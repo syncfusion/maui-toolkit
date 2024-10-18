@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Layouts">
+		<Control ControlName="Carousel"
+				 Title="Carousel"
+				 Image="carousel.png"
+				 Description="Provides an intuitive interface for navigating through a collection of views.">
+			<Sample SampleName="GettingStarted"
+					Title="Getting Started"
+					SearchTags="Carousel, Items Collection"/>
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>

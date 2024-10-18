@@ -1,0 +1,60 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.SelectionZooming"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart HorizontalOptions="Fill" VerticalOptions="Fill" x:Name="Chart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}">
+            <chart:SfCartesianChart.BindingContext>
+                <local:ScatterSeriesViewModel/>
+            </chart:SfCartesianChart.BindingContext>
+            <chart:SfCartesianChart.ZoomPanBehavior>
+                <chart:ChartZoomPanBehavior EnableSelectionZooming="True"
+                                            EnablePinchZooming="False"/>
+            </chart:SfCartesianChart.ZoomPanBehavior>
+            <chart:SfCartesianChart.Legend>
+                <chart:ChartLegend ToggleSeriesVisibility="True"/>
+            </chart:SfCartesianChart.Legend>
+            <chart:SfCartesianChart.Title>
+                <Label Text="Height vs Weight" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+            </chart:SfCartesianChart.Title>
+            <chart:SfCartesianChart.XAxes>
+                <chart:NumericalAxis ShowTrackballLabel="True" ShowMajorGridLines="False" EdgeLabelsDrawingMode="Shift" Minimum="100" Maximum="220" Interval="20">
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Margin="5,10,5,2" Text="Height (in cm)">
+                        </chart:ChartAxisTitle>
+                    </chart:NumericalAxis.Title>
+                    <chart:NumericalAxis.TrackballLabelStyle>
+                        <chart:ChartLabelStyle LabelFormat="#.#" Background="{AppThemeBinding Default={StaticResource ContentForeground}}"
+                                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                    </chart:NumericalAxis.TrackballLabelStyle>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.XAxes>
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis ShowTrackballLabel="True" ShowMajorGridLines="False" Minimum="50" Maximum="80" Interval="5">
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text="Weight (in pounds)">
+                        </chart:ChartAxisTitle>
+                    </chart:NumericalAxis.Title>
+                    <chart:NumericalAxis.TrackballLabelStyle>
+                        <chart:ChartLabelStyle LabelFormat="#.#" Background="{AppThemeBinding Default={StaticResource ContentForeground}}"
+                                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                    </chart:NumericalAxis.TrackballLabelStyle>
+                  
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+            <chart:SfCartesianChart.Series>
+                <chart:ScatterSeries Label="Male" EnableAnimation="{Binding EnableAnimation}" x:Name="scatterSeries1" Opacity="0.6" PointWidth="8" PointHeight="8" ItemsSource="{Binding MaleData}" XBindingPath="Value" YBindingPath="Size"/>
+                <chart:ScatterSeries Label="Female" EnableAnimation="{Binding EnableAnimation}" x:Name="scatterSeries2" Opacity="0.6" PointWidth="8" PointHeight="8" ItemsSource="{Binding FemaleData}" XBindingPath="Value" YBindingPath="Size"/>
+            </chart:SfCartesianChart.Series>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

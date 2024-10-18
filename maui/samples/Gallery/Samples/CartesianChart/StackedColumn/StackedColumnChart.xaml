@@ -1,0 +1,90 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.StackedColumnChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        <converter:BrushToColorConverter x:Key="brushToColor" />
+        <DataTemplate x:Key="tooltipTemplate">
+            <HorizontalStackLayout Spacing="10">
+                <Label Text="{Binding Item.Value,StringFormat='{0}B'}" FontSize="14"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </DataTemplate>
+
+        <Label x:Key="title" x:Name="titleName" Text="Global Revenue of the Unilever Group"
+                           FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
+                          LineBreakMode="WordWrap" Padding="0,0,0,5"/>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <StackLayout>
+            <StackLayout.BindingContext>
+                <local:StackedColumnViewModel />
+            </StackLayout.BindingContext>
+            <chart:SfCartesianChart x:Name="chart" Title="{StaticResource title}" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" >
+
+                <chart:SfCartesianChart.XAxes>
+                <chart:CategoryAxis x:Name="xAxis" LabelPlacement="BetweenTicks" IsVisible="true" ShowMajorGridLines="false">
+                </chart:CategoryAxis>
+            </chart:SfCartesianChart.XAxes>
+
+            <chart:SfCartesianChart.YAxes >
+                    <chart:NumericalAxis x:Name="yAxis" ShowMajorGridLines="True" ShowMinorGridLines="false" Minimum="0" Maximum="63" Interval="10">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="0'B" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+            
+            <chart:SfCartesianChart.Legend>
+                <chart:ChartLegend ToggleSeriesVisibility="True"/>
+            </chart:SfCartesianChart.Legend>
+
+            <chart:StackingColumnSeries XBindingPath="Name"
+                                        YBindingPath="Value"
+                                        ItemsSource="{Binding RevenueData}"
+                                        EnableAnimation="True"
+                                        Label="Personal care"
+                                        ShowDataLabels="True"
+                                        TooltipTemplate="{StaticResource tooltipTemplate}"
+                                        LegendIcon="SeriesType"/>
+
+            <chart:StackingColumnSeries  XBindingPath="Name"
+                                         YBindingPath="High"
+                                         ItemsSource="{Binding RevenueData}"
+                                         EnableAnimation="True"
+                                         Label="Home care"
+                                         ShowDataLabels="True"
+                                         TooltipTemplate="{StaticResource tooltipTemplate}"
+                                         LegendIcon="SeriesType"/>
+
+            <chart:StackingColumnSeries XBindingPath="Name"
+                                        YBindingPath="Low"
+                                        ItemsSource="{Binding RevenueData}"
+                                        EnableAnimation="True"
+                                        Label="Foods and refreshment"
+                                        ShowDataLabels="True"
+                                        TooltipTemplate="{StaticResource tooltipTemplate}"
+                                        LegendIcon="SeriesType"/>
+        </chart:SfCartesianChart>
+        <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" statista.com" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.statista.com/statistics/269200/revenue-of-the-unilever-group-worldwide-by-product-segment/"></TapGestureRecognizer>
+                </Label.GestureRecognizers>
+            </Label>
+        </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+   
+</localCore:SampleView>

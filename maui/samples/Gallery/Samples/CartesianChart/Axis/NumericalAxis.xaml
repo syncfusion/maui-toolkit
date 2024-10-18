@@ -1,0 +1,73 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.NumericalAxisChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <StackLayout>
+            <StackLayout.BindingContext>
+                <local:NumericalAxisViewModel/>
+            </StackLayout.BindingContext>
+            <chart:SfCartesianChart HorizontalOptions="Fill" VerticalOptions="FillAndExpand" x:Name="numericChart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}">
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True"/>
+                </chart:SfCartesianChart.Legend>
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Australia vs India ODI - 2019" Margin="0,0,0,5" HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand" FontSize="16"/>
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:NumericalAxis Interval="1" >
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle  Margin="5,10,5,2" Text="Match">
+                            </chart:ChartAxisTitle>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis Maximum="400">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Score">
+                            </chart:ChartAxisTitle>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                    <chart:ColumnSeries ShowDataLabels="True" EnableAnimation="{Binding EnableAnimation}" Label="Australia" Spacing="0.075" ItemsSource="{Binding DataCollection1}" XBindingPath="Value1" YBindingPath="Value">
+                        <chart:ColumnSeries.DataLabelSettings>
+                            <chart:CartesianDataLabelSettings>
+                                <chart:CartesianDataLabelSettings.LabelStyle>
+                                    <chart:ChartDataLabelStyle Margin="0" FontSize="10"/>
+                                </chart:CartesianDataLabelSettings.LabelStyle>
+                            </chart:CartesianDataLabelSettings>
+                        </chart:ColumnSeries.DataLabelSettings>
+                    </chart:ColumnSeries>
+                    <chart:ColumnSeries ShowDataLabels="True" EnableAnimation="{Binding EnableAnimation}" Label="India" Spacing="0.075" ItemsSource="{Binding DataCollection1}" XBindingPath="Value1" YBindingPath="Size">
+                        <chart:ColumnSeries.DataLabelSettings>
+                            <chart:CartesianDataLabelSettings>
+                                <chart:CartesianDataLabelSettings.LabelStyle>
+                                    <chart:ChartDataLabelStyle Margin="0" FontSize="10"/>
+                                </chart:CartesianDataLabelSettings.LabelStyle>
+                            </chart:CartesianDataLabelSettings>
+                        </chart:ColumnSeries.DataLabelSettings>
+                    </chart:ColumnSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0" >
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" ESPN cricinfo" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://stats.espncricinfo.com/ci/engine/records/team/match_results.html?class=2;id=2019;team=6;type=year"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

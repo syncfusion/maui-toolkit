@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer.Chats"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:shimmer="clr-namespace:Syncfusion.Maui.Toolkit.Shimmer;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer">
+
+    <localCore:SampleView.Resources>
+        <imageExtension:ImageSourceConverter x:Key="imageconverter"/>
+        <ResourceDictionary>
+            <DataTemplate x:Key="personTemplate">
+                <ViewCell>
+                    <Grid Padding="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.8*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Image Source="{Binding ContactImage,Converter={StaticResource imageconverter}}" Grid.RowSpan="2"/>
+                        <Grid Grid.Column="1" Padding="10,0,0,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Text="{Binding ContactName}" VerticalTextAlignment="Center" Grid.Column="1" FontAttributes="Bold" FontSize="17"/>
+                            <Label Text="{Binding Message}" VerticalTextAlignment="Center" Grid.Column="1" Grid.Row="1"/>
+                        </Grid>
+
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel x:Name="viewModel"/>
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Content>
+        <Grid WidthRequest="{OnPlatform WinUI=400, MacCatalyst=400}"
+              HeightRequest="{OnPlatform WinUI=570, MacCatalyst=570}"
+              x:Name="grid">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <shimmer:SfShimmer x:Name="shimmer"
+                               RepeatCount="8"
+                               
+                               WaveDirection="LeftToRight">
+                <shimmer:SfShimmer.Content>
+                    <StackLayout>
+                        <ListView ItemsSource="{Binding Info}" x:Name="listView"
+                                  ItemTemplate="{StaticResource personTemplate}"
+                                  SeparatorVisibility="None"
+                                  VerticalScrollBarVisibility="Never"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                  >
+                        </ListView>
+                    </StackLayout>
+                </shimmer:SfShimmer.Content>
+            </shimmer:SfShimmer>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

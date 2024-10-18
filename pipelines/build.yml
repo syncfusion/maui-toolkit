@@ -1,0 +1,24 @@
+trigger: none
+pr: none
+ 
+pool:
+  vmImage: 'windows-2022'
+
+steps:
+ 
+- script: |
+    cd $(Agent.BuildDirectory)/s/
+    dotnet build -c Release
+  displayName: 'Build the solution'
+ 
+- script: |
+    cd $(Agent.BuildDirectory)/s/maui/tests/Syncfusion.Maui.Toolkit.UnitTest/
+    dotnet test --logger "html;logfilename=UnitTestResults.html"
+  displayName: 'Perform Unit Tests'
+ 
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: 'D:\a\1\s\maui\tests\Syncfusion.Maui.Toolkit.UnitTest\TestResults'
+    ArtifactName: 'UnitTestResults'
+    publishLocation: 'Container'
+  displayName: 'Publish Test Results HTML'

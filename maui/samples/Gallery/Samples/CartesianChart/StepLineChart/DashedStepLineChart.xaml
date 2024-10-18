@@ -1,0 +1,88 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.DashedStepLineChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <StackLayout>
+            <StackLayout.BindingContext>
+                <local:StepLineChartViewModel/>
+            </StackLayout.BindingContext>
+            <chart:SfCartesianChart x:Name="Chart1" PaletteBrushes="{Binding CustomColor3}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="US: All Grades Conventional Retail Gasoline Prices in 2020 " MaxLines="2" LineBreakMode="WordWrap" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.Resources>
+                    <DoubleCollection x:Key="dashArray">
+                        <x:Double>6</x:Double>
+                        <x:Double>3</x:Double>
+                        <x:Double>3</x:Double>
+                        <x:Double>3</x:Double>
+                    </DoubleCollection>
+                    <ResourceDictionary>
+                        <DataTemplate x:Key="template1">
+                            <StackLayout>
+                                <Label Text="All Grades" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
+                                <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100"/>
+                                <StackLayout Orientation="Horizontal" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                    <Ellipse TranslationY="-1" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" HeightRequest="10" WidthRequest="10" Fill="#04ABC1" Margin="0,3,3,0"/>
+                                    <Label Text="{Binding Item.Date,StringFormat='{0:MMM-dd}'}" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0"/>
+                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="End" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="12"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </ResourceDictionary>
+                </chart:SfCartesianChart.Resources>
+
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior x:Name="zoomPan" ZoomMode="X" EnableDoubleTap="False" EnablePinchZooming="False" EnablePanning="True"/>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis x:Name="XAxis" LabelCreated="Primary_LabelCreated" ShowMajorGridLines="False" EdgeLabelsVisibilityMode="Visible" AutoScrollingDelta="6"  AutoScrollingDeltaType="Months">
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="MMM-dd"/>
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis x:Name="YAxis" EdgeLabelsDrawingMode="Fit"/>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Series>
+                    <chart:StepLineSeries  Label="All Grades"  
+                                           ItemsSource="{Binding USAGasolinePriceData}" 
+                                           StrokeDashArray="{StaticResource dashArray}" 
+                                           XBindingPath="Date"  
+                                           YBindingPath="Value" 
+                                           ShowMarkers="False" 
+                                           EnableAnimation="True" 
+                                           EnableTooltip="True"  
+                                           TooltipTemplate="{StaticResource template1}"
+                                           LegendIcon="SeriesType"/>
+
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"/>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" eia.gov" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.eia.gov/dnav/pet/pet_pri_gnd_dcus_nus_w.htm"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

@@ -1,0 +1,56 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.Column_Customization"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <StackLayout>
+            <StackLayout.BindingContext>
+                <local:ColumnViewModelEXT/>
+            </StackLayout.BindingContext>
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart3" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="PC Vendor Shipments - 2015 Q1" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis IsVisible="False" >
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="False" IsVisible="False" Maximum="15" Minimum="0">
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                    <local:ColumnSeriesExt EnableAnimation="{Binding EnableAnimation}" ShowDataLabels="True" PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}"
+                                         ItemsSource="{Binding ColumnData}" 
+                                          TrackColor="{AppThemeBinding Light={StaticResource TrackColorLight}, Dark={StaticResource TrackColorDark}}"
+                                           XBindingPath="Name" YBindingPath="Value">
+                        <local:ColumnSeriesExt.DataLabelSettings>
+                            <chart:CartesianDataLabelSettings UseSeriesPalette="False" LabelPlacement="Outer">
+                                <chart:CartesianDataLabelSettings.LabelStyle>
+                                    <chart:ChartDataLabelStyle TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}" FontSize="16" LabelFormat="0.00'M"/>
+                                </chart:CartesianDataLabelSettings.LabelStyle>
+                            </chart:CartesianDataLabelSettings>
+                        </local:ColumnSeriesExt.DataLabelSettings>
+                    </local:ColumnSeriesExt>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" Statista Survey" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.statista.com/statistics/263393/global-pc-shipments-since-1st-quarter-2009-by-vendor/"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

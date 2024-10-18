@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.CenterElevation"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Content>
+
+        <chart:SfCircularChart x:Name="Chart1">
+            <chart:SfCircularChart.Resources>
+                <ResourceDictionary>
+                    <local:CornerRadiusConverter x:Key="innerRadiusConverter"/>
+                </ResourceDictionary>
+            </chart:SfCircularChart.Resources>
+
+            <chart:SfCircularChart.Title>
+                <Label Text="Land Use in a Country" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+            </chart:SfCircularChart.Title>
+            <chart:SfCircularChart.BindingContext>
+                <local:DoughnutSeriesViewModel x:Name="doughnutViewModel"/>
+            </chart:SfCircularChart.BindingContext>
+            <chart:SfCircularChart.Legend>
+                <chart:ChartLegend Placement="{OnPlatform WinUI='Right',MacCatalyst='Right'}"/>
+            </chart:SfCircularChart.Legend>
+           
+            <chart:SfCircularChart.Series>
+                <chart:DoughnutSeries x:Name="series" PaletteBrushes="{Binding CenterViewThemeBrushes}" ItemsSource="{Binding CenterElevationData}" InnerRadius="0.55" StartAngle="300" EndAngle="660" XBindingPath="Name" ShowDataLabels="True" YBindingPath="Value" LegendIcon="SeriesType">
+                    <chart:DoughnutSeries.DataLabelSettings>
+                        <chart:CircularDataLabelSettings>
+                            <chart:CircularDataLabelSettings.LabelStyle>
+                                <chart:ChartDataLabelStyle LabelFormat="0'%"/>
+                            </chart:CircularDataLabelSettings.LabelStyle>
+                        </chart:CircularDataLabelSettings>
+                    </chart:DoughnutSeries.DataLabelSettings>
+                    <chart:DoughnutSeries.CenterView>
+                        <Border x:Name="border" HeightRequest="{Binding CenterHoleSize}" WidthRequest="{Binding CenterHoleSize}"
+                                BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackground}}">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="{Binding CenterHoleSize,Converter={StaticResource innerRadiusConverter},Source={x:Reference series}}"/>
+                            </Border.StrokeShape>
+                            <Border.Shadow>
+                                <Shadow Brush="{AppThemeBinding Default={StaticResource ContentForeground}}" Opacity="{OnPlatform Android='0.6',iOS='0.6',WinUI='0.5',MacCatalyst='0.5'}" Radius="{OnPlatform Android='20',iOS='20',WinUI='50',MacCatalyst='50'}"/>
+                            </Border.Shadow>
+                            <StackLayout>
+                                <Label Text="Total :" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}" FontSize="17"
+                                   VerticalOptions="EndAndExpand"
+                                   HorizontalOptions="Center" Margin="5"/>
+                                <Label Text="357,580 km²" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}" FontSize="16"
+                                   VerticalOptions="StartAndExpand"
+                                   HorizontalOptions="Center" Margin="5"/>
+                            </StackLayout>
+                        </Border>
+                     </chart:DoughnutSeries.CenterView>
+            </chart:DoughnutSeries>
+            </chart:SfCircularChart.Series>
+        </chart:SfCircularChart>
+
+    </localCore:SampleView.Content>
+</localCore:SampleView>

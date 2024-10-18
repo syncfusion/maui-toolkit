@@ -1,0 +1,123 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+		<RootNamespace>Syncfusion.Maui.Toolkit</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<UseMauiCompat>false</UseMauiCompat>
+		<SingleProject>true</SingleProject>
+		<Nullable>enable</Nullable>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<AnalysisLevelSecurity>latest-recommended</AnalysisLevelSecurity>
+		<AssemblyName>Syncfusion.Maui.Toolkit</AssemblyName>
+		<AssemblyTitle>Syncfusion.Maui.Toolkit</AssemblyTitle>
+		<Configurations>Release-Xml;Debug;Release</Configurations>
+		<Platforms>AnyCPU</Platforms>
+		<Version>1.0.0</Version>
+		<AssemblyVersion>1.0.0</AssemblyVersion>
+		<FileVersion>1.0.0.0</FileVersion>
+		<Company>Syncfusion Inc.</Company>
+		<Authors>Syncfusion Inc.</Authors>
+		<Copyright>Copyright 2001 - 2024 Syncfusion Inc.</Copyright>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		
+		<DebugType>portable</DebugType>
+		<OutputType>Library</OutputType>
+		
+		<SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageIcon>syncfusion_logo.png</PackageIcon>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+		<PackageProjectUrl>https://www.syncfusion.com/maui/?utm_source=nuget&amp;amp;utm_medium=listing</PackageProjectUrl>
+		<PackageReleaseNotes>https://help.syncfusion.com/maui/release-notes/v19.2.0.56?utm_source=nuget&amp;amp;utm_medium=listing</PackageReleaseNotes>
+		<Description>This package contains the Syncfusion Toolkit controls for .NET MAUI</Description>
+		<PackageTags>syncfusion;maui;ios;android;maccatalyst;dotnet-maui;syncfusion-maui</PackageTags>
+		
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0-android' ">
+		<AndroidGenerateResourceDesigner>false</AndroidGenerateResourceDesigner>
+		<AndroidUseIntermediateDesignerFile>false</AndroidUseIntermediateDesignerFile>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningLevel>5</WarningLevel>
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-android|AnyCPU'">
+	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningLevel>5</WarningLevel>
+    <Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-ios|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningLevel>5</WarningLevel>	  
+    <Optimize>True</Optimize>
+	  <MtouchUseLlvm>True</MtouchUseLlvm>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-maccatalyst|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningLevel>5</WarningLevel>	  
+    <Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-windows10.0.19041.0|AnyCPU'">
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningLevel>5</WarningLevel>	  
+    <Optimize>True</Optimize>
+	</PropertyGroup>
+	
+
+	<Import Project="..\..\targets\MultiTargeting.targets" />
+	
+
+	<ItemGroup>
+	  <Compile Remove="obj\**" />
+	  <EmbeddedResource Remove="obj\**" />
+	  <MauiCss Remove="obj\**" />
+	  <MauiXaml Remove="obj\**" />
+	  <None Remove="obj\**" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+	</ItemGroup>
+  
+  <ItemGroup>
+    <MauiXaml Remove="Carousel\Platform\Windows\Styles\CarouselStyles.xaml" />
+    <MauiXaml Remove="Carousel\Platform\Windows\Styles\Resources.xaml" />
+  </ItemGroup>
+  
+  <ItemGroup>
+	<None Include="..\..\LICENSE.txt" Link="LICENSE.txt" Pack="true" PackagePath="" />
+	<None Include="..\..\syncfusion_logo.png" Link="syncfusion_logo.png" Pack="true" PackagePath="" />
+    <None Include="..\..\README.md" Link="README.md" Pack="true" PackagePath="" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="Carousel\Platform\Windows\Styles\CarouselStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Carousel\Platform\Windows\Styles\Resources.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  
+</Project>

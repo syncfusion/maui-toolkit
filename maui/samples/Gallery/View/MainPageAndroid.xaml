@@ -1,0 +1,1023 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.MainPageAndroid"
+             xmlns:customView="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView"
+             xmlns:converters="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters"
+             xmlns:sfTab="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:base="clr-namespace:Syncfusion.Maui.ControlsGallery"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <base:SampleBrowserStyles/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+        <converters:TagToPaddingConverter x:Key="TagToPaddingConverter"/>
+        <converters:ImageSourceConverter x:Key="imageSourceConverter"/>
+    </ContentPage.Resources>
+
+    <Grid>
+        <Grid RowDefinitions="48,*" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+        <Grid Grid.Row="1" VerticalOptions="Fill" >
+            <Grid x:Name="controlListPage" VerticalOptions="Fill">
+                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Default" VerticalOptions="Fill">
+                    <Grid x:Name="controlListGrid" ColumnSpacing="24" VerticalOptions="Fill" Margin="0,12,0,0">
+                            
+                            <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" CornerRadius="20" VerticalOptions="Fill"/>
+                        <VerticalStackLayout x:Name="columOneLayout" Margin="10,0,10,0">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                        <VerticalStackLayout Spacing="12" Padding="0,12,0,0" >
+                                            <Grid HeightRequest="40">
+                                            <Grid HeightRequest="40">
+                                                    
+                                                    <Border  Padding="16,8" HorizontalOptions="Start" Stroke="{AppThemeBinding Light={StaticResource TileHeaderBorderLight}, Dark={StaticResource TileHeaderBorderDark}}" StrokeThickness="1">
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="20,20,20,0"/>
+                                                    </Border.StrokeShape>
+                                                        
+                                                        <Label FontFamily="Roboto-Medium" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TileHeaderForegroundLight}, Dark={StaticResource TileHeaderForegroundDark}}" Text="{Binding Name}" FontSize="16" />
+                                                </Border>
+                                            </Grid>
+                                                <BoxView Margin="22,0,0,1" HeightRequest="1" Color="{AppThemeBinding Light={StaticResource TileHeaderBorderLight}, Dark={StaticResource TileHeaderBorderDark}}" VerticalOptions="End"/>
+                                        </Grid>
+                                        <Grid>
+                                                
+                                                <BoxView Color="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" CornerRadius="20" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                                            <VerticalStackLayout>
+                                                    <BindableLayout.ItemsSource>
+                                                        <Binding Path="AllControls" />
+                                                    </BindableLayout.ItemsSource>
+                                                <BindableLayout.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <customView:SfEffectsViewAdv TouchDownEffects="Ripple">
+                                                                <customView:SfEffectsViewAdv.GestureRecognizers>
+                                                                    <TapGestureRecognizer Tapped="Control_Tapped"/>
+                                                                </customView:SfEffectsViewAdv.GestureRecognizers>
+                                                                <Grid>
+                                                                    <Grid Padding="16" ColumnSpacing="16" ColumnDefinitions="56,*" >
+                                                                        <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56" />
+                                                                        <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
+                                                                            <HorizontalStackLayout Spacing="5">
+                                                                                    
+                                                                                    <Label FontFamily="Roboto-Medium" Text="{Binding Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16"/>
+                                                                                    <Label FontFamily="Roboto-Medium" Text="Preview" Padding="3,1" IsVisible="{Binding IsPreview}" Background="{AppThemeBinding Light={StaticResource BadgeColour1Light}, Dark={StaticResource BadgeColour1Dark}}" TextColor="{AppThemeBinding Light={StaticResource BadgeTextColourLight}, Dark={StaticResource BadgeTextColourDark}}" FontAttributes="Bold"  FontSize="10" Margin="0,0,0,2" VerticalTextAlignment="Center"/>
+                                                                            </HorizontalStackLayout>
+                                                                            <Grid>
+                                                                                <Label FontFamily="Roboto-Regular" 
+                                                                                       VerticalOptions="Center"
+                                                                                       Text="{Binding Description}"
+                                                                                        
+                                                                                       TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" 
+                                                                                       FontSize="14"
+                                                                                       MaxLines="3" 
+                                                                                       LineBreakMode="WordWrap"/>
+                                                                            </Grid>
+                                                                        </VerticalStackLayout>
+                                                                    </Grid>
+                                                                        
+                                                                        <BoxView Grid.Row="1" VerticalOptions="End" HeightRequest="2" Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"/>
+                                                                </Grid>
+                                                        </customView:SfEffectsViewAdv>
+                                                    </DataTemplate>
+                                                </BindableLayout.ItemTemplate>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </Grid>
+                </ScrollView>
+            </Grid>
+          
+                <Grid x:Name="sortOptionGrid" BackgroundColor="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" IsVisible="False" VerticalOptions="End" HorizontalOptions="FillAndExpand" HeightRequest="544" RowDefinitions="56,*,2,*,80">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SortOptionGridTapped"/>
+                </Grid.GestureRecognizers>
+                
+                    <BoxView CornerRadius="20,20,0,0" Color="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" HeightRequest="544" Grid.RowSpan="5"/>
+                    <Grid ColumnDefinitions="*,Auto" Margin="24,0,29,0" HeightRequest="56" VerticalOptions="Center">
+                        
+                        <Label Text="Sort And Filter" Grid.Column="0" FontSize="16" FontFamily="Roboto-Medium" VerticalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold"/>
+                        <Border WidthRequest="24" HeightRequest="24" Grid.Row="1" Background="Transparent" VerticalOptions="Center" HorizontalOptions="End" StrokeThickness="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="30"/>
+                            </Border.StrokeShape>
+                            <customView:SfEffectsViewAdv>
+                                <customView:SfEffectsViewAdv.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="Cancel_Clicked"/>
+                                </customView:SfEffectsViewAdv.GestureRecognizers>
+                                <Label Text="&#xe755;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="14" VerticalOptions="Center" HorizontalOptions="Center">
+                                </Label>
+                            </customView:SfEffectsViewAdv>
+                        </Border>
+                    </Grid>
+
+                    <VerticalStackLayout Grid.Row="1" Spacing="0" Margin="0">
+                        
+                        <Label Text="Sort" FontSize="14" FontFamily="Roboto" HeightRequest="36" VerticalTextAlignment="Center" Grid.Row="1" Margin="24,0,0,0" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}" FontAttributes="Bold"/>
+                    <customView:SfEffectsViewAdv RadioButtonGroup.GroupName="sort">
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="NoneOptionTapGestureTapped"/>
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                        <Grid ColumnDefinitions="*,40" Margin="24,0,24,0" HeightRequest="48">
+                                
+                                <Label Text="None" FontSize="14" FontFamily="Roboto" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}"/>
+                            
+                            <RadioButton x:Name="noneOption" IsChecked="True" HorizontalOptions="End" Grid.Column="1" Style="{StaticResource radioButtonStyle}"/>
+                        </Grid>
+                    </customView:SfEffectsViewAdv>
+                    
+                    <customView:SfEffectsViewAdv RadioButtonGroup.GroupName="sort">
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="AscendingTapGestureTapped"/>
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                            <Grid ColumnDefinitions="*,40" Margin="24,0,24,0" HeightRequest="48" >
+                               
+                                <Label Text="Alphabetical ascending" VerticalTextAlignment="Center" FontSize="14" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}"/>
+
+                                <RadioButton x:Name="ascending" HorizontalOptions="End" Grid.Column="1" Style="{StaticResource radioButtonStyle}"/>
+                        </Grid>
+                    </customView:SfEffectsViewAdv>
+
+                    <customView:SfEffectsViewAdv RadioButtonGroup.GroupName="sort">
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="DescendingTapGestureTapped"/>
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                            <Grid ColumnDefinitions="*,40" Margin="24,0,24,0" HeightRequest="48">
+                                
+                                <Label Text="Alphabetical descending" VerticalTextAlignment="Center" FontSize="14" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}"/>
+                            
+                                <RadioButton x:Name="descending" HorizontalOptions="End"  Grid.Column="1" Style="{StaticResource radioButtonStyle}"/>
+                        </Grid>
+                    </customView:SfEffectsViewAdv>
+                </VerticalStackLayout>
+                    
+                    <BoxView Color="{AppThemeBinding Light={StaticResource TileHeaderBorderLight}, Dark={StaticResource TileHeaderBorderDark}}" HeightRequest="1" Grid.Row="2" Margin="0,0,0,0" />
+                <VerticalStackLayout Grid.Row="3" Margin="0" >
+                    
+                        <Label VerticalTextAlignment="Center" Text="Filter" Margin="24,0,0,0" HeightRequest="36" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}" FontFamily="Roboto" FontAttributes="Bold"  />
+
+                        <Grid ColumnDefinitions="*,40" Margin="24,0,24,0" HeightRequest="48">
+
+                            <Label Text="All Samples" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}"/>
+                        
+                            <CheckBox x:Name="allSamples" Grid.Column="1" CheckedChanged="AllSamplesCheckBoxChanged"/>
+                    </Grid>
+                        <Grid ColumnDefinitions="*,40" Margin="24,0,24,0" HeightRequest="48">
+
+                            <Label Text="New Samples" VerticalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}"/>
+                            <CheckBox x:Name="newSamples" Grid.Column="1" CheckedChanged="NewSamplesCheckBoxChanged"/>
+                    </Grid>
+                        <Grid ColumnDefinitions="*,40" Margin="24,0,24,0" HeightRequest="48">
+                         
+                            <Label Text="Updated Samples" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}"/>
+                      
+                            <CheckBox x:Name="updatedSamples" Grid.Column="1" CheckedChanged="UpdatedSamplesCheckBoxChanged"/>
+                    </Grid>
+                  
+                </VerticalStackLayout>
+                <Grid Grid.Row="4" VerticalOptions="Center">
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="20" VerticalOptions="Center">
+                            <Button Text="Cancel" Clicked="Cancel_Clicked" Style="{StaticResource CloseButtonStyle}" CornerRadius="20" HeightRequest="40" WidthRequest="150" />
+                        <Button Text="Apply" CornerRadius="20" Clicked="SortOptionApplyButtonClicked" HeightRequest="40" WidthRequest="150" />
+                    </HorizontalStackLayout>
+                </Grid>
+            </Grid>
+            
+            <Grid x:Name="searchListGrid" IsVisible="False" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" IsClippedToBounds="True" >
+                <Grid x:Name="searchedSampleView" ColumnDefinitions="*,50,Auto,Auto,Auto,Auto,Auto" IsVisible="false" RowDefinitions="48,*">
+                        <Grid Grid.ColumnSpan="7" BackgroundColor="{AppThemeBinding Light={StaticResource HeaderBackgroundLight}, Dark={StaticResource HeaderBackgroundDark}}"/> 
+                    <Label x:Name="searchedSampleTitle"
+                           BackgroundColor="Transparent"
+                           TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}"
+                           Margin="16,0"
+                           VerticalOptions="Center"
+                           VerticalTextAlignment="Center"
+                           HorizontalOptions="Start"
+                           HorizontalTextAlignment="Start"
+                           FontSize="16"/>
+
+                    <Border x:Name="searchedSampleWhatsNewImage"  Grid.Column="2" HorizontalOptions="End" IsVisible="False" WidthRequest="40" HeightRequest="40" BackgroundColor="Transparent">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="30"/>
+                            </Border.StrokeShape>
+                            <customView:SfEffectsViewAdv>
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="WhatsNewTappedSearchedSample"/>
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                                <Label Text="&#xe719;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </customView:SfEffectsViewAdv>
+                    </Border>
+
+                        <Border x:Name="searchedSampleSourceLinkImage" Grid.Column="3" HorizontalOptions="End" IsVisible="false" WidthRequest="40" HeightRequest="40" BackgroundColor="Transparent">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="30"/>
+                            </Border.StrokeShape>
+                            <customView:SfEffectsViewAdv>
+                                <customView:SfEffectsViewAdv.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="SourceLinkTapped" />
+                                </customView:SfEffectsViewAdv.GestureRecognizers>
+                                <Label Text="&#xe7ba;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </customView:SfEffectsViewAdv>
+                        </Border>
+
+                        <Border x:Name="searchedSampleYoutubeImage" Grid.Column="4" HorizontalOptions="End" IsVisible="false" WidthRequest="40" HeightRequest="40" BackgroundColor="Transparent">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="30"/>
+                            </Border.StrokeShape>
+                            <customView:SfEffectsViewAdv>
+                                <customView:SfEffectsViewAdv.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="YoutubeIconTapped" />
+                                </customView:SfEffectsViewAdv.GestureRecognizers>
+                                <Label Text="&#xe79e;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </customView:SfEffectsViewAdv>
+                        </Border>
+
+                        <Border x:Name="searchedSampleCodeViewerImage" HorizontalOptions="Fill" Grid.Column="5" IsVisible="false" WidthRequest="40" HeightRequest="40" BackgroundColor="Transparent">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="30"/>
+                            </Border.StrokeShape>
+                            <customView:SfEffectsViewAdv>
+                                <customView:SfEffectsViewAdv.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="CodeViewerTapped" />
+                                </customView:SfEffectsViewAdv.GestureRecognizers>
+                                <Label Text="&#xe7bb;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </customView:SfEffectsViewAdv>
+                        </Border>
+
+                        <Border x:Name="searchedSampleSettingsImage" HorizontalOptions="Fill" Grid.Column="6" IsVisible="false" WidthRequest="40" HeightRequest="40" BackgroundColor="Transparent">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="30"/>
+                            </Border.StrokeShape>
+                            <customView:SfEffectsViewAdv>
+                                <customView:SfEffectsViewAdv.GestureRecognizers> 
+                                    <TapGestureRecognizer Tapped="PropertiesTabPressed" />
+                                </customView:SfEffectsViewAdv.GestureRecognizers>
+                                <Label Text="&#xe73b;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </customView:SfEffectsViewAdv>
+                        </Border>
+                        
+                        <Grid x:Name="searchedSampleGrid" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Grid.Row="1" Grid.ColumnSpan="7" />
+                </Grid>
+                
+                <Grid x:Name="searchedSampleScrollViewer" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                    <ScrollView Orientation="Vertical" VerticalScrollBarVisibility="Always" VerticalOptions="Fill" >
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding SearchList}"
+                                             x:Name="searchedResultList" 
+                                             HorizontalOptions="Fill"
+                                             
+                                             Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                             Padding="10">
+                            <BindableLayout.ItemTemplate >
+                                <DataTemplate>
+                                        
+                                        <customView:SfEffectsViewAdv TouchDownEffects="Ripple" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                                        <HorizontalStackLayout Padding="10" Spacing="10">
+                                            
+                                                <Label Grid.Row="0" Text="{Binding Control.Title}" FontAttributes="Bold" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16" FontFamily="Roboto-Medium"  />
+                                                <Label Grid.Row="0" Text="-" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="20" FontFamily="Roboto-Regular"/>
+                                                <Label Grid.Row="0" Text="{Binding Sample.Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" FontSize="16" FontFamily="Roboto-Regular"/>
+                                        </HorizontalStackLayout>
+                                    </customView:SfEffectsViewAdv>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </Grid>
+            </Grid>
+            <Grid x:Name="sortAndFilteredGrid" VerticalOptions="Fill" IsVisible="false" Margin="0,0,0,0" RowDefinitions="20,*">
+                <BoxView HeightRequest="20" Color="Transparent"/>
+                <ScrollView Grid.Row="1" HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Default" VerticalOptions="Fill">
+                    <VerticalStackLayout>
+                       
+                            <Grid x:Name="filteredGridNew" IsVisible="false" ColumnSpacing="24" VerticalOptions="Fill" Margin="0,0,0,0" Padding="5" BackgroundColor="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}">
+                            <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" CornerRadius="20" VerticalOptions="Fill"/>
+                            <VerticalStackLayout Spacing="12" Padding="0,12,0,0" BackgroundColor="Transparent">
+                                <Grid HeightRequest="40">
+                                    <Grid HeightRequest="40">
+                                           
+                                            <Border  Background="{AppThemeBinding Light={StaticResource TileHeaderBackgroundLight}, Dark={StaticResource TileHeaderBackgroundDark}}" Padding="16,8" HorizontalOptions="Start" Stroke="{AppThemeBinding Light={StaticResource TileHeaderBorderLight}, Dark={StaticResource TileHeaderBorderDark}}" StrokeThickness="1">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="20,20,20,0"  />
+                                            </Border.StrokeShape>
+                                               
+                                                <Label FontFamily="Roboto-Medium" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TileHeaderForegroundLight}, Dark={StaticResource TileHeaderForegroundDark}}" Text="New Samples" FontSize="16" />
+                                        </Border>
+                                    </Grid>
+                                        
+                                        <BoxView Margin="22,0,0,1" HeightRequest="1" Color="{AppThemeBinding Light={StaticResource TileHeaderBorderLight}, Dark={StaticResource TileHeaderBorderDark}}" VerticalOptions="End"/> 
+                                </Grid>
+                                <ScrollView Orientation="Vertical" VerticalScrollBarVisibility="Always" VerticalOptions="Fill" >
+                                    <Grid BackgroundColor="Transparent">
+                                            
+                                            <BoxView Color="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" CornerRadius="20" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                                        <CollectionView ItemsSource="{Binding SortedListNew}">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <customView:SfEffectsViewAdv TouchDownEffects="Ripple">
+                                                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                                                            <TapGestureRecognizer Tapped="SortSampleTapGestureTapped"/>
+                                                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                                                        <VerticalStackLayout>
+                                                            <HorizontalStackLayout Padding="10" Spacing="10">
+                                                                    
+                                                                    <Label Text="{Binding Control.Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16" FontFamily="Roboto-Medium"  />
+                                                                    <Label Text="-" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16" FontFamily="Roboto-Medium"  />
+                                                                    <Label Text="{Binding Sample.Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"  FontSize="16" FontFamily="Roboto-Regular"/>
+                                                            </HorizontalStackLayout>
+                                                               
+                                                                <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" HeightRequest="2"/>
+                                                        </VerticalStackLayout>
+                                                    </customView:SfEffectsViewAdv>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </Grid>
+                                </ScrollView>
+                            </VerticalStackLayout>
+                        </Grid>
+                       
+                        <Grid x:Name="filteredGridUpdated" IsVisible="false" ColumnSpacing="24" VerticalOptions="Fill" Margin="0,0,0,0" Padding="5" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                            <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" CornerRadius="20" VerticalOptions="Fill"/>
+                            <VerticalStackLayout Spacing="12" Padding="0,12,0,0" BackgroundColor="Transparent">
+                                <Grid HeightRequest="40">
+                                    <Grid HeightRequest="40">
+                                            
+                                            <Border Background="{AppThemeBinding Light={StaticResource TileHeaderBackgroundLight}, Dark={StaticResource TileHeaderBackgroundDark}}" Padding="16,8" HorizontalOptions="Start" Stroke="{AppThemeBinding Light={StaticResource TileHeaderBorderLight}, Dark={StaticResource TileHeaderBorderDark}}" StrokeThickness="1">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="20,20,20,0"/>
+                                            </Border.StrokeShape>
+                                               
+                                                <Label FontFamily="Roboto-Medium" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TileHeaderForegroundLight}, Dark={StaticResource TileHeaderForegroundDark}}" Text="Updated Samples" FontSize="16" />
+                                        </Border>
+                                    </Grid>
+                                        
+                                        <BoxView Margin="22,0,0,1" HeightRequest="1" Color="{AppThemeBinding Light={StaticResource TileHeaderBorderLight}, Dark={StaticResource TileHeaderBorderDark}}" VerticalOptions="End"/>
+                                </Grid>
+                                <ScrollView Orientation="Vertical" VerticalScrollBarVisibility="Always" VerticalOptions="Fill" >
+                                    <Grid BackgroundColor="Transparent">
+                                            
+                                            <BoxView Color="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" CornerRadius="20" HorizontalOptions="Fill" VerticalOptions="Fill"/>
+                                        <CollectionView ItemsSource="{Binding SortedListUpdated}">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <customView:SfEffectsViewAdv TouchDownEffects="Ripple">
+                                                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                                                            <TapGestureRecognizer Tapped="SortSampleTapGestureTapped"/>
+                                                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                                                        <VerticalStackLayout>
+                                                            <HorizontalStackLayout Padding="10" Spacing="10">
+                                                                   
+                                                                    <Label Text="{Binding Control.Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16" FontFamily="Roboto-Medium"  />
+                                                                    <Label Text="-" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16" FontFamily="Roboto-Medium"  />
+                                                                    <Label Text="{Binding Sample.Title}" TextColor="{AppThemeBinding Light={StaticResource DescriptionTextColorLight}, Dark={StaticResource DescriptionTextColorDark}}" FontSize="16" FontFamily="Roboto-Regular"/>
+                                                            </HorizontalStackLayout>
+                                                                
+                                                                <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" HeightRequest="2"/>
+                                                        </VerticalStackLayout>
+                                                    </customView:SfEffectsViewAdv>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </Grid>
+                                </ScrollView>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Grid>
+                    <Grid Margin="0,16,0,0" x:Name="UpdatedSortCollection" BackgroundColor="Transparent" IsVisible="False">
+                        
+                    <BoxView CornerRadius="20" Color="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" VerticalOptions="Fill"/>
+                        <CollectionView ItemsSource="{Binding UpdatedSortedList}" Margin="10" BackgroundColor="Transparent">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+
+                                    <customView:SfEffectsViewAdv TouchDownEffects="Ripple">
+                                    <customView:SfEffectsViewAdv.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="Control_Tapped"/>
+                                    </customView:SfEffectsViewAdv.GestureRecognizers>
+                                    <Grid>
+                                            
+                                            <Grid Padding="16" ColumnSpacing="16" ColumnDefinitions="56,*" BackgroundColor="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackground}}">
+                                                    <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                                    <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
+                                                        <HorizontalStackLayout Spacing="5">
+                                                        
+                                                        <Label FontFamily="Roboto-Medium" Text="{Binding Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16"/>
+                                                        <Label FontFamily="Roboto-Medium" Text="Preview" Padding="3,1" IsVisible="{Binding IsPreview}" BackgroundColor="{AppThemeBinding Light={StaticResource BadgeColour1Light}, Dark={StaticResource BadgeColour1Dark}}" TextColor="{AppThemeBinding Light={StaticResource BadgeTextColourLight}, Dark={StaticResource BadgeTextColourDark}}" FontSize="10" Margin="0,0,0,2" VerticalTextAlignment="Center"/>
+                                                        </HorizontalStackLayout>
+                                                        <Grid>
+                                                            <Label FontFamily="Roboto-Regular" 
+                                                                                       VerticalOptions="Center"
+                                                                                       Text="{Binding Description}"
+                                                                                        
+                                                                                       TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"  
+                                                                                       FontSize="14"
+                                                                                       MaxLines="3" 
+                                                                                      
+                                                                                       LineBreakMode="WordWrap"/> 
+                                                    </Grid>
+                                                    </VerticalStackLayout>
+                                                </Grid>
+                                            
+                                            <BoxView Grid.Row="1" VerticalOptions="End" HeightRequest="2" Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"/>
+                                            </Grid>
+                                    </customView:SfEffectsViewAdv>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                
+                <Grid x:Name="sampleViewPage"  IsVisible="False" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="55" x:Name="tabViewRowDefinition"/>
+                            <RowDefinition Height="50" x:Name="chipRowDefinition"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                    <Grid HeightRequest="48" x:Name="shadowGrid"  VerticalOptions="Start" ColumnDefinitions="*">
+                            <Grid.Shadow>
+                            <Shadow Offset="0,10" Radius="40" /> 
+                            </Grid.Shadow>
+                        </Grid>
+                    
+                    <sfTab:SfTabView x:Name="tabView"  ItemsSource="{Binding SampleCategories}" TabWidthMode="SizeToContent" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" IndicatorBackground="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}">
+                            <sfTab:SfTabView.HeaderItemTemplate>
+                                <DataTemplate>
+                               
+                                <customView:SfEffectsViewAdv Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="Category_Tapped"/>
+                                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                                        <Grid  Padding="{Binding StatusTag, Converter={StaticResource TagToPaddingConverter}}" VerticalOptions="Center"  >
+                                            <Label VerticalTextAlignment="Center" Text="{Binding CategoryName}" FontAttributes="Bold">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsCategoryClicked}" Value="True">
+                                                        
+                                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding IsCategoryClicked}" Value="False">
+                                                        
+                                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                            </Grid>
+
+                                    </customView:SfEffectsViewAdv>
+                                </DataTemplate>
+                            </sfTab:SfTabView.HeaderItemTemplate>
+                            <sfTab:SfTabView.ContentItemTemplate>
+                                <DataTemplate>
+                                    <Label/>
+                                </DataTemplate>
+                            </sfTab:SfTabView.ContentItemTemplate>
+                        </sfTab:SfTabView>
+                        <Grid Margin="0,10,0,10" Grid.Row="1" x:Name="chipView" >
+                        
+                        <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" HeightRequest="50" IsClippedToBounds="True">
+                            <ScrollView x:Name="chipScroll" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" HeightRequest="40" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" >
+                                    <HorizontalStackLayout BindableLayout.ItemsSource="{Binding SampleSubCategories}" >
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                           
+                                            <Grid x:Name="customGrid" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="5,0,5,0">
+                                                <Frame BorderColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
+                                                   Margin="0,-3,0,0" 
+                                                   Padding="0"
+                                                   HeightRequest="32"
+                                                   CornerRadius="15"
+                                                   HasShadow="False"
+                                                   x:Name="frame">
+                                                    <Frame.Triggers>
+                                                        <DataTrigger TargetType="Frame" Binding="{Binding IsSubCategoryClicked}" Value="True">
+                                                            
+                                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight }, Dark={StaticResource PrimaryBackgroundDark}}" />
+                                                        </DataTrigger>
+                                                        <DataTrigger TargetType="Frame" Binding="{Binding IsSubCategoryClicked}" Value="False">
+                                                            
+                                                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" />
+                                                        </DataTrigger>
+                                                    </Frame.Triggers>
+                                                    <customView:SfEffectsViewAdv>
+                                                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                                                            <TapGestureRecognizer Tapped="SubCategory_Tapped"/>
+                                                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                                                        <Grid Padding="{Binding StatusTag, Converter={StaticResource TagToPaddingConverter}}">
+                                                                <Label FontSize="14"  
+                                                                   x:Name="label" 
+                                                                   FontFamily="Roboto-Medium"
+                                                                   Text="{Binding SubCategoryName}"
+                                                                   LineBreakMode="NoWrap"
+                                                                   HorizontalOptions="Center" 
+                                                                   VerticalOptions="Center"
+                                                                   HorizontalTextAlignment="Center" 
+                                                                   VerticalTextAlignment="Center">
+                                                                    <Label.Triggers>
+                                                                        <DataTrigger TargetType="Label" Binding="{Binding IsSubCategoryClicked}" Value="True">
+                                                                           
+                                                                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" />
+                                                                        </DataTrigger>
+                                                                        <DataTrigger TargetType="Label" Binding="{Binding IsSubCategoryClicked}" Value="False">
+                                                                           
+                                                                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+                                                                        </DataTrigger>
+                                                                    </Label.Triggers>
+                                                                </Label>
+                                                                </Grid>
+                                                        </customView:SfEffectsViewAdv>
+                                                    </Frame>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </HorizontalStackLayout>
+                                </ScrollView>
+                            </Grid>
+                        </Grid>
+                        <Grid Grid.Row="2" x:Name="sampleGridView" Margin="0,0,0,0" BackgroundColor="Transparent" />
+                    <Grid x:Name="busyIndicatorPage" Grid.Row="2" IsVisible="False" Margin="0,0,0,0"  BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                            <Label Text="Sample Loading..."  VerticalOptions="Center" HorizontalOptions="Center" FontSize="20"/>
+                        </Grid>
+                    </Grid>
+               
+                <Grid x:Name="popUpSamplePage" IsVisible="False" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" />
+                    <Grid x:Name="propertyTempGrid" IsVisible="false" BackgroundColor="#000000" Opacity="0.4">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TempGridTapped"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                    <Grid x:Name="properties" VerticalOptions="End" HorizontalOptions="FillAndExpand" IsVisible="False" HeightRequest="300"  >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="60"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                       
+                    <BoxView CornerRadius="20,20,0,0" Color="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" HeightRequest="300" Grid.RowSpan="2"/>
+                    <Grid Margin="16,16,16,24" VerticalOptions="Start" Grid.Row="0" HeightRequest="24">
+                       
+                        <Label Text="Properties" FontFamily="Roboto-Medium" FontSize="16" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                        <Label Text="&#xe703;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="28" HorizontalOptions="End">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PropertiesCollapeImageTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+                    <Grid Padding="16,0,16,10" x:Name="optionViewGrid" Grid.Row="1" />
+                    </Grid>
+                   
+                <Grid x:Name="busyIndicatorMainPage" IsVisible="False" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="0,0,0,0">
+                        <Label Text="Sample Loading..."  VerticalOptions="Center" HorizontalOptions="Center" FontSize="20"/>
+                    </Grid>
+                    
+                <Grid x:Name="sortTempGrid" IsVisible="false" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Opacity="0.4">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SortTempGridTapped"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+            </Grid>
+
+            
+            <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="0" x:Name="titleGrid">
+                <Grid.Shadow>
+                    <Shadow Brush="#7C5555"
+                        Offset="0,5"
+                        Radius="5"
+                        Opacity="0.1" />
+                </Grid.Shadow>
+            <Grid ColumnDefinitions="48,*,48">
+                    <Border Grid.Column="0" IsVisible="true" StrokeThickness="0" HeightRequest="40" WidthRequest="40" BackgroundColor="Transparent">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="30" />
+                    </Border.StrokeShape>
+                        <local:SfEffectsViewAdv x:Name="navigation" TouchDownEffects="Ripple">
+                            <local:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="NavigationDrawer_Tapped"/>
+                            </local:SfEffectsViewAdv.GestureRecognizers>
+                            <Label Text="&#xe731;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28" IsVisible="true"  />
+                        </local:SfEffectsViewAdv>
+                    </Border>
+                <Label x:Name="titleLable" 
+                       Margin="2,0" 
+                       HorizontalOptions="Start"
+                      
+                       TextColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+                       Padding="0,-2.5,0,0"
+                       Text=".NET MAUI Toolkit Demo"
+                       FontFamily="Roboto-Medium"
+                       HeightRequest="24"
+                       FontSize="20" Grid.Column="1" LineBreakMode="TailTruncation"/>
+                    <Border WidthRequest="40" HeightRequest="40" Grid.Column="2" VerticalOptions="Center" HorizontalOptions="Center" StrokeThickness="0" Background="transparent" >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <local:SfEffectsViewAdv TouchDownEffects="Ripple">
+                            <local:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Search_Tapped"/>
+                            </local:SfEffectsViewAdv.GestureRecognizers>
+                            <Label x:Name="searchImage" Text="&#xe728;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28" />
+                        </local:SfEffectsViewAdv>
+                    </Border>
+                    <!--<Border Grid.Column="3" IsVisible="False" StrokeThickness="0" HeightRequest="40" WidthRequest="40" Background="transparent">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="30"/>
+                    </Border.StrokeShape>
+                    <customView:SfEffectsViewAdv Grid.Column="2" TouchDownEffects="Ripple">
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="Setting_Tapped"/>
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                            <Label x:Name="sortAndFilterImage" Text="&#xe7bc;" FontFamily="MauiSampleFontIcon" Style="{StaticResource IconStyle}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28"  />
+                        </customView:SfEffectsViewAdv>
+                </Border>-->
+            </Grid>
+        </Grid>
+            
+            <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="0" x:Name="sampleTitleGrid" IsVisible="false">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="SampleTitleGridTapped"/>
+                </Grid.GestureRecognizers>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto" x:Name="whatsNewColumnWidth"/>
+                    <ColumnDefinition Width="Auto" x:Name="sourceColumnWidth"/>
+                        <ColumnDefinition Width="Auto" x:Name="youtubeColumnWidth"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" x:Name="optionColumnWidth"/>
+                    </Grid.ColumnDefinitions>
+                    <Border HorizontalOptions="Start"  WidthRequest="40" HeightRequest="40" Grid.Column="0" StrokeThickness="0"  BackgroundColor="Transparent" Margin="2,0,0,0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv>
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="BackButtonPressed" />
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                            
+                            <Label Text="&#xe70e;" TextColor="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark }}" FontFamily="MauiSampleFontIcon" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28" />
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+                    <Label x:Name="sampleTitleLabel" 
+                       Grid.Column="1"
+                        
+                       TextColor="{AppThemeBinding Light={StaticResource HeaderForegroundLight}, Dark={StaticResource HeaderForegroundDark}}" 
+                       Padding="0,-1.5,0,0"
+                       Margin="5,0,0,0"                      
+                       Text="{Binding Title}"
+                       FontFamily="Roboto-Medium"
+                       HeightRequest="24"                     
+                       HorizontalOptions="Start"
+                       FontSize="20"/>
+
+             
+                    <Border x:Name="whatsNewGrid" HorizontalOptions="End" Grid.Column="2" IsVisible="False" WidthRequest="40" HeightRequest="40" StrokeThickness="0"  BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv WidthRequest="40" HeightRequest="40" Grid.Column="0" HorizontalOptions="End" >
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="WhatsNewTapped" />
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                            
+                            <Label Text="&#xe719;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+            
+
+                <Border x:Name="sourceLinkGrid" BackgroundColor="Transparent" HorizontalOptions="End" IsVisible="false" WidthRequest="40" HeightRequest="40"   Grid.Column="3" StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="30"/>
+                    </Border.StrokeShape>
+                    <customView:SfEffectsViewAdv WidthRequest="40" HeightRequest="40"    Grid.Column="0" HorizontalOptions="End" >
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SourceLinkTapped" />
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                           
+                            <Label Text="&#xe7ba;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                </Border>
+
+                <Border x:Name="youtubeIconGrid" BackgroundColor="Transparent" HorizontalOptions="End" IsVisible="false" WidthRequest="40" HeightRequest="40"  Grid.Column="4" StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv WidthRequest="40" HeightRequest="40" Grid.Column="0" HorizontalOptions="End" >
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="YoutubeIconTapped" />
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                            
+                            <Label Text="&#xe79e;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+
+                    <Border x:Name="codeViewerImage" BackgroundColor="Transparent" HorizontalOptions="End" IsVisible="false" WidthRequest="40" HeightRequest="40"  Grid.Column="5" StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv WidthRequest="40" HeightRequest="40" Grid.Column="0" HorizontalOptions="End" >
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="CodeViewerTapped" />
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                           
+                            <Label Text="&#xe7bb;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+
+                    <Border x:Name="settingsImage" BackgroundColor="Transparent" HorizontalOptions="End" IsVisible="false" WidthRequest="40" HeightRequest="40"  Grid.Column="6" StrokeThickness="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv WidthRequest="40" HeightRequest="40" Grid.Column="0" HorizontalOptions="End" >
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PropertiesTabPressed" />
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                            
+                            <Label Text="&#xe73b;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+                </Grid>
+            </Grid>
+           
+            <Grid  x:Name="searchEntryGrid" Background="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}" HeightRequest="48" ColumnDefinitions="48,*,48" IsVisible="False">
+                <Border HorizontalOptions="Start"  WidthRequest="40" HeightRequest="40" Grid.Column="0" StrokeThickness="0"  BackgroundColor="Transparent" Margin="2,0,0,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="30"/>
+                    </Border.StrokeShape>
+                    <local:SfEffectsViewAdv>
+                        <local:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SampleSearchImage_Clicked"/>
+                        </local:SfEffectsViewAdv.GestureRecognizers>
+                        
+                        <Label Text="&#xe70e;" TextColor="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark}}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </local:SfEffectsViewAdv>
+                </Border>
+               
+                <BoxView Grid.Column="1" Color="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}" CornerRadius="1" Grid.ColumnSpan="2"/>
+                <local:SfEntry Grid.Column="1"
+                   Margin="10,5,0,0"
+                   Placeholder="Search"
+                   TextColor="{AppThemeBinding Light={StaticResource InputTextColourLight}, Dark={StaticResource InputTextColourDark}}"
+                   PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"
+                   FontFamily="Roboto-Medium"
+                   FontSize="14"
+                   Text="{Binding SearchText}"
+                   TextChanged="Entry_TextChanged"
+                   Focused="Entry_Focused"/>
+                <Border HorizontalOptions="End"  WidthRequest="40" HeightRequest="40" Grid.Column="2" StrokeThickness="0"  BackgroundColor="Transparent" Margin="0,0,2,0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="30"/>
+                    </Border.StrokeShape>
+                    <customView:SfEffectsViewAdv>
+                        <Label x:Name="sampleSearchImage" Text="&#xe728;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28" />
+                    </customView:SfEffectsViewAdv>
+                </Border>
+            </Grid>
+            
+            <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="0" x:Name="searchSampleTitleGrid" IsVisible="false">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border HorizontalOptions="Start"  WidthRequest="40" HeightRequest="40" Grid.Column="0" StrokeThickness="0"  BackgroundColor="Transparent" Margin="2,0,0,0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv>
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="BackButtonPressed" />
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                            <Label Text="&#xe70e;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"  />
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+                    <Label x:Name="searchSampleTitleLabel" 
+                       Grid.Column="1"
+                      
+                       TextColor="{AppThemeBinding Light={StaticResource HeaderForegroundLight}, Dark={StaticResource HeaderForegroundDark}}"
+                       Margin="5,0,0,0"
+                       Padding="0,-2.5,0,0"
+                       FontFamily="Roboto-Medium"
+                       HeightRequest="24"
+                       WidthRequest="200"
+                       FontSize="20"/>
+                </Grid>
+            </Grid>
+           
+            <Grid Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="0" x:Name="CardPopUpViewTitleGrid" IsVisible="false">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" x:Name="whatsnewPopupColumnWidth"/>
+                        <ColumnDefinition Width="Auto" x:Name="sourcePopupColumnWidth"/>
+                        <ColumnDefinition Width="Auto" x:Name="youtubePopupColumnWidth"/>
+                        <ColumnDefinition Width="Auto" x:Name="codeviewerPopupColumnWidth"/>
+                        <ColumnDefinition Width="Auto" x:Name="optionPopupColumnWidth"/>
+                    </Grid.ColumnDefinitions>
+                    <Border HorizontalOptions="Start"  WidthRequest="40" HeightRequest="40" Grid.Column="0" StrokeThickness="0"  BackgroundColor="Transparent" Margin="2,0,0,0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv>
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PopUpPageBackButtonPressed" />
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                            <Label Text="&#xe70e;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+                    <Label x:Name="poptitleLabel" 
+                       Grid.Column="1"
+                                             
+                       TextColor="{AppThemeBinding Light={StaticResource HeaderForegroundLight}, Dark={StaticResource HeaderForegroundDark}}"                      
+                       HorizontalTextAlignment="Start"
+                       HorizontalOptions="Start"
+                       Margin="5,0,0,0"
+                       Padding="0,-2.5,0,0"
+                       FontFamily="Roboto-Medium"
+                       HeightRequest="24"                     
+                       FontSize="20"/>
+
+
+                    <Border x:Name="whatsnewPopUpImage" WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Grid.Column="2" IsVisible="False" StrokeThickness="0" BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv>
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="WhatsNewTappedPopup"/>
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                            
+                            <Label Text="&#xe719;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+
+
+                    <Border x:Name="sourcePopUpImage" WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Grid.Column="3" IsVisible="false" BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv >
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="SourceLinkTapped" />
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                            
+                            <Label Text="&#xe7ba;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                </Border>
+
+                    <Border x:Name="youtubePopupImage" WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Grid.Column="4" IsVisible="false" BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv>
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="YoutubeIconTapped" />
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                           
+                            <Label Text="&#xe79e;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                </Border>
+
+                    <Border x:Name="codeViewerPopUpImage" WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Grid.Column="5" IsVisible="false" BackgroundColor="Transparent">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv  >
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="CodeViewerTapped" />
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                           
+                            <Label Text="&#xe7bb;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                </Border>
+
+                    <Border x:Name="settingsPopupImage" WidthRequest="40" HeightRequest="40" HorizontalOptions="End" Grid.Column="6" IsVisible="false" BackgroundColor="Transparent" >
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30"/>
+                        </Border.StrokeShape>
+                        <customView:SfEffectsViewAdv >
+                            <customView:SfEffectsViewAdv.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="PropertiesTabPressed" />
+                            </customView:SfEffectsViewAdv.GestureRecognizers>
+                            
+                            <Label Text="&#xe73b;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"/>
+                        </customView:SfEffectsViewAdv>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+        
+        <Grid x:Name="NavigationDrawerGrid" IsVisible="false" TranslationX="-345" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="75"/>
+            </Grid.ColumnDefinitions>
+           
+            <Grid x:Name="NavigationContentGrid" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" RowDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto,Auto" RowSpacing="5">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="NavigationContentGrid_Tapped"/>
+                </Grid.GestureRecognizers>
+                <HorizontalStackLayout Padding="30,45,0,45" VerticalOptions="Center">
+                   
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" HeightRequest="60" WidthRequest="60">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10"/>
+                        </Border.StrokeShape>
+                       
+                        <Label Text="&#xe7b4;" FontFamily="MauiSampleFontIcon" FontSize="40" TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                    </Border>
+                    <VerticalStackLayout>
+                       
+                        <Label Text=".NET MAUI" TextColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" FontFamily="Roboto" HeightRequest="30" FontSize="20" Margin="20,10,0,0" FontAttributes="Bold"/>
+                        <Label Text="Controls Demo" TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" FontFamily="Roboto" FontSize="14" HeightRequest="18" Margin="20,0,0,0" FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+               
+                <BoxView Grid.Row="1" HeightRequest="1" BackgroundColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" />
+                <VerticalStackLayout Grid.Row="2">
+                    <customView:SfEffectsViewAdv HeightRequest="45">
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="DocumentationTapGestureRecognizer" />
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                        <HorizontalStackLayout Padding="35,0,0,0" HeightRequest="45" Spacing="10">
+                            <Label Text="&#xe7b1;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="28" VerticalOptions="Center"/>
+                            <Label Text="Documentation" FontSize="16"  FontFamily="Roboto" FontAttributes="Bold" VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </customView:SfEffectsViewAdv>
+                </VerticalStackLayout>
+                <customView:SfEffectsViewAdv HeightRequest="45" Grid.Row="3" >
+                    <customView:SfEffectsViewAdv.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ContactTapGestureRecognizer" />
+                    </customView:SfEffectsViewAdv.GestureRecognizers>
+                    <HorizontalStackLayout Padding="35,0,0,0" HeightRequest="45" Spacing="10">
+                        <Label Text="&#xe7b8;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="28" VerticalOptions="Center"/>
+                        <Label Text="Contact Support" FontSize="16"  FontFamily="Roboto" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </customView:SfEffectsViewAdv>
+                <BoxView Grid.Row="4" IsVisible="false" HeightRequest="1" BackgroundColor="#E9E9E9" />
+                <customView:SfEffectsViewAdv IsVisible="True" HeightRequest="45" Grid.Row="5">
+                    <customView:SfEffectsViewAdv.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ThemeTapGestureRecognizer" />
+                    </customView:SfEffectsViewAdv.GestureRecognizers>
+                    <HorizontalStackLayout Padding="35,0,0,0" HeightRequest="45" Spacing="10">
+                        <Label Text="&#xe7b6;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="28" VerticalOptions="Center"/>
+                        <Label Text="Change theme" FontSize="16"  FontFamily="Roboto" FontAttributes="Bold" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </customView:SfEffectsViewAdv>
+                
+                <BoxView Grid.Row="6" HeightRequest="1" BackgroundColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" />
+                <VerticalStackLayout Grid.Row="7" HeightRequest="75">
+                    <Path  Data="M24 0L18.3433 5.65686L24 11.3137L29.657 5.65686L24 0ZM7 4.65686H0V11.6569H7V4.65686ZM42.3367 15.6821H34.2605C33.3875 15.6821 32.7327 15.8741 32.3398 16.2103C31.947 16.5464 31.7288 17.1226 31.7288 17.8909C31.7288 18.5152 31.9033 18.9954 32.2524 19.2835C32.6018 19.5716 33.1255 19.7637 33.7805 19.7637H38.1021C39.8918 19.7637 41.158 20.1478 41.9001 20.8681C42.6421 21.5884 43.0349 22.8369 43.0349 24.5656C43.0349 26.3423 42.5984 27.6388 41.7253 28.4551C40.8523 29.2715 39.499 29.7036 37.6218 29.7036H28.8911V26.6784H37.0981C38.0149 26.6784 38.6697 26.5344 39.0625 26.2462C39.4553 25.9581 39.6301 25.4299 39.6301 24.7577C39.6301 24.0374 39.4553 23.5572 39.1062 23.2211C38.7568 22.9329 38.1458 22.7889 37.3164 22.7889H33.4312C31.6414 22.7889 30.3318 22.4047 29.5024 21.5884C28.6729 20.8201 28.28 19.5716 28.28 17.8909C28.28 16.0662 28.7166 14.7697 29.5896 13.9053C30.4626 13.089 31.8596 12.6569 33.7368 12.6569H42.293L42.3367 15.6821ZM49.7607 26.9668H52.1619V17.2189H55.1738V29.4157C55.1738 31.0964 54.8247 32.2969 54.1262 33.1132C53.4277 33.9295 52.3364 34.3137 50.8958 34.3137H45.0024V31.7206H50.3721C50.9395 31.7206 51.376 31.5766 51.6816 31.2404C51.9871 30.9523 52.1619 30.4721 52.1619 29.8959V29.7038H49.4988C47.7964 29.7038 46.574 29.3197 45.8755 28.5994C45.1335 27.8791 44.7842 26.6306 44.7842 24.9019V17.1709H47.7527V24.6618C47.7527 25.6222 47.8838 26.2465 48.1455 26.5346C48.4075 26.8227 48.9314 26.9668 49.7607 26.9668ZM63.2026 17.2187H57.5276L57.5713 29.6556H60.5833V19.9078H62.9844C63.77 19.9078 64.2939 20.0518 64.5559 20.34C64.8179 20.6281 64.9487 21.2523 64.9487 22.1647V29.7037H67.9609V21.7805C67.9609 20.1479 67.6116 18.9954 66.8694 18.2751C66.1274 17.5548 64.905 17.2187 63.2026 17.2187ZM76.4307 27.0626H79.6174V29.7517H75.5139C74.4663 29.7517 73.637 29.6076 72.9822 29.4155C72.3271 29.1754 71.7161 28.7913 71.2358 28.2631C70.7122 27.6869 70.2756 27.0146 70.0137 26.1503C69.708 25.3339 69.5771 24.4696 69.5771 23.5092C69.5771 22.5488 69.708 21.6365 70.0137 20.8201C70.3191 20.0038 70.7122 19.2835 71.2795 18.7073C71.7598 18.1791 72.3708 17.7949 73.0256 17.5548C73.6807 17.3147 74.5537 17.2187 75.5576 17.2187H79.6611V19.9558H76.4744C75.0774 19.9558 74.0735 20.2439 73.5496 20.7721C73.0256 21.3003 72.7639 22.2607 72.7639 23.5572C72.7639 24.3255 72.8948 24.9498 73.113 25.478C73.3313 25.9582 73.6807 26.3904 74.1172 26.6785C74.3354 26.8225 74.5972 26.9185 74.9028 27.0146C74.9514 27.0146 75.0151 27.017 75.0933 27.0206L75.2363 27.0278C75.5139 27.042 75.9163 27.0626 76.4307 27.0626ZM80.1387 19.7157H82.2776V29.7516H85.377V19.7157H88.2146V17.2187H85.377V16.2103C85.377 15.8261 85.5081 15.538 85.7263 15.3459C85.9446 15.1538 86.2937 15.0578 86.8176 15.0578H88.2583V12.6569H85.4207C84.1985 12.6569 83.3689 12.897 82.9324 13.3291C82.4958 13.8093 82.2776 14.6256 82.2776 15.9221V17.2187H80.1387V19.7157ZM99.7009 29.7517H94.0259C92.3669 29.7517 91.1448 29.3675 90.4026 28.6472C89.6604 27.927 89.3113 26.7745 89.3113 25.1418V17.2187H92.2798V24.9018C92.2798 25.7181 92.4106 26.2943 92.6726 26.5824C92.9346 26.8705 93.4585 27.0146 94.2441 27.0146H96.645V17.2667H99.6572L99.7009 29.7517ZM108.255 27.1106H101.925H101.794V29.7517H109.565C110.481 29.7517 111.224 29.3675 111.791 28.6472C112.359 27.927 112.664 26.9666 112.664 25.8141C112.664 24.6136 112.359 23.7013 111.704 23.077C111.049 22.4528 110.089 22.1167 108.866 22.1167H106.16C105.68 22.1167 105.287 22.0206 105.068 21.8285C104.85 21.6365 104.719 21.3483 104.719 20.9642C104.719 20.532 104.85 20.2439 105.112 20.0518C105.374 19.9078 105.941 19.8117 106.815 19.8117H112.14V17.2187H105.68C104.326 17.2187 103.322 17.5548 102.667 18.1791C102.013 18.8033 101.707 19.8117 101.707 21.1563C101.707 22.5008 102.013 23.4132 102.537 23.9414C103.06 24.4696 104.108 24.7097 105.636 24.7097H108.255C108.823 24.7097 109.216 24.8057 109.478 24.9978C109.74 25.1899 109.87 25.478 109.87 25.9102C109.87 26.3423 109.74 26.6304 109.478 26.8225C109.216 27.0146 108.823 27.1106 108.255 27.1106ZM117.727 15.7781H114.584V12.6569H117.727V15.7781ZM117.727 29.7516H114.584V17.2187H117.727V29.7516ZM129.732 28.1679C130.823 27.0154 131.347 25.4308 131.347 23.462C131.347 21.5413 130.823 19.9566 129.688 18.7561C128.597 17.5557 127.156 16.9794 125.323 16.9794C123.49 16.9794 122.005 17.5557 120.914 18.7561C119.823 19.9086 119.255 21.4932 119.255 23.462C119.255 25.4308 119.823 27.0154 120.914 28.1679C122.005 29.3684 123.49 29.9446 125.323 29.9446C127.2 29.9446 128.641 29.3203 129.732 28.1679ZM123.184 26.2471C122.704 25.5749 122.442 24.6625 122.442 23.462C122.442 22.3096 122.66 21.3972 123.184 20.6769C123.708 20.0047 124.406 19.6685 125.323 19.6685C126.24 19.6685 126.938 20.0047 127.462 20.6769C127.986 21.3492 128.248 22.2616 128.248 23.462C128.248 24.6625 127.986 25.5749 127.462 26.2471C126.938 26.9194 126.24 27.2555 125.323 27.2555C124.406 27.2555 123.708 26.9194 123.184 26.2471ZM132.832 17.2187H138.507C140.21 17.2187 141.432 17.5548 142.174 18.2751C142.916 18.9954 143.266 20.1479 143.266 21.7805V29.7037H140.253V22.1647C140.253 21.2523 140.123 20.6281 139.861 20.34C139.599 20.0518 139.075 19.9078 138.289 19.9078H135.888V29.6556H132.876L132.832 17.2187ZM0 13.6569H7V20.6569H0V13.6569ZM7 22.6569H0V29.6569H7V22.6569ZM9 4.65686H16V11.6569H9V4.65686ZM16 13.6569H9V20.6569H16V13.6569ZM9 22.6569H16V29.6569H9V22.6569ZM18 13.6569H25V20.6569H18V13.6569ZM25 22.6569H18V29.6569H25V22.6569Z" 
+                           
+                           Fill="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}" HorizontalOptions="Start" WidthRequest="144" HeightRequest="35" Margin="33,0,0,0" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+
+        <Grid x:Name="Graylayout" IsVisible="false" BackgroundColor="{AppThemeBinding Light={StaticResource Overlay}, Dark={StaticResource Overlay}}"  Opacity="0.5">
+            <Grid.GestureRecognizers>
+
+                <TapGestureRecognizer Tapped="Graylayout_Tapped"/>
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <Grid x:Name="themePopup" IsVisible="false" VerticalOptions="End" HeightRequest="214" HorizontalOptions="FillAndExpand" RowDefinitions="56,auto">
+
+            <BoxView CornerRadius="20,20,0,0" Color="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" HeightRequest="214" Grid.RowSpan="5"/>
+            <Grid ColumnDefinitions="*,48" Grid.Row="0"  HeightRequest="56">
+
+                <Label Text="Select Theme" Grid.Column="0" FontSize="16" Margin="24,16,0,16" FontFamily="Roboto-Medium" VerticalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}"/>
+                <Border WidthRequest="24" HeightRequest="24" Grid.Row="1" Grid.Column="1" Background="Transparent" VerticalOptions="Center"  StrokeThickness="0" Margin="0,21,29,21">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="30"/>
+                    </Border.StrokeShape>
+                    <customView:SfEffectsViewAdv >
+                        <customView:SfEffectsViewAdv.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ThemePopupCloseIcon_Tapped"/>
+                        </customView:SfEffectsViewAdv.GestureRecognizers>
+                        <Label Text="&#xe755;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="14" VerticalOptions="Center" HorizontalOptions="Center">
+                        </Label>
+                    </customView:SfEffectsViewAdv>
+                </Border>
+            </Grid>
+            <Grid VerticalOptions="Start" Grid.Row="1" HeightRequest="48" ColumnDefinitions="60,*,50" >
+
+                <Label Text="&#xe775;" FontFamily="MauiSampleFontIcon" Grid.Column="0" Margin="27,15,0,15" FontSize="18"  Style="{StaticResource AltIconStyle}" VerticalOptions="Center"/>
+                <Label Text="Dark Theme" Grid.Column="1"                                    
+                            Margin="15,12,0,12"
+                            TextColor="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}"
+                            FontFamily="Roboto-Medium"
+                            VerticalTextAlignment="Center"
+                            FontSize="16" VerticalOptions="Center"/>
+                <Switch VerticalOptions="Center" Grid.Column="2" Margin="15,0,0,0" Toggled="themePopupSwitch_Toggled" x:Name="themePopupSwitch" Style="{StaticResource switchStyle}" />
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>

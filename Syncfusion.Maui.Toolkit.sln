@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{24C3AED9-329D-478C-A0B8-48CCF972B662}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{437D605F-5EA5-47D2-8F7D-BCD70A92FA12}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{BC1A528C-0E64-4D08-959A-0AA28C545F8C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sandbox", "Sandbox", "{ACFAD908-4EC5-4E20-A7A1-33D30A8C3C1F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gallery", "Gallery", "{878EF842-9BAF-44D4-8A5A-DC51AE334617}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syncfusion.Maui.Toolkit.UnitTest", "maui\tests\Syncfusion.Maui.Toolkit.UnitTest\Syncfusion.Maui.Toolkit.UnitTest.csproj", "{E9510CEB-2F71-45E7-AD97-5F859455B7EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syncfusion.Maui.Samples.Sandbox", "maui\samples\Sandbox\Syncfusion.Maui.Samples.Sandbox.csproj", "{5C154228-EE2F-4B3F-A34F-612573881BE1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syncfusion.Maui.Toolkit", "maui\src\Syncfusion.Maui.Toolkit.csproj", "{0C8A9769-D847-4A41-A9BF-98B6B52E641A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Syncfusion.Maui.ControlsGallery", "maui\samples\Gallery\Syncfusion.Maui.ControlsGallery.csproj", "{6A76077B-491B-4031-89AB-685060B46613}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Release-Xml|Any CPU = Release-Xml|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9510CEB-2F71-45E7-AD97-5F859455B7EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9510CEB-2F71-45E7-AD97-5F859455B7EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9510CEB-2F71-45E7-AD97-5F859455B7EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9510CEB-2F71-45E7-AD97-5F859455B7EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9510CEB-2F71-45E7-AD97-5F859455B7EE}.Release-Xml|Any CPU.ActiveCfg = Release-Xml|Any CPU
+		{E9510CEB-2F71-45E7-AD97-5F859455B7EE}.Release-Xml|Any CPU.Build.0 = Release-Xml|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Release-Xml|Any CPU.ActiveCfg = Release-Xml|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Release-Xml|Any CPU.Build.0 = Release-Xml|Any CPU
+		{5C154228-EE2F-4B3F-A34F-612573881BE1}.Release-Xml|Any CPU.Deploy.0 = Release-Xml|Any CPU
+		{0C8A9769-D847-4A41-A9BF-98B6B52E641A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C8A9769-D847-4A41-A9BF-98B6B52E641A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C8A9769-D847-4A41-A9BF-98B6B52E641A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C8A9769-D847-4A41-A9BF-98B6B52E641A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C8A9769-D847-4A41-A9BF-98B6B52E641A}.Release-Xml|Any CPU.ActiveCfg = Release-Xml|Any CPU
+		{0C8A9769-D847-4A41-A9BF-98B6B52E641A}.Release-Xml|Any CPU.Build.0 = Release-Xml|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Release-Xml|Any CPU.ActiveCfg = Release-Xml|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Release-Xml|Any CPU.Build.0 = Release-Xml|Any CPU
+		{6A76077B-491B-4031-89AB-685060B46613}.Release-Xml|Any CPU.Deploy.0 = Release-Xml|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ACFAD908-4EC5-4E20-A7A1-33D30A8C3C1F} = {BC1A528C-0E64-4D08-959A-0AA28C545F8C}
+		{878EF842-9BAF-44D4-8A5A-DC51AE334617} = {BC1A528C-0E64-4D08-959A-0AA28C545F8C}
+		{E9510CEB-2F71-45E7-AD97-5F859455B7EE} = {437D605F-5EA5-47D2-8F7D-BCD70A92FA12}
+		{5C154228-EE2F-4B3F-A34F-612573881BE1} = {ACFAD908-4EC5-4E20-A7A1-33D30A8C3C1F}
+		{0C8A9769-D847-4A41-A9BF-98B6B52E641A} = {24C3AED9-329D-478C-A0B8-48CCF972B662}
+		{6A76077B-491B-4031-89AB-685060B46613} = {878EF842-9BAF-44D4-8A5A-DC51AE334617}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {14BC5035-96F7-44E5-BC48-914D950CC1A5}
+	EndGlobalSection
+EndGlobal

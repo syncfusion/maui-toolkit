@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.PullToRefresh.SfPullToRefresh.PullToRefreshView"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.PullToRefresh"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+                      ios:Page.UseSafeArea="True"
+                      Padding="0"
+                      Margin="0">
+
+    <localCore:SampleView.Behaviors>
+        <local:PullToRefreshViewBehavior />
+    </localCore:SampleView.Behaviors>
+
+    <localCore:SampleView.Resources>
+        <imageExtension:ImageSourceConverter x:Key="imageconverter" />
+        <local:DateToStringConverter x:Key="datestringconverter"/>
+
+        <Style TargetType="Border">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" >
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="#A6FFFFFF"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor"
+                                        Value="#D3FCFF"/>
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+
+        <syncfusion:SfPullToRefresh x:Name="pullToRefresh"
+                                    RefreshViewThreshold="2"
+                                    TransitionMode="SlideOnTop">
+            <syncfusion:SfPullToRefresh.PullableContent>
+                <Grid x:Name="mainGrid"
+                      RowSpacing="0"
+                      BackgroundColor="{Binding Data.BackgroundColor}"
+                      MinimumWidthRequest="165"
+                      MinimumHeightRequest="106">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="106" />
+                    </Grid.RowDefinitions>
+                    <ScrollView VerticalScrollBarVisibility="Never"
+                                VerticalOptions="Center"
+                                Grid.Row="0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="427" />
+                                <RowDefinition Height="52" />
+                                <RowDefinition Height="43" />
+                            </Grid.RowDefinitions>
+                            <Grid x:Name="topGrid"
+                                  Grid.Row="0"
+                                  RowSpacing="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="90" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="110" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid Grid.Column="0">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="192" />
+                                        <RowDefinition Height="71" />
+                                        <RowDefinition Height="110" />
+                                        <RowDefinition Height="43" />
+                                        <RowDefinition Height="11" />
+                                    </Grid.RowDefinitions>
+
+                                    <Image x:Name="bigLeft"
+                                           Margin="-9, 0, 0, 0"
+                                           Source="{imageExtension:ImageResource cloud1.png}"
+                                           HorizontalOptions="Start"
+                                           Grid.Row="1"
+                                           Aspect="AspectFit" />
+
+                                    <Image x:Name="smallLeft"
+                                           Source="{imageExtension:ImageResource cloud3.png}"
+                                           HorizontalOptions="Start"
+                                           Grid.Row="3"
+                                           Aspect="AspectFit" />
+                                </Grid>
+
+                                <Image Source="{imageExtension:ImageResource circlegradient.png}"
+                                       Grid.ColumnSpan="3"
+                                       Aspect="AspectFit"
+                                       ZIndex="-1" />
+
+                                <Grid Grid.ColumnSpan="3"
+                                      RowSpacing="0"
+                                      RowDefinitions="38, 16, 13, 28, 13, 18, 36, 110, 23.5, 75, 9.5, 20, 40"
+                                      HorizontalOptions="Center">
+                                    <Grid Grid.Row="1"
+                                          RowSpacing="0"
+                                          VerticalOptions="Center"
+                                          HorizontalOptions="CenterAndExpand"
+                                          ColumnDefinitions="18, *">
+                                        <Label x:Name="locationPin"
+                                               Text="&#xe76E;"
+                                               FontFamily="MauiSampleFontIcon"
+                                               VerticalOptions="Center"
+                                               TextColor="#49454F"
+                                               Grid.Column="0" />
+
+                                        <Label x:Name="locationName"
+                                               Grid.Column="1"
+                                               Text="New York"
+                                               FontFamily="Roboto-Regular"
+                                               FontSize="14"
+                                               TextColor="#49454F"
+                                               Margin="4, 0, 0, 0" />
+                                    </Grid>
+
+                                    <Label x:Name="weatherType"
+                                           Grid.Row="3"
+                                           TextColor="#1C1B1F"
+                                           Text="{Binding Data.WeatherType}"
+                                           FontFamily="Roboto-Medium"
+                                           FontAttributes="Bold"
+                                           FontSize="24"
+                                           Margin="0, -3, 0, 0"
+                                           VerticalOptions="Center"
+                                           HorizontalTextAlignment="Center" />
+
+
+                                    <Label x:Name="dateDay"
+                                           TextColor="#1C1B1F"
+                                           Grid.Row="5"
+                                           Margin="0, -2, 0, 0"
+                                           Text="{Binding Data.Date, Converter={x:StaticResource datestringconverter}}"
+                                           FontSize="16"
+                                           FontFamily="Roboto-Regular"
+                                           HorizontalOptions="Center" />
+
+                                    <Image Source="{Binding Data.WeatherImage, Converter={x:StaticResource imageconverter}}"
+                                           Grid.Row="7"
+                                           x:Name="weatherImage"
+                                           Margin="0, 36, 0, 18"
+                                           HeightRequest="110"
+                                           WidthRequest="110"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center" />
+
+                                    <Label x:Name="temperature"
+                                           Grid.Row="9"
+                                           Text="{Binding Data.Temperature}"
+                                           TextColor="#1C1B1F"
+                                           FontSize="64"
+                                           FontFamily="Roboto-Medium"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"/>
+
+                                    <Label x:Name="dayNight"
+                                           Grid.Row="11"
+                                           VerticalOptions="Center"
+                                           HorizontalOptions="Center"
+                                           Text="{Binding Data.Temperature, StringFormat='Day : {0} | Night : 29°'}"
+                                           FontSize="14"
+                                           FontAttributes="Bold"
+                                           FontFamily="Roboto-Regular"
+                                           TextColor="#CC000000" />
+
+                                </Grid>
+
+                                <Grid Grid.Column="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="64" />
+                                        <RowDefinition Height="87" />
+                                        <RowDefinition Height="108" />
+                                        <RowDefinition Height="43" />
+                                        <RowDefinition Height="125" />
+                                    </Grid.RowDefinitions>
+
+                                    <Image x:Name="bigRight"
+                                           Margin="0, 0, -9, 0"
+                                           Source="{imageExtension:ImageResource cloud2.png}"
+                                           HorizontalOptions="End"
+                                           Aspect="AspectFit"
+                                           Grid.Row="1" />
+
+                                    <Image x:Name="smallRight"
+                                           Source="{imageExtension:ImageResource cloud4.png}"
+                                           HorizontalOptions="End"
+                                           Grid.Row="3"
+                                           Aspect="AspectFit" />
+                                </Grid>
+
+                            </Grid>
+
+                            <Grid x:Name="windDetailGrid"
+                                  HorizontalOptions="Center"
+                                  VerticalOptions="Fill"
+                                  IsVisible='{OnPlatform WinUI="False", Default="True"}'
+                                  Grid.Row="1">
+                                <CollectionView x:Name="windList"
+                                                 ItemsSource="{Binding WindDetailList}"
+                                                 SelectionMode="None"
+                                                 HorizontalOptions="Center">
+                                    <CollectionView.ItemsLayout>
+                                        <GridItemsLayout Orientation="Horizontal" Span="0" HorizontalItemSpacing='6'/>
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="12, 0, 12, 0"
+                                                    Grid.Column="0"
+                                                    BackgroundColor="#3BFFFFFF">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="8" />
+                                                </Border.StrokeShape>
+                                                <Grid ColumnSpacing="8">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="7" />
+                                                        <RowDefinition Height="16" />
+                                                        <RowDefinition Height="2" />
+                                                        <RowDefinition Height="16" />
+                                                        <RowDefinition Height="11" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="24" />
+                                                        <ColumnDefinition Width="57" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Label x:Name="airIcon"
+                                                           Text="&#xe78F;"
+                                                           TextColor="#1C1B1F"
+                                                           FontSize="24"
+                                                           FontFamily="MauiSampleFontIcon"
+                                                           VerticalOptions="Center"
+                                                           Grid.RowSpan="5"
+                                                           Grid.Column="0" />
+
+                                                    <Label x:Name="airQuality"
+                                                           Text="{Binding Detail}"
+                                                           FontSize="12"
+                                                           FontFamily="Roboto-Regular"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#B3000000"
+                                                           Grid.Row="1"
+                                                           Grid.Column="1" />
+
+                                                    <Label x:Name="airQualityValue"
+                                                           Text="{Binding Values}"
+                                                           FontSize="14"
+                                                           FontAttributes="Bold"
+                                                           FontFamily="Roboto-Medium"
+                                                           TextColor="#CC000000"
+                                                           Grid.Row="3"
+                                                           Grid.Column="1" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+
+                            </Grid>
+                        </Grid>
+                    </ScrollView>
+
+                    <Grid x:Name="listViewGrid"
+                          Grid.Row="1"
+                          BackgroundColor="#61FFFFFF"
+                          VerticalOptions="End">
+                        <CollectionView x:Name="listView"
+                                         ItemsSource="{Binding SelectedData}"
+                                         SelectionMode="Single"
+                                        ItemSizingStrategy="MeasureAllItems"
+                                        HorizontalOptions="Center"
+                                        HorizontalScrollBarVisibility="Never">
+                            <CollectionView.ItemsLayout>
+                                <GridItemsLayout Orientation="Horizontal" Span="0" VerticalItemSpacing="8" HorizontalItemSpacing='{OnPlatform WinUI="24", MacCatalyst="24", Default="10"}'/>
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border x:Name="listviewTemplate"
+                                                WidthRequest="72"
+                                                HeightRequest='{OnPlatform Android="90", iOS="90"}'>
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="8" />
+                                        </Border.StrokeShape>
+
+                                        <Grid RowSpacing="4"
+                                                  RowDefinitions="7, 28, 18, 14, 7">
+
+                                            <Label x:Name="weatherIcon"
+                                                       Text="{Binding WeatherIcon}"
+                                                       TextColor="#1C1B1F"
+                                                       FontSize="28"
+                                                       Grid.Row="1"
+                                                       HorizontalOptions="Center"
+                                                       FontFamily="MauiSampleFontIcon" />
+
+                                            <Label x:Name="listDay"
+                                                       Text="{Binding Date, Converter={x:StaticResource datestringconverter}, ConverterParameter={x:Reference listView}}"
+                                                       TextColor="#1C1B1F"
+                                                       FontSize="14"
+                                                       FontFamily="Roboto-Regular"
+                                                       Grid.Row="2"
+                                                       HorizontalOptions="Center" />
+
+                                            <Label x:Name="temp"
+                                                       Grid.Row="3"
+                                                       Text="32° / 29°"
+                                                       FontSize="12"
+                                                       FontFamily="Roboto-Regular"
+                                                       TextColor="#CC000000"
+                                                       HorizontalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+
+                            <CollectionView.SelectedItem>
+                                <DataTemplate>
+                                    <Border x:Name="listviewTemplate">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="8" />
+                                        </Border.StrokeShape>
+                                        <Grid RowSpacing="4"
+                                                  RowDefinitions="7, 28, 18, 14, 7">
+
+                                            <Label x:Name="weatherIcon"
+                                                       Text="{Binding WeatherIcon}"
+                                                       TextColor="#1C1B1F"
+                                                       FontSize="28"
+                                                       Grid.Row="1"
+                                                       HorizontalOptions="Center"
+                                                       FontFamily="MauiSampleFontIcon" />
+
+                                            <Label x:Name="listDay"
+                                                       Text="{Binding Date, Converter={x:StaticResource datestringconverter}, ConverterParameter={x:Reference listView}}"
+                                                       TextColor="#1C1B1F"
+                                                       FontSize="14"
+                                                       FontFamily="Roboto-Regular"
+                                                       Grid.Row="2"
+                                                       HorizontalOptions="Center" />
+
+                                            <Label x:Name="temp"
+                                                       Grid.Row="3"
+                                                       Text="32° / 29°"
+                                                       FontSize="12"
+                                                       FontFamily="Roboto-Regular"
+                                                       TextColor="#CC000000"
+                                                       HorizontalOptions="Center" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.SelectedItem>
+                        </CollectionView>
+                    </Grid>
+                </Grid>
+            </syncfusion:SfPullToRefresh.PullableContent>
+        </syncfusion:SfPullToRefresh>
+    </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <Grid Padding="0,20,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="160" />
+                </Grid.ColumnDefinitions>
+
+                <Label FontSize="14"
+                       HorizontalOptions="Start"
+                       Text="Transition Type"
+                       VerticalOptions="Center" />
+                <Picker  x:Name="comboBox"
+                                     Grid.Row="0"
+                                     Grid.Column="1"
+                                     HorizontalOptions="StartAndExpand">
+
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Push</x:String>
+                            <x:String>SlideOnTop</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+
+                    <Picker.SelectedItem>
+                        <x:String>SlideOnTop</x:String>
+                    </Picker.SelectedItem>
+                </Picker>
+            </Grid>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

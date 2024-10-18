@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Miscellaneous">
+		<Control Title="Effects View" ControlName="SfEffectsView" Image="effectsview.png" Description="Provides ripple, highlight, scaling and rotation effects for any view.">
+			<Sample Title="Ripple" SampleName="RippleAnimation" SearchTags="effectsview, ripple, animation, effects"/>
+			<Sample Title="Scale" SampleName="ScaleAnimation" SearchTags="effectsview, scale, animation, effects"/>
+			<Sample Title="Rotate" SampleName="RotateAnimation" SearchTags="effectsview, rotate, rotation, animation, effects"/>
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>

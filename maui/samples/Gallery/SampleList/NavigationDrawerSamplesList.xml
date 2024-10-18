@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+		<ControlCategory Name="Navigation">
+		<Control ControlName="NavigationDrawer"
+				 Title="Navigation Drawer"
+				 Image="navigationdrawer.png"
+				 Description="The NavigationDrawer is a UI panel that displays app navigation options on the side of the screen.">
+			<Sample SampleName="GettingStarted"
+					Title="Getting Started"
+					SearchTags="navigationdrawer,drawer,navigation,nav,menubar"/>
+		</Control>
+		</ControlCategory>
+	
+</SyncfusionControls>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class=" Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart.Tooltip"
+             xmlns:local="clr-namespace: Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:PolarChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <chart:SfPolarChart x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill" 
+                             PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight3}, Dark={StaticResource PaletteBrushesDark3}}">
+
+            <chart:SfPolarChart.Resources>
+                <ResourceDictionary>
+                    <DataTemplate x:Key="tooltipTemplate1">
+                        <StackLayout Orientation="Horizontal">
+                            <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series6Light}, Dark={StaticResource series6Dark}}"/>
+                            <StackLayout Orientation="Vertical">
+                                <Label Text="{Binding Item.Category}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="15" Padding="5,0,0,0" FontAttributes="Bold"/>
+                                <Label Text="{Binding Item.Value1,StringFormat='Budget : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0" Margin="0,2,0,0"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </DataTemplate>
+
+                    <DataTemplate x:Key="tooltipTemplate2">
+                        <StackLayout Orientation="Horizontal">
+                            <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series2Light}, Dark={StaticResource series2Dark}}"/>
+                            <StackLayout Orientation="Vertical">
+                                <Label Text="{Binding Item.Category}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="15" Padding="5,0,0,0" FontAttributes="Bold"/>
+                                <Label Text="{Binding Item.Value2,StringFormat='Expenditure : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0" Margin="0,2,0,0"/>
+                            </StackLayout>
+                        </StackLayout>
+                    </DataTemplate>
+                </ResourceDictionary>
+            </chart:SfPolarChart.Resources>
+
+            <chart:SfPolarChart.Title>
+                <Label Text="Tracking the Monthly Budget and Expenditure" HorizontalTextAlignment="Center" LineBreakMode="WordWrap"
+                      FontSize="18"/>
+            </chart:SfPolarChart.Title>
+
+            <chart:SfPolarChart.BindingContext>
+                <local:ViewModel x:Name="viewModel"/>
+            </chart:SfPolarChart.BindingContext>
+
+            <chart:SfPolarChart.PrimaryAxis>
+                <chart:CategoryAxis>
+                    <chart:CategoryAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle FontSize="{OnPlatform Android=9, iOS=9, Default=12}"/>
+                    </chart:CategoryAxis.LabelStyle>
+                </chart:CategoryAxis>
+            </chart:SfPolarChart.PrimaryAxis>
+
+            <chart:SfPolarChart.SecondaryAxis>
+                <chart:NumericalAxis EdgeLabelsDrawingMode="Center" Minimum="0" Interval="5" Maximum="30"
+                                     MinorTicksPerInterval="4" ShowMinorGridLines="False">
+                    <chart:NumericalAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="0'%" FontSize="{OnPlatform Android=9, iOS=9, Default=12}"/>
+                    </chart:NumericalAxis.LabelStyle>
+                </chart:NumericalAxis>
+            </chart:SfPolarChart.SecondaryAxis>
+
+            <chart:SfPolarChart.Legend>
+                <chart:ChartLegend/>
+            </chart:SfPolarChart.Legend>
+
+            <chart:PolarLineSeries Label="Allocated Budget" ItemsSource="{Binding ExpenditureData}" XBindingPath="Category" YBindingPath="Value1" LegendIcon="Rectangle" EnableAnimation="True"
+                                  EnableTooltip="True" TooltipTemplate="{StaticResource tooltipTemplate1}"  StrokeWidth="2" ShowMarkers="True">
+                <chart:PolarLineSeries.MarkerSettings>
+                    <chart:ChartMarkerSettings Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Default={StaticResource series6Light}, Dark={StaticResource series6Dark}}" StrokeWidth="1.5" Width="9" Height="9"/>
+                </chart:PolarLineSeries.MarkerSettings>
+            </chart:PolarLineSeries>
+
+            <chart:PolarLineSeries Label="Actual Spending" ItemsSource="{Binding ExpenditureData}" XBindingPath="Category" YBindingPath="Value2" LegendIcon="Rectangle" EnableAnimation="True"
+                                  EnableTooltip="True" TooltipTemplate="{StaticResource tooltipTemplate2}" StrokeWidth="2" ShowMarkers="True">
+                <chart:PolarLineSeries.MarkerSettings>
+                    <chart:ChartMarkerSettings Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Default={StaticResource series2Light}, Dark={StaticResource series2Dark}}" StrokeWidth="1.5" Width="9" Height="9"/>
+                </chart:PolarLineSeries.MarkerSettings>
+            </chart:PolarLineSeries>
+        </chart:SfPolarChart>
+    </localCore:SampleView.Content>
+
+</localCore:SampleView>

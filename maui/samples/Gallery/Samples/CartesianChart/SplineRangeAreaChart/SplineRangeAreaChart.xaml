@@ -1,0 +1,120 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.SplineRangeAreaChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+        <StackLayout>
+            
+            <StackLayout.BindingContext>
+                <local:SplineRangeAreaChartViewModel/>
+            </StackLayout.BindingContext>
+            
+            <chart:SfCartesianChart x:Name="Chart" PaletteBrushes="{Binding PaletteBrushes}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+           
+                <chart:SfCartesianChart.Resources>
+                    <ResourceDictionary>
+                        <DataTemplate x:Key="template1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Padding="0,1" Grid.Row="0">
+                                    <Ellipse TranslationY="-2" TranslationX="2" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" HeightRequest="10" WidthRequest="10" Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"  Margin="2,3,7,0" />
+                                    <Label Text="Madrid" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="13" Grid.Row="0"/>
+                                </StackLayout>
+                                <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="70" Margin="2" Grid.Row="1"/>
+                                <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Vertical"  VerticalOptions="Fill" Spacing="0" Padding="2" Margin="0">
+                                    <Label Text="{Binding DataItem.Value,StringFormat='High : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
+                                           TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                    <Label Text="{Binding DataItem.High,StringFormat='Avg  : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
+                                           TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                    <Label Text="{Binding DataItem.Low,StringFormat='Low  : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
+                                           TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                </StackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </ResourceDictionary>
+                </chart:SfCartesianChart.Resources>
+              
+                <chart:SfCartesianChart.TrackballBehavior>
+                    <chart:ChartTrackballBehavior>
+                        <chart:ChartTrackballBehavior.MarkerSettings>
+                            <chart:ChartMarkerSettings Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"
+                                                       Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeWidth="2"/>
+                        </chart:ChartTrackballBehavior.MarkerSettings>
+                    </chart:ChartTrackballBehavior>
+                </chart:SfCartesianChart.TrackballBehavior>
+                
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior EnablePinchZooming="False" EnableDoubleTap="False"/>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+                
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Temperature Variation in Madrid" Margin="0,0,0,40" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+                </chart:SfCartesianChart.Title>
+              
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis LabelCreated="Primary_LabelCreated" Interval="5" ShowMajorGridLines="false" AutoScrollingMode="Start" AutoScrollingDeltaType="Days" AutoScrollingDelta="{OnPlatform iOS=19,Android=19}">
+                        <chart:DateTimeAxis.Title>
+                            <chart:ChartAxisTitle Text="Year 2023"/>
+                        </chart:DateTimeAxis.Title>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+               
+                <chart:SfCartesianChart.YAxes >
+                    <chart:NumericalAxis ShowMajorGridLines="False" x:Name="yAxis" Minimum="40" Maximum="120" Interval="20">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat= "0.#&#186;F"/>
+                        </chart:NumericalAxis.LabelStyle>
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Temperature [°F]"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                
+                <chart:SplineRangeAreaSeries ItemsSource="{Binding SplineRangeAreaData}" XBindingPath="Date" High="Value" Low="Low"
+                        Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" 
+                        Stroke="{AppThemeBinding Light={StaticResource series1Dark}, Dark={StaticResource series1Dark}}" 
+                        EnableAnimation="True" StrokeWidth="3" ShowTrackballLabel="False"/>
+
+                <chart:SplineSeries ItemsSource="{Binding SplineRangeAreaData}" XBindingPath="Date" YBindingPath="High" ShowTrackballLabel="True"            
+                          Fill="{AppThemeBinding Light={StaticResource series1Light40 }, Dark={StaticResource series1Dark40}}" 
+                          TrackballLabelTemplate="{StaticResource template1}" EnableAnimation="True" StrokeWidth="2" ShowMarkers="True">
+                    <chart:SplineSeries.MarkerSettings>
+                        <chart:ChartMarkerSettings Width="8" Height="8" Fill="{AppThemeBinding Light={StaticResource series1Light40}, Dark={StaticResource series1Dark40}}" 
+                                   Stroke="{AppThemeBinding Light={StaticResource series1Light40}, Dark={StaticResource series1Dark40}}" StrokeWidth="2"/>
+                    </chart:SplineSeries.MarkerSettings>
+                </chart:SplineSeries>
+                
+              
+            </chart:SfCartesianChart>
+    
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" wunderground.com " VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.wunderground.com/history/monthly/es/madrid/LEMD/date/2023-8"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+            
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

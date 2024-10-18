@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Data Visualization">
+		<Control Title="Polar Charts" Image="polarchart.png" ControlName="SfPolarChart" Description="Visualize the comparison of values and angles, facilitating data analysis using polar charts.">
+			<Sample SearchTags="polar" Name="Polar Chart" SampleName="DefaultPolar" Title="Polar Chart" />
+			<Sample SearchTags="radar" Name="Radar Chart" SampleName="DefaultRadar" Title="Radar Chart" />
+			<Sample SearchTags="tooltip" Name="Tooltip" SampleName="Tooltip" Title="Tooltip"/>
+			<Sample SearchTags="dataLabel" Name="DataLabel" SampleName="PolarDataLabel" Title="DataLabel" />
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>

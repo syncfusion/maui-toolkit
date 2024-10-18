@@ -1,0 +1,85 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class=" Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart.Legend"
+             xmlns:local="clr-namespace: Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:PyramidChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <converter:BrushToColorConverter x:Key="brushToColor" />
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+        <chart:SfPyramidChart x:Name="Chart"
+                             HorizontalOptions="Fill"
+                             VerticalOptions="FillAndExpand"
+                             Margin="{OnPlatform Android='0,0,0,50', iOS='0,0,0,50', Default='0,0,0,0'}"
+                            PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight2}, Dark={StaticResource PaletteBrushesDark2}}" 
+                             StrokeWidth="2"
+                             Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                             ItemsSource="{Binding FinancialData}"
+                             XBindingPath="Name"
+                             YBindingPath="Size"
+                             ShowDataLabels="True">
+            <chart:SfPyramidChart.BindingContext>
+                <local:ViewModel />
+            </chart:SfPyramidChart.BindingContext>
+            <chart:SfPyramidChart.Title>
+                <Label Text="Operation Cost of Year - 2020"
+                       HorizontalOptions="Fill"
+                       HorizontalTextAlignment="Center"
+                       VerticalOptions="Center"
+                       FontSize="16" />
+            </chart:SfPyramidChart.Title>
+
+            <chart:SfPyramidChart.Legend>
+                <chart:ChartLegend Placement="{OnPlatform WinUI='Bottom',MacCatalyst='Bottom',Default='Top'}">
+                    <chart:ChartLegend.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,Auto,Auto" Padding="5,0,5,0" Margin="2">
+                                <Label Grid.Column="0"
+                                       FontSize="13"
+                                       VerticalTextAlignment="Center"
+                                       HorizontalOptions="End"
+                                       HorizontalTextAlignment="Center"
+                                       Text="{Binding Item.Value,StringFormat='{0:C}'}"
+                                       Padding="5" />
+
+                                <BoxView Grid.Column="1"
+                                         Color="{Binding IconBrush,Converter={StaticResource brushToColor}}"
+                                         HorizontalOptions="Center"
+                                         VerticalOptions="Center"
+                                         CornerRadius="4"
+                                         HeightRequest="10"
+                                         WidthRequest="20" />
+
+                                <Label Grid.Column="2"
+                                       FontSize="13"
+                                       VerticalTextAlignment="Center"
+                                       Text=" {Binding Item.Name}"
+                                       HorizontalOptions="Start"
+                                       HorizontalTextAlignment="Center"
+                                       Padding="5" />
+                            </Grid>
+                        </DataTemplate>
+                    </chart:ChartLegend.ItemTemplate>
+                </chart:ChartLegend>
+            </chart:SfPyramidChart.Legend>
+
+            <chart:SfPyramidChart.DataLabelSettings>
+                <chart:PyramidDataLabelSettings UseSeriesPalette="{OnPlatform Android=True, iOS=True, Default=False}">
+                    <chart:PyramidDataLabelSettings.LabelStyle>
+                        <chart:ChartDataLabelStyle LabelFormat="#.##'%" Margin="{OnPlatform Android=5, iOS=5, Default='1,0,0,0'}"/>
+                    </chart:PyramidDataLabelSettings.LabelStyle>
+                </chart:PyramidDataLabelSettings>
+            </chart:SfPyramidChart.DataLabelSettings>
+        </chart:SfPyramidChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Miscellaneous">
+		<Control Title="Shimmer" ControlName="SfShimmer" Image="shimmer.png" Description="A loading indicator control that provides animations while the data loads.">
+			<Sample Title="Getting started" SampleName="GettingStarted" SearchTags="shimmer, getting started"/>
+			<Sample Platforms="Android,iOS" Title="Chat" SampleName="Chats" SearchTags="Chats, ChatBox"/>
+			<Sample Platforms="Android,iOS" Title="Article" SampleName="Articles" SearchTags="Articles, Library"/>
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>

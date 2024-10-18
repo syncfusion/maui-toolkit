@@ -1,0 +1,50 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.VerticalLiveChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart IsTransposed="True" HorizontalOptions="Fill" 
+                                                x:Name="verticalLiveChart"
+                                                PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" VerticalOptions="Fill">
+
+            <chart:SfCartesianChart.BindingContext>
+                <local:RealTimeVerticalChartViewModel x:Name="realTimeVerticalChartViewModel"/>
+            </chart:SfCartesianChart.BindingContext>
+
+            <chart:SfCartesianChart.Title>
+                <Label Text="Seismograph Analysis of Country" Margin="0,0,0,5" 
+                                       HorizontalOptions="Fill" HorizontalTextAlignment="Center" 
+                                       VerticalOptions="Center" FontSize="16"/>
+            </chart:SfCartesianChart.Title>
+            <chart:SfCartesianChart.XAxes>
+                <chart:NumericalAxis ShowMajorGridLines="False">
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text="Time (s)" />
+                    </chart:NumericalAxis.Title>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.XAxes>
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis ShowMajorGridLines="False" Maximum="15" Minimum="-15">
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Margin="5,10,5,2" Text="Velocity (m/s)">
+                        </chart:ChartAxisTitle>
+                    </chart:NumericalAxis.Title>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+            <chart:SfCartesianChart.Series>
+                <chart:FastLineSeries ItemsSource="{Binding VerticalLiveChartData}" 
+                                                      EnableAntiAliasing="True"
+                                                      XBindingPath="Value" YBindingPath="Size"/>
+            </chart:SfCartesianChart.Series>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

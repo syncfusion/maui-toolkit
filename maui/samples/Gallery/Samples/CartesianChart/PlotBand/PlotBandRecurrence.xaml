@@ -1,0 +1,113 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.PlotBandRecurrence"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <StackLayout>
+
+            <StackLayout.BindingContext>
+                <local:PlotBandRecurrenceViewModel x:Name="ViewModel"/>
+            </StackLayout.BindingContext>
+            
+        <chart:SfCartesianChart VerticalOptions="FillAndExpand" Margin="5,0,5,0" EnableSideBySideSeriesPlacement="False"
+                                x:Name="plotBandRecurrenceChart">
+
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior EnableDoubleTap="False" EnablePinchZooming="False"/>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Comparison of Petrol and Diesel Prices (in pence per litre) in the UK" HorizontalOptions="Center" HorizontalTextAlignment="Center" 
+                       VerticalOptions="CenterAndExpand" FontSize="16" LineBreakMode="WordWrap" Margin="2,0,2,0"/>
+            </chart:SfCartesianChart.Title>
+
+            <chart:SfCartesianChart.Legend>
+                <chart:ChartLegend/>
+            </chart:SfCartesianChart.Legend>
+
+            <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeAxis Interval="{OnPlatform Android=2, iOS=2, Default=1}" ShowMajorGridLines="False" IntervalType="Years"
+                                    AutoScrollingDelta="{OnPlatform iOS=4, Android=4}" AutoScrollingMode="Start">
+                    <chart:DateTimeAxis.PlotBands>
+                        <chart:DateTimePlotBandCollection>
+                            <chart:DateTimePlotBand Start="2013,07,01" Size="1" RepeatEvery="2" IsRepeatable="True" AssociatedAxisEnd="250"
+                                                     IsVisible="{Binding Source={x:Reference xAxis},Path=IsChecked}"/>
+                        </chart:DateTimePlotBandCollection>
+                    </chart:DateTimeAxis.PlotBands>
+                </chart:DateTimeAxis>
+            </chart:SfCartesianChart.XAxes>
+
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis ShowMajorGridLines="False" Minimum="-200" Maximum="260" IsVisible="False">
+                    <chart:NumericalAxis.PlotBands>
+                        <chart:NumericalPlotBandCollection>
+                            <chart:NumericalPlotBand Start="-200" Size="40" RepeatEvery="80" RepeatUntil="250" 
+                                                     IsRepeatable="True" IsVisible="{Binding Source={x:Reference yAxis},Path=IsChecked}"/>
+                        </chart:NumericalPlotBandCollection>
+                    </chart:NumericalAxis.PlotBands>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+
+            <!--Petrol Price Series-->
+            <chart:ColumnSeries ItemsSource="{Binding FuelsPriceDetails}" XBindingPath="Date" YBindingPath="NegativePetrolPrice" Label="Petrol" 
+                                ShowDataLabels="True" 
+                                Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" LegendIcon="Rectangle" Width="0.5">
+                <chart:ColumnSeries.DataLabelSettings>
+                    <chart:CartesianDataLabelSettings LabelPlacement="Inner" BarAlignment="Bottom" UseSeriesPalette="False">
+                        <chart:CartesianDataLabelSettings.LabelStyle>
+                                <chart:ChartDataLabelStyle LabelFormat="0;#.##"  FontSize="{OnPlatform Android=11,iOS=11, Default=13}"/>
+                        </chart:CartesianDataLabelSettings.LabelStyle>
+                    </chart:CartesianDataLabelSettings>
+                </chart:ColumnSeries.DataLabelSettings>
+            </chart:ColumnSeries>
+
+            <!--Diesel Price Series-->
+            <chart:ColumnSeries ItemsSource="{Binding FuelsPriceDetails}" XBindingPath="Date" YBindingPath="DieselPrice" Label="Diesel" 
+                                ShowDataLabels="True" 
+                                Fill="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" LegendIcon="Rectangle" Width="0.5">
+                <chart:ColumnSeries.DataLabelSettings>
+                    <chart:CartesianDataLabelSettings LabelPlacement="Inner" UseSeriesPalette="False" BarAlignment="Bottom">
+                        <chart:CartesianDataLabelSettings.LabelStyle>
+                            <chart:ChartDataLabelStyle FontSize="{OnPlatform Android=11,iOS=11, Default=13}"/>
+                        </chart:CartesianDataLabelSettings.LabelStyle>
+                    </chart:CartesianDataLabelSettings>
+                </chart:ColumnSeries.DataLabelSettings>
+            </chart:ColumnSeries>
+
+        </chart:SfCartesianChart>
+
+        <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,15,0,0">
+            <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" ULSP and ULSD prices in the United Kingdom" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.gov.uk/government/statistical-data-sets/oil-and-petroleum-products-monthly-statistics"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <VerticalStackLayout Spacing="10">
+                <HorizontalStackLayout>
+                    <Label Text="X Axis"/>
+                    <CheckBox x:Name="xAxis" IsChecked="False" VerticalOptions="Start" Margin="30,0,0,0"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Y Axis"/>
+                    <CheckBox x:Name="yAxis" IsChecked="True" VerticalOptions="Start" Margin="30,0,0,0"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

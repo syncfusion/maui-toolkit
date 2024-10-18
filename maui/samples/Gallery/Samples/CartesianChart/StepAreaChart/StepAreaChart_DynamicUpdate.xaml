@@ -1,0 +1,37 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.StepAreaChart_DynamicUpdate"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart x:Name="Chart1" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCartesianChart.BindingContext>
+                <local:DynamicAnimationViewModel x:Name="viewModel1"/>
+            </chart:SfCartesianChart.BindingContext>
+            <chart:SfCartesianChart.Title>
+                <Label Text="Step Area Chart | Dynamic Animation" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+            </chart:SfCartesianChart.Title>
+            <chart:SfCartesianChart.XAxes>
+                <chart:NumericalAxis ShowMajorGridLines="False">
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.XAxes>
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis ShowMajorGridLines="True" Maximum="100" Interval="20" Minimum="0">
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+            <chart:SfCartesianChart.Series>
+
+                <chart:StepAreaSeries Opacity="0.7" Fill="{AppThemeBinding Light={StaticResource AreaGradientLight}, Dark={StaticResource AreaGradientDark}}" Stroke="#FF0080DF" StrokeWidth="2" ItemsSource="{Binding MotionAnimation}" EnableAnimation="True" XBindingPath="Value" YBindingPath="Size">
+                </chart:StepAreaSeries>
+            </chart:SfCartesianChart.Series>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

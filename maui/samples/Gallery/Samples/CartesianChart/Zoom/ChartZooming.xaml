@@ -1,0 +1,93 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.ChartZooming"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart x:Name="chart" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCartesianChart.BindingContext>
+                <local:ZoomViewModel x:Name="ViewModel"/>
+            </chart:SfCartesianChart.BindingContext>
+            <chart:SfCartesianChart.Title>
+                <Label Text="Activity Summary" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+            </chart:SfCartesianChart.Title>
+            <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeAxis ShowMajorGridLines="False" EnableAutoIntervalOnZooming="True" >
+                    <chart:DateTimeAxis.MajorTickStyle>
+                        <chart:ChartAxisTickStyle StrokeWidth="0"/>
+                    </chart:DateTimeAxis.MajorTickStyle>
+                    <chart:DateTimeAxis.Title>
+                        <chart:ChartAxisTitle Text="Month" Margin="5,10,5,2"/>
+                    </chart:DateTimeAxis.Title>
+                    <chart:DateTimeAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="MMM-dd"/>
+                    </chart:DateTimeAxis.LabelStyle>
+                    <chart:DateTimeAxis.AxisLineStyle>
+                        <chart:ChartLineStyle StrokeWidth="0"/>
+                    </chart:DateTimeAxis.AxisLineStyle>
+                </chart:DateTimeAxis>
+            </chart:SfCartesianChart.XAxes>
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis ShowMajorGridLines="True"
+                                     EdgeLabelsDrawingMode="Fit"
+                                     Maximum="100" Minimum="0" PlotOffsetStart="3" PlotOffsetEnd="3">
+                    <chart:NumericalAxis.AxisLineStyle>
+                        <chart:ChartLineStyle StrokeWidth="0" />
+                    </chart:NumericalAxis.AxisLineStyle>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+            <chart:SfCartesianChart.Series>
+                <chart:AreaSeries ItemsSource="{Binding ZoomData}" Fill="{AppThemeBinding Light={StaticResource AreaGradientLight}, Dark={StaticResource AreaGradientDark}}" XBindingPath="Date" YBindingPath="Value">
+                    <!--<chart:AreaSeries.Fill>
+                        <LinearGradientBrush EndPoint="0.5,0" StartPoint="0.5,1">
+                            <GradientStop Color="#00bdae" Offset="1.0"/>
+                            <GradientStop Color="White" Offset="0.0"/>
+                        </LinearGradientBrush>
+                    </chart:AreaSeries.Fill>-->
+                </chart:AreaSeries>
+            </chart:SfCartesianChart.Series>
+            <chart:SfCartesianChart.ZoomPanBehavior>
+                <chart:ChartZoomPanBehavior x:Name="zoomingBehavior" EnableDirectionalZooming="{OnPlatform iOS={Binding Source={x:Reference checkbox},Path=IsChecked},Android={Binding Source={x:Reference checkbox},Path=IsChecked}}"
+                                            ZoomMode="XY"/>
+            </chart:SfCartesianChart.ZoomPanBehavior>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <VerticalStackLayout Spacing="5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label  Grid.Row="0" Grid.Column="0" Text="Zoom Mode"  HorizontalOptions="Start" Padding="5"  FontSize="15"/>
+                    <Picker   Grid.Row="0" Grid.Column="1" 
+                          ItemsSource="{Binding Source={x:Reference ViewModel},Path=ZoomModeType}"
+                          SelectedItem="{Binding Source={x:Reference ViewModel},Path=ZoomModeType[2]}"
+                          VerticalOptions="Start" HorizontalOptions="Fill"
+                          x:Name="ZoomModePicker" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                          SelectedIndex="2"
+                          SelectedIndexChanged="ZoomModeChanged">
+                    </Picker>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Text="Directional Zooming" HorizontalOptions="Start"  Padding="5" FontSize="15" IsVisible="{OnPlatform WinUI=false,MacCatalyst=false}"/>
+                    <CheckBox Grid.Row="0" Grid.Column="1" x:Name="checkbox" VerticalOptions="Start" HorizontalOptions="Start" IsVisible="{OnPlatform WinUI=false,MacCatalyst=false}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

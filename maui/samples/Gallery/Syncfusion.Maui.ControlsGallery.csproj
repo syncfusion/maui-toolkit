@@ -1,0 +1,206 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
+		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
+
+		<!-- Note for MacCatalyst:
+		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
+		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
+		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
+		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
+		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
+
+		<OutputType>Exe</OutputType>
+		<RootNamespace>Syncfusion.Maui.ControlsGallery</RootNamespace>
+		<UseMaui>true</UseMaui>
+		<UseMauiCompat>false</UseMauiCompat>
+		<SingleProject>true</SingleProject>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<AnalysisLevel>latest</AnalysisLevel>
+		<AnalysisLevelSecurity>latest-recommended</AnalysisLevelSecurity>
+		<NoWarn>$(NoWarn);NU1803</NoWarn>
+		<PackageCertificateKeyFile>Syncfusion.Maui.ControlsGallery_TemporaryKey.pfx</PackageCertificateKeyFile>
+		<AssemblyName>Syncfusion.Maui.ControlsGallery</AssemblyName>
+
+		<!-- Display name -->
+		<ApplicationTitle>Syncfusion.Maui.ControlsGallery</ApplicationTitle>
+
+		<!-- App Identifier -->
+		<ApplicationId>com.syncfusion.Syncfusion.Maui.ControlsGallery</ApplicationId>
+		<ApplicationIdGuid>BC541705-2D2C-4B9B-867D-6ED9C6FA7A71</ApplicationIdGuid>
+
+		<!-- Versions -->
+		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
+		<ApplicationVersion>1</ApplicationVersion>
+
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.18362.0</SupportedOSPlatformVersion>
+		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.18362.0</TargetPlatformMinVersion>
+		<Configurations>Debug;Release;Release-Xml</Configurations>
+		<PackageCertificateThumbprint>2E201BC9A0451172406203A123FDCCF10485E2B0</PackageCertificateThumbprint>
+		<AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DefineConstants>TRACE;DEBUG;</DefineConstants>
+		<WarningLevel>5</WarningLevel>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DefineConstants>TRACE;RELEASE;</DefineConstants>
+		<WarningLevel>5</WarningLevel>
+		<!-- NOTE: not recommended for Debug builds! -->
+		<AndroidLinkTool>r8</AndroidLinkTool>
+	</PropertyGroup>
+	
+	<PropertyGroup Condition="$(TargetFramework.Contains('-windows')) and '$(Configuration)' == 'Release'">
+		<GenerateAppxPackageOnBuild>true</GenerateAppxPackageOnBuild>
+		<AppxPackageSigningEnabled>true</AppxPackageSigningEnabled>
+		<PackageCertificateThumbprint>d01aec76455c0352854b7caaf1544f9b169dce54</PackageCertificateThumbprint>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release-Xml|AnyCPU' ">
+		<DefineConstants>TRACE;RELEASE;</DefineConstants>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+		<WarningLevel>5</WarningLevel>
+		<!-- NOTE: not recommended for Debug builds! -->
+		<AndroidLinkTool>r8</AndroidLinkTool>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- App Icon -->
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#4822E3" />
+
+		<!-- Splash Screen -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#4822E3" BaseSize="*,*" />
+
+		<!-- Custom Fonts -->
+		<MauiFont Include="Resources\Fonts\*" />
+
+		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <EmbeddedResource Include="Resources\Images\circularchart.png" />
+	  <EmbeddedResource Include="Resources\Images\funnelchart.png" />
+	  <EmbeddedResource Include="Resources\Images\polarchart.png" />
+	  <EmbeddedResource Include="Resources\Images\pyramidchart.png" />
+	  <EmbeddedResource Include="SampleList\ButtonsSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\CarouselSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\CartesianChartSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\ChipsSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\CircularChartSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\EffectsViewSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\FunnelChartSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\NavigationDrawerSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\PolarChartSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\PullToRefreshSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\PyramidChartSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\ShimmerSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\TabViewSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\TextInputLayoutSamplesList.xml" />
+	  <EmbeddedResource Include="ControlList.xml" />
+	  <EmbeddedResource Include="Resources\Images\Austria.jpg" />
+	  <EmbeddedResource Include="Resources\Images\Canada.jpg" />
+	  <EmbeddedResource Include="Resources\Images\carousel.png" />
+	  <EmbeddedResource Include="Resources\Images\Colombia.jpg" />
+	  <EmbeddedResource Include="Resources\Images\Dubai.jpg" />
+	  <EmbeddedResource Include="Resources\Images\France.jpg" />
+	  <EmbeddedResource Include="Resources\Images\Germany.jpg" />
+	  <EmbeddedResource Include="Resources\Images\India.jpg" />
+	  <EmbeddedResource Include="Resources\Images\Italy.jpg" />
+	  <EmbeddedResource Include="Resources\Images\Kremlin.jpg" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\MauiSampleFontIcon.ttf" />
+    <EmbeddedResource Include="Resources\Images\alexandar.png" />
+    <EmbeddedResource Include="Resources\Images\chat.png" />
+    <EmbeddedResource Include="Resources\Images\cloud1.png" />
+    <EmbeddedResource Include="Resources\Images\cloud2.png" />
+    <EmbeddedResource Include="Resources\Images\book0.png" />
+    <EmbeddedResource Include="Resources\Images\book1.png" />
+    <EmbeddedResource Include="Resources\Images\book2.png" />
+    <EmbeddedResource Include="Resources\Images\book3.png" />
+    <EmbeddedResource Include="Resources\Images\book4.png" />
+    <EmbeddedResource Include="Resources\Images\book5.png" />
+    <EmbeddedResource Include="Resources\Images\chip.png" />
+    <EmbeddedResource Include="Resources\Images\circlegradient.png" />
+    <EmbeddedResource Include="Resources\Images\foggywithcloudy.png" />
+    <EmbeddedResource Include="Resources\Images\heavyrain.png" />
+    <EmbeddedResource Include="Resources\Images\bluecircle.png" />
+    <EmbeddedResource Include="Resources\Images\cartesianchart.png" />
+    <EmbeddedResource Include="Resources\Images\creditcard.png" />
+    <EmbeddedResource Include="Resources\Images\contact_image.png" />
+    <EmbeddedResource Include="Resources\Images\document.png" />
+    <EmbeddedResource Include="Resources\Images\excel.png" />
+    <EmbeddedResource Include="Resources\Images\gettingstarted.png" />
+    <EmbeddedResource Include="Resources\Images\greencircle.png" />
+    <EmbeddedResource Include="Resources\Images\lightbluecircle.png" />
+    <EmbeddedResource Include="Resources\Images\mostlycloudy.png" />
+    <EmbeddedResource Include="Resources\Images\navigationdrawer.png" />
+    <EmbeddedResource Include="Resources\Images\partlysunny.png" />
+    <EmbeddedResource Include="Resources\Images\pdftab.png" />
+    <EmbeddedResource Include="Resources\Images\people_circle23.png" />
+    <EmbeddedResource Include="Resources\Images\people_circle25.png" />
+    <EmbeddedResource Include="Resources\Images\people_circle26.png" />
+    <EmbeddedResource Include="Resources\Images\powerpoint.png" />
+    <EmbeddedResource Include="Resources\Images\pulltorefresh.png" />
+    <EmbeddedResource Include="Resources\Images\redcircle.png" />
+    <EmbeddedResource Include="Resources\Images\segmentedcontrol.png" />
+    <EmbeddedResource Include="Resources\Images\shimmer.png" />
+    <EmbeddedResource Include="Resources\Images\cloud3.png" />
+    <EmbeddedResource Include="Resources\Images\cloud4.png" />
+    <EmbeddedResource Include="Resources\Images\snowwithcloudy.png" />
+    <EmbeddedResource Include="Resources\Images\BlueSpeaker.png" />
+    <EmbeddedResource Include="Resources\Images\SandalsSpeaker.png" />
+    <EmbeddedResource Include="Resources\Images\GreenSpeaker.png" />
+    <EmbeddedResource Include="Resources\Images\PinkSpeaker.png" />
+    <EmbeddedResource Include="Resources\Images\GreySpeaker.png" />
+    <EmbeddedResource Include="Resources\Images\sunny.png" />
+    <EmbeddedResource Include="Resources\Images\thunderstrom.png" />
+    <EmbeddedResource Include="Resources\Images\user.png" />
+    <EmbeddedResource Include="Resources\Images\clara.png" />
+    <EmbeddedResource Include="Resources\Images\effectsview.png" />
+    <EmbeddedResource Include="Resources\Images\effectview_selection.png" />
+    <EmbeddedResource Include="Resources\Images\gabriella.png" />
+    <EmbeddedResource Include="Resources\Images\jackson.png" />
+    <EmbeddedResource Include="Resources\Images\ladybug.jpg" />
+    <EmbeddedResource Include="Resources\Images\liam.png" />
+    <EmbeddedResource Include="Resources\Images\lita.png" />
+    <EmbeddedResource Include="Resources\Images\nora.png" />
+    <EmbeddedResource Include="Resources\Images\people_circle16.png" />
+    <EmbeddedResource Include="Resources\Images\people_circle17.png" />
+    <EmbeddedResource Include="Resources\Images\people_circle18.png" />
+    <EmbeddedResource Include="Resources\Images\people_circle5.png" />
+    <EmbeddedResource Include="Resources\Images\people_circle9.png" />
+    <EmbeddedResource Include="Resources\Images\person.png" />
+    <EmbeddedResource Include="Resources\Images\person1.png" />
+    <EmbeddedResource Include="Resources\Images\sebastian.png" />
+    <EmbeddedResource Include="Resources\Images\tabview.png" />
+    <EmbeddedResource Include="Resources\Images\textinputlayout.png" />
+    <EmbeddedResource Include="Resources\Images\tye.png" />
+    <EmbeddedResource Include="Resources\Images\violetcircle.png" />
+    <EmbeddedResource Include="Resources\Images\washington.png" />
+    <EmbeddedResource Include="Resources\Images\yellowcircle.png" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Syncfusion.Maui.Toolkit.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,59 @@
+    <localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.BarBackToBack"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+        <localCore:SampleView.Content>
+        <chart:SfCartesianChart x:Name="Chart" IsTransposed="True" EnableSideBySideSeriesPlacement="False" PaletteBrushes="{Binding BarBackToBackColor}">
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend/>
+                </chart:SfCartesianChart.Legend>
+                <chart:SfCartesianChart.BindingContext>
+                    <local:BarSeriesViewModel/>
+                </chart:SfCartesianChart.BindingContext>
+                <chart:SfCartesianChart.Title>
+                <Label Text="GDP growth by Country" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.XAxes >
+                <chart:CategoryAxis ShowMajorGridLines="False">
+                        <chart:CategoryAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0"/>
+                        </chart:CategoryAxis.AxisLineStyle>
+                        <chart:CategoryAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle TickSize="5" StrokeWidth="0"/>
+                        </chart:CategoryAxis.MajorTickStyle>
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis AxisLineOffset="10" Interval="{OnPlatform Android='4', iOS='4', Default='2'}" EdgeLabelsDrawingMode="Fit">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Growth Rate in Percentage"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                <chart:ColumnSeries Label="2021" EnableAnimation="{Binding EnableAnimation}" CornerRadius="20,0,20,0" Width="0.5" ShowDataLabels="True" ItemsSource="{Binding BarRow1}" XBindingPath="Name" YBindingPath="Value">
+                    <chart:ColumnSeries.DataLabelSettings>
+                        <chart:CartesianDataLabelSettings UseSeriesPalette="False" LabelPlacement="Inner">
+                            <chart:CartesianDataLabelSettings.LabelStyle>
+                                <chart:ChartDataLabelStyle TextColor="Black"/>
+                            </chart:CartesianDataLabelSettings.LabelStyle>
+                        </chart:CartesianDataLabelSettings>
+                    </chart:ColumnSeries.DataLabelSettings>
+                </chart:ColumnSeries>
+                <chart:ColumnSeries Label="2020" EnableAnimation="{Binding EnableAnimation}" CornerRadius="0,20,0,20" Width="0.5" ShowDataLabels="True" ItemsSource="{Binding BarRow1}" XBindingPath="Name" YBindingPath="Size">
+                    <chart:ColumnSeries.DataLabelSettings>
+                        <chart:CartesianDataLabelSettings UseSeriesPalette="False" LabelPlacement="Inner">
+                            <chart:CartesianDataLabelSettings.LabelStyle>
+                                <chart:ChartDataLabelStyle TextColor="Black"/>
+                            </chart:CartesianDataLabelSettings.LabelStyle>
+                        </chart:CartesianDataLabelSettings>
+                    </chart:ColumnSeries.DataLabelSettings>
+                </chart:ColumnSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+        </localCore:SampleView.Content>
+    </localCore:SampleView>
+
+

@@ -1,0 +1,67 @@
+<Project>
+  <ItemGroup Condition="$(TargetFramework.StartsWith('Xamarin.iOS')) != true AND $(TargetFramework.StartsWith('net7.0-ios')) != true AND $(TargetFramework.StartsWith('net8.0-ios')) != true AND $(TargetFramework.StartsWith('net7.0-maccatalyst')) != true AND $(TargetFramework.StartsWith('net8.0-maccatalyst')) != true ">
+    <Compile Remove="**\**\*.iOS.cs" />
+    <None Include="**\**\*.iOS.cs" />
+    <Compile Remove="**\iOS\**\*.cs" />
+    <None Include="**\iOS\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework.StartsWith('Xamarin.Mac')) != true ">
+    <Compile Remove="**\*.Mac.cs" />
+    <None Include="**\*.Mac.cs" />
+    <Compile Remove="**\Mac\**\*.cs" />
+    <None Include="**\Mac\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework.StartsWith('Xamarin.Mac')) != true AND $(TargetFramework.StartsWith('Xamarin.iOS')) != true AND $(TargetFramework.StartsWith('net7.0-ios')) != true AND $(TargetFramework.StartsWith('net8.0-ios')) != true AND $(TargetFramework.StartsWith('net7.0-maccatalyst')) != true AND $(TargetFramework.StartsWith('net8.0-maccatalyst')) != true">
+    <Compile Remove="**\*.MaciOS.cs" />
+    <None Include="**\*.MaciOS.cs" />
+    <Compile Remove="**\MaciOS\**\*.cs" />
+    <None Include="**\MaciOS\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework.StartsWith('MonoAndroid')) != true AND $(TargetFramework.StartsWith('net7.0-android')) != true AND $(TargetFramework.StartsWith('net8.0-android')) != true ">
+    <Compile Remove="**\**\*.Android.cs" />
+    <None Include="**\**\*.Android.cs" />
+    <Compile Remove="**\Android\**\*.cs" />
+    <None Include="**\Android\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework.StartsWith('netstandard')) != true AND '$(TargetFramework)' != 'net7.0' AND '$(TargetFramework)' != 'net8.0'">
+    <Compile Remove="**\*.Standard.cs" />
+    <None Include="**\*.Standard.cs" />
+    <Compile Remove="**\Standard\**\*.cs" />
+    <None Include="**\Standard\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="$(TargetFramework.Contains('-windows')) != true ">
+    <Compile Remove="**\*.Windows.cs" />
+    <None Include="**\*.Windows.cs" />
+    <Compile Remove="**\Windows\**\*.cs" />
+    <None Include="**\Windows\**\*.cs" />
+    <Compile Remove="**\*.uwp.cs" />
+    <None Include="**\*.uwp.cs" />
+  </ItemGroup>
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('uap10.0')) ">
+    <Compile Remove="**\*.uwp.cs" />
+    <None Include="**\*.uwp.cs" />
+  </ItemGroup>
+  
+  <!-- Android -->
+  <PropertyGroup Condition=" $(TargetFramework.StartsWith('net7.0-android')) OR $(TargetFramework.StartsWith('net8.0-android'))">
+    <DefineConstants>$(DefineConstants);MONOANDROID</DefineConstants>
+  </PropertyGroup>
+
+  <!-- iOS -->
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net7.0-ios' OR '$(TargetFramework)' == 'net8.0-ios' ">
+    <DefineConstants>$(DefineConstants);IOS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net7.0-maccatalyst' OR '$(TargetFramework)' == 'net8.0-maccatalyst' ">
+    <DefineConstants>$(DefineConstants);MACCATALYST;IOS</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netstandard2.0|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <Target Name="Net6WinUIWorkaround" BeforeTargets="_GetSdkToolsPathsFromSdk" Condition="$(TargetFramework.Contains('-windows')) == true ">
+    <PropertyGroup>
+      <TargetPlatformIdentifierAdjusted>UAP</TargetPlatformIdentifierAdjusted>
+    </PropertyGroup>
+  </Target>
+</Project>

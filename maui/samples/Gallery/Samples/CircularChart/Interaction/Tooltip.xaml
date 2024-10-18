@@ -1,0 +1,53 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.Tooltip"
+                 xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CircularChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+        <chart:SfCircularChart x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCircularChart.Resources>
+                <ResourceDictionary>
+                    <DataTemplate x:Key="template1">
+                        <StackLayout Padding="0">
+                            <StackLayout Orientation="Horizontal"  VerticalOptions="Fill" Spacing="0" Padding="0" Margin="0">
+                                <Label Text="{Binding Item.Name}" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" FontSize="14" Margin="2,0,2,0" />
+                                <Label Text="{Binding Item.Value,StringFormat=' :  {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="End" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,0,2,0" FontSize="14" />
+                            </StackLayout>
+                        </StackLayout>
+                    </DataTemplate>
+                </ResourceDictionary>
+            </chart:SfCircularChart.Resources>
+            <chart:SfCircularChart.Title>
+                <Label Text="Sales by a Salesperson" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+            </chart:SfCircularChart.Title>
+            <chart:SfCircularChart.BindingContext>
+                <local:PieSeriesViewModel/>
+            </chart:SfCircularChart.BindingContext>
+            <chart:SfCircularChart.Legend>
+                <chart:ChartLegend/>
+            </chart:SfCircularChart.Legend>
+            <chart:SfCircularChart.TooltipBehavior>
+                <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+            </chart:SfCircularChart.TooltipBehavior>
+
+            <chart:SfCircularChart.Series>
+                <chart:PieSeries Radius="0.9" EnableTooltip="True" TooltipTemplate="{StaticResource template1}" 
+                            x:Name="pieSeries" StrokeWidth="2" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" EnableAnimation="{Binding EnableAnimation}" ItemsSource="{Binding PieSeriesData}" 
+                            XBindingPath="Name" YBindingPath="Value" LegendIcon="SeriesType"  PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}">
+                </chart:PieSeries>
+            </chart:SfCircularChart.Series>
+        </chart:SfCircularChart>
+
+    </localCore:SampleView.Content>
+</localCore:SampleView>

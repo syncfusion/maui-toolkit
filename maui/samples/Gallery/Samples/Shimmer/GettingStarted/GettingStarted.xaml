@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer.GettingStarted"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:shimmer="clr-namespace:Syncfusion.Maui.Toolkit.Shimmer;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Shimmer"
+                      xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel x:Name="viewModel" />
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <Style TargetType="Border">
+                <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" />
+                <Setter Property="StrokeThickness" Value="0" />
+                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}"/>
+            </Style>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <Grid HorizontalOptions="{OnPlatform WinUI=Center, MacCatalyst=Center}"
+              VerticalOptions="Center"
+              Padding="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="{OnPlatform WinUI=0, MacCatalyst=0, iOS=30, Default=10, Android=5}"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="{OnPlatform WinUI=400, MacCatalyst=400}"/>
+                <ColumnDefinition Width="{OnPlatform WinUI=70, MacCatalyst=70, Default=0}"/>
+                <ColumnDefinition Width="{OnPlatform WinUI=300, MacCatalyst=300, Default=0}"/>
+            </Grid.ColumnDefinitions>
+
+            <StackLayout BackgroundColor="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" Orientation="Vertical">
+                <tabView:SfTabView x:Name="tabView" ItemsSource="{Binding ShimmerTypes}"
+                                   SelectionChanged="SfTabView_SelectionChanged"
+                                   TabWidthMode="SizeToContent"
+                                   TabBarHeight="40">
+                    <tabView:SfTabItem Header="Feed"/>
+                    <tabView:SfTabItem Header="Video"/>
+                    <tabView:SfTabItem Header="Shopping"/>
+                    <tabView:SfTabItem Header="Article"/>
+                    <tabView:SfTabItem Header="Profile"/>
+                    <tabView:SfTabItem Header="Persona"/>
+                </tabView:SfTabView>
+
+                <shimmer:SfShimmer x:Name="shimmer"
+                                   Margin="2"
+                                   HeightRequest="{OnPlatform Android=240,iOS=270,Default=270}"
+                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                   AnimationDuration="{Binding Duration}"
+                                   Type="Feed"
+                                   VerticalOptions="Start"
+                                   WaveColor="{Binding WaveColor}"
+                                   WaveWidth="{Binding WaveWidth}"
+                                   Fill="{Binding ShimmerColor}"
+                                   RepeatCount="{Binding RepeatCount}">
+                    <shimmer:SfShimmer.Content>
+                        <StackLayout>
+                            <Label HorizontalOptions="CenterAndExpand"
+                                   Text="Content is loaded!"
+                                   VerticalOptions="CenterAndExpand" />
+                        </StackLayout>
+                    </shimmer:SfShimmer.Content>
+                </shimmer:SfShimmer>
+            </StackLayout>
+
+            <StackLayout Spacing="10" Grid.Column="{OnPlatform MacCatalyst=2,WinUI=2, Default=0}"
+                         Grid.Row="{OnPlatform MacCatalyst=0,WinUI=0,Default=2}"
+                         >
+
+                <Label Text="Wave direction"
+                       VerticalTextAlignment="Center" />
+
+                <Grid x:Name="directionGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border StrokeThickness="1" HeightRequest="40" WidthRequest="40" Rotation="225">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
+                               HorizontalTextAlignment="Center"
+                               FontSize="24"
+                               FontFamily="{OnPlatform iOS=Sync FontIcons, MacCatalyst=Sync FontIcons, Android=Sync FontIcons.ttf#, WinUI=Sync FontIcons.ttf#Sync FontIcons}"
+                               />
+                    </Border>
+                    <Border HeightRequest="40" WidthRequest="40" Rotation="180" 
+                            Grid.Column="1" >
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
+                               HorizontalTextAlignment="Center"
+                               FontSize="24"
+                               FontFamily="{OnPlatform iOS=Sync FontIcons, MacCatalyst=Sync FontIcons, Android=Sync FontIcons.ttf#, WinUI=Sync FontIcons.ttf#Sync FontIcons}"
+                               />
+                    </Border>
+                    <Border HeightRequest="40" WidthRequest="40"
+                            Grid.Column="2" >
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
+                               HorizontalTextAlignment="Center"
+                               FontSize="24"
+                               FontFamily="{OnPlatform iOS=Sync FontIcons, MacCatalyst=Sync FontIcons, Android=Sync FontIcons.ttf#, WinUI=Sync FontIcons.ttf#Sync FontIcons}"
+                               />
+                    </Border>
+                    <Border HeightRequest="40" WidthRequest="40" Rotation="270"
+                            Grid.Column="3" >
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
+                               HorizontalTextAlignment="Center"
+                               FontSize="24"
+                               FontFamily="{OnPlatform iOS=Sync FontIcons, MacCatalyst=Sync FontIcons, Android=Sync FontIcons.ttf#, WinUI=Sync FontIcons.ttf#Sync FontIcons}"
+                               />
+                    </Border>
+                    <Border HeightRequest="40" WidthRequest="40" Rotation="90" 
+                            Grid.Column="4" >
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+                        </Border.GestureRecognizers>
+                        <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
+                               HorizontalTextAlignment="Center"
+                               FontSize="24"
+                               FontFamily="{OnPlatform iOS=Sync FontIcons, MacCatalyst=Sync FontIcons, Android=Sync FontIcons.ttf#, WinUI=Sync FontIcons.ttf#Sync FontIcons}"
+                               />
+                    </Border>
+                </Grid>
+
+                <Label Text="Shimmer and wave color"
+                       VerticalTextAlignment="Center" />
+
+                <Grid x:Name="ColorGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border BackgroundColor="{Binding ShimmerColors[0]}" StrokeThickness="1" HeightRequest="40" WidthRequest="40">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Grid.Column="1" BackgroundColor="{Binding ShimmerColors[1]}" HeightRequest="40" WidthRequest="40">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Grid.Column="2" BackgroundColor="{Binding ShimmerColors[2]}" HeightRequest="40" WidthRequest="40">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Grid.Column="3" BackgroundColor="{Binding ShimmerColors[3]}" HeightRequest="40" WidthRequest="40">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                    <Border Grid.Column="4" BackgroundColor="{Binding ShimmerColors[4]}" HeightRequest="40" WidthRequest="40">
+                        <Border.StrokeShape>
+                            <Ellipse />
+                        </Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Border.GestureRecognizers>
+                    </Border>
+                </Grid>
+
+                <Label Text="Repeat count"
+                       VerticalTextAlignment="Center" />
+
+                <Slider x:Name="repeatCountSlider"
+                        HorizontalOptions="FillAndExpand"
+                        Maximum="4" 
+                        Minimum="1"
+                        VerticalOptions="Center"
+                        MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
+                        MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"  
+                        ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"
+                        Value="{Binding RepeatCount}">
+                </Slider>
+
+                <Label Text="Wave width"
+                       VerticalTextAlignment="Center" />
+
+                <Slider x:Name="sliderWaveWidth"
+                            HorizontalOptions="FillAndExpand"
+                            Maximum="200"
+                            Minimum="50"
+                            VerticalOptions="Center"
+                            MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
+                            MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"  
+                            ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"
+                            Value="{Binding WaveWidth}">
+                </Slider>
+
+                <Label Text="Animation duration"
+                       VerticalTextAlignment="Center" />
+
+                <Slider x:Name="sliderAnimationDuration"
+                            HorizontalOptions="FillAndExpand"
+                            Maximum="3000"
+                            Minimum="1000"
+                            VerticalOptions="Center"
+                            MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
+                            MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"  
+                            ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"
+                            Value="{Binding Duration}">
+                </Slider>
+            </StackLayout>
+        </Grid>
+    </localCore:SampleView.Content>
+
+</localCore:SampleView>

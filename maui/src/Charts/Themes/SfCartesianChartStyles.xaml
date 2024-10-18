@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Themes;assembly=Syncfusion.Maui.Toolkit"
+             x:Class="Syncfusion.Maui.Toolkit.Charts.SfCartesianChartStyles">
+
+    <ResourceDictionary.MergedDictionaries>
+        <chart:SfChartCommonStyle/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="chart:SfCartesianChart">
+        <Setter Property="Background" Value="{DynamicResource SfCartesianChartBackground}"/>
+    </Style>
+
+    <!--Axis Title-->
+    <Style TargetType="chart:ChartAxisTitle">
+        <Setter Property="TextColor" Value="{DynamicResource SfCartesianChartAxisTitleTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource SfCartesianChartAxisTitleBackground}"/>
+        <Setter Property="Stroke" Value="{DynamicResource SfCartesianChartAxisTitleStroke}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource SfCartesianChartAxisTitleCornerRadius}"/>
+        <Setter Property="FontSize" Value="{DynamicResource SfCartesianChartAxisTitleTextFontSize}"/>
+    </Style>
+
+    <!--Axis Label-->
+    <Style TargetType="chart:ChartAxisLabelStyle">
+        <Setter Property="TextColor" Value="{DynamicResource SfCartesianChartAxisLabelTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource SfCartesianChartAxisLabelBackground}"/>
+        <Setter Property="Stroke" Value="{DynamicResource SfCartesianChartAxisLabelStroke}"/>
+        <Setter Property="CornerRadius" Value="{DynamicResource SfCartesianChartAxisLabelCornerRadius}"/>
+        <Setter Property="FontSize" Value="{DynamicResource SfCartesianChartAxisLabelTextFontSize}"/>
+    </Style>
+
+    <Style TargetType="chart:ChartAnnotationLabelStyle">
+        <Setter Property="TextColor" Value="{DynamicResource SfCartesianChartAnnotationTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource SfCartesianChartAnnotationTextBackground}"/>
+        <Setter Property="FontSize" Value="{DynamicResource SfCartesianChartAnnotationFontSize}"/>
+    </Style>
+
+</ResourceDictionary> 

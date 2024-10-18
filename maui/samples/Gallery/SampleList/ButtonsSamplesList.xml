@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Buttons">
+		<Control Title="Segmented Control"
+             ControlName="SfSegmentedControl"
+             Image="segmentedcontrol.png"
+             Description="Offer choices from a linear set of segments, each as an independent button."
+             SearchTags="SfSegmentedControl,segmented buttons,segment,seg">
+
+			<Sample Title="Getting Started"
+              SampleName="GettingStarted"/>
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>

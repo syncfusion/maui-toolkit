@@ -1,0 +1,192 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl"
+                      xmlns:segmentedControl="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:thickness ="clr-namespace:Microsoft.Maui;assembly=Microsoft.Maui"
+                      x:Class="Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl.GettingStartedDesktopUI">
+
+    <localCore:SampleView.Resources>
+        <imageExtension:ImageSourceConverter x:Key="imageconverter"/>
+        <Color x:Key="lightThemeColor">#E7E0EC</Color>
+        <Color x:Key="darkThemeColor">#49454F</Color>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.BindingContext>
+        <local:GettingStartedViewModel />
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Margin>
+        <OnPlatform x:TypeArguments="thickness:Thickness">
+            <On Platform="MacCatalyst" Value="-4,-4,-6,-6"/>
+            <On Platform="WinUI" Value="-10"/>
+        </OnPlatform>
+    </localCore:SampleView.Margin>
+
+    <localCore:SampleView.Content>
+        <Grid ColumnDefinitions=".45*,420">
+            <Grid Grid.Column="0" 
+                  RowDefinitions="0.2*,0.8*">
+                <VerticalStackLayout Margin="22,20,15,12"
+                                     Spacing="5" 
+                                     HorizontalOptions="Start">
+                    <Label Text="Elektro Voice Speaker"
+                           FontFamily="RobotoMedium"
+                           FontSize="22"
+                           HorizontalTextAlignment="Start"/>
+                    <Label Text="Unleash the Power of Music!"
+                           FontSize="16"
+                           Opacity="0.5"
+                           MaxLines="2"
+                           FontFamily="Roboto"
+                           LineBreakMode="WordWrap"
+                           LineHeight="1.3"
+                           HorizontalTextAlignment="Start"/>
+                </VerticalStackLayout>
+                <StackLayout  Grid.Column="0" 
+                       Grid.Row="1" 
+                       VerticalOptions="Start" >
+                    <Image Source="{Binding Image,Converter={StaticResource imageconverter}}" HeightRequest="350" VerticalOptions="Center"/>
+                </StackLayout>
+            </Grid>
+
+            <Grid Grid.Column="1"
+                  x:Name="SegmentsContainerGrid"
+                  Margin="20,0,20,0" 
+                  RowDefinitions="{OnPlatform MacCatalyst='Auto,0.15*'}">
+                <ScrollView Orientation="Vertical">
+                    <StackLayout Orientation="Vertical"
+                                 IsClippedToBounds="True"
+                                 VerticalOptions="StartAndExpand"
+                                 Margin="0,20,0,15">
+                        <Label Text="Electric Voice Speaker, the ultimate audio companion for all your entertainment needs! This sleek and powerful device was carefully designed to deliver a healthy immersive experience like never before. The speaker's modern design effortlessly complements any interior decor. Its compact size makes it easy to place on a shelf, countertop, or desk. "
+                               FontSize="16" 
+                               MaxLines="7" 
+                               HorizontalTextAlignment="Start"
+                               FontFamily="Roboto"
+                               LineHeight="1.3"
+                               LineBreakMode="WordWrap"/>
+
+                        <Label Text="{Binding TotalPrice}"
+                               Margin="0,12,0,0"
+                               FontSize="20"
+                               FontFamily="RobotoMedium"
+                               FontAttributes="Bold"/>
+                        <StackLayout Margin="0,12,0,0"
+                                     Spacing="10">
+                            <Label FontFamily="RobotoMedium"
+                                   Text="Pick a Color" 
+                                   Margin="2,0,0,0"/>
+                            <segmentedControl:SfSegmentedControl x:Name="segmentedControlColorOption"
+                                                        StrokeThickness="3"
+                                                        VerticalOptions="Fill"
+                                                        Stroke="Transparent"
+                                                        SegmentWidth="36"
+                                                        HorizontalOptions="Start"
+                                                        Margin="-2,-2,0,0"
+                                                        WidthRequest="210"
+                                                        SegmentHeight="36"
+                                                        CornerRadius="36"
+                                                        SegmentCornerRadius="36"
+                                                        SelectedIndex="{Binding SelectedColoredIndex, Mode=TwoWay}"
+                                                        ItemsSource="{Binding SpeakerColorOptionsInfo}">
+                                <segmentedControl:SfSegmentedControl.SelectionIndicatorSettings>
+                                    <segmentedControl:SelectionIndicatorSettings SelectionIndicatorPlacement="Border" />
+                                </segmentedControl:SfSegmentedControl.SelectionIndicatorSettings>
+                            </segmentedControl:SfSegmentedControl>
+                        </StackLayout>
+
+                        <StackLayout Margin="0,20,0,0"
+                                     Spacing="10">
+                            <HorizontalStackLayout>
+                                <Label Text="Extended Warranty" 
+                                       FontFamily="RobotoMedium"/>
+                            </HorizontalStackLayout>
+                            <segmentedControl:SfSegmentedControl x:Name="segmentedControlWarrantyOption"
+                                                        SegmentHeight="38" 
+                                                        VerticalOptions="FillAndExpand"
+                                                        Margin="2,5,0,0"
+                                                        HorizontalOptions="Start"
+                                                        SegmentWidth="103"
+                                                        ItemsSource="{Binding SpeakerWarrantyOptionsInfo}"
+                                                        SelectedIndex="{Binding SelectedWarrantyOption, Mode=TwoWay}"
+                                                        StrokeThickness="1">
+                                <segmentedControl:SfSegmentedControl.TextStyle>
+                                    <segmentedControl:SegmentTextStyle FontSize="14"
+                                                              FontFamily="Roboto-Regular" />
+                                </segmentedControl:SfSegmentedControl.TextStyle>
+                                <segmentedControl:SfSegmentedControl.SelectionIndicatorSettings>
+                                    <segmentedControl:SelectionIndicatorSettings SelectionIndicatorPlacement="BottomBorder" />
+                                </segmentedControl:SfSegmentedControl.SelectionIndicatorSettings>
+                            </segmentedControl:SfSegmentedControl>
+                        </StackLayout>
+
+                        <StackLayout Margin="0,20,0,0" 
+                                     Spacing="10">
+                            <HorizontalStackLayout>
+                                <Label Text="Delivery Options"
+                                       FontFamily="RobotoMedium"/>
+                                <Label Text="{Binding Date}" 
+                                       FontFamily="Roboto"
+                                       Opacity="0.5"/>
+                            </HorizontalStackLayout>
+                            <HorizontalStackLayout>
+                                <segmentedControl:SfSegmentedControl x:Name="segmentedControlDeliveryOption"
+                                                            StrokeThickness="10"
+                                                            SegmentCornerRadius="30"
+                                                            SegmentHeight="30"
+                                                            Margin="-6,0,0,0"
+                                                            CornerRadius="30"
+                                                            WidthRequest="330"
+                                                            VerticalOptions="Fill"
+                                                            Stroke="Transparent"
+                                                            SegmentBackground="{AppThemeBinding Light={StaticResource lightThemeColor}, Dark={StaticResource darkThemeColor}}"
+                                                            HorizontalOptions="Start"
+                                                            ItemsSource="{Binding SpeakerDeliveryOptionsInfo}"
+                                                            SelectedIndex="{Binding SelectedDeliveryOption, Mode=TwoWay}">
+                                    <segmentedControl:SfSegmentedControl.TextStyle>
+                                        <segmentedControl:SegmentTextStyle FontSize="14" 
+                                                                  FontFamily="Roboto" />
+                                    </segmentedControl:SfSegmentedControl.TextStyle>
+                                                                   </segmentedControl:SfSegmentedControl>
+                            </HorizontalStackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+
+                <Border x:Name="line" StrokeThickness="1" VerticalOptions="Start" Background="LightGray" Grid.Row="1" >
+                    <Border.Margin>
+                        <OnPlatform x:TypeArguments="thickness:Thickness">
+                            <On Platform="MacCatalyst" Value="5,0,5,12"/>
+                            <On Platform="WinUI" Value="5,12,5,12"/>
+                        </OnPlatform>
+                    </Border.Margin>
+                </Border>
+
+
+
+                <segmentedControl:SfSegmentedControl  x:Name="segmentedControlResultsOption"
+                                             HorizontalOptions="FillAndExpand"
+                                             Grid.Row="1"
+                                             VerticalOptions="{OnPlatform WinUI=Fill,MacCatalyst=Start}"
+                                             VisibleSegmentsCount="1"
+                                             HeightRequest="40"
+                                             SelectedIndex="0"
+                                             ItemsSource="{Binding SpeakerResultsOptionInfo}">
+                    <segmentedControl:SfSegmentedControl.TextStyle>
+                        <segmentedControl:SegmentTextStyle FontSize="14" 
+                                                  FontFamily="Roboto" />
+                    </segmentedControl:SfSegmentedControl.TextStyle>
+                    <segmentedControl:SfSegmentedControl.Margin>
+                        <OnPlatform x:TypeArguments="thickness:Thickness">
+                            <On Platform="MacCatalyst" Value="3,20,3,0"/>
+                            <On Platform="WinUI" Value="3,12,3,0"/>
+                        </OnPlatform>
+                    </segmentedControl:SfSegmentedControl.Margin>
+                </segmentedControl:SfSegmentedControl>
+            </Grid>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

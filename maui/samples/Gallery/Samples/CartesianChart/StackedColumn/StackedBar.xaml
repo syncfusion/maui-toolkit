@@ -1,0 +1,80 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.StackedBar"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Content>
+        <StackLayout x:Name="layout">
+            <StackLayout.Resources>
+                <Label x:Key="title" x:Name="titleName" Text="Sales of Cosmetics Products by Region"
+                           FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
+                          LineBreakMode="WordWrap" Padding="0,0,0,5"/>
+            </StackLayout.Resources>
+            <StackLayout.BindingContext>
+                <local:StackedColumnViewModel></local:StackedColumnViewModel>
+            </StackLayout.BindingContext>
+
+            <chart:SfCartesianChart x:Name="chart" PaletteBrushes="{Binding CustomColor4}" Title="{StaticResource title}" IsTransposed="True" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis x:Name="xAxis" LabelPlacement="BetweenTicks" IsVisible="true" ShowMajorGridLines="false">
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis x:Name="yAxis" Minimum="-20" Maximum="48" Interval="10" ShowMajorGridLines="True" ShowMinorGridLines="false">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle  LabelFormat="$###,##0.##K"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True"/>
+                </chart:SfCartesianChart.Legend>
+
+                <chart:StackingColumnSeries XBindingPath="Name"
+                                            Label="Arizona"
+                                            ShowDataLabels="{OnPlatform WinUI=True,MacCatalyst=True}"
+                                            YBindingPath="High"
+                                            ItemsSource="{Binding ProductData}"
+                                            EnableTooltip="True"
+                                            LegendIcon="SeriesType"/>
+
+                <chart:StackingColumnSeries XBindingPath="Name"
+                                            YBindingPath="Low"
+                                            ShowDataLabels="{OnPlatform WinUI=True,MacCatalyst=True}"
+                                            ItemsSource="{Binding ProductData}"
+                                            Label="Nevada"
+                                            EnableTooltip="True"
+                                            LegendIcon="SeriesType"/>
+
+                <chart:StackingColumnSeries XBindingPath="Name"
+                                            YBindingPath="Value"
+                                            ShowDataLabels="{OnPlatform WinUI=True,MacCatalyst=True}"
+                                            ItemsSource="{Binding ProductData}"
+                                            Label="Texas"
+                                            EnableTooltip="True"
+                                            LegendIcon="SeriesType"/>
+
+                <chart:StackingColumnSeries XBindingPath="Name"
+                                            YBindingPath="Size"
+                                             ShowDataLabels="{OnPlatform WinUI=True,MacCatalyst=True}"
+                                            ItemsSource="{Binding ProductData}"
+                                            Label="Florida"
+                                            EnableTooltip="True"
+                                            LegendIcon="SeriesType"/>
+            </chart:SfCartesianChart>
+
+            <HorizontalStackLayout x:Name="hyperLinkLayout" IsVisible="false" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text="statista.com" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.statista.com/statistics/243742/revenue-of-the-cosmetic-industry-in-the-us/"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

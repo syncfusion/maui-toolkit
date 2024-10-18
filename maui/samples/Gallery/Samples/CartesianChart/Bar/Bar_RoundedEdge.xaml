@@ -1,0 +1,56 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.BarChart_RoundedEdge"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>       
+                <chart:SfCartesianChart x:Name="Chart2" IsTransposed="True" HorizontalOptions="Fill" VerticalOptions="Fill">
+                    <chart:SfCartesianChart.Title>
+                        <Label Text="Transportation Method (by Miles)" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+                    </chart:SfCartesianChart.Title>
+                    <chart:SfCartesianChart.BindingContext>
+                        <local:BarSeriesViewModel/>
+                    </chart:SfCartesianChart.BindingContext>
+                    <chart:SfCartesianChart.XAxes>
+                        <chart:CategoryAxis x:Name="primary" LabelPlacement="BetweenTicks" ShowMajorGridLines="false">
+                            <chart:CategoryAxis.AxisLineStyle>
+                                <chart:ChartLineStyle StrokeWidth="0"/>
+                            </chart:CategoryAxis.AxisLineStyle>
+                            <chart:CategoryAxis.MajorTickStyle>
+                                <chart:ChartAxisTickStyle StrokeWidth="0"/>
+                            </chart:CategoryAxis.MajorTickStyle>
+                        </chart:CategoryAxis>
+                    </chart:SfCartesianChart.XAxes>
+                    <chart:SfCartesianChart.YAxes>
+                        <chart:NumericalAxis Maximum="12" ShowMajorGridLines="False" IsVisible="False" EdgeLabelsDrawingMode="Shift" ShowMinorGridLines="false">
+                        </chart:NumericalAxis>
+                    </chart:SfCartesianChart.YAxes>
+
+                    <chart:SfCartesianChart.Series>
+                <local:CustomBarChart Label="Maldives visit" ShowDataLabels="True" Width="0.5" 
+                                      EnableAnimation="{Binding EnableAnimation}" CornerRadius="25"  
+                                      PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" 
+                                      ItemsSource="{Binding RundedBarData}" 
+                                      TrackColor="{AppThemeBinding Light={StaticResource TrackColorLight}, Dark={StaticResource TrackColorDark}}"
+                                      XBindingPath="Name" YBindingPath="Value">
+                            <local:CustomBarChart.DataLabelSettings>
+                                <chart:CartesianDataLabelSettings UseSeriesPalette="True" LabelPlacement="Inner">
+                                    <chart:CartesianDataLabelSettings.LabelStyle>
+                                        <chart:ChartDataLabelStyle LabelFormat="#.##" />
+                                    </chart:CartesianDataLabelSettings.LabelStyle>
+                                </chart:CartesianDataLabelSettings>
+                            </local:CustomBarChart.DataLabelSettings>
+                        </local:CustomBarChart>
+                    </chart:SfCartesianChart.Series>
+                </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

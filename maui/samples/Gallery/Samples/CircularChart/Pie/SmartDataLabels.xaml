@@ -1,0 +1,86 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.SmartDataLabels"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CircularChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <StackLayout x:Name="stackLayout"  HorizontalOptions="Fill">
+            <StackLayout.BindingContext>
+                <local:PieSeriesViewModel/>
+            </StackLayout.BindingContext>
+            <chart:SfCircularChart x:Name="Chart" VerticalOptions="FillAndExpand">
+
+                <chart:SfCircularChart.Resources>
+                    <DataTemplate x:Key="dataLabelTemplate">
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Item.Name}" VerticalOptions="Center" FontSize = "13"
+                                    LineBreakMode="{OnPlatform Android='TailTruncation', iOS='TailTruncation'}" 
+                                    MaximumWidthRequest="{OnPlatform Android='35', iOS='35'}" HorizontalTextAlignment="End"/>
+                            <Label Text=":" VerticalOptions="Center" FontSize = "13" HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding Item.Value, StringFormat=' {0}'}" VerticalOptions="Center" FontSize="13" HorizontalTextAlignment="Center"/>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </chart:SfCircularChart.Resources>
+
+            <chart:SfCircularChart.Title>
+                <Label Text="Gold medals count in Rio Olympics" HorizontalTextAlignment="Center" FontSize="16" Margin="0,0,0,0"/>
+            </chart:SfCircularChart.Title>
+
+            <chart:SfCircularChart.Series>
+                <chart:PieSeries ShowDataLabels="True" x:Name="pieSeries1"  EnableAnimation="{Binding EnableAnimation}" 
+                                 ItemsSource="{Binding GoldMedalCountData}"
+                                 XBindingPath="Name" Radius="{OnPlatform Android='0.5', iOS='0.5', Default='0.6'}"
+                                 YBindingPath="Value" LabelTemplate="{StaticResource dataLabelTemplate}"
+                                 PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}">
+                    <chart:PieSeries.DataLabelSettings>
+                        <chart:CircularDataLabelSettings x:Name="dataLabelSetting" LabelPosition="Outside">
+                                <chart:CircularDataLabelSettings.ConnectorLineSettings>
+                                    <chart:ConnectorLineStyle ConnectorType="Curve"/>
+                                </chart:CircularDataLabelSettings.ConnectorLineSettings>
+                        </chart:CircularDataLabelSettings>
+                    </chart:PieSeries.DataLabelSettings>
+                </chart:PieSeries>
+            </chart:SfCircularChart.Series>
+        </chart:SfCircularChart>
+
+        <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+            <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" insidethegames.biz" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.insidethegames.biz/games/7/medals"/>
+                </Label.GestureRecognizers>
+            </Label>
+        </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <Grid RowDefinitions="*" ColumnDefinitions="5*,5*">
+                <Grid.BindingContext>
+                    <local:PieSeriesViewModel/>
+                </Grid.BindingContext>
+                <Label Text="SmartLabelAlignment " VerticalOptions="Start"  
+                       Margin="0,15,0,0" Grid.Column="0" />
+                <Picker x:Name="dataLabel" Grid.Column="1" 
+                        VerticalOptions="Start" 
+                        BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                        WidthRequest="130"  Margin="0,13,0,0"
+                        ItemsSource="{Binding SmartLabelAlignment}" 
+                        SelectedIndexChanged="smartDataLabel_SelectedIndexChanged">
+                </Picker>
+            </Grid>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+
+</localCore:SampleView>

@@ -1,0 +1,42 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.PieChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CircularChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+        <chart:SfCircularChart x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCircularChart.BindingContext>
+                <local:PieSeriesViewModel/>
+            </chart:SfCircularChart.BindingContext>
+            <chart:SfCircularChart.Title>
+                <Label Text="Sales by a Salesperson" Margin="0,0,6,10" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+            </chart:SfCircularChart.Title>
+            <chart:SfCircularChart.Legend>
+                <chart:ChartLegend/>
+            </chart:SfCircularChart.Legend>
+            <chart:SfCircularChart.Series>
+                <chart:PieSeries ShowDataLabels="True" x:Name="pieSeries1" StrokeWidth="2" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" EnableAnimation="{Binding EnableAnimation}" 
+                                 ItemsSource="{Binding PieSeriesData}" XBindingPath="Name" YBindingPath="Value" LegendIcon="SeriesType"
+                                 PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}">
+                    <chart:PieSeries.DataLabelSettings>
+                        <chart:CircularDataLabelSettings LabelPlacement="Outer">
+                            <chart:CircularDataLabelSettings.LabelStyle>
+                                <chart:ChartDataLabelStyle LabelFormat="#.##'%"/>
+                            </chart:CircularDataLabelSettings.LabelStyle>
+                        </chart:CircularDataLabelSettings>
+                    </chart:PieSeries.DataLabelSettings>
+                </chart:PieSeries>
+            </chart:SfCircularChart.Series>
+        </chart:SfCircularChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

@@ -1,0 +1,173 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.StackedLine100Chart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+            xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+        <StackLayout>
+            
+            <StackLayout.BindingContext>
+                <local:StackedLine100ViewModel/>
+            </StackLayout.BindingContext>
+            
+            <chart:SfCartesianChart x:Name="Chart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesDark}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" >
+
+                <chart:SfCartesianChart.Resources>
+                    <ResourceDictionary>
+                        <DataTemplate x:Key="template1">
+                            <StackLayout Orientation="Horizontal">
+                                <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series1Light}, Dark={StaticResource series1Dark}}"/>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
+                                    <Label FontSize="12" Padding="5,0,0,0" Margin="0,0,3,0" >
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="O+" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                                <Span Text="{Binding Item.High, StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                        <DataTemplate x:Key="template2">
+                            <StackLayout Orientation="Horizontal">
+                                <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series2Dark}, Dark={StaticResource series2Dark}}"/>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
+                                    <Label FontSize="12" Padding="5,0,0,0" Margin="0,0,3,0">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="A+" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                                <Span Text="{Binding Item.Low, StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                        <DataTemplate x:Key="template3">
+                            <StackLayout Orientation="Horizontal">
+                                <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series3Dark}, Dark={StaticResource series3Dark}}"/>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
+                                    <Label FontSize="12" Padding="5,0,0,0" Margin="0,0,3,0">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="B+" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                                <Span Text="{Binding Item.Value, StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                        <DataTemplate x:Key="template4">
+                            <StackLayout Orientation="Horizontal">
+                                <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series4Dark}, Dark={StaticResource series4Dark}}"/>
+                                <StackLayout Orientation="Vertical">
+                                    <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
+                                    <Label FontSize="12" Padding="5,0,0,0" Margin="0,0,3,0">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <Span Text="Others" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                                <Span Text="{Binding Item.Size, StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </ResourceDictionary>
+                </chart:SfCartesianChart.Resources>
+                
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Blood Type Distribution Among Population"  LineBreakMode="WordWrap"  Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+                </chart:SfCartesianChart.Title>
+                
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis x:Name="XAxis" IsVisible="True" ShowMajorGridLines="False" LabelRotation="{OnPlatform Android=-45,iOS=-45}" LabelPlacement="BetweenTicks">
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+                
+                <chart:SfCartesianChart.YAxes >
+                    <chart:NumericalAxis x:Name="YAxis" Minimum="20"  Maximum="100" Interval="20" ShowMajorGridLines="True" ShowMinorGridLines="False" 
+                                   EdgeLabelsDrawingMode="Center" PlotOffsetEnd="10">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="0'%"/>
+                        </chart:NumericalAxis.LabelStyle>
+                        
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0">
+                            </chart:ChartLineStyle>
+                        </chart:NumericalAxis.AxisLineStyle>
+
+                        <chart:NumericalAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle  TickSize="0" ></chart:ChartAxisTickStyle>
+                        </chart:NumericalAxis.MajorTickStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend/>
+                </chart:SfCartesianChart.Legend>
+
+                <chart:StackingLine100Series ItemsSource="{Binding  StackedLineData}" XBindingPath="Name" YBindingPath="High"
+                                  EnableAnimation="True" ShowMarkers="True" StrokeWidth="2" Label="O+" LegendIcon="SeriesType"
+                                  EnableTooltip="True" TooltipTemplate="{StaticResource template1}">
+                        <chart:StackingLine100Series.MarkerSettings>
+                          <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                                  Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="2"/>
+                        </chart:StackingLine100Series.MarkerSettings>
+                </chart:StackingLine100Series>
+
+                <chart:StackingLine100Series ItemsSource="{Binding StackedLineData}" XBindingPath="Name" YBindingPath="Low"
+                                   EnableAnimation="True" ShowMarkers="True" StrokeWidth="2" Label="A+" LegendIcon="SeriesType"
+                                   EnableTooltip="True" TooltipTemplate="{StaticResource template2}">
+                        <chart:StackingLine100Series.MarkerSettings>
+                          <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                                   Stroke="{AppThemeBinding Light={StaticResource series2Dark}, Dark={StaticResource series2Dark}}" StrokeWidth="2"/>
+                        </chart:StackingLine100Series.MarkerSettings>
+                </chart:StackingLine100Series>
+
+                <chart:StackingLine100Series ItemsSource="{Binding StackedLineData}" XBindingPath="Name" YBindingPath="Value"
+                                  EnableAnimation="True" Label="B+" ShowMarkers="True" StrokeWidth="2" LegendIcon="SeriesType"
+                                  EnableTooltip="True" TooltipTemplate="{StaticResource template3}">
+                        <chart:StackingLine100Series.MarkerSettings>
+                          <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" 
+                                  Stroke="{AppThemeBinding Light={StaticResource series3Dark}, Dark={StaticResource series3Dark}}" StrokeWidth="2"/>
+                        </chart:StackingLine100Series.MarkerSettings>
+                </chart:StackingLine100Series>
+
+                <chart:StackingLine100Series ItemsSource="{Binding StackedLineData}" XBindingPath="Name" YBindingPath="Size"
+                                  EnableAnimation="True" Label="Others" ShowMarkers="True" StrokeWidth="2" LegendIcon="SeriesType"
+                                  EnableTooltip="True" TooltipTemplate="{StaticResource template4}">
+                    <chart:StackingLine100Series.MarkerSettings>
+                        <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" 
+                                  Stroke="{AppThemeBinding Light={StaticResource series4Dark}, Dark={StaticResource series4Dark}}" StrokeWidth="2"/>
+                    </chart:StackingLine100Series.MarkerSettings>
+                </chart:StackingLine100Series>
+            </chart:SfCartesianChart>
+       
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" rhesusnegative.net" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding  TapCommand}" CommandParameter="https://www.rhesusnegative.net/themission/bloodtypefrequencies/"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+       
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

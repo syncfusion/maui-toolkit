@@ -1,0 +1,51 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.TapToAdd"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <Grid HorizontalOptions="Fill" VerticalOptions="Fill" Padding="10, 0, 10, 0">
+            <chart:SfCartesianChart x:Name="categoryChart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}">
+                <chart:SfCartesianChart.BindingContext>
+                    <local:TapToAddViewModel x:Name="realTimeViewModel"/>
+                </chart:SfCartesianChart.BindingContext>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:NumericalAxis x:Name="axis" RangePadding="Additional" />
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="False" RangePadding="Additional"/>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                    <chart:LineSeries x:Name="lineSeries"  ItemsSource="{Binding LiveChartData}" XBindingPath="Value" ShowMarkers="True" YBindingPath="Size">
+                        <chart:LineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings  Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="1"/>
+                        </chart:LineSeries.MarkerSettings>
+                    </chart:LineSeries>
+                </chart:SfCartesianChart.Series>
+                <chart:SfCartesianChart.InteractiveBehavior>
+                    <local:ChartInteractionExt/>
+                </chart:SfCartesianChart.InteractiveBehavior>
+            </chart:SfCartesianChart>
+
+            <AbsoluteLayout VerticalOptions="Start" Margin="0,20,10,0" HeightRequest="80">
+                <HorizontalStackLayout AbsoluteLayout.LayoutFlags="PositionProportional"  AbsoluteLayout.LayoutBounds="1,0">
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                    </HorizontalStackLayout.GestureRecognizers>
+                    <Path Scale="1"  HorizontalOptions="End" VerticalOptions="Center"
+                          Data="M18.426025,0C25.913025,-4.8468792E-08 32,6.1669937 32,13.741 32,21.319005 25.913025,27.485999 18.426025,27.485999 15.667999,27.485999 13.104004,26.643989 10.960022,25.207007L13.22702,21.690984C14.718018,22.694005 16.506012,23.284001 18.426025,23.284001 23.620026,23.284001 27.848022,19.002996 27.848022,13.741 27.848022,8.4829731 23.620026,4.2029734 18.426025,4.2029734 14.284027,4.2029734 10.796021,6.9379898 9.5350037,10.711001L14.376007,10.767978 7.053009,22.125981 0,10.591983 5.2090149,10.653995C6.5980225,4.5649729,11.991028,-4.8468792E-08,18.426025,0z" 
+                          Fill="{StaticResource Blue200Accent}"/>
+                </HorizontalStackLayout>
+            </AbsoluteLayout>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

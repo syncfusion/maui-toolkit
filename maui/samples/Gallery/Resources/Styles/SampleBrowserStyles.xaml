@@ -1,0 +1,275 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:customView="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView"
+    x:Class="Syncfusion.Maui.ControlsGallery.SampleBrowserStyles">
+
+    <Color x:Key="White">White</Color>
+    <Color x:Key="Black">Black</Color>
+    <Color x:Key="Transparent">#00ffffff</Color>
+    <Color x:Key="Overlay">#80000000</Color>
+
+    <Style TargetType="customView:SfEffectsViewAdv" >
+        <Setter Property="RippleBackground" Value="{DynamicResource SfEffectsViewRippleBackground}"/>
+        <Setter Property="HighlightBackground" Value="{DynamicResource SfEffectsViewHighlightBackground}"/>
+        <Setter Property="SelectionBackground" Value="{DynamicResource SfEffectsViewSelectionBackground}"/>
+        <Setter Property="RippleAnimationDuration" Value="{DynamicResource SfEffectsViewRippleAnimationDuration}"/>
+    </Style>
+
+    <!--Dark Theme-->
+    <Color x:Key="BackgroundDark">#1C1B1F</Color>
+    <Color x:Key="PreviewAreaBackgroundDark">#1C1B1F</Color>
+    <Color x:Key="HeaderBackgroundDark">#1C1B1F</Color>
+    <Color x:Key="SidebarBackgroundDark">#1C1B1F</Color>
+    <Color x:Key="SampleBrowserBackgroundDark">#25232A</Color>
+    <Color x:Key="TileBackgroundDark">#25232A</Color>
+    <Color x:Key="PreviewAreaBorderDark">#49454F</Color>
+    <Color x:Key="BorderDark">#49454F</Color>
+    <Color x:Key="FilledInputBackgroundDark">#49454F</Color>
+    <Color x:Key="TileHeaderBorderDark">#49454F</Color>
+    <Color x:Key="HeaderForegroundDark">#E6E1E5</Color>
+    <Color x:Key="TextColourDark">#E6E1E5</Color>
+    <Color x:Key="TextColour1Dark">#CAC4D0</Color>
+    <Color x:Key="SidebaritemTextColourDark">#E6E1E5</Color>
+    <Color x:Key="TileHeaderForegroundDark">#E6E1E5</Color>
+    <Color x:Key="TileTextColourDark">#E6E1E5</Color>
+    <Color x:Key="InputTextColourDark">#E6E1E5</Color>
+    <Color x:Key="ChipSelectedTextDark">#E8DEF8</Color>
+    <Color x:Key="SidebaritemBackgroundSelectedDark">#4A4458</Color>
+    <Color x:Key="BlackOverlaySelectedDark">#4A4458</Color>
+    <Color x:Key="TileHeaderBackgroundDark">#2A2831</Color>
+    <Color x:Key="TextColourAlt1Dark">#CAC4D0</Color>
+    <Color x:Key="TileTextColourAlt1Dark">#CAC4D0</Color>
+    <Color x:Key="IconColourDark">#CAC4D0</Color>
+    <Color x:Key="PlaceholderTextColourDark">#CAC4D0</Color>
+    <Color x:Key="PrimaryBackgroundDark">#D0BCFF</Color>
+    <Color x:Key="PrimaryBorderDark">#D0BCFF</Color>
+    <Color x:Key="PrimaryForegroundDark">#381E72</Color>
+    <Color x:Key="SwitchInactiveBackgroundDark">#49454F</Color>
+    <Color x:Key="BlackOverlayHoveredDark">#14e6e1e5</Color>
+    <Color x:Key="BadgeColour1Dark">#FF5A35</Color>
+    <Color x:Key="BadgeColour2Dark">#8FE30B</Color>
+    <Color x:Key="BadgeTextColourDark">#000000</Color>
+    <Color x:Key="FilledInputBorderDark">#938F99</Color>
+
+    <!--Light Theme-->
+    <Color x:Key="BackgroundLight">#FFFBFE</Color>
+    <Color x:Key="PreviewAreaBackgroundLight">#FFFBFE</Color>
+    <Color x:Key="HeaderBackgroundLight">#FFFBFE</Color>
+    <Color x:Key="SidebarBackgroundLight">#FFFBFE</Color>
+    <Color x:Key="SampleBrowserBackgroundLight">#F7F2FB</Color>
+    <Color x:Key="TileBackgroundLight">#F7F2FB</Color>
+    <Color x:Key="PreviewAreaBorderLight">#CAC4D0</Color>
+    <Color x:Key="BorderLight">#CAC4D0</Color>
+    <Color x:Key="TileHeaderBorderLight">#CAC4D0</Color>
+    <Color x:Key="HeaderForegroundLight">#1C1B1F</Color>
+    <Color x:Key="TextColourLight">#1C1B1F</Color>
+    <Color x:Key="SidebaritemTextColourLight">#1C1B1F</Color>
+    <Color x:Key="TileHeaderForegroundLight">#1C1B1F</Color>
+    <Color x:Key="TileTextColourLight">#1C1B1F</Color>
+    <Color x:Key="InputTextColourLight">#1C1B1F</Color>
+    <Color x:Key="TextColourAlt1Light">#49454F</Color>
+    <Color x:Key="TileTextColourAlt1Light">#49454F</Color>
+    <Color x:Key="IconColourLight">#49454F</Color>
+    <Color x:Key="PlaceholderTextColourLight">#49454F</Color>
+    <Color x:Key="SidebaritemBackgroundSelectedLight">#EADDFF</Color>
+    <Color x:Key="BlackOverlaySelectedLight">#EADDFF</Color>
+    <Color x:Key="TileHeaderBackgroundLight">#F3EDF7</Color>
+    <Color x:Key="BadgeColour2Light">#608C1B</Color>
+    <Color x:Key="BadgeTextColourLight">#FFFFFF</Color>
+    <Color x:Key="PrimaryForegroundLight">#FFFFFF</Color>
+    <Color x:Key="PrimaryBackgroundLight">#6750A4</Color>
+    <Color x:Key="ChipSelectedTextLight">#6750A4</Color>
+    <Color x:Key="PrimaryBorderLight">#6750A4</Color>
+    <Color x:Key="FilledInputBackgroundLight">#E7E0EC</Color>
+    <Color x:Key="FilledInputBorderLight1">#79747E</Color>
+    <Color x:Key="SwitchInactiveThumbColourLight">#79747E</Color>
+    <Color x:Key="BlackOverlayHoveredLight">#141c1b1f</Color>
+    <Color x:Key="BadgeColour1Light">#D9644A</Color>
+
+    <!--Previously implemented Keys-->
+    <Color x:Key="PrimaryLight">#3B33DE</Color>
+    <Color x:Key="ChipSelectedBackgroundDark">#4A4458</Color>
+    <Color x:Key="PrimaryDark">#D0BCFF</Color>
+    <Color x:Key="TitleTextColorDark">#FFFFFF</Color>
+    <Color x:Key="TitleTextColorLight">#283237</Color>
+    <Color x:Key="DescriptionTextColorLight">#495963</Color>
+    <Color x:Key="DescriptionTextColorDark">#C4CAD0</Color>
+    <Color x:Key="ChipSelectedBackgroundLight">#EADDFF</Color>
+    <Color x:Key="Gray200">#C8C8C8</Color>
+    <Color x:Key="Gray300">#ACACAC</Color>
+    <Color x:Key="Gray900">#212121</Color>
+    <Color x:Key="Blue100Accent">#3E8EED</Color>
+
+    <Style TargetType="ActivityIndicator">
+        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+    </Style>
+    
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}" />
+        <Setter Property="FontFamily" Value="Roboto-Regular" />
+        <Setter Property="FontAutoScalingEnabled" Value="False"/>
+        <Setter Property="LineBreakMode" Value="NoWrap" />
+    </Style>
+    
+    <Style x:Key="hyperLink" TargetType="Label">
+        <Setter Property="FontSize"  Value="10"></Setter>
+        <Setter Property="FontAttributes"  Value="Italic"></Setter>
+        <Setter Property="VerticalOptions"  Value="Center"></Setter>
+        <Setter Property="TextColor" Value="{AppThemeBinding Default={StaticResource Blue100Accent}}"></Setter>
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" />
+        <Setter Property="FontFamily" Value="Roboto-Regular" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="FontAutoScalingEnabled" Value="False"/>
+    </Style>
+
+    <Style TargetType="Button" x:Key="CloseButtonStyle">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+        <Setter Property="FontFamily" Value="Roboto-Regular" />
+        <Setter Property="BackgroundColor" Value="{StaticResource Transparent}" />
+        <Setter Property="BorderColor" Value="{StaticResource Transparent}" />
+        <Setter Property="Padding" Value="14,10" />
+        <Setter Property="FontAutoScalingEnabled" Value="False"/>
+    </Style>
+
+    <ControlTemplate x:Key="RadioButtonTemplate">
+        <Border Stroke="Transparent" BackgroundColor="Transparent">
+            <VisualStateManager.VisualStateGroups>
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CheckedStates">
+                        <VisualState x:Name="Checked">
+                            <VisualState.Setters>
+                                <Setter TargetName="check" Property="Opacity" Value="1" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Unchecked">
+                            <VisualState.Setters>
+                                <Setter TargetName="check" Property="Opacity" Value="0" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </VisualStateManager.VisualStateGroups>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid WidthRequest="20" HeightRequest="20" Grid.Column="0" VerticalOptions="Center" HorizontalOptions="Center">
+                    <Ellipse x:Name="border_circle" StrokeThickness="2" Stroke="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" Fill="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" WidthRequest="18" HeightRequest="18" HorizontalOptions="Center" VerticalOptions="Center" />
+                    <Ellipse x:Name="check" Fill="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" WidthRequest="10" HeightRequest="10" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Grid>
+                <ContentPresenter Margin="10,0,0,0" Grid.Column="1" HorizontalOptions="Start" VerticalOptions="Center" />
+            </Grid>
+        </Border>
+    </ControlTemplate>
+
+    <Style TargetType="RadioButton" x:Key="radioButtonStyle">
+        <Setter Property="ControlTemplate" Value="{StaticResource RadioButtonTemplate}" />
+    </Style>
+
+    <Style TargetType="Switch" x:Key="switchStyle">
+        <Setter Property="OnColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="On">
+                        <VisualState.Setters>
+                            <Setter Property="OnColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+                            <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Off">
+                        <VisualState.Setters>
+              <Setter Property="ThumbColor" Value="{AppThemeBinding Light={StaticResource SwitchInactiveThumbColourLight}, Dark={StaticResource FilledInputBorderDark}}" />
+            </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="Entry">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        <Setter Property="FontFamily" Value="Roboto-Regular" />
+        <Setter Property="FontAutoScalingEnabled" Value="False"/>
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource PreviewAreaBorderDark}, Dark={StaticResource TextColourAlt1Dark}}" />
+    </Style>
+
+    <Style TargetType="Editor">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource PreviewAreaBorderDark}, Dark={StaticResource TextColourAlt1Dark}}" />
+        <Setter Property="FontFamily" Value="Roboto-Regular" />
+    </Style>
+
+    <Style TargetType="CheckBox">
+        <Setter Property="Color" Value="{AppThemeBinding Light={StaticResource PrimaryLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Color" Value="{StaticResource Gray300}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="ListView">
+        <Setter Property="SeparatorColor" Value="{StaticResource Gray200}" />
+        <Setter Property="RefreshControlColor" Value="{StaticResource Gray900}" />
+    </Style>
+
+    <Style TargetType="RadioButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+        <Setter Property="FontFamily" Value="OpenSansRegular"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{StaticResource Gray300}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <Style TargetType="SearchBar">
+        <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource InputTextColourLight}, Dark={StaticResource InputTextColourDark}}" />
+        <Setter Property="PlaceholderColor" Value="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}" />
+        <Setter Property="CancelButtonColor" Value="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark}}" />
+    </Style>
+
+    <Style x:Key="Label1Style" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SidebaritemTextColourLight}, Dark={StaticResource SidebaritemTextColourDark}}" ></Setter>
+    </Style>
+
+    <Style x:Key="RadioButtonStyle" TargetType="RadioButton">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource BackgroundDark}, Dark={StaticResource HeaderForegroundDark}}" ></Setter>
+    </Style>
+
+    <Style x:Key="IconStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark}}" ></Setter>
+    </Style>
+
+    <Style x:Key="AltIconStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark}}" ></Setter>
+    </Style>
+
+
+</ResourceDictionary>

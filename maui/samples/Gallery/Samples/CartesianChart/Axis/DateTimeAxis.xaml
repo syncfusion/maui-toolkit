@@ -1,0 +1,48 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.DateTimeAxisChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" x:Name="dateTimeChart" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCartesianChart.BindingContext>
+                <local:DateTimeAxisViewModel/>
+            </chart:SfCartesianChart.BindingContext>
+            <chart:SfCartesianChart.Title>
+                <Label Text="Food Production - 2017" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+            </chart:SfCartesianChart.Title>
+
+            <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeAxis EdgeLabelsDrawingMode="Shift" ZoomFactor="0.7" ZoomPosition="0.4" >
+                    <chart:DateTimeAxis.Title>
+                        <chart:ChartAxisTitle  Margin="5,10,5,2" Text="Production across year">
+                        </chart:ChartAxisTitle>
+                    </chart:DateTimeAxis.Title>
+                </chart:DateTimeAxis>
+            </chart:SfCartesianChart.XAxes>
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis>
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text="Growth (In Metric Tonnes)">
+                        </chart:ChartAxisTitle>
+                    </chart:NumericalAxis.Title>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+            <chart:SfCartesianChart.ZoomPanBehavior>
+                <chart:ChartZoomPanBehavior x:Name="zooming1" EnablePinchZooming="False" EnableDoubleTap="False" EnablePanning="False" ZoomMode="X" />
+            </chart:SfCartesianChart.ZoomPanBehavior>
+            <chart:SfCartesianChart.Series>
+                <chart:FastLineSeries EnableAnimation="{Binding EnableAnimation}" EnableTooltip="True" ItemsSource="{Binding DateTimeData}" XBindingPath="Date" YBindingPath="Growth">
+                </chart:FastLineSeries>
+            </chart:SfCartesianChart.Series>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.CartesianChartColorResources">
+
+
+    <!--Old palette-->
+    <!--<SolidColorBrush x:Key="series1Light">#314A6E</SolidColorBrush>
+    <SolidColorBrush x:Key="series2Light">#48988B</SolidColorBrush>
+    <SolidColorBrush x:Key="series3Light">#5E498C</SolidColorBrush>
+    <SolidColorBrush x:Key="series4Light">#74BD6F</SolidColorBrush>
+    <SolidColorBrush x:Key="series5Light">#597FCA</SolidColorBrush>
+
+    <SolidColorBrush x:Key="series1Light30">#C4314A6E</SolidColorBrush>
+    <SolidColorBrush x:Key="series2Light30">#C448988B</SolidColorBrush>
+    <SolidColorBrush x:Key="series3Light30">#C45E498C</SolidColorBrush>
+    <SolidColorBrush x:Key="series4Light30">#C474BD6F</SolidColorBrush>
+    <SolidColorBrush x:Key="series5Light30">#C4597FCA</SolidColorBrush>
+
+    <local:ChartColorModel x:Key="PaletteBrushesLight" >
+        <SolidColorBrush>#314A6E</SolidColorBrush>
+        <SolidColorBrush>#48988B</SolidColorBrush>
+        <SolidColorBrush>#5E498C</SolidColorBrush>
+        <SolidColorBrush>#74BD6F</SolidColorBrush>
+        <SolidColorBrush>#597FCA</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="AlterBrushesLight" >
+        <SolidColorBrush>#314A6E</SolidColorBrush>
+        <SolidColorBrush>#48988B</SolidColorBrush>
+    </local:ChartColorModel>-->
+    <!--End-->
+
+    <SolidColorBrush x:Key="series1Light">#3068F7</SolidColorBrush>
+    <SolidColorBrush x:Key="series2Light">#BD34B7</SolidColorBrush>
+    <SolidColorBrush x:Key="series3Light">#7442DD</SolidColorBrush>
+    <SolidColorBrush x:Key="series4Light">#352886</SolidColorBrush>
+    <SolidColorBrush x:Key="series5Light">#1D5B6F</SolidColorBrush>
+
+    <SolidColorBrush x:Key="series1Dark">#4A7BF8</SolidColorBrush>
+    <SolidColorBrush x:Key="series2Dark">#10AD4F</SolidColorBrush>
+    <SolidColorBrush x:Key="series3Dark">#C4A124</SolidColorBrush>
+    <SolidColorBrush x:Key="series4Dark">#D15007</SolidColorBrush>
+    <SolidColorBrush x:Key="series5Dark">#9730E7</SolidColorBrush>
+
+    <SolidColorBrush x:Key="series1Light30">#C43068F7</SolidColorBrush>
+    <SolidColorBrush x:Key="series2Light30">#C4BD34B7</SolidColorBrush>
+    <SolidColorBrush x:Key="series3Light30">#C47442DD</SolidColorBrush>
+    <SolidColorBrush x:Key="series4Light30">#C4352886</SolidColorBrush>
+    <SolidColorBrush x:Key="series5Light30">#C41D5B6F</SolidColorBrush>
+
+    <SolidColorBrush x:Key="series1Light40">#313068F7</SolidColorBrush>
+    <SolidColorBrush x:Key="series2Light40">#31BD34B7</SolidColorBrush>
+    <SolidColorBrush x:Key="series3Light40">#317442DD</SolidColorBrush>
+    <SolidColorBrush x:Key="series4Light40">#31352886</SolidColorBrush>
+    <SolidColorBrush x:Key="series5Light40">#311D5B6F</SolidColorBrush>
+
+    <SolidColorBrush x:Key="series1Dark30">#C44A7BF8</SolidColorBrush>
+    <SolidColorBrush x:Key="series2Dark30">#C410AD4F</SolidColorBrush>
+    <SolidColorBrush x:Key="series3Dark30">#C4C4A124</SolidColorBrush>
+    <SolidColorBrush x:Key="series4Dark30">#C4D15007</SolidColorBrush>
+    <SolidColorBrush x:Key="series5Dark30">#C49730E7</SolidColorBrush>
+
+    <SolidColorBrush x:Key="series1Dark40">#314A7BF8</SolidColorBrush>
+    <SolidColorBrush x:Key="series2Dark40">#3110AD4F</SolidColorBrush>
+    <SolidColorBrush x:Key="series3Dark40">#31C4A124</SolidColorBrush>
+    <SolidColorBrush x:Key="series4Dark40">#31D15007</SolidColorBrush>
+    <SolidColorBrush x:Key="series5Dark40">#319730E7</SolidColorBrush>
+    
+    <local:ChartColorModel x:Key="PaletteBrushesLight" >
+        <SolidColorBrush>#3068F7</SolidColorBrush>
+        <SolidColorBrush>#BD34B7</SolidColorBrush>
+        <SolidColorBrush>#7442DD</SolidColorBrush>
+        <SolidColorBrush>#352886</SolidColorBrush>
+        <SolidColorBrush>#1D5B6F</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesDark" >
+        <SolidColorBrush>#4A7BF8</SolidColorBrush>
+        <SolidColorBrush>#10AD4F</SolidColorBrush>
+        <SolidColorBrush>#C4A124</SolidColorBrush>
+        <SolidColorBrush>#D15007</SolidColorBrush>
+        <SolidColorBrush>#9730E7</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <SolidColorBrush x:Key="TrackColorLight">#E7E0EC</SolidColorBrush>
+    <SolidColorBrush x:Key="TrackColorDark">#36323B</SolidColorBrush>
+
+    <local:ChartColorModel x:Key="AlterBrushesDark" >
+        <SolidColorBrush>#4A7BF8</SolidColorBrush>
+        <SolidColorBrush>#10AD4F</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="AlterBrushesLight" >
+        <SolidColorBrush>#3068F7</SolidColorBrush>
+        <SolidColorBrush>#BD34B7</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <LinearGradientBrush x:Key="AreaGradientLight" StartPoint="0.5,1"
+                                     EndPoint="0.5,0">
+        <GradientStop Color="White"
+                                  Offset="0.0" />
+        <GradientStop Color="#FF0080DF"
+                                  Offset="1.0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AreaGradientDark" StartPoint="0.5,1"
+                                     EndPoint="0.5,0">
+        <GradientStop Color="#234A76"
+                                  Offset="0.0" />
+        <GradientStop Color="#234A76"
+                                  Offset="1.0" />
+    </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="OverlayBrush">#EA4701</SolidColorBrush>
+
+    <SolidColorBrush x:Key="series1Light50">#36323B</SolidColorBrush>
+    <SolidColorBrush x:Key="series1Dark50">#ffffff</SolidColorBrush>
+</ResourceDictionary>

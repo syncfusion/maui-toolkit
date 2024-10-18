@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Buttons">
+		<Control Title="Chips" ControlName="SfChip" Image="chip.png" Description="The chips control offers an interactive and customizable layout." >
+			<Sample Title="Getting Started" SampleName="ChipGettingStarted" SearchTags="chip"/>
+			<Sample Title="Chip Types" SampleName="ChipTypes" SearchTags="chip"/>
+			<Sample Title="Customization" SampleName="ChipCustomization" SearchTags="chip"/>
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>

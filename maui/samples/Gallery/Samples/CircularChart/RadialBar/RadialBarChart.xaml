@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.RadialBarChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CircularChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+        <Grid>
+            <chart:SfCircularChart x:Name="chart"   HorizontalOptions="Fill" VerticalOptions="FillAndExpand" >
+
+                <chart:SfCircularChart.Resources>
+                    <ResourceDictionary>
+
+                        <DataTemplate x:Key="tooltipTemplate">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica"
+	                FontSize="14"	HorizontalOptions="Center"	VerticalOptions="Center"/>
+                                <Label Text="{Binding Item.Value, StringFormat='  :  \{0}M'}"
+	               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"	FontAttributes="Bold" FontSize="14" FontFamily="Helvetica"
+	               HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </ResourceDictionary>
+                   
+                </chart:SfCircularChart.Resources>
+                <chart:SfCircularChart.Title>
+                    <Label Text="Project Cost Breakdown" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+                </chart:SfCircularChart.Title>
+                <chart:SfCircularChart.BindingContext>
+                    <local:RadialBarSeriesViewModel x:Name="radialBarSeriesViewModel"/>
+                </chart:SfCircularChart.BindingContext>
+                <chart:SfCircularChart.Legend>
+                    <chart:ChartLegend  Placement="{OnPlatform WinUI='Bottom', MacCatalyst='Bottom', iOS='Top', Android='Top'}">
+                    </chart:ChartLegend>
+                </chart:SfCircularChart.Legend>
+                <chart:SfCircularChart.TooltipBehavior>
+                    <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+                </chart:SfCircularChart.TooltipBehavior>
+                <chart:SfCircularChart.Series>
+                    <chart:RadialBarSeries x:Name="radialBarSeries" Radius="0.9" TrackFill="{AppThemeBinding Light={StaticResource TrackColorLight}, Dark={StaticResource TrackColorDark}}"
+                                           StartAngle="{Binding Source={x:Reference startAngle}, Path=Value, Mode=TwoWay}" 
+                                           EndAngle="{Binding Source={x:Reference endAngle}, Path=Value, Mode=TwoWay}"   
+                                           ItemsSource="{Binding RadialBarSeriesData}"  PaletteBrushes="{AppThemeBinding Light={StaticResource RadialPaletteBrushesLight1}, Dark={StaticResource RadialPaletteBrushesDark1}}"
+                                           XBindingPath="Name" YBindingPath="Value"  EnableAnimation="True"
+                                           TrackStrokeWidth="{Binding Source={x:Reference trackStrokeWidth}, Path=Value, Mode=TwoWay}"
+                                           MaximumValue="15"  EnableTooltip="True" 
+                                           GapRatio="{OnPlatform Android='0.4',WinUI='0.3',MacCatalyst='0.4',iOS='0.5'}"
+                                           CapStyle="{Binding Source={x:Reference capStyle}, Path=SelectedItem}" 
+                                           TooltipTemplate="{StaticResource tooltipTemplate}" LegendIcon="SeriesType">
+                    </chart:RadialBarSeries>
+                </chart:SfCircularChart.Series>
+            </chart:SfCircularChart>
+        </Grid>
+    </localCore:SampleView.Content>
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <ScrollView >
+                <Grid>
+                    <Grid.BindingContext>
+                        <local:RadialBarSeriesViewModel/>
+                    </Grid.BindingContext>
+                    <VerticalStackLayout>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.BindingContext>
+                                <local:RadialBarSeriesViewModel x:Name="viewModel"/>
+                            </Grid.BindingContext>
+                            <Label Text="Cap Style" VerticalOptions="CenterAndExpand"  
+                                   Margin="0,13,0,0" Grid.Column="0" />
+                            <Picker x:Name="capStyle"   Grid.Column="1"
+                                    VerticalOptions="CenterAndExpand"  BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                                    WidthRequest="{OnPlatform Default=130, WinUI=140}"  Margin="0,13,0,0"
+                                    ItemsSource="{Binding CapStyles}">
+                            </Picker>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Track Fill" VerticalOptions="CenterAndExpand"  
+                                   Margin="0,13,0,0" Grid.Column="0"/>
+                            <Picker x:Name="trackFill" ItemsSource="{Binding Track}" 
+                                    Margin="0,13,0,0" Grid.Column="1" VerticalOptions="CenterAndExpand"
+                                    SelectedIndexChanged="trackFill_SelectedIndexChanged" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                                    WidthRequest="{OnPlatform Default=130, WinUI=140}" >
+                            </Picker>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Track Stroke" VerticalOptions="CenterAndExpand" 
+                                   Margin="0,13,0,0" Grid.Column="0"/>
+                            <Picker  Margin="0,13,0,0" x:Name="trackStroke" Grid.Column="1" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                                     SelectedIndexChanged="trackStroke_SelectedIndexChanged"
+                                     ItemsSource="{Binding Track}" VerticalOptions="CenterAndExpand"
+                                     WidthRequest="{OnPlatform Default=130, WinUI=140}">
+                            </Picker>
+                        </Grid>
+                        <Grid HeightRequest="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Track Stroke Width" 
+                                   VerticalOptions="CenterAndExpand" Grid.Column="0"/>
+                            <Slider x:Name="trackStrokeWidth" Grid.Column="1"  Margin="0,5,0,0"
+                                    VerticalOptions="CenterAndExpand" 
+                                    Minimum="0" Value="0" Maximum="1">
+                            </Slider>
+                        </Grid>
+                        <Grid HeightRequest="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Start Angle" Grid.Column="0"
+                                       VerticalOptions="CenterAndExpand"   />
+                            <Slider x:Name="startAngle" Margin="0,5,0,0"
+                                    VerticalOptions="CenterAndExpand"
+                                    Grid.Column="1"  Minimum="-90" Maximum="90" >
+                            </Slider>
+                        </Grid>
+                        <Grid HeightRequest="50">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="End Angle" Grid.Column="0" 
+                                   VerticalOptions="CenterAndExpand" />
+                            <Slider x:Name="endAngle" Grid.Column="1" 
+                                    VerticalOptions="CenterAndExpand" Margin="0,5,0,0"
+                                        Minimum="90" Maximum="270">
+                            </Slider>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Grid>
+            </ScrollView>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

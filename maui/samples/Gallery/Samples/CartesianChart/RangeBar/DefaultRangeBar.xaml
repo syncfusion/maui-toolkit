@@ -1,0 +1,79 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.DefaultRangeBar"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <StackLayout HorizontalOptions="Fill" x:Name="layout">
+
+            <StackLayout.Resources>
+                <Label x:Key="title" x:Name="titleName" Text="Annual Average Temperature Variations in Paris"
+                           FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
+                          LineBreakMode="WordWrap" Padding="0,0,0,5"/>
+            </StackLayout.Resources>
+
+            <StackLayout.BindingContext>
+                <local:RangeBarSerieViewModel/>
+            </StackLayout.BindingContext>
+
+            <chart:SfCartesianChart  x:Name="Chart" VerticalOptions="FillAndExpand" IsTransposed="True" 
+                                     Title="{StaticResource title}">
+
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior EnableDoubleTap="False" EnablePinchZooming="False"/>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis Interval="1" LabelPlacement="BetweenTicks" IsVisible="true" ShowMajorGridLines="False" AutoScrollingDelta="{OnPlatform iOS=5,Android=5}" AutoScrollingMode="End">
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes >
+                    <chart:NumericalAxis x:Name="yAxis" ShowMajorGridLines="False" Interval="5">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat= "0.#&#186;C"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+            
+                <chart:RangeColumnSeries  EnableAnimation="True"
+                                     ShowDataLabels="True"
+                                     Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"
+                                     ItemsSource="{Binding TemperatureData}"
+                                     XBindingPath="Name"
+                                     High="Value"
+                                     Low="Size">
+
+                    <chart:RangeColumnSeries.DataLabelSettings>
+                        <chart:CartesianDataLabelSettings UseSeriesPalette="False">
+                            <chart:CartesianDataLabelSettings.LabelStyle >
+                                <chart:ChartDataLabelStyle TextColor="White" LabelFormat= "0.#&#186;C"/>
+                            </chart:CartesianDataLabelSettings.LabelStyle>
+                        </chart:CartesianDataLabelSettings>
+                    </chart:RangeColumnSeries.DataLabelSettings>
+
+                </chart:RangeColumnSeries>
+
+            </chart:SfCartesianChart>
+
+
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" holiday-weather.com" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.holiday-weather.com/paris/averages/"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

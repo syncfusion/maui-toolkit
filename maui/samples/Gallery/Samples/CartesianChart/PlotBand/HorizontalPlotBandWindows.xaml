@@ -1,0 +1,80 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.HorizontalPlotBandWindows"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart VerticalOptions="FillAndExpand" x:Name="horizontalPlotBandWindowsChart">
+
+            <chart:SfCartesianChart.Resources>
+                <ResourceDictionary>
+                    <DataTemplate x:Key="template">
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Item.Name}"  VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                            <Label Text="{Binding Item.Value,StringFormat=':  {0}&#186;C'}" VerticalTextAlignment="Center" HorizontalOptions="End" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </ResourceDictionary>
+            </chart:SfCartesianChart.Resources>
+
+            <chart:SfCartesianChart.BindingContext>
+                <local:PlotBandViewModel x:Name="ViewModel"/>
+            </chart:SfCartesianChart.BindingContext>
+            
+            <chart:SfCartesianChart.Title>
+                <Label Text="Weather Report" Margin="0,0,0,10" HorizontalOptions="Center" HorizontalTextAlignment="Center" 
+                       VerticalOptions="CenterAndExpand" FontSize="16" LineBreakMode="WordWrap"/>
+            </chart:SfCartesianChart.Title>
+            
+            <chart:SfCartesianChart.XAxes>
+                <chart:CategoryAxis ShowMajorGridLines="False" EdgeLabelsDrawingMode="Shift" LabelPlacement="BetweenTicks">
+                    <chart:CategoryAxis.Title>
+                        <chart:ChartAxisTitle Text="Months" FontSize="15.5"/>
+                    </chart:CategoryAxis.Title>
+                </chart:CategoryAxis>
+            </chart:SfCartesianChart.XAxes>
+            
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis Maximum="32" Minimum="20" Interval="4" ShowMinorGridLines="False"
+                                     EdgeLabelsDrawingMode="Shift" x:Name="YAxis">
+                    
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text="Temperature [°C]" FontSize="16"/>
+                    </chart:NumericalAxis.Title>
+                    
+                    <chart:NumericalAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="0°C"></chart:ChartAxisLabelStyle>
+                    </chart:NumericalAxis.LabelStyle>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+
+            <chart:SplineSeries x:Name="Series" ItemsSource="{Binding ClimateData}" XBindingPath="Name" YBindingPath="Value" Fill="{AppThemeBinding Light={StaticResource OverlayBrush}, Dark={StaticResource OverlayBrush}}"
+                                StrokeWidth="2" ShowMarkers="True" EnableTooltip="True" TooltipTemplate="{StaticResource template}">
+                <chart:SplineSeries.MarkerSettings>
+                    <chart:ChartMarkerSettings x:Name="Markersettings" Stroke="{AppThemeBinding Light={StaticResource OverlayBrush}, Dark={StaticResource OverlayBrush}}" StrokeWidth="1"/>
+                </chart:SplineSeries.MarkerSettings>
+            </chart:SplineSeries>
+            
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+    
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <VerticalStackLayout Spacing="5">
+                <HorizontalStackLayout>
+                    <Label Text="Plot band types :" HorizontalOptions="Center" VerticalOptions="Start" Padding="5" FontSize="17"/>
+                    <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=PlotBandType}" SelectedItem="{Binding Source={x:Reference ViewModel},Path=PlotBandType[0]}" WidthRequest="{OnPlatform MacCatalyst=80}"
+                           HorizontalOptions="Fill" VerticalOptions="Start" SelectedIndex="0" SelectedIndexChanged="Picker_SelectedIndexChanged" BackgroundColor="{AppThemeBinding Dark=lightgray}"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

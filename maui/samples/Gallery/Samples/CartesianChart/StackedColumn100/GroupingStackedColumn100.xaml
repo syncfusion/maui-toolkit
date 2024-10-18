@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.GroupingStackedColumn100"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Content>
+        <StackLayout>
+            <StackLayout.BindingContext>
+                <local:StackedColumn100ViewModel/>
+            </StackLayout.BindingContext>
+            
+            <chart:SfCartesianChart x:Name="Chart1" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" PaletteBrushes="{Binding PaletteBrushes}">
+                
+                <chart:SfCartesianChart.Title>
+                    <StackLayout>
+                        <Label Text="Electricity Consumption from Various Sources" Margin="3" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="6">
+                            <BoxView Color="#6EDE8A" WidthRequest="20" HeightRequest="10" CornerRadius="4"/>
+                            <Label Text="United States" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="13"/>
+                            <BoxView Color="#DE896E" WidthRequest="20" HeightRequest="10" CornerRadius="4"/>
+                            <Label Text="United Kingdom" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="13"/>
+                        </StackLayout>
+                    </StackLayout>
+                </chart:SfCartesianChart.Title>
+                
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend/>
+                </chart:SfCartesianChart.Legend>
+                
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis x:Name="XAxis" LabelPlacement="BetweenTicks" ShowMajorGridLines="True"/>
+                </chart:SfCartesianChart.XAxes>
+                
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis x:Name="YAxis" Interval="20" ShowMajorGridLines="False"  RangePadding="None">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="0'%"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                
+                <chart:SfCartesianChart.Series>
+                    <chart:StackingColumn100Series Label="Fossil Fuels" 
+                                                   ItemsSource="{Binding USElectricityData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="Value" 
+                                                   EnableAnimation="True" 
+                                                   EnableTooltip="True" 
+                                                   GroupingLabel="Food" 
+                                                   Spacing="0.07" 
+                                                   Fill="#45D669"
+                                                   LegendIcon="Rectangle"/>
+
+                    <chart:StackingColumn100Series Label="Nuclear" 
+                                                   ItemsSource="{Binding USElectricityData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="High" 
+                                                   EnableAnimation="True" 
+                                                   EnableTooltip="True"  
+                                                   GroupingLabel="Food" 
+                                                   Spacing="0.07" 
+                                                   Fill="#6EDE8A"
+                                                   LegendIcon="Rectangle"/>
+
+                    <chart:StackingColumn100Series Label="Renewables" 
+                                                   ItemsSource="{Binding USElectricityData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="Low" 
+                                                   EnableAnimation="True" 
+                                                   EnableTooltip="True" 
+                                                   GroupingLabel="Food" 
+                                                   Spacing="0.07" 
+                                                   Fill="#B7EFC5"
+                                                   LegendIcon="Rectangle"/>
+
+                    <chart:StackingColumn100Series Label="Fossil Fuels" 
+                                                   ItemsSource="{Binding UKElectricityData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="Value" 
+                                                   EnableAnimation="True" 
+                                                   EnableTooltip="True" 
+                                                   GroupingLabel="AnimalFeed" 
+                                                   Spacing="0.07" 
+                                                   Fill="#D65F45"
+                                                   LegendIcon="Rectangle"/>
+
+                    <chart:StackingColumn100Series Label="Nuclear" 
+                                                   ItemsSource="{Binding UKElectricityData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="High" 
+                                                   EnableAnimation="True" 
+                                                   EnableTooltip="True" 
+                                                   GroupingLabel="AnimalFeed" 
+                                                   Spacing="0.07" 
+                                                   Fill="#DE896E"
+                                                   LegendIcon="Rectangle"/>
+
+                    <chart:StackingColumn100Series Label="Renewables" 
+                                                   ItemsSource="{Binding UKElectricityData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="Low" 
+                                                   EnableAnimation="True" 
+                                                   EnableTooltip="True" 
+                                                   GroupingLabel="AnimalFeed" 
+                                                   Spacing="0.07" 
+                                                   Fill="#EFC4B7"
+                                                   LegendIcon="Rectangle"/>
+                    
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+            
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"/>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" ourworldindata.org" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://ourworldindata.org/grapher/elec-mix-bar?time=2017"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+            
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

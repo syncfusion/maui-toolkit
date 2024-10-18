@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.EffectsView.SfEffectsView.RotateAnimation"
+                      xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:sfEffectsView="clr-namespace:Syncfusion.Maui.Toolkit.EffectsView;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+    <localCore:SampleView.Content>
+        <StackLayout Spacing="20" HorizontalOptions="Center" VerticalOptions="Center">
+            <Label Text="Touch the icon to rotate it" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" HorizontalTextAlignment="Center" />
+            <Frame HorizontalOptions="Center" HasShadow="False" CornerRadius="{OnPlatform Default='70', iOS='70'}" HeightRequest="140" WidthRequest="140" Padding="0" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}">
+            	<sfEffectsView:SfEffectsView x:Name="RotationEffectsView"
+										     TouchDownEffects="Ripple" TouchUpEffects="Rotation" 
+											 RippleAnimationDuration="150"  
+										     RotationAnimationDuration="150" Angle="180" 
+										     InitialRippleFactor="0"
+										     AnimationCompleted="RotationEffectsViewAnimationCompleted">
+                    <Grid BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}">
+                        <Label Text="&#xe714;" FontFamily="MauiSampleFontIcon" Margin="10" FontSize="70"  Style="{StaticResource AltIconStyle}" VerticalOptions="Center" HorizontalOptions="Center"/>
+                    </Grid>
+                </sfEffectsView:SfEffectsView>
+            </Frame>
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

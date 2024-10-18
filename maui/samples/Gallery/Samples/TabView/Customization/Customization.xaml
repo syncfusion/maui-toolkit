@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.TabView.SfTabView.Customization"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.TabView.SfTabView"
+             xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+    <localCore:SampleView.Content>
+        <Grid >
+            <Grid.Resources>
+                <!-- Converter for formatting text -->
+                <local:TextToFormatTextConverter x:Key="TextToFileNameConverter"/>
+
+                <!-- Style for Image elements -->
+                <Style TargetType="Image">
+                    <Setter Property="VerticalOptions" Value="Center"/>
+                    <Setter Property="HorizontalOptions" Value="Center"/>
+                    
+                    <Setter Property="WidthRequest" Value="25"/>
+                    <Setter Property="HeightRequest" Value="25"/>
+                    <Setter Property="Aspect" Value="AspectFit"/>
+                </Style>
+
+                <!-- Style for Label elements -->
+                <Style TargetType="Label">
+                    <Setter Property="VerticalOptions" Value="Center"/>
+                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                    <Setter Property="FontSize"  Value="16"/>
+              </Style>
+
+                <!-- Style for SfTabItem elements -->
+                <Style TargetType="tabView:SfTabItem">
+                    <Setter Property="VisualStateManager.VisualStateGroups">
+                        <VisualStateGroupList>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Selected" >
+                                    <VisualState.Setters>
+                                        <Setter Property="TextColor" Value="{Binding SelectedItemColor}" />
+                                        <Setter Property="FontAttributes" Value="Bold" />
+                                        <Setter Property="FontSize" Value="16" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                                        <Setter Property="FontAttributes" Value="Italic" />
+                                        <Setter Property="FontSize" Value="14" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </Setter>
+
+                </Style>
+            </Grid.Resources>
+
+            <!-- TabView with multiple TabItems -->
+            <tabView:SfTabView x:Name="TabView"
+                               TabBarHeight="72"
+                               EnableSwiping="True"
+                               SelectionChanged="SfTabView_SelectionChanged">
+                <!-- Document TabItem -->
+                <tabView:SfTabItem Header="Document" 
+                                   ImageSource="{imageExtension:ImageResource document.png}">
+                    <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                        <VerticalStackLayout>
+                            <BindableLayout.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Content 1</x:String>
+                                    <x:String>Content 2</x:String>
+                                    <x:String>Content 3</x:String>
+                                    <x:String>Content 4</x:String>
+                                    <x:String>Content 5</x:String>
+                                    <x:String>Content 6</x:String>
+                                    <x:String>Content 7</x:String>
+                                    <x:String>Content 8</x:String>
+                                    <x:String>Content 9</x:String>
+                                    <x:String>Content 10</x:String>
+                                    <x:String>Content 11</x:String>
+                                    <x:String>Content 12</x:String>
+                                    <x:String>Content 13</x:String>
+                                    <x:String>Content 14</x:String>
+                                </x:Array>
+                            </BindableLayout.ItemsSource>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <HorizontalStackLayout Padding="5,0,5,0">
+                                        <Image Source="{imageExtension:ImageResource document.png}"/>
+                                        <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.docx}"/>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </tabView:SfTabItem>
+
+                <!-- Document TabItem -->
+                <tabView:SfTabItem Header="Excel"
+                                   ImageSource="{imageExtension:ImageResource excel.png}">
+                    <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                        <VerticalStackLayout>
+                            <BindableLayout.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Content 1</x:String>
+                                    <x:String>Content 2</x:String>
+                                    <x:String>Content 3</x:String>
+                                    <x:String>Content 4</x:String>
+                                    <x:String>Content 5</x:String>
+                                    <x:String>Content 6</x:String>
+                                    <x:String>Content 7</x:String>
+                                    <x:String>Content 8</x:String>
+                                </x:Array>
+                            </BindableLayout.ItemsSource>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <HorizontalStackLayout Padding="5,0,5,0">
+                                        <Image Source="{imageExtension:ImageResource excel.png}"/>
+                                        <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.xlsx}"/>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </tabView:SfTabItem>
+
+                <!-- Document TabItem -->
+                <tabView:SfTabItem Header="PDF" 
+                                   ImageSource="{imageExtension:ImageResource pdftab.png}">
+                    <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                        <VerticalStackLayout>
+                            <BindableLayout.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Content 1</x:String>
+                                    <x:String>Content 2</x:String>
+                                    <x:String>Content 3</x:String>
+                                    <x:String>Content 4</x:String>
+                                    <x:String>Content 5</x:String>
+                                    <x:String>Content 6</x:String>
+                                    <x:String>Content 7</x:String>
+                                    <x:String>Content 8</x:String>
+                                    <x:String>Content 9</x:String>
+                                    <x:String>Content 10</x:String>
+                                    <x:String>Content 11</x:String>
+                                    <x:String>Content 12</x:String>
+                                    <x:String>Content 13</x:String>
+                                    <x:String>Content 14</x:String>
+                                    <x:String>Content 15</x:String>
+                                </x:Array>
+                            </BindableLayout.ItemsSource>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <HorizontalStackLayout Padding="5,0,5,0">
+                                        <Image Source="{imageExtension:ImageResource pdftab.png}"/>
+                                        <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.pdf}"/>
+                                    </HorizontalStackLayout>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </ScrollView>
+                </tabView:SfTabItem>
+
+                <!-- PowerPoint TabItem -->
+                <tabView:SfTabItem Header="PowerPoint" 
+                                   ImageSource="{imageExtension:ImageResource powerpoint.png}">
+                    <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                        <VerticalStackLayout>
+                            <BindableLayout.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>Content 1</x:String>
+                                    <x:String>Content 2</x:String>
+                                    <x:String>Content 3</x:String>
+                                    <x:String>Content 4</x:String>
+                                    <x:String>Content 5</x:String>
+                                </x:Array>
+                            </BindableLayout.ItemsSource>
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate>
+                                    <HorizontalStackLayout Padding="5,0,5,0">
+                                        <Image Source="{imageExtension:ImageResource powerpoint.png}"/>
+                                        <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.pptx}"/>
+                                    </HorizontalStackLayout>
+                            </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
+                            </ScrollView>
+                </tabView:SfTabItem>
+            </tabView:SfTabView>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

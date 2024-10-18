@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.NavigationDrawer.SfNavigationDrawerStyle"
+             xmlns:navigationDrawer="clr-namespace:Syncfusion.Maui.Toolkit.NavigationDrawer">
+
+    <Style TargetType="navigationDrawer:SfNavigationDrawer">
+        <Setter Property="DrawerSettings">
+            <Setter.Value>
+                <navigationDrawer:DrawerSettings ContentBackground="{DynamicResource SfNavigationDrawerContentBackground}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

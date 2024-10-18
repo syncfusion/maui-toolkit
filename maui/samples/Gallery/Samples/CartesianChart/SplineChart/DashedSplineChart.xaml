@@ -1,0 +1,80 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.DashedSplineChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <StackLayout>
+            <StackLayout.BindingContext>
+                <local:SplineSeriesViewModel x:Name="viewModel"/>
+            </StackLayout.BindingContext>
+            <chart:SfCartesianChart x:Name="Chart1"  PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+                <chart:SfCartesianChart.Resources>
+                    <DoubleCollection x:Key="dashArray">
+                        <x:Double>6</x:Double>
+                        <x:Double>3</x:Double>
+                        <x:Double>3</x:Double>
+                        <x:Double>3</x:Double>
+                    </DoubleCollection>
+                </chart:SfCartesianChart.Resources>
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Total Investment (% of GDP)" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True"/>
+                </chart:SfCartesianChart.Legend>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis ShowMajorGridLines="false" PlotOffsetStart="10" PlotOffsetEnd="10" AxisLineOffset="10">
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis Interval="4">
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0">
+                            </chart:ChartLineStyle>
+                        </chart:NumericalAxis.AxisLineStyle>
+                        <chart:NumericalAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle TickSize="0" />
+                        </chart:NumericalAxis.MajorTickStyle>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="0'%" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                    <chart:SplineSeries StrokeDashArray="{StaticResource dashArray}" Label="Brazil" EnableTooltip="True" EnableAnimation="True" StrokeWidth="1" ItemsSource="{Binding DashedData}" XBindingPath="Data" YBindingPath="High" ShowMarkers="True" LegendIcon="SeriesType">
+                        <chart:SplineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="1"/>
+                        </chart:SplineSeries.MarkerSettings>
+                    </chart:SplineSeries>
+                    <chart:SplineSeries StrokeDashArray="{StaticResource dashArray}"  Label="Sweden" EnableTooltip="True" EnableAnimation="True" StrokeWidth="1" ItemsSource="{Binding DashedData}" XBindingPath="Data" YBindingPath="Low" ShowMarkers="True" LegendIcon="SeriesType">
+                        <chart:SplineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" StrokeWidth="1"/>
+                        </chart:SplineSeries.MarkerSettings>
+                    </chart:SplineSeries>
+                    <chart:SplineSeries StrokeDashArray="{StaticResource dashArray}"  Label="Greece" EnableTooltip="True" EnableAnimation="True" StrokeWidth="1" ItemsSource="{Binding DashedData}" XBindingPath="Data" YBindingPath="Value" ShowMarkers="True" LegendIcon="SeriesType">
+                        <chart:SplineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series3Light}, Dark={StaticResource series3Dark}}" StrokeWidth="1"/>
+                        </chart:SplineSeries.MarkerSettings>
+                    </chart:SplineSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" The World Bank Group" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://tcdata360.worldbank.org/indicators/inv.all.pct?country=BRA&amp;indicator=345&amp;countries=GRC,SWE&amp;viz=line_chart&amp;years=1997,2004"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

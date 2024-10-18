@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.SegmentedControl.SfSegmentedControlStyles"
+             xmlns:segmentedControl="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl">
+
+    <Style TargetType="segmentedControl:SfSegmentedControl">
+        <Setter Property="Stroke" Value="{DynamicResource SfSegmentedControlNormalStroke}"/>
+        <Setter Property="StrokeThickness" Value="{DynamicResource SfSegmentedControlNormalStrokeThickness}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource SfSegmentedControlNormalCornerRadius}" />
+        <Setter Property="SegmentCornerRadius" Value="{DynamicResource SfSegmentedControlNormalSegmentCornerRadius}" />
+        <Setter Property="Background" Value="{DynamicResource SfSegmentedControlNormalBackground}" />
+        <Setter Property="DisabledSegmentTextColor" Value="{DynamicResource SfSegmentedControlDisabledSegmentTextColor}" />
+        <Setter Property="DisabledSegmentBackground" Value="{DynamicResource SfSegmentedControlDisabledSegmentBackground}"/>
+    </Style>
+
+    <Style TargetType="segmentedControl:SegmentTextStyle">
+        <Setter Property="TextColor" Value="{DynamicResource SfSegmentedControlNormalTextColor}" />
+        <Setter Property="FontSize" Value="{DynamicResource SfSegmentedControlNormalFontSize}" />
+    </Style>
+
+    <Style TargetType="segmentedControl:SelectionIndicatorSettings">
+        <Setter Property="Stroke" Value="{DynamicResource SfSegmentedControlSelectionStroke}"/>
+        <Setter Property="StrokeThickness" Value="{DynamicResource SfSegmentedControlBorderSelectionStrokeThickness}" />
+        <Setter Property="Background" Value="{DynamicResource SfSegmentedControlSelectionBackground}" />
+        <Setter Property="TextColor" Value="{DynamicResource SfSegmentedControlSelectionTextColor}" />
+    </Style>
+
+</ResourceDictionary>

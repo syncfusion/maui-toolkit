@@ -1,0 +1,31 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.AutoScrolling"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart x:Name="categoryChart">
+            <chart:SfCartesianChart.BindingContext>
+                <local:AutoScrollingViewModel x:Name="realTimeViewModel"/>
+            </chart:SfCartesianChart.BindingContext>
+            <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeAxis x:Name="axis" EnableAutoIntervalOnZooming="False"  ShowMajorGridLines="False" Interval="1" IntervalType="Seconds" AutoScrollingDeltaType="Seconds" AutoScrollingDelta="10">
+                    <chart:DateTimeAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="{OnPlatform Default=hh:mm:ss,Android=mm:ss,iOS=mm:ss} "/>
+                    </chart:DateTimeAxis.LabelStyle>
+                </chart:DateTimeAxis>
+            </chart:SfCartesianChart.XAxes>
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis/>
+            </chart:SfCartesianChart.YAxes>
+            <chart:SfCartesianChart.Series>
+                <chart:ColumnSeries PaletteBrushes="{Binding CustomColor4}" ItemsSource="{Binding LiveChartData}" XBindingPath="Date" YBindingPath="Value">
+                </chart:ColumnSeries>
+            </chart:SfCartesianChart.Series>
+            <chart:SfCartesianChart.ZoomPanBehavior>
+                <chart:ChartZoomPanBehavior EnablePanning="True" EnableDoubleTap="False" EnablePinchZooming="False" EnableDirectionalZooming="False"/>
+            </chart:SfCartesianChart.ZoomPanBehavior>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

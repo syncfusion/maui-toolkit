@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SampleBrowser>
+	<Assemblies Prefix="Syncfusion.Maui.ControlsGallery" QualifiedInfo="Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Assembly Name="CartesianChart" />
+    <Assembly Name="CircularChart" />
+    <Assembly Name="FunnelChart" />
+    <Assembly Name="PyramidChart" />
+    <Assembly Name="PolarChart" />
+    <Assembly Name="TextInputLayout" />
+		<Assembly Name="TabView" />
+		<Assembly Name="Buttons" />
+		<Assembly Name="Chips" />
+		<Assembly Name="EffectsView" />
+		<Assembly Name="Shimmer" />
+		<Assembly Name="PullToRefresh" />
+		<Assembly Name="NavigationDrawer" />
+		<Assembly Name="Carousel" />
+	</Assemblies>
+</SampleBrowser>

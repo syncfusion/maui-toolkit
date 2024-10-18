@@ -1,0 +1,96 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.SeriesSelection"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <Grid HorizontalOptions="Fill" VerticalOptions="FillAndExpand" RowDefinitions="*,Auto">
+
+            <Grid.BindingContext>
+                <local:SeriesSelectionViewModel x:Name="dataViewModel"/>
+            </Grid.BindingContext>
+
+            <chart:SfCartesianChart Margin="0,0,0,5" x:Name="chart" PaletteBrushes="{Binding Brushes}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+
+                <chart:SfCartesianChart.Title>
+                    <VerticalStackLayout  Margin="0,0,0,20" >
+                        <Label Text="Age Distribution by Country" HorizontalTextAlignment="Center" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="16" />
+                    </VerticalStackLayout>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.SelectionBehavior>
+                    <chart:SeriesSelectionBehavior x:Name ="seriesSelection" SelectionBrush="{x:Null}"  SelectionChanging="seriesSelection_SelectionChanging" Type="SingleDeselect"/>
+                </chart:SfCartesianChart.SelectionBehavior>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis x:Name="categoryAxis" IsVisible="True" EnableAutoIntervalOnZooming="False" ShowMajorGridLines="False" >
+                        <chart:CategoryAxis.Title>
+                            <chart:ChartAxisTitle Text="Country" Margin="5,10,5,2"/>
+                        </chart:CategoryAxis.Title>
+                        <chart:CategoryAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle StrokeWidth="0"/>
+                        </chart:CategoryAxis.MajorTickStyle>
+                        <chart:CategoryAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0"/>
+                        </chart:CategoryAxis.AxisLineStyle>
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="True"
+                                     Maximum="100" Minimum="0" Interval="20">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Average Number of People in Percentage" Margin="5,10,5,2"/>
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0" />
+                        </chart:NumericalAxis.AxisLineStyle>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="0'%"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend Placement="Bottom"/>
+                </chart:SfCartesianChart.Legend>
+                <chart:SfCartesianChart.Series>
+                    <chart:ColumnSeries x:Name="series1" EnableAnimation="{Binding EnableAnimation}" Label="0-14 years" CornerRadius="5,5,0,0" ItemsSource="{Binding SelectionData}" XBindingPath="Name" YBindingPath="Value">
+                    </chart:ColumnSeries>
+                    <chart:ColumnSeries  x:Name="series2" EnableAnimation="{Binding EnableAnimation}" Label="15-59 years" CornerRadius="5,5,0,0" ItemsSource="{Binding SelectionData}" XBindingPath="Name" YBindingPath="High">
+                    </chart:ColumnSeries>
+                    <chart:ColumnSeries  x:Name="series3" EnableAnimation="{Binding EnableAnimation}" Label="60 years+" CornerRadius="5,5,0,0" ItemsSource="{Binding SelectionData}" XBindingPath="Name" YBindingPath="Low">
+                    </chart:ColumnSeries>
+                </chart:SfCartesianChart.Series>
+
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior EnableDoubleTap="False" EnablePinchZooming="False" EnablePanning="True" ZoomMode="X"/>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+
+            </chart:SfCartesianChart>
+            
+            <AbsoluteLayout VerticalOptions="Start" Margin="0,40,0,0" HeightRequest="40">
+                <HorizontalStackLayout AbsoluteLayout.LayoutFlags="PositionProportional"  AbsoluteLayout.LayoutBounds="1,0">
+                    <Label Text="Multiple Selection :" VerticalOptions="Center" FontSize="16" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+                    <CheckBox x:Name="checkbox" HeightRequest="35" VerticalOptions="Center" CheckedChanged="checkbox_CheckedChanged"/>
+                </HorizontalStackLayout>
+            </AbsoluteLayout>
+
+                <HorizontalStackLayout x:Name="hyperLinkLayout" HorizontalOptions="Start" Grid.Row="1">
+                    <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                    <Label TextColor="#3E8EED" FontAttributes="Italic" FontSize="12" Text=" Wikipedia" VerticalOptions="Center">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://en.wikipedia.org/wiki/List_of_Asian_countries_by_population"></TapGestureRecognizer>
+                        </Label.GestureRecognizers>
+                    </Label>
+                </HorizontalStackLayout>
+        </Grid>
+    </localCore:SampleView.Content>
+
+</localCore:SampleView>

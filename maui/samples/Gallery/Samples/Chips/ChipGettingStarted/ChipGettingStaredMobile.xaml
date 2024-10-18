@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Chips.SfChip.ChipGettingStartedMobile"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Chips"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Chips;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+	<localCore:SampleView.Resources>
+		<imageExtension:ImageSourceConverter x:Key="imageconverter"/>
+	</localCore:SampleView.Resources>
+	
+    <localCore:SampleView.BindingContext>
+        <local:ChipViewModel />
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Content>
+        <ScrollView Orientation="Vertical">
+            <Grid RowDefinitions="*">
+                <StackLayout Margin="15,15,0,15" Spacing="5">
+                    <Label Text="Electric Voice Speaker"
+                                   FontFamily="Roboto-Medium"
+                                   FontSize="20"
+                                   HorizontalTextAlignment="Start"/>
+                    <Label Text="Unleash the Power of Music!"
+                               FontSize="15"
+                               FontFamily="Roboto-Regular"
+                               Opacity=".54"
+                               MaxLines="2"
+                               LineBreakMode="WordWrap"
+                               LineHeight="1.3"
+                               HorizontalTextAlignment="Start"/>
+                    <Image Source="{Binding Image,Converter={StaticResource imageconverter}}" HeightRequest="300" Margin="10,10,30,10"/>
+
+                        <Label Text="{Binding TotalPrice}" 
+                                   TextColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" 
+                                   FontFamily="Roboto-Medium"
+                                   FontSize="22"/>
+                    <StackLayout Margin="0,10,0,15" Spacing="15">
+                            <Label FontSize="13" 
+								   FontFamily="Roboto-Medium"
+                                   Text="Pick a color"/>
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <core:SfChipGroup ChipPadding="2,0,0,0" 
+                                                    ItemsSource="{Binding ColorItems}"
+                                                    SelectedItem="{Binding SelectedColorItem,Mode=TwoWay}"
+                                                    ChipStrokeThickness="2"
+                                                    ChipType="Choice" />
+
+                        </ScrollView>
+                        </StackLayout>                       
+                        <StackLayout  Margin="0,0,0,15" Spacing="15">
+                            <Label Text="Add ons" FontSize="13" FontFamily="Roboto-Medium"/>
+                            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <core:SfChipGroup ChipPadding="2,0,0,0" 
+                                                      ItemsSource="{Binding AddOnItems}"
+                                                      SelectedItem="{Binding SelectedAddOnItems}"
+                                                      SelectionChanged="SfChipGroup_SelectionChanged"
+                                                      ChipStrokeThickness="2"
+                                                      ChipType="Filter" />
+                        </ScrollView>
+                        </StackLayout>
+
+                    <StackLayout Margin="0,0,22,10" Spacing="15">
+                        <HorizontalStackLayout Spacing="3" >
+                            <Label Text="Delivery options" FontSize="13" FontFamily="Roboto-Medium"/>
+                            <Label Text="{Binding Date}" FontSize="13" Opacity=".54" FontFamily="Roboto-Regular"/>
+                        </HorizontalStackLayout>
+                        <core:SfChipGroup ChipPadding="2,0,0,0" 
+                                                      ItemsSource="{Binding DeliveryOptions}" 
+                                                      SelectedItem="{Binding SelectedDeliveryOption,Mode=TwoWay}"
+                                                      ChipStrokeThickness="2"
+                                                      ChipType="Choice" />
+
+                    </StackLayout>
+
+                    <StackLayout Spacing="10" >
+                        <Label Text="Electric Voice Speaker, the ultimate audio companion for all your entertainment needs! This sleek and powerful device was carefully designed to deliver a healthy immersive experience like never before. The speaker's modern design effortlessly complements any interior decor. Its compact size makes it easy to place on a shelf, countertop, or desk. "
+                                   FontSize="15"
+							       FontFamily="Roboto-Regular"
+                                   MaxLines="10"
+                                   LineBreakMode="WordWrap"
+                                   LineHeight="1.3"
+                                   Margin="0,15,1,5"/>
+                    </StackLayout>
+                    <StackLayout HorizontalOptions="Center">
+                        <Button Margin="40,10" 
+							    FontFamily="Roboto-Regular"
+                                WidthRequest="350"
+                                CornerRadius="12"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+                                TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}"
+                                Text="Add to cart"/>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </localCore:SampleView.Content>
+
+</localCore:SampleView>

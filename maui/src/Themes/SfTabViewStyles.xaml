@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.TabView.SfTabViewStyles"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView">
+
+    <!--SfTabView-->
+    <Style TargetType="tabView:SfTabView">
+        <!-- Visual states to define different appearance based on interaction -->
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <!-- Normal state when no interaction -->
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="IndicatorBackground" Value="{DynamicResource SfTabViewActiveIndicatorBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Hover state when mouse hovers over the tab -->
+                    <VisualState x:Name="Hover">
+                        <VisualState.Setters>
+                            <Setter Property="IndicatorBackground" Value="{DynamicResource SfTabViewActiveMouseHoveredIndicatorBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Disabled state when the tab is not interactive -->
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="IndicatorBackground" Value="{DynamicResource SfTabViewActiveDisabledIndicatorBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+    <!--SfTabItem-->
+    <Style TargetType="tabView:SfTabItem">
+        <!-- Visual states to define different appearance based on interaction -->
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <!-- Normal state when no interaction -->
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewNormalTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActiveNormalBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Inactive Normal state when the tab item is not active -->
+                    <VisualState x:Name="InActiveNormal">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewInActiveNormalTextColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Pressed state when the tab item is clicked/pressed -->
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewActiveTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActivePressedBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Inactive Pressed state when the inactive tab item is clicked/pressed -->
+                    <VisualState x:Name="InActivePressed">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewInActiveTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewInActivePressedBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Focused state when the tab item is focused -->
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewActiveTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewInActiveNormalBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Selected state when the tab item is selected -->
+                    <VisualState x:Name="Selected">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewSelectedTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActiveNormalBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Disabled state when the tab item is not interactive -->
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewDisabledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewInActiveDisabledBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Hover state when mouse hovers over the tab item -->
+                    <VisualState x:Name="Hover">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewActiveTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActiveHoveredBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Inactive Hover state when mouse hovers over the inactive tab item -->
+                    <VisualState x:Name="InActiveHover">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewInActiveTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewInActiveHoveredBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Filled state variations -->
+                    <!-- Normal Filled state -->
+                    <VisualState x:Name="NormalFilled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewNormalFilledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActiveFilledNormalBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Hover Filled state -->
+                    <VisualState x:Name="HoverFilled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewActiveHoveredFilledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActiveHoveredBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Inactive Hover Filled state -->
+                    <VisualState x:Name="InActiveHoverFilled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewInActiveHoveredFilledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewInActiveHoveredFilledBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Pressed Filled state -->
+                    <VisualState x:Name="PressedFilled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewActivePressedFilledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActivePressedFilledBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Inactive Pressed Filled state -->
+                    <VisualState x:Name="InActivePressedFilled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewInActivePressedFilledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewInActivePressedFilledBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Focused Filled state -->
+                    <VisualState x:Name="FocusedFilled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewActiveFocusedFilledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActiveFocusedFilledBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Selected Filled state -->
+                    <VisualState x:Name="SelectedFilled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewSelectedFilledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewActiveNormalBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <!-- Disabled Filled state -->
+                    <VisualState x:Name="DisabledFilled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfTabViewDisabledFilledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfTabViewDisabledFilledBackground}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

@@ -1,0 +1,49 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.DoughnutChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CircularChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+
+        <chart:SfCircularChart x:Name="chart" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCircularChart.Title>
+                <Label Text="Project Cost Breakdown" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+            </chart:SfCircularChart.Title>
+            <chart:SfCircularChart.BindingContext>
+                <local:DoughnutSeriesViewModel x:Name="doughnutViewModel"/>
+            </chart:SfCircularChart.BindingContext>
+            <chart:SfCircularChart.Legend>
+                <chart:ChartLegend/>
+            </chart:SfCircularChart.Legend>
+            <chart:SfCircularChart.Series>
+                <chart:DoughnutSeries x:Name="series" ExplodeIndex="{Binding SelectedIndex}" ExplodeOnTouch="True" ShowDataLabels="True"
+                                      Radius="0.9" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}" ItemsSource="{Binding DoughnutSeriesData}" 
+                                      XBindingPath="Name" YBindingPath="Value" EnableAnimation="False" StrokeWidth="1" 
+                                      Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" LegendIcon="SeriesType">
+                    <chart:DoughnutSeries.CenterView>
+                        <StackLayout x:Name="layout" HeightRequest="{Binding CenterHoleSize}" WidthRequest="{Binding CenterHoleSize}">
+                            <Label Text="{Binding Name,Source={x:Reference doughnutViewModel}}" FontSize="13"  HorizontalOptions="Center" VerticalOptions="EndAndExpand" Margin="5"/>
+                            <Label Text="{Binding Value,Source={x:Reference doughnutViewModel},StringFormat='{0}%'}" FontSize="12"  HorizontalOptions="Center" VerticalOptions="StartAndExpand" Margin="5"/>
+                        </StackLayout>
+                    </chart:DoughnutSeries.CenterView>
+                    <chart:DoughnutSeries.DataLabelSettings>
+                        <chart:CircularDataLabelSettings>
+                            <chart:CircularDataLabelSettings.LabelStyle>
+                                <chart:ChartDataLabelStyle LabelFormat="0'M"/>
+                            </chart:CircularDataLabelSettings.LabelStyle>
+                        </chart:CircularDataLabelSettings>
+                    </chart:DoughnutSeries.DataLabelSettings>
+                </chart:DoughnutSeries>
+            </chart:SfCircularChart.Series>
+        </chart:SfCircularChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

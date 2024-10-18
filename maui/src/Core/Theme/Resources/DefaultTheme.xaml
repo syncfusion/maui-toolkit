@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--<?xaml-comp compile="true" ?>-->
+<local:SyncfusionThemeDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Syncfusion.Maui.Toolkit.Themes.DefaultTheme"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    xmlns:local="clr-namespace:Syncfusion.Maui.Toolkit.Themes">
+
+    <!--SfNavigationDrawer-->
+    <x:String x:Key="SfNavigationDrawerTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfNavigationDrawerContentBackground" ResourceKey="ContentBackgroundAlt1" />
+    <local:StaticThemeResource x:Key="SfNavigationDrawerGreyLayoutBackground" ResourceKey="Overlay" />
+    
+    <!--SfChipGroup-->
+    <x:String x:Key="SfChipGroupTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledSelectedTextColor" ResourceKey="SecondaryForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfChipGroupHoverSelectedTextColor" ResourceKey="SecondaryForegroundHovered" />
+    <local:StaticThemeResource x:Key="SfChipGroupPressedSelectedTextColor" ResourceKey="SecondaryForegroundPressed" />
+    <local:StaticThemeResource x:Key="SfChipGroupNormalSelectedTextColor" ResourceKey="SecondaryForeground" />
+    <local:StaticThemeResource x:Key="SfChipGroupPressedClearButtonBackground" ResourceKey="IconBackgroundFocused"/>
+    <local:StaticThemeResource x:Key="SfChipGroupHoverClearButtonBackground" ResourceKey="IconBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfChipGroupPressedClearButtonIconColor" ResourceKey="ChipInactivePressedForeground" />
+    <local:StaticThemeResource x:Key="SfChipGroupHoverClearButtonIconColor" ResourceKey="IconColorHovered" />
+    <local:StaticThemeResource x:Key="SfChipGroupNormalClearButtonIconColor" ResourceKey="IconColor" />
+    <local:StaticThemeResource x:Key="SfChipGroupNormalClearButtonBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfChipGroupNormalBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfChipGroupPressedBackground" ResourceKey="IconBackgroundFocused" />
+    <local:StaticThemeResource x:Key="SfChipGroupHoverBackground" ResourceKey="IconBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfChipGroupHoverStroke" ResourceKey="BorderAlt1" />
+    <local:StaticThemeResource x:Key="SfChipGroupPressedStroke" ResourceKey="BorderAlt2"/>
+    <local:StaticThemeResource x:Key="SfChipGroupNormalStroke" ResourceKey="BorderAlt1" />
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfChipGroupChoiceBackground" ResourceKey="ContentBackgroundAlt1" />
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledChoiceBackground" ResourceKey="IconBackgroundFocused" />
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledStroke" ResourceKey="BorderAlt3" />
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledClearButtonBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledClearButtonIconColor" ResourceKey="IconColorDisabled" />
+    <local:StaticThemeResource x:Key="SfChipGroupNormalTextColor" ResourceKey="ContentForegroundAlt1"/>
+    <local:StaticThemeResource x:Key="SfChipGroupPressedTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfChipGroupHoverTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledTextColor" ResourceKey="ForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfChipGroupSelectedDisabledTextColor" ResourceKey="ChipActiveDisabledForeground" />
+    <local:StaticThemeResource x:Key="SfChipGroupSelectedDisabledBackground" ResourceKey="ChipActiveDisabledBackground" />
+    <local:StaticThemeResource x:Key="SfChipGroupNormalSelectionIndicatorColor" ResourceKey="ChipActiveForeground" />
+    <local:StaticThemeResource x:Key="SfChipGroupPressedSelectionIndicatorColor" ResourceKey="ChipActivePressedForeground" />
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledSelectionIndicatorColor" ResourceKey="IconColorDisabled"/>
+    <local:StaticThemeResource x:Key="SfChipGroupHoverSelectionBackground" ResourceKey="SecondaryBackground" />
+    <local:StaticThemeResource x:Key="SfChipGroupNormalSelectionBackground" ResourceKey="SecondaryBackground" />
+    <local:StaticThemeResource x:Key="SfChipGroupPressedSelectionBackground" ResourceKey="Transparent"/>
+    <local:StaticThemeResource x:Key="SfChipGroupDisabledSelectionBackground" ResourceKey="SecondaryBackground" />
+    <sys:Double x:Key="SfChipGroupNormalFontSize">14</sys:Double>
+    <sys:Double x:Key="SfChipGroupNormalStrokeThickness">1</sys:Double>
+    <sys:Double x:Key="SfChipGroupNormalCornerRadius">8</sys:Double>
+
+    <!--SfChip-->
+    <x:String x:Key="SfChipTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfChipNormalBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfChipNormalTextColor" ResourceKey="ContentForegroundAlt1"/>
+    <local:StaticThemeResource x:Key="SfChipNormalClearButtonIconColor" ResourceKey="IconColor" />
+    <local:StaticThemeResource x:Key="SfChipNormalStroke" ResourceKey="BorderAlt1" />
+    <local:StaticThemeResource x:Key="SfChipNormalSelectionIndicatorColor" ResourceKey="ChipActiveForeground" />
+    <local:StaticThemeResource x:Key="SfChipDisabledBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfChipDisabledTextColor" ResourceKey="ForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfChipDisabledClearButtonIconColor" ResourceKey="IconColorDisabled" />
+    <local:StaticThemeResource x:Key="SfChipDisabledStroke" ResourceKey="BorderAlt3" />
+    <local:StaticThemeResource x:Key="SfChipDisabledSelectionIndicatorColor" ResourceKey="IconColorDisabled"/>
+    <sys:Double x:Key="SfChipNormalFontSize">14</sys:Double>
+    <sys:Double x:Key="SfChipNormalStrokeThickness">1</sys:Double>
+    <sys:Double x:Key="SfChipNormalCornerRadius">8</sys:Double>
+    
+    <!--SfSegmentedControl-->
+    <x:String x:Key="SfSegmentedControlTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfSegmentedControlNormalStroke" ResourceKey="BorderAlt1" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlNormalTextColor" ResourceKey="ContentForeground" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlNormalBackground" ResourceKey="ContentBackground" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlDisabledSegmentTextColor" ResourceKey="ForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlDisabledSegmentBackground" ResourceKey="SegmentInactiveBackground" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlSelectionBackground" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlSelectionTextColor" ResourceKey="PrimaryForeground" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlSelectionStroke" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlHoveredBackground" ResourceKey="ContentBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfSegmentedControlKeyboardFocusStroke" ResourceKey="ForegroundFocused" />
+    <sys:Double x:Key="SfSegmentedControlNormalStrokeThickness">1</sys:Double>
+    <sys:Double x:Key="SfSegmentedControlNormalCornerRadius">20</sys:Double>
+    <sys:Double x:Key="SfSegmentedControlNormalSegmentCornerRadius">0</sys:Double>
+    <sys:Double x:Key="SfSegmentedControlNormalFontSize">16</sys:Double>
+    <sys:Double x:Key="SfSegmentedControlBorderSelectionStrokeThickness">3</sys:Double>
+
+
+    <!--SfPullToRefresh-->
+    <x:String x:Key="SfPullToRefreshTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfPullToRefreshProgressBackground" ResourceKey="ContentBackgroundAlt2" />
+    <local:StaticThemeResource x:Key="SfPullToRefreshProgressColor" ResourceKey="PrimaryBackground" />
+    <sys:Double x:Key="SfPullToRefreshProgressThickness">3</sys:Double>
+
+    <!--SfTabView-->
+    <x:String x:Key="SfTabViewTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfTabViewNormalTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfTabViewSelectedTextColor" ResourceKey="PrimaryBackground"/>
+    <local:StaticThemeResource x:Key="SfTabViewActiveTextColor" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfTabViewDisabledTextColor" ResourceKey="ForegroundDisabled"/>
+    <local:StaticThemeResource x:Key="SfTabViewNormalTabBarBackground" ResourceKey="Transparent"/>
+    <local:StaticThemeResource x:Key="SfTabViewDisabledTabBarBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveIndicatorBackground" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveMouseHoveredIndicatorBackground" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveDisabledIndicatorBackground" ResourceKey="ForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveNormalBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveFocusedBackground" ResourceKey="PrimaryOverlayBackgroundFocused" />
+    <local:StaticThemeResource x:Key="SfTabViewActivePressedBackground" ResourceKey="PrimaryOverlayBackgroundPressed" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveDisabledBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveHoveredBackground" ResourceKey="PrimaryOverlayBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfTabViewInActiveNormalBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewInActiveFocusedBackground" ResourceKey="ContentBackgroundFocused" />
+    <local:StaticThemeResource x:Key="SfTabViewInActivePressedBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewInActiveDisabledBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewInActiveHoveredBackground" ResourceKey="ContentBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfTabViewInActiveTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfTabViewNormalFilledTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveFilledNormalBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveFilledTextColor" ResourceKey="PrimaryForegroundHovered" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveHoveredFilledTextColor" ResourceKey="PrimaryForegroundHovered" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveHoveredFilledBackground" ResourceKey="PrimaryBackgroundHovered" />
+     <local:StaticThemeResource x:Key="SfTabViewInActiveHoveredFilledTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfTabViewInActiveHoveredFilledBackground" ResourceKey="ContentBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfTabViewActivePressedFilledBackground" ResourceKey="PrimaryBackgroundPressed" />
+    <local:StaticThemeResource x:Key="SfTabViewActivePressedFilledTextColor" ResourceKey="PrimaryForegroundPressed" />
+    <local:StaticThemeResource x:Key="SfTabViewInActivePressedFilledBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewInActivePressedFilledTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveFocusedFilledTextColor" ResourceKey="PrimaryForegroundFocused" />
+    <local:StaticThemeResource x:Key="SfTabViewActiveFocusedFilledBackground" ResourceKey="PrimaryBackgroundFocused" />
+    <local:StaticThemeResource x:Key="SfTabViewSelectedFilledTextColor" ResourceKey="PrimaryForeground" />
+    <local:StaticThemeResource x:Key="SfTabViewSelectedFilledBackground" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfTabViewDisabledFilledTextColor" ResourceKey="PrimaryForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfTabViewDisabledFilledBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewScrollButtonBackground" ResourceKey="ContentBackgroundAlt1" />
+    <local:StaticThemeResource x:Key="SfTabViewScrollButtonIconColor" ResourceKey="IconColor" />
+    <local:StaticThemeResource x:Key="SfTabViewScrollButtonDisabledIconColor" ResourceKey="IconColorDisabled" />
+    <sys:Double x:Key="SfTabViewNormalFontSize">14</sys:Double>
+
+    <!--SfEffectsView-->
+    <x:String x:Key="SfEffectsViewTheme">CommonTheme</x:String>
+    <!--Will get the new color for ripple background from UX team-->
+    <local:StaticThemeResource x:Key="SfEffectsViewRippleBackground" ResourceKey="ContentForeground"/>
+    <local:StaticThemeResource x:Key="SfEffectsViewSelectionBackground" ResourceKey="ContentForeground"/>
+    <local:StaticThemeResource x:Key="SfEffectsViewHighlightBackground" ResourceKey="ContentForeground"/>
+    <sys:Double x:Key="SfEffectsViewRippleAnimationDuration">180</sys:Double>
+
+
+    <!--SfTextInputLayout-->
+    <x:String x:Key="SfTextInputLayoutTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfTextInputLayoutStroke" ResourceKey="InputBoxBorder"/>
+    <local:StaticThemeResource x:Key="SfTextInputLayoutNormalContainerBackground" ResourceKey="ContentBackgroundAlt5" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutContainerBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutNormalErrorTextColor" ResourceKey="ErrorBorder" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutHintTextColor" ResourceKey="PlaceholderForeground" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutHelperTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutFocusedHintTextColor" ResourceKey="PrimaryBackground"/>
+    <local:StaticThemeResource x:Key="SfTextInputLayoutCommonStroke" ResourceKey="PrimaryBackground"/>
+    <local:StaticThemeResource x:Key="SfTextInputLayoutFocusedContainerBackground" ResourceKey="InputBackground" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutDisabledStroke" ResourceKey="InputBorderDisabled" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutDisabledContainerBackground" ResourceKey="InputBackgroundDisabled" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutDisabledErrorTextColor" ResourceKey="ForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutDisabledHintTextColor" ResourceKey="ForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutDisabledHelperTextColor" ResourceKey="ForegroundDisabled" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutMouseHoveredContainerBackground" ResourceKey="InputBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutHoveredStroke" ResourceKey="InputBorderHovered" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutPressedHintTextColor" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutErrorStroke" ResourceKey="ErrorBorder" />
+    <local:StaticThemeResource x:Key="SfTextInputLayoutOutlinedContainerBackground" ResourceKey="Transparent" />
+    <sys:Double x:Key="SfTextInputLayoutNormalHintFontSize">12</sys:Double>
+    <sys:Double x:Key="SfTextInputLayoutFocusedHintFontSize">12</sys:Double>
+    <sys:Double x:Key="SfTextInputLayoutNormalHelperFontSize">12</sys:Double>
+    <sys:Double x:Key="SfTextInputLayoutNormalErrorFontSize">12</sys:Double>
+
+    <!--SfShimmer-->
+    <x:String x:Key="SfShimmerTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfShimmerFillColor" ResourceKey="ContentBackgroundAlt1" />
+    <local:StaticThemeResource x:Key="SfShimmerWaveColor" ResourceKey="ShimmerWaveColor" />
+    <local:StaticThemeResource x:Key="SfShimmerNormalBackground" ResourceKey="ContentBackground" />
+
+    <!--ChartCommon-->
+    <x:String x:Key="SfChartTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfChartDataPointSelectionBrush" ResourceKey="Overlay" />
+    <local:StaticThemeResource x:Key="SfChartSeriesSelectionBrush" ResourceKey="SeriesColor5" />
+
+    <!--SfCartesianChart-->
+	<x:String x:Key="SfCartesianChartTheme">CommonTheme</x:String>
+	<local:StaticThemeResource x:Key="SfCartesianChartBackground" ResourceKey="Transparent" />
+	<local:StaticThemeResource x:Key="SfCartesianChartMajorGridLineStroke" ResourceKey="SeriesColor11" />
+	<local:StaticThemeResource x:Key="SfCartesianChartMinorGridLineStroke" ResourceKey="SeriesColor10" />
+	<local:StaticThemeResource x:Key="SfCartesianChartMajorTickLineStroke" ResourceKey="SeriesColor11" />
+	<local:StaticThemeResource x:Key="SfCartesianChartMinorTickLineStroke" ResourceKey="SeriesColor10" />
+	<local:StaticThemeResource x:Key="SfCartesianChartAxisLineStroke" ResourceKey="SeriesColor11" />
+	<local:StaticThemeResource x:Key="SfCartesianChartAxisTitleTextColor" ResourceKey="ContentForegroundAlt1" />
+	<local:StaticThemeResource x:Key="SfCartesianChartAxisTitleBackground" ResourceKey="Transparent" />
+	<local:StaticThemeResource x:Key="SfCartesianChartAxisTitleStroke" ResourceKey="Transparent" />
+	<sys:Double x:Key="SfCartesianChartAxisTitleCornerRadius">0</sys:Double>
+	<sys:Double x:Key="SfCartesianChartAxisTitleTextFontSize">14</sys:Double>
+	<local:StaticThemeResource x:Key="SfCartesianChartAxisLabelTextColor" ResourceKey="ContentForegroundAlt1" />
+	<local:StaticThemeResource x:Key="SfCartesianChartAxisLabelBackground" ResourceKey="Transparent" />
+	<local:StaticThemeResource x:Key="SfCartesianChartAxisLabelStroke" ResourceKey="Transparent" />
+	<sys:Double x:Key="SfCartesianChartAxisLabelCornerRadius">0</sys:Double>
+	<sys:Double x:Key="SfCartesianChartAxisLabelTextFontSize">12</sys:Double>
+	<local:StaticThemeResource x:Key="SfCartesianChartDataLabelBackground" ResourceKey="ContentBackgroundAlt1" />
+	<local:StaticThemeResource x:Key="SfCartesianChartDataLabelStroke" ResourceKey="ContentBackgroundAlt1" />
+	<local:StaticThemeResource x:Key="SfCartesianChartDataLabelTextColor" ResourceKey="ContentBackgroundAlt1" />
+	<sys:Double x:Key="SfCartesianChartDataLabelCornerRadius">0</sys:Double>
+	<sys:Double x:Key="SfCartesianChartDataLabelTextFontSize">12</sys:Double>
+	<local:StaticThemeResource x:Key="SfCartesianChartTrackballLineStroke" ResourceKey="ContentForegroundAlt1" />
+	<local:StaticThemeResource x:Key="SfCartesianChartTrackballLabelBackground" ResourceKey="TooltipBackground" />
+	<local:StaticThemeResource x:Key="SfCartesianChartTrackballLabelStroke" ResourceKey="TooltipBorder" />
+	<local:StaticThemeResource x:Key="SfCartesianChartTrackballLabelTextColor" ResourceKey="TooltipForeground" />
+	<sys:Double x:Key="SfCartesianChartTrackballLabelCornerRadius">4</sys:Double>
+	<sys:Double x:Key="SfCartesianChartTrackballLabelTextFontSize">12</sys:Double>
+	<local:StaticThemeResource x:Key="SfCartesianChartTrackballAxisLabelBackground" ResourceKey="TooltipBackground" />
+	<local:StaticThemeResource x:Key="SfCartesianChartTrackballAxisLabelStroke" ResourceKey="TooltipBorder" />
+	<local:StaticThemeResource x:Key="SfCartesianChartTrackballAxisLabelTextColor" ResourceKey="TooltipForeground" />
+	<sys:Double x:Key="SfCartesianChartTrackballAxisLabelCornerRadius">4</sys:Double>
+	<sys:Double x:Key="SfCartesianChartTrackballAxisLabelTextFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfCartesianChartShapeAnnotationFill" ResourceKey="PrimaryOverlayBackgroundSelected" />
+    <local:StaticThemeResource x:Key="SfCartesianChartShapeAnnotationStroke" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfCartesianChartAnnotationTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfCartesianChartAnnotationTextBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfCartesianChartLineAnnotationStroke" ResourceKey="BorderAlt2" />
+	<local:StaticThemeResource x:Key="SfCartesianChartDataPointSelectionBrush" ResourceKey="Overlay" />
+	<local:StaticThemeResource x:Key="SfCartesianChartSeriesSelectionBrush" ResourceKey="SeriesColor5" />
+	<local:StaticThemeResource x:Key="SfCartesianChartTooltipBackground" ResourceKey="TooltipBackground" />
+	<local:StaticThemeResource x:Key="SfCartesianChartTooltipTextColor" ResourceKey="TooltipForeground" />
+	<sys:Double x:Key="SfCartesianChartTooltipTextFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfCartesianChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
+    <sys:Double x:Key="SfCartesianChartLegendFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfCartesianChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+
+    <!--SfPolarChart-->
+    <x:String x:Key="SfPolarChartTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfPolarChartBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfPolarMajorGridLineStroke" ResourceKey="SeriesColor11" />
+    <local:StaticThemeResource x:Key="SfPolarMinorGridLineStroke" ResourceKey="SeriesColor10" />
+    <local:StaticThemeResource x:Key="SfPolarMajorTickLineStroke" ResourceKey="SeriesColor11" />
+    <local:StaticThemeResource x:Key="SfPolarMinorTickLineStroke" ResourceKey="SeriesColor10" />
+    <local:StaticThemeResource x:Key="SfPolarAxisLineStroke" ResourceKey="SeriesColor11" />
+    <local:StaticThemeResource x:Key="SfPolarAxisTitleTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfPolarAxisTitleBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfPolarAxisTitleStroke" ResourceKey="Transparent" />
+    <sys:Double x:Key="SfPolarChartAxisTitleCornerRadius">0</sys:Double>
+    <sys:Double x:Key="SfPolarChartAxisTitleTextFontSize">16</sys:Double>
+    <local:StaticThemeResource x:Key="SfPolarChartAxisLabelTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfPolarChartAxisLabelBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfPolarChartAxisLabelStroke" ResourceKey="Transparent" />
+    <sys:Double x:Key="SfPolarChartAxisLabelCornerRadius">0</sys:Double>
+    <sys:Double x:Key="SfPolarChartAxisLabelTextFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfPolarChartDataLabelBackground" ResourceKey="ContentBackgroundAlt1" />
+    <local:StaticThemeResource x:Key="SfPolarChartDataLabelStroke" ResourceKey="ContentBackgroundAlt1" />
+    <local:StaticThemeResource x:Key="SfPolarChartDataLabelTextColor" ResourceKey="ContentBackgroundAlt1" />
+    <sys:Double x:Key="SfPolarChartDataLabelCornerRadius">0</sys:Double>
+    <sys:Double x:Key="SfPolarChartDataLabelTextFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfPolarChartTooltipBackground" ResourceKey="TooltipBackground" />
+    <local:StaticThemeResource x:Key="SfPolarChartTooltipTextColor" ResourceKey="TooltipForeground" />
+    <sys:Double x:Key="SfPolarChartTooltipTextFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfPolarChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
+    <sys:Double x:Key="SfPolarChartLegendFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfPolarChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+
+    <!--SfCircularChart-->
+	<x:String x:Key="SfCircularChartTheme">CommonTheme</x:String>
+	<local:StaticThemeResource x:Key="SfCircularChartBackground" ResourceKey="Transparent" />
+	<local:StaticThemeResource x:Key="SfCircularChartDataLabelBackground" ResourceKey="SeriesColor3" />
+	<local:StaticThemeResource x:Key="SfCircularChartDataLabelStroke" ResourceKey="SeriesColor3" />
+	<local:StaticThemeResource x:Key="SfCircularChartDataLabelTextColor" ResourceKey="SeriesColorWhite" />
+	<sys:Double x:Key="SfCircularChartDataLabelCornerRadius">8</sys:Double>
+	<sys:Double x:Key="SfCircularChartDataLabelTextFontSize">14</sys:Double>
+	<local:StaticThemeResource x:Key="SfCircularChartSelectionBrush" ResourceKey="SeriesColor5" />
+	<local:StaticThemeResource x:Key="SfCircularChartTooltipBackground" ResourceKey="TooltipBackground" />
+	<local:StaticThemeResource x:Key="SfCircularChartTooltipTextColor" ResourceKey="TooltipForeground" />
+	<sys:Double x:Key="SfCircularChartTooltipTextFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfCircularChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
+    <sys:Double x:Key="SfCircularChartLegendFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfCircularChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+
+    <!--SfFunnelChart-->
+	<x:String x:Key="SfFunnelChartTheme">CommonTheme</x:String>
+	<local:StaticThemeResource x:Key="SfFunnelChartBackground" ResourceKey="Transparent" />
+	<local:StaticThemeResource x:Key="SfFunnelChartDataLabelBackground" ResourceKey="SeriesColor3" />
+	<local:StaticThemeResource x:Key="SfFunnelChartDataLabelStroke" ResourceKey="SeriesColor3" />
+	<local:StaticThemeResource x:Key="SfFunnelChartDataLabelTextColor" ResourceKey="SeriesColorWhite" />
+	<sys:Double x:Key="SfFunnelChartDataLabelCornerRadius">8</sys:Double>
+	<sys:Double x:Key="SfFunnelChartDataLabelTextFontSize">14</sys:Double>
+	<local:StaticThemeResource x:Key="SfFunnelChartSelectionBrush" ResourceKey="SeriesColor5" />
+	<local:StaticThemeResource x:Key="SfFunnelChartTooltipBackground" ResourceKey="TooltipBackground" />
+	<local:StaticThemeResource x:Key="SfFunnelChartTooltipTextColor" ResourceKey="TooltipForeground" />
+	<sys:Double x:Key="SfFunnelChartTooltipTextFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfFunnelChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
+    <sys:Double x:Key="SfFunnelChartLegendFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfFunnelChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+
+    <!--SfPyramidChart-->
+	<x:String x:Key="SfPyramidChartTheme">CommonTheme</x:String>
+	<local:StaticThemeResource x:Key="SfPyramidChartBackground" ResourceKey="Transparent" />
+	<local:StaticThemeResource x:Key="SfPyramidChartDataLabelBackground" ResourceKey="SeriesColor3" />
+	<local:StaticThemeResource x:Key="SfPyramidChartDataLabelStroke" ResourceKey="SeriesColor3" />
+	<local:StaticThemeResource x:Key="SfPyramidChartDataLabelTextColor" ResourceKey="SeriesColorWhite" />
+	<sys:Double x:Key="SfPyramidChartDataLabelCornerRadius">8</sys:Double>
+	<sys:Double x:Key="SfPyramidChartDataLabelTextFontSize">14</sys:Double>
+	<local:StaticThemeResource x:Key="SfPyramidChartSelectionBrush" ResourceKey="SeriesColor5" />
+	<local:StaticThemeResource x:Key="SfPyramidChartTooltipBackground" ResourceKey="TooltipBackground" />
+	<local:StaticThemeResource x:Key="SfPyramidChartTooltipTextColor" ResourceKey="TooltipForeground" />
+	<sys:Double x:Key="SfPyramidChartTooltipTextFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfPyramidChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
+    <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+    
+</local:SyncfusionThemeDictionary>

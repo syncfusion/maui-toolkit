@@ -1,0 +1,52 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.ShapeAnnotationSample"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+        <localCore:SampleView.Resources>
+            <ResourceDictionary>
+                <ResourceDictionary.MergedDictionaries>
+                    <local:CartesianChartColorResources/>
+                </ResourceDictionary.MergedDictionaries>
+            </ResourceDictionary>
+        </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+
+        <chart:SfCartesianChart VerticalOptions="FillAndExpand" Margin="0,0,5,0" x:Name="Chart">
+            
+            <chart:SfCartesianChart.XAxes>
+                <chart:NumericalAxis Minimum="0" Maximum="4">
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.XAxes>
+
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis Minimum="20" Maximum="70" Interval="10"></chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+            
+            <chart:SfCartesianChart.Annotations>
+                
+                <chart:VerticalLineAnnotation X1="2" LineCap="Arrow" Text="Vertical Line">
+                </chart:VerticalLineAnnotation>
+                
+                <chart:HorizontalLineAnnotation Y1="45" LineCap="Arrow" Text="Horizontal Line">
+                </chart:HorizontalLineAnnotation>
+                
+                <chart:LineAnnotation X1="2.5" X2="3.5" Y1="52" Y2="63" LineCap="Arrow" Text="Line">
+                </chart:LineAnnotation>
+                
+                <chart:RectangleAnnotation X1="0.5" X2="1.5" Y1="25" Y2="35" Text="Rectangle">
+                </chart:RectangleAnnotation>
+                
+                <chart:EllipseAnnotation X1="2.5" X2="3.5" Y1="25" Y2="35" Text="Ellipse" HorizontalAlignment="End" VerticalAlignment="End">
+                </chart:EllipseAnnotation>
+                
+                <chart:TextAnnotation X1="1" Y1="57.5" Text="Text Annotation" x:Name="textAnnotation">
+                </chart:TextAnnotation>
+                
+            </chart:SfCartesianChart.Annotations>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

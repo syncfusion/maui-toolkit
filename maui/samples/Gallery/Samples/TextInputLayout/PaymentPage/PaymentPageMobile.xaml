@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout.PaymentPageMobile"
+                      xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+
+            <Style TargetType="syncfusion:SfTextInputLayout" x:Key="InputLayoutStyle">
+                
+                <Setter Property="ContainerType" Value="Outlined"/>
+               
+                <Setter Property="HeightRequest" Value="63"/>
+                <Setter Property="HintLabelStyle">
+                    <syncfusion:LabelStyle  FontFamily="Roboto-Regular" FontSize="14"/>
+                </Setter>
+                <Setter Property="HelperLabelStyle">
+                    <syncfusion:LabelStyle  FontFamily="Roboto-Regular" />
+                </Setter>
+                <Setter Property="ErrorLabelStyle">
+                    <syncfusion:LabelStyle FontFamily="Roboto-Regular"/>
+                </Setter>
+
+            </Style>
+
+            <Style TargetType="Picker">
+                <Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="PointerOver">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="Transparent" />
+                                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <ScrollView>
+            <VerticalStackLayout Padding="10,0,15,0" Spacing="20" WidthRequest="350" VerticalOptions="Center" >
+
+                <Label Text="Card Number" FontFamily="Roboto-Regular" Margin="0,0,0,-20" TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}"/>
+                <HorizontalStackLayout Margin="0,0,0,-15" Spacing="{OnPlatform Android=19, iOS=17}">
+                    <syncfusion:SfTextInputLayout x:Name="CardNumberField" Style="{StaticResource InputLayoutStyle}" Hint="0000" EnableFloating="False" EnableHintAnimation="False" WidthRequest="{OnPlatform Android=66, iOS=68}" >
+                        <Entry  Keyboard="Numeric" MaxLength="4" ReturnType="Next" TextChanged="Entry_TextChanged"/>
+                    </syncfusion:SfTextInputLayout>
+
+                    <syncfusion:SfTextInputLayout x:Name="CardNumberField1" Style="{StaticResource InputLayoutStyle}" Hint="0000" EnableFloating="False" EnableHintAnimation="False" WidthRequest="{OnPlatform Android=66, iOS=68}" >
+                        <Entry  Keyboard="Numeric" MaxLength="4" ReturnType="Next" TextChanged="Entry2_TextChanged"/>
+                    </syncfusion:SfTextInputLayout>
+
+                    <syncfusion:SfTextInputLayout x:Name="CardNumberField2" Style="{StaticResource InputLayoutStyle}" Hint="0000" EnableFloating="False" EnableHintAnimation="False" WidthRequest="{OnPlatform Android=66, iOS=68}" >
+                        <Entry  Keyboard="Numeric" MaxLength="4" ReturnType="Next"  TextChanged="Entry3_TextChanged"/>
+                    </syncfusion:SfTextInputLayout>
+
+                    <syncfusion:SfTextInputLayout x:Name="CardNumberField3" Style="{StaticResource InputLayoutStyle}" Hint="0000" EnableFloating="False" EnableHintAnimation="False" WidthRequest="{OnPlatform Android=66, iOS=68}" >
+                        <Entry  Keyboard="Numeric" MaxLength="4" ReturnType="Next"/>
+                    </syncfusion:SfTextInputLayout>
+                </HorizontalStackLayout>
+
+
+                <syncfusion:SfTextInputLayout x:Name="PayNameField" Style="{StaticResource InputLayoutStyle}" Hint="Name" HelperText="Name on your card" ErrorText="Name cannot be empty">
+                    <Entry />
+                </syncfusion:SfTextInputLayout>
+
+                <HorizontalStackLayout  Spacing="5" Margin="0,0,0,-10" >
+                    <syncfusion:SfTextInputLayout x:Name="MonthField" Style="{StaticResource InputLayoutStyle}" Hint="Month" ErrorText="Invalid" WidthRequest="125" >
+                        <Picker TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" BindingContext="{x:Reference MonthField}" >
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>01</x:String>
+                                    <x:String>02</x:String>
+                                    <x:String>03</x:String>
+                                    <x:String>04</x:String>
+                                    <x:String>05</x:String>
+                                    <x:String>06</x:String>
+                                    <x:String>07</x:String>
+                                    <x:String>08</x:String>
+                                    <x:String>09</x:String>
+                                    <x:String>10</x:String>
+                                    <x:String>11</x:String>
+                                    <x:String>12</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                        
+                    </syncfusion:SfTextInputLayout>
+
+                    <syncfusion:SfTextInputLayout x:Name="YearField" Style="{StaticResource InputLayoutStyle}" Hint="Year" ErrorText="Invalid" WidthRequest="125">
+                        <Picker TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" BindingContext="{x:Reference YearField}">
+                            <Picker.ItemsSource>
+                                <x:Array Type="{x:Type x:String}">
+                                    <x:String>2022</x:String>
+                                    <x:String>2023</x:String>
+                                    <x:String>2024</x:String>
+                                    <x:String>2025</x:String>
+                                    <x:String>2026</x:String>
+                                    <x:String>2027</x:String>
+                                    <x:String>2028</x:String>
+                                    <x:String>2029</x:String>
+                                    <x:String>2030</x:String>
+                                </x:Array>
+                            </Picker.ItemsSource>
+                        </Picker>
+                    </syncfusion:SfTextInputLayout>
+
+                    <syncfusion:SfTextInputLayout x:Name="CVVField" Style="{StaticResource InputLayoutStyle}" Hint="CVV" CharMaxLength="3" ErrorText="Invalid" WidthRequest="69" >
+                        <Entry IsPassword="True" MaxLength="3" Keyboard="Numeric"/>
+                    </syncfusion:SfTextInputLayout>
+                </HorizontalStackLayout>
+
+                <Button  x:Name="submitButton"
+                     Text="Pay Now"
+                     Margin="0,45,0,0"
+                     FontFamily="Roboto-Regular"
+                     BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+                     Clicked="SubmitButton_Clicked"
+                     HorizontalOptions="FillAndExpand"/>
+            </VerticalStackLayout>
+        </ScrollView>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

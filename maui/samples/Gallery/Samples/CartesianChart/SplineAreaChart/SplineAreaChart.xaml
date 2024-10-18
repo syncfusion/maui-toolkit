@@ -1,0 +1,55 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.SplineAreaChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart x:Name="Chart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCartesianChart.BindingContext>
+                <local:SplineAreaSeriesViewModel/>
+            </chart:SfCartesianChart.BindingContext>
+            <chart:SfCartesianChart.Legend>
+                <chart:ChartLegend ToggleSeriesVisibility="True"/>
+            </chart:SfCartesianChart.Legend>
+            <chart:SfCartesianChart.Title>
+                <Label Text="Inflation Rate in Percentage" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+            </chart:SfCartesianChart.Title>
+
+            <chart:SfCartesianChart.XAxes>
+                <chart:NumericalAxis Interval="2" EdgeLabelsDrawingMode="Shift" ShowMajorGridLines="false">
+                    <chart:NumericalAxis.MajorTickStyle>
+                        <chart:ChartAxisTickStyle TickSize="8">
+                        </chart:ChartAxisTickStyle>
+                    </chart:NumericalAxis.MajorTickStyle>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.XAxes>
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis Maximum="12" Minimum="0" Interval="2" >
+                    <chart:NumericalAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="0'%" x:Name="YAxesLabelStyle"/>
+                    </chart:NumericalAxis.LabelStyle>
+                    <chart:NumericalAxis.AxisLineStyle>
+                        <chart:ChartLineStyle StrokeWidth="0">
+                        </chart:ChartLineStyle>
+                    </chart:NumericalAxis.AxisLineStyle>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+
+            <chart:SfCartesianChart.Series>
+                <chart:SplineAreaSeries Label="India" EnableTooltip="True" EnableAnimation="{Binding EnableAnimation}" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="2" ItemsSource="{Binding SplineAreaData1}" XBindingPath="Value1" YBindingPath="Value" LegendIcon="SeriesType">
+                </chart:SplineAreaSeries>
+
+                <chart:SplineAreaSeries Label="China" EnableTooltip="True" EnableAnimation="{Binding EnableAnimation}" Stroke="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" StrokeWidth="2" ItemsSource="{Binding SplineAreaData1}" XBindingPath="Value1" YBindingPath="Size" LegendIcon="SeriesType">
+                </chart:SplineAreaSeries>
+            </chart:SfCartesianChart.Series>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

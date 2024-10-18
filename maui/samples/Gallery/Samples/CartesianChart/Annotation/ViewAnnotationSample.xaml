@@ -1,0 +1,109 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.ViewAnnotationSample"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+            <x:String x:Key="nationlockdown">M2.0010022,16L2.0010022,18.999995 22.001002,18.999995 22.001002,16z M2.0010022,11L2.0010022,14 22.001002,14 22.001002,11z M2.0010022,5.9999955L2.0010022,9 22.001002,9 22.001002,5.9999955 12.000085,5.9999955z M12,0C12.553001,0,13,0.44799995,13,1L13,3.9999951 24.001002,3.9999951 24.001002,20.999995 13,20.999995 13,30.999999C13,31.551999 12.553001,31.999999 12,31.999999 11.447,31.999999 11,31.551999 11,30.999999L11,20.999995 0.0010027885,20.999995 0.0010027885,15.019874 0,15 0.0010027885,14.980126 0.0010027885,10.019874 0,10 0.0010027885,9.9801264 0.0010027885,3.9999951 11,3.9999951 11,1C11,0.44799995,11.447,0,12,0z</x:String>
+            <x:String x:Key="sun">M14.900024,26.299988L15.900024,26.299988C16.300018,26.399963,16.700012,26.399963,17.100006,26.299988L17.100006,30.899963C17.100006,31.5 16.600006,32 16,32 15.400024,32 14.900024,31.5 14.900024,30.899963z M20.5,25.299988L21.900024,28.699951C22,29 21.900024,29.399963 21.600006,29.5 21.300018,29.599976 20.900024,29.5 20.800018,29.199951L19.400024,25.799988C19.700012,25.599976,20.100006,25.5,20.5,25.299988z M11.5,25.299988C11.900024,25.5,12.300018,25.699951,12.700012,25.799988L11.300018,29.199951C11.200012,29.5 10.800018,29.699951 10.5,29.5 10.200012,29.399963 10,29 10.200012,28.699951z M7.9000244,22.599976C8.3000183,23.099976,8.8000183,23.699951,9.4000244,24.099976L6.2000122,27.299988C5.8000183,27.699951 5.1000061,27.699951 4.7000122,27.299988 4.3000183,26.899963 4.3000183,26.199951 4.7000122,25.799988z M24,22.5L27.300018,25.799988C27.700012,26.199951 27.700012,26.899963 27.300018,27.299988 26.900024,27.699951 26.200012,27.699951 25.800018,27.299988L22.5,24z M25.600006,19.599976L28.900024,21C29.200012,21.099976 29.400024,21.5 29.200012,21.799988 29.100006,22.099976 28.700012,22.299988 28.400024,22.099976L25.100006,20.699951C25.300018,20.399963,25.5,20,25.600006,19.599976z M6.4000244,19.599976C6.5,20,6.7000122,20.399963,6.9000244,20.799988L3.5,22.199951C3.2000122,22.299988 2.8000183,22.199951 2.7000122,21.899963 2.6000061,21.599976 2.7000122,21.199951 3,21.099976z M26.100006,14.899963L30.900024,14.899963C31.5,14.899963 32,15.399963 32,16 32,16.599976 31.5,17.099976 30.900024,17.099976L26.100006,17.099976 26.100006,16.099976C26.200012,15.699951,26.100006,15.299988,26.100006,14.899963z M1.1000061,14.899963L5.7000122,14.899963C5.7000122,15.299988,5.6000061,15.699951,5.6000061,16.099976L5.6000061,17.099976 1.1000061,17.099976C0.5,17.099976 0,16.599976 0,16 0,15.399963 0.5,14.899963 1.1000061,14.899963z M28.400024,10.199951L28.600006,10.199951C28.900024,10.199951 29.100006,10.299988 29.200012,10.599976 29.300018,10.899963 29.200012,11.299988 28.900024,11.399963L25.700012,12.799988C25.600006,12.399963,25.400024,12,25.200012,11.599976z M3.2000122,10.199951L3.5,10.199951 6.8000183,11.599976C6.6000061,12,6.5,12.399963,6.3000183,12.799988L3,11.5C2.7000122,11.399963 2.5,11 2.7000122,10.699951 2.7000122,10.399963 3,10.199951 3.2000122,10.199951z M16,7.2999878C20.900024,7.2999878 24.800018,11.199951 24.800018,16.099976 24.800018,21 20.900024,24.899963 16,24.899963 11.100006,24.899963 7.2000122,21 7.2000122,16.099976 7.2000122,11.199951 11.100006,7.2999878 16,7.2999878z M26.600006,4.3999634C26.900024,4.3999634 27.100006,4.5 27.300018,4.6999512 27.700012,5.0999756 27.700012,5.7999878 27.300018,6.1999512L23.900024,9.5999756C23.5,9.0999756,23,8.5,22.400024,8.0999756L25.800018,4.6999512C26,4.5,26.300018,4.3999634,26.600006,4.3999634z M5.4000244,4.3999634C5.7000122,4.3999634,5.9000244,4.5,6.1000061,4.6999512L9.5,8 8,9.5 4.7000122,6.1999512C4.3000183,5.7999878 4.3000183,5.0999756 4.7000122,4.6999512 4.9000244,4.5 5.2000122,4.3999634 5.4000244,4.3999634z M10.5,2.8999634C10.800018,2.8999634,11,3,11.100006,3.2999878L12.5,6.5C12.100006,6.5999756,11.700012,6.7999878,11.300018,7L9.9000244,3.7999878C9.8000183,3.5 9.9000244,3.0999756 10.200012,3 10.300018,2.8999634 10.400024,2.8999634 10.5,2.8999634z M21.200012,2.7999878L21.5,2.7999878C21.800018,2.8999634,22,3.2999878,21.800018,3.5999756L20.5,6.7999878C20.100006,6.5999756,19.700012,6.3999634,19.300018,6.2999878L20.600006,3.0999756C20.700012,3,21,2.7999878,21.200012,2.7999878z M16,0C16.600006,0,17.100006,0.5,17.100006,1.0999756L17.100006,5.8999634C16.700012,5.8999634,16.300018,5.7999878,15.900024,5.7999878L14.900024,5.7999878 14.900024,1.0999756C14.900024,0.5,15.400024,0,16,0z</x:String>
+            <x:String x:Key="christmas">M12.906017,24.958992L12.906017,29.958992 16.906017,29.958992 16.906017,24.958992z M14.905986,2.5412524L10.770998,7.4822322 12.307988,7.6132441C12.692999,7.6452266 13.025001,7.8972407 13.15998,8.2602473 13.295998,8.6222468 13.209998,9.0292292 12.939979,9.3062373L6.2219779,16.211237 7.4959676,16.531244C7.8419764,16.61825 8.1159947,16.884241 8.2139866,17.227228 8.3109715,17.571253 8.2179844,17.940241 7.968991,18.197229L3.3619563,22.951227 26.450015,22.951227 21.842004,18.197229C21.594018,17.941248 21.501001,17.572229 21.597009,17.229242 21.693994,16.887232 21.965999,16.621241 22.311,16.532251L23.594999,16.202234 16.871993,9.2992488C16.602004,9.0222407 16.516006,8.6142512 16.651992,8.2522517 16.787002,7.888238 17.12001,7.638238 17.505998,7.6052485L19.038013,7.4762507z M14.905986,0C15.194737,0,15.483487,0.11374666,15.672986,0.3412398L21.808007,7.6712275C22.049007,7.9572383 22.107997,8.3522273 21.965022,8.6972285 21.821008,9.0422297 21.497003,9.2782527 21.124994,9.3082515L19.78301,9.4212275 26.233005,16.044245C26.481021,16.29925 26.576022,16.668238 26.479007,17.012232 26.383029,17.354242 26.111026,17.621241 25.765018,17.71023L24.476012,18.041254 29.423013,23.143244C29.671031,23.325251 29.832011,23.619257 29.832011,23.951227 29.832011,24.504236 29.384011,24.951229 28.83201,24.951229 28.827035,24.952236 28.820016,24.952236 28.812021,24.951229L18.906017,24.951229 18.906017,31.958992 10.906017,31.958992 10.906017,24.951229 0.99995211,24.951229C0.59797368,24.951229 0.23496633,24.711239 0.078959911,24.341242 -0.077046023,23.972254 0.0019641441,23.544245 0.28196368,23.255243L5.3289706,18.048243 4.0509836,17.726252C3.7049746,17.639246 3.4309566,17.374231 3.333972,17.02923 3.2359795,16.685236 3.3299739,16.315241 3.5789673,16.059229L10.032991,9.4272395 8.6849959,9.3112422C8.3129856,9.2802363 7.9909942,9.0442439 7.8469813,8.7002497 7.7039754,8.3552485 7.7629664,7.960229 8.0039942,7.6742488L14.138986,0.3412398C14.328485,0.11374666,14.617235,0,14.905986,0z</x:String>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+   
+    <localCore:SampleView.Content>
+
+            <chart:SfCartesianChart VerticalOptions="FillAndExpand" Margin="0,0,5,0" x:Name="Chart">
+
+                <chart:SfCartesianChart.BindingContext>
+                    <local:AnnotationViewModel/>
+                </chart:SfCartesianChart.BindingContext>
+            
+            <chart:SfCartesianChart.Title>
+                <Label Text="The Impact of the Pandemic on Individual Travel Activity" Margin="0,2,0,10"
+                       HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"
+                       FontSize="16" LineBreakMode="WordWrap"/>
+            </chart:SfCartesianChart.Title>
+
+            <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeAxis Interval="2" IntervalType="Months" EdgeLabelsVisibilityMode="AlwaysVisible">
+                    <chart:DateTimeAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="MMM"/>
+                    </chart:DateTimeAxis.LabelStyle>
+                </chart:DateTimeAxis>
+            </chart:SfCartesianChart.XAxes>
+
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis Interval="5000" CrossesAt="{Static x:Double.MaxValue}"/>
+            </chart:SfCartesianChart.YAxes>
+
+            <chart:AreaSeries ItemsSource="{Binding AnnotationData}"
+                              XBindingPath="Date"
+                              YBindingPath="Size"
+                              Fill="#66116DF9"
+                              Stroke="#116DF9"
+                              StrokeWidth="3"/>
+            
+            <chart:AreaSeries ItemsSource="{Binding AnnotationData}"
+                              XBindingPath="Date"
+                              YBindingPath="Value"
+                              Fill="#66CAC4D0"
+                              Stroke="#49454F"
+                              StrokeWidth="3"/>
+            
+            <chart:SfCartesianChart.Annotations>
+                <chart:ChartAnnotationCollection>
+
+                    <chart:LineAnnotation X1="2020-03-24" Y1="4000" X2="2020-03-24" Y2="2000" LineCap="Arrow"/>
+                    <chart:TextAnnotation X1="2020-04-01" Y1="6300" Text="Nationwide lockdown"/>
+                    <chart:ViewAnnotation X1="2020-03-19" Y1="5900" VerticalAlignment="Start">
+                        <chart:ViewAnnotation.View>
+                            <Path Data="{StaticResource nationlockdown}" Fill="#BF9C4C"></Path>
+                        </chart:ViewAnnotation.View>
+                    </chart:ViewAnnotation>
+
+                    <chart:LineAnnotation X1="2020-07-10" Y1="6500" X2="2020-05-27" Y2="1500" LineCap="Arrow"/>
+                    <chart:TextAnnotation X1="2020-07-20" Y1="7500" Text="Summer vacation "/>
+                    <chart:ViewAnnotation X1="2020-07-15" Y1="9500" VerticalAlignment="Start">
+                        <chart:ViewAnnotation.View>
+                            <Path Data="{StaticResource sun}" Fill="#FECA49"/>
+                        </chart:ViewAnnotation.View>
+                    </chart:ViewAnnotation>
+
+                    <chart:LineAnnotation X1="2020-12-05" Y1="7200" X2="2020-12-25" Y2="5500" LineCap="Arrow"/>
+                    <chart:TextAnnotation X1="2020-11-25" Y1="8000" Text="Christmas"/>
+                    <chart:ViewAnnotation X1="2020-11-20" Y1="10000" VerticalAlignment="Start">
+                        <chart:ViewAnnotation.View>
+                            <Path Data="{StaticResource christmas}" Fill="#44911B"></Path>
+                        </chart:ViewAnnotation.View>
+                    </chart:ViewAnnotation>
+
+                    <chart:TextAnnotation X1="2020-11-30" Y1="3000" Text="6,360 km">
+                        <chart:TextAnnotation.LabelStyle>
+                            <chart:ChartAnnotationLabelStyle FontAttributes="Bold" FontSize="13" TextColor="{AppThemeBinding Light=#116DF9, Dark=White}"/>
+                        </chart:TextAnnotation.LabelStyle>
+                    </chart:TextAnnotation>
+                    <chart:TextAnnotation X1="2020-12-03" Y1="2000" Text="March 2020 - March 2021">
+                        <chart:TextAnnotation.LabelStyle>
+                            <chart:ChartAnnotationLabelStyle TextColor="{AppThemeBinding Light=#116DF9, Dark=White}"/>
+                        </chart:TextAnnotation.LabelStyle>
+                    </chart:TextAnnotation>
+
+                    <chart:TextAnnotation X1="2020-08-05" Y1="20000" Text="22,630 Km">
+                        <chart:TextAnnotation.LabelStyle>
+                            <chart:ChartAnnotationLabelStyle HorizontalTextAlignment="End" FontAttributes="Bold" FontSize="13"/>
+                        </chart:TextAnnotation.LabelStyle>
+                    </chart:TextAnnotation>
+                    <chart:TextAnnotation X1="2020-08-20" Y1="19000" Text="March 2019 - March 2020"/>
+                    
+                </chart:ChartAnnotationCollection>
+            </chart:SfCartesianChart.Annotations>
+        </chart:SfCartesianChart>
+                
+    </localCore:SampleView.Content>
+</localCore:SampleView>

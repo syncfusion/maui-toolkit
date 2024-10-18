@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localcore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CustomView.GettingStartedSampleView"
+             xmlns:localcore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             Background="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" >
+    <localcore:SampleView >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Image MaximumHeightRequest ="600" Grid.Column="0" MaximumWidthRequest="500" Margin="20,0,0,0" 
+                   Source="{imageExtension:ImageResource gettingstarted.png}"
+                   HorizontalOptions="Fill" VerticalOptions="Fill"/>
+            <Frame x:Name="frame" Margin="10" Grid.Column="1" Padding="0" HasShadow="False" HorizontalOptions="End"
+                   CornerRadius="10" BorderColor="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" />
+        </Grid>
+    </localcore:SampleView>
+</localcore:SampleView>

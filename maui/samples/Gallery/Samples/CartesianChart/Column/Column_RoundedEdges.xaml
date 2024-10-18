@@ -1,0 +1,58 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.Column_RoundedEdges"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart x:Name="Chart1" HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCartesianChart.BindingContext>
+                <local:ColumnSeriesViewModel/>
+            </chart:SfCartesianChart.BindingContext>
+            <chart:SfCartesianChart.Title>
+                <Label Text="Product Sales Rate Across Week" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+            </chart:SfCartesianChart.Title>
+            <chart:SfCartesianChart.XAxes>
+                <chart:NumericalAxis IsVisible="true" Interval="1" ShowMajorGridLines="false" >
+                    <chart:NumericalAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle Margin="4" CornerRadius="5" LabelFormat="00" Background="LightGray" TextColor="Gray" FontSize="12" FontAttributes="Bold"/>
+                    </chart:NumericalAxis.LabelStyle>
+                    <chart:NumericalAxis.MajorTickStyle>
+                        <chart:ChartAxisTickStyle TickSize="10" StrokeWidth="0"/>
+                    </chart:NumericalAxis.MajorTickStyle>
+                    <chart:NumericalAxis.AxisLineStyle>
+                        <chart:ChartLineStyle StrokeWidth="0"/>
+                    </chart:NumericalAxis.AxisLineStyle>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.XAxes>
+
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis IsVisible="False" Minimum="0" Maximum="70" Interval="10" ShowMajorGridLines="True" >
+                    <chart:NumericalAxis.MinorTickStyle>
+                        <chart:ChartAxisTickStyle TickSize="10" StrokeWidth="0"/>
+                    </chart:NumericalAxis.MinorTickStyle>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+            <chart:SfCartesianChart.Series>
+                <chart:ColumnSeries EnableAnimation="{Binding EnableAnimation}" EnableTooltip="True" CornerRadius="10" x:Name="columnSeries2" ItemsSource="{Binding RoundedColumnData}"
+                                           PaletteBrushes="{AppThemeBinding Light={StaticResource AlterBrushesLight}, Dark={StaticResource AlterBrushesDark}}"  XBindingPath="Value" YBindingPath="Size">
+                </chart:ColumnSeries>
+            </chart:SfCartesianChart.Series>
+            <chart:SfCartesianChart.Annotations>
+                <chart:HorizontalLineAnnotation Y1="50" Stroke="#E75A6E" StrokeWidth="2" StrokeDashArray="15, 6, 5, 3" Text="Overflow">
+                    <chart:HorizontalLineAnnotation.LabelStyle>
+                        <chart:ChartAnnotationLabelStyle TextColor="#E75A6E" HorizontalTextAlignment="Start" VerticalTextAlignment="Start" FontSize="15"/>
+                    </chart:HorizontalLineAnnotation.LabelStyle>
+                </chart:HorizontalLineAnnotation>
+            </chart:SfCartesianChart.Annotations>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

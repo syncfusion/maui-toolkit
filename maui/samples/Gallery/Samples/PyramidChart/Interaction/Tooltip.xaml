@@ -1,0 +1,89 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class=" Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart.Tooltip"
+             xmlns:local="clr-namespace: Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <DataTemplate x:Key="tooltipTemplate">
+            <Grid ColumnDefinitions="*" RowDefinitions="Auto,Auto,Auto">
+                <HorizontalStackLayout HorizontalOptions="Center"  Grid.Row="0">
+                    <Label Text="{Binding Item.Name}"  FontSize="14"
+                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                  
+                    <Label  HorizontalTextAlignment="Center"
+                               Text="{Binding Item.Value,StringFormat=': {0}%'}"
+                               FontSize="14"
+                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                <BoxView 
+                    Grid.Row="1"
+                    HeightRequest="1"
+                    Color="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                    Margin="1"/>
+                <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="2" BindableLayout.ItemsSource="{Binding Item.LearningCategories}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Spacing="10">
+                                <Path HorizontalOptions="Center" HeightRequest="20" WidthRequest="20" Fill="{Binding Color}" Data="m336.31499,298.9348l5.00001,-10.00001l5.00001,10.00001l-10.00003,0z" Aspect="Uniform"/>
+                            <Label 
+                               Text=" {Binding Category}"
+                               FontSize="Caption"
+                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                               HorizontalOptions="Start" HorizontalTextAlignment="Start"
+                               VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+             
+                </VerticalStackLayout>
+            </Grid>
+        </DataTemplate>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+            <chart:SfPyramidChart HorizontalOptions="Fill"
+                                  VerticalOptions="Fill"
+                                  Margin="{OnPlatform Android='0,0,0,50', iOS='0,0,0,50', Default='0,0,0,0'}"
+                                  PaletteBrushes="{Binding ThemePaletteBrushes3}"
+                                  StrokeWidth="2"
+                                  Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                                  ItemsSource="{Binding PyramidData}"
+                                  XBindingPath="Name"
+                                  YBindingPath="Value"
+                                  EnableTooltip="True"
+                                  ShowDataLabels="True"
+                                  x:Name="Chart"
+                                  TooltipTemplate="{StaticResource tooltipTemplate}"
+                                  LegendIcon="SeriesType">
+                <chart:SfPyramidChart.BindingContext>
+                    <local:ViewModel />
+                </chart:SfPyramidChart.BindingContext>
+            <chart:SfPyramidChart.DataLabelSettings>
+                <chart:PyramidDataLabelSettings UseSeriesPalette="False">
+                    <chart:PyramidDataLabelSettings.LabelStyle>
+                        <chart:ChartDataLabelStyle LabelFormat="0'%" Margin="0.5"/>
+                    </chart:PyramidDataLabelSettings.LabelStyle>
+                </chart:PyramidDataLabelSettings>
+            </chart:SfPyramidChart.DataLabelSettings>
+            <chart:SfPyramidChart.Legend>
+                <chart:ChartLegend Placement="{OnPlatform WinUI='Bottom',MacCatalyst='Bottom',Default='Top'}"/>
+            </chart:SfPyramidChart.Legend>
+            <chart:SfPyramidChart.TooltipBehavior>
+                <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+            </chart:SfPyramidChart.TooltipBehavior>
+            <chart:SfPyramidChart.Title>
+                <Label Text="Average Rates of Learning Retention"
+                           HorizontalOptions="Fill"
+                           HorizontalTextAlignment="Center"
+                           VerticalOptions="Center"
+                           FontSize="16"/>
+                </chart:SfPyramidChart.Title>
+            </chart:SfPyramidChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

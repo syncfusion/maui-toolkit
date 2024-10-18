@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.TextInputLayout.SfTextInputLayoutStyles"
+             xmlns:inputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout">
+    
+    
+    <Style  TargetType="inputLayout:SfTextInputLayout" ApplyToDerivedTypes="True">
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutNormalContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="OutlinedNormal">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="LineNormal">
+                        <VisualState.Setters>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Hover">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutMouseHoveredContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutHoveredStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="OutlinedHover">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutHoveredStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="LineHover">
+                        <VisualState.Setters>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutHoveredStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutFocusedContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutCommonStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="OutlinedFocused">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutCommonStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="LineFocused">
+                        <VisualState.Setters>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutCommonStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutDisabledContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutDisabledStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="OutlinedDisabled">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutDisabledStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="LineDisabled">
+                        <VisualState.Setters>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutDisabledStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Error">
+                        <VisualState.Setters>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutErrorStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="FilledError">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutNormalContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutErrorStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="OutlinedError">
+                        <VisualState.Setters>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutErrorStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+</ResourceDictionary>

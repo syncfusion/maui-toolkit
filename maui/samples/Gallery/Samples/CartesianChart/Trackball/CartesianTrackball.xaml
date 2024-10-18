@@ -1,0 +1,132 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.CartesianTrackball"
+             xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <StackLayout HorizontalOptions="Fill">
+            <chart:SfCartesianChart x:Name="trackballChart" TrackballCreated="trackballChart_TrackballCreated" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}">
+                <chart:SfCartesianChart.Resources>
+                    <DataTemplate x:Key="trackballLabelTemplate">
+                        <HorizontalStackLayout Spacing="5">
+                            <Path Fill="{Binding Series.MarkerSettings.Stroke}" Margin="0,2,0,0">
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="5,0">
+                                            <ArcSegment Point="5,10"
+                                            Size="5, 5"
+                                            SweepDirection="Clockwise"
+                                            IsLargeArc="True"/>
+                                            <ArcSegment Point="5,0"
+                                            Size="5,5"
+                                            SweepDirection="Clockwise"
+                                            IsLargeArc="True"/>
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>
+
+                            <Label Text="{Binding Series.Label, StringFormat='{0}:'}" FontSize="12"  HorizontalOptions="Center"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                            <Label Text="{Binding Label,StringFormat='{0}M'}" FontSize="12" Margin="0,0,2,0" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+
+                </chart:SfCartesianChart.Resources>
+                <chart:SfCartesianChart.Title >
+                    <VerticalStackLayout Margin="0,0,0,5">
+                        <Label Text="Average Sales Per Person" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+                    </VerticalStackLayout>
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.BindingContext>
+                    <local:CartesianTrackballViewModel x:Name="ViewModel"/>
+                </chart:SfCartesianChart.BindingContext>
+                <chart:SfCartesianChart.TrackballBehavior>
+                    <chart:ChartTrackballBehavior x:Name="trackball" ShowLine="True" ShowMarkers="True" DisplayMode="FloatAllPoints">
+                        <chart:ChartTrackballBehavior.LineStyle>
+                            <chart:ChartLineStyle Stroke="{AppThemeBinding Default={StaticResource ContentForeground}}" StrokeWidth="1.5"/>
+                        </chart:ChartTrackballBehavior.LineStyle>
+                        <chart:ChartTrackballBehavior.MarkerSettings>
+                            <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeWidth="1"/>
+                        </chart:ChartTrackballBehavior.MarkerSettings>
+                    </chart:ChartTrackballBehavior>
+                </chart:SfCartesianChart.TrackballBehavior>
+
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend Placement="Top"/>
+                </chart:SfCartesianChart.Legend>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IntervalType="Years" Interval="1" EdgeLabelsVisibilityMode="Visible" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" ShowMajorGridLines="false"
+                                        PlotOffsetStart="10" PlotOffsetEnd="10" AxisLineOffset="10">
+                        <chart:DateTimeAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle TickSize="10">
+                            </chart:ChartAxisTickStyle>
+                        </chart:DateTimeAxis.MajorTickStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis Maximum="90" Minimum="0" Interval="10">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Revenue in Millions" Margin="5,10,5,2"/>
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0">
+                            </chart:ChartLineStyle>
+                        </chart:NumericalAxis.AxisLineStyle>
+                        <chart:NumericalAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle TickSize="0" />
+                        </chart:NumericalAxis.MajorTickStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                    <chart:LineSeries StrokeWidth="1" ItemsSource="{Binding ChartData1}" Label="Thomas" XBindingPath="Date" YBindingPath="Value" ShowMarkers="True">
+                        <chart:LineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Type="Circle" Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="1"/>
+                        </chart:LineSeries.MarkerSettings>
+                    </chart:LineSeries>
+                    <chart:LineSeries StrokeWidth="1" ItemsSource="{Binding ChartData1}"  Label="Andrew" XBindingPath="Date" YBindingPath="High" ShowMarkers="True">
+                        <chart:LineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Type="Circle" Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" StrokeWidth="1"/>
+                        </chart:LineSeries.MarkerSettings>
+                    </chart:LineSeries>
+                    <chart:LineSeries StrokeWidth="1" ItemsSource="{Binding ChartData1}" Label="Hayden" XBindingPath="Date" YBindingPath="Low" ShowMarkers="True">
+                        <chart:LineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Type="Circle" Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series3Light}, Dark={StaticResource series3Dark}}" StrokeWidth="1"/>
+                        </chart:LineSeries.MarkerSettings>
+                    </chart:LineSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+            <Label Text="Presss and hold to enable trackball." Grid.Row="1" HorizontalOptions="Center" FontSize="12" TextColor="#000000" Opacity="0.8" IsVisible="{OnPlatform WinUI='False', MacCatalyst='False', Android='True',iOS='True'}"/>
+        </StackLayout>
+    </localCore:SampleView.Content>
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <VerticalStackLayout Spacing="5">
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="Mode: " VerticalOptions="Start" HorizontalOptions="Center" Padding="5"  FontSize="17"/>
+                        <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=DisplayMode}" 
+                        SelectedItem="{Binding Source={x:Reference ViewModel}, Path=DisplayMode[0]}"
+                         VerticalOptions="Start" HorizontalOptions="Fill" 
+                        x:Name="picker" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                        SelectedIndex="0"
+                        SelectedIndexChanged="picker_SelectedIndexChanged">
+                        </Picker>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Spacing="5">
+                    <Label Text="Label Template: " x:Name="label" VerticalOptions="Center" HorizontalOptions="Center" Padding="5" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"  FontSize="17"/>
+                    <Switch x:Name="TemplateSwitch" IsEnabled="True" Toggled="Switch_Toggled"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
+    
+</localCore:SampleView>

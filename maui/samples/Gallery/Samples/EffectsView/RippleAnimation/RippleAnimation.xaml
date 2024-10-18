@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.EffectsView.SfEffectsView.RippleAnimation"
+                      xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:sfEffectsView="clr-namespace:Syncfusion.Maui.Toolkit.EffectsView;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+    <localCore:SampleView.Content>
+        <StackLayout Padding="10" Spacing="10" HorizontalOptions="Center" VerticalOptions="Center">
+            <Border x:Name="rippleEffectBorder" Padding="0" Background="Transparent">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="18" />
+                </Border.StrokeShape>
+                <sfEffectsView:SfEffectsView x:Name="EffectsView" TouchDownEffects="Ripple" WidthRequest="{OnIdiom Default='400', Phone='300'}"  HeightRequest="148"
+											 RippleAnimationDuration="800">
+                    <Grid>
+                        <Grid.Background>
+                            <LinearGradientBrush EndPoint="1,0">
+                                <GradientStop Color="#4E54C8" Offset="0.0" />
+                                <GradientStop Color="#8F94FB" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Grid.Background>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="{OnIdiom Default=100,Phone=3*,Tablet=100}" />
+                                <ColumnDefinition Width="7*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Image x:Name="cardImage" Source="{imageExtension:ImageResource person1.png}" Margin="7" VerticalOptions="Center"
+									   WidthRequest="72" HeightRequest="72" />
+                            <StackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                                <Label Text="Laura Steffi"  TextColor="#FFFFFF" FontFamily="Roboto-Medium"
+                                           Grid.Row="0"  VerticalTextAlignment="Center"
+                                           Margin="15,0,0,0" FontSize="18" />
+                                <Label Text="Data Science Analyst"  TextColor="#FFFFFF" 
+                                           VerticalTextAlignment="Center" 
+                                           Margin="15,0,0,0" FontSize="12"/>
+                                <Label Text="laurasteffi@gmail.com"  TextColor="#FFFFFF" 
+                                           VerticalTextAlignment="Center" Margin="15,0,0,0" FontSize="12"/>
+                                <Label Text="011-253-321"  TextColor="#FFFFFF" 
+                                           VerticalTextAlignment="Center" Margin="15,0,0,0" FontSize="12"/>
+                            </StackLayout>
+                        </Grid>
+                    </Grid>
+                </sfEffectsView:SfEffectsView>
+            </Border>
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

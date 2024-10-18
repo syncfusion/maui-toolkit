@@ -1,0 +1,63 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class=" Syncfusion.Maui.ControlsGallery.FunnelChart.SfFunnelChart.DefaultFunnel"
+             xmlns:local="clr-namespace: Syncfusion.Maui.ControlsGallery.FunnelChart.SfFunnelChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+            <local:FunnelChartColorResources/>
+        </ResourceDictionary.MergedDictionaries>
+        
+        <DataTemplate x:Key="tooltipTemplate">
+            <HorizontalStackLayout>
+                <Label Grid.Column="1"
+                              Text="{Binding Item.Name}"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                <Label Text="{Binding Item.Value,StringFormat=': {0}%'}"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </DataTemplate>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <chart:SfFunnelChart x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill"
+                         Margin="{OnPlatform Android='0,0,0,50', iOS='0,0,0,50', Default='0,0,0,0'}"
+                          ShowDataLabels="True" 
+                          PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}" 
+                          StrokeWidth="2" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" 
+                          ItemsSource="{Binding FunnelData}" 
+                          EnableTooltip="True"
+                          TooltipTemplate="{StaticResource tooltipTemplate}"
+                          XBindingPath="Name"
+                          YBindingPath="Value">
+        <chart:SfFunnelChart.BindingContext>
+            <local:ViewModel/>
+        </chart:SfFunnelChart.BindingContext>
+        <chart:SfFunnelChart.Title>
+            <Label Text="Website Conversion Rate" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+        </chart:SfFunnelChart.Title>
+        <!--<chart:SfFunnelChart.Legend>
+            <chart:ChartLegend Placement="{OnPlatform WinUI='Right',MacCatalyst='Right',Default='Bottom'}">
+            </chart:ChartLegend>
+        </chart:SfFunnelChart.Legend>-->
+        <chart:SfFunnelChart.DataLabelSettings>
+            <chart:FunnelDataLabelSettings>
+                <chart:FunnelDataLabelSettings.LabelStyle>
+                    <chart:ChartDataLabelStyle LabelFormat="0'%" Margin="1"/>
+                </chart:FunnelDataLabelSettings.LabelStyle>
+            </chart:FunnelDataLabelSettings>
+        </chart:SfFunnelChart.DataLabelSettings>
+        <chart:SfFunnelChart.TooltipBehavior>
+            <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+        </chart:SfFunnelChart.TooltipBehavior>
+    </chart:SfFunnelChart>
+</localCore:SampleView>

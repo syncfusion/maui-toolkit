@@ -1,0 +1,67 @@
+﻿
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.CandleChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Content>
+        <StackLayout HorizontalOptions="Fill" x:Name="layout">
+            <StackLayout.Resources>
+                <Label x:Key="title" Text="Stock Data of AEIS" FontSize="16" HorizontalTextAlignment="Center" Padding="0,5,0,5"  LineBreakMode="WordWrap"></Label>
+            </StackLayout.Resources>
+            <StackLayout.BindingContext>
+                <local:FinancialViewModel x:Name="ViewModel"/>
+            </StackLayout.BindingContext>
+            <chart:SfCartesianChart x:Name="Chart" Title="{StaticResource title}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis x:Name="xAxis" AutoScrollingDelta="{OnPlatform Android='2', iOS='2', Default='3'}" AutoScrollingMode="End" AutoScrollingDeltaType="Months" LabelCreated="Primary_LabelCreated" ShowMajorGridLines="False" >
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="MMM-dd"></chart:ChartAxisLabelStyle>
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMinorGridLines="True" Maximum="130" x:Name="YAxis" IsVisible="True">
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0"></chart:ChartLineStyle>
+                        </chart:NumericalAxis.AxisLineStyle>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="$0"></chart:ChartAxisLabelStyle>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:CandleSeries x:Name="Candle" ItemsSource="{Binding StockData}"
+                                    XBindingPath="Date"
+                                    Open="Value"
+                                    High="High"    
+                                    Low="Low"
+                                    Close="Size"
+                                    EnableTooltip="True"
+                                    EnableSolidCandle="{Binding Source={x:Reference checkBox},Path=IsChecked}"
+                                    EnableAnimation="True">
+                    
+                </chart:CandleSeries>
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior x:Name="ZoomPan" ZoomMode="X" EnableDoubleTap="False" EnablePanning="True" EnablePinchZooming="True"></chart:ChartZoomPanBehavior>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+            </chart:SfCartesianChart>
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" Text=" marketwatch.com" FontAttributes="Italic">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.marketwatch.com/investing/stock/aeis/download-data?startDate=1/3/2022&amp;endDate=1/2/2023"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <HorizontalStackLayout>
+                <Label Text="Enable Solid Candles"></Label>
+                <CheckBox x:Name="checkBox" IsChecked="False" VerticalOptions="Start" Margin="30,0,0,0" ></CheckBox>
+            </HorizontalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

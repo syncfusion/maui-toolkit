@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.NeumorphismColumnChart"
+             xmlns:control="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery" Margin="-10" BackgroundColor="#F5F5F5"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <control:SfNeumorphismDrawer BackgroundColor="#F5F5F5" Padding="20" LightOpacity="0.8" CornerRadius="20" x:Key="outerViewDrawable">
+        </control:SfNeumorphismDrawer>
+        
+        <control:SfNeumorphismDrawer BackgroundColor="#F5F5F5" Padding="8" LightOpacity="1" Offset="3,3" 
+                                     LightOffSet="-4,-4" 
+                                     CornerRadius="{OnPlatform Android='8',iOS='8',WinUI='10',MacCatalyst='10'}" x:Key="drawable" />
+        
+        <control:SfNeumorphismDrawer Blur="40"
+                                     IsPressedState="True" Opacity="0.3" 
+                                     LightOpacity="1" CornerRadius="20" 
+                                     BackgroundColor="#F5F5F5" x:Key="pressedDrawable" />
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <control:SfNeumorphismView Drawable="{StaticResource outerViewDrawable}">
+            <chart:SfCartesianChart EnableSideBySideSeriesPlacement="False" Margin="45,35,45,60" x:Name="Chart" VerticalOptions="Fill" HorizontalOptions="Fill">
+                <chart:SfCartesianChart.Title>
+                    <HorizontalStackLayout HorizontalOptions="Start">
+                        <control:SfNeumorphismView 
+                            HeightRequest="{OnPlatform Android='50',iOS='50',Default='65'}"
+                            WidthRequest="{OnPlatform Android='50',iOS='50',Default='65'}" 
+                            HorizontalOptions="Start"
+                            Drawable="{StaticResource drawable}">
+                            <Path Data="M6.5 0A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5
+                                          0h-3Zm3 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3Z M4 1.5H3a2 2
+                                          0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1A2.5 2.5 0 0 1 9.5 5h-3A2.5 2.5 0
+                                          0 1 4 2.5v-1ZM10 8a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V8Zm-6 4a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1Zm4-3a1 1 0 0 1 1 1v3a1 1 0 1 1-2 0v-3a1 1 0 0 1 1-1Z"
+                                          Fill="#6e8aa6" Aspect="Fill" 
+                                          HorizontalOptions="Center" VerticalOptions="Center" 
+                                  HeightRequest="{OnPlatform Android='20',iOS='20', Default='30'}" 
+                                  WidthRequest="{OnPlatform Android='20',iOS='20',Default='30'}" />
+                        </control:SfNeumorphismView>
+                        <VerticalStackLayout Margin="10,0,0,0">
+                            <Label Text="Year 2020" FontSize="{OnPlatform Android='12',iOS='12',WinUI='15',MacCatalyst='15'}" 
+                                   FontFamily="Times" FontAttributes="Bold" TextColor="#8b9eb0" Margin="{OnPlatform Android='0,10,0,3',iOS='0,10,0,3',WinUI='0,15,0,3',MacCatalyst='0,15,0,3'}"/>
+                            <Label Text="Yearly spending" FontFamily="Times" FontSize="{OnPlatform Android='9',iOS='9',WinUI='12',MacCatalyst='12'}" TextColor="#8b9eb0"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.BindingContext>
+                    <local:NeumorphismViewModel/>
+                </chart:SfCartesianChart.BindingContext>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis LabelPlacement="BetweenTicks" ShowMajorGridLines="False">
+                        <chart:CategoryAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle TickSize="0" />
+                        </chart:CategoryAxis.MajorTickStyle>
+                        <chart:CategoryAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0" />
+                        </chart:CategoryAxis.AxisLineStyle>
+                        <chart:CategoryAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="#66000000"/>
+                        </chart:CategoryAxis.LabelStyle>
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="False" PlotOffsetStart="12" PlotOffsetEnd="6" Minimum="0" Interval="20" Maximum="100">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="#0'%'" TextColor="#66000000"/>
+                        </chart:NumericalAxis.LabelStyle>
+                        <chart:NumericalAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle TickSize="0"/>
+                        </chart:NumericalAxis.MajorTickStyle>
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0" />
+                        </chart:NumericalAxis.AxisLineStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                    <local:SfNeumorphismColumnSeries Spacing="0.3" Width="0.4" Drawable="{StaticResource pressedDrawable}" CornerRadius="30" Label="Countries" x:Name="columnSeries1" ItemsSource="{Binding NeumorphismColumnData}" XBindingPath="Name" YBindingPath="Value">
+                    </local:SfNeumorphismColumnSeries>
+                    <chart:ColumnSeries Spacing="0.3" Width="0.4" EnableAnimation="True" CornerRadius="30" Label="Countries" ItemsSource="{Binding NeumorphismColumnData}" XBindingPath="Name" YBindingPath="Value">
+                        <chart:ColumnSeries.Fill>
+                            <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+                                <GradientStop Color="#B75EF8" Offset="0.2"/>
+                                <GradientStop Color="#7642A9" Offset="1"/>
+                            </LinearGradientBrush>
+                        </chart:ColumnSeries.Fill>
+                    </chart:ColumnSeries>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+        </control:SfNeumorphismView>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

@@ -1,0 +1,84 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.Selection"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <Grid HorizontalOptions="Fill" VerticalOptions="Fill" Padding="10,0, 10, 0">
+            <chart:SfCartesianChart HorizontalOptions="Fill" VerticalOptions="FillAndExpand" x:Name="chart">
+                <chart:SfCartesianChart.Resources>
+                    <ResourceDictionary>
+                        <local:SelectionValueConverter x:Key="valueconvert"/>
+                        <DataTemplate x:Key="template">
+                            <StackLayout>
+                                <StackLayout Orientation="Horizontal"  VerticalOptions="Fill" Spacing="0" Padding="0" Margin="0">
+                                    <Label Text="{Binding Item.Date, Converter={StaticResource valueconvert}}" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" FontSize="14" Margin="2,0,2,0" />
+                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="End" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="14" />
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </ResourceDictionary>
+                </chart:SfCartesianChart.Resources>
+
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Daily Activity Monitor" Margin="0,0,0,20" HorizontalTextAlignment="Center" VerticalOptions="Center" VerticalTextAlignment="Center" FontSize="16" />
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.BindingContext>
+                    <local:SelectionViewModel/>
+                </chart:SfCartesianChart.BindingContext>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis IsVisible="True" ZoomFactor="0.6" ZoomPosition="0" EnableAutoIntervalOnZooming="False"  Interval="1" IntervalType="Hours" ShowMajorGridLines="False" >
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="hh:mm"/>
+                        </chart:DateTimeAxis.LabelStyle>
+                        <chart:DateTimeAxis.Title>
+                            <chart:ChartAxisTitle Text="Hour" Margin="5,10,5,2"/>
+                        </chart:DateTimeAxis.Title>
+                        <chart:DateTimeAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle StrokeWidth="0"/>
+                        </chart:DateTimeAxis.MajorTickStyle>
+                        <chart:DateTimeAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0"/>
+                        </chart:DateTimeAxis.AxisLineStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis IsVisible="False" ShowMajorGridLines="True"
+                                     EdgeLabelsDrawingMode="Shift"
+                                     Maximum="100" Minimum="0" Interval="20">
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0" />
+                        </chart:NumericalAxis.AxisLineStyle>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="0'%"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                    <chart:ColumnSeries EnableAnimation="{Binding EnableAnimation}" Label="Steps" x:Name="series2" TooltipTemplate="{StaticResource template}" EnableTooltip="True" CornerRadius="5,5,0,0" ItemsSource="{Binding SelectionData}" XBindingPath="Date" YBindingPath="Value" Fill="{AppThemeBinding Light={StaticResource series1Light40}, Dark={StaticResource series1Dark40}}">
+                        <chart:ColumnSeries.SelectionBehavior>
+                            <chart:DataPointSelectionBehavior x:Name="dataPointSelection" SelectionBrush="#2A9AF3" SelectedIndex="6" Type="SingleDeselect"/>
+                        </chart:ColumnSeries.SelectionBehavior>
+                    </chart:ColumnSeries>
+                </chart:SfCartesianChart.Series>
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior EnableDoubleTap="False" EnablePinchZooming="False" EnablePanning="True" ZoomMode="X"/>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+            </chart:SfCartesianChart>
+            <AbsoluteLayout VerticalOptions="Start" Margin="0,40,0,0" HeightRequest="40">
+                <HorizontalStackLayout AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="1,0">
+                    <Label Text="Multiple Selection :" VerticalOptions="Center" FontSize="16" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+                    <CheckBox x:Name="checkbox" HeightRequest="35" VerticalOptions="Center" CheckedChanged="checkbox_CheckedChanged"/>
+                </HorizontalStackLayout>
+            </AbsoluteLayout>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

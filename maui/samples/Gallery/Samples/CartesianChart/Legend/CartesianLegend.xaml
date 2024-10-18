@@ -1,0 +1,155 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.CartesianLegend"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters"
+                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Content>
+        <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
+            <chart:SfCartesianChart x:Name="tooltipChart" PaletteBrushes="{Binding CustomColor3}">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Automobile Production by Category" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.BindingContext>
+                    <local:LegendViewModel/>
+                </chart:SfCartesianChart.BindingContext>
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ItemTemplate="{StaticResource LegendTemplate}" Placement="Top"/>
+                </chart:SfCartesianChart.Legend>
+
+                <chart:SfCartesianChart.Resources>
+                    <ResourceDictionary>
+                        <converter:BrushToColorConverter x:Key="brushToColor" />
+                        <DataTemplate x:Key="LegendTemplate">
+                            <Grid ColumnDefinitions="Auto,Auto"  ColumnSpacing="5">
+                                <HorizontalStackLayout Grid.Column="0" WidthRequest="35" HeightRequest="35">
+                                    <Path Scale="0.5" TranslationX="0.5"  HorizontalOptions="Start" VerticalOptions="Center"
+                                      Data="{Binding Item.PathData}" 
+                                      Fill="{Binding IconBrush,Converter={StaticResource brushToColor}}"/>
+                                </HorizontalStackLayout>
+                                <Label Grid.Column="1"
+                                       FontSize="13" 
+                                       VerticalTextAlignment="Center"
+                                       Text="{Binding Item.Label}"
+                                       TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}" Margin="0,2,0,0"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Start"
+                                       />
+                            </Grid>
+                        </DataTemplate>
+                        
+                        <DataTemplate x:Key="template1">
+                            <VerticalStackLayout>
+                                <Label Text="Truck" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
+                                <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100" />
+                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                    <Ellipse Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" HorizontalOptions="Center" HeightRequest="10" WidthRequest="10" Fill="#04ABC1" Margin="0,3,3,0" />
+                                    <Label Text="{Binding Item.Name}"  HorizontalOptions="Center" VerticalTextAlignment="Center"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+
+                        <DataTemplate x:Key="template2">
+                            <VerticalStackLayout>
+                                <Label Text="Car" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
+                                <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100" />
+                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                    <Ellipse Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" HorizontalOptions="Center" StrokeThickness="2" HeightRequest="10" WidthRequest="10" Fill="#234A76" Margin="0,3,3,0" />
+                                    <Label Text="{Binding Item.Name}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+
+                        <DataTemplate x:Key="template3">
+                            <VerticalStackLayout>
+                                <Label Text="Motorcycle" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
+                                <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100" />
+                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                    <Ellipse Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" HeightRequest="10" WidthRequest="10" Fill="#7642A9" Margin="0,3,3,0" />
+                                    <Label Text="{Binding Item.Name}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+
+                        <DataTemplate x:Key="template4">
+                            <VerticalStackLayout>
+                                <Label Text="Bus" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
+                                <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100" />
+                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                    <Ellipse Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" HeightRequest="10" WidthRequest="10" Fill="#DD6031" Margin="0,3,3,0" />
+                                    <Label Text="{Binding Item.Name}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </ResourceDictionary>
+                </chart:SfCartesianChart.Resources>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis ShowMajorGridLines="false"  PlotOffsetStart="10" PlotOffsetEnd="10" AxisLineOffset="10">
+                        <chart:CategoryAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle TickSize="10">
+                            </chart:ChartAxisTickStyle>
+                        </chart:CategoryAxis.MajorTickStyle>
+                        <chart:CategoryAxis.Title>
+                            <chart:ChartAxisTitle  Margin="5,10,5,2"/>
+                        </chart:CategoryAxis.Title>
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+                
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis Maximum="0" Minimum="120" Interval="20">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle />
+                        </chart:NumericalAxis.LabelStyle>
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle  Margin="5,10,5,2" Text="Production in Millions"/>
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0">
+                            </chart:ChartLineStyle>
+                        </chart:NumericalAxis.AxisLineStyle>
+                        <chart:NumericalAxis.MajorTickStyle>
+                            <chart:ChartAxisTickStyle TickSize="0" />
+                        </chart:NumericalAxis.MajorTickStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                
+                <chart:SfCartesianChart.Series>
+
+                    <local:LineSeriesExt TooltipTemplate="{StaticResource template1}" EnableTooltip="True" Label="Truck" PathData="{Binding Truck}" StrokeWidth="1" ItemsSource="{Binding ChartData1}" XBindingPath="Name" YBindingPath="Value" ShowMarkers="True">
+                        <chart:LineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="#04ABC1" StrokeWidth="1"/>
+                        </chart:LineSeries.MarkerSettings>
+                    </local:LineSeriesExt>
+
+                    <local:LineSeriesExt TooltipTemplate="{StaticResource template2}" EnableTooltip="True"  Label="Car" PathData="{Binding Car}" StrokeWidth="1" ItemsSource="{Binding ChartData2}" XBindingPath="Name" YBindingPath="Value" ShowMarkers="True">
+                        <chart:LineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="#234A76" StrokeWidth="1"/>
+                        </chart:LineSeries.MarkerSettings>
+                    </local:LineSeriesExt>
+
+                    <local:LineSeriesExt TooltipTemplate="{StaticResource template4}" EnableTooltip="True"  Label="Bus" PathData="{Binding Bus}" StrokeWidth="1" ItemsSource="{Binding ChartData4}" XBindingPath="Name" YBindingPath="Value" ShowMarkers="True">
+                        <chart:LineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="#DD6031" StrokeWidth="1"/>
+                        </chart:LineSeries.MarkerSettings>
+                    </local:LineSeriesExt>
+
+                    <local:LineSeriesExt TooltipTemplate="{StaticResource template3}" EnableTooltip="True"  Label="Motorcycle" PathData="{Binding Motorcycle}" StrokeWidth="1" ItemsSource="{Binding ChartData3}" XBindingPath="Name" YBindingPath="Value" ShowMarkers="True">
+                        <chart:LineSeries.MarkerSettings>
+                            <chart:ChartMarkerSettings Width="10" Height="10" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="#7642A9" StrokeWidth="1"/>
+                        </chart:LineSeries.MarkerSettings>
+                    </local:LineSeriesExt>
+
+                </chart:SfCartesianChart.Series>
+                
+                
+                
+            </chart:SfCartesianChart>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

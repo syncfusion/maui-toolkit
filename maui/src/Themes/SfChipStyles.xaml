@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Syncfusion.Maui.Toolkit.Chips.SfChipStyles"
+                    xmlns:chip="clr-namespace:Syncfusion.Maui.Toolkit.Chips">
+
+    <Style TargetType="chip:SfChip">
+        <Setter Property="StrokeThickness"
+                Value="{DynamicResource SfChipNormalStrokeThickness}" />
+        <Setter Property="FontSize"
+                Value="{DynamicResource SfChipNormalFontSize}" />
+        <Setter Property="CornerRadius"
+                Value="{DynamicResource SfChipNormalCornerRadius}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="Background"
+                                    Value="{DynamicResource SfChipNormalBackground}" />
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource SfChipNormalTextColor}" />
+                            <Setter Property="CloseButtonColor"
+                                    Value="{DynamicResource SfChipNormalClearButtonIconColor}" />
+                            <Setter Property="Stroke"
+                                    Value="{DynamicResource SfChipNormalStroke}" />
+                            <Setter Property="SelectionIndicatorColor"
+                                    Value="{DynamicResource SfChipNormalSelectionIndicatorColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Hovered">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource SfChipNormalTextColor}" />
+                            <Setter Property="SelectionIndicatorColor"
+                                    Value="{DynamicResource SfChipNormalSelectionIndicatorColor}" />
+                            <Setter Property="CloseButtonColor"
+                                    Value="{DynamicResource SfChipGroupHoverClearButtonIconColor}" />
+                            <Setter Property="Stroke"
+                                    Value="{DynamicResource SfChipGroupHoverStroke}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource SfChipNormalTextColor}" />
+                            <Setter Property="SelectionIndicatorColor"
+                                    Value="{DynamicResource SfChipNormalSelectionIndicatorColor}" />
+                            <Setter Property="CloseButtonColor"
+                                    Value="{DynamicResource SfChipGroupPressedClearButtonIconColor}" />
+                            <Setter Property="Stroke"
+                                    Value="{DynamicResource SfChipGroupPressedStroke}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Background"
+                                    Value="{DynamicResource SfChipDisabledBackground}" />
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource SfChipDisabledTextColor}" />
+                            <Setter Property="CloseButtonColor"
+                                    Value="{DynamicResource SfChipDisabledClearButtonIconColor}" />
+                            <Setter Property="Stroke"
+                                    Value="{DynamicResource SfChipDisabledStroke}" />
+                            <Setter Property="SelectionIndicatorColor"
+                                    Value="{DynamicResource SfChipDisabledSelectionIndicatorColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+</ResourceDictionary>

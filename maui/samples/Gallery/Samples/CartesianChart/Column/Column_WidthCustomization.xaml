@@ -1,0 +1,43 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.Column_WidthCustomization"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Content>
+        <StackLayout VerticalOptions="Fill"> 
+            <StackLayout.BindingContext>
+                <local:ColumnSeriesViewModel/>
+            </StackLayout.BindingContext>
+            <chart:SfCartesianChart x:Name="Chart2" PaletteBrushes="{Binding OlympicColorModel}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend ToggleSeriesVisibility="True" />
+                </chart:SfCartesianChart.Legend>
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Beijing Olympics Medals Count - 2022" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+                </chart:SfCartesianChart.Title>
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis ShowMajorGridLines="False" LabelPlacement="BetweenTicks">
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMajorGridLines="True" Minimum="0">
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:SfCartesianChart.Series>
+                    <chart:ColumnSeries Label="Gold" EnableTooltip="True" EnableAnimation="{Binding EnableAnimation}" Width="0.8" Spacing="0.2" ItemsSource="{Binding OlympicMedals}" XBindingPath="Name" YBindingPath="Value" LegendIcon="SeriesType"/>
+                    <chart:ColumnSeries Label="Silver" EnableTooltip="True" EnableAnimation="{Binding EnableAnimation}" Width="0.8" Spacing="0.2" ItemsSource="{Binding OlympicMedals}" XBindingPath="Name" YBindingPath="High" LegendIcon="SeriesType"/>
+                    <chart:ColumnSeries Label="Bronze" EnableTooltip="True" EnableAnimation="{Binding EnableAnimation}" Width="0.8" Spacing="0.2" ItemsSource="{Binding OlympicMedals}" XBindingPath="Name" YBindingPath="Low" LegendIcon="SeriesType"/>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" International Olympic Committee" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://olympics.com/en/olympic-games/beijing-2022/medals"></TapGestureRecognizer>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

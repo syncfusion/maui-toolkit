@@ -1,0 +1,105 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.VerticalPlotBand"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart VerticalOptions="FillAndExpand" Margin="0,0,5,0" x:Name="verticalPlotBandChart">
+
+            <chart:SfCartesianChart.Resources>
+                <ResourceDictionary>
+                    <DataTemplate x:Key="template">
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Item.Name}"  VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                            <Label Text="{Binding Item.Value,StringFormat=':  {0}&#186;C'}" VerticalTextAlignment="Center" HorizontalOptions="End" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </ResourceDictionary>
+            </chart:SfCartesianChart.Resources>
+
+            <chart:SfCartesianChart.BindingContext>
+                <local:PlotBandViewModel/>
+            </chart:SfCartesianChart.BindingContext>
+            
+            <chart:SfCartesianChart.Title>
+                <Label Text="Weather Report" Margin="0,2,0,10" HorizontalOptions="Center" HorizontalTextAlignment="Center" 
+                       VerticalOptions="CenterAndExpand" FontSize="16" LineBreakMode="WordWrap"/>
+            </chart:SfCartesianChart.Title>
+            
+            <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeAxis ShowMajorGridLines="False" Interval="2" EdgeLabelsDrawingMode="Shift" EdgeLabelsVisibilityMode="Visible"
+                                        Minimum="2023-01-01" Maximum="2023-12-31">
+                    <chart:DateTimeAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="MMM"/>
+                    </chart:DateTimeAxis.LabelStyle>
+                    
+                    <chart:DateTimeAxis.Title>
+                        <chart:ChartAxisTitle Text="Months" FontSize="16"/>
+                    </chart:DateTimeAxis.Title>
+                    
+                    <chart:DateTimeAxis.PlotBands>
+                        <chart:DateTimePlotBandCollection>
+                            <chart:DateTimePlotBand Start="2023-01-01" End="2023-03-01" Fill="#BF65C7D1" Text="Winter">
+                                <chart:DateTimePlotBand.LabelStyle>
+                                    <chart:ChartPlotBandLabelStyle Angle="270" TextColor="Black" FontSize="15.2"/>
+                                </chart:DateTimePlotBand.LabelStyle>
+                            </chart:DateTimePlotBand>
+
+                            <chart:DateTimePlotBand Start="2023-03-01" End="2023-06-01" Fill="#BFFED502" Text="Spring">
+                                <chart:DateTimePlotBand.LabelStyle>
+                                    <chart:ChartPlotBandLabelStyle Angle="270" TextColor="Black" FontSize="16"/>
+                                </chart:DateTimePlotBand.LabelStyle>
+                            </chart:DateTimePlotBand>
+
+                            <chart:DateTimePlotBand Start="2023-06-01" End="2023-09-01" Fill="#BF8CC63E" Text="Summer">
+                                <chart:DateTimePlotBand.LabelStyle>
+                                    <chart:ChartPlotBandLabelStyle Angle="270" TextColor="Black" FontSize="16"/>
+                                </chart:DateTimePlotBand.LabelStyle>
+                            </chart:DateTimePlotBand>
+
+                            <chart:DateTimePlotBand Start="2023-09-01" End="2023-11-01" Fill="#BFD97001" Text="Autumn">
+                                <chart:DateTimePlotBand.LabelStyle>
+                                    <chart:ChartPlotBandLabelStyle Angle="270" TextColor="Black" FontSize="16"/>
+                                </chart:DateTimePlotBand.LabelStyle>
+                            </chart:DateTimePlotBand>
+
+                            <chart:DateTimePlotBand Start="2023-11-01" Fill="#BF65C7D1" Text="Winter">
+                                <chart:DateTimePlotBand.LabelStyle>
+                                    <chart:ChartPlotBandLabelStyle Angle="270" TextColor="Black" FontSize="16" OffsetY="10"/>
+                                </chart:DateTimePlotBand.LabelStyle>
+                            </chart:DateTimePlotBand>
+                        </chart:DateTimePlotBandCollection>
+                    </chart:DateTimeAxis.PlotBands>
+                </chart:DateTimeAxis>
+            </chart:SfCartesianChart.XAxes>
+            
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis Interval="4" Minimum="32" Maximum="20">
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text="Temperature [°C]" FontSize="16"/>
+                    </chart:NumericalAxis.Title>
+                    
+                    <chart:NumericalAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="0°C"/>
+                    </chart:NumericalAxis.LabelStyle>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+
+            <chart:SplineSeries ItemsSource="{Binding ClimateData}" XBindingPath="Date" YBindingPath="Value" Fill="{AppThemeBinding Light={StaticResource OverlayBrush}, Dark={StaticResource OverlayBrush}}"
+                                StrokeWidth="2" ShowMarkers="True" EnableTooltip="True" TooltipTemplate="{StaticResource template}">
+                <chart:SplineSeries.MarkerSettings>
+                    <chart:ChartMarkerSettings Stroke="{AppThemeBinding Light={StaticResource OverlayBrush}, Dark={StaticResource OverlayBrush}}" StrokeWidth="1"/>
+                </chart:SplineSeries.MarkerSettings>
+            </chart:SplineSeries>
+            
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

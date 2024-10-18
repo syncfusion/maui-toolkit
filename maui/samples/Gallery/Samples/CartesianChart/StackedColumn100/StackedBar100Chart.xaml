@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.StackedBar100Chart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Content>
+        <StackLayout>
+            <StackLayout.BindingContext>
+                <local:StackedColumn100ViewModel/>
+            </StackLayout.BindingContext>
+            
+            <chart:SfCartesianChart x:Name="Chart2" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" PaletteBrushes="{Binding CustomColor4}" IsTransposed="True">
+                
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Worldwide Delivery of Tesla Cars, by Quarter" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+                </chart:SfCartesianChart.Title>
+                
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend/>
+                </chart:SfCartesianChart.Legend>
+                
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis x:Name="XAxis" LabelPlacement="BetweenTicks" ShowMajorGridLines="False"/>
+                </chart:SfCartesianChart.XAxes>
+                
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis x:Name="YAxis" Interval="20" ShowMajorGridLines="True" ShowMinorGridLines="True" RangePadding="None">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="0'%"/>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                
+                <chart:SfCartesianChart.Series>
+                    <chart:StackingColumn100Series Label="Quarter 1" 
+                                                   ItemsSource="{Binding TeslaVehicleData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="High" 
+                                                   EnableAnimation="True" 
+                                                   ShowDataLabels="True"
+                                                   LegendIcon="Rectangle"/>
+
+                    <chart:StackingColumn100Series Label="Quarter 2" 
+                                                   ItemsSource="{Binding TeslaVehicleData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="Low" 
+                                                   EnableAnimation="True" 
+                                                   ShowDataLabels="True"
+                                                   LegendIcon="Rectangle"/>
+
+                    <chart:StackingColumn100Series Label="Quarter 3" 
+                                                   ItemsSource="{Binding TeslaVehicleData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="Value" 
+                                                   EnableAnimation="True" 
+                                                   ShowDataLabels="True"
+                                                   LegendIcon="Rectangle"/>
+                    
+                    <chart:StackingColumn100Series Label="Quarter 4" 
+                                                   ItemsSource="{Binding TeslaVehicleData}" 
+                                                   XBindingPath="Name" 
+                                                   YBindingPath="Size" 
+                                                   EnableAnimation="True" 
+                                                   ShowDataLabels="True"
+                                                   LegendIcon="Rectangle"/>
+                </chart:SfCartesianChart.Series>
+            </chart:SfCartesianChart>
+            
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"/>
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" ir.tesla.com" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://ir.tesla.com/#quarterly-disclosure"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+            
+        </StackLayout>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.OHLC"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Content>
+        <StackLayout x:Name="layout">
+            <StackLayout.Resources>
+                <Label x:Key="title" Text="XNAS of ABM" FontSize="16" HorizontalOptions="Fill" HorizontalTextAlignment="Center"></Label>
+            </StackLayout.Resources>
+            
+            <StackLayout.BindingContext>
+                <local:FinancialViewModel></local:FinancialViewModel>
+            </StackLayout.BindingContext>
+            <chart:SfCartesianChart  x:Name="Chart" Title="{StaticResource title}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+                <chart:SfCartesianChart.XAxes>
+                    <chart:DateTimeAxis x:Name="xAxis" AutoScrollingDelta="{OnPlatform Android='2', iOS='2', Default='3'}" AutoScrollingMode="End" AutoScrollingDeltaType="Months" LabelCreated="Primary_LabelCreated" ShowMajorGridLines="False" >
+                        <chart:DateTimeAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="MMM-dd"></chart:ChartAxisLabelStyle>
+                        </chart:DateTimeAxis.LabelStyle>
+                    </chart:DateTimeAxis>
+                </chart:SfCartesianChart.XAxes>
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis ShowMinorGridLines="True" Minimum="10" Maximum="18" x:Name="YAxis" IsVisible="True">
+                        <chart:NumericalAxis.AxisLineStyle>
+                            <chart:ChartLineStyle StrokeWidth="0"></chart:ChartLineStyle>
+                        </chart:NumericalAxis.AxisLineStyle>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="$##.##"></chart:ChartAxisLabelStyle>
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+                <chart:HiLoOpenCloseSeries ItemsSource="{Binding StockDataOHLC}"
+                                           XBindingPath="Date"
+                                           Open="Value"
+                                           High="High"
+                                           Low="Low"
+                                           Close="Size"
+                                           EnableAnimation="True"
+                                           EnableTooltip="True"></chart:HiLoOpenCloseSeries>
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior x:Name="ZoomPan" ZoomMode="X" EnableDoubleTap="False" EnablePanning="True" EnablePinchZooming="True"></chart:ChartZoomPanBehavior>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+            </chart:SfCartesianChart>
+            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                <Label TextColor="#3E8EED" FontSize="12" Text=" marketwatch.com" FontAttributes="Italic">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.marketwatch.com/investing/stock/abm/download-data?startDate=1/3/2000&amp;endDate=12/29/2000"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </StackLayout>
+    </localCore:SampleView.Content>                  
+</localCore:SampleView>

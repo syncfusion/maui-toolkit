@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:sfeffects="clr-namespace:Syncfusion.Maui.Toolkit.EffectsView"
+             x:Class="Syncfusion.Maui.Toolkit.EffectsView.SfEffectsViewStyles">
+
+
+    <Style TargetType="sfeffects:SfEffectsView">
+        <!--Will get the new color for ripple background from UX team-->        
+        <Setter Property="RippleBackground" Value="{DynamicResource SfEffectsViewRippleBackground}"/>
+        <Setter Property="HighlightBackground" Value="{DynamicResource SfEffectsViewHighlightBackground}"/>
+        <Setter Property="SelectionBackground" Value="{DynamicResource SfEffectsViewSelectionBackground}"/>
+        <Setter Property="RippleAnimationDuration" Value="{DynamicResource SfEffectsViewRippleAnimationDuration}"/>
+    
+    </Style>
+</ResourceDictionary>

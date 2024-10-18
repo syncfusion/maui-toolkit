@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class=" Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart.PolarDataLabel"
+             xmlns:local="clr-namespace: Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:PolarChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+
+        <chart:SfPolarChart x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill" GridLineType="Polygon">
+
+            <chart:SfPolarChart.BindingContext>
+                <local:ViewModel x:Name="viewModel"/>
+            </chart:SfPolarChart.BindingContext>
+
+            <chart:SfPolarChart.Resources>
+                <ResourceDictionary>
+                    <local:IconColorConverter x:Key="iconColorConverter"/>
+
+                    <DataTemplate x:Key="legendTemplate">
+                        <StackLayout Orientation="Horizontal" Margin="5">
+                            <Ellipse WidthRequest="13.5" HeightRequest="13.5" Stroke="{AppThemeBinding Default={StaticResource series6Light}, Dark={StaticResource series6Dark}}" StrokeThickness="1.5"
+                                Fill="{Binding Item, Converter={StaticResource iconColorConverter}}"/>
+                            <Label FontSize="13" Text="{Binding Item.Label}" VerticalOptions="Center" Margin="3,0,0,0" HorizontalOptions="Center" />
+                        </StackLayout>
+                    </DataTemplate>
+                </ResourceDictionary>
+            </chart:SfPolarChart.Resources>
+
+            <chart:SfPolarChart.Title>
+                <Label Text="Health Analysis" HorizontalTextAlignment="Center" LineBreakMode="WordWrap"
+                 FontSize="18"/>
+            </chart:SfPolarChart.Title>
+
+            <chart:SfPolarChart.Legend>
+                <chart:ChartLegend ItemTemplate="{StaticResource legendTemplate}"/>
+            </chart:SfPolarChart.Legend>
+
+            <chart:SfPolarChart.PrimaryAxis>
+                <chart:CategoryAxis>
+                    <chart:CategoryAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle FontSize="{OnPlatform Android=9, iOS=9, Default=12}"/>
+                    </chart:CategoryAxis.LabelStyle>
+                </chart:CategoryAxis>
+            </chart:SfPolarChart.PrimaryAxis>
+
+            <chart:SfPolarChart.SecondaryAxis>
+                <chart:NumericalAxis Minimum="20" Interval="20" Maximum="100" EdgeLabelsDrawingMode="Center" MinorTicksPerInterval="2">
+                    <chart:NumericalAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="0'%" FontSize="{OnPlatform Android=9, iOS=9, Default=12}"/>
+                    </chart:NumericalAxis.LabelStyle>
+
+                    <chart:NumericalAxis.MinorTickStyle>
+                        <chart:ChartAxisTickStyle    StrokeWidth="0"   />
+                    </chart:NumericalAxis.MinorTickStyle>
+                </chart:NumericalAxis>
+            </chart:SfPolarChart.SecondaryAxis>
+
+            <chart:PolarAreaSeries ItemsSource="{Binding HealthData}" XBindingPath="Category" YBindingPath="Value1"
+                   Fill="{AppThemeBinding Default={StaticResource series7Light}, Dark={StaticResource series7Dark}}"
+                   Stroke="{AppThemeBinding Default={StaticResource series6Light}, Dark={StaticResource series6Dark}}" StrokeWidth="2" EnableAnimation="True" Label="Optimum Health">
+            </chart:PolarAreaSeries>
+
+            <local:PolarSeriesExt ItemsSource="{Binding HealthData}" XBindingPath="Category" YBindingPath="Value2" 
+                Fill="{AppThemeBinding Default={StaticResource series6Light}, Dark={StaticResource series6Dark}}" ShowDataLabels="True" EnableAnimation="True" Label="Actual Health">
+                <chart:PolarAreaSeries.DataLabelSettings>
+                    <chart:PolarDataLabelSettings UseSeriesPalette="False">
+                        <chart:PolarDataLabelSettings.LabelStyle>
+                            <chart:ChartDataLabelStyle Background="{AppThemeBinding Default={StaticResource ContentBackground}}" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"
+                                                  FontSize="{OnPlatform Android=9, iOS=9, Default=12}"
+                                                  Margin="{OnPlatform Android='7,6,7,6', iOS='7,6,7,6', Default='7,6,7,6'}" Stroke="{AppThemeBinding Default={StaticResource series6Light}, Dark={StaticResource series6Dark}}" StrokeWidth="2" CornerRadius="15"/>
+                        </chart:PolarDataLabelSettings.LabelStyle>
+                    </chart:PolarDataLabelSettings>
+                </chart:PolarAreaSeries.DataLabelSettings>
+            </local:PolarSeriesExt>
+
+        </chart:SfPolarChart>
+    </localCore:SampleView.Content>
+
+</localCore:SampleView>

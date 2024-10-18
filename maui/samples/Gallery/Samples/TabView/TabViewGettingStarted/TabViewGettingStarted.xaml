@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.TabView.SfTabView.TabViewGettingStarted"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.TabView.SfTabView"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+    <localCore:SampleView.Content>
+        <Grid>
+            <!-- Define Styles and Resources -->
+            <Grid.Resources>
+                <Style TargetType="tabView:SfTabItem">
+                    <Setter Property="VisualStateManager.VisualStateGroups">
+                        <VisualStateGroupList>
+                            <VisualStateGroup>
+                                <VisualState x:Name="Normal" >
+                                    <VisualState.Setters>
+                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                                        <Setter Property="FontFamily" Value="Roboto-Regular" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                                <VisualState x:Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+                                        <Setter Property="FontFamily" Value="Roboto-Medium" />
+                                    </VisualState.Setters>
+                                </VisualState>
+                            </VisualStateGroup>
+                        </VisualStateGroupList>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+
+            <!-- Border and TabView -->
+            <Border StrokeThickness="1" WidthRequest="{OnPlatform WinUI=450, MacCatalyst=450}" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" HorizontalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10">
+                    </RoundRectangle>
+                </Border.StrokeShape>
+            <tabView:SfTabView x:Name="tabView" 
+                               TabBarHeight="75"
+                               TabWidthMode="Default"
+                               EnableSwiping="True"
+                               TabBarPlacement="Bottom"                                                       
+                               IndicatorPlacement="Top"
+                               TabBarBackground="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}"
+                               SelectionChanged="tabView_SelectionChanged">
+                <tabView:SfTabView.Items>
+
+                     <!-- Favorites Tab -->
+                    <tabView:SfTabItem Header="Favorites" ImagePosition="Top" >
+                        <tabView:SfTabItem.ImageSource>
+                            <FontImageSource x:Name="FavoritesIcon"
+                                Glyph="&#xe760;"
+                                Color="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+                                FontFamily="MauiSampleFontIcon"/>
+                        </tabView:SfTabItem.ImageSource>
+                        <tabView:SfTabItem.Content>
+                                <ScrollView VerticalScrollBarVisibility="Never">
+                                    <FlexLayout Wrap="Wrap" Padding="0" AlignItems="Start" AlignContent="Start"  BindableLayout.ItemsSource="{Binding TabModelSource}" >
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Frame HasShadow="False" WidthRequest="{OnPlatform WinUI=110,MacCatalyst=110}" HeightRequest="{OnPlatform WinUI=120,MacCatalyst=120}" Margin="10" Padding="0" CornerRadius="10" BackgroundColor="Transparent">
+                                                    <VerticalStackLayout Padding="10" VerticalOptions="Center" Spacing="10">
+                                                        <Frame HasShadow="False" 
+                                                       BorderColor="#E5E5E5"
+                                                       CornerRadius="35"
+                                                       HeightRequest="70"
+                                                       WidthRequest="70"
+                                                       VerticalOptions="Center" 
+                                                       HorizontalOptions="Center"
+                                                       IsClippedToBounds="True"
+                                                       BackgroundColor="{Binding ImageBackground}" 
+                                                       Padding="0" >
+                                                            <Image Source="{Binding ImageSource}" WidthRequest="70" HeightRequest="70"/>
+                                                        </Frame>
+                                                        <Label FontSize="Medium" 
+                                                       FontFamily="Roboto-Regular" 
+                                                       Text="{Binding Name}"                                                     
+                                                       VerticalOptions="End" 
+                                                       HorizontalOptions="Center" />
+                                                    </VerticalStackLayout>
+                                                </Frame>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </FlexLayout>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                    </tabView:SfTabItem >
+
+                     <!-- Recents Tab -->
+                    <tabView:SfTabItem Header="Recents" ImagePosition="Top">
+                        <tabView:SfTabItem.ImageSource>
+                                <FontImageSource x:Name="RecentsIcon"
+                                   Glyph="&#xe758;"
+                                   Color="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                                   FontFamily="MauiSampleFontIcon"/>
+                        </tabView:SfTabItem.ImageSource>
+                        <tabView:SfTabItem.Content>
+                            <Grid>
+                                <Grid Grid.Row="1" VerticalOptions="End"  HeightRequest="20">
+                                </Grid>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <VerticalStackLayout>
+                                        <BindableLayout.ItemsSource>
+                                            <x:Array Type="{x:Type x:String}">
+                                                <x:String>James</x:String>
+                                                <x:String>Richard</x:String>
+                                                <x:String>Michael</x:String>
+                                                <x:String>Alex</x:String>
+                                                <x:String>Clara</x:String>
+                                                <x:String>Steve</x:String>
+                                                <x:String>James</x:String>
+                                                <x:String>Alex</x:String>
+                                                <x:String>James</x:String>
+                                                <x:String>James</x:String>
+                                                <x:String>Richard</x:String>
+                                                <x:String>Michael</x:String>
+                                                <x:String>Alex</x:String>
+                                                <x:String>Clara</x:String>
+                                                <x:String>Steve</x:String>
+                                                <x:String>James</x:String>
+                                                <x:String>Alex</x:String>
+                                                <x:String>James</x:String>
+                                            </x:Array>
+                                        </BindableLayout.ItemsSource>
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid ColumnDefinitions="48,*,48" Margin="10,5">
+                                                    <Label Grid.Column="0" 
+                                                          FontSize="22"
+                                                           VerticalOptions="Center" 
+                                                           HorizontalOptions="Center" 
+                                                           Text="&#xe763;"
+                                                           FontFamily="MauiSampleFontIcon"/>
+                                                    <Label Grid.Column="1" 
+                                                           VerticalOptions="Center" 
+                                                           HorizontalOptions="Start"                                                       
+                                                           FontSize="16" 
+                                                           Text="{Binding}"/>
+                                                    <Label Grid.Column="2" 
+                                                           FontSize="22"
+                                                           VerticalOptions="Center" 
+                                                           HorizontalOptions="Center" 
+                                                           Text="&#xe759;"
+                                                           FontFamily="MauiSampleFontIcon"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </VerticalStackLayout>
+                                </ScrollView>
+                            </Grid>
+                        </tabView:SfTabItem.Content>
+                    </tabView:SfTabItem>
+
+                    <!-- Contacts Tab -->
+                    <tabView:SfTabItem Header="Contacts" ImagePosition="Top">
+                        <tabView:SfTabItem.ImageSource>
+                                <FontImageSource x:Name="ContactsIcon"
+                                  Glyph="&#xe761;"
+                                  Color="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                                  FontFamily="MauiSampleFontIcon"/>
+                        </tabView:SfTabItem.ImageSource>
+                        <tabView:SfTabItem.Content>
+                            <Grid>
+                                <Grid Grid.Row="1" VerticalOptions="End"  HeightRequest="20">
+                                </Grid>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <VerticalStackLayout>
+                                        <BindableLayout.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                          <x:String>Alex</x:String>
+                          <x:String>Alexander</x:String>
+                          <x:String>Clara</x:String>
+                          <x:String>David</x:String>
+                          <x:String>Gabriella</x:String>
+                          <x:String>Jackson</x:String>
+                          <x:String>James</x:String>
+                          <x:String>John</x:String>
+                          <x:String>Liam</x:String>
+                          <x:String>Lita</x:String>
+                          <x:String>Michael</x:String>
+                          <x:String>Nora</x:String>
+                          <x:String>Richard</x:String>
+                          <x:String>Sebastian</x:String>
+                          <x:String>Smith</x:String>
+                          <x:String>Stephen</x:String>
+                          <x:String>Steve</x:String>
+                          <x:String>Tye</x:String>
+                          <x:String>Washington</x:String>
+                        </x:Array>
+                                    </BindableLayout.ItemsSource>
+                                        <BindableLayout.ItemTemplate>
+                                        <DataTemplate>
+                                                <Grid ColumnDefinitions="48,*,48,48" Margin="10,5">
+                                                    <Image Grid.Column="0" 
+                                                           WidthRequest="35" 
+                                                           HeightRequest="35"
+                                                           VerticalOptions="Center" 
+                                                           HorizontalOptions="Center" 
+                                                           Aspect="AspectFit"
+                                                           Source="{imageExtension:ImageResource contact_image.png}"/>
+                                                    <Label Grid.Column="1" 
+                                                           VerticalOptions="Center" 
+                                                           HorizontalOptions="Start" 
+                                                           Margin="5,0"                                                       
+                                                           FontSize="16" 
+                                                           Text="{Binding}"/>
+                                                    <Label Grid.Column="2" 
+                                                             FontSize="22"
+                                                             VerticalOptions="Center" 
+                                                             HorizontalOptions="Center" 
+                                                             Text="&#xe75c;"
+                                                             FontFamily="MauiSampleFontIcon"/>
+                                                    <Label Grid.Column="3" 
+                                                             FontSize="22"
+                                                             VerticalOptions="Center" 
+                                                             HorizontalOptions="Center" 
+                                                             Text="&#xe763;"
+                                                             FontFamily="MauiSampleFontIcon"/>
+                                                </Grid>
+                                        </DataTemplate>
+                                    </BindableLayout.ItemTemplate>
+                                    </VerticalStackLayout>
+                                </ScrollView>
+                            </Grid>
+                        </tabView:SfTabItem.Content>
+                    </tabView:SfTabItem>
+                </tabView:SfTabView.Items>
+            </tabView:SfTabView>
+            </Border>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

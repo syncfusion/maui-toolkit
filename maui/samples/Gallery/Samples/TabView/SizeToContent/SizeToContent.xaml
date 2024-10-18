@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.TabView.SfTabView.SizeToContent"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.TabView.SfTabView"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+    <localCore:SampleView.Content>
+        <Grid Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="{OnPlatform Android='0,-8,0,0'}" Padding="{OnPlatform WinUI='100,80,100,0', MacCatalyst='100,80,100,0'}">
+            <Border StrokeThickness="1" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" VerticalOptions="Start" HeightRequest="{OnPlatform WinUI=415, MacCatalyst=415}" >
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="{OnPlatform WinUI='0,0,16,16', MacCatalyst='0,0,16,16'}"/>
+                </Border.StrokeShape>
+                <tabView:SfTabView TabWidthMode="SizeToContent" 
+			                   IndicatorPlacement="Fill"
+                               x:Name="tab"
+                               IsScrollButtonEnabled="True"
+                               EnableSwiping="True"
+                               TabHeaderPadding="0"
+                               HorizontalOptions="Center">
+                    <tabView:SfTabView.Items>
+
+                        <!-- Alexandar Tab -->
+                        <tabView:SfTabItem Header="Alexandar" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" BackgroundColor="#F0F361" HasShadow="False" Padding="0" Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource alexandar.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                                                <Label LineBreakMode="WordWrap" VerticalOptions="Center" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2"
+                                                   TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Alexandar is a creative fiction writer with a knack for weaving intricate plots and complex characters. His works span a variety of genres, but he excels in contemporary fiction. With a passion for exploring human emotions, Alexandar’s stories are known for their depth and ability to resonate with readers on a personal level."/>
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Gabriella Tab -->
+                        <tabView:SfTabItem Header="Gabriella" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#7FE8EE" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource gabriella.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+
+                                                <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2"
+                                                   TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Gabriella is a seasoned journalist with over 20 years of experience covering global events and political affairs. Her insightful analysis and balanced reporting have earned her a respected place in the media industry. Gabriella’s work aims to inform and engage readers, offering a clear perspective on some of the world’s most pressing issues." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Clara Tab -->
+                        <tabView:SfTabItem Header="Clara" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#FFC252" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource clara.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                                                <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2"
+                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Tech enthusiast Clara writes about the ever-evolving world of artificial intelligence, robotics, and digital innovations. With a background in computer science, Clara’s blog and articles break down complex tech trends for a wide audience. Her passion lies in exploring how emerging technologies are shaping the future and impacting everyday life." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Tye Tab -->
+                        <tabView:SfTabItem Header="Tye" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#FFB381" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource tye.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                        <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Tye is a dedicated historical non-fiction author who brings forgotten stories to life through meticulous research and engaging prose. With a deep interest in the lesser-known aspects of history, Tye’s books provide fresh perspectives on significant events and figures, allowing readers to gain a richer understanding of the past." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Nora Tab -->
+                        <tabView:SfTabItem Header="Nora" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#7A7A7A" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource nora.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                        <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Nora writes enchanting children’s books filled with wonder and imagination. Her stories, often centered around adventurous young characters, are designed to spark creativity in kids and teach important life lessons. Nora’s vibrant storytelling style makes her a favorite among young readers and parents alike, creating memorable experiences with every book." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Sebastian Tab -->
+                        <tabView:SfTabItem Header="Sebastian" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#A1B2FF" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource sebastian.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                        <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Sebastian is an avid traveler and author who shares his global adventures through vivid travel writing. From the remote corners of the earth to bustling urban landscapes, Sebastian’s articles and books capture the essence of each destination. His goal is to inspire others to explore the world and embrace different cultures." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Lita Tab -->
+                        <tabView:SfTabItem Header="Lita" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#FFF27C" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource lita.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                        <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Lita is a wellness expert and author with a focus on mindfulness, meditation, and holistic living. Through her books and online courses, Lita guides her audience toward healthier lifestyles, promoting mental well-being alongside physical health. She is committed to helping people find balance and inner peace in today’s fast-paced world." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Jackson Tab -->
+                        <tabView:SfTabItem Header="Jackson" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#7FE8EE" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource jackson.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                        <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Jackson is a science fiction writer known for his futuristic tales that explore humanity’s relationship with technology. His novels delve into the ethical implications of artificial intelligence and space exploration, while also tackling timeless human emotions. Jackson’s writing captivates readers with its imaginative scope and thought-provoking themes." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Liam Tab -->
+                        <tabView:SfTabItem Header="Liam" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#EB70FF" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource liam.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                        <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Liam is a romance novelist whose heartwarming love stories are set against picturesque backdrops. Whether it’s a cozy small town or an exotic destination, his novels always feature deeply emotional connections between characters. Liam’s readers are drawn to the hopeful, uplifting nature of his stories, which celebrate the power of love." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+
+                        <!-- Washington Tab -->
+                        <tabView:SfTabItem Header="Washington" FontSize="16" FontFamily="Roboto-Regular">
+                            <tabView:SfTabItem.Content>
+                                <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
+                                    <Grid Padding="10" >
+                                        <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
+                                            <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
+                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#FFF27C" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
+                                                    <Image Source="{imageExtension:ImageResource washington.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Frame>
+                                                <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
+                                            </Grid>
+                                            <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
+                        <Label LineBreakMode="WordWrap" FontFamily="Roboto-Regular" FontSize="14" LineHeight="2" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Text="Washington is an award-winning poet whose work explores the beauty of nature and the complexity of human relationships. His poetry captures fleeting moments of joy and sorrow with elegance, using language to evoke deep emotions. Washington’s collections are celebrated for their lyrical quality and their ability to resonate on a universal level." />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Grid>
+                                </ScrollView>
+                            </tabView:SfTabItem.Content>
+                        </tabView:SfTabItem>
+                    </tabView:SfTabView.Items>
+                </tabView:SfTabView>
+            </Border>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

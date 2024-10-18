@@ -1,0 +1,52 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.FastLineChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    <localCore:SampleView.Content>
+        <chart:SfCartesianChart x:Name="fastLineChart" HorizontalOptions="Fill" PaletteBrushes="{Binding PaletteBrushes}"
+                                                VerticalOptions="Fill">
+            <chart:SfCartesianChart.BindingContext>
+                <local:FastLineSeriesViewModel/>
+            </chart:SfCartesianChart.BindingContext>
+            <chart:SfCartesianChart.Title>
+                <Label Text="Loaded 100K Points" Margin="0,0,0,5" 
+                                       HorizontalOptions="Fill" HorizontalTextAlignment="Center" 
+                                       VerticalOptions="Center" FontSize="16"/>
+            </chart:SfCartesianChart.Title>
+            <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeAxis ShowMinorGridLines="False"
+                                                    ShowMajorGridLines="False" 
+                                                    IntervalType="Years"
+                                                    Interval="15">
+                    <chart:DateTimeAxis.Title>
+                        <chart:ChartAxisTitle Text="X-Axis"/>
+                    </chart:DateTimeAxis.Title>
+                    <chart:DateTimeAxis.LabelStyle>
+                        <chart:ChartAxisLabelStyle LabelFormat="yyyy"/>
+                    </chart:DateTimeAxis.LabelStyle>
+                </chart:DateTimeAxis>
+            </chart:SfCartesianChart.XAxes>
+
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis>
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text="Y-Axis"/>
+                    </chart:NumericalAxis.Title>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+
+            <chart:SfCartesianChart.ZoomPanBehavior>
+                <chart:ChartZoomPanBehavior EnablePinchZooming="True" EnableDoubleTap="True" 
+                                                            EnablePanning="True"/>
+            </chart:SfCartesianChart.ZoomPanBehavior>
+
+            <chart:SfCartesianChart.Series>
+                <chart:FastLineSeries ItemsSource="{Binding Data}"
+                                                      EnableAntiAliasing="True"
+                                                      XBindingPath="Date" YBindingPath="Value"/>
+            </chart:SfCartesianChart.Series>
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

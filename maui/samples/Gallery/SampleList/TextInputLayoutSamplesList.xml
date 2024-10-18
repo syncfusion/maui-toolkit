@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Layouts">
+		<Control Title="Text Input Layout" ControlName="SfTextInputLayout" Description="Enhancing input with floating labels, icons, and assistive labels." Image="textinputlayout.png">
+			<Sample Title="Getting Started" SampleName="SignUpPage" SearchTags="textinputlayout, floating label, material, password, floating text field, sign up page"/>
+			<Sample Title="Payment" SampleName="PaymentPage" SearchTags="textinputlayout, floating label, material, password, floating text field, payment page"/>
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>

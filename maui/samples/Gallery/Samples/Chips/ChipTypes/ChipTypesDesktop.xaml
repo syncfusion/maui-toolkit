@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Chips.SfChip.ChipTypesDesktop"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Chips"
+             xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Chips;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+    <localCore:SampleView.BindingContext>
+        <local:ChipViewModel />
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <Thickness Left="10" Right="0" Top="25" Bottom="0" x:Key="LabelMargin"/>
+            <Thickness Left="5" Right="0" Top="10" Bottom="0" x:Key="ChipMargin"/>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <Grid ColumnDefinitions="auto" WidthRequest="500"  HorizontalOptions="Center">
+   
+           
+                <ScrollView VerticalScrollBarVisibility="Never" >
+                    <StackLayout WidthRequest="474" Padding="0,20,0,20" Spacing="3">
+                        <Label FontFamily="Roboto-Medium"
+                               Margin="{StaticResource LabelMargin}" 
+                               Text="Choose your electronics item (Choice chips)"/>
+                        <ScrollView Margin="{StaticResource ChipMargin}">
+                            <core:SfChipGroup ChipPadding="2,0,0,0" 
+                                              SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+                                              ItemsSource="{Binding ChoiceItems}" 
+                                              ChipType="Choice">
+                            </core:SfChipGroup>
+                        </ScrollView>
+                        <Label FontFamily="Roboto-Medium"
+                               Margin="{StaticResource LabelMargin}" 
+                               Text="Enter Your Brand (Input Chips)"/>
+                            <core:SfChipGroup VerticalOptions="Center"
+                                              x:Name="inputChipGroup"
+                                              ItemsSource="{Binding InputItems,Mode=TwoWay}" 
+                                              ChipType="Input"
+                                              Margin="4,0,25,0"
+                                              ChipPadding="2,8,0,0">
+                                <core:SfChipGroup.InputView>
+
+                                    <Entry VerticalOptions="Center" 
+                                           FontSize="15" 
+										   FontFamily="Roboto-Regular"
+                                           TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"
+                                           BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"
+                                           Placeholder="{Binding PlaceHolderText,Mode=TwoWay}"
+                                           WidthRequest="140" 
+                                           Text="{Binding InputText}">
+                                        <Entry.Margin>
+                                            <OnPlatform x:TypeArguments="Thickness">
+                                                <On Platform="WinUI" Value="2,5.5,0,0"/>
+                                                <On Platform="MacCatalyst" Value="2,8,0,0"/>
+                                            </OnPlatform>
+                                        </Entry.Margin>
+                                        <Entry.HeightRequest>
+                                            <OnPlatform x:TypeArguments="x:Double">
+                                                <On Platform="MacCatalyst" Value="26"/>
+                                                <On Platform="WinUI" Value="32"/>
+                                            </OnPlatform>
+                                        </Entry.HeightRequest>
+                                        <Entry.Behaviors>
+                                            <local:EntryBehavior InputChipGroup="{x:Reference inputChipGroup}" />
+                                        </Entry.Behaviors>
+                                    </Entry>
+                                </core:SfChipGroup.InputView>
+                                <core:SfChipGroup.ChipLayout>
+                                    <FlexLayout HorizontalOptions="Start" 
+                                                VerticalOptions="Center" 
+                                                Direction="Row" 
+                                                Wrap="Wrap" 
+                                                JustifyContent="Start" 
+                                                AlignContent="Start" 
+                                                AlignItems="Start"/>
+                                </core:SfChipGroup.ChipLayout>
+                            </core:SfChipGroup>
+                        <Label FontFamily="Roboto-Medium" 
+                               Margin="{StaticResource LabelMargin}" 
+                               Text="Filter by Features  (Filter chips)"/>
+                        <ScrollView  Margin="{StaticResource ChipMargin}" Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <core:SfChipGroup ChipPadding="2,0,0,0"
+                                              ItemsSource="{Binding FilterItems,Mode=TwoWay}"
+                                              SelectedItem="{Binding SelectedFilterItems,Mode=TwoWay}"
+                                              ChipType="Filter">
+                            </core:SfChipGroup>
+                        </ScrollView>
+                        <Label FontFamily="Roboto-Medium"
+                               Margin="{StaticResource LabelMargin}"
+                               Text="Selected Result  (Action chips)"/>
+                        <ScrollView Margin="{StaticResource ChipMargin}">
+                            <core:SfChipGroup Command="{Binding ActionCommand}" 
+                                              ChipPadding="2,0,0,0" 
+                                              ItemsSource="{Binding ActionItems,Mode=TwoWay}" 
+                                              ChipType="Action">
+                            </core:SfChipGroup>
+                        </ScrollView>
+                        <ScrollView>
+                            <Frame BorderColor="LightGray" CornerRadius="12" BackgroundColor="Transparent" WidthRequest="474" HeightRequest="165" HasShadow="False" Padding="10"
+							   Margin="0,20,0,10" VerticalOptions="Start">
+                            <StackLayout WidthRequest="454" HeightRequest="142"> 
+                                           <CollectionView ItemsSource="{Binding Result}"
+                                            Margin="0,5,5,0">
+                                                <CollectionView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Label FontFamily="Roboto-Regular"
+                                                            Text="{Binding .}"
+                                                            FontSize="14"
+                                                            Margin="2"/>
+                                                    </DataTemplate>
+                                                </CollectionView.ItemTemplate>
+                                            </CollectionView>
+                                </StackLayout>
+                            </Frame>
+                        </ScrollView>
+                    </StackLayout>
+                </ScrollView>            
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

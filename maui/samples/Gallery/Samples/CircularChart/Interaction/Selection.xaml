@@ -1,0 +1,40 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.Selection"
+                 xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CircularChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+        <chart:SfCircularChart x:Name="chart1">
+            <chart:SfCircularChart.BindingContext>
+                <local:SelectionViewModel x:Name="viewModel"/>
+            </chart:SfCircularChart.BindingContext>
+            <chart:SfCircularChart.Title>
+                <Label Text="Age Distribution by Country" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+            </chart:SfCircularChart.Title>
+            <chart:SfCircularChart.Legend>
+                <chart:ChartLegend/>
+            </chart:SfCircularChart.Legend>
+            <chart:SfCircularChart.TooltipBehavior>
+                <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+            </chart:SfCircularChart.TooltipBehavior>
+            <chart:SfCircularChart.Series>
+                <chart:DoughnutSeries x:Name="series1" Radius="0.9" EnableTooltip="True" ItemsSource="{Binding CircularData}" EnableAnimation="{Binding EnableAnimation}" XBindingPath="Name" YBindingPath="Value"  PaletteBrushes="{Binding ThemePaletteBrushes}"
+                                      Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeWidth="2" LegendIcon="SeriesType">
+                    <chart:DoughnutSeries.SelectionBehavior>
+                        <chart:DataPointSelectionBehavior x:Name="dataPointSelection" Type="SingleDeselect"/>
+                    </chart:DoughnutSeries.SelectionBehavior>
+                </chart:DoughnutSeries>
+            </chart:SfCircularChart.Series>
+        </chart:SfCircularChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>
