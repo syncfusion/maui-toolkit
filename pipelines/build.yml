@@ -24,4 +24,4 @@ steps:
     PathtoPublish: 'D:\a\1\s\maui\tests\Syncfusion.Maui.Toolkit.UnitTest\TestResults'
     ArtifactName: 'UnitTestResults'
     publishLocation: 'Container'
-  displayName: 'Publish Test Results HTML'
+  displayName: 'Publish Test Results HTML' 
