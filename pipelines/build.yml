@@ -1,8 +1,5 @@
 trigger: none  # No automatic CI builds for regular branch pushes
-pr:
-  branches:
-    include:
-      - '*'  # Allow PR builds from any branch, including forks
+pr: none
  
 pool:
   vmImage: 'windows-2022'
