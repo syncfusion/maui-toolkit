@@ -126,6 +126,21 @@ The following XAML code demonstrates how to set up a basic `SfCartesianChart` us
         <chart:SfCartesianChart.YAxes>
             <chart:NumericalAxis/>
         </chart:SfCartesianChart.YAxes>
+        <chart:SfCartesianChart.Series>
+            <chart:SplineSeries Label="High"
+                                EnableTooltip="True"
+                                EnableAnimation="True"
+                                ItemsSource="{Binding Data}"
+                                XBindingPath="Name"
+                                YBindingPath="Height"
+                                StrokeWidth="1"
+                                ShowMarkers="True"
+                                LegendIcon="SeriesType" >
+                <chart:SplineSeries.MarkerSettings>
+                    <chart:ChartMarkerSettings Width="8" Height="8" StrokeWidth="1"/>
+                </chart:SplineSeries.MarkerSettings>
+            </chart:SplineSeries>
+        </chart:SfCartesianChart.Series>
     </chart:SfCartesianChart>
 </ContentPage>
 ```
