@@ -74,7 +74,7 @@ public static class MauiProgram
 		builder
 		.UseMauiApp<App>()
 		// Initialize the Syncfusion .NET MAUI Toolkit by adding the below line of code
-		.UseSyncfusionToolkit()
+		.ConfigureSyncfusionToolkit()
 		// After initializing the Syncfusion .NET MAUI Toolkit, optionally add additional fonts
 		.ConfigureFonts(fonts =>
 		{
