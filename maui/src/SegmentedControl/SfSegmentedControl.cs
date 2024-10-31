@@ -257,15 +257,15 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
             float left, right, top, bottom;
 
 #if ANDROID || IOS || MACCATALYST
-            left = (float)borderRect.Left + strokeRadius;
-            right = (float)borderRect.Width - strokeThickness;
+            left = borderRect.Left + strokeRadius;
+            right = borderRect.Width - strokeThickness;
 #else
-            left = (float)borderRect.Left;
-            right = (float)borderRect.Width;
+            left = borderRect.Left;
+            right = borderRect.Width;
 #endif
             // Calculate the coordinates for the draw rectangle with the stroke value.
-            top = (float)borderRect.Top + strokeThickness;
-            bottom = (float)borderRect.Height - (2 * strokeThickness);
+            top = borderRect.Top + strokeThickness;
+            bottom = borderRect.Height - (2 * strokeThickness);
 
             return new RectF(left, top, right, bottom);
         }

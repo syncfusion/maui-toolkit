@@ -632,7 +632,7 @@
                 if (_currentIndicatorWidth >= 0)
                 {
                     // Update the scroll view position based on the currently selected index
-                    UpdateScrollViewPosition((int)SelectedIndex);
+                    UpdateScrollViewPosition(SelectedIndex);
                 }
             }
         }
@@ -1235,7 +1235,7 @@
         void GetNextVisibleItem()
         {
             double index = SelectedIndex;
-            for (int i = (int)SelectedIndex + 1; i < Items.Count; i++)
+            for (int i = SelectedIndex + 1; i < Items.Count; i++)
             {
                 if (Items[i] != null && Items[i].IsVisible)
                 {
@@ -1246,7 +1246,7 @@
 
             if (index == SelectedIndex)
             {
-                for (int i = (int)SelectedIndex - 1; i >= 0; i--)
+                for (int i = SelectedIndex - 1; i >= 0; i--)
                 {
                     if (Items[i] != null && Items[i].IsVisible)
                     {
@@ -2050,12 +2050,12 @@
                 SelectedIndex >= 0 &&
                 _tabHeaderItemContent.Children.Count > SelectedIndex)
             {
-                _selectedTabX = _tabHeaderItemContent.Children[(int)SelectedIndex].Frame.X;
+                _selectedTabX = _tabHeaderItemContent.Children[SelectedIndex].Frame.X;
                 if (SelectedIndex >= 0)
                 {
                     _selectedTabX = CalculateTabXPosition();
                 }
-                _currentIndicatorWidth = _tabHeaderItemContent.Children[(int)SelectedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
+                _currentIndicatorWidth = _tabHeaderItemContent.Children[SelectedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
                 IndicatorAnimation();
                 _previousTabX = _selectedTabX;
                 _previewSelectedIndex = SelectedIndex;
@@ -2142,11 +2142,11 @@
             {
                 if (IndicatorPlacement == TabIndicatorPlacement.Fill)
                 {
-                    _selectedTabX = _tabHeaderItemContent.Children[(int)SelectedIndex].Frame.X;
-                    _currentIndicatorWidth = _tabHeaderItemContent.Children[(int)SelectedIndex].Width;
+                    _selectedTabX = _tabHeaderItemContent.Children[SelectedIndex].Frame.X;
+                    _currentIndicatorWidth = _tabHeaderItemContent.Children[SelectedIndex].Width;
                     if (double.IsNaN(_currentIndicatorWidth))
                     {
-                        _currentIndicatorWidth = _tabHeaderItemContent.Children[(int)this.SelectedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
+                        _currentIndicatorWidth = _tabHeaderItemContent.Children[this.SelectedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
                     }
                 }
                 else
@@ -2157,8 +2157,8 @@
                     }
                     else
                     {
-                        _selectedTabX = _tabHeaderItemContent.Children[(int)SelectedIndex].Frame.X;
-                        _currentIndicatorWidth = _tabHeaderItemContent.Children[(int)SelectedIndex].Width;
+                        _selectedTabX = _tabHeaderItemContent.Children[SelectedIndex].Frame.X;
+                        _currentIndicatorWidth = _tabHeaderItemContent.Children[SelectedIndex].Width;
                     }
                 }
 
@@ -2209,15 +2209,15 @@
             {
                 if (item.HeaderHorizontalTextAlignment == TextAlignment.Start)
                 {
-                    _selectedTabX = (_tabHeaderItemContent.Children[(int)SelectedIndex].Frame.Left);
+                    _selectedTabX = (_tabHeaderItemContent.Children[SelectedIndex].Frame.Left);
                 }
                 else if (item.HeaderHorizontalTextAlignment == TextAlignment.End)
                 {
-                    _selectedTabX = (_tabHeaderItemContent.Children[(int)SelectedIndex].Frame.Right) - _currentIndicatorWidth;
+                    _selectedTabX = (_tabHeaderItemContent.Children[SelectedIndex].Frame.Right) - _currentIndicatorWidth;
                 }
                 else
                 {
-                    _selectedTabX = (_tabHeaderItemContent.Children[(int)SelectedIndex].Frame.Center.X) - ((_currentIndicatorWidth / 2));
+                    _selectedTabX = (_tabHeaderItemContent.Children[SelectedIndex].Frame.Center.X) - ((_currentIndicatorWidth / 2));
                 }
 
                 if (_currentIndicatorWidth > _tabHeaderItemContent.Children[SelectedIndex].Width)

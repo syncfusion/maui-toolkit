@@ -45,9 +45,9 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
             {
                 var top = yAxis.ValueToPoint(Convert.ToDouble(yAxis.Maximum ?? double.NaN));
 
-                var trackRect = new RectF() { Left = Left, Top = (float)top, Right = Right, Bottom = Bottom };
-                curveHeight = (float)trackRect.Height / curveYGape;
-                var width = (float)trackRect.Width + (float)Math.Sqrt((trackRect.Width * trackRect.Width) + (trackRect.Height * trackRect.Height));
+                var trackRect = new RectF() { Left = Left, Top = top, Right = Right, Bottom = Bottom };
+                curveHeight = trackRect.Height / curveYGape;
+                var width = trackRect.Width + (float)Math.Sqrt((trackRect.Width * trackRect.Width) + (trackRect.Height * trackRect.Height));
                 var waveLeft = trackRect.Left;
                 var waveRight = waveLeft + width;
                 var waveTop = trackRect.Bottom;

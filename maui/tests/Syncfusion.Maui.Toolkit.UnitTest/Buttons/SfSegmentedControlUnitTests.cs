@@ -1484,7 +1484,7 @@
             var result = this.InvokePrivateMethod(selection, "GetTopBorderPosition", dirtyRect, strokeThickness);
             Assert.NotNull(result);
             var topBorderPosition = (float)result;
-            var expectedPosition = (float)(dirtyRect.Top + strokeThickness / 2);
+            var expectedPosition = dirtyRect.Top + strokeThickness / 2;
             Assert.Equal(expectedPosition, topBorderPosition);
         }
 
@@ -1500,7 +1500,7 @@
             var result = this.InvokePrivateMethod(selection, "GetBottomBorderPosition", dirtyRect, strokeThickness);
             Assert.NotNull(result);
             var bottomBorderPosition = (float)result;
-            var expectedPosition = (float)(dirtyRect.Height - strokeThickness);
+            var expectedPosition = dirtyRect.Height - strokeThickness;
             Assert.Equal(expectedPosition, bottomBorderPosition);
         }
 
@@ -1545,7 +1545,7 @@
             var result = this.InvokePrivateMethod(selection, "GetLeftBorderPosition", dirtyRect, strokeThickness);
             Assert.NotNull(result);
             var leftBorderPosition = (float)result;
-            var expectedPosition = (float)(dirtyRect.Left + strokeThickness / 2);
+            var expectedPosition = dirtyRect.Left + strokeThickness / 2;
             Assert.Equal(expectedPosition, leftBorderPosition);
         }
 

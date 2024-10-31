@@ -162,7 +162,7 @@ namespace Syncfusion.Maui.Toolkit.Themes
 
             if (element != null && style != null && !ApplyStyle(element, style))
             {
-                foreach (Setter setter in (IEnumerable<Setter>)style.Setters)
+                foreach (Setter setter in style.Setters)
                 {
                     DynamicResource? dynamicResource = setter.Value as DynamicResource;
                     if (dynamicResource != null)

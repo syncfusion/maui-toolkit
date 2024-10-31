@@ -1278,7 +1278,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             if (!string.IsNullOrEmpty(Hint) && EnableFloating)
             {
                 if (BaseLineMaxHeight <= 2)
-                    _clipRect.X = (float)(_outlineRectF.X + StartX);
+                    _clipRect.X = _outlineRectF.X + StartX;
                 else
                     _clipRect.X = (float)(_outlineRectF.X + StartX + (BaseLineMaxHeight / 2));
                 _clipRect.Y = 0;
@@ -1322,7 +1322,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             }
             else if (IsOutlined)
             {
-                _passwordToggleIconRectF.Y = (float)((_outlineRectF.Center.Y) - (UpDownButtonSize / 2));
+                _passwordToggleIconRectF.Y = ((_outlineRectF.Center.Y) - (UpDownButtonSize / 2));
             }
             else
             {
@@ -1761,7 +1761,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         {
             _isAnimating = true;
             _hintRect.Y = (float)value;
-            _animatingFontSize = (float)_fontsize;
+            _animatingFontSize = _fontsize;
             InvalidateDrawable();
         }
 

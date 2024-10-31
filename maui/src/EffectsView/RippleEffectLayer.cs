@@ -298,7 +298,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
             }
             else if (GetParent() is View parent && parent.Width > 0 && parent.Height > 0)
             {
-                return (float)(Math.Min((float)parent.Width, (float)parent.Height) / 2 * initialRippleFactor);
+                return Math.Min((float)parent.Width, (float)parent.Height) / 2 * initialRippleFactor;
             }
 
             return 0;

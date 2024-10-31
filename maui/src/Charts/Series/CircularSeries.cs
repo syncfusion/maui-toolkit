@@ -1330,14 +1330,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (currentPoint.DataLabelRenderingPosition == Position.Right)
             {
-                currentPoint.XPoints[2] = (float)endPoint.X + currentPoint.connectorBendLineLength;
-                currentPoint.YPoints[2] = (float)endPoint.Y;
+                currentPoint.XPoints[2] = endPoint.X + currentPoint.connectorBendLineLength;
+                currentPoint.YPoints[2] = endPoint.Y;
                 rect = new Rect(currentPoint.XPoints[2] + _labelGap + currentPoint.LabelRect.Width / 2, currentPoint.YPoints[2], currentPoint.LabelRect.Width, currentPoint.LabelRect.Height);
             }
             else
             {
                 currentPoint.XPoints[2] = endPoint.X - currentPoint.connectorBendLineLength;
-                currentPoint.YPoints[2] = (float)endPoint.Y;
+                currentPoint.YPoints[2] = endPoint.Y;
                 rect = new Rect(currentPoint.XPoints[2] - currentPoint.LabelRect.Width / 2 - _labelGap, currentPoint.YPoints[2], currentPoint.LabelRect.Width, currentPoint.LabelRect.Height);
             }
 
@@ -1396,7 +1396,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 var labelRect = new Rect(x - labelWidth / 2, point.Y - pieSegment.LabelRect.Height / 2, labelWidth, pieSegment.LabelRect.Height);
                 
                 if (pieSegment.XPoints.Count > 2)
-                pieSegment.XPoints[2] = (float)labelRect.Right + (float)_labelGap;
+                pieSegment.XPoints[2] = (float)labelRect.Right + _labelGap;
             }
 
             if (right > clipRect.Right)
@@ -1405,7 +1405,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 var labelRect = new Rect(x - labelWidth / 2, point.Y - pieSegment.LabelRect.Height / 2, labelWidth, pieSegment.LabelRect.Height);
                 
                 if (pieSegment.XPoints.Count > 2)
-                    pieSegment.XPoints[2] = (float)labelRect.Left - (float)_labelGap;
+                    pieSegment.XPoints[2] = (float)labelRect.Left - _labelGap;
             }
 
             point.X = x;

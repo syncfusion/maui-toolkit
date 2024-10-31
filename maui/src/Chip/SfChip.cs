@@ -873,14 +873,14 @@ namespace Syncfusion.Maui.Toolkit.Chips
 
                 if (ShowIcon)
                 {
-                    xOffset = isRTL ? (float)(leftIconPadding + (float)(_linePadding / 0.95)) : (float)(Width - _defaultCloseButtonWidth - rightIconPadding + (float)(_linePadding * 1.75));
+                    xOffset = isRTL ? leftIconPadding + (float)(_linePadding / 0.95) : (float)(Width - _defaultCloseButtonWidth - rightIconPadding + (float)(_linePadding * 1.75));
                 }
                 else
                 {
                     if (DeviceInfo.Platform == DevicePlatform.WinUI)
-                        xOffset = isRTL ? (float)(leftIconPadding + (float)(_linePadding / 0.95)) : (float)(Width - _defaultCloseButtonWidth - rightIconPadding + (float)(_linePadding * 1.75));
+                        xOffset = isRTL ? leftIconPadding + (float)(_linePadding / 0.95) : (float)(Width - _defaultCloseButtonWidth - rightIconPadding + (float)(_linePadding * 1.75));
                     else
-                        xOffset = isRTL ? (float)(leftIconPadding + (float)(_linePadding / 0.95)) : dirtyRect.Width - _defaultCloseButtonWidth / 2 - rightIconPadding;
+                        xOffset = isRTL ? leftIconPadding + (float)(_linePadding / 0.95) : dirtyRect.Width - _defaultCloseButtonWidth / 2 - rightIconPadding;
                 }
 
                 _closeButtonRectF.X = xOffset;
@@ -900,7 +900,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
                 return;
 
             canvas.StrokeColor = SelectionIndicatorColorValue;
-            dirtyRect.X = isRTL ? (float)(Width - _defaultSelectionIndicatorWidth - rightIconPadding + (float)(_linePadding / 0.95f)) : leftIconPadding;
+            dirtyRect.X = isRTL ? (float)(Width - _defaultSelectionIndicatorWidth - rightIconPadding + _linePadding / 0.95f) : leftIconPadding;
             dirtyRect.Y = (float)Height / 2 - _selectionIndicatorPadding;
             dirtyRect.Width = _defaultSelectionIndicatorWidth;
             dirtyRect.Height = _selectionIndicatorHeight;
@@ -1047,7 +1047,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
         void SetTextBoundsForCloseButton(RectF dirtyRect)
         {
             textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + _defaultCloseButtonWidth + leftIconPadding + rightIconPadding : (float)Padding.Left - (float)Padding.Right + leftPadding;
-            textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)StrokeThickness / 2;
+            textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)StrokeThickness / 2;
             textRectF.Width = (float)Width - _defaultCloseButtonWidth - leftIconPadding - rightIconPadding - leftPadding;
             textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
         }
@@ -1057,14 +1057,14 @@ namespace Syncfusion.Maui.Toolkit.Chips
             if (ImageAlignment == Alignment.Default || ImageAlignment == Alignment.Start || ImageAlignment == Alignment.Left || ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom)
             {
                 textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + leftIconPadding + rightIconPadding + _defaultCloseButtonWidth : (float)Padding.Left - (float)Padding.Right + (float)ImageSize + leftIconPadding + rightIconPadding;
-                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)StrokeThickness / 2;
+                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)StrokeThickness / 2;
                 textRectF.Width = Math.Abs((float)Width - (float)ImageSize - 2 * leftIconPadding - 2 * rightIconPadding - _defaultCloseButtonWidth);
                 textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
             }
             else if (ImageAlignment == Alignment.End || ImageAlignment == Alignment.Right)
             {
                 textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + 2 * rightIconPadding + leftIconPadding + (float)ImageSize + _defaultCloseButtonWidth : (float)Padding.Left - (float)Padding.Right + leftIconPadding;
-                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)StrokeThickness / 2;
+                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)StrokeThickness / 2;
                 textRectF.Width = Math.Abs((float)Width - 2 * rightIconPadding - (float)ImageSize - 2 * leftIconPadding - _defaultCloseButtonWidth);
                 textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
             }
@@ -1073,7 +1073,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
         void SetTextBoundsForSelectionIndicator(RectF dirtyRect)
         {
             textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + rightPadding : (float)Padding.Left - (float)Padding.Right + _defaultSelectionIndicatorWidth + leftIconPadding + rightIconPadding / (float)1.75;
-            textRectF.Y = IsSelected ? (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textSelectionPadding : (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textSelectionPadding + (float)StrokeThickness / 2;
+            textRectF.Y = IsSelected ? (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textSelectionPadding : (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textSelectionPadding + (float)StrokeThickness / 2;
             textRectF.Width = (float)Width - _defaultSelectionIndicatorWidth - leftIconPadding - rightIconPadding - rightPadding;
             textRectF.Height = IsSelected ? Math.Abs((float)Height) : Math.Abs((float)Height - (float)StrokeThickness);
         }
@@ -1081,7 +1081,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
         void SetTextBoundsForCloseButtonAndSelectionIndicator(RectF dirtyRect)
         {
             textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + _defaultCloseButtonWidth + leftIconPadding + rightIconPadding : (float)Padding.Left - (float)Padding.Right + _defaultSelectionIndicatorWidth + leftIconPadding + rightIconPadding;
-            textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)StrokeThickness / 2;
+            textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)StrokeThickness / 2;
             textRectF.Width = (float)Width - _defaultSelectionIndicatorWidth - 2 * leftIconPadding - 2 * rightIconPadding - _defaultCloseButtonWidth;
             textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
         }
@@ -1091,14 +1091,14 @@ namespace Syncfusion.Maui.Toolkit.Chips
             if (ImageAlignment == Alignment.Default || ImageAlignment == Alignment.Start || ImageAlignment == Alignment.Left || ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom)
             {
                 textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + rightPadding : (float)Padding.Left - (float)Padding.Right + (float)ImageSize + _defaultSelectionIndicatorWidth + 2 * leftIconPadding + rightIconPadding;
-                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)StrokeThickness / 2;
+                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)StrokeThickness / 2;
                 textRectF.Width = Math.Abs((float)Width - (float)ImageSize - _defaultSelectionIndicatorWidth - 2 * leftIconPadding - 2 * rightIconPadding - (rightPadding - textAreaPadding));
                 textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
             }
             else if (ImageAlignment == Alignment.End || ImageAlignment == Alignment.Right)
             {
                 textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + rightIconPadding + leftIconPadding + (float)ImageSize : (float)Padding.Left - (float)Padding.Right + _defaultSelectionIndicatorWidth + leftIconPadding + rightIconPadding;
-                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)StrokeThickness / 2;
+                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)StrokeThickness / 2;
                 textRectF.Width = Math.Abs((float)Width - _defaultSelectionIndicatorWidth - (float)ImageSize - 2 * leftIconPadding - rightIconPadding - (rightPadding - textAreaPadding));
                 textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
             }
@@ -1109,14 +1109,14 @@ namespace Syncfusion.Maui.Toolkit.Chips
             if (ImageAlignment == Alignment.Default || ImageAlignment == Alignment.Start || ImageAlignment == Alignment.Left || ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom)
             {
                 textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + _defaultCloseButtonWidth + leftIconPadding + rightIconPadding : (float)Padding.Left - (float)Padding.Right + (float)ImageSize + _defaultSelectionIndicatorWidth + 2 * leftIconPadding + rightIconPadding - textAreaPadding;
-                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)StrokeThickness / 2;
+                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)StrokeThickness / 2;
                 textRectF.Width = Math.Abs((float)Width - (float)ImageSize - _defaultSelectionIndicatorWidth - _defaultCloseButtonWidth - 2 * leftIconPadding - rightIconPadding - (rightPadding - textAreaPadding));
                 textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
             }
             else if (ImageAlignment == Alignment.End || ImageAlignment == Alignment.Right)
             {
                 textRectF.X = isRTL ? (float)Padding.Left - (float)Padding.Right + 2 * rightIconPadding + leftIconPadding + (float)ImageSize + _defaultCloseButtonWidth : (float)Padding.Left - (float)Padding.Right + _defaultSelectionIndicatorWidth + leftIconPadding + rightIconPadding;
-                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)StrokeThickness / 2;
+                textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)StrokeThickness / 2;
                 textRectF.Width = Math.Abs((float)Width - (float)ImageSize - _defaultSelectionIndicatorWidth - _defaultCloseButtonWidth - 2 * leftIconPadding - rightIconPadding - (rightPadding - textAreaPadding));
                 textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
             }

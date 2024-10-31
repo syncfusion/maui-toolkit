@@ -338,8 +338,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             IsVisible = true;
 
-            float x = (float)labelPosition.X;
-            float y = (float)labelPosition.Y;
+            float x = labelPosition.X;
+            float y = labelPosition.Y;
             float x1 = x;
             float y1 = y;
             ChartDataLabelStyle labelStyle = dataLabelSettings.LabelStyle;
@@ -459,14 +459,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (DataLabelRenderingPosition == Position.Right)
             {
-                XPoints[2] = (float)endPoint.X + connectorBendLineLength;
-                YPoints[2] = (float)endPoint.Y;
+                XPoints[2] = endPoint.X + connectorBendLineLength;
+                YPoints[2] = endPoint.Y;
                 rect = new Rect(XPoints[2] + _labelGap + labelSize.Width / 2, YPoints[2], labelSize.Width, labelSize.Height);
             }
             else
             {
                 XPoints[2] = endPoint.X - connectorBendLineLength;
-                YPoints[2] = (float)endPoint.Y;
+                YPoints[2] = endPoint.Y;
                 rect = new Rect(XPoints[2] - labelSize.Width / 2 - _labelGap, YPoints[2], labelSize.Width, labelSize.Height);
             }
 

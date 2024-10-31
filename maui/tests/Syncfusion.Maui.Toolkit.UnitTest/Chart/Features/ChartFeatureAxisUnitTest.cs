@@ -954,8 +954,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             element.UpdateRendererVisible(visible);
 
-            Assert.Equal(visible, ((ILayoutCalculator)layout1).IsVisible);
-            Assert.Equal(visible, ((ILayoutCalculator)layout1).IsVisible);
+            Assert.Equal(visible, (layout1).IsVisible);
+            Assert.Equal(visible, (layout1).IsVisible);
         }
 
         [Theory]
@@ -1570,8 +1570,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             var axis = new DateTimeAxis();
 
-            DateTime? actualStart = string.IsNullOrEmpty(actualStartStr) ? (DateTime?)null : DateTime.Parse(actualStartStr);
-            DateTime? actualEnd = string.IsNullOrEmpty(actualEndStr) ? (DateTime?)null : DateTime.Parse(actualEndStr);
+            DateTime? actualStart = string.IsNullOrEmpty(actualStartStr) ? null : DateTime.Parse(actualStartStr);
+            DateTime? actualEnd = string.IsNullOrEmpty(actualEndStr) ? null : DateTime.Parse(actualEndStr);
 
             axis.ActualRange = new DoubleRange(
                 actualStart.HasValue ? actualStart.Value.ToOADate() : double.NaN,

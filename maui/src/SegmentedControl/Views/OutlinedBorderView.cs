@@ -59,14 +59,14 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
             float strokeRadius = (float)_itemInfo.StrokeThickness / 2f;
 
             // Calculate the coordinates for the draw rectangle with the stroke value.
-            float left = (float)dirtyRect.X + strokeRadius;
-            float right = (float)dirtyRect.Width - strokeThickness;
-            float top = (float)dirtyRect.Top + strokeRadius;
-            float bottom = (float)dirtyRect.Height - strokeThickness;
+            float left = dirtyRect.X + strokeRadius;
+            float right = dirtyRect.Width - strokeThickness;
+            float top = dirtyRect.Top + strokeRadius;
+            float bottom = dirtyRect.Height - strokeThickness;
 
             // Ensure that the calculated values are within valid ranges.
-            left = (float)Math.Max(left, dirtyRect.Left);
-            top = (float)Math.Max(top, dirtyRect.Top);
+            left = Math.Max(left, dirtyRect.Left);
+            top = Math.Max(top, dirtyRect.Top);
             RectF drawRect = new RectF(left, top, right, bottom);
             CornerRadius cornerRadius = _itemInfo.CornerRadius;
             canvas.Antialias = true;

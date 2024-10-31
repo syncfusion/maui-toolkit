@@ -703,7 +703,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             for (int i = 0; i < xValues.Count; i++)
             {
-                dataPoints.Add(new Point((double)xValues[i], (double)YValues[i]));
+                dataPoints.Add(new Point(xValues[i], YValues[i]));
             }
 
             return dataPoints;
@@ -902,7 +902,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             pathF1.MoveTo(11, (float)8.5);
             pathF1.CurveTo(11, (float)8.5, (float)11.5, (float)8.5, 12, 9);
             pathF1.LineTo(12, 10);
-            pathF1.CurveTo(12, (float)10, (float)11.5, (float)9.5, 11, (float)9.5);
+            pathF1.CurveTo(12, 10, (float)11.5, (float)9.5, 11, (float)9.5);
             pathF1.Close();
             canvas.FillPath(pathF1);
         }

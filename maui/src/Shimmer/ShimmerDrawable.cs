@@ -516,16 +516,16 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
             y = Math.Max(y, shimmerRect.Y);
 
             // The row spacing for the circle rectangle.
-            float circleRowSpacing = (float)diameter * FeedCircleRowSpacingRatio;
+            float circleRowSpacing = diameter * FeedCircleRowSpacingRatio;
 
             // The circle rectangle height.
-            float circularItemHeight = (float)diameter * FeedCircleRectangleHeightRatio;
+            float circularItemHeight = diameter * FeedCircleRectangleHeightRatio;
 
             // The common row spacing for the feed.
-            float rowSpacing = (float)shimmerRect.Height * FeedRowSpacingRatio;
+            float rowSpacing = shimmerRect.Height * FeedRowSpacingRatio;
 
             // The height of the subject rectangle
-            float rectangleHeight = (float)shimmerRect.Height * FeedRectangleHeightRatio;
+            float rectangleHeight = shimmerRect.Height * FeedRectangleHeightRatio;
 
             // The hight of the feed box.
             // The height of the feed rectangle is follows
@@ -594,7 +594,7 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
             float rectangleHeightFactor = ShoppingPaddingRatio;
 
             // The height of the rectangle.
-            float rectangleHeight = (float)(shimmerRect.Height * rectangleHeightFactor * 2);
+            float rectangleHeight = shimmerRect.Height * rectangleHeightFactor * 2;
 
             // The row space between the rectangle.
             float rowSpacing = shimmerRect.Height * rectangleHeightFactor;

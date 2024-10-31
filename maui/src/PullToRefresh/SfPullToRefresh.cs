@@ -1562,7 +1562,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				}
 			}
 
-			var pullToRefresh = PullToRefreshHelpers.GetIPullToRefreshElement(PullableContent as IView, this);
+			var pullToRefresh = PullToRefreshHelpers.GetIPullToRefreshElement(PullableContent, this);
 
 			if (pullToRefresh != null && pullToRefresh is IPullToRefresh pullToRefreshElement)
 			{

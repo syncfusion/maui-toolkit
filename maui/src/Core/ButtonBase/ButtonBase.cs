@@ -1502,10 +1502,10 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			if (this.Stroke != null && this.StrokeThickness > 0)
 			{
-				var x = (float)(dirtyRect.X);
-				var y = (float)(dirtyRect.Y);
+				var x = dirtyRect.X;
+				var y = dirtyRect.Y;
 				var width = (float)(this.Width);
-				var height = (float)(dirtyRect.Height);
+				var height = dirtyRect.Height;
 
 				var topLeftRadius = (float)CornerRadius.TopLeft;
 				var topRightRadius = (float)CornerRadius.TopRight;
@@ -1692,7 +1692,7 @@ namespace Syncfusion.Maui.Toolkit
 				else if (this.ImageAlignment == Alignment.End || this.ImageAlignment == Alignment.Right)
 				{
 					textRectF.X = this.isRTL ? (float)this.Padding.Left - (float)this.Padding.Right + (float)this.ImageSize + leftIconPadding + rightIconPadding : (float)this.Padding.Left - (float)this.Padding.Right + leftIconPadding;
-					textRectF.Y = (float)this.Padding.Top - (float)this.Padding.Bottom - dirtyRect.Y - (float)textAlignmentPadding + (float)this.StrokeThickness / 2;
+					textRectF.Y = (float)this.Padding.Top - (float)this.Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)this.StrokeThickness / 2;
 					textRectF.Width = Math.Abs((float)this.Width - (float)this.ImageSize - rightIconPadding - rightPadding);
 					textRectF.Height = Math.Abs((float)this.Height - (float)StrokeThickness);
 				}
@@ -1700,7 +1700,7 @@ namespace Syncfusion.Maui.Toolkit
 			else
 			{
 				textRectF.X = (float)this.Padding.Left - (float)this.Padding.Right + leftPadding;
-				textRectF.Y = (float)(this.Padding.Top - this.Padding.Bottom - dirtyRect.Y - (float)normalTextPadding);
+				textRectF.Y = (float)(this.Padding.Top - this.Padding.Bottom - dirtyRect.Y - normalTextPadding);
 				textRectF.Width = Math.Abs((float)(this.Width - leftPadding - rightPadding));
 				textRectF.Height = (float)this.Height;
 			}

@@ -128,9 +128,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (_currentSeries.CanAnimate())
             {
-                float animationValue = (float)_currentSeries.AnimationValue;
+                float animationValue = _currentSeries.AnimationValue;
                 _drawStartAngle = (float)(_currentSeries.StartAngle + ((StartAngle - _currentSeries.StartAngle) * animationValue));
-                _drawEndAngle = (float)StartAngle + (EndAngle * animationValue);
+                _drawEndAngle = StartAngle + (EndAngle * animationValue);
                 _isTrack = false;
                 CalculateSegmentAngle(_drawStartAngle, _drawEndAngle);
             }
@@ -238,7 +238,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     var innerTrack = new PathF();
                     innerTrack.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -_trackEndAngle, -_trackStartAngle, !_isClockWise);
                     canvas.StrokeColor = TrackStroke.ToColor();
-                    canvas.StrokeSize = (float)TrackStrokeWidth;
+                    canvas.StrokeSize = TrackStrokeWidth;
                     canvas.DrawPath(outerTrack);
                     canvas.DrawPath(innerTrack);
                 }
@@ -265,7 +265,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     trackStrokePath.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -_trackEndAngle, -_trackStartAngle, !_isClockWise);
                     
                     canvas.StrokeColor = TrackStroke.ToColor();
-                    canvas.StrokeSize = (float)TrackStrokeWidth;
+                    canvas.StrokeSize = TrackStrokeWidth;
                     canvas.DrawPath(trackStrokePath);
 
                     if (_currentSeries.CapStyle == CapStyle.BothFlat || _currentSeries.CapStyle == CapStyle.EndCurve) 
@@ -273,7 +273,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         // To draw line for the track stroke
                         canvas.DrawLine(_trackInnerLinePoint, _trackOuterLinePoint);
                         canvas.StrokeColor = TrackStroke.ToColor();
-                        canvas.StrokeSize = (float)TrackStrokeWidth;
+                        canvas.StrokeSize = TrackStrokeWidth;
                     }
                 }
             }
@@ -319,7 +319,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         void CapStyleCalculation(float midRadius, float segmentRadius, float startCurveAngle, float drawStartAngle, float drawEndAngle)
         {
             float calculatedRadius = (InnerRingRadius + OuterRingRadius) / 2;
-            _angleDeviation = ChartUtils.CalculateAngleDeviation(calculatedRadius, (float)(segmentRadius / 2), 360) * (_isClockWise ? 1 : -1);
+            _angleDeviation = ChartUtils.CalculateAngleDeviation(calculatedRadius, segmentRadius / 2, 360) * (_isClockWise ? 1 : -1);
             if (_currentSeries != null && _currentSeries.CapStyle != CapStyle.BothFlat)
             {
                 if (!_isCircularBar)
@@ -500,7 +500,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                                        _currentBounds.Center.Y + ((midRadius - segmentRadius / 1.75) * previousAngle.Y));
             _trackEndCurveEndPoint = new Point(_currentBounds.Center.X + ((midRadius + segmentRadius / 1.5) * previousAngle.X),
                                      _currentBounds.Center.Y + ((midRadius + segmentRadius / 1.5) * previousAngle.Y));
-            _trackEndAngle = (float)(outerSegmentEndAngle - (2 * _angleDeviation));
+            _trackEndAngle = outerSegmentEndAngle - (2 * _angleDeviation);
             _trackStartAngle = _currentSeries.CapStyle == CapStyle.BothCurve ? _trackStartAngle + (2 * _angleDeviation) : _trackStartAngle;
 
             _isTrack = false;
@@ -647,9 +647,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
             minScale = minScale * _currentSeries.Radius;
             _actualBounds = new RectF((float)((center.X * 2) - minScale) / 2, (float)((center.Y * 2) - minScale) / 2, (float)minScale, (float)minScale);
             _currentBounds = new RectF(_actualBounds.Left, _actualBounds.Top, _actualBounds.Width, _actualBounds.Height);
-            _innerRadius = (float)((float)(Math.Min(_actualBounds.Height, _actualBounds.Width) / 2) * _currentSeries.InnerRadius);
+            _innerRadius = (float)(Math.Min(_actualBounds.Height, _actualBounds.Width) / 2 * _currentSeries.InnerRadius);
             _actualRadius = _actualBounds.Width / 2 - _innerRadius;
-            float centerRadius = (float)((float)(Math.Min(_actualBounds.Height, _actualBounds.Width) / 2) * 0.2);
+            float centerRadius = (float)(Math.Min(_actualBounds.Height, _actualBounds.Width) / 2 * 0.2);
             double radius = (_actualRadius / _currentSeries.visibleSegmentCount) * (1 - _currentSeries.GapRatio);
             InnerRingRadius = _innerRadius + (_actualRadius / _currentSeries.visibleSegmentCount) * VisibleSegmentIndex + centerRadius;
             OuterRingRadius = (float)(InnerRingRadius + radius);

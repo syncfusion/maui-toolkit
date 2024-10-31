@@ -1370,7 +1370,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			tabView.Items = tabItems;
 			Assert.NotNull(tabView);
 			Assert.Single(tabView.Items);
-			Assert.Equal(imagePosition, ((SfTabItem)tabView.Items[0]).ImagePosition);
+			Assert.Equal(imagePosition, tabView.Items[0].ImagePosition);
 		}
 
 		[Theory]

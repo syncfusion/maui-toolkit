@@ -909,7 +909,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
 
             canvas.ResetStrokeDashPattern();
-            canvas.Translate((float)rect.Left, (float)rect.Top);
+            canvas.Translate(rect.Left, rect.Top);
 
             DrawTrackballLabels(canvas); //Draw only if not grouped label. 
 
@@ -1147,7 +1147,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (axis.IsVertical)
                 {
-                    y = (float)leastX - SeriesBounds.Top;
+                    y = leastX - SeriesBounds.Top;
                     x = (float)(isOpposed ? actualArrangeRect.X - offset : actualArrangeRect.Right - SeriesBounds.X + offset);
                 }
                 else
@@ -1569,7 +1569,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 var axis = pointInfo.Series.ActualXAxis;
                 if (axis == null) continue;
 
-                _currX = (float)(axis.ValueToPoint(pointInfo.XValue)) + (float)startXValue;
+                _currX = axis.ValueToPoint(pointInfo.XValue) + (float)startXValue;
 
                 var difference = Math.Abs(touchXValue - _currX);
 
@@ -2027,11 +2027,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (!CartesianChart.IsTransposed)
                 {
-                    canvas.DrawLine((float)_linePoint1.X + SeriesBounds.Left, (float)SeriesBounds.Top, (float)_linePoint2.X + SeriesBounds.Left, (float)SeriesBounds.Bottom);
+                    canvas.DrawLine((float)_linePoint1.X + SeriesBounds.Left, SeriesBounds.Top, (float)_linePoint2.X + SeriesBounds.Left, SeriesBounds.Bottom);
                 }
                 else
                 {
-                    canvas.DrawLine((float)SeriesBounds.Left, (float)_linePoint1.Y, (float)SeriesBounds.Right, (float)_linePoint2.Y);
+                    canvas.DrawLine(SeriesBounds.Left, (float)_linePoint1.Y, SeriesBounds.Right, (float)_linePoint2.Y);
                 }
             }
         }

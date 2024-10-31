@@ -589,10 +589,9 @@ namespace Syncfusion.Maui.ControlsGallery
                             {
                                 if (xmlItem.Name == "ControlCategory")
                                 {
-                                    XmlElement xmlControlCategoryItem = (XmlElement)xmlItem;
-                                    var xmlControlCategoryItemName = xmlControlCategoryItem.GetAttribute("Name");
+                                    var xmlControlCategoryItemName = xmlItem.GetAttribute("Name");
                                     var controlCatagoryObj = GetControlCategoryModel(xmlControlCategoryItemName);
-                                    foreach (var controlItem in xmlControlCategoryItem.ChildNodes)
+                                    foreach (var controlItem in xmlItem.ChildNodes)
                                     {
                                         if (controlItem is XmlElement xmlControlItem)
                                         {

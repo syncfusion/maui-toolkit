@@ -428,7 +428,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     yPos -= isOpposed ? actualSize.Height : 0;
 
                     float height = rotatedSize.Height;
-                    float textX = (float)xPos + MarginLeft;
+                    float textX = xPos + MarginLeft;
 
                     SizeF measuredSize = content.Measure(labelStyle);
 
@@ -436,7 +436,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 #if ANDROID
                     float textY = ((float)yPos + MarginTop + (float)DesiredHeight / 2);
 #else
-                    float textY = (float)yPos + MarginTop;
+                    float textY = yPos + MarginTop;
 #endif
 
                     float rotateOriginX = xPos;
@@ -554,7 +554,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                     canvas.CanvasSaveState();
 
-                    canvas.Rotate((float)rotateAngle, (float)rotateOriginX, (float)rotateOriginY);
+                    canvas.Rotate((float)rotateAngle, rotateOriginX, rotateOriginY);
 
                     if (Axis.LabelsIntersectAction == AxisLabelsIntersectAction.Wrap && !double.IsNaN(labelStyle.MaxWidth))
                     {
@@ -704,7 +704,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 MarginLeft = (float)labelStyle.Margin.Left;
                 MarginRight = (float)labelStyle.Margin.Right;
 
-                float coEff = (float)Axis.ValueToCoefficient(chartAxisLabel.Position);
+                float coEff = Axis.ValueToCoefficient(chartAxisLabel.Position);
                 float position = (coEff * size) - (ComputedSizes[i].Width / 2); //TODO: ensure the width need to calculate,
                 position -= (MarginLeft - MarginRight) / 2;
                 position = OnAxisLabelAlignment(position, ComputedSizes[i].Width + (float)labelStyle.StrokeWidth, labelStyle);
@@ -1078,7 +1078,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     var chartAxisLabel = axisLabels[i];
                     float position;
-                    float coEff = (float)Axis.ValueToCoefficient(chartAxisLabel.Position);
+                    float coEff = Axis.ValueToCoefficient(chartAxisLabel.Position);
                     var computedSize = computedSizes[i];
                     float height = computedSize.Height, width = computedSize.Width;
                     var labelStyle = chartAxisLabel.LabelStyle ?? Axis.LabelStyle;

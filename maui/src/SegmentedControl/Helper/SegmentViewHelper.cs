@@ -168,7 +168,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 
             // Return the count of visible segment items. If the calculated count based on the provided visibleSegmentsCount is higher than the total items count,
             // return visibleSegmentsCount. Otherwise, return the total items count.
-            return (int)(itemsCount > visibleSegmentsCount ? visibleSegmentsCount : itemsCount);
+            return itemsCount > visibleSegmentsCount ? visibleSegmentsCount : itemsCount;
         }
 
         /// <summary>

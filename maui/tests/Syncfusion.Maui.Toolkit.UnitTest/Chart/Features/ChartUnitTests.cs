@@ -200,7 +200,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             SetPrivateField(sfPyramidChart, "_yValues", new  List<double> { 10,   });
             SetPrivateField(sfPyramidChart, "_actualData", new List<object> { 10,  });
             SetPrivateField(pyramidSegment, "_values", valuesFromImage);
-            IChart iChart = (IChart)sfPyramidChart;
+            IChart iChart = sfPyramidChart;
             iChart.ActualSeriesClipRect = chartPyramid.AreaBounds;
             var result = sfPyramidChart.GetTooltipInfo(chartTooltipBehavior, 828.8f, 142.4f); 
             Assert.IsType<TooltipInfo>(result); 

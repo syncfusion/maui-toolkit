@@ -123,7 +123,7 @@
         {
             internal get
             {
-                return (nint)_index;
+                return _index;
             }
 
             set
@@ -191,7 +191,7 @@
 #pragma warning restore CS8765
         {
             UITouch touch = (UITouch)touches.AnyObject;
-            CGPoint touchPoint = (CGPoint)touch.LocationInView(this);
+            CGPoint touchPoint = touch.LocationInView(this);
             UIView? subView = HitTest(touchPoint, null);
             UIView? topView = GetTopView(subView);
 

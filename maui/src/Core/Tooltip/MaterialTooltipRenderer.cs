@@ -580,8 +580,8 @@ namespace Syncfusion.Maui.Toolkit
             if (index == 1)
             {
                 path.CurveTo(
-                    new PointF(x - desiredRadius, (float)y - CornerRadius),
-                    new PointF(x, (float)y - CornerRadius + desiredRadius),
+                    new PointF(x - desiredRadius, y - CornerRadius),
+                    new PointF(x, y - CornerRadius + desiredRadius),
                     new PointF(x, y));
             }
             else if (index == 3 || index == 6)

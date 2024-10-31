@@ -45,7 +45,7 @@ namespace Syncfusion.Maui.ControlsGallery.TabView.SfTabView
         {
             var view = (Syncfusion.Maui.Toolkit.TabView.SfTabView)sender;
 
-            SfTabItem item = view.Items[(int)e.NewIndex];
+            SfTabItem item = view.Items[e.NewIndex];
 
             var selectedFile = item.Header;
 

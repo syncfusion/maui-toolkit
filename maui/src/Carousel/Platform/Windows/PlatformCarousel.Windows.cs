@@ -2099,8 +2099,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                         }
                         if (item != null)
                         {
-                            double x = (m + (((double)b * Offset) + (SelectedItemOffset * mu))) - (item.ActualWidth / 2);
-                            double x1 = (m1 + (((double)b * Offset) + (SelectedItemOffset * mu))) - (item.ActualHeight / 2);
+                            double x = (m + ((b * Offset) + (SelectedItemOffset * mu))) - (item.ActualWidth / 2);
+                            double x1 = (m1 + ((b * Offset) + (SelectedItemOffset * mu))) - (item.ActualHeight / 2);
                             double s = mu == 0 ? 1 : ScaleOffset;
                             if (Orientation == Orientation.Vertical)
                             {
@@ -3226,8 +3226,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     {
                         indexFactor = 1;
                     }
-                    hCenter = (horizontalCenterPoint + (((double)selectedIndex * Offset) + (SelectedItemOffset * indexFactor))) - (ItemWidth / 2);
-                    vCenter = (verticalCenterPoint + (((double)selectedIndex * Offset) + (SelectedItemOffset * indexFactor))) - (ItemHeight / 2);
+                    hCenter = (horizontalCenterPoint + ((selectedIndex * Offset) + (SelectedItemOffset * indexFactor))) - (ItemWidth / 2);
+                    vCenter = (verticalCenterPoint + ((selectedIndex * Offset) + (SelectedItemOffset * indexFactor))) - (ItemHeight / 2);
                     if (Orientation == Orientation.Horizontal)
                     {
                         double startRegion = -horizontalCenterPoint;

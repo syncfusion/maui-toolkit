@@ -11,7 +11,7 @@ public class PreviewControllerDS : QLPreviewControllerDataSource
 
     public override nint PreviewItemCount(QLPreviewController controller)
     {
-        return (nint)1;
+        return 1;
     }
 
     public override IQLPreviewItem GetPreviewItem(QLPreviewController controller, nint index)

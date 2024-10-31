@@ -425,7 +425,7 @@
                 if (LoadMoreItemsCount > 0)
                 {
                     var count = _maximumVisibleCount;
-                    if (_dataSource != null && count > (int)GetItemCount())
+                    if (_dataSource != null && count > GetItemCount())
                     {
                         count = (int)_dataSource.Count;
                     }
@@ -1585,20 +1585,20 @@
             int count = _maximumVisibleCount;
             int tempCount = GetItemCount(); 
 
-            if (((int)tempCount - _dataSourceEndIndex - 1) < _maximumVisibleCount)
+            if ((tempCount - _dataSourceEndIndex - 1) < _maximumVisibleCount)
             {
-                count = (int)((int)tempCount - _dataSourceEndIndex - 1);
+                count = (int)(tempCount - _dataSourceEndIndex - 1);
             }
 
             if (_viewMode == ViewMode.Default)
             {
-                if (((int)tempCount - _dataSourceEndIndex - 1) > 0)
+                if ((tempCount - _dataSourceEndIndex - 1) > 0)
                 {
                     LoadMoreItem.RemoveFromSuperview();
                 }
 
                 object? convertItem;
-                for (int i = 0; i < (int)count; i++)
+                for (int i = 0; i < count; i++)
                 {
                     _dataSourceEndIndex++;
 
@@ -1625,7 +1625,7 @@
 
                     if (_allowLoadMore && _dataSourceEndIndex + 1 < tempCount)
                     {
-                        if (i + 1 == (int)count)
+                        if (i + 1 == count)
                         {
                             AddLoadMoreItem();
                         }
@@ -1663,14 +1663,14 @@
             int count = _maximumVisibleCount;
             if (_linearDataSource != null)
             {
-                if (((int)tempCount - (int)_linearDataSource.Count - 1) < _maximumVisibleCount)
+                if ((tempCount - (int)_linearDataSource.Count - 1) < _maximumVisibleCount)
                 {
-                    count = (int)((int)tempCount - (int)_linearDataSource.Count);
+                    count = tempCount - (int)_linearDataSource.Count;
                 }
 
                 count = count + (int)_linearDataSource.Count;
 
-                for (int i = (int)_linearDataSource.Count; i < ((int)count); i++)
+                for (int i = (int)_linearDataSource.Count; i < count; i++)
                 {
                     if (_dataSource != null && IsDataSourceAvailable())
                     {
@@ -2152,13 +2152,13 @@
         {
             int tempCount = GetItemCount();
 
-            _updatedSelectedValue = (nint)value;
+            _updatedSelectedValue = value;
             if (value < tempCount)
             {
                 _tappedDifference = value - _selectedIndex;
                 if (IsDataSourceAvailable())
                 {
-                    int count = (int)tempCount - 1;
+                    int count = tempCount - 1;
                     if (LoadMoreItemsCount > 0 && _viewMode == ViewMode.Default)
                     {
                         count = (int)_dataSourceEndIndex;
@@ -2168,7 +2168,7 @@
                         count = (int)_linearDataSource.Count;
                     }
 
-                    if ((int)count >= value)
+                    if (count >= value)
                     {
                         _isSelectedUpdated = true;
                         SelectionChangedEventArgs args = new SelectionChangedEventArgs();
@@ -2261,7 +2261,7 @@
             {
                 if (LinearMode != null)
                 {
-                    NSIndexPath pathValue = NSIndexPath.FromRowSection((nint)_selectedIndex, 0);
+                    NSIndexPath pathValue = NSIndexPath.FromRowSection(_selectedIndex, 0);
                     LinearMode.ViewCollection?.ScrollToItem(pathValue, UICollectionViewScrollPosition.CenteredHorizontally, false);
 					args.NewItem = GetMauiItem((int)SelectedIndex);
 					OnSelectionChanged(args);
@@ -2449,7 +2449,7 @@
             for (int i = 0; i < Math.Abs(_tappedDifference); i++)
             {
                 PlatformCarouselItem item;
-                if (_dataSourceEndIndex + 1 < (int)tempCount)
+                if (_dataSourceEndIndex + 1 < tempCount)
                 {
                     _dataSourceEndIndex++;
                     if (_dataSource != null)
@@ -2892,7 +2892,7 @@
 
             if (!_isVirtualization && !_allowLoadMore && !_isLinearVirtual)
             {
-                for (nint i = 0; i < (nint)tempCount; i++)
+                for (nint i = 0; i < tempCount; i++)
                 {
                     PlatformCarouselItem? item = null;
                     if (_dataSource != null)
@@ -2950,7 +2950,7 @@
                 int tempCount = GetItemCount();
                 nint j = 0;
 
-                for (nint i = (nint)_selectedIndex + 1; i < (nint)tempCount; i++)
+                for (nint i = _selectedIndex + 1; i < tempCount; i++)
                 {
                     PlatformCarouselItem? rightItem = GetLeftAndRightItem(i);
                     if (rightItem != null)
@@ -2960,7 +2960,7 @@
                     j++;
                     if (_allowLoadMore)
                     {
-                        if (i + 1 == (int)tempCount)
+                        if (i + 1 == tempCount)
                         {
                             PlatformCarouselItem item = LoadMoreItem;
                             UpdateLinearRightPosition(item, _offset * j);
@@ -2968,7 +2968,7 @@
                     }
                 }
 
-                j = (nint)_selectedIndex - 1;
+                j = _selectedIndex - 1;
                 for (nint i = 0; i < _selectedIndex; i++)
                 {
                     PlatformCarouselItem? leftItem = GetLeftAndRightItem(i);
@@ -3523,7 +3523,7 @@
         /// </summary>
         void AddLinearModeToView()
         {
-            NSIndexPath pathValue = NSIndexPath.FromRowSection((nint)_selectedIndex, 0);
+            NSIndexPath pathValue = NSIndexPath.FromRowSection(_selectedIndex, 0);
             LinearMode.ViewCollection?.ScrollToItem(pathValue, UICollectionViewScrollPosition.CenteredHorizontally, false);
             AddSubview(LinearMode);
         }
@@ -3624,12 +3624,12 @@
             {
                 _dataSourceStartIndex = 0;
                 _dataSourceEndIndex = 0;
-                if (_maximumVisibleCount > (int)tempCount)
+                if (_maximumVisibleCount > tempCount)
                 {
-                    _maximumVisibleCount = (int)tempCount;
+                    _maximumVisibleCount = tempCount;
                 }
 
-                for (nint i = 0; i < (nint)_maximumVisibleCount; i++)
+                for (nint i = 0; i < _maximumVisibleCount; i++)
                 {
                     item = new PlatformCarouselItem();
                     if (_dataSource != null)
@@ -3641,7 +3641,7 @@
                     _dataSourceEndIndex = i;
                     if (_allowLoadMore)
                     {
-                        if (i + 1 == (int)_maximumVisibleCount)
+                        if (i + 1 == _maximumVisibleCount)
                         {
                             InitializeLoadMoreItem();
                         }
@@ -3682,12 +3682,12 @@
                 object? convertItem;
                 _dataSourceStartIndex = 0;
                 _dataSourceEndIndex = 0;
-                if (_maximumVisibleCount > (int)((IList)_linearVirtualDataSource).Count)
+                if (_maximumVisibleCount > ((IList)_linearVirtualDataSource).Count)
                 {
-                    _maximumVisibleCount = (int)((IList)_linearVirtualDataSource).Count;
+                    _maximumVisibleCount = ((IList)_linearVirtualDataSource).Count;
                 }
 
-                for (nint i = 0; i < (nint)_maximumVisibleCount; i++)
+                for (nint i = 0; i < _maximumVisibleCount; i++)
                 {
                     if (_dataSource != null && _linearVirtualDataSource != null && _linearVirtualDataSource is IList list)
                     {
@@ -3699,7 +3699,7 @@
                     }
                     if (_allowLoadMore)
                     {
-                        if (i + 1 == (int)_maximumVisibleCount)
+                        if (i + 1 == _maximumVisibleCount)
                         {
                             InitializeLoadMoreItem();
                         }

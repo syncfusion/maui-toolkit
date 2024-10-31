@@ -1184,7 +1184,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
         /// </example>
         public object LongPressedCommandParameter
         {
-            get { return (object)GetValue(LongPressedCommandParameterProperty); }
+            get { return GetValue(LongPressedCommandParameterProperty); }
             set { SetValue(LongPressedCommandParameterProperty, value); }
         }
 

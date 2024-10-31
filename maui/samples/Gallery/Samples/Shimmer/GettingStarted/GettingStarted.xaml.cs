@@ -20,7 +20,7 @@ public partial class GettingStarted : SampleView
 
     private void SfTabView_SelectionChanged(object sender, Syncfusion.Maui.Toolkit.TabView.TabSelectionChangedEventArgs e)
     {
-        string type = viewModel.ShimmerTypes[(int)e.NewIndex];
+        string type = viewModel.ShimmerTypes[e.NewIndex];
 
         switch (type)
         {

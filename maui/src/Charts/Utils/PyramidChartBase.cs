@@ -404,7 +404,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                         if (angle != 0)
                         {
-                            angle = (float)(angle > 360 ? angle % 360 : angle);
+                            angle = angle > 360 ? angle % 360 : angle;
                             canvas.CanvasSaveState();
                             canvas.Rotate(angle, (float)rect.X, (float)rect.Y);
                         }

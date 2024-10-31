@@ -99,7 +99,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         if (supportAxis != null)
                         {
                             top = (float)supportAxis.ArrangeRect.Top - (float)thickness.Top;
-                            height = (float)top + (float)supportAxis.ArrangeRect.Height;
+                            height = top + (float)supportAxis.ArrangeRect.Height;
 
                             if (axis.CanDrawMajorGridLines())
                             {
@@ -123,7 +123,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         if (supportAxis != null)
                         {
                             left = (float)supportAxis.ArrangeRect.Left - (float)thickness.Left;
-                            width = (float)left + (float)supportAxis.ArrangeRect.Width;
+                            width = left + (float)supportAxis.ArrangeRect.Width;
 
                             if (axis.CanDrawMajorGridLines())
                             {

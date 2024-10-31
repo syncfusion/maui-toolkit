@@ -340,7 +340,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
             else
             {
-                x = (float)(XPosition1);
+                x = XPosition1;
                 y = (float)(xAxis.ArrangeRect.Y + labelSize.Height / 2 + marginBottom);
             }
             

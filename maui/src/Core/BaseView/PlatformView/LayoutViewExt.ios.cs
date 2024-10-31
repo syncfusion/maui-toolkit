@@ -475,7 +475,7 @@ namespace Syncfusion.Maui.Toolkit.Platform
         {
             IsAccessibilityElement = false;
             MauiView = mauiView;
-            Drawable = new PlatformDrawableView((IDrawable?)MauiView);
+            Drawable = new PlatformDrawableView(MauiView);
         }
 
         SfView? MauiView

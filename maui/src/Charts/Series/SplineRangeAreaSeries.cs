@@ -293,11 +293,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
 
             PathF pathF = new PathF();
-            pathF.MoveTo((float)5.45455, (float)1.92678f);
-            pathF.CurveTo((float)2.16168, (float)-1.56276, (float)0.606061, (float)0.963388f, 0, (float)2.89016);
+            pathF.MoveTo((float)5.45455, 1.92678f);
+            pathF.CurveTo((float)2.16168, (float)-1.56276, (float)0.606061, 0.963388f, 0, (float)2.89016);
             pathF.LineTo(0, (float)9.89016);
             pathF.CurveTo((float)0.606061, (float)7.96339, (float)2.16168, (float)5.43724, (float)5.45455, (float)8.92677);
-            pathF.CurveTo((float)7.72727, (float)11.3352, (float)9.69697, (float)9.2479, (float)10, (float)7);
+            pathF.CurveTo((float)7.72727, (float)11.3352, (float)9.69697, (float)9.2479, 10, 7);
             pathF.LineTo(10, 0);
             pathF.CurveTo((float)9.69697, (float)2.2479, (float)7.72727, (float)4.33524, (float)5.45455, (float)1.92678);
             pathF.Close();
