@@ -18,12 +18,6 @@
 		<UseMaui>true</UseMaui>
 		<UseMauiCompat>false</UseMauiCompat>
 		<SingleProject>true</SingleProject>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-		<AnalysisLevel>latest</AnalysisLevel>
-		<AnalysisLevelSecurity>latest-recommended</AnalysisLevelSecurity>
 		<NoWarn>$(NoWarn);NU1803</NoWarn>
 		<PackageCertificateKeyFile>Syncfusion.Maui.ControlsGallery_TemporaryKey.pfx</PackageCertificateKeyFile>
 		<AssemblyName>Syncfusion.Maui.ControlsGallery</AssemblyName>
