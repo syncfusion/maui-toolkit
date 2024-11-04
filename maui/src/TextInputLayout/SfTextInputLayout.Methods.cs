@@ -160,6 +160,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 {
                     if (!IsHintAlwaysFloated)
                     {
+                        IsHintFloated = false;
                         IsHintDownToUp = true;
                         InvalidateDrawable();
                     }
@@ -173,7 +174,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
                 // Clear icon can't draw when isClearIconVisible property updated based on text.
                 // So here call the InvalidateDrawable to draw the clear icon.
-                if (Text.Length == 1 || Text.Length == 0)
+                if (Text?.Length <= 1)
                 {
                     InvalidateDrawable();
                 }
