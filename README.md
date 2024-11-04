@@ -46,7 +46,7 @@ The Syncfusion Toolkit is built with community collaboration in mind, aiming to 
 
 ## Installation
 
-You can install the Syncfusion Toolkit for .NET MAUI via NuGet:
+You can install the [Syncfusion Toolkit for .NET MAUI](https://www.nuget.org/packages/Syncfusion.Maui.Toolkit) via NuGet: 
 
 ```
 dotnet add package Syncfusion.Maui.Toolkit
