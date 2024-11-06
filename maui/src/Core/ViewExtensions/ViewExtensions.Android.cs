@@ -12,6 +12,7 @@ using Android.Net;
 using Path = System.IO.Path;
 using Color = Android.Graphics.Color;
 using Microsoft.Maui.Platform;
+using Uri = Android.Net.Uri;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

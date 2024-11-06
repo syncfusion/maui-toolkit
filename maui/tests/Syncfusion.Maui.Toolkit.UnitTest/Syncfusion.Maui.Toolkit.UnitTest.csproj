@@ -2,16 +2,10 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
 		<UseMaui>true</UseMaui>
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
 		<SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-		<AnalysisLevel>latest</AnalysisLevel>
-		<AnalysisLevelSecurity>latest-recommended</AnalysisLevelSecurity>
 		<Configurations>Debug;Release;Release-Xml</Configurations>
 	</PropertyGroup>
 

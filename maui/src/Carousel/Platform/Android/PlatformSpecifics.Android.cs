@@ -5,9 +5,8 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
-using System;
-using System.Collections.Generic;
 using System.Collections;
+using View = Android.Views.View;
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {

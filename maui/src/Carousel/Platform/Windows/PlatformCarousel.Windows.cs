@@ -15,7 +15,10 @@ using Windows.Foundation;
 using AutomationProperties = Microsoft.UI.Xaml.Automation.AutomationProperties;
 using ControlTemplate = Microsoft.UI.Xaml.Controls.ControlTemplate;
 using DataTemplate = Microsoft.UI.Xaml.DataTemplate;
+using Point = Windows.Foundation.Point;
+using Rect = Windows.Foundation.Rect;
 using ResourceDictionary = Microsoft.UI.Xaml.ResourceDictionary;
+using Size = Windows.Foundation.Size;
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {
@@ -645,7 +648,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// </remarks>
 		public void MoveNext()
         {
-            bool isForward = FlowDirection == FlowDirection.LeftToRight;
+            bool isForward = FlowDirection == Microsoft.UI.Xaml.FlowDirection.LeftToRight;
             SelectionChangedEventArgs args = new SelectionChangedEventArgs();
             if (!EnableVirtualization)
             {
@@ -812,7 +815,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// </remarks>
 		public void MovePrevious()
         {
-            bool isBackward = !(FlowDirection == FlowDirection.LeftToRight);
+            bool isBackward = !(FlowDirection == Microsoft.UI.Xaml.FlowDirection.LeftToRight);
             SelectionChangedEventArgs args = new SelectionChangedEventArgs();
             if (!EnableVirtualization)
             {

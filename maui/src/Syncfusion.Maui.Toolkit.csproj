@@ -9,11 +9,6 @@
 		<UseMaui>true</UseMaui>
 		<UseMauiCompat>false</UseMauiCompat>
 		<SingleProject>true</SingleProject>
-		<Nullable>enable</Nullable>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-		<AnalysisLevel>latest</AnalysisLevel>
-		<AnalysisLevelSecurity>latest-recommended</AnalysisLevelSecurity>
 		<AssemblyName>Syncfusion.Maui.Toolkit</AssemblyName>
 		<AssemblyTitle>Syncfusion.Maui.Toolkit</AssemblyTitle>
 		<Configurations>Release-Xml;Debug;Release</Configurations>

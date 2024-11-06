@@ -1,6 +1,7 @@
 ﻿using MauiView = Microsoft.Maui.Controls.View;
 using Microsoft.Maui;
 using Android.Views;
+using View = Android.Views.View;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

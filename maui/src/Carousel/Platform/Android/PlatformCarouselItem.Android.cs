@@ -1,11 +1,9 @@
 ﻿using Android.Content.Res;
 using Android.Content;
 using Android.Graphics;
-using Android.Runtime;
-using Android.Util;
 using Android.Views;
 using Android.Widget;
-using System;
+using View = Android.Views.View;
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {

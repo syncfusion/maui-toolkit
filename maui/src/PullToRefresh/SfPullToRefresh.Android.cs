@@ -10,6 +10,10 @@ using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Platform;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Platform;
+using ListView = Android.Widget.ListView;
+using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
+using ScrollView = Android.Widget.ScrollView;
+using View = Android.Views.View;
 
 namespace Syncfusion.Maui.Toolkit.PullToRefresh
 {

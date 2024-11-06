@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui;
-
+﻿
 namespace Syncfusion.Maui.Toolkit.Carousel
 {
 	/// <summary>

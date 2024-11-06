@@ -6,6 +6,11 @@ using Microsoft.UI.Xaml.Media.Animation;
 using System;
 using System.Collections;
 using Windows.Foundation;
+using ContentPresenter = Microsoft.UI.Xaml.Controls.ContentPresenter;
+using DataTemplate = Microsoft.UI.Xaml.DataTemplate;
+using Grid = Microsoft.UI.Xaml.Controls.Grid;
+using Point = Windows.Foundation.Point;
+using Thickness = Microsoft.UI.Xaml.Thickness;
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {

@@ -5,6 +5,7 @@ using Microsoft.Maui;
 using Microsoft.Maui.Platform;
 using Microsoft.Maui.Graphics;
 using AView = Android.Views.View;
+using View = Android.Views.View;
 namespace Syncfusion.Maui.Toolkit.Internals
 {
     /// <summary>

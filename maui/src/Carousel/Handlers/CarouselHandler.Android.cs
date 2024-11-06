@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using Syncfusion.Maui.Toolkit.Internals;
 using Microsoft.Maui.Platform;
-using System.Collections;
+
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {

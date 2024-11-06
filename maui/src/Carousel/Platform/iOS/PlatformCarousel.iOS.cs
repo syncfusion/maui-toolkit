@@ -1,22 +1,15 @@
-﻿namespace Syncfusion.Maui.Toolkit.Carousel
+﻿using System.Collections;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Resources;
+using CoreAnimation;
+using CoreGraphics;
+using Foundation;
+using UIKit;
+using Microsoft.Maui.Platform;
+
+namespace Syncfusion.Maui.Toolkit.Carousel
 {
-    using System;
-    using System.Collections;
-    using System.ComponentModel;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
-    using System.Resources;
-    using CoreAnimation;
-    using CoreFoundation;
-    using CoreGraphics;
-    using Foundation;
-    using UIKit;
-    using Microsoft.Maui.Platform;
-    using Microsoft.Maui.Controls;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Microsoft.Maui;
 
 	/// <summary>
 	/// Represents a platform-specific handler for connecting a carousel view.
