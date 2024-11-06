@@ -1,26 +1,17 @@
 ﻿using Android.Content;
-using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Views.Animations;
 using Android.Views;
 using Android.Widget;
 using AndroidX.RecyclerView.Widget;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Resources;
 using View = Android.Views.View;
-using SwipeStartedEventArgs = Syncfusion.Maui.Toolkit.Carousel.SwipeStartedEventArgs;
 using IList = System.Collections.IList;
-using Microsoft.Maui.Platform;
-using Microsoft.Maui;
-using Syncfusion.Maui.Toolkit.Internals;
-using System.Collections.ObjectModel;
 using Syncfusion.Maui.Toolkit.Carousel.Platform;
+using Rect = Android.Graphics.Rect;
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {

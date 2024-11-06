@@ -1,9 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Platform;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Maui.Platform;
 
 namespace Syncfusion.Maui.Toolkit.Carousel.Platform
 {

@@ -1,11 +1,5 @@
 ﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
-using Microsoft.UI.Xaml.Media.Animation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {

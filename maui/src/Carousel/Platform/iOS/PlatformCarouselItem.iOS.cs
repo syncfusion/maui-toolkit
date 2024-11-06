@@ -1,10 +1,9 @@
-﻿namespace Syncfusion.Maui.Toolkit.Carousel
+﻿using CoreGraphics;
+using Foundation;
+using UIKit;
+
+namespace Syncfusion.Maui.Toolkit.Carousel
 {
-    using System;
-    using CoreGraphics;
-    using Foundation;
-    using Microsoft.Maui.Platform;
-    using UIKit;
 
 	/// <summary>
 	/// Platform carousel item item class.
