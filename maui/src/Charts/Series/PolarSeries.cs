@@ -637,7 +637,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             pathF1.LineTo(12, 6);
             pathF1.LineTo(8, 12);
             pathF1.LineTo((float)7.8, (float)11.4);
-            pathF1.LineTo((float)11, (float)6.3);
+            pathF1.LineTo(11, (float)6.3);
             pathF1.LineTo((float)5.2, (float)0.9);
             pathF1.LineTo(5, 0);
             pathF1.Close();
@@ -746,8 +746,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
 
             var clip = ChartArea.ActualSeriesClipRect;
-            float polarClipHeight = (float)(Math.Min(clip.Width, clip.Height) - (2 * yAxis.RenderedRect.Height));
-            float segmentRadius = (float)yAxis.ValueToPoint(yValue);
+            float polarClipHeight = Math.Min(clip.Width, clip.Height) - (2 * yAxis.RenderedRect.Height);
+            float segmentRadius = yAxis.ValueToPoint(yValue);
             radius = (float)(Math.Min(xAxis.AvailableSize.Width / 2, xAxis.AvailableSize.Height / 2) - segmentRadius - (polarClipHeight / 2));
             float angleValue = (float)xAxis.ValueToPolarAngle(xValue);
 

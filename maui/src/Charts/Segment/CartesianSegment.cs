@@ -17,13 +17,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             if (!double.IsNaN(oldValue) && !double.IsNaN(newValue))
             {
-                return (float)((newValue > oldValue) ?
-                    oldValue + ((newValue - oldValue) * animationValue)
-                    : oldValue - ((oldValue - newValue) * animationValue));
+                return (newValue > oldValue) ?
+	                oldValue + ((newValue - oldValue) * animationValue)
+	                : oldValue - ((oldValue - newValue) * animationValue);
             }
             else
             {
-                return double.IsNaN(oldValue) ? (float)newValue : (float)(oldValue - (oldValue * animationValue));
+                return double.IsNaN(oldValue) ? newValue : oldValue - (oldValue * animationValue);
             }
         }
 

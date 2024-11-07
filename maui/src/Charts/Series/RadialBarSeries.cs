@@ -867,7 +867,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         float GetTooltipRadius(RadialBarSegment radialBarSegment)
         {
-            return (float)(radialBarSegment.InnerRingRadius + radialBarSegment.OuterRingRadius) / 2;
+            return (radialBarSegment.InnerRingRadius + radialBarSegment.OuterRingRadius) / 2;
         }
 
         void UpdateTrackProperties(Object property)

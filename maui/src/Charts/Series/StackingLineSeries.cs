@@ -512,7 +512,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     return true;
                 }
 
-                var dataPoint = FindNearestChartPoint((float)point.X, (float)point.Y);
+                var dataPoint = FindNearestChartPoint(point.X, point.Y);
 
                 if (dataPoint == null || ActualData == null)
                 {

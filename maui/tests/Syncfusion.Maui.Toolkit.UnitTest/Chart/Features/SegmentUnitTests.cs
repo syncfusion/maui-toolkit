@@ -548,7 +548,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var sfCircularChart = new SfCircularChart();
             CircularChartArea chartArea=new CircularChartArea(sfCircularChart);
             chartArea.AreaBounds= new Rect(30,40, 100, 100);
-            IChart chart = (IChart)sfCircularChart;
+            IChart chart = sfCircularChart;
             chart.ActualSeriesClipRect = chartArea.AreaBounds;
             var doughnutSegment = new DoughnutSegment();
             var doughnutSeries = new DoughnutSeries
@@ -568,7 +568,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var segmentRadius = GetPrivateField(doughnutSegment, "_segmentRadius");  
             Assert.NotEqual(RectF.Zero,actualBounds);
             Assert.Equal(doughnutSeries.InnerRadius * 20, doughnutSegment.InnerRadius);
-            Assert.Equal((double)(doughnutSeries.Radius * 50), segmentRadius);
+            Assert.Equal(doughnutSeries.Radius * 50, segmentRadius);
         }
 
         [Fact]

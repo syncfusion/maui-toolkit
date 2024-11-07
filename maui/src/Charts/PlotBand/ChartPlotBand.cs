@@ -1207,7 +1207,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 case ChartLabelAlignment.Center:
                     return x + bandRect.Left + (bandRect.Width - actualSize.Width) / 2;
                 case ChartLabelAlignment.End:
-                    return x + (float)(bandRect.Right - actualSize.Width);
+                    return x + (bandRect.Right - actualSize.Width);
                 default:
                     return x + bandRect.Left;
             }
@@ -1221,7 +1221,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 case ChartLabelAlignment.Center:
                     return y + bandRect.Top + (bandRect.Height - actualSize.Height) / 2;
                 case ChartLabelAlignment.End:
-                    return y + (float)(bandRect.Bottom - actualSize.Height);
+                    return y + (bandRect.Bottom - actualSize.Height);
                 default:
                     return y + bandRect.Top;
             }

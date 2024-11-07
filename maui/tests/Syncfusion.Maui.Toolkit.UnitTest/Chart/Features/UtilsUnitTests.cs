@@ -274,8 +274,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void GetTextColorBasedOnChartBackground_NullBackground_ShouldReturnBlack()
         { 
             var sfCartesianChart = new SfCartesianChart();
-            IChart chart = (IChart)sfCartesianChart; 
-            var result = chart.GetTextColorBasedOnChartBackground(); 
+            var result = sfCartesianChart.GetTextColorBasedOnChartBackground(); 
             Assert.Equal(Colors.Black, result);   
         }
 

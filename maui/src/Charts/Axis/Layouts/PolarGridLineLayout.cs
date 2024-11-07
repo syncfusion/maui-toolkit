@@ -126,7 +126,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     foreach (var position in tickPositions)
                     {
-                        float value = (float)axis.ValueToCoefficient(position);
+                        float value = axis.ValueToCoefficient(position);
                         float y = height * (1f - value);
                         if (_area.Series?.Count > 0 && !(_isRadar))
                         {
@@ -145,7 +145,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     var minorGridLineStyle = rangeAxisBase.MinorGridLineStyle ?? GetDefaultGridLineStyle();
                     foreach (var pos in smallTicks)
                     {
-                        float value = (float)axis.ValueToCoefficient(pos);
+                        float value = axis.ValueToCoefficient(pos);
                         float y = height * (1f - value);
                         if (_area.Series?.Count > 0 && !(_isRadar))
                         {

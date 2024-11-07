@@ -157,7 +157,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
             float topBorderYPosition = dirtyRect.Top + (selectionStrokeThickness / 2);
 
             // Draw the top border.
-            canvas.DrawLine((float)dirtyRect.Left, topBorderYPosition, dirtyRect.Width, topBorderYPosition);
+            canvas.DrawLine(dirtyRect.Left, topBorderYPosition, dirtyRect.Width, topBorderYPosition);
             canvas.CanvasRestoreState();
         }
 
@@ -187,7 +187,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
             float bottomBorderYPosition = dirtyRect.Height - (selectionStrokeThickness / 2);
 
             // Draw the bottom border.
-            canvas.DrawLine((float)dirtyRect.Left, bottomBorderYPosition, dirtyRect.Width, bottomBorderYPosition);
+            canvas.DrawLine(dirtyRect.Left, bottomBorderYPosition, dirtyRect.Width, bottomBorderYPosition);
             canvas.CanvasRestoreState();
         }
 
@@ -224,7 +224,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
         /// <returns>The calculated top position.</returns>
         float GetTopBorderPosition(RectF dirtyRect, float strokeThickness)
         {
-            return (float)(dirtyRect.Top + strokeThickness / 2);
+            return dirtyRect.Top + strokeThickness / 2;
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
         float GetBottomBorderPosition(RectF dirtyRect, float strokeThickness)
         {
             // The position for drawing a bottom border on a canvas.
-            return (float)(dirtyRect.Height - strokeThickness);
+            return dirtyRect.Height - strokeThickness;
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
         float GetLeftBorderPosition(RectF dirtyRect, float strokeThickness)
         {
             // The position for drawing a left border on a canvas.
-            return (float)(dirtyRect.Left + strokeThickness / 2);
+            return dirtyRect.Left + strokeThickness / 2;
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
         float GetRightBorderPosition(RectF dirtyRect, float strokeThickness)
         {
             // The position for drawing a right border on a canvas.
-            return (float)(dirtyRect.Width - strokeThickness);
+            return dirtyRect.Width - strokeThickness;
         }
 
         #endregion

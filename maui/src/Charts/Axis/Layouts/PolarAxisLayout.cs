@@ -390,7 +390,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 PointF end = _chartArea.PolarAngleToPoint(primaryAxis, (float)radius1, i * angle);
                 canvas.StrokeSize = (float)tickStyle.StrokeWidth;
                 canvas.StrokeColor = tickStyle.Stroke.ToColor();
-                canvas.DrawLine((float)start.X, (float)start.Y, (float)end.X, (float)end.Y);
+                canvas.DrawLine(start.X, start.Y, end.X, end.Y);
             }
         }
 

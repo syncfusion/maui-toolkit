@@ -148,8 +148,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     RenderedRect = new Rect(left, top, _arrangeRect.Width, height);
                 }
 
-                LeftOffset = (float)(RenderedRect.Left - _arrangeRect.Left);
-                TopOffset = (float)(RenderedRect.Top - _arrangeRect.Top);
+                LeftOffset = RenderedRect.Left - _arrangeRect.Left;
+                TopOffset = RenderedRect.Top - _arrangeRect.Top;
                 UpdateAxisLayout();
             }
         }
@@ -206,10 +206,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (!IsVertical)
             {
-                return (float)(RenderedRect.Width * coefficient) + LeftOffset;
+                return RenderedRect.Width * coefficient + LeftOffset;
             }
 
-            return (float)(RenderedRect.Height * (1 - coefficient)) + TopOffset;
+            return RenderedRect.Height * (1 - coefficient) + TopOffset;
         }
 
         /// <summary>

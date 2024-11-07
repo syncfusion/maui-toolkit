@@ -43,7 +43,7 @@ BindableProperty.Create(nameof(TrackColor), typeof(SolidColorBrush), typeof(Colu
             if (Series is CartesianSeries series && series.ActualYAxis is NumericalAxis yAxis)
             {
                 var top = yAxis.ValueToPoint(Convert.ToDouble(yAxis.Maximum ?? double.NaN));
-                trackRect = new RectF() { Left = Left, Top = Top, Right = (float)top, Bottom = Bottom };
+                trackRect = new RectF() { Left = Left, Top = Top, Right = top, Bottom = Bottom };
             }
         }
 

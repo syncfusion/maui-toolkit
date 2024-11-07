@@ -417,7 +417,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             var dateTime = DateTime.FromOADate(actualRange.End);
             if (double.IsNaN(autoScrollingDelta)) return;
 
-            var ActualScrollingDelta = (double)AutoScrollingDelta;
+            var ActualScrollingDelta = AutoScrollingDelta;
 
             switch (GetActualAutoScrollingDeltaType())
             {

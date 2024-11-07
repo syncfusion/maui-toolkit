@@ -399,7 +399,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             Size size = label.Measure(this);
             Rect = new Rect() { Height = (float)size.Height, Width = (float)size.Width };
 
-            return new SizeF((float)(Rect.Width + (float)Margin.Left + (float)Margin.Right), (float)(Rect.Height + (float)Margin.Top + (float)Margin.Bottom));
+            return new SizeF(Rect.Width + (float)Margin.Left + (float)Margin.Right, Rect.Height + (float)Margin.Top + (float)Margin.Bottom);
         }
 
         internal void DrawLabel(ICanvas canvas, string label, PointF point)

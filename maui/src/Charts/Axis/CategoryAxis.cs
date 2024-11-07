@@ -123,7 +123,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                     if (!isOverriddenOnCreateLabelsMethod && LabelPlacement != LabelPlacement.BetweenTicks)
                     {
-                        TickPositions.Add((double)pos);
+                        TickPositions.Add(pos);
                     }
                 }
             }

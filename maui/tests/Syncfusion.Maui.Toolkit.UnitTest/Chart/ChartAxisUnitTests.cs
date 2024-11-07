@@ -629,7 +629,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void DateTimeAxis_Maximum_SetValue_ReturnsExpectedValue(string maximum)
         {
             DateTimeAxis dateTimeAxis = new DateTimeAxis();
-            DateTime? maxDate = maximum != null ? DateTime.Parse(maximum) : (DateTime?)null;
+            DateTime? maxDate = maximum != null ? DateTime.Parse(maximum) : null;
             dateTimeAxis.Maximum = maxDate;
 
             Assert.Equal(maxDate, dateTimeAxis.Maximum);
@@ -641,7 +641,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void DateTimeAxis_Minimum_SetValue_ReturnsExpectedValue(string minimum)
         {
             var dateTimeAxis = new DateTimeAxis();
-            DateTime? minDate = minimum != null ? DateTime.Parse(minimum) : (DateTime?)null;
+            DateTime? minDate = minimum != null ? DateTime.Parse(minimum) : null;
             dateTimeAxis.Minimum = minDate;
 
             Assert.Equal(minDate, dateTimeAxis.Minimum);

@@ -403,7 +403,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             ChartDataLabelStyle labelStyle = LabelStyle;
             var borderWidth = (float)labelStyle.StrokeWidth / 2;
-            float radius = (float)scatterSize.Height / 2;
+            float radius = scatterSize.Height / 2;
             float x = labelPoint.X;
             float y = labelPoint.Y;
             x = x + ((float)labelStyle.OffsetX);

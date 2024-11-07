@@ -138,7 +138,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
             {
                 lines.Remove(lines[0]);
             }
-            string trimedText = string.Join(" ", lines.Take((int)requiredLineCount));
+            string trimedText = string.Join(" ", lines.Take(requiredLineCount));
 
             return trimedText;
         }

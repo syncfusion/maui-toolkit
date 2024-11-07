@@ -122,7 +122,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             internal get
             {
-                return (nint)_index;
+                return _index;
             }
 
             set
@@ -190,7 +190,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 #pragma warning restore CS8765
         {
             UITouch touch = (UITouch)touches.AnyObject;
-            CGPoint touchPoint = (CGPoint)touch.LocationInView(this);
+            CGPoint touchPoint = touch.LocationInView(this);
             UIView? subView = HitTest(touchPoint, null);
             UIView? topView = GetTopView(subView);
 

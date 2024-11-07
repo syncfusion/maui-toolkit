@@ -451,7 +451,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             var circumference = 2 * (float)Math.PI * calcRadius;
             var deviation = (radius / circumference) * 100;
 
-            return (float)((deviation * angleDifferent) / 100);
+            return (deviation * angleDifferent) / 100;
         }
 
         /// <summary>

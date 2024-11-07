@@ -205,7 +205,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </example>
         public object X1
         {
-            get { return (object)GetValue(X1Property); }
+            get { return GetValue(X1Property); }
             set { SetValue(X1Property, value); }
         }
 

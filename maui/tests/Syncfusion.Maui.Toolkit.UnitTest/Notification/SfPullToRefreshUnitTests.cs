@@ -601,7 +601,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             pullToRefresh.InvalidateDrawable();
             pullToRefresh.ProgressCircleView.InvalidateDrawable();
-            var testView = (SfProgressCircleView)pullToRefresh.ProgressCircleView;
+            var testView = pullToRefresh.ProgressCircleView;
             Assert.True(testView.IsEnabled, "InvalidateDrawable should have been called.");
         }
 

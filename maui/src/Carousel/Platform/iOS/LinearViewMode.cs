@@ -274,7 +274,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             ClearExistingSubviews(cell);
             if(_carousel.LinearVirtualDataSource != null)
             {
-                object? convertitem = ((IList)_carousel.LinearVirtualDataSource)[(int)indexPath.Row];
+                object? convertitem = ((IList)_carousel.LinearVirtualDataSource)[indexPath.Row];
                 if (convertitem != null)
                 {
                     ConvertItem(convertitem, indexPath.Row);
@@ -406,7 +406,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             if(_carousel.LinearVirtualDataSource != null)
             {
-                object? convertitem = ((IList)_carousel.LinearVirtualDataSource)[(int)indexPath.Row];
+                object? convertitem = ((IList)_carousel.LinearVirtualDataSource)[indexPath.Row];
                 if (convertitem != null)
                 {
                     ConvertItem(convertitem, indexPath.Row);
@@ -428,7 +428,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 cell.IsAccessibilityElement = true;
                 if (_carousel.DataSource != null)
                 {
-                    string accessibilityText = $"{carouselItem.AutomationId} PlatformCarouselItem {(int)indexPath.Row + 1} of {(int)_carousel.DataSource.Count}";
+                    string accessibilityText = $"{carouselItem.AutomationId} PlatformCarouselItem {indexPath.Row + 1} of {(int)_carousel.DataSource.Count}";
                     cell.AccessibilityLabel = accessibilityText;
                     cell.AccessibilityIdentifier = accessibilityText;
                 }
