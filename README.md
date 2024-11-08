@@ -6,6 +6,16 @@ The Syncfusion Toolkit for .NET MAUI is a high-performance collection of UI cont
 
 The Syncfusion Toolkit is built with community collaboration in mind, aiming to incorporate user feedback and contributions. It is the perfect companion for developers looking to build engaging cross-platform applications faster and more efficiently using the Syncfusion ecosystem.
 
+![NuGet](https://img.shields.io/nuget/v/Syncfusion.Maui.Toolkit)
+![NuGet Downloads](https://img.shields.io/nuget/dt/Syncfusion.Maui.Toolkit)
+![License](https://img.shields.io/github/license/syncfusion/maui-toolkit)
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Mac%20%7C%20Windows-blue)
+![Contributions](https://img.shields.io/badge/contributions-welcome-green.svg)
+![Contributors](https://img.shields.io/github/contributors/syncfusion/maui-toolkit)
+![GitHub issues](https://img.shields.io/github/issues/syncfusion/maui-toolkit)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/syncfusion/maui-toolkit)
+
 <img src="https://cdn.syncfusion.com/content/images/maui/maui-toolkit--controls.png"/>
 
 ## Supported platforms for .NET MAUI apps
@@ -208,6 +218,8 @@ For any other queries, reach our [Syncfusion support team](https://mauitoolkit.s
 Contributions are welcome! If you'd like to contribute, please check out our [contributing guide](./.github/CONTRIBUTING.md) for details on how to get started. Whether you find a bug, have a feature request, or want to submit code, we appreciate your help in improving the toolkit.
 
 See the [Development Guide](./.github/DEVELOPMENT.md) for more details about this repository and project structure.
+
+You can see the full list of contributors [here](https://github.com/syncfusion/maui-toolkit/graphs/contributors)
 
 ## About Syncfusion
 Founded in 2001 and headquartered in Research Triangle Park, N.C., Syncfusion has more than 26,000+ customers and more than 1 million users, including large financial institutions, Fortune 500 companies, and global IT consultancies.
