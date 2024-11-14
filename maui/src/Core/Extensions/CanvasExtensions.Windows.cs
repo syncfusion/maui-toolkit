@@ -12,10 +12,38 @@ using System.Numerics;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel;
+using Font = Microsoft.Maui.Font;
 using Windows.UI.ViewManagement;
 
 namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
+    /// <summary>
+	/// Provides helper methods for determining if the current application is running as a packaged app.
+	/// </summary>
+	/// <exclude/>
+	public static class PackagedAppHelper
+	{
+		/// <summary>
+		///  Gets or sets a value indicating whether the application is running as a packaged or unpackaged.
+		///  Returns `true` if the application is packaged, otherwise `false`.
+		/// </summary>
+		/// <returns>A boolean indicating if the application is packaged.</returns>
+		/// <exclude/>
+		public static bool IsPackaged()
+		{
+			try
+			{
+				var _ = Package.Current;
+				return true;
+			}
+			catch (InvalidOperationException)
+			{
+				return false;
+			}
+		}
+	}
+
 	/// <summary>
 	/// Provides extension methods for the <see cref="ICanvas"/> interface on the windows platfrom.
 	/// </summary>
@@ -40,8 +68,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                     var font = textElement.Font;
                     if (fontManager != null)
                     {
-                        var fontFamily = fontManager.GetFontFamily(font);
-                        format.FontFamily = fontFamily.Source;
+                        format.FontFamily = GetFontFamily(textElement, fontManager, font);
                         UpdateFontSize(textElement, format);
                         format.FontStyle = font.ToFontStyle();
                         format.FontWeight = font.ToFontWeight();
@@ -70,8 +97,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                     var font = textElement.Font;
                     if (fontManager != null)
                     {
-                        var fontFamily = fontManager.GetFontFamily(font);
-                        format.FontFamily = fontFamily.Source;
+                        format.FontFamily = GetFontFamily(textElement, fontManager, font);
                         if (!double.IsNaN(textElement.FontSize))
                         {
                             UpdateFontSize(textElement, format);
@@ -107,6 +133,56 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 }
             }
         }
+
+        /// <summary>
+        /// Get the font family of the font
+        /// </summary>
+        /// <param name="textElement">The text element</param>
+        /// <param name="fontManager">The font manager</param>
+        /// <param name="font">The font</param>
+        /// <returns>A string representing the local path or URI source of the font family. Defaults to "Segoe UI" if retrieval fails.</returns>
+        private static string GetFontFamily(ITextElement textElement, IFontManager fontManager, Font font)
+		{
+			string fontPath = string.Empty;
+
+			if (fontManager is null)
+				return "Segoe UI";
+
+			var fontFamily = fontManager.GetFontFamily(font);
+			
+			if (fontFamily is null)
+				return "Segoe UI";
+			
+			string path = fontFamily.Source;
+			string prefix = "ms-appx:///";
+			string fontName = path.StartsWith(prefix) ? path.Substring(prefix.Length) : path;
+
+			if (!string.IsNullOrEmpty(textElement.Font.Family))
+			{
+				try
+				{
+					fontPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{fontName}");
+				}
+				catch (Exception)
+				{
+					fontPath = string.Empty;
+				}
+			}
+
+			if (!string.IsNullOrEmpty(fontPath))
+			{
+				if (!PackagedAppHelper.IsPackaged())
+				{
+					return $@"{fontPath}";
+				}
+				else
+				{
+					return fontFamily.Source;
+				}
+			}
+
+			return "Segoe UI";
+		}
 
         private static void UpdateFontSize(ITextElement textElement, CanvasTextFormat format)
         {
