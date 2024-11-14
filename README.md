@@ -6,11 +6,12 @@ The Syncfusion Toolkit for .NET MAUI is a high-performance collection of UI cont
 
 The Syncfusion Toolkit is built with community collaboration in mind, aiming to incorporate user feedback and contributions. It is the perfect companion for developers looking to build engaging cross-platform applications faster and more efficiently using the Syncfusion ecosystem.
 
-![NuGet](https://img.shields.io/nuget/v/Syncfusion.Maui.Toolkit)
-![NuGet Downloads](https://img.shields.io/nuget/dt/Syncfusion.Maui.Toolkit)
-![License](https://img.shields.io/github/license/syncfusion/maui-toolkit)
+[![NuGet version](https://img.shields.io/nuget/v/Syncfusion.Maui.Toolkit)](https://www.nuget.org/packages/Syncfusion.Maui.Toolkit)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/Syncfusion.Maui.Toolkit)](https://www.nuget.org/stats/packages/Syncfusion.Maui.Toolkit?groupby=Version)
+[![License](https://img.shields.io/github/license/syncfusion/maui-toolkit)](https://github.com/syncfusion/maui-toolkit/blob/UpdateReadMe/LICENSE.txt)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Mac%20%7C%20Windows-blue)
+[![.NET 8](https://img.shields.io/badge/.NET%208-5C2D91?logo=.net&logoColor=white)](https://dotnet.microsoft.com/download/dotnet/8.0)
 ![Contributions](https://img.shields.io/badge/contributions-welcome-green.svg)
 ![Contributors](https://img.shields.io/github/contributors/syncfusion/maui-toolkit)
 ![GitHub issues](https://img.shields.io/github/issues/syncfusion/maui-toolkit)
