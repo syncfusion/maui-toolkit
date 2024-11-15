@@ -1,10 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
-
-namespace Syncfusion.Maui.Toolkit.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Internals
 {
     /// <summary>
     /// Represents a touch detection mechanism for views.

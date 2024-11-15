@@ -1,7 +1,4 @@
-﻿
-using Microsoft.Maui;
-
-namespace Syncfusion.Maui.Toolkit
+﻿namespace Syncfusion.Maui.Toolkit
 {
 	/// <exclude/>
 	public partial class SfViewHandler

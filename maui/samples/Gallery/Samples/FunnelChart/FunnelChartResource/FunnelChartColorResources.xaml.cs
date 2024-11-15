@@ -1,9 +1,10 @@
-namespace  Syncfusion.Maui.ControlsGallery.FunnelChart.SfFunnelChart;
-
-public partial class FunnelChartColorResources : ResourceDictionary
+namespace Syncfusion.Maui.ControlsGallery.FunnelChart.SfFunnelChart
 {
-	public FunnelChartColorResources()
+	public partial class FunnelChartColorResources : ResourceDictionary
 	{
-		InitializeComponent();
+		public FunnelChartColorResources()
+		{
+			InitializeComponent();
+		}
 	}
 }

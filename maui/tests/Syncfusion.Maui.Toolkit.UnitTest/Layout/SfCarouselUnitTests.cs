@@ -1,6 +1,4 @@
 ﻿using Syncfusion.Maui.Toolkit.Carousel;
-using System.Collections.ObjectModel;
-
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
     public class SfCarouselUnitTests : BaseUnitTest

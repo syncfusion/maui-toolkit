@@ -1,16 +1,17 @@
 
-namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip;
-
-public partial class ChipTypes : SampleView
+namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 {
-	public ChipTypes()
+	public partial class ChipTypes : SampleView
 	{
-		InitializeComponent();
+		public ChipTypes()
+		{
+			InitializeComponent();
 #if WINDOWS || MACCATALYST
 		this.Content=new ChipTypesDesktop();
 #elif ANDROID || IOS
-		this.Content=new ChipTypesMobile();
+			this.Content = new ChipTypesMobile();
 #endif
-	}
+		}
 
+	}
 }

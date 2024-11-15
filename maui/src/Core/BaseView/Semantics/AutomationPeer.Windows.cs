@@ -1,14 +1,13 @@
-﻿namespace Syncfusion.Maui.Toolkit.Semantics
-{
-    using Microsoft.Maui.Graphics;
-    using Microsoft.UI.Xaml;
-    using Microsoft.UI.Xaml.Automation.Peers;
-    using Microsoft.UI.Xaml.Automation.Provider;
-    using Microsoft.UI.Xaml.Media;
-    using Syncfusion.Maui.Toolkit.Platform;
-    using Syncfusion.Maui.Toolkit.Graphics.Internals;
-    using System.Collections.Generic;
+﻿using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Automation.Peers;
+using Microsoft.UI.Xaml.Automation.Provider;
+using Microsoft.UI.Xaml.Media;
+using Syncfusion.Maui.Toolkit.Platform;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
+namespace Syncfusion.Maui.Toolkit.Semantics
+{
+    
     internal class CustomAutomationPeer : FrameworkElementAutomationPeer
     {
         /// <summary>

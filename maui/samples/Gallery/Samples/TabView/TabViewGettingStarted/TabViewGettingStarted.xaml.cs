@@ -1,5 +1,4 @@
-﻿using Syncfusion.Maui.ControlsGallery.Converters;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Syncfusion.Maui.ControlsGallery.TabView.SfTabView
 {
@@ -91,18 +90,18 @@ namespace Syncfusion.Maui.ControlsGallery.TabView.SfTabView
         {
             TabModelSource = new List<TabModel>();
             List<TabModel> TabModels = new List<TabModel>();
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#F0F361"), Name = "Alex", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.alexandar.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFC252"), Name = "Clara", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.clara.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#8AF8FF"), Name = "Steve", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.sebastian.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#A1B2FF"), Name = "Richard", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.jackson.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#7A7A7A"), Name = "Nora", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.nora.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFB381"), Name = "David", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.tye.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#7FE8EE"), Name = "Gabriella", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.gabriella.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFF27C"), Name = "Lita", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.lita.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#F0F361"), Name = "Alex", ImageSource = "alexandar.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFC252"), Name = "Clara", ImageSource = "clara.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#8AF8FF"), Name = "Steve", ImageSource = "sebastian.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#A1B2FF"), Name = "Richard", ImageSource = "jackson.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#7A7A7A"), Name = "Nora", ImageSource = "nora.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFB381"), Name = "David", ImageSource = "tye.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#7FE8EE"), Name = "Gabriella", ImageSource = "gabriella.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFF27C"), Name = "Lita", ImageSource = "lita.png" });
 #if WINDOWS || MACCATALYST
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#EB70FF"), Name = "Liam", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.liam.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#F0F361"), Name = "Dave", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.alexandar.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#8AF8FF"), Name = "Ben", ImageSource = ImageSource.FromResource("Syncfusion.Maui.ControlsGallery.Resources.Images.sebastian.png", typeof(Converters.ImageSourceConverter).GetTypeInfo().Assembly) });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#EB70FF"), Name = "Liam", ImageSource = "liam.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#F0F361"), Name = "Dave", ImageSource = "alexandar.png" });
+            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#8AF8FF"), Name = "Ben", ImageSource = "sebastian.png" });
 #endif
             TabModelSource = TabModels;
         }

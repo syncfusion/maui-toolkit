@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Represents the base class for various types of cartesian chart segments, including 

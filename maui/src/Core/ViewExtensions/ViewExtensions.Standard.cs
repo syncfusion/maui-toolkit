@@ -1,12 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Syncfusion.Maui.Toolkit.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Internals
 {
 	/// <summary>
 	/// Provides extension methods for views.

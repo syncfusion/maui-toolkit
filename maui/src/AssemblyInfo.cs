@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("Syncfusion.Maui.Toolkit.UnitTest")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Carousel")]

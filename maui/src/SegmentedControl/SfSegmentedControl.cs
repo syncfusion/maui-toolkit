@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Linq;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
 

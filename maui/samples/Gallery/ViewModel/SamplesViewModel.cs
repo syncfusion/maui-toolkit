@@ -1,9 +1,6 @@
-﻿using Microsoft.Maui.Platform;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Xml;
 
 namespace Syncfusion.Maui.ControlsGallery
@@ -655,7 +652,7 @@ namespace Syncfusion.Maui.ControlsGallery
                 Name = xmlElement.GetAttribute("ControlName"),
                 Title = xmlElement.GetAttribute("Title"),
                 Description = xmlElement.GetAttribute("Description"),
-                Image = xmlElement.GetAttribute("Image"),
+                Image = xmlElement.GetAttribute("Image").ToLowerInvariant(),
                 StatusTag = xmlElement.GetAttribute("StatusTag"),
                 DisplayName = xmlElement.GetAttribute("DisplayName")
             };

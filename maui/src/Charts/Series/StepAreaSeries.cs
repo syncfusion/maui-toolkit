@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using System.Collections.Generic;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// The <see cref="StepAreaSeries"/> is a chart type to represent data using connected horizontal and vertical steps, creating a stepped area visualization.

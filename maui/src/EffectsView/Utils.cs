@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Syncfusion.Maui.Toolkit.EffectsView
+﻿namespace Syncfusion.Maui.Toolkit.EffectsView
 {
     /// <summary>
     /// Flagged Enum extension.

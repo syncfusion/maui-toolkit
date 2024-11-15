@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Maui.Platform;
+﻿using Microsoft.Maui.Platform;
 #if ANDROID
 using Android.Content.Res;
 #endif

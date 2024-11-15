@@ -29,9 +29,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" BackgroundColor="#F0F361" HasShadow="False" Padding="0" Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource alexandar.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#F0F361" Padding="0" Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle  CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="alexandar.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -51,9 +54,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#7FE8EE" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource gabriella.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#7FE8EE" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="gabriella.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -74,9 +80,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#FFC252" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource clara.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#FFC252" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="clara.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -96,9 +105,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#FFB381" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource tye.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#FFB381" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="tye.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -117,9 +129,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#7A7A7A" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource nora.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#7A7A7A" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="nora.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -138,9 +153,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#A1B2FF" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource sebastian.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#A1B2FF" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                    <Border.StrokeShape>
+                                                      <RoundRectangle CornerRadius="50" />
+                                                    </Border.StrokeShape>
+                                                  <Image Source="sebastian.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -159,9 +177,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#FFF27C" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource lita.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#FFF27C" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="lita.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -180,9 +201,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#7FE8EE" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource jackson.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#7FE8EE" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="jackson.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -201,9 +225,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#EB70FF" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource liam.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#EB70FF" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="liam.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">
@@ -222,9 +249,12 @@
                                     <Grid Padding="10" >
                                         <Grid ColumnSpacing="30" ColumnDefinitions="100,*" HorizontalOptions="Start">
                                             <Grid RowDefinitions="*,50" HorizontalOptions="Center" VerticalOptions="Start">
-                                                <Frame IsClippedToBounds="True" HasShadow="False" BackgroundColor="#FFF27C" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" CornerRadius="50" BorderColor="#E5E5E5" >
-                                                    <Image Source="{imageExtension:ImageResource washington.png}" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
-                                                </Frame>
+                                                <Border BackgroundColor="#FFF27C" Padding="0"  Margin="0,10,0,0" WidthRequest="100" HeightRequest="100" Stroke="#E5E5E5" >
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="50" />
+                                                  </Border.StrokeShape>
+                                                    <Image Source="washington.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
                                             <VerticalStackLayout Padding="0,10,0,0" Grid.Column="1">

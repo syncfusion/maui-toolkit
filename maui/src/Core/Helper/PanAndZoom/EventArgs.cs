@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using System;
-
-namespace Syncfusion.Maui.Toolkit.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Internals
 {
     /// <summary>
     /// Provides data for the zoom events.

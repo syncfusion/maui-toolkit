@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace  Syncfusion.Maui.ControlsGallery.FunnelChart.SfFunnelChart
+﻿namespace  Syncfusion.Maui.ControlsGallery.FunnelChart.SfFunnelChart
 {
     public class ChartDataModel
     {

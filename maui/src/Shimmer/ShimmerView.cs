@@ -1,5 +1,3 @@
-using Microsoft.Maui.Controls;
-
 namespace Syncfusion.Maui.Toolkit.Shimmer
 {
     /// <summary>

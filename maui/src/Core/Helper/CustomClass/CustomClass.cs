@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-
-namespace Syncfusion.Maui.Toolkit.Helper
+﻿namespace Syncfusion.Maui.Toolkit.Helper
 {
     internal class SfBorder : Border { }
 

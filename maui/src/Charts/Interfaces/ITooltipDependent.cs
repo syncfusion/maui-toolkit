@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     internal interface ITooltipDependent
     {

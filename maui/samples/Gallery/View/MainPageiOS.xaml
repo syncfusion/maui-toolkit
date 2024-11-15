@@ -17,7 +17,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         <converters:TagToPaddingConverter x:Key="TagToPaddingConverter"/>
-        <converters:ImageSourceConverter x:Key="imageSourceConverter"/>
     </ContentPage.Resources>
 
     <Grid>
@@ -53,7 +52,7 @@
                                                                 </customView:SfEffectsViewAdv.GestureRecognizers>
                                                                 <Grid>
                                                                     <Grid Padding="16" ColumnSpacing="16" ColumnDefinitions="56,*">
-                                                                        <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                                                        <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56"/>
                                                                         <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                                             <HorizontalStackLayout Spacing="5">
                                                                                     <Label FontFamily="Roboto-Medium" Text="{Binding Title}"  TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16"/>
@@ -335,7 +334,7 @@
                                     </customView:SfEffectsViewAdv.GestureRecognizers>
                                     <Grid>
                                             <Grid Padding="16" ColumnSpacing="16" ColumnDefinitions="56,*" BackgroundColor="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" >
-                                            <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                            <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56"/>
                                             <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                 <HorizontalStackLayout Spacing="5">
                                                     <Label FontFamily="Roboto-Medium" Text="{Binding Title}" TextColor="{AppThemeBinding Light={StaticResource TitleTextColorLight}, Dark={StaticResource TitleTextColorDark}}" FontSize="16"/>
@@ -412,22 +411,22 @@
                                 <BindableLayout.ItemTemplate>
                                     <DataTemplate>
                                         <Grid x:Name="customGrid" HeightRequest="50" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="5,0,5,0">
-                                                <Frame BorderColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
+                                                <Border Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
                                                    Margin="0,-3,0,0"
                                                    Padding="0"
                                                    HeightRequest="32"
-                                                   CornerRadius="15"
-                                                   HasShadow="False"
-                                                   
                                                    x:Name="frame">
-                                                 <Frame.Triggers>
-                                                        <DataTrigger TargetType="Frame" Binding="{Binding IsSubCategoryClicked}" Value="True">
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="15" />
+                                                  </Border.StrokeShape>
+                                                 <Border.Triggers>
+                                                        <DataTrigger TargetType="Border" Binding="{Binding IsSubCategoryClicked}" Value="True">
                                                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight }, Dark={StaticResource PrimaryBackgroundDark}}" />
                                                         </DataTrigger>
-                                                        <DataTrigger TargetType="Frame" Binding="{Binding IsSubCategoryClicked}" Value="False">
+                                                        <DataTrigger TargetType="Border" Binding="{Binding IsSubCategoryClicked}" Value="False">
                                                             <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" />
                                                         </DataTrigger>
-                                                    </Frame.Triggers>
+                                                    </Border.Triggers>
                                                 <customView:SfEffectsViewAdv>
                                                         <customView:SfEffectsViewAdv.GestureRecognizers>
                                                             <TapGestureRecognizer Tapped="SubCategory_Tapped"/>
@@ -457,7 +456,7 @@
 </Label>
                                                         </Grid>
                                                 </customView:SfEffectsViewAdv>
-                                            </Frame>
+                                            </Border>
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
@@ -814,8 +813,7 @@
                 </Grid.GestureRecognizers>
                 <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" HeightRequest="850" Grid.RowSpan="8"/>
                 <HorizontalStackLayout Padding="35,45,0,45">
-                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource 
-                        Light}, Dark={StaticResource PrimaryBackgroundDark}}" HeightRequest="60" WidthRequest="60">
+                    <Border BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" HeightRequest="60" WidthRequest="60">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="10"/>
                         </Border.StrokeShape>

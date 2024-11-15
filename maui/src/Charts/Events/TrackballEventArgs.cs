@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
 	/// <summary>
 	/// Provides event data for the <see cref="SfCartesianChart.TrackballCreated"/> event, which is triggered when the trackball is created in the chart.

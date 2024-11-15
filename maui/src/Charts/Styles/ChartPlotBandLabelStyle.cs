@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Represents a LabelStyle class that can be used to customize the plot band labels.

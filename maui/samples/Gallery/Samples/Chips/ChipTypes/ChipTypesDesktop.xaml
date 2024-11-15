@@ -6,6 +6,7 @@
              xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Chips;assembly=Syncfusion.Maui.Toolkit"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             x:DataType="local:ChipViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
 
     <localCore:SampleView.BindingContext>
@@ -102,22 +103,22 @@
                             </core:SfChipGroup>
                         </ScrollView>
                         <ScrollView>
-                            <Frame BorderColor="LightGray" CornerRadius="12" BackgroundColor="Transparent" WidthRequest="474" HeightRequest="165" HasShadow="False" Padding="10"
-							   Margin="0,20,0,10" VerticalOptions="Start">
-                            <StackLayout WidthRequest="454" HeightRequest="142"> 
-                                           <CollectionView ItemsSource="{Binding Result}"
-                                            Margin="0,5,5,0">
-                                                <CollectionView.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <Label FontFamily="Roboto-Regular"
-                                                            Text="{Binding .}"
-                                                            FontSize="14"
-                                                            Margin="2"/>
-                                                    </DataTemplate>
-                                                </CollectionView.ItemTemplate>
-                                            </CollectionView>
-                                </StackLayout>
-                            </Frame>
+                              <Border Stroke="LightGray" StrokeShape="RoundRectangle 12" BackgroundColor="Transparent" WidthRequest="474" HeightRequest="165" Padding="10"
+                                  Margin="0,20,0,10" VerticalOptions="Start">
+                                  <StackLayout WidthRequest="440" HeightRequest="142"> 
+                                             <CollectionView ItemsSource="{Binding Result}"
+                                              Margin="0,5,5,0">
+                                                  <CollectionView.ItemTemplate>
+                                                      <DataTemplate x:DataType="x:String">
+                                                          <Label FontFamily="Roboto-Regular"
+                                                              Text="{Binding .}"
+                                                              FontSize="14"
+                                                              Margin="2"/>
+                                                      </DataTemplate>
+                                                  </CollectionView.ItemTemplate>
+                                              </CollectionView>
+                                  </StackLayout>
+                            </Border>
                         </ScrollView>
                     </StackLayout>
                 </ScrollView>            

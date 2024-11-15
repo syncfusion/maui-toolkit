@@ -1,17 +1,19 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal class ChartTitleView : Frame
-    {
-        #region Constructor
+#if NET9_0_OR_GREATER
+    internal class ChartTitleView : Border
+#else
+	internal class ChartTitleView : Frame
+#endif
+	{
+		#region Constructor
 
         internal ChartTitleView()
         {
-            HasShadow = false;
-            Padding = 0; //For default size to be empty
+#if !NET9_0_OR_GREATER
+			HasShadow = false;
+#endif
+			Padding = 0; //For default size to be empty
             BackgroundColor = Colors.Transparent;
             HorizontalOptions = LayoutOptions.Fill;
             VerticalOptions = LayoutOptions.Center;

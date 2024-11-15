@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
+﻿using System.ComponentModel;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts

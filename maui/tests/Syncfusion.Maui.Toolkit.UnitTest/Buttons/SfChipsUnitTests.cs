@@ -1,7 +1,4 @@
-using Syncfusion.Maui.Toolkit.Charts;
 using Syncfusion.Maui.Toolkit.Chips;
-using System;
-using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest
@@ -308,7 +305,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Theory]
 		[InlineData("TestParameter1")]
 		[InlineData(123)]
-		[InlineData(null)]
+		[InlineData("")]
 		public void CommandParameter_SetValue_ReturnsExpectedValue(object expectedParameter)
 		{
 			var chip = new SfChip();

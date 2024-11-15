@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Graphics;
-using System;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     internal static class ChartMath
     {

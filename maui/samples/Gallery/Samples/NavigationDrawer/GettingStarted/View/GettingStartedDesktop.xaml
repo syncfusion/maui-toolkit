@@ -14,7 +14,6 @@
         <local:TextColorConverter x:Key="textColorConverter" />
         <local:FontAttributeConverter x:Key="fontAttributeConverter" />
         <local:GroupHeaderTextConverter x:Key="groupHeaderTextConverter" />
-        <imageExtension:ImageSourceConverter x:Key="imageconverter" />
     </localcore:SampleView.Resources>
 
     <localcore:SampleView.Behaviors>
@@ -28,7 +27,7 @@
                     <navigationdrawer:DrawerSettings.DrawerHeaderView>
                         <VerticalStackLayout>
                             <Grid RowDefinitions="*,Auto,Auto" Padding="25,25,25,20">
-                                <Image Source="{imageExtension:ImageResource person.png}" VerticalOptions="Center" WidthRequest="72" HeightRequest="72"/>
+                                <Image Source="person.png" VerticalOptions="Center" WidthRequest="72" HeightRequest="72"/>
                                 <Label Grid.Row="1" Text="Leslie Alexander" Margin="0,5,0,0"  VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="20" WidthRequest="154" HeightRequest="24" HorizontalOptions="Center"/>
                                 <Label Grid.Row="2" Text="UX Designer" Margin="0,5,0,0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="14" WidthRequest="148" HeightRequest="24" HorizontalOptions="Center"/>
                             </Grid>
@@ -133,7 +132,7 @@
                             </core:SfEffectsView>
                         </Border>
                         <Label Grid.Column="1" x:Name="titleName" Text="Inbox" TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"/>
-                        <Image Grid.Column="2" Source="{imageExtension:ImageResource person.png}" VerticalOptions="Center" WidthRequest="35" HeightRequest="35" Margin="5"/>
+                        <Image Grid.Column="2" Source="person.png" VerticalOptions="Center" WidthRequest="35" HeightRequest="35" Margin="5"/>
                     </Grid>
 
                     <ListView BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"  RowHeight="{OnPlatform MacCatalyst=100}" Grid.Row="1"
@@ -264,13 +263,15 @@
                         </ListView.ItemTemplate>
                     </ListView>
 
-                    <Frame CornerRadius="4"
-                           Grid.Row="1"
+                    <Border Grid.Row="1"
                            Margin="16,0,16,5"
                            HeightRequest="40"
                            VerticalOptions="End"
                            IsVisible="{Binding IsDeleted}"
                            Padding="0">
+                      <Border.StrokeShape>
+              <RoundRectangle CornerRadius="4" />
+            </Border.StrokeShape>
                         <Grid HeightRequest="40"
                               BackgroundColor="#3D454A">
                             <Grid.ColumnDefinitions>
@@ -299,7 +300,7 @@
                                 </Label.GestureRecognizers>
                             </Label>
                         </Grid>
-                    </Frame>
+                    </Border>
                 </Grid>
             </navigationdrawer:SfNavigationDrawer.ContentView>
         </navigationdrawer:SfNavigationDrawer>

@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-
-#if IOS || MACCATALYST
+﻿#if IOS || MACCATALYST
 using UIKit;
 #endif
 

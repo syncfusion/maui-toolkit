@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System.Collections.Generic;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Represents a base class for the <see cref="CartesianDataLabelSettings"/>, <see cref="CircularDataLabelSettings"/> , <see cref="PyramidDataLabelSettings"/> , <see cref="FunnelDataLabelSettings"/> and <see cref="PolarDataLabelSettings"/> classes.

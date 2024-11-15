@@ -1,24 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Graphics.Canvas.Text;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
+﻿using Microsoft.Graphics.Canvas.Text;
 using Microsoft.Maui.Graphics.Win2D;
 using Microsoft.Maui.Platform;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Runtime.Versioning;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Font = Microsoft.Maui.Font;
 using Windows.UI.ViewManagement;
 
 namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
-    /// <summary>
+	/// <summary>
 	/// Provides helper methods for determining if the current application is running as a packaged app.
 	/// </summary>
 	/// <exclude/>
@@ -60,23 +50,31 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		/// <param name="textElement">The text element that defines the text's appearance.</param>
 		public static void DrawText(this ICanvas canvas, string value, float x, float y, ITextElement textElement)
         {
-            if (canvas is W2DCanvas w2DCanvas)
-            {
-                using (var format = new CanvasTextFormat())
-                {
-                    IFontManager? fontManager = textElement.FontManager;
-                    var font = textElement.Font;
-                    if (fontManager != null)
-                    {
-                        format.FontFamily = GetFontFamily(textElement, fontManager, font);
-                        UpdateFontSize(textElement, format);
-                        format.FontStyle = font.ToFontStyle();
-                        format.FontWeight = font.ToFontWeight();
-                        w2DCanvas.Session.DrawText(value, new Vector2(x, y), textElement.TextColor.AsColor(), format);
-                    }
-                }
-            }
-        }
+			if (string.IsNullOrEmpty(value) || canvas is not W2DCanvas w2DCanvas)
+				return;
+
+			try
+			{
+				using (var format = new CanvasTextFormat())
+				{
+					IFontManager? fontManager = textElement.FontManager;
+					var font = textElement.Font;
+
+					if (fontManager is not null)
+					{
+						format.FontFamily = GetFontFamily(textElement, fontManager, font);
+						UpdateFontSize(textElement, format);
+						format.FontStyle = font.ToFontStyle();
+						format.FontWeight = font.ToFontWeight();
+						w2DCanvas.Session.DrawText(value, new Vector2(x, y), textElement.TextColor.AsColor(), format);
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				System.Diagnostics.Debug.WriteLine($"Font error: {ex.Message}");
+			}
+		}
 
         /// <summary>
         /// Draw the text with in specified rectangle area.
@@ -89,50 +87,51 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// <param name="textElement">The text style.</param>
         public static void DrawText(this ICanvas canvas, string value, Rect rect, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, ITextElement textElement)
         {
-            if (canvas is W2DCanvas w2DCanvas)
-            {
-                using (var format = new CanvasTextFormat())
-                {
-                    IFontManager? fontManager = textElement.FontManager;
-                    var font = textElement.Font;
-                    if (fontManager != null)
-                    {
-                        format.FontFamily = GetFontFamily(textElement, fontManager, font);
-                        if (!double.IsNaN(textElement.FontSize))
-                        {
-                            UpdateFontSize(textElement, format);
-                        }
-                        format.FontStyle = font.ToFontStyle();
-                        format.FontWeight = font.ToFontWeight();
+			if (canvas is W2DCanvas w2DCanvas)
+			{
+				using (var format = new CanvasTextFormat())
+				{
+					IFontManager? fontManager = textElement.FontManager;
+					var font = textElement.Font;
 
-                        CanvasVerticalAlignment canvasVerticallAlignment = CanvasVerticalAlignment.Top;
-                        if (verticalAlignment == VerticalAlignment.Center)
-                        {
-                            canvasVerticallAlignment = CanvasVerticalAlignment.Center;
-                        }
-                        else if (verticalAlignment == VerticalAlignment.Bottom)
-                        {
-                            canvasVerticallAlignment = CanvasVerticalAlignment.Bottom;
-                        }
+					if (fontManager != null)
+					{
+						format.FontFamily = GetFontFamily(textElement, fontManager, font);
+						if (!double.IsNaN(textElement.FontSize))
+						{
+							UpdateFontSize(textElement, format);
+						}
+						format.FontStyle = font.ToFontStyle();
+						format.FontWeight = font.ToFontWeight();
 
-                        format.VerticalAlignment = canvasVerticallAlignment;
-                        CanvasHorizontalAlignment canvasHorizontalAlignment = CanvasHorizontalAlignment.Left;
-                        if (horizontalAlignment == HorizontalAlignment.Center)
-                        {
-                            canvasHorizontalAlignment = CanvasHorizontalAlignment.Center;
-                        }
-                        else if (horizontalAlignment == HorizontalAlignment.Right)
-                        {
-                            canvasHorizontalAlignment = CanvasHorizontalAlignment.Right;
-                        }
+						CanvasVerticalAlignment canvasVerticallAlignment = CanvasVerticalAlignment.Top;
+						if (verticalAlignment == VerticalAlignment.Center)
+						{
+							canvasVerticallAlignment = CanvasVerticalAlignment.Center;
+						}
+						else if (verticalAlignment == VerticalAlignment.Bottom)
+						{
+							canvasVerticallAlignment = CanvasVerticalAlignment.Bottom;
+						}
 
-                        format.HorizontalAlignment = canvasHorizontalAlignment;
-                        format.Options = CanvasDrawTextOptions.Clip;
-                        w2DCanvas.Session.DrawText(value, new Windows.Foundation.Rect(rect.X, rect.Y, rect.Width, rect.Height), textElement.TextColor.AsColor(), format);
-                    }
-                }
-            }
-        }
+						format.VerticalAlignment = canvasVerticallAlignment;
+						CanvasHorizontalAlignment canvasHorizontalAlignment = CanvasHorizontalAlignment.Left;
+						if (horizontalAlignment == HorizontalAlignment.Center)
+						{
+							canvasHorizontalAlignment = CanvasHorizontalAlignment.Center;
+						}
+						else if (horizontalAlignment == HorizontalAlignment.Right)
+						{
+							canvasHorizontalAlignment = CanvasHorizontalAlignment.Right;
+						}
+
+						format.HorizontalAlignment = canvasHorizontalAlignment;
+						format.Options = CanvasDrawTextOptions.Clip;
+						w2DCanvas.Session.DrawText(value, new Windows.Foundation.Rect(rect.X, rect.Y, rect.Width, rect.Height), textElement.TextColor.AsColor(), format);
+					}
+				}
+			}
+		}
 
         /// <summary>
         /// Get the font family of the font

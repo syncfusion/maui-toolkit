@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit.SegmentedControl

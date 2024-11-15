@@ -1,5 +1,4 @@
-﻿using Syncfusion.Maui.ControlsGallery;
-using Syncfusion.Maui.Toolkit.Charts;
+﻿using Syncfusion.Maui.Toolkit.Charts;
 using System.Globalization;
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart

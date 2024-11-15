@@ -1,9 +1,10 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using Syncfusion.Maui.Toolkit.SegmentedControl;
+
 namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
 {
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using Syncfusion.Maui.Toolkit.SegmentedControl;
-
+    
     /// <summary>
     /// Providing data to support getting started with the application.
     /// </summary>
@@ -378,23 +379,23 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
 
             if (this.SelectedColoredIndex == 0)
             {
-                this.Image = "BlueSpeaker.png";
+                this.Image = "bluespeaker.png";
             }
             else if (this.SelectedColoredIndex == 1)
             {
-                this.Image = "GreySpeaker.png";
+                this.Image = "greyspeaker.png";
             }
             else if (this.SelectedColoredIndex == 2)
             {
-                this.Image = "GreenSpeaker.png";
+                this.Image = "greenspeaker.png";
             }
             else if (this.SelectedColoredIndex == 3)
             {
-                this.Image = "PinkSpeaker.png";
+                this.Image = "pinkspeaker.png";
             }
             else if (this.SelectedColoredIndex == 4)
             {
-                this.Image = "SandalsSpeaker.png";
+                this.Image = "sandalsspeaker.png";
             }
 
             this.totalAmount = 399;

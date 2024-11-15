@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Layouts;
-using System;
+﻿using Microsoft.Maui.Layouts;
 #if ANDROID
 using Android.Content;
 using Android.Provider;

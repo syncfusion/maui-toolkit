@@ -1,13 +1,6 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Layouts;
+﻿using Microsoft.Maui.Layouts;
 using Syncfusion.Maui.Toolkit.Internals;
-using System;
-using System.IO;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Syncfusion.Maui.Toolkit.Graphics.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
     /// <summary>
     /// Represents a class that can be used to calculate the text size.

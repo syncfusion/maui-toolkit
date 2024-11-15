@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System.Collections.Generic;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Serves as the base class for Y-range based Cartesian series.

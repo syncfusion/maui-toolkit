@@ -27,7 +27,7 @@
                                 <ColumnDefinition Width="7*"/>
                             </Grid.ColumnDefinitions>
 
-                            <Image x:Name="cardImage" Source="{imageExtension:ImageResource person1.png}" Margin="7" VerticalOptions="Center"
+                            <Image x:Name="cardImage" Source="person1.png" Margin="7" VerticalOptions="Center"
 									   WidthRequest="72" HeightRequest="72" />
                             <StackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
                                 <Label Text="Laura Steffi"  TextColor="#FFFFFF" FontFamily="Roboto-Medium"

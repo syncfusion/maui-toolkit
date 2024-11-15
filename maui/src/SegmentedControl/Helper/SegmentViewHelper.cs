@@ -1,9 +1,4 @@
-﻿using System;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.SegmentedControl
+﻿namespace Syncfusion.Maui.Toolkit.SegmentedControl
 {
     /// <summary>
     /// Represents a static class that holds the segment view related static methods.

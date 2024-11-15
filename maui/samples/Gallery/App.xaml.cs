@@ -1,12 +1,18 @@
 ﻿using System.Reflection;
-namespace Syncfusion.Maui.ControlsGallery;
-
-public partial class App : Application
+namespace Syncfusion.Maui.ControlsGallery
 {
-	public App()
+	public partial class App : Application
 	{
-		InitializeComponent();
-        var appInfo = typeof(App).GetTypeInfo().Assembly;
-        MainPage = Syncfusion.Maui.ControlsGallery.BaseConfig.MainPageInit(appInfo);
-    }
+		public App()
+		{
+			InitializeComponent();
+		}
+
+		protected override Window CreateWindow(IActivationState? activationState)
+		{
+			Assembly assembly = typeof(App).GetTypeInfo().Assembly;
+			var mainPage = BaseConfig.MainPageInit(assembly);
+			return new Window(mainPage);
+		}
+	}
 }

@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit
+﻿namespace Syncfusion.Maui.Toolkit
 {
     /// <summary>
     /// Represents a layout that can be drawn and supports absolute positioning.

@@ -2,20 +2,16 @@
 // Copyright (c) PlaceholderCompany. All rights reserved.
 // </copyright>
 
+using System;
+using System.Threading.Tasks;
+using Syncfusion.Maui.Toolkit.EffectsView;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Internals;
+using Syncfusion.Maui.Toolkit.Themes;
+using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
 namespace Syncfusion.Maui.Toolkit.TextInputLayout
 {
-	using System;
-	using System.Threading.Tasks;
-	using Microsoft.Maui.Controls;
-	using Microsoft.Maui.Devices;
-	using Microsoft.Maui.Graphics;
-	using Syncfusion.Maui.Toolkit.EffectsView;
-	using Syncfusion.Maui.Toolkit.Graphics.Internals;
-	using Syncfusion.Maui.Toolkit.Internals;
-	using Syncfusion.Maui.Toolkit.Themes;
-	using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
-
 	/// <summary>
 	/// Represents the <see cref="SfTextInputLayout"/> control that enhances input views with decorative elements such as floating labels, icons, and assistive labels.
 	/// </summary>
@@ -569,7 +565,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
             if (Content != null)
             {
-                measure = Content.Measure(widthConstraint, heightConstraint, MeasureFlags.IncludeMargins);
+#if NET8_0
+				measure = this.Content.Measure(widthConstraint, heightConstraint, MeasureFlags.IncludeMargins);
+#else
+                measure = this.Content.Measure(widthConstraint, heightConstraint);
+#endif
             }
 
             if (availableWidth == -1 || availableWidth == double.PositiveInfinity)

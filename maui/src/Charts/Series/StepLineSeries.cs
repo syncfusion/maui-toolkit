@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// The <see cref="StepLineSeries"/> is a chart type to represent data using connected horizontal and vertical steps, creating a stepped line visualization.

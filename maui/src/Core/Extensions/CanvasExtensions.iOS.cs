@@ -1,12 +1,6 @@
 ﻿using CoreGraphics;
 using Foundation;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Platform;
-using ObjCRuntime;
-using System;
 using UIKit;
 
 namespace Syncfusion.Maui.Toolkit.Graphics.Internals

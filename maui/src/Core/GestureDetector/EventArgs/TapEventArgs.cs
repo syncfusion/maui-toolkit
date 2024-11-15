@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Internals
 {
     /// <summary>
     /// Provides event data for the tap action on the view.

@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Graphics;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

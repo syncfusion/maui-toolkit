@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Syncfusion.Maui.Toolkit
+﻿namespace Syncfusion.Maui.Toolkit
 {
     internal class LegendItemClickedEventArgs : EventArgs
     {

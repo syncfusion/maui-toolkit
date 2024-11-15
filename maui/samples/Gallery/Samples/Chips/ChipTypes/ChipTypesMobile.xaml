@@ -5,6 +5,7 @@
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Chips"
              xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Chips;assembly=Syncfusion.Maui.Toolkit"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             x:DataType="local:ChipViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
 
     <localCore:SampleView.BindingContext>
@@ -100,7 +101,7 @@
                 <CollectionView ItemsSource="{Binding Result}"
                                 Margin="10,5,5,0">
                     <CollectionView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="x:String">
                             <Label FontFamily="Roboto-Regular"
                                 Text="{Binding .}"
                                 LineBreakMode="WordWrap"

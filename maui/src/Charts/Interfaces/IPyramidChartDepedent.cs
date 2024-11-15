@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
 

@@ -1,7 +1,4 @@
 ﻿using Foundation;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Platform;
 using UIKit;
 
 namespace Syncfusion.Maui.Toolkit.Internals

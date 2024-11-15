@@ -1,75 +1,114 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Syncfusion.Maui.Toolkit.Internals;
+﻿using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Platform;
 using UIKit;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
 namespace Syncfusion.Maui.Toolkit.PullToRefresh
 {
-    /// <summary>
-    /// <see cref="SfPullToRefresh"/> enables interaction to refresh the loaded view. This control allows users to trigger a refresh action by performing the pull-to-refresh gesture.
-    /// </summary>
-    public partial class SfPullToRefresh
+	/// <summary>
+	/// <see cref="SfPullToRefresh"/> enables interaction to refresh the loaded view. This control allows users to trigger a refresh action by performing the pull-to-refresh gesture.
+	/// </summary>
+	public partial class SfPullToRefresh
     {
-        #region Fields
+		#region Fields
 
-        UIPanGestureRecognizer? _panGesture;
-        LayoutViewExt? _nativeView;
-        List<UIGestureRecognizer>? _childGestureRecognizers;
-        bool _isChildScrolledVertically = false;
-        #endregion
+		UIPanGestureRecognizer? _panGesture;
+		LayoutViewExt? _nativeView;
+		List<UIGestureRecognizer>? _childGestureRecognizers;
+		bool _isChildScrolledVertically = false;
+		PullToRefreshProxy? _proxy;
 
-        #region Private Methods
+		#endregion
 
-        /// <summary>
-        /// This method initializes all the gesture related works.
-        /// </summary>
-        void InitializeGesture()
+		#region Internal properties
+
+		/// <summary>
+		/// List to store gesture recognizers attached to pull to refresh control descendants.
+		/// </summary>
+		internal List<UIGestureRecognizer>? ChildGestureRecognizers
+		{
+			get { return _childGestureRecognizers; }
+			set { _childGestureRecognizers = value; }
+		}
+
+		/// <summary>
+		/// Indicates whether the child elements of pullToRefresh is Scrolled Vertically or not.
+		/// </summary>
+		internal bool IsChildScrolledVertically
+		{
+			get { return _isChildScrolledVertically; }
+			set { _isChildScrolledVertically = value; }
+		}
+
+		/// <summary>
+		/// Indicates the native view associated with pullToRefresh.
+		/// </summary>
+		internal LayoutViewExt? NativeView
+		{
+			get { return _nativeView; }
+			set { _nativeView = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the panGesture for the pullToRefresh.
+		/// </summary>
+		internal UIPanGestureRecognizer? PanGesture
+		{
+			get { return _panGesture; }
+			set { _panGesture = value; }
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// This method initializes all the gesture related works.
+		/// </summary>
+		void InitializeGesture()
         {
-            if (Handler != null && Handler.PlatformView is LayoutViewExt layoutView)
+			Dispose();
+			if (Handler is not null && Handler.PlatformView is LayoutViewExt layoutView)
             {
-                _nativeView = layoutView;
+                NativeView = layoutView;
 
-                if (_nativeView.GestureRecognizers != null && _nativeView.GestureRecognizers.Length > 0)
+                if (NativeView.GestureRecognizers is not null && NativeView.GestureRecognizers.Length > 0)
                 {
-                    var panGestureRecognizer = _nativeView.GestureRecognizers.OfType<UIPanGestureRecognizer>().FirstOrDefault();
-
-                    if (panGestureRecognizer != null)
-                    {
-                        _panGesture = panGestureRecognizer;
-                        _panGesture.CancelsTouchesInView = false;
-                        _childGestureRecognizers = new List<UIGestureRecognizer>();
-                        _panGesture.ShouldRecognizeSimultaneously = null;
-                        _panGesture.ShouldRecognizeSimultaneously += ShouldRecognizeSimultaneousGesture;
-                        _panGesture.ShouldBegin += GestureShouldBegin;
-                    }
-                }
-            }
-            else
-            {
-                Dispose();
+                    var panGestureRecognizer = NativeView.GestureRecognizers.OfType<UIPanGestureRecognizer>().FirstOrDefault();
+					if (panGestureRecognizer is not null)
+					{
+						PanGesture = panGestureRecognizer;
+						PanGesture.CancelsTouchesInView = false;
+						ChildGestureRecognizers = new List<UIGestureRecognizer>();
+						_proxy = new PullToRefreshProxy(this);
+						PanGesture.ShouldRecognizeSimultaneously = null;
+						PanGesture.ShouldRecognizeSimultaneously += _proxy.ShouldRecognizeSimultaneousGesture;
+						PanGesture.ShouldBegin += _proxy.GestureShouldBegin;
+					}
+				}
             }
         }
 
-        /// <summary>
-        /// Unwires wired events and disposes used objects.
-        /// </summary>
-        void Dispose()
-        {
-            if (_panGesture != null)
-            {
-                _panGesture.ShouldRecognizeSimultaneously -= ShouldRecognizeSimultaneousGesture;
-                _panGesture.ShouldBegin -= GestureShouldBegin;
-            }
+		/// <summary>
+		/// Unwires wired events and disposes used objects.
+		/// </summary>
+		void Dispose()
+		{
+			if (_proxy is not null)
+			{
+				if (PanGesture is not null)
+				{
+					PanGesture.ShouldRecognizeSimultaneously -= _proxy.ShouldRecognizeSimultaneousGesture;
+					PanGesture.ShouldBegin -= _proxy.GestureShouldBegin;
+					PanGesture = null;
+				}
 
-            _nativeView = null;
-            _childGestureRecognizers = null;
-            _panGesture = null;
-        }
+				_proxy = null;
+			}
+
+			NativeView = null;
+			ChildGestureRecognizers = null;
+		}
 
         /// <summary>
         /// Gets the X and Y coordinates of the specified element based on the screen.
@@ -79,7 +118,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         {
             if (child is UIView view)
             {
-                var point = view.ConvertPointToView(view.Bounds.Location, _nativeView);
+                var point = view.ConvertPointToView(view.Bounds.Location, NativeView);
                 return new Microsoft.Maui.Graphics.Point(point.X, point.Y);
             }
 
@@ -113,6 +152,9 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// </summary>
         void ConfigTouch()
         {
+			// When the handler is changed without creating a new virtual view, adding a touch listener will skip attaching touch wiring to the native view.
+			// This is because the TouchDetector will still remain in the VirtualView and will be wired with the old handler and old native view.
+			this.RemoveTouchListener(this);
             this.AddTouchListener(this);
             InitializeGesture();
         }
@@ -128,7 +170,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <param name="args">Relevant <see cref="HandlerChangingEventArgs"/>.</param>
 		protected override void OnHandlerChanging(HandlerChangingEventArgs args)
         {
-            if (args.OldHandler != null)
+            if (args.OldHandler is not null)
             {
                 Dispose();
             }
@@ -146,17 +188,17 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// <param name="e">Event args.</param>
         void ITouchListener.OnTouch(PointerEventArgs e)
         {
-            _isChildScrolledVertically = false;
+            IsChildScrolledVertically = false;
             if (e.Action == PointerActions.Pressed || e.Action == PointerActions.Moved)
             {
                 _childLoopCount = 0;
                 var firstDescendant = PullableContent.GetVisualTreeDescendants().FirstOrDefault();
-                if (firstDescendant != null)
+                if (firstDescendant is not null)
                 {
-                    _isChildScrolledVertically = IsChildElementScrolled(firstDescendant, e.TouchPoint);
+                    IsChildScrolledVertically = IsChildElementScrolled(firstDescendant, e.TouchPoint);
                 }
 
-                if (_isChildScrolledVertically)
+                if (IsChildScrolledVertically)
                 {
                     return;
                 }
@@ -166,10 +208,10 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
             if (e.Action == PointerActions.Released || e.Action == PointerActions.Exited || e.Action == PointerActions.Cancelled)
             {
-                _isIPullToRefresh = false;
-                if (_childGestureRecognizers != null)
+                IsIPullToRefresh = false;
+                if (ChildGestureRecognizers is not null)
                 {
-                    foreach (var recognizer in _childGestureRecognizers)
+                    foreach (var recognizer in ChildGestureRecognizers)
                     {
                         recognizer.Enabled = true;
                     }
@@ -178,142 +220,193 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         }
 
         #endregion
-
-        #region Events
-
-        /// <summary>
-        /// Raises when <see cref="_panGesture"/> begins.
-        /// </summary>
-        /// <param name="uIGestureRecognizer">Instance of <see cref="_panGesture"/>.</param>
-        /// <returns>True, If the gesture should begin, else false.</returns>
-        bool GestureShouldBegin(UIGestureRecognizer uIGestureRecognizer)
-        {
-            if (_childGestureRecognizers != null)
-            {
-                foreach (var recognizer in _childGestureRecognizers)
-                {
-                    recognizer.Enabled = true;
-                }
-            }
-
-            return !(_isIPullToRefresh && _isChildScrolledVertically);
-        }
-
-        /// <summary>
-        /// Raises when another gesture happens during <see cref="_panGesture"/>.
-        /// </summary>
-        /// <param name="gesture1">Instance of <see cref="_panGesture"/>.</param>
-        /// <param name="gesture2">Instance of other gesture.</param>
-        /// <returns>Return true, if we want to handle gesture, else false.</returns>
-        bool ShouldRecognizeSimultaneousGesture(UIGestureRecognizer gesture1, UIGestureRecognizer gesture2)
-        {
-            if (_panGesture == null || !(gesture2 is UIPanGestureRecognizer))
-            {
-                return false;
-            }
-
-            if (gesture2.View is UIScrollView uIScrollView)
-            {
-                HandleScrollBars(gesture2);
-            }
-
-            if (Math.Abs(_panGesture.VelocityInView(_nativeView).X) > Math.Abs(_panGesture.VelocityInView(_nativeView).Y))
-            {
-                return HandleHorizontalSwipe(gesture1, gesture2);
-            }
-            else if (_panGesture.VelocityInView(_nativeView).Y <= 0)
-            {
-                gesture2.Enabled = true;
-                return false;
-            }
-            else
-            {
-                return HandleCustomPanGesture(gesture1, gesture2);
-            }
-        }
-
-        void HandleScrollBars(UIGestureRecognizer gesture2)
-        {
-            var scrollBars = gesture2.View.Subviews.Where(x => x.Class.Name == "_UIScrollerImpContainerView");
-            foreach (var scroll in scrollBars)
-            {
-                var touchPoint = gesture2.LocationInView(scroll);
-                if (scroll.Bounds.Contains(touchPoint))
-                {
-                    CancelPulling();
-                }
-
-                break;
-            }
-        }
-
-        bool HandleHorizontalSwipe(UIGestureRecognizer gesture1, UIGestureRecognizer gesture2)
-        {
-            if (_panGesture != null && gesture2.State == UIGestureRecognizerState.Began)
-            {
-                _panGesture.Enabled = false;
-            }
-
-            gesture2.Enabled = true;
-            gesture1.Enabled = true;
-
-            UIGestureRecognizer.Token? gestureToken = null;
-
-            if (gestureToken == null)
-            {
-                gestureToken = gesture2.AddTarget(() =>
-                {
-                    if (gesture2.State == UIGestureRecognizerState.Failed ||
-                        gesture2.State == UIGestureRecognizerState.Ended ||
-                        gesture2.State == UIGestureRecognizerState.Cancelled)
-                    {
-                        if (_panGesture != null)
-                        {
-                            _panGesture.Enabled = true;
-                        }
-
-                        if (gestureToken != null)
-                        {
-                            gesture2.RemoveTarget(gestureToken);
-                            gestureToken = null;
-                        }
-                    }
-                });
-            }
-
-            return true;
-        }
-
-        bool HandleCustomPanGesture(UIGestureRecognizer gesture1, UIGestureRecognizer gesture2)
-        {
-            if (gesture1 != null && gesture2 != null &&
-                gesture1 is UIPanGestureRecognizer &&
-                gesture1.Class != null &&
-                gesture1.Class.Name != null &&
-                !gesture1.Class.Name.Equals("UIScrollViewPanGestureRecognizer", StringComparison.Ordinal))
-            {
-                if (_isChildScrolledVertically)
-                {
-                    gesture2.Enabled = true;
-                }
-                else
-                {
-                    if (_childGestureRecognizers != null && !_childGestureRecognizers.Contains(gesture2))
-                    {
-                        _childGestureRecognizers.Add(gesture2);
-                    }
-
-                    gesture2.Enabled = false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-
-            return false;
-        }
-
-        #endregion
     }
+
+	/// <summary>
+	///  Manages the native gesture events.
+	/// </summary>
+	internal class PullToRefreshProxy
+	{
+		#region Fields
+
+		WeakReference<SfPullToRefresh> _sfPullToRefresh;
+
+		#endregion
+
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PullToRefreshProxy"/> class.
+		/// </summary>
+		/// <param name="pullToRefresh">pullToRefresh instance.</param>
+		internal PullToRefreshProxy(SfPullToRefresh pullToRefresh)
+		{
+			_sfPullToRefresh = new(pullToRefresh);
+		}
+
+		#endregion
+
+		#region Internal Properties
+
+		/// <summary>
+		/// Gets the instance of <see cref="SfPullToRefresh"/> class.
+		/// </summary>
+		internal SfPullToRefresh? SfPullToRefresh
+		{
+			get => _sfPullToRefresh is not null && _sfPullToRefresh.TryGetTarget(out var v) ? v : null;
+		}
+
+		#endregion
+
+		#region Internal Methods
+
+		/// <summary>
+		/// Raises when pan gesture begins.
+		/// </summary>
+		/// <param name="uIGestureRecognizer">Instance of pan gesture.</param>
+		/// <returns>True, If the gesture should begin, else false.</returns>
+		internal bool GestureShouldBegin(UIGestureRecognizer uIGestureRecognizer)
+		{
+			if (SfPullToRefresh is null)
+			{
+				return false;
+			}
+
+			if (SfPullToRefresh.ChildGestureRecognizers is not null)
+			{
+				foreach (var recognizer in SfPullToRefresh.ChildGestureRecognizers)
+				{
+					recognizer.Enabled = true;
+				}
+			}
+
+			return !(SfPullToRefresh.IsIPullToRefresh && SfPullToRefresh.IsChildScrolledVertically);
+		}
+
+		/// <summary>
+		/// Raises when another gesture happens during <see cref="SfPullToRefresh.PanGesture"/>.
+		/// </summary>
+		/// <param name="gesture1">Instance of <see cref="SfPullToRefresh.PanGesture"/>.</param>
+		/// <param name="gesture2">Instance of other gesture.</param>
+		/// <returns>Return true, if we want to handle gesture, else false.</returns>
+		internal bool ShouldRecognizeSimultaneousGesture(UIGestureRecognizer gesture1, UIGestureRecognizer gesture2)
+		{
+			if (SfPullToRefresh is null || SfPullToRefresh.PanGesture is null || !(gesture2 is UIPanGestureRecognizer))
+			{
+				return false;
+			}
+
+			if (gesture2.View is UIScrollView uIScrollView)
+			{
+				HandleScrollBars(gesture2);
+			}
+
+			if (Math.Abs(SfPullToRefresh.PanGesture.VelocityInView(SfPullToRefresh.NativeView).X) > Math.Abs(SfPullToRefresh.PanGesture.VelocityInView(SfPullToRefresh.NativeView).Y))
+			{
+				return HandleHorizontalSwipe(gesture1, gesture2);
+			}
+			else if (SfPullToRefresh.PanGesture.VelocityInView(SfPullToRefresh.NativeView).Y <= 0)
+			{
+				gesture2.Enabled = true;
+				return false;
+			}
+			else
+			{
+				return HandleCustomPanGesture(gesture1, gesture2);
+			}
+		}
+
+		#endregion
+
+		#region Private Methods
+		void HandleScrollBars(UIGestureRecognizer gesture2)
+		{
+			if (SfPullToRefresh is null)
+			{
+				return;
+			}
+
+			var scrollBars = gesture2.View.Subviews.Where(x => x.Class.Name == "_UIScrollerImpContainerView");
+			foreach (var scroll in scrollBars)
+			{
+				var touchPoint = gesture2.LocationInView(scroll);
+				if (scroll.Bounds.Contains(touchPoint))
+				{
+					SfPullToRefresh.CancelPulling();
+				}
+
+				break;
+			}
+		}
+
+		bool HandleHorizontalSwipe(UIGestureRecognizer gesture1, UIGestureRecognizer gesture2)
+		{
+			if (SfPullToRefresh is null)
+			{
+				return false;
+			}
+
+			if (SfPullToRefresh.PanGesture is not null && gesture2.State == UIGestureRecognizerState.Began)
+			{
+				SfPullToRefresh.PanGesture.Enabled = false;
+			}
+
+			gesture2.Enabled = true;
+			gesture1.Enabled = true;
+
+			UIGestureRecognizer.Token? gestureToken = null;
+
+			if (gestureToken is null)
+			{
+				gestureToken = gesture2.AddTarget(() =>
+				{
+					if (gesture2.State == UIGestureRecognizerState.Failed ||
+						gesture2.State == UIGestureRecognizerState.Ended ||
+						gesture2.State == UIGestureRecognizerState.Cancelled)
+					{
+						if (SfPullToRefresh.PanGesture is not null)
+						{
+							SfPullToRefresh.PanGesture.Enabled = true;
+						}
+
+						if (gestureToken is not null)
+						{
+							gesture2.RemoveTarget(gestureToken);
+							gestureToken = null;
+						}
+					}
+				});
+			}
+
+			return true;
+		}
+
+		bool HandleCustomPanGesture(UIGestureRecognizer gesture1, UIGestureRecognizer gesture2)
+		{
+			if (SfPullToRefresh is not null && gesture1 is not null && gesture2 is not null &&
+				gesture1 is UIPanGestureRecognizer &&
+				gesture1.Class is not null &&
+				gesture1.Class.Name is not null &&
+				!gesture1.Class.Name.Equals("UIScrollViewPanGestureRecognizer", StringComparison.Ordinal))
+			{
+				if (SfPullToRefresh.IsChildScrolledVertically)
+				{
+					gesture2.Enabled = true;
+				}
+				else
+				{
+					if (SfPullToRefresh.ChildGestureRecognizers is not null && !SfPullToRefresh.ChildGestureRecognizers.Contains(gesture2))
+					{
+						SfPullToRefresh.ChildGestureRecognizers.Add(gesture2);
+					}
+
+					gesture2.Enabled = false;
+				}
+			}
+
+			return false;
+		}
+
+		#endregion
+	}
 }

@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Graphics;
+﻿using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Layouts;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -308,26 +306,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void LayoutView(SfCartesianChart chart, double x1, double y1)
         {
-            SetInheritedBindingContext(View, BindingContext);
+			SetInheritedBindingContext(View, BindingContext);
+#if NET9_0_OR_GREATER
+            var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity);
+#else
+			var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
+#endif
+			var measuredWidth = sizeRequest.Width;
+			var measuredHeight = sizeRequest.Height;
+			SetViewAlignment(ref x1, ref y1, measuredWidth, measuredHeight);
 
-			double measuredWidth;
-			double measuredHeight;
-
-			if (View.Bounds.IsEmpty)
-			{
-				var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity);
-				measuredWidth = sizeRequest.Request.Width;
-				measuredHeight = sizeRequest.Request.Height;
-			}
-			else
-			{
-				measuredWidth = View.Bounds.Width;
-				measuredHeight = View.Bounds.Height;
-			}
-
-			SetViewAlignment(ref x1, ref y1, measuredWidth, measuredHeight);               
-
-            AbsoluteLayout.SetLayoutBounds(View, new Rect(x1, y1, measuredWidth, measuredHeight));
+			AbsoluteLayout.SetLayoutBounds(View, new Rect(x1, y1, measuredWidth, measuredHeight));
             AbsoluteLayout.SetLayoutFlags(View, AbsoluteLayoutFlags.None);
 
             if (CoordinateUnit == ChartCoordinateUnit.Axis)

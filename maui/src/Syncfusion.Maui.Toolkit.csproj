@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst;net9.0;net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0;net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 		<RootNamespace>Syncfusion.Maui.Toolkit</RootNamespace>
@@ -36,44 +36,44 @@
 		<PackageTags>syncfusion;maui;ios;android;maccatalyst;dotnet-maui;syncfusion-maui</PackageTags>
 		
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
-	<PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0-android' ">
+	<PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0-android' OR '$(TargetFramework)' == 'net9.0-android' ">
 		<AndroidGenerateResourceDesigner>false</AndroidGenerateResourceDesigner>
 		<AndroidUseIntermediateDesignerFile>false</AndroidUseIntermediateDesignerFile>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net9.0|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningLevel>5</WarningLevel>
 	  <Optimize>True</Optimize>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-android|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-android|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net9.0-android|AnyCPU'">
 	  <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningLevel>5</WarningLevel>
     <Optimize>True</Optimize>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-ios|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-ios|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net9.0-ios|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningLevel>5</WarningLevel>	  
     <Optimize>True</Optimize>
 	  <MtouchUseLlvm>True</MtouchUseLlvm>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-maccatalyst|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-maccatalyst|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net9.0-maccatalyst|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningLevel>5</WarningLevel>	  
     <Optimize>True</Optimize>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-windows10.0.19041.0|AnyCPU'">
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net8.0-windows10.0.19041.0|AnyCPU' OR '$(Configuration)|$(TargetFramework)|$(Platform)'=='Release-Xml|net9.0-windows10.0.19041.0|AnyCPU'">
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 		<WarningLevel>5</WarningLevel>	  
     <Optimize>True</Optimize>

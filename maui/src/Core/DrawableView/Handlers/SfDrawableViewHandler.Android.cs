@@ -1,8 +1,5 @@
-﻿
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Graphics.Platform;
+﻿using Microsoft.Maui.Graphics.Platform;
 using Microsoft.Maui.Handlers;
-using System;
 
 namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {

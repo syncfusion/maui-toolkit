@@ -1,8 +1,10 @@
-namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart;
-public partial class CartesianChartColorResources : ResourceDictionary
+namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-	public CartesianChartColorResources()
+	public partial class CartesianChartColorResources : ResourceDictionary
 	{
-		InitializeComponent();
+		public CartesianChartColorResources()
+		{
+			InitializeComponent();
+		}
 	}
 }

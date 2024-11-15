@@ -1428,12 +1428,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         return content.DesiredSize;
                     }
 
-                    var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
+#if NET9_0_OR_GREATER
+                    var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity);
 
                     if (desiredSize.IsZero)
-                        return content.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
+                        return content.Measure(double.PositiveInfinity, double.PositiveInfinity);
+#else
+					var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
 
-                    return desiredSize;
+					if (desiredSize.IsZero)
+						return content.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
+#endif
+
+					return desiredSize;
                 }
             }
 

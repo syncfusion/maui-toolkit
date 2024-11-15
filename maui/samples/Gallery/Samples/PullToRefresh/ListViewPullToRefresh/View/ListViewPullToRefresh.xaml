@@ -5,12 +5,11 @@
                       xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
                       xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.PullToRefresh"
                       xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
-                      xmlns:pulltoRefresh="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit">
+                      xmlns:pulltoRefresh="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
+                      x:DataType="local:ListViewInboxInfoViewModel" >
     <localCore:SampleView.Resources>
         <local:DatetimeToStringConverter x:Key="dateTimeConverter" />
         <local:FontAttributeConverter x:Key="fontAttributeConverter" />
-        <local:GroupHeaderTextConverter x:Key="groupHeaderTextConverter" />
-        <imageExtension:ImageSourceConverter x:Key="imageconverter" />
     </localCore:SampleView.Resources>
 
     <localCore:SampleView.Behaviors>
@@ -40,28 +39,11 @@
                                VerticalOptions="Center" />
                         <ListView Grid.Row="1"
                                   RowHeight="100"
-                                             x:Name="listView"
-                                             ItemsSource="{Binding InboxInfos}">
-                            
-                            <ListView.GroupHeaderTemplate>
-                                <DataTemplate x:Name="GroupHeaderTemplate">
-                                    <ViewCell>
-                                        <ViewCell.View>
-                                            <Grid HeightRequest="16"
-                                                  Margin="16, 0, 16, 0">
-                                                <Label Text="{Binding Key, Converter={StaticResource groupHeaderTextConverter}}"
-                                                       VerticalOptions="CenterAndExpand"
-                                                       FontFamily="Roboto-Regular"
-                                                       FontSize="12"
-                                                       Grid.Row="1" />
-                                            </Grid>
-                                        </ViewCell.View>
-                                    </ViewCell>
-                                </DataTemplate>
-                            </ListView.GroupHeaderTemplate>
+                                  x:Name="listView"
+                                  ItemsSource="{Binding InboxInfos}">
 
                             <ListView.ItemTemplate>
-                                <DataTemplate>
+                               <DataTemplate x:DataType="local:InboxInfo">
                                     <ViewCell>
                                         <Grid ColumnSpacing="12"
                                           Margin="16, 14, 16, 14">

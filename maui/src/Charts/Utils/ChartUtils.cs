@@ -1,15 +1,9 @@
-﻿using Microsoft.Maui.Graphics;
-using Color = Microsoft.Maui.Graphics.Color;
+﻿using Color = Microsoft.Maui.Graphics.Color;
 using PointF = Microsoft.Maui.Graphics.PointF;
 using Rect = Microsoft.Maui.Graphics.Rect;
-using System;
-using System.Collections.Generic;
-using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using Core = Syncfusion.Maui.Toolkit;
-using Microsoft.Maui;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Syncfusion.Maui.Toolkit.Charts

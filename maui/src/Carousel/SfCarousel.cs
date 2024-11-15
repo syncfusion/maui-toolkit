@@ -1,11 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
-using Syncfusion.Maui.Toolkit;
-using Syncfusion.Maui.Toolkit.Carousel;
-using System.Collections.ObjectModel;
-using SwipeMovementMode = Syncfusion.Maui.Toolkit.Carousel.SwipeMovementMode;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 
 #if MACCATALYST || IOS || WINDOWS
 using Microsoft.Maui.Graphics;

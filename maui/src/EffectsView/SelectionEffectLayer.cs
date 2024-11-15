@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.EffectsView
+﻿namespace Syncfusion.Maui.Toolkit.EffectsView
 {
     /// <summary>
     /// Represents the SelectionEffectLayer class.

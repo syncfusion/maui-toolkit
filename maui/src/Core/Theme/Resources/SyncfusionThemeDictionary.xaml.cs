@@ -1,9 +1,4 @@
-﻿
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Xaml;
-using System.ComponentModel.Design;
-
-namespace Syncfusion.Maui.Toolkit.Themes
+﻿namespace Syncfusion.Maui.Toolkit.Themes
 {
     /// <summary>
     /// ThemeDictionary class for Syncfusion in which controls themes are to be included.

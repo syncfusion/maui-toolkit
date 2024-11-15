@@ -62,27 +62,31 @@
                                     <FlexLayout Wrap="Wrap" Padding="0" AlignItems="Start" AlignContent="Start"  BindableLayout.ItemsSource="{Binding TabModelSource}" >
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate>
-                                                <Frame HasShadow="False" WidthRequest="{OnPlatform WinUI=110,MacCatalyst=110}" HeightRequest="{OnPlatform WinUI=120,MacCatalyst=120}" Margin="10" Padding="0" CornerRadius="10" BackgroundColor="Transparent">
+                                                <Border WidthRequest="{OnPlatform WinUI=110,MacCatalyst=110}" HeightRequest="{OnPlatform WinUI=120,MacCatalyst=120}" Margin="10" Padding="0" BackgroundColor="Transparent">
+                                                  <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10" />
+                                                  </Border.StrokeShape>
                                                     <VerticalStackLayout Padding="10" VerticalOptions="Center" Spacing="10">
-                                                        <Frame HasShadow="False" 
-                                                       BorderColor="#E5E5E5"
-                                                       CornerRadius="35"
-                                                       HeightRequest="70"
+                                                        <Border  
+                                                       Stroke="#E5E5E5"
+                                                        HeightRequest="70"
                                                        WidthRequest="70"
                                                        VerticalOptions="Center" 
                                                        HorizontalOptions="Center"
-                                                       IsClippedToBounds="True"
                                                        BackgroundColor="{Binding ImageBackground}" 
                                                        Padding="0" >
+                                                          <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="35" />
+                                                          </Border.StrokeShape>
                                                             <Image Source="{Binding ImageSource}" WidthRequest="70" HeightRequest="70"/>
-                                                        </Frame>
+                                                        </Border>
                                                         <Label FontSize="Medium" 
                                                        FontFamily="Roboto-Regular" 
                                                        Text="{Binding Name}"                                                     
                                                        VerticalOptions="End" 
                                                        HorizontalOptions="Center" />
                                                     </VerticalStackLayout>
-                                                </Frame>
+                                                </Border>
                                             </DataTemplate>
                                         </BindableLayout.ItemTemplate>
                                     </FlexLayout>
@@ -201,7 +205,7 @@
                                                            VerticalOptions="Center" 
                                                            HorizontalOptions="Center" 
                                                            Aspect="AspectFit"
-                                                           Source="{imageExtension:ImageResource contact_image.png}"/>
+                                                           Source="contact_image.png"/>
                                                     <Label Grid.Column="1" 
                                                            VerticalOptions="Center" 
                                                            HorizontalOptions="Start" 

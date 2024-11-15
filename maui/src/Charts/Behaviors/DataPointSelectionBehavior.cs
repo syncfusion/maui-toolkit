@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Enables the selection of individual or multiple data points in a series.

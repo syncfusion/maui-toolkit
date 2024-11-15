@@ -1,6 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit;
-using Syncfusion.Maui.Toolkit.Chips;
-using Syncfusion.Maui.Toolkit.EffectsView;
+﻿using Syncfusion.Maui.Toolkit.EffectsView;
 using System.ComponentModel;
 using System.Globalization;
 

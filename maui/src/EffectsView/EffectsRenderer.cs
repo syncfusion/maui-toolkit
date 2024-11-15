@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui.Graphics;
+﻿using System.Collections.ObjectModel;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;

@@ -1,21 +1,16 @@
-﻿namespace Syncfusion.Maui.Toolkit.TabView
-{
-    using Microsoft.Maui;
-    using Microsoft.Maui.Accessibility;
-    using Microsoft.Maui.Controls;
-    using Microsoft.Maui.Controls.Shapes;
-    using Microsoft.Maui.Graphics;
-    using Syncfusion.Maui.Toolkit.EffectsView;
-    using Syncfusion.Maui.Toolkit.Graphics.Internals;
-    using Syncfusion.Maui.Toolkit.Helper;
-    using Syncfusion.Maui.Toolkit.Internals;
-    using System;
-    using System.Collections;
-    using System.Collections.Specialized;
-    using System.Threading.Tasks;
-    using CoreEventArgs = Syncfusion.Maui.Toolkit.TabView.TabSelectionChangedEventArgs;
-    using TouchEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
+﻿using Microsoft.Maui.Controls.Shapes;
+using Syncfusion.Maui.Toolkit.EffectsView;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Helper;
+using Syncfusion.Maui.Toolkit.Internals;
+using System.Collections;
+using System.Collections.Specialized;
+using CoreEventArgs = Syncfusion.Maui.Toolkit.TabView.TabSelectionChangedEventArgs;
+using TouchEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
+namespace Syncfusion.Maui.Toolkit.TabView
+{
+    
     /// <summary>
     /// Represents a tab bar control that manages the display and interaction of tab items.
     /// </summary>
@@ -793,25 +788,22 @@
         /// </summary>
         internal void UpdateItems()
         {
+            _tabHeaderItemContent?.Children.Clear();
+            ClearItems();
+
+            if (Items is null)
+                return;
+
             int count = -1;
-
-            if (Items != null)
+            foreach (var item in Items)
             {
-                _tabHeaderItemContent?.Children.Clear();
-                foreach (var item in Items)
-                {
-                    count++;
-                    if (item != null)
-                        AddTabItemProperties(item, count);
-                }
+                count++;
+                if (item is not null)
+                    AddTabItemProperties(item, count);
+            }
 
-                Items.CollectionChanged -= Items_CollectionChanged;
-                Items.CollectionChanged += Items_CollectionChanged;
-            }
-            else
-            {
-                ClearItems();
-            }
+            Items.CollectionChanged -= Items_CollectionChanged;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
 
         /// <summary>

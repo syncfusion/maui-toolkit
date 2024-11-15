@@ -1,11 +1,7 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Graphics.Win2D;
+﻿using Microsoft.Maui.Graphics.Win2D;
 using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using System;
-
 using WSize = global::Windows.Foundation.Size;
 using WRect = global::Windows.Foundation.Rect;
 using Microsoft.UI.Xaml.Media;

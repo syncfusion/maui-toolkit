@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Shimmer
+﻿namespace Syncfusion.Maui.Toolkit.Shimmer
 {
     /// <summary>
     /// Interface that holds the properties to render the <see cref="SfShimmer"/> view.

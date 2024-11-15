@@ -1,12 +1,7 @@
-﻿using System;
-using System.Linq;
-using Android.Views;
-using Android.Widget;
+﻿using Android.Views;
 using AndroidX.Core.Widget;
 using AndroidX.RecyclerView.Widget;
 using AndroidX.SwipeRefreshLayout.Widget;
-using Microsoft.Maui;
-using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Platform;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Platform;
@@ -42,7 +37,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         bool HandleActionDown(Point currenTouchPoint)
         {
             HandleTouchInteraction(PointerActions.Pressed, currenTouchPoint);
-            if (_nativeView != null && _nativeView.Parent != null && _nativeView.Parent.GetType().Name == "ScrollViewContainer")
+            if (_nativeView is not null && _nativeView.Parent is not null && _nativeView.Parent.GetType().Name == "ScrollViewContainer")
             {
                 // PullToRefresh is not working inside scrollView, this code passes touch to the parent without interfering any of the parent
                 _nativeView.Parent.RequestDisallowInterceptTouchEvent(true);
@@ -61,12 +56,12 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             }
 
             int sdk = (int)global::Android.OS.Build.VERSION.SdkInt;
-            if (sdk >= 16 && _nativeView != null && _nativeView.IsScrollContainer)
+            if (sdk >= 16 && _nativeView is not null && _nativeView.IsScrollContainer)
             {
                 return base.OnInterceptTouchEvent(ev);
             }
 
-            if (PullableContent != null)
+            if (PullableContent is not null)
             {
                 _childLoopCount = 0;
                 _isChildScrolledVertically = IsChildElementScrolled(PullableContent.GetVisualTreeDescendants().FirstOrDefault(), new Point(ev.RawX / _density, ev.RawY / _density));
@@ -105,7 +100,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         double GetChildScrollOffset(object view)
         {
             var childPanel = view as ViewGroup;
-            if (childPanel != null)
+            if (childPanel is not null)
             {
                 if (view is SwipeRefreshLayout swipeRefreshLayout)
                 {
@@ -114,7 +109,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                 else if (view is ListView list && list.ChildCount > 0)
                 {
                     View? firstChild = list.GetChildAt(0);
-                    if (firstChild != null)
+                    if (firstChild is not null)
                     {
                         return (list.FirstVisiblePosition * firstChild.Height) - firstChild.Top;
                     }
@@ -137,12 +132,15 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// </summary>
         void ConfigTouch()
         {
-            if (Handler != null && Handler.PlatformView != null)
+            if (Handler is not null && Handler.PlatformView is not null)
             {
-                this.AddTouchListener(this);
+				// When the handler is changed without creating a new virtual view, adding a touch listener will skip attaching touch wiring to the native view.
+				// This is because the TouchDetector will still remain in the VirtualView and will be wired with the old handler and old native view.
+				this.RemoveTouchListener(this);
+				this.AddTouchListener(this);
                 _nativeView = Handler.PlatformView as LayoutViewGroupExt;
 
-                if (_nativeView != null && _nativeView.Resources != null && _nativeView.Resources.DisplayMetrics != null)
+                if (_nativeView is not null && _nativeView.Resources is not null && _nativeView.Resources.DisplayMetrics is not null)
                 {
                     _density = _nativeView.Resources.DisplayMetrics.Density;
                 }
@@ -164,7 +162,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// <returns>Returns true, if <see cref="LayoutViewGroupExt"/> will handle the touch.</returns>
         internal override bool OnInterceptTouchEvent(MotionEvent? ev)
         {
-            if (_nativeView != null && ev != null)
+            if (_nativeView is not null && ev is not null)
             {
                 int actionIndex = ev.ActionIndex;
                 Point currenTouchPoint = GetCurrentTouchPoint(ev, actionIndex);

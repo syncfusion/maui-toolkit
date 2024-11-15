@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
 using Syncfusion.Maui.Toolkit.Internals;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;

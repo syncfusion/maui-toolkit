@@ -1,11 +1,5 @@
-using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;

@@ -1,5 +1,3 @@
-using System;
-
 namespace Syncfusion.Maui.Toolkit.EffectsView
 {
     /// <summary>

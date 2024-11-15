@@ -8,11 +8,9 @@
              xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             x:DataType="local:ChipViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
-    <localCore:SampleView.Resources>
-        <imageExtension:ImageSourceConverter x:Key="imageconverter"/>
-    </localCore:SampleView.Resources>
-
+   
     <localCore:SampleView.BindingContext>
         <local:ChipViewModel x:Name="viewModel"/>
     </localCore:SampleView.BindingContext>
@@ -381,7 +379,7 @@
                                     ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"
                                     Value="{Binding LeftCornerRadius,Mode=TwoWay}">
                             </Slider>
-                            <Label Text="{Binding Source={x:Reference leftCornerRadius},Path=Value}" 
+                            <Label Text="{Binding LeftCornerRadius}" 
                                    FontFamily="Roboto-Regular"
                                    Grid.Column="2" 
                                    HorizontalTextAlignment="Center"
@@ -408,7 +406,7 @@
                                     ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"
                                     Value="{Binding RightCornerRadius,Mode=TwoWay}">
                             </Slider>
-                            <Label Text="{Binding Source={x:Reference rightCornerRadius},Path=Value}"  
+                            <Label Text="{Binding RightCornerRadius}"  
                                    HorizontalTextAlignment="Center"
 								   FontFamily="Roboto-Regular"
                                    Grid.Column="2"

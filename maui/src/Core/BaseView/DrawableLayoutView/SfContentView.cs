@@ -1,14 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Syncfusion.Maui.Toolkit
+﻿namespace Syncfusion.Maui.Toolkit
 {
 
     /// <summary>

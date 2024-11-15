@@ -1,10 +1,4 @@
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Controls.Internals;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 
 namespace Syncfusion.Maui.Toolkit.Themes
 {

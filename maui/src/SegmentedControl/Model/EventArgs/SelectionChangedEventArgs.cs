@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Syncfusion.Maui.Toolkit.SegmentedControl
+﻿namespace Syncfusion.Maui.Toolkit.SegmentedControl
 {
     /// <summary>
     /// Provides data for the event when the selection is changed in the segmented control.

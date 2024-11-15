@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// The CategoryAxis is an indexed based axis that plots values based on the index of the data point collection. It displays string values in axis labels.

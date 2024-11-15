@@ -1,11 +1,12 @@
 
-namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip;
-
-public partial class ChipTypesDesktop : SampleView
+namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 {
-    public ChipTypesDesktop()
-    {
-        InitializeComponent();
-    }
+	public partial class ChipTypesDesktop : SampleView
+	{
+		public ChipTypesDesktop()
+		{
+			InitializeComponent();
+		}
 
+	}
 }

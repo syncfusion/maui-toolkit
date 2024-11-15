@@ -1,9 +1,7 @@
-﻿namespace Syncfusion.Maui.Toolkit.TabView
-{
-    using Microsoft.Maui;
-    using Microsoft.Maui.Controls;
-    using Syncfusion.Maui.Toolkit.Helper;
+﻿using Syncfusion.Maui.Toolkit.Helper;
 
+namespace Syncfusion.Maui.Toolkit.TabView
+{
     /// <summary>
     /// Represents the material design visual style for a <see cref="SfTabView"/> control.
     /// </summary>
@@ -150,26 +148,26 @@
         /// </summary>
         void ResetStyle()
         {
-            Style = null;
+            Style = new Style(typeof(SfGrid));
 
             if (_horizontalLayout != null)
             {
-                _horizontalLayout.Style = null;
+                _horizontalLayout.Style = new Style(typeof(SfHorizontalStackLayout));
             }
 
             if (_verticalLayout != null)
             {
-                _verticalLayout.Style = null;
+                _verticalLayout.Style = new Style(typeof(SfVerticalStackLayout));
             }
 
             if (_image != null)
             {
-                _image.Style = null;
+                _image.Style = new Style(typeof(SfImage));
             }
 
             if (_header != null)
             {
-                _header.Style = null;
+                _header.Style = new Style(typeof(SfLabel));
             }
         }
 

@@ -2,10 +2,6 @@
 using UIKit;
 using Foundation;
 using CoreGraphics;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui;
-using Microsoft.Maui.Devices;
-using System;
 using PlatformView = UIKit.UIView;
 
 namespace Syncfusion.Maui.Toolkit.Internals

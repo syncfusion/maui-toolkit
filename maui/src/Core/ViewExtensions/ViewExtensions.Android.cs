@@ -1,14 +1,8 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System.IO;
-using System.Threading.Tasks;
-using NativeBitmap = Android.Graphics.Bitmap;
+﻿using NativeBitmap = Android.Graphics.Bitmap;
 using Android.Graphics;
 using Stream = System.IO.Stream;
-using Microsoft.Maui;
 using Android.Content;
 using Android.Provider;
-using Android.Net;
 using Path = System.IO.Path;
 using Color = Android.Graphics.Color;
 using Microsoft.Maui.Platform;

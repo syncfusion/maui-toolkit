@@ -1,12 +1,9 @@
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Internals;
+using TouchEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
+
 namespace Syncfusion.Maui.Toolkit.TabView
 {
-    using Microsoft.Maui;
-    using Microsoft.Maui.Controls;
-    using Microsoft.Maui.Graphics;
-    using Syncfusion.Maui.Toolkit.Graphics.Internals;
-    using Syncfusion.Maui.Toolkit.Internals;
-    using System;
-    using TouchEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
 	/// <summary>
 	/// Represents a class which defines the visual and interactive behavior of individual tab item inside a <see cref="SfTabView"/> control.

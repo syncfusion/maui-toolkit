@@ -1,9 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Data;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {

@@ -1,7 +1,4 @@
-﻿
-using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.Graphics.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
     /// <summary>
     /// Represents <see cref="DoubleCollection"/> conversion.

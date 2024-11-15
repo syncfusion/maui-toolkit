@@ -1,8 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.UI.Xaml;
+﻿using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Input;
@@ -36,7 +32,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// </summary>
         void ConfigTouch()
         {
-            if (Handler != null && Handler.PlatformView != null)
+            if (Handler is not null && Handler.PlatformView is not null)
             {
                 _nativeView = Handler.PlatformView as LayoutPanelExt;
                 WireEvents();
@@ -53,7 +49,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// </summary>
         void WireEvents()
         {
-            if (_nativeView == null || PullableContent == null || PullableContent.Handler == null || !(PullableContent.Handler.PlatformView is FrameworkElement pullElement))
+            if (_nativeView is null || PullableContent is null || PullableContent.Handler is null || !(PullableContent.Handler.PlatformView is FrameworkElement pullElement))
             {
                 return;
             }
@@ -73,7 +69,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// </summary>
         void UnWireEvents()
         {
-            if (_pullableContentNativeView != null)
+            if (_pullableContentNativeView is not null)
             {
                 _pullableContentNativeView.ManipulationDelta -= PullableContentManipulationDelta;
                 _pullableContentNativeView.ManipulationCompleted -= PullableContentManipulationCompleted;
@@ -93,7 +89,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         ScrollViewer? GetScrollViewer(DependencyObject dependencyObject)
         {
             var scrollViewer = dependencyObject as ScrollViewer;
-            if (scrollViewer != null)
+            if (scrollViewer is not null)
             {
                 return scrollViewer;
             }
@@ -103,7 +99,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                 var child = VisualTreeHelper.GetChild(dependencyObject, i);
 
                 scrollViewer = GetScrollViewer(child);
-                if (scrollViewer != null)
+                if (scrollViewer is not null)
                 {
                     return scrollViewer;
                 }
@@ -119,11 +115,11 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         Microsoft.Maui.Graphics.Point ChildLocationToScreen(object native)
         {
             var transformPoints = new Windows.Foundation.Point(0, 0);
-            if (_nativeView != null)
+            if (_nativeView is not null)
             {
                 var transform = _nativeView.TransformToVisual(native as UIElement);
 
-                if (transform != null)
+                if (transform is not null)
                 {
                     transformPoints = transform.TransformPoint(new Windows.Foundation.Point(0, 0));
                 }
@@ -149,7 +145,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                 if (scrollView is UIElement uiElement)
                 {
                     var control = GetScrollViewer(uiElement);
-                    scrollOffset = control != null ? control.VerticalOffset : 0;
+                    scrollOffset = control is not null ? control.VerticalOffset : 0;
                 }
                 else
                 {
@@ -167,7 +163,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// <param name="e">Event arguments for the pointer pressed event.</param>
         void PullableContentPointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            if (_nativeView != null)
+            if (_nativeView is not null)
             {
                 // If we didn't pressed ScrollBar we didn't want to goes to continues loop. So here set maximum loop count.
                 // When we pressed Thumb stick, we'll get ScrollBar as parent with maximum of 4 loops and for top and bottom arrow icon, we'll get ScrollBar as parent with maximum of 8 loops.
@@ -204,7 +200,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
             _maxLoopCount--;
             var parent = VisualTreeHelper.GetParent(view);
-            if (parent != null && (parent is DependencyObject dependencyObject))
+            if (parent is not null && (parent is DependencyObject dependencyObject))
             {
                 // Since we can't able to get the ScrollBar instance from tapping thumbstick, so we need to loop its parent until its parent was ScrollBar.
                 // If parent is ScrollBar, then return true and no need to continue looping.
@@ -228,7 +224,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		protected override void OnChildAdded(Element child)
         {
             base.OnChildAdded(child);
-            if (PullableContent != null && PullableContent == child && Handler != null)
+            if (PullableContent is not null && PullableContent == child && Handler is not null)
             {
                 WireEvents();
             }
@@ -256,7 +252,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <param name="args">Relevant <see cref="HandlerChangingEventArgs"/>.</param>
 		protected override void OnHandlerChanging(HandlerChangingEventArgs args)
         {
-            if (args.OldHandler != null)
+            if (args.OldHandler is not null)
             {
                 UnWireEvents();
                 _nativeView = null;
@@ -298,7 +294,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// <param name="e">Event arguments for the manipulation delta event.</param>
         void PullableContentManipulationDelta(object sender, ManipulationDeltaRoutedEventArgs e)
         {
-            if (!_isIPullToRefresh && !_isChildScrolledVertically)
+            if (!IsIPullToRefresh && !_isChildScrolledVertically)
             {
                 var pointerPoint = e.Cumulative.Translation;
                 HandleTouchInteraction(PointerActions.Moved, new Microsoft.Maui.Graphics.Point(pointerPoint.X, pointerPoint.Y));

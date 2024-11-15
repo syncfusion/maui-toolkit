@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-
-namespace Syncfusion.Maui.Toolkit.Graphics.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
     internal partial class TextMeasurer : ITextMeasurer
     {

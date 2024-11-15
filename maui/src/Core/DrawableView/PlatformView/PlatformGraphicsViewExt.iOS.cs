@@ -1,7 +1,4 @@
-﻿using System;
-using Foundation;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
+﻿using Foundation;
 using Microsoft.Maui.Graphics.Platform;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;

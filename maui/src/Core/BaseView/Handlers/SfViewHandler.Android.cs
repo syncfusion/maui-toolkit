@@ -1,14 +1,6 @@
-﻿
-using Android.Content;
-using Android.Graphics;
-using Android.Runtime;
-using Android.Util;
-using Android.Views;
-using Microsoft.Maui;
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Syncfusion.Maui.Toolkit.Platform;
-using System;
 
 namespace Syncfusion.Maui.Toolkit
 {

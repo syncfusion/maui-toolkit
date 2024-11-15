@@ -1,9 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Enables the selection of individual or multiple series in a <see cref="SfCartesianChart"/>.

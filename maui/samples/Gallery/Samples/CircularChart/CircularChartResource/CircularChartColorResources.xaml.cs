@@ -1,9 +1,10 @@
-namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart;
-
-public partial class CircularChartColorResources : ResourceDictionary
+namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 {
-	public CircularChartColorResources()
+	public partial class CircularChartColorResources : ResourceDictionary
 	{
-		InitializeComponent();
+		public CircularChartColorResources()
+		{
+			InitializeComponent();
+		}
 	}
 }

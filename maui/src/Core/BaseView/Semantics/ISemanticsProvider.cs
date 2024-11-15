@@ -1,8 +1,7 @@
-﻿namespace Syncfusion.Maui.Toolkit.Semantics
-{
-    using Syncfusion.Maui.Toolkit.Graphics.Internals;
-    using System.Collections.Generic;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
+namespace Syncfusion.Maui.Toolkit.Semantics
+{ 
     internal interface ISemanticsProvider
     {
         /// <summary>

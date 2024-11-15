@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
+		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
+		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
 		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
 		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
 
@@ -18,7 +18,8 @@
 		<UseMaui>true</UseMaui>
 		<UseMauiCompat>false</UseMauiCompat>
 		<SingleProject>true</SingleProject>
-		<NoWarn>$(NoWarn);NU1803</NoWarn>
+		<NoWarn>$(NoWarn);NU1803;XC0022;XC0045</NoWarn>
+    <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
 		<PackageCertificateKeyFile>Syncfusion.Maui.ControlsGallery_TemporaryKey.pfx</PackageCertificateKeyFile>
 		<AssemblyName>Syncfusion.Maui.ControlsGallery</AssemblyName>
 
@@ -34,7 +35,7 @@
 		<ApplicationVersion>1</ApplicationVersion>
 
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
-		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
+		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">15.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.18362.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.18362.0</TargetPlatformMinVersion>
@@ -80,7 +81,10 @@
 		<!-- Splash Screen -->
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#4822E3" BaseSize="*,*" />
 
-		<!-- Custom Fonts -->
+    <!-- Images -->
+    <MauiImage Include="Resources\Images\*" />
+
+    <!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
@@ -88,10 +92,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <EmbeddedResource Include="Resources\Images\circularchart.png" />
-	  <EmbeddedResource Include="Resources\Images\funnelchart.png" />
-	  <EmbeddedResource Include="Resources\Images\polarchart.png" />
-	  <EmbeddedResource Include="Resources\Images\pyramidchart.png" />
 	  <EmbeddedResource Include="SampleList\ButtonsSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CarouselSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CartesianChartSamplesList.xml" />
@@ -107,91 +107,7 @@
 	  <EmbeddedResource Include="SampleList\TabViewSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\TextInputLayoutSamplesList.xml" />
 	  <EmbeddedResource Include="ControlList.xml" />
-	  <EmbeddedResource Include="Resources\Images\Austria.jpg" />
-	  <EmbeddedResource Include="Resources\Images\Canada.jpg" />
-	  <EmbeddedResource Include="Resources\Images\carousel.png" />
-	  <EmbeddedResource Include="Resources\Images\Colombia.jpg" />
-	  <EmbeddedResource Include="Resources\Images\Dubai.jpg" />
-	  <EmbeddedResource Include="Resources\Images\France.jpg" />
-	  <EmbeddedResource Include="Resources\Images\Germany.jpg" />
-	  <EmbeddedResource Include="Resources\Images\India.jpg" />
-	  <EmbeddedResource Include="Resources\Images\Italy.jpg" />
-	  <EmbeddedResource Include="Resources\Images\Kremlin.jpg" />
 	</ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Fonts\MauiSampleFontIcon.ttf" />
-    <EmbeddedResource Include="Resources\Images\alexandar.png" />
-    <EmbeddedResource Include="Resources\Images\chat.png" />
-    <EmbeddedResource Include="Resources\Images\cloud1.png" />
-    <EmbeddedResource Include="Resources\Images\cloud2.png" />
-    <EmbeddedResource Include="Resources\Images\book0.png" />
-    <EmbeddedResource Include="Resources\Images\book1.png" />
-    <EmbeddedResource Include="Resources\Images\book2.png" />
-    <EmbeddedResource Include="Resources\Images\book3.png" />
-    <EmbeddedResource Include="Resources\Images\book4.png" />
-    <EmbeddedResource Include="Resources\Images\book5.png" />
-    <EmbeddedResource Include="Resources\Images\chip.png" />
-    <EmbeddedResource Include="Resources\Images\circlegradient.png" />
-    <EmbeddedResource Include="Resources\Images\foggywithcloudy.png" />
-    <EmbeddedResource Include="Resources\Images\heavyrain.png" />
-    <EmbeddedResource Include="Resources\Images\bluecircle.png" />
-    <EmbeddedResource Include="Resources\Images\cartesianchart.png" />
-    <EmbeddedResource Include="Resources\Images\creditcard.png" />
-    <EmbeddedResource Include="Resources\Images\contact_image.png" />
-    <EmbeddedResource Include="Resources\Images\document.png" />
-    <EmbeddedResource Include="Resources\Images\excel.png" />
-    <EmbeddedResource Include="Resources\Images\gettingstarted.png" />
-    <EmbeddedResource Include="Resources\Images\greencircle.png" />
-    <EmbeddedResource Include="Resources\Images\lightbluecircle.png" />
-    <EmbeddedResource Include="Resources\Images\mostlycloudy.png" />
-    <EmbeddedResource Include="Resources\Images\navigationdrawer.png" />
-    <EmbeddedResource Include="Resources\Images\partlysunny.png" />
-    <EmbeddedResource Include="Resources\Images\pdftab.png" />
-    <EmbeddedResource Include="Resources\Images\people_circle23.png" />
-    <EmbeddedResource Include="Resources\Images\people_circle25.png" />
-    <EmbeddedResource Include="Resources\Images\people_circle26.png" />
-    <EmbeddedResource Include="Resources\Images\powerpoint.png" />
-    <EmbeddedResource Include="Resources\Images\pulltorefresh.png" />
-    <EmbeddedResource Include="Resources\Images\redcircle.png" />
-    <EmbeddedResource Include="Resources\Images\segmentedcontrol.png" />
-    <EmbeddedResource Include="Resources\Images\shimmer.png" />
-    <EmbeddedResource Include="Resources\Images\cloud3.png" />
-    <EmbeddedResource Include="Resources\Images\cloud4.png" />
-    <EmbeddedResource Include="Resources\Images\snowwithcloudy.png" />
-    <EmbeddedResource Include="Resources\Images\BlueSpeaker.png" />
-    <EmbeddedResource Include="Resources\Images\SandalsSpeaker.png" />
-    <EmbeddedResource Include="Resources\Images\GreenSpeaker.png" />
-    <EmbeddedResource Include="Resources\Images\PinkSpeaker.png" />
-    <EmbeddedResource Include="Resources\Images\GreySpeaker.png" />
-    <EmbeddedResource Include="Resources\Images\sunny.png" />
-    <EmbeddedResource Include="Resources\Images\thunderstrom.png" />
-    <EmbeddedResource Include="Resources\Images\user.png" />
-    <EmbeddedResource Include="Resources\Images\clara.png" />
-    <EmbeddedResource Include="Resources\Images\effectsview.png" />
-    <EmbeddedResource Include="Resources\Images\effectview_selection.png" />
-    <EmbeddedResource Include="Resources\Images\gabriella.png" />
-    <EmbeddedResource Include="Resources\Images\jackson.png" />
-    <EmbeddedResource Include="Resources\Images\ladybug.jpg" />
-    <EmbeddedResource Include="Resources\Images\liam.png" />
-    <EmbeddedResource Include="Resources\Images\lita.png" />
-    <EmbeddedResource Include="Resources\Images\nora.png" />
-    <EmbeddedResource Include="Resources\Images\people_circle16.png" />
-    <EmbeddedResource Include="Resources\Images\people_circle17.png" />
-    <EmbeddedResource Include="Resources\Images\people_circle18.png" />
-    <EmbeddedResource Include="Resources\Images\people_circle5.png" />
-    <EmbeddedResource Include="Resources\Images\people_circle9.png" />
-    <EmbeddedResource Include="Resources\Images\person.png" />
-    <EmbeddedResource Include="Resources\Images\person1.png" />
-    <EmbeddedResource Include="Resources\Images\sebastian.png" />
-    <EmbeddedResource Include="Resources\Images\tabview.png" />
-    <EmbeddedResource Include="Resources\Images\textinputlayout.png" />
-    <EmbeddedResource Include="Resources\Images\tye.png" />
-    <EmbeddedResource Include="Resources\Images\violetcircle.png" />
-    <EmbeddedResource Include="Resources\Images\washington.png" />
-    <EmbeddedResource Include="Resources\Images\yellowcircle.png" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Syncfusion.Maui.Toolkit.csproj" />

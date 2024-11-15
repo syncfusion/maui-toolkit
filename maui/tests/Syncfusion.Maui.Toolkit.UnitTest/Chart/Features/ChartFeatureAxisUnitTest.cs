@@ -1403,7 +1403,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(50, "", "50")]
         [InlineData(50.6789, "F2", "50.68")]
         [InlineData(null, "F2", "NaN")]
-        public void GetActualLabelContent_Test(object value, string format, string expected)
+        public void GetActualLabelContent_Test(object? value, string format, string expected)
         {
             var result = NumericalAxis.GetActualLabelContent(value, format);
 
@@ -1426,7 +1426,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Theory]
         [InlineData(44197, "yyyy-MM-dd", "2021-01-01")]
         [InlineData(null, "yyyy-MM-dd", "")]
-        public void GetFormattedAxisLabel_Test(object value, string format, string expected)
+        public void GetFormattedAxisLabel_Test(object? value, string format, string expected)
         {
             var result = CategoryAxis.GetFormattedAxisLabel(format, value);
 

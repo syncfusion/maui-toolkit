@@ -1,89 +1,91 @@
 ﻿using Syncfusion.Maui.Toolkit.Chips;
 
-namespace Syncfusion.Maui.ControlsGallery.Chips;
-public class EntryBehavior : Behavior<Entry>
+namespace Syncfusion.Maui.ControlsGallery.Chips
 {
-    #region Fields
+	public class EntryBehavior : Behavior<Entry>
+	{
+		#region Fields
 
-    /// <summary>
-    /// The input chip group.
-    /// </summary>
-    SfChipGroup? inputChipGroup;
+		/// <summary>
+		/// The input chip group.
+		/// </summary>
+		SfChipGroup? inputChipGroup;
 
-    #endregion
+		#endregion
 
-    #region Properties
+		#region Properties
 
-    /// <summary>
-    /// Gets or sets the input chip group.
-    /// </summary>
-    /// <value>The input chip group.</value>
-    public SfChipGroup? InputChipGroup
-    {
-        get
-        {
-            return inputChipGroup;
-        }
-        set
-        {
-            inputChipGroup = value;
-        }
-    }
+		/// <summary>
+		/// Gets or sets the input chip group.
+		/// </summary>
+		/// <value>The input chip group.</value>
+		public SfChipGroup? InputChipGroup
+		{
+			get
+			{
+				return inputChipGroup;
+			}
+			set
+			{
+				inputChipGroup = value;
+			}
+		}
 
-    #endregion
+		#endregion
 
-    #region Constructor
+		#region Constructor
 
-    /// <summary>
-    /// Initializes a new instance of the <see cref="T:SampleBrowser.Chips.EntryBehavior"/> class.
-    /// </summary>
-    public EntryBehavior()
-    {
-    }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="T:SampleBrowser.Chips.EntryBehavior"/> class.
+		/// </summary>
+		public EntryBehavior()
+		{
+		}
 
-    #endregion
+		#endregion
 
-    #region Methods
+		#region Methods
 
-    /// <summary>
-    /// On the attached property.
-    /// </summary>
-    /// <param name="entry">Bindable.</param>
-    protected override void OnAttachedTo(Entry entry)
-    {
-        base.OnAttachedTo(entry);
+		/// <summary>
+		/// On the attached property.
+		/// </summary>
+		/// <param name="entry">Bindable.</param>
+		protected override void OnAttachedTo(Entry entry)
+		{
+			base.OnAttachedTo(entry);
 
-        entry.Completed += (object? sender, EventArgs e) =>
-        {
-            if (inputChipGroup != null && !string.IsNullOrEmpty(entry.Text))
-            {
-                ChipViewModel viewModel = (entry.BindingContext as ChipViewModel)!;
-                if (viewModel != null && viewModel.SelectedItem != null)
-                {
-                    if (viewModel.SelectedItem.ToString() == "Television")
-                    {
-                        viewModel.televisionItems.Add(entry.Text);
-                    }
-                    else if (viewModel.SelectedItem.ToString() == "Washer")
-                    {
-                        viewModel.washerItems.Add(entry.Text);
-                    }
-                    else if (viewModel.SelectedItem.ToString() == "Air Conditioner")
-                    {
-                        viewModel.airConditionerItems.Add(entry.Text);
-                    }
-                }
-                entry.Text = string.Empty;
-                entry.Placeholder = "Enter brand name";
+			entry.Completed += (object? sender, EventArgs e) =>
+			{
+				if (inputChipGroup != null && !string.IsNullOrEmpty(entry.Text))
+				{
+					ChipViewModel viewModel = (entry.BindingContext as ChipViewModel)!;
+					if (viewModel != null && viewModel.SelectedItem != null)
+					{
+						if (viewModel.SelectedItem.ToString() == "Television")
+						{
+							viewModel.televisionItems.Add(entry.Text);
+						}
+						else if (viewModel.SelectedItem.ToString() == "Washer")
+						{
+							viewModel.washerItems.Add(entry.Text);
+						}
+						else if (viewModel.SelectedItem.ToString() == "Air Conditioner")
+						{
+							viewModel.airConditionerItems.Add(entry.Text);
+						}
+					}
+					entry.Text = string.Empty;
+					entry.Placeholder = "Enter brand name";
 
-            }
-            if (string.IsNullOrEmpty(entry.Text))
-            {
-                entry.Unfocus();
-            }
-        };
-    }
+				}
+				if (string.IsNullOrEmpty(entry.Text))
+				{
+					entry.Unfocus();
+				}
+			};
+		}
 
-    #endregion
+		#endregion
 
+	}
 }

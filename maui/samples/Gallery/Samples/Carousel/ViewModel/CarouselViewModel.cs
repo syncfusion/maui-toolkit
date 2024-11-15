@@ -234,15 +234,15 @@ namespace Syncfusion.Maui.ControlsGallery.Carousel.Carousel
 
         private void GetImageCollection()
         {          
-            carouselCollection.Add(new CarouselModel("Austria.jpg","Austria", "Landlocked European country known for its stunning Alpine scenery, classical music heritage, and historic architecture."));
-            carouselCollection.Add(new CarouselModel("India.jpg", "India", "Diverse South Asian nation with a rich tapestry of cultures, languages, and traditions, marked by a long history, vibrant spirituality, and rapid modernization."));
-            carouselCollection.Add(new CarouselModel("Dubai.jpg", "Dubai", "Dynamic city in the United Arab Emirates known for its futuristic skyline, opulent shopping malls, luxury lifestyle, and as a global business and tourism hub."));
-            carouselCollection.Add(new CarouselModel("Canada.jpg", "Canada", "Vast North American nation celebrated for its stunning natural landscapes, cultural diversity, and reputation for politeness and inclusiveness."));
-            carouselCollection.Add(new CarouselModel("Kremlin.jpg", "Russia", "Vast Eurasian nation with a rich cultural heritage, diverse landscapes, and a complex geopolitical history."));
-            carouselCollection.Add(new CarouselModel("Colombia.jpg", "Colombia", "South American country with diverse landscapes, rich biodiversity, a complex history marked by both challenges and resilience, and a vibrant cultural scene."));
-            carouselCollection.Add(new CarouselModel("France.jpg", "France", "European nation synonymous with art, fashion, culinary excellence, and a rich cultural heritage, including iconic architectural landmarks such as the Eiffel Tower."));
-            carouselCollection.Add(new CarouselModel("Germany.jpg", "Germany", "Central European powerhouse renowned for its engineering prowess, efficiency, and cultural contributions, with a complex history and a key role in the European Union"));
-            carouselCollection.Add(new CarouselModel("Italy.jpg", "Italy", "Mediterranean nation celebrated for its art, history, architecture, and cuisine, with a cultural legacy that includes ancient Rome and the European Renaissance."));
+            carouselCollection.Add(new CarouselModel("austria.jpg","Austria", "Landlocked European country known for its stunning Alpine scenery, classical music heritage, and historic architecture."));
+            carouselCollection.Add(new CarouselModel("india.jpg", "India", "Diverse South Asian nation with a rich tapestry of cultures, languages, and traditions, marked by a long history, vibrant spirituality, and rapid modernization."));
+            carouselCollection.Add(new CarouselModel("dubai.jpg", "Dubai", "Dynamic city in the United Arab Emirates known for its futuristic skyline, opulent shopping malls, luxury lifestyle, and as a global business and tourism hub."));
+            carouselCollection.Add(new CarouselModel("canada.jpg", "Canada", "Vast North American nation celebrated for its stunning natural landscapes, cultural diversity, and reputation for politeness and inclusiveness."));
+            carouselCollection.Add(new CarouselModel("kremlin.jpg", "Russia", "Vast Eurasian nation with a rich cultural heritage, diverse landscapes, and a complex geopolitical history."));
+            carouselCollection.Add(new CarouselModel("colombia.jpg", "Colombia", "South American country with diverse landscapes, rich biodiversity, a complex history marked by both challenges and resilience, and a vibrant cultural scene."));
+            carouselCollection.Add(new CarouselModel("france.jpg", "France", "European nation synonymous with art, fashion, culinary excellence, and a rich cultural heritage, including iconic architectural landmarks such as the Eiffel Tower."));
+            carouselCollection.Add(new CarouselModel("germany.jpg", "Germany", "Central European powerhouse renowned for its engineering prowess, efficiency, and cultural contributions, with a complex history and a key role in the European Union"));
+            carouselCollection.Add(new CarouselModel("italy.jpg", "Italy", "Mediterranean nation celebrated for its art, history, architecture, and cuisine, with a cultural legacy that includes ancient Rome and the European Renaissance."));
         }
 
         #endregion

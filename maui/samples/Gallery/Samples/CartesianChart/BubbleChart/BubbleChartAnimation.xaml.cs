@@ -1,35 +1,36 @@
 
-namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart;
-
-public partial class BubbleChartAnimation : SampleView
+namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-	public BubbleChartAnimation()
+	public partial class BubbleChartAnimation : SampleView
 	{
-		InitializeComponent();
-        if (!(BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile))
-            viewModel.StartTimer();
-    }
+		public BubbleChartAnimation()
+		{
+			InitializeComponent();
+			if (!(BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile))
+				viewModel.StartTimer();
+		}
 
-    public override void OnAppearing()
-    {
-        base.OnAppearing();
-        if (BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile)
-        {
-            viewModel.StopTimer();
-            viewModel.StartTimer();
-        }
+		public override void OnAppearing()
+		{
+			base.OnAppearing();
+			if (BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile)
+			{
+				viewModel.StopTimer();
+				viewModel.StartTimer();
+			}
 
-        if (!IsCardView)
-        {
-            bubbleChart.Title = (Label)layout.Resources["title"];
-        }
-    }
-    
-    public override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        viewModel?.StopTimer();
+			if (!IsCardView)
+			{
+				bubbleChart.Title = (Label)layout.Resources["title"];
+			}
+		}
 
-        bubbleChart.Handler?.DisconnectHandler();
-    }
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			viewModel?.StopTimer();
+
+			bubbleChart.Handler?.DisconnectHandler();
+		}
+	}
 }

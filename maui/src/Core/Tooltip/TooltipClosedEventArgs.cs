@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Syncfusion.Maui.Toolkit
+﻿namespace Syncfusion.Maui.Toolkit
 {
     /// <summary>
     /// Represents the event argument class for tooltip dismiss event.

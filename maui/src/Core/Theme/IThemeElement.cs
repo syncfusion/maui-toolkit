@@ -1,7 +1,4 @@
-﻿
-using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.Themes
+﻿namespace Syncfusion.Maui.Toolkit.Themes
 {
     /// <summary>
     /// The interface from which control's subviews/styles should be inherited.

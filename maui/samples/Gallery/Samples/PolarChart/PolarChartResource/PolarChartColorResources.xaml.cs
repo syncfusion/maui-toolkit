@@ -1,9 +1,10 @@
-namespace  Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart;
-
-public partial class PolarChartColorResources : ResourceDictionary
+namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 {
-	public PolarChartColorResources()
+	public partial class PolarChartColorResources : ResourceDictionary
 	{
-		InitializeComponent();
+		public PolarChartColorResources()
+		{
+			InitializeComponent();
+		}
 	}
 }
