@@ -3,25 +3,44 @@ pr:
   branches:
     include:
       - '*'  # Allow PR builds from any branch (including forks)
- 
+
 pool:
   vmImage: 'windows-2022'
 
 steps:
- 
+# Step 1: Install .NET 9.0 SDK
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '9.0.x' # Use the latest .NET 9.0 SDK version
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+# Step 2: Verify .NET SDK Installation
+- script: |
+    dotnet --info
+  displayName: 'Check .NET SDK Versions'
+
+# Step 3: Install Required Workloads for .NET MAUI
+- script: |
+    dotnet workload install maui
+  displayName: 'Install .NET MAUI Workloads'
+
+# Step 4: Build the Solution
 - script: |
     cd $(Agent.BuildDirectory)/s/
     dotnet build -c Release
-  displayName: 'Build the solution'
- 
+  displayName: 'Build the Solution'
+
+# Step 5: Run Unit Tests and Generate HTML Report
 - script: |
     cd $(Agent.BuildDirectory)/s/maui/tests/Syncfusion.Maui.Toolkit.UnitTest/
     dotnet test --logger "html;logfilename=UnitTestResults.html"
   displayName: 'Perform Unit Tests'
- 
+
+# Step 6: Publish Test Results
 - task: PublishBuildArtifacts@1
   inputs:
-    PathtoPublish: 'D:\a\1\s\maui\tests\Syncfusion.Maui.Toolkit.UnitTest\TestResults'
+    PathtoPublish: '$(Agent.BuildDirectory)/s/maui/tests/Syncfusion.Maui.Toolkit.UnitTest/TestResults'
     ArtifactName: 'UnitTestResults'
     publishLocation: 'Container'
   displayName: 'Publish Test Results HTML'
