@@ -1,4 +1,4 @@
-<img src="https://cdn.syncfusion.com/content/images/maui/maui-toolkit--controls-banner.png"/>
+![NET_MAUI__Toolkit_Banner](https://cdn.syncfusion.com/content/images/maui/maui-toolkit--controls-banner.png)
 
 # Syncfusion Toolkit for .NET MAUI
 
@@ -17,16 +17,7 @@ The Syncfusion Toolkit is built with community collaboration in mind, aiming to 
 ![GitHub issues](https://img.shields.io/github/issues/syncfusion/maui-toolkit)
 ![GitHub pull requests](https://img.shields.io/github/issues-pr/syncfusion/maui-toolkit)
 
-<img src="https://cdn.syncfusion.com/content/images/maui/maui-toolkit--controls.png"/>
-
-## Supported platforms for .NET MAUI apps
-
-.NET Multi-platform App UI (.NET MAUI) apps can be written for the following platforms:
-
-* Android 5.0 (API 21) or higher is required.
-* iOS 11 or higher is required.
-* macOS 11 or higher, using Mac Catalyst.
-* Windows 11 and Windows 10 version 1809 or higher, using Windows UI Library (WinUI) 3.
+![NET_MAUI_Toolkit_product](https://cdn.syncfusion.com/content/images/maui/maui-toolkit--controls.png)
 
 ## Getting Started ##
 
@@ -72,7 +63,7 @@ Alternatively, add it directly in your `.csproj` file:
 
 In order to use the Syncfusion .NET MAUI Toolkit you need to call the extension method in your MauiProgram.cs file as follows:
 
-<b>MauiProgram.cs</b>
+**MauiProgram.cs**
 
 ```csharp
 using Syncfusion.Maui.Toolkit.Hosting;
@@ -114,7 +105,7 @@ Here’s a quick example to get you started with one of the controls, such as th
 
 The following XAML code demonstrates how to set up a basic `SfCartesianChart` using the Syncfusion MAUI Toolkit. This code snippet should be included in the `MainPage.xaml` file of your MAUI project. It sets up the necessary namespaces, binds the `ViewModel` to the `ContentPage`, and configures the `SfCartesianChart` with `CategoryAxis` for the X-axis and `NumericalAxis` for the Y-axis. The creation of the `ViewModel` will be explained in the following section.
 
-<b>MainPage.xaml</b>
+**MainPage.xaml**
 
 ```xml
 <ContentPage 
@@ -123,42 +114,66 @@ The following XAML code demonstrates how to set up a basic `SfCartesianChart` us
     x:Class="ChartGettingStarted.MainPage"
     xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
     xmlns:model="clr-namespace:ChartGettingStarted">
-    <!-- Set the BindingContext to the ViewModel -->
+    
+	<!-- Set the BindingContext to the ViewModel -->
     <ContentPage.BindingContext>
         <model:ViewModel/>
     </ContentPage.BindingContext>
-    <!-- Define the Syncfusion Cartesian Chart -->
+
+    <!-- Define a Syncfusion Cartesian Chart to visualize data -->
     <chart:SfCartesianChart>
-        <!-- Define the X-axis as a Category Axis -->
+
+        <!-- Set the title for the Cartesian chart -->
+        <chart:SfCartesianChart.Title>
+            <Label Text="Height Comparison" HorizontalOptions="Center" />
+        </chart:SfCartesianChart.Title>
+
+        <!-- Add a legend to the chart for identifying series -->
+        <chart:SfCartesianChart.Legend>
+            <chart:ChartLegend />
+        </chart:SfCartesianChart.Legend>
+
+        <!-- Define the horizontal (X) axis as a category axis -->
         <chart:SfCartesianChart.XAxes>
-            <chart:CategoryAxis/>
+            <chart:CategoryAxis>
+                <!-- Set the title for the X-axis -->
+                <chart:CategoryAxis.Title>
+                    <chart:ChartAxisTitle Text="Name" />
+                </chart:CategoryAxis.Title>
+            </chart:CategoryAxis>
         </chart:SfCartesianChart.XAxes>
-        <!-- Define the Y-axis as a Numerical Axis -->
+
+        <!-- Define the vertical (Y) axis as a numerical axis -->
         <chart:SfCartesianChart.YAxes>
-            <chart:NumericalAxis/>
+            <chart:NumericalAxis>
+                <!-- Set the title for the Y-axis -->
+                <chart:NumericalAxis.Title>
+                    <chart:ChartAxisTitle Text="Height(in cm)" />
+                </chart:NumericalAxis.Title>
+            </chart:NumericalAxis>
         </chart:SfCartesianChart.YAxes>
-        <chart:SfCartesianChart.Series>
-            <chart:SplineSeries Label="High"
-                                EnableTooltip="True"
-                                EnableAnimation="True"
-                                ItemsSource="{Binding Data}"
-                                XBindingPath="Name"
-                                YBindingPath="Height"
-                                StrokeWidth="1"
-                                ShowMarkers="True"
-                                LegendIcon="SeriesType" >
-                <chart:SplineSeries.MarkerSettings>
-                    <chart:ChartMarkerSettings Width="8" Height="8" StrokeWidth="1"/>
-                </chart:SplineSeries.MarkerSettings>
-            </chart:SplineSeries>
-        </chart:SfCartesianChart.Series>
+
+        <!-- Initialize a ColumnSeries to visualize the data in columns -->
+        <chart:ColumnSeries Label="Height"
+                         EnableTooltip="True" 
+                         ShowDataLabels="True" 
+                         ItemsSource="{Binding Data}" 
+                         XBindingPath="Name" 
+                         YBindingPath="Height">
+            <!-- Define the settings for data labels of the columns -->
+            <chart:ColumnSeries.DataLabelSettings>
+                <chart:CartesianDataLabelSettings LabelPlacement="Inner" />
+            </chart:ColumnSeries.DataLabelSettings>
+        </chart:ColumnSeries>
+
     </chart:SfCartesianChart>
 </ContentPage>
+
 ```
 
 Define a simple data model C# class named `Person` to represent a data point, such as a person with a name and height, in your application.
 
-<b>Person.cs</b>
+**Person.cs**
 
 ```csharp
     /// <summary>
@@ -180,7 +195,7 @@ Define a simple data model C# class named `Person` to represent a data point, su
 
 Next, create a ViewModel class in C# and initialize it with a list of `Person` objects:
 
-<b>ViewModel.cs</b>
+**ViewModel.cs**
 
 ```csharp
     /// <summary>
@@ -223,9 +238,9 @@ See the [Development Guide](./.github/DEVELOPMENT.md) for more details about thi
 You can see the full list of contributors [here](https://github.com/syncfusion/maui-toolkit/graphs/contributors)
 
 ## About Syncfusion
-Founded in 2001 and headquartered in Research Triangle Park, N.C., Syncfusion has more than 26,000+ customers and more than 1 million users, including large financial institutions, Fortune 500 companies, and global IT consultancies.
+Founded in 2001 and headquartered in Research Triangle Park, N.C., Syncfusion has more than 29,000 customers and more than 1 million users, including large financial institutions, Fortune 500 companies, and global IT consultancies.
  
-Today, we provide 1600+ components and frameworks for web ([Blazor](https://www.syncfusion.com/blazor-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [ASP.NET Core](https://www.syncfusion.com/aspnet-core-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [ASP.NET MVC](https://www.syncfusion.com/aspnet-mvc-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Angular](https://www.syncfusion.com/angular-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [React](https://www.syncfusion.com/react-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Vue](https://www.syncfusion.com/vue-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), and [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)), mobile ([.NET MAUI](https://www.syncfusion.com/maui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Xamarin](https://www.syncfusion.com/xamarin-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [UWP](https://www.syncfusion.com/uwp-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), and [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)), and desktop development ([WinForms](https://www.syncfusion.com/winforms-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [WPF](https://www.syncfusion.com/wpf-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [WinUI](https://www.syncfusion.com/winui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget) and [UWP](https://www.syncfusion.com/uwp-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)).
+Today, we provide 1800+ components and frameworks for web ([Blazor](https://www.syncfusion.com/blazor-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [ASP.NET Core](https://www.syncfusion.com/aspnet-core-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [ASP.NET MVC](https://www.syncfusion.com/aspnet-mvc-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Angular](https://www.syncfusion.com/angular-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [React](https://www.syncfusion.com/react-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Vue](https://www.syncfusion.com/vue-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), and [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)), mobile ([.NET MAUI](https://www.syncfusion.com/maui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Xamarin](https://www.syncfusion.com/xamarin-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [UWP](https://www.syncfusion.com/uwp-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), and [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)), and desktop development ([WinForms](https://www.syncfusion.com/winforms-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [WPF](https://www.syncfusion.com/wpf-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [WinUI](https://www.syncfusion.com/winui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget) and [UWP](https://www.syncfusion.com/uwp-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)).
 ___
 
 [sales@syncfusion.com](mailto:sales@syncfusion.com?Subject=Syncfusion%20Maui%toolkit%20-%20NuGet) | [www.syncfusion.com](https://www.syncfusion.com?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget) | Toll Free: 1-888-9 DOTNET
