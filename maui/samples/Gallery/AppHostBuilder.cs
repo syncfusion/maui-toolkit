@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
-using Microsoft.Maui.LifecycleEvents;
+﻿using Microsoft.Maui.LifecycleEvents;
 
 namespace Syncfusion.Maui.ControlsGallery.Hosting
 {
@@ -18,7 +16,7 @@ namespace Syncfusion.Maui.ControlsGallery.Hosting
         {
             builder.ConfigureFonts(fonts =>
 			{
-                fonts.AddEmbeddedResourceFont(typeof(AppHostBuilderExtensions).Assembly, "MauiSampleFontIcon.ttf", "MauiSampleFontIcon");
+                fonts.AddFont("MauiSampleFontIcon.ttf", "MauiSampleFontIcon");
 			});
 
 			builder.ConfigureLifecycleEvents(AppLifecycle => {

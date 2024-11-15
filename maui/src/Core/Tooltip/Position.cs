@@ -1,5 +1,4 @@
-﻿
-namespace Syncfusion.Maui.Toolkit
+﻿namespace Syncfusion.Maui.Toolkit
 {
     /// <summary>
     /// Represents the position of the tooltip label.

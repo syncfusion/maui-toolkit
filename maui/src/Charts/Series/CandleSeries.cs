@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// The <see cref="CandleSeries"/> displays a set of candle used in financial analysis to represent open, high, low, and close values of an asset or security.

@@ -1,9 +1,6 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Handlers;
+﻿using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Syncfusion.Maui.Toolkit.Platform;
-using System;
 
 namespace Syncfusion.Maui.Toolkit
 {

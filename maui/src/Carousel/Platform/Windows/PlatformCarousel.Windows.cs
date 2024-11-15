@@ -1,17 +1,12 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Platform;
+﻿using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Animation;
-using System;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Windows.Foundation;
 using AutomationProperties = Microsoft.UI.Xaml.Automation.AutomationProperties;
 using ControlTemplate = Microsoft.UI.Xaml.Controls.ControlTemplate;
 using DataTemplate = Microsoft.UI.Xaml.DataTemplate;

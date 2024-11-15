@@ -6,11 +6,8 @@
              xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Chips;assembly=Syncfusion.Maui.Toolkit"
              xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             x:DataType="local:ChipViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
-
-	<localCore:SampleView.Resources>
-		<imageExtension:ImageSourceConverter x:Key="imageconverter"/>
-	</localCore:SampleView.Resources>
 	
     <localCore:SampleView.BindingContext>
         <local:ChipViewModel />

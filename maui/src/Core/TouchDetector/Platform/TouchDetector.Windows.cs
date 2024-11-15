@@ -1,8 +1,6 @@
 ﻿using MauiView = Microsoft.Maui.Controls.View;
 using Microsoft.UI.Xaml;
-using Microsoft.Maui;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.Maui.Graphics;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

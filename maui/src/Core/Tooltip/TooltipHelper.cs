@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Animations;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
+﻿using Microsoft.Maui.Animations;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Animation = Microsoft.Maui.Animations.Animation;
 using Font = Microsoft.Maui.Font;

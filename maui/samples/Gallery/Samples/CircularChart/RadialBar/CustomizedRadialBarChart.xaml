@@ -18,7 +18,6 @@
     <localCore:SampleView.Content>
         <chart:SfCircularChart x:Name="chart" >
             <chart:SfCircularChart.Resources>
-                <converter:ImageSourceConverter x:Key="imageConverter"/>
                 <local:CornerRadiusConverter x:Key="innerRadiusConverter" />
                 <converter:BrushToColorConverter x:Key="brushToColor" />
                 <local:IndexToItemSourceConverter x:Key="indexToItemSourceConverter" />
@@ -50,13 +49,13 @@
                                 <On Platform="WinUI, MacCatalyst,Android">
                                     <Image HorizontalOptions="CenterAndExpand" 
                                            VerticalOptions="CenterAndExpand" 
-                                           Source="{converter:ImageResource person.png}" />
+                                           Source="person.png" />
                                 </On>
                                 <On Platform="iOS">
                                     <Image HorizontalOptions="CenterAndExpand"
                                            HeightRequest="140" WidthRequest="140" 
                                            VerticalOptions="CenterAndExpand" 
-                                           Source="{converter:ImageResource person.png}" />
+                                           Source="person.png" />
                                 </On>
                             </OnPlatform>
                         </StackLayout>

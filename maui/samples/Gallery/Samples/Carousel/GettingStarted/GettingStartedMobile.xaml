@@ -7,10 +7,10 @@
     xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
     xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Carousel.Carousel"
     xmlns:localcore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+    x:DataType="local:CarouselViewModel"
     BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
 
     <localcore:SampleView.Resources>
-        <imageExtension:ImageSourceConverter x:Key="imageconverter" />
         <Style TargetType="Label">
             <Setter Property="FontFamily" Value="Roboto" />
             <Setter Property="HorizontalOptions" Value="Center" />
@@ -43,7 +43,7 @@
                 SelectionChanged="carousel_SelectionChanged"
                 Offset="50">
                 <carousel:SfCarousel.ItemTemplate>
-                    <DataTemplate>
+                <DataTemplate x:DataType="local:CarouselModel">
                         <Image
                             Aspect="Fill"
                             HeightRequest="300"

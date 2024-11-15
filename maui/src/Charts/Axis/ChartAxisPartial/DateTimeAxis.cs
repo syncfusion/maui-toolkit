@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using System;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// DateTimeAxis is used to plot <b> DateTime </b> values. The date-time axis uses date time scale and displays date-time values as axis labels in the specified format.

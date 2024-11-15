@@ -49,7 +49,7 @@
                                        VerticalTextAlignment="Center"
                                        HorizontalOptions="End"
                                        HorizontalTextAlignment="Center"
-                                       Text="{Binding Item.Value,StringFormat='{0:C}'}"
+                                       Text="{Binding Item.Value, StringFormat='${0:F2}'}"
                                        Padding="5" />
 
                                 <BoxView Grid.Column="1"

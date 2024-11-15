@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Syncfusion.Maui.Toolkit.TextInputLayout
+﻿namespace Syncfusion.Maui.Toolkit.TextInputLayout
 {
     /// <summary>
     /// Provides data for the <see cref="SfTextInputLayout.PasswordVisibilityToggled"/> event in <see cref="SfTextInputLayout"/>.

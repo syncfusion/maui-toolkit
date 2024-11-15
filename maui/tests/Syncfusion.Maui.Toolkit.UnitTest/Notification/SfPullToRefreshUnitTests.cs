@@ -347,11 +347,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             if (pullToRefresh.TransitionMode == PullToRefreshTransitionType.SlideOnTop) 
             {
-                Assert.Equal(0.5, pullToRefresh._progressRate);
+                Assert.Equal(0.5, pullToRefresh.ProgressRate);
             }
             else
             {
-                Assert.Equal(0.37, pullToRefresh._progressRate);
+                Assert.Equal(0.37, pullToRefresh.ProgressRate);
             }
         }
 
@@ -622,7 +622,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 }
                 else
                 {
-                    y = y - pullToRefresh.ProgressCircleView._circleViewBounds.Height;
+                    y = y - pullToRefresh.ProgressCircleView.CircleViewBounds.Height;
                 }
             }
             Assert.Equal(100, y);
@@ -633,8 +633,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             SfPullToRefresh pullToRefresh = new SfPullToRefresh();
             double pulledDistance = 160;
-            pullToRefresh._progressRate = pulledDistance;
-            Assert.Equal(160, pullToRefresh._progressRate, 0.01);
+            pullToRefresh.ProgressRate = pulledDistance;
+            Assert.Equal(160, pullToRefresh.ProgressRate, 0.01);
         }
 
         [Fact]

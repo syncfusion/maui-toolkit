@@ -626,7 +626,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Theory]
         [InlineData("2023-12-31")]
         [InlineData(null)]
-        public void DateTimeAxis_Maximum_SetValue_ReturnsExpectedValue(string maximum)
+        public void DateTimeAxis_Maximum_SetValue_ReturnsExpectedValue(string? maximum)
         {
             DateTimeAxis dateTimeAxis = new DateTimeAxis();
             DateTime? maxDate = maximum != null ? DateTime.Parse(maximum) : null;
@@ -638,7 +638,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Theory]
         [InlineData("2023-01-01")]
         [InlineData(null)]
-        public void DateTimeAxis_Minimum_SetValue_ReturnsExpectedValue(string minimum)
+        public void DateTimeAxis_Minimum_SetValue_ReturnsExpectedValue(string? minimum)
         {
             var dateTimeAxis = new DateTimeAxis();
             DateTime? minDate = minimum != null ? DateTime.Parse(minimum) : null;

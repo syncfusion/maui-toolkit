@@ -1,11 +1,11 @@
-using Syncfusion.Maui.ControlsGallery;
 
-namespace Syncfusion.Maui.ControlsGallery.PullToRefresh.SfPullToRefresh;
-
-public partial class ListViewPullToRefresh : SampleView
+namespace Syncfusion.Maui.ControlsGallery.PullToRefresh.SfPullToRefresh
 {
-	public ListViewPullToRefresh()
+	public partial class ListViewPullToRefresh : SampleView
 	{
-		InitializeComponent();
+		public ListViewPullToRefresh()
+		{
+			InitializeComponent();
+		}
 	}
 }

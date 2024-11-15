@@ -1,15 +1,9 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Charts.Chart.Layouts;
+﻿using Syncfusion.Maui.Toolkit.Charts.Chart.Layouts;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Linq;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -1770,7 +1764,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (area.AreaBounds != Rect.Zero)//Not to call at load time
                     area.OnPaletteColorChanged();
-            }
+				else if (area.PlotArea.LegendItems.Count > 0 && area.Series != null)
+				{
+					foreach (var series in area.Series)
+					{
+						series.UpdateLegendIconColor();
+					}
+				}
+			}
         }
 
         static void OnZoomPanBehaviorPropertyChanged(BindableObject bindable, object oldValue, object newValue)

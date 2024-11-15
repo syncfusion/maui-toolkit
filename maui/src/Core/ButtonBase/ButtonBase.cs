@@ -1,11 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Windows.Input;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
+﻿using System.Windows.Input;
 using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Chips;
 using Syncfusion.Maui.Toolkit.EffectsView;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
@@ -1237,7 +1231,7 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			var x = 0;
 			var y = 0;
-#if WINDOWS
+#if WINDOWS && NET8_0
             if (!(Parent is Frame))
                    this.Clip = new RoundRectangleGeometry(this.CornerRadius, new Rect(x, y, this.Width, this.Height));
 #else

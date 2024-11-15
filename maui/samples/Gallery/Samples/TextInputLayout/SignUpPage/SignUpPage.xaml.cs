@@ -1,16 +1,17 @@
 
-namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout;
-
-public partial class SignUpPage : SampleView
+namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 {
-	public SignUpPage()
+	public partial class SignUpPage : SampleView
 	{
-		InitializeComponent();
+		public SignUpPage()
+		{
+			InitializeComponent();
 #if ANDROID || IOS
-        this.Content = new SignUpPageMobile();
+			this.Content = new SignUpPageMobile();
 #else
         this.Content = new SignUpPageDesktop();
 #endif
-    }
+		}
 
+	}
 }

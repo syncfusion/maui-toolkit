@@ -1,46 +1,46 @@
 using Syncfusion.Maui.Toolkit.Charts;
 
-namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart;
-
-public partial class StepAreaChart : SampleView
+namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-    int month = int.MaxValue;
-
-    public StepAreaChart()
+	public partial class StepAreaChart : SampleView
 	{
-		InitializeComponent();
+		int month = int.MaxValue;
 
-        if ((BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile))
-        {
-            xAxis.AutoScrollingDelta = 18;
-            xAxis.AutoScrollingMode = ChartAutoScrollingMode.Start;
-        }
-    }
+		public StepAreaChart()
+		{
+			InitializeComponent();
 
-    private void Primary_LabelCreated(object? sender, ChartAxisLabelEventArgs e)
-    {
-        DateTime baseDate = new(1899, 12, 30);
-        var date = baseDate.AddDays(e.Position);
-        if (date.Month != month)
-        {
-            ChartAxisLabelStyle labelStyle = new();
-            labelStyle.LabelFormat = "MMM-dd";
-            labelStyle.FontAttributes = FontAttributes.Bold;
-            e.LabelStyle = labelStyle;
+			if ((BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile))
+			{
+				xAxis.AutoScrollingDelta = 18;
+				xAxis.AutoScrollingMode = ChartAutoScrollingMode.Start;
+			}
+		}
 
-            month = date.Month;
-        }
-        else
-        {
-            ChartAxisLabelStyle labelStyle = new();
-            labelStyle.LabelFormat = "dd";
-            e.LabelStyle = labelStyle;
-        }
-    }
+		private void Primary_LabelCreated(object? sender, ChartAxisLabelEventArgs e)
+		{
+			DateTime baseDate = new(1899, 12, 30);
+			var date = baseDate.AddDays(e.Position);
+			if (date.Month != month)
+			{
+				ChartAxisLabelStyle labelStyle = new();
+				labelStyle.LabelFormat = "MMM-dd";
+				labelStyle.FontAttributes = FontAttributes.Bold;
+				e.LabelStyle = labelStyle;
 
-    public override void OnAppearing()
-    {
-        base.OnAppearing();
+				month = date.Month;
+			}
+			else
+			{
+				ChartAxisLabelStyle labelStyle = new();
+				labelStyle.LabelFormat = "dd";
+				e.LabelStyle = labelStyle;
+			}
+		}
+
+		public override void OnAppearing()
+		{
+			base.OnAppearing();
 
 #if IOS
             if (IsCardView)
@@ -51,16 +51,18 @@ public partial class StepAreaChart : SampleView
             }
 #endif
 
-        if (!IsCardView)
-        { 
-            yAxis.Title = new ChartAxisTitle() { Text = "Stock Price" }; xAxis.Title = new ChartAxisTitle() { Text = "Date" };
-        }
-    }
+			if (!IsCardView)
+			{
+				yAxis.Title = new ChartAxisTitle() { Text = "Stock Price" };
+				xAxis.Title = new ChartAxisTitle() { Text = "Date" };
+			}
+		}
 
-    public override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        Chart.Handler?.DisconnectHandler();
-    }
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			Chart.Handler?.DisconnectHandler();
+		}
 
+	}
 }

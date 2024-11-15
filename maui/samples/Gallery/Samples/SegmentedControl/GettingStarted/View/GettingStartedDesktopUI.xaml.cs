@@ -1,6 +1,5 @@
 namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
 {
-    using Syncfusion.Maui.ControlsGallery;
 
     /// <summary>
     /// Provides the view for the Getting Started sample for the desktop.

@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Font = Microsoft.Maui.Font;
 
 namespace Syncfusion.Maui.Toolkit.Graphics.Internals

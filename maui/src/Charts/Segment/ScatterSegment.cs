@@ -1,5 +1,3 @@
-using Microsoft.Maui.Graphics;
-
 namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>

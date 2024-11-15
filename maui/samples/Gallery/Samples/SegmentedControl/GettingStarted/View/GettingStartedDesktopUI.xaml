@@ -6,10 +6,10 @@
                       xmlns:segmentedControl="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
                       xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
                       xmlns:thickness ="clr-namespace:Microsoft.Maui;assembly=Microsoft.Maui"
+                      x:DataType="local:GettingStartedViewModel"
                       x:Class="Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl.GettingStartedDesktopUI">
 
     <localCore:SampleView.Resources>
-        <imageExtension:ImageSourceConverter x:Key="imageconverter"/>
         <Color x:Key="lightThemeColor">#E7E0EC</Color>
         <Color x:Key="darkThemeColor">#49454F</Color>
     </localCore:SampleView.Resources>

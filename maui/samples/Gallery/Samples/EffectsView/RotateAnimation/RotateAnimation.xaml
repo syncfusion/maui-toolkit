@@ -9,8 +9,11 @@
     <localCore:SampleView.Content>
         <StackLayout Spacing="20" HorizontalOptions="Center" VerticalOptions="Center">
             <Label Text="Touch the icon to rotate it" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" HorizontalTextAlignment="Center" />
-            <Frame HorizontalOptions="Center" HasShadow="False" CornerRadius="{OnPlatform Default='70', iOS='70'}" HeightRequest="140" WidthRequest="140" Padding="0" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}">
-            	<sfEffectsView:SfEffectsView x:Name="RotationEffectsView"
+            <Border HorizontalOptions="Center" HeightRequest="140" WidthRequest="140" Padding="0" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}">
+            	<Border.StrokeShape>
+                  <RoundRectangle CornerRadius="{OnPlatform Default='70', iOS='70'}" />
+                </Border.StrokeShape>
+              <sfEffectsView:SfEffectsView x:Name="RotationEffectsView"
 										     TouchDownEffects="Ripple" TouchUpEffects="Rotation" 
 											 RippleAnimationDuration="150"  
 										     RotationAnimationDuration="150" Angle="180" 
@@ -20,7 +23,7 @@
                         <Label Text="&#xe714;" FontFamily="MauiSampleFontIcon" Margin="10" FontSize="70"  Style="{StaticResource AltIconStyle}" VerticalOptions="Center" HorizontalOptions="Center"/>
                     </Grid>
                 </sfEffectsView:SfEffectsView>
-            </Frame>
+            </Border>
         </StackLayout>
     </localCore:SampleView.Content>
 </localCore:SampleView>

@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// The <see cref="ChartLegendLabelStyle"/> class provides customizable styling options for the labels in a chart's legend, allowing you to define properties such as font size, font family, text color, margin, and font attributes to enhance the visual appearance of the legend labels.

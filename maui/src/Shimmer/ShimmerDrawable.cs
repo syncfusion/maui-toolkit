@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Shimmer
 {

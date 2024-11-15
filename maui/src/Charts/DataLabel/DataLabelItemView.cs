@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui;
-using Microsoft.Maui.ApplicationModel;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     internal class DataLabelItemView : SfTemplatedView, ICustomAbsoluteView
     {
@@ -43,11 +39,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     layout.InvalidateMeasure();
                 });
             }
-        }
-
-        public override SizeRequest Measure(double widthConstraint, double heightConstraint, MeasureFlags flags = MeasureFlags.None)
-        {
-            return base.Measure(widthConstraint, heightConstraint, flags);
         }
 
         #endregion

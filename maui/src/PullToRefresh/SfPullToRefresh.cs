@@ -1,12 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
+﻿using System.Windows.Input;
 using Microsoft.Maui.Controls.Shapes;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Themes;
 using Syncfusion.Maui.Toolkit.Internals;
 
@@ -22,17 +15,22 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <summary>
 		/// Below field maintains the current pulling progress rate.
 		/// </summary>
-		internal double _progressRate = 0;
+		double _progressRate = 0;
 
 		/// <summary>
 		/// Below field maintains the view created from <see cref="SfPullToRefresh.PullingViewTemplate"/>.
 		/// </summary>
-		internal View? _pullingTemplateView;
+		View? _pullingTemplateView;
 
 		/// <summary>
 		/// Below field maintains the view created from <see cref="SfPullToRefresh.RefreshingViewTemplate"/>.
 		/// </summary>
-		internal View? _refreshingTemplateView;
+		View? _refreshingTemplateView;
+
+		/// <summary>
+		/// Indicates whether the child is IPullToRefresh or not.
+		/// </summary>
+		bool _isIPullToRefresh = false;
 
 		/// <summary>
 		/// Instance of refresh view.
@@ -97,11 +95,6 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// Represents the number of attempts to loops through to retrieve the specified child of <see cref="SfPullToRefresh.PullableContent"/> based on touch points.
 		/// </summary>
 		int _childLoopCount = 0;
-
-		/// <summary>
-		/// Indicates whether the child is IPullToRefresh or not.
-		/// </summary>
-		bool _isIPullToRefresh = false;
 
 		#endregion
 
@@ -875,7 +868,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// private async void RefreshMethod(object parameter)
 		/// {
 		///     var pullToRefresh = parameter as SfPullToRefresh;
-		///     if (pullToRefresh != null)
+		///     if (pullToRefresh is not null)
 		///     {
 		///          pullToRefresh.IsRefreshing = true;
 		///          await Task.Delay(1200); // Simulate a refresh
@@ -936,7 +929,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// private async void RefreshMethod(object parameter)
 		/// {
 		///     var pullToRefresh = parameter as SfPullToRefresh;
-		///     if (pullToRefresh != null)
+		///     if (pullToRefresh is not null)
 		///     {
 		///         pullToRefresh.IsRefreshing = true;
 		///         await Task.Delay(1200); // Simulate a refresh
@@ -963,7 +956,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		#region Internal Properties
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the <see cref="SfPullToRefresh._progressRate"/> has shadow or not.
+		/// Gets or sets a value indicating whether the <see cref="SfPullToRefresh.ProgressCircleView"/> has shadow or not.
 		/// </summary>
 		internal bool HasShadow
 		{
@@ -1058,6 +1051,53 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			}
 		}
 
+		internal double ProgressRate
+		{
+			get
+			{
+				return _progressRate;
+			}
+			set
+			{
+				_progressRate = value;
+			}
+		}
+
+		internal View? PullingTemplateView
+		{
+			get
+			{
+				return _pullingTemplateView;
+			}
+			set
+			{
+				_pullingTemplateView = value;
+			}
+		}
+
+		internal View? RefreshingTemplateView
+		{
+			get
+			{
+				return _refreshingTemplateView;
+			}
+			set
+			{
+				_refreshingTemplateView = value;
+			}
+		}
+
+		internal bool IsIPullToRefresh
+		{
+			get
+			{
+				return _isIPullToRefresh;
+			}
+			set
+			{
+				_isIPullToRefresh = value;
+			}
+		}
 		#endregion
 
 		#region Public Methods
@@ -1179,7 +1219,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <param name="heightConstraint">The available height for <see cref="SfPullToRefresh"/>.</param>
 		internal void MeasureSfProgressCircleView(double widthConstraint = 0, double heightConstraint = 0)
 		{
-			if (ProgressCircleView.Content != null)
+			if (ProgressCircleView.Content is not null)
 			{
 				(ProgressCircleView as IView).Measure(widthConstraint, heightConstraint);
 			}
@@ -1187,6 +1227,20 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			{
 				(ProgressCircleView as IView).Measure(CircleViewWidth, CircleViewHeight);
 			}
+		}
+
+		/// <summary>
+		/// Gets the bounds based on framework assigned height based on safe area region.
+		/// </summary>
+		/// <returns>Return the rect based on height passed in arrange pass to pull to refresh control.</returns>
+		internal Rect GetBounds()
+		{
+			Rect bounds = Bounds;
+#if IOS && !MACCATALYST
+			bounds.Height = _previousBounds.Height;
+#endif
+
+			return bounds;
 		}
 
 		/// <summary>
@@ -1198,13 +1252,13 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		internal bool IsChildElementScrolled(IVisualTreeElement? element, Point touchPoint)
 		{
 			bool interceptResult = false;
-			if (element == null)
+			if (element is null)
 			{
 				return false;
 			}
 
 			var view = element as View;
-			if (view == null || view.Handler == null || view.Handler.PlatformView == null)
+			if (view is null || view.Handler is null || view.Handler.PlatformView is null)
 			{
 				return false;
 			}
@@ -1224,14 +1278,14 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				}
 
 				// This condition is when IContentView content is not null and child count is 0
-				if (view is IContentView contentView && element.GetVisualChildren().Count == 0 && contentView.Content != null && contentView.Content is IVisualTreeElement contentElement)
+				if (view is IContentView contentView && element.GetVisualChildren().Count == 0 && contentView.Content is not null && contentView.Content is IVisualTreeElement contentElement)
 				{
 					element = contentElement;
 				}
 
 				foreach (var childView in element.GetVisualChildren().OfType<View>())
 				{
-					if (childView is null || childView.Handler == null || childView.Handler.PlatformView == null)
+					if (childView is null || childView.Handler is null || childView.Handler.PlatformView is null)
 					{
 						return false;
 					}
@@ -1256,6 +1310,15 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			return false;
 		}
 
+		/// <summary>
+		/// Calling this method cancels the pulling and refreshing process.
+		/// </summary>
+		/// <returns>true indicating that the pulling action has been cancelled.</returns>
+		internal bool CancelPulling()
+		{
+			RaisePullingCancelled();
+			return true;
+		}
 		#endregion
 
 		#region Private Methods
@@ -1272,18 +1335,20 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		double CalculateYPosition()
 		{
 			double y = 0;
-
+#if IOS && !MACCATALYST
+			y = _previousBounds.Y;
+#endif
 			if (IsPulling)
 			{
-				y = _distancePulled;
+				y += _distancePulled;
 				if (TransitionMode == PullToRefreshTransitionType.Push)
 				{
-					y -= ProgressCircleView.Content == null ? RefreshViewHeight + _pullableContentMargin : ProgressCircleView._circleViewBounds.Height + _pullableContentMargin;
+					y -= ProgressCircleView.Content is null ? RefreshViewHeight + _pullableContentMargin : ProgressCircleView.CircleViewBounds.Height + _pullableContentMargin;
 				}
 			}
 			else
 			{
-				y = RefreshViewThreshold;
+				y += RefreshViewThreshold;
 			}
 
 			return y;
@@ -1291,17 +1356,16 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
 		void ApplyPlatformSpecificClipping(double y)
 		{
-			if (DeviceInfo.Platform == DevicePlatform.WinUI)
+#if WINDOWS
+			if (TransitionMode == PullToRefreshTransitionType.Push)
 			{
-				if (TransitionMode == PullToRefreshTransitionType.Push)
-				{
-					ProgressCircleView.Clip = new RectangleGeometry(new Rect(0, y < 0 ? -y : 0, ProgressCircleView._circleViewBounds.Width, ProgressCircleView._circleViewBounds.Height));
-				}
-				else if (ProgressCircleView.Clip != null)
-				{
-					ProgressCircleView.Clip = new RectangleGeometry(new Rect(0, 0, ProgressCircleView._circleViewBounds.Width, ProgressCircleView._circleViewBounds.Height));
-				}
+				ProgressCircleView.Clip = new RectangleGeometry(new Rect(0, y < 0 ? -y : 0, ProgressCircleView.CircleViewBounds.Width, ProgressCircleView.CircleViewBounds.Height));
 			}
+			else if (ProgressCircleView.Clip is not null)
+			{
+				ProgressCircleView.Clip = new RectangleGeometry(new Rect(0, 0, ProgressCircleView.CircleViewBounds.Width, ProgressCircleView.CircleViewBounds.Height));
+			}
+#endif
 		}
 
 		/// <summary>
@@ -1309,7 +1373,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// </summary>
 		void ArrangeSfProgressCircleView()
 		{
-			if (ProgressCircleView != null)
+			if (ProgressCircleView is not null)
 			{
 				if (!IsPulling && !ActualIsRefreshing)
 				{
@@ -1317,24 +1381,26 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				}
 				else
 				{
-					if (!ProgressCircleView._processedBounds.Equals(Bounds))
+					if (!ProgressCircleView.ProcessedBounds.Equals(Bounds))
 					{
 						ProgressCircleView.UpdateCircleViewBounds();
 					}
 
 					double y = CalculateYPosition();
 
-					if (ProgressCircleView.Content == null)
+					if (ProgressCircleView.Content is null)
 					{
 						y -= GetShadowSpace(true);
 					}
 
 					ApplyPlatformSpecificClipping(y);
 
-					ProgressCircleView._circleViewBounds.Y = y;
+					var bounds = ProgressCircleView.CircleViewBounds;
+					bounds.Y = y;
+					ProgressCircleView.CircleViewBounds = bounds;
 
-					(ProgressCircleView as IView).Arrange(new Rect(ProgressCircleView._circleViewBounds.X, y, ProgressCircleView._circleViewBounds.Width, ProgressCircleView._circleViewBounds.Height));
-					if (ProgressCircleView.Content == null && IsPulling)
+					(ProgressCircleView as IView).Arrange(new Rect(ProgressCircleView.CircleViewBounds.X, y, ProgressCircleView.CircleViewBounds.Width, ProgressCircleView.CircleViewBounds.Height));
+					if (ProgressCircleView.Content is null && IsPulling)
 					{
 						ProgressCircleView.InvalidateDrawable();
 					}
@@ -1349,9 +1415,12 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <param name="animate">This flag indicates whether to animate the <see cref="SfPullToRefresh.PullableContent"/>.</param>
 		void ArrangePullableContent(Rect bounds, bool animate = false)
 		{
-			if (PullableContent != null)
+			if (PullableContent is not null)
 			{
 				bounds.Y = 0;
+#if IOS && !MACCATALYST
+				bounds.Y = _previousBounds.Y;
+#endif
 				bounds.X = 0;
 				if (!PullableContent.AnimationIsRunning("PushBackAnimation"))
 				{
@@ -1359,12 +1428,12 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 					{
 						if (IsPulling)
 						{
-							bounds.Y = _distancePulled;
+							bounds.Y += _distancePulled;
 						}
 						else if (ActualIsRefreshing)
 						{
 							double circleViewHeight = 0;
-							if (ProgressCircleView.Content != null && _refreshingTemplateView != null)
+							if (ProgressCircleView.Content is not null && RefreshingTemplateView is not null)
 							{
 								circleViewHeight = ProgressCircleView.Content.DesiredSize.Height;
 							}
@@ -1373,7 +1442,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 								circleViewHeight = RefreshViewHeight;
 							}
 
-							bounds.Y = RefreshViewThreshold + circleViewHeight + _pullableContentMargin;
+							bounds.Y += RefreshViewThreshold + circleViewHeight + _pullableContentMargin;
 						}
 					}
 
@@ -1397,19 +1466,25 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			const int rate = 5;
 			const int length = 300;
+			double endvalue = 0;
+#if IOS && !MACCATALYST
+			endvalue = _previousBounds.Y;
+#endif
 			// LayoutTo was not working so added animation to perform Layout animation.
 			Animation animation = new Animation(
 								callback: d =>
 								{
-									if (DeviceInfo.Platform == DevicePlatform.Android)
-									{
-										(element as IView).Measure(Width, Height);
-									}
+#if ANDROID
+									(element as IView).Measure(Width, Height);
+#elif IOS && !MACCATALYST
 
+									(element as IView).Arrange(new Rect(0, d, Width, _previousBounds.Height));
+#else
 									(element as IView).Arrange(new Rect(0, d, Width, Height));
+#endif
 								},
 								start: element.Bounds.Y,
-								end: 0,
+								end: endvalue,
 								easing: Easing.CubicIn);
 			animation.Commit(element, "PushBackAnimation", rate, length);
 		}
@@ -1420,7 +1495,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <returns>Return whether to process touch or not.</returns>
 		bool CanProcessTouch()
 		{
-			if ((PullableContent != null && PullableContent.AnimationIsRunning("PushBackAnimation")) || ActualIsRefreshing)
+			if ((PullableContent is not null && PullableContent.AnimationIsRunning("PushBackAnimation")) || ActualIsRefreshing)
 			{
 				return false;
 			}
@@ -1432,33 +1507,33 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			if (TransitionMode == PullToRefreshTransitionType.SlideOnTop)
 			{
-				_progressRate = (pulledDistance - RefreshViewThreshold) / (PullingThreshold - RefreshViewThreshold);
+				ProgressRate = (pulledDistance - RefreshViewThreshold) / (PullingThreshold - RefreshViewThreshold);
 			}
 			else
 			{
 				double refreshContentHeight = RefreshViewHeight;
 
-				if (_pullingTemplateView != null)
+				if (PullingTemplateView is not null)
 				{
-					refreshContentHeight = _pullingTemplateView.DesiredSize.Height;
+					refreshContentHeight = PullingTemplateView.DesiredSize.Height;
 				}
 
 				refreshContentHeight += _pullableContentMargin;
 
-				_progressRate = (pulledDistance - refreshContentHeight) / PullingThreshold;
+				ProgressRate = (pulledDistance - refreshContentHeight) / PullingThreshold;
 			}
 		}
 
 		bool HandlePullingEvent()
 		{
 			var pullToRefresh = PullToRefreshHelpers.GetIPullToRefreshElement(PullableContent as IView, this);
-			if (pullToRefresh != null)
+			if (pullToRefresh is not null)
 			{
 				var cancel = false;
 
 				if (pullToRefresh is IPullToRefresh pullToRefreshElement)
 				{
-					pullToRefreshElement.Pulling(_progressRate, this, out cancel);
+					pullToRefreshElement.Pulling(ProgressRate, this, out cancel);
 				}
 
 				if (pullToRefresh == PullableContent && cancel)
@@ -1467,9 +1542,9 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				}
 			}
 
-			if (Pulling != null)
+			if (Pulling is not null)
 			{
-				PullingEventArgs args = new PullingEventArgs() { Progress = _progressRate };
+				PullingEventArgs args = new PullingEventArgs() { Progress = ProgressRate };
 				Pulling(this, args);
 				if (args.Cancel)
 				{
@@ -1491,9 +1566,9 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
 			if (TransitionMode == PullToRefreshTransitionType.SlideOnTop && pulledDistance < RefreshViewThreshold)
 			{
-				if (_progressRate > 0)
+				if (ProgressRate > 0)
 				{
-					_progressRate = 0;
+					ProgressRate = 0;
 				}
 
 				HideSfProgressCircleView();
@@ -1501,15 +1576,15 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			}
 
 			UpdateProgressRate(pulledDistance);
-			_progressRate = Math.Min(MaxProgressRate, Math.Round(_progressRate * MaxProgressRate));
-			_progressRate = Math.Max(0, _progressRate);
+			ProgressRate = Math.Min(MaxProgressRate, Math.Round(ProgressRate * MaxProgressRate));
+			ProgressRate = Math.Max(0, ProgressRate);
 
 			if (HandlePullingEvent())
 			{
 				return true;
 			}
 
-			if (RefreshCommand != null && !RefreshCommand.CanExecute(RefreshCommandParameter))
+			if (RefreshCommand is not null && !RefreshCommand.CanExecute(RefreshCommandParameter))
 			{
 				return CancelPulling();
 			}
@@ -1522,7 +1597,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			IsPulling = true;
 
 			bool canSkipArrange = TransitionMode == PullToRefreshTransitionType.SlideOnTop;
-			ManualArrangeContent(canSkipArrange, Bounds);
+			ManualArrangeContent(canSkipArrange, GetBounds());
 			return false;
 		}
 
@@ -1532,7 +1607,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <param name="sender">The instance of <see cref="SfPullToRefresh"/>.</param>
 		void RaiseRefreshingEvent(object sender)
 		{
-			if (_progressRate < 100 || (Refreshing == null && RefreshCommand == null))
+			if (ProgressRate < 100 || (Refreshing is null && RefreshCommand is null))
 			{
 				RaisePullingCancelled();
 				return;
@@ -1549,14 +1624,14 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			IsPulling = false;
 			ActualIsRefreshing = true;
-			_progressRate = 100;
-			if (_refreshingTemplateView != null && ProgressCircleView != null)
+			ProgressRate = 100;
+			if (RefreshingTemplateView is not null && ProgressCircleView is not null)
 			{
 				ProgressCircleView.CheckIfAndSetTemplate();
 			}
 			else
 			{
-				if (ProgressCircleView != null && ProgressCircleView.Content != null)
+				if (ProgressCircleView is not null && ProgressCircleView.Content is not null)
 				{
 					ProgressCircleView.UpdateContent();
 				}
@@ -1564,7 +1639,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
 			var pullToRefresh = PullToRefreshHelpers.GetIPullToRefreshElement(PullableContent, this);
 
-			if (pullToRefresh != null && pullToRefresh is IPullToRefresh pullToRefreshElement)
+			if (pullToRefresh is not null && pullToRefresh is IPullToRefresh pullToRefreshElement)
 			{
 				pullToRefreshElement.Refreshing(this);
 			}
@@ -1572,20 +1647,20 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			bool canSkipArrange = TransitionMode == PullToRefreshTransitionType.SlideOnTop;
 			ManualArrangeContent(canSkipArrange, Bounds);
 
-			if (ProgressCircleView != null && ProgressCircleView.Content == null && isProgrammatic)
+			if (ProgressCircleView is not null && ProgressCircleView.Content is null && isProgrammatic)
 			{
 				Rotate();
 				return;
 			}
 
-			if (Refreshing != null)
+			if (Refreshing is not null)
 			{
 				Refreshing(this, EventArgs.Empty);
 			}
 
 			RefreshCommand?.Execute(RefreshCommandParameter);
 
-			if (ProgressCircleView != null && ProgressCircleView.Content == null)
+			if (ProgressCircleView is not null && ProgressCircleView.Content is null)
 			{
 				Rotate();
 			}
@@ -1617,7 +1692,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 							_distancePulled = point.Y - _downY;
 							if (!ActualIsRefreshing)
 							{
-								double circleHeight = ProgressCircleView.Content == null ? RefreshViewHeight : ProgressCircleView.Content.DesiredSize.Height;
+								double circleHeight = ProgressCircleView.Content is null ? RefreshViewHeight : ProgressCircleView.Content.DesiredSize.Height;
 								double maxPullingThreshold = PullingThreshold + (TransitionMode == PullToRefreshTransitionType.Push ? circleHeight + _pullableContentMargin : 0);
 								if (_distancePulled > maxPullingThreshold)
 								{
@@ -1657,7 +1732,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			ResetTouchFields();
 			HideSfProgressCircleView();
-			_progressRate = 0;
+			ProgressRate = 0;
 		}
 
 		/// <summary>
@@ -1676,7 +1751,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// </summary>
 		void HideSfProgressCircleView()
 		{
-			if (ProgressCircleView != null)
+			if (ProgressCircleView is not null)
 			{
 				(ProgressCircleView as IView).Arrange(new Rect(0, 0, 0, 0));
 				ProgressCircleView.ResetArcAngle();
@@ -1691,35 +1766,25 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			ResetValues();
 			var pullToRefresh = PullToRefreshHelpers.GetIPullToRefreshElement(PullableContent as IView, this);
-			if (pullToRefresh != null && pullToRefresh is IPullToRefresh pullToRefreshElement)
+			if (pullToRefresh is not null && pullToRefresh is IPullToRefresh pullToRefreshElement)
 			{
 				pullToRefreshElement.Refreshed(this);
 			}
 
 			// Included condition for battery saver logic for android platform.
 			HideSfProgressCircleView();
-			var canAnimate = TransitionMode == PullToRefreshTransitionType.Push && !(DeviceInfo.Platform == DevicePlatform.Android && Battery.Default.EnergySaverStatus == EnergySaverStatus.On);
-			if (TransitionMode == PullToRefreshTransitionType.Push)
-			{
-				ArrangePullableContent(Bounds, canAnimate);
-			}
-
+			var canAnimate = TransitionMode == PullToRefreshTransitionType.Push;
+#if ANDROID
+			canAnimate = Battery.Default.EnergySaverStatus is not EnergySaverStatus.On;
+#endif
+			ArrangePullableContent(GetBounds(), canAnimate);
 			(this as IView).InvalidateMeasure();
-			if (Refreshed != null)
+			if (Refreshed is not null)
 			{
 				Refreshed(this, EventArgs.Empty);
 			}
 		}
 
-		/// <summary>
-		/// Calling this method cancels the pulling and refreshing process.
-		/// </summary>
-		/// <returns>true indicating that the pulling action has been cancelled.</returns>
-		bool CancelPulling()
-		{
-			RaisePullingCancelled();
-			return true;
-		}
 
 		/// <summary>
 		/// The method cancels the pulling operation.
@@ -1728,7 +1793,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			ResetValues();
 			var pullToRefresh = PullToRefreshHelpers.GetIPullToRefreshElement(PullableContent as IView, this);
-			if (pullToRefresh != null && pullToRefresh is IPullToRefresh pullToRefreshElement)
+			if (pullToRefresh is not null && pullToRefresh is IPullToRefresh pullToRefreshElement)
 			{
 				pullToRefreshElement.PullingCancelled(this);
 			}
@@ -1749,7 +1814,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			{
 				try
 				{
-					while (ActualIsRefreshing && ProgressCircleView != null && ProgressCircleView.IsVisible && RefreshingViewTemplate == null)
+					while (ActualIsRefreshing && ProgressCircleView is not null && ProgressCircleView.IsVisible && RefreshingViewTemplate is null)
 					{
 						_isCircleRotating = true;
 						ProgressCircleView.ComputeArcAngle();
@@ -1759,14 +1824,13 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				}
 				catch
 				{
-					if (DeviceInfo.Platform != DevicePlatform.Android && DeviceInfo.Platform != DevicePlatform.iOS)
-					{
-						const int contentLength = 300;
-						const int circleViewLength = 250;
-						await PullableContent.LayoutTo(new Rect(0, RefreshViewHeight * 2, Width, Height - (RefreshViewHeight * 2)), contentLength).ConfigureAwait(true);
-						await ProgressCircleView.LayoutTo(new Rect((Width / 2) - (RefreshViewWidth / 2), RefreshViewHeight / 1.5, RefreshViewWidth, RefreshViewHeight), circleViewLength).ConfigureAwait(true);
-						HideSfProgressCircleView();
-					}
+#if WINDOWS
+					const int contentLength = 300;
+					const int circleViewLength = 250;
+					await PullableContent.LayoutTo(new Rect(0, RefreshViewHeight * 2, Width, Height - (RefreshViewHeight * 2)), contentLength).ConfigureAwait(true);
+					await ProgressCircleView.LayoutTo(new Rect((Width / 2) - (RefreshViewWidth / 2), RefreshViewHeight / 1.5, RefreshViewWidth, RefreshViewHeight), circleViewLength).ConfigureAwait(true);
+					HideSfProgressCircleView();
+#endif
 				}
 
 				_isCircleRotating = false;
@@ -1798,7 +1862,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			if ((!IsPulling && !ActualIsRefreshing) || _previousMeasuredSize != new Size(widthConstraint, heightConstraint))
 			{
-				if (PullableContent != null)
+				if (PullableContent is not null)
 				{
 					(PullableContent as IView).Measure(widthConstraint, heightConstraint);
 				}
@@ -1840,7 +1904,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnIsRefreshingChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null)
+			if (pullToRefresh is not null)
 			{
 				if (pullToRefresh.IsRefreshing)
 				{
@@ -1864,13 +1928,12 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
 
 			// OnCanRestrictChildTouchChanged method triggers before OnPullableContentChanged method. So, we have to check whether the PullableContent is null or not.
-			if (pullToRefresh != null && pullToRefresh.PullableContent != null)
+			if (pullToRefresh is not null && pullToRefresh.PullableContent is not null)
 			{
 				// Should not make the pullable content as InputTransparent for WinUI platform as making it will restrict touch listening for pullable content.
-				if (DeviceInfo.Platform == DevicePlatform.Android || DeviceInfo.Platform == DevicePlatform.iOS)
-				{
-					pullToRefresh.PullableContent.InputTransparent = pullToRefresh.CanRestrictChildTouch;
-				}
+#if !WINDOWS
+				pullToRefresh.PullableContent.InputTransparent = pullToRefresh.CanRestrictChildTouch;
+#endif
 			}
 		}
 
@@ -1883,7 +1946,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnPullableContentChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null)
+			if (pullToRefresh is not null)
 			{
 				if (oldValue is View view && pullToRefresh.Contains(oldValue))
 				{
@@ -1912,24 +1975,24 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnPullingViewTemplatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null && oldValue != null)
+			if (pullToRefresh is not null && oldValue is not null)
 			{
-				if (pullToRefresh.ProgressCircleView != null && pullToRefresh.ProgressCircleView.Content != null && pullToRefresh._pullingTemplateView != null && pullToRefresh.ProgressCircleView.Content == pullToRefresh._pullingTemplateView)
+				if (pullToRefresh.ProgressCircleView is not null && pullToRefresh.ProgressCircleView.Content is not null && pullToRefresh.PullingTemplateView is not null && pullToRefresh.ProgressCircleView.Content == pullToRefresh.PullingTemplateView)
 				{
 					pullToRefresh.ProgressCircleView.UpdateContent();
 				}
 
-				pullToRefresh._pullingTemplateView = null;
+				pullToRefresh.PullingTemplateView = null;
 			}
 
-			if (pullToRefresh != null && newValue != null && pullToRefresh.ProgressCircleView != null)
+			if (pullToRefresh is not null && newValue is not null && pullToRefresh.ProgressCircleView is not null)
 			{
 				pullToRefresh.ProgressCircleView.InitializePullingViewTemplate();
 			}
 
-			if (pullToRefresh != null && pullToRefresh.IsPulling && pullToRefresh.ProgressCircleView != null)
+			if (pullToRefresh is not null && pullToRefresh.IsPulling && pullToRefresh.ProgressCircleView is not null)
 			{
-				if (newValue != null)
+				if (newValue is not null)
 				{
 					pullToRefresh.ProgressCircleView.CheckIfAndSetTemplate();
 				}
@@ -1950,26 +2013,26 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnRefreshingViewTemplatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null && pullToRefresh.ProgressCircleView != null)
+			if (pullToRefresh is not null && pullToRefresh.ProgressCircleView is not null)
 			{
-				if (oldValue != null)
+				if (oldValue is not null)
 				{
-					if (pullToRefresh.ProgressCircleView.Content != null && pullToRefresh._refreshingTemplateView != null && pullToRefresh.ProgressCircleView.Content == pullToRefresh._refreshingTemplateView)
+					if (pullToRefresh.ProgressCircleView.Content is not null && pullToRefresh.RefreshingTemplateView is not null && pullToRefresh.ProgressCircleView.Content == pullToRefresh.RefreshingTemplateView)
 					{
 						pullToRefresh.ProgressCircleView.UpdateContent();
 					}
 
-					pullToRefresh._refreshingTemplateView = null;
+					pullToRefresh.RefreshingTemplateView = null;
 				}
 
-				if (newValue != null)
+				if (newValue is not null)
 				{
 					pullToRefresh.ProgressCircleView.InitializeRefreshViewViewTemplate();
 				}
 
 				if (pullToRefresh.ActualIsRefreshing)
 				{
-					if (newValue != null)
+					if (newValue is not null)
 					{
 						pullToRefresh.ProgressCircleView.CheckIfAndSetTemplate();
 					}
@@ -1992,14 +2055,14 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnRefreshViewHeightChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null)
+			if (pullToRefresh is not null)
 			{
 				pullToRefresh.ProgressCircleView.UpdateDrawProperties();
-				if ((pullToRefresh.IsPulling || pullToRefresh.ActualIsRefreshing) && pullToRefresh.ProgressCircleView.Content == null)
+				if ((pullToRefresh.IsPulling || pullToRefresh.ActualIsRefreshing) && pullToRefresh.ProgressCircleView.Content is null)
 				{
 					pullToRefresh.MeasureSfProgressCircleView(pullToRefresh.Bounds.Width, pullToRefresh.Bounds.Height);
 					pullToRefresh.ProgressCircleView.UpdateCircleViewBounds();
-					pullToRefresh.ManualArrangeContent(pullToRefresh.TransitionMode == PullToRefreshTransitionType.SlideOnTop, pullToRefresh.Bounds);
+					pullToRefresh.ManualArrangeContent(pullToRefresh.TransitionMode == PullToRefreshTransitionType.SlideOnTop, pullToRefresh.GetBounds());
 				}
 			}
 		}
@@ -2013,14 +2076,14 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnRefreshViewWidthChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null)
+			if (pullToRefresh is not null)
 			{
 				pullToRefresh.ProgressCircleView.UpdateDrawProperties();
-				if ((pullToRefresh.IsPulling || pullToRefresh.ActualIsRefreshing) && pullToRefresh.ProgressCircleView.Content == null)
+				if ((pullToRefresh.IsPulling || pullToRefresh.ActualIsRefreshing) && pullToRefresh.ProgressCircleView.Content is null)
 				{
 					pullToRefresh.MeasureSfProgressCircleView(pullToRefresh.Width, pullToRefresh.Height);
 					pullToRefresh.ProgressCircleView.UpdateCircleViewBounds();
-					pullToRefresh.ManualArrangeContent(pullToRefresh.TransitionMode == PullToRefreshTransitionType.SlideOnTop, pullToRefresh.Bounds);
+					pullToRefresh.ManualArrangeContent(pullToRefresh.TransitionMode == PullToRefreshTransitionType.SlideOnTop, pullToRefresh.GetBounds());
 				}
 			}
 		}
@@ -2034,10 +2097,10 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnProgressThicknessChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null)
+			if (pullToRefresh is not null)
 			{
 				// No need for do invalidate in Pulling because on pulling circle layout will be updated subsequently and draw also refreshes.
-				if (pullToRefresh.ActualIsRefreshing && pullToRefresh.ProgressCircleView != null && pullToRefresh.ProgressCircleView.Content == null)
+				if (pullToRefresh.ActualIsRefreshing && pullToRefresh.ProgressCircleView is not null && pullToRefresh.ProgressCircleView.Content is null)
 				{
 					pullToRefresh.ProgressCircleView.InvalidateDrawable();
 				}
@@ -2053,10 +2116,10 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnProgressBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null)
+			if (pullToRefresh is not null)
 			{
 				// No need for do invalidate in Pulling because on pulling circle layout will be updated subsequently and draw also refreshes.
-				if (pullToRefresh.ActualIsRefreshing && pullToRefresh.ProgressCircleView != null && pullToRefresh.ProgressCircleView.Content == null)
+				if (pullToRefresh.ActualIsRefreshing && pullToRefresh.ProgressCircleView is not null && pullToRefresh.ProgressCircleView.Content is null)
 				{
 					pullToRefresh.ProgressCircleView.InvalidateDrawable();
 				}
@@ -2072,10 +2135,10 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnProgressColorChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh != null)
+			if (pullToRefresh is not null)
 			{
 				// No need for do invalidate in Pulling because on pulling circle layout will be updated subsequently and draw also refreshes.
-				if (pullToRefresh.ActualIsRefreshing && pullToRefresh.ProgressCircleView != null && pullToRefresh.ProgressCircleView.Content == null)
+				if (pullToRefresh.ActualIsRefreshing && pullToRefresh.ProgressCircleView is not null && pullToRefresh.ProgressCircleView.Content is null)
 				{
 					pullToRefresh.ProgressCircleView.InvalidateDrawable();
 				}

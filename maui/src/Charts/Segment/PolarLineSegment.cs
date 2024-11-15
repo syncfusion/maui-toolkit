@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using System;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {

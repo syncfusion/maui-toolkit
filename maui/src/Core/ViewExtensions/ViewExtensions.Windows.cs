@@ -1,15 +1,8 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Microsoft.UI.Xaml.Media.Imaging;
+﻿using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Windows.Graphics.Imaging;
 using Windows.Storage.Streams;
 using System.Runtime.InteropServices.WindowsRuntime;
-using Microsoft.Maui;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

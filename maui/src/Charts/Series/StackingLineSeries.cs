@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -446,8 +442,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 CalculateDataPointPosition(indexValue, ref x, ref y);
                 PointF labelPoint = new PointF((float)x, (float)y);
-                dataLabel.LabelContent = ChartDataLabelSettings.GetLabelContent(currentValue);
-                dataLabel.LabelPositionPoint = dataLabelSettings.CalculateDataLabelPoint(this, dataLabel, labelPoint, labelStyle);
+                dataLabel.LabelContent = GetLabelContent(currentValue, SumOfValues(YValues));
+				dataLabel.LabelPositionPoint = dataLabelSettings.CalculateDataLabelPoint(this, dataLabel, labelPoint, labelStyle);
                 UpdateDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
             }
         }

@@ -1,7 +1,3 @@
-using Microsoft.Maui.Graphics;
-using System.Collections.ObjectModel;
-using System.Globalization;
-
 namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 {
     public partial class CenterElevation : SampleView

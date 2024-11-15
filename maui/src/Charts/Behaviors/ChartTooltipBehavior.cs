@@ -1,6 +1,3 @@
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
 
@@ -724,8 +721,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (view != null)
             {
-                var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
-                view.Layout(new Rect(0, 0, size.Width, size.Height));
+#if NET9_0_OR_GREATER
+                var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity);
+#else
+				var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
+#endif
+				view.Layout(new Rect(0, 0, size.Width, size.Height));
             }
 
             return view;

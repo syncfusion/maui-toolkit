@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// The <see cref="PolarLineSeries"/> is a series that displays data in terms of values and angles by using a collection of straight lines. It allows for the visually comparing several quantitative or qualitative aspects of a situation.

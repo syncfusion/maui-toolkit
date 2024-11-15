@@ -1,6 +1,4 @@
 using Syncfusion.Maui.Toolkit;
-using System.Collections;
-using System.Collections.ObjectModel;
 using System.Globalization;
 
 namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart

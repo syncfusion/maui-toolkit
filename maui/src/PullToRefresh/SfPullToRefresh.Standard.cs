@@ -1,5 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Internals;
+﻿using Syncfusion.Maui.Toolkit.Internals;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
 namespace Syncfusion.Maui.Toolkit.PullToRefresh

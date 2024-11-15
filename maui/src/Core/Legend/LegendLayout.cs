@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {
@@ -16,7 +12,8 @@ namespace Syncfusion.Maui.Toolkit.Internals
         ILegend? _legend;
         IPlotArea _plotArea;
         SfLegend? _legendItemsView;
-        internal readonly AreaBase AreaBase;
+		Rect previousBounds;
+		internal readonly AreaBase AreaBase;
 
 		#endregion
 
@@ -82,10 +79,15 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <returns>The final size of the arranged content.</returns>
 		protected override Size ArrangeOverride(Rect bounds)
         {
-            //Calculate LegendItems before calling AreaBase's layout.
-            _plotArea.UpdateLegendItems();
-            UpdateLegendLayout(bounds);
-            return base.ArrangeOverride(bounds);
+			//Calculate LegendItems before calling AreaBase's layout.
+			if (previousBounds != bounds)
+			{
+				_plotArea.UpdateLegendItems();
+				UpdateLegendLayout(bounds);
+				previousBounds = bounds;
+			}
+
+			return base.ArrangeOverride(bounds);
         }
 
         void UpdateLegendLayout(Rect bounds)

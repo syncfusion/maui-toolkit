@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Internals
 {
     /// <summary>
     /// Provides touch detection functionality. 

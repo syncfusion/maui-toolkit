@@ -1,7 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Resources;
-using System.Threading;
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {

@@ -1,12 +1,5 @@
 ﻿using Syncfusion.Maui.Toolkit.EffectsView;
 using Syncfusion.Maui.Toolkit.Internals;
-using Syncfusion.Maui.Toolkit;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
 namespace Syncfusion.Maui.ControlsGallery.CustomView

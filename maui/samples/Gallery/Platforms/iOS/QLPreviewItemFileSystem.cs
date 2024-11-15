@@ -1,6 +1,5 @@
 using Foundation;
 using QuickLook;
-using System.IO;
 
 public class QLPreviewItemFileSystem : QLPreviewItem
 {

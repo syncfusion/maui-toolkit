@@ -5,6 +5,7 @@
              xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
@@ -51,14 +52,14 @@
                 <syncfusion:SfTextInputLayout x:Name="FirstNameFieldMobile" Style="{StaticResource InputLayoutStyleMobile}" Hint="First Name" HelperText="Enter your first name" ErrorText="Enter your first name">
                     <Entry x:Name="firstNameEntry" FontSize="{OnPlatform Android=16}"/>
                     <syncfusion:SfTextInputLayout.LeadingView>
-                        <Label Text="&#xe760;" FontSize="22" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=FirstNameFieldMobile}}"/>
+                        <Label Text="&#xe760;" FontSize="22" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=FirstNameFieldMobile}}" x:DataType="syncfusion:SfTextInputLayout"/>
                     </syncfusion:SfTextInputLayout.LeadingView>
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout x:Name="LastNameFieldMobile" Style="{StaticResource InputLayoutStyleMobile}" Hint="Last Name" HelperText="Enter your last name" ErrorText="Enter your last name">
                     <Entry x:Name="lastNameEntry" FontSize="{OnPlatform Android=16}"/>
                     <syncfusion:SfTextInputLayout.LeadingView>
-                        <Label Text="&#xe760;" FontSize="22" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=LastNameFieldMobile}}"/>
+                        <Label Text="&#xe760;" FontSize="22" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=LastNameFieldMobile}}" x:DataType="syncfusion:SfTextInputLayout"/>
                     </syncfusion:SfTextInputLayout.LeadingView>
                 </syncfusion:SfTextInputLayout>
 
@@ -73,43 +74,43 @@
                         </Picker.ItemsSource>
                     </Picker>
                     <syncfusion:SfTextInputLayout.LeadingView>
-                        <Label Text="&#xe77c;" FontSize="24" FontFamily="MauiSampleFontIcon" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=GenderFieldMobile}}"/>
+                        <Label Text="&#xe77c;" FontSize="24" FontFamily="MauiSampleFontIcon" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=GenderFieldMobile}}" x:DataType="syncfusion:SfTextInputLayout"/>
                     </syncfusion:SfTextInputLayout.LeadingView>
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout x:Name="PhoneNumberFieldMobile" Style="{StaticResource InputLayoutStyleMobile}" Hint="Phone number" HelperText="Please don't include country code" ErrorText="Enter your phone number">
                     <Entry FontSize="{OnPlatform Android=16}" Keyboard="Telephone" x:Name="phoneEntry"/>
                     <syncfusion:SfTextInputLayout.LeadingView>
-                        <Label Text="&#xe763;" FontSize="22" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=PhoneNumberFieldMobile}}"/>
+                        <Label Text="&#xe763;" FontSize="22" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=PhoneNumberFieldMobile}}" x:DataType="syncfusion:SfTextInputLayout"/>
                     </syncfusion:SfTextInputLayout.LeadingView>
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout  x:Name="CountryFieldMobile" Style="{StaticResource InputLayoutStyleMobile}" Hint="Country" HelperText="Enter your country" ErrorText="Enter your country">
-                    <Picker x:Name="countryAutocomplete" FontSize="{OnPlatform Android=16}" TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" ItemsSource="{Binding CountryList}">
+                    <Picker x:Name="countryAutocomplete" FontSize="{OnPlatform Android=16}" TextColor="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" ItemsSource="{Binding CountryList}" x:DataType="local:SignUpPageMobile">
                     </Picker>
                     <syncfusion:SfTextInputLayout.LeadingView>
-                        <Label Text="&#xe76e;" FontSize="22" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=CountryFieldMobile}}"/>
+                        <Label Text="&#xe76e;" FontSize="22" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=CountryFieldMobile}}" x:DataType="syncfusion:SfTextInputLayout"/>
                     </syncfusion:SfTextInputLayout.LeadingView>
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout  x:Name="EmailFieldMobile" Style="{StaticResource InputLayoutStyleMobile}" Hint="Email" HelperText="Enter your email address" ErrorText="Enter a valid email address">
                     <Entry FontSize="{OnPlatform Android=16}" x:Name="emailEntry"/>
                     <syncfusion:SfTextInputLayout.LeadingView>
-                        <Label Text="&#xe75c;" FontSize="20" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=EmailFieldMobile}}"/>
+                        <Label Text="&#xe75c;" FontSize="20" FontFamily="MauiSampleFontIcon" HeightRequest="24" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=EmailFieldMobile}}" x:DataType="syncfusion:SfTextInputLayout"/>
                     </syncfusion:SfTextInputLayout.LeadingView>
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout  x:Name="PasswordFieldMobile" Style="{StaticResource InputLayoutStyleMobile}" EnablePasswordVisibilityToggle="True" Hint="Password" HelperText="Enter 5 to 8 characters" ErrorText="Length must be 5 to 8 characters" CharMaxLength="8" >
                     <Entry x:Name="passwordEntry" FontSize="{OnPlatform Android=16}" TextChanged="Entry_TextChanged"/>
                     <syncfusion:SfTextInputLayout.LeadingView>
-                        <Label Text="&#xe751;" FontSize="20" FontFamily="MauiSampleFontIcon" HeightRequest="24" Rotation="-45" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=PasswordFieldMobile}}"/>
+                        <Label Text="&#xe751;" FontSize="20" FontFamily="MauiSampleFontIcon" HeightRequest="24" Rotation="-45" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=PasswordFieldMobile}}" x:DataType="syncfusion:SfTextInputLayout"/>
                     </syncfusion:SfTextInputLayout.LeadingView>
                 </syncfusion:SfTextInputLayout>
 
                 <syncfusion:SfTextInputLayout  x:Name="ConfirmPasswordFieldMobile" LeadingViewPosition="Outside" EnablePasswordVisibilityToggle="False" IsEnabled="False" Hint="Confirm Password" HelperText="Re-enter your password" ErrorText="Re-enter your password" ShowHelperText="False">
                     <Entry x:Name="confirmPasswordEntry" FontSize="{OnPlatform Android=16}" IsPassword="True"/>
                     <syncfusion:SfTextInputLayout.LeadingView>
-                        <Label Text="&#xe751;" FontSize="20" FontFamily="MauiSampleFontIcon" HeightRequest="24" Rotation="-45" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=ConfirmPasswordFieldMobile}}"/>
+                        <Label Text="&#xe751;" FontSize="20" FontFamily="MauiSampleFontIcon" HeightRequest="24" Rotation="-45" VerticalTextAlignment="End" TextColor="{Binding Path=CurrentActiveColor, Source={x:Reference Name=ConfirmPasswordFieldMobile}}" x:DataType="syncfusion:SfTextInputLayout"/>
                     </syncfusion:SfTextInputLayout.LeadingView>
                 </syncfusion:SfTextInputLayout>
 

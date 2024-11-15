@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Runtime.Versioning;
+﻿using System.Runtime.Versioning;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

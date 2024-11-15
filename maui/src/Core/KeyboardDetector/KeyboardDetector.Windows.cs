@@ -1,12 +1,6 @@
 ﻿using Microsoft.UI.Xaml;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using System;
-using System.Collections.Generic;
 using MauiView = Microsoft.Maui.Controls.View;
-using Key = Windows.System.VirtualKey;
 using Microsoft.UI.Xaml.Input;
-using Windows.UI.Core;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

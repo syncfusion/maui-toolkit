@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Maui;
-#if MONOANDROID
+﻿#if MONOANDROID
 using PlatformView = Android.Views.View;
 #elif __IOS__ || MACCATALYST
 using PlatformView = UIKit.UIView;

@@ -1,34 +1,35 @@
-namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart;
-
-public partial class RangeBarAnimation : SampleView
+namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-	public RangeBarAnimation()
+	public partial class RangeBarAnimation : SampleView
 	{
-		InitializeComponent();
-        if (!(BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile))
-            viewModel.StartTimer();
-    }
+		public RangeBarAnimation()
+		{
+			InitializeComponent();
+			if (!(BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile))
+				viewModel.StartTimer();
+		}
 
-    public override void OnAppearing()
-    {
-        base.OnAppearing();
-        if (BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile)
-        {
-            viewModel.StopTimer();
-            viewModel.StartTimer();
-        }
+		public override void OnAppearing()
+		{
+			base.OnAppearing();
+			if (BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile)
+			{
+				viewModel.StopTimer();
+				viewModel.StartTimer();
+			}
 
-        if (!IsCardView)
-        {
-            Chart.Title = (Label)layout.Resources["title"];
-        }
-    }
+			if (!IsCardView)
+			{
+				Chart.Title = (Label)layout.Resources["title"];
+			}
+		}
 
-    public override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        viewModel?.StopTimer();
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			viewModel?.StopTimer();
 
-        Chart.Handler?.DisconnectHandler();
-    }
+			Chart.Handler?.DisconnectHandler();
+		}
+	}
 }

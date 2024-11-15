@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using System;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Represents a segment of the <see cref="DoughnutSeries"/> chart, extending the functionality of a pie chart segment.

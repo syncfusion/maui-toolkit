@@ -1,5 +1,4 @@
-﻿
-namespace Syncfusion.Maui.Toolkit
+﻿namespace Syncfusion.Maui.Toolkit
 {
     /// <summary>
     /// Represents the default shape types in <see cref="SfShapeView"/>.

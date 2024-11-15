@@ -1,16 +1,11 @@
-﻿using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Graphics.Platform;
+﻿using Microsoft.Maui.Graphics.Platform;
 using Microsoft.Maui.Platform;
 using CoreGraphics;
 using UIKit;
-using System;
-using Microsoft.Maui.Controls;
 using Foundation;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using System.Collections.Generic;
 using Syncfusion.Maui.Toolkit.Semantics;
-using Microsoft.Maui;
 using ILayout = Microsoft.Maui.ILayout;
 
 namespace Syncfusion.Maui.Toolkit.Platform

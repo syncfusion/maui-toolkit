@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System.Runtime.Versioning;
-
-namespace Syncfusion.Maui.Toolkit.Graphics.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
     /// <summary>
     /// Represents a view that can be drawn on using native drawing options. 

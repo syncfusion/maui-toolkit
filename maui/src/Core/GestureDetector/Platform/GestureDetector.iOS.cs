@@ -1,11 +1,7 @@
-using Microsoft.Maui.Graphics;
 using MauiView = Microsoft.Maui.Controls.View;
 using GestureStatus = Microsoft.Maui.GestureStatus;
 using UIKit;
-using System;
 using CoreGraphics;
-using Microsoft.Maui;
-using Foundation;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

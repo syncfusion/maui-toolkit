@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// This class provides data for the <see cref="SfCartesianChart.ZoomEnd"/> event.

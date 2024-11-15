@@ -1,14 +1,11 @@
-﻿namespace Syncfusion.Maui.Toolkit.UnitTest
-{
-    using System.Collections.ObjectModel;
-    using System.Drawing;
-    using System.Reflection;
-    using System.Threading;
-    using Syncfusion.Maui.Toolkit.Charts;
-    using Syncfusion.Maui.Toolkit.SegmentedControl;
-    using Color = Microsoft.Maui.Graphics.Color;
-    using Size = Microsoft.Maui.Graphics.Size;
+﻿using System.Collections.ObjectModel;
+using System.Reflection;
+using Syncfusion.Maui.Toolkit.SegmentedControl;
+using Color = Microsoft.Maui.Graphics.Color;
+using Size = Microsoft.Maui.Graphics.Size;
 
+namespace Syncfusion.Maui.Toolkit.UnitTest
+{    
     public class SfSegmentedControlUnitTests : BaseUnitTest
     {
         #region Constructors

@@ -1,10 +1,5 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Internals;
-using System;
+﻿using Syncfusion.Maui.Toolkit.Internals;
 using System.Collections;
-using System.Collections.Generic;
 using Layout = Microsoft.Maui.Controls.Layout;
 using ScrollBarVisibility = Microsoft.Maui.ScrollBarVisibility;
 
@@ -224,24 +219,24 @@ namespace Syncfusion.Maui.Toolkit
                 switch (legend.Placement)
                 {
                     case LegendPlacement.Top:
-                        size = legend.Measure(availableSize.Width, double.PositiveInfinity, MeasureFlags.IncludeMargins);
+                        size = legend.Measure(availableSize.Width, double.PositiveInfinity);
                         maxWidth = availableSize.Height * maxSizePercentage < size.Height ? availableSize.Height * maxSizePercentage : size.Height;
                         position = (availableSize.Height != maxSize) ? availableSize.Height - maxWidth : 0;
                         return new Rect(availableSize.X, availableSize.Y, availableSize.Width, maxWidth);
 
                     case LegendPlacement.Bottom:
-                        size = legend.Measure(availableSize.Width, double.PositiveInfinity, MeasureFlags.IncludeMargins);
+                        size = legend.Measure(availableSize.Width, double.PositiveInfinity);
                         maxWidth = availableSize.Height * maxSizePercentage < size.Height ? availableSize.Height * maxSizePercentage : size.Height;
                         position = (availableSize.Height != maxSize) ? availableSize.Height - maxWidth : 0;
                         return new Rect(availableSize.X, availableSize.Y + position, availableSize.Width, maxWidth);
 
                     case LegendPlacement.Left:
-                        size = legend.Measure(double.PositiveInfinity, availableSize.Height, MeasureFlags.IncludeMargins);
+                        size = legend.Measure(double.PositiveInfinity, availableSize.Height);
                         maxWidth = availableSize.Width * maxSizePercentage < size.Width ? availableSize.Width * maxSizePercentage : size.Width;
                         return new Rect(availableSize.X, availableSize.Y, maxWidth, availableSize.Height);
 
                     case LegendPlacement.Right:
-                        size = legend.Measure(double.PositiveInfinity, availableSize.Height, MeasureFlags.IncludeMargins);
+                        size = legend.Measure(double.PositiveInfinity, availableSize.Height);
                         maxWidth = availableSize.Width * maxSizePercentage < size.Width ? availableSize.Width * maxSizePercentage : size.Width;
                         position = (availableSize.Width != maxSize) ? availableSize.Width - maxWidth : 0;
                         return new Rect(availableSize.X + position, availableSize.Y, maxWidth, availableSize.Height);

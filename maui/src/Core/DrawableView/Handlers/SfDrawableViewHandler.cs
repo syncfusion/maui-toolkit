@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Handlers;
-using System.Runtime.Versioning;
-
-namespace Syncfusion.Maui.Toolkit.Graphics.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
 	/// <summary>
 	/// Handles the drawing view functionality for the SfDrawableView.

@@ -1,13 +1,8 @@
-﻿using System;
-
-using Android.Views;
+﻿using Android.Views;
 using AGestureDetector = Android.Views.GestureDetector;
-
-using Microsoft.Maui;
 using GestureStatus = Microsoft.Maui.GestureStatus;
 using Microsoft.Maui.Platform;
 using MauiView = Microsoft.Maui.Controls.View;
-using Microsoft.Maui.Graphics;
 using View = Android.Views.View;
 
 namespace Syncfusion.Maui.Toolkit.Internals

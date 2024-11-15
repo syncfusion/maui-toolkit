@@ -1,9 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Serves as a base class for all types of range series.
@@ -538,11 +533,32 @@ namespace Syncfusion.Maui.Toolkit.Charts
             SumOfLowValues = float.NaN;
         }
 
-        #endregion
+		internal override DataTemplate? GetDefaultTooltipTemplate(TooltipInfo info)
+		{
+			var texts = info.Text.Split('/');
 
-        #region Private Methods
+			DataTemplate template = new DataTemplate(() =>
+			{
+				Grid grid = new Grid()
+				{
+					RowDefinitions =
+					{
+						new RowDefinition{Height = GridLength.Auto },
+					},
+				};
 
-        static void OnHighAndLowBindingPathChanged(BindableObject bindable, object oldValue, object newValue)
+				grid.Add(GetTooltipContent(texts[0], texts[1], info), 0, 1);
+				return grid;
+			});
+
+			return template;
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		static void OnHighAndLowBindingPathChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is RangeSeriesBase series)
             {
@@ -577,8 +593,56 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
-        #endregion
+		static StackLayout GetTooltipContent(string highValue, string lowValue, TooltipInfo info)
+		{
+			var layout = new StackLayout()
+			{
+				Orientation = StackOrientation.Vertical,
+				VerticalOptions = LayoutOptions.Fill,
+			};
 
-        #endregion
-    }
+			Label highLabel = new Label()
+			{
+				Text = SfCartesianChartResources.High + " : " + highValue,
+				VerticalTextAlignment = TextAlignment.Center,
+#if WINDOWS
+                HorizontalOptions = LayoutOptions.Fill,
+                LineBreakMode = LineBreakMode.NoWrap,
+#else
+				HorizontalOptions = LayoutOptions.Start,
+#endif
+				TextColor = info.TextColor,
+				Margin = info.Margin,
+				Background = info.Background,
+				FontAttributes = info.FontAttributes,
+				FontSize = info.FontSize,
+			};
+
+			Label lowLabel = new Label
+			{
+				Text = SfCartesianChartResources.Low + "  : " + lowValue,
+				VerticalTextAlignment = TextAlignment.Center,
+#if WINDOWS
+                HorizontalOptions = LayoutOptions.Fill,
+                LineBreakMode = LineBreakMode.NoWrap,
+#else
+				HorizontalOptions = LayoutOptions.Start,
+#endif
+				TextColor = info.TextColor,
+				Margin = info.Margin,
+				Background = info.Background,
+				FontAttributes = info.FontAttributes,
+				FontSize = info.FontSize,
+			};
+
+			layout.Children.Add(highLabel);
+			layout.Children.Add(lowLabel);
+
+			return layout;
+		}
+
+		#endregion
+
+		#endregion
+	}
 }

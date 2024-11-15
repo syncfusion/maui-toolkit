@@ -1,5 +1,4 @@
-﻿
-using Syncfusion.Maui.Toolkit.Themes;
+﻿using Syncfusion.Maui.Toolkit.Themes;
 
 namespace Syncfusion.Maui.Toolkit.Shimmer
 {

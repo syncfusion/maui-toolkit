@@ -1,8 +1,4 @@
-﻿using System;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.PullToRefresh
 {
@@ -12,9 +8,9 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 	internal class SfProgressCircleView : SfContentView
     {
         #region Fields
-
-        internal Rect _circleViewBounds;
-        internal Rect _processedBounds;
+		
+		Rect _circleViewBounds;
+        Rect _processedBounds;
         Rect _oval;
         Rect _fillRect;
         const float _minArcLength = 21.6f;
@@ -50,10 +46,28 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
 		#region Properties
 
+		/// <summary>
+		/// Gets or sets the circle view bounds.
+		/// </summary>
+		internal Rect CircleViewBounds
+		{
+			get { return _circleViewBounds; }
+			set { _circleViewBounds = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the bounds in which the circle bounds is previously processed.
+		/// </summary>
+		internal Rect ProcessedBounds
+		{
+			get { return _processedBounds; }
+			set { _processedBounds = value; }
+		}
+
 		SfPullToRefresh? PullToRefresh
 		{
-			get => _pullToRefresh != null && _pullToRefresh.TryGetTarget(out var v) ? v : null;
-			set => _pullToRefresh = value == null ? null : new(value);
+			get => _pullToRefresh is not null && _pullToRefresh.TryGetTarget(out var v) ? v : null;
+			set => _pullToRefresh = value is null ? null : new(value);
 		}
 
 		#endregion
@@ -65,9 +79,9 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// </summary>
 		internal void InitializePullingViewTemplate()
 		{
-			if (PullToRefresh != null && PullToRefresh.PullingViewTemplate != null)
+			if (PullToRefresh is not null && PullToRefresh.PullingViewTemplate is not null)
 			{
-				PullToRefresh._pullingTemplateView = CreateTemplateContent(PullToRefresh.PullingViewTemplate);
+				PullToRefresh.PullingTemplateView = CreateTemplateContent(PullToRefresh.PullingViewTemplate);
 			}
 		}
 
@@ -76,9 +90,9 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// </summary>
 		internal void InitializeRefreshViewViewTemplate()
 		{
-			if (PullToRefresh != null && PullToRefresh.RefreshingViewTemplate != null)
+			if (PullToRefresh is not null && PullToRefresh.RefreshingViewTemplate is not null)
 			{
-				PullToRefresh._refreshingTemplateView = CreateTemplateContent(PullToRefresh.RefreshingViewTemplate);
+				PullToRefresh.RefreshingTemplateView = CreateTemplateContent(PullToRefresh.RefreshingViewTemplate);
 			}
 		}
 
@@ -87,18 +101,18 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// </summary>
 		internal void CheckIfAndSetTemplate()
 		{
-			if (PullToRefresh != null)
+			if (PullToRefresh is not null)
 			{
 				var isPulling = PullToRefresh.IsPulling;
 				var isRefreshing = PullToRefresh.ActualIsRefreshing;
 
-				if (isPulling && PullToRefresh._pullingTemplateView != null)
+				if (isPulling && PullToRefresh.PullingTemplateView is not null)
 				{
-					UpdateContent(PullToRefresh._pullingTemplateView);
+					UpdateContent(PullToRefresh.PullingTemplateView);
 				}
-				else if (isRefreshing && PullToRefresh._refreshingTemplateView != null)
+				else if (isRefreshing && PullToRefresh.RefreshingTemplateView is not null)
 				{
-					UpdateContent(PullToRefresh._refreshingTemplateView);
+					UpdateContent(PullToRefresh.RefreshingTemplateView);
 				}
 			}
            
@@ -110,18 +124,18 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <param name="content">Indicates the content to be added, if null <see cref="SfProgressCircleView"/> Content will be set null.</param>
 		internal void UpdateContent(View? content = null)
 		{
-			if (content != null)
+			if (content is not null)
 			{
 				Content = content;
 			}
 
-			if (PullToRefresh != null)
+			if (PullToRefresh is not null)
 			{ 
 				PullToRefresh.MeasureSfProgressCircleView(PullToRefresh.Bounds.Width, PullToRefresh.Bounds.Height);
 				UpdateCircleViewBounds();
 				if (PullToRefresh.IsPulling || PullToRefresh.ActualIsRefreshing)
 				{
-					PullToRefresh.ManualArrangeContent(PullToRefresh.TransitionMode == PullToRefreshTransitionType.SlideOnTop, PullToRefresh.Bounds);
+					PullToRefresh.ManualArrangeContent(PullToRefresh.TransitionMode == PullToRefreshTransitionType.SlideOnTop, PullToRefresh.GetBounds());
 				}
 			}
 		}
@@ -132,7 +146,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		internal void ResetArcAngle()
 		{
 			_startAngle = 90f;
-			_endAngle =  _startAngle - _minArcLength;
+			_endAngle = _startAngle - _minArcLength;
 			_isArcCollapsing = false;
 			_isInShift = false;
 			_angleMaintenanceCounter = 0;
@@ -188,29 +202,29 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         internal void UpdateCircleViewBounds()
         {
             // if either a pulling template or refreshing template need to use their desired size values.
-            if (Content != null)
+            if (Content is not null)
             {
                 _circleViewBounds.Width = Content.DesiredSize.Width;
-                _circleViewBounds.Height = Content.DesiredSize.Height;
+				_circleViewBounds.Height = Content.DesiredSize.Height;
             }
-			else if (PullToRefresh != null)
+			else if (PullToRefresh is not null)
 			{
 				_circleViewBounds.Width = PullToRefresh.CircleViewWidth;
 				_circleViewBounds.Height = PullToRefresh.CircleViewHeight;
 			}
 
-			if (PullToRefresh != null)
+			if (PullToRefresh is not null)
 			{
 				if (PullToRefresh.Bounds.Width > 0)
 				{
-					_circleViewBounds.X = (PullToRefresh.Width / 2) - (_circleViewBounds.Width / 2);
+					_circleViewBounds.X = (PullToRefresh.Width / 2) - (CircleViewBounds.Width / 2);
 				}
 				else
 				{
 					_circleViewBounds.X = 0;
 				}
 
-				_processedBounds = PullToRefresh.Bounds;
+				ProcessedBounds = PullToRefresh.Bounds;
 			}
 		}
 
@@ -219,7 +233,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// </summary>
 		internal void UpdateDrawProperties()
 		{
-			if (PullToRefresh != null)
+			if (PullToRefresh is not null)
 			{
 				// Calculate positions and sizes for drawing the background circle.
 				float x = (float)((PullToRefresh.CircleViewWidth / 2) - (PullToRefresh.RefreshViewWidth / 2));
@@ -244,30 +258,34 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
         bool ShouldSkipDrawing(RectF dirtyRect)
         {
-			return (PullToRefresh != null && PullToRefresh.IsPulling && PullToRefresh._pullingTemplateView != null) ||
-                   (PullToRefresh != null && PullToRefresh.ActualIsRefreshing && PullToRefresh._refreshingTemplateView != null) ||
+			return (PullToRefresh is not null && PullToRefresh.IsPulling && PullToRefresh.PullingTemplateView is not null) ||
+                   (PullToRefresh is not null && PullToRefresh.ActualIsRefreshing && PullToRefresh.RefreshingTemplateView is not null) ||
                    dirtyRect.Width <= 0 || dirtyRect.Height <= 0;
         }
 
         void DrawBackgroundCircle(ICanvas canvas)
         {
-			if (PullToRefresh == null)
+			if (PullToRefresh is null)
 			{
 				return;
 			}
 
-			const int androidShadowSize = 4;
-			const int defaultShadowSize = 3;
 			const string shadowColor = "#59000000";
 			Paint solidPaint = PullToRefresh.ProgressBackground;
 			canvas.SetFillPaint(solidPaint, _fillRect);
-			canvas.SetShadow(new SizeF(0, 1), DeviceInfo.Platform == DevicePlatform.Android ? androidShadowSize : defaultShadowSize, Color.FromArgb(shadowColor));
+#if ANDROID
+			const int androidShadowSize = 4;
+			canvas.SetShadow(new SizeF(0, 1), androidShadowSize, Color.FromArgb(shadowColor));
+#else
+			const int defaultShadowSize = 3;
+			canvas.SetShadow(new SizeF(0, 1), defaultShadowSize, Color.FromArgb(shadowColor));
+#endif
 			canvas.FillEllipse((float)_fillRect.X, (float)_fillRect.Y, (float)_fillRect.Width, (float)_fillRect.Height);
         }
 
         void DrawProgressArc(ICanvas canvas)
         {
-			if (PullToRefresh == null)
+			if (PullToRefresh is null)
 			{
 				return;
 			}
@@ -277,18 +295,18 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			const float quarterCircle = 90f;
 			if (PullToRefresh.IsPulling)
 			{
-				if (PullToRefresh._progressRate == 100)
+				if (PullToRefresh.ProgressRate == 100)
 				{
 					canvas.DrawEllipse(_oval);
 				}
 				else
 				{
-					canvas.DrawArc(_oval, quarterCircle, ThresholdToAngle(PullToRefresh._progressRate), true, false);
+					canvas.DrawArc(_oval, quarterCircle, ThresholdToAngle(PullToRefresh.ProgressRate), true, false);
 				}
 			}
 			else if (PullToRefresh.ActualIsRefreshing)
 			{
-				canvas.DrawArc(_oval,  _startAngle, _endAngle, true, false);
+				canvas.DrawArc(_oval, _startAngle, _endAngle, true, false);
 			}
 		}
 
@@ -348,7 +366,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         {
             var templateView = dataTemplate.CreateContent();
             var viewCell = templateView as ViewCell;
-            if (viewCell != null)
+            if (viewCell is not null)
             {
                 return viewCell.View;
             }
@@ -369,15 +387,16 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		protected override void OnHandlerChanged()
         {
             base.OnHandlerChanged();
-
-            // In WinUI, we will do clipping while pulling, which triggers the WrapperView procedure at runtime.
-            // which causes to removing and adding circle view to wrapper view. So, canvasControl will get loaded and unloaded at runtime
-            // causes a blank issue for first time pulling in WInUI.
-            if (Handler != null && DeviceInfo.Platform == DevicePlatform.WinUI)
-            {
-                Handler.HasContainer = true;
-            }
-        }
+#if WINDOWS
+			// In WinUI, we will do clipping while pulling, which triggers the WrapperView procedure at runtime.
+			// which causes to removing and adding circle view to wrapper view. So, canvasControl will get loaded and unloaded at runtime
+			// causes a blank issue for first time pulling in WInUI.
+			if (Handler is not null)
+			{
+				Handler.HasContainer = true;
+			}
+#endif
+		}
 
 		/// <summary>
 		/// This method used the shape the view to circle and draw arc based on <see cref="SfPullToRefresh"/>.

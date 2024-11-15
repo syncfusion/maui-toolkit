@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.Internals
+﻿namespace Syncfusion.Maui.Toolkit.Internals
 {
     internal abstract class SfTabViewExt : SfContentView
     {

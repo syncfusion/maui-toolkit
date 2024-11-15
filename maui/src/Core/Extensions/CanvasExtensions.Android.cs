@@ -1,12 +1,7 @@
 ﻿using Android.Content.Res;
 using Android.Graphics;
 using Android.Text;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Platform;
-using System.Runtime.Versioning;
 using Font = Microsoft.Maui.Font;
 using Paint = Android.Graphics.Paint;
 using Rect = Microsoft.Maui.Graphics.Rect;

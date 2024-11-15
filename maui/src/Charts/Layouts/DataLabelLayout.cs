@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Layouts;
-using System;
+﻿using Microsoft.Maui.Layouts;
 using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -112,6 +108,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 if (child is ICustomAbsoluteView customView)
                 {
                     var size = child.DesiredSize;
+
+                    if (child.DesiredSize.IsZero)
+                    {
+                        size = child.Measure(bounds.Width, bounds.Height);
+                    }
 
                     var destination = new Rect(customView.XPosition, customView.YPosition, child.DesiredSize.Width, child.DesiredSize.Height);
 

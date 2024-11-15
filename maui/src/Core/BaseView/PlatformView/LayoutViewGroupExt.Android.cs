@@ -2,26 +2,20 @@
 using Android.Graphics;
 using Android.Util;
 using Android.Views;
-using Android.Text;
-using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Graphics.Platform;
 using Color = Microsoft.Maui.Graphics.Color;
 using Microsoft.Maui.Platform;
-using System;
 using Android.Runtime;
 using ARect = Android.Graphics.Rect;
 using Rectangle = Microsoft.Maui.Graphics.Rect;
 using Size = Microsoft.Maui.Graphics.Size;
-using Android.Widget;
 using Android.Views.Accessibility;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using Microsoft.Maui.Controls;
 using Syncfusion.Maui.Toolkit.NavigationDrawer;
 
 namespace Syncfusion.Maui.Toolkit.Platform
 {
-
     internal class LayoutViewGroupExt : LayoutViewGroup, AccessibilityManager.IAccessibilityStateChangeListener
     {
         private int _width, _height;

@@ -1,9 +1,4 @@
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -644,7 +639,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         public List<object>? GetDataPoints(double startX, double endX, double startY, double endY)
         {
             var xValues = GetXValues();
-            if (xValues == null)
+            if (xValues == null || xValues.Count == 0)
                 return null;
 
             int minimum = 0, maximum = xValues.Count - 1;

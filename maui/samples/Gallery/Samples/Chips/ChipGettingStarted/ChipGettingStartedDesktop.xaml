@@ -6,11 +6,8 @@
              xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Chips;assembly=Syncfusion.Maui.Toolkit"
              xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             x:DataType="local:ChipViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
-
-	<localCore:SampleView.Resources>
-		<imageExtension:ImageSourceConverter x:Key="imageconverter"/>
-	</localCore:SampleView.Resources>
 
     <localCore:SampleView.BindingContext>
         <local:ChipViewModel />
@@ -27,12 +24,11 @@
                            Text="Home / Electronics / Speakers / More By Levis">
 
                     </Label>
-                    <Frame BorderColor="Gray" Grid.Row="1" BackgroundColor="Transparent">
-
+                    <Border Stroke="Gray" Grid.Row="1" BackgroundColor="Transparent">
                         <StackLayout  VerticalOptions="Center">
                             <Image Source="{Binding Image,Converter={StaticResource imageconverter}}" HeightRequest="350" VerticalOptions="Center"/>
                         </StackLayout>
-                    </Frame>
+                    </Border>
                     <StackLayout HorizontalOptions="Center" Margin="25,15,0,10" Grid.Row="2" VerticalOptions="Start">
                         <Button WidthRequest="365" 
                                 BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" 

@@ -1,19 +1,20 @@
 
-namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout;
-
-public partial class PaymentPage : SampleView
+namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 {
-	public PaymentPage()
+	public partial class PaymentPage : SampleView
 	{
-		InitializeComponent();
+		public PaymentPage()
+		{
+			InitializeComponent();
 #if ANDROID || IOS
-        this.Content = new PaymentPageMobile();
+			this.Content = new PaymentPageMobile();
 #else
         this.Content = new PaymentPageDesktop();
 #endif
 
-    }
+		}
 
 
 
+	}
 }

@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 
 namespace Syncfusion.Maui.Toolkit.Chips

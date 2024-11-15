@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
 	public partial class LogarithmicAxis : RangeAxisBase
     {

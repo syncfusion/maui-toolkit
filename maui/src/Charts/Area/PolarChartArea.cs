@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Microsoft.Maui.Layouts;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
@@ -358,6 +353,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             foreach (SeriesView seriesView in _seriesViews)
             {
                 seriesView.Series.ResetData();
+				seriesView.Series.Chart = null;
+				seriesView.Series.Parent = null;
             }
 
             _dataLabelLayout.Clear();

@@ -4027,23 +4027,42 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 
         View? CreateTemplatedView(ICarousel formsCarousel, int index)
         {
-            DataTemplate? template = GetDataTemplate(formsCarousel, index);
-            if (template == null)
-            {
-                return null;
-            }
+			if(formsCarousel is not null)
+			{
+				DataTemplate? template = GetDataTemplate(formsCarousel, index);
+				if (template is null)
+				{
+					return null;
+				}
 
-            View? templateLayout = CreateViewFromTemplate(template);
-            if (templateLayout == null)
-            {
-                return null;
-            }
+				View? templateLayout = CreateViewFromTemplate(template);
+				if (templateLayout is null)
+				{
+					return null;
+				}
 
-            SetBindingContext(templateLayout, formsCarousel, index);
-            return templateLayout;
+				SetParentContent(templateLayout, formsCarousel);
+				SetBindingContext(templateLayout, formsCarousel, index);
+				return templateLayout;
+			}
+
+			return null;
         }
 
-        void SetBindingContext(View templateLayout, ICarousel formsCarousel, int index)
+		/// <summary>
+		/// Sets parent to the template view.
+		/// </summary>
+		/// <param name="templateLayout"></param>
+		/// <param name="formsCarousel"></param>
+		void SetParentContent(View templateLayout, ICarousel formsCarousel)
+		{
+			if (templateLayout != null)
+			{
+				templateLayout.Parent = (Element)formsCarousel;
+			}
+		}
+
+		void SetBindingContext(View templateLayout, ICarousel formsCarousel, int index)
         {
             if (formsCarousel.ItemsSource != null && index < formsCarousel.ItemsSource.Count())
             {

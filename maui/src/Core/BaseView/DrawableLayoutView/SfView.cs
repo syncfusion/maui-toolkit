@@ -1,14 +1,7 @@
-﻿
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Microsoft.Maui.Layouts;
+﻿using Microsoft.Maui.Layouts;
 using Syncfusion.Maui.Toolkit.Semantics;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Syncfusion.Maui.Toolkit
 {
@@ -213,12 +206,6 @@ namespace Syncfusion.Maui.Toolkit
 		protected sealed override Size ArrangeOverride(Rect bounds)
         {
             return base.ArrangeOverride(bounds);
-        }
-
-		/// <exclude/> 
-		protected sealed override SizeRequest OnMeasure(double widthConstraint, double heightConstraint)
-        {
-            return base.OnMeasure(widthConstraint, heightConstraint);
         }
 
 		/// <exclude/> 

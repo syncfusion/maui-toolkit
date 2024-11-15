@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using System;
-using System.Collections.Generic;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Represents the segment of the <see cref="BoxAndWhiskerSeries"/>.

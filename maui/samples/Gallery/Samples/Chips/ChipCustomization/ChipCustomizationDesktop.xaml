@@ -6,6 +6,7 @@
              xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Chips;assembly=Syncfusion.Maui.Toolkit"
              xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             x:DataType="local:ChipViewModel"
              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
     
     <localCore:SampleView.BindingContext>
@@ -41,8 +42,8 @@
                     </core:SfChipGroup.ChipLayout>
                 </core:SfChipGroup>
 
-                <Frame Grid.Column="1" BorderColor="LightGray" CornerRadius="8" BackgroundColor="Transparent" HasShadow="False"  Margin="40,40,10,50" Padding="10,10,0,0"  >
-                <StackLayout  Spacing="10" >
+        <Border Grid.Column="1" Stroke="LightGray" StrokeShape="RoundRectangle 8" BackgroundColor="Transparent"  Margin="40,40,10,50" Padding="10,10,0,0"  >
+          <StackLayout  Spacing="10" >
                         <StackLayout Margin="14,5,33,0">
                     <tabView:SfTabView WidthRequest="300"
 									   IndicatorBackground="#c6c6c6"									   
@@ -365,7 +366,7 @@
                             </OnPlatform>
                         </Slider.Margin>
                     </Slider>
-                    <Label Text="{Binding Source={x:Reference leftCornerRadius},Path=Value}" 
+                    <Label Text="{Binding LeftCornerRadius}" 
                                    Grid.Column="2" FontFamily="Roboto-Regular"
                                    HorizontalTextAlignment="Center"
                                    VerticalTextAlignment="Center"/>
@@ -396,28 +397,28 @@
                         </Slider.Margin>
 
                     </Slider>
-                    <Label Text="{Binding Source={x:Reference rightCornerRadius},Path=Value}"  
+                    <Label Text="{Binding RightCornerRadius}"  
                                    HorizontalTextAlignment="Center"
                                    Grid.Column="2" FontFamily="Roboto-Regular"
                                    VerticalTextAlignment="Center"/>
                 </Grid>
-                        <StackLayout Margin="8,10,-7,0"  Orientation="Horizontal" HorizontalOptions="Start" >
+                        <StackLayout Margin="8,10,-7,0"  Orientation="Horizontal" HorizontalOptions="Start" Spacing="20">
                             <HorizontalStackLayout  HorizontalOptions="Start" Spacing="{OnPlatform MacCatalyst=5}">
                             <HorizontalStackLayout.Margin>
                             <OnPlatform x:TypeArguments="Thickness">
                                 <On Platform="MacCatalyst" Value="-9,0,0,0"/>
                             </OnPlatform>
                         </HorizontalStackLayout.Margin>
-                                <CheckBox IsChecked="{Binding IsShownSelection}" />
+                                <CheckBox IsChecked="{Binding IsShownSelection}" MinimumWidthRequest="24"/>
                                 <Label Text="Enable Selection" FontSize="14" VerticalOptions="Center" FontFamily="Roboto-Regular"/>
 						</HorizontalStackLayout >
                             <HorizontalStackLayout HorizontalOptions="End" Spacing="{OnPlatform MacCatalyst=5}">
-							<CheckBox IsChecked="{Binding IsShownCloseButton}"/>
+							<CheckBox IsChecked="{Binding IsShownCloseButton}" MinimumWidthRequest="24"/>
 							<Label Text="Close Icon" VerticalOptions="Center" FontFamily="Roboto-Regular"/>
 						</HorizontalStackLayout>
 					</StackLayout>
             </StackLayout>
-            </Frame>
+            </Border>
         </Grid>
         </ScrollView>
     </localCore:SampleView.Content>

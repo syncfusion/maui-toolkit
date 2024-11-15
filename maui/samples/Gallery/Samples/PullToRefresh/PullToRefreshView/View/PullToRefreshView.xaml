@@ -7,6 +7,7 @@
                       xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.PullToRefresh;assembly=Syncfusion.Maui.Toolkit"
                       xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
                       xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
+                      x:DataType="local:PullToRefreshViewModel"
                       ios:Page.UseSafeArea="True"
                       Padding="0"
                       Margin="0">
@@ -16,7 +17,6 @@
     </localCore:SampleView.Behaviors>
 
     <localCore:SampleView.Resources>
-        <imageExtension:ImageSourceConverter x:Key="imageconverter" />
         <local:DateToStringConverter x:Key="datestringconverter"/>
 
         <Style TargetType="Border">
@@ -85,19 +85,19 @@
 
                                     <Image x:Name="bigLeft"
                                            Margin="-9, 0, 0, 0"
-                                           Source="{imageExtension:ImageResource cloud1.png}"
+                                           Source="cloud1.png"
                                            HorizontalOptions="Start"
                                            Grid.Row="1"
                                            Aspect="AspectFit" />
 
                                     <Image x:Name="smallLeft"
-                                           Source="{imageExtension:ImageResource cloud3.png}"
+                                           Source="cloud3.png"
                                            HorizontalOptions="Start"
                                            Grid.Row="3"
                                            Aspect="AspectFit" />
                                 </Grid>
 
-                                <Image Source="{imageExtension:ImageResource circlegradient.png}"
+                                <Image Source="circlegradient.png"
                                        Grid.ColumnSpan="3"
                                        Aspect="AspectFit"
                                        ZIndex="-1" />
@@ -189,13 +189,13 @@
 
                                     <Image x:Name="bigRight"
                                            Margin="0, 0, -9, 0"
-                                           Source="{imageExtension:ImageResource cloud2.png}"
+                                           Source="cloud2.png"
                                            HorizontalOptions="End"
                                            Aspect="AspectFit"
                                            Grid.Row="1" />
 
                                     <Image x:Name="smallRight"
-                                           Source="{imageExtension:ImageResource cloud4.png}"
+                                           Source="cloud4.png"
                                            HorizontalOptions="End"
                                            Grid.Row="3"
                                            Aspect="AspectFit" />
@@ -216,7 +216,7 @@
                                         <GridItemsLayout Orientation="Horizontal" Span="0" HorizontalItemSpacing='6'/>
                                     </CollectionView.ItemsLayout>
                                     <CollectionView.ItemTemplate>
-                                        <DataTemplate>
+                                         <DataTemplate x:DataType="local:WindDetails">
                                             <Border Padding="12, 0, 12, 0"
                                                     Grid.Column="0"
                                                     BackgroundColor="#3BFFFFFF">
@@ -287,7 +287,7 @@
                                 <GridItemsLayout Orientation="Horizontal" Span="0" VerticalItemSpacing="8" HorizontalItemSpacing='{OnPlatform WinUI="24", MacCatalyst="24", Default="10"}'/>
                             </CollectionView.ItemsLayout>
                             <CollectionView.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="local:WeatherData">
                                     <Border x:Name="listviewTemplate"
                                                 WidthRequest="72"
                                                 HeightRequest='{OnPlatform Android="90", iOS="90"}'>
@@ -327,7 +327,7 @@
                             </CollectionView.ItemTemplate>
 
                             <CollectionView.SelectedItem>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="local:WeatherData">
                                     <Border x:Name="listviewTemplate">
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="8" />

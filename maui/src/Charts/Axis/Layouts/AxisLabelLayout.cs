@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Maui;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using RectF = Microsoft.Maui.Graphics.RectF;
 
 namespace Syncfusion.Maui.Toolkit.Charts

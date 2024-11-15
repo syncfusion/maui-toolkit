@@ -1,8 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using System;
-using System.Collections;
+﻿using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit
 {

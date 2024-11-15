@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.PullToRefresh
+﻿namespace Syncfusion.Maui.Toolkit.PullToRefresh
 {
     /// <summary>
     /// Class that has various common methods useful for PullToRefresh control.
@@ -51,7 +48,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// </summary>
         static bool CheckChildrenIsIPullToRefresh(IView view, object pullToRefresh)
         {
-            if (view == null)
+            if (view is null)
             {
                 return false;
             }
@@ -67,11 +64,14 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             {
                 return CheckLayoutChildren(layout, pullToRefresh);
             }
+#pragma warning disable CS0618
+
+            // TODO:We cannot remove this warning because, still framework didn't changed the ScrollView and ContentView from Compatibility.Layout. We can remove this only when framework changes this.
             else if (view is Microsoft.Maui.Controls.Compatibility.Layout compatibilityLayout)
             {
                 return CheckCompatibilityLayoutChildren(compatibilityLayout, pullToRefresh);
             }
-
+#pragma warning disable CS0618
             return false;
         }
 
@@ -94,7 +94,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
             return false;
         }
-
+#pragma warning disable CS0618
         static bool CheckCompatibilityLayoutChildren(Microsoft.Maui.Controls.Compatibility.Layout compatibilityLayout, object pullToRefresh)
         {
             foreach (var child in compatibilityLayout.Children)
@@ -106,7 +106,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             }
             return false;
         }
-
+#pragma warning disable CS0618
         #endregion
     }
 }

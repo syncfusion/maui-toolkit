@@ -33,12 +33,12 @@
 										     ScaleFactor="{Binding ScaleFactorValue}" 
 										     ScaleAnimationDuration="{Binding ScaleDuration}"
 										     AnimationCompleted="AnimationCompleted">
-                        <Image x:Name="FriendsImage" WidthRequest="300" HeightRequest="300" Aspect="AspectFill" Source="{imageExtension:ImageResource ladybug.jpg}" />
+                        <Image x:Name="FriendsImage" WidthRequest="300" HeightRequest="300" Aspect="AspectFill" Source="ladybug.jpg" />
                 </sfEffectsView:SfEffectsView>
 
                 <Image x:Name="FriendsSelectionImage"
 					   HorizontalOptions="End" VerticalOptions="Start"
-				       Source="{imageExtension:ImageResource effectview_selection.png}" BindingContext="{x:Reference Friends}"
+				       Source="effectviewselection.png" BindingContext="{x:Reference Friends}"
 					   IsVisible="{Binding Path=ScaleFactor, Converter={StaticResource visibility}, ConverterParameter={x:Reference Friends}}"
                        Margin="0,30,30,0" 	 
 					   HeightRequest="20" WidthRequest="20"/>

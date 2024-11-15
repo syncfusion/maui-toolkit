@@ -1,8 +1,9 @@
-﻿namespace Syncfusion.Maui.Toolkit
-{
-    using Foundation;
-    using UIKit;
+﻿using Foundation;
+using UIKit;
 
+namespace Syncfusion.Maui.Toolkit
+{
+    
     internal static class SfViewExtensions
     {
         internal static void Announce(this UIView view, string text)

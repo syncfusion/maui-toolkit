@@ -1,9 +1,7 @@
 ﻿using Android.Views;
-using System;
 using Syncfusion.Maui.Toolkit.Internals;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 using Microsoft.Maui.Platform;
-using Microsoft.Maui.Graphics;
 
 namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 {

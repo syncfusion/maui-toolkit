@@ -1,5 +1,4 @@
-﻿using Microsoft.UI.Xaml;
-using ResourceDictionary = Microsoft.UI.Xaml.ResourceDictionary;
+﻿using ResourceDictionary = Microsoft.UI.Xaml.ResourceDictionary;
 
 namespace Syncfusion.Maui.Toolkit.Platform.Windows.Styles
 {

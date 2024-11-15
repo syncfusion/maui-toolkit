@@ -1,9 +1,10 @@
-namespace  Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart;
-
-public partial class PyramidChartColorResources : ResourceDictionary
+namespace Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart
 {
-	public PyramidChartColorResources()
+	public partial class PyramidChartColorResources : ResourceDictionary
 	{
-		InitializeComponent();
+		public PyramidChartColorResources()
+		{
+			InitializeComponent();
+		}
 	}
 }

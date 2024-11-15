@@ -1,16 +1,13 @@
+using Syncfusion.Maui.Toolkit.Helper;
+using Syncfusion.Maui.Toolkit.Internals;
+using System.Collections;
+using System.Collections.Specialized;
+using System.Runtime.CompilerServices;
+using ContentView = Microsoft.Maui.Controls.ContentView;
+using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
+
 namespace Syncfusion.Maui.Toolkit.TabView
 {
-	using Microsoft.Maui;
-	using Microsoft.Maui.Controls;
-	using Microsoft.Maui.Graphics;
-	using Syncfusion.Maui.Toolkit.Helper;
-	using Syncfusion.Maui.Toolkit.Internals;
-	using System;
-	using System.Collections;
-	using System.Collections.Specialized;
-	using System.Runtime.CompilerServices;
-	using ContentView = Microsoft.Maui.Controls.ContentView;
-	using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
 	/// <summary>
 	/// Represents the SfHorizontalStackLayout class.

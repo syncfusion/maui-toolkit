@@ -1,8 +1,5 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Themes;
+﻿using Syncfusion.Maui.Toolkit.Themes;
 using Syncfusion.Maui.Toolkit.Internals;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Core = Syncfusion.Maui.Toolkit;
@@ -965,6 +962,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 if (area.AreaBounds != Rect.Zero)
                 {
                     area.OnPaletteColorChanged();
+                }
+				else if (area.PlotArea.LegendItems.Count > 0 && area.Series != null)
+                {
+                    foreach (var series in area.Series)
+                    {
+                        series.UpdateLegendIconColor();
+                    }
                 }
             }
         }

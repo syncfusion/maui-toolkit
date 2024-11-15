@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     internal class ChartAxisRangeStyle : BindableObject
     {

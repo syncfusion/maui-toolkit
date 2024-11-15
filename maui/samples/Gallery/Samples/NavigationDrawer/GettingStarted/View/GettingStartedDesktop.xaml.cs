@@ -1,11 +1,11 @@
 
-namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer;
-
-public partial class GettingStartedDesktop : SampleView
+namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 {
-    public GettingStartedDesktop()
+	public partial class GettingStartedDesktop : SampleView
 	{
-		InitializeComponent();
-    }
+		public GettingStartedDesktop()
+		{
+			InitializeComponent();
+		}
+	}
 }
-

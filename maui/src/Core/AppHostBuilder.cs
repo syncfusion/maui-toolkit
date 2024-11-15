@@ -1,9 +1,4 @@
-using Microsoft.Maui;
-using Microsoft.Maui.Hosting;
-using Microsoft.Maui.LifecycleEvents;
-using Syncfusion.Maui.Toolkit;
 using Syncfusion.Maui.Toolkit.Carousel;
-using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 #if WINDOWS
 using System;

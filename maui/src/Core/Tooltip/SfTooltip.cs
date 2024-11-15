@@ -1,10 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui;
-using Microsoft.Maui.Animations;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
+﻿using Microsoft.Maui.Animations;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using System;
 using Animation = Microsoft.Maui.Animations.Animation;
 using ControlAnimation = Microsoft.Maui.Controls.Animation;
 
@@ -175,7 +170,7 @@ namespace Syncfusion.Maui.Toolkit
             Content.HorizontalOptions = LayoutOptions.Start;
 #endif
 
-            _tooltipHelper.ContentSize = Content.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
+            _tooltipHelper.ContentSize = Content.Measure(double.PositiveInfinity, double.PositiveInfinity);
             _tooltipHelper.Show(containerRect, targetRect, false);
             SetContentMargin(_tooltipHelper.ContentViewMargin);
             AbsoluteLayout.SetLayoutBounds(this, _tooltipHelper.TooltipRect);

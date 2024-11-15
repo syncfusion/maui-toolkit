@@ -1,17 +1,13 @@
-﻿namespace Syncfusion.Maui.Toolkit.Graphics.Internals
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Microsoft.Maui.Platform;
-    using Android.Views.Accessibility;
-    using AndroidX.Core.View.Accessibility;
-    using Android.OS;
-    using Microsoft.Maui.Controls;
-    using Syncfusion.Maui.Toolkit.Semantics;
-    using AndroidX.Core.View;
-    using Rectangle = Android.Graphics.Rect;
+﻿using Microsoft.Maui.Platform;
+using Android.Views.Accessibility;
+using AndroidX.Core.View.Accessibility;
+using Android.OS;
+using Syncfusion.Maui.Toolkit.Semantics;
+using AndroidX.Core.View;
+using Rectangle = Android.Graphics.Rect;
 
+namespace Syncfusion.Maui.Toolkit.Graphics.Internals
+{    
     internal class CustomAccessibilityDelegate : AccessibilityDelegateCompat
     {
         private CustomAccessibilityProvider accessibilityNodeProvider;
@@ -184,10 +180,12 @@
                     return null;
                 }
 
+#pragma warning disable CS0618 // Type or member is obsolete
                 ViewCompat.OnInitializeAccessibilityNodeInfo(this.host, source);
+#pragma warning restore CS0618 // Type or member is obsolete
 
 
-                Rectangle parentRect = new Rectangle();
+				Rectangle parentRect = new Rectangle();
                 Rectangle screenRect = new Rectangle();
                 //// Copy over parent and screen bounds.
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -196,8 +194,10 @@
                 result.SetBoundsInParent(parentRect);
                 result.SetBoundsInScreen(screenRect);
 #pragma warning restore CS0618 // Type or member is obsolete
-
+#pragma warning disable CS0618 // Type or member is obsolete
                 Android.Views.IViewParent? parent = ViewCompat.GetParentForAccessibility(this.host);
+#pragma warning restore CS0618 // Type or member is obsolete
+
                 if (parent != null && parent is Android.Views.View)
                 {
                     result.SetParent((Android.Views.View)parent);
@@ -221,7 +221,10 @@
                     return null;
                 }
 
+#pragma warning disable CS0618 // Type or member is obsolete
                 ViewCompat.OnInitializeAccessibilityNodeInfo(this.host, node);
+#pragma warning restore CS0618 // Type or member is obsolete
+
                 List<SemanticsNode>? semanticsNodes = null;
                 if (this.virtualView is ISemanticsProvider)
                 {
@@ -602,7 +605,10 @@
                         {
                             if ((action == AccessibilityNodeInfoCompat.ActionClick && semanticsNode != null && semanticsNode.IsTouchEnabled) || virtualViewId == Host_ID)
                             {
+#pragma warning disable CS0618 // Type or member is obsolete
                                 return ViewCompat.PerformAccessibilityAction(this.host, action, arguments);
+#pragma warning restore CS0618 // Type or member is obsolete
+
                             }
                             else if (virtualViewId != Host_ID)
                             {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Maui.Controls;
-using Syncfusion.Maui.Toolkit.Internals;
+﻿using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Platform;
 using UIKit;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;

@@ -1,16 +1,17 @@
 
-namespace  Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart;
-
-public partial class Tooltip : SampleView
+namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 {
-    public Tooltip()
-    {
-        InitializeComponent();
-    }
+	public partial class Tooltip : SampleView
+	{
+		public Tooltip()
+		{
+			InitializeComponent();
+		}
 
-    public override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        Chart.Handler?.DisconnectHandler();
-    }
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			Chart.Handler?.DisconnectHandler();
+		}
+	}
 }

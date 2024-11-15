@@ -15,7 +15,6 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         <converters:BoolToPlatformBoolConverter x:Key="BoolToPlatformBoolConverter"/>
-        <converters:ImageSourceConverter x:Key="imageSourceConverter"/>
         <converters:TagToPaddingConverter x:Key="TagToPaddingConverter"/>
         <converters:TextToBoolConverter x:Key="TextToBoolConverter"/>
         <converters:InvertedBoolConverter x:Key="InvertedBoolConverter" />
@@ -320,7 +319,7 @@
                                             </customView:SfEffectsViewAdv.GestureRecognizers>
                                                 <Grid>
                                                     <Grid Padding="10" ColumnSpacing="10" ColumnDefinitions="56,*">
-                                                        <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                                        <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56"/>
                                                         <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                             <HorizontalStackLayout Spacing="5">
                                                                 <Label FontFamily="Roboto-Medium" Text="{Binding Title}" 
@@ -358,7 +357,7 @@
                                             </customView:SfEffectsViewAdv.GestureRecognizers>
                                                 <Grid>
                                                     <Grid Padding="10" ColumnSpacing="10" ColumnDefinitions="56,*">
-                                                        <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                                        <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56"/>
                                                         <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                             <HorizontalStackLayout Spacing="5">
                                                                 <Label FontFamily="Roboto-Medium" Text="{Binding Title}" 
@@ -396,7 +395,7 @@
                                             </customView:SfEffectsViewAdv.GestureRecognizers>
                                             <Grid>
                                                     <Grid Padding="10" ColumnSpacing="10" ColumnDefinitions="56,*">
-                                                        <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                                        <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56"/>
                                                         <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                             <HorizontalStackLayout Spacing="5">
                                                                 <Label FontFamily="Roboto-Medium" Text="{Binding Title}" 
@@ -456,7 +455,7 @@
                                                                 </customView:SfEffectsViewAdv.GestureRecognizers>
                                                                     <Grid>
                                                                         <Grid Padding="10" ColumnSpacing="10" ColumnDefinitions="56,*">
-                                                                            <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                                                            <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56"/>
                                                                             <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                                                 <HorizontalStackLayout Spacing="5">
                                                                                     <Label FontFamily="Roboto-Medium" Text="{Binding Title}" 
@@ -518,7 +517,7 @@
                                                                 </customView:SfEffectsViewAdv.GestureRecognizers>
                                                                         <Grid>
                                                                             <Grid Padding="10" ColumnSpacing="10" ColumnDefinitions="56,*">
-                                                                                <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                                                                <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56"/>
                                                                                 <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                                                     <HorizontalStackLayout Spacing="5">
                                                                                         <Label FontFamily="Roboto-Medium" Text="{Binding Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="14"/>
@@ -574,7 +573,7 @@
                                                                     </customView:SfEffectsViewAdv.GestureRecognizers>
                                                                     <Grid>
                                                                         <Grid Padding="10" ColumnSpacing="10" ColumnDefinitions="56,*">
-                                                                            <Image Source="{Binding Image,Converter={StaticResource imageSourceConverter}}" HeightRequest="56" WidthRequest="56"/>
+                                                                            <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56"/>
                                                                             <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                                                 <HorizontalStackLayout Spacing="5">
                                                                                         <Label FontFamily="Roboto-Medium" Text="{Binding Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="14"/>
@@ -854,23 +853,24 @@
                                                 <TapGestureRecognizer Tapped="Chip_Tapped"/>
                                             </Grid.GestureRecognizers>
 
-                                            <Frame Margin="0,-3,0,0"
+                                            <Border Margin="0,-3,0,0"
                                                    HeightRequest="32"
-                                                   CornerRadius="15" 
                                                    x:Name="frame"
-                                                   Padding="0"
-                                                   HasShadow="False">
+                                                   Padding="0">
+                        <Border.StrokeShape>
+                          <RoundRectangle CornerRadius="15" />
+                        </Border.StrokeShape>
 
-                                                <Frame.Triggers>
-                                                    <DataTrigger TargetType="Frame" Binding="{Binding IsSelected}" Value="True">
+                                                <Border.Triggers>
+                                                    <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
                                                         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource ChipSelectedBackgroundLight}, Dark={StaticResource ChipSelectedBackgroundDark}}" />
-                                                        <Setter Property="BorderColor" Value ="Transparent"/>
+                                                        <Setter Property="Stroke" Value ="Transparent"/>
                                                     </DataTrigger>
-                                                    <DataTrigger TargetType="Frame" Binding="{Binding IsSelected}" Value="False">
+                                                    <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="False">
                                                         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" />
-                                                        <Setter Property="BorderColor" Value="{AppThemeBinding Light={StaticResource FilledInputBorderLight1}, Dark={StaticResource FilledInputBorderDark}}" />
+                                                        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource FilledInputBorderLight1}, Dark={StaticResource FilledInputBorderDark}}" />
                                                     </DataTrigger>
-                                                </Frame.Triggers>
+                                                </Border.Triggers>
 
                                                 <customView:SfEffectsViewAdv >
                                                     <Grid Margin="0,0,0,0" Padding="{Binding StatusTag, Converter={StaticResource TagToPaddingConverter}}">
@@ -910,23 +910,29 @@
 										                           VerticalTextAlignment="Center"  />
                                                         </Grid>
                                                 </customView:SfEffectsViewAdv>
-                                            </Frame>
+                                            </Border>
                                         </Grid>
                                     </DataTemplate>
                                 </BindableLayout.ItemTemplate>
                             </HorizontalStackLayout>
                         </ScrollView>
                         <Grid Grid.Row="1" Margin="-8,5,0,16" ColumnDefinitions="*,300">
-                            <Frame HasShadow="False" CornerRadius="10" Grid.ColumnSpan="2" BorderColor="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}" BackgroundColor="{AppThemeBinding Light={StaticResource PreviewAreaBackgroundLight}, Dark={StaticResource PreviewAreaBackgroundDark}}" Grid.Column="0" Padding="0">
-                                <Grid x:Name="sampleGridView" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="5" IsClippedToBounds="True" />
-                            </Frame>
-                            <Frame HasShadow="False" CornerRadius="10" Grid.ColumnSpan="2" x:Name="propertyFrameOverlay" BindingContext="{x:Reference propertyFrame }" IsVisible="{Binding IsVisible}"  BackgroundColor="#22000000">
-                                <Frame.GestureRecognizers>
+                            <Border Grid.ColumnSpan="2" Stroke="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}" BackgroundColor="{AppThemeBinding Light={StaticResource PreviewAreaBackgroundLight}, Dark={StaticResource PreviewAreaBackgroundDark}}" Grid.Column="0" Padding="0">
+                <Border.StrokeShape>
+                  <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                              <Grid x:Name="sampleGridView" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="5" IsClippedToBounds="True" />
+                            </Border>
+                            <Border Grid.ColumnSpan="2" x:Name="propertyFrameOverlay" BindingContext="{x:Reference propertyFrame }" IsVisible="{Binding IsVisible}"  BackgroundColor="#22000000">
+                <Border.StrokeShape>
+                  <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                              <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="CollapseRightButtonTapped"/>
-                                </Frame.GestureRecognizers>
-                            </Frame>
-                            <Frame x:Name="propertyFrame" CornerRadius="10" HasShadow="False" IsVisible="false" BorderColor="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}" BackgroundColor="{AppThemeBinding Light={StaticResource PreviewAreaBackgroundLight}, Dark={StaticResource PreviewAreaBackgroundDark}}" Grid.Column="1"  Padding="12">
-                                <Grid RowDefinitions="24,*" RowSpacing="10" IsClippedToBounds="True">
+                                </Border.GestureRecognizers>
+                            </Border>
+              <Grid x:Name="propertyFrame" IsVisible="false"  BackgroundColor="{AppThemeBinding Light={StaticResource PreviewAreaBackgroundLight}, Dark={StaticResource PreviewAreaBackgroundDark}}" Grid.Column="1"  Padding="12">
+                <Grid RowDefinitions="24,*" RowSpacing="10" IsClippedToBounds="True">
                                     <Grid Grid.Row="0">
                                         <Label Text="Properties"
                                                TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
@@ -943,12 +949,15 @@
                                     </Grid>
                                     <Grid x:Name="propertyGrid" Grid.Row="1" />
                                 </Grid>
-                            </Frame>
-                            <Frame x:Name="busyIndicatorPage" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" HasShadow="False" CornerRadius="10" Margin="0" Grid.ColumnSpan="2" IsVisible="False" BorderColor="#D2D2D2">
-                                <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                            </Grid>
+                            <Border x:Name="busyIndicatorPage" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"   Margin="0" Grid.ColumnSpan="2" IsVisible="False" Stroke="#D2D2D2">
+                                <Border.StrokeShape>
+                                  <RoundRectangle CornerRadius="10"/>
+                                </Border.StrokeShape>
+                              <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
                                     <Label Text="Sample Loading..." VerticalOptions="Center" HorizontalOptions="Center" FontSize="20"/>
                                 </Grid>
-                            </Frame>
+                            </Border>
                         </Grid>
                         <Label Grid.Row="2"
                                x:Name="descriptionLabel" 
@@ -1137,7 +1146,7 @@
                                         <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                                     </customView:SfEffectsViewAdv.GestureRecognizers>
                                     <HorizontalStackLayout Padding="5" Spacing="5" HeightRequest="40">
-                                        <Image  WidthRequest="25" Margin="5,0" HeightRequest="25"  Source="{Binding Control.Image, Converter={StaticResource imageSourceConverter}}"/>
+                                        <Image  WidthRequest="25" Margin="5,0" HeightRequest="25"  Source="{Binding Control.Image}"/>
                                         <Label Grid.Row="0" Text="{Binding Control.Title}"  TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="14" VerticalOptions="Center" VerticalTextAlignment="Center"   />
                                         <Label Grid.Row="0" Text="-" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="14" VerticalOptions="Center" VerticalTextAlignment="Center"   />
                                         <Label LineBreakMode="TailTruncation" Grid.Row="0" Text="{Binding Sample.Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" FontSize="14" VerticalOptions="Center" VerticalTextAlignment="Center"  />

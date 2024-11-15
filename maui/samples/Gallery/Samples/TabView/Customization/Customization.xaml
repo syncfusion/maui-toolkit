@@ -63,7 +63,7 @@
                                SelectionChanged="SfTabView_SelectionChanged">
                 <!-- Document TabItem -->
                 <tabView:SfTabItem Header="Document" 
-                                   ImageSource="{imageExtension:ImageResource document.png}">
+                                   ImageSource="document.png">
                     <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
                         <VerticalStackLayout>
                             <BindableLayout.ItemsSource>
@@ -87,7 +87,7 @@
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
                                     <HorizontalStackLayout Padding="5,0,5,0">
-                                        <Image Source="{imageExtension:ImageResource document.png}"/>
+                                        <Image Source="document.png"/>
                                         <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.docx}"/>
                                     </HorizontalStackLayout>
                                 </DataTemplate>
@@ -98,7 +98,7 @@
 
                 <!-- Document TabItem -->
                 <tabView:SfTabItem Header="Excel"
-                                   ImageSource="{imageExtension:ImageResource excel.png}">
+                                   ImageSource="excel.png">
                     <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
                         <VerticalStackLayout>
                             <BindableLayout.ItemsSource>
@@ -116,7 +116,7 @@
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
                                     <HorizontalStackLayout Padding="5,0,5,0">
-                                        <Image Source="{imageExtension:ImageResource excel.png}"/>
+                                        <Image Source="excel.png"/>
                                         <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.xlsx}"/>
                                     </HorizontalStackLayout>
                                 </DataTemplate>
@@ -127,7 +127,7 @@
 
                 <!-- Document TabItem -->
                 <tabView:SfTabItem Header="PDF" 
-                                   ImageSource="{imageExtension:ImageResource pdftab.png}">
+                                   ImageSource="pdftab.png">
                     <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
                         <VerticalStackLayout>
                             <BindableLayout.ItemsSource>
@@ -152,7 +152,7 @@
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
                                     <HorizontalStackLayout Padding="5,0,5,0">
-                                        <Image Source="{imageExtension:ImageResource pdftab.png}"/>
+                                        <Image Source="pdftab.png"/>
                                         <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.pdf}"/>
                                     </HorizontalStackLayout>
                                 </DataTemplate>
@@ -163,7 +163,7 @@
 
                 <!-- PowerPoint TabItem -->
                 <tabView:SfTabItem Header="PowerPoint" 
-                                   ImageSource="{imageExtension:ImageResource powerpoint.png}">
+                                   ImageSource="powerpoint.png">
                     <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never">
                         <VerticalStackLayout>
                             <BindableLayout.ItemsSource>
@@ -178,7 +178,7 @@
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
                                     <HorizontalStackLayout Padding="5,0,5,0">
-                                        <Image Source="{imageExtension:ImageResource powerpoint.png}"/>
+                                        <Image Source="powerpoint.png"/>
                                         <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.pptx}"/>
                                     </HorizontalStackLayout>
                             </DataTemplate>

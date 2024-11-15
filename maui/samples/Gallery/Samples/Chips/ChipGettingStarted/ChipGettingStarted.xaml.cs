@@ -1,15 +1,17 @@
 
-namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip;
-
-public partial class ChipGettingStarted : SampleView
+namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 {
-	public ChipGettingStarted()
+
+	public partial class ChipGettingStarted : SampleView
 	{
-		InitializeComponent();
+		public ChipGettingStarted()
+		{
+			InitializeComponent();
 #if WINDOWS || MACCATALYST
 		this.Content=new ChipGettingStartedDesktop();
 #elif ANDROID || IOS
-		this.Content=new ChipGettingStartedMobile();
+			this.Content = new ChipGettingStartedMobile();
 #endif
-    }
+		}
+	}
 }

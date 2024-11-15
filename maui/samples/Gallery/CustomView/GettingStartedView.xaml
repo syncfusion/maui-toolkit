@@ -13,10 +13,14 @@
             </Grid.ColumnDefinitions>
 
             <Image MaximumHeightRequest ="600" Grid.Column="0" MaximumWidthRequest="500" Margin="20,0,0,0" 
-                   Source="{imageExtension:ImageResource gettingstarted.png}"
+                   Source="gettingstarted.png"
                    HorizontalOptions="Fill" VerticalOptions="Fill"/>
-            <Frame x:Name="frame" Margin="10" Grid.Column="1" Padding="0" HasShadow="False" HorizontalOptions="End"
-                   CornerRadius="10" BorderColor="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" />
+      <Border x:Name="frame" Margin="10" Grid.Column="1" Padding="0" HorizontalOptions="End"
+                    Stroke="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}">
+        <Border.StrokeShape>
+          <RoundRectangle CornerRadius="10" />
+        </Border.StrokeShape>
+      </Border>
         </Grid>
     </localcore:SampleView>
 </localcore:SampleView>

@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
- 
-namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
+﻿namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 { 
     public partial class Selection : SampleView
     {

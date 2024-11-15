@@ -1,5 +1,4 @@
-﻿
-namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
+﻿namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
     public partial class CategoryAxisChart : SampleView
     {

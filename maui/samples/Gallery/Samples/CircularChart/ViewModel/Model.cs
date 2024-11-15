@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
+﻿namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 {
     public class ChartDataModel
     {

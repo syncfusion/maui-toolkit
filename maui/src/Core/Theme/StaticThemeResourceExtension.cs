@@ -1,13 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Xaml;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace Syncfusion.Maui.Toolkit.Themes
 {
     /// <summary>

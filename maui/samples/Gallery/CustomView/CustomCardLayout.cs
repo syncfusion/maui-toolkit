@@ -1,6 +1,4 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
-using Syncfusion.Maui.ControlsGallery.Converters;
-using System.Reflection;
 
 namespace Syncfusion.Maui.ControlsGallery.CustomView
 {

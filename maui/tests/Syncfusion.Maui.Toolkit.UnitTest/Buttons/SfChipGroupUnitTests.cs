@@ -1,5 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit;
-using Syncfusion.Maui.Toolkit.Chips;
+﻿using Syncfusion.Maui.Toolkit.Chips;
 using System.Collections.ObjectModel;
 using System.Reflection;
 
@@ -106,7 +105,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		[Theory]
 		[InlineData("Empty Value")]
-		[InlineData(null)]
+		[InlineData("")]
 		public void ImageMemberPath_SetValue_ReturnsExpectedValue(string expectedPath)
 		{
 			var chipGroup = new SfChipGroup();

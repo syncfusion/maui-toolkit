@@ -1,9 +1,6 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
-    using System.Collections.Generic;
-    using System;
-    using Microsoft.Maui.Graphics;
-
+    
     /// <summary>
     /// Holds the semantics node information.
     /// </summary>

@@ -38,7 +38,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData("123.45", 123.45)]               
         [InlineData(null, double.NaN)]          
         [InlineData("", double.NaN)]            
-        public void ToDouble_ShouldHandleStringInput(string input, double expected)
+        public void ToDouble_ShouldHandleStringInput(string? input, double expected)
         {
             var axis = new NumericalAxis();
             var eventElement = new ActualRangeChangedEventArgs(axis.ActualMinimum, axis.ActualMaximum);

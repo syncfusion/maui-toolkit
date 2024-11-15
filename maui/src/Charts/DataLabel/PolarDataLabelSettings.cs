@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// The PolarDataLabelSettings class is used to customize the appearance of polar series data labels.

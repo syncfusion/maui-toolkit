@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -448,26 +443,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         #region Internal Methods
 
-        internal override DataTemplate? GetDefaultTooltipTemplate(TooltipInfo info)
-        {
-            var texts = info.Text.Split('/');
-            DataTemplate template = new DataTemplate(() =>
-            {
-                Grid grid = new Grid()
-                {
-                    RowDefinitions =
-                    {
-                        new RowDefinition{Height=GridLength.Auto },
-                    },
-                };
-
-                grid.Add(GetTooltipContent(texts[0], texts[1], info), 0, 1);
-                return grid;
-            });
-
-            return template;
-        }
-
         internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior tooltipBehavior, float x, float y)
         {
             if (ChartArea == null || SeriesYValues == null)
@@ -747,43 +722,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
         #endregion
 
         #region Private Methods
-
-        static StackLayout GetTooltipContent(string highValue, string lowValue, TooltipInfo info)
-        {
-            var layout = new StackLayout()
-            {
-                Orientation = StackOrientation.Vertical,
-                VerticalOptions = LayoutOptions.Fill,
-            };
-
-            Label highLabel = new Label()
-            {
-                Text = SfCartesianChartResources.High + " : " + highValue,
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.Start,
-                TextColor = info.TextColor,
-                Margin = info.Margin,
-                Background = info.Background,
-                FontAttributes = info.FontAttributes,
-                FontSize = info.FontSize,
-            };
-
-            Label lowLabel = new Label
-            {
-                Text = SfCartesianChartResources.Low + "  : " + lowValue,
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalOptions = LayoutOptions.Start,
-                TextColor = info.TextColor,
-                Margin = info.Margin,
-                Background = info.Background,
-                FontAttributes = info.FontAttributes,
-                FontSize = info.FontSize,
-            };
-
-            layout.Children.Add(highLabel);
-            layout.Children.Add(lowLabel);
-            return layout;
-        }
 
         void CreateSegment(SeriesView seriesView, IList<double> xVals, IList<double> highVals, double[] highStartPointsX, double[] highStartPointsY, double[] highEndPointsX, double[] highEndPointsY, IList<double> lowVals, double[] lowStartPointsX, double[] lowStartPointsY, double[] lowEndPointsX, double[] lowEndPointsY)
         {

@@ -6,11 +6,7 @@
                       xmlns:shimmer="clr-namespace:Syncfusion.Maui.Toolkit.Shimmer;assembly=Syncfusion.Maui.Toolkit"
                       xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
                       xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer">
-
-    <localCore:SampleView.Resources>
-        <imageExtension:ImageSourceConverter x:Key="imageconverter"/>
-    </localCore:SampleView.Resources>
-
+   
     <localCore:SampleView.BindingContext>
         <local:BookViewModel x:Name="viewModel"/>
     </localCore:SampleView.BindingContext>
@@ -28,7 +24,7 @@
                            WaveDirection="LeftToRight">
                 <shimmer:SfShimmer.Content>
                     <StackLayout>
-                        <ListView ItemsSource="{Binding Info1}" x:Name="listView"
+                        <ListView ItemsSource="{Binding Info1}" x:Name="listView" x:DataType="local:BookViewModel"
                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
                                   SeparatorVisibility="None"
                                   VerticalScrollBarVisibility="Never">
@@ -41,7 +37,7 @@
                                                 <ColumnDefinition Width="0.75*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Image Source="{Binding BookImage,Converter={StaticResource imageconverter}}"/>
+                                            <Image x:DataType="local:BookInfo" Source="{Binding BookImage,Converter={StaticResource imageconverter}}"/>
                                             <Grid Grid.Column="1" Padding="10,0,0,0">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto"/>
@@ -49,9 +45,9 @@
                                                     <RowDefinition Height="Auto"/>
                                                     <RowDefinition/>
                                                 </Grid.RowDefinitions>
-                                                <Label Text="{Binding BookName}" FontAttributes="Bold" FontSize="16"/>
-                                                <Label Text="{Binding Author}" Grid.Row="1"  FontSize="16"/>
-                                                <Label Text="{Binding Summary}" FontSize="10" VerticalOptions="Center" Grid.Row="3" MaxLines="2" LineBreakMode="WordWrap"/>
+                                                <Label x:DataType="local:BookInfo" Text="{Binding BookName}" FontAttributes="Bold" FontSize="16"/>
+                                                <Label x:DataType="local:BookInfo" Text="{Binding Author}" Grid.Row="1"  FontSize="16"/>
+                                                <Label x:DataType="local:BookInfo" Text="{Binding Summary}" FontSize="10" VerticalOptions="Center" Grid.Row="3" MaxLines="2" LineBreakMode="WordWrap"/>
                                             </Grid>
 
                                         </Grid>

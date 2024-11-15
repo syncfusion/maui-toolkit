@@ -1,14 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using Microsoft.Maui;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Devices;
-using Microsoft.Maui.Graphics;
+﻿using System.ComponentModel;
 using Syncfusion.Maui.Toolkit.Internals;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 using Syncfusion.Maui.Toolkit.Themes;
-using System.Runtime.CompilerServices;
 using Syncfusion.Maui.Toolkit.Helper;
+using System.Runtime.CompilerServices;
 #if IOS || MACCATALYST
     using UIKit;
 #endif

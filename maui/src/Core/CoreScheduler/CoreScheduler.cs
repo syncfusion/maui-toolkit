@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Maui.Animations;
-using Microsoft.Maui.Controls;
-using System;
+﻿using Microsoft.Maui.Animations;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {

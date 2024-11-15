@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Graphics;
-using System;
-
-namespace Syncfusion.Maui.Toolkit.Charts
+﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
     /// <summary>
     /// Represents the segments for <see cref="HiLoOpenCloseSeries"/>.

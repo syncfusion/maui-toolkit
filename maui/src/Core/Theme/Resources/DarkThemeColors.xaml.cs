@@ -1,8 +1,4 @@
-﻿
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Xaml;
-
-namespace Syncfusion.Maui.Toolkit.Themes
+﻿namespace Syncfusion.Maui.Toolkit.Themes
 {
     /// <summary>
     /// Dark theme resource dictionary.

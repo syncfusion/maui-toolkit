@@ -1,7 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-
-namespace Syncfusion.Maui.Toolkit.NavigationDrawer
+﻿namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 {
     /// <summary>
     /// Drawer settings class for customize the drawer.
