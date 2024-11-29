@@ -1,0 +1,75 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Calendar.Calendar.DateSelection"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Calendar.Calendar"
+             xmlns:calendar="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="-4, -4, -6, -6">
+    <localCore:SampleView.Content>
+        <Grid  WidthRequest="350" HeightRequest="500">
+            <Border IsVisible="False" x:Name="frame" Background="Transparent" Margin="0" Padding="0">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="{OnPlatform Default=20, Android=0, iOS=0}" />
+                </Border.StrokeShape>
+                <Grid BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt3}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="0.5"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" x:Name="selectionLabel" Text="Select date" FontSize="15" Margin="15, 0, 0, 0" VerticalTextAlignment="Center" VerticalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentForegroundAlt1}}"/>
+                    <Label Grid.Row="1" x:Name="label" FontSize="30" Margin="15,0,0,0" VerticalTextAlignment="Center" VerticalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+                    <BoxView Grid.Row="2" BackgroundColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}"/>
+                    <calendar:SfCalendar x:Name="dateSelection" Grid.Row="3" CornerRadius="0" View="Month" RangeSelectionDirection="Both" AllowViewNavigation="True" NavigationDirection="Horizontal" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Grid>
+            </Border>
+
+            <Border IsVisible="False" x:Name="border" Background="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 10,10,10,10" Margin="0" Padding="0">
+                <Grid BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt3}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="0.5"/>
+                        <RowDefinition Height="7*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" x:Name="selectionLabel1" Text="Select date" FontSize="15" Margin="15, 0, 0, 0" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentForegroundAlt1}}" VerticalOptions="Center"/>
+                    <Label Grid.Row="1" x:Name="label1" FontSize="30" Margin="15,0,0,0" VerticalTextAlignment="Center" VerticalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+                    <BoxView Grid.Row="2" BackgroundColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}"/>
+                    <calendar:SfCalendar x:Name="dateSelection1" Grid.Row="3" CornerRadius="0" View="Month" RangeSelectionDirection="Both" AllowViewNavigation="True" NavigationDirection="Horizontal" HorizontalOptions="Center" VerticalOptions="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </localCore:SampleView.Content>
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <ScrollView Padding="0, 0, 5, 0">
+                <StackLayout Orientation="Vertical">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Selection Type"
+                              Grid.Column="0"
+                              LineBreakMode="WordWrap"
+                              FontSize="14"
+                              VerticalOptions="Center"
+                              HorizontalOptions="Start"/>
+                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+                          <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                          </Border.StrokeShape>
+                        <Picker x:Name="comboBox" HeightRequest="37"
+                              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                              TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+                          </Border>
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+    <localCore:SampleView.Behaviors>
+        <local:DateSelectionBehavior/>
+    </localCore:SampleView.Behaviors>
+</localCore:SampleView>

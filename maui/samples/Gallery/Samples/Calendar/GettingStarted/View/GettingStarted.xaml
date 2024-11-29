@@ -1,0 +1,303 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Calendar.Calendar.GettingStarted"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Calendar.Calendar"
+             xmlns:thickness ="clr-namespace:Microsoft.Maui;assembly=Microsoft.Maui"
+             xmlns:calendar="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             x:DataType="local:ViewModel"
+             Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="-4, -4, -6, -6">
+  <localCore:SampleView.Content>
+    <Grid WidthRequest="350" HeightRequest="400">
+      <Border IsVisible="False" x:Name="border"
+                    Background="Transparent" 
+                    HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="2">
+        <calendar:SfCalendar x:Name="Calendar" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackground}}" CornerRadius="{Binding CornerRadius}" />
+      </Border>
+    </Grid>
+  </localCore:SampleView.Content>
+
+  <localCore:SampleView.BindingContext>
+    <local:ViewModel/>
+  </localCore:SampleView.BindingContext>
+
+  <localCore:SampleView.OptionView>
+    <ContentView>
+      <ScrollView Padding="0, 0, 5, 0">
+        <StackLayout Orientation="Vertical" Spacing="5">
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.5*"/>
+              <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Calendar View"
+                        Grid.Column="0"
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+              <Border.StrokeShape>
+                <RoundRectangle CornerRadius="5" />
+              </Border.StrokeShape>
+              <Picker x:Name="comboBox" HeightRequest="37"
+                          BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+            </Border>
+          </Grid>
+
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.5*"/>
+              <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Calendar Selection"
+                        Grid.Column="0"
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+              <Border.StrokeShape>
+                <RoundRectangle CornerRadius="5" />
+              </Border.StrokeShape>
+              <Picker x:Name="selectionComboBox" HeightRequest="37"
+                          BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+            </Border>
+          </Grid>
+
+          <Grid >
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.5*"/>
+              <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Selection shape" 
+                        Grid.Column="0"
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+              <Border.StrokeShape>
+                <RoundRectangle CornerRadius="5" />
+              </Border.StrokeShape>
+              <Picker x:Name="selectionShapeComboBox" HeightRequest="37"
+                          BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+            </Border>
+          </Grid>
+
+          <Grid  x:Name="selectionDirectionGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.5*"/>
+              <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Selection Direction"
+                           x:Name="selectionDirectionText"
+                        Grid.Column="0"
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+              <Border.StrokeShape>
+                <RoundRectangle CornerRadius="5" />
+              </Border.StrokeShape>
+              <Picker x:Name="directionComboBox" HeightRequest="37"
+                          BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+            </Border>
+          </Grid>
+
+          <Grid>
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.5*"/>
+              <ColumnDefinition Width="0.5*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Display Date" 
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <DatePicker x:Name="datePicker" HeightRequest="37"
+                                Grid.Column="1"/>
+          </Grid>
+
+          <Grid x:Name="allowViewNavigationGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.7*"/>
+              <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Allow view navigation"  
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Switch x:Name="allowViewNavigationSwitch" 
+                          Grid.Column="1"
+                          Margin="15,0,0,0"
+                          VerticalOptions="Center"
+                          IsToggled="True"
+                          HorizontalOptions="End">
+            </Switch>
+          </Grid>
+
+          <Grid x:Name="weekNumberGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.7*"/>
+              <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label Text="Show week number"  
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Switch x:Name="weekNumberSwitch" 
+                          Grid.Column="1"
+                          Margin="15,0,0,0"
+                          IsToggled="False"
+                          VerticalOptions="Center"
+                          HorizontalOptions="End">
+            </Switch>
+          </Grid>
+
+          <Grid x:Name="trailingDatesGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.7*"/>
+              <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Show trailing and leading dates"  
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Switch x:Name="trailingDatesSwitch" 
+                         Grid.Column="1" 
+                         Margin="15,0,0,0"
+                         IsToggled="True"
+                         VerticalOptions="Center"
+                         HorizontalOptions="End">
+            </Switch>
+          </Grid>
+
+          <Grid x:Name="enableDatesGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.7*"/>
+              <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Enable Past Dates"  
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Switch x:Name="enableDatesSwitch" 
+                         Grid.Column="1"
+                          Margin="15,0,0,0"
+                         VerticalOptions="Center"
+                         IsToggled="True"
+                         HorizontalOptions="End">
+            </Switch>
+          </Grid>
+
+          <Grid x:Name="enableSwipeSelectionGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.7*"/>
+              <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Enable swipe Selection"  
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Switch x:Name="enableSwipeSelectionSwitch" 
+                         Grid.Column="1"
+                          Margin="15,0,0,0"
+                         VerticalOptions="Center"
+                         IsToggled="False"
+                         HorizontalOptions="End">
+            </Switch>
+          </Grid>
+
+          <Grid x:Name="showActionButtonGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.7*"/>
+              <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Show action buttons"  
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Switch x:Name="showActionButtonsSwitch" 
+                         Grid.Column="1"
+                          Margin="15,0,0,0"
+                         VerticalOptions="Center"
+                         IsToggled="True"
+                         HorizontalOptions="End">
+            </Switch>
+          </Grid>
+
+          <Grid x:Name="showTodayButtonGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.7*"/>
+              <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Show today button"  
+                         LineBreakMode="WordWrap"
+                         FontSize="14"
+                         VerticalOptions="Center"
+                         HorizontalOptions="Start"/>
+            <Switch x:Name="showTodayButtonSwitch" 
+                         Grid.Column="1"
+                         Margin="15,0,0,0"
+                         VerticalOptions="Center"
+                         IsToggled="True"
+                         HorizontalOptions="End">
+            </Switch>
+          </Grid>
+
+          <Grid x:Name="navigationToAdjacentMonthGrid">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="0.7*"/>
+              <ColumnDefinition Width="0.3*"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="Navigate to adjacent month"  
+                        LineBreakMode="WordWrap"
+                        FontSize="14"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Start"/>
+            <Switch x:Name="navigationToAdjacentMonthSwitch" 
+                         Grid.Column="1"
+                          Margin="15,0,0,0"
+                         VerticalOptions="Center"
+                         IsToggled="True"
+                         HorizontalOptions="End">
+            </Switch>
+          </Grid>
+
+          <Grid>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Label Text="Corner radius"
+                        x:Name="cornerRadiusLabel"
+                        Margin="0,15,0,0"/>
+            <Slider x:Name="cornerRadiusSlider"
+                                  Grid.Row="1"
+                                  Maximum="30" Minimum="0"              
+                                  VerticalOptions="Center"
+                                  Value="{Binding CornerRadius}">
+            </Slider>
+          </Grid>
+
+        </StackLayout>
+      </ScrollView>
+    </ContentView>
+  </localCore:SampleView.OptionView>
+  <localCore:SampleView.Behaviors>
+    <local:GettingStartedBehavior/>
+  </localCore:SampleView.Behaviors>
+</localCore:SampleView>

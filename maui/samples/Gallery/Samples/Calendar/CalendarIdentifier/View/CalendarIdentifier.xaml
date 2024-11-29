@@ -1,0 +1,123 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Calendar.Calendar.CalendarIdentifier"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Calendar.Calendar"
+             xmlns:thickness ="clr-namespace:Microsoft.Maui;assembly=Microsoft.Maui"
+             xmlns:calendar="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             Margin="-4, -4, -6, -6">
+
+    <localCore:SampleView.Content>
+        <Grid>
+            <HorizontalStackLayout IsVisible="False" x:Name="desktopCalendar" HorizontalOptions="Center" VerticalOptions="Center">
+                <VerticalStackLayout VerticalOptions="Center">
+                    <Border Background="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Margin="5, 0, 10, 0" Padding="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <Grid HeightRequest="350">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="250"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt3}}">
+                                <Label Text="&#xe7dd;"
+                                        FontSize="70"
+                                        TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"
+                                        FontFamily="MauiSampleFontIcon"
+                                        HorizontalOptions="Center" VerticalOptions="Center"/>
+                            </Grid>
+
+                            <Grid Grid.Row="2" x:Name="desktopOptionView" BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt3}}" Padding="5, 0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                    <RowDefinition Height="35"/>
+                                </Grid.RowDefinitions>
+
+                                <RadioButton Grid.Row="0" Content="Gregorian" VerticalOptions="Start" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Grid.Row="1" Content="Hijri" VerticalOptions="Start" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Grid.Row="2" Content="Korean" VerticalOptions="Start" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Grid.Row="3" Content="Persian" VerticalOptions="Start" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Grid.Row="4" Content="Taiwan" VerticalOptions="Start" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Grid.Row="5" Content="Thai Buddhist" VerticalOptions="Start" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Grid.Row="6" Content="UmAlQura" VerticalOptions="Start" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+                <Grid WidthRequest="320" HeightRequest="350" Padding="0">
+                    <Border IsVisible="False" x:Name="desktopFrame" Background="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                        <calendar:SfCalendar x:Name="desktopIdentifier" CornerRadius="10" Identifier="Hijri" />
+                    </Border>
+
+                    <Border IsVisible="False" x:Name="desktopBorder" Background="Transparent"  HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                        <calendar:SfCalendar x:Name="desktopIdentifier1" Identifier="Hijri" CornerRadius="10" />
+                    </Border>
+                </Grid>
+            </HorizontalStackLayout>
+
+            <Grid IsVisible="False" x:Name="mobileCalendar" HorizontalOptions="Center" VerticalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="75"/>
+                    <RowDefinition Height="400"/>
+                </Grid.RowDefinitions>
+
+                <Grid WidthRequest="350" HeightRequest="75" Padding="0" Margin="0, 0, 0, 20">
+                    <Border IsVisible="False" x:Name="mobileOptionFrame" Background="{AppThemeBinding Default={StaticResource ContentBackgroundAlt3}}" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Always" Margin="5, 0">
+                            <HorizontalStackLayout x:Name="mobileOptionFrameView" HeightRequest="50" VerticalOptions="Center">
+                                <RadioButton Content="Gregorian" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Content="Hijri" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Content="Korean" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Content="Persian" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton  Content="Taiwan" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Content="Thai Buddhist" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                <RadioButton Content="UmAlQura" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                    </Border>
+
+                    <Border x:Name="mobileOptionBorder" IsVisible="False" HeightRequest="60" WidthRequest="350" Background="{AppThemeBinding Default={StaticResource ContentBackgroundAlt3}}" StrokeThickness="2" StrokeShape="RoundRectangle 10,10,10,10" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                        <Grid>
+                            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Always">
+                                <HorizontalStackLayout x:Name="mobileOptionBorderView" HeightRequest="50" VerticalOptions="Center">
+                                    <RadioButton Content="Gregorian" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                    <RadioButton Content="Hijri" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                    <RadioButton Content="Korean" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                    <RadioButton Content="Persian" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                    <RadioButton  Content="Taiwan" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                    <RadioButton Content="Thai Buddhist" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                    <RadioButton Content="UmAlQura" VerticalOptions="Center" Margin="5, 0" Padding="{OnPlatform iOS=5, MacCatalyst=5}"/>
+                                </HorizontalStackLayout>
+                            </ScrollView>
+                        </Grid>
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="1" WidthRequest="350" HeightRequest="400" Padding="0">
+                    <Border IsVisible="False" x:Name="mobileFrame" Background="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                        <calendar:SfCalendar x:Name="mobileIdentifier" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackground}}" CornerRadius="10" Identifier="Hijri"/>
+                    </Border>
+
+                    <Border IsVisible="False" x:Name="mobileBorder" Background="Transparent" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                        <calendar:SfCalendar x:Name="mobileIdentifier1" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackground}}" CornerRadius="10" Identifier="Hijri"/>
+                    </Border>
+                </Grid>
+            </Grid>
+        </Grid>
+    </localCore:SampleView.Content>
+
+    <localCore:SampleView.Behaviors>
+        <local:CalendarIdentifierBehavior/>
+    </localCore:SampleView.Behaviors>
+
+</localCore:SampleView>

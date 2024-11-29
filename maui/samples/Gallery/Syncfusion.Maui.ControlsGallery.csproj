@@ -93,6 +93,7 @@
 
 	<ItemGroup>
 	  <EmbeddedResource Include="SampleList\ButtonsSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\CalendarSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CarouselSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CartesianChartSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\ChipsSamplesList.xml" />

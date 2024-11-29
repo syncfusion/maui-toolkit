@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+  <ControlCategory Name="Calendar">
+    <Control Title="Calendar"
+             Image="calendar.png"
+             ControlName="Calendar"
+             Description="It is a lightweight control used to select a single, multiple, and a range of dates.">
+      <Sample Title="Getting Started" SampleName="GettingStarted" SearchTags="calendar"/>
+      <Category Title="Views">
+        <CardLayout>
+          <Sample SampleName="Month" ShowExpandIcon="False" Title="Month"/>
+          <Sample SampleName="Year" ShowExpandIcon="False" Title="Year"/>
+          <Sample SampleName="Decade" ShowExpandIcon="False" Title="Decade"/>
+          <Sample SampleName="Century" ShowExpandIcon="False" Title="Century"/>
+        </CardLayout>
+      </Category>
+      <Sample Title="Selection" SampleName="DateSelection"/>
+      <Sample Title="Calendar Identifier" SampleName="CalendarIdentifier"/>
+      <Sample Title="Appointment Booking" SampleName="AppointmentBooking"/>
+      <Sample Title="Color Scheme" SampleName="HighlightDates" />
+      <Sample Title="Customization" SampleName="AppearanceCustomization" />
+    </Control>
+  </ControlCategory>
+</SyncfusionControls>
