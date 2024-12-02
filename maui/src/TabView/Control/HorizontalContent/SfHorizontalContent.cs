@@ -35,6 +35,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		bool _isPreviousItemVisible;
 		bool _isNextItemVisible;
 		SelectionChangingEventArgs? _selectionChangingEventArgs;
+		bool _isSelectionProcessed;
 #if WINDOWS
 		bool _isItemRemoved;
 #endif
@@ -246,16 +247,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <returns>It returns the size</returns>
 		protected override Size MeasureContent(double widthConstraint, double heightConstraint)
 		{
-			if (widthConstraint > 0 && widthConstraint != double.PositiveInfinity && MinimumWidthRequest != widthConstraint)
+			if (widthConstraint > 0 && widthConstraint != double.PositiveInfinity)
 			{
-				MinimumWidthRequest = widthConstraint;
 				ContentWidth = widthConstraint;
 				UpdateTabItemContentSize();
 				UpdateTabItemContentPosition();
 			}
-			if (heightConstraint > 0 && heightConstraint != double.PositiveInfinity && MinimumHeightRequest != heightConstraint)
+			if (heightConstraint > 0 && heightConstraint != double.PositiveInfinity)
 			{
-				MinimumHeightRequest = heightConstraint;
 				UpdateTabItemContentSize();
 				UpdateTabItemContentPosition();
 			}
@@ -373,6 +372,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		void UpdateSelectedIndex()
 		{
+			_isSelectionProcessed = true;
 			UpdateTabItemContentPosition();
 		}
 
@@ -576,12 +576,30 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				{
 					xPosition = ContentWidth * SelectedIndex;
 #if WINDOWS
-					_horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, Easing.Linear);
-#else
-					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+					if (_isSelectionProcessed)
+					{
 						_horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, Easing.Linear);
+						_isSelectionProcessed = false;
+					}
 					else
-						_horizontalStackLayout?.TranslateTo(xPosition, 0, (uint)ContentTransitionDuration, Easing.Linear);
+					{
+						if (_horizontalStackLayout is not null)
+						{
+							_horizontalStackLayout.TranslationX = -xPosition;
+						}
+					}
+#else
+					double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
+					if (_isSelectionProcessed)
+					{
+						_horizontalStackLayout?.TranslateTo(targetX, 0, (uint)ContentTransitionDuration, Easing.Linear);
+						_isSelectionProcessed = false;
+					}
+					else
+					{
+						if (_horizontalStackLayout is not null)
+							_horizontalStackLayout.TranslationX = targetX;
+					}
 #endif
 				}
 			}
@@ -601,13 +619,31 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				}
 				else
 				{
-					_horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, Easing.Linear);
+					if (_isSelectionProcessed)
+					{
+						_horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, Easing.Linear);
+						_isSelectionProcessed = false;
+					}
+					else
+					{
+						if (_horizontalStackLayout is not null)
+						{
+							_horizontalStackLayout.TranslationX = -xPosition;
+						}
+					}				
 				}
 #else
-				if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
-					_horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, Easing.Linear);
+				double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
+				if (_isSelectionProcessed)
+				{
+					_horizontalStackLayout?.TranslateTo(targetX, 0, (uint)ContentTransitionDuration, Easing.Linear);
+					_isSelectionProcessed = false;
+				}
 				else
-					_horizontalStackLayout?.TranslateTo(xPosition, 0, (uint)ContentTransitionDuration, Easing.Linear);
+				{
+					if (_horizontalStackLayout is not null)
+						_horizontalStackLayout.TranslationX = targetX;
+				}
 #endif
 			}
 
