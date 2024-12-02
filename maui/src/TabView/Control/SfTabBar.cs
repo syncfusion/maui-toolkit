@@ -39,6 +39,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         readonly double _arrowButtonSize = 32;
 		double _removedItemWidth = 0;
 		bool _itemRemoved = false;
+        bool _isSelectionProcessed;
 
         // State-tracking fields
 
@@ -719,6 +720,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (newIndex != -1)
             {
+                _isSelectionProcessed = true;
                 UpdateSelectedTabItemIsSelected(newIndex, oldIndex);
                 UpdateTabIndicatorWidth();
                 if (_tabSelectionChangedEventArgs != null)
@@ -2308,6 +2310,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
                         _previousIndicatorWidth = _currentIndicatorWidth;
                     });
+                    _isSelectionProcessed = false;
                 }
                 else
                 {
@@ -2326,7 +2329,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						}
 						else
 						{
-							_tabSelectionIndicator.TranslateTo(targetX, 0, animationDuration, Easing.Linear);
+							if (_isSelectionProcessed)
+							{
+								_tabSelectionIndicator.TranslateTo(targetX, 0, animationDuration, Easing.Linear);
+								_isSelectionProcessed = false;
+							}
+							else
+							{
+								if (_tabSelectionIndicator is not null)
+								{
+									_tabSelectionIndicator.TranslationX = targetX;
+								}
+							}
 						}
 						UpdateFillSelectedTabItem();
                         UpdateScrollViewPosition(SelectedIndex);
