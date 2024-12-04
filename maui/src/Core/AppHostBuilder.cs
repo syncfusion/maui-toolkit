@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Maui.Dispatching;
 #endif
+#if ANDROID
+using Syncfusion.Maui.Toolkit.Calendar;
+#endif
 
 namespace Syncfusion.Maui.Toolkit.Hosting
 {
@@ -26,7 +29,10 @@ namespace Syncfusion.Maui.Toolkit.Hosting
                 handlers.AddHandler(typeof(IDrawableView), typeof(SfDrawableViewHandler));
                 handlers.AddHandler(typeof(IDrawableLayout), typeof(SfViewHandler));
                 handlers.AddHandler(typeof(ICarousel), typeof(CarouselHandler));
-            });
+#if __ANDROID__
+                handlers.AddHandler(typeof(SnapLayout), typeof(SnapLayoutHandler));
+#endif
+			});
 
 #if WINDOWS
             builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IMauiInitializeService, MauiControlsInitializer>());

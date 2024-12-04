@@ -305,6 +305,7 @@
 	<local:StaticThemeResource x:Key="SfPyramidChartTooltipBackground" ResourceKey="TooltipBackground" />
 	<local:StaticThemeResource x:Key="SfPyramidChartTooltipTextColor" ResourceKey="TooltipForeground" />
 	<sys:Double x:Key="SfPyramidChartTooltipTextFontSize">12</sys:Double>
+
     <local:StaticThemeResource x:Key="SfPyramidChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
     <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
     <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
@@ -315,5 +316,106 @@
   <local:StaticThemeResource x:Key="SfBottomSheetGrabberBackground" ResourceKey="Border"/>
   <local:StaticThemeResource x:Key="SfBottomSheetOverlayBackgroundColor" ResourceKey="Overlay"/>
 
- 
+  <!--SfButton-->
+  <x:String x:Key="SfButtonTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfButtonNormalBackground" ResourceKey="PrimaryBackground"/>
+  <local:StaticThemeResource x:Key="SfButtonPressedBackground" ResourceKey="PrimaryBackgroundPressed"/>
+  <local:StaticThemeResource x:Key="SfButtonHoverBackground" ResourceKey="PrimaryBackgroundHovered"/>
+  <local:StaticThemeResource x:Key="SfButtonHoverStroke" ResourceKey="PrimaryBackgroundHovered"/>
+  <local:StaticThemeResource x:Key="SfButtonPressedStroke" ResourceKey="PrimaryBackgroundPressed"/>
+  <local:StaticThemeResource x:Key="SfButtonNormalStroke" ResourceKey="PrimaryBackground"/>
+  <local:StaticThemeResource x:Key="SfButtonDisabledBackground" ResourceKey="PrimaryBackgroundDisabled" />
+  <local:StaticThemeResource x:Key="SfButtonDisabledStroke" ResourceKey="PrimaryBackgroundDisabled" />
+  <local:StaticThemeResource x:Key="SfButtonNormalTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfButtonPressedTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfButtonHoverTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfButtonDisabledTextColor" ResourceKey="PrimaryForegroundDisabled" />
+  <local:StaticThemeResource x:Key="SfButtonFocusedBackground" ResourceKey="PrimaryBackgroundFocused" />
+  <local:StaticThemeResource x:Key="SfButtonFocusedStroke" ResourceKey="BorderAlt4" />
+  <local:StaticThemeResource x:Key="SfButtonFocusedTextColor" ResourceKey="PrimaryForeground" />
+  <sys:Double x:Key="SfButtonNormalStrokeThickness">1</sys:Double>
+  <sys:Double x:Key="SfButtonTextNormalFontSize">14</sys:Double>
+
+  <!--SfCalendar-->
+  <x:String x:Key="SfCalendarTheme">CommonTheme</x:String>
+  <!--Calendar header-->
+  <local:StaticThemeResource x:Key="SfCalendarHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfCalendarHeaderFontSize">14</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarHeaderBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar view header-->
+  <local:StaticThemeResource x:Key="SfCalendarViewHeaderTextColor" ResourceKey="ContentForeground" />
+  <sys:Double x:Key="SfCalendarViewHeaderFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarViewHeaderBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar week number-->
+  <local:StaticThemeResource x:Key="SfCalendarWeekNumberTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfCalendarWeekNumberFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarWeekNumberBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar month dates-->
+  <local:StaticThemeResource x:Key="SfCalendarMonthDatesTextColor" ResourceKey="ContentForeground" />
+  <sys:Double x:Key="SfCalendarMonthDatesFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarMonthDatesBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar month today-->
+  <local:StaticThemeResource x:Key="SfCalendarMonthTodayTextColor" ResourceKey="PrimaryBackground" />
+  <sys:Double x:Key="SfCalendarMonthTodayFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarMonthTodayBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar month trailing and leading dates-->
+  <local:StaticThemeResource x:Key="SfCalendarMonthTrailingLeadingDatesTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfCalendarMonthTrailingLeadingDatesFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarMonthTrailingLeadingDatesBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar month disabled dates-->
+  <local:StaticThemeResource x:Key="SfCalendarMonthDisabledDatesTextColor" ResourceKey="ForegroundDisabled" />
+  <sys:Double x:Key="SfCalendarMonthDisabledDatesFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarMonthDisabledDatesBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar weekend dates-->
+  <local:StaticThemeResource x:Key="SfCalendarWeekendDatesTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfCalendarWeekendDatesFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarWeekendDatesBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar special dates-->
+  <local:StaticThemeResource x:Key="SfCalendarSpecialDatesTextColor" ResourceKey="ContentForeground" />
+  <sys:Double x:Key="SfCalendarSpecialDatesFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarSpecialDatesBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar month in-between range dates-->
+  <local:StaticThemeResource x:Key="SfCalendarMonthRangeTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfCalendarMonthRangeFontSize">12</sys:Double>
+  <!--Calendar month selected dates-->
+  <local:StaticThemeResource x:Key="SfCalendarMonthSelectionTextColor" ResourceKey="PrimaryForeground" />
+  <sys:Double x:Key="SfCalendarMonthSelectionFontSize">12</sys:Double>
+  <!--Calendar year dates-->
+  <local:StaticThemeResource x:Key="SfCalendarYearDatesTextColor" ResourceKey="ContentForeground" />
+  <sys:Double x:Key="SfCalendarYearDatesFontSize">14</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarYearDatesBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar year disabled dates-->
+  <local:StaticThemeResource x:Key="SfCalendarYearDisabledDatesTextColor" ResourceKey="ForegroundDisabled" />
+  <sys:Double x:Key="SfCalendarYearDisabledDatesFontSize">14</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarYearDisabledDatesBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar year leading dates-->
+  <local:StaticThemeResource x:Key="SfCalendarYearLeadingDatesTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfCalendarYearLeadingDatesFontSize">14</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarYearLeadingDatesBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar year today-->
+  <local:StaticThemeResource x:Key="SfCalendarYearTodayTextColor" ResourceKey="PrimaryBackground" />
+  <sys:Double x:Key="SfCalendarYearTodayFontSize">14</sys:Double>
+  <local:StaticThemeResource x:Key="SfCalendarYearTodayBackgroundColor" ResourceKey="Transparent" />
+  <!--Calendar year in-between range dates-->
+  <local:StaticThemeResource x:Key="SfCalendarYearRangeTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfCalendarYearRangeFontSize">14</sys:Double>
+  <!--Calendar year selected dates-->
+  <local:StaticThemeResource x:Key="SfCalendarYearSelectionTextColor" ResourceKey="PrimaryForeground" />
+  <sys:Double x:Key="SfCalendarYearSelectionFontSize">14</sys:Double>
+  <!--Calendar footer view divider color-->
+  <local:StaticThemeResource x:Key="SfCalendarFooterDividerColor" ResourceKey="Border" />
+  <!--Calendar common properties-->
+  <local:StaticThemeResource x:Key="SfCalendarTodayHighlightColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfCalendarSelectionColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfCalendarStartRangeSelectionColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfCalendarEndRangeSelectionColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfCalendarRangeSelectionColor" ResourceKey="PrimaryOverlayBackgroundFocused" />
+  <local:StaticThemeResource x:Key="SfCalendarHeaderHoverTextColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfCalendarButtonTextColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfCalendarNavigationArrowColor" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfCalendarDisabledNavigationArrowColor" ResourceKey="IconColorDisabled" />
+  <local:StaticThemeResource x:Key="SfCalendarHoverColor" ResourceKey="PrimaryBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfCalendarSpecialDayIconColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfCalendarNormalBackground" ResourceKey="ContentBackgroundAlt3" />
+
 </local:SyncfusionThemeDictionary>

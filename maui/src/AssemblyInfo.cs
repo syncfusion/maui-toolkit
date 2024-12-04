@@ -2,6 +2,7 @@
 
 [assembly: InternalsVisibleTo("Syncfusion.Maui.Toolkit.UnitTest")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.BottomSheet")]
+[assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Calendar")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Carousel")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Charts")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Chips")]
