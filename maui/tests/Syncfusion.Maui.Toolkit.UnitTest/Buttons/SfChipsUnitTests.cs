@@ -437,7 +437,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void CalculateHeight_ShouldReturnHeight_WhenHeightConstraintIsPositiveInfinity()
 		{
 			var chip = new SfChip();
-			SetPrivateField(chip, "textHeightPadding", 5);
+			SetPrivateField(chip, "_textHeightPadding", 5);
 			SetNonPublicProperty(chip, "IsCreatedInternally", false);
 			chip.ImageSize = 10;
 			chip.ShowIcon = true;
@@ -450,7 +450,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void CalculateHeight_ShouldReturnHeight_WhenHeightConstraintIsZero()
 		{
 			var chip = new SfChip();
-			SetPrivateField(chip, "textHeightPadding", 5);
+			SetPrivateField(chip, "_textHeightPadding", 5);
 			SetNonPublicProperty(chip, "IsCreatedInternally", false);
 			chip.ImageSize = 10;
 			chip.ShowIcon = true;
@@ -463,7 +463,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void CalculateHeight_ShouldReturnHeight_WhenIsCreatedInternallyIsTrue()
 		{
 			var chip = new SfChip();
-			SetPrivateField(chip, "textHeightPadding", 5);
+			SetPrivateField(chip, "_textHeightPadding", 5);
 			SetNonPublicProperty(chip, "IsCreatedInternally", true);
 			chip.ImageSize = 10;
 			chip.ShowIcon = true;
