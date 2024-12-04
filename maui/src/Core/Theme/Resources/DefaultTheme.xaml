@@ -308,5 +308,12 @@
     <local:StaticThemeResource x:Key="SfPyramidChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
     <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
     <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
-    
+
+  <!--BottomSheet-->
+  <x:String x:Key="SfBottomSheetTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfBottomSheetBackground" ResourceKey="ContentBackgroundAlt1"/>
+  <local:StaticThemeResource x:Key="SfBottomSheetGrabberBackground" ResourceKey="Border"/>
+  <local:StaticThemeResource x:Key="SfBottomSheetOverlayBackgroundColor" ResourceKey="Overlay"/>
+
+ 
 </local:SyncfusionThemeDictionary>
