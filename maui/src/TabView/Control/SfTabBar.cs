@@ -720,7 +720,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (newIndex != -1)
             {
-                _isSelectionProcessed = true;
+				if (IsLoaded)
+				{
+					_isSelectionProcessed = true;
+				}
+
                 UpdateSelectedTabItemIsSelected(newIndex, oldIndex);
                 UpdateTabIndicatorWidth();
                 if (_tabSelectionChangedEventArgs != null)

@@ -306,6 +306,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 BindingMode.Default,
                 null);
 
+		/// <summary>
+		/// Identifies the <see cref="EnableVirtualization"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty EnableVirtualizationProperty =
+			BindableProperty.Create(
+				nameof(EnableVirtualization),
+				typeof(bool),
+				typeof(SfTabView),
+				false,
+				propertyChanged: OnEnableVirtualizationChanged);
+
         static readonly BindableProperty IsContentTransitionEnabledProperty =
             BindableProperty.Create(
                 nameof(IsContentTransitionEnabled),
@@ -1257,6 +1268,32 @@ namespace Syncfusion.Maui.Toolkit.TabView
             set => SetValue(ContentTransitionDurationProperty, value);
         }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether lazy loading is enabled during the initial load.
+		/// </summary>
+		/// <value>
+		/// A boolean value indicating whether lazy loading is enabled. The default value is false.
+		/// </value>
+		/// <example>
+		/// Here is an example of how to set the <see cref="EnableVirtualization"/> property.
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView EnableVirtualization="True" />
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// SfTabView tabView = new SfTabView();
+		/// tabView.EnableVirtualization = true;
+		/// ]]></code>
+		/// </example>
+		public bool EnableVirtualization
+		{
+			get => (bool)GetValue(EnableVirtualizationProperty);
+			set => SetValue(EnableVirtualizationProperty, value);
+		}
+
         ///  <summary>
         /// Gets or sets a value that can be used to customize the scroll button’s background color in the <see cref="SfTabView"/>.
         /// </summary>
@@ -1556,6 +1593,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// Handles changes to the <see cref="FontAutoScalingEnabled"/> property.
         /// </summary>
         static void OnFontAutoScalingEnabledChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateFontAutoScalingEnabled((Boolean)newValue);
+
+		/// <summary>
+		/// Handles changes to the <see cref="EnableVirtualization"/> property.
+		/// </summary>
+		static void OnEnableVirtualizationChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateEnableVirtualization();
 
         #endregion
 
@@ -1954,6 +1996,15 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 _tabHeaderContainer.FontAutoScalingEnabled = newValue;
             }
         }
+
+		/// <summary>
+		/// Updates the enable virtualization.
+		/// </summary>
+		void UpdateEnableVirtualization()
+		{
+			if (_tabContentContainer != null)
+				_tabContentContainer.EnableVirtualization = EnableVirtualization;
+		}
 
         /// <summary>
         /// Gets the theme dictionary for the tab view.
