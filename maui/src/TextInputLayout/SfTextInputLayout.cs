@@ -9,6 +9,9 @@ using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
+using Syncfusion.Maui.Toolkit.NumericEntry;
+using Syncfusion.Maui.Toolkit.EntryRenderer;
+using Syncfusion.Maui.Toolkit.EntryView;
 
 namespace Syncfusion.Maui.Toolkit.TextInputLayout
 {
@@ -18,7 +21,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 	/// <example>
 	/// <code>
 	/// <![CDATA[
-	/// <inputLayout:SfTextInputLayout Hint="Hint" HelperText="Helper" ErrorText="Error">
+	///<inputLayout:SfTextInputLayout Hint="Hint" HelperText="Helper" ErrorText="Error">
 	///     <Entry />
 	/// </inputLayout:SfTextInputLayout>
 	/// ]]>
@@ -27,7 +30,17 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 	[ContentProperty("Content")]
     public partial class SfTextInputLayout : SfContentView, ITouchListener, IParentThemeElement
     {
-        #region Fields
+		#region Fields
+
+		/// <summary>
+		/// Timer for handling long press events.
+		/// </summary>
+		bool _isPressOccurring = false;
+
+        /// <summary>
+        /// Gets or sets a value updown button alignment is vertical or not.
+        /// </summary>
+        bool _isUpDownVerticalAlignment = false;
 
         /// <summary>
         /// Gets the padding value of the helper text, error text, counter text.
@@ -201,20 +214,30 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// </summary>
         internal bool IsHintDownToUp = true;
 
+        ///<summary>
+        /// Gets or sets a value indicating whether the alignment of the up-down button alignment is left.
+        /// </summary>
+        bool _isUpDownAlignmentLeft = false;
+
         /// <summary>
-        /// Gets or sets the start value for custom animation.
+        /// Gets or sets a value indicating whether the alignment of the up-down button alignment is Both.
+        /// </summary>
+        private bool _isUpDownAlignmentBoth = false;
+
+        /// <summary>
+        /// Gets or sets the vertical start value for custom animation.
         /// </summary>
         double _translateStart = 0;
 
         /// <summary>
-        /// Gets or sets the end value for custom animation.
+        /// Gets or sets the vertical end value for custom animation.
         /// </summary>
         double _translateEnd = 1;
 
-        /// <summary>
-        /// Gets or sets the start value for scaling animation.
-        /// </summary>
-        double _fontSizeStart = DefaultHintFontSize;
+		/// <summary>
+		/// Gets or sets the start value for scaling animation.
+		/// </summary>
+		double _fontSizeStart = DefaultHintFontSize;
 
         /// <summary>
         /// Gets or sets the end value for scaling animation.
@@ -259,6 +282,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
         RectF _counterTextRect = new();
 
+        RectF _downIconRectF = new();
+
+        RectF _upIconRectF = new();
+
+        IUpDownButtonRenderer? _tilRenderer;
+
         readonly LabelStyle _internalHintLabelStyle = new();
 
         readonly LabelStyle _internalHelperLabelStyle = new();
@@ -285,6 +314,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
          Rect? _oldBounds;
 #elif IOS || MACCATALYST
          Point _touchDownPoint;
+
+         /// <summary>
+         /// To access to the native iOS text control.
+         /// </summary>
+         UIKit.UITextField? uiEntry;
 #endif
 
         #endregion
@@ -303,6 +337,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             _effectsRenderer = new EffectsRenderer(this);
             Unloaded += OnTextInputLayoutUnloaded;
             Loaded += OnTextInputLayoutLoaded;
+            SetRendererBasedOnPlatform();
+
         }
         #endregion
 
@@ -323,24 +359,73 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             return touchPoint;
         }
 
-        async Task HandlePointerActions(PointerEventArgs e, Point touchPoint)
+#if IOS || MACCATALYST
+        async void UpDownButtonPressed(Point touchpoint)
+#else
+        void UpDownButtonPressed(Point touchpoint)
+#endif
+        {
+            if (this.Content is ITextInputLayout numericEntry)
+            {
+                if ((_downIconRectF.Contains(touchpoint) && IsUpDownVerticalAlignment) || (_upIconRectF.Contains(touchpoint) && !IsUpDownVerticalAlignment))
+                {
+                    numericEntry.UpButtonPressed();
+                }
+                else if ((_upIconRectF.Contains(touchpoint) && IsUpDownVerticalAlignment) || (_downIconRectF.Contains(touchpoint) && !IsUpDownVerticalAlignment))
+                {
+                    numericEntry.DownButtonPressed();
+                }
+            }
+#if IOS || MACCATALYST
+            await Task.Delay(10);
+            IsIconPressed = false;
+#endif
+        }
+
+#if IOS || MACCATALYST
+        async void ClearText()
+#else
+		void ClearText()
+#endif
+		{
+			if (this.Content is ITextInputLayout numericEntry)
+            {
+                numericEntry.ClearIconPressed();
+                if (!IsClearIconVisible && _effectsRenderer != null && _effectsRenderer.HighlightBounds.Width > 0 && _effectsRenderer.HighlightBounds.Height > 0)
+                {
+                    _effectsRenderer.RemoveHighlight();
+                }
+            }
+#if IOS || MACCATALYST
+            await Task.Delay(10);
+            IsIconPressed = false;
+#endif
+		}
+		async Task HandlePointerActions(PointerEventArgs e, Point touchPoint)
         {
             if (e.Action == PointerActions.Cancelled || e.Action == PointerActions.Exited)
             {
+                _isPressOccurring = false;
                 IsLayoutTapped = false;
             }
 #if WINDOWS
             IsIconPressed = false;
 #endif
 
+			if (e.Action == PointerActions.Pressed)
+			{
 #if IOS || MACCATALYST
-            if (e.Action == PointerActions.Pressed)
-            {
-                _touchDownPoint = e.TouchPoint;
-            }
+				_touchDownPoint = e.TouchPoint;
 #endif
-            if (e.Action == PointerActions.Released)
+				if (IsUpDownButtonPressed(touchPoint))
+				{
+					StartPressTimer(touchPoint);
+					UpDownButtonPressed(touchPoint);
+				}
+			}
+			if (e.Action == PointerActions.Released)
             {
+                _isPressOccurring = false;
 #if IOS || MACCATALYST
                 double diffX = Math.Abs(_touchDownPoint.X - e.TouchPoint.X);
                 double diffY = Math.Abs(_touchDownPoint.Y - e.TouchPoint.Y);
@@ -350,6 +435,22 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                     return;
                 }
 #endif
+                if (IsClearIconVisible && _clearIconRectF.Contains(touchPoint) && (IsLayoutFocused))
+                {
+#if !ANDROID
+                    IsIconPressed = true;
+#endif
+                    ClearText();
+                    return;
+                }
+                if (IsUpDownButtonPressed(touchPoint))
+                {
+#if WINDOWS
+                    IsIconPressed = true;
+#endif
+                    return;
+                }
+
                 if ((EnablePasswordVisibilityToggle) && _passwordToggleIconRectF.Contains(touchPoint))
                 {
 #if !ANDROID
@@ -359,7 +460,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                     {
                         ToggleIcon();
                     }
-
                     return;
                 }
 
@@ -384,6 +484,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                         {
                             inputView.Focus();
                         }
+                        else if (Content is SfEntryView entryView && !entryView.IsReadOnly && entryView.IsEnabled)
+                        {
+                            entryView.Focus();
+                        }
                         else if (Content is SfView sfView && sfView.Children.Count > 0 && sfView.Children[0] is Entry entry)
                         {
                             entry.Focus();
@@ -394,9 +498,42 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                         }
                     }
                 }
+			}
+		}
+
+
+		/// <summary>
+		/// Determines whether the specified touch point intersects with the up or down button.
+		/// </summary>
+		/// <param name="touchPoint">The point of touch input to evaluate.</param>
+		/// <returns>
+		/// True if the touch point is within the bounds of the up or down button; otherwise, false.
+		/// </returns>
+		bool IsUpDownButtonPressed(Point touchPoint)
+		{
+			return ShowUpDownButton && ((_downIconRectF.Contains(touchPoint) || _upIconRectF.Contains(touchPoint)));
+		}
+
+		void HandleEntryView(object newValue)
+        {
+            if (newValue is SfView numericEntry && numericEntry.Children.Count > 0)
+            {
+                numericEntry.BackgroundColor = Colors.Transparent;
+                if (numericEntry.Children[0] is Entry numericInputView)
+                {
+                    numericInputView.Focused += OnTextInputViewFocused;
+                    numericInputView.Unfocused += OnTextInputViewUnfocused;
+                    numericInputView.TextChanged += OnTextInputViewTextChanged;
+                    numericInputView.HandlerChanged += OnTextInputViewHandlerChanged;
+                    if (!string.IsNullOrEmpty(numericInputView.Text))
+                    {
+                        IsHintFloated = true;
+                        IsHintDownToUp = false;
+                        Text = numericInputView.Text;
+                    }
+                }
             }
         }
-
 
         void HandleInputView(object newValue)
         {
@@ -488,7 +625,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             }
             InvalidateDrawable();
         }
-		#endregion
+#endregion
 
 		#region Override Methods
 
@@ -501,7 +638,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            if (!VisualStateManager.HasVisualStateGroups(this) && !HasStrokeValue() && !HasContainerBackgroundValue() && !Application.Current!.Resources.TryGetValue("SfTextInputLayoutTheme", out var theme))
+            if (!VisualStateManager.HasVisualStateGroups(this) && HasStrokeValue() && HasContainerBackgroundValue() && !Application.Current!.Resources.TryGetValue("SfTextInputLayoutTheme", out var theme))
             {
                 AddDefaultVSM();
             }
@@ -515,10 +652,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// <exclude/>
 		protected override void OnContentChanged(object oldValue, object newValue)
         {
+            ResetNumericUpDown();
             HandleInputView(newValue);
             HandlePickerView(newValue);
             HandleDatePickerView(newValue);
             HandleTimePickerView(newValue);
+            HandleEntryView(newValue);
 
             if (newValue is View view)
             {
@@ -529,6 +668,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             if (newValue is InputView entryEditorContent)
             {
                 entryEditorContent.Opacity = IsHintFloated ? 1 : 0;
+            }
+            else if (newValue is SfView numericEntryContent && numericEntryContent.Children.Count > 0)
+            {
+                if (numericEntryContent.Children[0] is Entry numericInputView)
+                {
+                    numericInputView.Opacity = IsHintFloated ? 1 : 0;
+                }
             }
             else if (newValue is Picker picker)
             {
@@ -566,9 +712,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             if (Content != null)
             {
 #if NET8_0
-				measure = this.Content.Measure(widthConstraint, heightConstraint, MeasureFlags.IncludeMargins);
+				measure = Content.Measure(widthConstraint, heightConstraint, MeasureFlags.IncludeMargins);
 #else
-                measure = this.Content.Measure(widthConstraint, heightConstraint);
+                measure = Content.Measure(widthConstraint, heightConstraint);
 #endif
             }
 
@@ -583,6 +729,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             if (heightConstraint == -1 || heightConstraint == double.PositiveInfinity)
             {
                 measuredHeight = measure.Height;
+                if (IsUpDownVerticalAlignment && measuredHeight < 90 && ShowUpDownButton)
+                {
+                    measuredHeight = 90;
+                }
             }
             else
             {
@@ -634,6 +784,205 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         }
 
 		/// <summary>
+		/// Resets the numeric up-down control settings
+		/// </summary>
+		void ResetNumericUpDown()
+		{
+			ShowUpDownButton = false;
+			ShowClearButton = false;
+			IsUpDownVerticalAlignment = false;
+			IsUpDownAlignmentLeft = false;
+			IsUpDownAlignmentBoth = false;
+		}
+
+		/// <summary>
+		/// This method calculate the up icon rectF position.
+		/// </summary>
+		void UpdateUpIconRectF()
+        {
+            if (IsUpDownVerticalAlignment)
+            {
+                _upIconRectF.X = _downIconRectF.X;
+                _upIconRectF.Y = (float)(_downIconRectF.Y + IconSize / 2 + DefaultAssistiveLabelPadding);
+            }
+            else
+            {
+				if (!(IsUpDownAlignmentBoth || IsUpDownAlignmentLeft))
+				{
+					_upIconRectF.X = (_downIconRectF.Width != 0 && ShowUpDownButton) ? this.IsRTL ? (_downIconRectF.X + IconSize) : _downIconRectF.X - IconSize : _downIconRectF.X;
+				}               
+				_upIconRectF.Y = _downIconRectF.Y;
+				HandleUpIconInlinePosition();
+            }
+            _upIconRectF.Width = (ShowUpDownButton) ? UpDownButtonSize : 0;
+            _upIconRectF.Height = (ShowUpDownButton) ? UpDownButtonSize : 0;
+        }
+
+		/// <summary>
+		/// Handles the positioning of the up icon inline with other elements.
+		/// Adjusts the X-coordinate of the up icon based on alignment settings and RTL layout.
+		/// </summary>
+		void HandleUpIconInlinePosition()
+        {
+			if (IsUpDownAlignmentLeft)
+			{
+				_downIconRectF.X = (_upIconRectF.Width != 0 && ShowUpDownButton) ? !IsRTL ?
+(_upIconRectF.X + IconSize) : _upIconRectF.X - IconSize : _upIconRectF.X;
+			}
+			else if (IsUpDownAlignmentBoth)
+			{
+				_downIconRectF.X = !IsRTL ? (float)(Width - _trailViewWidth - (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) - IconSize - DefaultAssistiveLabelPadding)
+: (float)(_trailViewWidth + (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) + DefaultAssistiveLabelPadding);
+			}
+		}
+
+		/// <summary>
+		/// This method calculate the clear icon rectF position.
+		/// </summary>
+		bool IsClearIconVisible
+        {
+            get { return (ShowClearButton && IsLayoutFocused && !string.IsNullOrEmpty(Text)); }
+        }
+
+        /// <summary>
+        /// This method calculate the clear icon rectF position.
+        /// </summary>
+        void UpdateClearIconRectF()
+        {
+            _clearIconRectF.X = (_downIconRectF.Width != 0) ? GetClearIconX() : IsRTL ? _upIconRectF.X - IconSize : _upIconRectF.X;
+            _clearIconRectF.Y = IsUpDownVerticalAlignment ? (float)(_downIconRectF.Y + (DefaultAssistiveLabelPadding / 2) + (IconSize / 2) - (IconSize / 4)) : _downIconRectF.Y;
+            _clearIconRectF.Width = IsClearIconVisible ? IconSize : 0;
+            _clearIconRectF.Height = IsClearIconVisible ? IconSize : 0;
+            if (_downIconRectF.Width != 0)
+            {
+                _clearIconRectF.X -= (float)(DefaultAssistiveLabelPadding);
+            }
+        }
+
+        /// <summary>
+        /// Updates clear icon position based on up down alignment.
+        /// </summary>
+        private float GetClearIconX()
+        {
+			if (IsUpDownVerticalAlignment && !IsRTL && IsUpDownAlignmentLeft && ShowUpDownButton)
+			{
+				return (float)(Width - _trailViewWidth  - IconSize - DefaultAssistiveLabelPadding) ;
+			}
+			if (IsUpDownAlignmentLeft && ShowUpDownButton)
+            {
+                return !IsRTL ? (float)(Width - _trailViewWidth - (IsOutlined ? BaseLineMaxHeight  : BaseLineMaxHeight) - IconSize - DefaultAssistiveLabelPadding) : (float)(_leadViewWidth + (IsOutlined ? BaseLineMaxHeight : BaseLineMaxHeight) + DefaultAssistiveLabelPadding);
+            }
+			
+			if (IsUpDownVerticalAlignment && IsUpDownAlignmentLeft && IsRTL)
+			{
+				return (float)(_trailViewWidth + (IsOutlined ? BaseLineMaxHeight : BaseLineMaxHeight) + DefaultAssistiveLabelPadding);
+			}
+			else if ((IsUpDownAlignmentBoth || IsUpDownVerticalAlignment))
+			{
+				return IsRTL ? _downIconRectF.X + _downIconRectF.Width : _downIconRectF.X - _downIconRectF.Width;
+			}
+			return !IsRTL ? _upIconRectF.X - IconSize : _upIconRectF.X + IconSize;
+        }
+
+		/// <summary>
+		/// Handles the positioning of the down icon.
+		/// Adjusts the X-coordinate of the down icon based on down button alignment settings.
+		/// </summary>
+		void HandleDownIconPositionRTL()
+        {
+            if (IsUpDownVerticalAlignment)
+            {
+                if (IsUpDownAlignmentLeft)
+                {
+                    _downIconRectF.X = (float)(Width - _leadViewWidth - (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) - IconSize - DefaultAssistiveLabelPadding);
+                }
+                else
+                {
+                    _downIconRectF.X = (float)(_trailViewWidth + (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) + DefaultAssistiveLabelPadding);
+                }
+            }
+            else
+            {
+                if (IsUpDownAlignmentLeft || IsUpDownAlignmentBoth)
+                {
+                    _upIconRectF.X = (float)(Width - _leadViewWidth - (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) - IconSize - DefaultAssistiveLabelPadding);
+                }
+				else
+				{
+					_downIconRectF.X = (float)(Width - _downIconRectF.X - _downIconRectF.Width);
+				}
+            }
+        }
+
+		/// <summary>
+		/// Handles the positioning of the down icon for Right-to-Left (RTL) layouts.
+		/// Adjusts the X-coordinate of the down icon based on down button alignment settings.
+		/// </summary>
+		void HandleDownIconPosition()
+        {
+            if (IsUpDownVerticalAlignment)
+            {
+                if (IsUpDownAlignmentLeft)
+                {
+                    _downIconRectF.X = (float)(_leadViewWidth + (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) + DefaultAssistiveLabelPadding);
+                }
+                else
+                {
+                    _downIconRectF.X = (float)(Width - _trailViewWidth - (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) - IconSize - DefaultAssistiveLabelPadding);
+                }
+            }
+            else
+            {
+                if (IsUpDownAlignmentLeft || IsUpDownAlignmentBoth)
+                {
+                    _upIconRectF.X = (float)(_leadViewWidth + (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) + DefaultAssistiveLabelPadding);
+                }
+            }
+        }
+
+		/// <summary>
+		/// This method calculate the down rectF position.
+		/// </summary>
+		void UpdateDownIconRectF()
+        {
+            _downIconRectF.X = (float)(Width - _trailViewWidth - (IsOutlined ? BaseLineMaxHeight * 2 : BaseLineMaxHeight) - IconSize - DefaultAssistiveLabelPadding);
+			HandleDownIconPosition();
+            if (IsNone)
+            {
+                _downIconRectF.Y = (float)((Content.Y + (Content.Height / 2)) - (UpDownButtonSize / 2));
+                if (IsUpDownVerticalAlignment)
+                {
+                    _downIconRectF.Y = (float)((Content.Y + (Content.Height / 2)) - (UpDownButtonSize / 2));
+                }
+            }
+            else if (IsOutlined)
+            {
+                _downIconRectF.Y = (float)((_outlineRectF.Center.Y) - (UpDownButtonSize / 2));
+                if (IsUpDownVerticalAlignment)
+                {
+                    _downIconRectF.Y = (float)((_outlineRectF.Center.Y) - ((IconSize * 1.5) / 2) - (DefaultAssistiveLabelPadding / 2));
+                }
+            }
+            else
+            {
+                _downIconRectF.Y = (float)(((Height - AssistiveLabelPadding - TotalAssistiveTextHeight()) / 2) - (UpDownButtonSize / 2));
+                if (IsUpDownVerticalAlignment)
+                {
+                    _downIconRectF.Y = (float)(((Height - AssistiveLabelPadding - TotalAssistiveTextHeight()) / 2) - ((IconSize * 1.5) / 2) - (DefaultAssistiveLabelPadding / 2));
+                }
+            }
+
+            _downIconRectF.Width = (IsPassowordToggleIconVisible || ShowUpDownButton) ? UpDownButtonSize : 0;
+            _downIconRectF.Height = (IsPassowordToggleIconVisible || ShowUpDownButton) ? UpDownButtonSize : 0;
+
+            if (IsRTL)
+            {
+				HandleDownIconPositionRTL();
+            }
+
+        }
+
+		/// <summary>
 		/// Draws the content of the element.
 		/// </summary>
 		/// <param name="canvas">The canvas on which to draw.</param>
@@ -647,6 +996,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             UpdateIconRectF();
             DrawBorder(canvas, dirtyRect);
             DrawHintText(canvas, dirtyRect);
+            DrawClearIcon(canvas, _clearIconRectF);
+            DrawUpDownIcon(canvas, dirtyRect);
             DrawAssistiveText(canvas, dirtyRect);
             DrawPasswordToggleIcon(canvas, dirtyRect);
             if (_effectsRenderer != null)
@@ -662,6 +1013,38 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
             UpdateContentPosition();
             canvas.ResetState();
+        }
+
+		/// <summary>
+		/// Draws a button on the canvas with the specified color and icon.
+		/// </summary>
+		/// <param name="canvas">The canvas to draw on.</param>
+		/// <param name="color">The color of the button.</param>
+		/// <param name="iconRectF">The rectangle defining the button's boundaries.</param>
+		/// <param name="drawAction">The action to draw the button's icon.</param>
+		void DrawButton(ICanvas canvas, Color color, RectF iconRectF, Action<ICanvas, RectF> drawAction)
+        {
+            canvas.SaveState();
+            canvas.FillColor = color;
+            canvas.StrokeColor = color;
+            canvas.StrokeSize = 1.5f;
+            drawAction.Invoke(canvas, iconRectF);
+            canvas.RestoreState();
+        }
+
+		/// <summary>
+		/// Draws the up and down icons for the numeric input control.
+		/// </summary>
+		/// <param name="canvas">The canvas to draw on.</param>
+		/// <param name="rectF">The rectangle defining the control's boundaries.</param>
+		void DrawUpDownIcon(ICanvas canvas, RectF rectF)
+        {
+            if (!this.ShowUpDownButton || _tilRenderer is null)
+            {
+				return;
+            }
+			DrawButton(canvas, UpButtonColor, IsUpDownVerticalAlignment ? _downIconRectF : _upIconRectF, _tilRenderer.DrawUpButton);
+			DrawButton(canvas, DownButtonColor, IsUpDownVerticalAlignment ? _upIconRectF : _downIconRectF, _tilRenderer.DrawDownButton);
         }
 
 		/// <summary>
@@ -844,7 +1227,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// 
 		/// private void OnPasswordVisibilityToggled(object sender, PasswordVisibilityToggledEventArgs e)
 		/// {
-		///    var passwordVisbility = e.IsPasswordVisible;
+		///    var passwordVisibility = e.IsPasswordVisible;
 		/// }
 		/// ]]></code>
 		/// </example>

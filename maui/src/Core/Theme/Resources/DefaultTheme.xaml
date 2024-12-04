@@ -310,6 +310,52 @@
     <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
     <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
 
+  <!--SfNumericEntryTheme-->
+  <x:String x:Key="SfNumericEntryTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfNumericEntryNormalTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfNumericEntryDisabledTextColor" ResourceKey="ForegroundDisabled"/>
+  <local:StaticThemeResource x:Key="SfNumericEntryFocusedTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfNumericEntryMouseHoveredTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfNumericEntryNormalBackground" ResourceKey="Transparent"/>
+  <local:StaticThemeResource x:Key="SfNumericEntryDisabledBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfNumericEntryMouseHoveredBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfNumericEntryFocusedBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfNumericEntryNormalClearButtonColor" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfNumericEntryPlaceholderTextColor" ResourceKey="PlaceholderForeground"/>
+  <local:StaticThemeResource x:Key="SfNumericEntryDisabledClearButtonColor" ResourceKey="IconColorDisabled" />
+  <local:StaticThemeResource x:Key="SfNumericEntryPressedClearButtonColor" ResourceKey="IconColorPressed" />
+  <local:StaticThemeResource x:Key="SfNumericEntryMouseHoveredClearButtonColor" ResourceKey="IconColorHovered" />
+  <local:StaticThemeResource x:Key="SfNumericEntryNormalStroke" ResourceKey="InputBoxBorder" />
+  <local:StaticThemeResource x:Key="SfNumericEntryFocusedStroke" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfNumericEntryDisabledStroke" ResourceKey="InputBorderDisabled" />
+  <local:StaticThemeResource x:Key="SfNumericEntryMouseHoveredStroke" ResourceKey="InputBorderHovered" />
+  <sys:Double x:Key="SfNumericEntryNormalFontSize">16</sys:Double>
+
+  <!--SfNumericUpDownTheme-->
+  <x:String x:Key="SfNumericUpDownTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfNumericUpDownNormalTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfNumericUpDownDisabledTextColor" ResourceKey="ForegroundDisabled"/>
+  <local:StaticThemeResource x:Key="SfNumericUpDownFocusedTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfNumericUpDownMouseHoveredTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfNumericUpDownNormalBackground" ResourceKey="Transparent"/>
+  <local:StaticThemeResource x:Key="SfNumericUpDownDisabledBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownMouseHoveredBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownFocusedBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownNormalArrowColor" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownDisabledArrowColor" ResourceKey="IconColorDisabled" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownPressedArrowColor" ResourceKey="IconColorPressed" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownMouseHoveredArrowColor" ResourceKey="IconColorHovered" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownNormalClearButtonColor" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownPlaceholderTextColor" ResourceKey="PlaceholderForeground"/>
+  <local:StaticThemeResource x:Key="SfNumericUpDownDisabledClearButtonColor" ResourceKey="IconColorDisabled" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownPressedClearButtonColor" ResourceKey="IconColorPressed" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownMouseHoveredClearButtonColor" ResourceKey="IconColorHovered" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownNormalStroke" ResourceKey="InputBoxBorder" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownFocusedStroke" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownDisabledStroke" ResourceKey="InputBorderDisabled" />
+  <local:StaticThemeResource x:Key="SfNumericUpDownMouseHoveredStroke" ResourceKey="InputBorderHovered" />
+  <sys:Double x:Key="SfNumericUpDownNormalFontSize">16</sys:Double>
+
   <!--BottomSheet-->
   <x:String x:Key="SfBottomSheetTheme">CommonTheme</x:String>
   <local:StaticThemeResource x:Key="SfBottomSheetBackground" ResourceKey="ContentBackgroundAlt1"/>

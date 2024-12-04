@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.NumericUpDown.SfNumericUpDownStyles"
+             xmlns:numericEntry="clr-namespace:Syncfusion.Maui.Toolkit.NumericUpDown">
+
+
+    <Style TargetType="numericEntry:SfNumericUpDown">
+        <Setter Property="TextColor" Value="{DynamicResource SfNumericUpDownNormalTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource SfNumericUpDownNormalBackground}"/>
+        <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericUpDownNormalClearButtonColor}"/>
+        <Setter Property="Stroke" Value="{DynamicResource SfNumericUpDownNormalStroke}"/>
+        <Setter Property="UpDownButtonColor" Value="{DynamicResource SfNumericUpDownNormalArrowColor}"/>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource SfNumericUpDownPlaceholderTextColor}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericUpDownNormalTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericUpDownNormalBackground}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericUpDownNormalClearButtonColor}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericUpDownNormalStroke}"/>
+                            <Setter Property="UpDownButtonColor" Value="{DynamicResource SfNumericUpDownNormalArrowColor}"/>
+                            <Setter Property="PlaceholderColor" Value="{DynamicResource SfNumericUpDownPlaceholderTextColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericUpDownDisabledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericUpDownDisabledBackground}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericUpDownDisabledClearButtonColor}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericUpDownDisabledStroke}"/>
+                            <Setter Property="UpDownButtonColor" Value="{DynamicResource SfNumericUpDownDisabledArrowColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericUpDownMouseHoveredTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericUpDownMouseHoveredBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericUpDownMouseHoveredStroke}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericUpDownNormalClearButtonColor}"/>
+                            <Setter Property="UpDownButtonColor" Value="{DynamicResource SfNumericUpDownMouseHoveredArrowColor}"/>
+                            <Setter Property="PlaceholderColor" Value="{DynamicResource SfNumericUpDownPlaceholderTextColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericUpDownFocusedTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericUpDownFocusedBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericUpDownFocusedStroke}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericUpDownPressedClearButtonColor}"/>
+                            <Setter Property="UpDownButtonColor" Value="{DynamicResource SfNumericUpDownNormalArrowColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericUpDownFocusedTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericUpDownFocusedBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericUpDownFocusedStroke}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericUpDownPressedClearButtonColor}"/>
+                            <Setter Property="UpDownButtonColor" Value="{DynamicResource SfNumericUpDownPressedArrowColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+</ResourceDictionary>
