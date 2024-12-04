@@ -103,7 +103,4 @@ body:
       label: Relevant log output
       description: Include a stack trace for further analysis.
       render: shell
-  - type: markdown
-    attributes:
-      value: |
       

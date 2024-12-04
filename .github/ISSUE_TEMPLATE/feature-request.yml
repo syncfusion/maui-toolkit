@@ -8,7 +8,7 @@ body:
       value: |
         Thank you for your interest in Syncfsuion Toolkit for .NET MAUI open source controls! We welcome all ideas. Please provide a detailed description, including screenshots, mockups, and pseudo-code, and consider the platform feasibility across .NET MAUI to expedite review.
 
-        If you're unsure about a request, feel free to [start a discussion(https://github.com/syncfusion/maui-toolkit/discussions/new?category=ideas) to collaborate with the team and community before proceeding.
+        If you're unsure about a request, feel free to [start a discussion](https://github.com/syncfusion/maui-toolkit/discussions/new?category=ideas) to collaborate with the team and community before proceeding.
   - type: textarea
     id: description
     attributes:
@@ -37,7 +37,4 @@ body:
       placeholder: In my app, I want to change the SfSegmentedControl from horizontal to vertical orientation to better organize items and enhance the user experience.
     validations:
       required: true
-  - type: markdown
-    attributes:
-      value: |
    
