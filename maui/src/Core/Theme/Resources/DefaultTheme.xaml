@@ -305,11 +305,31 @@
 	<local:StaticThemeResource x:Key="SfPyramidChartTooltipBackground" ResourceKey="TooltipBackground" />
 	<local:StaticThemeResource x:Key="SfPyramidChartTooltipTextColor" ResourceKey="TooltipForeground" />
 	<sys:Double x:Key="SfPyramidChartTooltipTextFontSize">12</sys:Double>
-    <local:StaticThemeResource x:Key="SfPyramidChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
-    <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
-    <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+  <local:StaticThemeResource x:Key="SfPyramidChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
 
-    <!--SfCalendar-->
+  <!--SfButton-->
+  <x:String x:Key="SfButtonTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfButtonNormalBackground" ResourceKey="PrimaryBackground"/>
+  <local:StaticThemeResource x:Key="SfButtonPressedBackground" ResourceKey="PrimaryBackgroundPressed"/>
+  <local:StaticThemeResource x:Key="SfButtonHoverBackground" ResourceKey="PrimaryBackgroundHovered"/>
+  <local:StaticThemeResource x:Key="SfButtonHoverStroke" ResourceKey="PrimaryBackgroundHovered"/>
+  <local:StaticThemeResource x:Key="SfButtonPressedStroke" ResourceKey="PrimaryBackgroundPressed"/>
+  <local:StaticThemeResource x:Key="SfButtonNormalStroke" ResourceKey="PrimaryBackground"/>
+  <local:StaticThemeResource x:Key="SfButtonDisabledBackground" ResourceKey="PrimaryBackgroundDisabled" />
+  <local:StaticThemeResource x:Key="SfButtonDisabledStroke" ResourceKey="PrimaryBackgroundDisabled" />
+  <local:StaticThemeResource x:Key="SfButtonNormalTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfButtonPressedTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfButtonHoverTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfButtonDisabledTextColor" ResourceKey="PrimaryForegroundDisabled" />
+  <local:StaticThemeResource x:Key="SfButtonFocusedBackground" ResourceKey="PrimaryBackgroundFocused" />
+  <local:StaticThemeResource x:Key="SfButtonFocusedStroke" ResourceKey="BorderAlt4" />
+  <local:StaticThemeResource x:Key="SfButtonFocusedTextColor" ResourceKey="PrimaryForeground" />
+  <sys:Double x:Key="SfButtonNormalStrokeThickness">1</sys:Double>
+  <sys:Double x:Key="SfButtonTextNormalFontSize">14</sys:Double>
+
+  <!--SfCalendar-->
   <x:String x:Key="SfCalendarTheme">CommonTheme</x:String>
   <!--Calendar header-->
   <local:StaticThemeResource x:Key="SfCalendarHeaderTextColor" ResourceKey="ContentForegroundAlt1" />

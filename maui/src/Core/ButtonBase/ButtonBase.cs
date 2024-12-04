@@ -7,6 +7,17 @@ using Syncfusion.Maui.Toolkit.Internals;
 using Grid = Microsoft.Maui.Controls.Grid;
 using Image = Microsoft.Maui.Controls.Image;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
+using TextAlignment = Microsoft.Maui.TextAlignment;
+using CornerRadius = Microsoft.Maui.CornerRadius;
+using HorizontalAlignment = Microsoft.Maui.Graphics.HorizontalAlignment;
+using VisualStateManager = Microsoft.Maui.Controls.VisualStateManager;
+using Thickness = Microsoft.Maui.Thickness;
+using VerticalAlignment = Microsoft.Maui.Graphics.VerticalAlignment;
+using Application = Microsoft.Maui.Controls.Application;
+#if WINDOWS
+using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml;
+#endif
 
 namespace Syncfusion.Maui.Toolkit
 {
@@ -170,99 +181,108 @@ namespace Syncfusion.Maui.Toolkit
 
 		#region Fields
 
-		private bool isItemTemplate = false;
+		private bool _isItemTemplate = false;
 
-		private bool isFontIconText = false;
+		internal bool _isFontIconText = false;
 
-		internal bool isRTL;
+		private Aspect _backgroundImageAspect = Aspect.AspectFill;
 
-		internal bool isImageIconUpdated;
+		internal bool _isRTL;
+
+		internal bool _isImageIconUpdated;
+
+		internal bool _isSemanticTextChanged = false;
 
 		/// <summary>
 		/// The color of the disabled background.
 		/// </summary>
-		internal readonly Color disabledBackgroundColor = Color.FromRgb(255, 251, 254);
+		internal readonly Color _disabledBackgroundColor = Color.FromRgb(255, 251, 254);
 
 		/// <summary>
 		/// The color of the disabled border.
 		/// </summary>
-		internal readonly Color disabledBorderColor = Color.FromRgba(28, 27, 31, 30);
+		internal readonly Color _disabledBorderColor = Color.FromRgba(28, 27, 31, 30);
 
 		/// <summary>
 		/// The color of the disabled text.
 		/// </summary>
-		internal readonly Color disabledTextColor = Color.FromRgba(28, 27, 31, 97);
+		internal readonly Color _disabledTextColor = Color.FromRgba(28, 27, 31, 97);
 
 		/// <summary>
 		/// The color of the disabled pressed background.
 		/// </summary>
-		internal readonly Color disabledPressedBackgroundColor = new Color(209, 209, 209);
+		internal readonly Color _disabledPressedBackgroundColor = new(209, 209, 209);
 
 		/// <summary>
 		/// The color of the disabled pressed background.
 		/// </summary>
-		internal readonly Color disabledPressedTextColor = new Color(148, 148, 148);
+		internal readonly Color _disabledPressedTextColor = new(148, 148, 148);
 
-		internal Grid? imageViewGrid = new Grid();
+		internal Grid? _imageViewGrid = [];
 
-		private RectF closeButtonRippleRectF = new RectF();
+		private RectF _closeButtonRippleRectF = new();
 
-		internal RectF backgroudRectF = new RectF();
+		internal RectF _backgroundRectF = new();
 
-		internal TextStyle textStyle = new TextStyle();
+		internal TextStyle _textStyle = new();
 
-		private Color textColor = Color.FromArgb("#1C1B1F");
+		private Color _textColor = Color.FromArgb("#1C1B1F");
 
-		private Brush backgroundColor = Colors.Transparent;
+		private Brush _backgroundColor = Colors.Transparent;
 
-		internal float leftPadding = 12f;
+		internal float _leftPadding = 12f;
 
-		internal float rightPadding = 12f;
+		internal float _rightPadding = 12f;
 
-		internal float leftIconPadding = 8f;
+		internal float _leftIconPadding = 8f;
 
-		internal float rightIconPadding = 8f;
+		internal float _rightIconPadding = 8f;
 
-		internal float textAreaPadding = 4f;
+		internal float _textAreaPadding = 4f;
 
-		internal double textHeightPadding = 13d;
+		internal double _textHeightPadding = 13d;
 
-		internal float textAlignmentPadding = 1.15f;
+		internal float _textAlignmentPadding = 1.15f;
 
-		internal float textSelectionPadding = 0.25f;
+		internal float _textSelectionPadding = 0.25f;
 
-		internal float normalTextPadding = 0.5f;
+		internal float _normalTextPadding = 0.5f;
 
-		internal float textSizePadding = 10f;
+		internal float _textSizePadding = 10f;
 
 #if ANDROID || MACCATALYST || IOS
-        internal double textPadding = 8d;
+        internal double _textPadding = 8d;
 #endif
 
-		private readonly int defaultCloseButtonWidth = 18;
+		private readonly int _defaultCloseButtonWidth = 18;
 
-		internal bool filterType;
+		internal bool _filterType;
 
 		/// <summary>
 		/// The background image view.
 		/// </summary>
-		internal Image backgroundImageView = new Image();
+		internal Image _backgroundImageView = new();
 
-		internal Grid backgroundImageGrid = new Grid();
+		internal Grid _backgroundImageGrid = [];
 
-		internal RectF textRectF = new RectF();
+		internal RectF _textRectF = new();
 
-		internal EffectsRenderer? effectsRenderer;
+		internal EffectsRenderer? _effectsRenderer;
 
-		internal Color background = Colors.Transparent;
+		internal Color _background = Colors.Transparent;
 
-		private Color highlightColor = Color.FromRgba(73, 69, 78, 30);
+		private Color _highlightColor = Color.FromRgba(73, 69, 78, 30);
 
-		private Color borderColor = Color.FromArgb("#79747E");
+		private Color _borderColor = Color.FromArgb("#79747E");
 
-		private int textSizeWidthPadding = 4;
+		private readonly int _textSizeWidthPadding = 4;
 
-		private TextAlignment horizontalTextAlignment;
+		private TextAlignment _horizontalTextAlignment;
+
+#if WINDOWS
+        // The native view element for the button control.
+        private FrameworkElement? _buttonNativeView;
+#endif
 
 		#endregion
 
@@ -296,8 +316,18 @@ namespace Syncfusion.Maui.Toolkit
 		internal ButtonBase(bool isCreatedInternally)
 		{
 			InitializeElements();
-			this.IsCreatedInternally = isCreatedInternally;
+			IsCreatedInternally = isCreatedInternally;
 		}
+
+		/// <summary>
+        /// Destructor of the <see cref="ButtonBase"/> class.
+        /// </summary>
+        ~ButtonBase()
+        {
+            _effectsRenderer = null;
+            _imageViewGrid = null;
+            ActualImageView = null;
+        }
 
 		#endregion
 
@@ -388,8 +418,8 @@ namespace Syncfusion.Maui.Toolkit
 		/// </summary>
 		public bool FontAutoScalingEnabled
 		{
-			get { return (bool)this.GetValue(FontAutoScalingEnabledProperty); }
-			set { this.SetValue(FontAutoScalingEnabledProperty, value); }
+			get { return (bool)GetValue(FontAutoScalingEnabledProperty); }
+			set { SetValue(FontAutoScalingEnabledProperty, value); }
 		}
 
 		/// <summary>
@@ -467,7 +497,7 @@ namespace Syncfusion.Maui.Toolkit
 		public ImageSource BackgroundImageSource
 		{
 			get { return (ImageSource)GetValue(BackgroundImageSourceProperty); }
-			set { this.SetValue(BackgroundImageSourceProperty, value); }
+			set { SetValue(BackgroundImageSourceProperty, value); }
 		}
 
 		/// <summary>
@@ -477,7 +507,7 @@ namespace Syncfusion.Maui.Toolkit
 		public ICommand Command
 		{
 			get { return (ICommand)GetValue(CommandProperty); }
-			set { this.SetValue(CommandProperty, value); }
+			set { SetValue(CommandProperty, value); }
 		}
 
 		/// <summary>
@@ -487,7 +517,7 @@ namespace Syncfusion.Maui.Toolkit
 		public object CommandParameter
 		{
 			get { return (object)GetValue(CommandParameterProperty); }
-			set { this.SetValue(CommandParameterProperty, value); }
+			set { SetValue(CommandParameterProperty, value); }
 		}
 
 		/// <summary>
@@ -497,7 +527,7 @@ namespace Syncfusion.Maui.Toolkit
 		public new Thickness Padding
 		{
 			get { return (Thickness)GetValue(PaddingProperty); }
-			set { this.SetValue(PaddingProperty, value); }
+			set { SetValue(PaddingProperty, value); }
 		}
 
 		/// <summary>
@@ -507,7 +537,7 @@ namespace Syncfusion.Maui.Toolkit
 		public string FontFamily
 		{
 			get { return (string)GetValue(FontFamilyProperty); }
-			set { this.SetValue(FontFamilyProperty, value); }
+			set { SetValue(FontFamilyProperty, value); }
 		}
 
 		/// <summary>
@@ -517,7 +547,7 @@ namespace Syncfusion.Maui.Toolkit
 		public FontAttributes FontAttributes
 		{
 			get { return (FontAttributes)GetValue(FontAttributesProperty); }
-			set { this.SetValue(FontAttributesProperty, value); }
+			set { SetValue(FontAttributesProperty, value); }
 		}
 
 		/// <summary>
@@ -528,7 +558,7 @@ namespace Syncfusion.Maui.Toolkit
 		public bool EnableRippleEffect
 		{
 			get { return (bool)GetValue(EnableRippleEffectProperty); }
-			set { this.SetValue(EnableRippleEffectProperty, value); }
+			set { SetValue(EnableRippleEffectProperty, value); }
 		}
 
 		internal void SetRTL()
@@ -536,17 +566,21 @@ namespace Syncfusion.Maui.Toolkit
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
 			{
 
-				this.isRTL = true;
-				if (this.effectsRenderer != null)
-					effectsRenderer.IsRTL = this.isRTL;
+				_isRTL = true;
+				if (_effectsRenderer != null)
+				{
+					_effectsRenderer.IsRTL = _isRTL;
+				}
 			}
 			else
 			{
-				this.isRTL = false;
-				if (this.effectsRenderer != null)
-					effectsRenderer.IsRTL = this.isRTL;
+				_isRTL = false;
+				if (_effectsRenderer != null)
+				{
+					_effectsRenderer.IsRTL = _isRTL;
+				}
 			}
-			this.InvalidateDrawable();
+			InvalidateDrawable();
 		}
 
 
@@ -559,8 +593,8 @@ namespace Syncfusion.Maui.Toolkit
 		/// </summary>
 		internal bool IsItemTemplate
 		{
-			get { return isItemTemplate; }
-			set { isItemTemplate = value; }
+			get { return _isItemTemplate; }
+			set { _isItemTemplate = value; }
 		}
 
 		/// <summary>
@@ -572,7 +606,7 @@ namespace Syncfusion.Maui.Toolkit
 		internal bool IsCheckable
 		{
 			get { return (bool)GetValue(IsCheckableProperty); }
-			set { this.SetValue(IsCheckableProperty, value); }
+			set { SetValue(IsCheckableProperty, value); }
 		}
 
 		/// <summary>
@@ -584,7 +618,7 @@ namespace Syncfusion.Maui.Toolkit
 		internal bool IsChecked
 		{
 			get { return (bool)GetValue(IsCheckedProperty); }
-			set { this.SetValue(IsCheckedProperty, value); }
+			set { SetValue(IsCheckedProperty, value); }
 		}
 
 		/// <summary>
@@ -599,8 +633,8 @@ namespace Syncfusion.Maui.Toolkit
 		/// </value>
 		internal Color HighlightColor
 		{
-			get { return highlightColor; }
-			set { highlightColor = value; }
+			get { return _highlightColor; }
+			set { _highlightColor = value; }
 		}
 
 		/// <summary>
@@ -612,9 +646,9 @@ namespace Syncfusion.Maui.Toolkit
 			{
 				var size = Text.Measure(this);
 #if ANDROID
-                size.Width = size.Width * 1.03 + textSizeWidthPadding;
+                size.Width = size.Width * 1.03 + _textSizeWidthPadding;
 #else
-				size.Width = size.Width + textSizeWidthPadding;
+				size.Width += _textSizeWidthPadding;
 #endif
 				size.Height = FontSize;
 				return size;
@@ -636,19 +670,19 @@ namespace Syncfusion.Maui.Toolkit
 		/// </summary>
 		internal Color BaseTextColor
 		{
-			get { return textColor; }
-			set { textColor = value; }
+			get { return _textColor; }
+			set { _textColor = value; }
 		}
 
 		internal Brush? BaseBackgroundColor
 		{
-			get { return backgroundColor; }
+			get { return _backgroundColor; }
 			set
 			{
 				if (value != null)
 				{
-					backgroundColor = value;
-					base.Background = backgroundColor;
+					_backgroundColor = value;
+					base.Background = _backgroundColor;
 				}
 			}
 		}
@@ -658,8 +692,8 @@ namespace Syncfusion.Maui.Toolkit
 		/// </summary>
 		internal Color BaseStrokeColor
 		{
-			get { return borderColor; }
-			set { borderColor = value; }
+			get { return _borderColor; }
+			set { _borderColor = value; }
 		}
 
 		/// <summary>
@@ -686,20 +720,6 @@ namespace Syncfusion.Maui.Toolkit
 
 		#endregion
 
-		#region Public Methods
-
-		/// <summary>
-		/// Releases all resources used by the <see cref="ButtonBase"/> object. Using this method, all the dead objects are removed.
-		/// </summary>
-		public void Dispose()
-		{
-			this.Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-
-		#endregion
-
 		#region Internal Methods
 
 		/// <summary>
@@ -711,16 +731,16 @@ namespace Syncfusion.Maui.Toolkit
 			{
 				if (EnableRippleEffect)
 				{
-					if (this.effectsRenderer != null)
+					if (_effectsRenderer != null)
 					{
-						this.effectsRenderer.RippleBoundsCollection.Clear();
-						this.effectsRenderer.RippleBoundsCollection.Add(backgroudRectF);
+						_effectsRenderer.RippleBoundsCollection.Clear();
+						_effectsRenderer.RippleBoundsCollection.Add(_backgroundRectF);
 
 					}
 				}
 				else
 				{
-					this.effectsRenderer?.RippleBoundsCollection.Clear();
+					_effectsRenderer?.RippleBoundsCollection.Clear();
 				}
 			}
 
@@ -733,28 +753,78 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			this.AddTouchListener(this);
 #if WINDOWS
-            this.DrawingOrder = DrawingOrder.AboveContentWithTouch;
+            DrawingOrder = DrawingOrder.AboveContentWithTouch;
 #else
-			this.DrawingOrder = DrawingOrder.AboveContent;
+			DrawingOrder = DrawingOrder.AboveContent;
 #endif
-			base.Background = this.Background;
-			this.effectsRenderer = new EffectsRenderer(this);
-			effectsRenderer.RippleAnimationDuration = 150;
+			base.Background = Background;
+			_effectsRenderer = new EffectsRenderer(this)
+			{
+				RippleAnimationDuration = 150
+			};
 			this.AddGestureListener(this);
+		}
+
+		/// <summary>
+		/// Handles the change of the ImageSource property
+		/// </summary>
+		internal void OnImageSourcePropertyChanged()
+		{
+			if (ShowIcon && ImageSource != null && !IsItemTemplate)
+			{
+				_isImageIconUpdated = true;
+
+				if (ImageSource != null && ActualImageView != null)
+				{
+					ActualImageView.Source = ImageSource;
+				}
+				if (_imageViewGrid != null)
+				{
+					_imageViewGrid.Children.Clear();
+					AutomationProperties.SetIsInAccessibleTree(ActualImageView, false);
+					_imageViewGrid.Add(ActualImageView);
+					_imageViewGrid.InputTransparent = true;
+				}
+			}
+			else
+			{
+
+				if (_imageViewGrid != null)
+				{
+					if (_imageViewGrid.Parent != null)
+					{
+						_imageViewGrid.Children.Clear();
+						Remove(_imageViewGrid);
+					}
+				}
+
+			}
+		}
+
+		/// <summary>
+		/// Method to set aspect for background image.
+		/// </summary>
+		internal void SetAspectForBackgroundImage(Aspect newAspect)
+		{
+			_backgroundImageAspect = newAspect;
+			if (BackgroundImageSource != null)
+			{
+				_backgroundImageView.Aspect = _backgroundImageAspect;
+			}
 		}
 
 		Microsoft.Maui.Font ITextElement.Font => (Microsoft.Maui.Font)GetValue(FontElement.FontProperty);
 
 		void ITextElement.OnFontFamilyChanged(string oldValue, string newValue)
 		{
-			this.InvalidateMeasure();
-			this.InvalidateDrawable();
+			InvalidateMeasure();
+			InvalidateDrawable();
 		}
 
 		void ITextElement.OnFontSizeChanged(double oldValue, double newValue)
 		{
-			this.InvalidateMeasure();
-			this.InvalidateDrawable();
+			InvalidateMeasure();
+			InvalidateDrawable();
 		}
 
 		double ITextElement.FontSizeDefaultValueCreator()
@@ -764,14 +834,14 @@ namespace Syncfusion.Maui.Toolkit
 
 		void ITextElement.OnFontAttributesChanged(FontAttributes oldValue, FontAttributes newValue)
 		{
-			this.InvalidateMeasure();
-			this.InvalidateDrawable();
+			InvalidateMeasure();
+			InvalidateDrawable();
 		}
 
 		void ITextElement.OnFontChanged(Microsoft.Maui.Font oldValue, Microsoft.Maui.Font newValue)
 		{
-			this.InvalidateMeasure();
-			this.InvalidateDrawable();
+			InvalidateMeasure();
+			InvalidateDrawable();
 		}
 
 		/// <summary>
@@ -781,7 +851,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="newValue"></param>
 		void ITextElement.OnFontAutoScalingEnabledChanged(bool oldValue, bool newValue)
 		{
-			this.InvalidateDrawable();
+			InvalidateDrawable();
 		}
 
 		#endregion
@@ -789,26 +859,10 @@ namespace Syncfusion.Maui.Toolkit
 		#region Internal Methods
 		internal void RaiseClicked(EventArgs args)
 		{
-			if (this.IsEnabled)
+			if (IsEnabled)
 			{
-				this.Command?.Execute(CommandParameter);
-				this.Clicked?.Invoke(this, args);
-			}
-		}
-
-		/// <summary>
-		/// Disposing all the resources used by the <see cref="Syncfusion.Maui.Toolkit.ButtonBase"/> object. 
-		/// </summary>
-		/// <param name="disposing">If set to <c>true</c> disposing.</param>
-		/// <exclude/>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (this.DataContext != null)
-				{
-					this.DataContext = null;
-				}
+				Command?.Execute(CommandParameter);
+				Clicked?.Invoke(this, args);
 			}
 		}
 
@@ -826,11 +880,11 @@ namespace Syncfusion.Maui.Toolkit
 			var width = widthConstraint;
 			var height = heightConstraint;
 
-			textRectF.Width = Math.Abs((float)this.Width - (float)this.ImageSize - 2 * leftIconPadding - 2 * rightIconPadding - defaultCloseButtonWidth);
+			_textRectF.Width = Math.Abs((float)Width - (float)ImageSize - 2 * _leftIconPadding - 2 * _rightIconPadding - _defaultCloseButtonWidth);
 
 			if (width == double.PositiveInfinity || width < 0 || IsCreatedInternally)
 			{
-				width = TextSize.Width + leftPadding + rightPadding + this.Padding.Right + this.Padding.Left;
+				width = TextSize.Width + _leftPadding + _rightPadding + Padding.Right + Padding.Left;
 			}
 
 			if (height == double.PositiveInfinity || height < 0 || IsCreatedInternally)
@@ -838,11 +892,13 @@ namespace Syncfusion.Maui.Toolkit
 
 				if (ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom)
 				{
-					height = ShowIcon ? 2 * this.ImageSize + TextSize.Height + this.Padding.Top + this.Padding.Bottom : TextSize.Height + textHeightPadding + this.Padding.Top + this.Padding.Bottom;
+					height = ShowIcon ? 2 * ImageSize + TextSize.Height + Padding.Top + Padding.Bottom : TextSize.Height + _textHeightPadding + Padding.Top + Padding.Bottom;
 				}
 
 				else
-					height = ShowIcon ? FontSize + this.ImageSize + this.Padding.Top + this.Padding.Bottom : TextSize.Height + textHeightPadding + this.Padding.Top + this.Padding.Bottom;
+				{
+					height = ShowIcon ? FontSize + ImageSize + Padding.Top + Padding.Bottom : TextSize.Height + _textHeightPadding + Padding.Top + Padding.Bottom;
+				}
 			}
 			return new Size(width, height);
 		}
@@ -859,35 +915,35 @@ namespace Syncfusion.Maui.Toolkit
 				Color default1 = Color.FromArgb("FFFBFE");
 				Color default2 = Color.FromArgb("#E8DEF8");
 
-				this.BaseTextColor = this.TextColor;
-				if (this.Stroke != null)
+				BaseTextColor = TextColor;
+				if (Stroke != null)
 				{
-					this.BaseStrokeColor = ((SolidColorBrush)this.Stroke).Color;
+					BaseStrokeColor = ((SolidColorBrush)Stroke).Color;
 				}
-				this.StrokeThickness = this.StrokeThickness;
-				if (this.Background == null || this.Background.Equals(default2))
+				StrokeThickness = StrokeThickness;
+				if (Background == null || Background.Equals(default2))
 				{
-					this.BaseBackgroundColor = default1;
+					BaseBackgroundColor = default1;
 				}
 				else
 				{
-					this.BaseBackgroundColor = this.Background;
+					BaseBackgroundColor = Background;
 				}
 			}
 			else
 			{
 				if (!VisualStateManager.HasVisualStateGroups(this) && !Application.Current!.Resources.TryGetValue("SfButtonTheme", out var theme))
 				{
-					this.BaseBackgroundColor = Color.FromRgba(28, 27, 31, 30);
+					BaseBackgroundColor = Color.FromRgba(28, 27, 31, 30);
 				}
 				else
 				{
-					this.BaseBackgroundColor = this.Background;
+					BaseBackgroundColor = Background;
 				}
-				this.BaseStrokeColor = this.disabledBorderColor;
-				this.BaseTextColor = this.disabledTextColor;
+				BaseStrokeColor = _disabledBorderColor;
+				BaseTextColor = _disabledTextColor;
 			}
-			this.InvalidateDrawable();
+			InvalidateDrawable();
 		}
 
 		/// <exclude/>
@@ -895,9 +951,18 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			if (propertyName == "FlowDirection")
 			{
-				this.SetRTL();
+				SetRTL();
 			}
 			base.OnPropertyChanged(propertyName);
+		}
+
+		/// <inheritdoc/>
+		protected override void OnHandlerChanged()
+		{
+			base.OnHandlerChanged();
+#if WINDOWS
+			ConfigureTouch();
+#endif
 		}
 
 		#endregion
@@ -965,10 +1030,12 @@ namespace Syncfusion.Maui.Toolkit
 			{
 				if (newValue is string text)
 				{
-					buttonbase.ContainsUnicodeCharacter(text);
+					buttonbase._isFontIconText = ButtonBase.ContainsUnicodeCharacter(text);
 				}
+				buttonbase._isSemanticTextChanged = true;
 				buttonbase.InvalidateMeasure();
 				buttonbase.InvalidateDrawable();
+				buttonbase.InvalidateSemantics();
 			}
 		}
 
@@ -981,19 +1048,6 @@ namespace Syncfusion.Maui.Toolkit
 		private static void OnTextColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			(bindable as ButtonBase)?.UpdateTextColor();
-			(bindable as ButtonBase)?.InvalidateDrawable();
-		}
-
-		/// <summary>
-		/// Property changed method for font size property.
-		/// </summary>
-		/// <param name="bindable">The original source of property changed event.</param>
-		/// <param name="oldValue">The old value of font size property.</param>
-		/// <param name="newValue">The new value of font size property </param>
-		private static void OnFontSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-		{
-			(bindable as ButtonBase)?.BaseGroupHeight();
-			(bindable as ButtonBase)?.InvalidateMeasure();
 			(bindable as ButtonBase)?.InvalidateDrawable();
 		}
 
@@ -1052,8 +1106,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="newValue">The new value of image width property.</param>
 		private static void OnImageSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			var buttonBase = bindable as ButtonBase;
-			if (buttonBase != null && buttonBase.ShowIcon)
+			if (bindable is ButtonBase buttonBase && buttonBase.ShowIcon)
 			{
 				buttonBase.OnImageSourcePropertyChanged();
 				buttonBase.BaseGroupHeight();
@@ -1139,91 +1192,33 @@ namespace Syncfusion.Maui.Toolkit
 			(bindable as ButtonBase)?.InvalidateDrawable();
 		}
 
-		/// <summary>
-		/// Property changed method for font family property.
-		/// </summary>
-		/// <param name="bindable">The original source of property changed event.</param>
-		/// <param name="oldValue">The old value of font family property.</param>
-		/// <param name="newValue">The new value of font family property.</param>
-
-		private static void OnFontFamilyPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-		{
-			(bindable as ButtonBase)?.InvalidateMeasure();
-			(bindable as ButtonBase)?.InvalidateDrawable();
-		}
-
-		/// <summary>
-		/// Property changed method for font attributes property.
-		/// </summary>
-		/// <param name="bindable">The original source of property changed event.</param>
-		/// <param name="oldValue">The old value of font attributes property.</param>
-		/// <param name="newValue">The new value of font attributes property.</param>
-		private static void OnFontAttributesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-		{
-			(bindable as ButtonBase)?.InvalidateMeasure();
-			(bindable as ButtonBase)?.InvalidateDrawable();
-		}
-
 		#endregion
 
 		#region Private Methods
-
-		private void OnImageSourcePropertyChanged()
-		{
-			if (this.ShowIcon && this.ImageSource != null && !this.IsItemTemplate)
-			{
-				this.isImageIconUpdated = true;
-
-				if (this.ImageSource != null && this.ActualImageView != null)
-					this.ActualImageView.Source = this.ImageSource;
-
-				if (this.imageViewGrid != null)
-				{
-					this.imageViewGrid.Children.Clear();
-					AutomationProperties.SetIsInAccessibleTree(ActualImageView, false);
-					this.imageViewGrid.Add(ActualImageView);
-					this.imageViewGrid.InputTransparent = true;
-				}
-
-			}
-			else
-			{
-
-				if (this.imageViewGrid != null)
-				{
-					if (this.imageViewGrid.Parent != null)
-					{
-						this.imageViewGrid.Children.Clear();
-						this.Remove(this.imageViewGrid);
-					}
-				}
-
-			}
-		}
 
 		private void BaseGroupHeight()
 		{
 			if (IsCreatedInternally)
 			{
-				this.HeightRequest = ShowIcon ? FontSize + this.ImageSize + this.Padding.Top + this.Padding.Bottom : TextSize.Height + textHeightPadding + this.Padding.Top + this.Padding.Bottom;
+				HeightRequest = ShowIcon ? FontSize + ImageSize + Padding.Top + Padding.Bottom : TextSize.Height + _textHeightPadding + Padding.Top + Padding.Bottom;
 			}
 		}
 
 		private void UpdateTextColor()
 		{
-			this.BaseTextColor = this.TextColor;
+			BaseTextColor = TextColor;
 		}
 
 		private void UpdateBackground()
 		{
-			base.Background = this.Background;
+			base.Background = Background;
 		}
 
 		private void UpdateStroke()
 		{
-			if (this.Stroke != null)
+			if (Stroke != null)
 			{
-				this.BaseStrokeColor = ((SolidColorBrush)this.Stroke).Color;
+				BaseStrokeColor = ((SolidColorBrush)Stroke).Color;
 			}
 		}
 
@@ -1233,26 +1228,28 @@ namespace Syncfusion.Maui.Toolkit
 			var y = 0;
 #if WINDOWS && NET8_0
             if (!(Parent is Frame))
-                   this.Clip = new RoundRectangleGeometry(this.CornerRadius, new Rect(x, y, this.Width, this.Height));
+			{
+				Clip = new RoundRectangleGeometry(CornerRadius, new Rect(x, y, Width, Height));
+			}
 #else
-			this.Clip = new RoundRectangleGeometry(this.CornerRadius, new Rect(x, y, this.Width, this.Height));
+			Clip = new RoundRectangleGeometry(CornerRadius, new Rect(x, y, Width, Height));
 #endif
 		}
 
 		private void InitializeBackgroundImage()
 		{
-			if (this.Children.Contains(this.backgroundImageGrid))
+			if (Children.Contains(_backgroundImageGrid))
 			{
-				this.Children.Remove(this.backgroundImageGrid);
+				Children.Remove(_backgroundImageGrid);
 			}
 
-			if (this.BackgroundImageSource != null)
+			if (BackgroundImageSource != null)
 			{
-				this.backgroundImageGrid.Children.Clear();
-				this.backgroundImageView.Aspect = Aspect.AspectFill;
-				this.backgroundImageView.Source = this.BackgroundImageSource;
-				this.backgroundImageGrid.Add(this.backgroundImageView);
-				this.Children.Insert(0, this.backgroundImageGrid);
+				_backgroundImageGrid.Children.Clear();
+				_backgroundImageView.Aspect = _backgroundImageAspect;
+				_backgroundImageView.Source = BackgroundImageSource;
+				_backgroundImageGrid.Add(_backgroundImageView);
+				Children.Insert(0, _backgroundImageGrid);
 			}
 
 		}
@@ -1262,13 +1259,13 @@ namespace Syncfusion.Maui.Toolkit
 		/// </summary>
 		private void OnCommandPropertyChanged()
 		{
-			if (this.Command != null)
+			if (Command != null)
 			{
-				this.Command.CanExecuteChanged -= this.OnCommandCanExecuteChanged;
-				this.Command.CanExecuteChanged += this.OnCommandCanExecuteChanged;
-				if (!this.Command.CanExecute(this.CommandParameter))
+				Command.CanExecuteChanged -= OnCommandCanExecuteChanged;
+				Command.CanExecuteChanged += OnCommandCanExecuteChanged;
+				if (!Command.CanExecute(CommandParameter))
 				{
-					this.IsEnabled = false;
+					IsEnabled = false;
 				}
 			}
 		}
@@ -1281,7 +1278,7 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			if (command != null)
 			{
-				command.CanExecuteChanged -= this.OnCommandCanExecuteChanged;
+				command.CanExecuteChanged -= OnCommandCanExecuteChanged;
 			}
 		}
 
@@ -1292,10 +1289,10 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="e">Event args.</param>
 		private void OnCommandCanExecuteChanged(object? sender, EventArgs e)
 		{
-			ICommand command = this.Command;
+			ICommand command = Command;
 			if (command != null)
 			{
-				this.IsEnabled = command.CanExecute(this.CommandParameter);
+				IsEnabled = command.CanExecute(CommandParameter);
 			}
 		}
 
@@ -1304,50 +1301,50 @@ namespace Syncfusion.Maui.Toolkit
 		/// </summary>
 		private void OnCommandParameterPropertyChanged()
 		{
-			this.OnCommandCanExecuteChanged(this, EventArgs.Empty);
+			OnCommandCanExecuteChanged(this, EventArgs.Empty);
 		}
 
 		internal void CheckPropertyChanged()
 		{
 			if (IsEnabled)
 			{
-				if (this.IsCheckable)
+				if (IsCheckable)
 				{
-					if (this.IsChecked)
+					if (IsChecked)
 					{
-						this.TriggerChecked();
+						TriggerChecked();
 					}
 					else
 					{
-						this.TriggerUnchecked();
+						TriggerUnchecked();
 					}
 				}
 				else
 				{
-					base.Background = this.Background;
-					this.Stroke = this.Stroke;
-					this.TextColor = this.TextColor;
+					base.Background = Background;
+					Stroke = Stroke;
+					TextColor = TextColor;
 					VisualStateManager.GoToState(this, "Normal");
 				}
 			}
 			else
 			{
-				if (this.IsCheckable)
+				if (IsCheckable)
 				{
-					if (this.IsChecked)
+					if (IsChecked)
 					{
-						this.TriggerChecked();
+						TriggerChecked();
 					}
 					else
 					{
-						this.TriggerUnchecked();
+						TriggerUnchecked();
 					}
 				}
 				else
 				{
-					base.Background = this.disabledBackgroundColor;
-					this.Stroke = this.disabledBorderColor;
-					this.TextColor = this.disabledTextColor;
+					base.Background = _disabledBackgroundColor;
+					Stroke = _disabledBorderColor;
+					TextColor = _disabledTextColor;
 					VisualStateManager.GoToState(this, "Disabled");
 				}
 			}
@@ -1362,9 +1359,9 @@ namespace Syncfusion.Maui.Toolkit
 			}
 			else
 			{
-				base.Background = disabledPressedBackgroundColor;
-				this.Stroke = this.disabledBorderColor;
-				this.TextColor = this.disabledPressedTextColor;
+				base.Background = _disabledPressedBackgroundColor;
+				Stroke = _disabledBorderColor;
+				TextColor = _disabledPressedTextColor;
 				VisualStateManager.GoToState(this, "Disabled");
 			}
 
@@ -1373,14 +1370,14 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			if (IsEnabled)
 			{
-				base.Background = this.Background;
+				base.Background = Background;
 				VisualStateManager.GoToState(this, "Normal");
 			}
 			else
 			{
-				base.Background = this.disabledBackgroundColor;
-				this.Stroke = this.disabledBorderColor;
-				this.TextColor = this.disabledTextColor;
+				base.Background = _disabledBackgroundColor;
+				Stroke = _disabledBorderColor;
+				TextColor = _disabledTextColor;
 				VisualStateManager.GoToState(this, "Disabled");
 			}
 
@@ -1388,24 +1385,98 @@ namespace Syncfusion.Maui.Toolkit
 
 		private void UpdateCloseButtonRippleEffectsRenderer()
 		{
-			if (this.IsEnabled)
+			if (IsEnabled)
 			{
-				if (this.EnableRippleEffect)
+				if (EnableRippleEffect)
 				{
 
-					if (this.effectsRenderer != null)
+					if (_effectsRenderer != null)
 					{
-						this.effectsRenderer.RippleBoundsCollection.Clear();
-						this.effectsRenderer.RippleBoundsCollection.Add(closeButtonRippleRectF);
+						_effectsRenderer.RippleBoundsCollection.Clear();
+						_effectsRenderer.RippleBoundsCollection.Add(_closeButtonRippleRectF);
 
 					}
 				}
 				else
 				{
-					this.effectsRenderer?.RippleBoundsCollection.Clear();
+					_effectsRenderer?.RippleBoundsCollection.Clear();
 				}
 			}
 		}
+
+#if WINDOWS
+
+		/// <summary>
+		/// Configures touch interactions for the native button view by wiring or unwiring platform-specific touch events.
+		/// </summary>
+		private void ConfigureTouch()
+		{
+			if (Handler != null && Handler.PlatformView != null)
+			{
+				WireEvents();
+			}
+			else
+			{
+				UnWireEvents();
+			}
+		}
+
+		/// <summary>
+		/// Subscribes to platform-specific touch events on the native button view, enabling pointer and manipulation event handling.
+		/// </summary>
+		private void WireEvents()
+		{
+			if (Handler != null && Handler.PlatformView != null && Handler.PlatformView is FrameworkElement)
+			{
+				_buttonNativeView = Handler.PlatformView as FrameworkElement;
+				if(_buttonNativeView is not null)
+				{
+					_buttonNativeView.ManipulationMode = ManipulationModes.All;
+					_buttonNativeView.PointerPressed += OnPointerPressed;
+					_buttonNativeView.ManipulationStarted += OnManipulationStarted;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Unsubscribes from platform-specific touch events on the native button view to prevent further event handling.
+		/// </summary>
+		private void UnWireEvents()
+		{
+			if (Handler != null && Handler.PlatformView != null)
+			{
+				_buttonNativeView = Handler.PlatformView as FrameworkElement;
+				if (_buttonNativeView is not null)
+				{
+					_buttonNativeView.ManipulationMode = ManipulationModes.All;
+					_buttonNativeView.PointerPressed -= OnPointerPressed;
+					_buttonNativeView.ManipulationStarted -= OnManipulationStarted;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Handles the PointerPressed event by marking it as handled to prevent further propagation.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnPointerPressed(object sender, PointerRoutedEventArgs e)
+		{
+			e.Handled = true;
+		}
+
+
+		/// <summary>
+		/// Handles the ManipulationStarted event by marking it as handled to prevent further manipulation.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnManipulationStarted(object sender, ManipulationStartedRoutedEventArgs e)
+		{
+			e.Handled = true;
+		}
+
+#endif
 
 		#endregion
 
@@ -1418,15 +1489,15 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="dirtyRect">The area to be updated on the canvas (dirty rectangle).</param>
 		internal virtual void DrawText(ICanvas canvas, RectF dirtyRect)
 		{
-			UpdateTextBounds(dirtyRect, this.VerticalTextAlignment);
+			UpdateTextBounds(dirtyRect, VerticalTextAlignment);
 			canvas.CanvasSaveState();
 
-			var trimmedText = isFontIconText ? this.Text : RequiredTextTrim(this.Text, this.textRectF.Width);
+			var trimmedText = _isFontIconText ? Text : RequiredTextTrim(Text, _textRectF.Width);
 
-			if (textRectF.Width > 0 && textRectF.Height > 0)
+			if (_textRectF.Width > 0 && _textRectF.Height > 0)
 			{
 				GetHorizontalTextAlignment();
-				canvas.DrawText(trimmedText, textRectF, (HorizontalAlignment)horizontalTextAlignment, (VerticalAlignment)this.VerticalTextAlignment, this);
+				canvas.DrawText(trimmedText, _textRectF, (HorizontalAlignment)_horizontalTextAlignment, (VerticalAlignment)VerticalTextAlignment, this);
 			}
 
 			canvas.CanvasRestoreState();
@@ -1436,19 +1507,19 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			if (HorizontalTextAlignment == TextAlignment.Start)
 			{
-				horizontalTextAlignment = isRTL ? TextAlignment.End : TextAlignment.Start;
+				_horizontalTextAlignment = _isRTL ? TextAlignment.End : TextAlignment.Start;
 			}
 			else if (HorizontalTextAlignment == TextAlignment.End)
 			{
-				horizontalTextAlignment = isRTL ? TextAlignment.Start : TextAlignment.End;
+				_horizontalTextAlignment = _isRTL ? TextAlignment.Start : TextAlignment.End;
 			}
 			else
 			{
-				horizontalTextAlignment = HorizontalTextAlignment;
+				_horizontalTextAlignment = HorizontalTextAlignment;
 			}
 		}
 
-		private bool ContainsUnicodeCharacter(string input)
+		private static bool ContainsUnicodeCharacter(string input)
 		{
 			const int MaxAnsiCode = 255;
 			const int CyrillicStart = 1024;
@@ -1494,11 +1565,11 @@ namespace Syncfusion.Maui.Toolkit
 		/// <exclude/>
 		protected virtual void DrawOutline(ICanvas canvas, RectF dirtyRect)
 		{
-			if (this.Stroke != null && this.StrokeThickness > 0)
+			if (Stroke != null && StrokeThickness > 0)
 			{
 				var x = dirtyRect.X;
 				var y = dirtyRect.Y;
-				var width = (float)(this.Width);
+				var width = (float)(Width);
 				var height = dirtyRect.Height;
 
 				var topLeftRadius = (float)CornerRadius.TopLeft;
@@ -1507,9 +1578,9 @@ namespace Syncfusion.Maui.Toolkit
 				var bottomRightRadius = (float)CornerRadius.BottomRight;
 
 				canvas.CanvasSaveState();
-				canvas.StrokeColor = this.BaseStrokeColor;
-				canvas.StrokeSize = (float)this.StrokeThickness;
-				if (!this.IsSelected)
+				canvas.StrokeColor = BaseStrokeColor;
+				canvas.StrokeSize = (float)StrokeThickness;
+				if (!IsSelected)
 				{
 					canvas.DrawRoundedRectangle(x, y, width, height, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius);
 				}
@@ -1523,10 +1594,10 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="dirtyRect">The area to be updated on the canvas (dirty rectangle).</param>
 		internal void UpdateBackgroundRectF(RectF dirtyRect)
 		{
-			backgroudRectF.X = dirtyRect.X + (float)this.StrokeThickness / 2;
-			backgroudRectF.Y = dirtyRect.Y + (float)this.StrokeThickness / 2;
-			backgroudRectF.Width = dirtyRect.Width - (float)this.StrokeThickness;
-			backgroudRectF.Height = dirtyRect.Height - (float)this.StrokeThickness;
+			_backgroundRectF.X = dirtyRect.X + (float)StrokeThickness / 2;
+			_backgroundRectF.Y = dirtyRect.Y + (float)StrokeThickness / 2;
+			_backgroundRectF.Width = dirtyRect.Width - (float)StrokeThickness;
+			_backgroundRectF.Height = dirtyRect.Height - (float)StrokeThickness;
 		}
 
 		#endregion
@@ -1541,15 +1612,15 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			if (e.Action == PointerActions.Pressed)
 			{
-				if (background != HighlightColor && !this.IsEditorControl)
+				if (_background != HighlightColor && !IsEditorControl)
 				{
-					background = HighlightColor;
-					this.InvalidateDrawable();
+					_background = HighlightColor;
+					InvalidateDrawable();
 				}
 				if (IsCheckable)
 				{
 					IsChecked = !IsChecked;
-					this.CheckPropertyChanged();
+					CheckPropertyChanged();
 
 				}
 				UpdateRippleEffectsRenderer();
@@ -1559,19 +1630,19 @@ namespace Syncfusion.Maui.Toolkit
 
 			if (e.Action == PointerActions.Released)
 			{
-				if (!background.Equals(Colors.Transparent))
+				if (!_background.Equals(Colors.Transparent))
 				{
-					background = Colors.Transparent;
-					this.InvalidateDrawable();
+					_background = Colors.Transparent;
+					InvalidateDrawable();
 				}
 
 				SfChip? chip = null;
-				if (this.Children.Count == 0 && this.Children != null && this.Children is SfChip)
+				if (Children.Count == 0 && Children != null && Children is SfChip)
 				{
-					chip = this.Children as SfChip;
+					chip = Children as SfChip;
 				}
 
-				if (chip != null && chip is SfChip)
+				if (chip is not null)
 				{
 					if (!chip.IsTouchInsideCloseButton(e.TouchPoint) && IsEnabled)
 					{
@@ -1590,10 +1661,10 @@ namespace Syncfusion.Maui.Toolkit
 #if ANDROID
             if (e.Action == PointerActions.Cancelled)
             {
-                if (!background.Equals(Colors.Transparent))
+                if (!_background.Equals(Colors.Transparent))
                 {
-                    background = Colors.Transparent;
-                    this.InvalidateDrawable();
+                    _background = Colors.Transparent;
+                    InvalidateDrawable();
                 }
             }
 #endif
@@ -1601,28 +1672,28 @@ namespace Syncfusion.Maui.Toolkit
 			if (e.Action == PointerActions.Moved)
 			{
 #if ANDROID
-                if (!background.Equals(Colors.Transparent))
+                if (!_background.Equals(Colors.Transparent))
                 {
-                    background = Colors.Transparent;
-                    this.InvalidateDrawable();
+                    _background = Colors.Transparent;
+                    InvalidateDrawable();
                 }
 #endif
 
 #if WINDOWS || MACCATALYST
 
-                    if (this.Background != null && !this.IsEditorControl)
+                    if (Background != null && !IsEditorControl)
                     {
-                        if (this.Background as SolidColorBrush != null && ((SolidColorBrush)this.Background).Color.Equals (Colors.Transparent))
+                        if (Background as SolidColorBrush != null && ((SolidColorBrush)Background).Color.Equals (Colors.Transparent))
                         {
-                            if (!background.Equals(Colors.Gray.MultiplyAlpha(0.1f)))
+                            if (!_background.Equals(Colors.Gray.MultiplyAlpha(0.1f)))
                             {
-                                background = Colors.Gray.MultiplyAlpha(0.1f);
-                                this.InvalidateDrawable();
+                                _background = Colors.Gray.MultiplyAlpha(0.1f);
+                                InvalidateDrawable();
                             }
                         }
                         else
                         {
-                            if(this.Background is SolidColorBrush background)
+                            if(Background is SolidColorBrush background)
                             {
                                 base.Background = new SolidColorBrush(Color.FromRgba(background.Color.Red, background.Color.Green, background.Color.Blue, 0.8));
                             }    
@@ -1638,12 +1709,14 @@ namespace Syncfusion.Maui.Toolkit
 
 			if (e.Action == PointerActions.Exited)
 			{
-				base.Background = this.Background;
-				background = Colors.Transparent;
-				this.InvalidateDrawable();
+				base.Background = Background;
+				_background = Colors.Transparent;
+				InvalidateDrawable();
 #if MACCATALYST || IOS
-                if (this.Background != null)
-                    VisualStateManager.GoToState(this, "Normal");
+                if (Background != null)
+				{
+					VisualStateManager.GoToState(this, "Normal");
+				}
 #else
 				VisualStateManager.GoToState(this, "Normal");
 #endif
@@ -1660,7 +1733,7 @@ namespace Syncfusion.Maui.Toolkit
 
         // Both Button and its Parent Commands are executed simultaneously. 
         // So, we are handling the gesture listener here.
-        bool IGestureListener.IsTouchHandled => !this.InputTransparent;
+        bool IGestureListener.IsTouchHandled => !InputTransparent;
 #endif
 
 		#endregion
@@ -1674,53 +1747,57 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="verticalTextAlignment">The vertical alignment of the text within the view.</param>
 		internal virtual void UpdateTextBounds(RectF dirtyRect, TextAlignment verticalTextAlignment)
 		{
-			if (this.ShowIcon)
+			if (ShowIcon)
 			{
-				if (this.ImageAlignment == Alignment.Default || this.ImageAlignment == Alignment.Start || this.ImageAlignment == Alignment.Left || this.ImageAlignment == Alignment.Top || this.ImageAlignment == Alignment.Bottom)
+				if (ImageAlignment == Alignment.Default || ImageAlignment == Alignment.Start || ImageAlignment == Alignment.Left || ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom)
 				{
-					textRectF.X = this.isRTL ? (float)this.Padding.Left - (float)this.Padding.Right + leftIconPadding : (float)this.Padding.Left - (float)this.Padding.Right + (float)this.ImageSize + leftIconPadding + rightIconPadding;
-					textRectF.Y = (float)this.Padding.Top - (float)this.Padding.Bottom - dirtyRect.Y - normalTextPadding;
-					textRectF.Width = Math.Abs((float)this.Width - (float)this.ImageSize - leftIconPadding - rightPadding);
-					textRectF.Height = Math.Abs((float)this.Height);
+					_textRectF.X = _isRTL ? (float)Padding.Left - (float)Padding.Right + _leftIconPadding : (float)Padding.Left - (float)Padding.Right + (float)ImageSize + _leftIconPadding + _rightIconPadding;
+					_textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - _normalTextPadding;
+					_textRectF.Width = Math.Abs((float)Width - (float)ImageSize - _leftIconPadding - _rightPadding);
+					_textRectF.Height = Math.Abs((float)Height);
 				}
-				else if (this.ImageAlignment == Alignment.End || this.ImageAlignment == Alignment.Right)
+				else if (ImageAlignment == Alignment.End || ImageAlignment == Alignment.Right)
 				{
-					textRectF.X = this.isRTL ? (float)this.Padding.Left - (float)this.Padding.Right + (float)this.ImageSize + leftIconPadding + rightIconPadding : (float)this.Padding.Left - (float)this.Padding.Right + leftIconPadding;
-					textRectF.Y = (float)this.Padding.Top - (float)this.Padding.Bottom - dirtyRect.Y - textAlignmentPadding + (float)this.StrokeThickness / 2;
-					textRectF.Width = Math.Abs((float)this.Width - (float)this.ImageSize - rightIconPadding - rightPadding);
-					textRectF.Height = Math.Abs((float)this.Height - (float)StrokeThickness);
+					_textRectF.X = _isRTL ? (float)Padding.Left - (float)Padding.Right + (float)ImageSize + _leftIconPadding + _rightIconPadding : (float)Padding.Left - (float)Padding.Right + _leftIconPadding;
+					_textRectF.Y = (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - _textAlignmentPadding + (float)StrokeThickness / 2;
+					_textRectF.Width = Math.Abs((float)Width - (float)ImageSize - _rightIconPadding - _rightPadding);
+					_textRectF.Height = Math.Abs((float)Height - (float)StrokeThickness);
 				}
 			}
 			else
 			{
-				textRectF.X = (float)this.Padding.Left - (float)this.Padding.Right + leftPadding;
-				textRectF.Y = (float)(this.Padding.Top - this.Padding.Bottom - dirtyRect.Y - normalTextPadding);
-				textRectF.Width = Math.Abs((float)(this.Width - leftPadding - rightPadding));
-				textRectF.Height = (float)this.Height;
+				_textRectF.X = (float)Padding.Left - (float)Padding.Right + _leftPadding;
+				_textRectF.Y = (float)(Padding.Top - Padding.Bottom - dirtyRect.Y - _normalTextPadding);
+				_textRectF.Width = Math.Abs((float)(Width - _leftPadding - _rightPadding));
+				_textRectF.Height = (float)Height;
 			}
 
 #if ANDROID || MACCATALYST || IOS
                     if (VerticalTextAlignment == TextAlignment.End)
                     {
-                        if ((this.Height - this.TextSize.Height) > 0)
-                            textRectF.Y = (float)(this.Height - this.TextSize.Height - textPadding - this.Padding.Bottom);
-                        else
-                            textRectF.Y = (float)(this.Padding.Top - this.Padding.Bottom);
-                    }
+                        if ((Height - TextSize.Height) > 0)
+				{
+					_textRectF.Y = (float)(Height - TextSize.Height - _textPadding - Padding.Bottom);
+				}
+				else
+				{
+					_textRectF.Y = (float)(Padding.Top - Padding.Bottom);
+				}
+			}
                     else
                     {
-                        if (this.Padding.Top - (float)this.Padding.Bottom + this.Height > this.Height)
+                        if (Padding.Top - (float)Padding.Bottom + Height > Height)
                         {
-                            textRectF.Y = (float)(this.Height - this.Padding.Top - this.Padding.Bottom - this.TextSize.Height);
+                            _textRectF.Y = (float)(Height - Padding.Top - Padding.Bottom - TextSize.Height);
 
                         }
                         else
                         {
-                            textRectF.Y = (float)this.Padding.Top - (float)this.Padding.Bottom + normalTextPadding;
+                            _textRectF.Y = (float)Padding.Top - (float)Padding.Bottom + _normalTextPadding;
 
                         }
                     }
-                    textRectF.Height = Math.Abs((float)this.Height);
+                    _textRectF.Height = Math.Abs((float)Height);
 #endif
 		}
 
@@ -1737,7 +1814,7 @@ namespace Syncfusion.Maui.Toolkit
 			if (dirtyRect.Width > 0 && dirtyRect.Height > 0)
 			{
 				DrawOutline(canvas, dirtyRect);
-				this.UpdateBaseClip();
+				UpdateBaseClip();
 				if (!IsItemTemplate)
 				{
 					DrawText(canvas, dirtyRect);
