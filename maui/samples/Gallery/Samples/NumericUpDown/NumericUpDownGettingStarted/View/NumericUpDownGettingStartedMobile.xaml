@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.NumericUpDown.SfNumericUpDown.NumericUpDownGettingStartedMobile"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.NumericUpDown;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.NumericUpDown"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+
+    <localCore:SampleView.BindingContext>
+        <local:GettingStartedViewModel/>
+    </localCore:SampleView.BindingContext>
+
+  <localCore:SampleView.Resources>
+    <Style TargetType="Label">			
+			<Setter Property="FontFamily" Value="Roboto-Regular"/>
+		</Style>
+	</localCore:SampleView.Resources>
+
+  <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+        <VerticalStackLayout x:Name="listView" BindableLayout.ItemsSource="{Binding ProductInfo}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*" Margin="0,7,0,0" RowDefinitions="Auto,4" ColumnSpacing="10" RowSpacing="5">
+                        <Image Source="{Binding ProductImage}" Grid.Column="0" WidthRequest="150" HeightRequest="140"/>
+                        <VerticalStackLayout  Grid.Column="1"  Spacing="5" VerticalOptions="Center" Margin="10,0" HeightRequest="{OnPlatform Android='140', iOS='130'}">
+                            <Label Text="{Binding ProductName}" FontSize="16" FontAttributes="Bold"/>
+                            <Label Text="{Binding Price , StringFormat='$ {0:F2} per Unit'}" FontSize="10"/>
+                            <core:SfTextInputLayout Hint="Total Quantity" ReserveSpaceForAssistiveLabels="False" HeightRequest="50">
+                                <syncfusion:SfNumericUpDown WidthRequest="100" UpDownPlacementMode="InlineVertical" IsEditable="False" Value="{Binding Count}" AllowNull="False" ShowClearButton="False" HorizontalOptions="Start" CustomFormat="#0"/>
+                            </core:SfTextInputLayout>
+                            <Grid Margin="{OnPlatform iOS='0,4'}">
+                                <Label Text="{Binding TotalPrice , StringFormat='$ {0:F2}'}" FontSize="16" HorizontalOptions="Start" FontAttributes="Bold" VerticalOptions="Center" />
+                                <Button Text="ADD TO CART" FontSize="14" CornerRadius="20" HorizontalOptions="End" />
+                            </Grid>
+                        </VerticalStackLayout>
+                        <BoxView Color="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" HeightRequest="1" VerticalOptions="End" Grid.Row="1" Grid.ColumnSpan="3"/>
+                    </Grid>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+    </ScrollView>
+</localCore:SampleView>

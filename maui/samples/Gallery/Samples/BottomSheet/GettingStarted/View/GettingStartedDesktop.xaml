@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localcore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="Syncfusion.Maui.ControlsGallery.BottomSheet.BottomSheet.GettingStartedDesktop"
+            xmlns:BottomSheet="clr-namespace:Syncfusion.Maui.Toolkit.BottomSheet;assembly=Syncfusion.Maui.Toolkit"
+            xmlns:customView="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView"
+            xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.BottomSheet.BottomSheet"
+            xmlns:localcore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery">
+
+  <localcore:SampleView.Behaviors>
+    <local:BottomSheetBehavior />
+  </localcore:SampleView.Behaviors>
+
+  <Border StrokeThickness="1" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}">
+    <Border.StrokeShape>
+      <RoundRectangle CornerRadius="10">
+      </RoundRectangle>
+    </Border.StrokeShape>
+    <Grid x:Name="MainGrid" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" >
+      <Grid.BindingContext>
+        <local:ItemViewModel />
+      </Grid.BindingContext>
+
+      <BottomSheet:SfBottomSheet x:Name="BottomSheet" BottomSheetContentWidth="450" ContentWidthMode="Custom" HalfExpandedRatio="{OnPlatform WinUI=0.5, MacCatalyst=0.43}" FullExpandedRatio="0.9" CollapsedHeight="180" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" CornerRadius="10, 10, 0, 0" ContentPadding="16,16,16,0">
+        <BottomSheet:SfBottomSheet.Content>
+          <Grid>
+            <ListView x:Name="ListView" ItemsSource="{Binding Items}" RowHeight="120" Grid.Row="1" SeparatorVisibility="None" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+              <ListView.ItemTemplate>
+                <DataTemplate>
+                  <ViewCell>
+                    <Grid ColumnDefinitions="auto, *, 50" ColumnSpacing="0" Padding="16">
+                      <Border StrokeThickness="0">
+                        <Border.StrokeShape>
+                          <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <Image Source="{Binding ImageName}" />
+                      </Border>
+                      <VerticalStackLayout Grid.Column="1" Spacing="2" Padding="16,0,0,0">
+                        <Label Text="{Binding FoodName}" FontSize="20" FontAttributes="Bold" FontFamily="Roboto"/>
+                        <Label Text="{Binding SubName}" FontSize="16" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}"/>
+                        <Label Text="{Binding Description}" FontSize="12" LineBreakMode="TailTruncation" MaxLines="2" Opacity="0.5" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light},Dark={StaticResource TextColourAlt1Dark}}"/>
+                      </VerticalStackLayout>
+                      <Label Text="{Binding Price, StringFormat='${0}'}" FontAttributes="Bold" FontSize="20" FontFamily="Roboto" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2" />
+                    </Grid>
+                  </ViewCell>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
+          </Grid>
+        </BottomSheet:SfBottomSheet.Content>
+        
+        <BottomSheet:SfBottomSheet.BottomSheetContent>
+          <Grid RowDefinitions="auto,*, 80" x:Name="Grid">
+            <Grid Grid.Row="0" ColumnDefinitions="*,50" RowDefinitions="*,auto">
+              <Border WidthRequest="40" HeightRequest="40" Grid.Row="0" Grid.Column="1" Background="Transparent" HorizontalOptions="Start" StrokeThickness="0" >
+                <Border.StrokeShape>
+                  <RoundRectangle CornerRadius="30" />
+                </Border.StrokeShape>
+                <customView:SfEffectsViewAdv x:Name="CloseIcon" >
+                  <Label Text="&#xe755;" FontFamily="MauiSampleFontIcon"  FontSize="24" Style="{StaticResource AltIconStyle}" VerticalOptions="Center" HorizontalOptions="Center" />
+                </customView:SfEffectsViewAdv>
+              </Border>
+              <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                <Label TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource PrimaryBackgroundDark}}" FontSize="16" FontAttributes="None" FontFamily="Roboto" Opacity="0.8">
+                  <Label.FormattedText>
+                    <FormattedString>
+                      <Span Text="{Binding FoodName, StringFormat='{0} Pizza'}" FontAttributes="None"/>
+                      <Span Text=" - " FontAttributes="None" />
+                      <Span Text="{Binding Price, StringFormat='${0}'}" />
+                    </FormattedString>
+                  </Label.FormattedText>
+                </Label>
+                <Label Text="Customise as per your taste" FontSize="22" FontAttributes="Bold" FontFamily="Roboto"/>
+              </VerticalStackLayout>
+              <Border Background="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray200}}" HeightRequest="2" Grid.Row="1" Grid.ColumnSpan="2" Opacity="0.5" Margin="0, 10,0,5"/>
+            </Grid>
+            <ScrollView Grid.Row="1">
+              <VerticalStackLayout Spacing="5">
+                <VerticalStackLayout Margin="0,16,0,0">
+                  <Label Text="Crust" FontSize="18" FontAttributes="Bold" FontFamily="Roboto"/>
+                  <Label Text="Select any 1" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource PrimaryBackgroundDark}}" FontAttributes="None" FontFamily="Roboto" Opacity="0.8"/>
+              </VerticalStackLayout>
+              <Border StrokeThickness="0" Background="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}" Padding="10">
+                <Border.StrokeShape>
+                  <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="15">
+                  <Grid ColumnDefinitions="*, 30">
+                      <Label Text="New Hand Tossed" FontFamily="Roboto" VerticalOptions="Center" Style="{StaticResource Label1Style}"/>
+                      <RadioButton HorizontalOptions="End" Grid.Column="1" GroupName="Crust" Style="{StaticResource radioButtonStyle}"/>
+                  </Grid>
+                  <Grid ColumnDefinitions="*, 30">
+                      <Label Text="100% Wheat Thin Crust" FontFamily="Roboto" VerticalOptions="Center" Style="{StaticResource Label1Style}"/>
+                      <RadioButton HorizontalOptions="End" Grid.Column="1" GroupName="Crust" Style="{StaticResource radioButtonStyle}"/>
+                  </Grid>
+                  <Grid ColumnDefinitions="*, 30">
+                      <Label Text="Cheese Burst" FontFamily="Roboto" VerticalOptions="Center" Style="{StaticResource Label1Style}"/>
+                      <RadioButton HorizontalOptions="End" Grid.Column="1" GroupName="Crust" Style="{StaticResource radioButtonStyle}"/>
+                  </Grid>
+                  <Grid ColumnDefinitions="*, 30">
+                      <Label Text="Fresh Pan Pizza" FontFamily="Roboto" VerticalOptions="Center" Style="{StaticResource Label1Style}"/>
+                      <RadioButton HorizontalOptions="End" Grid.Column="1" GroupName="Crust" Style="{StaticResource radioButtonStyle}"/>
+                  </Grid>
+                </VerticalStackLayout>
+              </Border>
+              <VerticalStackLayout Margin="0,16,0,0">
+                  <Label Text="Add On" FontSize="18" FontAttributes="Bold" FontFamily="Roboto"/>
+                  <Label Text="Select upto 1" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource PrimaryBackgroundDark}}" FontAttributes="None" FontFamily="Roboto" Opacity="0.8"/>
+                </VerticalStackLayout>
+              <Border StrokeThickness="0" Background="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}" Padding="10">
+                <Border.StrokeShape>
+                  <RoundRectangle CornerRadius="15" />
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="15">
+                  <Grid ColumnDefinitions="*, 40">
+                      <Label Text="Extra Cheese" VerticalOptions="Center" FontFamily="Roboto" Style="{StaticResource Label1Style}"/>
+                      <Label Text="+$2" VerticalOptions="Center" HorizontalOptions="End" FontAttributes="None" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource PrimaryBackgroundDark}}" Style="{StaticResource Label1Style}" Opacity="0.8"/>
+                    <CheckBox x:Name="ExtraCheese" HorizontalOptions="Center" Grid.Column="1" />
+                  </Grid>
+                  <Grid ColumnDefinitions="*, 40">
+                      <Label Text="Extra Double Cheese" VerticalOptions="Center" FontFamily="Roboto" Style="{StaticResource Label1Style}"/>
+                      <Label Text="+$4" VerticalOptions="Center" HorizontalOptions="End" FontAttributes="None" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource PrimaryBackgroundDark}}" Style="{StaticResource Label1Style}" Opacity="0.8"/>
+                    <CheckBox x:Name="ExtraDoubleCheese" HorizontalOptions="Center" Grid.Column="1"/>
+                  </Grid>
+                </VerticalStackLayout>
+              </Border>
+            </VerticalStackLayout>
+            </ScrollView>
+            <Grid Grid.Row="2" ColumnDefinitions="*, *" Padding="0,10">
+              <Border Grid.Column="0" WidthRequest="120" HeightRequest="40"  HorizontalOptions="Start" StrokeThickness="1" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" Background="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource Gray900}}">
+                <Border.StrokeShape>
+                  <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <Grid ColumnDefinitions="40, 40, 40"  HorizontalOptions="Center">
+                  <customView:SfEffectsViewAdv x:Name="DecreaseQuantity" SelectionBackground="{AppThemeBinding Light={StaticResource BlackOverlaySelectedLight}, Dark={StaticResource BlackOverlaySelectedDark}}" Grid.Column="0">
+                    <Label Text="-" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" Style="{StaticResource Label1Style}"/>
+                  </customView:SfEffectsViewAdv>
+                  <Label Text="{Binding Quantity}" FontSize="20" FontFamily="Roboto" Grid.Column="1" HorizontalOptions="Center" VerticalOptions="Center" Style="{StaticResource Label1Style}"/>
+                  <customView:SfEffectsViewAdv x:Name="IncreaseQuantity" SelectionBackground="{AppThemeBinding Light={StaticResource BlackOverlaySelectedLight}, Dark={StaticResource BlackOverlaySelectedDark}}" Grid.Column="2">
+                    <Label Text="+" FontSize="20" HorizontalOptions="Center" VerticalOptions="Center" Style="{StaticResource Label1Style}"/>
+                  </customView:SfEffectsViewAdv>
+                </Grid>
+              </Border>
+              <Button Text="{Binding TotalPrice, StringFormat='Add Item | ${0}'}" FontFamily="Roboto" WidthRequest="160" CornerRadius="10" Grid.Column="1" VerticalOptions="Center" HorizontalOptions="End"/>
+            </Grid>
+          </Grid>
+        </BottomSheet:SfBottomSheet.BottomSheetContent>
+      </BottomSheet:SfBottomSheet>
+    </Grid>
+  </Border>
+
+</localcore:SampleView>

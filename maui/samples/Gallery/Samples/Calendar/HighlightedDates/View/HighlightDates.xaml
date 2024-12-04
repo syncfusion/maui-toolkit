@@ -1,0 +1,48 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Calendar.Calendar.HighlightDates"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Calendar.Calendar"
+             xmlns:thickness ="clr-namespace:Microsoft.Maui;assembly=Microsoft.Maui"
+             xmlns:calendar="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="-4, -4, -6, -6">
+    <localCore:SampleView.Content>
+        <Grid WidthRequest="350" HeightRequest="400" Padding="0">
+            <Border IsVisible="False" x:Name="frame" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"  HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                <calendar:SfCalendar x:Name="HighlightCalendar" AllowViewNavigation="False" CornerRadius="10"/>
+            </Border>
+
+            <Border IsVisible="False" x:Name="border" x:DataType="local:Month" Background="{Binding BGColor}"  StrokeThickness="2" StrokeShape="RoundRectangle 10,10,10,10"  HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                <calendar:SfCalendar x:Name="HighlightCalendar1" AllowViewNavigation="False" CornerRadius="10"/>
+            </Border>
+        </Grid>
+    </localCore:SampleView.Content>
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <ScrollView Padding="0, 0, 5, 0">
+                <StackLayout Orientation="Vertical">
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Theme"
+                              Grid.Column="0"
+                              LineBreakMode="WordWrap"
+                              FontSize="14"
+                              VerticalOptions="Center"
+                              HorizontalOptions="Start"/>
+                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+                          <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="5" />
+                          </Border.StrokeShape>
+                        <Picker x:Name="comboBox" HeightRequest="37"
+                                BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                                SelectedIndexChanged="comboBox_SelectionChanged"/>
+                          </Border>
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>
