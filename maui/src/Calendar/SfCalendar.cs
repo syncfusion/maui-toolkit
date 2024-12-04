@@ -135,7 +135,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <summary>
         /// Gets a value indicating whether the layout is RTL or not.
         /// </summary>
-        bool IHeaderCommon.IsRTLLayout => this.IsRTL(Identifier);
+        bool IHeaderCommon.IsRTLLayout => _isRTLLayout;
 
         #endregion
 
@@ -159,7 +159,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             if (NavigationDirection == CalendarNavigationDirection.Horizontal)
             {
-                if (this.IsRTL(Identifier))
+                if (_isRTLLayout)
                 {
                     _customScrollLayout.AnimateMoveToNextView();
                 }
@@ -192,7 +192,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             if (NavigationDirection == CalendarNavigationDirection.Horizontal)
             {
-                if (this.IsRTL(Identifier))
+                if (_isRTLLayout)
                 {
                     _customScrollLayout.AnimateMoveToPreviousView();
                 }
@@ -1509,11 +1509,46 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         void UpdateFlowDirection()
         {
-            _isRTLLayout = this.IsRTL(Identifier);
+            if (_customScrollLayout == null)
+            {
+                return;
+            }
+
+            UpdateLayoutFlowDirection();
             _layout.UpdateFlowDirection();
             //// To update the header text flow direction.
             _headerLayout?.UpdateHeaderTextFlowDirection();
             _footerLayout?.UpdateFooterFlowDirection();
+        }
+
+        /// <summary>
+        /// Method to update the layout flow direction.
+        /// </summary>
+        void UpdateLayoutFlowDirection()
+        {
+            // Set isRTLLayout based on CalendarIdentifier
+            switch (Identifier)
+            {
+                case CalendarIdentifier.Hijri:
+                case CalendarIdentifier.Persian:
+                case CalendarIdentifier.UmAlQura:
+                    _isRTLLayout = true;
+                    break;
+
+                case CalendarIdentifier.Korean:
+                case CalendarIdentifier.Taiwan:
+                case CalendarIdentifier.ThaiBuddhist:
+                    _isRTLLayout = false;
+                    break;
+
+                case CalendarIdentifier.Gregorian:
+                    _isRTLLayout = FlowDirection == FlowDirection.RightToLeft ? true : this.IsRTL(this.Identifier);
+                    break;
+
+                default:
+                    _isRTLLayout = false;
+                    break;
+            }
         }
 
         /// <summary>

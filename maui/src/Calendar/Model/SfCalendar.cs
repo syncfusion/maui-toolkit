@@ -562,6 +562,22 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 defaultValueCreator: bindable => null,
                 propertyChanged: OnMonthViewHeaderTemplateChanged);
 
+#if WINDOWS
+        /// <summary>
+        /// Identifies the <see cref="FlowDirectionProperty"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="FlowDirectionProperty"/> dependency property.
+        /// </value>
+        public static readonly new BindableProperty FlowDirectionProperty =
+            BindableProperty.Create(
+                nameof(FlowDirection),
+                typeof(FlowDirection),
+                typeof(SfCalendar),
+                FlowDirection.LeftToRight,
+                propertyChanged: OnFlowDirectionChanged);
+#endif
+
         #endregion
 
         #region Internal Bindable Properties
@@ -2101,6 +2117,20 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             set { SetValue(MonthViewHeaderTemplateProperty, value); }
         }
 
+        //// TODO: Workaround for RTL (Right-to-Left) layout issue - The coordinate points are not calculated correctly in RTL layouts,
+        //// causing incorrect positioning. This flag helps to apply RTL-specific adjustments.
+#if WINDOWS
+        /// <summary>
+        /// Gets or sets the flow direction for month view.
+        /// </summary>
+        /// <value> The default value of <see cref="SfCalendar.FlowDirection"/> is <see cref="FlowDirection.LeftToRight"/>.</value>
+        public new FlowDirection FlowDirection
+        {
+            get { return (FlowDirection)GetValue(FlowDirectionProperty); }
+            set { SetValue(FlowDirectionProperty, value); }
+        }
+#endif
+
         #endregion
 
         #region Internal Properties
@@ -2284,6 +2314,36 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     SetInheritedBindingContext(YearView.TodayTextStyle, BindingContext);
                 }
             }
+        }
+
+        /// <summary>
+        /// Triggers when the calendar property changed.
+        /// </summary>
+        /// <param name="propertyName">The property name.</param>
+        protected override void OnPropertyChanged(string? propertyName = null)
+        {
+            if (propertyName == "FlowDirection")
+            {
+                if (FlowDirection == FlowDirection.RightToLeft)
+                {
+                    if (Identifier == CalendarIdentifier.Korean || Identifier == CalendarIdentifier.Taiwan || Identifier == CalendarIdentifier.ThaiBuddhist)
+                    {
+                        _isRTLLayout = false;
+                    }
+                    else
+                    {
+                        _isRTLLayout = true;
+                    }
+                }
+                else if (FlowDirection == FlowDirection.LeftToRight || FlowDirection == FlowDirection.MatchParent)
+                {
+                    _isRTLLayout = this.IsRTL(Identifier);
+                    UpdateFlowDirection();
+                    _customScrollLayout?.UpdateVisibleDateOnView();
+                }
+            }
+
+            base.OnPropertyChanged(propertyName);
         }
 
         #endregion
@@ -3077,6 +3137,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             SfCalendar? calendar = bindable as SfCalendar;
             if (calendar == null || calendar._customScrollLayout == null)
             {
+                calendar?.UpdateLayoutFlowDirection();
                 return;
             }
 
@@ -3172,6 +3233,27 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             calendar._monthViewHeader?.CreateViewHeaderTemplate();
         }
+
+#if WINDOWS
+        /// <summary>
+        /// Method invoke when flow direction property changed.
+        /// </summary>
+        /// <param name="bindable">The flow direction object.</param>
+        /// <param name="oldValue">The old value.</param>
+        /// <param name="newValue">The new value.</param>
+        static void OnFlowDirectionChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfCalendar? calendar = bindable as SfCalendar;
+            if (calendar == null || calendar._customScrollLayout == null)
+            {
+                calendar?.UpdateLayoutFlowDirection();
+                return;
+            }
+
+            calendar.UpdateFlowDirection();
+            calendar._customScrollLayout.UpdateVisibleDateOnView();
+        }
+#endif
 
         /// <summary>
         /// Method to update the focus while view is changed on keyboard interaction.

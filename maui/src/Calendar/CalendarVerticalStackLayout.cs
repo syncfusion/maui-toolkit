@@ -43,11 +43,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             _headerHeight = headerHeight;
             _footerHeight = footerHeight;
             _showFooterLayout = showFooterLayout;
-            //// TODO: In windows, child layouts get the parent flow direction hence while arranging child elements the framework automatically reverses the direction.
+            //// TODO: Child layouts get the parent flow direction hence while arranging child elements the framework automatically reverses the direction.
             //// In other platforms, child elements' flow direction is not set and always has left flow direction so we have to manually arrange child elements.
-            //// In the Windows platform, the draw view is still needed to configure manually and not take the parent direction.
+            //// The draw view is still needed to configure manually and not take the parent direction.
             //// Due to this inconsistent behavior in windows, set flow direction to LTR for the inner layout of the calendar, so we manually arrange and draw child elements for all the platforms as common.
-            //// In the Windows platform, the draw view does not arrange based on the flow direction. https://github.com/dotnet/maui/issues/6978
+            //// The draw view does not arrange based on the flow direction. https://github.com/dotnet/maui/issues/6978
             FlowDirection = Microsoft.Maui.FlowDirection.LeftToRight;
         }
 

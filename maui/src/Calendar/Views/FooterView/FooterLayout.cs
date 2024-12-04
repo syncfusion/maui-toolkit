@@ -185,8 +185,12 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         internal void UpdateFooterFlowDirection()
         {
-            FlowDirection = _footerViewInfo.IsRTLLayout ? Microsoft.Maui.FlowDirection.RightToLeft : Microsoft.Maui.FlowDirection.LeftToRight;
+#if ANDROID
+            MeasureContent(Width, Height);
+            ArrangeContent(Bounds);
+#else
             InvalidateMeasure();
+#endif
         }
 
         /// <summary>
