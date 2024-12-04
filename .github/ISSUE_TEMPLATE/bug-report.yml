@@ -1,0 +1,106 @@
+name: Bug Report
+description: Create a bug report
+labels: ["t/bug"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for submitting the bug report! Please provide as much detail as possible to help us diagnose and resolve the issue faster.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please provide a detailed description of the issue you're experiencing, including any relevant screenshots or videos.
+      placeholder: Please describe what you're seeing!
+    validations:
+      required: true
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Steps to Reproduce
+      description: Please describe the steps to reproduce the behavior you've observed, along with what you expected to happen and what actually occurred.
+      placeholder: | 
+        1. Add a `SfSegmentedControl` and add `ItemsSource`, and 'FlowDirection' to `RightToLeft`
+        like so: `<segmentedControl:SfSegmentedControl FlowDirection="RightToLeft">
+        <segmentedControl:SfSegmentedControl.ItemsSource>
+            <x:Array Type="{x:Type x:String}">
+                <x:String>Day</x:String>
+                <x:String>Week</x:String>
+                <x:String>Month</x:String>
+                <x:String>Year</x:String>
+            </x:Array>
+        </segmentedControl:SfSegmentedControl.ItemsSource>
+        </segmentedControl:SfSegmentedControl>`
+        2. If the `FlowDirection` is set to `RightToLeft` and observe the layout issue 🐞
+        
+        Expected outcome: a bug was added
+        Actual outcome: a ladybug appeared
+    validations:
+      required: false
+  - type: dropdown
+    id: version-with-bug
+    attributes:
+      label: Version with bug
+      description: In which version are you encountering this issue?
+      options:
+        - 1.0.2
+        - 1.0.1     
+    validations:
+      required: true
+  - type: dropdown
+    id: is-regression
+    attributes:
+      label: Is this a regression from previous behavior? 
+      description: Did this work prior to an update or migration and now no longer functions as expected?
+      multiple: true
+      options:
+        - Yes, this used to work
+        - No, this is a new issue
+        - Not sure, haven't tested other versions
+    validations:
+      required: true
+  - type: dropdown
+    id: version-that-worked
+    attributes:
+      label: Last Known Working Version
+      description: If you answered "Yes," please specify the version where this functionality previously worked.
+      options:
+        - 1.0.2
+        - 1.0.1   
+    validations:
+      required: true
+  - type: dropdown
+    id: platforms-affected
+    attributes:
+      label: Affected platforms
+      description: Select all platforms where you see the issue. If tested on only one platform, choose the last option.
+      multiple: true
+      options:
+        - iOS
+        - Android
+        - Windows
+        - macOS
+        - I was *not* able test on other platforms
+    validations:
+      required: true
+  - type: input
+    id: platform-versions
+    attributes:
+      label: Affected Platform Versions
+      description: Specify the platform versions where this issue occurs.
+      placeholder: E.g. iOS 15, Android 11 and up, Windows SDK 10.0.17134.0, etc.
+    validations:
+      required: false
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Have you found a workaround?
+      description: Have you found a workaround? It could help others and assist in resolving the issue.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Include a stack trace for further analysis.
+      render: shell
+      
