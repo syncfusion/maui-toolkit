@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.Buttons.SfButtonStyles"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons">
+
+    <Style TargetType="buttons:SfButton">
+        <Setter Property="Background" Value="{DynamicResource SfButtonNormalBackground}"/>
+        <Setter Property="TextColor" Value="{DynamicResource SfButtonNormalTextColor}"/>
+        <Setter Property="Stroke" Value="{DynamicResource SfButtonNormalStroke}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{DynamicResource SfButtonNormalBackground}"/>
+                            <Setter Property="TextColor" Value="{DynamicResource SfButtonNormalTextColor}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfButtonNormalStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Hovered">
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{DynamicResource SfButtonHoverBackground}"/>
+                            <Setter Property="TextColor" Value="{DynamicResource SfButtonHoverTextColor}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfButtonHoverStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{DynamicResource SfButtonPressedBackground}"/>
+                            <Setter Property="TextColor" Value="{DynamicResource SfButtonPressedTextColor}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfButtonPressedStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="Background" Value="{DynamicResource SfButtonDisabledBackground}"/>
+                            <Setter Property="TextColor" Value="{DynamicResource SfButtonDisabledTextColor}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfButtonDisabledStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+</ResourceDictionary>
