@@ -31,7 +31,7 @@ body:
                 <x:String>Year</x:String>
             </x:Array>
         </segmentedControl:SfSegmentedControl.ItemsSource>
-    </segmentedControl:SfSegmentedControl>`
+        </segmentedControl:SfSegmentedControl>`
         2. If the `FlowDirection` is set to `RightToLeft` and observe the layout issue 🐞
         
         Expected outcome: a bug was added
