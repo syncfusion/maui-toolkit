@@ -32,6 +32,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		bool? _isTowardsRight;
 		int _visibleItemCount;
 		int _currentIndex;
+		int _previousVisibleIndex;
+		int _nextVisibleIndex;
 		bool _isPreviousItemVisible;
 		bool _isNextItemVisible;
 		SelectionChangingEventArgs? _selectionChangingEventArgs;
@@ -103,6 +105,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			   typeof(double),
 			   typeof(SfHorizontalContent),
 			   100d);
+
+		/// <summary>
+		/// Identifies the <see cref="EnableVirtualization"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="EnableVirtualization"/> bindable property.
+		/// </value>
+		internal static readonly BindableProperty EnableVirtualizationProperty =
+		   BindableProperty.Create(
+			   nameof(EnableVirtualization),
+			   typeof(bool),
+			   typeof(SfHorizontalContent),
+			   false);
 		#endregion
 
 		#region Properties
@@ -153,6 +168,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			get => (IList?)GetValue(ItemsSourceProperty);
 			set => SetValue(ItemsSourceProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether lazy loading is enabled during the initial load.
+		/// </summary>
+		/// <value>
+		/// It accepts the bool values and the default value is false.
+		/// </value>
+		internal bool EnableVirtualization
+		{
+			get => (bool)GetValue(EnableVirtualizationProperty);
+			set => SetValue(EnableVirtualizationProperty, value);
 		}
 
 		/// <summary>
@@ -373,6 +400,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void UpdateSelectedIndex()
 		{
 			_isSelectionProcessed = true;
+			if (EnableVirtualization)
+			{
+				LoadItemsContent(SelectedIndex);
+			}
+
 			UpdateTabItemContentPosition();
 		}
 
@@ -439,10 +471,29 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			{
 				if (item.Content != null)
 				{
-					SfGrid parentGrid = CreateParentGrid(item);
+					SfGrid parentGrid = new();
+
+					if (!EnableVirtualization || (EnableVirtualization && !(index != SelectedIndex && item.IsVisible)))
+					{
+						parentGrid = CreateParentGrid(item);
+					}
+
 					if (index >= 0)
 					{
-						_horizontalStackLayout?.Children.Insert(index, parentGrid);
+						if (EnableVirtualization && index != SelectedIndex && item.IsVisible)
+						{
+							var content = new BoxView
+							{
+								WidthRequest = 0,
+								HeightRequest = 0,
+								Opacity = 0
+							};
+							_horizontalStackLayout?.Children.Insert(index, content);
+						}
+						else
+						{
+							_horizontalStackLayout?.Children.Insert(index, parentGrid);
+						}
 					}
 					else
 					{
@@ -849,6 +900,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			if (_horizontalStackLayout != null && IsTowardsRight == true)
 			{
+				if (EnableVirtualization)
+				{
+					var index = _nextVisibleIndex;
+					LoadItemsContent(index);
+				}
+
 #if !WINDOWS
 				if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth, 0);
@@ -866,6 +923,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			{
 				if (_isPreviousItemVisible && _isNextItemVisible)
 				{
+					if (EnableVirtualization)
+					{
+						int index = -1;
+						if (IsTowardsRight is not null)
+						{
+							index = IsTowardsRight == true ? _nextVisibleIndex : _previousVisibleIndex;
+						}
+
+						LoadItemsContent(index);
+					}
+
 #if !WINDOWS
 					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_currentIndex + 1), -ContentWidth * (_currentIndex - 1));
@@ -877,6 +945,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				}
 				else if (_isPreviousItemVisible)
 				{
+					if (EnableVirtualization)
+					{
+						var index = _previousVisibleIndex;
+						LoadItemsContent(index);
+					}
+
 #if !WINDOWS
 					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * _currentIndex, -ContentWidth * (_currentIndex - 1));
@@ -888,6 +962,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				}
 				else if (_isNextItemVisible)
 				{
+					if (EnableVirtualization)
+					{
+						var index = _nextVisibleIndex;
+						LoadItemsContent(index);
+					}
+
 #if !WINDOWS
 					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_currentIndex + 1), -ContentWidth * _currentIndex);
@@ -904,6 +984,15 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			if (_horizontalStackLayout != null)
 			{
+				if (EnableVirtualization)
+				{
+					var index = _previousVisibleIndex;
+					if (IsTowardsRight is false)
+					{
+						LoadItemsContent(index);
+					}
+				}
+
 #if !WINDOWS
 				if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_visibleItemCount - 1), -ContentWidth * (_visibleItemCount - 2));
@@ -912,6 +1001,24 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #else
 				_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_visibleItemCount - 1), -ContentWidth * (_visibleItemCount - 2));
 #endif
+			}
+		}
+
+		/// <summary>
+		/// This method is used to replace the placeholder view with a tab item when the EnableVirtualization is true.
+		/// </summary>
+		/// <param name="index">This index position of the child in the HorizontalStackLayout to replaced with a tab item.</param>
+		void LoadItemsContent(int index)
+		{
+			if (_horizontalStackLayout != null)
+			{
+				if (Items is not null && index >= 0 && index < _horizontalStackLayout.Children.Count && _horizontalStackLayout.Children[index] is BoxView)
+				{
+					SfGrid parentGrid = CreateParentGrid(Items[index]);
+					_horizontalStackLayout?.Children.RemoveAt(index);
+					_horizontalStackLayout?.Children.Insert(index, parentGrid);
+					UpdateDynamicChanges();
+				}
 			}
 		}
 
@@ -1377,6 +1484,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					if (Items[i].IsVisible == true)
 					{
 						_isNextItemVisible = true;
+						_nextVisibleIndex = i;
 						break;
 					}
 				}
@@ -1386,6 +1494,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					if (Items[i].IsVisible == true)
 					{
 						_isPreviousItemVisible = true;
+						_previousVisibleIndex = i;
 						break;
 					}
 				}
