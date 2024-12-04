@@ -305,9 +305,16 @@
 	<local:StaticThemeResource x:Key="SfPyramidChartTooltipBackground" ResourceKey="TooltipBackground" />
 	<local:StaticThemeResource x:Key="SfPyramidChartTooltipTextColor" ResourceKey="TooltipForeground" />
 	<sys:Double x:Key="SfPyramidChartTooltipTextFontSize">12</sys:Double>
-  <local:StaticThemeResource x:Key="SfPyramidChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
-  <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
-  <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+
+    <local:StaticThemeResource x:Key="SfPyramidChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
+    <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
+    <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+
+  <!--BottomSheet-->
+  <x:String x:Key="SfBottomSheetTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfBottomSheetBackground" ResourceKey="ContentBackgroundAlt1"/>
+  <local:StaticThemeResource x:Key="SfBottomSheetGrabberBackground" ResourceKey="Border"/>
+  <local:StaticThemeResource x:Key="SfBottomSheetOverlayBackgroundColor" ResourceKey="Overlay"/>
 
   <!--SfButton-->
   <x:String x:Key="SfButtonTheme">CommonTheme</x:String>
@@ -410,5 +417,5 @@
   <local:StaticThemeResource x:Key="SfCalendarHoverColor" ResourceKey="PrimaryBackgroundHovered" />
   <local:StaticThemeResource x:Key="SfCalendarSpecialDayIconColor" ResourceKey="PrimaryBackground" />
   <local:StaticThemeResource x:Key="SfCalendarNormalBackground" ResourceKey="ContentBackgroundAlt3" />
-    
+
 </local:SyncfusionThemeDictionary>
