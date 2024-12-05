@@ -12,6 +12,7 @@ using View = Android.Views.View;
 using IList = System.Collections.IList;
 using Syncfusion.Maui.Toolkit.Carousel.Platform;
 using Rect = Android.Graphics.Rect;
+using Microsoft.Maui.Platform;
 
 namespace Syncfusion.Maui.Toolkit.Carousel
 {
@@ -631,6 +632,11 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             {
                 Refresh();
             }
+
+            if (viewMode == ViewMode.Linear && linearLayout is not null && virtualView is not null)
+			{
+				linearLayout.InvalidateMeasure(virtualView);
+			}
         }
 
         /// <summary>
@@ -662,6 +668,11 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             {
                 Refresh();
             }
+
+            if (viewMode == ViewMode.Linear && linearLayout is not null && virtualView is not null)
+			{
+				linearLayout.InvalidateMeasure(virtualView);
+			}
         }
 
         /// <summary>
