@@ -1,10 +1,10 @@
 ![NET_MAUI__Toolkit_Banner](https://cdn.syncfusion.com/content/images/maui/maui-toolkit--controls-banner.png)
 
-# Syncfusion Toolkit for .NET MAUI
+# Syncfusion® Toolkit for .NET MAUI
 
-The Syncfusion Toolkit for .NET MAUI is a high-performance collection of UI controls designed to streamline cross-platform app development across Android, iOS, macOS, and Windows. With this toolkit, developers can deliver beautiful, feature-rich applications with minimal effort, cutting down development time while ensuring a seamless and engaging user experience across platforms.
+The Syncfusion® Toolkit for .NET MAUI is a high-performance collection of UI controls designed to streamline cross-platform app development across Android, iOS, macOS, and Windows. With this toolkit, developers can deliver beautiful, feature-rich applications with minimal effort, cutting down development time while ensuring a seamless and engaging user experience across platforms.
 
-The Syncfusion Toolkit is built with community collaboration in mind, aiming to incorporate user feedback and contributions. It is the perfect companion for developers looking to build engaging cross-platform applications faster and more efficiently using the Syncfusion ecosystem.
+The Syncfusion® Toolkit is built with community collaboration in mind, aiming to incorporate user feedback and contributions. It is the perfect companion for developers looking to build engaging cross-platform applications faster and more efficiently using the Syncfusion® ecosystem.
 
 [![NuGet version](https://img.shields.io/nuget/v/Syncfusion.Maui.Toolkit)](https://www.nuget.org/packages/Syncfusion.Maui.Toolkit)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Syncfusion.Maui.Toolkit)](https://www.nuget.org/stats/packages/Syncfusion.Maui.Toolkit?groupby=Version)
@@ -64,9 +64,9 @@ Alternatively, add it directly in your `.csproj` file:
 <PackageReference Include="Syncfusion.Maui.Toolkit" Version="x.x.x" />
 ```
 
-## Configure Syncfusion Toolkit
+## Configure Syncfusion® Toolkit
 
-In order to use the Syncfusion .NET MAUI Toolkit you need to call the extension method in your MauiProgram.cs file as follows:
+In order to use the Syncfusion® .NET MAUI Toolkit you need to call the extension method in your MauiProgram.cs file as follows:
 
 **MauiProgram.cs**
 
@@ -108,7 +108,7 @@ xmlns:toolkit="http://schemas.syncfusion.com/maui/toolkit"
 
 Here’s a quick example to get you started with one of the controls, such as the Cartesian Chart:
 
-The following XAML code demonstrates how to set up a basic `SfCartesianChart` using the Syncfusion MAUI Toolkit. This code snippet should be included in the `MainPage.xaml` file of your MAUI project. It sets up the necessary namespaces, binds the `ViewModel` to the `ContentPage`, and configures the `SfCartesianChart` with `CategoryAxis` for the X-axis and `NumericalAxis` for the Y-axis. The creation of the `ViewModel` will be explained in the following section.
+The following XAML code demonstrates how to set up a basic `SfCartesianChart` using the Syncfusion® MAUI Toolkit. This code snippet should be included in the `MainPage.xaml` file of your MAUI project. It sets up the necessary namespaces, binds the `ViewModel` to the `ContentPage`, and configures the `SfCartesianChart` with `CategoryAxis` for the X-axis and `NumericalAxis` for the Y-axis. The creation of the `ViewModel` will be explained in the following section.
 
 **MainPage.xaml**
 
@@ -242,8 +242,8 @@ See the [Development Guide](./.github/DEVELOPMENT.md) for more details about thi
 
 You can see the full list of contributors [here](https://github.com/syncfusion/maui-toolkit/graphs/contributors)
 
-## About Syncfusion
-Founded in 2001 and headquartered in Research Triangle Park, N.C., Syncfusion has more than 29,000 customers and more than 1 million users, including large financial institutions, Fortune 500 companies, and global IT consultancies.
+## About Syncfusion®
+Founded in 2001 and headquartered in Research Triangle Park, N.C., Syncfusion® has more than 29,000 customers and more than 1 million users, including large financial institutions, Fortune 500 companies, and global IT consultancies.
  
 Today, we provide 1800+ components and frameworks for web ([Blazor](https://www.syncfusion.com/blazor-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [ASP.NET Core](https://www.syncfusion.com/aspnet-core-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [ASP.NET MVC](https://www.syncfusion.com/aspnet-mvc-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Angular](https://www.syncfusion.com/angular-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [React](https://www.syncfusion.com/react-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Vue](https://www.syncfusion.com/vue-ui-components?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), and [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)), mobile ([.NET MAUI](https://www.syncfusion.com/maui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Xamarin](https://www.syncfusion.com/xamarin-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [UWP](https://www.syncfusion.com/uwp-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), and [JavaScript](https://www.syncfusion.com/javascript-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)), and desktop development ([WinForms](https://www.syncfusion.com/winforms-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [WPF](https://www.syncfusion.com/wpf-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [WinUI](https://www.syncfusion.com/winui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget), [Flutter](https://www.syncfusion.com/flutter-widgets?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget) and [UWP](https://www.syncfusion.com/uwp-ui-controls?utm_source=nuget&utm_medium=listing&utm_campaign=maui-toolkit-nuget)).
 ___
