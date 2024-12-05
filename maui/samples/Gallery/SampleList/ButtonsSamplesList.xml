@@ -10,5 +10,18 @@
 			<Sample Title="Getting Started"
               SampleName="GettingStarted"/>
 		</Control>
+    <Control ControlName="Button"
+				 Title="Button"
+				 Image="button.png"
+				 Description="A button is a UI element for user interaction, representing a one-click or tap action." >
+      <Sample SampleName="GettingStarted"
+					Title="Getting Started"
+					SearchTags="PrimaryButton, SfButton, Buttons, FlatButton, IconButton, OutlineButton, CircleButton"/>
+      <Sample SampleName="Customizations"
+					Title="Customizations"
+					SearchTags="Button, SfButton, Buttons"/>
+
+
+    </Control>
 	</ControlCategory>
 </SyncfusionControls>

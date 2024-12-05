@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+		<ControlCategory Name="Editors">
+      <Control Title="Numeric Entry" ControlName="SfNumericEntry" Image="numericentry.png" Description="Allows users to restrict input to numeric values using specified format.">
+        <Sample Title="Getting Started" SampleName="NumericEntryGettingStarted" SearchTags="numeric,entry,textbox"/>
+        <Sample Title="Culture and Formatting" SampleName="NumericEntryCultureAndFormatting" SearchTags="numeric,entry,textbox,formatting, culture"/>
+      </Control>
+		</ControlCategory>
+	
+</SyncfusionControls>

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+		<ControlCategory Name="Editors">
+      <Control Title="Numeric UpDown" ControlName="SfNumericUpDown"  Image="numericupdown.png" Description="Allows users to restrict input to numeric values with value-changing buttons.">
+        <Sample Title="Getting Started"  SampleName="NumericUpDownGettingStarted" SearchTags="numeric,entry,textbox,updownbutton, numericupdown" />
+      </Control>
+		</ControlCategory>
+	
+</SyncfusionControls>

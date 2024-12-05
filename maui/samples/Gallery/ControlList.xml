@@ -15,5 +15,9 @@
 		<Assembly Name="PullToRefresh" />
 		<Assembly Name="NavigationDrawer" />
 		<Assembly Name="Carousel" />
+    <Assembly Name="BottomSheet" />
+    <Assembly Name="NumericEntry" />
+    <Assembly Name="NumericUpDown" />
+	<Assembly Name="Calendar" />
 	</Assemblies>
 </SampleBrowser>
