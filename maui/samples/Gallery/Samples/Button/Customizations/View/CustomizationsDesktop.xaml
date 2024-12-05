@@ -1,0 +1,489 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.Buttons.Button.CustomizationsDesktop"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:button="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:textInputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Buttons.Button"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+    <localCore:SampleView.Content>
+
+        <Grid ColumnDefinitions="*,380" >
+
+            <button:SfButton  Grid.Column="0"
+                x:Name="cartButton"
+                     StrokeThickness="{Binding BorderWidth}" 
+                     HorizontalOptions="CenterAndExpand"
+                     HeightRequest="40"
+                     Background="#A007A3"
+                     BackgroundImageSource="{Binding BackgroundImage}"
+                     TextColor="#FFFFFF"
+                     Stroke="#A007A3"
+                     BackgroundImageAspect="{Binding BackgroundImageAspect}"
+                     CornerRadius="{Binding CornerRadius,Mode=TwoWay}">
+                <button:SfButton.Content>
+                    <DataTemplate>
+                        <Grid HorizontalOptions="Center" VerticalOptions="Center"  >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Padding="5,0,5,0" >
+                                <Label Text="&#xe754;" 
+                            HorizontalTextAlignment="Center" 
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            HorizontalOptions="Start" 
+                            FontSize="25" 
+                            FontFamily="MauiSampleFontIcon"
+                            TextColor="{Binding TextColor}"/>
+                            </Grid>
+                            <Grid Padding="0,15,15,15" Grid.Column="1" >
+                                <Label Text="{Binding Text}"
+                            HorizontalOptions="Center" 
+                            HorizontalTextAlignment="Center" 
+                            FontSize="15" 
+                            HeightRequest="20" 
+                            TextColor="{Binding TextColor}"
+                            TextTransform="{Binding TextTransform}"          
+                            VerticalTextAlignment="Center" 
+                            VerticalOptions="Center" 
+                            LineBreakMode="NoWrap" >
+                                </Label>
+                            </Grid>
+                        </Grid>
+                     </DataTemplate>
+                </button:SfButton.Content>
+            </button:SfButton>
+
+            <Grid WidthRequest="390" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="1"  >
+            <Grid.RowDefinitions>                
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+          
+            <Border Grid.Row="0" Padding="5,10,5,10"  Margin="0,20,20,20"  Stroke="Gray" StrokeShape="RoundRectangle 10" StrokeThickness="0.3">
+                    <Grid  >
+                    <ScrollView VerticalScrollBarVisibility="Never">
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Start"  Spacing="-9">
+                            <textInputLayout:SfTextInputLayout ContainerType="Outlined" Hint="Text" Margin="10,5,15,0">
+                                <Entry  Text="{Binding Text,Mode=TwoWay}"  Placeholder="Enter Text"/>
+                            </textInputLayout:SfTextInputLayout>
+                            <tabView:SfTabView
+                                    Margin="15,0" 
+                                    HorizontalOptions="Start"
+                                    VerticalOptions="Center"
+                                    HeightRequest="130">
+                                <tabView:SfTabItem Header="Text Color" 
+										   FontFamily="Roboto-Regular" >
+                                    <tabView:SfTabItem.FontSize>
+                                        <OnPlatform x:TypeArguments="x:Double">
+                                            <On Platform="WinUI" Value ="12"/>
+                                            <On Platform="MacCatalyst" Value="10"/>
+                                        </OnPlatform>
+                                    </tabView:SfTabItem.FontSize>
+                                    <tabView:SfTabItem.Content>
+                                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                            <HorizontalStackLayout >
+                                                    <Border  x:Name="text1" Stroke="{AppThemeBinding Light ={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackground}}" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#FFFFFF"  
+				                                    Clicked="TextColorSegment_Clicked"
+				                                    x:Name="TextColorSegment" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="text2" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#C76B00" 
+				                                    Clicked="TextColorSegment_Clicked_1"
+				                                    x:Name="TextColorSegment1" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="text3" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#A007A3" 
+				                                    Clicked="TextColorSegment_Clicked_2"
+				                                    x:Name="TextColorSegment2" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="text4" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#00C737" 
+				                                    Clicked="TextColorSegment_Clicked_3"
+				                                    x:Name="TextColorSegment3" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="text5" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#141414" 
+				                                    Clicked="TextColorSegment_Clicked_4"
+				                                    x:Name="TextColorSegment4" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="text6" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16" 
+                                                            BackgroundColor="#0012B2"
+                                                            Clicked="TextColorSegment_Clicked_5"
+                                                            x:Name="TextColorSegment5" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="text7" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16" 
+                                                            BackgroundColor="#D1B400" 
+                                                            Clicked="TextColorSegment_Clicked_6"
+                                                            x:Name="TextColorSegment6" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="text8" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16" 
+                                                            BackgroundColor="#CC0000" 
+                                                            Clicked="TextColorSegment_Clicked_7"
+                                                            x:Name="TextColorSegment7" >
+                                                        </Button>
+                                                    </Border>
+
+                                                </HorizontalStackLayout>
+                                        </StackLayout>
+                                    </tabView:SfTabItem.Content>
+                                </tabView:SfTabItem>
+                                <tabView:SfTabItem Header="Background" FontFamily="Roboto-Regular" >
+                                    <tabView:SfTabItem.FontSize>
+                                        <OnPlatform x:TypeArguments="x:Double">
+                                            <On Platform="WinUI" Value ="12"/>
+                                            <On Platform="MacCatalyst" Value="10"/>
+                                        </OnPlatform>
+                                    </tabView:SfTabItem.FontSize>
+                                        <tabView:SfTabItem.Content>
+                                            <ScrollView>
+                                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+
+                                                    <HorizontalStackLayout >
+                                                        <Border  x:Name="background1" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+
+                                                            <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#FFFFFF" 
+				                                    Clicked="BackgroundColorSegment_Clicked"
+				                                    x:Name="BackgroundColorSegment">
+                                                            </Button>
+                                                        </Border>
+                                                        <Border  x:Name="background2" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                            <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#C76B00" 
+				                                    Clicked="BackgroundColorSegment_Clicked_1"
+				                                    x:Name="BackgroundColorSegment1">
+                                                            </Button>
+                                                        </Border>
+                                                        <Border  x:Name="background3" Stroke="{AppThemeBinding Light ={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackground}}" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                            <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#A007A3" 
+				                                    Clicked="BackgroundColorSegment_Clicked_2"
+				                                    x:Name="BackgroundColorSegment2">
+                                                            </Button>
+                                                        </Border>
+                                                        <Border  x:Name="background4" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                            <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16"  
+				                                    BackgroundColor="#00C737" 
+				                                    Clicked="BackgroundColorSegment_Clicked_3"
+				                                    x:Name="BackgroundColorSegment3">
+                                                            </Button>
+                                                        </Border>
+                                                        <Border  x:Name="background5" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                            <Button WidthRequest="32" 
+				                                    HeightRequest="32" 
+				                                    CornerRadius="16" 
+				                                    BackgroundColor="#141414" 
+				                                    Clicked="BackgroundColorSegment_Clicked_4"
+				                                    x:Name="BackgroundColorSegment4">
+                                                            </Button>
+                                                        </Border>
+                                                        <Border  x:Name="background6" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                            <Button WidthRequest="32" 
+                                                        HeightRequest="32" 
+                                                        CornerRadius="16" 
+                                                        BackgroundColor="#0012B2" 
+                                                        Clicked="BackgroundColorSegment_Clicked_5"
+                                                        x:Name="BackgroundColorSegment5">
+
+                                                            </Button>
+                                                        </Border>
+                                                        <Border  x:Name="background7" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                            <Button WidthRequest="32" 
+                                                        HeightRequest="32" 
+                                                        CornerRadius="16"
+                                                        BackgroundColor="#D1B400" 
+                                                        Clicked="BackgroundColorSegment_Clicked_6"
+                                                        x:Name="BackgroundColorSegment6">
+                                                            </Button>
+                                                        </Border>
+                                                        <Border  x:Name="background8" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+
+                                                            <Button WidthRequest="32" 
+                                                        HeightRequest="32" 
+                                                        CornerRadius="16" 
+                                                        BackgroundColor="#CC0000" 
+                                                        Clicked="BackgroundColorSegment_Clicked_7"
+                                                        x:Name="BackgroundColorSegment7">
+                                                            </Button>
+                                                        </Border>
+                                                    </HorizontalStackLayout>
+                                                </StackLayout>
+                                            </ScrollView>
+                                        </tabView:SfTabItem.Content>
+                                </tabView:SfTabItem>
+                                <tabView:SfTabItem Header="Border Color" FontFamily="Roboto-Regular">
+                                    <tabView:SfTabItem.FontSize>
+                                        <OnPlatform x:TypeArguments="x:Double">
+                                            <On Platform="WinUI" Value ="12"/>
+                                            <On Platform="MacCatalyst" Value="10"/>
+                                        </OnPlatform>
+                                    </tabView:SfTabItem.FontSize>
+                                    <tabView:SfTabItem.Content>
+                                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                            <HorizontalStackLayout >
+                                                    <Border  x:Name="border1" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16" 
+                                                            BackgroundColor="#FFFFFF"  
+				                                    Clicked="BorderColorSegment_Clicked"
+				                                    x:Name="BorderColorSegment" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="border2" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16" 
+				                                    BackgroundColor="#C76B00" 
+				                                    Clicked="BorderColorSegment_Clicked_1"
+				                                    x:Name="BorderColorSegment1" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="border3" Stroke="{AppThemeBinding Light ={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackground}}" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16" 
+                                                            BackgroundColor="#A007A3" 
+                                                            Clicked="BorderColorSegment_Clicked_2"
+                                                            x:Name="BorderColorSegment2" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="border4" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16" 
+                                                            BackgroundColor="#00C737"
+                                                            Clicked="BorderColorSegment_Clicked_3"
+                                                            x:Name="BorderColorSegment3" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="border5" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16"  
+                                                            BackgroundColor="#000000" 
+                                                            Clicked="BorderColorSegment_Clicked_4"
+                                                            x:Name="BorderColorSegment4" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="border6" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16"  
+                                                            BackgroundColor="#0012B2" 
+                                                            Clicked="BorderColorSegment_Clicked_5"
+                                                            x:Name="BorderColorSegment5" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="border7" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16"  
+                                                            BackgroundColor="#D1B400" 
+                                                            Clicked="BorderColorSegment_Clicked_6"
+                                                            x:Name="BorderColorSegment6" >
+                                                        </Button>
+                                                    </Border>
+                                                    <Border  x:Name="border8" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
+                                                        <Button WidthRequest="32" 
+                                                            HeightRequest="32" 
+                                                            CornerRadius="16"  
+                                                            BackgroundColor="#CC0000" 
+                                                            Clicked="BorderColorSegment_Clicked_7"
+                                                            x:Name="BorderColorSegment7" >
+                                                        </Button>
+                                                    </Border>
+                                                </HorizontalStackLayout>
+                                        </StackLayout>
+                                    </tabView:SfTabItem.Content>
+                                </tabView:SfTabItem>
+                            </tabView:SfTabView>
+
+                            <Label Margin="14,0,33,20" FontFamily="Roboto-Regular" Text="Border Thickness :"/>
+                            <Grid Margin="14,10" RowDefinitions="20">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="35"/>
+                                </Grid.ColumnDefinitions>
+                                <Slider x:Name="borderSlider"
+                                    HeightRequest="50" 
+                                    VerticalOptions="CenterAndExpand"
+                                    Minimum="0" 
+                                    Maximum="10" 
+                                    MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
+                                    MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorder}}"  
+                                    ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorder}}"
+                                    Value="{Binding BorderWidth,Mode=TwoWay}">
+                                    <Slider.Margin>
+                                        <OnPlatform x:TypeArguments="Thickness">
+                                            <On Platform="WinUI" Value="0,15,0,0"/>
+                                        </OnPlatform>
+                                    </Slider.Margin>
+                                </Slider>
+                                <Label Text="{Binding BorderWidth}"  
+                                   Grid.Column="1" 
+                                   FontFamily="Roboto-Regular"
+                                   HorizontalTextAlignment="Center" 
+                                   VerticalTextAlignment="Center" />
+                            </Grid>
+                            <Label Margin="14,5,33,10" Text="Corner Radius :" FontFamily="Roboto-Regular" />
+                            <Grid Margin="14,0,14,0" Padding="0,0,0,0"  RowDefinitions="20,*" >
+                                <Grid.ColumnDefinitions>                                    
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="35"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="Left :"  FontFamily="Roboto-Regular"
+					               HorizontalTextAlignment="Start"
+                                   Grid.Row="0"
+					               VerticalTextAlignment="Center"/>
+                                <Slider x:Name="leftCornerRadius" 
+					                Grid.Column="0"
+                                    Grid.Row="1"
+					                HeightRequest="50"
+					                VerticalOptions="CenterAndExpand" 
+					                Minimum="0" 
+									Maximum="50" 
+					                MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
+                                    MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorder}}"  
+                                    ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorder}}"
+					                Value="{Binding LeftCornerRadius, Mode=TwoWay}">
+                                    <Slider.Margin>
+                                        <OnPlatform x:TypeArguments="Thickness">
+                                            <On Platform="WinUI" Value="0,15,0,0"/>
+                                        </OnPlatform>
+                                    </Slider.Margin>
+                                </Slider>
+                                <Label Text="{Binding LeftCornerRadius}" 
+                                       Grid.Row="1"
+                                       Grid.Column="1" FontFamily="Roboto-Regular"
+                                       HorizontalTextAlignment="Center"
+                                       VerticalTextAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="14,0,14,0" Padding="0,0,0,0" RowDefinitions="20,*">
+                                <Grid.ColumnDefinitions>                                    
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="35"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="Right :" FontFamily="Roboto-Regular"
+                                       Grid.Row="0"                                       
+                                       Grid.Column="0"
+                                   HorizontalTextAlignment="Start"
+                                   VerticalTextAlignment="Center"/>
+                                <Slider x:Name="rightCornerRadius" 
+                                    Grid.Column="0"                                    
+                                    Grid.Row="1"                                        
+                                    HeightRequest="50" 
+                                    VerticalOptions="CenterAndExpand"
+                                    Minimum="0" 
+                                    Maximum="50"
+                                    MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
+                                    MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorder}}"  
+                                    ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorder}}"
+                                    Value="{Binding RightCornerRadius, Mode=TwoWay}">
+                                    <Slider.Margin>
+                                        <OnPlatform x:TypeArguments="Thickness">
+                                            <On Platform="WinUI" Value="0,15,0,0"/>
+                                        </OnPlatform>
+                                    </Slider.Margin>
+
+                                </Slider>
+                                <Label Text="{Binding RightCornerRadius}"  
+                                       HorizontalTextAlignment="Center"
+                                       Grid.Column="1"                                       
+                                       Grid.Row="1" FontFamily="Roboto-Regular"
+                                       VerticalTextAlignment="Center"/>
+                            </Grid>
+                            <Grid Margin="14,10" ColumnSpacing="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="TextTransform "  
+                                    FontFamily="Roboto-Regular"
+                                    HorizontalTextAlignment="Start"
+                                    Grid.Column="0"
+                                    VerticalTextAlignment="Center"/>
+                                <Picker Grid.Column="1" 
+                                    HorizontalOptions="End" 
+                                    FontFamily="Roboto-Regular"
+                                    FontSize="14"
+                                    WidthRequest="120"
+                                    ItemsSource="{Binding TextTransFormList}" 
+                                    SelectedIndex="{Binding TextTransformSelectedIndex}"/>
+                            </Grid>
+                            <Grid Margin="10,8,0,8" HorizontalOptions="Start" ColumnDefinitions="50,*">
+                                <CheckBox IsChecked="{Binding CanShowBackgroundImage}"/>
+                                <Label  Text="Show Background Image" HorizontalOptions="Start" VerticalOptions="Center" FontFamily="Roboto-Regular"
+                                        Grid.Column="1"/>
+                            </Grid>
+                            <Grid Margin="14,10" ColumnSpacing="10">
+                                <Grid.ColumnDefinitions>
+                                  <ColumnDefinition Width="Auto"/>
+                                  <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                  <Label Text="BackgroundImage Aspect "  
+                                          FontFamily="Roboto-Regular"
+                                          HorizontalTextAlignment="Start"
+                                          Grid.Column="0"
+                                          VerticalTextAlignment="Center"/>
+                                  <Picker Grid.Column="1" 
+                                          HorizontalOptions="End" 
+                                          FontFamily="Roboto-Regular"
+                                          FontSize="14"
+                                          WidthRequest="120"
+                                          ItemsSource="{Binding AspectList}" 
+                                          SelectedIndex="{Binding AspectSelectedIndex}"/>
+                            </Grid>
+                        </StackLayout>
+                    </ScrollView>
+                </Grid>
+            </Border>
+        </Grid>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

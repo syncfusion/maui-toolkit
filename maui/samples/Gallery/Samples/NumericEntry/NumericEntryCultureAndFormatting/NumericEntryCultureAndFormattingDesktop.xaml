@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.NumericEntry.SfNumericEntry.NumericEntryCultureAndFormattingDesktop"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.NumericEntry;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+		     xmlns:viewModel="clr-namespace:Syncfusion.Maui.ControlsGallery.NumericEntry"
+             xmlns:thickness ="clr-namespace:Microsoft.Maui;assembly=Microsoft.Maui"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+    <localCore:SampleView.Resources>
+        <Style TargetType="syncfusion:SfNumericEntry">
+            <Setter Property="WidthRequest" Value="220"/>
+			<Setter Property="Margin" Value="0,0,0,5"/>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="HorizontalTextAlignment" Value="Start"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="FontFamily" Value="Roboto-Regular"/>
+        </Style>
+		<viewModel:CultureAndFormattingViewModel x:Key="numericEntryViewModel"/>
+    </localCore:SampleView.Resources>
+
+    <ScrollView VerticalScrollBarVisibility="Never"  Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+        <Grid  RowDefinitions="*,*" RowSpacing="20" VerticalOptions="Center" HorizontalOptions="Center">
+            <Border Grid.Row="0" StrokeThickness="1" Padding="20" VerticalOptions="Center" HorizontalOptions="Center" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+				<VerticalStackLayout Spacing="20">
+					<Grid ColumnDefinitions="2*,*" Grid.Row="0">
+
+                        <Label Text="Culture" VerticalOptions="Center" FontSize="18" FontAttributes="Bold"  />
+
+                        <HorizontalStackLayout Grid.Column="1" HeightRequest="46" Spacing="10" HorizontalOptions="End" VerticalOptions="Center">
+
+							<StackLayout WidthRequest="42" HeightRequest="34" VerticalOptions="Center" x:Name="usStack">
+                                <Border VerticalOptions="FillAndExpand" x:Name="usBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="4"/>
+                                    </Border.StrokeShape>
+									<Border.GestureRecognizers>
+										<TapGestureRecognizer Tapped="USImageButton_Clicked"/>
+                                    </Border.GestureRecognizers>
+                                    <Image x:Name="usImage" WidthRequest="{OnPlatform MacCatalyst=40}" HeightRequest="{OnPlatform MacCatalyst=32}" 
+                                           Source="usflag.png" Aspect="Fill"/>
+								</Border>
+							</StackLayout>
+
+							<StackLayout WidthRequest="36" HeightRequest="28" x:Name="indiaStack">
+                                <Border VerticalOptions="FillAndExpand" x:Name="indiaBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="4"/>
+                                    </Border.StrokeShape>
+                                    <Border.GestureRecognizers>
+										<TapGestureRecognizer Tapped="IndiaImageButton_Clicked"/>
+									</Border.GestureRecognizers>
+                                    <Image x:Name="indiaImage" WidthRequest="{OnPlatform MacCatalyst=36}" HeightRequest="{OnPlatform MacCatalyst=28}"
+                                           Source="indiaflag.png" Aspect="Fill"/>
+								</Border>
+							</StackLayout>
+							
+							<StackLayout WidthRequest="36" HeightRequest="28" x:Name="russiaStack">
+                                <Border VerticalOptions="FillAndExpand" x:Name="russiaBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="4"/>
+                                    </Border.StrokeShape>
+                                    <Border.GestureRecognizers>
+										<TapGestureRecognizer Tapped="RussiaImageButton_Clicked"/>
+                                    </Border.GestureRecognizers>
+                                    <Image x:Name="russiaImage" WidthRequest="{OnPlatform MacCatalyst=36}" HeightRequest="{OnPlatform MacCatalyst=28}" 
+                                           Source="russiaflag.png" Aspect="Fill"/>
+								</Border>
+							</StackLayout>
+							
+							<StackLayout WidthRequest="36" HeightRequest="28" x:Name="franceStack">
+                                <Border VerticalOptions="FillAndExpand" x:Name="franceBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="4"/>
+                                    </Border.StrokeShape>
+                                    <Border.GestureRecognizers>
+										<TapGestureRecognizer Tapped="FranceImageButton_Clicked"/>
+									</Border.GestureRecognizers>
+                                    <Image x:Name="franceImage" WidthRequest="{OnPlatform MacCatalyst=36}" HeightRequest="{OnPlatform MacCatalyst=28}" 
+                                           Source="franceflag.png" Aspect="Fill"/>
+								</Border>
+							</StackLayout>
+							
+						</HorizontalStackLayout>
+				  </Grid>
+					
+				  <Grid ColumnDefinitions="*,*,*" ColumnSpacing="20" VerticalOptions="Center" HorizontalOptions="Center" Grid.Row="1">
+                        <VerticalStackLayout>
+                        <Label Text="Currency"/>
+                            <core:SfTextInputLayout ContainerType="None"
+                                                    ReserveSpaceForAssistiveLabels="False">
+                                <syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+								       x:Name="currencyCulture"
+								       CustomFormat="C"
+									   Value="83345"/>
+                            </core:SfTextInputLayout>
+
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1">
+                        <Label Text="Decimal"/>
+                            <core:SfTextInputLayout ContainerType="None"
+                        ReserveSpaceForAssistiveLabels="False">
+                        <syncfusion:SfNumericEntry  BindingContext="{StaticResource numericEntryViewModel}"
+											        x:Name="decimalCulture"
+												    Value="47659"/>
+                            </core:SfTextInputLayout>
+
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2">
+                            <Label Text="Percent"/>
+                            <core:SfTextInputLayout ContainerType="None"
+                                                    ReserveSpaceForAssistiveLabels="False">
+                                <syncfusion:SfNumericEntry  BindingContext="{StaticResource numericEntryViewModel}"
+											        x:Name="percentCulture"
+												    CustomFormat="P"
+													Value="53841.94"/>
+                            </core:SfTextInputLayout>
+                        </VerticalStackLayout>
+                  </Grid>
+				</VerticalStackLayout>
+            </Border>
+
+            <Border Grid.Row="1" StrokeThickness="1" Padding="20" VerticalOptions="FillAndExpand" HorizontalOptions="Center" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" >
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout Spacing="20" VerticalOptions="Center">
+                    <Grid ColumnDefinitions="2*,*">
+						<Label Text="Formatting" FontSize="18" FontAttributes="Bold" VerticalOptions="Center"  />
+                        <HorizontalStackLayout Grid.Column="1" Spacing="5" HeightRequest="45" BackgroundColor="Transparent" VerticalOptions="Center">
+                            <CheckBox BindingContext="{StaticResource numericEntryViewModel}"
+				IsChecked="{Binding ShowGroupSeparator}" />
+                            <Label Text="ShowGroupSeparator"  VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="20" VerticalOptions="Center" HorizontalOptions="Center">
+                        <VerticalStackLayout>
+                            <Label Text="Centimeter (cm)"/>
+                            <core:SfTextInputLayout ContainerType="None"
+                                                    ReserveSpaceForAssistiveLabels="False">
+                                <syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+								       CustomFormat="{Binding CentimeterCustomFormat}"
+									   Value="12" />
+                            </core:SfTextInputLayout>
+
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="Pound (lb)"/>
+                            <core:SfTextInputLayout ContainerType="None"
+                                                    ReserveSpaceForAssistiveLabels="False">
+                                <syncfusion:SfNumericEntry  BindingContext="{StaticResource numericEntryViewModel}"
+								        CustomFormat="{Binding PoundCustomFormat}"
+										Value="12"/>
+                            </core:SfTextInputLayout>
+
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2">
+                            <Label Text="Kilobyte (kb)"/>
+                            <core:SfTextInputLayout ContainerType="None"
+                                                    ReserveSpaceForAssistiveLabels="False">
+                                <syncfusion:SfNumericEntry  BindingContext="{StaticResource numericEntryViewModel}"
+								        CustomFormat="{Binding KilobyteCustomFormat}"
+										Value="12"/>
+                            </core:SfTextInputLayout>
+
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="20" VerticalOptions="Center">
+                    <VerticalStackLayout Grid.Column="0" HorizontalOptions="Start">
+                        <Label Text="Litre (ℓ)"/>
+                        <core:SfTextInputLayout ContainerType="None"
+                        ReserveSpaceForAssistiveLabels="False">
+                            <syncfusion:SfNumericEntry  BindingContext="{StaticResource numericEntryViewModel}"
+											            CustomFormat="{Binding LitreCustomFormat}" 
+												        Value="12"/>
+                        </core:SfTextInputLayout>
+                    </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1"/>
+                        <VerticalStackLayout Grid.Column="2"/>
+                    </Grid>
+                    
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
+
+    <localCore:SampleView.OptionView>
+        <Grid>
+        <VerticalStackLayout VerticalOptions="Start">
+            <VerticalStackLayout Margin="10" Spacing="5">
+                <Label Text="Minimum integer digits" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center"/>
+                <Entry  BindingContext="{StaticResource numericEntryViewModel}"
+						Text="{Binding MinimumIntegerDigits}"
+						Keyboard="Numeric"
+						WidthRequest="250"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                        PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Margin="10"  Spacing="5">
+                <Label Text="Minimum fraction digits" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center"/>
+                <Entry  BindingContext="{StaticResource numericEntryViewModel}"
+						Text="{Binding MinimumFractionDigits}" 
+						Keyboard="Numeric"
+						WidthRequest="250"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                        PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"                        />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Margin="10"  Spacing="5">
+                <Label Text="Maximum fraction digits" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center"/>
+                <Entry  BindingContext="{StaticResource numericEntryViewModel}"
+						Text="{Binding MaximumFractionDigits}"
+						Keyboard="Numeric"
+						WidthRequest="250"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                        PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"/>
+        </VerticalStackLayout>
+      </VerticalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

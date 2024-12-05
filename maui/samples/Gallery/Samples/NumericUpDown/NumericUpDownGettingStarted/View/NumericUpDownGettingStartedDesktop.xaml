@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.NumericUpDown.SfNumericUpDown.NumericUpDownGettingStartedDesktop"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.NumericUpDown;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.NumericUpDown"
+             Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+    
+    <localCore:SampleView.BindingContext>
+        <local:GettingStartedViewModel/>
+    </localCore:SampleView.BindingContext>
+
+
+  <localCore:SampleView.Resources>
+
+    <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Roboto-Regular"/>
+        </Style>
+    </localCore:SampleView.Resources>
+    <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+        <VerticalStackLayout x:Name="listView" BindableLayout.ItemsSource="{Binding ProductInfo}" Margin="15,0,15,0">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto, *" Padding="10" RowDefinitions="{OnPlatform WinUI='Auto,1', MacCatalyst='Auto,1'}" ColumnSpacing="10" RowSpacing="5">
+                        <Image Source="{Binding ProductImage}" VerticalOptions="Center" Grid.Column="0" WidthRequest="130" HeightRequest="130"/>
+                        <VerticalStackLayout  Grid.Column="1" Spacing="5" VerticalOptions="Center" Margin="10">
+
+                            <Grid ColumnDefinitions="Auto,*">
+                                <HorizontalStackLayout>
+                                    <Label Text="{Binding ProductName}" FontSize="14" FontAttributes="Bold" HeightRequest="24"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                            
+                            <Label Text="{Binding ProductDescription}" VerticalOptions="Center"
+                                   MaxLines="6"
+                                   LineHeight="1.5"
+                                   LineBreakMode="WordWrap"
+                                   TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}"/>
+                            
+                            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="20">
+                                <core:SfTextInputLayout Hint="Total Quantity" Grid.Column="0" HeightRequest="50" ReserveSpaceForAssistiveLabels="False" WidthRequest="160" HorizontalOptions="Start"    >
+                                    <syncfusion:SfNumericUpDown WidthRequest="100" UpDownPlacementMode="InlineVertical" Value="{Binding Count}" AllowNull="False" IsEditable="False" ShowClearButton="False" HorizontalOptions="Start" CustomFormat="#0"/>
+                                </core:SfTextInputLayout>
+                                <VerticalStackLayout Grid.Column="1" Spacing="5">
+                                    <Label Text="Sub Total"
+                                           TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"
+                                           FontSize="12"/>
+                                    <Label  Text="{Binding TotalPrice, StringFormat='$ {0:F2}'}"  FontAttributes="Bold" VerticalOptions="Center"  HorizontalOptions="Start" FontSize="20"/>
+                                </VerticalStackLayout>
+                                <Button Grid.Column="2" Text="ADD TO CART" FontSize="10" CornerRadius="18" HeightRequest="40" WidthRequest="113" HorizontalOptions="End"/>
+                            </Grid>
+                            
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Padding="50,0">
+                            <BoxView  BackgroundColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" HeightRequest="1" Grid.Row="1" Grid.ColumnSpan="2"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+    </ScrollView>
+
+</localCore:SampleView>

@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.NumericEntry.SfNumericEntry.NumericEntryCultureAndFormattingMobile"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.NumericEntry;assembly=Syncfusion.Maui.Toolkit"
+		     xmlns:viewModel="clr-namespace:Syncfusion.Maui.ControlsGallery.NumericEntry"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:thickness ="clr-namespace:Microsoft.Maui;assembly=Microsoft.Maui"
+            
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+  
+
+    <localCore:SampleView.Resources>
+        <Style TargetType="syncfusion:SfNumericEntry">
+            <Setter Property="WidthRequest" Value="300"/>
+		   <Setter Property="Margin" Value="10,0,0,0"/>
+        </Style>
+
+        <Style TargetType="Label">
+            <Setter Property="HorizontalTextAlignment" Value="Start"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="FontFamily" Value="Roboto-Regular"/>			
+        </Style>
+		<viewModel:CultureAndFormattingViewModel x:Key="numericEntryViewModel"/>
+    </localCore:SampleView.Resources>
+
+    <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never" HorizontalOptions="Center"  Background="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}">
+        <Grid HorizontalOptions="Center" WidthRequest="430" VerticalOptions="Center" Grid.RowDefinitions="*,*">
+            <StackLayout  Grid.Row="0" WidthRequest="400" Margin="10" >
+				<HorizontalStackLayout   Margin="15" Spacing="{OnPlatform Android=25, iOS=33}">
+					<Label Text="Culture"  FontSize="20" FontAttributes="Bold" Margin="10" HorizontalOptions="Start" />
+                    <HorizontalStackLayout HeightRequest="46" WidthRequest="220" Spacing="15" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}" >
+
+						<StackLayout WidthRequest="42" HeightRequest="34" Margin="12,0,0,0" VerticalOptions="Center" x:Name="usStack">
+                            <Border VerticalOptions="FillAndExpand" x:Name="usBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Padding="2">
+								<Border.GestureRecognizers>
+									<TapGestureRecognizer Tapped="USImageButton_Clicked"/>
+								</Border.GestureRecognizers>
+                                <Image x:Name="usImage" WidthRequest="{OnPlatform iOS=40}" HeightRequest="{OnPlatform iOS=32}" 
+                                       Source="usflag.png" Aspect="Fill"/>
+							</Border>
+						</StackLayout>
+
+						<StackLayout WidthRequest="36" HeightRequest="28" x:Name="indiaStack">
+                            <Border VerticalOptions="FillAndExpand"  x:Name="indiaBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4"  Padding="2">
+								<Border.GestureRecognizers>
+									<TapGestureRecognizer Tapped="IndiaImageButton_Clicked"/>
+								</Border.GestureRecognizers>
+                                <Image x:Name="indiaImage" WidthRequest="{OnPlatform iOS=36}" HeightRequest="{OnPlatform iOS=28}"
+                                       Source="indiaflag.png" Aspect="Fill"/>
+							</Border>
+						</StackLayout>
+						<StackLayout WidthRequest="36" HeightRequest="28" x:Name="russiaStack">
+                            <Border  VerticalOptions="FillAndExpand" x:Name="russiaBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Stroke="Transparent" Padding="2">
+								<Border.GestureRecognizers>
+									<TapGestureRecognizer Tapped="RussiaImageButton_Clicked"/>
+								</Border.GestureRecognizers>
+                                <Image x:Name="russiaImage" WidthRequest="{OnPlatform iOS=36}" HeightRequest="{OnPlatform iOS=28}" 
+                                       Source="russiaflag.png" Aspect="Fill"/>
+							</Border>
+						</StackLayout>
+						<StackLayout WidthRequest="36" HeightRequest="28" x:Name="franceStack">
+                            <Border  VerticalOptions="FillAndExpand" x:Name="franceBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Stroke="Transparent" Padding="2">
+								<Border.GestureRecognizers>
+									<TapGestureRecognizer Tapped="FranceImageButton_Clicked"/>
+								</Border.GestureRecognizers>
+                                <Image x:Name="franceImage" WidthRequest="{OnPlatform iOS=36}" HeightRequest="{OnPlatform iOS=28}" 
+                                       Source="franceflag.png" Aspect="Fill"/>
+							</Border>
+						</StackLayout>
+					</HorizontalStackLayout>
+				</HorizontalStackLayout>
+
+				<VerticalStackLayout Spacing="25" WidthRequest="300" VerticalOptions="Center" HorizontalOptions="Start"  Margin="25,0,0,0">
+					<VerticalStackLayout Spacing="5">
+						<Label Text="Currency NumericEntry"  Margin="{OnPlatform Android='10,5', iOS='5,10,10,6'}" />
+						<syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+											       x:Name="currencyCulture"
+												   Value="83345"
+											       CustomFormat="C"/>			      						
+					</VerticalStackLayout>
+
+					<VerticalStackLayout Spacing="5">
+						<Label Text="Decimal NumericEntry" Margin="{OnPlatform Android='10,5', iOS='5,10,10,6'}"/>
+						<syncfusion:SfNumericEntry  BindingContext="{StaticResource numericEntryViewModel}"
+											        x:Name="decimalCulture"
+												    Value="47659"/>				        						
+					</VerticalStackLayout>
+
+					<VerticalStackLayout Spacing="5">
+						<Label Text="Percent NumericEntry" Margin="{OnPlatform Android='10,5', iOS='5,10,10,6'}"/>
+						<syncfusion:SfNumericEntry  BindingContext="{StaticResource numericEntryViewModel}"
+											        x:Name="percentCulture"
+													Value="53841.94"
+												    CustomFormat="P"/>			        					
+					</VerticalStackLayout>
+				</VerticalStackLayout>
+			</StackLayout>
+
+			<StackLayout Grid.Row="1"  WidthRequest="400">
+				<HorizontalStackLayout Margin="15" Spacing="{OnPlatform Android=10, iOS=20}" >
+					<Label Text="Formatting"  FontSize="20" FontAttributes="Bold" Margin="10" VerticalOptions="Center" HorizontalOptions="Start"/>
+                    <HorizontalStackLayout Spacing="5" HeightRequest="46" WidthRequest="200" BackgroundColor="Transparent" HorizontalOptions="End">
+						<CheckBox  BindingContext="{StaticResource numericEntryViewModel}"
+						           IsChecked="{Binding ShowGroupSeparator}" Margin="10,0,0,0" />
+						<Label Text="ShowGroupSeparator"  VerticalOptions="Center" Margin="0,0,10,0" />
+					</HorizontalStackLayout>
+				</HorizontalStackLayout>
+				<VerticalStackLayout Spacing="25" VerticalOptions="Center" WidthRequest="300" HorizontalOptions="Start" Margin="25,0,0,0">
+
+					<VerticalStackLayout >
+						<Label Text="Centimeter (cm)" Margin="{OnPlatform Android='10,5', iOS='5,10,10,10'}" />
+						<syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+							                       CustomFormat="{Binding CentimeterCustomFormat}"
+								                   Value="12"/>
+					</VerticalStackLayout>
+
+					<VerticalStackLayout >
+						<Label Text="Pound (lb)" Margin="{OnPlatform Android='10,5', iOS='5,10,10,10'}"/>
+						<syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+							                       CustomFormat="{Binding PoundCustomFormat}"
+									               Value="12"/>
+					</VerticalStackLayout>
+
+					<VerticalStackLayout >
+						<Label Text="Kilobyte (kb)" Margin="{OnPlatform Android='10,5', iOS='5,10,10,10'}"/>
+						<syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+							                       CustomFormat="{Binding KilobyteCustomFormat}"
+									               Value="12"/>
+					</VerticalStackLayout>
+
+					<VerticalStackLayout >
+						<Label Text="Liter (ℓ)" Margin="{OnPlatform Android='10,5', iOS='5,10,10,10'}"/>
+						<syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+								                   CustomFormat="{Binding LitreCustomFormat}"
+									               Value="12"/>
+					</VerticalStackLayout>
+
+				</VerticalStackLayout>
+
+			</StackLayout>
+        </Grid>
+    </ScrollView>
+
+    <localCore:SampleView.OptionView>
+        <ScrollView VerticalScrollBarVisibility="Never">
+            <Grid>
+            <VerticalStackLayout VerticalOptions="Start" HorizontalOptions="Start">
+
+                <VerticalStackLayout Margin="10">
+                    <Label Text="Minimum integer digits" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center" Margin="{OnPlatform Android='3,0', iOS='2,10,10,10'}"/>
+                    <Entry  BindingContext="{StaticResource numericEntryViewModel}" Text="{Binding MinimumIntegerDigits}"  WidthRequest="350" HorizontalOptions="Start" Keyboard="Numeric" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Margin="10" Spacing="5">
+                    <Label Text="Minimum fraction digits" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center" Margin="{OnPlatform Android='3,0', iOS='2,10,10,10'}"/>
+                    <Entry  BindingContext="{StaticResource numericEntryViewModel}" Text="{Binding MinimumFractionDigits}" WidthRequest="350"  HorizontalOptions="Start" Keyboard="Numeric" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"/>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Margin="10"  Spacing="5">
+                    <Label Text="Maximum fraction digits" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center" Margin="{OnPlatform Android='3,0', iOS='2,10,10,10'}"/>
+                    <Entry BindingContext="{StaticResource numericEntryViewModel}" Text="{Binding MaximumFractionDigits}" WidthRequest="350"  HorizontalOptions="Start" Keyboard="Numeric" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+		<ControlCategory Name="Navigation">
+		<Control ControlName="BottomSheet"
+				 Title="Bottom Sheet"
+				 Image="bottomsheet.png"
+				 Description="The BottomSheet is a panel that slides up from the bottom of the screen to display content.">
+			<Sample SampleName="GettingStarted"
+					Title="Getting Started"
+					SearchTags="bottomsheet,bottomslide,nav,menubar,slidingpanel,overlay,drawer,actionsheet,slideup,expandable,maiu,bottommenu,dropdown"/>
+		</Control>
+		</ControlCategory>
+	
+</SyncfusionControls>

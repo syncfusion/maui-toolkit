@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.NumericEntry.SfNumericEntry.NumericEntryGettingStartedMobile"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.NumericEntry;assembly=Syncfusion.Maui.Toolkit"
+		     xmlns:viewModel="clr-namespace:Syncfusion.Maui.ControlsGallery.NumericEntry"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+	
+    <localCore:SampleView.Resources>
+		<Style TargetType="Label">
+			<Setter Property="HorizontalTextAlignment" Value="Start"/>
+			<Setter Property="Margin" Value="10,0,0,5"/>
+			<Setter Property="FontFamily" Value="Roboto-Regular"/>
+		</Style>
+		<viewModel:GettingStartedViewModel x:Key="numericEntryViewModel"/>
+    </localCore:SampleView.Resources>
+
+
+
+
+        <Grid  VerticalOptions="Fill" BackgroundColor="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" >
+            <VerticalStackLayout Spacing="20" Margin="15,20,15,0" VerticalOptions="Start" >
+
+            <core:SfTextInputLayout Hint="Fahrenheit (°F)" ReserveSpaceForAssistiveLabels="False">
+                <syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}" 
+								   Placeholder="{Binding PlaceholderText}"
+                                PlaceholderColor="{AppThemeBinding Light=#C8C8C8, Dark=#6E6E6E}"
+								   CustomFormat="#0.00°F"
+								   Minimum="{Binding Minimum}"
+								   Maximum="{Binding Maximum}"											
+								   AllowNull="{Binding AllowNull}"
+								   Value="{Binding FahrenheitValue,Mode=TwoWay}"/>
+            </core:SfTextInputLayout>
+
+
+            <core:SfTextInputLayout Hint="Celsius (°C)" ReserveSpaceForAssistiveLabels="False">
+                <syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+										   AllowNull="{Binding AllowNull}" IsEnabled="False" IsEditable="False"
+										   CustomFormat="#0.00°C"
+									       Value="{Binding CelsiusValue}"/>
+            </core:SfTextInputLayout>
+
+            <core:SfTextInputLayout Hint="Kelvin (K)" ReserveSpaceForAssistiveLabels="False">
+                <syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+										   AllowNull="{Binding AllowNull}" IsEnabled="False" IsEditable="False"
+										   CustomFormat="#0.00K"
+										   Value="{Binding KelvinValue}"/>
+            </core:SfTextInputLayout>
+
+            <core:SfTextInputLayout Hint="Rankine (°R)" ReserveSpaceForAssistiveLabels="False">
+                <syncfusion:SfNumericEntry BindingContext="{StaticResource numericEntryViewModel}"
+								   AllowNull="{Binding AllowNull}" IsEditable="False" IsEnabled="False"
+								   CustomFormat="#0.00°R"
+								   Value="{Binding RankineValue}"/>
+            </core:SfTextInputLayout>
+
+        </VerticalStackLayout>
+		</Grid>
+
+	
+	<localCore:SampleView.OptionView>
+		<ScrollView VerticalScrollBarVisibility="Never">
+            <Grid>
+			<VerticalStackLayout VerticalOptions="Start">
+
+				<HorizontalStackLayout Spacing="5" Margin="6,5">
+					<CheckBox BindingContext="{StaticResource numericEntryViewModel}" IsChecked="{Binding AllowNull, Mode=TwoWay}" HorizontalOptions="Start" />
+					<Label Text="AllowNull"  VerticalOptions="Center"/>
+				</HorizontalStackLayout>
+
+				<VerticalStackLayout Margin="10">
+					<Label Text="PlaceholderText" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center" Margin="{OnPlatform Android='3,0', iOS='2,10,10,10'}"/>
+					<Entry  BindingContext="{StaticResource numericEntryViewModel}"
+							Text="{Binding PlaceholderText}"
+							WidthRequest="350"
+							HorizontalOptions="Start"
+                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"/>
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Margin="10">
+					<Label Text="Minimum" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center" Margin="{OnPlatform Android='3,0', iOS='2,10,10,10'}"/>
+					<Entry  BindingContext="{StaticResource numericEntryViewModel}"
+							Text="{Binding Minimum}"
+							Keyboard="Numeric"
+							WidthRequest="350"
+							HorizontalOptions="Start"
+                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"/>
+				</VerticalStackLayout>
+
+				<VerticalStackLayout Margin="10">
+					<Label Text="Maximum" FontSize="14" FontFamily="Roboto-Regular" VerticalOptions="Center" Margin="{OnPlatform Android='3,0', iOS='2,10,10,10'}"/>
+					<Entry  BindingContext="{StaticResource numericEntryViewModel}"
+							Text="{Binding Maximum}"
+							Keyboard="Numeric"
+							WidthRequest="350"
+							HorizontalOptions="Start"
+                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}"/>
+				</VerticalStackLayout>
+				
+			</VerticalStackLayout>
+            </Grid>
+		</ScrollView>
+	</localCore:SampleView.OptionView>
+	
+</localCore:SampleView>
