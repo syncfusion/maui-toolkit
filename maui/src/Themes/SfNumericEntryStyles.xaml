@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.NumericEntry.SfNumericEntryStyles"
+             xmlns:numericEntry="clr-namespace:Syncfusion.Maui.Toolkit.NumericEntry">
+
+
+    <Style TargetType="numericEntry:SfNumericEntry">
+        <Setter Property="TextColor" Value="{DynamicResource SfNumericEntryNormalTextColor}"/>
+        <Setter Property="Background" Value="{DynamicResource SfNumericEntryNormalBackground}"/>
+        <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericEntryNormalClearButtonColor}"/>
+        <Setter Property="Stroke" Value="{DynamicResource SfNumericEntryNormalStroke}"/>
+        <Setter Property="PlaceholderColor" Value="{DynamicResource SfNumericEntryPlaceholderTextColor}"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericEntryNormalTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericEntryNormalBackground}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericEntryNormalClearButtonColor}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericEntryNormalStroke}"/>
+                            <Setter Property="PlaceholderColor" Value="{DynamicResource SfNumericEntryPlaceholderTextColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericEntryDisabledTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericEntryDisabledBackground}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericEntryDisabledClearButtonColor}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericEntryDisabledStroke}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="PointerOver">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericEntryMouseHoveredTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericEntryMouseHoveredBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericEntryMouseHoveredStroke}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericEntryNormalClearButtonColor}"/>
+                            <Setter Property="PlaceholderColor" Value="{DynamicResource SfNumericEntryPlaceholderTextColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Focused">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericEntryFocusedTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericEntryFocusedBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericEntryFocusedStroke}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericEntryPressedClearButtonColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource SfNumericEntryFocusedTextColor}"/>
+                            <Setter Property="Background" Value="{DynamicResource SfNumericEntryFocusedBackground}"/>
+                            <Setter Property="Stroke" Value="{DynamicResource SfNumericEntryFocusedStroke}"/>
+                            <Setter Property="ClearButtonColor" Value="{DynamicResource SfNumericEntryPressedClearButtonColor}"/>
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+</ResourceDictionary>

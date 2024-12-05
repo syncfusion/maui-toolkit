@@ -15,7 +15,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 	/// </summary>
 	[System.ComponentModel.DesignTimeVisible(true)]
 	[ContentProperty(nameof(Items))]
-	public class SfChipGroup : ContentView, IParentThemeElement
+	public partial class SfChipGroup : ContentView, IParentThemeElement
 	{
 		#region Fields
 
@@ -468,7 +468,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// </summary>
 		public SfChipGroup()
 		{
-			_chipGroupChildren = new List<SfChip>();
+			_chipGroupChildren = [];
 			ThemeElement.InitializeThemeResources(this, "SfChipGroupTheme");
 			InitializeCollection();
 		}
@@ -1308,7 +1308,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// </example>
 		public ReadOnlyCollection<SfChip> GetChips()
 		{
-			return new ReadOnlyCollection<SfChip>(_chipGroupChildren ?? new List<SfChip>());
+			return new ReadOnlyCollection<SfChip>(_chipGroupChildren ?? []);
 		}
 
 		#endregion
@@ -1429,7 +1429,10 @@ namespace Syncfusion.Maui.Toolkit.Chips
 
 		void UpdateInputView(View oldInputView, View newInputView)
 		{
-			if (ChipLayout == null) return;
+			if (ChipLayout == null)
+			{
+				return;
+			}
 
 			if (oldInputView != null && ChipLayout.Children.Contains(oldInputView))
 			{
@@ -1837,7 +1840,10 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// <param name="chip">The Chip.</param>
 		void ApplyChipColor(SfChip chip)
 		{
-			if (chip == null) return;
+			if (chip == null)
+			{
+				return;
+			}
 
 			switch (ChipType)
 			{
@@ -1875,7 +1881,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 			chip.ShowIcon = ShowIcon;
 			chip.StrokeThickness = ChipStrokeThickness;
 			chip.ImageSize = ChipImageSize;
-			chip.filterType = false;
+			chip._filterType = false;
 
 			switch (ChipType)
 			{
@@ -1893,7 +1899,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 					break;
 			}
 
-			chip.chipType = ChipType;
+			chip._chipType = ChipType;
 			chip.InvalidateSemantics();
 		}
 
@@ -1914,7 +1920,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		void ConfigureFilterChip(SfChip chip)
 		{
 			chip.ShowCloseButton = false;
-			chip.filterType = true;
+			chip._filterType = true;
 			chip.CloseButtonClicked -= Chip_CloseButtonClicked;
 		}
 
@@ -2003,7 +2009,10 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// <param name="child">The child to be added.</param>
 		void AddChildToLayout(View child)
 		{
-			if (child == null) return;
+			if (child == null)
+			{
+				return;
+			}
 
 			if (ChipLayout != null)
 			{
@@ -2056,10 +2065,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		void SelectOrUnselectChip(object? item)
 		{
 			SfChip? chip = item as SfChip;
-			if (chip == null)
-			{
-				chip = GetChip(item);
-			}
+			chip ??= GetChip(item);
 
 			if (chip != null)
 			{
@@ -2115,10 +2121,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 
 				ApplyChipColor(chip);
 
-				if (SelectedItem == null)
-				{
-					SelectedItem = new ObservableCollection<object>();
-				}
+				SelectedItem ??= new ObservableCollection<object>();
 
 				if (SelectedItem is IList selectedItem && !selectedItem.Contains(chipData))
 				{
@@ -2517,7 +2520,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 			if (sender is SfChip chip)
 			{
 				RemoveChipFromLayout(chip);
-				Object? item = chip.IsCreatedInternally
+				object? item = chip.IsCreatedInternally
 					? ItemsSource?.Contains(chip.DataContext) == true ? chip.DataContext : null
 					: Items?.Contains(chip) == true ? chip : null;
 

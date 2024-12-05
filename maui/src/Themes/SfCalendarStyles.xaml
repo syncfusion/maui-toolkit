@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.Calendar.SfCalendarStyles"
+             xmlns:calendar="clr-namespace:Syncfusion.Maui.Toolkit.Calendar">
+
+    <Style TargetType="calendar:SfCalendar">
+        <Setter Property="TodayHighlightBrush" Value="{DynamicResource SfCalendarTodayHighlightColor}"/>
+        <Setter Property="SelectionBackground" Value="{DynamicResource SfCalendarSelectionColor}"/>
+        <Setter Property="StartRangeSelectionBackground" Value="{DynamicResource SfCalendarStartRangeSelectionColor}"/>
+        <Setter Property="EndRangeSelectionBackground" Value="{DynamicResource SfCalendarEndRangeSelectionColor}"/>
+    </Style>
+    <Style TargetType="calendar:CalendarYearView">
+        <Setter Property="Background" Value="{DynamicResource SfCalendarYearDatesBackgroundColor}"/>
+        <Setter Property="DisabledDatesBackground" Value="{DynamicResource SfCalendarYearDisabledDatesBackgroundColor}"/>
+        <Setter Property="LeadingDatesBackground" Value="{DynamicResource SfCalendarYearLeadingDatesBackgroundColor}"/>
+        <Setter Property="TodayBackground" Value="{DynamicResource SfCalendarYearTodayBackgroundColor}"/>
+        <Setter Property="TodayTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarYearTodayTextColor}" FontSize="{DynamicResource SfCalendarYearTodayFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarYearDatesTextColor}" FontSize="{DynamicResource SfCalendarYearDatesFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="DisabledDatesTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarYearDisabledDatesTextColor}" FontSize="{DynamicResource SfCalendarYearDisabledDatesFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="LeadingDatesTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarYearLeadingDatesTextColor}" FontSize="{DynamicResource SfCalendarYearLeadingDatesFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="RangeTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarYearRangeTextColor}" FontSize="{DynamicResource SfCalendarYearRangeFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="SelectionTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarYearSelectionTextColor}" FontSize="{DynamicResource SfCalendarYearSelectionFontSize}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="calendar:CalendarMonthView">
+        <Setter Property="Background" Value="{DynamicResource SfCalendarMonthDatesBackgroundColor}"/>
+        <Setter Property="DisabledDatesBackground" Value="{DynamicResource SfCalendarMonthDisabledDatesBackgroundColor}"/>
+        <Setter Property="TrailingLeadingDatesBackground" Value="{DynamicResource SfCalendarMonthTrailingLeadingDatesBackgroundColor}"/>
+        <Setter Property="TodayBackground" Value="{DynamicResource SfCalendarMonthTodayBackgroundColor}"/>
+        <Setter Property="WeekendDatesBackground" Value="{DynamicResource SfCalendarWeekendDatesBackgroundColor}"/>
+        <Setter Property="SpecialDatesBackground" Value="{DynamicResource SfCalendarSpecialDatesBackgroundColor}"/>
+        <Setter Property="TrailingLeadingDatesTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarMonthTrailingLeadingDatesTextColor}" FontSize="{DynamicResource SfCalendarMonthTrailingLeadingDatesFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="DisabledDatesTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarMonthDisabledDatesTextColor}" FontSize="{DynamicResource SfCalendarMonthDisabledDatesFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarMonthDatesTextColor}" FontSize="{DynamicResource SfCalendarMonthDatesFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="WeekendDatesTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarWeekendDatesTextColor}" FontSize="{DynamicResource SfCalendarWeekendDatesFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="TodayTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarMonthTodayTextColor}" FontSize="{DynamicResource SfCalendarMonthTodayFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="RangeTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarMonthRangeTextColor}" FontSize="{DynamicResource SfCalendarMonthRangeFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="SelectionTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarMonthSelectionTextColor}" FontSize="{DynamicResource SfCalendarMonthSelectionFontSize}" />
+            </Setter.Value>
+        </Setter>
+        <Setter Property="SpecialDatesTextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarSpecialDatesTextColor}" FontSize="{DynamicResource SfCalendarSpecialDatesFontSize}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="calendar:CalendarWeekNumberStyle">
+        <Setter Property="Background" Value="{DynamicResource SfCalendarWeekNumberBackgroundColor}"/>
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarWeekNumberTextColor}" FontSize="{DynamicResource SfCalendarWeekNumberFontSize}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="calendar:CalendarMonthHeaderView">
+        <Setter Property="Background" Value="{DynamicResource SfCalendarViewHeaderBackgroundColor}"/>
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarViewHeaderTextColor}" FontSize="{DynamicResource SfCalendarViewHeaderFontSize}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="calendar:CalendarHeaderView">
+        <Setter Property="Background" Value="{DynamicResource SfCalendarHeaderBackgroundColor}"/>
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarHeaderTextColor}" FontSize="{DynamicResource SfCalendarHeaderFontSize}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style TargetType="calendar:CalendarIconDetails">
+        <Setter Property="Fill" Value="{DynamicResource SfCalendarSpecialDayIconColor}"/>
+    </Style>
+    <Style TargetType="calendar:CalendarFooterView">
+        <Setter Property="DividerColor" Value="{DynamicResource SfCalendarFooterDividerColor}"/>
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <calendar:CalendarTextStyle TextColor="{DynamicResource SfCalendarButtonTextColor}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
