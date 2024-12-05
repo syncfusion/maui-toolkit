@@ -37,10 +37,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(double.MaxValue)]
         public void PullingThreshold_DifferentValues(double expectedValue)
         {
-            var pullToRefresh = new SfPullToRefresh();
-
-            pullToRefresh.PullingThreshold = expectedValue;
-            var actualValue = pullToRefresh.PullingThreshold;
+			var pullToRefresh = new SfPullToRefresh
+			{
+				PullingThreshold = expectedValue
+			};
+			var actualValue = pullToRefresh.PullingThreshold;
 
             Assert.Equal(expectedValue, actualValue);
         }
@@ -50,19 +51,23 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(PullToRefreshTransitionType.SlideOnTop)]
         public void TransitionMode_SetValue_ReturnsExpected(PullToRefreshTransitionType expected)
         {
-            var pullToRefresh = new SfPullToRefresh();
-            pullToRefresh.TransitionMode = expected;
+			var pullToRefresh = new SfPullToRefresh
+			{
+				TransitionMode = expected
+			};
 
-            Assert.Equal(expected, pullToRefresh.TransitionMode);
+			Assert.Equal(expected, pullToRefresh.TransitionMode);
         }
 
         [Fact]
         public void ProgressColor_SetValue_ReturnsExpected()
         {
-            var pullToRefresh = new SfPullToRefresh();
-            pullToRefresh.ProgressColor = Colors.Blue;
+			var pullToRefresh = new SfPullToRefresh
+			{
+				ProgressColor = Colors.Blue
+			};
 
-            Assert.Equal(Colors.Blue, pullToRefresh.ProgressColor);
+			Assert.Equal(Colors.Blue, pullToRefresh.ProgressColor);
         }
 
         [Theory]
@@ -127,11 +132,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var pullToRefresh = new SfPullToRefresh();
             var expectedBrush = new LinearGradientBrush
             {
-                GradientStops = new GradientStopCollection
-                {
-                    new GradientStop(Colors.Yellow, (float)0.0),
+                GradientStops =
+				[
+					new GradientStop(Colors.Yellow, (float)0.0),
                     new GradientStop(Colors.Red, (float)1.0)
-                }
+                ]
             };
             pullToRefresh.ProgressBackground = expectedBrush;
             var actualBrush = pullToRefresh.ProgressBackground;
@@ -145,10 +150,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(3d)]
         public void ProgressThickness_SetValue_ReturnsExpected(double expected)
         {
-            var pullToRefresh = new SfPullToRefresh();
-            pullToRefresh.ProgressThickness = expected;
+			var pullToRefresh = new SfPullToRefresh
+			{
+				ProgressThickness = expected
+			};
 
-            Assert.Equal(expected, pullToRefresh.ProgressThickness);
+			Assert.Equal(expected, pullToRefresh.ProgressThickness);
         }
 
         [Fact]
@@ -167,10 +174,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void CanRestrictChildTouch_SetValue_ReturnsExpected(bool expected)
         {
-            var pullToRefresh = new SfPullToRefresh();
-            pullToRefresh.CanRestrictChildTouch = expected;
+			var pullToRefresh = new SfPullToRefresh
+			{
+				CanRestrictChildTouch = expected
+			};
 
-            Assert.Equal(expected, pullToRefresh.CanRestrictChildTouch);
+			Assert.Equal(expected, pullToRefresh.CanRestrictChildTouch);
         }
 
         [Theory]
@@ -180,10 +189,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(40d)]
         public void RefreshViewThreshold_SetValue_ReturnsExpected(double expected)
         {
-            var pullToRefresh = new SfPullToRefresh();
-            pullToRefresh.RefreshViewThreshold = expected;
+			var pullToRefresh = new SfPullToRefresh
+			{
+				RefreshViewThreshold = expected
+			};
 
-            Assert.Equal(expected, pullToRefresh.RefreshViewThreshold);
+			Assert.Equal(expected, pullToRefresh.RefreshViewThreshold);
         }
 
         [Theory]
@@ -193,10 +204,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(40d)]
         public void RefreshViewHeight_SetValue_ReturnsExpected(double expected)
         {
-            var pullToRefresh = new SfPullToRefresh();
-            pullToRefresh.RefreshViewHeight = expected;
+			var pullToRefresh = new SfPullToRefresh
+			{
+				RefreshViewHeight = expected
+			};
 
-            Assert.Equal(expected, pullToRefresh.RefreshViewHeight);
+			Assert.Equal(expected, pullToRefresh.RefreshViewHeight);
         }
 
         [Theory]
@@ -206,10 +219,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(200d)]
         public void RefreshViewWidth_ShouldSetAndGetVariousValidValues(double expected)
         {
-            var pullToRefresh = new SfPullToRefresh();
-            pullToRefresh.RefreshViewWidth = expected;
+			var pullToRefresh = new SfPullToRefresh
+			{
+				RefreshViewWidth = expected
+			};
 
-            Assert.Equal(expected, pullToRefresh.RefreshViewWidth);
+			Assert.Equal(expected, pullToRefresh.RefreshViewWidth);
         }
 
         [Fact]
@@ -551,7 +566,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var pullToRefresh = new SfPullToRefresh();
             var progress = new SfProgressCircleView(pullToRefresh);
             var methodInfo = typeof(SfPullToRefresh).GetMethod("MeasureProgressCircleView", BindingFlags.Instance | BindingFlags.Public);
-            methodInfo?.Invoke(pullToRefresh, new object[] { 100, 100 });
+            methodInfo?.Invoke(pullToRefresh, [100, 100]);
             Assert.True(true, "MeasureProgressCircleView executed without throwing exceptions.");
         }
 
@@ -608,9 +623,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void AdjustYCoordinate_WhenTransitionModeIsPush_AndProgressCircleViewContentIsNull()
         {
-            var pullToRefresh = new SfPullToRefresh();
-            pullToRefresh.TransitionMode = PullToRefreshTransitionType.Push;
-            pullToRefresh.ProgressCircleView = new SfProgressCircleView(pullToRefresh);
+			var pullToRefresh = new SfPullToRefresh
+			{
+				TransitionMode = PullToRefreshTransitionType.Push
+			};
+			pullToRefresh.ProgressCircleView = new SfProgressCircleView(pullToRefresh);
             pullToRefresh.RefreshViewHeight = 100;
 
             double y = 200;
@@ -618,11 +635,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             {
                 if (pullToRefresh.ProgressCircleView.Content == null)
                 {
-                    y = y - pullToRefresh.RefreshViewHeight;
+                    y -= pullToRefresh.RefreshViewHeight;
                 }
                 else
                 {
-                    y = y - pullToRefresh.ProgressCircleView.CircleViewBounds.Height;
+                    y -= pullToRefresh.ProgressCircleView.CircleViewBounds.Height;
                 }
             }
             Assert.Equal(100, y);
@@ -631,25 +648,25 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void CalculateProgressRate_WhenTemplateViewIsNull_CalculatesCorrectly()
         {
-            SfPullToRefresh pullToRefresh = new SfPullToRefresh();
+            SfPullToRefresh pullToRefresh = [];
             double pulledDistance = 160;
             pullToRefresh.ProgressRate = pulledDistance;
             Assert.Equal(160, pullToRefresh.ProgressRate, 0.01);
         }
 
         [Fact]
-        public void CreateStyles_ShouldReturnNewInstance()
-        {
-            SfPullToRefreshStyles style = new SfPullToRefreshStyles();
+		public void CreateStyles_ShouldReturnNewInstance()
+		{
+			SfPullToRefreshStyles style = new SfPullToRefreshStyles();
 
-            Assert.NotNull(style);
-            Assert.IsType<SfPullToRefreshStyles>(style);
-        }
+			Assert.NotNull(style);
+			Assert.IsType<SfPullToRefreshStyles>(style);
+		}
 
-        [Fact]
+		[Fact]
         public void MeasureProgressCircleView_CallsMeasureWithCorrectConstraints()
         {
-            SfPullToRefresh pullToRefresh = new SfPullToRefresh();
+            SfPullToRefresh pullToRefresh = [];
             double widthConstraint = 200.0;
             double heightConstraint = 100.0;
 

@@ -27,7 +27,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Empty(chipGroup.ChipFontFamily);
 
 			if (chipGroup.ChipLayout != null)
+			{
 				Assert.Empty(chipGroup.ChipLayout);
+			}
 
 			Assert.Empty(chipGroup.DisplayMemberPath);
 			Assert.Empty(chipGroup.ImageMemberPath);
@@ -47,8 +49,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(null)]
 		public void Items_SetValue_ReturnsExpectedValue(ChipCollection? expectedItems)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.Items = expectedItems;
+			var chipGroup = new SfChipGroup
+			{
+				Items = expectedItems
+			};
 			Assert.Equal(expectedItems, chipGroup.Items);
 		}
 
@@ -56,7 +60,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void ItemsSource_SetValue_ReturnsExpectedValue()
 		{
 			var chipGroup = new SfChipGroup();
-			IList<string> expectedItemsSource = new List<string> { "Chip1", "Chip2" };
+			IList<string> expectedItemsSource = ["Chip1", "Chip2"];
 			chipGroup.ItemsSource = (System.Collections.IList)expectedItemsSource;
 			Assert.Equal(expectedItemsSource, (IEnumerable<string>?)chipGroup.ItemsSource);
 		}
@@ -67,8 +71,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(FontAttributes.None)]
 		public void ChipFontAttributes_SetValue_ReturnsExpectedValue(FontAttributes expectedFontAttributes)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipFontAttributes = expectedFontAttributes;
+			var chipGroup = new SfChipGroup
+			{
+				ChipFontAttributes = expectedFontAttributes
+			};
 			Assert.Equal(expectedFontAttributes, chipGroup.ChipFontAttributes);
 		}
 
@@ -78,8 +84,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(480.0)]
 		public void ChipImageSize_SetValue_ReturnsExpectedValue(double expectedSize)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipImageSize = expectedSize;
+			var chipGroup = new SfChipGroup
+			{
+				ChipImageSize = expectedSize
+			};
 			Assert.Equal(expectedSize, chipGroup.ChipImageSize);
 		}
 
@@ -98,8 +106,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData("")]
 		public void DisplayMemberPath_SetValue_ReturnsExpectedValue(string expectedPath)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.DisplayMemberPath = expectedPath;
+			var chipGroup = new SfChipGroup
+			{
+				DisplayMemberPath = expectedPath
+			};
 			Assert.Equal(expectedPath, chipGroup.DisplayMemberPath);
 		}
 
@@ -108,8 +118,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData("")]
 		public void ImageMemberPath_SetValue_ReturnsExpectedValue(string expectedPath)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ImageMemberPath = expectedPath;
+			var chipGroup = new SfChipGroup
+			{
+				ImageMemberPath = expectedPath
+			};
 			Assert.Equal(expectedPath, chipGroup.ImageMemberPath);
 		}
 
@@ -120,8 +132,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(SfChipsType.Filter)]
 		public void ChipType_SetValue_ReturnsExpectedValue(SfChipsType expectedType)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipType = expectedType;
+			var chipGroup = new SfChipGroup
+			{
+				ChipType = expectedType
+			};
 			Assert.Equal(expectedType, chipGroup.ChipType);
 		}
 
@@ -143,8 +157,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(42)]
 		public void SelectedItem_SetValue_ReturnsExpectedValue(object? expectedItem)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.SelectedItem = expectedItem;
+			var chipGroup = new SfChipGroup
+			{
+				SelectedItem = expectedItem
+			};
 			Assert.Equal(expectedItem, chipGroup.SelectedItem);
 		}
 
@@ -187,8 +203,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(5)]
 		public void ChipStrokeThickness_SetValue_ReturnsExpectedValue(double expectedThickness)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipStrokeThickness = expectedThickness;
+			var chipGroup = new SfChipGroup
+			{
+				ChipStrokeThickness = expectedThickness
+			};
 			Assert.Equal(expectedThickness, chipGroup.ChipStrokeThickness);
 		}
 
@@ -244,8 +262,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(106.0)]
 		public void ChipTextSize_SetValue_ReturnsExpectedValue(double expectedSize)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipTextSize = expectedSize;
+			var chipGroup = new SfChipGroup
+			{
+				ChipTextSize = expectedSize
+			};
 			Assert.Equal(expectedSize, chipGroup.ChipTextSize);
 		}
 
@@ -255,8 +275,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData("Courier New")]
 		public void ChipFontFamily_SetValue_ReturnsExpectedValue(string expectedFontFamily)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipFontFamily = expectedFontFamily;
+			var chipGroup = new SfChipGroup
+			{
+				ChipFontFamily = expectedFontFamily
+			};
 			Assert.Equal(expectedFontFamily, chipGroup.ChipFontFamily);
 		}
 
@@ -322,8 +344,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(double.NaN)]
 		public void ItemHeight_SetValue_ReturnsExpectedValue(double height)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ItemHeight = height;
+			var chipGroup = new SfChipGroup
+			{
+				ItemHeight = height
+			};
 			Assert.Equal(height, chipGroup.ItemHeight);
 		}
 
@@ -332,8 +356,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(false)]
 		public void ShowIcon_SetValue_ReturnsExpectedValue(bool expectedValue)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ShowIcon = expectedValue;
+			var chipGroup = new SfChipGroup
+			{
+				ShowIcon = expectedValue
+			};
 			Assert.Equal(expectedValue, chipGroup.ShowIcon);
 		}
 
@@ -342,8 +368,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(ChoiceMode.SingleOrNone)]
 		public void ChoiceMode_SetValue_ReturnsExpectedValue(ChoiceMode expectedMode)
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChoiceMode = expectedMode;
+			var chipGroup = new SfChipGroup
+			{
+				ChoiceMode = expectedMode
+			};
 			Assert.Equal(expectedMode, chipGroup.ChoiceMode);
 		}
 
@@ -411,8 +439,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var commonStateGroup = new VisualStateGroup();
 			commonStateGroup.States.Add(normalState);
 			commonStateGroup.States.Add(selectedState);
-			var visualStateGroupList = new VisualStateGroupList();
-			visualStateGroupList.Add(commonStateGroup);
+			var visualStateGroupList = new VisualStateGroupList
+			{
+				commonStateGroup
+			};
 			VisualStateManager.SetVisualStateGroups(chipGroup, visualStateGroupList);
 			VisualStateManager.GoToState(chipGroup, "Normal");
 			Assert.Equal(Colors.Black, chipGroup.ChipTextColor);
@@ -437,8 +467,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var commonStateGroup = new VisualStateGroup();
 			commonStateGroup.States.Add(normalState);
 			commonStateGroup.States.Add(selectedState);
-			var visualStateGroupList = new VisualStateGroupList();
-			visualStateGroupList.Add(commonStateGroup);
+			var visualStateGroupList = new VisualStateGroupList
+			{
+				commonStateGroup
+			};
 			VisualStateManager.SetVisualStateGroups(chipGroup, visualStateGroupList);
 			VisualStateManager.GoToState(chipGroup, "Selected");
 			Assert.Equal(Colors.Green, chipGroup.ChipTextColor);
@@ -464,8 +496,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var commonStateGroup = new VisualStateGroup();
 			commonStateGroup.States.Add(normalState);
 			commonStateGroup.States.Add(selectedState);
-			var visualStateGroupList = new VisualStateGroupList();
-			visualStateGroupList.Add(commonStateGroup);
+			var visualStateGroupList = new VisualStateGroupList
+			{
+				commonStateGroup
+			};
 			VisualStateManager.SetVisualStateGroups(chipGroup, visualStateGroupList);
 			VisualStateManager.GoToState(chipGroup, "Normal");
 			Assert.Equal(Colors.Black, chipGroup.ChipTextColor);
@@ -491,8 +525,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var commonStateGroup = new VisualStateGroup();
 			commonStateGroup.States.Add(normalState);
 			commonStateGroup.States.Add(selectedState);
-			var visualStateGroupList = new VisualStateGroupList();
-			visualStateGroupList.Add(commonStateGroup);
+			var visualStateGroupList = new VisualStateGroupList
+			{
+				commonStateGroup
+			};
 			VisualStateManager.SetVisualStateGroups(chipGroup, visualStateGroupList);
 			VisualStateManager.GoToState(chipGroup, "Selected");
 			Assert.Equal(Colors.Green, chipGroup.ChipTextColor);
@@ -515,8 +551,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var commonStateGroup = new VisualStateGroup();
 			commonStateGroup.States.Add(normalState);
 			commonStateGroup.States.Add(selectedState);
-			var visualStateGroupList = new VisualStateGroupList();
-			visualStateGroupList.Add(commonStateGroup);
+			var visualStateGroupList = new VisualStateGroupList
+			{
+				commonStateGroup
+			};
 			VisualStateManager.SetVisualStateGroups(chipGroup, visualStateGroupList);
 			VisualStateManager.GoToState(chipGroup, "Normal");
 			Assert.Equal(Colors.White, chipGroup.ChipBackground);
@@ -538,8 +576,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var commonStateGroup = new VisualStateGroup();
 			commonStateGroup.States.Add(normalState);
 			commonStateGroup.States.Add(selectedState);
-			var visualStateGroupList = new VisualStateGroupList();
-			visualStateGroupList.Add(commonStateGroup);
+			var visualStateGroupList = new VisualStateGroupList
+			{
+				commonStateGroup
+			};
 			VisualStateManager.SetVisualStateGroups(chipGroup, visualStateGroupList);
 			VisualStateManager.GoToState(chipGroup, "Selected");
 			Assert.Equal(Colors.Violet, chipGroup.ChipBackground);
@@ -643,7 +683,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var collection = new ObservableCollection<string> { "Item1", "Item2", "Item3" };
 			var methodInfo = typeof(SfChipGroup).GetMethod("GetPropertyValue", BindingFlags.NonPublic | BindingFlags.Static);
-			var result = methodInfo?.Invoke(null, new object[] { "Count", collection });
+			var result = methodInfo?.Invoke(null, ["Count", collection]);
 			Assert.Equal(3, result);
 		}
 
@@ -652,7 +692,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var item = new { Name = "Test", Age = 25 };
 			var methodInfo = typeof(SfChipGroup).GetMethod("GetPropertyValue", BindingFlags.NonPublic | BindingFlags.Static);
-			var result = methodInfo?.Invoke(null, new object[] { "Name", item });
+			var result = methodInfo?.Invoke(null, ["Name", item]);
 			Assert.NotNull(result);
 			Assert.Equal("Test", result);
 		}
@@ -662,7 +702,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var item = new { Name = "Test", Age = 25 };
 			var methodInfo = typeof(SfChipGroup).GetMethod("GetPropertyValue", BindingFlags.NonPublic | BindingFlags.Static);
-			var result = methodInfo?.Invoke(null, new object[] { "InvalidProp", item });
+			var result = methodInfo?.Invoke(null, ["InvalidProp", item]);
 			Assert.NotNull(result);
 			Assert.Equal(string.Empty, result);
 		}
@@ -683,7 +723,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var item = new { Name = "Test", Age = 25 };
 			var methodInfo = typeof(SfChipGroup).GetMethod("GetPropertyValue", BindingFlags.NonPublic | BindingFlags.Static);
-			var result = methodInfo?.Invoke(null, new object[] { string.Empty, item });
+			var result = methodInfo?.Invoke(null, [string.Empty, item]);
 			Assert.NotNull(result);
 			Assert.Equal(string.Empty, result);
 		}
@@ -693,7 +733,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var item = new { Name = "Test", Age = 25, MiddleName = (string?)null };
 			var methodInfo = typeof(SfChipGroup).GetMethod("GetPropertyValue", BindingFlags.NonPublic | BindingFlags.Static);
-			var result = methodInfo?.Invoke(null, new object[] { "MiddleName", item });
+			var result = methodInfo?.Invoke(null, ["MiddleName", item]);
 			Assert.NotNull(result);
 			Assert.Equal(string.Empty, result);
 		}
@@ -703,7 +743,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var item = new { Name = "Test", Age = 25 };
 			var methodInfo = typeof(SfChipGroup).GetMethod("GetPropertyValue", BindingFlags.NonPublic | BindingFlags.Static);
-			var result = methodInfo?.Invoke(null, new object[] { string.Empty, item });
+			var result = methodInfo?.Invoke(null, [string.Empty, item]);
 			Assert.NotNull(result);
 			Assert.Equal(string.Empty, result);
 		}
@@ -725,7 +765,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var chipGroup = new SfChipGroup();
 			var chip = new SfChip();
 			SetNonPublicProperty(chip, "IsSelected", true);
-			var initialState = chip.ShowSelectionIndicator;
+
+			_ = chip.ShowSelectionIndicator;
 			InvokePrivateMethod(chipGroup, "DeselectChip", chip);
 			Assert.False(chip.ShowSelectionIndicator);
 			Assert.False(chip.IsSelected);
@@ -737,7 +778,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void SelectOrUnselectMultipleChips_ShouldNotThrow_WhenListIsNullOrEmpty(int? count)
 		{
 			var chipGroup = new SfChipGroup();
-			List<object>? chips = count == null ? null : new List<object>();
+			List<object>? chips = count == null ? null : [];
 			var exception = Record.Exception(() => InvokePrivateMethod(chipGroup, "SelectOrUnselectMultipleChips", chips));
 			Assert.Null(exception);
 		}
@@ -833,7 +874,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void UnselectChips_WithEmptyList_ShouldNotThrowException()
 		{
 			var chipGroup = new SfChipGroup();
-			IList<object> emptyList = new List<object>();
+			IList<object> emptyList = [];
 			var exception = Record.Exception(() => InvokePrivateMethod(chipGroup, "UnselectChips", emptyList));
 			Assert.Null(exception);
 		}
@@ -842,7 +883,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void UnselectChips_WithNullValues_ShouldNotThrowException()
 		{
 			var chipGroup = new SfChipGroup();
-			IList<object?> listWithNulls = new List<object?> { null, null, null };
+			IList<object?> listWithNulls = [null, null, null];
 			var exception = Record.Exception(() => InvokePrivateMethod(chipGroup, "UnselectChips", listWithNulls));
 			Assert.Null(exception);
 		}
@@ -850,8 +891,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void UnselectChips_ShouldUnselectFilterChips_WhenChipTypeIsFilter()
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipType = SfChipsType.Filter;
+			var chipGroup = new SfChipGroup
+			{
+				ChipType = SfChipsType.Filter
+			};
 			var chip1 = new SfChip();
 			var chip2 = new SfChip();
 			chipGroup.ItemsSource = new ObservableCollection<SfChip> { chip1, chip2 };
@@ -865,8 +908,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void UnselectChips_ShouldUnselectOnlySelectedFilterChips()
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipType = SfChipsType.Filter;
+			var chipGroup = new SfChipGroup
+			{
+				ChipType = SfChipsType.Filter
+			};
 			var chip1 = new SfChip() { IsSelected = true };
 			var chip2 = new SfChip() { IsSelected = true };
 			var chip3 = new SfChip() { IsSelected = true };
@@ -879,8 +924,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void UnselectFilterChip_ShouldDoNothing_WhenChipTypeIsNotFilter()
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipType = SfChipsType.Choice;
+			var chipGroup = new SfChipGroup
+			{
+				ChipType = SfChipsType.Choice
+			};
 			var chip = new SfChip();
 			InvokePrivateMethod(chipGroup, "UnselectFilterChip", chip);
 			Assert.False(chip.IsSelected);
@@ -889,8 +936,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void UnselectFilterChip_ShouldUnselectChipAndRemoveFromSelectedItems_WhenSelectedItemIsNull()
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipType = SfChipsType.Filter;
+			var chipGroup = new SfChipGroup
+			{
+				ChipType = SfChipsType.Filter
+			};
 			var chip = new SfChip();
 			SetNonPublicProperty(chip, "IsSelected", true);
 			SetNonPublicProperty(chipGroup, "SelectedItem", null);
@@ -903,8 +952,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void UnselectFilterChip_ShouldUnselectChipButKeepInSelectedItems_WhenItemTemplateIsNotNull()
 		{
-			var chipGroup = new SfChipGroup();
-			chipGroup.ChipType = SfChipsType.Filter;
+			var chipGroup = new SfChipGroup
+			{
+				ChipType = SfChipsType.Filter
+			};
 			var chip = new SfChip();
 			SetNonPublicProperty(chip, "IsSelected", true);
 			SetNonPublicProperty(chipGroup, "SelectedItem", chip);
@@ -963,7 +1014,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var chipGroup = new SfChipGroup { ItemHeight = itemHeight };
 			var chip = new SfChip { IsCreatedInternally = true };
-			InvokePrivateMethod(chipGroup, "SetChipHeight", new object[] { chip });
+			InvokePrivateMethod(chipGroup, "SetChipHeight", [chip]);
 			Assert.Equal(expectedHeightRequest, chip.HeightRequest);
 		}
 
@@ -1003,7 +1054,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var chipGroup = new SfChipGroup();
 			var chip = new SfChip();
-			var nonMatchingChip = new SfChip();
+
+			_ = new SfChip();
 			var selectedList = new List<object> { "SomeOtherData" };
 			chipGroup.SelectedItem = selectedList;
 			InvokePrivateMethod(chipGroup, "RemoveChipFromSelectedItems", chip);
@@ -1020,7 +1072,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetNonPublicProperty(chip, "DataContext", chipDataMock);
 			var selectedList = new List<object> { chipDataMock };
 			chipGroup.SelectedItem = selectedList;
-			var chipDataContext = GetNonPublicProperty(chip, "DataContext");
+
+			_ = GetNonPublicProperty(chip, "DataContext");
 			InvokePrivateMethod(chipGroup, "RemoveChipFromSelectedItems", chip);
 			Assert.Empty(selectedList);
 		}

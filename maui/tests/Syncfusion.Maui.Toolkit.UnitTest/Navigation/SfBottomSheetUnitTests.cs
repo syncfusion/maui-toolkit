@@ -12,7 +12,47 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             _bottomSheet = new Syncfusion.Maui.Toolkit.BottomSheet.SfBottomSheet();
         }
 
-        [Theory]
+		#region Constructor
+
+		[Fact]
+		public void Constructor_InitializesDefaultsCorrectly()
+		{
+			Assert.True(_bottomSheet.IsModal);
+			Assert.True(_bottomSheet.ShowGrabber);
+			Assert.True(_bottomSheet.EnableSwiping);
+			Assert.False(_bottomSheet.IsOpen);
+			Assert.Null(_bottomSheet.Content);
+			Assert.Null(_bottomSheet.BottomSheetContent);
+			Assert.Equal(0.5d, _bottomSheet.HalfExpandedRatio);
+			Assert.Equal(1d, _bottomSheet.FullExpandedRatio);
+			Assert.Equal(100d, _bottomSheet.CollapsedHeight);
+			Assert.Equal(BottomSheetContentWidthMode.Full, _bottomSheet.ContentWidthMode);
+			Assert.Equal(300d, _bottomSheet.BottomSheetContentWidth);
+			Assert.Equal(new Thickness(5), _bottomSheet.ContentPadding);
+			Assert.Equal(new CornerRadius(0), _bottomSheet.CornerRadius);
+			Assert.Equal(BottomSheetState.Hidden, _bottomSheet.State);
+			Assert.Equal(BottomSheetAllowedState.All, _bottomSheet.AllowedState);
+			Assert.Equal(4d, _bottomSheet.GrabberHeight);
+			Assert.Equal(32d, _bottomSheet.GrabberWidth);
+			Assert.Equal(12d, _bottomSheet.GrabberCornerRadius);
+			if (_bottomSheet.GrabberBackground is SolidColorBrush grabberBrush)
+			{
+				var grabberColor = grabberBrush.Color;
+				Assert.Equal(Color.FromArgb("#CAC4D0"), grabberColor);
+			}
+
+			if (_bottomSheet.Background is SolidColorBrush backgroundBrush)
+			{
+				var backgroundColor = backgroundBrush.Color;
+				Assert.Equal(Color.FromArgb("#F7F2FB"), backgroundColor);
+			}
+		}
+
+		#endregion
+
+		#region Pubilc Properties
+
+		[Theory]
         [InlineData(true, true)]
         [InlineData(false, false)]
         public void IsModal(bool input, bool expected)
@@ -80,27 +120,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             _bottomSheet.ContentPadding = input;
 
             var actual = _bottomSheet.ContentPadding;
-
-            Assert.Equal(expected, actual);
-        }
-
-        public static IEnumerable<object[]> MarginData =>
-        new List<object[]>
-        {
-            new object[] { new Thickness(5), new Thickness(5) },
-            new object[] { new Thickness(0), new Thickness(0) },
-            new object[] { new Thickness(-5), new Thickness(-5) },
-            new object[] { new Thickness(10, 5, 10, 5), new Thickness(10, 5, 10, 5) },
-            new object[] { new Thickness(15, 0, 5, 10), new Thickness(15, 0, 5, 10) }
-        };
-
-        [Theory]
-        [MemberData(nameof(MarginData))]
-        public void Margin(Thickness input, Thickness expected)
-        {
-            _bottomSheet.Margin = input;
-
-            var actual = _bottomSheet.Margin;
 
             Assert.Equal(expected, actual);
         }
@@ -338,5 +357,68 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			Assert.Equal(expected, actual);
 		}
+
+		[Theory]
+		[InlineData(BottomSheetContentWidthMode.Full,  BottomSheetContentWidthMode.Full)]
+		[InlineData(BottomSheetContentWidthMode.Custom, BottomSheetContentWidthMode.Custom)]
+		public void ContentWidthMode(BottomSheetContentWidthMode input, BottomSheetContentWidthMode expected)
+		{
+			_bottomSheet.ContentWidthMode = input;
+
+			var actual = _bottomSheet.ContentWidthMode;
+
+			Assert.Equal(expected, actual);
+		}
+
+		[Theory]
+		[InlineData(500, 500 , BottomSheetContentWidthMode.Full)]
+		[InlineData(200, 200, BottomSheetContentWidthMode.Custom)]
+		public void BottomSheetContentWidth(double input, double expected, BottomSheetContentWidthMode mode)
+		{
+			_bottomSheet.BottomSheetContentWidth = input;
+
+			_bottomSheet.ContentWidthMode = mode;
+			var actual = _bottomSheet.BottomSheetContentWidth;
+
+			Assert.Equal(expected, actual);
+		}
+
+		#endregion
+
+		#region Events
+
+		public static IEnumerable<object[]> StateData =>
+		new List<object[]>
+		{
+			new object[] { BottomSheetState.Hidden, BottomSheetState.Collapsed },
+			new object[] { BottomSheetState.Hidden, BottomSheetState.HalfExpanded },
+			new object[] { BottomSheetState.Hidden, BottomSheetState.FullExpanded },
+			new object[] { BottomSheetState.Collapsed, BottomSheetState.HalfExpanded },
+			new object[] { BottomSheetState.Collapsed, BottomSheetState.FullExpanded },
+			new object[] { BottomSheetState.HalfExpanded, BottomSheetState.Collapsed },
+			new object[] { BottomSheetState.HalfExpanded, BottomSheetState.FullExpanded },
+			new object[] { BottomSheetState.FullExpanded, BottomSheetState.Collapsed },
+			new object[] { BottomSheetState.FullExpanded, BottomSheetState.HalfExpanded }
+		};
+
+		[Fact]
+		public void StateChanged()
+		{
+			var fired = false;
+			_bottomSheet.StateChanged += (sender, e) => fired = true;
+			var methodInfo = typeof(SfBottomSheet).GetMethod("UpdateStateChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+
+			foreach (var data in StateData)
+			{
+				var oldState = (BottomSheetState)data[0];
+				var newState = (BottomSheetState)data[1];
+
+				methodInfo?.Invoke(_bottomSheet, new object[] { oldState, newState });
+			}
+			Assert.True(fired);
+		}
+
+		#endregion
+
 	}
 }

@@ -9,10 +9,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void IsVisible_SetValue_ReturnsExpectedValue(bool isVisible)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.IsVisible = isVisible;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				IsVisible = isVisible
+			};
 
-            Assert.Equal(isVisible, numericalAxis.IsVisible);
+			Assert.Equal(isVisible, numericalAxis.IsVisible);
         }
 
         [Theory]
@@ -21,10 +23,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(-2)]
         public void AutoScrollingDelta_SetValue_ReturnsExpectedValue(double autoScrollingDelta)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.AutoScrollingDelta = autoScrollingDelta;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				AutoScrollingDelta = autoScrollingDelta
+			};
 
-            Assert.Equal(autoScrollingDelta, numericalAxis.AutoScrollingDelta);
+			Assert.Equal(autoScrollingDelta, numericalAxis.AutoScrollingDelta);
         }
 
         [Theory]
@@ -32,10 +36,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(ChartAutoScrollingMode.End)]
         public void AutoScrollingDeltaMode_SetValue_ReturnsExpectedValue(ChartAutoScrollingMode autoScrollingMode)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.AutoScrollingMode = autoScrollingMode;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				AutoScrollingMode = autoScrollingMode
+			};
 
-            Assert.Equal(autoScrollingMode, numericalAxis.AutoScrollingMode);
+			Assert.Equal(autoScrollingMode, numericalAxis.AutoScrollingMode);
         }
 
         [Theory]
@@ -46,10 +52,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(double.NaN)]
         public void AxisLineOffSet_SetValue_ReturnsExpectedValue(double axisLineOffset)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.AxisLineOffset = axisLineOffset;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				AxisLineOffset = axisLineOffset
+			};
 
-            Assert.Equal(axisLineOffset, numericalAxis.AxisLineOffset);
+			Assert.Equal(axisLineOffset, numericalAxis.AxisLineOffset);
         }
 
         [Fact]
@@ -79,10 +87,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(10)]
         public void CrossesAt_SetValue_ReturnsExpectedValue(double crossesAt)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.CrossesAt = crossesAt;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				CrossesAt = crossesAt
+			};
 
-            Assert.Equal(crossesAt, numericalAxis.CrossesAt);
+			Assert.Equal(crossesAt, numericalAxis.CrossesAt);
         }
 
         [Theory]
@@ -92,10 +102,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(EdgeLabelsDrawingMode.Hide)]
         public void EdgeLabelDrawingMode_SetValue_ReturnsExpectedValue(EdgeLabelsDrawingMode edgeLabelsDrawingMode)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.EdgeLabelsDrawingMode = edgeLabelsDrawingMode;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				EdgeLabelsDrawingMode = edgeLabelsDrawingMode
+			};
 
-            Assert.Equal(edgeLabelsDrawingMode, numericalAxis.EdgeLabelsDrawingMode);
+			Assert.Equal(edgeLabelsDrawingMode, numericalAxis.EdgeLabelsDrawingMode);
         }
 
         [Theory]
@@ -103,10 +115,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void AutoIntervalOnZooming_SetValue_ReturnsExpectedValue(bool enableAutoIntervalOnZooming)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.EnableAutoIntervalOnZooming = enableAutoIntervalOnZooming;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				EnableAutoIntervalOnZooming = enableAutoIntervalOnZooming
+			};
 
-            Assert.Equal(enableAutoIntervalOnZooming, numericalAxis.EnableAutoIntervalOnZooming);
+			Assert.Equal(enableAutoIntervalOnZooming, numericalAxis.EnableAutoIntervalOnZooming);
         }
 
         [Theory]
@@ -114,10 +128,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void IsInversed_SetValue_ReturnsExpectedValue(bool isInversed)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.IsInversed = isInversed;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				IsInversed = isInversed
+			};
 
-            Assert.Equal(isInversed, numericalAxis.IsInversed);
+			Assert.Equal(isInversed, numericalAxis.IsInversed);
         }
 
         [Theory]
@@ -128,10 +144,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(double.NaN)]
         public void AxisLabelExtent_SetValue_ReturnsExpectedValue(double labelExtent)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.LabelExtent = labelExtent;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				LabelExtent = labelExtent
+			};
 
-            Assert.Equal(labelExtent, numericalAxis.LabelExtent);
+			Assert.Equal(labelExtent, numericalAxis.LabelExtent);
         }
 
         [Theory]
@@ -141,10 +159,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(double.NaN)]
         public void AxisLabelRotation_SetValue_ReturnsExpectedValue(double labelRotation)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.LabelRotation = labelRotation;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				LabelRotation = labelRotation
+			};
 
-            Assert.Equal(labelRotation, numericalAxis.LabelRotation);
+			Assert.Equal(labelRotation, numericalAxis.LabelRotation);
         }
 
         [Theory]
@@ -167,10 +187,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(AxisElementPosition.Inside)]
         public void LabelsPosition_SetValue_ReturnsExpectedValue(AxisElementPosition labelPosition)
         {
-            CategoryAxis categoryAxis = new CategoryAxis();
-            categoryAxis.LabelsPosition = labelPosition;
+			CategoryAxis categoryAxis = new CategoryAxis
+			{
+				LabelsPosition = labelPosition
+			};
 
-            Assert.Equal(labelPosition, categoryAxis.LabelsPosition);
+			Assert.Equal(labelPosition, categoryAxis.LabelsPosition);
         }
 
         [Fact]
@@ -196,7 +218,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             {
                 Stroke = Colors.Black,
                 StrokeWidth = 2,
-                StrokeDashArray = new DoubleCollection { 3, 3 }
+                StrokeDashArray = [3, 3]
             };
             numericalAxis.MajorGridLineStyle = gridLineStyle;
 
@@ -224,28 +246,34 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void Name_SetValue_ReturnsExpectedValue()
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.Name = "PrimaryAxis";
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				Name = "PrimaryAxis"
+			};
 
-            Assert.Equal("PrimaryAxis", numericalAxis.Name);
+			Assert.Equal("PrimaryAxis", numericalAxis.Name);
         }
 
         [Fact]
         public void PlotOffsetEnd_SetValue_ReturnsExpectedValue()
         {
-            CategoryAxis categoryAxis = new CategoryAxis();
-            categoryAxis.PlotOffsetEnd = 30;
+			CategoryAxis categoryAxis = new CategoryAxis
+			{
+				PlotOffsetEnd = 30
+			};
 
-            Assert.Equal(30, categoryAxis.PlotOffsetEnd);
+			Assert.Equal(30, categoryAxis.PlotOffsetEnd);
         }
 
         [Fact]
         public void PlotOffsetStart_SetValue_ReturnsExpectedValue()
         {
-            CategoryAxis categoryAxis = new CategoryAxis();
-            categoryAxis.PlotOffsetStart = 30;
+			CategoryAxis categoryAxis = new CategoryAxis
+			{
+				PlotOffsetStart = 30
+			};
 
-            Assert.Equal(30, categoryAxis.PlotOffsetStart);
+			Assert.Equal(30, categoryAxis.PlotOffsetStart);
         }
 
         [Theory]
@@ -253,10 +281,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void RenderNextToCrossingValue_SetValue_ReturnsExpectedValue(bool renderNextToCrossingValue)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.RenderNextToCrossingValue = renderNextToCrossingValue;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				RenderNextToCrossingValue = renderNextToCrossingValue
+			};
 
-            Assert.Equal(renderNextToCrossingValue, numericalAxis.RenderNextToCrossingValue);
+			Assert.Equal(renderNextToCrossingValue, numericalAxis.RenderNextToCrossingValue);
         }
 
         [Theory]
@@ -264,10 +294,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void ShowMajorGridLines_SetValue_ReturnsExpectedValue(bool showMajorGridLines)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.ShowMajorGridLines = showMajorGridLines;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				ShowMajorGridLines = showMajorGridLines
+			};
 
-            Assert.Equal(showMajorGridLines, numericalAxis.ShowMajorGridLines);
+			Assert.Equal(showMajorGridLines, numericalAxis.ShowMajorGridLines);
         }
 
         [Theory]
@@ -275,10 +307,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void ShowTrackballLabel_SetValue_ReturnsExpectedValue(bool showTrackballLabel)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.ShowTrackballLabel = showTrackballLabel;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				ShowTrackballLabel = showTrackballLabel
+			};
 
-            Assert.Equal(showTrackballLabel, numericalAxis.ShowTrackballLabel);
+			Assert.Equal(showTrackballLabel, numericalAxis.ShowTrackballLabel);
         }
 
         [Theory]
@@ -286,10 +320,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(AxisElementPosition.Inside)]
         public void TickPosition_SetValue_ReturnsExpectedValue(AxisElementPosition tickPosition)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.TickPosition = tickPosition;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				TickPosition = tickPosition
+			};
 
-            Assert.Equal(tickPosition, numericalAxis.TickPosition);
+			Assert.Equal(tickPosition, numericalAxis.TickPosition);
         }
 
         [Fact]
@@ -346,10 +382,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(double.MinValue)]
         public void VisibleMaximum_SetValue_ReturnsExpectedValue(double visibleMaximum)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.Maximum = visibleMaximum;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				Maximum = visibleMaximum
+			};
 
-            Assert.Equal(visibleMaximum, numericalAxis.Maximum);
+			Assert.Equal(visibleMaximum, numericalAxis.Maximum);
         }
 
         [Fact]
@@ -368,10 +406,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(0.0)]
         public void ZoomFactor_SetValue_ReturnsExpectedValue(double zoomFactor)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.ZoomFactor = zoomFactor;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				ZoomFactor = zoomFactor
+			};
 
-            Assert.Equal(zoomFactor, numericalAxis.ZoomFactor);
+			Assert.Equal(zoomFactor, numericalAxis.ZoomFactor);
         }
         [Theory]
         [InlineData(0.5)]
@@ -379,10 +419,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(0.0)]
         public void ZoomPosition_SetValue_ReturnsExpectedValue(double zoomPosition)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.ZoomPosition = zoomPosition;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				ZoomPosition = zoomPosition
+			};
 
-            Assert.Equal(zoomPosition, numericalAxis.ZoomPosition);
+			Assert.Equal(zoomPosition, numericalAxis.ZoomPosition);
         }
 
         // CategoryAxis
@@ -392,10 +434,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void ArrangeByIndex_SetValue_ReturnsExpectedValue(bool arrangeByIndex)
         {
-            CategoryAxis categoryAxis = new CategoryAxis();
-            categoryAxis.ArrangeByIndex = arrangeByIndex;
+			CategoryAxis categoryAxis = new CategoryAxis
+			{
+				ArrangeByIndex = arrangeByIndex
+			};
 
-            Assert.Equal(arrangeByIndex, categoryAxis.ArrangeByIndex);
+			Assert.Equal(arrangeByIndex, categoryAxis.ArrangeByIndex);
         }
 
         [Theory]
@@ -404,10 +448,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(50)]
         public void Interval_SetValue_ReturnsExpectedValue(double interval)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.Interval = interval;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				Interval = interval
+			};
 
-            Assert.Equal(interval, numericalAxis.Interval);
+			Assert.Equal(interval, numericalAxis.Interval);
         }
 
         [Theory]
@@ -415,10 +461,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(LabelPlacement.OnTicks)]
         public void LabelPlacement_SetValue_ReturnsExpectedValue(LabelPlacement labelPlacement)
         {
-            CategoryAxis categoryAxis = new CategoryAxis();
-            categoryAxis.LabelPlacement = labelPlacement;
+			CategoryAxis categoryAxis = new CategoryAxis
+			{
+				LabelPlacement = labelPlacement
+			};
 
-            Assert.Equal(labelPlacement, categoryAxis.LabelPlacement);
+			Assert.Equal(labelPlacement, categoryAxis.LabelPlacement);
         }
 
         [Fact]
@@ -426,10 +474,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             NumericalAxis numericalAxis = new NumericalAxis();
             var plotBand1 = new NumericalPlotBand() { Start = 20, End = 40, Fill = Colors.Bisque };
-            numericalAxis.PlotBands = new NumericalPlotBandCollection
-            {
-                plotBand1,
-            };
+            numericalAxis.PlotBands =
+			[
+				plotBand1,
+            ];
 
             Assert.NotNull(numericalAxis.PlotBands);
             Assert.Single(numericalAxis.PlotBands);
@@ -444,10 +492,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(EdgeLabelsVisibilityMode.Visible)]
         public void EdgeLabelsVisibilityMode_SetValue_ReturnsExpectedValue(EdgeLabelsVisibilityMode visibilityMode)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.EdgeLabelsVisibilityMode = visibilityMode;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				EdgeLabelsVisibilityMode = visibilityMode
+			};
 
-            Assert.Equal(visibilityMode, numericalAxis.EdgeLabelsVisibilityMode);
+			Assert.Equal(visibilityMode, numericalAxis.EdgeLabelsVisibilityMode);
         }
         [Fact]
         public void MinorGridLineStyle_SetValue_ReturnsExpectedValue()
@@ -457,7 +507,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             {
                 Stroke = Colors.Gray,
                 StrokeWidth = 1,
-                StrokeDashArray = new DoubleCollection { 2, 2 }
+                StrokeDashArray = [2, 2]
             };
             numericalAxis.MinorGridLineStyle = minorGridLineStyle;
 
@@ -471,10 +521,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(5)]
         public void MinorTicksPerInterval_SetValue_ReturnsExpectedValue(int minorTicksPerInterval)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.MinorTicksPerInterval = minorTicksPerInterval;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				MinorTicksPerInterval = minorTicksPerInterval
+			};
 
-            Assert.Equal(minorTicksPerInterval, numericalAxis.MinorTicksPerInterval);
+			Assert.Equal(minorTicksPerInterval, numericalAxis.MinorTicksPerInterval);
         }
 
         [Fact]
@@ -497,10 +549,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(false)]
         public void ShowMinorGridLines_SetValue_ReturnsExpectedValue(bool showMinorGridLines)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.ShowMinorGridLines = showMinorGridLines;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				ShowMinorGridLines = showMinorGridLines
+			};
 
-            Assert.Equal(showMinorGridLines, numericalAxis.ShowMinorGridLines);
+			Assert.Equal(showMinorGridLines, numericalAxis.ShowMinorGridLines);
         }
 
         // Numerical Axis
@@ -508,19 +562,23 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void NumericalAxis_ActualMaximum_SetValue_ReturnsExpectedValue()
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.ActualMaximum = 100;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				ActualMaximum = 100
+			};
 
-            Assert.Equal(100, numericalAxis.ActualMaximum);
+			Assert.Equal(100, numericalAxis.ActualMaximum);
         }
 
         [Fact]
         public void NumericalAxis_ActualMinimum_SetValue_ReturnsExpectedValue()
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.ActualMinimum = 10;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				ActualMinimum = 10
+			};
 
-            Assert.Equal(10, numericalAxis.ActualMinimum);
+			Assert.Equal(10, numericalAxis.ActualMinimum);
         }
 
         [Theory]
@@ -528,10 +586,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(double.NaN)]
         public void NumericalAxis_Maximum_SetValue_ReturnsExpectedValue(double maximum)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.Maximum = maximum;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				Maximum = maximum
+			};
 
-            Assert.Equal(maximum, numericalAxis.Maximum);
+			Assert.Equal(maximum, numericalAxis.Maximum);
         }
 
         [Theory]
@@ -539,10 +599,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(double.NaN)]
         public void NumericalAxis_Minimum_SetValue_ReturnsExpectedValue(double minimum)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.Minimum = minimum;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				Minimum = minimum
+			};
 
-            Assert.Equal(minimum, numericalAxis.Minimum);
+			Assert.Equal(minimum, numericalAxis.Minimum);
         }
 
         [Theory]
@@ -551,10 +613,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(NumericalPadding.Additional)]
         public void NumericalAxis_RangePadding_SetValue_ReturnsExpectedValue(NumericalPadding rangePadding)
         {
-            NumericalAxis numericalAxis = new NumericalAxis();
-            numericalAxis.RangePadding = rangePadding;
+			NumericalAxis numericalAxis = new NumericalAxis
+			{
+				RangePadding = rangePadding
+			};
 
-            Assert.Equal(rangePadding, numericalAxis.RangePadding);
+			Assert.Equal(rangePadding, numericalAxis.RangePadding);
         }
 
         [Theory]
@@ -563,10 +627,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(100)]
         public void LogarithmicBase_SetValue_ReturnsExpectedValue(double logarithmicBase)
         {
-            LogarithmicAxis logarithmicAxis = new LogarithmicAxis();
-            logarithmicAxis.LogarithmicBase = logarithmicBase;
+			LogarithmicAxis logarithmicAxis = new LogarithmicAxis
+			{
+				LogarithmicBase = logarithmicBase
+			};
 
-            Assert.Equal(logarithmicBase, logarithmicAxis.LogarithmicBase);
+			Assert.Equal(logarithmicBase, logarithmicAxis.LogarithmicBase);
         }
 
         // DateTimeAxis
@@ -574,19 +640,23 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void DateTimeAxis_ActualMaximum_SetValue_ReturnsExpectedValue()
         {
-            DateTimeAxis dateTimeAxis = new DateTimeAxis();
-            dateTimeAxis.ActualMaximum = new DateTime(2023, 12, 31);
+			DateTimeAxis dateTimeAxis = new DateTimeAxis
+			{
+				ActualMaximum = new DateTime(2023, 12, 31)
+			};
 
-            Assert.Equal(new DateTime(2023, 12, 31), dateTimeAxis.ActualMaximum);
+			Assert.Equal(new DateTime(2023, 12, 31), dateTimeAxis.ActualMaximum);
         }
 
         [Fact]
         public void DateTimeAxis_ActualMinimum_SetValue_ReturnsExpectedValue()
         {
-            DateTimeAxis dateTimeAxis = new DateTimeAxis();
-            dateTimeAxis.ActualMinimum = new DateTime(2023, 1, 1);
+			DateTimeAxis dateTimeAxis = new DateTimeAxis
+			{
+				ActualMinimum = new DateTime(2023, 1, 1)
+			};
 
-            Assert.Equal(new DateTime(2023, 1, 1), dateTimeAxis.ActualMinimum);
+			Assert.Equal(new DateTime(2023, 1, 1), dateTimeAxis.ActualMinimum);
         }
 
         [Theory]
@@ -600,10 +670,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(DateTimeIntervalType.Years)]
         public void AutoScrollingDeltaType_SetValue_ReturnsExpectedValue(DateTimeIntervalType intervalType)
         {
-            DateTimeAxis dateTimeAxis = new DateTimeAxis();
-            dateTimeAxis.AutoScrollingDeltaType = intervalType;
+			DateTimeAxis dateTimeAxis = new DateTimeAxis
+			{
+				AutoScrollingDeltaType = intervalType
+			};
 
-            Assert.Equal(intervalType, dateTimeAxis.AutoScrollingDeltaType);
+			Assert.Equal(intervalType, dateTimeAxis.AutoScrollingDeltaType);
         }
 
         [Theory]
@@ -617,10 +689,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(DateTimeIntervalType.Years)]
         public void IntervalType_SetValue_ReturnsExpectedValue(DateTimeIntervalType intervalType)
         {
-            DateTimeAxis dateTimeAxis = new DateTimeAxis();
-            dateTimeAxis.IntervalType = intervalType;
+			DateTimeAxis dateTimeAxis = new DateTimeAxis
+			{
+				IntervalType = intervalType
+			};
 
-            Assert.Equal(intervalType, dateTimeAxis.IntervalType);
+			Assert.Equal(intervalType, dateTimeAxis.IntervalType);
         }
 
         [Theory]
@@ -652,10 +726,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             DateTimeAxis dateTimeAxis = new DateTimeAxis();
             var plotBand1 = new DateTimePlotBand() { Start = new DateTime(2023, 1, 1), End = new DateTime(2023, 12, 31), Fill = Colors.Bisque };
-            dateTimeAxis.PlotBands = new DateTimePlotBandCollection
-            {
-                plotBand1,
-            };
+            dateTimeAxis.PlotBands =
+			[
+				plotBand1,
+            ];
 
             Assert.NotNull(dateTimeAxis.PlotBands);
             Assert.Single(dateTimeAxis.PlotBands);
@@ -673,10 +747,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(DateTimeRangePadding.AppendInterval)]
         public void DateTimeAxis_RangePadding_SetValue_ReturnsExpectedValue(DateTimeRangePadding rangePadding)
         {
-            DateTimeAxis dateTimeAxis = new DateTimeAxis();
-            dateTimeAxis.RangePadding = rangePadding;
+			DateTimeAxis dateTimeAxis = new DateTimeAxis
+			{
+				RangePadding = rangePadding
+			};
 
-            Assert.Equal(rangePadding, dateTimeAxis.RangePadding);
+			Assert.Equal(rangePadding, dateTimeAxis.RangePadding);
         }
     }
 }

@@ -2,221 +2,237 @@
 
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
-    public class ChartFeatureBehaviourUnitTest : BaseUnitTest
-    {
-        #region ZoomPanbehaviour methods
+	public class ChartFeatureBehaviourUnitTest : BaseUnitTest
+	{
+		#region ZoomPanbehaviour methods
 
-        [Fact]
-        public void ZoomIn_ValidatesZoomIncreases()
-        {
-            var chart = new SfCartesianChart();
-            var xAxis = new CategoryAxis();
-            var yAxis = new NumericalAxis();
-            chart.ChartArea.XAxes.Add(xAxis);
-            chart.ChartArea.YAxes.Add(yAxis);
-            var zoomPanBehavior = new ChartZoomPanBehavior();
-            zoomPanBehavior.Chart = chart;
+		[Fact]
+		public void ZoomIn_ValidatesZoomIncreases()
+		{
+			var chart = new SfCartesianChart();
+			var xAxis = new CategoryAxis();
+			var yAxis = new NumericalAxis();
+			chart._chartArea._xAxes.Add(xAxis);
+			chart._chartArea._yAxes.Add(yAxis);
+			var zoomPanBehavior = new ChartZoomPanBehavior
+			{
+				Chart = chart
+			};
 
-            zoomPanBehavior.ZoomIn();
+			zoomPanBehavior.ZoomIn();
 
-            var result = GetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel");
+			var result = GetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel");
 
-            Assert.NotNull(result);
-            Assert.Equal(1.25, (double)result);
-            Assert.True(xAxis.ZoomFactor < 1);
-            Assert.True(xAxis.ZoomPosition > 0);
-            Assert.True(yAxis.ZoomFactor < 1);
-            Assert.True(yAxis.ZoomPosition > 0);
-        }
+			Assert.NotNull(result);
+			Assert.Equal(1.25, (double)result);
+			Assert.True(xAxis.ZoomFactor < 1);
+			Assert.True(xAxis.ZoomPosition > 0);
+			Assert.True(yAxis.ZoomFactor < 1);
+			Assert.True(yAxis.ZoomPosition > 0);
+		}
 
-        [Fact]
-        public void ZoomOut_ValidatesZoomDecreases()
-        {
-            var chart = new SfCartesianChart() ;
-            var xAxis = new CategoryAxis();
-            var yAxis = new NumericalAxis() ;
-            chart.ChartArea.XAxes.Add(xAxis);
-            chart.ChartArea.YAxes.Add(yAxis);
-            var zoomPanBehavior = new ChartZoomPanBehavior();
-            zoomPanBehavior.Chart = chart;
-            SetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel", 0.5);
+		[Fact]
+		public void ZoomOut_ValidatesZoomDecreases()
+		{
+			var chart = new SfCartesianChart();
+			var xAxis = new CategoryAxis();
+			var yAxis = new NumericalAxis();
+			chart._chartArea._xAxes.Add(xAxis);
+			chart._chartArea._yAxes.Add(yAxis);
+			var zoomPanBehavior = new ChartZoomPanBehavior
+			{
+				Chart = chart
+			};
+			SetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel", 0.5);
 
-            zoomPanBehavior.ZoomOut();
-            var result = GetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel");
+			zoomPanBehavior.ZoomOut();
+			var result = GetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel");
 
-            Assert.NotNull(result);
-            Assert.Equal(0.5, (double)result);
-            Assert.Equal(1, xAxis.ZoomFactor);
-            Assert.Equal(0, xAxis.ZoomPosition);
-            Assert.Equal(1, yAxis.ZoomFactor);
-            Assert.Equal(0, xAxis.ZoomPosition);
-        }
+			Assert.NotNull(result);
+			Assert.Equal(0.5, (double)result);
+			Assert.Equal(1, xAxis.ZoomFactor);
+			Assert.Equal(0, xAxis.ZoomPosition);
+			Assert.Equal(1, yAxis.ZoomFactor);
+			Assert.Equal(0, xAxis.ZoomPosition);
+		}
 
-        [Fact]
-        public void Reset_ValidatesZoomResets()
-        {
-            var chart = new SfCartesianChart();
-            var xAxis = new CategoryAxis();
-            var yAxis = new NumericalAxis();
-            chart.ChartArea.AxisLayout.HorizontalAxes.Add(xAxis);
-            chart.ChartArea.AxisLayout.VerticalAxes.Add(yAxis);
-            var zoomPanBehavior = new ChartZoomPanBehavior();
-            zoomPanBehavior.Chart = chart;
-            SetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel", 0.5);
+		[Fact]
+		public void Reset_ValidatesZoomResets()
+		{
+			var chart = new SfCartesianChart();
+			var xAxis = new CategoryAxis();
+			var yAxis = new NumericalAxis();
+			chart._chartArea._axisLayout.HorizontalAxes.Add(xAxis);
+			chart._chartArea._axisLayout.VerticalAxes.Add(yAxis);
+			var zoomPanBehavior = new ChartZoomPanBehavior
+			{
+				Chart = chart
+			};
+			SetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel", 0.5);
 
-            zoomPanBehavior.Reset();
+			zoomPanBehavior.Reset();
 
-            Assert.Equal(1.0, GetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel"));
-            Assert.Equal(1, xAxis.ZoomFactor);
-            Assert.Equal(0, xAxis.ZoomPosition);
-            Assert.Equal(1, yAxis.ZoomFactor);
-            Assert.Equal(0, yAxis.ZoomPosition);
-        }
+			Assert.Equal(1.0, GetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel"));
+			Assert.Equal(1, xAxis.ZoomFactor);
+			Assert.Equal(0, xAxis.ZoomPosition);
+			Assert.Equal(1, yAxis.ZoomFactor);
+			Assert.Equal(0, yAxis.ZoomPosition);
+		}
 
-        [Theory]
-        [InlineData(0.1, 0.5)] 
-        [InlineData(-0.1, 1.1)] 
-        public void ZoomByRange_ValidatesZoomPositionAndFactor(double start, double end)
-        {
-            var chart = new SfCartesianChart();
-            var xAxis = new CategoryAxis() { ActualRange = new DoubleRange(0.0, 1.0), Area = chart.ChartArea };
-            chart.ChartArea.AxisLayout.HorizontalAxes.Add(xAxis);
-            var zoomPanBehavior = new ChartZoomPanBehavior();
-            zoomPanBehavior.Chart = chart;
+		[Theory]
+		[InlineData(0.1, 0.5)]
+		[InlineData(-0.1, 1.1)]
+		public void ZoomByRange_ValidatesZoomPositionAndFactor(double start, double end)
+		{
+			var chart = new SfCartesianChart();
+			var xAxis = new CategoryAxis() { ActualRange = new DoubleRange(0.0, 1.0), Area = chart._chartArea };
+			chart._chartArea._axisLayout.HorizontalAxes.Add(xAxis);
+			var zoomPanBehavior = new ChartZoomPanBehavior
+			{
+				Chart = chart
+			};
 
-            zoomPanBehavior.ZoomByRange(xAxis, start, end);
+			zoomPanBehavior.ZoomByRange(xAxis, start, end);
 
-            var expectedStart = Math.Max(0.0, Math.Min(1.0, start)); 
-            var expectedEnd = Math.Max(0.0, Math.Min(1.0, end)); 
-            Assert.Equal((expectedStart - xAxis.ActualRange.Start) / xAxis.ActualRange.Delta, xAxis.ZoomPosition);
-            Assert.Equal((expectedEnd - expectedStart) / xAxis.ActualRange.Delta, xAxis.ZoomFactor);
-        }
+			var expectedStart = Math.Max(0.0, Math.Min(1.0, start));
+			var expectedEnd = Math.Max(0.0, Math.Min(1.0, end));
+			Assert.Equal((expectedStart - xAxis.ActualRange.Start) / xAxis.ActualRange.Delta, xAxis.ZoomPosition);
+			Assert.Equal((expectedEnd - expectedStart) / xAxis.ActualRange.Delta, xAxis.ZoomFactor);
+		}
 
-        [Theory]
-        [InlineData(0.0, 1.0)] 
-        [InlineData(0.5, 0.25)]
-        public void ZoomToFactor_ValidatesZoomPositionAndFactor(double zoomPosition, double zoomFactor)
-        {
-            var chart = new SfCartesianChart();
-            var xAxis = new CategoryAxis()
-            {
-                ZoomPosition = 0.0,
-                ZoomFactor = 1.0,
-                Area = chart.ChartArea
-            };
-                
-            chart.ChartArea.AxisLayout.HorizontalAxes.Add(xAxis);
-            var zoomPanBehavior = new ChartZoomPanBehavior();
-            zoomPanBehavior.Chart = chart;
+		[Theory]
+		[InlineData(0.0, 1.0)]
+		[InlineData(0.5, 0.25)]
+		public void ZoomToFactor_ValidatesZoomPositionAndFactor(double zoomPosition, double zoomFactor)
+		{
+			var chart = new SfCartesianChart();
+			var xAxis = new CategoryAxis()
+			{
+				ZoomPosition = 0.0,
+				ZoomFactor = 1.0,
+				Area = chart._chartArea
+			};
 
-            zoomPanBehavior.ZoomToFactor(xAxis, zoomPosition, zoomFactor);
+			chart._chartArea._axisLayout.HorizontalAxes.Add(xAxis);
+			var zoomPanBehavior = new ChartZoomPanBehavior
+			{
+				Chart = chart
+			};
 
-            Assert.Equal(zoomPosition, xAxis.ZoomPosition);
-            Assert.Equal(zoomFactor, xAxis.ZoomFactor);
-        }
+			zoomPanBehavior.ZoomToFactor(xAxis, zoomPosition, zoomFactor);
 
-        [Theory]
-        [InlineData(0.5, 1.0)]
-        [InlineData(0.5, 0.25)]
-        public void ZoomToFactor_ZoomFactor(double zoomPosition, double zoomFactor)
-        {
-            var chart = new SfCartesianChart();
-            var xAxis = new CategoryAxis()
-            {
-                ZoomPosition = 0.0,
-                ZoomFactor = 1.0,
-                Area = chart.ChartArea
-            };
+			Assert.Equal(zoomPosition, xAxis.ZoomPosition);
+			Assert.Equal(zoomFactor, xAxis.ZoomFactor);
+		}
 
-            chart.ChartArea.AxisLayout.HorizontalAxes.Add(xAxis);
-            var zoomPanBehavior = new ChartZoomPanBehavior();
-            zoomPanBehavior.Chart = chart;
+		[Theory]
+		[InlineData(0.5, 1.0)]
+		[InlineData(0.5, 0.25)]
+		public void ZoomToFactor_ZoomFactor(double zoomPosition, double zoomFactor)
+		{
+			var chart = new SfCartesianChart();
+			var xAxis = new CategoryAxis()
+			{
+				ZoomPosition = 0.0,
+				ZoomFactor = 1.0,
+				Area = chart._chartArea
+			};
 
-            zoomPanBehavior.ZoomToFactor(zoomFactor);
+			chart._chartArea._axisLayout.HorizontalAxes.Add(xAxis);
+			var zoomPanBehavior = new ChartZoomPanBehavior
+			{
+				Chart = chart
+			};
 
-            Assert.Equal(zoomPosition, xAxis.ZoomPosition);
-            Assert.Equal(zoomFactor, xAxis.ZoomFactor);
-        }
+			zoomPanBehavior.ZoomToFactor(zoomFactor);
 
-        [Fact]
-        public void SetTouchHandled_EnablesPanning_SetsIsHandledToTrue()
-        {
-            var chart = new SfCartesianChart();
-            var zoomPan = new ChartZoomPanBehavior();  
-            zoomPan.EnablePanning = true; 
+			Assert.Equal(zoomPosition, xAxis.ZoomPosition);
+			Assert.Equal(zoomFactor, xAxis.ZoomFactor);
+		}
 
-            zoomPan.SetTouchHandled(chart);
+		[Fact]
+		public void SetTouchHandled_EnablesPanning_SetsIsHandledToTrue()
+		{
+			var chart = new SfCartesianChart();
+			var zoomPan = new ChartZoomPanBehavior
+			{
+				EnablePanning = true
+			};
 
-            Assert.False(chart.IsHandled);
-        }
+			zoomPan.SetTouchHandled(chart);
 
-        [Fact]
-        public void OnDoubleTap_WithinClipRect_CallsOnDoubleTapWithParameters()
-        {
-            var chart = new SfCartesianChart();
-            var xAxis = new CategoryAxis();
-            var yAxis = new NumericalAxis();
-            chart.ChartArea.AxisLayout.HorizontalAxes.Add(xAxis);
-            chart.ChartArea.AxisLayout.VerticalAxes.Add(yAxis);
-            var zoomPanBehavior = new ChartZoomPanBehavior();
-            zoomPanBehavior.Chart = chart;
-            var clipRect = new Rect(0, 0, 500, 500);
-            ((IChart)chart).ActualSeriesClipRect = clipRect;
+			Assert.False(chart.IsHandled);
+		}
 
-            zoomPanBehavior.OnDoubleTap(chart, 250, 250);
+		[Fact]
+		public void OnDoubleTap_WithinClipRect_CallsOnDoubleTapWithParameters()
+		{
+			var chart = new SfCartesianChart();
+			var xAxis = new CategoryAxis();
+			var yAxis = new NumericalAxis();
+			chart._chartArea._axisLayout.HorizontalAxes.Add(xAxis);
+			chart._chartArea._axisLayout.VerticalAxes.Add(yAxis);
+			var zoomPanBehavior = new ChartZoomPanBehavior
+			{
+				Chart = chart
+			};
+			var clipRect = new Rect(0, 0, 500, 500);
+			((IChart)chart).ActualSeriesClipRect = clipRect;
 
-            Assert.Equal(2.5, GetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel"));
-            Assert.True(xAxis.ZoomFactor < 1);
-            Assert.True(xAxis.ZoomPosition > 0);
-            Assert.True(yAxis.ZoomFactor < 1);
-            Assert.True(yAxis.ZoomPosition > 0);
-        }
+			zoomPanBehavior.OnDoubleTap(chart, 250, 250);
 
-        [Theory]
-        [InlineData(GestureStatus.Started, true)]
-        [InlineData(GestureStatus.Completed, false)]
-        public void OnPinchStateChanged_ActivatesPinchZoom(GestureStatus status, bool isPinchZooming)
-        {
-            var handler = new ChartZoomPanBehavior();
-            var chart = new SfCartesianChart();
-            handler.EnablePinchZooming = true;
-            var clipRect = new Rect(0, 0, 500, 500);
-            ((IChart)chart).ActualSeriesClipRect = clipRect;
+			Assert.Equal(2.5, GetPrivateField(zoomPanBehavior, "_cumulativeZoomLevel"));
+			Assert.True(xAxis.ZoomFactor < 1);
+			Assert.True(xAxis.ZoomPosition > 0);
+			Assert.True(yAxis.ZoomFactor < 1);
+			Assert.True(yAxis.ZoomPosition > 0);
+		}
 
-            var location = new Point(100, 100);
-            var angle = 45;
-            var scale = 1.5f;
+		[Theory]
+		[InlineData(GestureStatus.Started, true)]
+		[InlineData(GestureStatus.Completed, false)]
+		public void OnPinchStateChanged_ActivatesPinchZoom(GestureStatus status, bool isPinchZooming)
+		{
+			var handler = new ChartZoomPanBehavior();
+			var chart = new SfCartesianChart();
+			handler.EnablePinchZooming = true;
+			var clipRect = new Rect(0, 0, 500, 500);
+			((IChart)chart).ActualSeriesClipRect = clipRect;
 
-            handler.OnPinchStateChanged(chart, status, location, angle, scale);
+			var location = new Point(100, 100);
+			var angle = 45;
+			var scale = 1.5f;
 
-            Assert.Equal(isPinchZooming, GetPrivateField(handler, "_isPinchZoomingActivated"));
-        }
+			handler.OnPinchStateChanged(chart, status, location, angle, scale);
 
-        [Fact]
-        public void OnMouseWeelChanged_Test()
-        {
-            var handler = new ChartZoomPanBehavior();
-            var chart = new SfCartesianChart();
-            handler.Chart = chart;
-            var xAxis = new CategoryAxis();
-            var yAxis = new NumericalAxis();
-            chart.ChartArea.XAxes.Add(xAxis);
-            chart.ChartArea.YAxes.Add(yAxis);
-            handler.EnablePinchZooming = true;
-            var clipRect = new Rect(0, 0, 500, 500);
-            ((IChart)chart).ActualSeriesClipRect = clipRect;
+			Assert.Equal(isPinchZooming, GetPrivateField(handler, "_isPinchZoomingActivated"));
+		}
 
-            var location = new Point(100, 100);
-            var angle = 50;
+		[Fact]
+		public void OnMouseWeelChanged_Test()
+		{
+			var handler = new ChartZoomPanBehavior();
+			var chart = new SfCartesianChart();
+			handler.Chart = chart;
+			var xAxis = new CategoryAxis();
+			var yAxis = new NumericalAxis();
+			chart._chartArea._xAxes.Add(xAxis);
+			chart._chartArea._yAxes.Add(yAxis);
+			handler.EnablePinchZooming = true;
+			var clipRect = new Rect(0, 0, 500, 500);
+			((IChart)chart).ActualSeriesClipRect = clipRect;
 
-            handler.OnMouseWheelChanged(chart, location, angle);
+			var location = new Point(100, 100);
+			var angle = 50;
 
-            Assert.True(xAxis.ZoomFactor < 1);
-            Assert.True(xAxis.ZoomPosition > 0);
-            Assert.True(yAxis.ZoomFactor < 1);
-            Assert.True(yAxis.ZoomPosition > 0);
-        }
+			handler.OnMouseWheelChanged(chart, location, angle);
 
-        #endregion
-    }
+			Assert.True(xAxis.ZoomFactor < 1);
+			Assert.True(xAxis.ZoomPosition > 0);
+			Assert.True(yAxis.ZoomFactor < 1);
+			Assert.True(yAxis.ZoomPosition > 0);
+		}
+
+		#endregion
+	}
 }
