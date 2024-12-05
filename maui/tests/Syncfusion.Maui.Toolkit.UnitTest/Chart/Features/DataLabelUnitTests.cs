@@ -575,7 +575,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         }
 
         [Theory]
-        [InlineData(123.456, "$123.46", "C")]
+        [InlineData(123.456, "123", "#")]
         [InlineData(123.456, "123.46", "")] 
         public void GetLabelContent_VariousInputs_ReturnsExpectedContent(double value, string expectedContent, string format)
         {
