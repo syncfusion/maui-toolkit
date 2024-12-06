@@ -116,15 +116,17 @@
                         <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=DisplayMode}" 
                         SelectedItem="{Binding Source={x:Reference ViewModel}, Path=DisplayMode[0]}"
                          VerticalOptions="Start" HorizontalOptions="Fill" 
-                        x:Name="picker" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                        x:Name="picker" 
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                         SelectedIndex="0"
                         SelectedIndexChanged="picker_SelectedIndexChanged">
                         </Picker>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout Spacing="5">
-                    <Label Text="Label Template: " x:Name="label" VerticalOptions="Center" HorizontalOptions="Center" Padding="5" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"  FontSize="17"/>
-                    <Switch x:Name="TemplateSwitch" IsEnabled="True" Toggled="Switch_Toggled"/>
-                </HorizontalStackLayout>
+          <Label Text="Label Template: " x:Name="label" VerticalOptions="Center" HorizontalOptions="Center" Padding="5" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"  FontSize="17"/>
+          <CheckBox x:Name="templateCheckBox" HeightRequest="35" IsEnabled="True" VerticalOptions="Center" CheckedChanged="checkbox_CheckedChanged"/>
+        </HorizontalStackLayout>
             </VerticalStackLayout>
         </Grid>
     </localCore:SampleView.OptionView>

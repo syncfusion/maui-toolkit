@@ -1,17 +1,17 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
-    /// <summary>
-    /// Provides a collection of default brushes for chart visualization. This static class contains a list of predefined color brushes
-    /// used to enhance the appearance of chart segments.
-    /// </summary>
-    internal static class ChartColorModel
-    {
-        /// <summary>
-        /// A collection of default brushes for chart segments.
-        /// </summary>
-        public static List<Brush> DefaultBrushes = new List<Brush>
-                {
-                new SolidColorBrush(Color.FromArgb("#00bdae")),
+	/// <summary>
+	/// Provides a collection of default brushes for chart visualization. This static class contains a list of predefined color brushes
+	/// used to enhance the appearance of chart segments.
+	/// </summary>
+	internal static class ChartColorModel
+	{
+		/// <summary>
+		/// A collection of default brushes for chart segments.
+		/// </summary>
+		public static List<Brush> DefaultBrushes =
+				[
+				new SolidColorBrush(Color.FromArgb("#00bdae")),
                     /*#00bdae*/
                    new SolidColorBrush(Color.FromArgb("#404041")),
                     /*#404041*/
@@ -31,6 +31,6 @@
                     /*#7bb4eb*/				 	    
                     new SolidColorBrush(Color.FromArgb("#ea7a57"))
                     /*#ea7a57*/
-                };
-    }
+                ];
+	}
 }

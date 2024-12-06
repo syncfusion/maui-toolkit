@@ -6,15 +6,15 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Chats : SampleView
 	{
-		IDispatcherTimer timer;
+		readonly IDispatcherTimer _timer;
 
 		public Chats()
 		{
 			InitializeComponent();
-			timer = Dispatcher.CreateTimer();
-			timer.Interval = TimeSpan.FromMilliseconds(3000);
-			timer.Tick += Timer_Tick;
-			timer.Start();
+			_timer = Dispatcher.CreateTimer();
+			_timer.Interval = TimeSpan.FromMilliseconds(3000);
+			_timer.Tick += Timer_Tick;
+			_timer.Start();
 		}
 
 		protected override void OnSizeAllocated(double width, double height)
@@ -36,31 +36,31 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 		private void Timer_Tick(object? sender, EventArgs e)
 		{
 			shimmer.IsActive = false;
-			timer.Stop();
+			_timer.Stop();
 		}
 
 		public override void OnDisappearing()
 		{
-			timer.Stop();
-			timer.Tick -= Timer_Tick;
+			_timer.Stop();
+			_timer.Tick -= Timer_Tick;
 		}
 	}
 
 
 	public class ViewModel
 	{
-		private ObservableCollection<ContactInfo> info;
+		private ObservableCollection<ContactInfo> _info;
 
 		public ObservableCollection<ContactInfo> Info
 		{
-			get { return info; }
-			set { info = value; }
+			get { return _info; }
+			set { _info = value; }
 		}
 
 		public ViewModel()
 		{
-			info = new ObservableCollection<ContactInfo>
-		{
+			_info =
+		[
 			new ContactInfo() { ContactImage = "peoplecircle17.png", ContactName = "Brenda", Message = "Hey, how's it going? What have you been up to lately?" },
 			new ContactInfo() { ContactImage = "peoplecircle9.png", ContactName = "Jennifer", Message = "Do you have any plans for the weekend?" },
 			new ContactInfo() { ContactImage = "peoplecircle5.png", ContactName = "Watson", Message = "Have you watched any good movies or TV shows lately?" },
@@ -69,17 +69,17 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 			new ContactInfo() { ContactImage = "peoplecircle26.png", ContactName = "Daniel", Message = "Call me at 6" },
 			new ContactInfo() { ContactImage = "peoplecircle25.png", ContactName = "Katie", Message = "Shall we go?" },
 			new ContactInfo() { ContactImage = "peoplecircle18.png", ContactName = "Peter", Message = "Join the meeting!" },
-		};
+		];
 		}
 	}
 
-	public class ContactInfo : INotifyPropertyChanged
+	public partial class ContactInfo : INotifyPropertyChanged
 	{
 		#region Fields
 
-		private string? contactName;
-		private string? contactImage;
-		private string? message;
+		private string? _contactName;
+		private string? _contactImage;
+		private string? _message;
 
 		#endregion
 
@@ -96,33 +96,33 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 
 		public string? ContactName
 		{
-			get { return this.contactName; }
+			get { return _contactName; }
 			set
 			{
-				this.contactName = value;
+				_contactName = value;
 				RaisePropertyChanged("ContactName");
 			}
 		}
 
 		public string? Message
 		{
-			get { return this.message; }
+			get { return _message; }
 			set
 			{
-				this.message = value;
+				_message = value;
 				RaisePropertyChanged("Message");
 			}
 		}
 
 		public string? ContactImage
 		{
-			get { return this.contactImage; }
+			get { return _contactImage; }
 			set
 			{
 				if (value != null)
 				{
-					this.contactImage = value;
-					this.RaisePropertyChanged("ContactImage");
+					_contactImage = value;
+					RaisePropertyChanged("ContactImage");
 				}
 			}
 		}
@@ -133,10 +133,9 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 
 		public event PropertyChangedEventHandler? PropertyChanged;
 
-		private void RaisePropertyChanged(String name)
+		private void RaisePropertyChanged(string name)
 		{
-			if (PropertyChanged != null)
-				this.PropertyChanged(this, new PropertyChangedEventArgs(name));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
 
 		#endregion

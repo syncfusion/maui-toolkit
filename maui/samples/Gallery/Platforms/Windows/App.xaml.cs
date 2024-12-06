@@ -15,33 +15,34 @@ namespace Syncfusion.Maui.ControlsGallery.WinUI;
 /// </summary>
 public partial class App : MauiWinUIApplication
 {
-    /// <summary>
-    /// Initializes the singleton application object.  This is the first line of authored code
-    /// executed, and as such is the logical equivalent of main() or WinMain().
-    /// </summary>
-    public App()
-    {
-        this.InitializeComponent();
-    }
-   
+	/// <summary>
+	/// Initializes the singleton application object.  This is the first line of authored code
+	/// executed, and as such is the logical equivalent of main() or WinMain().
+	/// </summary>
+	public App()
+	{
+		InitializeComponent();
+	}
 
-    protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
-    protected override void OnLaunched(LaunchActivatedEventArgs args)
-    {
-        base.OnLaunched(args);
-        if (IPlatformApplication.Current != null) {
-            foreach (var item in IPlatformApplication.Current.Application.Windows)
-            {
-                var platformWindow = (item?.Handler?.PlatformView as Microsoft.UI.Xaml.Window);
+	protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
 
-                if (platformWindow != null)
-                {
-                    platformWindow.ExtendsContentIntoTitleBar = false;
-                    platformWindow.Title = ".NET MAUI Controls Demo";
-                }
-            }
-        }
-    }
+	protected override void OnLaunched(LaunchActivatedEventArgs args)
+	{
+		base.OnLaunched(args);
+		if (IPlatformApplication.Current != null)
+		{
+			foreach (var item in IPlatformApplication.Current.Application.Windows)
+			{
+				var platformWindow = (item?.Handler?.PlatformView as Microsoft.UI.Xaml.Window);
+
+				if (platformWindow != null)
+				{
+					platformWindow.ExtendsContentIntoTitleBar = false;
+					platformWindow.Title = ".NET MAUI Controls Demo";
+				}
+			}
+		}
+	}
 }
 

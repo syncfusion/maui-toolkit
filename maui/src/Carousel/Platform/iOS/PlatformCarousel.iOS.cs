@@ -77,7 +77,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <summary>
         /// The pan gesture recognizer.
         /// </summary>
-        internal UIPanGestureRecognizer? gestureRecognizer;
+        internal UIPanGestureRecognizer? _gestureRecognizer;
 
         /// <summary>
         /// The data source start index.
@@ -124,7 +124,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <summary>
         /// The load more item.
         /// </summary>
-        private PlatformCarouselItem _loadMoreItem = new PlatformCarouselItem();
+        private PlatformCarouselItem _loadMoreItem = [];
 
         /// <summary>
         /// The view mode field.
@@ -276,10 +276,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         private bool _textChanged = false;
 
-        /// <summary>
-        /// The base view.
-        /// </summary>
-        private UIView _baseView = new UIView();
+		/// <summary>
+		/// The base view.
+		/// </summary>
+		private readonly UIView _baseView = [];
 
         /// <summary>
         /// AutomationId field.
@@ -414,7 +414,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             if (value != null && value.Count > 0)
             {
-                _linearDataSource = new NSMutableArray();
+                _linearDataSource = [];
                 if (LoadMoreItemsCount > 0)
                 {
                     var count = _maximumVisibleCount;
@@ -426,8 +426,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     for (int i = 0; i < count; i++)
                     {
                         if (_dataSource != null)
-                            _linearDataSource.Add(_dataSource.GetItem<NSObject>((nuint)i));
-                    }
+						{
+							_linearDataSource.Add(_dataSource.GetItem<NSObject>((nuint)i));
+						}
+					}
                 }
                 else
                 {
@@ -685,7 +687,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             if (_dataSource != null)
             {
-                _linearDataSource = new NSMutableArray();
+                _linearDataSource = [];
                 int count = Math.Min(_maximumVisibleCount, (int)_dataSource.Count);
 
                 for (int i = 0; i < count; i++)
@@ -704,7 +706,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             {
                 for (int i = 0; i < (int)_dataSource.Count; i++)
                 {
-                    object? convertItem = GetConvertItem(_linearVirtualDataSource, i);
+                    object? convertItem = PlatformCarousel.GetConvertItem(_linearVirtualDataSource, i);
                     SetConversionArguments(convertItem, i);
                 }
             }
@@ -754,9 +756,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 
         void OnLoadMoreItemsCountPropertyChanged()
         {
-            if (_maximumVisibleCount <= 0 && virtualView != null)
-                _maximumVisibleCount = virtualView.ItemsSource.Count();
-            AllowLoadMoreItems();
+            if (_maximumVisibleCount <= 0 && _virtualView != null)
+			{
+				_maximumVisibleCount = _virtualView.ItemsSource.Count();
+			}
+
+			AllowLoadMoreItems();
         }
 
         /// <summary>
@@ -984,7 +989,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             if ((_isVirtualization || LoadMoreItemsCount > 0) && _isLinearVirtual && isNew)
             {
                 _linearVirtualDataSource = value!;
-                NSMutableArray array = new NSMutableArray();
+                NSMutableArray array = [];
                 for (int i = 0; i < ((IList)_linearVirtualDataSource).Count; i++)
                 {
                     array.Add(new NSObject());
@@ -1220,10 +1225,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             if(_automationId != value)
             {
                 _automationId = value;
-                if (_automationId == null)
-                {
-                    _automationId = string.Empty;
-                }
+                _automationId ??= string.Empty;
 
                 if (AllowLoadMore)
                 {
@@ -1259,7 +1261,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		public override void LayoutSubviews()
         {
             base.LayoutSubviews();
-            this.IsAccessibilityElement = false;
+            IsAccessibilityElement = false;
         }
 
         /// <summary>
@@ -1267,7 +1269,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         public override void AwakeFromNib()
         {
-            this.Initialize();
+            Initialize();
             base.AwakeFromNib();
         }        
 
@@ -1309,10 +1311,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="tempCount">The total count of items.</param>
         void HandleSelectionChange(int tempCount)
         {
-            SelectionChangedEventArgs args = new SelectionChangedEventArgs();
-            args.OldItem = GetMauiItem((int)SelectedIndex);
+			SelectionChangedEventArgs args = new SelectionChangedEventArgs
+			{
+				OldItem = GetMauiItem((int)SelectedIndex)
+			};
 
-            SelectedIndex = SelectedIndex + 1;
+			SelectedIndex++;
             _isCarouselInvoked = true;
 
             args.NewItem = GetMauiItem((int)SelectedIndex);
@@ -1326,10 +1330,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <returns>The object at the specified index in the ItemsSource, or null if not found.</returns>
         object? GetMauiItem(int selectedIndex)
         {
-            if (virtualView != null)
+            if (_virtualView != null)
             {
                 int i = 0;
-                foreach (var item in virtualView.ItemsSource)
+                foreach (var item in _virtualView.ItemsSource)
                 {
                     if (selectedIndex == i)
                     {
@@ -1370,7 +1374,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 
             if (isDatasource)
             {
-                if (_isVirtualization && virtualView != null && virtualView.ViewMode == ViewMode.Linear && _linearVirtualDataSource != null)
+                if (_isVirtualization && _virtualView != null && _virtualView.ViewMode == ViewMode.Linear && _linearVirtualDataSource != null)
                 {
                     var item = ((IList)_linearVirtualDataSource)[(int)index];
 
@@ -1420,10 +1424,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 
         void HandleSelectionChangeForPrevious(int tempCount)
         {
-            SelectionChangedEventArgs args = new SelectionChangedEventArgs();
-            args.OldItem = GetMauiItem((int)SelectedIndex);
+			SelectionChangedEventArgs args = new SelectionChangedEventArgs
+			{
+				OldItem = GetMauiItem((int)SelectedIndex)
+			};
 
-            SelectedIndex = _selectedIndex - 1;
+			SelectedIndex = _selectedIndex - 1;
 
             if (tempCount > 0)
             {
@@ -1492,9 +1498,9 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             CALayer layer = view.Layer;
             CATransform3D rotationAndPerspectiveTransform = CATransform3D.Identity;
 
-            if (virtualView != null)
+            if (_virtualView != null)
             {
-                UIView.Animate((nfloat)virtualView.Duration / 1000, () =>
+                UIView.Animate((nfloat)_virtualView.Duration / 1000, () =>
                 {
 #pragma warning disable CA1422
                     UIView.SetAnimationCurve(UIViewAnimationCurve.EaseInOut);
@@ -1530,12 +1536,14 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="args">The event arguments.</param>
         internal virtual void OnSelectionChanged(SelectionChangedEventArgs args)
         {
-			if (virtualView != null)
+			if (_virtualView != null)
 			{
-				if (virtualView.SelectedIndex != (int)_selectedIndex)
-					virtualView.SelectedIndex = (int)_selectedIndex;
+				if (_virtualView.SelectedIndex != (int)_selectedIndex)
+				{
+					_virtualView.SelectedIndex = (int)_selectedIndex;
+				}
 
-				virtualView.RaiseSelectionChanged(args);
+				_virtualView.RaiseSelectionChanged(args);
 			}
 		}
 
@@ -1545,7 +1553,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="args">The event arguments.</param>
         internal virtual void OnSwipeStarted(SwipeStartedEventArgs args)
         {
-            virtualView?.RaiseSwipeStarted(args);
+            _virtualView?.RaiseSwipeStarted(args);
         }
 
         /// <summary>
@@ -1554,7 +1562,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="args">The event arguments.</param>
         internal virtual void OnSwipeEnded(EventArgs args)
         {
-            virtualView?.RaiseSwipeEnded(args);
+            _virtualView?.RaiseSwipeEnded(args);
         }
 
         /// <summary>
@@ -1574,7 +1582,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         internal void LoadOtherItem()
         {
-            PlatformCarouselItem item = new PlatformCarouselItem();
+            PlatformCarouselItem item = [];
             int count = _maximumVisibleCount;
             int tempCount = GetItemCount(); 
 
@@ -1599,7 +1607,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     {
                         if (_linearVirtualDataSource is IList list)
                         {
-                            convertItem = GetConvertItem(_linearVirtualDataSource, (int)_dataSourceEndIndex);
+                            convertItem = PlatformCarousel.GetConvertItem(_linearVirtualDataSource, (int)_dataSourceEndIndex);
                             SetConversionArguments(convertItem, _dataSourceEndIndex);
                             if (_dataSource != null)
                             {
@@ -1661,7 +1669,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     count = tempCount - (int)_linearDataSource.Count;
                 }
 
-                count = count + (int)_linearDataSource.Count;
+                count += (int)_linearDataSource.Count;
 
                 for (int i = (int)_linearDataSource.Count; i < count; i++)
                 {
@@ -1681,10 +1689,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="index">The index of the item.</param>
         void SetConversionArguments(object? convertItem, nint index)
         {
-            ConversionEventArgs arg = new ConversionEventArgs();
-            arg.Index = (int)index;
-            arg.Item = convertItem;
-            OnConversion(arg);
+			ConversionEventArgs arg = new ConversionEventArgs
+			{
+				Index = (int)index,
+				Item = convertItem
+			};
+			OnConversion(arg);
 
         }
 
@@ -1721,11 +1731,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="args">Conversion event arguments.</param>
         internal virtual void OnConversion(ConversionEventArgs args)
         {
-            if (ConversionInvoked != null)
-            {
-                ConversionInvoked(this, args);
-            }
-        }
+			ConversionInvoked?.Invoke(this, args);
+		}
 
         /// <summary>
         /// Releases the unmanaged resources used by the PlatformCarousel and optionally releases the managed resources.
@@ -1788,10 +1795,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         void InitializeGestureRecognizers()
         {
-            gestureRecognizer = new UIPanGestureRecognizer(PanHandle);
+            _gestureRecognizer = new UIPanGestureRecognizer(PanHandle);
             _customGesture = new CustomCarouselPanGesture(this);
-            gestureRecognizer.Delegate = _customGesture;
-            AddGestureRecognizer(gestureRecognizer);
+            _gestureRecognizer.Delegate = _customGesture;
+            AddGestureRecognizer(_gestureRecognizer);
         }
 
         /// <summary>
@@ -1825,8 +1832,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         void InitializeDataSources()
         {
-            _dataSource = new NSMutableArray();
-            _linearDataSource = new NSMutableArray();
+            _dataSource = [];
+            _linearDataSource = [];
             _linearVirtualDataSource = new ObservableCollection<object>();
         }
 
@@ -1844,18 +1851,15 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         void PanHandle()
         {
-            if (gestureRecognizer == null)
+            if (_gestureRecognizer == null)
             {
                 return;
             }
 
             CGPoint stopLocation = new CGPoint(0, 0);
-            if (SwipeStartEventArgs == null)
-            {
-                SwipeStartEventArgs = new SwipeStartedEventArgs();
-            }
+            SwipeStartEventArgs ??= new SwipeStartedEventArgs();
 
-            switch (gestureRecognizer.State)
+            switch (_gestureRecognizer.State)
             {
                 case UIGestureRecognizerState.Began:
                     HandleGestureBegan();
@@ -1878,10 +1882,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="stopLocation">Reference to the stop location of the gesture.</param>
         void HandleGestureChanged(ref CGPoint stopLocation)
         {
-            if (gestureRecognizer == null)
-                return;
-            stopLocation = gestureRecognizer.TranslationInView(this);
-            nfloat velocityX = gestureRecognizer.VelocityInView(this).X;
+            if (_gestureRecognizer == null)
+			{
+				return;
+			}
+
+			stopLocation = _gestureRecognizer.TranslationInView(this);
+            nfloat velocityX = _gestureRecognizer.VelocityInView(this).X;
             nfloat diff = _lastX - stopLocation.X;
 
             if (diff < 0.0f)
@@ -1910,7 +1917,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     _increment = MinIncrement;
                 }
 
-                _tempX = _tempX - _increment;
+                _tempX -= _increment;
                 _switchFloat = 1;
             }
 
@@ -1952,7 +1959,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     }
                 }
 
-                _tempX = _tempX - _increment;
+                _tempX -= _increment;
             }
 
         }
@@ -1973,7 +1980,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     _increment = MinIncrement;
                 }
 
-                _tempX = _tempX + _increment;
+                _tempX += _increment;
                 _switchFloat = 0;
             }
 
@@ -2014,8 +2021,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     }
                 }
 
-                _touchX = _touchX + _touchX;
-                _tempX = _tempX + _increment;
+                _touchX += _touchX;
+                _tempX += _increment;
             }
         }
 
@@ -2044,10 +2051,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         void HandleGestureBegan()
         {
-            if (gestureRecognizer != null)
+            if (_gestureRecognizer != null)
             {
                 _tempX = 0;
-                CGPoint startLocation = gestureRecognizer.TranslationInView(this);
+                CGPoint startLocation = _gestureRecognizer.TranslationInView(this);
                 _touchX = MaxIncrement;
                 _increment = MaxIncrement;
                 _isSwipeRestricted = true;
@@ -2193,7 +2200,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <returns>A new PlatformCarouselItem.</returns>
         PlatformCarouselItem? GetNewItem()
         {
-            PlatformCarouselItem? newValue = new PlatformCarouselItem();
+            PlatformCarouselItem? newValue = [];
             if (_dataSource != null)
             {
                 if (_dataSource.GetItem<NSObject>((nuint)_selectedIndex) as PlatformCarouselItem == null && _isLinearVirtual)
@@ -2202,7 +2209,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     SetConversionArguments(convertItem, _selectedIndex);
                 }
 
-                if (_isVirtualization && virtualView != null && virtualView.ViewMode == ViewMode.Linear)
+                if (_isVirtualization && _virtualView != null && _virtualView.ViewMode == ViewMode.Linear)
                 {
                     if (_linearVirtualDataSource is IList list && list != null)
                     {
@@ -2262,13 +2269,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             }
         }
 
-        /// <summary>
-        /// Retrieves an item from the source list at the specified index.
-        /// </summary>
-        /// <param name="sourceList">The source list to retrieve the item from.</param>
-        /// <param name="index">The index of the item to retrieve.</param>
-        /// <returns>The item at the specified index, or null if not found.</returns>
-        object? GetConvertItem(object? sourceList, int index)
+		/// <summary>
+		/// Retrieves an item from the source list at the specified index.
+		/// </summary>
+		/// <param name="sourceList">The source list to retrieve the item from.</param>
+		/// <param name="index">The index of the item to retrieve.</param>
+		/// <returns>The item at the specified index, or null if not found.</returns>
+		static object? GetConvertItem(object? sourceList, int index)
         {
             object? obj = null;
             if (sourceList != null && sourceList is IList list)
@@ -2398,25 +2405,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             return _selectedIndex - 1;
         }
 
-        /// <summary>
-        /// Handles virtualization scenarios if needed.
-        /// </summary>
-        void HandleVirtualizationIfNeeded()
-        {
-            if (_isVirtualization && _isLinearVirtual && IsTapped)
-            {
-                HandleTapVirtualization();
-            }
-            else if (_isVirtualization && IsTapped)
-            {
-                HandleTapWithoutXForms();
-            }
-        }
-
-        /// <summary>
-        /// Handles tap events when virtualization is enabled without XForms.
-        /// </summary>
-        void HandleTapWithoutXForms()
+		/// <summary>
+		/// Handles tap events when virtualization is enabled without XForms.
+		/// </summary>
+		void HandleTapWithoutXForms()
         {
             int tempCount = GetItemCount();
 
@@ -2493,7 +2485,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     
                     if ((int)_dataSourceEndIndex > _selectedIndex)
                     {
-                        PlatformCarouselItem deletedItem = new PlatformCarouselItem();
+                        PlatformCarouselItem deletedItem = [];
                         
                         if (_dataSource != null)
                         {
@@ -2538,50 +2530,53 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             object? convertItem;
             for (int i = 0; i < Math.Abs(_tappedDifference); i++)
             {
-                PlatformCarouselItem? item = null;
-                if (_dataSource != null && _dataSourceEndIndex + 1 < (int)_dataSource.Count)
-                {
-                    _dataSourceEndIndex++;
-                    convertItem = GetConvertItem(_linearVirtualDataSource, i);
-                    SetConversionArguments(convertItem, _dataSourceEndIndex);
-                    if (convertItem != null && virtualView != null && virtualView.ViewMode == ViewMode.Linear)
-                    {
-                        item = GetVirtualizedItem(convertItem, _dataSourceEndIndex);
-                    }
-                    else
-                        item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
-                    if (item != null)
-                    {
-                        AddItemToSubView(item, _dataSourceEndIndex);
-                        if ((int)_dataSourceStartIndex < _selectedIndex)
-                        {
-                            PlatformCarouselItem? deletedItem;
+				if (_dataSource != null && _dataSourceEndIndex + 1 < (int)_dataSource.Count)
+				{
+					_dataSourceEndIndex++;
+					convertItem = PlatformCarousel.GetConvertItem(_linearVirtualDataSource, i);
+					SetConversionArguments(convertItem, _dataSourceEndIndex);
+					PlatformCarouselItem? item;
+					if (convertItem != null && _virtualView != null && _virtualView.ViewMode == ViewMode.Linear)
+					{
+						item = GetVirtualizedItem(convertItem, _dataSourceEndIndex);
+					}
+					else
+					{
+						item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+					}
 
-                            if (virtualView != null && virtualView.ViewMode == ViewMode.Linear)
-                            {
-                                if (_linearVirtualDataSource is IList list && list[(int)_dataSourceEndIndex] is PlatformCarouselItem carouselItem && carouselItem != null)
-                                {
-                                    deletedItem = GetVirtualizedItem(item, _dataSourceEndIndex);
-                                }
-                                else
-                                {
-                                    deletedItem = null;
-                                }
-                            }
-                            else
-                            {
-                                deletedItem = _dataSource?.GetItem<PlatformCarouselItem>((nuint)_dataSourceStartIndex);
-                            }
+					if (item != null)
+					{
+						AddItemToSubView(item, _dataSourceEndIndex);
+						if ((int)_dataSourceStartIndex < _selectedIndex)
+						{
+							PlatformCarouselItem? deletedItem;
 
-                            if (deletedItem != null && (deletedItem.Frame.X + deletedItem.Frame.Size.Width) < Frame.X)
-                            {
-                                deletedItem.RemoveFromSuperview();
-                                _dataSourceStartIndex++;
-                            }
-                        }
-                    }
-                }
-            }
+							if (_virtualView != null && _virtualView.ViewMode == ViewMode.Linear)
+							{
+								if (_linearVirtualDataSource is IList list && list[(int)_dataSourceEndIndex] is PlatformCarouselItem carouselItem && carouselItem != null)
+								{
+									deletedItem = GetVirtualizedItem(item, _dataSourceEndIndex);
+								}
+								else
+								{
+									deletedItem = null;
+								}
+							}
+							else
+							{
+								deletedItem = _dataSource?.GetItem<PlatformCarouselItem>((nuint)_dataSourceStartIndex);
+							}
+
+							if (deletedItem != null && (deletedItem.Frame.X + deletedItem.Frame.Size.Width) < Frame.X)
+							{
+								deletedItem.RemoveFromSuperview();
+								_dataSourceStartIndex++;
+							}
+						}
+					}
+				}
+			}
         }
 
         /// <summary>
@@ -2591,9 +2586,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             for (int i = 0; i < Math.Abs(_tappedDifference); i++)
             {
-                if (_dataSourceStartIndex - 1 == -1) break;
+                if (_dataSourceStartIndex - 1 == -1)
+				{
+					break;
+				}
 
-                _dataSourceStartIndex--;
+				_dataSourceStartIndex--;
                 PlatformCarouselItem? item = CreateAndConfigureBackwardItem();
 
                 if (item != null)
@@ -2611,13 +2609,16 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <returns>A configured PlatformCarouselItem, or null if creation fails.</returns>
         PlatformCarouselItem? CreateAndConfigureBackwardItem()
         {
-            object? convertItem = GetConvertItem(_linearVirtualDataSource, (int)_dataSourceStartIndex);
+            object? convertItem = PlatformCarousel.GetConvertItem(_linearVirtualDataSource, (int)_dataSourceStartIndex);
             SetConversionArguments(convertItem, _dataSourceStartIndex);
 
             PlatformCarouselItem? item = GetCarouselItem(convertItem);
-            if (item == null) return null;
+            if (item == null)
+			{
+				return null;
+			}
 
-            ConfigureBackwardItem(item);
+			ConfigureBackwardItem(item);
             return item;
         }
 
@@ -2642,7 +2643,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <returns>True if in linear virtual mode, false otherwise.</returns>
         bool IsLinearVirtualMode(object? convertItem)
         {
-            return convertItem != null && virtualView != null && virtualView.ViewMode == ViewMode.Linear;
+            return convertItem != null && _virtualView != null && _virtualView.ViewMode == ViewMode.Linear;
         }
 
         /// <summary>
@@ -2702,9 +2703,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         void RemoveExcessForwardItem()
         {
-            if ((int)_dataSourceEndIndex <= _selectedIndex) return;
+            if ((int)_dataSourceEndIndex <= _selectedIndex)
+			{
+				return;
+			}
 
-            PlatformCarouselItem? deletedItem = GetItemToDelete();
+			PlatformCarouselItem? deletedItem = GetItemToDelete();
             if (deletedItem != null && IsItemOutOfView(deletedItem))
             {
                 deletedItem.RemoveFromSuperview();
@@ -2768,12 +2772,18 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             int tempCount = GetItemCount();
             nint offset = 0;
-            if (tempCount <= 0) return;
+            if (tempCount <= 0)
+			{
+				return;
+			}
 
-            PlatformCarouselItem? selectedItem = GetSelectedItem();
-            if (selectedItem == null) return;
+			PlatformCarouselItem? selectedItem = GetSelectedItem();
+            if (selectedItem == null)
+			{
+				return;
+			}
 
-            ArrangeRightItems(ref offset);
+			ArrangeRightItems(ref offset);
             ArrangeLeftItems(ref offset);
             CenterSelectedItem(selectedItem);
         }
@@ -2784,7 +2794,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <returns>The selected PlatformCarouselItem, or null if not found.</returns>
         PlatformCarouselItem? GetSelectedItem()
         {
-            if (_isVirtualization && virtualView != null && virtualView.ViewMode == ViewMode.Linear)
+            if (_isVirtualization && _virtualView != null && _virtualView.ViewMode == ViewMode.Linear)
             {
                 return GetVirtualizedSelectedItem();
             }
@@ -2909,8 +2919,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <returns>The <see cref="PlatformCarouselItem"/> at the specified index, or null if not found.</returns>
         PlatformCarouselItem? GetLeftAndRightItem(nint index)
         {
-            PlatformCarouselItem? carouselItem = new PlatformCarouselItem();
-            if (_isVirtualization && virtualView != null && virtualView.ViewMode == ViewMode.Linear)
+            PlatformCarouselItem? carouselItem = [];
+            if (_isVirtualization && _virtualView != null && _virtualView.ViewMode == ViewMode.Linear)
             {
                 if (_linearVirtualDataSource is IList list && list[(int)index] is var item && item != null)
                 {
@@ -2990,13 +3000,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             BringSubviewToFront(view);
             CALayer layer = view.Layer;
-            CATransform3D rotationAndPerspectiveTransform = CreateRotationAndPerspectiveTransform(-0.0005f);
+            CATransform3D rotationAndPerspectiveTransform = PlatformCarousel.CreateRotationAndPerspectiveTransform(-0.0005f);
             nfloat tempValue = GetRotationAngle();
-            rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Rotate(DegreeValue(tempValue), 0.0f, 1.0f, 0.0f);
+            rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Rotate(PlatformCarousel.DegreeValue(tempValue), 0.0f, 1.0f, 0.0f);
             rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Scale(_scaleOffset, _scaleOffset, 1);
-            if (virtualView != null)
+            if (_virtualView != null)
             {
-                UIView.Animate((nfloat)virtualView.Duration / 1000, () =>
+                UIView.Animate((nfloat)_virtualView.Duration / 1000, () =>
                 {
 
 #pragma warning disable CA1422
@@ -3024,10 +3034,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             BringSubviewToFront(view);
             CALayer layer = view.Layer;
-            CATransform3D rotationAndPerspectiveTransform = CreateRotationAndPerspectiveTransform(-0.0005f);
+            CATransform3D rotationAndPerspectiveTransform = PlatformCarousel.CreateRotationAndPerspectiveTransform(-0.0005f);
             nfloat tempValue = GetRotationAngle();
 
-            rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Rotate(DegreeValue(tempValue), 0.0f, 1.0f, 0.0f);
+            rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Rotate(PlatformCarousel.DegreeValue(tempValue), 0.0f, 1.0f, 0.0f);
             rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Scale(_scaleOffset, _scaleOffset, 1);
             view.Frame = new CGRect(
                 (Bounds.Size.Width / 2) - _selectedItemOffset - _itemWidth + value,
@@ -3048,12 +3058,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             return tempValue;
         }
 
-        /// <summary>
-        /// degree value calculation
-        /// </summary>
-        /// <param name="degree">calculation of degree</param>
-        /// <returns>degree value</returns>
-        nfloat DegreeValue(nfloat degree)
+		/// <summary>
+		/// degree value calculation
+		/// </summary>
+		/// <param name="degree">calculation of degree</param>
+		/// <returns>degree value</returns>
+		static nfloat DegreeValue(nfloat degree)
         {
             return (nfloat)((Math.PI * degree) / Angle180);
         }
@@ -3073,12 +3083,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             );
         }
 
-        /// <summary>
-        /// Creates a rotation and perspective transform for the carousel item.
-        /// </summary>
-        /// <param name="value">The offset value used in calculating the rotation angle.</param>
-        /// <returns>A CATransform3D object representing the rotation and perspective transform.</returns>
-        CATransform3D CreateRotationAndPerspectiveTransform(nfloat value)
+		/// <summary>
+		/// Creates a rotation and perspective transform for the carousel item.
+		/// </summary>
+		/// <param name="value">The offset value used in calculating the rotation angle.</param>
+		/// <returns>A CATransform3D object representing the rotation and perspective transform.</returns>
+		static CATransform3D CreateRotationAndPerspectiveTransform(nfloat value)
         {
             CATransform3D transform = CATransform3D.Identity;
             transform.M34 = value;
@@ -3095,14 +3105,14 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             SendSubviewToBack(view);
             CALayer layer = view.Layer;
-            CATransform3D rotationAndPerspectiveTransform = CreateRotationAndPerspectiveTransform(-0.0005f);
+            CATransform3D rotationAndPerspectiveTransform = PlatformCarousel.CreateRotationAndPerspectiveTransform(-0.0005f);
             nfloat rotationAngle = GetRotationAngle();
 
-            rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Rotate(-DegreeValue(rotationAngle), 0.0f, 1.0f, 0.0f);
+            rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Rotate(-PlatformCarousel.DegreeValue(rotationAngle), 0.0f, 1.0f, 0.0f);
             rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Scale(_scaleOffset, _scaleOffset, 1);
-            if (virtualView != null)
+            if (_virtualView != null)
             {
-                UIView.Animate((nfloat)virtualView.Duration / 1000, () =>
+                UIView.Animate((nfloat)_virtualView.Duration / 1000, () =>
                 {
 #pragma warning disable CA1422
                     UIView.SetAnimationCurve(UIViewAnimationCurve.EaseOut);
@@ -3137,10 +3147,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             SendSubviewToBack(view);
             CALayer layer = view.Layer;
-            CATransform3D rotationAndPerspectiveTransform = CreateRotationAndPerspectiveTransform((nfloat)(-0.0005));
+            CATransform3D rotationAndPerspectiveTransform = PlatformCarousel.CreateRotationAndPerspectiveTransform((nfloat)(-0.0005));
             nfloat tempValue = GetRotationAngle();
 
-            rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Rotate(-DegreeValue(tempValue), 0.0f, 1.0f, 0.0f);
+            rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Rotate(-PlatformCarousel.DegreeValue(tempValue), 0.0f, 1.0f, 0.0f);
             rotationAndPerspectiveTransform = rotationAndPerspectiveTransform.Scale(_scaleOffset, _scaleOffset, 1);
             view.Frame = new CGRect((Bounds.Size.Width / 2) + _selectedItemOffset + value,
                 (Bounds.Size.Height - ItemHeight) / 2,
@@ -3161,9 +3171,9 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             if (_handler != null)
             {
                 View? contentView = null;
-                if (virtualView != null && virtualView.ItemTemplate != null)
+                if (_virtualView != null && _virtualView.ItemTemplate != null)
                 {
-                    contentView = GetItemView(virtualView, this, (int)index);
+                    contentView = GetItemView(_virtualView, this, (int)index);
                 }
 
                 if (contentView != null)
@@ -3196,7 +3206,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 ArrangeItem();
                 LinearViewLoading();
 
-                if (_isVirtualization && virtualView != null && virtualView != null && virtualView.ViewMode == ViewMode.Linear)
+                if (_isVirtualization && _virtualView != null && _virtualView != null && _virtualView.ViewMode == ViewMode.Linear)
                 {
                     if (_linearVirtualDataSource is IList list && list[(int)SelectedIndex] is object obj && obj != null)
                     {
@@ -3228,14 +3238,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="j">A reference to the current index offset.</param>
         void LoadVirtualizationItemsBackward(ref PlatformCarouselItem item, ref int j)
         {
-            object? convertItem = null;
-            for (int i = (int)_selectedIndex - 1; i >= 0; i--)
+			for (int i = (int)_selectedIndex - 1; i >= 0; i--)
             {
                 j = (int)_selectedIndex - (int)_dataSourceStartIndex - 1;
                 if (i != -1)
                 {
-                    convertItem = GetConvertItem(_linearVirtualDataSource, i);
-                    ConvertItemToCarouselItem(convertItem, ref item, i);
+					var convertItem = PlatformCarousel.GetConvertItem(_linearVirtualDataSource, i);
+					ConvertItemToCarouselItem(convertItem, ref item, i);
                     AddItemToSubView(item, i);
                     _dataSourceStartIndex = i;
                     UpdateLinearLeftPosition(item, -(_offset * j));
@@ -3250,7 +3259,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         void ConvertItemToCarouselItem(object? convertItem, ref PlatformCarouselItem item, int index)
         {
             SetConversionArguments(convertItem, index);
-            if (convertItem != null && virtualView != null && virtualView.ViewMode == ViewMode.Linear)
+            if (convertItem != null && _virtualView != null && _virtualView.ViewMode == ViewMode.Linear)
             {
                 PlatformCarouselItem? virtualizedItem = GetVirtualizedItem(convertItem, index);
                 if (virtualizedItem != null) 
@@ -3285,8 +3294,11 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             for (int i = (int)_selectedIndex; i < (nint)((IList)_linearVirtualDataSource).Count; i++)
             {
                 if (_linearVirtualDataSource is IList list && list != null)
-                    convertItem = list[i];
-                ConvertItemToCarouselItem(convertItem, ref item, i);
+				{
+					convertItem = list[i];
+				}
+
+				ConvertItemToCarouselItem(convertItem, ref item, i);
                 AddItemToSubView(item, i);
                 _dataSourceEndIndex = i;
                 UpdateLinearRightPosition(item, _offset * j);
@@ -3319,7 +3331,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         void HandleVirtualizationAndXForms()
         {
-            PlatformCarouselItem item = new();
+            PlatformCarouselItem item = [];
             int j = 0;
             if (_viewMode == ViewMode.Default)
             {
@@ -3397,10 +3409,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             if (IsDataSourceAvailable())
             {
-                LinearMode = new SfLinearMode(this);
-                LinearMode.Frame = new CGRect(0, 0, Frame.Size.Width, Frame.Size.Height);
-                LinearMode.Carousel = this;
-                AddLinearModeToView();
+				LinearMode = new SfLinearMode(this)
+				{
+					Frame = new CGRect(0, 0, Frame.Size.Width, Frame.Size.Height),
+					Carousel = this
+				};
+				AddLinearModeToView();
             }
         }
 
@@ -3449,9 +3463,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="tempCount">The total count of items in the carousel.</param>
         void HandleDefaultViewMode(int tempCount)
         {
-            if (_dataSource == null) return;
+            if (_dataSource == null)
+			{
+				return;
+			}
 
-            PlatformCarouselItem item = new PlatformCarouselItem();
+			PlatformCarouselItem item = [];
 
             if (!_allowLoadMore && !_isVirtualization)
             {
@@ -3484,9 +3501,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="tempCount">The total count of items in the carousel.</param>
         void HandleLinearViewMode(int tempCount)
         {
-            if (!IsDataSourceAvailable()) return;
+            if (!IsDataSourceAvailable())
+			{
+				return;
+			}
 
-            LinearMode = new SfLinearMode(this);
+			LinearMode = new SfLinearMode(this);
             ConfigureLinearMode(tempCount);
             AddLinearModeToView();
         }
@@ -3554,12 +3574,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 {
                     if (_dataSource != null)
                     {
-                        item = item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						item = item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
                         AddItemToSubView(item, i);
                     }
 
                     _dataSourceEndIndex = i;
-                    PlatformCarouselItem platformCarousel = new PlatformCarouselItem();
+					PlatformCarouselItem platformCarousel = [];
                     if (_dataSource != null)
                     {
                         platformCarousel = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
@@ -3585,7 +3605,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                         AddItemToSubView(item, i, false);
 
                         _dataSourceStartIndex = i;
-                        PlatformCarouselItem carouselItem = new PlatformCarouselItem();
+                        PlatformCarouselItem carouselItem = [];
                         if (_dataSource != null)
                         {
                             carouselItem = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
@@ -3624,7 +3644,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 
                 for (nint i = 0; i < _maximumVisibleCount; i++)
                 {
-                    item = new PlatformCarouselItem();
+                    item = [];
                     if (_dataSource != null)
                     {
                         item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
@@ -3812,17 +3832,28 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         {
             if (LoadMoreItem != null)
             {
+
+/* Unmerged change from project 'Syncfusion.Maui.Toolkit (net9.0-ios)'
+Before:
                 RemoveExtraSubviews(LoadMoreItem);
                 if(Loadmore != null)
-                    ConfigureLoadMoreItem(Loadmore);
-            }
+After:
+				PlatformCarousel.RemoveExtraSubviews(LoadMoreItem);
+                if(Loadmore != null)
+*/
+				RemoveExtraSubviews(LoadMoreItem);
+                if(Loadmore != null)
+				{
+					ConfigureLoadMoreItem(Loadmore);
+				}
+			}
         }
 
-        /// <summary>
-        /// Removes extra subviews from the LoadMoreItem.
-        /// </summary>
-        /// <param name="loadMoreItem">The LoadMoreItem to remove extra subviews from.</param>
-        void RemoveExtraSubviews(UIView loadMoreItem)
+		/// <summary>
+		/// Removes extra subviews from the LoadMoreItem.
+		/// </summary>
+		/// <param name="loadMoreItem">The LoadMoreItem to remove extra subviews from.</param>
+		static void RemoveExtraSubviews(UIView loadMoreItem)
         {
             foreach (var item in loadMoreItem.Subviews)
             {
@@ -3919,7 +3950,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 
                     for (nfloat i = 0; i < tempCount; i++)
                     {
-                        PlatformCarouselItem view = new PlatformCarouselItem();
+                        PlatformCarouselItem view = [];
                         if (_dataSource != null)
                         {
                             view = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
@@ -3951,16 +3982,16 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// <param name="handler"></param>
         void SetDataSource(CarouselHandler handler)
         {
-            if (virtualView != null && (virtualView.ItemsSource is IList list))
+			if (_virtualView != null && (_virtualView.ItemsSource is IList))
             {
-                NSMutableArray array = new NSMutableArray();
+                NSMutableArray array = [];
                 int i = 0;
-                foreach (var item in virtualView.ItemsSource)
+                foreach (var item in _virtualView.ItemsSource)
                 {
                     View? contentView = null;
-                    if (virtualView.ItemTemplate != null)
+                    if (_virtualView.ItemTemplate != null)
                     {
-                        contentView = GetItemView(virtualView, this, i);
+                        contentView = GetItemView(_virtualView, this, i);
                         i++;
                     }
 
@@ -3971,11 +4002,15 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 }
 
                 if (array.Count == 0)
-                    SelectedIndex = 0;
-                else if (((int)SelectedIndex) >= (int)array.Count)
-                    SelectedIndex = ((int)array.Count) - 1;
+				{
+					SelectedIndex = 0;
+				}
+				else if (((int)SelectedIndex) >= (int)array.Count)
+				{
+					SelectedIndex = ((int)array.Count) - 1;
+				}
 
-                DataSource = array;
+				DataSource = array;
                 SelectedIndex = SelectedIndex;
             }
         }
@@ -3993,20 +4028,24 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             {
                 if (formsCarousel.ItemTemplate != null)
                 {
-                    return CreateTemplatedView(formsCarousel, index);
+                    return PlatformCarousel.CreateTemplatedView(formsCarousel, index);
                 }
                 if (formsCarousel.ItemTemplate == null)
                 {
-                    return CreateDefaultLabelView(formsCarousel, index);
+                    return PlatformCarousel.CreateDefaultLabelView(formsCarousel, index);
                 }
                 else
-                    return null;
-            }
+				{
+					return null;
+				}
+			}
             else
-                return null;
-        }
+			{
+				return null;
+			}
+		}
 
-        DataTemplate? GetDataTemplate(ICarousel formsCarousel, int index)
+		static DataTemplate? GetDataTemplate(ICarousel formsCarousel, int index)
         {
             if (formsCarousel.ItemTemplate is DataTemplateSelector dataTemplateSelector)
             {
@@ -4015,7 +4054,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             return formsCarousel.ItemTemplate;
         }
 
-        View? CreateViewFromTemplate(DataTemplate template)
+		static View? CreateViewFromTemplate(DataTemplate template)
         {
             var templateInstance = template.CreateContent();
             if (templateInstance is View view)
@@ -4025,24 +4064,24 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             return (templateInstance as ViewCell)?.View;
         }
 
-        View? CreateTemplatedView(ICarousel formsCarousel, int index)
+		static View? CreateTemplatedView(ICarousel formsCarousel, int index)
         {
 			if(formsCarousel is not null)
 			{
-				DataTemplate? template = GetDataTemplate(formsCarousel, index);
+				DataTemplate? template = PlatformCarousel.GetDataTemplate(formsCarousel, index);
 				if (template is null)
 				{
 					return null;
 				}
 
-				View? templateLayout = CreateViewFromTemplate(template);
+				View? templateLayout = PlatformCarousel.CreateViewFromTemplate(template);
 				if (templateLayout is null)
 				{
 					return null;
 				}
 
-				SetParentContent(templateLayout, formsCarousel);
-				SetBindingContext(templateLayout, formsCarousel, index);
+				PlatformCarousel.SetParentContent(templateLayout, formsCarousel);
+				PlatformCarousel.SetBindingContext(templateLayout, formsCarousel, index);
 				return templateLayout;
 			}
 
@@ -4054,7 +4093,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// </summary>
 		/// <param name="templateLayout"></param>
 		/// <param name="formsCarousel"></param>
-		void SetParentContent(View templateLayout, ICarousel formsCarousel)
+		static void SetParentContent(View templateLayout, ICarousel formsCarousel)
 		{
 			if (templateLayout != null)
 			{
@@ -4062,7 +4101,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			}
 		}
 
-		void SetBindingContext(View templateLayout, ICarousel formsCarousel, int index)
+		static void SetBindingContext(View templateLayout, ICarousel formsCarousel, int index)
         {
             if (formsCarousel.ItemsSource != null && index < formsCarousel.ItemsSource.Count())
             {
@@ -4070,7 +4109,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             }
         }
 
-        View? CreateDefaultLabelView(ICarousel formsCarousel, int index)
+		static View? CreateDefaultLabelView(ICarousel formsCarousel, int index)
         {
             if (formsCarousel.ItemsSource == null || index >= formsCarousel.ItemsSource.Count())
             {
@@ -4090,7 +4129,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         /// </summary>
         public PlatformCarouselItem GetNativeViewItem(View contentView, ICarouselHandler handler)
         {
-            PlatformCarouselItem carouselItem = new PlatformCarouselItem();
+            PlatformCarouselItem carouselItem = [];
             if (handler.MauiContext != null)
             {
                 carouselItem.View = contentView.ToPlatform(handler.MauiContext);
@@ -4111,11 +4150,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             {
                 IsLinearVirtual = true;
                 _handler = handler;
-                ObservableCollection<object> array = new ObservableCollection<object>();
-                foreach (var item in virtualView.ItemsSource)
-                {
-                    array.Add(item);
-                }
+                ObservableCollection<object> array = [.. virtualView.ItemsSource];
                 LinearVirtualDataSource = array;
             }
             else if (virtualView.ItemsSource != null)

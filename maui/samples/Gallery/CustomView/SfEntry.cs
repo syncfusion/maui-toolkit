@@ -5,19 +5,19 @@ using Android.Content.Res;
 
 namespace Syncfusion.Maui.ControlsGallery.CustomView
 {
-    internal class SfEntry : Entry
-    {
-        public SfEntry()
-        {
+	internal partial class SfEntry : Entry
+	{
+		public SfEntry()
+		{
 
 #if ANDROID
-            Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (h, v) =>
-            {
-                if (v is SfEntry)
-                {
-                    h.PlatformView.BackgroundTintList = ColorStateList.ValueOf(Colors.Transparent.ToPlatform());
-                }
-            });
+			Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (h, v) =>
+			{
+				if (v is SfEntry)
+				{
+					h.PlatformView.BackgroundTintList = ColorStateList.ValueOf(Colors.Transparent.ToPlatform());
+				}
+			});
 #endif
 #if WINDOWS
             Microsoft.Maui.Handlers.EntryHandler.Mapper.AppendToMapping("NoUnderline", (h, v) =>
@@ -39,7 +39,6 @@ namespace Syncfusion.Maui.ControlsGallery.CustomView
                 }
             });
 #endif
-        }
-
-    }
+		}
+	}
 }

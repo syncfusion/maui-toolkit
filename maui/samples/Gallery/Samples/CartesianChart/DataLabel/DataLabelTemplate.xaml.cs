@@ -9,56 +9,58 @@ using System.Globalization;
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-    public partial class DataLabelTemplate : SampleView
-    {
-        public DataLabelTemplate()
-        {
-            InitializeComponent();
-        }
+	public partial class DataLabelTemplate : SampleView
+	{
+		public DataLabelTemplate()
+		{
+			InitializeComponent();
+		}
 
-        public override void OnAppearing()
-        {
-            base.OnAppearing();
+		public override void OnAppearing()
+		{
+			base.OnAppearing();
 
 #if !WINDOWS && !MACCATALYST
-            title.Text = "Tracking USA Box Office Revenue Since 2000";
+			title.Text = "Tracking USA Box Office Revenue Since 2000";
 #endif
-        }
+		}
 
-        public override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            chart.Handler?.DisconnectHandler();
-        }
-    }
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			chart.Handler?.DisconnectHandler();
+		}
+	}
 
-    public class DoubleToFontIconConverter : IValueConverter
-    {
-        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            if (!(value is double) || parameter is not string para)
-                return null;
+	public class DoubleToFontIconConverter : IValueConverter
+	{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			if (value is not double || parameter is not string para)
+			{
+				return null;
+			}
 
-            var doubleValue = (double)value;
+			var doubleValue = (double)value;
 
-            string text = "\ue704";
-            Color color = Colors.Red;
-            TextAlignment alignment = TextAlignment.End;
-            if (doubleValue >= 0)
-            {
-                text= "\ue705";
-                color = Colors.Green;
-                alignment = TextAlignment.Start;
-            }
+			string text = "\ue704";
+			Color color = Colors.Red;
+			TextAlignment alignment = TextAlignment.End;
+			if (doubleValue >= 0)
+			{
+				text = "\ue705";
+				color = Colors.Green;
+				alignment = TextAlignment.Start;
+			}
 
-            //FontImageSource source = new FontImageSource() { Glyph = text, Color = color, FontFamily = "MauiSampleFontIcon", Size = 30};
+			//FontImageSource source = new FontImageSource() { Glyph = text, Color = color, FontFamily = "MauiSampleFontIcon", Size = 30};
 
-            return para == "icon" ? text : para == "position" ? alignment : color;
-        }
+			return para == "icon" ? text : para == "position" ? alignment : color;
+		}
 
-        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            return value;
-        }
-    }
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			return value;
+		}
+	}
 }

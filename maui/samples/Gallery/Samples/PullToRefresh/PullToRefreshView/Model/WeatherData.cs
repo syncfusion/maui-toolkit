@@ -5,7 +5,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// <summary>
 	/// A class contains Properties and notifies when property value has changed 
 	/// </summary>
-	public class WeatherData : INotifyPropertyChanged
+	public partial class WeatherData : INotifyPropertyChanged
 	{
 		#region NotifyPropertyChanged
 
@@ -20,21 +20,18 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="name">string type parameter named as name</param>
 		private void RaisePropertyChanged(string name)
 		{
-			if (this.PropertyChanged != null)
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(name));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
 
 		#endregion
 
 		#region Field
-		string? weatherType;
-		DateTime? date;
-		string? temperature;
-		string? weatherIcon;
-		string? weatherImage;
-		string? backgroundColor;
+		string? _weatherType;
+		DateTime? _date;
+		string? _temperature;
+		string? _weatherIcon;
+		string? _weatherImage;
+		string? _backgroundColor;
 		#endregion
 
 		#region Property
@@ -44,8 +41,8 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public string? WeatherType
 		{
-			get { return weatherType; }
-			set { weatherType = value; RaisePropertyChanged("WeatherType"); }
+			get { return _weatherType; }
+			set { _weatherType = value; RaisePropertyChanged("WeatherType"); }
 		}
 
 		/// <summary>
@@ -53,8 +50,8 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public DateTime? Date
 		{
-			get { return date; }
-			set { date = value; RaisePropertyChanged("Date"); }
+			get { return _date; }
+			set { _date = value; RaisePropertyChanged("Date"); }
 		}
 
 		/// <summary>
@@ -62,8 +59,8 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public string? WeatherImage
 		{
-			get { return weatherImage; }
-			set { weatherImage = value; RaisePropertyChanged("WeatherImage"); }
+			get { return _weatherImage; }
+			set { _weatherImage = value; RaisePropertyChanged("WeatherImage"); }
 		}
 
 		/// <summary>
@@ -71,8 +68,8 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public string? Temperature
 		{
-			get { return temperature; }
-			set { temperature = value; RaisePropertyChanged("Temperature"); }
+			get { return _temperature; }
+			set { _temperature = value; RaisePropertyChanged("Temperature"); }
 		}
 
 		/// <summary>
@@ -80,8 +77,8 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public string? BackgroundColor
 		{
-			get { return backgroundColor; }
-			set { backgroundColor = value; RaisePropertyChanged("backgroundImage"); }
+			get { return _backgroundColor; }
+			set { _backgroundColor = value; RaisePropertyChanged("backgroundImage"); }
 		}
 
 		/// <summary>
@@ -89,8 +86,8 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public string? WeatherIcon
 		{
-			get { return weatherIcon; }
-			set { weatherIcon = value; RaisePropertyChanged("WeatherIcon"); }
+			get { return _weatherIcon; }
+			set { _weatherIcon = value; RaisePropertyChanged("WeatherIcon"); }
 		}
 		#endregion
 	}
@@ -100,20 +97,20 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// </summary>
 	public class WindDetails
 	{
-		string? detail;
+		string? _detail;
 
-		string? values;
+		string? _values;
 
 		public string? Detail
 		{
-			get { return detail; }
-			set { detail = value; }
+			get { return _detail; }
+			set { _detail = value; }
 		}
 
 		public string? Values
 		{
-			get { return values; }
-			set { values = value; }
+			get { return _values; }
+			set { _values = value; }
 		}
 
 	}

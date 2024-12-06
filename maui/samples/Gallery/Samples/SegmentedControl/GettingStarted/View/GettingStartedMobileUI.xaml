@@ -34,7 +34,7 @@
                                   Grid.Row="1" 
                                   Margin="0,30,0,0"
                                   VerticalOptions="Start" >
-                        <Image Source="{Binding Image,Converter={StaticResource imageconverter}}" HeightRequest="320" VerticalOptions="Center"/>
+                        <Image Source="{Binding Image}" HeightRequest="320" VerticalOptions="Center"/>
                     </StackLayout>
 
                     <Label Text="{Binding TotalPrice}"

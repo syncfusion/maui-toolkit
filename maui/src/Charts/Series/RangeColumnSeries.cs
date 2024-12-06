@@ -72,7 +72,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ]]></code>
 	/// ***
 	/// </example>
-	public class RangeColumnSeries : RangeSeriesBase, IDrawCustomLegendIcon
+	public partial class RangeColumnSeries : RangeSeriesBase, IDrawCustomLegendIcon
     {
         #region Internal properties
 
@@ -327,13 +327,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
             {
                 for (var i = 0; i < PointsCount; i++)
                 {
-                    if (i < Segments.Count && Segments[i] is RangeColumnSegment)
+                    if (i < _segments.Count && _segments[i] is RangeColumnSegment)
                     {
-                        ((RangeColumnSegment)Segments[i]).SetData(new[] { i + SbsInfo.Start, i + SbsInfo.End, HighValues[i], LowValues[i], i });
+                        ((RangeColumnSegment)_segments[i]).SetData([i + SbsInfo.Start, i + SbsInfo.End, HighValues[i], LowValues[i], i]);
                     }
                     else
                     {
-                        CreateSegment(seriesView, new[] { i + SbsInfo.Start, i + SbsInfo.End, HighValues[i], LowValues[i], i }, i);
+                        CreateSegment(seriesView, [i + SbsInfo.Start, i + SbsInfo.End, HighValues[i], LowValues[i], i], i);
                     }
                 }
             }
@@ -344,13 +344,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     for (var i = 0; i < PointsCount; i++)
                     {
                         var x = xValues[i];
-                        if (i < Segments.Count && Segments[i] is RangeColumnSegment)
+                        if (i < _segments.Count && _segments[i] is RangeColumnSegment)
                         {
-                            ((RangeColumnSegment)Segments[i]).SetData(new[] { x + SbsInfo.Start, x + SbsInfo.End, HighValues[i], LowValues[i], x });
+                            ((RangeColumnSegment)_segments[i]).SetData([x + SbsInfo.Start, x + SbsInfo.End, HighValues[i], LowValues[i], x]);
                         }
                         else
                         {
-                            CreateSegment(seriesView, new[] { x + SbsInfo.Start, x + SbsInfo.End, HighValues[i], LowValues[i], x }, i);
+                            CreateSegment(seriesView, [x + SbsInfo.Start, x + SbsInfo.End, HighValues[i], LowValues[i], x], i);
                         }
                     }
                 }
@@ -370,9 +370,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
         internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior tooltipBehavior, float x, float y)
         {
             if (ChartArea == null || SeriesYValues == null)
-                return null;
+			{
+				return null;
+			}
 
-            var tooltipInfo = base.GetTooltipInfo(tooltipBehavior, x, y);
+			var tooltipInfo = base.GetTooltipInfo(tooltipBehavior, x, y);
 
             if (tooltipInfo != null)
             {
@@ -383,7 +385,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (ChartArea.IsTransposed)
                 {
-                    var segment = (ChartSegment)Segments[index];
+                    var segment = (ChartSegment)_segments[index];
                     tooltipInfo.X = segment.SegmentBounds.Center.X;
                     tooltipInfo.Y = segment.SegmentBounds.Top;
                 }
@@ -433,7 +435,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                             chartPointInfo.GroupLabelSize = contentSize;
 #endif
                         chartPointInfo.XValue = xValue;
-                        chartPointInfo.YValues = new List<double>() { yValue, yValue1 };
+                        chartPointInfo.YValues = [yValue, yValue1];
                         PointInfos.Add(chartPointInfo);
                     }
                 }
@@ -455,22 +457,31 @@ namespace Syncfusion.Maui.Toolkit.Charts
         internal override void DrawDataLabels(ICanvas canvas)
         {
             var dataLabelSettings = ChartDataLabelSettings;
-            if (dataLabelSettings == null) return;
+            if (dataLabelSettings == null)
+			{
+				return;
+			}
 
-            ChartDataLabelStyle labelStyle = dataLabelSettings.LabelStyle;
-            foreach (RangeColumnSegment dataLabel in Segments)
+			ChartDataLabelStyle labelStyle = dataLabelSettings.LabelStyle;
+            foreach (RangeColumnSegment dataLabel in _segments)
             {
-                if (!dataLabel.InVisibleRange || dataLabel.IsEmpty) continue;
+                if (!dataLabel.InVisibleRange || dataLabel.IsEmpty)
+				{
+					continue;
+				}
 
-                RangeColumnSeriesDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
+				RangeColumnSeriesDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
             }
         }
 
         internal double GetDataLabelPositionAtIndex(int index, double value)
         {
-            if (DataLabelSettings == null) return 0;
+            if (DataLabelSettings == null)
+			{
+				return 0;
+			}
 
-            var yValue = HighValues?[index] ?? 0f;
+			var yValue = HighValues?[index] ?? 0f;
             var yValue1 = LowValues?[index] ?? 0f;
             var returnValue = value == yValue ? yValue : yValue1;
 
@@ -492,14 +503,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 rangeColumn.Index = index;
                 rangeColumn.Item = ActualData?[index];
                 InitiateDataLabels(rangeColumn);
-                Segments.Add(rangeColumn);
+                _segments.Add(rangeColumn);
 
                 if (OldSegments != null && OldSegments.Count > 0 && OldSegments.Count > index)
                 {
                     var oldSegment = OldSegments[index] as RangeColumnSegment;
                     if (oldSegment != null)
-                        rangeColumn.SetPreviousData(new[] { oldSegment.Y1, oldSegment.Y2 });
-                }
+					{
+						rangeColumn.SetPreviousData([oldSegment.Y1, oldSegment.Y2]);
+					}
+				}
             }
         }
 
@@ -536,13 +549,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (i == 0)
                 {
-                    labelText = dataLabel.DataLabel[0] ?? string.Empty;
-                    position = dataLabel.LabelPositionPoints[0];
+                    labelText = dataLabel._dataLabel[0] ?? string.Empty;
+                    position = dataLabel._labelPositionPoints[0];
                 }
                 else
                 {
-                    labelText = dataLabel.DataLabel[1] ?? string.Empty;
-                    position = dataLabel.LabelPositionPoints[1];
+                    labelText = dataLabel._dataLabel[1] ?? string.Empty;
+                    position = dataLabel._labelPositionPoints[1];
                 }
 
                 if (labelStyle.Angle != 0)

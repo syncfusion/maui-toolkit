@@ -1,17 +1,16 @@
-﻿
-namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
+﻿namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
 	public partial class VerticalPlotBand : SampleView
 	{
-		public VerticalPlotBand ()
+		public VerticalPlotBand()
 		{
-			InitializeComponent ();
+			InitializeComponent();
 		}
 
-        public override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            verticalPlotBandChart.Handler?.DisconnectHandler();
-        }
-    }
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			verticalPlotBandChart.Handler?.DisconnectHandler();
+		}
+	}
 }

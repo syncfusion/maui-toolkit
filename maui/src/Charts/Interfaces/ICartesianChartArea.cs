@@ -1,13 +1,13 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal interface ICartesianChartArea : IChartArea
-    {
-        #region Properties
+	internal interface ICartesianChartArea : IChartArea
+	{
+		#region Properties
 
-        ChartAxis? PrimaryAxis { get; set; }
+		ChartAxis? PrimaryAxis { get; set; }
 
-        RangeAxisBase? SecondaryAxis { get; set; }
+		RangeAxisBase? SecondaryAxis { get; set; }
 
-        #endregion
-    }
+		#endregion
+	}
 }

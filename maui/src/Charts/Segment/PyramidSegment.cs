@@ -5,7 +5,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
     /// <summary>
     /// Represents a segment of the <see cref="SfPyramidChart"/>, responsible for rendering and customizing the appearance of individual pyramid segments.
     /// </summary>
-    public class PyramidSegment : ChartSegment, IPyramidLabels
+    public partial class PyramidSegment : ChartSegment, IPyramidLabels
     {
         #region Fields
 
@@ -28,34 +28,34 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </remarks>
         public Point[] Points { get; internal set; } = new Point[4];
 
-        double yValue;
-        double height;
+        double _yValue;
+        double _height;
 
-        double dataLabelYValue;
-        object? dataLabelXValue;
-        Rect labelRect;
-        float labelXPosition;
-        float labelYPosition;
-        Point[]? linePoints = new Point[3];
-        bool isIntersected = false;
-        bool isLabelVisible = true;
-        Size dataLabelSize = Size.Zero;
-        Size actualSize = Size.Zero;
-        Point slopeCenter = Point.Zero;
-        DataLabelPlacement position = DataLabelPlacement.Auto;
-        float IPyramidLabels.DataLabelX { get => labelXPosition; set => labelXPosition = value; }
-        float IPyramidLabels.DataLabelY { get => labelYPosition; set => labelYPosition = value; }
-        Point[]? IPyramidLabels.LinePoints { get => linePoints; set => linePoints = value; }
-        Rect IPyramidLabels.LabelRect { get => labelRect; set => labelRect = value; }
-        Size IPyramidLabels.DataLabelSize { get => dataLabelSize; set => dataLabelSize = value; }
-        Size IPyramidLabels.ActualLabelSize { get => actualSize; set => actualSize = value; }
+        double _dataLabelYValue;
+        object? _dataLabelXValue;
+        Rect _labelRect;
+        float _labelXPosition;
+        float _labelYPosition;
+        Point[]? _linePoints = new Point[3];
+        bool _isIntersected = false;
+        bool _isLabelVisible = true;
+        Size _dataLabelSize = Size.Zero;
+        Size _actualSize = Size.Zero;
+        Point _slopeCenter = Point.Zero;
+        DataLabelPlacement _position = DataLabelPlacement.Auto;
+        float IPyramidLabels.DataLabelX { get => _labelXPosition; set => _labelXPosition = value; }
+        float IPyramidLabels.DataLabelY { get => _labelYPosition; set => _labelYPosition = value; }
+        Point[]? IPyramidLabels.LinePoints { get => _linePoints; set => _linePoints = value; }
+        Rect IPyramidLabels.LabelRect { get => _labelRect; set => _labelRect = value; }
+        Size IPyramidLabels.DataLabelSize { get => _dataLabelSize; set => _dataLabelSize = value; }
+        Size IPyramidLabels.ActualLabelSize { get => _actualSize; set => _actualSize = value; }
         string IPyramidLabels.DataLabel => LabelContent ?? string.Empty;
         bool IPyramidLabels.IsEmpty { get => Empty; set => Empty = value; }
-        bool IPyramidLabels.IsIntersected { get => isIntersected; set => isIntersected = value; }
-        bool IPyramidLabels.IsLabelVisible { get => isLabelVisible; set => isLabelVisible = value; }
+        bool IPyramidLabels.IsIntersected { get => _isIntersected; set => _isIntersected = value; }
+        bool IPyramidLabels.IsLabelVisible { get => _isLabelVisible; set => _isLabelVisible = value; }
         Brush IPyramidLabels.Fill => Fill ?? Brush.Transparent;
-        Point IPyramidLabels.SlopePoint => slopeCenter;
-        DataLabelPlacement IPyramidLabels.Position { get => position; set => position = value; }
+        Point IPyramidLabels.SlopePoint => _slopeCenter;
+        DataLabelPlacement IPyramidLabels.Position { get => _position; set => _position = value; }
 
         #endregion
 
@@ -68,10 +68,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         internal void SetData(double x, double y, object? xVal, double yVal)
         {
-            yValue = x;
-            height = y;
-            dataLabelYValue = yVal;
-            dataLabelXValue = xVal;
+            _yValue = x;
+            _height = y;
+            _dataLabelYValue = yVal;
+            _dataLabelXValue = xVal;
             Empty = double.IsNaN(yVal) || yVal == 0;
         }
 
@@ -104,9 +104,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 double boundsWidth = _actualBounds.Width;
                 double boundsTop = _actualBounds.Top;
                 double boundsLeft = _actualBounds.Left;
-                float top = (float)yValue;
-                float bottom = (float)(yValue + height);
-                float topRadius = 0.5f * (1 - (float)yValue);
+                float top = (float)_yValue;
+                float bottom = (float)(_yValue + _height);
+                float topRadius = 0.5f * (1 - (float)_yValue);
                 float bottomRadius = 0.5f * (1 - bottom);
 
                 _values = new float[8];
@@ -157,33 +157,36 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal override void OnDataLabelLayout()
         {
-            if (Chart != null && !Empty && Chart.DataLabelSettings.LabelStyle is ChartLabelStyle style)
+            if (Chart != null && !Empty && Chart.DataLabelSettings.LabelStyle is ChartDataLabelStyle style)
             {
-                labelXPosition = (float)Chart.SeriesBounds.X + SegmentBounds.Center.X;
-                labelYPosition = (float)Chart.SeriesBounds.Y + SegmentBounds.Center.Y;
+                _labelXPosition = (float)Chart.SeriesBounds.X + SegmentBounds.Center.X;
+                _labelYPosition = (float)Chart.SeriesBounds.Y + SegmentBounds.Center.Y;
 
-                LabelContent = Chart.DataLabelSettings.GetLabelContent(dataLabelXValue, dataLabelYValue);
+                LabelContent = Chart.DataLabelSettings.GetLabelContent(_dataLabelXValue, _dataLabelYValue);
                 var left = ((_values[0] + _values[6]) / 2) + Chart.SeriesBounds.Left;
                 var right = ((_values[2] + _values[4]) / 2) + Chart.SeriesBounds.Left;
                 var y = ((_values[3] + _values[5]) / 2) + Chart.SeriesBounds.Top;
-                slopeCenter = new Point(right - 3, y);
+                _slopeCenter = new Point(right - 3, y);
 
                 //Add the DataLabel property.
                 UpdateDataLabels();
 
-                dataLabelSize = Chart.LabelTemplate is null ? LabelContent.Measure(style) : CalculateTemplateSize();
-                actualSize = new Size(dataLabelSize.Width + style.Margin.HorizontalThickness, dataLabelSize.Height + style.Margin.VerticalThickness);
+                _dataLabelSize = Chart.LabelTemplate is null ? LabelContent.Measure(style) : CalculateTemplateSize();
+                _actualSize = new Size(_dataLabelSize.Width + style.Margin.HorizontalThickness, _dataLabelSize.Height + style.Margin.VerticalThickness);
 
-                position = DataLabelPlacement.Inner;
+                _position = DataLabelPlacement.Inner;
                 switch (Chart.DataLabelSettings.LabelPlacement)
                 {
                     case DataLabelPlacement.Center:
                     case DataLabelPlacement.Auto:
-                        if (actualSize.Width > right - left || actualSize.Height > SegmentBounds.Height)
-                            position = DataLabelPlacement.Outer;
-                        break;
+                        if (_actualSize.Width > right - left || _actualSize.Height > SegmentBounds.Height)
+						{
+							_position = DataLabelPlacement.Outer;
+						}
+
+						break;
                     case DataLabelPlacement.Outer:
-                        position = DataLabelPlacement.Outer;
+                        _position = DataLabelPlacement.Outer;
                         break;
                 }
 
@@ -218,30 +221,32 @@ namespace Syncfusion.Maui.Toolkit.Charts
             {
                 if (pyramidChart.LabelTemplateView != null && pyramidChart.LabelTemplateView.Any())
                 {
-                    var templateView = pyramidChart.LabelTemplateView.Cast<View>().FirstOrDefault(child => DataLabels[0] == child.BindingContext) as DataLabelItemView;
-
-                    if (templateView != null && templateView.ContentView is View content)
-                    {
-                        if (!content.DesiredSize.IsZero)
-                        {
-                            return content.DesiredSize;
-                        }
+					if (pyramidChart.LabelTemplateView.Cast<View>().FirstOrDefault(child => DataLabels[0] == child.BindingContext) is DataLabelItemView templateView && templateView.ContentView is View content)
+					{
+						if (!content.DesiredSize.IsZero)
+						{
+							return content.DesiredSize;
+						}
 
 #if NET9_0_OR_GREATER
                         var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity);
 
                         if (desiredSize.IsZero)
-                            return content.Measure(double.PositiveInfinity, double.PositiveInfinity);
+						{
+							return content.Measure(double.PositiveInfinity, double.PositiveInfinity);
+						}
 #else
 						var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
 
 						if (desiredSize.IsZero)
+						{
 							return content.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
+						}
 #endif
 
 						return desiredSize;
-                    }
-                }
+					}
+				}
             }
 
             return SizeF.Zero;

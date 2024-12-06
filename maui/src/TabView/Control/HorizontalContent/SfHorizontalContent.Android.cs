@@ -9,7 +9,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		#region Fields
 
 		// Initial touch point
-		Point _initialPoint = new Point(0, 0);
+		Point _initialPoint = new(0, 0);
 
 		// Touch down coordinates
 		double _downX;
@@ -20,8 +20,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		double _moveY;
 
 		// Constants for touch movement thresholds
-		const double _verticalScrollThreshold = 5;
-		const double _horizontalScrollThreshold = 15;
+		const double VerticalScrollThreshold = 5;
+		const double HorizontalScrollThreshold = 15;
 
 		#endregion
 
@@ -60,7 +60,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 							_moveY = motionEvent.GetY();
 
 							// Check for vertical scrolling threshold
-							if (Math.Abs(_downY - _moveY) > _verticalScrollThreshold && Math.Abs(_downX - _moveX) < _horizontalScrollThreshold)
+							if (Math.Abs(_downY - _moveY) > VerticalScrollThreshold && Math.Abs(_downX - _moveX) < HorizontalScrollThreshold)
 							{
 								return false;
 							}

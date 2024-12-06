@@ -40,7 +40,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ]]>
 	/// </code>
 	/// </example>
-	public class ViewAnnotation : ChartAnnotation
+	public partial class ViewAnnotation : ChartAnnotation
     {
         #region Bindable Properties
 
@@ -253,30 +253,43 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
         {
-            ResetPosition(x1, y1);
+			ViewAnnotation.ResetPosition(x1, y1);
 
-            if (View == null || X1 == null || double.IsNaN(Y1))
-                return;
+			if (View != null && X1 != null && !double.IsNaN(Y1))
+			{
+				if (CoordinateUnit == ChartCoordinateUnit.Axis)
+				{
+					if (xAxis == null || yAxis == null)
+					{
+						return;
+					}
 
-            if (CoordinateUnit == ChartCoordinateUnit.Axis)
-            {
-                if (xAxis == null || yAxis == null)
-                {
-                    return;
-                }
+					if (!xAxis.IsVertical)
+					{
+						(x1, y1) = TransformCoordinates(chart, xAxis, yAxis, x1, y1);
+					}
+					else
+					{
+						(x1, y1) = TransformCoordinates(chart, xAxis, yAxis, x1, y1);
+					}
+				}
 
-                if (!xAxis.IsVertical)
-                {
-                    (x1, y1) = TransformCoordinates(chart, xAxis, yAxis, x1, y1);
-                }
-                else
-                {
-                    (x1, y1) = TransformCoordinates(chart, xAxis, yAxis, x1, y1);
-                }
-            }
-
-            LayoutView(chart, x1, y1);
-        }
+				if (!double.IsNaN(x1) && !double.IsNaN(y1))
+				{
+					LayoutView(chart, x1, y1);
+				}
+				else
+				{
+					AbsoluteLayout.SetLayoutBounds(View, new Rect(0, 0, 0, 0));
+					AbsoluteLayout.SetLayoutFlags(View, AbsoluteLayoutFlags.None);
+				}
+			}
+			else
+			{
+				AbsoluteLayout.SetLayoutBounds(View, new Rect(0, 0, 0, 0));
+				AbsoluteLayout.SetLayoutFlags(View, AbsoluteLayoutFlags.None);
+			}
+		}
 
         #endregion
 
@@ -307,13 +320,26 @@ namespace Syncfusion.Maui.Toolkit.Charts
         void LayoutView(SfCartesianChart chart, double x1, double y1)
         {
 			SetInheritedBindingContext(View, BindingContext);
+
+			double measuredWidth;
+			double measuredHeight;
+
+			if (View.Bounds.IsEmpty)
+			{
 #if NET9_0_OR_GREATER
-            var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity);
+				var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity);
 #else
-			var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
+				var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
 #endif
-			var measuredWidth = sizeRequest.Width;
-			var measuredHeight = sizeRequest.Height;
+				measuredWidth = sizeRequest.Width;
+				measuredHeight = sizeRequest.Height;
+			}
+			else
+			{
+				measuredWidth = View.Bounds.Width;
+				measuredHeight = View.Bounds.Height;
+			}
+
 			SetViewAlignment(ref x1, ref y1, measuredWidth, measuredHeight);
 
 			AbsoluteLayout.SetLayoutBounds(View, new Rect(x1, y1, measuredWidth, measuredHeight));
@@ -321,71 +347,95 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (CoordinateUnit == ChartCoordinateUnit.Axis)
             {
-                var bounds = chart.ChartArea.ActualSeriesClipRect;
-                ClipViewToSeriesBounds(View, bounds);
+                var bounds = chart._chartArea.ActualSeriesClipRect;
+				ViewAnnotation.ClipViewToSeriesBounds(View, bounds);
             }
         }
 
-        void ClipViewToSeriesBounds(View childView, RectF parentLayoutBounds)
+		static void ClipViewToSeriesBounds(View childView, RectF parentLayoutBounds)
         {
             var childViewBounds = AbsoluteLayout.GetLayoutBounds(childView);
 
             double clipX = (childViewBounds.X < parentLayoutBounds.X) && (childViewBounds.Right > parentLayoutBounds.Left) ? childViewBounds.Width - (childViewBounds.Right - parentLayoutBounds.Left) : 0;
             double clipY = (childViewBounds.Y < parentLayoutBounds.Y) && (childViewBounds.Bottom > parentLayoutBounds.Top) ? childViewBounds.Height - (childViewBounds.Bottom - parentLayoutBounds.Top) : 0;
-            double clipWidth = 0;
+			double clipWidth;
 
-            //calculated the width of the clip need to visible in the chart.
-            if (childViewBounds.X < parentLayoutBounds.X)
+			//calculated the width of the clip need to visible in the chart.
+			if (childViewBounds.X < parentLayoutBounds.X)
             {
                 if (childViewBounds.Right < parentLayoutBounds.Left)
-                    clipWidth = 0;
-                else
+				{
+					clipWidth = 0;
+				}
+				else
                 {
                     if (childViewBounds.Right > parentLayoutBounds.Right)
-                        clipWidth = parentLayoutBounds.Width;
-                    else
-                        clipWidth = childViewBounds.Right - parentLayoutBounds.Left;
-                }
+					{
+						clipWidth = parentLayoutBounds.Width;
+					}
+					else
+					{
+						clipWidth = childViewBounds.Right - parentLayoutBounds.Left;
+					}
+				}
             }
             else
             {
                 if (childViewBounds.Left > parentLayoutBounds.Right)
-                    clipWidth = 0;
-                else
+				{
+					clipWidth = 0;
+				}
+				else
                 {
                     if (childViewBounds.Right > parentLayoutBounds.Right)
-                        clipWidth = parentLayoutBounds.Right - childViewBounds.Left;
-                    else
-                        clipWidth = childViewBounds.Width;
-                }
+					{
+						clipWidth = parentLayoutBounds.Right - childViewBounds.Left;
+					}
+					else
+					{
+						clipWidth = childViewBounds.Width;
+					}
+				}
             }
 
-            double clipHeight = 0;
+			double clipHeight;
 
-            //Calculated the height of the view need to visible in the chart.
-            if (childViewBounds.Y < parentLayoutBounds.Y)
+			//Calculated the height of the view need to visible in the chart.
+			if (childViewBounds.Y < parentLayoutBounds.Y)
             {
                 if (childViewBounds.Bottom < parentLayoutBounds.Top)
-                    clipHeight = 0;
-                else
+				{
+					clipHeight = 0;
+				}
+				else
                 {
                     if (childViewBounds.Bottom > parentLayoutBounds.Bottom)
-                        clipHeight = parentLayoutBounds.Height;
-                    else
-                        clipHeight = childViewBounds.Bottom - parentLayoutBounds.Top;
-                }
+					{
+						clipHeight = parentLayoutBounds.Height;
+					}
+					else
+					{
+						clipHeight = childViewBounds.Bottom - parentLayoutBounds.Top;
+					}
+				}
             }
             else
             {
                 if (childViewBounds.Top > parentLayoutBounds.Bottom)
-                    clipHeight = 0;
-                else
+				{
+					clipHeight = 0;
+				}
+				else
                 {
                     if (childViewBounds.Bottom > parentLayoutBounds.Bottom)
-                        clipHeight = parentLayoutBounds.Bottom - childViewBounds.Top;
-                    else
-                        clipHeight = childViewBounds.Height;
-                }
+					{
+						clipHeight = parentLayoutBounds.Bottom - childViewBounds.Top;
+					}
+					else
+					{
+						clipHeight = childViewBounds.Height;
+					}
+				}
             }
 
             var clipGeometry = new RectangleGeometry
@@ -419,13 +469,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
-        void ResetPosition(double x, double y)
+		static void ResetPosition(double x, double y)
         {
-            x = y = double.NaN;
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

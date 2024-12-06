@@ -2,29 +2,29 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal interface IDatapointSelectionDependent
-    {
-        #region Properties
+	internal interface IDatapointSelectionDependent
+	{
+		#region Properties
 
-        DataPointSelectionBehavior? SelectionBehavior { get; }
+		DataPointSelectionBehavior? SelectionBehavior { get; }
 
-        ObservableCollection<ChartSegment> Segments { get; }
+		ObservableCollection<ChartSegment> Segments { get; }
 
-        Rect AreaBounds { get; }
+		Rect AreaBounds { get; }
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        void UpdateSelectedItem(int index);
+		void UpdateSelectedItem(int index);
 
-        void SetFillColor(ChartSegment segment);
+		void SetFillColor(ChartSegment segment);
 
-        void Invalidate();
+		void Invalidate();
 
-        void UpdateLegendIconColor(ChartSelectionBehavior sender, int index);
+		void UpdateLegendIconColor(ChartSelectionBehavior sender, int index);
 
-        #endregion
-    }
+		#endregion
+	}
 }
 

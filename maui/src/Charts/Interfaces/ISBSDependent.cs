@@ -1,24 +1,24 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal interface ISBSDependent
-    {
-        #region Properties
+	internal interface ISBSDependent
+	{
+		#region Properties
 
-        double Spacing { get; set; }
+		double Spacing { get; set; }
 
-        double Width { get; set; }
+		double Width { get; set; }
 
-        CornerRadius CornerRadius { get; set; }
+		CornerRadius CornerRadius { get; set; }
 
-        #endregion
-    }
+		#endregion
+	}
 
-    internal interface IDrawCustomLegendIcon
-    {
-        #region Methods
+	internal interface IDrawCustomLegendIcon
+	{
+		#region Methods
 
-        void DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState);
+		void DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState);
 
-        #endregion
-    }
+		#endregion
+	}
 }

@@ -2,61 +2,61 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-	internal class ChartPlotBandView : SfDrawableView
-    {
-        #region Fields
+	internal partial class ChartPlotBandView : SfDrawableView
+	{
+		#region Fields
 
-        CartesianChartArea _area;
+		readonly CartesianChartArea _area;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        internal ChartPlotBandView(CartesianChartArea cartesianChartArea)
-        {
-            _area = cartesianChartArea;
-        }
+		internal ChartPlotBandView(CartesianChartArea cartesianChartArea)
+		{
+			_area = cartesianChartArea;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Methods
+		#region Protected Methods
 
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            canvas.CanvasSaveState();
-            canvas.ClipRectangle(dirtyRect);
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		{
+			canvas.CanvasSaveState();
+			canvas.ClipRectangle(dirtyRect);
 
-            DrawPlotBandsForAxes(_area.XAxes, canvas, dirtyRect);
-            DrawPlotBandsForAxes(_area.YAxes, canvas, dirtyRect);
+			ChartPlotBandView.DrawPlotBandsForAxes(_area._xAxes, canvas, dirtyRect);
+			ChartPlotBandView.DrawPlotBandsForAxes(_area._yAxes, canvas, dirtyRect);
 
-            canvas.CanvasRestoreState();
-        }
+			canvas.CanvasRestoreState();
+		}
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
 
-        void DrawPlotBandsForAxes(IEnumerable<ChartAxis> axes, ICanvas canvas, RectF dirtyRect)
-        {
-            foreach (var axis in axes)
-            {
-                if (axis.ActualPlotBands != null && axis.ActualPlotBands.Count > 0)
-                {
-                    foreach (ChartPlotBand plotBand in axis.ActualPlotBands)
-                    {
-                        if (plotBand.IsVisible)
-                        {
-                            plotBand.DrawPlotBands(canvas, dirtyRect);
-                        }
-                    }
-                }
-            }
-        }
+		static void DrawPlotBandsForAxes(IEnumerable<ChartAxis> axes, ICanvas canvas, RectF dirtyRect)
+		{
+			foreach (var axis in axes)
+			{
+				if (axis.ActualPlotBands != null && axis.ActualPlotBands.Count > 0)
+				{
+					foreach (ChartPlotBand plotBand in axis.ActualPlotBands)
+					{
+						if (plotBand.IsVisible)
+						{
+							plotBand.DrawPlotBands(canvas, dirtyRect);
+						}
+					}
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

@@ -100,12 +100,12 @@
         <Grid>
             <VerticalStackLayout Spacing="10">
                 <HorizontalStackLayout>
-                    <Label Text="X Axis"/>
-                    <CheckBox x:Name="xAxis" IsChecked="False" VerticalOptions="Start" Margin="30,0,0,0"/>
+                    <Label Text="X Axis" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                    <CheckBox x:Name="xAxis" IsChecked="False" VerticalOptions="Center" Margin="30,0,0,0"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Label Text="Y Axis"/>
-                    <CheckBox x:Name="yAxis" IsChecked="True" VerticalOptions="Start" Margin="30,0,0,0"/>
+                    <Label Text="Y Axis" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                    <CheckBox x:Name="yAxis" IsChecked="True" VerticalOptions="Center" Margin="30,0,0,0"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </Grid>

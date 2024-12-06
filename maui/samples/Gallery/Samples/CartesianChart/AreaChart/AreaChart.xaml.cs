@@ -1,16 +1,16 @@
 ﻿
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-    public partial class AreaChart : SampleView
-    {
-        public AreaChart()
-        {
-            InitializeComponent();
-        }
+	public partial class AreaChart : SampleView
+	{
+		public AreaChart()
+		{
+			InitializeComponent();
+		}
 
-        public override void OnAppearing()
-        {
-            base.OnAppearing();
+		public override void OnAppearing()
+		{
+			base.OnAppearing();
 #if IOS
             if (IsCardView)
             {
@@ -19,12 +19,12 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
                 Chart.VerticalOptions = LayoutOptions.Start;
             }
 #endif
-        }
+		}
 
-        public override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            Chart.Handler?.DisconnectHandler();
-        }
-    }
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			Chart.Handler?.DisconnectHandler();
+		}
+	}
 }

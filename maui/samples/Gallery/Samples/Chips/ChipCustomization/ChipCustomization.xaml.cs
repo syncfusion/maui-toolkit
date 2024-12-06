@@ -1,4 +1,3 @@
-
 namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 {
 	public partial class ChipCustomization : SampleView
@@ -7,9 +6,9 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 		{
 			InitializeComponent();
 #if ANDROID || IOS
-			this.Content = new ChipCustomizationMobile();
+			Content = new ChipCustomizationMobile();
 #elif WINDOWS || MACCATALYST
-        this.Content=new ChipCustomizationDesktop();
+			Content = new ChipCustomizationDesktop();
 #endif
 		}
 	}

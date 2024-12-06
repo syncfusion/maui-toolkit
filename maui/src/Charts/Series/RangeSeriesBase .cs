@@ -7,8 +7,8 @@
     {
         #region Internal Properties
 
-        internal float SumOfHighValues = float.NaN;
-        internal float SumOfLowValues = float.NaN;
+        internal float _sumOfHighValues = float.NaN;
+        internal float _sumOfLowValues = float.NaN;
 
         internal IList<double> HighValues { get; set; }
 
@@ -246,51 +246,52 @@
             set { SetValue(StrokeProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets a value to specify the border width of the range series.
-        /// </summary>
-        /// <value>It accepts <see cref="double"/> values, and its default value is 0.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-7)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///
-        ///          <chart:RangeColumnSeries ItemsSource = "{Binding Data}"
-        ///                                   XBindingPath = "XValue"
-        ///                                   High = "HighValue"
-        ///                                   Low = "LowValue"
-        ///                                   Stroke = "Red"
-        ///                                   StrokeWidth = "3" />
-        ///
-        ///     </chart:SfCartesianChart>
-        /// ]]>
-        /// </code>
-        /// # [C#](#tab/tabid-8)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();
-        ///     ViewModel viewModel = new ViewModel();
-        ///
-        ///     // Eliminated for simplicity
-        ///
-        ///     RangeColumnSeries series = new RangeColumnSeries()
-        ///     {
-        ///           ItemsSource = viewModel.Data,
-        ///           XBindingPath = "XValue",
-        ///           High = "HighValue",
-        ///           Low = "LowValue",
-        ///           StrokeWidth = 3,
-        ///           Stroke = new SolidColorBrush(Colors.Red),
-        ///     };
-        ///     
-        ///     chart.Series.Add(series);
-        ///
-        /// ]]>
-        /// </code>
-        /// ***
-        /// </example>
-        public double StrokeWidth
+		/// <summary>
+		/// Gets or sets a value to specify the border width of the range series.
+		/// </summary>
+		/// <remarks>The value needs to be greater than zero.</remarks>
+		/// <value>It accepts <see cref="double"/> values, and its default value is 0.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-7)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///
+		///          <chart:RangeColumnSeries ItemsSource = "{Binding Data}"
+		///                                   XBindingPath = "XValue"
+		///                                   High = "HighValue"
+		///                                   Low = "LowValue"
+		///                                   Stroke = "Red"
+		///                                   StrokeWidth = "3" />
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-8)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     ViewModel viewModel = new ViewModel();
+		///
+		///     // Eliminated for simplicity
+		///
+		///     RangeColumnSeries series = new RangeColumnSeries()
+		///     {
+		///           ItemsSource = viewModel.Data,
+		///           XBindingPath = "XValue",
+		///           High = "HighValue",
+		///           Low = "LowValue",
+		///           StrokeWidth = 3,
+		///           Stroke = new SolidColorBrush(Colors.Red),
+		///     };
+		///     
+		///     chart.Series.Add(series);
+		///
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public double StrokeWidth
         {
             get { return (double)GetValue(StrokeWidthProperty); }
             set { SetValue(StrokeWidthProperty, value); }
@@ -358,8 +359,8 @@
         /// </summary>
         public RangeSeriesBase()
         {
-            HighValues = new List<double>();
-            LowValues = new List<double>();
+            HighValues = [];
+            LowValues = [];
         }
 
         #endregion
@@ -375,16 +376,18 @@
             SegmentsCreated = false;
 
             if (Chart != null)
-                Chart.IsRequiredDataLabelsMeasure = true;
+			{
+				Chart.IsRequiredDataLabelsMeasure = true;
+			}
 
-            GeneratePoints(new[] { High, Low }, HighValues, LowValues);
+			GeneratePoints([High, Low], HighValues, LowValues);
             base.OnDataSourceChanged(oldValue, newValue);
         }
 
         internal override void OnBindingPathChanged()
         {
             ResetData();
-            GeneratePoints(new[] { High, Low }, HighValues, LowValues);
+            GeneratePoints([High, Low], HighValues, LowValues);
             base.OnBindingPathChanged();
         }
 
@@ -409,32 +412,35 @@
 
             if (LabelTemplateView != null && LabelTemplateView.Any())
             {
-                var templateView = LabelTemplateView.Cast<View>().FirstOrDefault(child => segment.DataLabels[labelIndex] == child.BindingContext) as DataLabelItemView;
+				if (LabelTemplateView.Cast<View>().FirstOrDefault(child => segment.DataLabels[labelIndex] == child.BindingContext) is DataLabelItemView templateView && templateView.ContentView is View content)
+				{
+					if (!content.DesiredSize.IsZero)
+					{
+						return content.DesiredSize;
+					}
 
-                if (templateView != null && templateView.ContentView is View content)
-                {
-                    if (!content.DesiredSize.IsZero)
-                    {
-                        return content.DesiredSize;
-                    }
+					var desiredSize = (Size)templateView.Measure(double.PositiveInfinity, double.PositiveInfinity);
 
-                    var desiredSize = (Size)templateView.Measure(double.PositiveInfinity, double.PositiveInfinity);
+					if (desiredSize.IsZero)
+					{
+						return (Size)content.Measure(double.PositiveInfinity, double.PositiveInfinity);
+					}
 
-                    if (desiredSize.IsZero)
-                        return (Size)content.Measure(double.PositiveInfinity, double.PositiveInfinity);
-
-                    return desiredSize;
-                }
-            }
+					return desiredSize;
+				}
+			}
 
             return SizeF.Zero;
         }
 
         internal override void CalculateDataPointPosition(int index, ref double x, ref double y)
         {
-            if (ChartArea == null) return;
+            if (ChartArea == null)
+			{
+				return;
+			}
 
-            var x1 = SbsInfo.Start + x;
+			var x1 = SbsInfo.Start + x;
             var x2 = SbsInfo.End + x;
             var xCal = x1 + ((x2 - x1) / 2);
             var yCal = y;
@@ -462,13 +468,13 @@
 
         internal override List<object>? GetDataPoints(double startX, double endX, double startY, double endY, int minimum, int maximum, List<double> xValues, bool validateYValues)
         {
-            List<object> dataPoints = new List<object>();
+            List<object> dataPoints = [];
             int count = xValues.Count;
             if (count == HighValues.Count && count == LowValues.Count && ActualData != null)
             {
                 for (int i = minimum; i <= maximum; i++)
                 {
-                    double xValue = xValues[i];
+					double xValue = xValues[i];
                     if ((startY <= HighValues[i] && HighValues[i] <= endY) || (startY <= LowValues[i] && LowValues[i] <= endY))
                     {
                         dataPoints.Add(ActualData[i]);
@@ -506,10 +512,10 @@
             switch (yPath)
             {
                 case "High":
-                    SumOfHighValues = float.IsNaN(SumOfHighValues) ? yValue : SumOfHighValues + yValue;
+                    _sumOfHighValues = float.IsNaN(_sumOfHighValues) ? yValue : _sumOfHighValues + yValue;
                     break;
                 case "Low":
-                    SumOfLowValues = float.IsNaN(SumOfLowValues) ? yValue : SumOfLowValues + yValue;
+                    _sumOfLowValues = float.IsNaN(_sumOfLowValues) ? yValue : _sumOfLowValues + yValue;
                     break;
             }
         }
@@ -519,18 +525,18 @@
             switch (yPath)
             {
                 case "High":
-                    SumOfHighValues -= yValue;
+                    _sumOfHighValues -= yValue;
                     break;
                 case "Low":
-                    SumOfLowValues -= yValue;
+                    _sumOfLowValues -= yValue;
                     break;
             }
         }
 
         internal void ResetSumOfValues()
         {
-            SumOfHighValues = float.NaN;
-            SumOfLowValues = float.NaN;
+            _sumOfHighValues = float.NaN;
+            _sumOfLowValues = float.NaN;
         }
 
 		internal override DataTemplate? GetDefaultTooltipTemplate(TooltipInfo info)

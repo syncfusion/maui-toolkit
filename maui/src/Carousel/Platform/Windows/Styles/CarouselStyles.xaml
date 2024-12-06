@@ -46,7 +46,7 @@
 
     <Style BasedOn="{StaticResource DefaultSfCarouselItemStyle}" TargetType="local:PlatformCarouselItem" />
 
-    <ControlTemplate x:Key="DefualtTemplate" TargetType="local:PlatformCarousel">
+    <ControlTemplate x:Key="DefaultTemplate" TargetType="local:PlatformCarousel">
         <Grid x:Name="LayoutGrid">
             <Border
                 x:Name="LayoutRoot"
@@ -76,7 +76,7 @@
         <Setter Property="ManipulationMode" Value="All" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Template" Value="{StaticResource DefualtTemplate}" />
+        <Setter Property="Template" Value="{StaticResource DefaultTemplate}" />
 
         <Setter Property="ItemsPanel" Value="{StaticResource DefaultPanel}" />
 

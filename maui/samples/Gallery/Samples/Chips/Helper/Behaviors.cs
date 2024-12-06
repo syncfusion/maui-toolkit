@@ -2,14 +2,14 @@
 
 namespace Syncfusion.Maui.ControlsGallery.Chips
 {
-	public class EntryBehavior : Behavior<Entry>
+	public partial class EntryBehavior : Behavior<Entry>
 	{
 		#region Fields
 
 		/// <summary>
 		/// The input chip group.
 		/// </summary>
-		SfChipGroup? inputChipGroup;
+		SfChipGroup? _inputChipGroup;
 
 		#endregion
 
@@ -23,11 +23,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return inputChipGroup;
+				return _inputChipGroup;
 			}
 			set
 			{
-				inputChipGroup = value;
+				_inputChipGroup = value;
 			}
 		}
 
@@ -56,22 +56,22 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 
 			entry.Completed += (object? sender, EventArgs e) =>
 			{
-				if (inputChipGroup != null && !string.IsNullOrEmpty(entry.Text))
+				if (_inputChipGroup != null && !string.IsNullOrEmpty(entry.Text))
 				{
 					ChipViewModel viewModel = (entry.BindingContext as ChipViewModel)!;
 					if (viewModel != null && viewModel.SelectedItem != null)
 					{
 						if (viewModel.SelectedItem.ToString() == "Television")
 						{
-							viewModel.televisionItems.Add(entry.Text);
+							viewModel._televisionItems.Add(entry.Text);
 						}
 						else if (viewModel.SelectedItem.ToString() == "Washer")
 						{
-							viewModel.washerItems.Add(entry.Text);
+							viewModel._washerItems.Add(entry.Text);
 						}
 						else if (viewModel.SelectedItem.ToString() == "Air Conditioner")
 						{
-							viewModel.airConditionerItems.Add(entry.Text);
+							viewModel._airConditionerItems.Add(entry.Text);
 						}
 					}
 					entry.Text = string.Empty;

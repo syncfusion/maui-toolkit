@@ -2,16 +2,16 @@
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-    public class BoxAndWhiskerViewModel:BaseViewModel
-    {
-        public ObservableCollection<ChartDataModel> DataSets { get; set; } 
-        public string[] BoxPlotMode => new string[] { "Exclusive", "Inclusive" };
+	public partial class BoxAndWhiskerViewModel : BaseViewModel
+	{
+		public ObservableCollection<ChartDataModel> DataSets { get; set; }
+		public string[] BoxPlotMode => ["Exclusive", "Inclusive"];
 
-        public BoxAndWhiskerViewModel()
-        {
-            DataSets = new ObservableCollection<ChartDataModel>
-            {
-             new ChartDataModel("1", new List<double>{ 67.4,
+		public BoxAndWhiskerViewModel()
+		{
+			DataSets =
+			[
+			 new ChartDataModel("1", [ 67.4,
  65.5,
  72.0,
  73.6,
@@ -35,8 +35,8 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
  66.6,
  65.4,
  68.1,
-}),
-             new ChartDataModel("2", new List<double>{69.0,
+]),
+			 new ChartDataModel("2", [69.0,
  66.2,
  70.0,
  68.5,
@@ -60,8 +60,8 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
  71.0,
  68.0,
  75.0,
- 67.0, }),
-              new ChartDataModel("3",new List<double>{73.0,
+ 67.0, ]),
+			  new ChartDataModel("3",[73.0,
  78.9,
  75.0,
  72.3,
@@ -85,8 +85,8 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
  68.5,
  70.1,
  73.0,
- 70.9,}),
-               new ChartDataModel("4",new List<double>{67.6,
+ 70.9,]),
+			   new ChartDataModel("4",[67.6,
  64.2,
  65.9,
  65.9,
@@ -110,8 +110,8 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
  67.6,
  67.6,
  70.5,
- 70.5, }),
-            };
-        }
-    }
+ 70.5, ]),
+			];
+		}
+	}
 }

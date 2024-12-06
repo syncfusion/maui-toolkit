@@ -67,7 +67,7 @@
                 <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
             </chart:SfFunnelChart.TooltipBehavior>
             <chart:SfFunnelChart.DataLabelSettings>
-                <chart:FunnelDataLabelSettings UseSeriesPalette="False"
+                <chart:FunnelDataLabelSettings UseSeriesPalette="{OnPlatform Android=True, iOS=True, Default=False}"
                                                >
                     <chart:FunnelDataLabelSettings.LabelStyle>
                         <chart:ChartDataLabelStyle LabelFormat="#"

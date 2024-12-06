@@ -7,20 +7,22 @@ namespace Syncfusion.Maui.Toolkit.Internals
 	/// Detects keyboard events and handles related functionality.
 	/// </summary>
 	public partial class KeyboardDetector
-    {
-        internal void SubscribeNativeKeyEvents(View? mauiView)
-        {
+	{
+		internal void SubscribeNativeKeyEvents(View? mauiView)
+		{
 
-        }
+		}
 
-        internal void CreateNativeListener()
-        {
+		internal void CreateNativeListener()
+		{
 
-        }
+		}
 
-        internal void UnsubscribeNativeKeyEvents(IElementHandler handler)
-        {
+#pragma warning disable IDE0060 // Remove unused parameter
+		internal void UnsubscribeNativeKeyEvents(IElementHandler handler)
+#pragma warning restore IDE0060 // Remove unused parameter
+		{
 
-        }
-    }
+		}
+	}
 }

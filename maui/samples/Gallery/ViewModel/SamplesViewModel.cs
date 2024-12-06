@@ -8,13 +8,13 @@ namespace Syncfusion.Maui.ControlsGallery
     /// <summary>
     /// 
     /// </summary>
-    public class SamplesViewModel : Element , INotifyPropertyChanged
+    public partial class SamplesViewModel : Element , INotifyPropertyChanged
     {
 
-        IList<ControlModel> allControlList = new List<ControlModel>();
-        List<SearchModel>? list = new();
-        List<SearchModel>? newSampleList = new();
-        List<SearchModel>? updatedSampleList = new();
+        IList<ControlModel> allControlList = [];
+        List<SearchModel>? list = [];
+        List<SearchModel>? newSampleList = [];
+        List<SearchModel>? updatedSampleList = [];
         internal bool exit = false;
         bool exitLoop = true;
         Assembly? currentAssembly;
@@ -38,18 +38,15 @@ namespace Syncfusion.Maui.ControlsGallery
 
         private void OnPropertyRaised(string propertyname)
         {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyname));
-            }
-        }
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
+		}
         /// <summary>
         /// 
         /// </summary>
         public ObservableCollection<ControlCategoryModel> AllControlCategories
         {
-            get { return (ObservableCollection<ControlCategoryModel>)this.GetValue(AllControlCategoriesProperty); }
-            set { this.SetValue(AllControlCategoriesProperty, value); }
+            get { return (ObservableCollection<ControlCategoryModel>)GetValue(AllControlCategoriesProperty); }
+            set { SetValue(AllControlCategoriesProperty, value); }
         }
 
         /// <summary>
@@ -92,7 +89,7 @@ namespace Syncfusion.Maui.ControlsGallery
         public ObservableCollection<SearchModel> SortedList
         {
             get { return (ObservableCollection<SearchModel>)GetValue(SortedListProperty); }
-            set { SetValue(SortedListProperty, value); this.OnPropertyRaised(nameof(SortedList)); }
+            set { SetValue(SortedListProperty, value); OnPropertyRaised(nameof(SortedList)); }
         }
 
         /// <summary>
@@ -101,7 +98,7 @@ namespace Syncfusion.Maui.ControlsGallery
         public ObservableCollection<SearchModel> SortedListNew
         {
             get { return (ObservableCollection<SearchModel>)GetValue(SortedListNewProperty); }
-            set { SetValue(SortedListNewProperty, value); this.OnPropertyRaised(nameof(SortedListNew)); }
+            set { SetValue(SortedListNewProperty, value); OnPropertyRaised(nameof(SortedListNew)); }
         }
 
         /// <summary>
@@ -110,7 +107,7 @@ namespace Syncfusion.Maui.ControlsGallery
         public ObservableCollection<SearchModel> SortedListUpdated
         {
             get { return (ObservableCollection<SearchModel>)GetValue(SortedListUpdatedProperty); }
-            set { SetValue(SortedListUpdatedProperty, value); this.OnPropertyRaised(nameof(SortedListUpdated)); }
+            set { SetValue(SortedListUpdatedProperty, value); OnPropertyRaised(nameof(SortedListUpdated)); }
         }
 
         /// <summary>
@@ -126,7 +123,7 @@ namespace Syncfusion.Maui.ControlsGallery
         public ObservableCollection<ControlModel> UpdatedSortedList
         {
             get { return (ObservableCollection<ControlModel>)GetValue(UpdatedSortedListProperty); }
-            set { SetValue(UpdatedSortedListProperty, value); this.OnPropertyRaised(nameof(UpdatedSortedList)); }
+            set { SetValue(UpdatedSortedListProperty, value); OnPropertyRaised(nameof(UpdatedSortedList)); }
         }
 
 
@@ -143,7 +140,7 @@ namespace Syncfusion.Maui.ControlsGallery
         public SortOption SortOption
         {
             get { return (SortOption)GetValue(SortOptionProperty); }
-            set { SetValue(SortOptionProperty, value); this.OnPropertyRaised(nameof(SortOption)); }
+            set { SetValue(SortOptionProperty, value); OnPropertyRaised(nameof(SortOption)); }
         }
 
         /// <summary>
@@ -158,8 +155,8 @@ namespace Syncfusion.Maui.ControlsGallery
         /// </summary>
         public SamplesViewModel()
         {
-            this.AllControlCategories = new ObservableCollection<ControlCategoryModel>();
-            this.MainPageList = new ObservableCollection<object>();
+            AllControlCategories = [];
+            MainPageList = [];
             GetControlLists();
             GetAllControls();
         }
@@ -176,22 +173,26 @@ namespace Syncfusion.Maui.ControlsGallery
                 ReadStream(item.Value);
             }
 
-            foreach (var item in this.AllControlCategories)
+            foreach (var item in AllControlCategories)
             {
-                this.MainPageList.Add(item);
+                MainPageList.Add(item);
                 if (item is ControlCategoryModel controlCategoryModel)
                 {
                     foreach (var control in controlCategoryModel.AllControls!)
                     {
-                        this.MainPageList.Add(control);
+                        MainPageList.Add(control);
 
                         foreach (var category in control.SampleCategories!)
                         {
                             if (category.SampleSubCategories?.Count > 1)
-                                category.HasCategory = true;
-                            else if(category.SampleSubCategories?.Count == 1)
-                                category.SampleSubCategories![0].IsSubCategory = false;
-                        }
+							{
+								category.HasCategory = true;
+							}
+							else if(category.SampleSubCategories?.Count == 1)
+							{
+								category.SampleSubCategories![0].IsSubCategory = false;
+							}
+						}
 
                     }
                 }
@@ -203,7 +204,7 @@ namespace Syncfusion.Maui.ControlsGallery
         /// </summary>
         private void GetAllControls()
         {
-            foreach (var item in this.AllControlCategories)
+            foreach (var item in AllControlCategories)
             {
                 if (item is ControlCategoryModel controlCategoryModel)
                 {
@@ -224,16 +225,16 @@ namespace Syncfusion.Maui.ControlsGallery
         /// <param name="filterList">User selection filtered list</param>
         internal void GetSortedList(List<string> filterList)
         {
-            if (this.UpdatedSortedList != null)
+            if (UpdatedSortedList != null)
             {
-                this.UpdatedSortedList.Clear();
+                UpdatedSortedList.Clear();
             }
             else
             {
-                this.UpdatedSortedList = new ObservableCollection<ControlModel>();
-                this.OnPropertyRaised("UpdatedSortedList");
+                UpdatedSortedList = [];
+                OnPropertyRaised("UpdatedSortedList");
             }
-            IList<ControlModel> sortedAndFilteredList = new List<ControlModel>();
+            IList<ControlModel> sortedAndFilteredList = [];
             if (filterList.Contains("AllSamples") || filterList.Count == 0)
             {
                 sortedAndFilteredList = allControlList;
@@ -253,15 +254,15 @@ namespace Syncfusion.Maui.ControlsGallery
                 }
             }
 
-            if (this.SortOption == SortOption.Ascending)
+            if (SortOption == SortOption.Ascending)
             {
-                sortedAndFilteredList = sortedAndFilteredList.OrderBy(x => x.Title != null ? x.Title.ToString() : string.Empty).ToList();
+                sortedAndFilteredList = [.. sortedAndFilteredList.OrderBy(x => x.Title != null ? x.Title.ToString() : string.Empty)];
             }
-            else if (this.SortOption == SortOption.Descending)
+            else if (SortOption == SortOption.Descending)
             {
-                sortedAndFilteredList = sortedAndFilteredList.OrderByDescending(x => x.Title != null ? x.Title.ToString() : string.Empty).ToList();
+                sortedAndFilteredList = [.. sortedAndFilteredList.OrderByDescending(x => x.Title != null ? x.Title.ToString() : string.Empty)];
             }
-            this.UpdatedSortedList = new ObservableCollection<ControlModel>(sortedAndFilteredList);
+            UpdatedSortedList = new ObservableCollection<ControlModel>(sortedAndFilteredList);
 
         }
 
@@ -328,8 +329,8 @@ namespace Syncfusion.Maui.ControlsGallery
         {
             MainThread.BeginInvokeOnMainThread(() =>
             {
-                this.exitLoop = true;
-                this.PopulateSearchText(searchText);
+                exitLoop = true;
+                PopulateSearchText(searchText);
             });
         }
 
@@ -337,7 +338,7 @@ namespace Syncfusion.Maui.ControlsGallery
         {
             if (exitLoop)
             {
-                this.SearchList?.Clear();
+                SearchList?.Clear();
             }
             return exitLoop;
         }
@@ -345,62 +346,107 @@ namespace Syncfusion.Maui.ControlsGallery
         private static int GetDelay()
         {
             if (Syncfusion.Maui.ControlsGallery.BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile)
-               return  40;
-            else
-                return 50;
-        }
+			{
+				return  40;
+			}
+			else
+			{
+				return 50;
+			}
+		}
 
         private async void PopulateSearchText(string searchText)
         {
 
                await Task.Delay(SamplesViewModel.GetDelay());
-            if (this.SearchList != null)
+            if (SearchList != null)
             {
-                this.SearchList.Clear();
+                SearchList.Clear();
             }
             else
             {
-                this.SearchList = new ObservableCollection<SearchModel>();
-                this.OnPropertyRaised("SearchList");
+                SearchList = [];
+                OnPropertyRaised("SearchList");
             }
             exitLoop = false;
 
 
-            foreach (var item in this.AllControlCategories)
+            foreach (var item in AllControlCategories)
             {
-                if (ExitLoop()) return;
-                foreach (var controlModel in item.AllControls!)
+                if (ExitLoop())
+				{
+					return;
+				}
+
+				foreach (var controlModel in item.AllControls!)
                 {
-                    if (ExitLoop()) return;
-                    foreach (var sampleCategoryModel in controlModel.SampleCategories!)
+                    if (ExitLoop())
+					{
+						return;
+					}
+
+					foreach (var sampleCategoryModel in controlModel.SampleCategories!)
                     {
-                        if (ExitLoop()) return;
-                        foreach (var sampleSubCategoryModel in sampleCategoryModel.SampleSubCategories!)
+                        if (ExitLoop())
+						{
+							return;
+						}
+
+						foreach (var sampleSubCategoryModel in sampleCategoryModel.SampleSubCategories!)
                         {
-                            if (ExitLoop()) return;
-                            foreach (var cardLayoutModel in sampleSubCategoryModel.CardLayouts!)
+                            if (ExitLoop())
+							{
+								return;
+							}
+
+							foreach (var cardLayoutModel in sampleSubCategoryModel.CardLayouts!)
                             {
-                                if (ExitLoop()) return;
-                                var show = cardLayoutModel.Samples?.Where(a => (a.ControlName != null && a.ControlName.ToLowerInvariant().Contains(searchText, StringComparison.CurrentCultureIgnoreCase)) || (a.SampleName != null && a.SampleName.ToLowerInvariant().Contains(searchText, StringComparison.CurrentCultureIgnoreCase)) || (a.Title != null && a.Title.ToLowerInvariant().Contains(searchText, StringComparison.CurrentCultureIgnoreCase)) || (a.SearchTags != null && a.SearchTags.Contains(searchText, StringComparison.CurrentCultureIgnoreCase)));
+                                if (ExitLoop())
+								{
+									return;
+								}
+
+								var show = cardLayoutModel.Samples?.Where(a => (a.ControlName != null && a.ControlName.ToLowerInvariant().Contains(searchText, StringComparison.CurrentCultureIgnoreCase)) || (a.SampleName != null && a.SampleName.ToLowerInvariant().Contains(searchText, StringComparison.CurrentCultureIgnoreCase)) || (a.Title != null && a.Title.ToLowerInvariant().Contains(searchText, StringComparison.CurrentCultureIgnoreCase)) || (a.SearchTags != null && a.SearchTags.Contains(searchText, StringComparison.CurrentCultureIgnoreCase)));
                                 if (show != null)
                                 {
-                                    if (ExitLoop()) return;
-                                    foreach (var samples in show)
+                                    if (ExitLoop())
+									{
+										return;
+									}
+
+									foreach (var samples in show)
                                     {
-                                        if (ExitLoop()) return;
-                                        this.SearchList.Add(
+                                        if (ExitLoop())
+										{
+											return;
+										}
+
+										SearchList.Add(
                                             new SearchModel()
                                             {
                                                 Sample = samples,
                                                 Control = controlModel
                                             });
                                         if(sampleCategoryModel.CategoryName != samples.Title)
-                                            samples.CategoryName = "(" + sampleCategoryModel.CategoryName +")";
-                                        if (ExitLoop()) return;
-                                        if (this.SearchList.Count % 5 == 0 || Syncfusion.Maui.ControlsGallery.BaseConfig.RunTimeDeviceLayout == SBLayout.Desktop)
-                                            await Task.Delay(SamplesViewModel.GetDelay());
-                                        if (ExitLoop()) return;
-                                    }
+										{
+											samples.CategoryName = "(" + sampleCategoryModel.CategoryName +")";
+										}
+
+										if (ExitLoop())
+										{
+											return;
+										}
+
+										if (SearchList.Count % 5 == 0 || Syncfusion.Maui.ControlsGallery.BaseConfig.RunTimeDeviceLayout == SBLayout.Desktop)
+										{
+											await Task.Delay(SamplesViewModel.GetDelay());
+										}
+
+										if (ExitLoop())
+										{
+											return;
+										}
+									}
                                 }
                             }
                         }
@@ -412,45 +458,45 @@ namespace Syncfusion.Maui.ControlsGallery
         internal void PopulateSortAndFilterSamples(List<string> filteredList)
         {
 #if WINDOWS || MACCATALYST
-            this.FilterNewSampleCount = 0;
-            this.FilterUpdatedSampleCount = 0;
-            if (this.SortedList != null)
+            FilterNewSampleCount = 0;
+            FilterUpdatedSampleCount = 0;
+            if (SortedList != null)
             {
-                this.SortedList.Clear();                
+                SortedList.Clear();                
             }
             else
             {
-                this.SortedList = new ObservableCollection<SearchModel>();
-                this.OnPropertyRaised("SortedList");
+                SortedList = [];
+                OnPropertyRaised("SortedList");
             }
-             this.list?.Clear();
+             list?.Clear();
 #else
 
-            if (this.SortedListNew != null)
+            if (SortedListNew != null)
             {
-                this.SortedListNew.Clear();
+                SortedListNew.Clear();
             }
             else
             {
-                this.SortedListNew = new ObservableCollection<SearchModel>();
-                this.OnPropertyRaised("SortedListNew");
+                SortedListNew = [];
+                OnPropertyRaised("SortedListNew");
             }
 
-            if (this.SortedListUpdated != null)
+            if (SortedListUpdated != null)
             {
-                this.SortedListUpdated.Clear();
+                SortedListUpdated.Clear();
             }
             else
             {
-                this.SortedListUpdated = new ObservableCollection<SearchModel>();
-                this.OnPropertyRaised("SortedListUpdated");
+                SortedListUpdated = [];
+                OnPropertyRaised("SortedListUpdated");
             }
-            this.newSampleList?.Clear();
-            this.updatedSampleList?.Clear();
+            newSampleList?.Clear();
+            updatedSampleList?.Clear();
 #endif
 
 
-            foreach (var item in this.AllControlCategories)
+            foreach (var item in AllControlCategories)
             {
                 foreach (var controlModel in item.AllControls!)
                 {
@@ -492,7 +538,7 @@ namespace Syncfusion.Maui.ControlsGallery
 
         void SortMethod()
         {
-            if (this.SortOption == SortOption.Ascending)
+            if (SortOption == SortOption.Ascending)
             {
 #if WINDOWS || MACCATALYST
                 list = list?.OrderBy(x => x.Control?.Title!).ToList();
@@ -501,7 +547,7 @@ namespace Syncfusion.Maui.ControlsGallery
                 updatedSampleList = updatedSampleList?.OrderBy(x => x.Control?.Title!).ToList();
 #endif
             }
-            else if (this.SortOption == SortOption.Descending)
+            else if (SortOption == SortOption.Descending)
             {
 #if WINDOWS || MACCATALYST
                 list = list?.OrderByDescending(x => x.Control?.Title!).ToList();
@@ -515,23 +561,30 @@ namespace Syncfusion.Maui.ControlsGallery
             foreach (var temp in list!)
             {
                 if (exit)
-                    return;
+				{
+					return;
+				}
 
-                this.SortedList?.Add(temp);
+				SortedList?.Add(temp);
             }
 #else
             foreach (var temp in newSampleList!)
             {
                 if (exit)
-                    return;
+				{
+					return;
+				}
 
-                this.SortedListNew?.Add(temp);
+				SortedListNew?.Add(temp);
             }
             foreach (var temp in updatedSampleList!)
             {
                 if (exit)
-                    return;
-                this.SortedListUpdated?.Add(temp);
+				{
+					return;
+				}
+
+				SortedListUpdated?.Add(temp);
             }
 #endif
         }
@@ -545,26 +598,26 @@ namespace Syncfusion.Maui.ControlsGallery
             }
         }
 #else
-        void AddNewSamples(ControlModel controlModel, SampleModel samples)
-        {
-            if(this.newSampleList != null)
-            {
-                newSampleList.Add(new SearchModel() { Control = controlModel, Sample = samples });
-            }
-        }
-        void AddUpdatedSamples(ControlModel controlModel, SampleModel samples)
-        {
-            if(this.updatedSampleList != null)
-            {
-                updatedSampleList.Add(new SearchModel() { Control = controlModel, Sample = samples });
-            }
-        }
+		void AddNewSamples(ControlModel controlModel, SampleModel samples)
+		{
+			if (this.newSampleList != null)
+			{
+				newSampleList.Add(new SearchModel() { Control = controlModel, Sample = samples });
+			}
+		}
+		void AddUpdatedSamples(ControlModel controlModel, SampleModel samples)
+		{
+			if (this.updatedSampleList != null)
+			{
+				updatedSampleList.Add(new SearchModel() { Control = controlModel, Sample = samples });
+			}
+		}
 #endif
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="controlListStream"></param>
-        public void ReadStream(Stream controlListStream)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="controlListStream"></param>
+		public void ReadStream(Stream controlListStream)
         {
             if (controlListStream != null)
             {
@@ -675,10 +728,9 @@ namespace Syncfusion.Maui.ControlsGallery
         /// <returns></returns>
         public static SampleSubCategoryModel GetSubCategoryModel(SampleSubCategoryModel catagorySubModel, SampleCategoryModel categoryModel)
         {
-            if (categoryModel.SampleSubCategories == null)
-                categoryModel.SampleSubCategories = new ObservableCollection<SampleSubCategoryModel>();
+            categoryModel.SampleSubCategories ??= [];
 
-            foreach (var item in categoryModel.SampleSubCategories)
+			foreach (var item in categoryModel.SampleSubCategories)
             {
                 if (item.SubCategoryName == catagorySubModel.SubCategoryName)
                 {
@@ -698,10 +750,9 @@ namespace Syncfusion.Maui.ControlsGallery
         /// <returns></returns>
         public static SampleCategoryModel GetCategoryModel(SampleCategoryModel catagoryModel, ControlModel controlModel)
         {
-            if (controlModel.SampleCategories == null)
-                controlModel.SampleCategories = new ObservableCollection<SampleCategoryModel>();
+            controlModel.SampleCategories ??= [];
 
-            foreach (var item in controlModel.SampleCategories)
+			foreach (var item in controlModel.SampleCategories)
             {
                 if (item.CategoryName == catagoryModel.CategoryName)
                 {
@@ -721,10 +772,9 @@ namespace Syncfusion.Maui.ControlsGallery
         /// <returns></returns>
         public static ControlModel GetControlModel(ControlModel controlModel, ControlCategoryModel controlCategoryModel)
         {
-            if (controlCategoryModel.AllControls == null)
-                controlCategoryModel.AllControls = new ObservableCollection<ControlModel>();
+            controlCategoryModel.AllControls ??= [];
 
-            foreach (var item in controlCategoryModel.AllControls)
+			foreach (var item in controlCategoryModel.AllControls)
             {
                 if (item.Name == controlModel.Name)
                 {
@@ -744,7 +794,7 @@ namespace Syncfusion.Maui.ControlsGallery
         /// <returns></returns>
         public ControlCategoryModel GetControlCategoryModel(string controlCategoryModelName)
         {
-            foreach (var item in this.AllControlCategories)
+            foreach (var item in AllControlCategories)
             {
                 if (controlCategoryModelName == item.Name)
                 {
@@ -753,7 +803,7 @@ namespace Syncfusion.Maui.ControlsGallery
             }
 
             var newControlCategoryModel = new ControlCategoryModel() { Name = controlCategoryModelName };
-            this.AllControlCategories.Add(newControlCategoryModel);
+            AllControlCategories.Add(newControlCategoryModel);
 
             return newControlCategoryModel;
         }
@@ -816,10 +866,9 @@ namespace Syncfusion.Maui.ControlsGallery
         {
             if (itemModel is ControlModel controlModel)
             {
-                if (controlModel.SampleCategories == null)
-                    controlModel.SampleCategories = new ObservableCollection<SampleCategoryModel>();
+                controlModel.SampleCategories ??= [];
 
-                var sampleModel = CreateSampleModel(xmlElement);
+				var sampleModel = CreateSampleModel(xmlElement);
                 if (string.IsNullOrEmpty(sampleModel.Platforms) || sampleModel.Platforms.Contains(BaseConfig.RunTimeDevicePlatform.ToString(), StringComparison.Ordinal))
                 {
                     var dummyCardLayoutModel = SamplesViewModel.GetDummayCardLayoutModel();
@@ -840,10 +889,9 @@ namespace Syncfusion.Maui.ControlsGallery
             }
             else if (itemModel is SampleCategoryModel categoryModel)
             {
-                if (categoryModel.SampleSubCategories == null)
-                    categoryModel.SampleSubCategories = new ObservableCollection<SampleSubCategoryModel>();
+                categoryModel.SampleSubCategories ??= [];
 
-                var sampleModel = CreateSampleModel(xmlElement);
+				var sampleModel = CreateSampleModel(xmlElement);
                 if (string.IsNullOrEmpty(sampleModel.Platforms) || sampleModel.Platforms.Contains(BaseConfig.RunTimeDevicePlatform.ToString(), StringComparison.Ordinal))
                 {
                     var dummyCardLayoutModel = SamplesViewModel.GetDummayCardLayoutModel();
@@ -860,10 +908,9 @@ namespace Syncfusion.Maui.ControlsGallery
             }
             else if (itemModel is SampleSubCategoryModel subCategoryModel)
             {
-                if (subCategoryModel.CardLayouts == null)
-                    subCategoryModel.CardLayouts = new ObservableCollection<CardLayoutModel>();
+                subCategoryModel.CardLayouts ??= [];
 
-                var sampleModel = CreateSampleModel(xmlElement);
+				var sampleModel = CreateSampleModel(xmlElement);
                 if (string.IsNullOrEmpty(sampleModel.Platforms) || sampleModel.Platforms.Contains(BaseConfig.RunTimeDevicePlatform.ToString(), StringComparison.Ordinal))
                 {
                     var dummyCardLayoutModel = SamplesViewModel.GetDummayCardLayoutModel();
@@ -877,10 +924,9 @@ namespace Syncfusion.Maui.ControlsGallery
             }
             else if (itemModel is CardLayoutModel cardLayoutModel)
             {
-                if (cardLayoutModel.Samples == null)
-                    cardLayoutModel.Samples = new ObservableCollection<SampleModel>();
+                cardLayoutModel.Samples ??= [];
 
-                var sampleModel = CreateSampleModel(xmlElement);
+				var sampleModel = CreateSampleModel(xmlElement);
                 if (string.IsNullOrEmpty(sampleModel.Platforms) || sampleModel.Platforms.Contains(BaseConfig.RunTimeDevicePlatform.ToString(), StringComparison.Ordinal))
                 {
                     cardLayoutModel.Title = sampleModel.Title;
@@ -896,7 +942,7 @@ namespace Syncfusion.Maui.ControlsGallery
         /// <returns></returns>
         public static SampleCategoryModel GetDummySampleCategoryModel()
         {
-            return new SampleCategoryModel() { SampleSubCategories = new ObservableCollection<SampleSubCategoryModel>(), HasCategory = false };
+            return new SampleCategoryModel() { SampleSubCategories = [], HasCategory = false };
         }
 
         /// <summary>
@@ -905,7 +951,7 @@ namespace Syncfusion.Maui.ControlsGallery
         /// <returns></returns>
         public static SampleSubCategoryModel GetDummySampleSubCategoryModel()
         {
-            return new SampleSubCategoryModel() { IsApplicable = false, CardLayouts = new ObservableCollection<CardLayoutModel>() };
+            return new SampleSubCategoryModel() { IsApplicable = false, CardLayouts = [] };
         }
 
         /// <summary>
@@ -914,7 +960,7 @@ namespace Syncfusion.Maui.ControlsGallery
         /// <returns></returns>
         public static CardLayoutModel GetDummayCardLayoutModel()
         {
-            return new CardLayoutModel() { IsApplicable = false, Samples = new ObservableCollection<SampleModel>() };
+            return new CardLayoutModel() { IsApplicable = false, Samples = [] };
         }
 
         /// <summary>
@@ -926,9 +972,9 @@ namespace Syncfusion.Maui.ControlsGallery
         {
             if (itemModel is SampleCategoryModel categoryModel)
             {
-                if (categoryModel.SampleSubCategories == null)
-                    categoryModel.SampleSubCategories = new ObservableCollection<SampleSubCategoryModel>();
-                categoryModel.HasCategory = false;
+                categoryModel.SampleSubCategories ??= [];
+
+				categoryModel.HasCategory = false;
                 var dummySampleSubCategoryModel = SamplesViewModel.GetDummySampleSubCategoryModel();
                 foreach (var sampleModelItem in xmlCardElement.ChildNodes)
                 {
@@ -938,9 +984,9 @@ namespace Syncfusion.Maui.ControlsGallery
                         if (string.IsNullOrEmpty(sampleModel.Platforms) || sampleModel.Platforms.Contains(BaseConfig.RunTimeDevicePlatform.ToString(), StringComparison.Ordinal))
                         {
                             var dummyCardLayoutModel = new CardLayoutModel() { IsApplicable = true, Title = sampleModel.Title, StatusTag = sampleModel.StatusTag };
-                            if (dummyCardLayoutModel.Samples == null)
-                                dummyCardLayoutModel.Samples = new ObservableCollection<SampleModel>();
-                            dummyCardLayoutModel.Samples.Add(sampleModel);
+                            dummyCardLayoutModel.Samples ??= [];
+
+							dummyCardLayoutModel.Samples.Add(sampleModel);
                             dummySampleSubCategoryModel.CardLayouts?.Add(dummyCardLayoutModel);
                             dummySampleSubCategoryModel.StatusTag = sampleModel.StatusTag;
                         }
@@ -950,10 +996,9 @@ namespace Syncfusion.Maui.ControlsGallery
             }
             else if (itemModel is SampleSubCategoryModel subCategoryModel)
             {
-                if (subCategoryModel.CardLayouts == null)
-                    subCategoryModel.CardLayouts = new ObservableCollection<CardLayoutModel>();
+                subCategoryModel.CardLayouts ??= [];
 
-                foreach (var sampleModelItem in xmlCardElement.ChildNodes)
+				foreach (var sampleModelItem in xmlCardElement.ChildNodes)
                 {
                     if (sampleModelItem is XmlElement xmlElement)
                     {
@@ -961,9 +1006,9 @@ namespace Syncfusion.Maui.ControlsGallery
                         if (string.IsNullOrEmpty(sampleModel.Platforms) || sampleModel.Platforms.Contains(BaseConfig.RunTimeDevicePlatform.ToString(), StringComparison.Ordinal))
                         {
                             var dummyCardLayoutModel = new CardLayoutModel() { IsApplicable = true, Title = sampleModel.Title, StatusTag = sampleModel.StatusTag };
-                            if (dummyCardLayoutModel.Samples == null)
-                                dummyCardLayoutModel.Samples = new ObservableCollection<SampleModel>();
-                            dummyCardLayoutModel.Samples?.Add(sampleModel);
+                            dummyCardLayoutModel.Samples ??= [];
+
+							dummyCardLayoutModel.Samples?.Add(sampleModel);
                             subCategoryModel.CardLayouts?.Add(dummyCardLayoutModel);
                         }
                     }
@@ -980,10 +1025,9 @@ namespace Syncfusion.Maui.ControlsGallery
         {
             if (itemModel is SampleCategoryModel categoryModel)
             {
-                if (categoryModel.SampleSubCategories == null)
-                    categoryModel.SampleSubCategories = new ObservableCollection<SampleSubCategoryModel>();
+                categoryModel.SampleSubCategories ??= [];
 
-                SampleSubCategoryModel samplesubCategoryModel = new()
+				SampleSubCategoryModel samplesubCategoryModel = new()
                 {
                     SubCategoryName = xmlSubCateGoryElement.GetAttribute("Title"),
                     StatusTag = xmlSubCateGoryElement.GetAttribute("StatusTag")
@@ -1004,10 +1048,9 @@ namespace Syncfusion.Maui.ControlsGallery
         {
             if (itemModel is ControlModel controlModel)
             {
-                if (controlModel.SampleCategories == null)
-                    controlModel.SampleCategories = new ObservableCollection<SampleCategoryModel>();
+                controlModel.SampleCategories ??= [];
 
-                SampleCategoryModel sampleCategoryModel = new()
+				SampleCategoryModel sampleCategoryModel = new()
                 {
                     CategoryName = xmlCateGoryElement.GetAttribute("Title"),
                     StatusTag = xmlCateGoryElement.GetAttribute("StatusTag")
@@ -1057,6 +1100,4 @@ namespace Syncfusion.Maui.ControlsGallery
         /// </summary>
         Descending,
     }
-
-
 }

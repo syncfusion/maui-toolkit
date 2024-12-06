@@ -29,7 +29,7 @@
                                LineBreakMode="WordWrap"
                                LineHeight="1.3"
                                HorizontalTextAlignment="Start"/>
-                    <Image Source="{Binding Image,Converter={StaticResource imageconverter}}" HeightRequest="300" Margin="10,10,30,10"/>
+                    <Image Source="{Binding Image}" HeightRequest="300" Margin="10,10,30,10"/>
 
                         <Label Text="{Binding TotalPrice}" 
                                    TextColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" 

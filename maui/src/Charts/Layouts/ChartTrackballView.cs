@@ -2,39 +2,39 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts.Chart.Layouts
 {
-	internal class ChartTrackballView : SfView
-    {
-        #region Properties
+	internal partial class ChartTrackballView : SfView
+	{
+		#region Properties
 
-        internal ChartTrackballBehavior? Behavior { get; set; }
+		internal ChartTrackballBehavior? Behavior { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public ChartTrackballView()
-        {
-            DrawingOrder = DrawingOrder.BelowContent;
-        }
+		public ChartTrackballView()
+		{
+			DrawingOrder = DrawingOrder.BelowContent;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Methods
+		#region Protected Methods
 
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            if (Behavior?.PointInfos.Count > 0)
-            {
-                canvas.CanvasSaveState();
-                Behavior.DrawElements(canvas, dirtyRect);
-                canvas.CanvasRestoreState();
-            }
-        }
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		{
+			if (Behavior?.PointInfos.Count > 0)
+			{
+				canvas.CanvasSaveState();
+				Behavior.DrawElements(canvas, dirtyRect);
+				canvas.CanvasRestoreState();
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

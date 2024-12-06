@@ -81,11 +81,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal int TooltipDataPointIndex { get; set; }
 
-        internal List<double> GroupedXValuesIndexes { get; set; } = new List<double>();
+        internal List<double> GroupedXValuesIndexes { get; set; } = [];
 
-        internal List<object> GroupedActualData { get; set; } = new List<object>();
+        internal List<object> GroupedActualData { get; set; } = [];
 
-        internal List<string> GroupedXValues { get; set; } = new List<string>();
+        internal List<string> GroupedXValues { get; set; } = [];
 
         internal ObservableCollection<ChartDataLabel> DataLabels
         {
@@ -1139,9 +1139,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         public ChartSeries()
         {
-            Segments = new ObservableCollection<ChartSegment>();
-            Segments.CollectionChanged += Segments_CollectionChanged;
-            _dataLabels = new ObservableCollection<ChartDataLabel>();
+            _segments = [];
+            _segments.CollectionChanged += Segments_CollectionChanged;
+            _dataLabels = [];
             LabelTemplateView = new DataLabelLayout(this);
         }
 
@@ -1155,7 +1155,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         bool IDataTemplateDependent.IsVisible => IsVisible;
 
-        ObservableCollection<ChartSegment> IDatapointSelectionDependent.Segments => Segments;
+        ObservableCollection<ChartSegment> IDatapointSelectionDependent.Segments => _segments;
 
         Rect IDatapointSelectionDependent.AreaBounds => AreaBounds;
 
@@ -1164,14 +1164,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
             InvalidateSeries();
 
             if (ShowDataLabels)
-                InvalidateDataLabel();
-        }
+			{
+				InvalidateDataLabel();
+			}
+		}
 
         void IDatapointSelectionDependent.UpdateSelectedItem(int index)
         {
             //Update selected segment.
             //While selection no need to update legend items for cartesian series. So created override to circular alone.
-            SetFillColor(Segments[index]);
+            SetFillColor(_segments[index]);
         }
 
         void IDatapointSelectionDependent.UpdateLegendIconColor(ChartSelectionBehavior sender, int index)
@@ -1194,9 +1196,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
         bool IDataTemplateDependent.IsTemplateItemsChanged()
         {
             if (Chart != null)
-                return Chart.IsRequiredDataLabelsMeasure;
+			{
+				return Chart.IsRequiredDataLabelsMeasure;
+			}
 
-            return true;
+			return true;
         }
 
         #endregion
@@ -1213,9 +1217,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
             int selectedDataPointIndex = -1;
             RectF seriesBounds = AreaBounds;
 
-            for (int i = 0; i < Segments.Count; i++)
+            for (int i = 0; i < _segments.Count; i++)
             {
-                ChartSegment chartSegment = Segments[i];
+                ChartSegment chartSegment = _segments[i];
                 selectedDataPointIndex = chartSegment.GetDataPointIndex(pointX - seriesBounds.Left, pointY - seriesBounds.Top);
                 if (selectedDataPointIndex >= 0)
                 {
@@ -1330,7 +1334,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal virtual Brush? GetSegmentFillColor(int index)
         {
-            var segment = Segments[index];
+            var segment = _segments[index];
 
             if (segment != null)
             {
@@ -1356,9 +1360,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void Animate()
         {
-            if (EnableAnimation && Segments != null && Segments.Count > 0)
+            if (EnableAnimation && _segments != null && _segments.Count > 0)
             {
-                SeriesView? seriesView = Segments[0].SeriesView;
+                SeriesView? seriesView = _segments[0].SeriesView;
 
                 seriesView?.Animate();
             }
@@ -1368,15 +1372,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             var dataLabelSettings = ChartDataLabelSettings;
 
-            if (dataLabelSettings == null) return;
+            if (dataLabelSettings == null)
+			{
+				return;
+			}
 
-            ChartDataLabelStyle labelStyle = dataLabelSettings.LabelStyle;
+			ChartDataLabelStyle labelStyle = dataLabelSettings.LabelStyle;
 
-            foreach (ChartSegment segment in Segments)
+            foreach (ChartSegment segment in _segments)
             {
-                if (!segment.InVisibleRange || segment.IsEmpty) continue;
+                if (!segment.InVisibleRange || segment.IsEmpty)
+				{
+					continue;
+				}
 
-                UpdateDataLabelAppearance(canvas, segment, dataLabelSettings, labelStyle);
+				UpdateDataLabelAppearance(canvas, segment, dataLabelSettings, labelStyle);
             }
         }
 
@@ -1403,9 +1413,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             var dataLabelSettings = ChartDataLabelSettings;
 
-            if (dataLabelSettings == null) return labelPosition;
+            if (dataLabelSettings == null)
+			{
+				return labelPosition;
+			}
 
-            if (dataLabelSettings.LabelPlacement == DataLabelPlacement.Outer)
+			if (dataLabelSettings.LabelPlacement == DataLabelPlacement.Outer)
             {
                 labelPosition.Y = labelPosition.Y - (labelSize.Height / 2) - padding;
             }
@@ -1432,12 +1445,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity);
 
                     if (desiredSize.IsZero)
-                        return content.Measure(double.PositiveInfinity, double.PositiveInfinity);
+					{
+						return content.Measure(double.PositiveInfinity, double.PositiveInfinity);
+					}
 #else
 					var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
 
 					if (desiredSize.IsZero)
+					{
 						return content.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
+					}
 #endif
 
 					return desiredSize;
@@ -1518,7 +1535,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal virtual void InvalidateMeasureDataLabel()
         {
-            foreach (var segment in Segments)
+            foreach (var segment in _segments)
             {
                 segment.OnDataLabelLayout();
             }
@@ -1602,10 +1619,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
             fillColor = Chart?.GetSelectionBrush(this);
 
             //Series selection behavior check.
-            if (fillColor == null)
-                fillColor = GetSelectionBrush(item, index);
+            fillColor ??= GetSelectionBrush(item, index);
 
-            if (fillColor == null)
+			if (fillColor == null)
             {
                 if (Fill != null)
                 {
@@ -1622,9 +1638,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal virtual bool SeriesContainsPoint(PointF point)
         {
-            if (PointsCount == 0) return false;
+            if (PointsCount == 0)
+			{
+				return false;
+			}
 
-            TooltipDataPointIndex = GetDataPointIndex(point.X, point.Y);
+			TooltipDataPointIndex = GetDataPointIndex(point.X, point.Y);
 
             return TooltipDataPointIndex < PointsCount && TooltipDataPointIndex > -1;
         }
@@ -1650,7 +1669,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal virtual void InitiateDataLabels(ChartSegment segment)
         {
-            if (DataLabels.Count > this.Segments.Count)
+            if (DataLabels.Count > _segments.Count)
             {
                 DataLabels.Clear();
             }
@@ -1662,7 +1681,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void UpdateColor()
         {
-            foreach (var segment in Segments)
+            foreach (var segment in _segments)
             {
                 SetFillColor(segment);
             }
@@ -1670,7 +1689,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void UpdateStrokeColor()
         {
-            foreach (var segment in Segments)
+            foreach (var segment in _segments)
             {
                 SetStrokeColor(segment);
             }
@@ -1678,7 +1697,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void UpdateStrokeWidth()
         {
-            foreach (var segment in Segments)
+            foreach (var segment in _segments)
             {
                 SetStrokeWidth(segment);
             }
@@ -1686,7 +1705,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void UpdateDashArray()
         {
-            foreach (var segment in Segments)
+            foreach (var segment in _segments)
             {
                 SetDashArray(segment);
             }
@@ -1694,13 +1713,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void AnimateSeries(Action<double> callback)
         {
-            if (SeriesAnimation == null) return;
+            if (SeriesAnimation == null)
+			{
+				return;
+			}
 
-            Animation? customAnimation = CreateAnimation(callback);
+			Animation? customAnimation = CreateAnimation(callback);
 
             if (customAnimation != null)
-                SeriesAnimation.Add(0, 1, customAnimation);
-        }
+			{
+				SeriesAnimation.Add(0, 1, customAnimation);
+			}
+		}
 
         internal bool CanAnimate()
         {
@@ -1713,9 +1737,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (plotArea != null)
             {
-                foreach (SeriesView seriesView in plotArea.SeriesViews.Children)
+                foreach (SeriesView seriesView in plotArea._seriesViews.Children)
                 {
-                    if (seriesView != null && this == seriesView.Series)
+                    if (seriesView != null && this == seriesView._series)
                     {
                         seriesView.InvalidateDrawable();
                         break;
@@ -1730,9 +1754,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (plotArea != null)
             {
-                foreach (SeriesView seriesView in plotArea.SeriesViews.Children)
+                foreach (SeriesView seriesView in plotArea._seriesViews.Children)
                 {
-                    if (seriesView != null && this == seriesView.Series)
+                    if (seriesView != null && this == seriesView._series)
                     {
                         seriesView.Invalidate();
                         break;
@@ -1796,7 +1820,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (Yvalues != null)
             {
-                if (float.IsNaN(sumOfYValues))
+                if (float.IsNaN(_sumOfYValues))
                 {
                     foreach (double number in Yvalues)
                     {
@@ -1805,11 +1829,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
                             sum += (float)number;
                         }
                     }
-                    sumOfYValues = sum;
+                    _sumOfYValues = sum;
                 }
                 else
                 {
-                    return sumOfYValues;
+                    return _sumOfYValues;
                 }
             }
 
@@ -1834,7 +1858,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             {
                 if (newValue != null && newValue is string)
                 {
-                    chartSeries.XComplexPaths = ((string)newValue).Split(new char[] { '.' });
+                    chartSeries.XComplexPaths = ((string)newValue).Split(['.']);
                 }
 
                 chartSeries.OnBindingPathChanged();
@@ -1868,9 +1892,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void UpdateAlpha()
         {
-            foreach (var segment in Segments)
+            foreach (var segment in _segments)
             {
-                segment.Opacity = (float)Opacity;
+                segment.Opacity = Math.Clamp((float)Opacity, 0, 1);
             }
         }
 
@@ -2009,9 +2033,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 }
 
                 if (chartSeries.Chart != null)
-                    chartSeries.Chart.IsRequiredDataLabelsMeasure = true;
+				{
+					chartSeries.Chart.IsRequiredDataLabelsMeasure = true;
+				}
 
-                chartSeries.InvalidateMeasureDataLabel();
+				chartSeries.InvalidateMeasureDataLabel();
                 chartSeries.InvalidateDataLabel();
             }
         }
@@ -2023,11 +2049,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 return;
             }
 
-            if (EnableAnimation && AnimationDuration > 0 && Segments != null && Segments.Count > 0)
+            if (EnableAnimation && AnimationDuration > 0 && _segments != null && _segments.Count > 0)
             {
-                OldSegments = new ObservableCollection<ChartSegment>(Segments);
+                OldSegments = new ObservableCollection<ChartSegment>(_segments);
                 PreviousXRange = XRange;
-                Segments[0].SeriesView?.AbortAnimation();
+                _segments[0].SeriesView?.AbortAnimation();
             }
 
             if (DataLabels.Count > 0)
@@ -2044,8 +2070,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
             ScheduleUpdateChart();
 
             if (Chart != null)
-                Chart.IsRequiredDataLabelsMeasure = true;
-        }
+			{
+				Chart.IsRequiredDataLabelsMeasure = true;
+			}
+		}
 
         void Segments_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
@@ -2159,7 +2187,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// <exclude/>
         ~ChartSeries()
         {
-            Segments.CollectionChanged -= Segments_CollectionChanged;
+            _segments.CollectionChanged -= Segments_CollectionChanged;
         }
         #endregion
     }

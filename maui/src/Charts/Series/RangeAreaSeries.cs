@@ -71,7 +71,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ]]></code>
 	/// ***
 	/// </example>
-	public class RangeAreaSeries : RangeSeriesBase, IMarkerDependent, IDrawCustomLegendIcon
+	public partial class RangeAreaSeries : RangeSeriesBase, IMarkerDependent, IDrawCustomLegendIcon
     {
         #region Fields
 
@@ -287,7 +287,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
 
             PointF visiblePoint = new PointF();
-            List<PointF> segPoints = new List<PointF>();
+            List<PointF> segPoints = [];
             var xValues = GetXValues();
 
             if (xValues != null)
@@ -409,10 +409,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     if (xValues == null)
                     {
-                        xValues = new List<double>();
-                        highValues = new List<double>();
-                        lowValues = new List<double>();
-                        items = new List<object>();
+                        xValues = [];
+                        highValues = [];
+                        lowValues = [];
+                        items = [];
                     }
 
                     xValues.Add(actualXValues[i]);
@@ -436,7 +436,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                             segment.Item = items;
                             InitiateDataLabels(segment);
-                            Segments.Add(segment);
+                            _segments.Add(segment);
                         }
 
                         xValues = lowValues = highValues = null;
@@ -445,10 +445,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                     if (double.IsNaN(HighValues[i]) || double.IsNaN(LowValues[i]))
                     {
-                        xValues = new List<double> { actualXValues[i] };
-                        highValues = new List<double> { HighValues[i] };
-                        lowValues = new List<double> { LowValues[i] };
-                        items = new List<object> { ActualData![i] };
+                        xValues = [actualXValues[i]];
+                        highValues = [HighValues[i]];
+                        lowValues = [LowValues[i]];
+                        items = [ActualData![i]];
 
                         if (CreateSegment() is RangeAreaSegment segment)
                         {
@@ -523,9 +523,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     var desiredSize = (Size)templateView.Measure(double.PositiveInfinity, double.PositiveInfinity);
 
                     if (desiredSize.IsZero)
-                        return (Size)content.Measure(double.PositiveInfinity, double.PositiveInfinity);
+					{
+						return (Size)content.Measure(double.PositiveInfinity, double.PositiveInfinity);
+					}
 
-                    return desiredSize;
+					return desiredSize;
                 }
             }
 
@@ -536,14 +538,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             var dataLabelSettings = DataLabelSettings;
 
-            if (dataLabelSettings == null || Segments == null || Segments.Count <= 0)
+            if (dataLabelSettings == null || _segments == null || _segments.Count <= 0)
             {
                 return;
             }
 
             ChartDataLabelStyle labelStyle = DataLabelSettings.LabelStyle;
 
-            foreach (RangeAreaSegment dataLabel in Segments)
+            foreach (RangeAreaSegment dataLabel in _segments.Cast<RangeAreaSegment>())
             {
                 if (dataLabel == null || dataLabel.XValues == null || dataLabel.HighValues == null || dataLabel.LowValues == null)
                 {
@@ -567,8 +569,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                             CalculateDataPointPosition(i, ref x, ref y);
                             PointF labelPoint = new PointF((float)x, (float)y);
-                            SumOfHighValues = float.IsNaN(SumOfHighValues) ? SumOfValues(HighValues) : SumOfHighValues;
-                            dataLabel.LabelContent = GetLabelContent(dataLabel.HighValues[i], SumOfHighValues);
+                            _sumOfHighValues = float.IsNaN(_sumOfHighValues) ? SumOfValues(HighValues) : _sumOfHighValues;
+                            dataLabel.LabelContent = GetLabelContent(dataLabel.HighValues[i], _sumOfHighValues);
                             dataLabel.LabelPositionPoint = dataLabelSettings.CalculateDataLabelPoint(this, dataLabel, labelPoint, dataLabelSettings.LabelStyle, "HighType");
                             UpdateDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
                         }
@@ -584,8 +586,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                             CalculateDataPointPosition(i, ref x, ref y);
                             PointF labelPoint = new PointF((float)x, (float)y);
-                            SumOfLowValues = float.IsNaN(SumOfLowValues) ? SumOfValues(LowValues) : SumOfLowValues;
-                            dataLabel.LabelContent = GetLabelContent(dataLabel.LowValues[i], SumOfLowValues);
+                            _sumOfLowValues = float.IsNaN(_sumOfLowValues) ? SumOfValues(LowValues) : _sumOfLowValues;
+                            dataLabel.LabelContent = GetLabelContent(dataLabel.LowValues[i], _sumOfLowValues);
                             dataLabel.LabelPositionPoint = dataLabelSettings.CalculateDataLabelPoint(this, dataLabel, labelPoint, dataLabelSettings.LabelStyle, "LowType");
                             UpdateDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
                         }
@@ -597,7 +599,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal override Brush? GetSegmentFillColor(int index)
         {
-            var segment = Segments[0];
+            var segment = _segments[0];
 
             if (segment != null)
             {

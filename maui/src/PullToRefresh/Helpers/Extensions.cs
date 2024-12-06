@@ -7,8 +7,8 @@
     {
         #region Fields
 
-        static bool _shouldHandle = false;
-        static IView? _pullToRefreshElement;
+        static bool ShouldHandle = false;
+        static IView? PullToRefreshElement;
 
         #endregion
 
@@ -24,7 +24,7 @@
         internal static void CheckChildren(IView view, object pullToRefreshView, out bool isPullToRefresh, out bool isAction)
         {
             isPullToRefresh = CheckChildrenIsIPullToRefresh(view, pullToRefreshView);
-            isAction = _shouldHandle;
+            isAction = ShouldHandle;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@
         internal static IView? GetIPullToRefreshElement(IView view, object pullToRefreshView)
         {
             CheckChildrenIsIPullToRefresh(view, pullToRefreshView);
-            return _pullToRefreshElement;
+            return PullToRefreshElement;
         }
 
         #endregion
@@ -58,7 +58,7 @@
                 return SetPullToRefreshElement(pulltoRefreshChild, pullToRefresh);
             }
 
-            _shouldHandle = false;
+            ShouldHandle = false;
 
             if (view is Layout layout)
             {
@@ -77,9 +77,9 @@
 
         static bool SetPullToRefreshElement(IPullToRefresh pulltoRefreshChild, object pullToRefresh)
         {
-            _pullToRefreshElement = pulltoRefreshChild as IView;
-            _shouldHandle = pulltoRefreshChild.CanHandleGesture(pullToRefresh);
-            return _shouldHandle;
+            PullToRefreshElement = pulltoRefreshChild as IView;
+            ShouldHandle = pulltoRefreshChild.CanHandleGesture(pullToRefresh);
+            return ShouldHandle;
         }
 
         static bool CheckLayoutChildren(Layout layout, object pullToRefresh)

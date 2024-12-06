@@ -35,54 +35,64 @@ namespace Syncfusion.Maui.Toolkit.Hosting
 			});
 
 #if WINDOWS
-            builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IMauiInitializeService, MauiControlsInitializer>());
+			builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IMauiInitializeService, MauiControlsInitializer>());
 #endif
 
-            return builder;
-        }
+			return builder;
+		}
 
 #if WINDOWS
-        class MauiControlsInitializer : IMauiInitializeService
-        {
-            public void Initialize(IServiceProvider services)
-            {
-               var dispatcher = services.GetRequiredService<IDispatcher>();
+		class MauiControlsInitializer : IMauiInitializeService
+		{
+			public void Initialize(IServiceProvider services)
+			{
+				var dispatcher = services.GetRequiredService<IDispatcher>();
 				if (dispatcher.IsDispatchRequired)
+				{
 					dispatcher.Dispatch(() => SetupResources());
+				}
 				else
+				{
 					SetupResources();
+				}
 
 				static void SetupResources()
 				{
 					if (Microsoft.UI.Xaml.Application.Current?.Resources is not Microsoft.UI.Xaml.ResourceDictionary resources)
+					{
 						return;
+					}
 
 					AppHostBuilderExtensions.AddLibraryResources(resources, "SyncfusionResourcesIncluded", "ms-appx:///Syncfusion.Maui.Toolkit/Carousel/Platform/Windows/Styles/Resources.xaml");
 
 				}
-            }
-        }   
+			}
+		}
 
-        /// <summary>
-        /// Method to add the 
-        /// </summary>
-        internal static void AddLibraryResources(this Microsoft.UI.Xaml.ResourceDictionary? resources, string key, string uri)
-        {
-            if (resources == null)
-                return;
+		/// <summary>
+		/// Method to add the 
+		/// </summary>
+		internal static void AddLibraryResources(this Microsoft.UI.Xaml.ResourceDictionary? resources, string key, string uri)
+		{
+			if (resources == null)
+			{
+				return;
+			}
 
-            var dictionaries = resources.MergedDictionaries;
-            if (dictionaries == null)
-                return;
+			var dictionaries = resources.MergedDictionaries;
+			if (dictionaries == null)
+			{
+				return;
+			}
 
-            if (!resources.ContainsKey(key))
-            {
-                dictionaries.Add(new Microsoft.UI.Xaml.ResourceDictionary
-                {
-                    Source = new Uri(uri)
-                });
-            }
-        }
+			if (!resources.ContainsKey(key))
+			{
+				dictionaries.Add(new Microsoft.UI.Xaml.ResourceDictionary
+				{
+					Source = new Uri(uri)
+				});
+			}
+		}
 #endif
-    }
+	}
 }

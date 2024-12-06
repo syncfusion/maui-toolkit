@@ -11,64 +11,64 @@ namespace Syncfusion.Maui.Toolkit.Internals
 	/// Represents a base class for areas, inheriting from <see cref="AbsoluteLayout"/> and implementing the <see cref="IArea"/> interface.
 	/// </summary>
 	internal abstract class AreaBase : AbsoluteLayout, IArea
-    {
-        #region Fields
+	{
+		#region Fields
 
-        const double _maxSize = 8388607.5;
-        readonly CoreScheduler _coreScheduler;
-        Rect _areaBounds;
-        bool _powerMode;
-        bool _isAnimationEnabled;
+		const double MaxSize = 8388607.5;
+		readonly CoreScheduler _coreScheduler;
+		Rect _areaBounds;
+		readonly bool _powerMode;
+		readonly bool _isAnimationEnabled;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AreaBase"/> class.
-        /// </summary>
-        public AreaBase()
-        {
-            _powerMode = IsPowerSaverMode();
-            _isAnimationEnabled = IsAnimationEnabled();
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AreaBase"/> class.
+		/// </summary>
+		public AreaBase()
+		{
+			_powerMode = AreaBase.IsPowerSaverMode();
+			_isAnimationEnabled = AreaBase.IsAnimationEnabled();
 
-            if (Application.Current != null)
-            {
-                _coreScheduler = CoreScheduler.CreateScheduler((!_powerMode && _isAnimationEnabled) ? CoreSchedulerType.Frame : CoreSchedulerType.Main);
-            }
-            else
-            {
-                _coreScheduler = CoreScheduler.CreateScheduler(CoreSchedulerType.Main);
-            }
-        }
+			if (Application.Current != null)
+			{
+				_coreScheduler = CoreScheduler.CreateScheduler((!_powerMode && _isAnimationEnabled) ? CoreSchedulerType.Frame : CoreSchedulerType.Main);
+			}
+			else
+			{
+				_coreScheduler = CoreScheduler.CreateScheduler(CoreSchedulerType.Main);
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets or sets the area bounds
-        /// </summary>
-        public Rect AreaBounds
-        {
-            get
-            {
-                return _areaBounds;
-            }
-            set
-            {
-                if (_areaBounds != value)
-                {
-                    if (PlotArea != null)
-                    {
-                        PlotArea.PlotAreaBounds = value;
-                    }
+		/// <summary>
+		/// Gets or sets the area bounds
+		/// </summary>
+		public Rect AreaBounds
+		{
+			get
+			{
+				return _areaBounds;
+			}
+			set
+			{
+				if (_areaBounds != value)
+				{
+					if (PlotArea != null)
+					{
+						PlotArea.PlotAreaBounds = value;
+					}
 
-                    _areaBounds = value;
-                    NeedsRelayout = true;
-                }
-            }
-        }
+					_areaBounds = value;
+					NeedsRelayout = true;
+				}
+			}
+		}
 
 		/// <summary>
 		/// Gets the plot area
@@ -78,9 +78,9 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <summary>
 		/// Gets or sets a value indicating whether the layout needs to be updated.
 		/// </summary>
-		public bool NeedsRelayout { get; set; } = false;
+		public bool NeedsRelayout { get; set; }
 
-        IPlotArea IArea.PlotArea => PlotArea;
+		IPlotArea IArea.PlotArea => PlotArea;
 
 		#endregion
 
@@ -91,9 +91,9 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// Updates the core area of the layout. This method can be overridden to provide custom update logic.
 		/// </summary>
 		protected virtual void UpdateAreaCore()
-        {
+		{
 
-        }
+		}
 
 		/// <summary>
 		/// Measures the size required for the layout, given the width and height constraints.
@@ -102,19 +102,23 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <param name="heightConstraint">The available height for the layout.</param>
 		/// <returns>The size required for the layout.</returns>
 		protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
-        {
-            var size = this.ComputeDesiredSize(widthConstraint, heightConstraint);
-            // Size.Height is 1.33 for windows platform, so checked condition with less than 1.
-            bool isHeightNotContains = double.IsPositiveInfinity(heightConstraint) && Math.Round(size.Height) <= 1;
-            bool isWidthNotContains = double.IsPositiveInfinity(widthConstraint) && Math.Round(size.Width) <= 1;
+		{
+			var size = this.ComputeDesiredSize(widthConstraint, heightConstraint);
+			// Size.Height is 1.33 for windows platform, so checked condition with less than 1.
+			bool isHeightNotContains = double.IsPositiveInfinity(heightConstraint) && Math.Round(size.Height) <= 1;
+			bool isWidthNotContains = double.IsPositiveInfinity(widthConstraint) && Math.Round(size.Width) <= 1;
 
-            if (isHeightNotContains || isWidthNotContains)
-                DesiredSize = new Size(isWidthNotContains ? 300 : size.Width, isHeightNotContains ? 300 : size.Height);
-            else
-                DesiredSize = size;
+			if (isHeightNotContains || isWidthNotContains)
+			{
+				DesiredSize = new Size(isWidthNotContains ? 300 : size.Width, isHeightNotContains ? 300 : size.Height);
+			}
+			else
+			{
+				DesiredSize = size;
+			}
 
-            return DesiredSize;
-        }
+			return DesiredSize;
+		}
 
 		/// <summary>
 		/// Arranges the content of the layout within the specified bounds.
@@ -122,19 +126,19 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <param name="bounds">The rectangle that defines the bounds of the layout.</param>
 		/// <returns>The final size of the arranged content.</returns>
 		protected override Size ArrangeOverride(Rect bounds)
-        {
-            if (!AreaBounds.Equals(bounds) && bounds.Width != _maxSize && bounds.Height != _maxSize)
-            {
-                AreaBounds = bounds;
+		{
+			if (!AreaBounds.Equals(bounds) && bounds.Width != MaxSize && bounds.Height != MaxSize)
+			{
+				AreaBounds = bounds;
 
-                if (bounds.Width > 0 && bounds.Height > 0)
-                {
-                    ScheduleUpdateArea();
-                }
-            }
+				if (bounds.Width > 0 && bounds.Height > 0)
+				{
+					ScheduleUpdateArea();
+				}
+			}
 
-            return base.ArrangeOverride(bounds);
-        }
+			return base.ArrangeOverride(bounds);
+		}
 
 		#endregion
 
@@ -144,53 +148,55 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// Schedules an update for the area, ensuring that any necessary changes are applied.
 		/// </summary>
 		public void ScheduleUpdateArea()
-        {
-            if (NeedsRelayout && !_areaBounds.IsEmpty)
-                _coreScheduler.ScheduleCallback(UpdateArea);
-        }
+		{
+			if (NeedsRelayout && !_areaBounds.IsEmpty)
+			{
+				_coreScheduler.ScheduleCallback(UpdateArea);
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Private Method
+		#region Private Method
 
-        void UpdateArea()
-        {
-            PlotArea.UpdateLegendItems();
-            UpdateAreaCore();
-            NeedsRelayout = false;
-        }
+		void UpdateArea()
+		{
+			PlotArea.UpdateLegendItems();
+			UpdateAreaCore();
+			NeedsRelayout = false;
+		}
 
-        bool IsPowerSaverMode()
-        {
-            bool powerSaveOn = false;
+		static bool IsPowerSaverMode()
+		{
+			bool powerSaveOn = false;
 #if ANDROID
-            var handler = Application.Current?.Handler;
-            var powerManager = handler?.MauiContext?.Context?.ApplicationContext?.GetSystemService(Context.PowerService) as PowerManager;
-            powerSaveOn = powerManager?.IsPowerSaveMode ?? false;
+			var handler = Application.Current?.Handler;
+			var powerManager = handler?.MauiContext?.Context?.ApplicationContext?.GetSystemService(Context.PowerService) as PowerManager;
+			powerSaveOn = powerManager?.IsPowerSaveMode ?? false;
 #endif
-            return powerSaveOn;
-        }
+			return powerSaveOn;
+		}
 
-        bool IsAnimationEnabled()
-        {
-            bool isAnimationOn = true;
+		static bool IsAnimationEnabled()
+		{
+			bool isAnimationOn = true;
 #if ANDROID
-            try
-            {
-                var handler = Application.Current?.Handler;
-                float scale = Settings.Global.GetFloat(handler?.MauiContext?.Context?.ApplicationContext?.ContentResolver, Settings.Global.AnimatorDurationScale);
-                isAnimationOn = scale != 0.0f;
-            }
-            catch
-            {
-                isAnimationOn = false;
-            }
+			try
+			{
+				var handler = Application.Current?.Handler;
+				float scale = Settings.Global.GetFloat(handler?.MauiContext?.Context?.ApplicationContext?.ContentResolver, Settings.Global.AnimatorDurationScale);
+				isAnimationOn = scale != 0.0f;
+			}
+			catch
+			{
+				isAnimationOn = false;
+			}
 #endif
-            return isAnimationOn;
-        }
+			return isAnimationOn;
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

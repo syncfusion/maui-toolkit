@@ -1030,6 +1030,15 @@ namespace Syncfusion.Maui.Toolkit
 			{
 				if (newValue is string text)
 				{
+
+					/* Unmerged change from project 'Syncfusion.Maui.Toolkit (net8.0)'
+					Before:
+										buttonbase.ContainsUnicodeCharacter(text);
+									}
+					After:
+										ContainsUnicodeCharacter(text);
+									}
+					*/
 					buttonbase._isFontIconText = ButtonBase.ContainsUnicodeCharacter(text);
 				}
 				buttonbase._isSemanticTextChanged = true;

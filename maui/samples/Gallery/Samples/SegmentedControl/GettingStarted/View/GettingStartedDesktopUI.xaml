@@ -48,7 +48,7 @@
                 <StackLayout  Grid.Column="0" 
                        Grid.Row="1" 
                        VerticalOptions="Start" >
-                    <Image Source="{Binding Image,Converter={StaticResource imageconverter}}" HeightRequest="350" VerticalOptions="Center"/>
+                    <Image Source="{Binding Image}" HeightRequest="350" VerticalOptions="Center"/>
                 </StackLayout>
             </Grid>
 

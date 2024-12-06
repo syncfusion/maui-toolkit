@@ -8,46 +8,46 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 	/// </summary>
 	/// <exclude/>
 	public partial class CarouselHandler : ICarouselHandler
-    {
+	{
 		#region Public Methods
 		/// <summary>
 		/// Maps cross-platform property changes to native property changes.
 		/// </summary>
 		public static PropertyMapper<ICarousel, CarouselHandler> Mapper =
-            new((PropertyMapper)ViewMapper)
-            {
-                [nameof(ICarousel.AllowLoadMore)] = MapAllowLoadMore,
-                [nameof(ICarousel.EnableVirtualization)] = MapEnableVirtualization,
-                [nameof(ICarousel.LoadMoreItemsCount)] = MapLoadMoreItemsCount,
-                [nameof(ICarousel.SelectedIndex)] = MapSelectedIndex,
-                [nameof(ICarousel.ItemsSource)] = MapItemsSource,
-                [nameof(ICarousel.LoadMoreView)] = MapLoadMoreView,
-                [nameof(ICarousel.ItemTemplate)] = MapItemTemplate,
-                [nameof(ICarousel.ViewMode)] = MapViewMode,
-                [nameof(ICarousel.ItemSpacing)] = MapItemSpacing,
-                [nameof(ICarousel.RotationAngle)] = MapRotationAngle,
-                [nameof(ICarousel.Offset)] = MapOffset,
-                [nameof(ICarousel.ScaleOffset)] = MapScaleOffset,
-                [nameof(ICarousel.SelectedItemOffset)] = MapSelectedItemOffset,
-                [nameof(ICarousel.Duration)] = MapDuration,
-                [nameof(ICarousel.ItemWidth)] = MapItemWidth,
-                [nameof(ICarousel.ItemHeight)] = MapItemHeight,
-                [nameof(ICarousel.EnableInteraction)] = MapEnableInteraction,
-                [nameof(ICarousel.SwipeMovementMode)] = MapSwipeMovementMode,
-                [nameof(ICarousel.IsEnabled)] = MapIsEnabled,
-                [nameof(ICarousel.FlowDirection)] = MapFlowDirection,
-            };
+			new((PropertyMapper)ViewMapper)
+			{
+				[nameof(ICarousel.AllowLoadMore)] = MapAllowLoadMore,
+				[nameof(ICarousel.EnableVirtualization)] = MapEnableVirtualization,
+				[nameof(ICarousel.LoadMoreItemsCount)] = MapLoadMoreItemsCount,
+				[nameof(ICarousel.SelectedIndex)] = MapSelectedIndex,
+				[nameof(ICarousel.ItemsSource)] = MapItemsSource,
+				[nameof(ICarousel.LoadMoreView)] = MapLoadMoreView,
+				[nameof(ICarousel.ItemTemplate)] = MapItemTemplate,
+				[nameof(ICarousel.ViewMode)] = MapViewMode,
+				[nameof(ICarousel.ItemSpacing)] = MapItemSpacing,
+				[nameof(ICarousel.RotationAngle)] = MapRotationAngle,
+				[nameof(ICarousel.Offset)] = MapOffset,
+				[nameof(ICarousel.ScaleOffset)] = MapScaleOffset,
+				[nameof(ICarousel.SelectedItemOffset)] = MapSelectedItemOffset,
+				[nameof(ICarousel.Duration)] = MapDuration,
+				[nameof(ICarousel.ItemWidth)] = MapItemWidth,
+				[nameof(ICarousel.ItemHeight)] = MapItemHeight,
+				[nameof(ICarousel.EnableInteraction)] = MapEnableInteraction,
+				[nameof(ICarousel.SwipeMovementMode)] = MapSwipeMovementMode,
+				[nameof(ICarousel.IsEnabled)] = MapIsEnabled,
+				[nameof(ICarousel.FlowDirection)] = MapFlowDirection,
+			};
 
 
-        /// <summary>
-        /// Maps the cross-platform methods to the native methods.
-        /// </summary>
-        public static CommandMapper<ICarousel, ICarouselHandler> CommandMapper = new(ViewCommandMapper)
-        {
-            [nameof(ICarousel.MoveNext)] = MapMoveNext,
-            [nameof(ICarousel.MovePrevious)] = MapMovePrevious,
-            [nameof(ICarousel.LoadMore)] = MapLoadMore,
-        };
+		/// <summary>
+		/// Maps the cross-platform methods to the native methods.
+		/// </summary>
+		public static CommandMapper<ICarousel, ICarouselHandler> CommandMapper = new(ViewCommandMapper)
+		{
+			[nameof(ICarousel.MoveNext)] = MapMoveNext,
+			[nameof(ICarousel.MovePrevious)] = MapMovePrevious,
+			[nameof(ICarousel.LoadMore)] = MapLoadMore,
+		};
 		#endregion
 
 		#region Constructor
@@ -66,10 +66,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// </summary>
 		ICarousel ICarouselHandler.VirtualView => VirtualView;
 
-        /// <summary>
-        /// Gets the platform-specific view associated with the handler.
-        /// </summary>
-        PlatformCarousel ICarouselHandler.PlatformView => PlatformView;
+		/// <summary>
+		/// Gets the platform-specific view associated with the handler.
+		/// </summary>
+		PlatformCarousel ICarouselHandler.PlatformView => PlatformView;
 		#endregion
 
 		#region Override Methods
@@ -79,10 +79,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <exclude/>
 		/// <param name="platformView"></param>
 		protected override void ConnectHandler(PlatformCarousel platformView)
-        {
-            platformView.Connect(VirtualView);
-            base.ConnectHandler(platformView);
-        }
+		{
+			platformView.Connect(VirtualView);
+			base.ConnectHandler(platformView);
+		}
 
 		/// <summary>
 		/// The disconnect handler override method
@@ -90,10 +90,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <exclude/>
 		/// <param name="platformView"></param>
 		protected override void DisconnectHandler(PlatformCarousel platformView)
-        {
-            platformView.Disconnect();
-            base.DisconnectHandler(platformView);
-        }
+		{
+			platformView.Disconnect();
+			base.DisconnectHandler(platformView);
+		}
 		#endregion
 
 		#region Private Methods
@@ -102,34 +102,66 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// </summary>
 		/// <param name="virtualView">The carousel view</param>
 		/// <returns>Returns the default view for loading more items.</returns>
-		private static object GetDefaultLoadMore(ICarousel virtualView)
-        {
-            var loadMoreView = new Border()
-            {
-                Stroke = Microsoft.Maui.Graphics.Color.FromArgb("#CAC4D0"),
-                StrokeThickness = 1,
-                StrokeShape = new RoundRectangle() { CornerRadius = 8 },
-                HeightRequest = virtualView.ItemHeight,
-                WidthRequest = virtualView.ItemWidth,
-                BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#FFFBFE"),
-#if ANDROID
-                InputTransparent = true,
-#endif
-            };
-            loadMoreView.Content = new Label()
-            {
-                Text = "Load More",
+		private static Microsoft.Maui.Controls.Border GetDefaultLoadMore(ICarousel virtualView)
+		{
+
+			/* Unmerged change from project 'Syncfusion.Maui.Toolkit (net8.0-android)'
+			Before:
+						var loadMoreView = new Border()
+						{
+							Stroke = Microsoft.Maui.Graphics.Color.FromArgb("#CAC4D0"),
+							StrokeThickness = 1,
+							StrokeShape = new RoundRectangle() { CornerRadius = 8 },
+							HeightRequest = virtualView.ItemHeight,
+							WidthRequest = virtualView.ItemWidth,
+							BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#FFFBFE"),
+			#if ANDROID
+							InputTransparent = true,
+			#endif
+						};
+						loadMoreView.Content = new Label()
+						{
+							Text = "Load More",
+			#if ANDROID || IOS
+			After:
+						var loadMoreView = new Border
+						{
+							Stroke = Microsoft.Maui.Graphics.Color.FromArgb("#CAC4D0"),
+							StrokeThickness = 1,
+							StrokeShape = new RoundRectangle() { CornerRadius = 8 },
+							HeightRequest = virtualView.ItemHeight,
+							WidthRequest = virtualView.ItemWidth,
+							BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#FFFBFE"),
+			#if ANDROID
+							InputTransparent = true,
+							Content = new Label()
+							{
+								Text = "Load More",
+			#if ANDROID || IOS
+			*/
+			var loadMoreView = new Border
+			{
+				Stroke = Microsoft.Maui.Graphics.Color.FromArgb("#CAC4D0"),
+				StrokeThickness = 1,
+				StrokeShape = new RoundRectangle() { CornerRadius = 8 },
+				HeightRequest = virtualView.ItemHeight,
+				WidthRequest = virtualView.ItemWidth,
+				BackgroundColor = Microsoft.Maui.Graphics.Color.FromArgb("#FFFBFE"),
+				Content = new Label()
+				{
+					Text = "Load More",
 #if ANDROID || IOS
-                FontSize = 16,
+					FontSize = 16,
 #else
-                FontSize = 22,
+					FontSize = 22,
 #endif
-                FontAttributes = FontAttributes.Bold,
-                VerticalTextAlignment = TextAlignment.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
-            };
-            return loadMoreView;
-        }
+					FontAttributes = FontAttributes.Bold,
+					VerticalTextAlignment = TextAlignment.Center,
+					HorizontalTextAlignment = TextAlignment.Center,
+				}
+			};
+			return loadMoreView;
+		}
 		#endregion
 	}
 }

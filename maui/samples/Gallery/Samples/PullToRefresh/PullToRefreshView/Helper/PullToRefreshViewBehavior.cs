@@ -5,20 +5,20 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// <summary>
 	/// Base generic class for user-defined behaviors that can respond to conditions and events.
 	/// </summary>
-	public class PullToRefreshViewBehavior : Behavior<SampleView>
+	public partial class PullToRefreshViewBehavior : Behavior<SampleView>
 	{
-		CollectionView? listView;
-		Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh? pullToRefresh;
-		Picker? transitionType;
-		PullToRefreshViewModel? viewModel;
+		CollectionView? _listView;
+		Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh? _pullToRefresh;
+		Picker? _transitionType;
+		PullToRefreshViewModel? _viewModel;
 
 		/// <summary>
 		/// Used to Update weather data value
 		/// </summary>
 		internal void UpdateData()
 		{
-			var weatherType = this.viewModel!.Data!.WeatherType;
-			this.viewModel.Data.Temperature = this.viewModel.UpdateTemperature(weatherType!);
+			var weatherType = _viewModel!.Data!.WeatherType;
+			_viewModel.Data.Temperature = _viewModel.UpdateTemperature(weatherType!);
 		}
 
 		/// <summary>
@@ -27,18 +27,18 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="bindable">Sample View typed parameter named as bindable</param>
 		protected override void OnAttachedTo(SampleView bindable)
 		{
-			this.viewModel = new PullToRefreshViewModel();
-			bindable.BindingContext = this.viewModel;
-			this.pullToRefresh = bindable.FindByName<Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh>("pullToRefresh");
-			this.listView = bindable.FindByName<CollectionView>("listView");
-			this.transitionType = bindable.FindByName<Picker>("comboBox");
-			this.pullToRefresh.PullingThreshold = 100;
-			this.listView.BindingContext = this.viewModel;
-			this.listView.ItemsSource = this.viewModel.SelectedData;
-			this.listView.SelectedItem = (this.listView.BindingContext as PullToRefreshViewModel)?.SelectedData![0];
-			this.listView.SelectionChanged += ListView_SelectionChanged;
-			this.pullToRefresh.Refreshing += this.PullToRefresh_Refreshing;
-			this.transitionType.SelectedIndexChanged += this.OnSelectionChanged;
+			_viewModel = new PullToRefreshViewModel();
+			bindable.BindingContext = _viewModel;
+			_pullToRefresh = bindable.FindByName<Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh>("pullToRefresh");
+			_listView = bindable.FindByName<CollectionView>("listView");
+			_transitionType = bindable.FindByName<Picker>("comboBox");
+			_pullToRefresh.PullingThreshold = 100;
+			_listView.BindingContext = _viewModel;
+			_listView.ItemsSource = _viewModel.SelectedData;
+			_listView.SelectedItem = (_listView.BindingContext as PullToRefreshViewModel)?.SelectedData![0];
+			_listView.SelectionChanged += ListView_SelectionChanged;
+			_pullToRefresh.Refreshing += PullToRefresh_Refreshing;
+			_transitionType.SelectedIndexChanged += OnSelectionChanged;
 			base.OnAttachedTo(bindable);
 		}
 
@@ -46,10 +46,9 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			if (e.CurrentSelection.Count > 0)
 			{
-				var selectedWeatherData = e.CurrentSelection[0] as WeatherData;
-				if (selectedWeatherData != null && this.viewModel != null)
+				if (e.CurrentSelection[0] is WeatherData selectedWeatherData && _viewModel != null)
 				{
-					this.viewModel.Data = selectedWeatherData;
+					_viewModel.Data = selectedWeatherData;
 				}
 			}
 		}
@@ -60,25 +59,25 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="bindAble">SampleView typed parameter named as bindAble</param>
 		protected override void OnDetachingFrom(SampleView bindAble)
 		{
-			if (this.pullToRefresh != null)
+			if (_pullToRefresh != null)
 			{
-				this.pullToRefresh.Refreshing -= this.PullToRefresh_Refreshing;
+				_pullToRefresh.Refreshing -= PullToRefresh_Refreshing;
 			}
 
-			if (this.transitionType != null)
+			if (_transitionType != null)
 			{
-				this.transitionType.SelectedIndexChanged -= this.OnSelectionChanged;
+				_transitionType.SelectedIndexChanged -= OnSelectionChanged;
 			}
 
-			if (this.listView != null)
+			if (_listView != null)
 			{
-				this.listView.SelectionChanged -= ListView_SelectionChanged;
+				_listView.SelectionChanged -= ListView_SelectionChanged;
 			}
 
-			this.pullToRefresh = null;
-			this.viewModel = null;
-			this.listView = null;
-			this.transitionType = null;
+			_pullToRefresh = null;
+			_viewModel = null;
+			_listView = null;
+			_transitionType = null;
 			base.OnDetachingFrom(bindAble);
 		}
 
@@ -89,9 +88,9 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="e">OnSelectionChanged event args e</param>
 		private void OnSelectionChanged(object? sender, EventArgs e)
 		{
-			if (this.pullToRefresh != null && this.transitionType != null)
+			if (_pullToRefresh != null && _transitionType != null)
 			{
-				this.pullToRefresh.TransitionMode = this.transitionType.SelectedIndex == 0 ? PullToRefreshTransitionType.Push : PullToRefreshTransitionType.SlideOnTop;
+				_pullToRefresh.TransitionMode = _transitionType.SelectedIndex == 0 ? PullToRefreshTransitionType.Push : PullToRefreshTransitionType.SlideOnTop;
 			}
 		}
 
@@ -102,14 +101,14 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="args">PullToRefresh_Refreshing event args e</param>
 		private void PullToRefresh_Refreshing(object? sender, EventArgs args)
 		{
-			if (this.pullToRefresh != null)
+			if (_pullToRefresh != null)
 			{
-				this.pullToRefresh.IsRefreshing = true;
+				_pullToRefresh.IsRefreshing = true;
 				Dispatcher.StartTimer(
 				new TimeSpan(0, 0, 0, 1, 3000), () =>
 				{
-					this.UpdateData();
-					this.pullToRefresh.IsRefreshing = false;
+					UpdateData();
+					_pullToRefresh.IsRefreshing = false;
 					return false;
 				});
 			}

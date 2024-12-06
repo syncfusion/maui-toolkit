@@ -94,7 +94,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ]]></code>
 	/// ***
 	/// </example>
-	public class StackingLineSeries : StackingSeriesBase, IMarkerDependent, IDrawCustomLegendIcon
+	public partial class StackingLineSeries : StackingSeriesBase, IMarkerDependent, IDrawCustomLegendIcon
     {
         #region Fields
 
@@ -328,15 +328,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
             var yEnd = TopValues;
             if (PointsCount == 1)
             {
-                CreateSegment(seriesView, new[] { xValues[0], YValues[0], double.NaN, double.NaN }, 0);
+                CreateSegment(seriesView, [xValues[0], YValues[0], double.NaN, double.NaN], 0);
             }
             else
             {
                 for (int i = 0; i < PointsCount; i++)
                 {
-                    if (i < Segments.Count)
+                    if (i < _segments.Count)
                     {
-                        Segments[i].SetData(new[] { xValues[i], yEnd![i], xValues[i + 1], yEnd[i + 1] });
+						_segments[i].SetData([xValues[i], yEnd![i], xValues[i + 1], yEnd[i + 1]]);
                     }
                     else
                     {
@@ -344,24 +344,26 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         {
                             if (i == PointsCount - 1)
                             {
-                                CreateSegment(seriesView, new[] { xValues[i], yEnd![i], double.NaN, double.NaN }, i);
+                                CreateSegment(seriesView, [xValues[i], yEnd![i], double.NaN, double.NaN], i);
                             }
                             else
-                                CreateSegment(seriesView, new[] { xValues[i], YValues[i], xValues[i + 1], yEnd![i + 1] }, i);
-                        }
+							{
+								CreateSegment(seriesView, [xValues[i], YValues[i], xValues[i + 1], yEnd![i + 1]], i);
+							}
+						}
                         else if (i < PointsCount - 1 && double.IsNaN(YValues[i + 1]))
                         {
-                            CreateSegment(seriesView, new[] { xValues[i], yEnd![i], xValues[i + 1], YValues[i + 1] }, i);
+                            CreateSegment(seriesView, [xValues[i], yEnd![i], xValues[i + 1], YValues[i + 1]], i);
                         }
                         else
                         {
                             if (i == PointsCount - 1)
                             {
-                                CreateSegment(seriesView, new[] { xValues[i], yEnd![i], double.NaN, double.NaN }, i);
+                                CreateSegment(seriesView, [xValues[i], yEnd![i], double.NaN, double.NaN], i);
                             }
                             else
                             {
-                                CreateSegment(seriesView, new[] { xValues[i], yEnd![i], xValues[i + 1], yEnd![i + 1] }, i);
+                                CreateSegment(seriesView, [xValues[i], yEnd![i], xValues[i + 1], yEnd![i + 1]], i);
                             }
                         }
                     }
@@ -417,14 +419,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             IList<double> actualYValues = YValues;
 
-            if (dataLabelSettings == null || Segments == null || Segments.Count <= 0)
+            if (dataLabelSettings == null || _segments == null || _segments.Count <= 0)
             {
                 return;
             }
 
             ChartDataLabelStyle labelStyle = DataLabelSettings.LabelStyle;
 
-            foreach (LineSegment dataLabel in Segments)
+            foreach (LineSegment dataLabel in _segments.Cast<LineSegment>())
             {
                 if (dataLabel == null)
                 {
@@ -443,16 +445,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 CalculateDataPointPosition(indexValue, ref x, ref y);
                 PointF labelPoint = new PointF((float)x, (float)y);
                 dataLabel.LabelContent = GetLabelContent(currentValue, SumOfValues(YValues));
-				dataLabel.LabelPositionPoint = dataLabelSettings.CalculateDataLabelPoint(this, dataLabel, labelPoint, labelStyle);
+				dataLabel.LabelPositionPoint = CartesianDataLabelSettings.CalculateDataLabelPoint(this, dataLabel, labelPoint, labelStyle);
                 UpdateDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
             }
         }
 
         internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior tooltipBehavior, float x, float y)
         {
-            if (Segments == null) return null;
+            if (_segments == null)
+			{
+				return null;
+			}
 
-            int index = SeriesContainsPoint(new PointF(x, y)) ? TooltipDataPointIndex : -1;
+			int index = SeriesContainsPoint(new PointF(x, y)) ? TooltipDataPointIndex : -1;
 
             if (index < 0 || ItemsSource == null || ActualData == null || ActualXAxis == null
                 || ActualYAxis == null || SeriesYValues == null)
@@ -462,9 +467,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             var xValues = GetXValues();
 
-            if (xValues == null || ChartArea == null || TopValues == null) return null;
+            if (xValues == null || ChartArea == null || TopValues == null)
+			{
+				return null;
+			}
 
-            object dataPoint = ActualData[index];
+			object dataPoint = ActualData[index];
             double xValue = xValues[index];
             IList<double> yValues = SeriesYValues[0];
             double content = Convert.ToDouble(yValues[index]);
@@ -480,20 +488,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 yPosition = Math.Min(Math.Max(seriesBounds.Top, yPosition), seriesBounds.Bottom);
                 xPosition = Math.Min(Math.Max(seriesBounds.Left, xPosition), seriesBounds.Right);
 
-                TooltipInfo tooltipInfo = new TooltipInfo(this);
-                tooltipInfo.X = xPosition;
-                tooltipInfo.Y = yPosition;
-                tooltipInfo.Index = index;
-                tooltipInfo.Margin = tooltipBehavior.Margin;
-                tooltipInfo.TextColor = tooltipBehavior.TextColor;
-                tooltipInfo.FontFamily = tooltipBehavior.FontFamily;
-                tooltipInfo.FontSize = tooltipBehavior.FontSize;
-                tooltipInfo.FontAttributes = tooltipBehavior.FontAttributes;
-                tooltipInfo.Background = tooltipBehavior.Background;
-                tooltipInfo.Text = content.ToString();
-                tooltipInfo.Item = dataPoint;
+				TooltipInfo tooltipInfo = new TooltipInfo(this)
+				{
+					X = xPosition,
+					Y = yPosition,
+					Index = index,
+					Margin = tooltipBehavior.Margin,
+					TextColor = tooltipBehavior.TextColor,
+					FontFamily = tooltipBehavior.FontFamily,
+					FontSize = tooltipBehavior.FontSize,
+					FontAttributes = tooltipBehavior.FontAttributes,
+					Background = tooltipBehavior.Background,
+					Text = content.ToString(),
+					Item = dataPoint
+				};
 
-                return tooltipInfo;
+				return tooltipInfo;
             }
 
             return null;
@@ -517,7 +527,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 TooltipDataPointIndex = ActualData.IndexOf(dataPoint);
 
-                if (Segments.Count == 0 || TooltipDataPointIndex < 0 || double.IsNaN(YValues[TooltipDataPointIndex]))
+                if (_segments.Count == 0 || TooltipDataPointIndex < 0 || double.IsNaN(YValues[TooltipDataPointIndex]))
                 {
                     return false;
                 }
@@ -525,21 +535,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 LineSegment? startSegment = null;
                 LineSegment? endSegment = null;
                 var seriesClipRect = AreaBounds;
-                point.X = point.X - ((float)seriesClipRect.Left);
-                point.Y = point.Y - ((float)seriesClipRect.Top);
+                point.X -= ((float)seriesClipRect.Left);
+                point.Y -= ((float)seriesClipRect.Top);
 
                 if (TooltipDataPointIndex == 0)
                 {
-                    startSegment = Segments[TooltipDataPointIndex] as LineSegment;
+                    startSegment = _segments[TooltipDataPointIndex] as LineSegment;
                 }
                 else if (TooltipDataPointIndex == PointsCount - 1)
                 {
-                    startSegment = Segments[TooltipDataPointIndex - 1] as LineSegment;
+                    startSegment = _segments[TooltipDataPointIndex - 1] as LineSegment;
                 }
                 else
                 {
-                    startSegment = Segments[TooltipDataPointIndex - 1] as LineSegment;
-                    endSegment = Segments[TooltipDataPointIndex] as LineSegment;
+                    startSegment = _segments[TooltipDataPointIndex - 1] as LineSegment;
+                    endSegment = _segments[TooltipDataPointIndex] as LineSegment;
                 }
 
                 return SegmentContains(startSegment, endSegment, point, this);
@@ -564,17 +574,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void CreateSegment(SeriesView seriesView, double[] values, int index)
         {
-            var segment = CreateSegment() as LineSegment;
-            if (segment != null)
-            {
-                segment.Series = this;
-                segment.SeriesView = seriesView;
-                segment.Index = index;
-                segment.SetData(values);
-                InitiateDataLabels(segment);
-                Segments.Add(segment);
-            }
-        }
+			if (CreateSegment() is LineSegment segment)
+			{
+				segment.Series = this;
+				segment.SeriesView = seriesView;
+				segment.Index = index;
+				segment.SetData(values);
+				InitiateDataLabels(segment);
+				_segments.Add(segment);
+			}
+		}
 
         bool SegmentContains(ChartSegment? startSegment, ChartSegment? endSegment, PointF point, ChartSeries series)
         {

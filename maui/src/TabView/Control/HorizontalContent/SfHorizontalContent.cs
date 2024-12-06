@@ -43,7 +43,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #endif
 
 #if IOS || MACCATALYST
-        readonly SfHorizontalContentProxy _proxy;
+		readonly SfHorizontalContentProxy _proxy;
 #endif
 
 		#endregion
@@ -238,8 +238,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			InitializeControl();
 			this.AddTouchListener(this);
 #if IOS || MACCATALYST
-            this.AddGestureListener(this);
-			this._proxy = new(this);
+			this.AddGestureListener(this);
+			_proxy = new(this);
 #endif
 			_selectionChangingEventArgs = new SelectionChangingEventArgs();
 		}
@@ -248,21 +248,21 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		#region Override Methods
 #if IOS || MACCATALYST
-        protected override Microsoft.Maui.Graphics.Size ArrangeContent(Microsoft.Maui.Graphics.Rect bounds)
-        {
-            if (MinimumHeightRequest != bounds.Height || MinimumWidthRequest != bounds.Width)
-            {
-                if (bounds.Height > 0)
-                {
-                    MinimumHeightRequest = bounds.Height;
-                }
-                MinimumWidthRequest = bounds.Width;
-                ContentWidth = bounds.Width;
-                UpdateTabItemContentSize();
-                UpdateTabItemContentPosition();
-            }
-            return base.ArrangeContent(bounds);
-        }
+		protected override Microsoft.Maui.Graphics.Size ArrangeContent(Microsoft.Maui.Graphics.Rect bounds)
+		{
+			if (MinimumHeightRequest != bounds.Height || MinimumWidthRequest != bounds.Width)
+			{
+				if (bounds.Height > 0)
+				{
+					MinimumHeightRequest = bounds.Height;
+				}
+				MinimumWidthRequest = bounds.Width;
+				ContentWidth = bounds.Width;
+				UpdateTabItemContentSize();
+				UpdateTabItemContentPosition();
+			}
+			return base.ArrangeContent(bounds);
+		}
 #endif
 
 #if ANDROID || WINDOWS
@@ -315,7 +315,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		void InitializeControl()
 		{
-			Items = new TabItemCollection();
+			Items = [];
 			_parentGrid = new SfGrid()
 			{
 				IsClippedToBounds = true, // Ensuring content bounds are clipped within the grid
@@ -371,10 +371,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <param name="args">args.</param>
 		void RaiseSelectionChangingEvent(SelectionChangingEventArgs args)
 		{
-			if (SelectionChanging != null)
-			{
-				SelectionChanging(this, args);
-			}
+			SelectionChanging?.Invoke(this, args);
 		}
 
 		void ClearItems()
@@ -436,18 +433,26 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void UpdateItemsSource()
 		{
 			if (_horizontalStackLayout != null && ItemsSource != null)
+			{
 				BindableLayout.SetItemsSource(_horizontalStackLayout, ItemsSource);
+			}
 
 			if (ItemsSource != null && ContentItemTemplate != null)
 			{
 				if (ItemsSource is INotifyCollectionChanged oldNotifyTabItemsSource && oldNotifyTabItemsSource != null)
+				{
 					oldNotifyTabItemsSource.CollectionChanged -= OnTabItemsSourceCollectionChanged;
+				}
 
 				if (ItemsSource is INotifyCollectionChanged newNotifyTabItemsSource && newNotifyTabItemsSource != null)
+				{
 					newNotifyTabItemsSource.CollectionChanged += OnTabItemsSourceCollectionChanged;
+				}
 
 				if (_horizontalStackLayout != null && ItemsSource != null)
+				{
 					BindableLayout.SetItemTemplate(_horizontalStackLayout, ContentItemTemplate);
+				}
 			}
 
 			// Update sizes and positions of tab items after updating the source
@@ -502,7 +507,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				}
 				else
 				{
-					SfGrid parentGrid = new SfGrid();
+					SfGrid parentGrid = [];
 					parentGrid.SetBinding(SfGrid.IsVisibleProperty, new Binding("IsVisible", source: item));
 					if (index >= 0)
 					{
@@ -665,7 +670,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				if (_isItemRemoved)
 				{
 					if (_horizontalStackLayout != null)
+					{
 						_horizontalStackLayout.TranslationX = -xPosition;
+					}
+
 					_isItemRemoved = false;
 				}
 				else
@@ -681,7 +689,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						{
 							_horizontalStackLayout.TranslationX = -xPosition;
 						}
-					}				
+					}
 				}
 #else
 				double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
@@ -749,7 +757,6 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <summary>
 		/// This method used for handle the tap.
 		/// </summary>
-		/// <param name="e">Tap event arguments.</param>
 		public void OnTap(TapEventArgs e)
 		{
 			// This method is intentionally left empty as it is required by interface
@@ -821,9 +828,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+			{
 				_initialXPosition = -ContentWidth * _currentIndex;
+			}
 			else
+			{
 				_initialXPosition = ContentWidth * _currentIndex;
+			}
 #else
 			_initialXPosition = -ContentWidth * _currentIndex;
 #endif
@@ -860,11 +871,15 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				{
 #if !WINDOWS
 					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
-						IsTowardsRight = _initialXPosition > translateXPosition ? true : false;
+					{
+						IsTowardsRight = _initialXPosition > translateXPosition;
+					}
 					else
-						IsTowardsRight = _initialXPosition < translateXPosition ? true : false;
+					{
+						IsTowardsRight = _initialXPosition < translateXPosition;
+					}
 #else
-					IsTowardsRight = _initialXPosition > translateXPosition ? true : false;
+					IsTowardsRight = _initialXPosition > translateXPosition;
 #endif
 				}
 			}
@@ -908,9 +923,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 #if !WINDOWS
 				if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+				{
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth, 0);
+				}
 				else
+				{
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, 0, ContentWidth);
+				}
 #else
 				_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth, 0);
 #endif
@@ -936,9 +955,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 #if !WINDOWS
 					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+					{
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_currentIndex + 1), -ContentWidth * (_currentIndex - 1));
+					}
 					else
+					{
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, ContentWidth * (_currentIndex - 1), ContentWidth * (_currentIndex + 1));
+					}
 #else
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_currentIndex + 1), -ContentWidth * (_currentIndex - 1));
 #endif
@@ -953,9 +976,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 #if !WINDOWS
 					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+					{
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * _currentIndex, -ContentWidth * (_currentIndex - 1));
+					}
 					else
+					{
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, ContentWidth * (_currentIndex - 1), ContentWidth * _currentIndex);
+					}
 #else
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * _currentIndex, -ContentWidth * (_currentIndex - 1));
 #endif
@@ -970,9 +997,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 #if !WINDOWS
 					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+					{
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_currentIndex + 1), -ContentWidth * _currentIndex);
+					}
 					else
+					{
 						_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, ContentWidth * _currentIndex, ContentWidth * (_currentIndex + 1));
+					}
 #else
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_currentIndex + 1), -ContentWidth * _currentIndex);
 #endif
@@ -995,9 +1026,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 #if !WINDOWS
 				if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+				{
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_visibleItemCount - 1), -ContentWidth * (_visibleItemCount - 2));
+				}
 				else
+				{
 					_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, ContentWidth * (_visibleItemCount - 2), ContentWidth * (_visibleItemCount - 1));
+				}
 #else
 				_horizontalStackLayout.TranslationX = Math.Clamp(_horizontalStackLayout.TranslationX + difference, -ContentWidth * (_visibleItemCount - 1), -ContentWidth * (_visibleItemCount - 2));
 #endif
@@ -1294,12 +1329,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void MoveToNextTabItem()
 		{
 			if (_horizontalStackLayout == null)
+			{
 				return;
+			}
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+			{
 				_horizontalStackLayout.TranslateTo(-ContentWidth * (_currentIndex + 1), 0, 100, Easing.Linear);
+			}
 			else
+			{
 				_horizontalStackLayout.TranslateTo(ContentWidth * (_currentIndex + 1), 0, 100, Easing.Linear);
+			}
 #else
 			_horizontalStackLayout.TranslateTo(-ContentWidth * (_currentIndex + 1), 0, 100, Easing.Linear);
 #endif
@@ -1329,9 +1370,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+			{
 				_horizontalStackLayout?.TranslateTo(-ContentWidth * (_currentIndex - 1), 0, 100, Easing.Linear);
+			}
 			else
+			{
 				_horizontalStackLayout?.TranslateTo(ContentWidth * (_currentIndex - 1), 0, 100, Easing.Linear);
+			}
 #else
 			_horizontalStackLayout?.TranslateTo(-ContentWidth * (_currentIndex - 1), 0, 100, Easing.Linear);
 #endif
@@ -1359,12 +1404,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void MoveToCurrentTabItem()
 		{
 			if (_horizontalStackLayout == null)
+			{
 				return;
+			}
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
+			{
 				_horizontalStackLayout.TranslateTo(-ContentWidth * _currentIndex, 0, 100, Easing.Linear);
+			}
 			else
+			{
 				_horizontalStackLayout.TranslateTo(ContentWidth * _currentIndex, 0, 100, Easing.Linear);
+			}
 #else
 			_horizontalStackLayout.TranslateTo(-ContentWidth * _currentIndex, 0, 100, Easing.Linear);
 #endif
@@ -1413,7 +1464,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		int GetNextItemIndex()
 		{
 			if (ItemsSource == null || ItemsSource.Count == 0)
+			{
 				return 0;
+			}
 
 			int increment = IsTowardsRight == true ? 1 : -1;
 			int newIndex = 0;
@@ -1422,10 +1475,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				newIndex = _tabBar.SelectedIndex + increment;
 			}
 
-			return ClampIndex(newIndex, 0, ItemsSource.Count - 1);
+			return SfHorizontalContent.ClampIndex(newIndex, 0, ItemsSource.Count - 1);
 		}
 
-		int ClampIndex(int index, int min, int max)
+		static int ClampIndex(int index, int min, int max)
 		{
 			return Math.Max(min, Math.Min(max, index));
 		}
@@ -1437,7 +1490,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		int GetNextVisibleItemIndex()
 		{
 			if (Items == null || Items?.Count == 0 || SelectedIndex < 0 || SelectedIndex >= Items?.Count)
+			{
 				return 0;
+			}
 
 			int increment = IsTowardsRight == true ? 1 : -1;
 			int index = SelectedIndex + increment;
@@ -1448,7 +1503,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				index += increment;
 			}
 
-			TabItemCollection sfTabItems = new TabItemCollection();
+			TabItemCollection sfTabItems = [];
 			if (Items != null)
 			{
 				sfTabItems = Items;

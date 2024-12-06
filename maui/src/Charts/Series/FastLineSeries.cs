@@ -74,424 +74,438 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ***
 	/// </example>
 	public partial class FastLineSeries : XYDataSeries, IDrawCustomLegendIcon
-    {
-        #region Internal Properties
+	{
+		#region Internal Properties
 
-        internal double ToleranceCoefficient { get; set; }
+		internal double ToleranceCoefficient { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Bindable Properties
+		#region Bindable Properties
 
-        /// <summary>
-        /// Identifies the <see cref="EnableAntiAliasing"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="EnableAntiAliasing"/> property indicates whether to enable smooth line drawing in the <see cref="FastLineSeries"/>. 
-        /// </remarks>
-        public static readonly BindableProperty EnableAntiAliasingProperty = BindableProperty.Create(
-            nameof(EnableAntiAliasing),
-            typeof(bool),
-            typeof(FastLineSeries),
-            false,
-            BindingMode.Default,
-            null,
-            OnInvalidatePropertyChanged);
+		/// <summary>
+		/// Identifies the <see cref="EnableAntiAliasing"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="EnableAntiAliasing"/> property indicates whether to enable smooth line drawing in the <see cref="FastLineSeries"/>. 
+		/// </remarks>
+		public static readonly BindableProperty EnableAntiAliasingProperty = BindableProperty.Create(
+			nameof(EnableAntiAliasing),
+			typeof(bool),
+			typeof(FastLineSeries),
+			false,
+			BindingMode.Default,
+			null,
+			OnInvalidatePropertyChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="StrokeDashArray"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="StrokeDashArray"/> property allows customization of the dash pattern used for the stroke in the <see cref="FastLineSeries"/>.
-        /// </remarks>
-        public static readonly BindableProperty StrokeDashArrayProperty = BindableProperty.Create(
-            nameof(StrokeDashArray),
-            typeof(DoubleCollection),
-            typeof(FastLineSeries),
-            null,
-            BindingMode.Default,
-            null,
-            OnStrokeDashArrayPropertyChanged);
+		/// <summary>
+		/// Identifies the <see cref="StrokeDashArray"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="StrokeDashArray"/> property allows customization of the dash pattern used for the stroke in the <see cref="FastLineSeries"/>.
+		/// </remarks>
+		public static readonly BindableProperty StrokeDashArrayProperty = BindableProperty.Create(
+			nameof(StrokeDashArray),
+			typeof(DoubleCollection),
+			typeof(FastLineSeries),
+			null,
+			BindingMode.Default,
+			null,
+			OnStrokeDashArrayPropertyChanged);
 
-        #endregion
+		#endregion
 
-        #region Public Properties
+		#region Public Properties
 
-        /// <summary>
-        /// Gets or sets a value indicating whether to enable smooth line drawing for <see cref="FastLineSeries"/>.
-        /// </summary>
-        /// <value> It accepts <c>bool</c> values and the default value is <c>false</c>.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-4)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///
-        ///          <chart:FastLineSeries ItemsSource="{Binding Data}"
-        ///                                XBindingPath="XValue"
-        ///                                YBindingPath="YValue"
-        ///                                EnableAntiAliasing ="True" />
-        ///
-        ///     </chart:SfCartesianChart>
-        /// ]]>
-        /// </code>
-        /// # [C#](#tab/tabid-5)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();
-        ///     ViewModel viewModel = new ViewModel();
-        ///
-        ///     // Eliminated for simplicity
-        ///
-        ///     DoubleCollection doubleCollection = new DoubleCollection();
-        ///     doubleCollection.Add(5);
-        ///     doubleCollection.Add(3);
-        ///     FastLineSeries series = new FastLineSeries()
-        ///     {
-        ///           ItemsSource = viewModel.Data,
-        ///           XBindingPath = "XValue",
-        ///           YBindingPath = "YValue",
-        ///           EnableAntiAliasing = true,
-        ///     };
-        ///     
-        ///     chart.Series.Add(series);
-        ///
-        /// ]]>
-        /// </code>
-        /// ***
-        /// </example>
-        public bool EnableAntiAliasing
-        {
-            get { return (bool)GetValue(EnableAntiAliasingProperty); }
-            set { SetValue(EnableAntiAliasingProperty, value); }
-        }
+		/// <summary>
+		/// Gets or sets a value indicating whether to enable smooth line drawing for <see cref="FastLineSeries"/>.
+		/// </summary>
+		/// <value> It accepts <c>bool</c> values and the default value is <c>false</c>.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-4)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///
+		///          <chart:FastLineSeries ItemsSource="{Binding Data}"
+		///                                XBindingPath="XValue"
+		///                                YBindingPath="YValue"
+		///                                EnableAntiAliasing ="True" />
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-5)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     ViewModel viewModel = new ViewModel();
+		///
+		///     // Eliminated for simplicity
+		///
+		///     DoubleCollection doubleCollection = new DoubleCollection();
+		///     doubleCollection.Add(5);
+		///     doubleCollection.Add(3);
+		///     FastLineSeries series = new FastLineSeries()
+		///     {
+		///           ItemsSource = viewModel.Data,
+		///           XBindingPath = "XValue",
+		///           YBindingPath = "YValue",
+		///           EnableAntiAliasing = true,
+		///     };
+		///     
+		///     chart.Series.Add(series);
+		///
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public bool EnableAntiAliasing
+		{
+			get { return (bool)GetValue(EnableAntiAliasingProperty); }
+			set { SetValue(EnableAntiAliasingProperty, value); }
+		}
 
-        /// <summary>
-        /// Gets or sets the stroke dash array to customize the appearance of stroke.
-        /// </summary>
-        /// <value>It accepts the <see cref="DoubleCollection"/> value and the default value is null.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-6)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///
-        ///          <chart:FastLineSeries ItemsSource="{Binding Data}"
-        ///                                XBindingPath="XValue"
-        ///                                YBindingPath="YValue"
-        ///                                StrokeDashArray="5,3"
-        ///                                Stroke = "Red" />
-        ///
-        ///     </chart:SfCartesianChart>
-        /// ]]>
-        /// </code>
-        /// # [C#](#tab/tabid-7)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();
-        ///     ViewModel viewModel = new ViewModel();
-        ///
-        ///     // Eliminated for simplicity
-        ///
-        ///     DoubleCollection doubleCollection = new DoubleCollection();
-        ///     doubleCollection.Add(5);
-        ///     doubleCollection.Add(3);
-        ///     FastLineSeries series = new FastLineSeries()
-        ///     {
-        ///           ItemsSource = viewModel.Data,
-        ///           XBindingPath = "XValue",
-        ///           YBindingPath = "YValue",
-        ///           StrokeDashArray = doubleCollection,
-        ///           Stroke = new SolidColorBrush(Colors.Red),
-        ///     };
-        ///     
-        ///     chart.Series.Add(series);
-        ///
-        /// ]]>
-        /// </code>
-        /// ***
-        /// </example>
-        public DoubleCollection StrokeDashArray
-        {
-            get { return (DoubleCollection)GetValue(StrokeDashArrayProperty); }
-            set { SetValue(StrokeDashArrayProperty, value); }
-        }
+		/// <summary>
+		/// Gets or sets the stroke dash array to customize the appearance of stroke.
+		/// </summary>
+		/// <value>It accepts the <see cref="DoubleCollection"/> value and the default value is null.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-6)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///
+		///          <chart:FastLineSeries ItemsSource="{Binding Data}"
+		///                                XBindingPath="XValue"
+		///                                YBindingPath="YValue"
+		///                                StrokeDashArray="5,3"
+		///                                Stroke = "Red" />
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-7)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     ViewModel viewModel = new ViewModel();
+		///
+		///     // Eliminated for simplicity
+		///
+		///     DoubleCollection doubleCollection = new DoubleCollection();
+		///     doubleCollection.Add(5);
+		///     doubleCollection.Add(3);
+		///     FastLineSeries series = new FastLineSeries()
+		///     {
+		///           ItemsSource = viewModel.Data,
+		///           XBindingPath = "XValue",
+		///           YBindingPath = "YValue",
+		///           StrokeDashArray = doubleCollection,
+		///           Stroke = new SolidColorBrush(Colors.Red),
+		///     };
+		///     
+		///     chart.Series.Add(series);
+		///
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public DoubleCollection StrokeDashArray
+		{
+			get { return (DoubleCollection)GetValue(StrokeDashArrayProperty); }
+			set { SetValue(StrokeDashArrayProperty, value); }
+		}
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FastLineSeries"/> class.
-        /// </summary>
-        public FastLineSeries() : base()
-        {
-            ToleranceCoefficient = 1;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FastLineSeries"/> class.
+		/// </summary>
+		public FastLineSeries() : base()
+		{
+			ToleranceCoefficient = 1;
+		}
 
-        #endregion
+		#endregion
 
-        #region Interface Implementation
+		#region Interface Implementation
 
-        void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
-        {
-            if (isSaveState)
-            {
-                canvas.CanvasSaveState();
-            }
+		void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
+		{
+			if (isSaveState)
+			{
+				canvas.CanvasSaveState();
+			}
 
-            var pathF = new PathF();
-            pathF.MoveTo(5, 1);
-            pathF.LineTo(5, 2);
-            pathF.LineTo(6, 2);
-            pathF.LineTo(6, 4);
-            pathF.LineTo(7, 4);
-            pathF.LineTo(7, 5);
-            pathF.LineTo(8, 5);
-            pathF.LineTo(8, 7);
-            pathF.LineTo(9, 7);
-            pathF.LineTo(9, 9);
-            pathF.LineTo(10, 9);
-            pathF.LineTo(10, 7);
-            pathF.LineTo(11, 7);
-            pathF.LineTo(11, 5);
-            pathF.LineTo(12, 5);
-            pathF.LineTo(12, 8);
-            pathF.LineTo(11, 8);
-            pathF.LineTo(11, 10);
-            pathF.LineTo(10, 10);
-            pathF.LineTo(10, 12);
-            pathF.LineTo(9, 12);
-            pathF.LineTo(9, 10);
-            pathF.LineTo(8, 10);
-            pathF.LineTo(8, 8);
-            pathF.LineTo(7, 8);
-            pathF.LineTo(7, 7);
-            pathF.LineTo(6, 7);
-            pathF.LineTo(6, 5);
-            pathF.LineTo(5, 5);
-            pathF.LineTo(5, 4);
-            pathF.LineTo(4, 4);
-            pathF.LineTo(4, 6);
-            pathF.LineTo(3, 6);
-            pathF.LineTo(3, 8);
-            pathF.LineTo(2, 8);
-            pathF.LineTo(2, 10);
-            pathF.LineTo(1, 10);
-            pathF.LineTo(1, 12);
-            pathF.LineTo(0, 12);
-            pathF.LineTo(0, 9);
-            pathF.LineTo(1, 9);
-            pathF.LineTo(1, 7);
-            pathF.LineTo(2, 7);
-            pathF.LineTo(2, 5);
-            pathF.LineTo(3, 5);
-            pathF.LineTo(3, 3);
-            pathF.LineTo(4, 3);
-            pathF.LineTo(4, 1);
-            pathF.LineTo(5, 1);
-            pathF.Close();
-            canvas.FillPath(pathF);
+			var pathF = new PathF();
+			pathF.MoveTo(5, 1);
+			pathF.LineTo(5, 2);
+			pathF.LineTo(6, 2);
+			pathF.LineTo(6, 4);
+			pathF.LineTo(7, 4);
+			pathF.LineTo(7, 5);
+			pathF.LineTo(8, 5);
+			pathF.LineTo(8, 7);
+			pathF.LineTo(9, 7);
+			pathF.LineTo(9, 9);
+			pathF.LineTo(10, 9);
+			pathF.LineTo(10, 7);
+			pathF.LineTo(11, 7);
+			pathF.LineTo(11, 5);
+			pathF.LineTo(12, 5);
+			pathF.LineTo(12, 8);
+			pathF.LineTo(11, 8);
+			pathF.LineTo(11, 10);
+			pathF.LineTo(10, 10);
+			pathF.LineTo(10, 12);
+			pathF.LineTo(9, 12);
+			pathF.LineTo(9, 10);
+			pathF.LineTo(8, 10);
+			pathF.LineTo(8, 8);
+			pathF.LineTo(7, 8);
+			pathF.LineTo(7, 7);
+			pathF.LineTo(6, 7);
+			pathF.LineTo(6, 5);
+			pathF.LineTo(5, 5);
+			pathF.LineTo(5, 4);
+			pathF.LineTo(4, 4);
+			pathF.LineTo(4, 6);
+			pathF.LineTo(3, 6);
+			pathF.LineTo(3, 8);
+			pathF.LineTo(2, 8);
+			pathF.LineTo(2, 10);
+			pathF.LineTo(1, 10);
+			pathF.LineTo(1, 12);
+			pathF.LineTo(0, 12);
+			pathF.LineTo(0, 9);
+			pathF.LineTo(1, 9);
+			pathF.LineTo(1, 7);
+			pathF.LineTo(2, 7);
+			pathF.LineTo(2, 5);
+			pathF.LineTo(3, 5);
+			pathF.LineTo(3, 3);
+			pathF.LineTo(4, 3);
+			pathF.LineTo(4, 1);
+			pathF.LineTo(5, 1);
+			pathF.Close();
+			canvas.FillPath(pathF);
 
-            if (isSaveState)
-            {
-                canvas.CanvasRestoreState();
-            }
-        }
+			if (isSaveState)
+			{
+				canvas.CanvasRestoreState();
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Public methods
+		#region Public methods
 
-        /// <inheritdoc />
-        public override int GetDataPointIndex(float pointX, float pointY)
-        {
-            if (ActualXAxis != null && ActualYAxis != null && Segments != null && Segments.Count > 0)
-            {
-                RectF seriesBounds = AreaBounds;
-                float xPos = pointX - seriesBounds.Left;
-                float yPos = pointY - seriesBounds.Top;
+		/// <inheritdoc />
+		public override int GetDataPointIndex(float pointX, float pointY)
+		{
+			if (ActualXAxis != null && ActualYAxis != null && _segments != null && _segments.Count > 0)
+			{
+				RectF seriesBounds = AreaBounds;
+				float xPos = pointX - seriesBounds.Left;
+				float yPos = pointY - seriesBounds.Top;
 
-                foreach (FastLineSegment segment in Segments)
-                {
-                    var xValues = segment.XValues;
-                    var yValues = segment.YValues;
+				foreach (FastLineSegment segment in _segments.Cast<FastLineSegment>())
+				{
+					var xValues = segment._xValues;
+					var yValues = segment._yValues;
 
-                    if (xValues == null || yValues == null) return -1;
+					if (xValues == null || yValues == null)
+					{
+						return -1;
+					}
 
-                    for (int i = 0; i < xValues.Count; i++)
-                    {
-                        var xVal = xValues[i];
-                        var yVal = yValues[i];
-                        float xPoint = TransformToVisibleX(xVal, yVal);
-                        float yPoint = TransformToVisibleY(xVal, yVal);
-                        if (ChartSegment.IsRectContains(xPoint, yPoint, xPos, yPos, (float)StrokeWidth))
-                        {
-                            return i;
-                        }
-                    }
-                }
-            }
+					for (int i = 0; i < xValues.Count; i++)
+					{
+						var xVal = xValues[i];
+						var yVal = yValues[i];
+						float xPoint = TransformToVisibleX(xVal, yVal);
+						float yPoint = TransformToVisibleY(xVal, yVal);
+						if (ChartSegment.IsRectContains(xPoint, yPoint, xPos, yPos, (float)StrokeWidth))
+						{
+							return i;
+						}
+					}
+				}
+			}
 
-            return -1;
-        }
+			return -1;
+		}
 
-        #endregion
+		#endregion
 
-        #region Protected Methods
+		#region Protected Methods
 
-        /// <inheritdoc />
-        protected override ChartSegment CreateSegment()
-        {
-            return new FastLineSegment();
-        }
+		/// <inheritdoc />
+		protected override ChartSegment CreateSegment()
+		{
+			return new FastLineSegment();
+		}
 
-        #endregion
+		#endregion
 
-        #region Internal Methods
+		#region Internal Methods
 
-        internal override void GenerateSegments(SeriesView seriesView)
-        {
-            var xValues = GetXValues();
-            if (xValues == null || xValues.Count == 0 || ActualData == null)
-            {
-                return;
-            }
+		internal override void GenerateSegments(SeriesView seriesView)
+		{
+			var xValues = GetXValues();
+			if (xValues == null || xValues.Count == 0 || ActualData == null)
+			{
+				return;
+			}
 
-            if (Segments.Count == 0)
-            {
-                var segment = CreateSegment() as FastLineSegment;
-                if (segment != null)
-                {
-                    segment.Series = this;
-                    segment.SeriesView = seriesView;
-                    segment.Item = ActualData;
-                    segment.SetData(xValues, YValues);
-                    InitiateDataLabels(segment);
-                    Segments.Add(segment);
-                }
-            }
-            else
-            {
-                foreach (FastLineSegment segment in Segments)
-                {
-                    segment.SetData(xValues, YValues);
-                }
-            }
-        }
+			if (_segments.Count == 0)
+			{
+				if (CreateSegment() is FastLineSegment segment)
+				{
+					segment.Series = this;
+					segment.SeriesView = seriesView;
+					segment.Item = ActualData;
+					segment.SetData(xValues, YValues);
+					InitiateDataLabels(segment);
+					_segments.Add(segment);
+				}
+			}
+			else
+			{
+				foreach (FastLineSegment segment in _segments.Cast<FastLineSegment>())
+				{
+					segment.SetData(xValues, YValues);
+				}
+			}
+		}
 
-        internal override bool IsIndividualSegment()
-        {
-            return false;
-        }
+		internal override bool IsIndividualSegment()
+		{
+			return false;
+		}
 
-        internal override void InitiateDataLabels(ChartSegment segment)
-        {
-            if (ShowDataLabels && DataLabels.Count < PointsCount)
-            {
-                var fastLineSegment = segment as FastLineSegment;
+		internal override void InitiateDataLabels(ChartSegment segment)
+		{
+			if (ShowDataLabels && DataLabels.Count < PointsCount)
+			{
+				var fastLineSegment = segment as FastLineSegment;
 
-                var xValues = fastLineSegment?.XValues;
+				var xValues = fastLineSegment?._xValues;
 
-                if (xValues == null) return;
+				if (xValues == null)
+				{
+					return;
+				}
 
-                for (int i = 0; i < xValues.Count; i++)
-                {
-                    var dataLabel = new ChartDataLabel();
-                    segment.DataLabels.Add(dataLabel);
-                    DataLabels.Add(dataLabel);
-                }
-            }
-        }
+				for (int i = 0; i < xValues.Count; i++)
+				{
+					var dataLabel = new ChartDataLabel();
+					segment.DataLabels.Add(dataLabel);
+					DataLabels.Add(dataLabel);
+				}
+			}
+		}
 
-        internal override void SetDashArray(ChartSegment segment)
-        {
-            segment.StrokeDashArray = StrokeDashArray;
-        }
+		internal override void SetDashArray(ChartSegment segment)
+		{
+			segment.StrokeDashArray = StrokeDashArray;
+		}
 
-        internal override PointF GetDataLabelPosition(ChartSegment dataLabel, SizeF labelSize, PointF labelPosition, float padding)
-        {
-            return DataLabelSettings.GetLabelPositionForContinuousSeries(this, dataLabel.Index, labelSize, labelPosition, padding);
-        }
+		internal override PointF GetDataLabelPosition(ChartSegment dataLabel, SizeF labelSize, PointF labelPosition, float padding)
+		{
+			return DataLabelSettings.GetLabelPositionForContinuousSeries(this, dataLabel.Index, labelSize, labelPosition, padding);
+		}
 
-        internal override void DrawDataLabels(ICanvas canvas)
-        {
-            var dataLabeSettings = DataLabelSettings;
+		internal override void DrawDataLabels(ICanvas canvas)
+		{
+			var dataLabeSettings = DataLabelSettings;
 
-            if (dataLabeSettings == null || Segments == null || Segments.Count <= 0) return;
+			if (dataLabeSettings == null || _segments == null || _segments.Count <= 0)
+			{
+				return;
+			}
 
-            ChartDataLabelStyle labelStyle = DataLabelSettings.LabelStyle;
+			ChartDataLabelStyle labelStyle = DataLabelSettings.LabelStyle;
 
-            foreach (FastLineSegment segment in Segments)
-            {
-                var xValues = segment.XValues;
-                var yValues = segment.YValues;
+			foreach (FastLineSegment segment in _segments.Cast<FastLineSegment>())
+			{
+				var xValues = segment._xValues;
+				var yValues = segment._yValues;
 
-                if (xValues == null || yValues == null) return;
+				if (xValues == null || yValues == null)
+				{
+					return;
+				}
 
-                for (int i = 0; i < xValues.Count; i++)
-                {
-                    double x = xValues[i], y = yValues[i];
-                    var isDataInVisibleRange = IsDataInVisibleRange(x, y);
+				for (int i = 0; i < xValues.Count; i++)
+				{
+					double x = xValues[i], y = yValues[i];
+					var isDataInVisibleRange = IsDataInVisibleRange(x, y);
 
-                    if (double.IsNaN(y) || !isDataInVisibleRange) continue;
+					if (double.IsNaN(y) || !isDataInVisibleRange)
+					{
+						continue;
+					}
 
-                    CalculateDataPointPosition(i, ref x, ref y);
-                    PointF labelPoint = new PointF((float)x, (float)y);
-                    segment.Index = i;
-                    segment.LabelContent = GetLabelContent(yValues[i], SumOfValues(YValues));
-                    segment.LabelPositionPoint = dataLabeSettings.CalculateDataLabelPoint(this, segment, labelPoint, labelStyle);
-                    UpdateDataLabelAppearance(canvas, segment, dataLabeSettings, labelStyle);
-                }
-            }
-        }
+					CalculateDataPointPosition(i, ref x, ref y);
+					PointF labelPoint = new PointF((float)x, (float)y);
+					segment.Index = i;
+					segment.LabelContent = GetLabelContent(yValues[i], SumOfValues(YValues));
+					segment.LabelPositionPoint = CartesianDataLabelSettings.CalculateDataLabelPoint(this, segment, labelPoint, labelStyle);
+					UpdateDataLabelAppearance(canvas, segment, dataLabeSettings, labelStyle);
+				}
+			}
+		}
 
-        internal override Brush? GetSegmentFillColor(int index)
-        {
-            var segment = Segments[0];
+		internal override Brush? GetSegmentFillColor(int index)
+		{
+			var segment = _segments[0];
 
-            if (segment != null)
-            {
-                return segment.Fill;
-            }
+			if (segment != null)
+			{
+				return segment.Fill;
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-        internal override void InvalidateMeasureDataLabel()
-        {
-            foreach (var segment in Segments)
-            {
-                InitiateDataLabels(segment);
-                segment.OnDataLabelLayout();
-            }
-        }
+		internal override void InvalidateMeasureDataLabel()
+		{
+			foreach (var segment in _segments)
+			{
+				InitiateDataLabels(segment);
+				segment.OnDataLabelLayout();
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
 
-        static void OnStrokeDashArrayPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (bindable is FastLineSeries series)
-            {
-                series.UpdateDashArray();
-                series.InvalidateSeries();
-            }
-        }
+		static void OnStrokeDashArrayPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is FastLineSeries series)
+			{
+				series.UpdateDashArray();
+				series.InvalidateSeries();
+			}
+		}
 
-        static void OnInvalidatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (bindable is FastLineSeries series)
-            {
-                series.InvalidateSeries();
-            }
-        }
+		static void OnInvalidatePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is FastLineSeries series)
+			{
+				series.InvalidateSeries();
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

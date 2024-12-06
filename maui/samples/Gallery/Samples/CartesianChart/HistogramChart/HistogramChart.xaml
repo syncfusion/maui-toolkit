@@ -83,7 +83,7 @@
     <localCore:SampleView.OptionView>
         <Grid>
             <HorizontalStackLayout>
-                <Label Text="Show distribution line"></Label>
+                <Label Text="Show distribution line" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"></Label>
                 <CheckBox x:Name="checkBox" IsChecked="True" VerticalOptions="Start" Margin="30,0,0,0"></CheckBox>
             </HorizontalStackLayout>
         </Grid>

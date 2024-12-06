@@ -2,11 +2,11 @@
 
 namespace Syncfusion.Maui.Toolkit.Platform.Windows.Styles
 {
-    partial class Resources : ResourceDictionary
-    {
-        public Resources()
-        {
-            this.InitializeComponent();
-        }
-    }
+	partial class Resources : ResourceDictionary
+	{
+		public Resources()
+		{
+			InitializeComponent();
+		}
+	}
 }

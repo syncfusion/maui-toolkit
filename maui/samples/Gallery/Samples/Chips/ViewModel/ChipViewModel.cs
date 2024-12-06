@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace Syncfusion.Maui.ControlsGallery.Chips
 {
-	public class ChipViewModel : INotifyPropertyChanged
+	public partial class ChipViewModel : INotifyPropertyChanged
 	{
 		public event PropertyChangedEventHandler? PropertyChanged;
 		public void OnPropertyChanged([CallerMemberName] string? name = null) =>
@@ -17,259 +17,259 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		/// <summary>
 		/// The icon property to hold the chip image.
 		/// </summary>
-		string icon = "user.png";
+		string _icon = "user.png";
 
 		/// <summary>
 		/// The television collection.
 		/// </summary>
-		internal ObservableCollection<string> televisionItems = new ObservableCollection<string>() { "Samsung", "LG" };
+		internal ObservableCollection<string> _televisionItems = ["Samsung", "LG"];
 
 		/// <summary>
 		/// The washer collection.
 		/// </summary>
-		internal ObservableCollection<string> washerItems = new ObservableCollection<string>() { "Whirlpool", "Kenmore" };
+		internal ObservableCollection<string> _washerItems = ["Whirlpool", "Kenmore"];
 
 		/// <summary>
 		/// The air conditioner collection.
 		/// </summary>
-		internal ObservableCollection<string> airConditionerItems = new ObservableCollection<string>() { "Mitsubishi", "Hitachi" };
+		internal ObservableCollection<string> _airConditionerItems = ["Mitsubishi", "Hitachi"];
 
 		/// <summary>
 		/// The choice collection.
 		/// </summary>
-		List<string> choiceItems = new List<string>() { "Washer", "Television", "Air Conditioner" };
+		List<string> _choiceItems = ["Washer", "Television", "Air Conditioner"];
 
 		/// <summary>
 		/// The result.
 		/// </summary>
-		ObservableCollection<string> result = new ObservableCollection<string>();
+		ObservableCollection<string> _result = [];
 
 		/// <summary>
 		/// The border color of chip.
 		/// </summary>
-		Color borderColor = Color.FromArgb("#A007A3");
+		Color _borderColor = Color.FromArgb("#A007A3");
 
 		/// <summary>
 		/// The background color of chip.
 		/// </summary>
 #if ANDROID || IOS
-		Color backgroundColor = Color.FromArgb("#af2463");
+		Color _backgroundColor = Color.FromArgb("#af2463");
 #elif WINDOWS || MACCATALYST
-    Color backgroundColor = Color.FromArgb("#A007A3");
+    Color _backgroundColor = Color.FromArgb("#A007A3");
 #endif
 		/// <summary>
 		/// Represents the text color
 		/// </summary>
 #if ANDROID || IOS
-		Color textColor = Color.FromArgb("#f2f3f4");
+		Color _textColor = Color.FromArgb("#f2f3f4");
 #elif WINDOWS || MACCATALYST
-    Color textColor = Colors.White;
+    Color _textColor = Colors.White;
 #endif
 
 		/// <summary>
 		/// Represents the visibility of image
 		/// </summary>
-		bool showImage = true;
+		bool _showImage = true;
 
 		/// <summary>
 		/// The border thickness of chip.
 		/// </summary>
-		int borderThickness = 1;
+		int _borderThickness = 1;
 
 		/// <summary>
 		/// The corner radius slider.
 		/// </summary>
 #if ANDROID || IOS
-		int rightSlider = 20;
+		int _rightSlider = 20;
 #elif WINDOWS || MACCATALYST
-    int rightSlider = 0;
+    int _rightSlider = 0;
 #endif
 
 		/// <summary>
 		/// The corner radius of chip.
 		/// </summary>
 #if ANDROID || IOS
-		CornerRadius cornerRadius = 20;
+		CornerRadius _cornerRadius = 20;
 #elif WINDOWS || MACCATALYST
-    CornerRadius cornerRadius = 0;
+    CornerRadius _cornerRadius = 0;
 #endif
 
 		/// <summary>
 		/// The default corner radius.
 		/// </summary>
 #if ANDROID || IOS
-		int leftSlider = 20;
+		int _leftSlider = 20;
 #elif WINDOWS || MACCATALYST
-    int leftSlider = 0;  
+    int _leftSlider = 0;  
 #endif
 
 		/// <summary>
 		/// Represents the border width
 		/// </summary>
-		double borderWidth = 0;
+		double _borderWidth = 0;
 
 		/// <summary>
 		/// The text of chip.
 		/// </summary>
-		string text = "JAMES";
+		string _text = "JAMES";
 
 		/// <summary>
 		/// The is show visual.
 		/// </summary>
 #if WINDOWS || MACCATALYST
-    bool isShowVisual = false;
+    bool _isShowVisual = false;
 #elif ANDROID || IOS
-		bool isShowVisual = false;
+		bool _isShowVisual = false;
 #endif
 
 		/// <summary>
 		/// The is show.
 		/// </summary>
-		bool isShow = true;
+		bool _isShow = true;
 
 		/// <summary>
 		/// The input text.
 		/// </summary>
-		string inputText = "";
+		string _inputText = "";
 
 		/// <summary>
 		/// The visual mode.
 		/// </summary>
-		string visualMode = "None";
+		string _visualMode = "None";
 
 		/// <summary>
 		/// The is shown close button.
 		/// </summary>
 #if WINDOWS || MACCATALYST
-    bool isShownCloseButton = true;
+    bool _isShownCloseButton = true;
 #elif ANDROID || IOS
-		bool isShownCloseButton = true;
+		bool _isShownCloseButton = true;
 #endif
 
 		/// <summary>
 		/// The selected item.
 		/// </summary>
-		object selectedItem = "Television";
+		object _selectedItem = "Television";
 
 		/// <summary>
 		/// The selected filter items collection.
 		/// </summary>
-		ObservableCollection<object> selectedFilterItems = new ObservableCollection<object>();
+		ObservableCollection<object> _selectedFilterItems = [];
 
 		/// <summary>s
 		/// The input collection.
 		/// </summary>
-		ObservableCollection<string>? brands;
+		ObservableCollection<string>? _brands;
 
 		/// <summary>
 		/// The filter collection.
 		/// </summary>
-		List<string> filterChips = new List<string>();
+		List<string> _filterChips = [];
 
 		/// <summary>
 		/// The action collection.
 		/// </summary>
-		List<string> actionChips = new List<string>() { "Search by brands", "Search by features" };
+		List<string> _actionChips = ["Search by brands", "Search by features"];
 
 		/// <summary>
 		/// The action command.
 		/// </summary>
-		ICommand? actionCommand;
+		ICommand? _actionCommand;
 
 		/// <summary>
 		/// The place holder text.
 		/// </summary>
-		string placeHolderText = "Enter brand name";
+		string _placeHolderText = "Enter brand name";
 
 		/// <summary>
 		/// The color items filter collection.
 		/// </summary>
-		public List<string>? colorItems = new List<string>() { "Blue", "Grey", "Green", "Pink", "Sandal" };
+		public List<string>? colorItems = ["Blue", "Grey", "Green", "Pink", "Sandal"];
 
 		/// <summary>
 		/// The add ons filter collection.
 		/// </summary>
-		List<string>? addOnItems = new List<string>() { "Fast Charge", "512 MB SD Card", "2 Years Extended Warranty" };
+		List<string>? _addOnItems = ["Fast Charge", "512 MB SD Card", "2 Years Extended Warranty"];
 
 		/// <summary>
 		/// The devivery option choice collection.
 		/// </summary>
-		List<string>? deliveryOptions = new List<string>() { "Free Delivery", "+$5 for 1 Day Delivery" };
+		List<string>? _deliveryOptions = ["Free Delivery", "+$5 for 1 Day Delivery"];
 
 		/// <summary>
 		/// The control list choice collection.
 		/// </summary>
-		List<string>? controlsList = new List<string>() { "syncfusion", "dot-net", "android" };
+		List<string>? _controlsList = ["syncfusion", "dot-net", "android"];
 		/// <summary>
 		/// The selected color filter item.
 		/// </summary>
-		object selectedColorItem = "Blue";
+		object _selectedColorItem = "Blue";
 
 		/// <summary>
 		/// The image property to hold the speaker image..
 		/// </summary>
-		string image = "blueSpeaker.png";
+		string _image = "blueSpeaker.png";
 
 		/// <summary>
 		/// The selected add on filter item.
 		/// </summary>
-		ObservableCollection<object> selectedaddOnItems = new() { "Fast Charge" };
+		ObservableCollection<object> _selectedaddOnItems = ["Fast Charge"];
 
 		/// <summary>
 		/// The selected delivery option choice item.
 		/// </summary>
-		object selectedDeliveryOptions = "Free Delivery";
+		object _selectedDeliveryOptions = "Free Delivery";
 
 		/// <summary>
 		/// The total amount.
 		/// </summary>
-		int totalAmount = 0;
+		int _totalAmount = 0;
 
 		/// <summary>
 		/// The fast charge price.
 		/// </summary>
-		int fastChargePrice = 0;
+		int _fastChargePrice = 0;
 
 		/// <summary>
 		/// The sd card price
 		/// </summary>
-		int sdCardPrice = 0;
+		int _sdCardPrice = 0;
 
 		/// <summary>
 		/// The warrenty price.
 		/// </summary>
-		int warrentyPrice = 0;
+		int _warrentyPrice = 0;
 
 		/// <summary>
 		/// The delivery date.
 		/// </summary>
-		DateTime deliveryDate = DateTime.Now;
+		DateTime _deliveryDate = DateTime.Now;
 
 		/// <summary>
 		/// The date.
 		/// </summary>
-		string date = " ";
+		string _date = " ";
 
 		/// <summary>
 		/// The total price.
 		/// </summary>
-		string totalPrice = " ";
+		string _totalPrice = " ";
 
 		/// <summary>
 		/// The final amount.
 		/// </summary>
-		int finalAmount = 0;
+		int _finalAmount = 0;
 
 		/// <summary>
 		/// The final price.
 		/// </summary>
-		int finalPrice = 299;
+		int _finalPrice = 299;
 
 
     /// <summary>
     /// The chip type.
     /// </summary>   
-    SfChipsType chipType = SfChipsType.Input;
+    SfChipsType _chipType = SfChipsType.Input;
 
 		#endregion
 
@@ -282,11 +282,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return showImage;
+				return _showImage;
 			}
 			set
 			{
-				showImage = value;
+				_showImage = value;
 				OnPropertyChanged("ShowImage");
 			}
 		}
@@ -299,12 +299,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return textColor;
+				return _textColor;
 			}
 
 			set
 			{
-				textColor = value;
+				_textColor = value;
 				OnPropertyChanged("TextColor");
 			}
 		}
@@ -313,12 +313,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
     {
         get
         {
-            return textColor;
+            return _textColor;
         }
 
         set
         {
-            textColor = value;
+            _textColor = value;
             OnPropertyChanged("TextColor");
         }
     }
@@ -332,12 +332,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return icon;
+				return _icon;
 			}
 
 			set
 			{
-				icon = value;
+				_icon = value;
 			}
 		}
 
@@ -349,12 +349,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return borderColor;
+				return _borderColor;
 			}
 
 			set
 			{
-				borderColor = value;
+				_borderColor = value;
 				OnPropertyChanged("BorderStroke");
 			}
 		}
@@ -368,12 +368,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return backgroundColor;
+				return _backgroundColor;
 			}
 
 			set
 			{
-				backgroundColor = value;
+				_backgroundColor = value;
 				OnPropertyChanged("BackgroundColor");
 			}
 		}
@@ -382,12 +382,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
     {
         get
         {
-            return backgroundColor;
+            return _backgroundColor;
         }
 
         set
         {
-            backgroundColor = value;
+            _backgroundColor = value;
             OnPropertyChanged("BackgroundColor");
         }
     }
@@ -400,11 +400,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return borderThickness;
+				return _borderThickness;
 			}
 			set
 			{
-				borderThickness = value;
+				_borderThickness = value;
 				OnPropertyChanged("BorderThickness");
 			}
 		}
@@ -418,12 +418,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return rightSlider;
+				return _rightSlider;
 			}
 			set
 			{
-				rightSlider = value;
-				CornerRadius = new CornerRadius(cornerRadius.TopLeft, value, value, cornerRadius.BottomRight);
+				_rightSlider = value;
+				CornerRadius = new CornerRadius(_cornerRadius.TopLeft, value, value, _cornerRadius.BottomRight);
 				OnPropertyChanged("RightCornerRadius");
 			}
 		}
@@ -432,12 +432,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
     {
         get
         {
-            return rightSlider;
+            return _rightSlider;
         }
         set
         {
-            rightSlider = value;
-            CornerRadius = new CornerRadius(cornerRadius.TopLeft, value, value, cornerRadius.BottomRight);
+            _rightSlider = value;
+            CornerRadius = new CornerRadius(_cornerRadius.TopLeft, value, value, _cornerRadius.BottomRight);
             OnPropertyChanged("RightCornerRadius");
         }
     }
@@ -452,12 +452,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return leftSlider;
+				return _leftSlider;
 			}
 			set
 			{
-				leftSlider = value;
-				CornerRadius = new CornerRadius(value, cornerRadius.TopRight, cornerRadius.BottomLeft, value);
+				_leftSlider = value;
+				CornerRadius = new CornerRadius(value, _cornerRadius.TopRight, _cornerRadius.BottomLeft, value);
 				OnPropertyChanged("LeftCornerRadius");
 			}
 		}
@@ -466,12 +466,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
     {
         get
         {
-            return leftSlider;
+            return _leftSlider;
         }
         set
         {
-            leftSlider = value;
-            CornerRadius = new CornerRadius(value, cornerRadius.TopRight, cornerRadius.BottomLeft, value);
+            _leftSlider = value;
+            CornerRadius = new CornerRadius(value, _cornerRadius.TopRight, _cornerRadius.BottomLeft, value);
             OnPropertyChanged("LeftCornerRadius");
         }
     }
@@ -484,11 +484,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return borderWidth;
+				return _borderWidth;
 			}
 			set
 			{
-				borderWidth = value;
+				_borderWidth = value;
 				OnPropertyChanged("BorderWidth");
 			}
 		}
@@ -503,12 +503,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return cornerRadius;
+				return _cornerRadius;
 			}
 			set
 			{
 
-				cornerRadius = value;
+				_cornerRadius = value;
 				OnPropertyChanged("CornerRadius");
 			}
 		}
@@ -517,12 +517,12 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
     {
         get
         {
-            return cornerRadius;
+            return _cornerRadius;
         }
         set
         {
 
-            cornerRadius = value;
+            _cornerRadius = value;
             OnPropertyChanged("CornerRadius");
         }
     }
@@ -536,11 +536,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return text;
+				return _text;
 			}
 			set
 			{
-				text = value;
+				_text = value;
 				OnPropertyChanged("Text");
 			}
 		}
@@ -553,11 +553,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return isShow;
+				return _isShow;
 			}
 			set
 			{
-				isShow = value;
+				_isShow = value;
 				OnPropertyChanged("IsShownIcon");
 			}
 		}
@@ -571,11 +571,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
     {
         get
         {
-            return isShowVisual;
+            return _isShowVisual;
         }
         set
         {
-            isShowVisual = value;
+            _isShowVisual = value;
             if (value) 
             {
                 ChipType = SfChipsType.Filter;
@@ -597,11 +597,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return isShowVisual;
+				return _isShowVisual;
 			}
 			set
 			{
-				isShowVisual = value;
+				_isShowVisual = value;
 				OnPropertyChanged("IsShownSelection");
 			}
 		}
@@ -616,11 +616,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
     {
         get
         {
-            return isShownCloseButton;
+            return _isShownCloseButton;
         }
         set
         {
-            isShownCloseButton = value;
+            _isShownCloseButton = value;
             if (value)
             {
                 ChipType = SfChipsType.Input;
@@ -642,11 +642,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return isShownCloseButton;
+				return _isShownCloseButton;
 			}
 			set
 			{
-				isShownCloseButton = value;
+				_isShownCloseButton = value;
 				OnPropertyChanged("IsShownCloseButton");
 			}
 		}
@@ -661,11 +661,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return visualMode;
+				return _visualMode;
 			}
 			set
 			{
-				visualMode = value;
+				_visualMode = value;
 				OnPropertyChanged("VisualMode");
 			}
 		}
@@ -678,33 +678,34 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return selectedItem;
+				return _selectedItem;
 			}
 			set
 			{
-				selectedItem = value;
-				if (selectedItem != null)
+				_selectedItem = value;
+				if (_selectedItem != null)
 				{
 					if (!string.IsNullOrEmpty("SelectedItem"))
 					{
-						if (selectedItem.Equals("Television"))
+						if (_selectedItem.Equals("Television"))
 						{
-							InputItems = televisionItems;
-							FilterItems = new List<string>() { "LED", "LCD", "Wi-Fi", "4K", "Ultra HD" };
+							InputItems = _televisionItems;
+							FilterItems = ["LED", "LCD", "Wi-Fi", "4K", "Ultra HD"];
 						}
-						else if (selectedItem.Equals("Washer"))
+						else if (_selectedItem.Equals("Washer"))
 						{
-							InputItems = washerItems;
-							FilterItems = new List<string>() { "Front Load", "Top Load" };
+							InputItems = _washerItems;
+							FilterItems = ["Front Load", "Top Load"];
 						}
-						else if (selectedItem.Equals("Air Conditioner"))
+						else if (_selectedItem.Equals("Air Conditioner"))
 						{
-							InputItems = airConditionerItems;
-							FilterItems = new List<string>() { "Window", "Portable", "Hybrid" };
+							InputItems = _airConditionerItems;
+							FilterItems = ["Window", "Portable", "Hybrid"];
 						}
 					}
-					selectedFilterItems.Clear();
+					_selectedFilterItems.Clear();
 				}
+				Result.Clear();
 				Result.Add("No results found");
 				OnPropertyChanged("SelectedItem");
 			}
@@ -718,11 +719,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return inputText;
+				return _inputText;
 			}
 			set
 			{
-				inputText = value;
+				_inputText = value;
 				OnPropertyChanged("InputText");
 			}
 		}
@@ -735,11 +736,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return actionCommand;
+				return _actionCommand;
 			}
 			set
 			{
-				actionCommand = value;
+				_actionCommand = value;
 			}
 		}
 
@@ -751,11 +752,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return placeHolderText;
+				return _placeHolderText;
 			}
 			set
 			{
-				placeHolderText = value;
+				_placeHolderText = value;
 				OnPropertyChanged("PlaceHolderText");
 			}
 		}
@@ -768,14 +769,14 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return brands;
+				return _brands;
 			}
 			set
 			{
-				brands = value;
-				if (brands != null && brands.Count == 0)
+				_brands = value;
+				if (_brands != null && _brands.Count == 0)
 				{
-					filterChips.Clear();
+					_filterChips.Clear();
 					Result.Add("No results found");
 
 				}
@@ -792,11 +793,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return filterChips;
+				return _filterChips;
 			}
 			set
 			{
-				filterChips = value;
+				_filterChips = value;
 				OnPropertyChanged("FilterItems");
 			}
 		}
@@ -809,11 +810,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return actionChips;
+				return _actionChips;
 			}
 			set
 			{
-				actionChips = value;
+				_actionChips = value;
 				OnPropertyChanged("ActionItems");
 			}
 		}
@@ -826,11 +827,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return choiceItems;
+				return _choiceItems;
 			}
 			set
 			{
-				choiceItems = value;
+				_choiceItems = value;
 				OnPropertyChanged("ChoiceItems");
 			}
 		}
@@ -843,11 +844,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return result;
+				return _result;
 			}
 			set
 			{
-				result = value;
+				_result = value;
 				OnPropertyChanged("Result");
 			}
 		}
@@ -860,11 +861,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return selectedFilterItems;
+				return _selectedFilterItems;
 			}
 			set
 			{
-				selectedFilterItems = value;
+				_selectedFilterItems = value;
 				OnPropertyChanged(nameof(SelectedFilterItems));
 			}
 		}
@@ -894,11 +895,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return addOnItems;
+				return _addOnItems;
 			}
 			set
 			{
-				addOnItems = value;
+				_addOnItems = value;
 				OnPropertyChanged(nameof(AddOnItems));
 			}
 		}
@@ -911,11 +912,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return deliveryOptions;
+				return _deliveryOptions;
 			}
 			set
 			{
-				deliveryOptions = value;
+				_deliveryOptions = value;
 				OnPropertyChanged(nameof(DeliveryOptions));
 			}
 		}
@@ -928,11 +929,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return controlsList;
+				return _controlsList;
 			}
 			set
 			{
-				controlsList = value;
+				_controlsList = value;
 				OnPropertyChanged(nameof(ControlsList));
 			}
 		}
@@ -946,32 +947,32 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return selectedColorItem;
+				return _selectedColorItem;
 			}
 			set
 			{
-				selectedColorItem = value;
-				if (selectedColorItem != null)
+				_selectedColorItem = value;
+				if (_selectedColorItem != null)
 				{
 					if (!string.IsNullOrEmpty("SelectedColorItem"))
 					{
-						if (selectedColorItem.Equals("Blue"))
+						if (_selectedColorItem.Equals("Blue"))
 						{
 							Image = "bluespeaker.png";
 						}
-						else if (selectedColorItem.Equals("Grey"))
+						else if (_selectedColorItem.Equals("Grey"))
 						{
 							Image = "greyspeaker.png";
 						}
-						else if (selectedColorItem.Equals("Green"))
+						else if (_selectedColorItem.Equals("Green"))
 						{
 							Image = "greenspeaker.png";
 						}
-						else if (selectedColorItem.Equals("Pink"))
+						else if (_selectedColorItem.Equals("Pink"))
 						{
 							Image = "pinkspeaker.png";
 						}
-						else if (selectedColorItem.Equals("Sandal"))
+						else if (_selectedColorItem.Equals("Sandal"))
 						{
 							Image = "sandalsspeaker.png";
 						}
@@ -989,11 +990,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return image;
+				return _image;
 			}
 			set
 			{
-				image = value;
+				_image = value;
 				OnPropertyChanged(nameof(Image));
 			}
 		}
@@ -1004,8 +1005,8 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		/// <value>The FastChargePrice.</value>
 		public int FastChargePrice
 		{
-			get { return fastChargePrice; }
-			set { fastChargePrice = value; OnPropertyChanged(nameof(FastChargePrice)); }
+			get { return _fastChargePrice; }
+			set { _fastChargePrice = value; OnPropertyChanged(nameof(FastChargePrice)); }
 		}
 
 		/// <summary>
@@ -1014,8 +1015,8 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		/// <value>The SDCardPrice.</value>
 		public int SDCardPrice
 		{
-			get { return sdCardPrice; }
-			set { sdCardPrice = value; OnPropertyChanged(nameof(SDCardPrice)); }
+			get { return _sdCardPrice; }
+			set { _sdCardPrice = value; OnPropertyChanged(nameof(SDCardPrice)); }
 		}
 
 		/// <summary>
@@ -1024,8 +1025,8 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		/// <value>The WarrentyPrice.</value>
 		public int WarrentyPrice
 		{
-			get { return warrentyPrice; }
-			set { warrentyPrice = value; OnPropertyChanged(nameof(WarrentyPrice)); }
+			get { return _warrentyPrice; }
+			set { _warrentyPrice = value; OnPropertyChanged(nameof(WarrentyPrice)); }
 		}
 
 		/// <summary>
@@ -1036,11 +1037,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return selectedaddOnItems;
+				return _selectedaddOnItems;
 			}
 			set
 			{
-				selectedaddOnItems = value;
+				_selectedaddOnItems = value;
 				OnPropertyChanged(nameof(SelectedAddOnItems));
 			}
 		}
@@ -1051,8 +1052,8 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		/// <value>The Date.</value>
 		public string Date
 		{
-			get { return date; }
-			set { date = value; OnPropertyChanged(nameof(Date)); }
+			get { return _date; }
+			set { _date = value; OnPropertyChanged(nameof(Date)); }
 		}
 
 		/// <summary>
@@ -1061,8 +1062,8 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		/// <value>The TotalPrice.</value>
 		public string TotalPrice
 		{
-			get { return totalPrice; }
-			set { totalPrice = value; OnPropertyChanged(nameof(TotalPrice)); }
+			get { return _totalPrice; }
+			set { _totalPrice = value; OnPropertyChanged(nameof(TotalPrice)); }
 		}
 
 		/// <summary>
@@ -1073,14 +1074,14 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return selectedDeliveryOptions;
+				return _selectedDeliveryOptions;
 			}
 			set
 			{
-				selectedDeliveryOptions = value;
+				_selectedDeliveryOptions = value;
 				if (SelectedDeliveryOption != null)
 				{
-					if (selectedDeliveryOptions.Equals("Free Delivery"))
+					if (_selectedDeliveryOptions.Equals("Free Delivery"))
 					{
 						TotalAmount = FinalAmount;
 						Date = "(Get by " + DeliveryDate.AddDays(5).ToLongDateString() + " )";
@@ -1105,11 +1106,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return totalAmount;
+				return _totalAmount;
 			}
 			set
 			{
-				totalAmount = value;
+				_totalAmount = value;
 				OnPropertyChanged(nameof(TotalAmount));
 			}
 		}
@@ -1122,11 +1123,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return finalAmount;
+				return _finalAmount;
 			}
 			set
 			{
-				finalAmount = value;
+				_finalAmount = value;
 				OnPropertyChanged(nameof(FinalAmount));
 			}
 		}
@@ -1139,11 +1140,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return finalPrice;
+				return _finalPrice;
 			}
 			set
 			{
-				finalPrice = value;
+				_finalPrice = value;
 				OnPropertyChanged(nameof(FinalPrice));
 			}
 		}
@@ -1156,11 +1157,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		{
 			get
 			{
-				return deliveryDate;
+				return _deliveryDate;
 			}
 			set
 			{
-				deliveryDate = value;
+				_deliveryDate = value;
 				OnPropertyChanged(nameof(DeliveryDate));
 			}
 		}
@@ -1169,11 +1170,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
     {
         get
         {
-            return chipType;
+            return _chipType;
         }
         set
         {
-            chipType = value;
+            _chipType = value;
             OnPropertyChanged(nameof(ChipType));
         }
     }
@@ -1197,23 +1198,23 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 			Result.Clear();
 
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
-			if (obj != null && obj.ToString().Equals("Search by brands", StringComparison.Ordinal) && selectedItem != null && brands.Count > 0)
+			if (obj != null && obj.ToString().Equals("Search by brands", StringComparison.Ordinal) && _selectedItem != null && _brands.Count > 0)
 			{
-				foreach (var brand in brands)
+				foreach (var brand in _brands)
 				{
-					Result.Add(new Random().Next(1, 5).ToString() + " " + brand.ToString() + " " + selectedItem.ToString() + " found");
+					Result.Add(new Random().Next(1, 5).ToString() + " " + brand.ToString() + " " + _selectedItem.ToString() + " found");
 				}
 			}
 
-			else if (FilterItems.Count > 0 && selectedItem != null && selectedFilterItems.Count > 0 && brands.Count > 0)
+			else if (FilterItems.Count > 0 && _selectedItem != null && _selectedFilterItems.Count > 0 && _brands.Count > 0)
 			{
 
 
-				foreach (var feature in selectedFilterItems)
+				foreach (var feature in _selectedFilterItems)
 				{
-					foreach (var brand in brands)
+					foreach (var brand in _brands)
 					{
-						Result.Add(new Random().Next(1, 5).ToString() + " " + feature.ToString() + " " + selectedItem.ToString() + " found in " + brand.ToString());
+						Result.Add(new Random().Next(1, 5).ToString() + " " + feature.ToString() + " " + _selectedItem.ToString() + " found in " + brand.ToString());
 					}
 				}
 			}

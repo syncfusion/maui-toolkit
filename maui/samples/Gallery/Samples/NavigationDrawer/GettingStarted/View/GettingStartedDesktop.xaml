@@ -180,7 +180,7 @@
                                           Margin="0, 0, 0, 0"
                                           HorizontalOptions="Center"
                                           VerticalOptions="StartAndExpand">
-                                        <Image Source="{Binding Image, Converter={x:StaticResource imageconverter}}"
+                                        <Image Source="{Binding Image}"
                                                HeightRequest="42"
                                                WidthRequest="42"/>
                                         <Label Text="{Binding ProfileName}"

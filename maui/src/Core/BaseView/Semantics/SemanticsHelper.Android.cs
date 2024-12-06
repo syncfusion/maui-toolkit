@@ -10,15 +10,15 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {    
     internal class CustomAccessibilityDelegate : AccessibilityDelegateCompat
     {
-        private CustomAccessibilityProvider accessibilityNodeProvider;
+        private readonly CustomAccessibilityProvider _accessibilityNodeProvider;
 
         internal CustomAccessibilityDelegate(Android.Views.View host, View virtualView, bool isChildrenImportant)
         {
-            this.accessibilityNodeProvider = new CustomAccessibilityProvider(host, virtualView, isChildrenImportant);
+            _accessibilityNodeProvider = new CustomAccessibilityProvider(host, virtualView, isChildrenImportant);
         }
         public override AccessibilityNodeProviderCompat GetAccessibilityNodeProvider(Android.Views.View host)
         {
-            return this.accessibilityNodeProvider;
+            return _accessibilityNodeProvider;
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 return false;
             }
 
-            return this.accessibilityNodeProvider.DispatchHoverEvent(e);
+            return _accessibilityNodeProvider.DispatchHoverEvent(e);
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// </summary>
         internal void UpdateChildOrder(bool isChildrenImportant)
         {
-            this.accessibilityNodeProvider.UpdateChildOrder(isChildrenImportant);
+            _accessibilityNodeProvider.UpdateChildOrder(isChildrenImportant);
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// </summary>
         internal void InvalidateSemantics()
         {
-            this.accessibilityNodeProvider.InvalidateSemantics();
+            _accessibilityNodeProvider.InvalidateSemantics();
         }
 
         /// <summary>
@@ -107,34 +107,34 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// <summary>
         /// Current focused(highlighted) node id.
         /// </summary>
-        private int focusedVirtualID = Root_ID;
+        private int _focusedVirtualID = Root_ID;
 
         /// <summary>
         /// Hovered accessibility node id.
         /// </summary>
-        private int hoveredVirtualID = Root_ID;
+        private int _hoveredVirtualID = Root_ID;
 
         /// <summary>
         /// Native android view.
         /// </summary>
-        private Android.Views.View host;
+        private readonly Android.Views.View _host;
 
         /// <summary>
         /// Maui view instance.
         /// </summary>
-        private View virtualView;
+        private readonly View _virtualView;
 
         /// <summary>
         /// Children is important means the children gets the accessibility event
         /// while the drawn UI and children are overlapped.
         /// </summary>
-        private bool isChildNode;
+        private bool _isChildNode;
 
         internal CustomAccessibilityProvider(Android.Views.View host, View virtualView, bool isChildNode)
         {
-            this.host = host;
-            this.virtualView = virtualView;
-            this.isChildNode = isChildNode;
+            _host = host;
+            _virtualView = virtualView;
+            _isChildNode = isChildNode;
         }
 
         /// <summary>
@@ -143,13 +143,13 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// <param name="isChildNode">Is children important</param>
         internal void UpdateChildOrder(bool isChildNode)
         {
-            if (this.isChildNode == isChildNode)
+            if (_isChildNode == isChildNode)
             {
                 return;
             }
 
-            this.isChildNode = isChildNode;
-            this.InvalidateSemantics();
+            _isChildNode = isChildNode;
+            InvalidateSemantics();
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// </summary>
         internal void InvalidateSemantics()
         {
-            this.SendEventForVirtualViewId(Host_ID, EventTypes.WindowContentChanged, null);
+            SendEventForVirtualViewId(Host_ID, EventTypes.WindowContentChanged, null);
         }
 
         /// <summary>
@@ -172,8 +172,8 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
             {
                 //// Since we don't want the parent to be focusable, but we can't remove
                 //// actions from a node, copy over the necessary fields.
-                AccessibilityNodeInfoCompat? result = AccessibilityNodeInfoCompat.Obtain(this.host);
-                AccessibilityNodeInfoCompat? source = AccessibilityNodeInfoCompat.Obtain(this.host);
+                AccessibilityNodeInfoCompat? result = AccessibilityNodeInfoCompat.Obtain(_host);
+                AccessibilityNodeInfoCompat? source = AccessibilityNodeInfoCompat.Obtain(_host);
                 //// If the result and source return null then the host view is not valid.
                 if (result == null || source == null)
                 {
@@ -181,7 +181,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 }
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                ViewCompat.OnInitializeAccessibilityNodeInfo(this.host, source);
+                ViewCompat.OnInitializeAccessibilityNodeInfo(_host, source);
 #pragma warning restore CS0618 // Type or member is obsolete
 
 
@@ -195,7 +195,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 result.SetBoundsInScreen(screenRect);
 #pragma warning restore CS0618 // Type or member is obsolete
 #pragma warning disable CS0618 // Type or member is obsolete
-                Android.Views.IViewParent? parent = ViewCompat.GetParentForAccessibility(this.host);
+                Android.Views.IViewParent? parent = ViewCompat.GetParentForAccessibility(_host);
 #pragma warning restore CS0618 // Type or member is obsolete
 
                 if (parent != null && parent is Android.Views.View)
@@ -207,14 +207,14 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 result.PackageName = source.PackageName;
                 result.ClassName = source.ClassName;
                 //// Add the root layout with ID.
-                result.AddChild(this.host, Host_ID);
+                result.AddChild(_host, Host_ID);
                 return result;
             }
             else if (virtualViewId == Host_ID)
             {
                 //// The host node is identical to the root node, except that it is a
                 //// child of the root view and is populated with virtual descendants.
-                AccessibilityNodeInfoCompat? node = AccessibilityNodeInfoCompat.Obtain(this.host, virtualViewId);
+                AccessibilityNodeInfoCompat? node = AccessibilityNodeInfoCompat.Obtain(_host, virtualViewId);
                 //// If the node return null then the host view is not valid.
                 if (node == null)
                 {
@@ -222,21 +222,28 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 }
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                ViewCompat.OnInitializeAccessibilityNodeInfo(this.host, node);
+                ViewCompat.OnInitializeAccessibilityNodeInfo(_host, node);
 #pragma warning restore CS0618 // Type or member is obsolete
 
                 List<SemanticsNode>? semanticsNodes = null;
-                if (this.virtualView is ISemanticsProvider)
+                if (_virtualView is ISemanticsProvider)
                 {
-                    semanticsNodes = ((ISemanticsProvider)this.virtualView).GetSemanticsNodes(this.virtualView.Width, this.virtualView.Height);
+                    semanticsNodes = ((ISemanticsProvider)_virtualView).GetSemanticsNodes(_virtualView.Width, _virtualView.Height);
                 }
 
-                List<Android.Views.View> children = new List<Android.Views.View>();
-                this.AddAccessibilityChildren(host, children);
+                List<Android.Views.View> children = [];
+
+/* Unmerged change from project 'Syncfusion.Maui.Toolkit (net9.0-android)'
+Before:
+                AddAccessibilityChildren(_host, children);
+After:
+				CustomAccessibilityProvider.AddAccessibilityChildren(_host, children);
+*/
+				AddAccessibilityChildren(_host, children);
 
                 //// Children is important means the children gets the accessibility event
                 //// while the drawn UI and children are overlapped.
-                if (this.isChildNode)
+                if (_isChildNode)
                 {
                     foreach (var child in children)
                     {
@@ -248,13 +255,13 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 {
                     foreach (SemanticsNode info in semanticsNodes)
                     {
-                        node.AddChild(this.host, info.Id);
+                        node.AddChild(_host, info.Id);
                     }
                 }
 
                 //// Children is not important means the drawn UI gets the accessibility event
                 //// while the drawn UI and children are overlapped.
-                if (!this.isChildNode)
+                if (!_isChildNode)
                 {
                     foreach (var child in children)
                     {
@@ -262,17 +269,17 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                     }
                 }
 
-                node.SetParent(this.host);
-                node.SetSource(this.host, Host_ID);
+                node.SetParent(_host);
+                node.SetSource(_host, Host_ID);
 
                 return node;
             }
             else
             {
                 List<SemanticsNode>? semanticsNodes = null;
-                if (this.virtualView is ISemanticsProvider)
+                if (_virtualView is ISemanticsProvider)
                 {
-                    semanticsNodes = ((ISemanticsProvider)this.virtualView).GetSemanticsNodes(this.virtualView.Width, this.virtualView.Height);
+                    semanticsNodes = ((ISemanticsProvider)_virtualView).GetSemanticsNodes(_virtualView.Width, _virtualView.Height);
                 }
 
                 SemanticsNode? semanticsNode = null;
@@ -291,20 +298,22 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                     }
 
                     node.Enabled = true;
-                    node.ClassName = this.host.Class.Name;
+                    node.ClassName = _host.Class.Name;
 
                     node.ContentDescription = semanticsNode.Text;
 
                     Func<double, float> toPixels = Android.App.Application.Context.ToPixels;
-                    //// Parent bounds consider the right and bottom position from rectangle.
-                    Rectangle rect = new Rectangle();
-                    rect.Left = (int)toPixels(semanticsNode.Bounds.X);
-                    rect.Top = (int)toPixels(semanticsNode.Bounds.Y);
-                    rect.Right = (int)toPixels(semanticsNode.Bounds.X + semanticsNode.Bounds.Width);
-                    rect.Bottom = (int)toPixels(semanticsNode.Bounds.Y + semanticsNode.Bounds.Height);
+					//// Parent bounds consider the right and bottom position from rectangle.
+					Rectangle rect = new Rectangle
+					{
+						Left = (int)toPixels(semanticsNode.Bounds.X),
+						Top = (int)toPixels(semanticsNode.Bounds.Y),
+						Right = (int)toPixels(semanticsNode.Bounds.X + semanticsNode.Bounds.Width),
+						Bottom = (int)toPixels(semanticsNode.Bounds.Y + semanticsNode.Bounds.Height)
+					};
 
 #pragma warning disable CS0618 // Type or member is obsolete
-                    node.SetBoundsInParent(rect);
+					node.SetBoundsInParent(rect);
 #pragma warning restore CS0618 // Type or member is obsolete
                     //// Add click action only for touch enabled semantics node.
                     if (semanticsNode.IsTouchEnabled)
@@ -312,11 +321,11 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                         node.AddAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ActionClick);
                     }
 
-                    node.PackageName = this.host.Context?.PackageName;
-                    node.SetParent(this.host, Host_ID);
-                    node.SetSource(this.host, virtualViewId);
+                    node.PackageName = _host.Context?.PackageName;
+                    node.SetParent(_host, Host_ID);
+                    node.SetSource(_host, virtualViewId);
                     //// add accessibility focus clear action for focused node.
-                    if (focusedVirtualID == virtualViewId)
+                    if (_focusedVirtualID == virtualViewId)
                     {
                         node.AccessibilityFocused = true;
                         node.AddAction(AccessibilityNodeInfoCompat.AccessibilityActionCompat.ActionClearAccessibilityFocus);
@@ -333,7 +342,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 #pragma warning disable CS0618 // Type or member is obsolete
                     node.GetBoundsInParent(tempRect);
 
-                    if (this.IntersectVisibleToUser(tempRect))
+                    if (IntersectVisibleToUser(tempRect))
                     {
                         node.VisibleToUser = true;
                         node.SetBoundsInParent(tempRect);
@@ -344,7 +353,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                     node.Focusable = true;
                     int[] position = new int[2];
                     //// Calculate screen-relative bound.
-                    this.host.GetLocationOnScreen(position);
+                    _host.GetLocationOnScreen(position);
                     Rectangle screenBounds = new Rectangle();
                     screenBounds.Set(tempRect);
                     screenBounds.Offset(position[0], position[1]);
@@ -366,14 +375,14 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
             }
 
             // Attached to invisible window means this view is not visible.
-            if (this.host.WindowVisibility != Android.Views.ViewStates.Visible)
+            if (_host.WindowVisibility != Android.Views.ViewStates.Visible)
             {
                 return false;
             }
 
             Rectangle rect = new Rectangle();
             // If no portion of the parent is visible, this view is not visible.
-            if (!this.host.GetLocalVisibleRect(rect))
+            if (!_host.GetLocalVisibleRect(rect))
             {
                 return false;
             }
@@ -389,7 +398,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// <param name="p1">y position value</param>
         /// <param name="view">Android view</param>
         /// <returns>the view have hovering point.</returns>
-        private bool HandleChildHover(float p0, float p1, Android.Views.View view)
+        private static bool HandleChildHover(float p0, float p1, Android.Views.View view)
         {
             Android.Views.ViewGroup? viewGroup = (Android.Views.ViewGroup?)view;
             if (viewGroup == null)
@@ -416,7 +425,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                         return true;
                     }
                 }
-                else if (child is Android.Views.ViewGroup && this.HandleChildHover(p0, p1, child))
+                else if (child is Android.Views.ViewGroup && CustomAccessibilityProvider.HandleChildHover(p0, p1, child))
                 {
                     return true;
                 }
@@ -432,12 +441,12 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// <returns></returns>
         internal bool DispatchHoverEvent(Android.Views.MotionEvent e)
         {
-            if (this.HandleChildHover(e.GetX(), e.GetY(), this.host))
+            if (CustomAccessibilityProvider.HandleChildHover(e.GetX(), e.GetY(), _host))
             {
                 return false;
             }
 
-            int virtualViewId = this.GetVirtualViewAt(e.GetX(), e.GetY());
+            int virtualViewId = GetVirtualViewAt(e.GetX(), e.GetY());
 
             switch (e.Action)
             {
@@ -446,7 +455,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                     UpdateHoveredVirtualViewId(virtualViewId);
                     return virtualViewId != Root_ID;
                 case Android.Views.MotionEventActions.HoverExit:
-                    if (hoveredVirtualID != Root_ID)
+                    if (_hoveredVirtualID != Root_ID)
                     {
                         UpdateHoveredVirtualViewId(Root_ID);
                         return true;
@@ -466,9 +475,9 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         private int GetVirtualViewAt(float p0, float p1)
         {
             List<SemanticsNode>? semanticsNodes = null;
-            if (this.virtualView is ISemanticsProvider)
+			if (_virtualView is ISemanticsProvider provider)
             {
-                semanticsNodes = ((ISemanticsProvider)this.virtualView).GetSemanticsNodes(this.virtualView.Width, this.virtualView.Height);
+                semanticsNodes = provider.GetSemanticsNodes(_virtualView.Width, _virtualView.Height);
             }
 
             if (semanticsNodes != null)
@@ -477,12 +486,14 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 {
                     SemanticsNode semanticsNode = semanticsNodes[i];
                     Func<double, float> toPixels = Android.App.Application.Context.ToPixels;
-                    Rectangle rect = new Rectangle();
-                    rect.Left = (int)toPixels(semanticsNode.Bounds.X);
-                    rect.Top = (int)toPixels(semanticsNode.Bounds.Y);
-                    rect.Right = (int)toPixels(semanticsNode.Bounds.X + semanticsNode.Bounds.Width);
-                    rect.Bottom = (int)toPixels(semanticsNode.Bounds.Y + semanticsNode.Bounds.Height);
-                    if (rect.Contains((int)p0, (int)p1))
+					Rectangle rect = new Rectangle
+					{
+						Left = (int)toPixels(semanticsNode.Bounds.X),
+						Top = (int)toPixels(semanticsNode.Bounds.Y),
+						Right = (int)toPixels(semanticsNode.Bounds.X + semanticsNode.Bounds.Width),
+						Bottom = (int)toPixels(semanticsNode.Bounds.Y + semanticsNode.Bounds.Height)
+					};
+					if (rect.Contains((int)p0, (int)p1))
                     {
                         return semanticsNode.Id;
                     }
@@ -498,29 +509,29 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// <param name="virtualViewId">Virtual view id value.</param>
         private void UpdateHoveredVirtualViewId(int virtualViewId)
         {
-            if (this.hoveredVirtualID == virtualViewId)
+            if (_hoveredVirtualID == virtualViewId)
             {
                 return;
             }
 
-            int previousVirtualViewId = this.hoveredVirtualID;
-            this.hoveredVirtualID = virtualViewId;
+            int previousVirtualViewId = _hoveredVirtualID;
+            _hoveredVirtualID = virtualViewId;
             List<SemanticsNode>? semanticsNodes = null;
-            if (this.virtualView is ISemanticsProvider)
+            if (_virtualView is ISemanticsProvider provider)
             {
-                semanticsNodes = ((ISemanticsProvider)this.virtualView).GetSemanticsNodes(this.virtualView.Width, this.virtualView.Height);
+                semanticsNodes = provider.GetSemanticsNodes(_virtualView.Width, _virtualView.Height);
             }
 
             if (virtualViewId != Root_ID)
             {
                 SemanticsNode? semanticsNode = semanticsNodes?.FirstOrDefault(info => info.Id == virtualViewId);
-                this.SendEventForVirtualViewId(virtualViewId, EventTypes.ViewHoverEnter, semanticsNode);
+                SendEventForVirtualViewId(virtualViewId, EventTypes.ViewHoverEnter, semanticsNode);
             }
 
             if (previousVirtualViewId != Root_ID)
             {
                 SemanticsNode? previousNode = semanticsNodes?.FirstOrDefault(info => info.Id == previousVirtualViewId);
-                this.SendEventForVirtualViewId(previousVirtualViewId, EventTypes.ViewHoverExit, previousNode);
+                SendEventForVirtualViewId(previousVirtualViewId, EventTypes.ViewHoverExit, previousNode);
             }
         }
 
@@ -529,7 +540,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// </summary>
         /// <param name="host"></param>
         /// <param name="children"></param>
-        private void AddAccessibilityChildren(Android.Views.View host, List<Android.Views.View> children)
+        private static void AddAccessibilityChildren(Android.Views.View host, List<Android.Views.View> children)
         {
             Android.Views.ViewGroup? viewGroup = (Android.Views.ViewGroup?)host;
             if (viewGroup == null)
@@ -551,7 +562,16 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 }
                 else if (child is Android.Views.ViewGroup)
                 {
-                    this.AddAccessibilityChildren(child, children);
+
+/* Unmerged change from project 'Syncfusion.Maui.Toolkit (net9.0-android)'
+Before:
+                    AddAccessibilityChildren(child, children);
+                }
+After:
+					CustomAccessibilityProvider.AddAccessibilityChildren(child, children);
+                }
+*/
+					AddAccessibilityChildren(child, children);
                 }
             }
         }
@@ -566,9 +586,9 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         public override bool PerformAction(int virtualViewId, int action, Bundle? arguments)
         {
             List<SemanticsNode>? semanticsNodes = null;
-            if (this.virtualView is ISemanticsProvider)
+            if (_virtualView is ISemanticsProvider)
             {
-                semanticsNodes = ((ISemanticsProvider)this.virtualView).GetSemanticsNodes(this.virtualView.Width, this.virtualView.Height);
+                semanticsNodes = ((ISemanticsProvider)_virtualView).GetSemanticsNodes(_virtualView.Width, _virtualView.Height);
             }
 
             SemanticsNode? semanticsNode = semanticsNodes?.FirstOrDefault(info => info.Id == virtualViewId);
@@ -579,10 +599,10 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                     case AccessibilityNodeInfoCompat.ActionAccessibilityFocus:
                         {
                             bool handled = false;
-                            if (focusedVirtualID != virtualViewId)
+                            if (_focusedVirtualID != virtualViewId)
                             {
-                                focusedVirtualID = virtualViewId;
-                                this.host.Invalidate();
+                                _focusedVirtualID = virtualViewId;
+                                _host.Invalidate();
                                 SendEventForVirtualViewId(virtualViewId, EventTypes.ViewAccessibilityFocused, semanticsNode);
                                 handled = true;
                             }
@@ -591,12 +611,12 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                         }
                     case AccessibilityNodeInfoCompat.ActionClearAccessibilityFocus:
                         {
-                            if (focusedVirtualID == virtualViewId)
+                            if (_focusedVirtualID == virtualViewId)
                             {
-                                focusedVirtualID = Root_ID;
+                                _focusedVirtualID = Root_ID;
                             }
 
-                            this.host.Invalidate();
+                            _host.Invalidate();
                             SendEventForVirtualViewId(virtualViewId, EventTypes.ViewAccessibilityFocusCleared, semanticsNode);
 
                             return true;
@@ -606,7 +626,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                             if ((action == AccessibilityNodeInfoCompat.ActionClick && semanticsNode != null && semanticsNode.IsTouchEnabled) || virtualViewId == Host_ID)
                             {
 #pragma warning disable CS0618 // Type or member is obsolete
-                                return ViewCompat.PerformAccessibilityAction(this.host, action, arguments);
+                                return ViewCompat.PerformAccessibilityAction(_host, action, arguments);
 #pragma warning restore CS0618 // Type or member is obsolete
 
                             }
@@ -639,7 +659,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 return;
             }
 
-            Android.Views.ViewGroup? parent = (Android.Views.ViewGroup?)this.host.Parent;
+            Android.Views.ViewGroup? parent = (Android.Views.ViewGroup?)_host.Parent;
             if (parent == null)
             {
                 return;
@@ -648,8 +668,8 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
             AccessibilityEvent? accessibilityEvent;
             if (virtualViewId == Host_ID)
             {
-                accessibilityEvent = this.GetAccessibilityEvent(eventType);
-                this.host.OnInitializeAccessibilityEvent(accessibilityEvent);
+                accessibilityEvent = CustomAccessibilityProvider.GetAccessibilityEvent(eventType);
+                _host.OnInitializeAccessibilityEvent(accessibilityEvent);
             }
             else
             {
@@ -658,18 +678,18 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                     return;
                 }
 
-                accessibilityEvent = this.GetAccessibilityEvent(eventType);
+                accessibilityEvent = CustomAccessibilityProvider.GetAccessibilityEvent(eventType);
                 if (accessibilityEvent != null)
                 {
                     accessibilityEvent.Enabled = true;
-                    accessibilityEvent.ClassName = this.host.Class.Name;
+                    accessibilityEvent.ClassName = _host.Class.Name;
                     accessibilityEvent.ContentDescription = semanticsNode.Text;
-                    accessibilityEvent.PackageName = this.host.Context?.PackageName;
-                    accessibilityEvent.SetSource(this.host, virtualViewId);
+                    accessibilityEvent.PackageName = _host.Context?.PackageName;
+                    accessibilityEvent.SetSource(_host, virtualViewId);
                 }
             }
 
-            parent.RequestSendAccessibilityEvent(this.host, accessibilityEvent);
+            parent.RequestSendAccessibilityEvent(_host, accessibilityEvent);
         }
 
         /// <summary>
@@ -678,13 +698,15 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// <param name="eventTypes">Event type.</param>
         /// <returns></returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
-        private AccessibilityEvent? GetAccessibilityEvent(EventTypes eventTypes)
+        private static AccessibilityEvent? GetAccessibilityEvent(EventTypes eventTypes)
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.R)
             {
-                AccessibilityEvent accessibilityEvent = new AccessibilityEvent();
-                accessibilityEvent.EventType = eventTypes;
-                return accessibilityEvent;
+				AccessibilityEvent accessibilityEvent = new AccessibilityEvent
+				{
+					EventType = eventTypes
+				};
+				return accessibilityEvent;
             }
             else
             {

@@ -5,20 +5,20 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// <summary>
 	/// Class contains property and fields for ListViewPullToRefresh.
 	/// </summary>
-	public class InboxInfo : INotifyPropertyChanged
+	public partial class InboxInfo : INotifyPropertyChanged
 	{
 		#region Fields
 
-		string? profileName;
-		string? name;
-		string? subject;
-		string? description;
-		DateTime date;
-		bool isAttached;
-		bool isOpened;
-		bool isImportant;
-		Color? avatarBackgroundColor;
-		Color? avatarTextColor;
+		string? _profileName;
+		string? _name;
+		string? _subject;
+		string? _description;
+		DateTime _date;
+		bool _isAttached;
+		bool _isOpened;
+		bool _isImportant;
+		Color? _avatarBackgroundColor;
+		Color? _avatarTextColor;
 
 		#endregion
 
@@ -31,11 +31,11 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			get
 			{
-				return name;
+				return _name;
 			}
 			set
 			{
-				name = value;
+				_name = value;
 				OnPropertyChanged("Name");
 			}
 		}
@@ -45,10 +45,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public string? ProfileName
 		{
-			get { return profileName; }
+			get { return _profileName; }
 			set
 			{
-				profileName = value;
+				_profileName = value;
 				OnPropertyChanged("ProfileName");
 			}
 		}
@@ -60,12 +60,12 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			get
 			{
-				return subject;
+				return _subject;
 			}
 
 			set
 			{
-				subject = value;
+				_subject = value;
 				OnPropertyChanged("Subject");
 			}
 		}
@@ -77,12 +77,12 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			get
 			{
-				return description;
+				return _description;
 			}
 
 			set
 			{
-				description = value;
+				_description = value;
 				OnPropertyChanged("Description");
 			}
 		}
@@ -94,12 +94,12 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			get
 			{
-				return date;
+				return _date;
 			}
 
 			set
 			{
-				date = value;
+				_date = value;
 				OnPropertyChanged("Date");
 			}
 		}
@@ -109,10 +109,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public bool IsAttached
 		{
-			get { return isAttached; }
+			get { return _isAttached; }
 			set
 			{
-				isAttached = value;
+				_isAttached = value;
 				OnPropertyChanged("IsAttached");
 			}
 		}
@@ -122,10 +122,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public bool IsImportant
 		{
-			get { return isImportant; }
+			get { return _isImportant; }
 			set
 			{
-				isImportant = value;
+				_isImportant = value;
 				OnPropertyChanged("IsImportant");
 			}
 		}
@@ -135,10 +135,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public bool IsOpened
 		{
-			get { return isOpened; }
+			get { return _isOpened; }
 			set
 			{
-				isOpened = value;
+				_isOpened = value;
 				OnPropertyChanged("IsOpened");
 			}
 		}
@@ -148,10 +148,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public Color? AvatarBackgroundColor
 		{
-			get { return avatarBackgroundColor; }
+			get { return _avatarBackgroundColor; }
 			set
 			{
-				avatarBackgroundColor = value;
+				_avatarBackgroundColor = value;
 				OnPropertyChanged("AvatarBackgroundColor");
 			}
 		}
@@ -161,10 +161,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public Color? AvatarTextColor
 		{
-			get { return avatarTextColor; }
+			get { return _avatarTextColor; }
 			set
 			{
-				avatarTextColor = value;
+				_avatarTextColor = value;
 				OnPropertyChanged("AvatarTextColor");
 			}
 		}
@@ -183,8 +183,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="name">string type parameter represent propertyName as name</param>
 		public void OnPropertyChanged(string name)
 		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(name));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
 
 		#endregion

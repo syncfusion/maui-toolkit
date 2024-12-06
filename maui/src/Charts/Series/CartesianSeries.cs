@@ -32,9 +32,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
             get
             {
                 if (ActualXValues is CategoryAxis category)
-                    return category.ArrangeByIndex;
+				{
+					return category.ArrangeByIndex;
+				}
 
-                return false;
+				return false;
             }
         }
 
@@ -628,7 +630,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
 
             double startX = double.NaN, startY = double.NaN, endX = double.NaN, endY = double.NaN;
-            ConvertRectToValue(ref startX, ref endX, ref startY, ref endY, rectangle, ActualXAxis, ActualYAxis);
+
+			CartesianSeries.ConvertRectToValue(ref startX, ref endX, ref startY, ref endY, rectangle, ActualXAxis, ActualYAxis);
 
             return GetDataPoints(startX, endX, startY, endY);
         }
@@ -640,9 +643,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             var xValues = GetXValues();
             if (xValues == null || xValues.Count == 0)
-                return null;
+			{
+				return null;
+			}
 
-            int minimum = 0, maximum = xValues.Count - 1;
+			int minimum = 0, maximum = xValues.Count - 1;
 
             if (IsLinearData)
             {
@@ -681,7 +686,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal List<double>? CalculateControlPoints(IList<double> values, double yCoef, double nextyCoef, int i)
         {
-            List<double> controlPoints = new List<double>();
+            List<double> controlPoints = [];
             var xValues = GetXValues();
 
             if (xValues == null)
@@ -700,7 +705,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             double deltaX2 = nextX - x;
 
-            deltaX2 = deltaX2 * deltaX2;
+            deltaX2 *= deltaX2;
 
             double dx1 = (2 * x) + nextX;
             double dx2 = x + (2 * nextX);
@@ -724,16 +729,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
             return controlPoints;
         }
 
-        internal List<double> CalculateControlPoints(double pointX, double pointY, double pointX1, double pointY1, double coefficientY, double coefficientY1)
+        internal static List<double> CalculateControlPoints(double pointX, double pointY, double pointX1, double pointY1, double coefficientY, double coefficientY1)
         {
-            return new List<double>(4) { pointX + (coefficientY / 3), pointY + (coefficientY / 3), pointX1 - (coefficientY1 / 3), pointY1 - (coefficientY1 / 3) };
+            return [pointX + (coefficientY / 3), pointY + (coefficientY / 3), pointX1 - (coefficientY1 / 3), pointY1 - (coefficientY1 / 3)];
         }
 
-        internal List<double> CalculateControlPoints(double pointX, double pointY, double pointX1, double pointY1, double coefficientY, double coefficientY1, double dx)
+        internal static List<double> CalculateControlPoints(double pointX, double pointY, double pointX1, double pointY1, double coefficientY, double coefficientY1, double dx)
         {
             var value = dx / 3;
 
-            return new List<double>(4) { pointX + value, pointY + (coefficientY * value), pointX1 - value, pointY1 - (coefficientY1 * value) };
+            return [pointX + value, pointY + (coefficientY * value), pointX1 - value, pointY1 - (coefficientY1 * value)];
         }
 
         internal override void LegendItemToggled(LegendItem legendItem)
@@ -810,9 +815,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
         internal override void UpdateRange()
         {
             if (ChartArea == null)
-                return;
+			{
+				return;
+			}
 
-            VisibleXRange = XRange;
+			VisibleXRange = XRange;
             VisibleYRange = YRange;
 
             if (PointsCount <= 0)
@@ -864,7 +871,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         VisibleXRange = new DoubleRange(VisibleXRange.Start + diff, VisibleXRange.End - diff);
                     }
                 }
-                else if (PointsCount == 1 && ItemsSource != null && Segments != null && Segments.Count == 0)
+                else if (PointsCount == 1 && ItemsSource != null && _segments != null && _segments.Count == 0)
                 {
                     var xValues = GetXValues();
                     var yValues = ((XYDataSeries)this).YValues;
@@ -1007,9 +1014,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
         internal override Brush? GetSelectionBrush(object item, int index)
         {
             if (item is LegendItem)
-                return null;
+			{
+				return null;
+			}
 
-            return base.GetSelectionBrush(item, index);
+			return base.GetSelectionBrush(item, index);
         }
 
         internal override void OnAttachedToChart(IChart? chart)
@@ -1051,9 +1060,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
             {
                 var visibleSeries = ChartArea.VisibleSeries;
 
-                if (visibleSeries == null) return;
+                if (visibleSeries == null)
+				{
+					return;
+				}
 
-                foreach (var chartSeries in visibleSeries)
+				foreach (var chartSeries in visibleSeries)
                 {
                     chartSeries.SegmentsCreated = false;
                 }
@@ -1062,9 +1074,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal virtual void CalculateDataPointPosition(int index, ref double x, ref double y)
         {
-            if (ActualYAxis == null || ActualXAxis == null || ChartArea == null) return;
+            if (ActualYAxis == null || ActualXAxis == null || ChartArea == null)
+			{
+				return;
+			}
 
-            double X = x;
+			double X = x;
 
             if (ActualXAxis != null && !double.IsNaN(x))
             {
@@ -1079,9 +1094,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal bool IsDataInVisibleRange(double xValue, double yValue)
         {
-            if (ActualYAxis == null || ActualXAxis == null) return false;
+            if (ActualYAxis == null || ActualXAxis == null)
+			{
+				return false;
+			}
 
-            if (xValue < ActualXAxis.VisibleRange.Start || xValue > ActualXAxis.VisibleRange.End
+			if (xValue < ActualXAxis.VisibleRange.Start || xValue > ActualXAxis.VisibleRange.End
                           || yValue < ActualYAxis.VisibleRange.Start || yValue > ActualYAxis.VisibleRange.End)
             {
                 return false;
@@ -1094,9 +1112,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior tooltipBehavior, float x, float y)
         {
-            if (Segments == null) return null;
+            if (_segments == null)
+			{
+				return null;
+			}
 
-            int index = IsSideBySide ? GetDataPointIndex(x, y) : SeriesContainsPoint(new PointF(x, y)) ? TooltipDataPointIndex : -1;
+			int index = IsSideBySide ? GetDataPointIndex(x, y) : SeriesContainsPoint(new PointF(x, y)) ? TooltipDataPointIndex : -1;
 
             if (index < 0 || ItemsSource == null || ActualData == null || ActualXAxis == null
                 || ActualYAxis == null || SeriesYValues == null)
@@ -1106,9 +1127,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             var xValues = GetXValues();
 
-            if (xValues == null || ChartArea == null) return null;
+            if (xValues == null || ChartArea == null)
+			{
+				return null;
+			}
 
-            object dataPoint = ActualData[index];
+			object dataPoint = ActualData[index];
             double xValue = xValues[index];
             IList<double> yValues = SeriesYValues[0];
             double yValue = Convert.ToDouble(yValues[index]);
@@ -1133,19 +1157,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 xPosition = seriesBounds.Left < xPosition ? xPosition : seriesBounds.Left;
                 xPosition = seriesBounds.Right > xPosition ? xPosition : seriesBounds.Right;
 
-                TooltipInfo tooltipInfo = new TooltipInfo(this);
-                tooltipInfo.X = xPosition;
-                tooltipInfo.Y = yPosition;
-                tooltipInfo.Index = index;
-                tooltipInfo.Margin = tooltipBehavior.Margin;
-                tooltipInfo.TextColor = tooltipBehavior.TextColor;
-                tooltipInfo.FontFamily = tooltipBehavior.FontFamily;
-                tooltipInfo.FontSize = tooltipBehavior.FontSize;
-                tooltipInfo.FontAttributes = tooltipBehavior.FontAttributes;
-                tooltipInfo.Background = tooltipBehavior.Background;
-                tooltipInfo.Text = yValue.ToString("#.##");
-                tooltipInfo.Item = dataPoint;
-                return tooltipInfo;
+				TooltipInfo tooltipInfo = new TooltipInfo(this)
+				{
+					X = xPosition,
+					Y = yPosition,
+					Index = index,
+					Margin = tooltipBehavior.Margin,
+					TextColor = tooltipBehavior.TextColor,
+					FontFamily = tooltipBehavior.FontFamily,
+					FontSize = tooltipBehavior.FontSize,
+					FontAttributes = tooltipBehavior.FontAttributes,
+					Background = tooltipBehavior.Background,
+					Text = yValue.ToString("#.##"),
+					Item = dataPoint
+				};
+				return tooltipInfo;
             }
 
             return null;
@@ -1204,7 +1230,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (legend != null && legend.IsVisible && legendItems != null)
             {
-                foreach (LegendItem legendItem in legendItems)
+                foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
                 {
                     if (legendItem != null && legendItem.Item == this)
                     {
@@ -1222,7 +1248,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (legend != null && legend.IsVisible && legendItems != null)
             {
-                foreach (LegendItem legendItem in legendItems)
+                foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
                 {
                     if (legendItem != null && legendItem.Item == this)
                     {
@@ -1268,7 +1294,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal List<object> FindNearestChartPoints(float pointX, float pointY)
         {
-            List<object> dataPointsList = new List<object>();
+            List<object> dataPointsList = [];
             double delta = 0;
 
             if (_actualXAxis != null && ChartArea != null)
@@ -1281,7 +1307,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 if (IsIndexed)
                 {
                     xValue = Math.Round(xValue);
-                    var isGrouped = this.ActualXAxis is CategoryAxis category && !category.ArrangeByIndex;
+                    var isGrouped = ActualXAxis is CategoryAxis category && !category.ArrangeByIndex;
                     int dataCount = isGrouped ? GroupedXValues.Count : PointsCount;
 
                     if (xValue <= xEnd && xValue >= xStart && xValue < dataCount && xValue >= 0)
@@ -1387,7 +1413,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal virtual List<object>? GetDataPoints(double startX, double endX, double startY, double endY, int minimum, int maximum, List<double> xValues, bool validateYValues)
         {
-            List<object> dataPoints = new List<object>();
+            List<object> dataPoints = [];
             if (ActualSeriesYValues == null || ActualData == null || xValues.Count != ActualSeriesYValues[0].Count)
             {
                 return null;
@@ -1467,7 +1493,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 }
             }
 
-            coEfficient[++index] = double.IsNaN(slope[slope.Length - 1]) ? 0 : slope[slope.Length - 1];
+            coEfficient[++index] = double.IsNaN(slope[^1]) ? 0 : slope[^1];
 
             return coEfficient;
         }
@@ -1587,6 +1613,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 foreach (object point in nearestDataPoints)
                 {
                     int index = ActualData.IndexOf(point);
+                    if (index == -1)
+					{
+						 continue;
+					}
+                       
                     var xValue = xValues[index];
                     double yValue = yValues[index];
                     string label = yValue.ToString();
@@ -1617,7 +1648,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             maximum = endX >= xValues[maximum] ? maximum : maximum - 1;
         }
 
-        void ConvertRectToValue(ref double startX, ref double endX, ref double startY, ref double endY, Rect rect, ChartAxis actualXAxis, ChartAxis actualYAxis)
+		static void ConvertRectToValue(ref double startX, ref double endX, ref double startY, ref double endY, Rect rect, ChartAxis actualXAxis, ChartAxis actualYAxis)
         {
             bool isVertical = actualXAxis.IsVertical;
 
@@ -1631,18 +1662,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (startX > endX)
             {
-                double temp = endX;
-                endX = startX;
-                startX = temp;
-            }
+				(startX, endX) = (endX, startX);
+			}
 
-            if (startY > endY)
+			if (startY > endY)
             {
-                double temp = endY;
-                endY = startY;
-                startY = temp;
-            }
-        }
+				(startY, endY) = (endY, startY);
+			}
+		}
 
         static void OnDataLabelSettingsChanged(BindableObject bindable, object oldValue, object newValue)
         {
@@ -1668,7 +1695,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (legendItems != null)
                 {
-                    foreach (LegendItem legendItem in legendItems)
+                    foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
                     {
                         if (legendItem != null && legendItem.Item == chartSeries)
                         {

@@ -74,9 +74,11 @@
                           ItemsSource="{Binding Source={x:Reference ViewModel},Path=ZoomModeType}"
                           SelectedItem="{Binding Source={x:Reference ViewModel},Path=ZoomModeType[2]}"
                           VerticalOptions="Start" HorizontalOptions="Fill"
-                          x:Name="ZoomModePicker" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                          x:Name="ZoomModePicker"
                           SelectedIndex="2"
-                          SelectedIndexChanged="ZoomModeChanged">
+                          SelectedIndexChanged="ZoomModeChanged"
+                          BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}">
                     </Picker>
                 </Grid>
                 <Grid>
@@ -85,8 +87,15 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Text="Directional Zooming" HorizontalOptions="Start"  Padding="5" FontSize="15" IsVisible="{OnPlatform WinUI=false,MacCatalyst=false}"/>
-                    <CheckBox Grid.Row="0" Grid.Column="1" x:Name="checkbox" VerticalOptions="Start" HorizontalOptions="Start" IsVisible="{OnPlatform WinUI=false,MacCatalyst=false}"/>
-                </Grid>
+                    <CheckBox Grid.Row="0" Grid.Column="1" x:Name="checkbox" HorizontalOptions="StartAndExpand" IsVisible="{OnPlatform WinUI=false,MacCatalyst=false}">
+                      <CheckBox.VerticalOptions>
+                        <OnPlatform x:TypeArguments="LayoutOptions">
+                          <On Platform="MacCatalyst, iOS" Value="Center" />
+                          <On Platform="Default" Value="Start" />
+                        </OnPlatform>
+                      </CheckBox.VerticalOptions>
+                    </CheckBox>
+        </Grid>
             </VerticalStackLayout>
         </Grid>
     </localCore:SampleView.OptionView>

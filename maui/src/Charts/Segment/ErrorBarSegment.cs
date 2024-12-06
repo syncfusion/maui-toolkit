@@ -2,418 +2,422 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-    /// <summary>
-    /// Represents a segment of an <see cref="ErrorBarSeries"/> chart, used to display error bars for data points.
-    /// </summary>
-    public class ErrorBarSegment : ChartSegment
-    {
-        #region Fields
+	/// <summary>
+	/// Represents a segment of an <see cref="ErrorBarSeries"/> chart, used to display error bars for data points.
+	/// </summary>
+	public partial class ErrorBarSegment : ChartSegment
+	{
+		#region Fields
 
-        #region Private Fields
+		#region Private Fields
 
-        int _index = 0;
-        float _strokeWidth;
-        Color? _strokeColor;
-        double _horizontalErrorValue;
-        double _verticalErrorValue;
-        List<Point> _leftPointCollection = new();
-        List<Point> _rightPointCollection = new();
-        List<Point> _topPointCollection = new();
-        List<Point> _bottomPointCollection = new();
+		int _index;
+		float _strokeWidth;
+		Color? _strokeColor;
+		double _horizontalErrorValue;
+		double _verticalErrorValue;
+		readonly List<Point> _leftPointCollection = [];
+		readonly List<Point> _rightPointCollection = [];
+		readonly List<Point> _topPointCollection = [];
+		readonly List<Point> _bottomPointCollection = [];
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        DoubleRange XRange { get; set; }
-        DoubleRange YRange { get; set; }
+		DoubleRange XRange { get; set; }
+		DoubleRange YRange { get; set; }
 
-        internal List<ErrorSegmentPoint[]> ErrorSegmentPoints { get; set; }
+		internal List<ErrorSegmentPoint[]> ErrorSegmentPoints { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ErrorBarSegment"/> class.
-        /// </summary>
-        public ErrorBarSegment()
-        {
-            ErrorSegmentPoints = new List<ErrorSegmentPoint[]>();
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ErrorBarSegment"/> class.
+		/// </summary>
+		public ErrorBarSegment()
+		{
+			ErrorSegmentPoints = [];
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Internal Methods
+		#region Internal Methods
 
-        /// <summary>
-        /// Converts the data points to corresponding screen points for rendering the error bar segment.
-        /// </summary>
-        internal override void SetData(IList xList, IList yList)
-        {
-            var xValues = (IList<double>)xList;
-            var yValues = (IList<double>)yList;
-            _index = xValues.Count;
-            
-            if (Series is ErrorBarSeries errorBarSeries)
-            {
-                var horSdValue = GetSdErrorValue(xValues);
-                var verSdValue = GetSdErrorValue(yValues);
+		/// <summary>
+		/// Converts the data points to corresponding screen points for rendering the error bar segment.
+		/// </summary>
+		internal override void SetData(IList xList, IList yList)
+		{
+			var xValues = (IList<double>)xList;
+			var yValues = (IList<double>)yList;
+			_index = xValues.Count;
 
-                switch (errorBarSeries.Type)
-                {
-                    case ErrorBarType.StandardDeviation:
-                    case ErrorBarType.StandardError:
-                        _horizontalErrorValue = horSdValue[1];
-                        _verticalErrorValue = verSdValue[1];
-                        break;
+			if (Series is ErrorBarSeries errorBarSeries)
+			{
+				var horSdValue = GetSdErrorValue(xValues);
+				var verSdValue = GetSdErrorValue(yValues);
 
-                    case ErrorBarType.Custom:
-                        _horizontalErrorValue = errorBarSeries.HorizontalErrorValues.Count > 0 ? errorBarSeries.HorizontalErrorValues.Max() : 0;
-                        _verticalErrorValue = errorBarSeries.VerticalErrorValues.Count > 0 ? errorBarSeries.VerticalErrorValues.Max() : 0;
-                        break;
+				switch (errorBarSeries.Type)
+				{
+					case ErrorBarType.StandardDeviation:
+					case ErrorBarType.StandardError:
+						_horizontalErrorValue = horSdValue[1];
+						_verticalErrorValue = verSdValue[1];
+						break;
 
-                    default:
-                        _horizontalErrorValue = errorBarSeries.HorizontalErrorValue;
-                        _verticalErrorValue = errorBarSeries.VerticalErrorValue;
-                        break;
-                }
+					case ErrorBarType.Custom:
+						_horizontalErrorValue = errorBarSeries.HorizontalErrorValues.Count > 0 ? errorBarSeries.HorizontalErrorValues.Max() : 0;
+						_verticalErrorValue = errorBarSeries.VerticalErrorValues.Count > 0 ? errorBarSeries.VerticalErrorValues.Max() : 0;
+						break;
 
-                double xMin = xValues.Min();
-                double xMax = xValues.Max();
-                double yMin = yValues.Min();
-                double yMax = yValues.Max();
-                double leftPointMin = xMin - _horizontalErrorValue;
-                double leftPointMax = xMax - _horizontalErrorValue;
-                double rightPointMin = xMin + _horizontalErrorValue;
-                double rightPointMax = xMax + _horizontalErrorValue;
-                double bottomPointMin = yMin - _verticalErrorValue;
-                double bottomPointMax = yMax - _verticalErrorValue;
-                double topPointMin = yMin + _verticalErrorValue;
-                double topPointMax = yMax + _verticalErrorValue;
-                XRange = new DoubleRange(Math.Min(leftPointMin, rightPointMin), Math.Max(leftPointMax, rightPointMax));
-                errorBarSeries.XRange += XRange;
-                
-                for (int i = 0; i < _index; i++)
-                {
-                    if (errorBarSeries.Type == ErrorBarType.Percentage)
-                    {
-                        if ((errorBarSeries.ActualXAxis is DateTimeAxis) || (errorBarSeries.ActualYAxis is CategoryAxis))
-                        {
-                            _horizontalErrorValue = (i + 1) * (errorBarSeries.HorizontalErrorValue / 100);
-                            _verticalErrorValue = yValues[i] * (errorBarSeries.VerticalErrorValue / 100);
-                        }
-                        else
-                        {
-                            _horizontalErrorValue = xValues[i] * (errorBarSeries.HorizontalErrorValue / 100);
-                            _verticalErrorValue = yValues[i] * (errorBarSeries.VerticalErrorValue / 100);
-                        }
-                    }
-                    else if (errorBarSeries.Type == ErrorBarType.Custom)
-                    {
-                        _horizontalErrorValue = errorBarSeries.HorizontalErrorValues.Count > 0 ? errorBarSeries.HorizontalErrorValues[i] : 0;
-                        _verticalErrorValue = errorBarSeries.VerticalErrorValues.Count > 0 ? errorBarSeries.VerticalErrorValues[i] : 0;
-                    }
+					default:
+						_horizontalErrorValue = errorBarSeries.HorizontalErrorValue;
+						_verticalErrorValue = errorBarSeries.VerticalErrorValue;
+						break;
+				}
 
-                    if (errorBarSeries.Type == ErrorBarType.StandardDeviation)
-                    {
-                        if (errorBarSeries.HorizontalDirection == ErrorBarDirection.Plus)
-                        {
-                            _leftPointCollection.Add(new Point(horSdValue[0], yValues[i]));
-                            _rightPointCollection.Add(new Point(horSdValue[0] + _horizontalErrorValue, yValues[i]));
-                        }
-                        else if (errorBarSeries.HorizontalDirection == ErrorBarDirection.Minus)
-                        {
-                            _leftPointCollection.Add(new Point(horSdValue[0] - _horizontalErrorValue, yValues[i]));
-                            _rightPointCollection.Add(new Point(horSdValue[0], yValues[i]));
-                        }
-                        else
-                        {
-                            _leftPointCollection.Add(new Point(horSdValue[0] - _horizontalErrorValue, yValues[i]));
-                            _rightPointCollection.Add(new Point(horSdValue[0] + _horizontalErrorValue, yValues[i]));
-                        }
+				double xMin = xValues.Min();
+				double xMax = xValues.Max();
+				double yMin = yValues.Min();
+				double yMax = yValues.Max();
+				double leftPointMin = xMin - _horizontalErrorValue;
+				double leftPointMax = xMax - _horizontalErrorValue;
+				double rightPointMin = xMin + _horizontalErrorValue;
+				double rightPointMax = xMax + _horizontalErrorValue;
+				double bottomPointMin = yMin - _verticalErrorValue;
+				double bottomPointMax = yMax - _verticalErrorValue;
+				double topPointMin = yMin + _verticalErrorValue;
+				double topPointMax = yMax + _verticalErrorValue;
+				XRange = new DoubleRange(Math.Min(leftPointMin, rightPointMin), Math.Max(leftPointMax, rightPointMax));
+				errorBarSeries.XRange += XRange;
 
-                        if (errorBarSeries.VerticalDirection == ErrorBarDirection.Plus)
-                        {
-                            _bottomPointCollection.Add(new Point(xValues[i], verSdValue[0]));
-                            _topPointCollection.Add(new Point(xValues[i], verSdValue[0] + _verticalErrorValue));
-                        }
-                        else if (errorBarSeries.VerticalDirection == ErrorBarDirection.Minus)
-                        {
-                            _bottomPointCollection.Add(new Point(xValues[i], verSdValue[0] - _verticalErrorValue));
-                            _topPointCollection.Add(new Point(xValues[i], verSdValue[0]));
-                        }
-                        else
-                        {
-                            _bottomPointCollection.Add(new Point(xValues[i], verSdValue[0] - _verticalErrorValue));
-                            _topPointCollection.Add(new Point(xValues[i], verSdValue[0] + _verticalErrorValue));
-                        }
-                    }
-                    else
-                    {
-                        if (errorBarSeries.HorizontalDirection == ErrorBarDirection.Plus)
-                        {
-                            _leftPointCollection.Add(new Point(xValues[i], yValues[i]));
-                            _rightPointCollection.Add(new Point(xValues[i] + _horizontalErrorValue, yValues[i]));
-                        }
-                        else if (errorBarSeries.HorizontalDirection == ErrorBarDirection.Minus)
-                        {
-                            _leftPointCollection.Add(new Point(xValues[i] - _horizontalErrorValue, yValues[i]));
-                            _rightPointCollection.Add(new Point(xValues[i], yValues[i]));
-                        }
-                        else
-                        {
-                            _leftPointCollection.Add(new Point(xValues[i] - _horizontalErrorValue, yValues[i]));
-                            _rightPointCollection.Add(new Point(xValues[i] + _horizontalErrorValue, yValues[i]));
-                        }
+				for (int i = 0; i < _index; i++)
+				{
+					if (errorBarSeries.Type == ErrorBarType.Percentage)
+					{
+						if ((errorBarSeries.ActualXAxis is DateTimeAxis) || (errorBarSeries.ActualYAxis is CategoryAxis))
+						{
+							_horizontalErrorValue = (i + 1) * (errorBarSeries.HorizontalErrorValue / 100);
+							_verticalErrorValue = yValues[i] * (errorBarSeries.VerticalErrorValue / 100);
+						}
+						else
+						{
+							_horizontalErrorValue = xValues[i] * (errorBarSeries.HorizontalErrorValue / 100);
+							_verticalErrorValue = yValues[i] * (errorBarSeries.VerticalErrorValue / 100);
+						}
+					}
+					else if (errorBarSeries.Type == ErrorBarType.Custom)
+					{
+						_horizontalErrorValue = errorBarSeries.HorizontalErrorValues.Count > 0 ? errorBarSeries.HorizontalErrorValues[i] : 0;
+						_verticalErrorValue = errorBarSeries.VerticalErrorValues.Count > 0 ? errorBarSeries.VerticalErrorValues[i] : 0;
+					}
 
-                        if (errorBarSeries.VerticalDirection == ErrorBarDirection.Plus)
-                        {
-                            _bottomPointCollection.Add(new Point(xValues[i], yValues[i]));
-                            _topPointCollection.Add(new Point(xValues[i], yValues[i] + _verticalErrorValue));
-                        }
-                        else if (errorBarSeries.VerticalDirection == ErrorBarDirection.Minus)
-                        {
-                            _bottomPointCollection.Add(new Point(xValues[i], yValues[i] - _verticalErrorValue));
-                            _topPointCollection.Add(new Point(xValues[i], yValues[i]));
-                        }
-                        else
-                        {
-                            _bottomPointCollection.Add(new Point(xValues[i], yValues[i] - _verticalErrorValue));
-                            _topPointCollection.Add(new Point(xValues[i], yValues[i] + _verticalErrorValue));
-                        }
-                    }
-                }
+					if (errorBarSeries.Type == ErrorBarType.StandardDeviation)
+					{
+						if (errorBarSeries.HorizontalDirection == ErrorBarDirection.Plus)
+						{
+							_leftPointCollection.Add(new Point(horSdValue[0], yValues[i]));
+							_rightPointCollection.Add(new Point(horSdValue[0] + _horizontalErrorValue, yValues[i]));
+						}
+						else if (errorBarSeries.HorizontalDirection == ErrorBarDirection.Minus)
+						{
+							_leftPointCollection.Add(new Point(horSdValue[0] - _horizontalErrorValue, yValues[i]));
+							_rightPointCollection.Add(new Point(horSdValue[0], yValues[i]));
+						}
+						else
+						{
+							_leftPointCollection.Add(new Point(horSdValue[0] - _horizontalErrorValue, yValues[i]));
+							_rightPointCollection.Add(new Point(horSdValue[0] + _horizontalErrorValue, yValues[i]));
+						}
 
-                if (errorBarSeries.Type == ErrorBarType.Percentage)
-                {
-                    double topVerticalPointMinY = _topPointCollection.Select(p => p.Y).Min();
-                    double topVerticalPointMaxY = _topPointCollection.Select(p => p.Y).Max();
-                    double bottomVerticalPointMinY = _bottomPointCollection.Select(p => p.Y).Min();
-                    double bottomVerticalPointMaxY = _bottomPointCollection.Select(p => p.Y).Max();
-                    YRange = new DoubleRange(Math.Min(bottomVerticalPointMinY, topVerticalPointMinY), Math.Max(bottomVerticalPointMaxY, topVerticalPointMaxY));
-                }
-                else
-                {
-                    YRange = new DoubleRange(Math.Min(bottomPointMin, topPointMin), Math.Max(bottomPointMax, topPointMax));
-                }
+						if (errorBarSeries.VerticalDirection == ErrorBarDirection.Plus)
+						{
+							_bottomPointCollection.Add(new Point(xValues[i], verSdValue[0]));
+							_topPointCollection.Add(new Point(xValues[i], verSdValue[0] + _verticalErrorValue));
+						}
+						else if (errorBarSeries.VerticalDirection == ErrorBarDirection.Minus)
+						{
+							_bottomPointCollection.Add(new Point(xValues[i], verSdValue[0] - _verticalErrorValue));
+							_topPointCollection.Add(new Point(xValues[i], verSdValue[0]));
+						}
+						else
+						{
+							_bottomPointCollection.Add(new Point(xValues[i], verSdValue[0] - _verticalErrorValue));
+							_topPointCollection.Add(new Point(xValues[i], verSdValue[0] + _verticalErrorValue));
+						}
+					}
+					else
+					{
+						if (errorBarSeries.HorizontalDirection == ErrorBarDirection.Plus)
+						{
+							_leftPointCollection.Add(new Point(xValues[i], yValues[i]));
+							_rightPointCollection.Add(new Point(xValues[i] + _horizontalErrorValue, yValues[i]));
+						}
+						else if (errorBarSeries.HorizontalDirection == ErrorBarDirection.Minus)
+						{
+							_leftPointCollection.Add(new Point(xValues[i] - _horizontalErrorValue, yValues[i]));
+							_rightPointCollection.Add(new Point(xValues[i], yValues[i]));
+						}
+						else
+						{
+							_leftPointCollection.Add(new Point(xValues[i] - _horizontalErrorValue, yValues[i]));
+							_rightPointCollection.Add(new Point(xValues[i] + _horizontalErrorValue, yValues[i]));
+						}
 
-                errorBarSeries.YRange += YRange;
-            }
-        }
+						if (errorBarSeries.VerticalDirection == ErrorBarDirection.Plus)
+						{
+							_bottomPointCollection.Add(new Point(xValues[i], yValues[i]));
+							_topPointCollection.Add(new Point(xValues[i], yValues[i] + _verticalErrorValue));
+						}
+						else if (errorBarSeries.VerticalDirection == ErrorBarDirection.Minus)
+						{
+							_bottomPointCollection.Add(new Point(xValues[i], yValues[i] - _verticalErrorValue));
+							_topPointCollection.Add(new Point(xValues[i], yValues[i]));
+						}
+						else
+						{
+							_bottomPointCollection.Add(new Point(xValues[i], yValues[i] - _verticalErrorValue));
+							_topPointCollection.Add(new Point(xValues[i], yValues[i] + _verticalErrorValue));
+						}
+					}
+				}
 
-        #endregion
+				if (errorBarSeries.Type == ErrorBarType.Percentage)
+				{
+					double topVerticalPointMinY = _topPointCollection.Select(p => p.Y).Min();
+					double topVerticalPointMaxY = _topPointCollection.Select(p => p.Y).Max();
+					double bottomVerticalPointMinY = _bottomPointCollection.Select(p => p.Y).Min();
+					double bottomVerticalPointMaxY = _bottomPointCollection.Select(p => p.Y).Max();
+					YRange = new DoubleRange(Math.Min(bottomVerticalPointMinY, topVerticalPointMinY), Math.Max(bottomVerticalPointMaxY, topVerticalPointMaxY));
+				}
+				else
+				{
+					YRange = new DoubleRange(Math.Min(bottomPointMin, topPointMin), Math.Max(bottomPointMax, topPointMax));
+				}
 
-        #region Protected Internal Methods
+				errorBarSeries.YRange += YRange;
+			}
+		}
 
-        /// <inheritdoc/>
-        protected internal override void OnLayout()
-        {
-            if (Series is ErrorBarSeries errorBarSeries)
-            {
-                ErrorSegmentPoints.Clear();
+		#endregion
 
-                for (int i = 0; i < _index; i++)
-                {
-                    float horCapLineSize = errorBarSeries.HorizontalCapLineStyle != null
-                        ? (float)errorBarSeries.HorizontalCapLineStyle.CapLineSize : 10;
-                    float verLineCapSize = errorBarSeries.VerticalCapLineStyle != null
-                        ? (float)errorBarSeries.VerticalCapLineStyle.CapLineSize : 10;
-                    ErrorSegmentPoint[] errorSegment = new ErrorSegmentPoint[2];
-                    
-                    if (!(double.IsNaN(_leftPointCollection[i].Y) || double.IsNaN(_rightPointCollection[i].Y)))
-                    {
-                        float horRightPoint1 = errorBarSeries.TransformToVisibleX(_rightPointCollection[i].X, _rightPointCollection[i].Y);
-                        float horRightPoint2 = errorBarSeries.TransformToVisibleY(_rightPointCollection[i].X, _rightPointCollection[i].Y);
-                        float horLeftPoint3 = errorBarSeries.TransformToVisibleX(_leftPointCollection[i].X, _leftPointCollection[i].Y);
-                        float horLeftPoint4 = errorBarSeries.TransformToVisibleY(_leftPointCollection[i].X, _leftPointCollection[i].Y);
-                        errorSegment[0] = new ErrorSegmentPoint();
-                        errorSegment[0].X1 = horRightPoint1;
-                        errorSegment[0].Y1 = horRightPoint2;
-                        errorSegment[0].X2 = horLeftPoint3;
-                        errorSegment[0].Y2 = horLeftPoint4;
-                        //Horizontal Right Cap
-                        RectF rightRectangle = new RectF(horRightPoint1 - (horCapLineSize / 2), horRightPoint2 - (horCapLineSize / 2), horCapLineSize, horCapLineSize);
-                        errorSegment[0].RightRect = rightRectangle;
-                        RectF leftRectangle = new RectF(horLeftPoint3 - (horCapLineSize / 2), horLeftPoint4 - (horCapLineSize / 2), horCapLineSize, horCapLineSize);
-                        errorSegment[0].LeftRect = leftRectangle;
-                    }
+		#region Protected Internal Methods
 
-                    if (!(double.IsNaN(_topPointCollection[i].Y) || double.IsNaN(_bottomPointCollection[i].Y)))
-                    {
-                        float verBottomPoint1 = errorBarSeries.TransformToVisibleX(_bottomPointCollection[i].X, _bottomPointCollection[i].Y);
-                        float verBottomPoint2 = errorBarSeries.TransformToVisibleY(_bottomPointCollection[i].X, _bottomPointCollection[i].Y);
-                        float verTopPoint1 = errorBarSeries.TransformToVisibleX(_topPointCollection[i].X, _topPointCollection[i].Y);
-                        float verTopPoint2 = errorBarSeries.TransformToVisibleY(_topPointCollection[i].X, _topPointCollection[i].Y);
-                        errorSegment[1] = new ErrorSegmentPoint();
-                        errorSegment[1].X1 = verBottomPoint1;
-                        errorSegment[1].Y1 = verBottomPoint2;
-                        errorSegment[1].X2 = verTopPoint1;
-                        errorSegment[1].Y2 = verTopPoint2;
-                        RectF bottomRectangle = new RectF(verBottomPoint1 - (verLineCapSize / 2), verBottomPoint2 - (verLineCapSize / 2), verLineCapSize, verLineCapSize);
-                        errorSegment[1].BottomRect = bottomRectangle;
-                        RectF topRectangle = new RectF(verTopPoint1 - (verLineCapSize / 2), verTopPoint2 - (verLineCapSize / 2), verLineCapSize, verLineCapSize);
-                        errorSegment[1].TopRect = topRectangle;
-                    }
+		/// <inheritdoc/>
+		protected internal override void OnLayout()
+		{
+			if (Series is ErrorBarSeries errorBarSeries)
+			{
+				ErrorSegmentPoints.Clear();
 
-                    ErrorSegmentPoints.Add(errorSegment);
-                }
-            }
-        }
+				for (int i = 0; i < _index; i++)
+				{
+					float horCapLineSize = errorBarSeries.HorizontalCapLineStyle != null
+						? (float)errorBarSeries.HorizontalCapLineStyle.CapLineSize : 10;
+					float verLineCapSize = errorBarSeries.VerticalCapLineStyle != null
+						? (float)errorBarSeries.VerticalCapLineStyle.CapLineSize : 10;
+					ErrorSegmentPoint[] errorSegment = new ErrorSegmentPoint[2];
 
-        /// <inheritdoc/>
-        protected internal override void Draw(ICanvas canvas)
-        {
-            if (Series is not ErrorBarSeries errorBarSeries || errorBarSeries.ChartArea == null)
-            {
-                return;
-            }
+					if (!(double.IsNaN(_leftPointCollection[i].Y) || double.IsNaN(_rightPointCollection[i].Y)))
+					{
+						float horRightPoint1 = errorBarSeries.TransformToVisibleX(_rightPointCollection[i].X, _rightPointCollection[i].Y);
+						float horRightPoint2 = errorBarSeries.TransformToVisibleY(_rightPointCollection[i].X, _rightPointCollection[i].Y);
+						float horLeftPoint3 = errorBarSeries.TransformToVisibleX(_leftPointCollection[i].X, _leftPointCollection[i].Y);
+						float horLeftPoint4 = errorBarSeries.TransformToVisibleY(_leftPointCollection[i].X, _leftPointCollection[i].Y);
+						errorSegment[0] = new ErrorSegmentPoint
+						{
+							X1 = horRightPoint1,
+							Y1 = horRightPoint2,
+							X2 = horLeftPoint3,
+							Y2 = horLeftPoint4
+						};
+						//Horizontal Right Cap
+						RectF rightRectangle = new RectF(horRightPoint1 - (horCapLineSize / 2), horRightPoint2 - (horCapLineSize / 2), horCapLineSize, horCapLineSize);
+						errorSegment[0].RightRect = rightRectangle;
+						RectF leftRectangle = new RectF(horLeftPoint3 - (horCapLineSize / 2), horLeftPoint4 - (horCapLineSize / 2), horCapLineSize, horCapLineSize);
+						errorSegment[0].LeftRect = leftRectangle;
+					}
 
-            var isTransposed = errorBarSeries.ChartArea.IsTransposed;
+					if (!(double.IsNaN(_topPointCollection[i].Y) || double.IsNaN(_bottomPointCollection[i].Y)))
+					{
+						float verBottomPoint1 = errorBarSeries.TransformToVisibleX(_bottomPointCollection[i].X, _bottomPointCollection[i].Y);
+						float verBottomPoint2 = errorBarSeries.TransformToVisibleY(_bottomPointCollection[i].X, _bottomPointCollection[i].Y);
+						float verTopPoint1 = errorBarSeries.TransformToVisibleX(_topPointCollection[i].X, _topPointCollection[i].Y);
+						float verTopPoint2 = errorBarSeries.TransformToVisibleY(_topPointCollection[i].X, _topPointCollection[i].Y);
+						errorSegment[1] = new ErrorSegmentPoint
+						{
+							X1 = verBottomPoint1,
+							Y1 = verBottomPoint2,
+							X2 = verTopPoint1,
+							Y2 = verTopPoint2
+						};
+						RectF bottomRectangle = new RectF(verBottomPoint1 - (verLineCapSize / 2), verBottomPoint2 - (verLineCapSize / 2), verLineCapSize, verLineCapSize);
+						errorSegment[1].BottomRect = bottomRectangle;
+						RectF topRectangle = new RectF(verTopPoint1 - (verLineCapSize / 2), verTopPoint2 - (verLineCapSize / 2), verLineCapSize, verLineCapSize);
+						errorSegment[1].TopRect = topRectangle;
+					}
 
-            canvas.Alpha = Opacity;
+					ErrorSegmentPoints.Add(errorSegment);
+				}
+			}
+		}
 
-            for (int i = 0; i < _index; i++)
-            {
-                if (errorBarSeries.Mode == ErrorBarMode.Horizontal)
-                {
-                    DrawErrorBar(canvas, i, false, errorBarSeries.HorizontalLineStyle, errorBarSeries.HorizontalCapLineStyle, isTransposed);
-                }
-                else if (errorBarSeries.Mode == ErrorBarMode.Vertical)
-                {
-                    DrawErrorBar(canvas, i, true, errorBarSeries.VerticalLineStyle, errorBarSeries.VerticalCapLineStyle, isTransposed);
-                }
-                else
-                {
-                    DrawErrorBar(canvas, i, false, errorBarSeries.HorizontalLineStyle, errorBarSeries.HorizontalCapLineStyle, isTransposed);
-                    DrawErrorBar(canvas, i, true, errorBarSeries.VerticalLineStyle, errorBarSeries.VerticalCapLineStyle, isTransposed);
-                }
-            }
-        }
+		/// <inheritdoc/>
+		protected internal override void Draw(ICanvas canvas)
+		{
+			if (Series is not ErrorBarSeries errorBarSeries || errorBarSeries.ChartArea == null)
+			{
+				return;
+			}
 
-        #endregion
+			var isTransposed = errorBarSeries.ChartArea.IsTransposed;
 
-        #region Private Methods
+			canvas.Alpha = Opacity;
 
-        void DrawErrorBar(ICanvas canvas, int index, bool isVertical, ErrorBarLineStyle? lineStyle, ErrorBarCapLineStyle? capStyle, bool isTransposed)
-        {
-            _strokeColor = lineStyle != null ? lineStyle.Stroke.ToColor() : Fill.ToColor();
-            _strokeWidth = lineStyle != null ? (float)lineStyle.StrokeWidth : (float)StrokeWidth;
+			for (int i = 0; i < _index; i++)
+			{
+				if (errorBarSeries.Mode == ErrorBarMode.Horizontal)
+				{
+					DrawErrorBar(canvas, i, false, errorBarSeries.HorizontalLineStyle, errorBarSeries.HorizontalCapLineStyle, isTransposed);
+				}
+				else if (errorBarSeries.Mode == ErrorBarMode.Vertical)
+				{
+					DrawErrorBar(canvas, i, true, errorBarSeries.VerticalLineStyle, errorBarSeries.VerticalCapLineStyle, isTransposed);
+				}
+				else
+				{
+					DrawErrorBar(canvas, i, false, errorBarSeries.HorizontalLineStyle, errorBarSeries.HorizontalCapLineStyle, isTransposed);
+					DrawErrorBar(canvas, i, true, errorBarSeries.VerticalLineStyle, errorBarSeries.VerticalCapLineStyle, isTransposed);
+				}
+			}
+		}
 
-            int vertical = isVertical ? 1 : 0;
+		#endregion
 
-            DrawLine(canvas, index, vertical, _strokeColor, _strokeWidth);
+		#region Private Methods
 
-            _strokeColor = Fill.ToColor();
-            _strokeWidth = (float)StrokeWidth;
+		void DrawErrorBar(ICanvas canvas, int index, bool isVertical, ErrorBarLineStyle? lineStyle, ErrorBarCapLineStyle? capStyle, bool isTransposed)
+		{
+			_strokeColor = lineStyle != null ? lineStyle.Stroke.ToColor() : Fill.ToColor();
+			_strokeWidth = lineStyle != null ? (float)lineStyle.StrokeWidth : (float)StrokeWidth;
 
-            if (capStyle == null)
-            {
-                DrawCapLine(canvas, index, vertical, _strokeColor, _strokeWidth, isTransposed);
-            }
-            else if (capStyle.IsVisible)
-            {
-                _strokeColor = capStyle.Stroke.ToColor();
-                _strokeWidth = (float)capStyle.StrokeWidth;
+			int vertical = isVertical ? 1 : 0;
 
-                if (lineStyle != null)
-                {
-                    canvas.StrokeLineCap = lineStyle.StrokeCap switch
-                    {
-                        ErrorBarStrokeCap.Square => LineCap.Square,
-                        ErrorBarStrokeCap.Round => LineCap.Round,
-                        _ => LineCap.Butt
-                    };
-                }
+			DrawLine(canvas, index, vertical, _strokeColor, _strokeWidth);
 
-                DrawCapLine(canvas, index, vertical, _strokeColor, _strokeWidth, isTransposed);
-            }
-        }
+			_strokeColor = Fill.ToColor();
+			_strokeWidth = (float)StrokeWidth;
 
-        void DrawLine(ICanvas canvas, int index, int j, Color strokeColor, float strokeWidth)
-        {
-            canvas.StrokeColor = strokeColor;
-            canvas.StrokeSize = strokeWidth;
-            canvas.DrawLine(ErrorSegmentPoints[index][j].X1, ErrorSegmentPoints[index][j].Y1, ErrorSegmentPoints[index][j].X2, ErrorSegmentPoints[index][j].Y2);
-        }
+			if (capStyle == null)
+			{
+				DrawCapLine(canvas, index, vertical, _strokeColor, _strokeWidth, isTransposed);
+			}
+			else if (capStyle.IsVisible)
+			{
+				_strokeColor = capStyle.Stroke.ToColor();
+				_strokeWidth = (float)capStyle.StrokeWidth;
 
-        void DrawCapLine(ICanvas canvas, int index, int j, Color strokeColor, float strokeWidth, bool isTransposed)
-        {
-            canvas.StrokeColor = strokeColor;
-            canvas.StrokeSize = strokeWidth;
+				if (lineStyle != null)
+				{
+					canvas.StrokeLineCap = lineStyle.StrokeCap switch
+					{
+						ErrorBarStrokeCap.Square => LineCap.Square,
+						ErrorBarStrokeCap.Round => LineCap.Round,
+						_ => LineCap.Butt
+					};
+				}
 
-            var shapeType = j == 0 ? isTransposed ? ShapeType.HorizontalLine : ShapeType.VerticalLine : isTransposed ? ShapeType.VerticalLine : ShapeType.HorizontalLine;
+				DrawCapLine(canvas, index, vertical, _strokeColor, _strokeWidth, isTransposed);
+			}
+		}
 
-            var rectTop = j == 0 ? ErrorSegmentPoints[index][j].LeftRect : ErrorSegmentPoints[index][j].BottomRect;
-            var rectBottom = j == 0 ? ErrorSegmentPoints[index][j].RightRect : ErrorSegmentPoints[index][j].TopRect;
+		void DrawLine(ICanvas canvas, int index, int j, Color strokeColor, float strokeWidth)
+		{
+			canvas.StrokeColor = strokeColor;
+			canvas.StrokeSize = strokeWidth;
+			canvas.DrawLine(ErrorSegmentPoints[index][j].X1, ErrorSegmentPoints[index][j].Y1, ErrorSegmentPoints[index][j].X2, ErrorSegmentPoints[index][j].Y2);
+		}
 
-            canvas.DrawShape(rectTop, shapeType, HasStroke, false);
-            canvas.DrawShape(rectBottom, shapeType, HasStroke, false);
-        }
+		void DrawCapLine(ICanvas canvas, int index, int j, Color strokeColor, float strokeWidth, bool isTransposed)
+		{
+			canvas.StrokeColor = strokeColor;
+			canvas.StrokeSize = strokeWidth;
 
-        /// <summary>
-        /// Standard Deviation Methods for the xValues and yValues
-        /// </summary>
-        /// <param name="values"></param>
-        /// <returns></returns>
-        double[] GetSdErrorValue(IList<double> values)
-        {
-            var valueDoubles = new double[2];
+			var shapeType = j == 0 ? isTransposed ? ShapeType.HorizontalLine : ShapeType.VerticalLine : isTransposed ? ShapeType.VerticalLine : ShapeType.HorizontalLine;
 
-            if (Series is not ErrorBarSeries errorBarSeries)
-            {
-                return valueDoubles;
-            }
+			var rectTop = j == 0 ? ErrorSegmentPoints[index][j].LeftRect : ErrorSegmentPoints[index][j].BottomRect;
+			var rectBottom = j == 0 ? ErrorSegmentPoints[index][j].RightRect : ErrorSegmentPoints[index][j].TopRect;
 
-            var sum = values.Sum();
-            var mean = sum / values.Count;
-            var dev = new List<double>();
-            var sQDev = new List<double>();
+			canvas.DrawShape(rectTop, shapeType, HasStroke, false);
+			canvas.DrawShape(rectBottom, shapeType, HasStroke, false);
+		}
 
-            for (var i = 0; i < values.Count; i++)
-            {
-                dev.Add(values[i] - mean);
-                sQDev.Add(dev[i] * dev[i]);
-            }
+		/// <summary>
+		/// Standard Deviation Methods for the xValues and yValues
+		/// </summary>
+		/// <param name="values"></param>
+		/// <returns></returns>
+		double[] GetSdErrorValue(IList<double> values)
+		{
+			var valueDoubles = new double[2];
 
-            var sumSqDev = sQDev.Sum(x => x);
+			if (Series is not ErrorBarSeries errorBarSeries)
+			{
+				return valueDoubles;
+			}
 
-            var sDValue = Math.Sqrt(sumSqDev / (values.Count - 1));
-            var sDErrorValue = sDValue / Math.Sqrt(values.Count);
-            valueDoubles[0] = mean;
-            valueDoubles[1] = errorBarSeries.Type == ErrorBarType.StandardDeviation ? sDValue : sDErrorValue;
-            return valueDoubles;
-        }
+			var sum = values.Sum();
+			var mean = sum / values.Count;
+			var dev = new List<double>();
+			var sQDev = new List<double>();
 
-        #endregion
+			for (var i = 0; i < values.Count; i++)
+			{
+				dev.Add(values[i] - mean);
+				sQDev.Add(dev[i] * dev[i]);
+			}
 
-        #endregion
-    }
+			var sumSqDev = sQDev.Sum(x => x);
 
-    /// <summary>
-    /// Represents the coordinates and bounding rectangles for the error bar chart segment.
-    /// </summary>
-    internal class ErrorSegmentPoint
-    {
-        #region Properties
+			var sDValue = Math.Sqrt(sumSqDev / (values.Count - 1));
+			var sDErrorValue = sDValue / Math.Sqrt(values.Count);
+			valueDoubles[0] = mean;
+			valueDoubles[1] = errorBarSeries.Type == ErrorBarType.StandardDeviation ? sDValue : sDErrorValue;
+			return valueDoubles;
+		}
 
-        #region Public  Properties
+		#endregion
 
-        public float X1 { get; set; }
-        public float Y1 { get; set; }
-        public float X2 { get; set; }
-        public float Y2 { get; set; }
-        public RectF LeftRect { get; set; }
-        public RectF RightRect { get; set; }
-        public RectF TopRect { get; set; }
-        public RectF BottomRect { get; set; }
+		#endregion
+	}
 
-        #endregion
+	/// <summary>
+	/// Represents the coordinates and bounding rectangles for the error bar chart segment.
+	/// </summary>
+	internal class ErrorSegmentPoint
+	{
+		#region Properties
 
-        #endregion
-    }
+		#region Public  Properties
+
+		public float X1 { get; set; }
+		public float Y1 { get; set; }
+		public float X2 { get; set; }
+		public float Y2 { get; set; }
+		public RectF LeftRect { get; set; }
+		public RectF RightRect { get; set; }
+		public RectF TopRect { get; set; }
+		public RectF BottomRect { get; set; }
+
+		#endregion
+
+		#endregion
+	}
 }

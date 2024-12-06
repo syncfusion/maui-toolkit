@@ -87,7 +87,8 @@
                                                                    XBindingPath="Name"  YBindingPath="Value" 
                                                                    GapRatio="{OnPlatform WinUI='0.4',Android='0.6',iOS='0.4',MacCatalyst='0.4'}"
                                                                    ItemsSource="{Binding Converter={StaticResource indexToItemSourceConverter}}" 
-                                                                   Fill="{Binding IconBrush}" LegendIcon="SeriesType">
+                                                                   Fill="{Binding IconBrush}" LegendIcon="SeriesType"
+                                                                   TrackFill="{AppThemeBinding Light={StaticResource TrackColorLight}, Dark={StaticResource TrackColorDark}}">
                                             <chart:RadialBarSeries.CenterView>
                                                 <Border Stroke="{OnPlatform WinUI='White',Android='White'}"  HeightRequest="{Binding CenterHoleSize}"  
                                                         WidthRequest="{Binding CenterHoleSize}">
@@ -111,7 +112,7 @@
                                     </chart:SfCircularChart.Series>
                                 </chart:SfCircularChart>
                                 <Label Grid.Row="0" Grid.Column="1" 
-                                       Margin="{OnPlatform WinUI='10,30,0,0',Android='5,23,0,0',MacCatalyst='10,30,0,0',iOS='5,15,0,0'}" 
+                                       Margin="{OnPlatform WinUI='10,30,0,0',Android='5,0,0,0',MacCatalyst='10,30,0,0',iOS='10,20,0,0'}"
                                        HeightRequest="{OnPlatform WinUI=30,Android=23,MacCatalyst=30,iOS=23}" x:Name="label" 
                                        FontSize="{OnPlatform WinUI='13' ,Android='10',MacCatalyst='13',iOS='10'}"
                                        TextColor="{Binding IconBrush,Converter={StaticResource brushToColor}}" 
@@ -119,7 +120,7 @@
                                        Text="{Binding Item.Value, StringFormat='\{0,0\}%'}">
                                 </Label>
                                 <Label FontSize="{OnPlatform WinUI='13' ,Android='10',MacCatalyst='13',iOS='10'}" Grid.Row="1" 
-                                       Margin="{OnPlatform WinUI='10,0,0,30',Android='5,0,0,23',MacCatalyst='10,0,0,30',iOS='5,0,0,23'}" 
+                                       Margin="{OnPlatform WinUI='10,0,0,30',Android='5,0,0,50',MacCatalyst='10,0,0,30',iOS='10,0,0,27'}" 
                                        HeightRequest="{OnPlatform WinUI=30,Android=23,MacCatalyst=30,iOS=23}" Text="{Binding Item.Name}" 
                                        Grid.Column="1" VerticalTextAlignment="Start"  HorizontalTextAlignment="Start" />
                             </Grid>

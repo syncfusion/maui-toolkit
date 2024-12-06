@@ -1,4 +1,3 @@
-
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
 	public partial class StepAreaChart_DynamicUpdate : SampleView
@@ -7,7 +6,9 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 		{
 			InitializeComponent();
 			if (!(BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile))
+			{
 				viewModel1.StartTimer();
+			}
 		}
 
 		public override void OnAppearing()

@@ -59,7 +59,7 @@
     <localCore:SampleView.OptionView>
         <Grid>
             <HorizontalStackLayout>
-                <Label Text="Enable Solid Candles"></Label>
+        <Label Text="Enable Solid Candles" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"></Label>
                 <CheckBox x:Name="checkBox" IsChecked="False" VerticalOptions="Start" Margin="30,0,0,0" ></CheckBox>
             </HorizontalStackLayout>
         </Grid>

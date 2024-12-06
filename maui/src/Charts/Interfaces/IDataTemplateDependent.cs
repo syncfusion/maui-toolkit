@@ -2,22 +2,22 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal interface IDataTemplateDependent
-    {
-        #region Properties
+	internal interface IDataTemplateDependent
+	{
+		#region Properties
 
-        ObservableCollection<ChartDataLabel> DataLabels { get; }
+		ObservableCollection<ChartDataLabel> DataLabels { get; }
 
-        DataTemplate LabelTemplate { get; }
+		DataTemplate LabelTemplate { get; }
 
-        bool IsVisible { get; }
+		bool IsVisible { get; }
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        bool IsTemplateItemsChanged() => true;
+		bool IsTemplateItemsChanged() => true;
 
-        #endregion
-    }
+		#endregion
+	}
 }

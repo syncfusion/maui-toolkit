@@ -12,7 +12,9 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 		{
 			if (value == null)
+			{
 				return string.Empty;
+			}
 
 			var datetime = (DateTime)value;
 			int compare = datetime.Date.CompareTo(DateTime.Now.Date);
@@ -110,23 +112,16 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 	{
 		public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 		{
-			switch ((GroupName)value!)
+			return (GroupName)value! switch
 			{
-				case GroupName.Yesterday:
-					return "Yesterday";
-				case GroupName.ThisWeek:
-					return "This Week";
-				case GroupName.LastWeek:
-					return "Last Week";
-				case GroupName.ThisMonth:
-					return "This Month";
-				case GroupName.LastMonth:
-					return "Last Month";
-				case GroupName.Older:
-					return "Older";
-				default:
-					return "";
-			}
+				GroupName.Yesterday => "Yesterday",
+				GroupName.ThisWeek => "This Week",
+				GroupName.LastWeek => "Last Week",
+				GroupName.ThisMonth => "This Month",
+				GroupName.LastMonth => "Last Month",
+				GroupName.Older => "Older",
+				_ => "",
+			};
 		}
 
 		public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

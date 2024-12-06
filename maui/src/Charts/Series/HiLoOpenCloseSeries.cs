@@ -81,393 +81,394 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ]]></code>
 	/// ***
 	/// </example>
-	public class HiLoOpenCloseSeries : FinancialSeriesBase, IDrawCustomLegendIcon
-    {
-        #region Internal Properties
+	public partial class HiLoOpenCloseSeries : FinancialSeriesBase, IDrawCustomLegendIcon
+	{
+		#region Internal Properties
 
-        internal override bool IsSideBySide => true;
+		internal override bool IsSideBySide => true;
 
-        #endregion
+		#endregion
 
-        #region Interface Implementation
+		#region Interface Implementation
 
-        void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
-        {
-            if (isSaveState)
-            {
-                canvas.CanvasSaveState();
-            }
+		void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
+		{
+			if (isSaveState)
+			{
+				canvas.CanvasSaveState();
+			}
 
-            if (this is not null && this is not CandleSeries)
-            {
-                var pathF = new PathF();
-                pathF.MoveTo(3, 4);
-                pathF.LineTo(3, 5);
-                pathF.LineTo(1, 5);
-                pathF.LineTo(1, 7);
-                pathF.LineTo(3, 7);
-                pathF.LineTo(3, 11);
-                pathF.LineTo(5, 11);
-                pathF.LineTo(5, 10);
-                pathF.LineTo(7, 10);
-                pathF.LineTo(7, 8);
-                pathF.LineTo(5, 8);
-                pathF.LineTo(5, 4);
-                pathF.LineTo(3, 4);
-                pathF.Close();
-                pathF.MoveTo(8, 1);
-                pathF.LineTo(8, 2);
-                pathF.LineTo(6, 2);
-                pathF.LineTo(6, 4);
-                pathF.LineTo(8, 4);
-                pathF.LineTo(8, 8);
-                pathF.LineTo(10, 8);
-                pathF.LineTo(10, 7);
-                pathF.LineTo(12, 7);
-                pathF.LineTo(12, 5);
-                pathF.LineTo(10, 5);
-                pathF.LineTo(10, 1);
-                pathF.LineTo(8, 1);
-                pathF.Close();
-                canvas.FillPath(pathF);
-            }
-            else if (this is CandleSeries)
-            {
-                RectF innerRect1 = new(2, 5, 3, 5);
-                canvas.SetFillPaint(fillColor, innerRect1);
-                canvas.FillRectangle(innerRect1);
+			if (this is not null && this is not CandleSeries)
+			{
+				var pathF = new PathF();
+				pathF.MoveTo(3, 4);
+				pathF.LineTo(3, 5);
+				pathF.LineTo(1, 5);
+				pathF.LineTo(1, 7);
+				pathF.LineTo(3, 7);
+				pathF.LineTo(3, 11);
+				pathF.LineTo(5, 11);
+				pathF.LineTo(5, 10);
+				pathF.LineTo(7, 10);
+				pathF.LineTo(7, 8);
+				pathF.LineTo(5, 8);
+				pathF.LineTo(5, 4);
+				pathF.LineTo(3, 4);
+				pathF.Close();
+				pathF.MoveTo(8, 1);
+				pathF.LineTo(8, 2);
+				pathF.LineTo(6, 2);
+				pathF.LineTo(6, 4);
+				pathF.LineTo(8, 4);
+				pathF.LineTo(8, 8);
+				pathF.LineTo(10, 8);
+				pathF.LineTo(10, 7);
+				pathF.LineTo(12, 7);
+				pathF.LineTo(12, 5);
+				pathF.LineTo(10, 5);
+				pathF.LineTo(10, 1);
+				pathF.LineTo(8, 1);
+				pathF.Close();
+				canvas.FillPath(pathF);
+			}
+			else if (this is CandleSeries)
+			{
+				RectF innerRect1 = new(2, 5, 3, 5);
+				canvas.SetFillPaint(fillColor, innerRect1);
+				canvas.FillRectangle(innerRect1);
 
-                RectF innerRect2 = new(7, 2, 3, 5);
-                canvas.SetFillPaint(fillColor, innerRect2);
-                canvas.FillRectangle(innerRect2);
+				RectF innerRect2 = new(7, 2, 3, 5);
+				canvas.SetFillPaint(fillColor, innerRect2);
+				canvas.FillRectangle(innerRect2);
 
-                RectF innerRect3 = new(3, 3, 1, 9);
-                canvas.SetFillPaint(fillColor, innerRect3);
-                canvas.FillRectangle(innerRect3);
+				RectF innerRect3 = new(3, 3, 1, 9);
+				canvas.SetFillPaint(fillColor, innerRect3);
+				canvas.FillRectangle(innerRect3);
 
-                RectF innerRect4 = new(8, 0, 1, 9);
-                canvas.SetFillPaint(fillColor, innerRect4);
-                canvas.FillRectangle(innerRect4);
-            }
+				RectF innerRect4 = new(8, 0, 1, 9);
+				canvas.SetFillPaint(fillColor, innerRect4);
+				canvas.FillRectangle(innerRect4);
+			}
 
-            if (isSaveState)
-            {
-                canvas.CanvasRestoreState();
-            }
-        }
+			if (isSaveState)
+			{
+				canvas.CanvasRestoreState();
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Method
+		#region Protected Method
 
-        /// <inheritdoc/>
-        protected override ChartSegment? CreateSegment()
-        {
-            return new HiLoOpenCloseSegment();
-        }
+		/// <inheritdoc/>
+		protected override ChartSegment? CreateSegment()
+		{
+			return new HiLoOpenCloseSegment();
+		}
 
-        #endregion
+		#endregion
 
-        #region Internal method
+		#region Internal method
 
-        internal override Brush? GetFillColor(object item, int index)
-        {
-            var series = this as CandleSeries;
-            Brush? fillColor = base.GetFillColor(item, index);
+		internal override Brush? GetFillColor(object item, int index)
+		{
+			Brush? fillColor = base.GetFillColor(item, index);
 
-            if (fillColor == Chart?.GetSelectionBrush(this) || fillColor == GetSelectionBrush(item, index))
-            {
-                return fillColor;
-            }
+			if (fillColor == Chart?.GetSelectionBrush(this) || fillColor == GetSelectionBrush(item, index))
+			{
+				return fillColor;
+			}
 
-            if (Segments.Count == 0)
-            {
-                return base.GetFillColor(item, index);
-            }
+			if (_segments.Count == 0)
+			{
+				return base.GetFillColor(item, index);
+			}
 
-            if (Segments[index] is HiLoOpenCloseSegment segment)
-            {
-                if (segment.IsBull && segment.IsFill)
-                {
-                    fillColor = Fill != null ? fillColor : BullishFill;
-                }
-                else if (!(segment.IsBull) && !(segment.IsFill))
-                {
-                    fillColor = Brush.Transparent;
-                }
-                else if (segment.IsBull)
-                {
-                    if (this is CandleSeries)
-                    {
-                        fillColor = Fill != null ? fillColor
-                                    : (series != null && series.EnableSolidCandle ? BullishFill : Brush.Transparent);
+			if (_segments[index] is HiLoOpenCloseSegment segment)
+			{
+				if (segment.IsBull && segment.IsFill)
+				{
+					fillColor = Fill != null ? fillColor : BullishFill;
+				}
+				else if (!(segment.IsBull) && !(segment.IsFill))
+				{
+					fillColor = Brush.Transparent;
+				}
+				else if (segment.IsBull)
+				{
+					if (this is CandleSeries)
+					{
+						fillColor = Fill != null ? fillColor
+									: (this is CandleSeries series && series.EnableSolidCandle ? BullishFill : Brush.Transparent);
 
-                    }
-                    else
-                    {
-                        fillColor = Fill != null ? fillColor : BullishFill;
-                    }
-                }
-                else
-                {
-                    fillColor = Fill != null ? fillColor : BearishFill;
-                }
-            }
+					}
+					else
+					{
+						fillColor = Fill != null ? fillColor : BullishFill;
+					}
+				}
+				else
+				{
+					fillColor = Fill != null ? fillColor : BearishFill;
+				}
+			}
 
-            return fillColor;
-        }
+			return fillColor;
+		}
 
-        internal override void GenerateSegments(SeriesView seriesView)
-        {
-            var xValues = GetXValues();
+		internal override void GenerateSegments(SeriesView seriesView)
+		{
+			var xValues = GetXValues();
 
-            if (xValues == null || OpenValues.Count == 0)
-            {
-                return;
-            }
+			if (xValues == null || OpenValues.Count == 0)
+			{
+				return;
+			}
 
-            var previousClose = 0d;
-            bool isFill = false;
+			bool isFill;
 
-            for (int i = 0; i < PointsCount; i++)
-            {
-                if (i > 0)
-                {
-                    previousClose = CloseValues[i - 1];
-                }
+			for (int i = 0; i < PointsCount; i++)
+			{
+				if (i > 0)
+				{
+					_ = CloseValues[i - 1];
+				}
 
-                bool isBull = false;
-                var series = this as CandleSeries;
+				bool isBull;
 
-                if (series != null)
-                {
-                    isFill = series.EnableSolidCandle || !(OpenValues[i] < CloseValues[i]);
-                    isBull = series.EnableSolidCandle ? OpenValues[i] < CloseValues[i] : (i == 0 ? OpenValues[i] : CloseValues[i - 1]) <= CloseValues[i];
-                }
-                else
-                {
-                    isBull = OpenValues[i] < CloseValues[i];
-                    isFill = OpenValues[i] > CloseValues[i];
-                }
+				if (this is CandleSeries series)
+				{
+					isFill = series.EnableSolidCandle || !(OpenValues[i] < CloseValues[i]);
+					isBull = series.EnableSolidCandle ? OpenValues[i] < CloseValues[i] : (i == 0 ? OpenValues[i] : CloseValues[i - 1]) <= CloseValues[i];
+				}
+				else
+				{
+					isBull = OpenValues[i] < CloseValues[i];
+					isFill = OpenValues[i] > CloseValues[i];
+				}
 
-                var x = xValues[i];
+				var x = xValues[i];
 
-                if (i < Segments.Count)
-                {
-                    Segments[i].SetData(new[] { x + SbsInfo.Start, x + SbsInfo.Median, x + SbsInfo.End, OpenValues[i], HighValues[i], LowValues[i], CloseValues[i], x }, isFill, isBull);
-                }
-                else
-                {
-                    CreateSegment(seriesView, new[]  { x + SbsInfo.Start, x + SbsInfo.Median, x + SbsInfo.End, OpenValues[i], HighValues[i]
-                     , LowValues[i], CloseValues[i], x }, isFill, isBull, i);
-                }
-            }
-        }
+				if (i < _segments.Count)
+				{
+					_segments[i].SetData([x + SbsInfo.Start, x + SbsInfo.Median, x + SbsInfo.End, OpenValues[i], HighValues[i], LowValues[i], CloseValues[i], x], isFill, isBull);
+				}
+				else
+				{
+					CreateSegment(seriesView, [ x + SbsInfo.Start, x + SbsInfo.Median, x + SbsInfo.End, OpenValues[i], HighValues[i]
+					 , LowValues[i], CloseValues[i], x ], isFill, isBull, i);
+				}
+			}
+		}
 
-        internal virtual void CreateSegment(SeriesView seriesView, double[] values, bool isFill, bool isBull, int index)
-        {
-            var segment = CreateSegment() as HiLoOpenCloseSegment;
-            if (segment != null)
-            {
-                segment.Series = this;
-                segment.Index = index;
-                segment.SeriesView = seriesView;
-                segment.SetData(values, isFill, isBull);
-                segment.Item = ActualData?[index];
-                InitiateDataLabels(segment);
-                Segments.Add(segment);
-            }
-        }
+		internal virtual void CreateSegment(SeriesView seriesView, double[] values, bool isFill, bool isBull, int index)
+		{
+			if (CreateSegment() is HiLoOpenCloseSegment segment)
+			{
+				segment.Series = this;
+				segment.Index = index;
+				segment.SeriesView = seriesView;
+				segment.SetData(values, isFill, isBull);
+				segment.Item = ActualData?[index];
+				InitiateDataLabels(segment);
+				_segments.Add(segment);
+			}
+		}
 
-        internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior tooltipBehavior, float x, float y)
-        {
-            int index = IsSideBySide ? GetDataPointIndex(x, y) : SeriesContainsPoint(new PointF(x, y)) ? TooltipDataPointIndex : -1;
+		internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior tooltipBehavior, float x, float y)
+		{
+			int index = IsSideBySide ? GetDataPointIndex(x, y) : SeriesContainsPoint(new PointF(x, y)) ? TooltipDataPointIndex : -1;
 
-            if (index < 0 || ItemsSource == null || ActualData == null || ActualXAxis == null
-                || ActualYAxis == null || SeriesYValues == null)
-            {
-                return null;
-            }
+			if (index < 0 || ItemsSource == null || ActualData == null || ActualXAxis == null
+				|| ActualYAxis == null || SeriesYValues == null)
+			{
+				return null;
+			}
 
-            var xValues = GetXValues();
+			var xValues = GetXValues();
 
-            if (xValues == null) return null;
+			if (xValues == null)
+			{
+				return null;
+			}
 
-            object dataPoint = ActualData[index];
-            double highValue = HighValues[index];
-            double lowValue = LowValues[index];
-            double openValue = OpenValues[index];
-            double closeValue = CloseValues[index];
-            double xValue = xValues[index];
-            double yValue = highValue;
+			object dataPoint = ActualData[index];
+			double highValue = HighValues[index];
+			double lowValue = LowValues[index];
+			double openValue = OpenValues[index];
+			double closeValue = CloseValues[index];
+			double xValue = xValues[index];
+			double yValue = highValue;
 
-            float xPosition = TransformToVisibleX(xValue, yValue);
+			float xPosition = TransformToVisibleX(xValue, yValue);
 
-            if (!double.IsNaN(xPosition) && !double.IsNaN(yValue))
-            {
-                float yPosition = TransformToVisibleY(xValue, yValue);
+			if (!double.IsNaN(xPosition) && !double.IsNaN(yValue))
+			{
+				float yPosition = TransformToVisibleY(xValue, yValue);
 
-                if (IsSideBySide)
-                {
-                    double xMidVal = xValue + SbsInfo.Start + ((SbsInfo.End - SbsInfo.Start) / 2);
-                    xPosition = TransformToVisibleX(xMidVal, yValue);
-                    yPosition = TransformToVisibleY(xMidVal, yValue);
-                }
+				if (IsSideBySide)
+				{
+					double xMidVal = xValue + SbsInfo.Start + ((SbsInfo.End - SbsInfo.Start) / 2);
+					xPosition = TransformToVisibleX(xMidVal, yValue);
+					yPosition = TransformToVisibleY(xMidVal, yValue);
+				}
 
-                TooltipInfo tooltipInfo = new TooltipInfo(this);
-                tooltipInfo.X = xPosition;
-                tooltipInfo.Y = yPosition;
-                tooltipInfo.Index = index;
-                tooltipInfo.Text = yValue.ToString(" #.##") + "/" + lowValue.ToString(" #.##") + "/" + openValue.ToString(" #.##") + "/" + closeValue.ToString(" #.##");
-                tooltipInfo.Margin = tooltipBehavior.Margin;
-                tooltipInfo.TextColor = tooltipBehavior.TextColor;
-                tooltipInfo.FontFamily = tooltipBehavior.FontFamily;
-                tooltipInfo.FontSize = tooltipBehavior.FontSize;
-                tooltipInfo.FontAttributes = tooltipBehavior.FontAttributes;
-                tooltipInfo.Background = tooltipBehavior.Background;
-                tooltipInfo.Item = dataPoint;
+				TooltipInfo tooltipInfo = new TooltipInfo(this)
+				{
+					X = xPosition,
+					Y = yPosition,
+					Index = index,
+					Text = yValue.ToString(" #.##") + "/" + lowValue.ToString(" #.##") + "/" + openValue.ToString(" #.##") + "/" + closeValue.ToString(" #.##"),
+					Margin = tooltipBehavior.Margin,
+					TextColor = tooltipBehavior.TextColor,
+					FontFamily = tooltipBehavior.FontFamily,
+					FontSize = tooltipBehavior.FontSize,
+					FontAttributes = tooltipBehavior.FontAttributes,
+					Background = tooltipBehavior.Background,
+					Item = dataPoint
+				};
 
-                return tooltipInfo;
-            }
+				return tooltipInfo;
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-        internal override DataTemplate? GetDefaultTooltipTemplate(TooltipInfo info)
-        {
-            var template = new DataTemplate(() =>
-            {
-                var texts = info.Text.Split('/');
+		internal override DataTemplate? GetDefaultTooltipTemplate(TooltipInfo info)
+		{
+			var template = new DataTemplate(() =>
+			{
+				var texts = info.Text.Split('/');
 
-                string highFormat = $"{SfCartesianChartResources.High}    :";
-                string lowFormat = $"{SfCartesianChartResources.Low}     :";
-                string openFormat = $"{SfCartesianChartResources.Open}  :";
-                string closeFormat = $"{SfCartesianChartResources.Close}  :";
+				string highFormat = $"{SfCartesianChartResources.High}    :";
+				string lowFormat = $"{SfCartesianChartResources.Low}     :";
+				string openFormat = $"{SfCartesianChartResources.Open}  :";
+				string closeFormat = $"{SfCartesianChartResources.Close}  :";
 
-                var labels = new[]
-                {
-                   new {LabelText = highFormat,ValueText = texts[0]},
-                   new {LabelText = lowFormat,ValueText = texts[1]},
-                   new {LabelText = openFormat,ValueText = texts[2]},
-                   new {LabelText = closeFormat,ValueText = texts[3]},
-                };
+				var labels = new[]
+				{
+				   new {LabelText = highFormat,ValueText = texts[0]},
+				   new {LabelText = lowFormat,ValueText = texts[1]},
+				   new {LabelText = openFormat,ValueText = texts[2]},
+				   new {LabelText = closeFormat,ValueText = texts[3]},
+				};
 
-                StackLayout stackLayout = new StackLayout();
-                BindableLayout.SetItemsSource(stackLayout, labels);
-                BindableLayout.SetItemTemplate(stackLayout, new DataTemplate(() =>
-                {
-                    StackLayout stackLayout1 = new StackLayout();
-                    stackLayout1.Orientation = StackOrientation.Horizontal;
-                    stackLayout1.Add(new Label()
-                    {
-                        HorizontalOptions = LayoutOptions.Start,
-                        VerticalOptions = LayoutOptions.Start,
-                        TextColor = info.TextColor,
-                        Background = info.Background,
-                        Margin = info.Margin,
-                        FontAttributes = info.FontAttributes,
-                        FontSize = info.FontSize,
-                    });
-                    stackLayout1.Add(new Label()
-                    {
-                        HorizontalOptions = LayoutOptions.End,
-                        VerticalOptions = LayoutOptions.Start,
-                        HorizontalTextAlignment = TextAlignment.Start,
-                        TextColor = info.TextColor,
-                        Background = info.Background,
-                        Margin = info.Margin,
-                        FontAttributes = info.FontAttributes,
-                        FontSize = info.FontSize,
-                    });
+				StackLayout stackLayout = [];
+				BindableLayout.SetItemsSource(stackLayout, labels);
+				BindableLayout.SetItemTemplate(stackLayout, new DataTemplate(() =>
+				{
+					StackLayout stackLayout1 = [];
+					stackLayout1.Orientation = StackOrientation.Horizontal;
+					stackLayout1.Add(new Label()
+					{
+						HorizontalOptions = LayoutOptions.Start,
+						VerticalOptions = LayoutOptions.Start,
+						TextColor = info.TextColor,
+						Background = info.Background,
+						Margin = info.Margin,
+						FontAttributes = info.FontAttributes,
+						FontSize = info.FontSize,
+					});
+					stackLayout1.Add(new Label()
+					{
+						HorizontalOptions = LayoutOptions.End,
+						VerticalOptions = LayoutOptions.Start,
+						HorizontalTextAlignment = TextAlignment.Start,
+						TextColor = info.TextColor,
+						Background = info.Background,
+						Margin = info.Margin,
+						FontAttributes = info.FontAttributes,
+						FontSize = info.FontSize,
+					});
 
-                    ((Label)stackLayout1.Children[0]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty, new Binding("LabelText"));
-                    ((Label)stackLayout1.Children[1]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty, new Binding("ValueText"));
-                    return stackLayout1;
-                }));
+					((Label)stackLayout1.Children[0]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty, new Binding("LabelText"));
+					((Label)stackLayout1.Children[1]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty, new Binding("ValueText"));
+					return stackLayout1;
+				}));
 
-                return stackLayout;
-            });
+				return stackLayout;
+			});
 
-            return template;
-        }
+			return template;
+		}
 
-        internal override void GenerateTrackballPointInfo(List<object> nearestDataPoints, List<TrackballPointInfo> pointInfos, ref bool isSideBySide)
-        {
-            var xValues = GetXValues();
-            float xPosition = 0f;
-            float yPosition = 0f;
-            if (nearestDataPoints != null && ActualData != null && xValues != null && SeriesYValues != null)
-            {
-                foreach (object point in nearestDataPoints)
-                {
-                    int index = ActualData.IndexOf(point);
-                    var xValue = xValues[index];
-                    double highValue = HighValues[index];
-                    double lowValue = LowValues[index];
-                    double openValue = OpenValues[index];
-                    double closeValue = CloseValues[index];
-                    string label = $"{SfCartesianChartResources.High} : {highValue}\n" +
-                                   $"{SfCartesianChartResources.Low} : {lowValue}\n" +
-                                   $"{SfCartesianChartResources.Open} : {openValue}\n" +
-                                   $"{SfCartesianChartResources.Close} : {closeValue}";
+		internal override void GenerateTrackballPointInfo(List<object> nearestDataPoints, List<TrackballPointInfo> pointInfos, ref bool isSideBySide)
+		{
+			var xValues = GetXValues();
+			float xPosition = 0f;
+			float yPosition = 0f;
+			if (nearestDataPoints != null && ActualData != null && xValues != null && SeriesYValues != null)
+			{
+				foreach (object point in nearestDataPoints)
+				{
+					int index = ActualData.IndexOf(point);
+					var xValue = xValues[index];
+					double highValue = HighValues[index];
+					double lowValue = LowValues[index];
+					double openValue = OpenValues[index];
+					double closeValue = CloseValues[index];
+					string label = $"{SfCartesianChartResources.High} : {highValue}\n" +
+								   $"{SfCartesianChartResources.Low} : {lowValue}\n" +
+								   $"{SfCartesianChartResources.Open} : {openValue}\n" +
+								   $"{SfCartesianChartResources.Close} : {closeValue}";
 
-                    if (IsSideBySide)
-                    {
-                        isSideBySide = true;
-                        double xMidVal = xValue + SbsInfo.Start + ((SbsInfo.End - SbsInfo.Start) / 2);
-                        xPosition = TransformToVisibleX(xMidVal, highValue);
-                        yPosition = TransformToVisibleY(xMidVal, highValue);
-                    }
+					if (IsSideBySide)
+					{
+						isSideBySide = true;
+						double xMidVal = xValue + SbsInfo.Start + ((SbsInfo.End - SbsInfo.Start) / 2);
+						xPosition = TransformToVisibleX(xMidVal, highValue);
+						yPosition = TransformToVisibleY(xMidVal, highValue);
+					}
 
-                    // Checking YValue is contain in plotArea
-                    //Todo: need to check with transposed
-                    //if (!AreaBounds.Contains(xPoint + AreaBounds.Left, yPoint + AreaBounds.Top)) continue;
+					// Checking YValue is contain in plotArea
+					//Todo: need to check with transposed
+					//if (!AreaBounds.Contains(xPoint + AreaBounds.Left, yPoint + AreaBounds.Top)) continue;
 
-                    TrackballPointInfo? chartPointInfo = CreateTrackballPointInfo(xPosition, yPosition, label, point);
+					TrackballPointInfo? chartPointInfo = CreateTrackballPointInfo(xPosition, yPosition, label, point);
 
-                    //chartPointInfo.TooltipHelper.Text = label;
-                    if (chartPointInfo != null)
-                    {
+					//chartPointInfo.TooltipHelper.Text = label;
+					if (chartPointInfo != null)
+					{
 #if ANDROID
-                            Size contentSize = ChartUtils.GetLabelSize(label, chartPointInfo.TooltipHelper);
-                            chartPointInfo.GroupLabelSize = contentSize;
+						Size contentSize = ChartUtils.GetLabelSize(label, chartPointInfo.TooltipHelper);
+						chartPointInfo.GroupLabelSize = contentSize;
 #endif
-                        chartPointInfo.XValue = xValue;
-                        chartPointInfo.YValues = new List<double>() { highValue, lowValue, openValue, closeValue };
-                        pointInfos.Add(chartPointInfo);
-                    }
-                }
-            }
-        }
+						chartPointInfo.XValue = xValue;
+						chartPointInfo.YValues = [highValue, lowValue, openValue, closeValue];
+						pointInfos.Add(chartPointInfo);
+					}
+				}
+			}
+		}
 
-        internal override void ApplyTrackballLabelFormat(TrackballPointInfo pointInfo, string labelFormat)
-        {
-            var yValues = pointInfo.YValues;
-            string label = $"{SfCartesianChartResources.High} : {yValues[0].ToString(labelFormat)}\n" +
-                                  $"{SfCartesianChartResources.Low} : {yValues[1].ToString(labelFormat)}\n" +
-                                  $"{SfCartesianChartResources.Open} : {yValues[2].ToString(labelFormat)}\n" +
-                                  $"{SfCartesianChartResources.Close} : {yValues[3].ToString(labelFormat)}";
+		internal override void ApplyTrackballLabelFormat(TrackballPointInfo pointInfo, string labelFormat)
+		{
+			var yValues = pointInfo.YValues;
+			string label = $"{SfCartesianChartResources.High} : {yValues[0].ToString(labelFormat)}\n" +
+								  $"{SfCartesianChartResources.Low} : {yValues[1].ToString(labelFormat)}\n" +
+								  $"{SfCartesianChartResources.Open} : {yValues[2].ToString(labelFormat)}\n" +
+								  $"{SfCartesianChartResources.Close} : {yValues[3].ToString(labelFormat)}";
 #if ANDROID
-            Size contentSize = ChartUtils.GetLabelSize(label, pointInfo.TooltipHelper);
-            pointInfo.GroupLabelSize = contentSize;
+			Size contentSize = ChartUtils.GetLabelSize(label, pointInfo.TooltipHelper);
+			pointInfo.GroupLabelSize = contentSize;
 #endif
-            pointInfo.Label = label;
-        }
+			pointInfo.Label = label;
+		}
 
-        internal override double GetActualSpacing()
-        {
-            return Spacing;
-        }
+		internal override double GetActualSpacing()
+		{
+			return Spacing;
+		}
 
-        internal override double GetActualWidth()
-        {
-            return Width;
-        }
+		internal override double GetActualWidth()
+		{
+			return Width;
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

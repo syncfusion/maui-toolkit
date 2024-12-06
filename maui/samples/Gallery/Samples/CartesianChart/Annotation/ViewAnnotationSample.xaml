@@ -55,31 +55,41 @@
                               Fill="#66CAC4D0"
                               Stroke="#49454F"
                               StrokeWidth="3"/>
-            
+
             <chart:SfCartesianChart.Annotations>
                 <chart:ChartAnnotationCollection>
 
                     <chart:LineAnnotation X1="2020-03-24" Y1="4000" X2="2020-03-24" Y2="2000" LineCap="Arrow"/>
-                    <chart:TextAnnotation X1="2020-04-01" Y1="6300" Text="Nationwide lockdown"/>
-                    <chart:ViewAnnotation X1="2020-03-19" Y1="5900" VerticalAlignment="Start">
+                    <chart:TextAnnotation X1="{OnPlatform Default='2020-04-01',Android='2020-04-15', iOS='2020-04-15'}" Y1="6500" Text="Lockdown">
+                        <chart:TextAnnotation.LabelStyle>
+                            <chart:ChartAnnotationLabelStyle HorizontalTextAlignment="{OnPlatform Android='Center',iOS='Center'}"/>
+                        </chart:TextAnnotation.LabelStyle>
+                    </chart:TextAnnotation>
+                    <chart:ViewAnnotation X1="2020-03-24" Y1="5000">
                         <chart:ViewAnnotation.View>
-                            <Path Data="{StaticResource nationlockdown}" Fill="#BF9C4C"></Path>
+                            <HorizontalStackLayout >
+                                <Path Data="{StaticResource nationlockdown}" Fill="#BF9C4C"></Path>
+                            </HorizontalStackLayout>
                         </chart:ViewAnnotation.View>
                     </chart:ViewAnnotation>
 
-                    <chart:LineAnnotation X1="2020-07-10" Y1="6500" X2="2020-05-27" Y2="1500" LineCap="Arrow"/>
-                    <chart:TextAnnotation X1="2020-07-20" Y1="7500" Text="Summer vacation "/>
-                    <chart:ViewAnnotation X1="2020-07-15" Y1="9500" VerticalAlignment="Start">
+                    <chart:LineAnnotation X1="2020-07-20" Y1="6500" X2="2020-05-27" Y2="1500" LineCap="Arrow"/>
+                    <chart:TextAnnotation X1="2020-07-20" Y1="7000" Text="Summer vacation "/>
+                    <chart:ViewAnnotation X1="2020-07-20" Y1="8500">
                         <chart:ViewAnnotation.View>
-                            <Path Data="{StaticResource sun}" Fill="#FECA49"/>
+                            <HorizontalStackLayout>
+                                <Path Data="{StaticResource sun}" Fill="#FECA49"/>
+                            </HorizontalStackLayout>
                         </chart:ViewAnnotation.View>
                     </chart:ViewAnnotation>
 
-                    <chart:LineAnnotation X1="2020-12-05" Y1="7200" X2="2020-12-25" Y2="5500" LineCap="Arrow"/>
-                    <chart:TextAnnotation X1="2020-11-25" Y1="8000" Text="Christmas"/>
-                    <chart:ViewAnnotation X1="2020-11-20" Y1="10000" VerticalAlignment="Start">
+                    <chart:LineAnnotation X1="2020-12-01" Y1="7500" X2="2020-12-25" Y2="5500" LineCap="Arrow"/>
+                    <chart:TextAnnotation X1="2020-12-01" Y1="8000" Text="Christmas"/>
+                    <chart:ViewAnnotation X1="2020-11-30" Y1="9300">
                         <chart:ViewAnnotation.View>
-                            <Path Data="{StaticResource christmas}" Fill="#44911B"></Path>
+                            <HorizontalStackLayout>
+                                <Path Data="{StaticResource christmas}" Fill="#44911B"></Path>
+                            </HorizontalStackLayout>
                         </chart:ViewAnnotation.View>
                     </chart:ViewAnnotation>
 
@@ -100,10 +110,10 @@
                         </chart:TextAnnotation.LabelStyle>
                     </chart:TextAnnotation>
                     <chart:TextAnnotation X1="2020-08-20" Y1="19000" Text="March 2019 - March 2020"/>
-                    
+
                 </chart:ChartAnnotationCollection>
             </chart:SfCartesianChart.Annotations>
-        </chart:SfCartesianChart>
+    </chart:SfCartesianChart>
                 
     </localCore:SampleView.Content>
 </localCore:SampleView>

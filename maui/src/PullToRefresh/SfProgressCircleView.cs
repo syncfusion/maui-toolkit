@@ -5,7 +5,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 	/// <summary>
 	/// This is the refresh view of <see cref="SfPullToRefresh"/>.
 	/// </summary>
-	internal class SfProgressCircleView : SfContentView
+	internal partial class SfProgressCircleView : SfContentView
     {
         #region Fields
 		
@@ -13,10 +13,10 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         Rect _processedBounds;
         Rect _oval;
         Rect _fillRect;
-        const float _minArcLength = 21.6f;
-        const float _maxArcLength = 280.8f;
-        const float _arcMovementAngle = 7f;
-        const float _arcIncrement = 22f;
+        const float MinArcLength = 21.6f;
+        const float MaxArcLength = 280.8f;
+        const float ArcMovementAngle = 7f;
+        const float ArcIncrement = 22f;
         int _angleMaintenanceCounter = 0;
         WeakReference<SfPullToRefresh>? _pullToRefresh;
         float _startAngle = 90f;
@@ -38,7 +38,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             ZIndex = 1;
             DrawingOrder = DrawingOrder.BelowContent;
             ClipToBounds = true;
-            _endAngle = _startAngle - _minArcLength;
+            _endAngle = _startAngle - MinArcLength;
             UpdateDrawProperties();
         }
 
@@ -81,7 +81,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			if (PullToRefresh is not null && PullToRefresh.PullingViewTemplate is not null)
 			{
-				PullToRefresh.PullingTemplateView = CreateTemplateContent(PullToRefresh.PullingViewTemplate);
+				PullToRefresh.PullingTemplateView = SfProgressCircleView.CreateTemplateContent(PullToRefresh.PullingViewTemplate);
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		{
 			if (PullToRefresh is not null && PullToRefresh.RefreshingViewTemplate is not null)
 			{
-				PullToRefresh.RefreshingTemplateView = CreateTemplateContent(PullToRefresh.RefreshingViewTemplate);
+				PullToRefresh.RefreshingTemplateView = SfProgressCircleView.CreateTemplateContent(PullToRefresh.RefreshingViewTemplate);
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		internal void ResetArcAngle()
 		{
 			_startAngle = 90f;
-			_endAngle = _startAngle - _minArcLength;
+			_endAngle = _startAngle - MinArcLength;
 			_isArcCollapsing = false;
 			_isInShift = false;
 			_angleMaintenanceCounter = 0;
@@ -164,18 +164,18 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
             if (_isArcCollapsing)
             {
-                _endAngle = ConvertAngleBasedOnQuadrant(_endAngle - _arcMovementAngle);
+                _endAngle = SfProgressCircleView.ConvertAngleBasedOnQuadrant(_endAngle - ArcMovementAngle);
                 const float counterValue = 86.4f;
-                float incrementAngle = GetArcLength() <= counterValue ? _arcMovementAngle + (_arcIncrement / 4f) : _arcIncrement;
-                 _startAngle = ConvertAngleBasedOnQuadrant( _startAngle - incrementAngle);
+                float incrementAngle = GetArcLength() <= counterValue ? ArcMovementAngle + (ArcIncrement / 4f) : ArcIncrement;
+                 _startAngle = SfProgressCircleView.ConvertAngleBasedOnQuadrant( _startAngle - incrementAngle);
             }
             else
             {
-                 _startAngle = ConvertAngleBasedOnQuadrant( _startAngle - _arcMovementAngle);
-                _endAngle = ConvertAngleBasedOnQuadrant(_endAngle - (_isInShift ? _arcMovementAngle : _arcIncrement));
+                 _startAngle = SfProgressCircleView.ConvertAngleBasedOnQuadrant( _startAngle - ArcMovementAngle);
+                _endAngle = SfProgressCircleView.ConvertAngleBasedOnQuadrant(_endAngle - (_isInShift ? ArcMovementAngle : ArcIncrement));
             }
 
-            if (GetArcLength() >= _maxArcLength)
+            if (GetArcLength() >= MaxArcLength)
             {
                 if (!_isInShift)
                 {
@@ -183,7 +183,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                     _angleMaintenanceCounter = 30;
                 }
             }
-            else if (GetArcLength() <= _minArcLength)
+            else if (GetArcLength() <= MinArcLength)
             {
                 _isArcCollapsing = false;
             }
@@ -301,7 +301,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				}
 				else
 				{
-					canvas.DrawArc(_oval, quarterCircle, ThresholdToAngle(PullToRefresh.ProgressRate), true, false);
+					canvas.DrawArc(_oval, quarterCircle, SfProgressCircleView.ThresholdToAngle(PullToRefresh.ProgressRate), true, false);
 				}
 			}
 			else if (PullToRefresh.ActualIsRefreshing)
@@ -310,12 +310,12 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			}
 		}
 
-        /// <summary>
-        /// This method used to calculate the progress value based on the progress rate.
-        /// </summary>
-        /// <param name="progressRate">Indicates the progress rate.</param>
-        /// <returns>Progress value.</returns>
-        float ThresholdToAngle(double progressRate)
+		/// <summary>
+		/// This method used to calculate the progress value based on the progress rate.
+		/// </summary>
+		/// <param name="progressRate">Indicates the progress rate.</param>
+		/// <returns>Progress value.</returns>
+		static float ThresholdToAngle(double progressRate)
         {
             const float fullCircle = 360f;
             const float quarterCircle = 90f;
@@ -332,12 +332,12 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             return arcAngle;
         }
 
-        /// <summary>
-        /// Method converts angle relative to quadrant of circle.
-        /// </summary>
-        /// <param name="value">Calculated angle.</param>
-        /// <returns>Returns the angle relative to quadrant.</returns>
-        float ConvertAngleBasedOnQuadrant(float value)
+		/// <summary>
+		/// Method converts angle relative to quadrant of circle.
+		/// </summary>
+		/// <param name="value">Calculated angle.</param>
+		/// <returns>Returns the angle relative to quadrant.</returns>
+		static float ConvertAngleBasedOnQuadrant(float value)
         {
             const float fullCircle = 360f;
             if (value < 0)
@@ -354,15 +354,15 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         /// <returns>The length of arc between start and end angle.</returns>
         float GetArcLength()
         {
-            return ConvertAngleBasedOnQuadrant( _startAngle - _endAngle);
+            return SfProgressCircleView.ConvertAngleBasedOnQuadrant( _startAngle - _endAngle);
         }
 
-        /// <summary>
-        /// Method cast the template content as view which loaded inside the <see cref="DataTemplate"/>.
-        /// </summary>
-        /// <param name="dataTemplate">DateTemplate instance.</param>
-        /// <returns>Returns the <see cref="DataTemplate"/> content as view.</returns>
-        View CreateTemplateContent(DataTemplate dataTemplate)
+		/// <summary>
+		/// Method cast the template content as view which loaded inside the <see cref="DataTemplate"/>.
+		/// </summary>
+		/// <param name="dataTemplate">DateTemplate instance.</param>
+		/// <returns>Returns the <see cref="DataTemplate"/> content as view.</returns>
+		static View CreateTemplateContent(DataTemplate dataTemplate)
         {
             var templateView = dataTemplate.CreateContent();
             var viewCell = templateView as ViewCell;

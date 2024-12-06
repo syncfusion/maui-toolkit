@@ -25,9 +25,9 @@ namespace Syncfusion.Maui.Toolkit
 
         private bool clipToBounds = true;
 
-        private Thickness padding = new Thickness(0);
+        private Thickness padding = new(0);
 
-        readonly List<IView> children = new();
+        readonly List<IView> children = [];
 
         #endregion
 
@@ -45,7 +45,7 @@ namespace Syncfusion.Maui.Toolkit
             set
             {
                 drawingOrder = value;
-                this.LayoutHandler?.SetDrawingOrder(value);
+                LayoutHandler?.SetDrawingOrder(value);
             }
         }
 
@@ -56,11 +56,11 @@ namespace Syncfusion.Maui.Toolkit
         {
             get
             {
-                return this.ignoreSafeArea;
+                return ignoreSafeArea;
             }
             set
             {
-                this.ignoreSafeArea = value;
+                ignoreSafeArea = value;
             }
         }
 
@@ -76,12 +76,12 @@ namespace Syncfusion.Maui.Toolkit
         {
             get
             {
-                return this.clipToBounds;
+                return clipToBounds;
             }
             set
             {
-                this.clipToBounds = value;
-                this.LayoutHandler?.UpdateClipToBounds(value);
+                clipToBounds = value;
+                LayoutHandler?.UpdateClipToBounds(value);
             }
         }
 
@@ -92,13 +92,13 @@ namespace Syncfusion.Maui.Toolkit
         {
             get
             {
-                return this.padding;
+                return padding;
             }
             set
             {
-                this.padding = value;
-                this.MeasureContent(this.Width, this.Height);
-                this.ArrangeContent(this.Bounds);
+                padding = value;
+                MeasureContent(Width, Height);
+                ArrangeContent(Bounds);
             }
         }
 
@@ -106,25 +106,25 @@ namespace Syncfusion.Maui.Toolkit
 		IReadOnlyList<IVisualTreeElement> IVisualTreeElement.GetVisualChildren() => Children.Cast<IVisualTreeElement>().ToList().AsReadOnly();
 
 		/// <exclude/>
-		bool Microsoft.Maui.ILayout.ClipsToBounds => this.ClipToBounds;
+		bool Microsoft.Maui.ILayout.ClipsToBounds => ClipToBounds;
 
 		/// <exclude/>
-		int ICollection<IView>.Count => this.children.Count;
+		int ICollection<IView>.Count => children.Count;
 
 		/// <exclude/>
 		bool ICollection<IView>.IsReadOnly => ((ICollection<IView>)children).IsReadOnly;
 
 		/// <exclude/>
-		bool ISafeAreaView.IgnoreSafeArea => this.IgnoreSafeArea;
+		bool ISafeAreaView.IgnoreSafeArea => IgnoreSafeArea;
 
 		/// <exclude/>
-		Thickness IPadding.Padding => this.Padding;
+		Thickness IPadding.Padding => Padding;
 
 		/// <exclude/>
-		DrawingOrder IDrawableLayout.DrawingOrder { get => this.DrawingOrder; set => this.DrawingOrder = value; }
+		DrawingOrder IDrawableLayout.DrawingOrder { get => DrawingOrder; set => DrawingOrder = value; }
 
 		/// <exclude/>
-		IView IList<IView>.this[int index] { get => this.children[index]; set => this.children[index] = value; }
+		IView IList<IView>.this[int index] { get => children[index]; set => children[index] = value; }
 
         #endregion
 
@@ -161,7 +161,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// <exclude/>
 		protected virtual Size MeasureContent(double widthConstraint, double heightConstraint)
         {
-            return this.layoutManager.Measure(widthConstraint, heightConstraint);
+            return layoutManager.Measure(widthConstraint, heightConstraint);
         }
 
 		/// <summary>
@@ -172,7 +172,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// <exclude/>
 		protected virtual Size ArrangeContent(Rect bounds)
         {
-            return this.layoutManager.ArrangeChildren(bounds);
+            return layoutManager.ArrangeChildren(bounds);
         }
 
 		#endregion
@@ -187,7 +187,7 @@ namespace Syncfusion.Maui.Toolkit
             {
                 if (item is BindableObject child)
                 {
-                    this.UpdateBindingContextToChild(child);
+                    UpdateBindingContextToChild(child);
                 }
             }
         }
@@ -214,9 +214,9 @@ namespace Syncfusion.Maui.Toolkit
             base.OnHandlerChanged();
             if (Handler != null)
             {
-                this.LayoutHandler?.SetDrawingOrder(this.DrawingOrder);
-                this.LayoutHandler?.UpdateClipToBounds(this.ClipToBounds);
-                this.LayoutHandler?.Invalidate();
+                LayoutHandler?.SetDrawingOrder(DrawingOrder);
+                LayoutHandler?.UpdateClipToBounds(ClipToBounds);
+                LayoutHandler?.Invalidate();
             }
         }
 
@@ -251,7 +251,7 @@ namespace Syncfusion.Maui.Toolkit
 
         internal void InvalidateDrawable()
         {
-            this.LayoutHandler?.Invalidate();
+            LayoutHandler?.Invalidate();
         }
 
 		#endregion
@@ -264,7 +264,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// <exclude/>
 		void IDrawableLayout.InvalidateDrawable()
         {
-            this.InvalidateDrawable();
+            InvalidateDrawable();
         }
 
 		/// <exclude/>
@@ -296,8 +296,8 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="child">The child view to insert into the list.</param>
 		void IList<IView>.Insert(int index, IView child)
         {
-            this.children.Insert(index, child);
-            this.LayoutHandler?.Insert(index, child);
+            children.Insert(index, child);
+            LayoutHandler?.Insert(index, child);
             if (child is Element element)
             {
                 OnChildAdded(element);
@@ -311,8 +311,8 @@ namespace Syncfusion.Maui.Toolkit
 		void IList<IView>.RemoveAt(int index)
         {
             var child = children[index];
-            this.LayoutHandler?.Remove(this.children[index]);
-            this.children.RemoveAt(index);
+            LayoutHandler?.Remove(children[index]);
+            children.RemoveAt(index);
 
             if (child is Element element)
             {
@@ -326,8 +326,8 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="child">The child view to add to the collection.</param>
 		void ICollection<IView>.Add(IView child)
         {
-            this.children.Add(child);
-            this.LayoutHandler?.Add(child);
+            children.Add(child);
+            LayoutHandler?.Add(child);
             if (child is Element element)
             {
                 OnChildAdded(element);
@@ -339,8 +339,8 @@ namespace Syncfusion.Maui.Toolkit
 		/// </summary>
 		void ICollection<IView>.Clear()
         {
-            this.children.Clear();
-            this.LayoutHandler?.Clear();
+            children.Clear();
+            LayoutHandler?.Clear();
         }
 
 		/// <summary>
@@ -350,7 +350,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// <returns><c>true</c> if the child view is found in the collection; otherwise, <c>false</c>.</returns>
 		bool ICollection<IView>.Contains(IView child)
         {
-            return this.children.Contains(child);
+            return children.Contains(child);
         }
 
 		/// <summary>
@@ -360,7 +360,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// <param name="arrayIndex">The index in the array at which copying begins.</param>
 		void ICollection<IView>.CopyTo(IView[] array, int arrayIndex)
         {
-            this.children.CopyTo(array, arrayIndex);
+            children.CopyTo(array, arrayIndex);
         }
 
 		/// <summary>
@@ -371,8 +371,8 @@ namespace Syncfusion.Maui.Toolkit
 		bool ICollection<IView>.Remove(IView child)
         {
             var index = children.IndexOf(child);
-            this.LayoutHandler?.Remove(child);
-            var childRemoved = this.children.Remove(child);
+            LayoutHandler?.Remove(child);
+            var childRemoved = children.Remove(child);
             if (child is Element element)
             {
                 OnChildRemoved(element, index);
@@ -401,7 +401,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// <exclude/>
 		void IDrawable.Draw(ICanvas canvas, RectF dirtyRect)
         {
-            this.OnDraw(canvas, dirtyRect);
+            OnDraw(canvas, dirtyRect);
         }
 
 		/// <summary>
@@ -434,7 +434,7 @@ namespace Syncfusion.Maui.Toolkit
         /// <returns>The semantics nodes of the view.</returns>
         List<SemanticsNode>? ISemanticsProvider.GetSemanticsNodes(double width, double height)
         {
-            return this.GetSemanticsNodesCore(width, height);
+            return GetSemanticsNodesCore(width, height);
         }
 
         /// <summary>
@@ -443,7 +443,7 @@ namespace Syncfusion.Maui.Toolkit
         /// <param name="node">Current navigated semantics node.</param>
         void ISemanticsProvider.ScrollTo(SemanticsNode node)
         {
-            this.ScrollToCore(node);
+            ScrollToCore(node);
         }
 
         /// <summary>
@@ -451,7 +451,7 @@ namespace Syncfusion.Maui.Toolkit
         /// </summary>
         internal void InvalidateSemantics()
         {
-            this.LayoutHandler?.InvalidateSemantics();
+            LayoutHandler?.InvalidateSemantics();
         }
 
         /// <summary>

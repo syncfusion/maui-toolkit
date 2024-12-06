@@ -1,5 +1,5 @@
 ﻿using UIKit;
-	
+
 namespace Syncfusion.Maui.ControlsGallery;
 
 public class Program

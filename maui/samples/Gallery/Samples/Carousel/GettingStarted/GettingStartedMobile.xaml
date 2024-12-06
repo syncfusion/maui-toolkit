@@ -47,7 +47,7 @@
                         <Image
                             Aspect="Fill"
                             HeightRequest="300"
-                            Source="{Binding ImageName, Converter={StaticResource imageconverter}}"
+                            Source="{Binding ImageName}"
                             WidthRequest="200" />
                     </DataTemplate>
                 </carousel:SfCarousel.ItemTemplate>

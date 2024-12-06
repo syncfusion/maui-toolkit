@@ -18,7 +18,7 @@
                             <ColumnDefinition Width="0.8*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Image x:DataType="local:ContactInfo" Source="{Binding ContactImage,Converter={StaticResource imageconverter}}" Grid.RowSpan="2"/>
+                        <Image x:DataType="local:ContactInfo" Source="{Binding ContactImage}" Grid.RowSpan="2"/>
                         <Grid Grid.Column="1" Padding="10,0,0,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
@@ -54,6 +54,7 @@
                         <ListView x:DataType="local:ViewModel" ItemsSource="{Binding Info}" x:Name="listView"
                                   ItemTemplate="{StaticResource personTemplate}"
                                   SeparatorVisibility="None"
+                                  RowHeight="90"
                                   VerticalScrollBarVisibility="Never"
                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
                                   >

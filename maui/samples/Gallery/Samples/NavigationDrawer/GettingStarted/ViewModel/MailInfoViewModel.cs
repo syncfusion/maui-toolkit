@@ -7,21 +7,21 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 	/// <summary>
 	/// ViewModel class of NavigationDrawer.
 	/// </summary>
-	public class MailInfoViewModel : INotifyPropertyChanged
+	public partial class MailInfoViewModel : INotifyPropertyChanged
 	{
 		#region Fields
 
-		ObservableCollection<MailInfo>? mailInfos;
-		ObservableCollection<MailInfo>? archivedMessages;
-		Command? undoCommand;
-		Command? deleteCommand;
-		bool? isDeleted;
-		MailInfo? listViewItem;
-		Command? archiveCommand;
-		string? popUpText;
-		int listViewItemIndex;
-		Random random;
-		MailInfoRepository? listViewRepository;
+		ObservableCollection<MailInfo>? _mailInfos;
+		ObservableCollection<MailInfo>? _archivedMessages;
+		Command? _undoCommand;
+		Command? _deleteCommand;
+		bool? _isDeleted;
+		MailInfo? _listViewItem;
+		Command? _archiveCommand;
+		string? _popUpText;
+		int _listViewItemIndex;
+		readonly Random _random;
+		readonly MailInfoRepository? _listViewRepository;
 
 		#endregion
 
@@ -38,8 +38,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// <param name="name">string type parameter represent propertyName as name</param>
 		public void OnPropertyChanged(string name)
 		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(name));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
 
 		#endregion
@@ -51,9 +50,9 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public MailInfoViewModel()
 		{
-			this.random = new Random();
+			_random = new Random();
 			GenerateSource();
-			this.listViewRepository = new MailInfoRepository();
+			_listViewRepository = new MailInfoRepository();
 		}
 
 		#endregion
@@ -65,8 +64,8 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public ObservableCollection<MailInfo>? MailInfos
 		{
-			get { return mailInfos; }
-			set { mailInfos = value; OnPropertyChanged("MailInfos"); }
+			get { return _mailInfos; }
+			set { _mailInfos = value; OnPropertyChanged("MailInfos"); }
 		}
 
 		/// <summary>
@@ -74,8 +73,8 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public ObservableCollection<MailInfo>? ArchivedMessages
 		{
-			get { return archivedMessages; }
-			set { archivedMessages = value; OnPropertyChanged("ArchivedMessages"); }
+			get { return _archivedMessages; }
+			set { _archivedMessages = value; OnPropertyChanged("ArchivedMessages"); }
 		}
 
 		/// <summary>
@@ -83,8 +82,8 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public Command? DeleteCommand
 		{
-			get { return deleteCommand; }
-			protected set { deleteCommand = value; }
+			get { return _deleteCommand; }
+			protected set { _deleteCommand = value; }
 		}
 
 		/// <summary>
@@ -92,8 +91,8 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public Command? UndoCommand
 		{
-			get { return undoCommand; }
-			protected set { undoCommand = value; }
+			get { return _undoCommand; }
+			protected set { _undoCommand = value; }
 		}
 
 		/// <summary>
@@ -101,20 +100,20 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public Command? ArchiveCommand
 		{
-			get { return archiveCommand; }
-			protected set { archiveCommand = value; }
+			get { return _archiveCommand; }
+			protected set { _archiveCommand = value; }
 		}
 
 		public bool? IsDeleted
 		{
-			get { return isDeleted; }
-			set { isDeleted = value; OnPropertyChanged("IsDeleted"); }
+			get { return _isDeleted; }
+			set { _isDeleted = value; OnPropertyChanged("IsDeleted"); }
 		}
 
 		public string? PopUpText
 		{
-			get { return popUpText; }
-			set { popUpText = value; OnPropertyChanged("PopUpText"); }
+			get { return _popUpText; }
+			set { _popUpText = value; OnPropertyChanged("PopUpText"); }
 		}
 
 
@@ -136,19 +135,19 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 					k = 0;
 				}
 
-				if (this.listViewRepository != null)
+				if (_listViewRepository != null)
 				{
 					var record = new MailInfo()
 					{
-						ProfileName = listViewRepository.ProfileList[i],
-						Name = listViewRepository.NameList[i],
-						Subject = listViewRepository.Subject[i],
+						ProfileName = _listViewRepository._profileList[i],
+						Name = _listViewRepository._nameList[i],
+						Subject = _listViewRepository._subject[i],
 						Date = DateTime.Now.AddMinutes((i * -3)),
-						Description = listViewRepository.Descriptions[i],
-						Image = listViewRepository.Images[k],
-						IsAttached = listViewRepository.Attachments[i],
-						IsImportant = listViewRepository.Importants[i],
-						IsOpened = listViewRepository.Opens[i],
+						Description = _listViewRepository._descriptions[i],
+						Image = _listViewRepository._images[k],
+						IsAttached = _listViewRepository._attachments[i],
+						IsImportant = _listViewRepository._importants[i],
+						IsOpened = _listViewRepository._opens[i],
 					};
 					empInfo.Add(record);
 					k++;
@@ -167,11 +166,11 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			IsDeleted = false;
 			MailInfoRepository mailinfo = new MailInfoRepository();
-			archivedMessages = new ObservableCollection<MailInfo>();
-			mailInfos = mailinfo.GetMailInfo();
-			deleteCommand = new Command(OnDelete);
-			undoCommand = new Command(OnUndo);
-			archiveCommand = new Command(OnArchive);
+			_archivedMessages = [];
+			_mailInfos = mailinfo.GetMailInfo();
+			_deleteCommand = new Command(OnDelete);
+			_undoCommand = new Command(OnUndo);
+			_archiveCommand = new Command(OnArchive);
 		}
 
 		/// <summary>
@@ -181,11 +180,11 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private async void OnDelete(object item)
 		{
 			PopUpText = "Deleted";
-			listViewItem = (MailInfo)item;
-			if (this.mailInfos != null)
+			_listViewItem = (MailInfo)item;
+			if (_mailInfos != null)
 			{
-				listViewItemIndex = mailInfos.IndexOf(listViewItem);
-				mailInfos.Remove(listViewItem);
+				_listViewItemIndex = _mailInfos.IndexOf(_listViewItem);
+				_mailInfos.Remove(_listViewItem);
 			}
 
 			IsDeleted = true;
@@ -202,12 +201,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private async void OnArchive(object item)
 		{
 			PopUpText = "Archived";
-			listViewItem = (MailInfo)item;
-			if (this.mailInfos != null && this.archivedMessages != null)
+			_listViewItem = (MailInfo)item;
+			if (_mailInfos != null && _archivedMessages != null)
 			{
-				listViewItemIndex = mailInfos.IndexOf(listViewItem);
-				mailInfos.Remove(listViewItem);
-				archivedMessages.Add(listViewItem);
+				_listViewItemIndex = _mailInfos.IndexOf(_listViewItem);
+				_mailInfos.Remove(_listViewItem);
+				_archivedMessages.Add(_listViewItem);
 			}
 
 			IsDeleted = true;
@@ -224,24 +223,24 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			IsDeleted = false;
 
-			if (listViewItem != null && this.mailInfos != null && this.archivedMessages != null)
+			if (_listViewItem != null && _mailInfos != null && _archivedMessages != null)
 			{
-				mailInfos.Insert(listViewItemIndex, listViewItem);
+				_mailInfos.Insert(_listViewItemIndex, _listViewItem);
 
-				var archivedItem = archivedMessages.Where(x => x.Name != null && x.Name.Equals(listViewItem.Name, StringComparison.Ordinal));
+				var archivedItem = _archivedMessages.Where(x => x.Name != null && x.Name.Equals(_listViewItem.Name, StringComparison.Ordinal));
 
 				if (archivedItem != null)
 				{
 					foreach (var item in archivedItem)
 					{
-						archivedMessages.Remove(listViewItem);
+						_archivedMessages.Remove(_listViewItem);
 						break;
 					}
 				}
 			}
 
-			listViewItemIndex = 0;
-			listViewItem = null;
+			_listViewItemIndex = 0;
+			_listViewItem = null;
 		}
 
 		/// <summary>
@@ -252,7 +251,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			MailInfoRepository inboxinfo = new MailInfoRepository();
 
-			this.mailInfos = inboxinfo.AddRefreshItems(count);
+			_mailInfos = inboxinfo.AddRefreshItems(count);
 		}
 
 		#endregion

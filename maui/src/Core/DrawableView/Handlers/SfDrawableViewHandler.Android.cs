@@ -7,7 +7,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 	/// Handles the drawing view functionality for the SfDrawableView on the Android platform.
 	/// </summary>
 	public partial class SfDrawableViewHandler : ViewHandler<IDrawableView, PlatformGraphicsView>
-    {
+	{
 		#region Methods
 
 		/// <summary>
@@ -16,18 +16,18 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		/// <exclude/>
 		/// <returns>The Android platform graphics view.</returns>
 		protected override PlatformGraphicsView CreatePlatformView()
-        {
-            return new PlatformGraphicsView(Context, VirtualView);
-        }
+		{
+			return new PlatformGraphicsView(Context, VirtualView);
+		}
 
 		/// <summary>
 		/// Invalidates the view, causing it to be redrawn.
 		/// </summary>
 		public void Invalidate()
-        {
-            this.PlatformView?.Invalidate();
-        }
+		{
+			PlatformView?.Invalidate();
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

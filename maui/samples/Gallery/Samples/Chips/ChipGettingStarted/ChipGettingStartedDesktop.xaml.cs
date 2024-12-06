@@ -12,6 +12,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 		private void SfChipGroup_SelectionChanged(object sender, Syncfusion.Maui.Toolkit.Chips.SelectionChangedEventArgs e)
 		{
 			if (sender != null && ((sender as SfChipGroup)?.BindingContext as ChipViewModel) != null)
+			{
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 				if (!string.IsNullOrEmpty("SelectedAddOnItems"))
 				{
@@ -52,7 +53,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 					}
 
 				}
-			((sender as SfChipGroup).BindingContext as ChipViewModel).FinalAmount = ((sender as SfChipGroup).BindingContext as ChipViewModel).TotalAmount;
+			} ((sender as SfChipGroup).BindingContext as ChipViewModel).FinalAmount = ((sender as SfChipGroup).BindingContext as ChipViewModel).TotalAmount;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
 		}
 	}

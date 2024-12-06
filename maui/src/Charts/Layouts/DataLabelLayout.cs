@@ -3,26 +3,26 @@ using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal class DataLabelLayout : Layout
+    internal partial class DataLabelLayout : Layout
     {
         protected override ILayoutManager CreateLayoutManager()
         {
             return new TemplatedViewLayoutManager(this);
         }
 
-        internal IDataTemplateDependent source;
+		internal IDataTemplateDependent _source;
 
         internal bool IsTemplateItemsChanged()
         {
-            return source.IsTemplateItemsChanged();
+            return _source.IsTemplateItemsChanged();
         }
 
         public DataLabelLayout(IDataTemplateDependent source)
         {
             IsClippedToBounds = true;
-            this.source = source;
+            _source = source;
             BindableLayout.SetItemTemplate(this, GetItemTemplate());
-            SetBinding(IsVisibleProperty, new Binding(nameof(IDataTemplateDependent.IsVisible)) { Source = this.source });
+            SetBinding(IsVisibleProperty, new Binding(nameof(IDataTemplateDependent.IsVisible)) { Source = _source });
         }
 
         DataTemplate GetItemTemplate()
@@ -32,18 +32,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 var item = new DataLabelItemView();
                 var binding = new MultiBinding
                 {
-                    Bindings = new Collection<BindingBase>
-                    {
-                        new Binding(nameof(ChartDataLabel.XPosition)),
+					Bindings =
+					[
+						new Binding(nameof(ChartDataLabel.XPosition)),
                         new Binding(nameof(ChartDataLabel.YPosition)),
-                    },
+                    ],
                     Converter = new TemplateVisibilityConverter(),
                 };
 
                 item.SetBinding(DataLabelItemView.IsVisibleProperty, binding);
                 item.SetBinding(DataLabelItemView.XPositionProperty, new Binding(nameof(ChartDataLabel.XPosition)));
                 item.SetBinding(DataLabelItemView.YPositionProperty, new Binding(nameof(ChartDataLabel.YPosition)));
-                item.SetBinding(SfTemplatedView.ItemTemplateProperty, new Binding(nameof(IDataTemplateDependent.LabelTemplate)) { Source = this.source });
+                item.SetBinding(SfTemplatedView.ItemTemplateProperty, new Binding(nameof(IDataTemplateDependent.LabelTemplate)) { Source = _source });
                 return item;
             });
         }
@@ -58,7 +58,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         public override Size Measure(double widthConstraint, double heightConstraint)
         {
-            var padding = Layout.Padding;
+			var padding = Layout.Padding;
 
             double measuredHeight = 0;
             double measuredWidth = 0;

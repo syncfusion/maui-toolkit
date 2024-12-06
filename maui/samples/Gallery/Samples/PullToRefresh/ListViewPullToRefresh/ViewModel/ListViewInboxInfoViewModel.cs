@@ -7,12 +7,12 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// <summary>
 	/// ViewModel class of ListViewPullToRefresh.
 	/// </summary>
-	public class ListViewInboxInfoViewModel : INotifyPropertyChanged
+	public partial class ListViewInboxInfoViewModel : INotifyPropertyChanged
 	{
 		#region Fields
 
-		ObservableCollection<InboxInfo>? inboxInfos;
-		Random random;
+		ObservableCollection<InboxInfo>? _inboxInfos;
+		readonly Random _random;
 
 		#endregion
 
@@ -29,8 +29,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="name">string type parameter represent propertyName as name</param>
 		public void OnPropertyChanged(string name)
 		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(name));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
 
 		#endregion
@@ -42,7 +41,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public ListViewInboxInfoViewModel()
 		{
-			this.random = new Random();
+			_random = new Random();
 			GenerateSource();
 		}
 
@@ -55,8 +54,8 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		public ObservableCollection<InboxInfo>? InboxInfos
 		{
-			get { return inboxInfos; }
-			set { inboxInfos = value; OnPropertyChanged("InboxInfos"); }
+			get { return _inboxInfos; }
+			set { _inboxInfos = value; OnPropertyChanged("InboxInfos"); }
 		}
 
 		#endregion
@@ -69,7 +68,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		private void GenerateSource()
 		{
 			ListViewInboxInfoRepository inboxinfo = new ListViewInboxInfoRepository();
-			inboxInfos = inboxinfo.GetInboxInfo();
+			_inboxInfos = inboxinfo.GetInboxInfo();
 		}
 
 		/// <summary>
@@ -82,7 +81,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 
 			foreach (var i in inboxinfo.AddRefreshItems(count))
 			{
-				this.inboxInfos?.Insert(0, i);
+				_inboxInfos?.Insert(0, i);
 			}
 		}
 

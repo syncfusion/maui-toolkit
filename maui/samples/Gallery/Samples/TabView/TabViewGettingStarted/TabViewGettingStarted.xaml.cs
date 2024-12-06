@@ -12,7 +12,7 @@ namespace Syncfusion.Maui.ControlsGallery.TabView.SfTabView
         public TabViewGettingStarted()
         {
             InitializeComponent();
-            this.BindingContext = new TabViewModel();
+            BindingContext = new TabViewModel();
         }
 
         /// <summary>
@@ -88,16 +88,27 @@ namespace Syncfusion.Maui.ControlsGallery.TabView.SfTabView
         /// </summary>
         public TabViewModel()
         {
+
+/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net9.0-windows10.0.19041.0)'
+Before:
             TabModelSource = new List<TabModel>();
             List<TabModel> TabModels = new List<TabModel>();
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#F0F361"), Name = "Alex", ImageSource = "alexandar.png" });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFC252"), Name = "Clara", ImageSource = "clara.png" });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#8AF8FF"), Name = "Steve", ImageSource = "sebastian.png" });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#A1B2FF"), Name = "Richard", ImageSource = "jackson.png" });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#7A7A7A"), Name = "Nora", ImageSource = "nora.png" });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFB381"), Name = "David", ImageSource = "tye.png" });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#7FE8EE"), Name = "Gabriella", ImageSource = "gabriella.png" });
-            TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#FFF27C"), Name = "Lita", ImageSource = "lita.png" });
+After:
+            TabModelSource = [];
+            List<TabModel> TabModels = new List<TabModel>();
+*/
+            TabModelSource = [];
+            List<TabModel> TabModels =
+			[
+				new TabModel() { ImageBackground = Color.FromArgb("#F0F361"), Name = "Alex", ImageSource = "alexandar.png" },
+				new TabModel() { ImageBackground = Color.FromArgb("#FFC252"), Name = "Clara", ImageSource = "clara.png" },
+				new TabModel() { ImageBackground = Color.FromArgb("#8AF8FF"), Name = "Steve", ImageSource = "sebastian.png" },
+				new TabModel() { ImageBackground = Color.FromArgb("#A1B2FF"), Name = "Richard", ImageSource = "jackson.png" },
+				new TabModel() { ImageBackground = Color.FromArgb("#7A7A7A"), Name = "Nora", ImageSource = "nora.png" },
+				new TabModel() { ImageBackground = Color.FromArgb("#FFB381"), Name = "David", ImageSource = "tye.png" },
+				new TabModel() { ImageBackground = Color.FromArgb("#7FE8EE"), Name = "Gabriella", ImageSource = "gabriella.png" },
+				new TabModel() { ImageBackground = Color.FromArgb("#FFF27C"), Name = "Lita", ImageSource = "lita.png" },
+			];
 #if WINDOWS || MACCATALYST
             TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#EB70FF"), Name = "Liam", ImageSource = "liam.png" });
             TabModels.Add(new TabModel() { ImageBackground = Color.FromArgb("#F0F361"), Name = "Dave", ImageSource = "alexandar.png" });

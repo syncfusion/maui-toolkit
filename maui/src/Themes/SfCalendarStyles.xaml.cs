@@ -14,7 +14,7 @@ public partial class SfCalendarStyles : ResourceDictionary
     /// </summary>
     public SfCalendarStyles()
     {
-        this.InitializeComponent();
+        InitializeComponent();
     }
 
     #endregion

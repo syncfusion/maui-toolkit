@@ -1,17 +1,16 @@
-﻿
-namespace  Syncfusion.Maui.ControlsGallery.FunnelChart.SfFunnelChart
+﻿namespace Syncfusion.Maui.ControlsGallery.FunnelChart.SfFunnelChart
 {
-    public partial class Tooltip : SampleView
-    {
-        public Tooltip()
-        {
-            InitializeComponent();
-        }
+	public partial class Tooltip : SampleView
+	{
+		public Tooltip()
+		{
+			InitializeComponent();
+		}
 
-        public override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            Chart.Handler?.DisconnectHandler();
-        }
-    }
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			Chart.Handler?.DisconnectHandler();
+		}
+	}
 }

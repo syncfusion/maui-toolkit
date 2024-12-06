@@ -1,5 +1,5 @@
-namespace Syncfusion.Maui.Toolkit.Charts 
-{ 
+namespace Syncfusion.Maui.Toolkit.Charts
+{
 	/// <summary>
 	/// Holds the theme and styling implementations for the <see cref="SfCartesianChart"/>.
 	/// </summary>

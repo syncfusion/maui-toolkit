@@ -17,15 +17,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ArrangeRect = new Rect(0, 0, 100, 100),
                 InsidePadding = 10,
             };
-            axis.AxisLabelsRenderer = new CartesianAxisLabelsRenderer(axis);
-            axis.AxisLabelsRenderer.LabelLayout = new AxisLabelLayout(axis);
-            axis.AxisLabelsRenderer.LabelLayout.LabelsRect = new List<RectF>
-            {
-                new Rect(0, 0, 50, 20),
-                new Rect(0, 20, 50, 20)
-            };
+			axis.AxisLabelsRenderer = new CartesianAxisLabelsRenderer(axis)
+			{
+				LabelLayout = new AxisLabelLayout(axis)
+				{
+					LabelsRect =
+			[
+				new Rect(0, 0, 50, 20),
+				new Rect(0, 20, 50, 20)
+			]
+				}
+			};
 
-            bool result = axis.RenderRectContains(50, 50);
+			bool result = axis.RenderRectContains(50, 50);
 
             Assert.True(result);
         }
@@ -33,9 +37,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void Test_UpdateLayout()
         {
-            var axis = new NumericalAxis();
-            axis.Area = new CartesianChartArea(new SfCartesianChart());
-            axis.UpdateLayout();
+			var axis = new NumericalAxis
+			{
+				Area = new CartesianChartArea(new SfCartesianChart())
+			};
+			axis.UpdateLayout();
             Assert.True(axis.Area.NeedsRelayout);
 
             axis.PolarArea = new PolarChartArea(new SfPolarChart());
@@ -108,9 +114,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void Test_ClearRegisteredSeries()
         {
-            var axis = new CategoryAxis();
-            axis.Area = new CartesianChartArea(new SfCartesianChart());
-            axis.RegisteredSeries.Add(new LineSeries());
+			var axis = new CategoryAxis
+			{
+				Area = new CartesianChartArea(new SfCartesianChart())
+			};
+			axis.RegisteredSeries.Add(new LineSeries());
             axis.AssociatedAxes.Add(new NumericalAxis());
 
             axis.ClearRegisteredSeries();
@@ -140,14 +148,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void GetCrossingAxis_Test()
         {
-            var axis = new CategoryAxis() { Name = "CrossXAxis" };
-            axis.IsVertical = false;
-            var expectedAxis = new NumericalAxis() { Name = "CrossAxis" };
+			var axis = new CategoryAxis
+			{
+				Name = "CrossXAxis",
+				IsVertical = false
+			};
+			var expectedAxis = new NumericalAxis() { Name = "CrossAxis" };
             var area = new CartesianChartArea(new SfCartesianChart());
 
-            area.AxisLayout.HorizontalAxes.Add(new CategoryAxis());
-            area.AxisLayout.VerticalAxes.Add(new NumericalAxis());
-            area.AxisLayout.VerticalAxes.Add(expectedAxis);
+            area._axisLayout.HorizontalAxes.Add(new CategoryAxis());
+            area._axisLayout.VerticalAxes.Add(new NumericalAxis());
+            area._axisLayout.VerticalAxes.Add(expectedAxis);
 
             axis.CrossAxisName = "CrossAxis";
 
@@ -167,7 +178,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 LabelStyle = new ChartAxisLabelStyle(),
                 MajorGridLineStyle = new ChartLineStyle(),
                 MajorTickStyle = new ChartAxisTickStyle(),
-                RegisteredSeries = new List<ChartSeries> { new LineSeries() },
+                RegisteredSeries = [new LineSeries()],
             };
 
             bool isAxisLineStyleChanged = false;
@@ -220,9 +231,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void GetPlotSize_ShouldReturnCorrectSize_WhenNotVertical()
         {
-            var _chartAxis = new CategoryAxis();
-            _chartAxis.IsVertical = false;
-            var availableSize = new Size(200, 100);
+			var _chartAxis = new CategoryAxis
+			{
+				IsVertical = false
+			};
+			var availableSize = new Size(200, 100);
 
             var plotSize = InvokePrivateMethod(_chartAxis, "GetPlotSize", availableSize);
 
@@ -233,9 +246,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void GetPlotSize_ShouldReturnCorrectSize_WhenVertical()
         {
-            var _chartAxis = new CategoryAxis();
-            _chartAxis.IsVertical = true;
-            var availableSize = new Size(200, 100);
+			var _chartAxis = new CategoryAxis
+			{
+				IsVertical = true
+			};
+			var availableSize = new Size(200, 100);
 
             var plotSize = InvokePrivateMethod(_chartAxis, "GetPlotSize", availableSize);
 
@@ -381,7 +396,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var r2 = new RectF(left2, top2, right2, bottom2);
             var layout = new AxisLabelLayout(new CategoryAxis());
 
-            var result = layout.IntersectsWith(r1, r2, 0, 1);
+            var result = AxisLabelLayout.IntersectsWith(r1, r2, 0, 1);
 
             Assert.Equal(expectedResult, result);
         }
@@ -415,7 +430,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             var layout = new AxisLabelLayout(new CategoryAxis())
             {
-                RectByRowsAndCols = new List<Dictionary<int, RectF>>()
+                RectByRowsAndCols = []
             };
 
             var rect = new RectF(rectX, rectY, 10, 10);
@@ -431,13 +446,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             var layout = new AxisLabelLayout(new CategoryAxis())
             {
-                RectByRowsAndCols = new List<Dictionary<int, RectF>>
-                {
-                    new Dictionary<int, RectF>
+                RectByRowsAndCols =
+				[
+					new Dictionary<int, RectF>
                     {
                         { 0, new RectF(0, 0, 10, 10) }
                     }
-                }
+                ]
             };
 
             var intersectingRect = new RectF(5, 5, 10, 10);
@@ -458,7 +473,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var layout = new AxisLabelLayout(new CategoryAxis());
             var originalSize = new Size(originalWidth, originalHeight);
 
-            var rotatedSize = InvokePrivateMethod(layout, "GetRotatedSize", new object[] { originalSize, degrees });
+            var rotatedSize = InvokePrivateMethod(layout, "GetRotatedSize", [originalSize, degrees]);
 
             Assert.NotNull(rotatedSize);
             Assert.Equal(expectedWidth, ((Size)rotatedSize).Width);
@@ -473,21 +488,21 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(EdgeLabelsDrawingMode.Hide)]
         public void CalcBounds_ShouldAdjustBoundsForLabels(EdgeLabelsDrawingMode edgeLabelsDrawingMode)
         {
-            var layout = new HorizontalLabelLayout(new CategoryAxis())
-            {
-                ComputedSizes = new List<SizeF> { new SizeF(50, 20), new SizeF(60, 20) }
-            };
-            layout.Axis = new CategoryAxis()
-            {
-                VisibleLabels = new ObservableCollection<ChartAxisLabel>
-                {
-                    new ChartAxisLabel ( 0, new ChartAxisLabelStyle { Margin = new Thickness(5, 0, 5, 0) }),
-                    new ChartAxisLabel ( 1, new ChartAxisLabelStyle { Margin = new Thickness(5, 0, 5, 0) })
-                },
-                EdgeLabelsDrawingMode = edgeLabelsDrawingMode
-            };
+			var layout = new HorizontalLabelLayout(new CategoryAxis())
+			{
+				ComputedSizes = [new SizeF(50, 20), new SizeF(60, 20)],
+				Axis = new CategoryAxis()
+				{
+					VisibleLabels =
+				[
+					new ChartAxisLabel ( 0, new ChartAxisLabelStyle { Margin = new Thickness(5, 0, 5, 0) }),
+					new ChartAxisLabel ( 1, new ChartAxisLabelStyle { Margin = new Thickness(5, 0, 5, 0) })
+				],
+					EdgeLabelsDrawingMode = edgeLabelsDrawingMode
+				}
+			};
 
-            InvokePrivateMethod(layout, "CalcBounds", 100);
+			InvokePrivateMethod(layout, "CalcBounds", 100);
 
             Assert.NotNull(layout.RectByRowsAndCols);
             Assert.Equal(layout.RectByRowsAndCols[0].Values, layout.LabelsRect);
@@ -505,10 +520,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             var layout = new VerticalLabelLayout(new NumericalAxis());
             var chart = new SfPolarChart() { PolarStartAngle = angle };
-            layout.Axis = new NumericalAxis();
-            layout.Axis.Parent = chart;
+			layout.Axis = new NumericalAxis
+			{
+				Parent = chart
+			};
 
-            var parameter = new object[] { coeff, width, height, size };
+			var parameter = new object[] { coeff, width, height, size };
 
             var result = InvokePrivateMethod(layout, "CalculatePolarPosition", parameter);
 
@@ -531,7 +548,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var series2 = new ColumnSeries() { ActualXAxis = new CategoryAxis(), ActualYAxis = new NumericalAxis() };
 
             var visibleSeries = new ReadOnlyObservableCollection<ChartSeries>(
-                new ObservableCollection<ChartSeries> { series1, series2 }
+                [series1, series2]
             );
 
             var layout = new CartesianAxisLayout(chartArea);
@@ -568,11 +585,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void UpdateActualAxis_Test()
         {
             var visibleSeries = new ReadOnlyObservableCollection<ChartSeries>(
-                new ObservableCollection<ChartSeries>
-                {
+                [
                     new LineSeries { XAxisName = "XAxis1", YAxisName = "YAxis1" },
                     new LineSeries { XAxisName = "XAxis2", YAxisName = "YAxis2" }
-                }
+                ]
             );
 
             var chart = new SfCartesianChart();
@@ -588,15 +604,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 SecondaryAxis = new NumericalAxis() { Name = "SecondaryAxis" },
 
             };
-            var layout = new CartesianAxisLayout(area);
-            layout.HorizontalAxes = chart.XAxes;
-            layout.VerticalAxes = new ObservableCollection<ChartAxis>
-            {
-                new NumericalAxis() { Name = "YAxis1" },
-                new NumericalAxis() { Name = "YAxis2" },
-            };
+			var layout = new CartesianAxisLayout(area)
+			{
+				HorizontalAxes = chart.XAxes,
+				VerticalAxes =
+			[
+				new NumericalAxis() { Name = "YAxis1" },
+				new NumericalAxis() { Name = "YAxis2" },
+			]
+			};
 
-            InvokePrivateMethod(layout, "UpdateActualAxis", visibleSeries);
+			InvokePrivateMethod(layout, "UpdateActualAxis", visibleSeries);
 
             Assert.Equal("XAxis1", ((CartesianSeries)visibleSeries[0]).ActualXAxis?.Name);
             Assert.Equal("YAxis1", ((CartesianSeries)visibleSeries[0]).ActualYAxis?.Name);
@@ -674,32 +692,32 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var area = new CartesianChartArea(new SfCartesianChart());
             var layout = new CartesianAxisLayout(area);
 
-            var verticalAxis = new NumericalAxis()
-            {
-                TickPosition = AxisElementPosition.Inside,
-                LabelsPosition = AxisElementPosition.Inside,
-                ActualRange = new DoubleRange(0, 100),
-                VisibleRange = new DoubleRange(0, 150),
-                ComputedDesiredSize = new Size(0, 100),
-                InsidePadding = 5,
-                RenderedRect = new RectF(0, 0, 20, 100)
-            };
-            verticalAxis.ActualCrossingValue = 30;
-            layout.VerticalAxes.Add(verticalAxis);
+			var verticalAxis = new NumericalAxis
+			{
+				TickPosition = AxisElementPosition.Inside,
+				LabelsPosition = AxisElementPosition.Inside,
+				ActualRange = new DoubleRange(0, 100),
+				VisibleRange = new DoubleRange(0, 150),
+				ComputedDesiredSize = new Size(0, 100),
+				InsidePadding = 5,
+				RenderedRect = new RectF(0, 0, 20, 100),
+				ActualCrossingValue = 30
+			};
+			layout.VerticalAxes.Add(verticalAxis);
             area.SecondaryAxis = verticalAxis;
 
-            var horizontalAxis = new CategoryAxis()
-            {
-                TickPosition = AxisElementPosition.Outside,
-                LabelsPosition = AxisElementPosition.Outside,
-                ActualRange = new DoubleRange(20, 150),
-                VisibleRange = new DoubleRange(20, 150),
-                ComputedDesiredSize = new Size(100, 20),
-                RenderedRect = new RectF(0, 0, 100, 20),
-                InsidePadding = 10,
-            };
-            horizontalAxis.ActualCrossingValue = 30;
-            layout.HorizontalAxes.Add(horizontalAxis);
+			var horizontalAxis = new CategoryAxis
+			{
+				TickPosition = AxisElementPosition.Outside,
+				LabelsPosition = AxisElementPosition.Outside,
+				ActualRange = new DoubleRange(20, 150),
+				VisibleRange = new DoubleRange(20, 150),
+				ComputedDesiredSize = new Size(100, 20),
+				RenderedRect = new RectF(0, 0, 100, 20),
+				InsidePadding = 10,
+				ActualCrossingValue = 30
+			};
+			layout.HorizontalAxes.Add(horizontalAxis);
             area.PrimaryAxis = horizontalAxis;
             var left = 10;
             var top = 20;
@@ -745,7 +763,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var series2 = new PolarLineSeries() { ActualXAxis = new CategoryAxis(), ActualYAxis = new NumericalAxis() };
 
             var visibleSeries = new ReadOnlyObservableCollection<ChartSeries>(
-                new ObservableCollection<ChartSeries> { series1, series2 }
+                [series1, series2]
             );
 
             var layout = new PolarAxisLayoutView(chartArea);
@@ -758,43 +776,24 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Null(series2.ActualYAxis);
         }
 
-        [Fact]
-        public void PolarGetAxisByName_Test()
-        {
-            var area = new PolarChartArea(new SfPolarChart());
-            var layout = new PolarAxisLayoutView(area);
-            var axes = new ObservableCollection<ChartAxis>
-            {
-                new CategoryAxis() { Name = "XAxis" },
-                new NumericalAxis() { Name = "YAxis" }
-            };
-
-            var parameter = new object[] { "XAxis", axes };
-
-            var result = InvokePrivateMethod(layout, "GetAxisByName", parameter);
-
-            Assert.NotNull(result);
-            Assert.Equal("XAxis", ((ChartAxis)result).Name);
-        }
-
-        [Fact]
+		[Fact]
         public void PolarUpdateActualAxis_Test()
         {
             var visibleSeries = new ReadOnlyObservableCollection<ChartSeries>(
-                new ObservableCollection<ChartSeries>
-                {
+                [
                     new PolarLineSeries (),
                     new PolarLineSeries ()
-                }
+                ]
             );
 
-            var chart = new SfPolarChart();
+			var chart = new SfPolarChart
+			{
+				PrimaryAxis = (new CategoryAxis() { Name = "XAxis1" }),
+				SecondaryAxis = (new NumericalAxis() { Name = "YAxis1" })
+			};
 
-            chart.PrimaryAxis = (new CategoryAxis() { Name = "XAxis1" });
-            chart.SecondaryAxis = (new NumericalAxis() { Name = "YAxis1" });
 
-
-            var area = new PolarChartArea(chart);
+			var area = new PolarChartArea(chart);
 
             var layout = new PolarAxisLayoutView(area);
 
@@ -981,7 +980,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             
             var element = new CartesianAxisRenderer(axis)
             {
-                LayoutCalculators = new List<ILayoutCalculator> { layout1, layout2 },
+                LayoutCalculators = [layout1, layout2],
             };
 
             element.Layout(new SizeF(100, 200));
@@ -1033,16 +1032,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var series1 = new LineSeries
             {
                 ActualXValues = new List<string> { "A", "B", "C" },
-                ActualData = new List<object> { 1, 2, 3 }
+                ActualData = [1, 2, 3]
             };
 
             var series2 = new LineSeries
             {
                 ActualXValues = new List<string> { "B", "C", "D" },
-                ActualData = new List<object> { 4, 5, 6 }
+                ActualData = [4, 5, 6]
             };
 
-            axis.RegisteredSeries = new List<ChartSeries> { series1, series2 };
+            axis.RegisteredSeries = [series1, series2];
 
             axis.GroupData();
 
@@ -1099,8 +1098,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ActualXAxis = axis
             };
 
-            axis.Area.Series = new ChartSeriesCollection();
-            axis.Area.Series.Add(series);
+            axis.Area.Series = [series];
             var result = axis.GetActualSeries();
 
             Assert.Equal(series, result);
@@ -1113,9 +1111,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void AddSmallTicksPoint_Test()
         {
-            var axis = new NumericalAxis();
-            axis.VisibleRange = new DoubleRange(0, 100);
-            double position = 10;
+			var axis = new NumericalAxis
+			{
+				VisibleRange = new DoubleRange(0, 100)
+			};
+			double position = 10;
             double interval = 1;
 
             axis.AddSmallTicksPoint(position, interval);
@@ -1166,7 +1166,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             axis.RegisteredSeries.Add(new PolarLineSeries()); 
             var range = new DoubleRange(start, end);
 
-            var paddedRange = InvokePrivateMethod(axis, "ApplyRangePadding", new object[] { range, interval });
+            var paddedRange = InvokePrivateMethod(axis, "ApplyRangePadding", [range, interval]);
 
             Assert.NotNull(paddedRange);
             Assert.Equal(expectedStart, ((DoubleRange)paddedRange).Start);
@@ -1176,11 +1176,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void CalculateVisibleRange_Test()
         {
-            var axis = new CategoryAxis();
-            axis.ZoomFactor = 0.5; 
-            axis.ZoomPosition = 0.25; 
+			var axis = new CategoryAxis
+			{
+				ZoomFactor = 0.5,
+				ZoomPosition = 0.25
+			};
 
-            var actualRange = new DoubleRange(0, 100);
+			var actualRange = new DoubleRange(0, 100);
             var availableSize = new Size(500, 500);
 
             var parameter = new object[] { actualRange, availableSize };
@@ -1198,9 +1200,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var area = new CartesianChartArea(chart);
             var series1 = new LineSeries();
             var series2 = new LineSeries();
-            area.Series = new ChartSeriesCollection();
-            area.Series.Add(series1);
-            area.Series.Add(series2);
+            area.Series = [series1, series2];
 
             var axis = new CategoryAxis();
             SetPrivateField(axis, "_cartesianArea", area);
@@ -1220,9 +1220,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var series1 = new LineSeries() { VisibleXRange = new DoubleRange(2, 8), ActualXAxis = axis };
             var series2 = new LineSeries() { VisibleXRange = new DoubleRange(3, 20), ActualXAxis = axis };
 
-            area.Series = new ChartSeriesCollection();
-            area.Series.Add(series1);
-            area.Series.Add(series2);
+            area.Series = [series1, series2];
             SetPrivateField(axis, "_cartesianArea", area);
 
             var actualRange = InvokePrivateMethod(axis, "CalculateActualRange");
@@ -1240,9 +1238,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var series1 = new PolarLineSeries() { VisibleXRange = new DoubleRange(2, 8), ActualXAxis = axis };
             var series2 = new PolarLineSeries() { VisibleXRange = new DoubleRange(3, 20), ActualXAxis = axis };
 
-            area.Series = new ChartPolarSeriesCollection();
-            area.Series.Add(series1);
-            area.Series.Add(series2);
+            area.Series = [series1, series2];
             axis.PolarArea = area;
             axis.Parent = chart;
 
@@ -1255,13 +1251,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void CalculateVisibleInterval_Test()
         {
-            var axis = new CategoryAxis();
-            axis.ZoomFactor = 1;
-            axis.ZoomPosition = 0.3;
-            axis.ActualInterval = 5;
-            axis.EnableAutoIntervalOnZooming = false;
+			var axis = new CategoryAxis
+			{
+				ZoomFactor = 1,
+				ZoomPosition = 0.3,
+				ActualInterval = 5,
+				EnableAutoIntervalOnZooming = false
+			};
 
-            var visibleRange = new DoubleRange(0, 100);
+			var visibleRange = new DoubleRange(0, 100);
             var availableSize = new Size(100, 100);
 
             var parameter = new object[] { visibleRange, availableSize };
@@ -1418,7 +1416,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             var axis = new DateTimeAxis();
 
-            var result = axis.GetSpecificFormattedLabel(intervalType);
+            var result = ChartAxis.GetSpecificFormattedLabel(intervalType);
 
             Assert.Equal(expectedFormat, result);
         }
@@ -1496,7 +1494,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var range = new DoubleRange(start, end);
             var size = new Size(500, 500);
 
-            var result = InvokePrivateMethod(axis, "CalculateActualInterval", new object[] { range, size });
+            var result = InvokePrivateMethod(axis, "CalculateActualInterval", [range, size]);
 
             Assert.Equal(expectedInterval, (double)result!);
         }
@@ -1513,7 +1511,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var range = new DoubleRange(0, 100);
             var size = new Size(400, 400);
 
-            var visibleRange = InvokePrivateMethod(axis, "CalculateVisibleRange", new object[] { range, size });
+            var visibleRange = InvokePrivateMethod(axis, "CalculateVisibleRange", [range, size]);
 
             Assert.NotNull(visibleRange);
             Assert.NotEqual(range, ((DoubleRange)visibleRange));
@@ -1544,7 +1542,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var actualRange = new DoubleRange(start, end);
             var size = new Size(400, 400);
 
-            var result = InvokePrivateMethod(axis, "CalculateNiceInterval", new object[] { actualRange, size });
+            var result = InvokePrivateMethod(axis, "CalculateNiceInterval", [actualRange, size]);
 
             Assert.Equal(expectedInterval, result);
         }
@@ -1623,10 +1621,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void GetStartPosition_ShouldReturnCorrectDate_ForGivenVisibleRange()
         {
-            var axis = new DateTimeAxis();
-            axis.VisibleRange = new DoubleRange(DateTime.Now.AddMonths(-6).ToOADate(), DateTime.Now.ToOADate());
+			var axis = new DateTimeAxis
+			{
+				VisibleRange = new DoubleRange(DateTime.Now.AddMonths(-6).ToOADate(), DateTime.Now.ToOADate())
+			};
 
-            var result = axis.GetStartPosition();
+			var result = axis.GetStartPosition();
 
             Assert.True(result < DateTime.Now);
             Assert.True(result > DateTime.Now.AddMonths(-7));
@@ -1694,7 +1694,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             axis.RangePadding = rangePadding;
             axis.ActualIntervalType = intervalType;
 
-            var paddedRange = InvokePrivateMethod(axis, "ApplyDateRagePadding", new object[] { range, interval }); 
+            var paddedRange = InvokePrivateMethod(axis, "ApplyDateRagePadding", [range, interval]); 
 
             Assert.NotNull(paddedRange);
             Assert.Equal(expectedStart, ((DoubleRange)paddedRange).Start);
@@ -1710,10 +1710,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(DateTimeIntervalType.Milliseconds, DateTimeIntervalType.Milliseconds)]
         public void GetActualAutoScrollingDeltaType_Returns_Expected_Interval(DateTimeIntervalType expectedInterval, DateTimeIntervalType autoScrollingDeltaType)
         {
-            var axis = new DateTimeAxis();
-            axis.AutoScrollingDeltaType = autoScrollingDeltaType;
+			var axis = new DateTimeAxis
+			{
+				AutoScrollingDeltaType = autoScrollingDeltaType
+			};
 
-            var result = InvokePrivateMethod(axis, "GetActualAutoScrollingDeltaType");
+			var result = InvokePrivateMethod(axis, "GetActualAutoScrollingDeltaType");
 
             Assert.Equal(expectedInterval, result);
         }
@@ -1728,12 +1730,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(DateTimeIntervalType.Milliseconds)]
         public void GetActualAutoScrollingDeltaType_ShouldReturnCorrectIntervalType(DateTimeIntervalType intervalType)
         {
-            var axis = new DateTimeAxis();
-            axis.ActualRange = new DoubleRange(DateTime.Now.AddYears(-1).ToOADate(), DateTime.Now.ToOADate());
-            axis.AvailableSize = new Size(1000, 500);
-            axis.AutoScrollingDeltaType = DateTimeIntervalType.Auto;
+			var axis = new DateTimeAxis
+			{
+				ActualRange = new DoubleRange(DateTime.Now.AddYears(-1).ToOADate(), DateTime.Now.ToOADate()),
+				AvailableSize = new Size(1000, 500),
+				AutoScrollingDeltaType = DateTimeIntervalType.Auto
+			};
 
-            SetPrivateField(axis, "_dateTimeIntervalType", intervalType);
+			SetPrivateField(axis, "_dateTimeIntervalType", intervalType);
 
             var result = InvokePrivateMethod(axis, "GetActualAutoScrollingDeltaType"); ;
 
@@ -1745,12 +1749,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(DateTimeIntervalType.Auto)]
         public void GetActualAutoScrollingDeltaType_ShouldReturnCorrectIntervalType_WhenSetAuto(DateTimeIntervalType intervalType)
         {
-            var axis = new DateTimeAxis();
-            axis.ActualRange = new DoubleRange(DateTime.Now.AddYears(-1).ToOADate(), DateTime.Now.ToOADate());
-            axis.AvailableSize = new Size(1000, 500);
-            axis.AutoScrollingDeltaType = DateTimeIntervalType.Auto;
+			var axis = new DateTimeAxis
+			{
+				ActualRange = new DoubleRange(DateTime.Now.AddYears(-1).ToOADate(), DateTime.Now.ToOADate()),
+				AvailableSize = new Size(1000, 500),
+				AutoScrollingDeltaType = DateTimeIntervalType.Auto
+			};
 
-            SetPrivateField(axis, "_dateTimeIntervalType", intervalType);
+			SetPrivateField(axis, "_dateTimeIntervalType", intervalType);
 
             var result = InvokePrivateMethod(axis, "GetActualAutoScrollingDeltaType"); ;
 
@@ -1834,21 +1840,21 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         }
 
         [Fact]
-        public void UpdateDefaultMaximum_ValidDateTime_UpdatesMaximum()
-        {
-            var axis = new DateTimeAxis();
-            DateTime? newMaxDate = new DateTime(2024, 12, 31);
+		public void UpdateDefaultMaximum_ValidDateTime_UpdatesMaximum()
+		{
+			var axis = new DateTimeAxis();
+			DateTime? newMaxDate = new DateTime(2024, 12, 31);
 
-            InvokePrivateMethod(axis, "UpdateDefaultMaximum", newMaxDate);
+			InvokePrivateMethod(axis, "UpdateDefaultMaximum", newMaxDate);
 
-            Assert.Equal(newMaxDate, axis.DefaultMaximum);
-        }
+			Assert.Equal(newMaxDate, axis.DefaultMaximum);
+		}
 
-        #endregion
+		#endregion
 
-        #region LogarithmicAxis methods
+		#region LogarithmicAxis methods
 
-        [Fact]
+		[Fact]
         public void UpdateAxisScale_LogarthmicAxis()
         {
             var axis = new LogarithmicAxis()
@@ -1970,10 +1976,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void RaiseCallBackActualRangeChanged_UpdatesActualMinMaxCorrectly()
         {
-            var axis = new LogarithmicAxis();
-            axis.ActualRange = new DoubleRange(1, 100); 
+			var axis = new LogarithmicAxis
+			{
+				ActualRange = new DoubleRange(1, 100)
+			};
 
-            axis.RaiseCallBackActualRangeChanged();
+			axis.RaiseCallBackActualRangeChanged();
 
             Assert.Equal(1, axis.ActualMinimum);
             Assert.Equal(100, axis.ActualMaximum);
@@ -1982,11 +1990,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void OnMinMaxChanged_UpdatesActualRangeCorrectly()
         {
-            var axis = new LogarithmicAxis();
-            axis.DefaultMinimum = 2;
-            axis.DefaultMaximum = 100;
+			var axis = new LogarithmicAxis
+			{
+				DefaultMinimum = 2,
+				DefaultMaximum = 100
+			};
 
-            InvokePrivateMethod(axis, "OnMinMaxChanged");
+			InvokePrivateMethod(axis, "OnMinMaxChanged");
 
             Assert.Equal(axis.GetLogValue(2), axis.ActualRange.Start);
             Assert.Equal(axis.GetLogValue(100), axis.ActualRange.End);
@@ -2013,7 +2023,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             double start = axis.GetLogValue(1);
             double end = axis.GetLogValue(100);
 
-            var result = InvokePrivateMethod(axis, "SetVisibleRange", new object[] { start, end });
+            var result = InvokePrivateMethod(axis, "SetVisibleRange", [start, end]);
 
             Assert.NotNull(result);
             Assert.Equal(axis.GetPowValue(start), ((DoubleRange)result).Start);
@@ -2036,10 +2046,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ActualRange = new DoubleRange(1, 50) 
             };
 
-            var area = new CartesianChartArea( new SfCartesianChart());
-            area.Series = new ChartSeriesCollection();
-            area.Series.Add(series);
-            axis.Area = area;
+			var area = new CartesianChartArea(new SfCartesianChart())
+			{
+				Series = [series]
+			};
+			axis.Area = area;
 
             series.ActualXAxis = axis;
 
@@ -2063,7 +2074,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 AvailableSize = new Size(100, 100) 
             };
 
-            var result = InvokePrivateMethod(axis, "CalculateActualInterval", new object[] { axis.VisibleLogRange, axis.AvailableSize });
+            var result = InvokePrivateMethod(axis, "CalculateActualInterval", [axis.VisibleLogRange, axis.AvailableSize]);
 
             Assert.NotNull(result);
             Assert.Equal(expected, (double)result);
@@ -2081,7 +2092,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 AvailableSize = new Size(availableWidth, 100)
             };
 
-            var result = InvokePrivateMethod(axis, "CalculateNiceInterval", new object[] { axis.VisibleLogRange, axis.AvailableSize });
+            var result = InvokePrivateMethod(axis, "CalculateNiceInterval", [axis.VisibleLogRange, axis.AvailableSize]);
 
             Assert.NotNull(result);
             Assert.Equal(expected, (double)result);
@@ -2099,7 +2110,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ZoomPosition = zoomPosition
             };
 
-            var result = InvokePrivateMethod(axis, "CalculateVisibleRange", new object[] { axis.VisibleLogRange, new Size(100, 100) });
+            var result = InvokePrivateMethod(axis, "CalculateVisibleRange", [axis.VisibleLogRange, new Size(100, 100)]);
 
             var expectedRange = new DoubleRange(axis.GetPowValue(axis.VisibleLogRange.Start), axis.GetPowValue(axis.VisibleLogRange.End));
 
@@ -2118,7 +2129,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ZoomPosition = zoomPosition
             };
 
-            var result = InvokePrivateMethod(axis, "CalculateVisibleRange", new object[] { axis.VisibleLogRange, new Size(100, 100) });
+            var result = InvokePrivateMethod(axis, "CalculateVisibleRange", [axis.VisibleLogRange, new Size(100, 100)]);
 
             Assert.NotNull(result);
             Assert.Equal(axis.VisibleLogRange, (DoubleRange)result);
@@ -2197,14 +2208,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void ActualRangePadding_ReturnsRoundPadding_WhenAutoAndVisibleSeries()
         {
-            var axis = new NumericalAxis();
-            axis.RangePadding = NumericalPadding.Auto;
-            axis.Area = new CartesianChartArea(new SfCartesianChart()) { IsTransposed = false };
-            axis.Area.Series = new ChartSeriesCollection();
-            axis.Area.Series.Add(new LineSeries()); 
-            axis.IsVertical = true;
+			var axis = new NumericalAxis
+			{
+				RangePadding = NumericalPadding.Auto,
+				Area = new CartesianChartArea(new SfCartesianChart())
+				{
+					IsTransposed = false,
+					Series = [new LineSeries()]
+				},
+				IsVertical = true
+			};
 
-            var padding = InvokePrivateMethod(axis, "ActualRangePadding"); 
+			var padding = InvokePrivateMethod(axis, "ActualRangePadding"); 
 
             Assert.Equal(NumericalPadding.Round, padding);
         }
@@ -2236,7 +2251,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var range = new DoubleRange(1.0, 10.0); 
             var availableSize = new Size(100, 100); 
 
-            var visibleRange = InvokePrivateMethod(axis, "CalculateVisibleRange", new object[] { range, availableSize } ); 
+            var visibleRange = InvokePrivateMethod(axis, "CalculateVisibleRange", [range, availableSize] ); 
 
             Assert.NotNull(visibleRange);
             Assert.NotEqual(DoubleRange.Empty, (DoubleRange)visibleRange);
@@ -2256,7 +2271,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var range = new DoubleRange(1.0, 10.0); 
             var availableSize = new Size(100, 100); 
 
-            var actualInterval = InvokePrivateMethod(axis, "CalculateActualInterval", new object[] { range, availableSize });
+            var actualInterval = InvokePrivateMethod(axis, "CalculateActualInterval", [range, availableSize]);
 
             Assert.NotNull(actualInterval);
             Assert.True((double)actualInterval >= 0);
@@ -2278,7 +2293,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var range = new DoubleRange(1.0, 10.0); 
             double interval = 1.0;
 
-            var paddedRange = InvokePrivateMethod(axis, "ApplyRangePadding", new object[] { range, interval });
+            var paddedRange = InvokePrivateMethod(axis, "ApplyRangePadding", [range, interval]);
 
             // You may need to update this assertion based on your specific logic
             Assert.NotNull(paddedRange);
@@ -2315,10 +2330,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             };
             var series = new LineSeries() { VisibleXRange = new DoubleRange(10, 100) };
 
-            var area = new CartesianChartArea(new SfCartesianChart());
-            area.Series = new ChartSeriesCollection();
-            area.Series.Add(series);
-            axis.Area = area;
+			var area = new CartesianChartArea(new SfCartesianChart())
+			{
+				Series = [series]
+			};
+			axis.Area = area;
 
             series.ActualXAxis = axis;
 
@@ -2335,13 +2351,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void CoefficientToValue_TestForNormalAxis()
         {
-            var axis = new CategoryAxis()
-            {
-                VisibleRange = new DoubleRange(0, 100),
-                RenderedRect = new Rect(0, 0, 100, 200), 
-            };
-            axis.IsInversed = false;
-            double coefficient = 0.5;
+			var axis = new CategoryAxis
+			{
+				VisibleRange = new DoubleRange(0, 100),
+				RenderedRect = new Rect(0, 0, 100, 200),
+				IsInversed = false
+			};
+			double coefficient = 0.5;
 
             var result = axis.CoefficientToValue(coefficient);
 
@@ -2351,13 +2367,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void CoefficientToValue_TestForInversedAxis()
         {
-            var axis = new CategoryAxis()
-            {
-                VisibleRange = new DoubleRange(0, 100),
-                RenderedRect = new Rect(0, 0, 100, 200),
-            };
-            axis.IsInversed = true;
-            double coefficient = 0.25;
+			var axis = new CategoryAxis
+			{
+				VisibleRange = new DoubleRange(0, 100),
+				RenderedRect = new Rect(0, 0, 100, 200),
+				IsInversed = true
+			};
+			double coefficient = 0.25;
 
             var result = axis.CoefficientToValue(coefficient);
 
@@ -2371,13 +2387,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void ValueToCoefficient_TestForNormalAxis()
         {
-            var axis = new CategoryAxis()
-            {
-                VisibleRange = new DoubleRange(0, 100),
-                RenderedRect = new Rect(0, 0, 100, 200), 
-            }; 
-            axis.IsInversed = false;
-            double value = 50;
+			var axis = new CategoryAxis
+			{
+				VisibleRange = new DoubleRange(0, 100),
+				RenderedRect = new Rect(0, 0, 100, 200),
+				IsInversed = false
+			};
+			double value = 50;
 
             var result = axis.ValueToCoefficient(value);
 
@@ -2387,13 +2403,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void ValueToCoefficient_TestForInversedAxis()
         {
-            var axis = new CategoryAxis()
-            {
-                VisibleRange = new DoubleRange(0, 100),
-                RenderedRect = new Rect(0, 0, 100, 200), 
-            };
-            axis.IsInversed = true;
-            double value = 25;
+			var axis = new CategoryAxis
+			{
+				VisibleRange = new DoubleRange(0, 100),
+				RenderedRect = new Rect(0, 0, 100, 200),
+				IsInversed = true
+			};
+			double value = 25;
 
             var result = axis.ValueToCoefficient(value);
 
@@ -2407,14 +2423,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void ValueToPoint_ShouldReturnCorrectPoint_ForHorizontalAxis()
         {
-            var axis = new CategoryAxis()
-            {
-                VisibleRange = new DoubleRange(0, 100),
-                RenderedRect = new Rect(0, 0, 100, 200), 
-                LeftOffset = 10
-            };
-            axis.IsVertical = false;
-            double value = 50;
+			var axis = new CategoryAxis
+			{
+				VisibleRange = new DoubleRange(0, 100),
+				RenderedRect = new Rect(0, 0, 100, 200),
+				LeftOffset = 10,
+				IsVertical = false
+			};
+			double value = 50;
 
             var result = axis.ValueToPoint(value);
 
@@ -2424,15 +2440,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void ValueToPoint_ShouldReturnCorrectPoint_ForVerticalAxis()
         {
-            var axis = new CategoryAxis()
-            {
-                VisibleRange = new DoubleRange(0, 100),
-                RenderedRect = new Rect(0, 0, 100, 200), 
-                LeftOffset = 10,
-                TopOffset = 5,
-            };
-            axis.IsVertical = true;
-            double value = 75;
+			var axis = new CategoryAxis
+			{
+				VisibleRange = new DoubleRange(0, 100),
+				RenderedRect = new Rect(0, 0, 100, 200),
+				LeftOffset = 10,
+				TopOffset = 5,
+				IsVertical = true
+			};
+			double value = 75;
 
             var result = axis.ValueToPoint(value);
 
@@ -2446,15 +2462,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void PointToValue_ShouldReturnCorrectValue_ForHorizontalAxis()
         {
-            var axis = new CategoryAxis()
-            {
-                Area = new CartesianChartArea(new SfCartesianChart()),
-                VisibleRange = new DoubleRange(0, 100),
-                RenderedRect = new Rect(0, 0, 100, 200), 
-                LeftOffset = 10,
-            };
-            axis.IsVertical = false;
-            float x = 60f; 
+			var axis = new CategoryAxis
+			{
+				Area = new CartesianChartArea(new SfCartesianChart()),
+				VisibleRange = new DoubleRange(0, 100),
+				RenderedRect = new Rect(0, 0, 100, 200),
+				LeftOffset = 10,
+				IsVertical = false
+			};
+			float x = 60f; 
 
             var result = axis.PointToValue(x, 0);
 
@@ -2468,15 +2484,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [Fact]
         public void PointToValue_ShouldReturnCorrectValue_ForVerticalAxis()
         {
-            var axis = new CategoryAxis()
-            {
-                Area = new CartesianChartArea(new SfCartesianChart()),
-                VisibleRange = new DoubleRange(0, 100),
-                RenderedRect = new Rect(0, 0, 100, 200),
-                TopOffset = 5,
-            }; 
-            axis.IsVertical = true;
-            float y = 55f;
+			var axis = new CategoryAxis
+			{
+				Area = new CartesianChartArea(new SfCartesianChart()),
+				VisibleRange = new DoubleRange(0, 100),
+				RenderedRect = new Rect(0, 0, 100, 200),
+				TopOffset = 5,
+				IsVertical = true
+			};
+			float y = 55f;
 
             var result = axis.PointToValue(0, y);
 

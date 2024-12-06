@@ -77,452 +77,455 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ***
 	/// </example>
 	public partial class ScatterSeries : XYDataSeries, IDrawCustomLegendIcon
-    {
-        #region Bindable Properties
+	{
+		#region Bindable Properties
 
-        /// <summary>
-        /// Identifies the <see cref="PointHeight"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="PointHeight"/> property defines the height of the scatter segment size.
-        /// </remarks>
-        public static readonly BindableProperty PointHeightProperty = BindableProperty.Create(
-            nameof(PointHeight),
-            typeof(double),
-            typeof(ScatterSeries),
-            5d,
-            BindingMode.Default,
-            null,
-            OnScatterSizeChanged);
+		/// <summary>
+		/// Identifies the <see cref="PointHeight"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="PointHeight"/> property defines the height of the scatter segment size.
+		/// </remarks>
+		public static readonly BindableProperty PointHeightProperty = BindableProperty.Create(
+			nameof(PointHeight),
+			typeof(double),
+			typeof(ScatterSeries),
+			5d,
+			BindingMode.Default,
+			null,
+			OnScatterSizeChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="PointWidth"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="PointWidth"/> property defines the width of the scatter segment size.
-        /// </remarks>
-        public static readonly BindableProperty PointWidthProperty = BindableProperty.Create(
-            nameof(PointWidth),
-            typeof(double),
-            typeof(ScatterSeries),
-            5d,
-            BindingMode.Default,
-            null,
-            OnScatterSizeChanged);
+		/// <summary>
+		/// Identifies the <see cref="PointWidth"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="PointWidth"/> property defines the width of the scatter segment size.
+		/// </remarks>
+		public static readonly BindableProperty PointWidthProperty = BindableProperty.Create(
+			nameof(PointWidth),
+			typeof(double),
+			typeof(ScatterSeries),
+			5d,
+			BindingMode.Default,
+			null,
+			OnScatterSizeChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="Stroke"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="Stroke"/> property helps to customize the stroke appearance of the scatter series.
-        /// </remarks>
-        public static readonly BindableProperty StrokeProperty = BindableProperty.Create(
-            nameof(Stroke),
-            typeof(Brush),
-            typeof(ScatterSeries),
-            null,
-            BindingMode.Default,
-            null,
-            OnStrokeChanged);
+		/// <summary>
+		/// Identifies the <see cref="Stroke"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="Stroke"/> property helps to customize the stroke appearance of the scatter series.
+		/// </remarks>
+		public static readonly BindableProperty StrokeProperty = BindableProperty.Create(
+			nameof(Stroke),
+			typeof(Brush),
+			typeof(ScatterSeries),
+			null,
+			BindingMode.Default,
+			null,
+			OnStrokeChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="Type"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="Type"/> property indicates the shape of the scatter series.
-        /// </remarks>
-        public static readonly BindableProperty TypeProperty = BindableProperty.Create(
-            nameof(Type),
-            typeof(ShapeType),
-            typeof(ScatterSeries),
-            ShapeType.Circle,
-            BindingMode.Default,
-            null,
-            OnScatterTypeChanged);
+		/// <summary>
+		/// Identifies the <see cref="Type"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="Type"/> property indicates the shape of the scatter series.
+		/// </remarks>
+		public static readonly BindableProperty TypeProperty = BindableProperty.Create(
+			nameof(Type),
+			typeof(ShapeType),
+			typeof(ScatterSeries),
+			ShapeType.Circle,
+			BindingMode.Default,
+			null,
+			OnScatterTypeChanged);
 
-        #endregion
+		#endregion
 
-        #region Public Properties
+		#region Public Properties
 
-        /// <summary>
-        /// Gets or sets a value that defines the height of the scatter segment size.
-        /// </summary>
-        /// <value>It accepts <c>double</c> values and its default value is 5.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-4)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///
-        ///          <chart:ScatterSeries ItemsSource = "{Binding Data}"
-        ///                               XBindingPath = "XValue"
-        ///                               YBindingPath = "YValue"
-        ///                               PointHeight = "20"/>
-        ///
-        ///     </chart:SfCartesianChart>
-        /// ]]></code>
-        /// # [C#](#tab/tabid-5)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();
-        ///     ViewModel viewModel = new ViewModel();
-        ///
-        ///     // Eliminated for simplicity
-        ///
-        ///     ScatterSeries series = new ScatterSeries()
-        ///     {
-        ///           ItemsSource = viewModel.Data,
-        ///           XBindingPath = "XValue",
-        ///           YBindingPath = "YValue",
-        ///           PointHeight = 20,
-        ///     };
-        ///     
-        ///     chart.Series.Add(series);
-        ///
-        /// ]]></code>
-        /// ***
-        /// </example>
-        public double PointHeight
-        {
-            get { return (double)GetValue(PointHeightProperty); }
-            set { SetValue(PointHeightProperty, value); }
-        }
+		/// <summary>
+		/// Gets or sets a value that defines the height of the scatter segment size.
+		/// </summary>
+		/// <value>It accepts <c>double</c> values and its default value is 5.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-4)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///
+		///          <chart:ScatterSeries ItemsSource = "{Binding Data}"
+		///                               XBindingPath = "XValue"
+		///                               YBindingPath = "YValue"
+		///                               PointHeight = "20"/>
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-5)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     ViewModel viewModel = new ViewModel();
+		///
+		///     // Eliminated for simplicity
+		///
+		///     ScatterSeries series = new ScatterSeries()
+		///     {
+		///           ItemsSource = viewModel.Data,
+		///           XBindingPath = "XValue",
+		///           YBindingPath = "YValue",
+		///           PointHeight = 20,
+		///     };
+		///     
+		///     chart.Series.Add(series);
+		///
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public double PointHeight
+		{
+			get { return (double)GetValue(PointHeightProperty); }
+			set { SetValue(PointHeightProperty, value); }
+		}
 
-        /// <summary>
-        /// Gets or sets a value that defines the width of the scatter segment size.
-        /// </summary>
-        /// <value>It accepts <c>double</c> values and its default value is 5.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-6)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///
-        ///          <chart:ScatterSeries ItemsSource = "{Binding Data}"
-        ///                               XBindingPath = "XValue"
-        ///                               YBindingPath = "YValue"
-        ///                               PointWidth = "20"/>
-        ///
-        ///     </chart:SfCartesianChart>
-        /// ]]></code>
-        /// # [C#](#tab/tabid-7)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();
-        ///     ViewModel viewModel = new ViewModel();
-        ///
-        ///     // Eliminated for simplicity
-        ///
-        ///     ScatterSeries series = new ScatterSeries()
-        ///     {
-        ///           ItemsSource = viewModel.Data,
-        ///           XBindingPath = "XValue",
-        ///           YBindingPath = "YValue",
-        ///           PointWidth = 20,
-        ///     };
-        ///     
-        ///     chart.Series.Add(series);
-        ///
-        /// ]]></code>
-        /// ***
-        /// </example>
-        public double PointWidth
-        {
-            get { return (double)GetValue(PointWidthProperty); }
-            set { SetValue(PointWidthProperty, value); }
-        }
+		/// <summary>
+		/// Gets or sets a value that defines the width of the scatter segment size.
+		/// </summary>
+		/// <value>It accepts <c>double</c> values and its default value is 5.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-6)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///
+		///          <chart:ScatterSeries ItemsSource = "{Binding Data}"
+		///                               XBindingPath = "XValue"
+		///                               YBindingPath = "YValue"
+		///                               PointWidth = "20"/>
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-7)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     ViewModel viewModel = new ViewModel();
+		///
+		///     // Eliminated for simplicity
+		///
+		///     ScatterSeries series = new ScatterSeries()
+		///     {
+		///           ItemsSource = viewModel.Data,
+		///           XBindingPath = "XValue",
+		///           YBindingPath = "YValue",
+		///           PointWidth = 20,
+		///     };
+		///     
+		///     chart.Series.Add(series);
+		///
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public double PointWidth
+		{
+			get { return (double)GetValue(PointWidthProperty); }
+			set { SetValue(PointWidthProperty, value); }
+		}
 
-        /// <summary>
-        /// Gets or sets a value to customize the stroke appearance of the scatter series.
-        /// </summary>
-        /// <value>It accepts <see cref="Brush"/> values and its default value is null.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-8)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///
-        ///          <chart:ScatterSeries ItemsSource = "{Binding Data}"
-        ///                               XBindingPath = "XValue"
-        ///                               YBindingPath = "YValue"
-        ///                               StrokeWidth = "2"
-        ///                               Stroke = "Red" />
-        ///
-        ///     </chart:SfCartesianChart>
-        /// ]]>
-        /// </code>
-        /// # [C#](#tab/tabid-9)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();
-        ///     ViewModel viewModel = new ViewModel();
-        ///
-        ///     // Eliminated for simplicity
-        ///
-        ///     ScatterSeries series = new ScatterSeries()
-        ///     {
-        ///           ItemsSource = viewModel.Data,
-        ///           XBindingPath = "XValue",
-        ///           YBindingPath = "YValue",
-        ///           Stroke = new SolidColorBrush(Colors.Red),
-        ///           StrokeWidth = 2,
-        ///     };
-        ///     
-        ///     chart.Series.Add(series);
-        ///
-        /// ]]>
-        /// </code>
-        /// ***
-        /// </example>
-        public Brush Stroke
-        {
-            get { return (Brush)GetValue(StrokeProperty); }
-            set { SetValue(StrokeProperty, value); }
-        }
+		/// <summary>
+		/// Gets or sets a value to customize the stroke appearance of the scatter series.
+		/// </summary>
+		/// <value>It accepts <see cref="Brush"/> values and its default value is null.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-8)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///
+		///          <chart:ScatterSeries ItemsSource = "{Binding Data}"
+		///                               XBindingPath = "XValue"
+		///                               YBindingPath = "YValue"
+		///                               StrokeWidth = "2"
+		///                               Stroke = "Red" />
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-9)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     ViewModel viewModel = new ViewModel();
+		///
+		///     // Eliminated for simplicity
+		///
+		///     ScatterSeries series = new ScatterSeries()
+		///     {
+		///           ItemsSource = viewModel.Data,
+		///           XBindingPath = "XValue",
+		///           YBindingPath = "YValue",
+		///           Stroke = new SolidColorBrush(Colors.Red),
+		///           StrokeWidth = 2,
+		///     };
+		///     
+		///     chart.Series.Add(series);
+		///
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public Brush Stroke
+		{
+			get { return (Brush)GetValue(StrokeProperty); }
+			set { SetValue(StrokeProperty, value); }
+		}
 
-        /// <summary>
-        /// Gets or sets a value that indicates the shape of the scatter series.
-        /// </summary>
-        /// <value>It accepts <see cref="ShapeType"/> values and its default value is <see cref="ShapeType.Circle"/>.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-10)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///
-        ///          <chart:ScatterSeries ItemsSource = "{Binding Data}"
-        ///                               XBindingPath = "XValue"
-        ///                               YBindingPath = "YValue"
-        ///                               ShapeType = "Diamond"/>
-        ///
-        ///     </chart:SfCartesianChart>
-        /// ]]></code>
-        /// # [C#](#tab/tabid-11)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();
-        ///     ViewModel viewModel = new ViewModel();
-        ///
-        ///     // Eliminated for simplicity
-        ///
-        ///     ScatterSeries series = new ScatterSeries()
-        ///     {
-        ///           ItemsSource = viewModel.Data,
-        ///           XBindingPath = "XValue",
-        ///           YBindingPath = "YValue",
-        ///           Type = ShapeType.Diamond,
-        ///     };
-        ///     
-        ///     chart.Series.Add(series);
-        ///
-        /// ]]></code>
-        /// ***
-        /// </example>
-        public ShapeType Type
-        {
-            get { return (ShapeType)GetValue(TypeProperty); }
-            set { SetValue(TypeProperty, value); }
-        }
+		/// <summary>
+		/// Gets or sets a value that indicates the shape of the scatter series.
+		/// </summary>
+		/// <value>It accepts <see cref="ShapeType"/> values and its default value is <see cref="ShapeType.Circle"/>.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-10)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///
+		///          <chart:ScatterSeries ItemsSource = "{Binding Data}"
+		///                               XBindingPath = "XValue"
+		///                               YBindingPath = "YValue"
+		///                               ShapeType = "Diamond"/>
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-11)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     ViewModel viewModel = new ViewModel();
+		///
+		///     // Eliminated for simplicity
+		///
+		///     ScatterSeries series = new ScatterSeries()
+		///     {
+		///           ItemsSource = viewModel.Data,
+		///           XBindingPath = "XValue",
+		///           YBindingPath = "YValue",
+		///           Type = ShapeType.Diamond,
+		///     };
+		///     
+		///     chart.Series.Add(series);
+		///
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public ShapeType Type
+		{
+			get { return (ShapeType)GetValue(TypeProperty); }
+			set { SetValue(TypeProperty, value); }
+		}
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScatterSeries"/> class.
-        /// </summary>
-        public ScatterSeries() : base()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ScatterSeries"/> class.
+		/// </summary>
+		public ScatterSeries() : base()
+		{
+		}
 
-        #endregion
+		#endregion
 
-        #region Interface Implementation
+		#region Interface Implementation
 
-        void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
-        {
-            if (isSaveState)
-            {
-                canvas.CanvasSaveState();
-            }
+		void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
+		{
+			if (isSaveState)
+			{
+				canvas.CanvasSaveState();
+			}
 
-            RectF circleRect1 = new(3, 6, 1, 1);
-            canvas.SetFillPaint(fillColor, circleRect1);
-            canvas.FillEllipse(circleRect1);
+			RectF circleRect1 = new(3, 6, 1, 1);
+			canvas.SetFillPaint(fillColor, circleRect1);
+			canvas.FillEllipse(circleRect1);
 
-            RectF circleRect2 = new(6, 3, 1, 1);
-            canvas.SetFillPaint(fillColor, circleRect2);
-            canvas.FillEllipse(circleRect2);
+			RectF circleRect2 = new(6, 3, 1, 1);
+			canvas.SetFillPaint(fillColor, circleRect2);
+			canvas.FillEllipse(circleRect2);
 
-            RectF circleRect3 = new(8, 6, 1, 1);
-            canvas.SetFillPaint(fillColor, circleRect3);
-            canvas.FillEllipse(circleRect3);
+			RectF circleRect3 = new(8, 6, 1, 1);
+			canvas.SetFillPaint(fillColor, circleRect3);
+			canvas.FillEllipse(circleRect3);
 
-            RectF circleRect4 = new(2, 2, 1, 1);
-            canvas.SetFillPaint(fillColor, circleRect4);
-            canvas.FillEllipse(circleRect4);
+			RectF circleRect4 = new(2, 2, 1, 1);
+			canvas.SetFillPaint(fillColor, circleRect4);
+			canvas.FillEllipse(circleRect4);
 
-            RectF circleRect5 = new(10, 2, 1, 1);
-            canvas.SetFillPaint(fillColor, circleRect5);
-            canvas.FillEllipse(circleRect5);
+			RectF circleRect5 = new(10, 2, 1, 1);
+			canvas.SetFillPaint(fillColor, circleRect5);
+			canvas.FillEllipse(circleRect5);
 
-            RectF circleRect6 = new(6, 10, 1, 1);
-            canvas.SetFillPaint(fillColor, circleRect6);
-            canvas.FillEllipse(circleRect6);
+			RectF circleRect6 = new(6, 10, 1, 1);
+			canvas.SetFillPaint(fillColor, circleRect6);
+			canvas.FillEllipse(circleRect6);
 
-            RectF circleRect7 = new(10, 9, 1, 1);
-            canvas.SetFillPaint(fillColor, circleRect7);
-            canvas.FillEllipse(circleRect7);
+			RectF circleRect7 = new(10, 9, 1, 1);
+			canvas.SetFillPaint(fillColor, circleRect7);
+			canvas.FillEllipse(circleRect7);
 
-            RectF circleRect8 = new(2, 10, 1, 1);
-            canvas.SetFillPaint(fillColor, circleRect8);
-            canvas.FillEllipse(circleRect8);
+			RectF circleRect8 = new(2, 10, 1, 1);
+			canvas.SetFillPaint(fillColor, circleRect8);
+			canvas.FillEllipse(circleRect8);
 
-            if (isSaveState)
-            {
-                canvas.CanvasRestoreState();
-            }
-        }
+			if (isSaveState)
+			{
+				canvas.CanvasRestoreState();
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Methods
+		#region Protected Methods
 
-        /// <inheritdoc/>
-        protected override ChartSegment CreateSegment()
-        {
-            return new ScatterSegment();
-        }
+		/// <inheritdoc/>
+		protected override ChartSegment CreateSegment()
+		{
+			return new ScatterSegment();
+		}
 
-        #endregion
+		#endregion
 
-        #region Internal Methods
+		#region Internal Methods
 
-        internal override void GenerateSegments(SeriesView seriesView)
-        {
-            var xValues = GetXValues();
-            if (xValues == null)
-            {
-                return;
-            }
+		internal override void GenerateSegments(SeriesView seriesView)
+		{
+			var xValues = GetXValues();
+			if (xValues == null)
+			{
+				return;
+			}
 
-            for (int i = 0; i < PointsCount; i++)
-            {
-                if (i < Segments.Count)
-                {
-                    Segments[i].SetData(new double[] { xValues[i], YValues[i] });
-                }
-                else
-                {
-                    CreateSegment(seriesView, xValues[i], YValues[i], i);
-                }
-            }
-        }
+			for (int i = 0; i < PointsCount; i++)
+			{
+				if (i < _segments.Count)
+				{
+					_segments[i].SetData([xValues[i], YValues[i]]);
+				}
+				else
+				{
+					CreateSegment(seriesView, xValues[i], YValues[i], i);
+				}
+			}
+		}
 
-        internal override void SetStrokeColor(ChartSegment segment)
-        {
-            segment.Stroke = Stroke;
-        }
+		internal override void SetStrokeColor(ChartSegment segment)
+		{
+			segment.Stroke = Stroke;
+		}
 
-        internal override PointF GetDataLabelPosition(ChartSegment dataLabel, SizeF labelSize, PointF labelPosition, float padding)
-        {
-            return DataLabelSettings.GetLabelPositionForSeries(this, labelSize, labelPosition, padding, new Size(PointHeight, PointWidth));
-        }
+		internal override PointF GetDataLabelPosition(ChartSegment dataLabel, SizeF labelSize, PointF labelPosition, float padding)
+		{
+			return DataLabelSettings.GetLabelPositionForSeries(this, labelSize, labelPosition, padding, new Size(PointHeight, PointWidth));
+		}
 
-        internal override void SetTooltipTargetRect(TooltipInfo tooltipInfo, Rect seriesBounds)
-        {
-            if (Chart == null) return;
+		internal override void SetTooltipTargetRect(TooltipInfo tooltipInfo, Rect seriesBounds)
+		{
+			if (Chart == null)
+			{
+				return;
+			}
 
-            ScatterSegment? scatterSegment = Segments[tooltipInfo.Index] as ScatterSegment;
 
-            if (scatterSegment != null)
-            {
-                RectF targetRect = scatterSegment.SegmentBounds;
+			if (_segments[tooltipInfo.Index] is ScatterSegment scatterSegment)
+			{
+				RectF targetRect = scatterSegment.SegmentBounds;
 
-                float xPosition = targetRect.X;
-                float yPosition = targetRect.Y;
-                float height = targetRect.Height;
-                float width = targetRect.Width;
+				float xPosition = targetRect.X;
+				float yPosition = targetRect.Y;
+				float height = targetRect.Height;
+				float width = targetRect.Width;
 
-                if ((xPosition + width / 2 + seriesBounds.Left) == seriesBounds.Left)
-                {
-                    targetRect = new Rect(xPosition + width / 2, yPosition, width / 2, height);
-                    tooltipInfo.Position = TooltipPosition.Right;
-                }
-                else if ((xPosition + width / 2) == seriesBounds.Width)
-                {
-                    targetRect = new Rect(xPosition, yPosition, width, height);
-                    tooltipInfo.Position = TooltipPosition.Left;
-                }
+				if ((xPosition + width / 2 + seriesBounds.Left) == seriesBounds.Left)
+				{
+					targetRect = new Rect(xPosition + width / 2, yPosition, width / 2, height);
+					tooltipInfo.Position = TooltipPosition.Right;
+				}
+				else if ((xPosition + width / 2) == seriesBounds.Width)
+				{
+					targetRect = new Rect(xPosition, yPosition, width, height);
+					tooltipInfo.Position = TooltipPosition.Left;
+				}
 
-                tooltipInfo.TargetRect = targetRect;
-            }
-        }
+				tooltipInfo.TargetRect = targetRect;
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
 
-        void CreateSegment(SeriesView seriesView, double x, double y, int index)
-        {
-            var segment = CreateSegment() as ScatterSegment;
-            if (segment != null)
-            {
-                segment.Type = Type;
-                segment.Series = this;
-                segment.SeriesView = seriesView;
-                segment.Index = index;
-                segment.SetData(new double[] { x, y });
-                segment.Item = ActualData?[index];
-                InitiateDataLabels(segment);
-                Segments.Add(segment);
+		void CreateSegment(SeriesView seriesView, double x, double y, int index)
+		{
+			if (CreateSegment() is ScatterSegment segment)
+			{
+				segment.Type = Type;
+				segment.Series = this;
+				segment.SeriesView = seriesView;
+				segment.Index = index;
+				segment.SetData([x, y]);
+				segment.Item = ActualData?[index];
+				InitiateDataLabels(segment);
+				_segments.Add(segment);
 
-                if (OldSegments != null && OldSegments.Count > 0 && OldSegments.Count > index)
-                {
-                    if (OldSegments[index] is ScatterSegment oldSegment)
-                        segment.PreviousSegmentBounds = oldSegment.SegmentBounds;
-                }
-            }
-        }
+				if (OldSegments != null && OldSegments.Count > 0 && OldSegments.Count > index)
+				{
+					if (OldSegments[index] is ScatterSegment oldSegment)
+					{
+						segment.PreviousSegmentBounds = oldSegment.SegmentBounds;
+					}
+				}
+			}
+		}
 
-        void UpdateScatterType(ShapeType type)
-        {
-            foreach (ScatterSegment item in Segments)
-            {
-                item.Type = type;
-            }
-        }
+		void UpdateScatterType(ShapeType type)
+		{
+			foreach (ScatterSegment item in _segments.Cast<ScatterSegment>())
+			{
+				item.Type = type;
+			}
+		}
 
-        static void OnScatterSizeChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (bindable is ScatterSeries series)
-            {
-                series.ScheduleUpdateChart();
-            }
-        }
+		static void OnScatterSizeChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is ScatterSeries series)
+			{
+				series.ScheduleUpdateChart();
+			}
+		}
 
-        static void OnStrokeChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (bindable is ScatterSeries series)
-            {
-                series.UpdateStrokeColor();
-                series.InvalidateSeries();
-            }
-        }
+		static void OnStrokeChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is ScatterSeries series)
+			{
+				series.UpdateStrokeColor();
+				series.InvalidateSeries();
+			}
+		}
 
-        static void OnScatterTypeChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (bindable is ScatterSeries series)
-            {
-                series.UpdateScatterType((ShapeType)newValue);
-                series.InvalidateSeries();
-            }
-        }
+		static void OnScatterTypeChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is ScatterSeries series)
+			{
+				series.UpdateScatterType((ShapeType)newValue);
+				series.InvalidateSeries();
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

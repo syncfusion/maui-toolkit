@@ -5,15 +5,15 @@ namespace Syncfusion.Maui.Toolkit.Internals
 	/// <summary>
 	/// Represents a layout for displaying legends, inheriting from <see cref="AbsoluteLayout"/>.
 	/// </summary>
-	internal class LegendLayout : AbsoluteLayout
+	internal partial class LegendLayout : AbsoluteLayout
     {
         #region Fields
 
         ILegend? _legend;
-        IPlotArea _plotArea;
+		readonly IPlotArea _plotArea;
         SfLegend? _legendItemsView;
-		Rect previousBounds;
-		internal readonly AreaBase AreaBase;
+		Rect _previousBounds;
+		internal readonly AreaBase _areaBase;
 
 		#endregion
 
@@ -26,20 +26,26 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		public LegendLayout(AreaBase? area)
         {
             if (area == null)
-                throw new ArgumentNullException("Chart area cannot be null");
+			{
+				throw new ArgumentNullException("Chart area cannot be null");
+			}
 
-            AreaBase = area;
-            if (AreaBase is not IView chartAreaView)
-                throw new ArgumentException("Chart area should be a view");
+			_areaBase = area;
+            if (_areaBase is not IView chartAreaView)
+			{
+				throw new ArgumentException("Chart area should be a view");
+			}
 
-            _plotArea = AreaBase.PlotArea;
+			_plotArea = _areaBase.PlotArea;
 
             //Todo: Need to check collection changes needed.
             var legendItems = _plotArea.LegendItems as INotifyCollectionChanged;
             if (legendItems != null)
-                legendItems.CollectionChanged += OnLegendItemsCollectionChanged;
+			{
+				legendItems.CollectionChanged += OnLegendItemsCollectionChanged;
+			}
 
-            _plotArea.LegendItemsUpdated += OnLegendItemsUpdated;
+			_plotArea.LegendItemsUpdated += OnLegendItemsUpdated;
 
             Add(chartAreaView);
         }
@@ -80,11 +86,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		protected override Size ArrangeOverride(Rect bounds)
         {
 			//Calculate LegendItems before calling AreaBase's layout.
-			if (previousBounds != bounds)
+			if (_previousBounds != bounds)
 			{
 				_plotArea.UpdateLegendItems();
 				UpdateLegendLayout(bounds);
-				previousBounds = bounds;
+				_previousBounds = bounds;
 			}
 
 			return base.ArrangeOverride(bounds);
@@ -99,7 +105,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
                 if (_legendItemsView != null)
                 {
                     var legendRectangle = SfLegend.GetLegendRectangle(_legendItemsView, new Rect(0, 0, bounds.Width, bounds.Height),
-GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25));
+LegendLayout.GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25));
 
                     if (_legendItemsView.Placement == LegendPlacement.Top)
                     {
@@ -125,12 +131,12 @@ GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25));
                         areaBounds = new Rect(0, 0, bounds.Width - legendRectangle.Width, bounds.Height);
                     }
 
-                    AbsoluteLayout.SetLayoutBounds(AreaBase, areaBounds);
+                    AbsoluteLayout.SetLayoutBounds(_areaBase, areaBounds);
                 }
             }
             else
             {
-                AbsoluteLayout.SetLayoutBounds(AreaBase, areaBounds);
+                AbsoluteLayout.SetLayoutBounds(_areaBase, areaBounds);
             }
         }
 
@@ -139,7 +145,7 @@ GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25));
 
         }
 
-        double GetMaximumCoeff(double value)
+		static double GetMaximumCoeff(double value)
         {
             if (!double.IsNaN(value))
             {
@@ -159,9 +165,11 @@ GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25));
                 //legendItemsView.Placement = Legend.Placement;
                 //legendItemsView.ToggleVisibility = Legend.ToggleVisibility;
                 if(_legendItemsView != null)
-                    _legendItemsView.ItemsSource = _plotArea.LegendItems;
+				{
+					_legendItemsView.ItemsSource = _plotArea.LegendItems;
+				}
 
-                UpdateLegendLayout(Bounds);
+				UpdateLegendLayout(Bounds);
             }
         }
 
@@ -170,12 +178,14 @@ GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25));
             //Todo: We need to reimplement the legend feature in chart, once fixed the Bindable layout issue and dynamically change scroll view content issue.
             //https://github.com/dotnet/maui/issues/1393
             if (_legendItemsView != null)
-                Remove(_legendItemsView);
+			{
+				Remove(_legendItemsView);
+			}
 
-            if (Legend != null)
+			if (Legend != null)
             {
                 var itemsView = Legend.CreateLegendView();
-                _legendItemsView = itemsView ?? new SfLegend();
+                _legendItemsView = itemsView ?? [];
                 _legendItemsView.BindingContext = _legend;
                 _legendItemsView.SetBinding(SfLegend.ToggleVisibilityProperty, "ToggleSeriesVisibility");
                 _legendItemsView.SetBinding(SfLegend.PlacementProperty, nameof(Legend.Placement));
@@ -189,12 +199,16 @@ GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25));
                 Add(_legendItemsView);
 
 				if (!Bounds.IsEmpty && (Bounds.Width > -1 || Bounds.Height > -1))
+				{
 					UpdateLegendLayout(Bounds);
+				}
 			}
 			else
 			{
 				if (!Bounds.IsEmpty && (Bounds.Width > -1 || Bounds.Height > -1))
+				{
 					UpdateLegendLayout(Bounds);
+				}
 			}
 		}
 

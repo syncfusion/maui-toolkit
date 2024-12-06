@@ -148,7 +148,7 @@
                                            FontFamily="Roboto-Regular"
                                            HorizontalOptions="Center" />
 
-                                    <Image Source="{Binding Data.WeatherImage, Converter={x:StaticResource imageconverter}}"
+                                    <Image Source="{Binding Data.WeatherImage}"
                                            Grid.Row="7"
                                            x:Name="weatherImage"
                                            Margin="0, 36, 0, 18"

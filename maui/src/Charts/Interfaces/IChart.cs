@@ -2,59 +2,59 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal interface IChart
-    {
-        #region Properties
+	internal interface IChart
+	{
+		#region Properties
 
-        //Todo: Need to recheck BackgroundColor property for contrast color.
-        Color BackgroundColor { get; }
+		//Todo: Need to recheck BackgroundColor property for contrast color.
+		Color BackgroundColor { get; }
 
-        ChartTooltipBehavior? ActualTooltipBehavior { get; set; }
+		ChartTooltipBehavior? ActualTooltipBehavior { get; set; }
 
-        SfTooltip? TooltipView { get; set; }
+		SfTooltip? TooltipView { get; set; }
 
-        AbsoluteLayout BehaviorLayout { get; }
+		AbsoluteLayout BehaviorLayout { get; }
 
-        ChartLegend Legend { get; set; }
+		ChartLegend Legend { get; set; }
 
-        ChartThemeLegendLabelStyle LegendLabelStyle { get; }
+		ChartThemeLegendLabelStyle LegendLabelStyle { get; }
 
-        public IArea Area { get; }
+		public IArea Area { get; }
 
-        double TitleHeight { get; }
+		double TitleHeight { get; }
 
-        Rect ActualSeriesClipRect { get; set; }
+		Rect ActualSeriesClipRect { get; set; }
 
-        bool IsRequiredDataLabelsMeasure { get; set; }
+		bool IsRequiredDataLabelsMeasure { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        Brush? GetSelectionBrush(ChartSeries series);
+		Brush? GetSelectionBrush(ChartSeries series);
 
-        TooltipInfo? GetTooltipInfo(ChartTooltipBehavior behavior, float x, float y);
+		TooltipInfo? GetTooltipInfo(ChartTooltipBehavior behavior, float x, float y);
 
-        void ResetTooltip()
-        {
-            ActualTooltipBehavior?.Hide();
-        }
+		void ResetTooltip()
+		{
+			ActualTooltipBehavior?.Hide();
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 
-    internal interface IChartLegend : ILegend
-    {
-        #region Properties
+	internal interface IChartLegend : ILegend
+	{
+		#region Properties
 
-        ChartLegendLabelStyle LabelStyle { get; set; }
+		ChartLegendLabelStyle LabelStyle { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        void OnLegendItemCreated(ILegendItem item);
+		void OnLegendItemCreated(ILegendItem item);
 
-        #endregion
-    }
+		#endregion
+	}
 }
