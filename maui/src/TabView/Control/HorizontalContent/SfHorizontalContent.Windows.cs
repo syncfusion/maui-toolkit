@@ -86,7 +86,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 		}
 
-		bool isTouchHandled = false;
+		bool _isTouchHandled;
 		void OnPointerPressed(object sender, PointerRoutedEventArgs e)
 		{
 			if (_horizontalContentNativeView != null)
@@ -98,16 +98,21 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 
 			if (e.Pointer.PointerDeviceType == Microsoft.UI.Input.PointerDeviceType.Touch)
-				isTouchHandled = true;
+			{
+				_isTouchHandled = true;
+			}
 			else
-				isTouchHandled = false;
-
+			{
+				_isTouchHandled = false;
+			}
 		}
 
 		void OnPointerMoved(object sender, PointerRoutedEventArgs e)
 		{
-			if (e.Pointer.PointerDeviceType == Microsoft.UI.Input.PointerDeviceType.Mouse && isTouchHandled)
+			if (e.Pointer.PointerDeviceType == Microsoft.UI.Input.PointerDeviceType.Mouse && _isTouchHandled)
+			{
 				return;
+			}
 
 			if (_isPressed && _horizontalContentNativeView != null)
 			{
@@ -127,7 +132,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 
 			_isManipulationStarted = false;
-			isTouchHandled = false;
+			_isTouchHandled = false;
 		}
 
 		void OnManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)

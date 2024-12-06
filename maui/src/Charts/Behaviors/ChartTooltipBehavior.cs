@@ -34,7 +34,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
     /// ]]></code>
     /// ***
     /// </example>
-    public class ChartTooltipBehavior : ChartBehavior, IParentThemeElement
+    public partial class ChartTooltipBehavior : ChartBehavior, IParentThemeElement
     {
         #region Fields 
 
@@ -573,9 +573,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         public void Show(float pointX, float pointY, bool canAnimate)
         {
-            if (Chart == null) return;
+            if (Chart == null)
+			{
+				return;
+			}
 
-            var visibleSeries = (Chart.Area as IChartArea)?.VisibleSeries;
+			var visibleSeries = (Chart.Area as IChartArea)?.VisibleSeries;
 
             //While the animation is in progress, ignore the tooltip show. 
             if (visibleSeries != null)
@@ -583,8 +586,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 foreach (var series in visibleSeries)
                 {
                     if (series.NeedToAnimateSeries || series.NeedToAnimateDataLabel)
-                        return;
-                }
+					{
+						return;
+					}
+				}
             }
 
             GenerateTooltip(Chart, pointX, pointY, canAnimate);

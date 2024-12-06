@@ -1,4 +1,5 @@
-﻿namespace Syncfusion.Maui.Toolkit.Carousel;
+﻿
+namespace Syncfusion.Maui.Toolkit.Carousel;
 
 /// <summary>
 /// Represents a platform-specific implementation of a carousel item within the <see cref="SfCarousel"/> control.

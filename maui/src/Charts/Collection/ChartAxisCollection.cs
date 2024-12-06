@@ -2,7 +2,7 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal class ChartAxisRangeStyleCollection : ObservableCollection<ChartAxisRangeStyle>
-    {
-    }
+	internal partial class ChartAxisRangeStyleCollection : ObservableCollection<ChartAxisRangeStyle>
+	{
+	}
 }

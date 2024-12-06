@@ -1,9 +1,9 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
 #if NET9_0_OR_GREATER
-    internal class ChartTitleView : Border
+    internal partial class ChartTitleView : Border
 #else
-	internal class ChartTitleView : Frame
+	internal partial class ChartTitleView : Frame
 #endif
 	{
 		#region Constructor

@@ -14,12 +14,12 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			base.OnAppearing();
 			hyperLinkLayout.IsVisible = !IsCardView;
 #if IOS
-            if (IsCardView)
-            {
-                Chart2.WidthRequest = 350;
-                Chart2.HeightRequest = 400;
-                Chart2.VerticalOptions = LayoutOptions.Start;
-            }
+			if (IsCardView)
+			{
+				Chart2.WidthRequest = 350;
+				Chart2.HeightRequest = 400;
+				Chart2.VerticalOptions = LayoutOptions.Start;
+			}
 #endif
 			if (!IsCardView)
 			{

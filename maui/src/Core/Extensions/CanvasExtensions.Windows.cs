@@ -51,7 +51,9 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		public static void DrawText(this ICanvas canvas, string value, float x, float y, ITextElement textElement)
         {
 			if (string.IsNullOrEmpty(value) || canvas is not W2DCanvas w2DCanvas)
+			{
 				return;
+			}
 
 			try
 			{
@@ -145,13 +147,17 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 			string fontPath = string.Empty;
 
 			if (fontManager is null)
+			{
 				return "Segoe UI";
+			}
 
 			var fontFamily = fontManager.GetFontFamily(font);
 			
 			if (fontFamily is null)
+			{
 				return "Segoe UI";
-			
+			}
+
 			string path = fontFamily.Source;
 			string prefix = "ms-appx:///";
 			string fontName = path.StartsWith(prefix) ? path.Substring(prefix.Length) : path;
@@ -189,10 +195,14 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
             float fontScale = (float)uiSettings.TextScaleFactor;
             double fontSize = textElement.FontSize > 0 ? textElement.FontSize : 12;
             if (textElement.FontAutoScalingEnabled)
-                format.FontSize = (float)fontSize * fontScale;
-            else
-                format.FontSize = (float)fontSize;
-        }
+			{
+				format.FontSize = (float)fontSize * fontScale;
+			}
+			else
+			{
+				format.FontSize = (float)fontSize;
+			}
+		}
 
 		/// <summary>
 		/// Draws lines connecting a series of points on the specified canvas using the provided line drawing settings.
@@ -212,10 +222,12 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
                 w2DCanvas.Alpha = lineDrawing.Opacity;
 
                 if (lineDrawing.StrokeDashArray != null)
-                    w2DCanvas.StrokeDashPattern = lineDrawing.StrokeDashArray.ToFloatArray();
-                //Draw path.
+				{
+					w2DCanvas.StrokeDashPattern = lineDrawing.StrokeDashArray.ToFloatArray();
+				}
+				//Draw path.
 
-                PathF pathF = new PathF();
+				PathF pathF = new PathF();
                 while (j + 1 < points.Length)
                 {
                     pathF.LineTo(points[j++], points[j++]);

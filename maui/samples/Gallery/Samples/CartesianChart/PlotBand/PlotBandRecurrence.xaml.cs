@@ -1,17 +1,16 @@
-﻿
-namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
+﻿namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-    public partial class PlotBandRecurrence : SampleView
-    {
-        public PlotBandRecurrence()
-        {
-            InitializeComponent();
-        }
+	public partial class PlotBandRecurrence : SampleView
+	{
+		public PlotBandRecurrence()
+		{
+			InitializeComponent();
+		}
 
-        public override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            plotBandRecurrenceChart.Handler?.DisconnectHandler();
-        }
-    }
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			plotBandRecurrenceChart.Handler?.DisconnectHandler();
+		}
+	}
 }

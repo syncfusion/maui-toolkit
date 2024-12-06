@@ -85,7 +85,9 @@
                         SelectedItem="{Binding Source={x:Reference ViewModel}, Path=ErrorBarType[0]}"
                         VerticalOptions="Start" HorizontalOptions="Fill" 
                         x:Name="typePicker" 
-                        SelectedIndex="0" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                        SelectedIndex="0" 
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                         SelectedIndexChanged="typePicker_SelectedIndexChanged">
             </Picker>
         </Grid>
@@ -99,7 +101,9 @@
                          ItemsSource="{Binding Source={x:Reference ViewModel},Path=ErrorBarMode}" 
                          SelectedItem="{Binding Source={x:Reference ViewModel}, Path=ErrorBarMode[0]}"
                          VerticalOptions="Start" HorizontalOptions="Fill" 
-                         x:Name="modePicker" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                         x:Name="modePicker" 
+                         BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                         TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                          SelectedIndex="0"
                          SelectedIndexChanged="modePicker_SelectedIndexChanged">
                 </Picker>
@@ -114,7 +118,9 @@
                               ItemsSource="{Binding Source={x:Reference ViewModel},Path=ErrorBarDirection}" 
                               SelectedItem="{Binding Source={x:Reference ViewModel}, Path=ErrorBarDirection[0]}"
                               VerticalOptions="Start" HorizontalOptions="Fill" 
-                              x:Name="directionPicker"  BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                              x:Name="directionPicker" 
+                              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                              TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                               SelectedIndex="0"
                               SelectedIndexChanged="directionPicker_SelectedIndexChanged">
                 </Picker>

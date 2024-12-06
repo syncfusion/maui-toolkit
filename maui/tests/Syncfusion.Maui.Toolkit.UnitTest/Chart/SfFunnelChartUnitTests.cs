@@ -2,217 +2,223 @@
 
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
-    public class SfFunnelChartUnitTests
-    {
-        [Fact]
-        public void Constructor_InitializesDefaultsCorrectly()
-        {
-            var chart = new SfFunnelChart();
+	public class SfFunnelChartUnitTests
+	{
+		[Fact]
+		public void Constructor_InitializesDefaultsCorrectly()
+		{
+			var chart = new SfFunnelChart();
 
-            Assert.NotNull(chart);
+			Assert.NotNull(chart);
 
-            Assert.Null(chart.ItemsSource);  
+			Assert.Null(chart.ItemsSource);
 
-            Assert.Null(chart.XBindingPath);  
+			Assert.Null(chart.XBindingPath);
 
-            Assert.Null(chart.YBindingPath);
+			Assert.Null(chart.YBindingPath);
 
-            var defaultBrushes = chart.PaletteBrushes;
+			var defaultBrushes = chart.PaletteBrushes;
 
-            Assert.Equal(10, defaultBrushes.Count);
-            
-            Assert.Equal(Color.FromRgba(0, 189, 174, 255), (defaultBrushes[0] as SolidColorBrush)?.Color); 
+			Assert.Equal(10, defaultBrushes.Count);
 
-            Assert.Equal(SolidColorBrush.Transparent,chart.Stroke);  
+			Assert.Equal(Color.FromRgba(0, 189, 174, 255), (defaultBrushes[0] as SolidColorBrush)?.Color);
 
-            Assert.Equal(2d, chart.StrokeWidth);  
+			Assert.Equal(SolidColorBrush.Transparent, chart.Stroke);
 
-            Assert.Equal(ChartLegendIconType.Circle, chart.LegendIcon);  
+			Assert.Equal(2d, chart.StrokeWidth);
 
-            Assert.Null(chart.TooltipTemplate);  
+			Assert.Equal(ChartLegendIconType.Circle, chart.LegendIcon);
 
-            Assert.False(chart.EnableTooltip);  
+			Assert.Null(chart.TooltipTemplate);
 
-            Assert.Null(chart.SelectionBehavior); 
+			Assert.False(chart.EnableTooltip);
 
-            Assert.False(chart.ShowDataLabels);
+			Assert.Null(chart.SelectionBehavior);
 
-            Assert.Equal(FunnelDataLabelContext.YValue, chart.DataLabelSettings.Context);
-           
-            Assert.Equal(0, chart.GapRatio); 
+			Assert.False(chart.ShowDataLabels);
 
-            Assert.Null(chart.LabelTemplate);  
-        }
+			Assert.Equal(FunnelDataLabelContext.YValue, chart.DataLabelSettings.Context);
 
-        [Fact]
-        public void ItemsSource_SetAndGet_ReturnsExpectedValue()
-        {
-            var chart = new SfFunnelChart();
-            var expectedValue = new object();
+			Assert.Equal(0, chart.GapRatio);
 
-            chart.ItemsSource = expectedValue;
+			Assert.Null(chart.LabelTemplate);
+		}
 
-            Assert.Equal(expectedValue, chart.ItemsSource);
-        }
+		[Fact]
+		public void ItemsSource_SetAndGet_ReturnsExpectedValue()
+		{
+			var chart = new SfFunnelChart();
+			var expectedValue = new object();
 
-        [Theory]
-        [InlineData("XValue1")]
-        [InlineData("XValue2")]
-        public void XBindingPath_SetAndGet_ReturnsExpectedValue(string expectedValue)
-        {
-            var chart = new SfFunnelChart();
+			chart.ItemsSource = expectedValue;
 
-            chart.XBindingPath = expectedValue;
+			Assert.Equal(expectedValue, chart.ItemsSource);
+		}
 
-            Assert.Equal(expectedValue, chart.XBindingPath);
-        }
+		[Theory]
+		[InlineData("XValue1")]
+		[InlineData("XValue2")]
+		public void XBindingPath_SetAndGet_ReturnsExpectedValue(string expectedValue)
+		{
+			var chart = new SfFunnelChart
+			{
+				XBindingPath = expectedValue
+			};
 
-        [Theory]
-        [InlineData("YValue1")]
-        [InlineData("YValue2")]
-        public void YBindingPath_SetAndGet_ReturnsExpectedValue(string expectedValue)
-        {
-            var chart = new SfFunnelChart();
+			Assert.Equal(expectedValue, chart.XBindingPath);
+		}
 
-            chart.YBindingPath = expectedValue;
+		[Theory]
+		[InlineData("YValue1")]
+		[InlineData("YValue2")]
+		public void YBindingPath_SetAndGet_ReturnsExpectedValue(string expectedValue)
+		{
+			var chart = new SfFunnelChart
+			{
+				YBindingPath = expectedValue
+			};
 
-            Assert.Equal(expectedValue, chart.YBindingPath);
-        }
+			Assert.Equal(expectedValue, chart.YBindingPath);
+		}
 
-        [Fact]
-        public void PaletteBrushes_SetAndGet_ReturnsExpectedValue()
-        {
-            var chart = new SfFunnelChart();
-            var expectedValue = new List<Brush> { new SolidColorBrush(Colors.Red) };
+		[Fact]
+		public void PaletteBrushes_SetAndGet_ReturnsExpectedValue()
+		{
+			var chart = new SfFunnelChart();
+			var expectedValue = new List<Brush> { new SolidColorBrush(Colors.Red) };
 
-            chart.PaletteBrushes = expectedValue;
+			chart.PaletteBrushes = expectedValue;
 
-            Assert.Equal(expectedValue, chart.PaletteBrushes);
-        }
+			Assert.Equal(expectedValue, chart.PaletteBrushes);
+		}
 
-        [Fact]
-        public void Stroke_SetAndGet_ReturnsExpectedValue()
-        {
-            var chart = new SfFunnelChart();
-            var expectedValue = new SolidColorBrush(Colors.Black);
+		[Fact]
+		public void Stroke_SetAndGet_ReturnsExpectedValue()
+		{
+			var chart = new SfFunnelChart();
+			var expectedValue = new SolidColorBrush(Colors.Black);
 
-            chart.Stroke = expectedValue;
+			chart.Stroke = expectedValue;
 
-            Assert.Equal(expectedValue, chart.Stroke);
-        }
+			Assert.Equal(expectedValue, chart.Stroke);
+		}
 
-        [Theory]
-        [InlineData(1.0)]
-        [InlineData(2.5)]
-        public void StrokeWidth_SetAndGet_ReturnsExpectedValue(double expectedValue)
-        {
-            var chart = new SfFunnelChart();
+		[Theory]
+		[InlineData(1.0)]
+		[InlineData(2.5)]
+		public void StrokeWidth_SetAndGet_ReturnsExpectedValue(double expectedValue)
+		{
+			var chart = new SfFunnelChart
+			{
+				StrokeWidth = expectedValue
+			};
 
-            chart.StrokeWidth = expectedValue;
+			Assert.Equal(expectedValue, chart.StrokeWidth);
+		}
 
-            Assert.Equal(expectedValue, chart.StrokeWidth);
-        }
+		[Theory]
+		[InlineData(ChartLegendIconType.Circle)]
+		[InlineData(ChartLegendIconType.Diamond)]
+		[InlineData(ChartLegendIconType.Cross)]
+		[InlineData(ChartLegendIconType.Hexagon)]
+		[InlineData(ChartLegendIconType.Rectangle)]
+		[InlineData(ChartLegendIconType.HorizontalLine)]
+		[InlineData(ChartLegendIconType.InvertedTriangle)]
+		[InlineData(ChartLegendIconType.Triangle)]
+		[InlineData(ChartLegendIconType.Pentagon)]
+		[InlineData(ChartLegendIconType.Plus)]
+		[InlineData(ChartLegendIconType.SeriesType)]
+		[InlineData(ChartLegendIconType.VerticalLine)]
+		public void LegendIcon_SetAndGet_ReturnsExpectedValue(ChartLegendIconType expectedValue)
+		{
+			var chart = new SfFunnelChart
+			{
+				LegendIcon = expectedValue
+			};
 
-        [Theory]
-        [InlineData(ChartLegendIconType.Circle)]
-        [InlineData(ChartLegendIconType.Diamond)]
-        [InlineData(ChartLegendIconType.Cross)]
-        [InlineData(ChartLegendIconType.Hexagon)]
-        [InlineData(ChartLegendIconType.Rectangle)]
-        [InlineData(ChartLegendIconType.HorizontalLine)]
-        [InlineData(ChartLegendIconType.InvertedTriangle)]
-        [InlineData(ChartLegendIconType.Triangle)]
-        [InlineData(ChartLegendIconType.Pentagon)]
-        [InlineData(ChartLegendIconType.Plus)]
-        [InlineData(ChartLegendIconType.SeriesType)]
-        [InlineData(ChartLegendIconType.VerticalLine)]
-        public void LegendIcon_SetAndGet_ReturnsExpectedValue(ChartLegendIconType expectedValue)
-        {
-            var chart = new SfFunnelChart();
+			Assert.Equal(expectedValue, chart.LegendIcon);
+		}
 
-            chart.LegendIcon = expectedValue;
+		[Fact]
+		public void TooltipTemplate_SetAndGet_ReturnsExpectedValue()
+		{
+			var chart = new SfFunnelChart();
+			var expectedValue = new DataTemplate();
 
-            Assert.Equal(expectedValue, chart.LegendIcon);
-        }
+			chart.TooltipTemplate = expectedValue;
 
-        [Fact]
-        public void TooltipTemplate_SetAndGet_ReturnsExpectedValue()
-        {
-            var chart = new SfFunnelChart();
-            var expectedValue = new DataTemplate();
+			Assert.Equal(expectedValue, chart.TooltipTemplate);
+		}
 
-            chart.TooltipTemplate = expectedValue;
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void EnableTooltip_SetAndGet_ReturnsExpectedValue(bool expectedValue)
+		{
+			var chart = new SfFunnelChart
+			{
+				EnableTooltip = expectedValue
+			};
 
-            Assert.Equal(expectedValue, chart.TooltipTemplate);
-        }
+			Assert.Equal(expectedValue, chart.EnableTooltip);
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void EnableTooltip_SetAndGet_ReturnsExpectedValue(bool expectedValue)
-        {
-            var chart = new SfFunnelChart();
+		[Fact]
+		public void SelectionBehavior_SetAndGet_ReturnsExpectedValue()
+		{
+			var chart = new SfFunnelChart();
+			var expectedValue = new DataPointSelectionBehavior();
 
-            chart.EnableTooltip = expectedValue;
+			chart.SelectionBehavior = expectedValue;
 
-            Assert.Equal(expectedValue, chart.EnableTooltip);
-        }
+			Assert.Equal(expectedValue, chart.SelectionBehavior);
+		}
 
-        [Fact]
-        public void SelectionBehavior_SetAndGet_ReturnsExpectedValue()
-        {
-            var chart = new SfFunnelChart();
-            var expectedValue = new DataPointSelectionBehavior();
+		[Theory]
+		[InlineData(0.1)]
+		[InlineData(0.5)]
+		public void GapRatio_SetAndGet_ReturnsExpectedValue(double expectedValue)
+		{
+			var chart = new SfFunnelChart
+			{
+				GapRatio = expectedValue
+			};
 
-            chart.SelectionBehavior = expectedValue;
+			Assert.Equal(expectedValue, chart.GapRatio);
+		}
 
-            Assert.Equal(expectedValue, chart.SelectionBehavior);
-        }
+		[Fact]
+		public void ShowDataLabels_SetAndGet_ReturnsExpectedValue()
+		{
+			var chart = new SfFunnelChart();
+			var expectedValue = true;
 
-        [Theory]
-        [InlineData(0.1)]
-        [InlineData(0.5)]
-        public void GapRatio_SetAndGet_ReturnsExpectedValue(double expectedValue)
-        {
-            var chart = new SfFunnelChart();
+			chart.ShowDataLabels = expectedValue;
 
-            chart.GapRatio = expectedValue;
+			Assert.Equal(expectedValue, chart.ShowDataLabels);
+		}
 
-            Assert.Equal(expectedValue, chart.GapRatio);
-        }
+		[Fact]
+		public void DataLabelSettings_SetAndGet_ReturnsExpectedValue()
+		{
+			var chart = new SfFunnelChart();
+			var expectedValue = new FunnelDataLabelSettings();
 
-        [Fact]
-        public void ShowDataLabels_SetAndGet_ReturnsExpectedValue()
-        {
-            var chart = new SfFunnelChart();
-            var expectedValue = true;
+			chart.DataLabelSettings = expectedValue;
 
-            chart.ShowDataLabels = expectedValue;
+			Assert.Equal(expectedValue, chart.DataLabelSettings);
+		}
 
-            Assert.Equal(expectedValue, chart.ShowDataLabels);
-        }
+		[Fact]
+		public void LabelTemplate_SetAndGet_ReturnsExpectedValue()
+		{
+			var chart = new SfFunnelChart();
+			var expectedValue = new DataTemplate();
 
-        [Fact]
-        public void DataLabelSettings_SetAndGet_ReturnsExpectedValue()
-        {
-            var chart = new SfFunnelChart();
-            var expectedValue = new FunnelDataLabelSettings();
+			chart.LabelTemplate = expectedValue;
 
-            chart.DataLabelSettings = expectedValue;
+			Assert.Equal(expectedValue, chart.LabelTemplate);
+		}
 
-            Assert.Equal(expectedValue, chart.DataLabelSettings);
-        }
-
-        [Fact]
-        public void LabelTemplate_SetAndGet_ReturnsExpectedValue()
-        {
-            var chart = new SfFunnelChart();
-            var expectedValue = new DataTemplate();
-
-            chart.LabelTemplate = expectedValue;
-
-            Assert.Equal(expectedValue, chart.LabelTemplate);
-        }
-
-    }
+	}
 }

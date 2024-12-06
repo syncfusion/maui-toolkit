@@ -9,40 +9,40 @@ using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-    public partial class ErrorBarDefault : SampleView
-    {
+	public partial class ErrorBarDefault : SampleView
+	{
 
-        #region Constructor
+		#region Constructor
 
-        #region  Public Constructor
+		#region  Public Constructor
 
-        public ErrorBarDefault()
-        {
-            InitializeComponent();
-        }
-        
-        public override void OnAppearing()
-        {
-            base.OnAppearing();
-            hyperLinkLayout.IsVisible = !IsCardView;
-            if (!IsCardView)
-            {
-                errorBarChart.Title = (Label)layout.Resources["title"];
-                xAxis.Title = new ChartAxisTitle() { Text = "Material" };
-                yAxis.Title = new ChartAxisTitle() { Text = "Thermal Coefficient" };
-            }
+		public ErrorBarDefault()
+		{
+			InitializeComponent();
+		}
 
-        }
+		public override void OnAppearing()
+		{
+			base.OnAppearing();
+			hyperLinkLayout.IsVisible = !IsCardView;
+			if (!IsCardView)
+			{
+				errorBarChart.Title = (Label)layout.Resources["title"];
+				xAxis.Title = new ChartAxisTitle() { Text = "Material" };
+				yAxis.Title = new ChartAxisTitle() { Text = "Thermal Coefficient" };
+			}
 
-        public override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            errorBarChart.Handler?.DisconnectHandler();
-        }
+		}
 
-        #endregion
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			errorBarChart.Handler?.DisconnectHandler();
+		}
 
-        #endregion
+		#endregion
 
-    }
+		#endregion
+
+	}
 }

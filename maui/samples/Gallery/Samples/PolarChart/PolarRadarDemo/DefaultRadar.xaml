@@ -73,22 +73,26 @@
                 <HorizontalStackLayout>
                     <Label Text="Type        :" HorizontalOptions="Center" VerticalOptions="Center" 
                            FontFamily="Helvetica" Padding="5" FontSize="14" Margin="0,0,4,0"/>
-                    <Picker ItemsSource="{Binding Source={x:Reference viewModel},Path=SeriesType}" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                    <Picker ItemsSource="{Binding Source={x:Reference viewModel},Path=SeriesType}" 
+                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                             SelectedIndex="0" SelectedIndexChanged="type_SelectedIndexChanged"/>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout>
                     <Label Text="Angle      :" HorizontalOptions="Center" VerticalOptions="Center" 
                            FontFamily="Helvetica" Padding="5" FontSize="14" Margin="0,0,4,0"/>
-                    <Picker x:Name="angle" ItemsSource="{Binding Source={x:Reference viewModel},Path=PolarAngle}" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                    <Picker x:Name="angle" ItemsSource="{Binding Source={x:Reference viewModel},Path=PolarAngle}" 
+                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                             SelectedIndex="4" SelectedIndexChanged="Angle_SelectedIndexChanged"/>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout>
                     <Label Text="IsClosed  :" HorizontalOptions="Center" VerticalOptions="Center" FontFamily="Helvetica" 
                            Padding="5" FontSize="14" Margin="0,0,4,0"/>
-                    <Switch x:Name="switch" IsToggled="True" Toggled="switch_StateChanged" Style="{StaticResource switchStyle}"/>
-                </HorizontalStackLayout>
+                    <CheckBox x:Name="checkbox" IsChecked="True" HeightRequest="35" VerticalOptions="Center" CheckedChanged="checkbox_CheckedChanged"/>   
+        </HorizontalStackLayout>
             </VerticalStackLayout>
         </Grid>
     </localCore:SampleView.OptionView>

@@ -2,40 +2,40 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-	internal class PyramidChartView : SfDrawableView
-    {
-        #region Field
+	internal partial class PyramidChartView : SfDrawableView
+	{
+		#region Field
 
-        internal readonly IPyramidChartDependent chart;
+		internal readonly IPyramidChartDependent _chart;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        internal PyramidChartView(IPyramidChartDependent charts)
-        {
-            chart = charts;
-        }
+		internal PyramidChartView(IPyramidChartDependent charts)
+		{
+			_chart = charts;
+		}
 
-        #endregion
+		#endregion
 
-        #region Override method
+		#region Override method
 
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            canvas.CanvasSaveState();
-            canvas.ClipRectangle(dirtyRect);
-            var bounds = chart.SeriesBounds;
-            canvas.Translate((float)bounds.X, (float)bounds.Y);
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		{
+			canvas.CanvasSaveState();
+			canvas.ClipRectangle(dirtyRect);
+			var bounds = _chart.SeriesBounds;
+			canvas.Translate((float)bounds.X, (float)bounds.Y);
 
-            foreach (var segment in chart.Segments)
-            {
-                segment.Draw(canvas);
-            }
+			foreach (var segment in _chart.Segments)
+			{
+				segment.Draw(canvas);
+			}
 
-            canvas.CanvasRestoreState();
-        }
+			canvas.CanvasRestoreState();
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

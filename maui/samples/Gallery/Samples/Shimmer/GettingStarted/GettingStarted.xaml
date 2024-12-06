@@ -98,7 +98,7 @@
                         <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
                                HorizontalTextAlignment="Center"
                                FontSize="24"
-                               FontFamily="{OnPlatform iOS=SyncFontIcons, MacCatalyst=SyncFontIcons, Android=SyncFontIcons.ttf#, WinUI=SyncFontIcons.ttf#SyncFontIcons}"
+                               FontFamily="SyncFontIcons"
                                />
                     </Border>
                     <Border HeightRequest="40" WidthRequest="40" Rotation="180" 
@@ -112,7 +112,7 @@
                         <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
                                HorizontalTextAlignment="Center"
                                FontSize="24"
-                               FontFamily="{OnPlatform iOS=SyncFontIcons, MacCatalyst=SyncFontIcons, Android=SyncFontIcons.ttf#, WinUI=SyncFontIcons.ttf#SyncFontIcons}"
+                               FontFamily="SyncFontIcons"
                                />
                     </Border>
                     <Border HeightRequest="40" WidthRequest="40"
@@ -126,7 +126,7 @@
                         <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
                                HorizontalTextAlignment="Center"
                                FontSize="24"
-                               FontFamily="{OnPlatform iOS=SyncFontIcons, MacCatalyst=SyncFontIcons, Android=SyncFontIcons.ttf#, WinUI=SyncFontIcons.ttf#SyncFontIcons}"
+                               FontFamily="SyncFontIcons"
                                />
                     </Border>
                     <Border HeightRequest="40" WidthRequest="40" Rotation="270"
@@ -140,7 +140,7 @@
                         <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
                                HorizontalTextAlignment="Center"
                                FontSize="24"
-                               FontFamily="{OnPlatform iOS=SyncFontIcons, MacCatalyst=SyncFontIcons, Android=SyncFontIcons.ttf#, WinUI=SyncFontIcons.ttf#SyncFontIcons}"
+                               FontFamily="SyncFontIcons"
                                />
                     </Border>
                     <Border HeightRequest="40" WidthRequest="40" Rotation="90" 
@@ -154,7 +154,7 @@
                         <Label Text="&#xe74a;" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" VerticalTextAlignment="Center" 
                                HorizontalTextAlignment="Center"
                                FontSize="24"
-                               FontFamily="{OnPlatform iOS=SyncFontIcons, MacCatalyst=SyncFontIcons, Android=SyncFontIcons.ttf#, WinUI=SyncFontIcons.ttf#SyncFontIcons}"
+                               FontFamily="SyncFontIcons"
                                />
                     </Border>
                 </Grid>

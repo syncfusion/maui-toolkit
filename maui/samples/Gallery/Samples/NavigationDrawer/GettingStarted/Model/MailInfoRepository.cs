@@ -9,7 +9,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 	{
 		#region Fields
 
-		Random random = new Random();
+		readonly Random _random = new();
 
 		#endregion
 
@@ -23,7 +23,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			var empInfo = new ObservableCollection<MailInfo>();
 			int k = 0;
-			for (int i = 0; i < Subject.Count(); i++)
+			for (int i = 0; i < _subject.Length; i++)
 			{
 				if (k > 5)
 				{
@@ -31,15 +31,15 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 				}
 				var record = new MailInfo()
 				{
-					ProfileName = ProfileList[i],
-					Name = NameList[i],
-					Subject = Subject[i],
+					ProfileName = _profileList[i],
+					Name = _nameList[i],
+					Subject = _subject[i],
 					Date = DateTime.Today.AddDays(i * -3),
-					Description = Descriptions[i],
-					Image = Images[k],
-					IsAttached = Attachments[i],
-					IsImportant = Importants[i],
-					IsOpened = Opens[i],
+					Description = _descriptions[i],
+					Image = _images[k],
+					IsAttached = _attachments[i],
+					IsImportant = _importants[i],
+					IsOpened = _opens[i],
 				};
 				empInfo.Add(record);
 				k++;
@@ -56,11 +56,11 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			var empInfo = new ObservableCollection<MailInfo>();
 			int k = 0;
-			for (int i = 0; i < Subject.Count(); i++)
+			for (int i = 0; i < _subject.Length; i++)
 			{
 				if (i % itemsCount == 0)
 				{
-					var j = random.Next(Subject.Count());
+					var j = _random.Next(_subject.Length);
 
 					if (k > 5)
 					{
@@ -68,15 +68,15 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 					}
 					var record = new MailInfo()
 					{
-						ProfileName = ProfileList[j],
-						Name = NameList[j],
-						Subject = Subject[j],
+						ProfileName = _profileList[j],
+						Name = _nameList[j],
+						Subject = _subject[j],
 						Date = DateTime.Today.AddDays(i * -3),
-						Description = Descriptions[j],
-						Image = Images[k],
-						IsAttached = Attachments[j],
-						IsImportant = Importants[j],
-						IsOpened = Opens[j],
+						Description = _descriptions[j],
+						Image = _images[k],
+						IsAttached = _attachments[j],
+						IsImportant = _importants[j],
+						IsOpened = _opens[j],
 					};
 					empInfo.Add(record);
 					k++;
@@ -90,8 +90,8 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 
 		#region Employee Info
 
-		internal string[] ProfileList = new string[]
-		{
+		internal string[] _profileList =
+		[
 		"M",
 		"MV",
 		"MV",
@@ -107,10 +107,10 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		"BT",
 		"M",
 		"M",
-		};
+		];
 
-		internal string[] NameList = new string[]
-		{
+		internal string[] _nameList =
+		[
 		"Microsoft",
 		"Microsoft Viva",
 		"Microsoft Viva",
@@ -126,20 +126,20 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		"Blog Team Site",
 		"Microsoft",
 		"Microsoft",
-		};
+		];
 
-		internal string[] Images = new string[]
-		{
+		internal string[] _images =
+		[
 		"bluecircle.png",
 		"greencircle.png",
 		"lightbluecircle.png",
 		"redcircle.png",
 		"violetcircle.png",
 		"yellowcircle.png",
-		};
+		];
 
-		internal bool[] Attachments = new bool[]
-		{
+		internal bool[] _attachments =
+		[
 		false,
 		false,
 		false,
@@ -155,10 +155,10 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		false,
 		true,
 		false,
-		};
+		];
 
-		internal bool[] Importants = new bool[]
-		{
+		internal bool[] _importants =
+		[
 		false,
 		true,
 		false,
@@ -174,10 +174,10 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		true,
 		false,
 		false,
-		};
+		];
 
-		internal bool[] Opens = new bool[]
-		{
+		internal bool[] _opens =
+		[
 		true,
 		false,
 		true,
@@ -193,10 +193,10 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		false,
 		true,
 		false,
-		};
+		];
 
-		internal string[] Subject = new string[]
-		{
+		internal string[] _subject =
+		[
 		"Dev Essentials: Learn about the future of .NET and celebrate Visual Studio's 25th anniversary",
 		"Your daily briefing",
 		"Your digest email",
@@ -212,9 +212,9 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		"You've joined the Blog Team Site group",
 		"Microsoft .NET News: Get started with .NET 6.0 and watch sessions from .NET Conf 2022 on demand",
 		"Microsoft .NET News: Learn about new tools and updates for .NET developers",
-		};
+		];
 
-		internal string[] Descriptions = new string[] {
+		internal string[] _descriptions = [
 		"Developer news, updates, and training resources.",
 		"Dear developer, It's almost the end of the week",
 		"Dear developer, Discover trends in your work habits",
@@ -230,7 +230,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		"Welcome to the Blog Team Site group.",
 		"The Xamarin Newsletter is now .NET News.",
 		"Now available: Visual Studio 2019 version 16.9.",
-	};
+	];
 
 		#endregion
 	}

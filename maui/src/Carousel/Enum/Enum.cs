@@ -4,7 +4,7 @@
 	/// Represents the various display modes for the <see cref="SfCarousel"/>.
 	/// </summary>
 	public enum ViewMode
-    {
+	{
 		/// <summary>
 		/// The carousel items are arranged in a default 3D layout.
 		/// </summary>
@@ -20,7 +20,7 @@
 	/// Represents the modes of swipe movement for manipulating items.
 	/// </summary>
 	public enum SwipeMovementMode
-    {
+	{
 		/// <summary>
 		/// Indicates that a single item should be moved.
 		/// </summary>

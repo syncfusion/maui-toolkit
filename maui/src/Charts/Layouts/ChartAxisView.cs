@@ -3,56 +3,59 @@ using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-	internal class ChartAxisView : SfDrawableView
-    {
-        #region Properties
+	internal partial class ChartAxisView : SfDrawableView
+	{
+		#region Properties
 
-        internal CartesianChartArea Area { get; set; }
+		internal CartesianChartArea Area { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public ChartAxisView(CartesianChartArea area)
-        {
-            Area = area;
-        }
+		public ChartAxisView(CartesianChartArea area)
+		{
+			Area = area;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Methods
+		#region Protected Methods
 
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            var axisLayout = Area.AxisLayout;
-            OnDrawAxis(canvas, axisLayout.HorizontalAxes);
-            OnDrawAxis(canvas, axisLayout.VerticalAxes);
-        }
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		{
+			var axisLayout = Area._axisLayout;
+			ChartAxisView.OnDrawAxis(canvas, axisLayout.HorizontalAxes);
+			ChartAxisView.OnDrawAxis(canvas, axisLayout.VerticalAxes);
+		}
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
 
-        void OnDrawAxis(ICanvas canvas, ObservableCollection<ChartAxis>? axes)
-        {
-            if (axes == null) return;
+		static void OnDrawAxis(ICanvas canvas, ObservableCollection<ChartAxis>? axes)
+		{
+			if (axes == null)
+			{
+				return;
+			}
 
-            foreach (ChartAxis chartAxis in axes)
-            {
-                Rect arrangeRect = chartAxis.ArrangeRect;
-                if (arrangeRect != Rect.Zero)
-                {
-                    canvas.CanvasSaveState();
-                    chartAxis.DrawAxis(canvas, arrangeRect);
-                    canvas.CanvasRestoreState();
-                }
-            }
-        }
+			foreach (ChartAxis chartAxis in axes)
+			{
+				Rect arrangeRect = chartAxis.ArrangeRect;
+				if (arrangeRect != Rect.Zero)
+				{
+					canvas.CanvasSaveState();
+					chartAxis.DrawAxis(canvas, arrangeRect);
+					canvas.CanvasRestoreState();
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

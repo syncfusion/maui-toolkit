@@ -70,11 +70,12 @@
                 <Grid.BindingContext>
                     <local:PieSeriesViewModel/>
                 </Grid.BindingContext>
-                <Label Text="SmartLabelAlignment " VerticalOptions="Start"  
+                <Label Text="SmartLabelAlignment " Padding="5" VerticalOptions="Start"  
                        Margin="0,15,0,0" Grid.Column="0" />
                 <Picker x:Name="dataLabel" Grid.Column="1" 
                         VerticalOptions="Start" 
-                        BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                         WidthRequest="130"  Margin="0,13,0,0"
                         ItemsSource="{Binding SmartLabelAlignment}" 
                         SelectedIndexChanged="smartDataLabel_SelectedIndexChanged">

@@ -2,16 +2,16 @@
 {
 	/// <exclude/>
 	public partial class SfViewHandler
-    {
+	{
 		/// <exclude/>
 		public SfViewHandler() : base(SfViewHandler.ViewMapper)
-        {
+		{
 
-        }
+		}
 
 		/// <exclude/>
 		public SfViewHandler(PropertyMapper mapper) : base(mapper)
-        {
-        }
-    }
+		{
+		}
+	}
 }

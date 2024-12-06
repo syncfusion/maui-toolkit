@@ -18,18 +18,18 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 		}
 		private void SubmitButton_Clicked(object sender, EventArgs e)
 		{
-			FieldNullCheck(PayNameField);
-			FieldNullCheck(CardNumberField);
-			FieldNullCheck(CardNumberField1);
-			FieldNullCheck(CardNumberField2);
-			FieldNullCheck(CardNumberField3);
-			FieldNullCheck(CVVField);
-			FieldNullCheck(MonthField);
-			FieldNullCheck(YearField);
+			PaymentPageMobile.FieldNullCheck(PayNameField);
+			PaymentPageMobile.FieldNullCheck(CardNumberField);
+			PaymentPageMobile.FieldNullCheck(CardNumberField1);
+			PaymentPageMobile.FieldNullCheck(CardNumberField2);
+			PaymentPageMobile.FieldNullCheck(CardNumberField3);
+			PaymentPageMobile.FieldNullCheck(CVVField);
+			PaymentPageMobile.FieldNullCheck(MonthField);
+			PaymentPageMobile.FieldNullCheck(YearField);
 			ValidateCardNumber();
 		}
 
-		private void FieldNullCheck(core.SfTextInputLayout inputLayout)
+		private static void FieldNullCheck(core.SfTextInputLayout inputLayout)
 		{
 			if (string.IsNullOrEmpty(inputLayout.Text))
 			{
@@ -44,7 +44,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 
 		private void ValidateCardNumber()
 		{
-			if (CardNumberField.Text == null || CardNumberField.Text.Count() != 4 || !double.TryParse(CardNumberField.Text, out double result))
+			if (CardNumberField.Text == null || CardNumberField.Text.Length != 4 || !double.TryParse(CardNumberField.Text, out _))
 			{
 				CardNumberField.HasError = true;
 			}
@@ -53,7 +53,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 				CardNumberField.HasError = false;
 			}
 
-			if (CardNumberField1.Text == null || CardNumberField1.Text.Count() != 4 || !double.TryParse(CardNumberField1.Text, out result))
+			if (CardNumberField1.Text == null || CardNumberField1.Text.Length != 4 || !double.TryParse(CardNumberField1.Text, out _))
 			{
 				CardNumberField1.HasError = true;
 			}
@@ -62,7 +62,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 				CardNumberField1.HasError = false;
 			}
 
-			if (CardNumberField2.Text == null || CardNumberField2.Text.Count() != 4 || !double.TryParse(CardNumberField2.Text, out result))
+			if (CardNumberField2.Text == null || CardNumberField2.Text.Length != 4 || !double.TryParse(CardNumberField2.Text, out _))
 			{
 				CardNumberField2.HasError = true;
 			}
@@ -71,7 +71,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 				CardNumberField2.HasError = false;
 			}
 
-			if (CardNumberField3.Text == null || CardNumberField3.Text.Count() != 4 || !double.TryParse(CardNumberField3.Text, out result))
+			if (CardNumberField3.Text == null || CardNumberField3.Text.Length != 4 || !double.TryParse(CardNumberField3.Text, out _))
 			{
 				CardNumberField3.HasError = true;
 			}
@@ -80,7 +80,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 				CardNumberField3.HasError = false;
 			}
 
-			if (CVVField.Text == null || CVVField.Text.Count() != 3 || !double.TryParse(CVVField.Text, out result))
+			if (CVVField.Text == null || CVVField.Text.Length != 3 || !double.TryParse(CVVField.Text, out _))
 			{
 				CVVField.HasError = true;
 			}

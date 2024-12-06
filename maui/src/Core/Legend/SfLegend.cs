@@ -8,13 +8,12 @@ namespace Syncfusion.Maui.Toolkit
 	/// <summary>
 	/// Represents a legend component for displaying chart legends or other graphical legends.
 	/// </summary>
-	internal class SfLegend : SfView, ILegend
+	internal partial class SfLegend : SfView, ILegend
     {
-        #region Fields
 
-        const double _maxSize = 8388607.5;
+		#region Fields
 
-        readonly ScrollView _legendView;
+		readonly ScrollView _legendView;
 
         Func<double> _getLegendSizeCoeff = GetLegendSizeCoeff;
 
@@ -177,17 +176,16 @@ namespace Syncfusion.Maui.Toolkit
         /// </summary>
         public SfLegend()
         {
-            _legendView = new ScrollView()
-            {
-                Orientation = ScrollOrientation.Both,
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Never
-            };
+			_legendView = new ScrollView
+			{
+				Orientation = ScrollOrientation.Both,
+				HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+				VerticalScrollBarVisibility = ScrollBarVisibility.Never,
+				HorizontalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.Center
+			};
 
-            _legendView.HorizontalOptions = LayoutOptions.Center;
-            _legendView.VerticalOptions = LayoutOptions.Center;
-
-            ContentLayout = ItemsLayout is Layout ? ItemsLayout : new HorizontalStackLayout();
+			ContentLayout = ItemsLayout is Layout ? ItemsLayout : new HorizontalStackLayout();
 
             UpdateLegendTemplate();
             _legendView.Content = ContentLayout;
@@ -307,17 +305,9 @@ namespace Syncfusion.Maui.Toolkit
         {
         }
 
-        static void OnLegendLayoutChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (bindable is SfLegend legend)
-            {
-                legend.OnLegendLayoutChanged();
-            }
-        }
+		#endregion
 
-        #endregion
-
-        #region Private Methods
+		#region Private Methods
 
 #if MACCATALYST || IOS
 
@@ -328,7 +318,7 @@ namespace Syncfusion.Maui.Toolkit
         }
 #endif
 
-        internal void UpdateLegendPlacement()
+		internal void UpdateLegendPlacement()
         {
             if (ItemsLayout is Layout customLayout)
             {
@@ -385,11 +375,8 @@ namespace Syncfusion.Maui.Toolkit
             {
                 legendItem.IsToggled = !legendItem.IsToggled;
 
-                if (ItemClicked != null)
-                {
-                    ItemClicked(this, new LegendItemClickedEventArgs() { LegendItem = legendItem });
-                }
-            }
+				ItemClicked?.Invoke(this, new LegendItemClickedEventArgs() { LegendItem = legendItem });
+			}
         }
 
         /// <summary>
@@ -416,13 +403,15 @@ namespace Syncfusion.Maui.Toolkit
                 {
                     shapeView.HorizontalOptions = LayoutOptions.Start;
                     shapeView.VerticalOptions = LayoutOptions.Center;
-                    binding = new Binding(nameof(LegendItem.IsToggled));
-                    binding.Converter = toggleColorConverter;
-                    binding.ConverterParameter = shapeView;
-                    binding1 = new Binding(nameof(LegendItem.IconBrush));
+					binding = new Binding(nameof(LegendItem.IsToggled))
+					{
+						Converter = toggleColorConverter,
+						ConverterParameter = shapeView
+					};
+					binding1 = new Binding(nameof(LegendItem.IconBrush));
                     multiBinding = new MultiBinding()
                     {
-                        Bindings = new List<BindingBase>() { binding, binding1 },
+                        Bindings = [binding, binding1],
                         Converter = new MultiBindingIconBrushConverter(),
                         ConverterParameter = shapeView
                     };
@@ -459,9 +448,11 @@ namespace Syncfusion.Maui.Toolkit
             {
                 var itemTemplate = new DataTemplate(() =>
                 {
-                    LegendItemView views = new LegendItemView(LegendTappedAction);
-                    views.ItemTemplate = GetDefaultLegendTemplate();
-                    return views;
+					LegendItemView views = new LegendItemView(LegendTappedAction)
+					{
+						ItemTemplate = GetDefaultLegendTemplate()
+					};
+					return views;
                 });
 
                 BindableLayout.SetItemTemplate(ContentLayout, itemTemplate);
@@ -499,9 +490,11 @@ namespace Syncfusion.Maui.Toolkit
                 {
                     var itemtemplate = new DataTemplate(() =>
                     {
-                        LegendItemView views = new LegendItemView(LegendTappedAction);
-                        views.ItemTemplate = dataTemplate;
-                        return views;
+						LegendItemView views = new LegendItemView(LegendTappedAction)
+						{
+							ItemTemplate = dataTemplate
+						};
+						return views;
                     });
 
                     BindableLayout.SetItemTemplate(ContentLayout, itemtemplate);
@@ -516,7 +509,7 @@ namespace Syncfusion.Maui.Toolkit
 	/// <summary>
 	/// Represents a view for individual legend items, inheriting from <see cref="ContentView"/> and implementing the <see cref="ITapGestureListener"/> interface.
 	/// </summary>
-	internal class LegendItemView : ContentView, ITapGestureListener
+	internal partial class LegendItemView : ContentView, ITapGestureListener
     {
         readonly Action<LegendItem> _legendAction;
 

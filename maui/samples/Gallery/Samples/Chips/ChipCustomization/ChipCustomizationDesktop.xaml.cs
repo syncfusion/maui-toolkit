@@ -1,4 +1,3 @@
-
 namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 {
 	public partial class ChipCustomizationDesktop : SampleView

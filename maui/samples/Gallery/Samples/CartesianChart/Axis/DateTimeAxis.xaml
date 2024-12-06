@@ -40,7 +40,7 @@
                 <chart:ChartZoomPanBehavior x:Name="zooming1" EnablePinchZooming="False" EnableDoubleTap="False" EnablePanning="False" ZoomMode="X" />
             </chart:SfCartesianChart.ZoomPanBehavior>
             <chart:SfCartesianChart.Series>
-                <chart:FastLineSeries EnableAnimation="{Binding EnableAnimation}" EnableTooltip="True" ItemsSource="{Binding DateTimeData}" XBindingPath="Date" YBindingPath="Growth">
+                <chart:FastLineSeries EnableAnimation="{Binding EnableAnimation}" EnableTooltip="True" ItemsSource="{Binding DateTimeData}" XBindingPath="Date" YBindingPath="Growth" EnableAntiAliasing="True">
                 </chart:FastLineSeries>
             </chart:SfCartesianChart.Series>
         </chart:SfCartesianChart>

@@ -9,370 +9,426 @@ using System.ComponentModel;
 using System.Reflection;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
-
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
-    public class SfTabViewUnitTests : BaseUnitTest
-    {
-        SfTabBar tabBar= new SfTabBar();
-        private void PopulateTabBarItems()
-        {
-            tabBar = new SfTabBar();
+	public class SfTabViewUnitTests : BaseUnitTest
+	{
+		SfTabBar tabBar = [];
+		private void PopulateTabBarItems()
+		{
+			tabBar = [];
 
-            var tabItems = new TabItemCollection
-            {
-                new SfTabItem()
-                {
-                    Header = "Call",
-                    Content = new Button()
-                    {
-                        Text = "Tab Item1",
-                    }
-                },
-                new SfTabItem()
-                {
-                    Header = "Favorites",
-                    Content = new Button()
-                    {
-                        Text = "Tab Item2",
-                    }
-                },
-                new SfTabItem()
-                {
-                    Header = "Contacts",
-                    Content = new Button()
-                    {
-                        Text = "Tab Item3",
-                    }
-                }
-            };
+			var tabItems = new TabItemCollection
+			{
+				new SfTabItem()
+				{
+					Header = "Call",
+					Content = new Button()
+					{
+						Text = "Tab Item1",
+					}
+				},
+				new SfTabItem()
+				{
+					Header = "Favorites",
+					Content = new Button()
+					{
+						Text = "Tab Item2",
+					}
+				},
+				new SfTabItem()
+				{
+					Header = "Contacts",
+					Content = new Button()
+					{
+						Text = "Tab Item3",
+					}
+				}
+			};
 
-            tabBar.Items = tabItems;
-        }
+			tabBar.Items = tabItems;
+		}
 
-        private List<Button> PopulateButtonsListItemsSource()
-        {
-            List<Button> tabItems = new List<Button>();
-            tabItems.Add(new Button() { Text = "button1" });
-            tabItems.Add(new Button() { Text = "button2" });
-            tabItems.Add(new Button() { Text = "button3" });
+		private List<Button> PopulateButtonsListItemsSource()
+		{
+			List<Button> tabItems =
+			[
+				new Button() { Text = "button1" },
+				new Button() { Text = "button2" },
+				new Button() { Text = "button3" },
+			];
 
-            return tabItems;
-        }
+			return tabItems;
+		}
 
-        private List<object> PopulateMixedObjectItemsSource()
-        {
-            List<object> tabItems = new List<object>();
-            tabItems.Add(new Button() { Text = "button" });
-            tabItems.Add(new Label() { Text = "label" });
-            tabItems.Add(new Picker() { });
+		private List<object> PopulateMixedObjectItemsSource()
+		{
+			List<object> tabItems = [new Button() { Text = "button" }, new Label() { Text = "label" }, new Picker() { }];
 
-            return tabItems;
-        }
+			return tabItems;
+		}
 
-        private TabItemCollection PopulateMixedItemsCollection()
-        {
-            var tabItems = new TabItemCollection()
-                {
-                    new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
-                    new SfTabItem { Header = "TAB 2", Content = new Button { Text = "Content 2" } },
-                    new SfTabItem { Header = "TAB 3", Content = new Picker { } }
-                };
+		private TabItemCollection PopulateMixedItemsCollection()
+		{
+			var tabItems = new TabItemCollection()
+				{
+					new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
+					new SfTabItem { Header = "TAB 2", Content = new Button { Text = "Content 2" } },
+					new SfTabItem { Header = "TAB 3", Content = new Picker { } }
+				};
 
-            return tabItems;
-        }
+			return tabItems;
+		}
 
-        private TabItemCollection PopulateLabelItemsCollection()
-        {
-            var tabViewItems = new TabItemCollection
-            {
-                new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
-                new SfTabItem { Header = "TAB 2", Content = new Label { Text = "Content 2" } },
-                new SfTabItem { Header = "TAB 3", Content = new Label { Text = "Content 3" } }
-            };
-            return tabViewItems;
-        }
+		private TabItemCollection PopulateLabelItemsCollection()
+		{
+			var tabViewItems = new TabItemCollection
+			{
+				new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
+				new SfTabItem { Header = "TAB 2", Content = new Label { Text = "Content 2" } },
+				new SfTabItem { Header = "TAB 3", Content = new Label { Text = "Content 3" } }
+			};
+			return tabViewItems;
+		}
 
-        private List<string> PopulateLargeData()
-        {
-            List<string> largeDataSet = Enumerable.Range(1, 1000)
-                                      .Select(i => $"Item {i}")
-                                      .ToList();
-            return largeDataSet;
-        }
+		private List<string> PopulateLargeData()
+		{
+			List<string> largeDataSet = Enumerable.Range(1, 1000)
+									  .Select(i => $"Item {i}")
+									  .ToList();
+			return largeDataSet;
+		}
 
-        private List<object> PopulateMixedDataItemsSource()
-        {
-            List<object> mixedList = new List<object>()
-            {
-                "String item",
-                42,
-                new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
-                true
-            };
-            return mixedList;
-        }
+		private List<object> PopulateMixedDataItemsSource()
+		{
+			List<object> mixedList =
+			[
+				"String item",
+				42,
+				new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
+				true
+			];
+			return mixedList;
+		}
 
 		#region TabView Public properties
 
 		[Fact]
-        public void Constructor_InitializesDefaultsCorrectly()
-        {
-            var tabView = new SfTabView();
+		public void Constructor_InitializesDefaultsCorrectly()
+		{
+			var tabView = new SfTabView();
 
-            Assert.Null(tabView.TabBarBackground);
-            Assert.Equal(TabBarDisplayMode.Default, tabView.HeaderDisplayMode);
-            Assert.Equal(TabBarPlacement.Top, tabView.TabBarPlacement);
-            Assert.Equal(TabIndicatorPlacement.Bottom, tabView.IndicatorPlacement);
-            Assert.Equal(IndicatorWidthMode.Fit, tabView.IndicatorWidthMode);
-            Assert.Equal(TabWidthMode.Default, tabView.TabWidthMode);
-            Assert.Equal(48d, tabView.TabBarHeight);
-            Assert.Equal(Color.FromArgb("#6750A4"), ((SolidColorBrush)tabView.IndicatorBackground).Color);
-            Assert.Empty(tabView.Items);
-            Assert.Equal(0d, tabView.SelectedIndex);
-            Assert.Equal(TextAlignment.Center, tabView.HeaderHorizontalTextAlignment);
-            Assert.Null(tabView.ItemsSource);
-            Assert.Null(tabView.HeaderItemTemplate);
-            Assert.Null(tabView.ContentItemTemplate);
-            Assert.Equal(new Thickness(52, 0, 52, 0), tabView.TabHeaderPadding);
-            Assert.False(tabView.FontAutoScalingEnabled);
-            Assert.Equal(new CornerRadius(-1), tabView.IndicatorCornerRadius);
-            Assert.False(tabView.IsScrollButtonEnabled);
-            Assert.False(tabView.EnableSwiping);
-            Assert.Equal(100d, tabView.ContentTransitionDuration);
-        }
+			Assert.Null(tabView.TabBarBackground);
+			Assert.Equal(TabBarDisplayMode.Default, tabView.HeaderDisplayMode);
+			Assert.Equal(TabBarPlacement.Top, tabView.TabBarPlacement);
+			Assert.Equal(TabIndicatorPlacement.Bottom, tabView.IndicatorPlacement);
+			Assert.Equal(IndicatorWidthMode.Fit, tabView.IndicatorWidthMode);
+			Assert.Equal(TabWidthMode.Default, tabView.TabWidthMode);
+			Assert.Equal(48d, tabView.TabBarHeight);
+			Assert.Equal(Color.FromArgb("#6750A4"), ((SolidColorBrush)tabView.IndicatorBackground).Color);
+			Assert.Equal(Color.FromArgb("#49454F"), tabView.ScrollButtonColor);
+			Assert.Equal(Color.FromArgb("#F7F2FB"), ((SolidColorBrush)tabView.ScrollButtonBackground).Color);
+			Assert.Equal(3, tabView.IndicatorStrokeThickness);
+			Assert.Empty(tabView.Items);
+			Assert.Equal(0d, tabView.SelectedIndex);
+			Assert.Equal(TextAlignment.Center, tabView.HeaderHorizontalTextAlignment);
+			Assert.Null(tabView.ItemsSource);
+			Assert.Null(tabView.HeaderItemTemplate);
+			Assert.Null(tabView.ContentItemTemplate);
+			Assert.Equal(new Thickness(52, 0, 52, 0), tabView.TabHeaderPadding);
+			Assert.False(tabView.FontAutoScalingEnabled);
+			Assert.Equal(new CornerRadius(-1), tabView.IndicatorCornerRadius);
+			Assert.False(tabView.IsScrollButtonEnabled);
+			Assert.False(tabView.EnableSwiping);
+			Assert.Equal(100d, tabView.ContentTransitionDuration);
+		}
 
-        [Theory]
-        [InlineData(IndicatorWidthMode.Fit)]
-        [InlineData(IndicatorWidthMode.Stretch)]
-        public void IndicatorWidthMode_SetAndGet_ReturnsExpectedValue(IndicatorWidthMode expected)
-        {
-            var tabView = new SfTabView();
-            tabView.IndicatorWidthMode = expected;
+		[Theory]
+		[InlineData(IndicatorWidthMode.Fit)]
+		[InlineData(IndicatorWidthMode.Stretch)]
+		public void IndicatorWidthMode_SetAndGet_ReturnsExpectedValue(IndicatorWidthMode expected)
+		{
+			var tabView = new SfTabView
+			{
+				IndicatorWidthMode = expected
+			};
 
-            Assert.Equal(expected, tabView.IndicatorWidthMode);
-        }
+			Assert.Equal(expected, tabView.IndicatorWidthMode);
+		}
 
-        [Theory]
-        [InlineData(TabBarDisplayMode.Default)]
-        [InlineData(TabBarDisplayMode.Image)]
-        [InlineData(TabBarDisplayMode.Text)]
-        public void HeaderDisplayMode_SetAndGet_ReturnsExpectedValue(TabBarDisplayMode expected)
-        {
-            var tabView = new SfTabView();
-            tabView.HeaderDisplayMode = expected;
+		[Theory]
+		[InlineData(TabBarDisplayMode.Default)]
+		[InlineData(TabBarDisplayMode.Image)]
+		[InlineData(TabBarDisplayMode.Text)]
+		public void HeaderDisplayMode_SetAndGet_ReturnsExpectedValue(TabBarDisplayMode expected)
+		{
+			var tabView = new SfTabView
+			{
+				HeaderDisplayMode = expected
+			};
 
-            Assert.Equal(expected, tabView.HeaderDisplayMode);
-        }
+			Assert.Equal(expected, tabView.HeaderDisplayMode);
+		}
 
-        [Fact]
-        public void TabBarBackground_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            tabView.TabBarBackground = Colors.Beige;
+		[Fact]
+		public void TabBarBackground_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView
+			{
+				TabBarBackground = Colors.Beige
+			};
 
-            Assert.Equal(Colors.Beige, tabView.TabBarBackground);
-        }
+			Assert.Equal(Colors.Beige, tabView.TabBarBackground);
+		}
 
-        [Theory]
-        [InlineData(TabBarPlacement.Top)]
-        [InlineData(TabBarPlacement.Bottom)]
-        public void TabBarPlacement_SetAndGet_ReturnsExpectedValue(TabBarPlacement expected)
-        {
-            var tabView = new SfTabView();
-            tabView.TabBarPlacement = expected;
+		[Theory]
+		[InlineData(TabBarPlacement.Top)]
+		[InlineData(TabBarPlacement.Bottom)]
+		public void TabBarPlacement_SetAndGet_ReturnsExpectedValue(TabBarPlacement expected)
+		{
+			var tabView = new SfTabView
+			{
+				TabBarPlacement = expected
+			};
 
-            Assert.Equal(expected, tabView.TabBarPlacement);
-        }
+			Assert.Equal(expected, tabView.TabBarPlacement);
+		}
 
-        [Theory]
-        [InlineData(TabIndicatorPlacement.Top)]
-        [InlineData(TabIndicatorPlacement.Bottom)]
-        [InlineData(TabIndicatorPlacement.Fill)]
-        public void IndicatorPlacement_SetAndGet_ReturnsExpectedValue(TabIndicatorPlacement expected)
-        {
-            var tabView = new SfTabView();
-            tabView.IndicatorPlacement = expected;
+		[Theory]
+		[InlineData(TabIndicatorPlacement.Top)]
+		[InlineData(TabIndicatorPlacement.Bottom)]
+		[InlineData(TabIndicatorPlacement.Fill)]
+		public void IndicatorPlacement_SetAndGet_ReturnsExpectedValue(TabIndicatorPlacement expected)
+		{
+			var tabView = new SfTabView
+			{
+				IndicatorPlacement = expected
+			};
 
-            Assert.Equal(expected, tabView.IndicatorPlacement);
-        }
+			Assert.Equal(expected, tabView.IndicatorPlacement);
+		}
 
-        [Theory]
-        [InlineData(TabWidthMode.Default)]
-        [InlineData(TabWidthMode.SizeToContent)]
-        public void TabWidthMode_SetAndGet_ReturnsExpectedValue(TabWidthMode expected)
-        {
-            var tabView = new SfTabView();
-            tabView.TabWidthMode = expected;
+		[Theory]
+		[InlineData(TabWidthMode.Default)]
+		[InlineData(TabWidthMode.SizeToContent)]
+		public void TabWidthMode_SetAndGet_ReturnsExpectedValue(TabWidthMode expected)
+		{
+			var tabView = new SfTabView
+			{
+				TabWidthMode = expected
+			};
 
-            Assert.Equal(expected, tabView.TabWidthMode);
-        }
+			Assert.Equal(expected, tabView.TabWidthMode);
+		}
 
-        [Fact]
-        public void IndicatorBackground_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            tabView.IndicatorBackground = Colors.Magenta;
+		[Fact]
+		public void IndicatorBackground_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView
+			{
+				IndicatorBackground = Colors.Magenta
+			};
 
-            Assert.Equal(Colors.Magenta, tabView.IndicatorBackground);
-        }
+			Assert.Equal(Colors.Magenta, tabView.IndicatorBackground);
+		}
 
-        [Fact]
-        public void TabBarHeight_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            tabView.TabBarHeight = 40d;
+		[Fact]
+		public void ScrollButtonBackground_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView();
+			tabView.ScrollButtonBackground = Colors.Red;
+			Assert.Equal(Colors.Red, tabView.ScrollButtonBackground);
+		}
 
-            Assert.Equal(40d, tabView.TabBarHeight);
-        }
+		[Fact]
+		public void ScrollButtonColor_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView();
+			tabView.ScrollButtonColor = Colors.Yellow;
+			Assert.Equal(Colors.Yellow, tabView.ScrollButtonColor);
+		}
 
-        [Fact]
-        public void Items_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            var tabItems = new TabItemCollection
-            {
-                new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
-                new SfTabItem { Header = "TAB 2", Content = new Label { Text = "Content 2" } }
-            };
+		[Theory]
+		[InlineData(40, 40)]
+		[InlineData(0, 0)]
+		[InlineData(-20, -20)]
+		public void IndicatorStrokeThickness_SetAndGet_ReturnsExpectedValue(double value, double expected)
+		{
+			var tabView = new SfTabView();
+			tabView.IndicatorStrokeThickness = value;
+			Assert.Equal(expected, tabView.IndicatorStrokeThickness);
+		}
 
-            tabView.Items = tabItems;
-            var actualItems = tabView.Items;
+		[Fact]
+		public void TabBarHeight_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView
+			{
+				TabBarHeight = 40d
+			};
 
-            Assert.NotNull(actualItems);
-            Assert.Equal(tabItems.Count, actualItems.Count);
-            for (int i = 0; i < tabItems.Count; i++)
-            {
-                Assert.Equal(tabItems[i].Header, actualItems[i].Header);
-                Assert.Equal(((Label)tabItems[i].Content).Text, ((Label)actualItems[i].Content).Text);
-            }
-        }
+			Assert.Equal(40d, tabView.TabBarHeight);
+		}
 
-        [Theory]
-        [InlineData(TextAlignment.Start)]
-        [InlineData(TextAlignment.Center)]
-        [InlineData(TextAlignment.End)]
-        public void HeaderHorizontalTextAlignment_SetAndGet_ReturnsExpectedValue(TextAlignment expected)
-        {
-            var tabView = new SfTabView();
-            tabView.HeaderHorizontalTextAlignment = expected;
+		[Fact]
+		public void Items_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView();
+			var tabItems = new TabItemCollection
+			{
+				new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
+				new SfTabItem { Header = "TAB 2", Content = new Label { Text = "Content 2" } }
+			};
 
-            Assert.Equal(expected, tabView.HeaderHorizontalTextAlignment);
-        }
+			tabView.Items = tabItems;
+			var actualItems = tabView.Items;
 
-        [Theory]
-        [InlineData(2)]
-        [InlineData(0)]
-        public void SelectedIndex_SetAndGet_ReturnsExpectedValue(int expected)
-        {
-            var tabView = new SfTabView();
-            tabView.SelectedIndex = expected;
+			Assert.NotNull(actualItems);
+			Assert.Equal(tabItems.Count, actualItems.Count);
+			for (int i = 0; i < tabItems.Count; i++)
+			{
+				Assert.Equal(tabItems[i].Header, actualItems[i].Header);
+				Assert.Equal(((Label)tabItems[i].Content).Text, ((Label)actualItems[i].Content).Text);
+			}
+		}
 
-            Assert.Equal(expected, tabView.SelectedIndex);
-        }
+		[Theory]
+		[InlineData(TextAlignment.Start)]
+		[InlineData(TextAlignment.Center)]
+		[InlineData(TextAlignment.End)]
+		public void HeaderHorizontalTextAlignment_SetAndGet_ReturnsExpectedValue(TextAlignment expected)
+		{
+			var tabView = new SfTabView
+			{
+				HeaderHorizontalTextAlignment = expected
+			};
 
-        [Fact]
-        public void ItemsSource_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            var expectedItemsSource = new List<string> { "Tab1", "Tab2", "Tab3" };
+			Assert.Equal(expected, tabView.HeaderHorizontalTextAlignment);
+		}
 
-            tabView.ItemsSource = expectedItemsSource;
-            var actualItemsSource = tabView.ItemsSource;
+		[Theory]
+		[InlineData(2)]
+		[InlineData(0)]
+		public void SelectedIndex_SetAndGet_ReturnsExpectedValue(int expected)
+		{
+			var tabView = new SfTabView
+			{
+				SelectedIndex = expected
+			};
 
-            Assert.NotNull(actualItemsSource);
-            Assert.Equal(expectedItemsSource.Count, actualItemsSource.Count);
+			Assert.Equal(expected, tabView.SelectedIndex);
+		}
 
-        }
+		[Fact]
+		public void ItemsSource_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView();
+			var expectedItemsSource = new List<string> { "Tab1", "Tab2", "Tab3" };
 
-        [Fact]
-        public void HeaderItemTemplate_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            var expectedTemplate = new DataTemplate(() => new Label { Text = "Header" });
+			tabView.ItemsSource = expectedItemsSource;
+			var actualItemsSource = tabView.ItemsSource;
 
-            tabView.HeaderItemTemplate = expectedTemplate;
+			Assert.NotNull(actualItemsSource);
+			Assert.Equal(expectedItemsSource.Count, actualItemsSource.Count);
 
-            Assert.Equal(expectedTemplate, tabView.HeaderItemTemplate);
-        }
+		}
 
-        [Fact]
-        public void ContentItemTemplate_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            var expectedTemplate = new DataTemplate(() => new Label { Text = "Test" });
+		[Fact]
+		public void HeaderItemTemplate_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView();
+			var expectedTemplate = new DataTemplate(() => new Label { Text = "Header" });
 
-            tabView.ContentItemTemplate = expectedTemplate;
+			tabView.HeaderItemTemplate = expectedTemplate;
 
-            Assert.Equal(expectedTemplate, tabView.ContentItemTemplate);
-        }
+			Assert.Equal(expectedTemplate, tabView.HeaderItemTemplate);
+		}
 
-        [Fact]
-        public void TabHeaderPadding_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            var expectedPadding = new Thickness(5, 10, 5, 10);
+		[Fact]
+		public void ContentItemTemplate_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView();
+			var expectedTemplate = new DataTemplate(() => new Label { Text = "Test" });
 
-            tabView.TabHeaderPadding = expectedPadding;
+			tabView.ContentItemTemplate = expectedTemplate;
 
-            Assert.Equal(expectedPadding, tabView.TabHeaderPadding);
-        }
+			Assert.Equal(expectedTemplate, tabView.ContentItemTemplate);
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void FontAutoScalingEnabled_SetAndGet_ReturnsExpectedValue(bool expected)
-        {
-            var tabView = new SfTabView();
-            tabView.FontAutoScalingEnabled = expected;
+		[Fact]
+		public void TabHeaderPadding_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView();
+			var expectedPadding = new Thickness(5, 10, 5, 10);
 
-            Assert.Equal(expected, tabView.FontAutoScalingEnabled);
-        }
+			tabView.TabHeaderPadding = expectedPadding;
 
-        [Fact]
-        public void IndicatorCornerRadius_SetAndGet_ReturnsExpectedValue()
-        {
-            var tabView = new SfTabView();
-            var expectedRadius = new CornerRadius(5);
+			Assert.Equal(expectedPadding, tabView.TabHeaderPadding);
+		}
 
-            tabView.IndicatorCornerRadius = expectedRadius;
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void FontAutoScalingEnabled_SetAndGet_ReturnsExpectedValue(bool expected)
+		{
+			var tabView = new SfTabView
+			{
+				FontAutoScalingEnabled = expected
+			};
 
-            Assert.Equal(expectedRadius, tabView.IndicatorCornerRadius);
-        }
+			Assert.Equal(expected, tabView.FontAutoScalingEnabled);
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void IsScrollButtonEnabled_SetAndGet_ReturnsExpectedValue(bool expected)
-        {
-            var tabView = new SfTabView();
-            tabView.IsScrollButtonEnabled = expected;
+		[Fact]
+		public void IndicatorCornerRadius_SetAndGet_ReturnsExpectedValue()
+		{
+			var tabView = new SfTabView();
+			var expectedRadius = new CornerRadius(5);
 
-            Assert.Equal(expected, tabView.IsScrollButtonEnabled);
-        }
+			tabView.IndicatorCornerRadius = expectedRadius;
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void EnableSwiping_SetAndGet_ReturnsExpectedValue(bool expected)
-        {
-            var tabView = new SfTabView();
-            tabView.EnableSwiping = expected;
+			Assert.Equal(expectedRadius, tabView.IndicatorCornerRadius);
+		}
 
-            Assert.Equal(expected, tabView.EnableSwiping);
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void IsScrollButtonEnabled_SetAndGet_ReturnsExpectedValue(bool expected)
+		{
+			var tabView = new SfTabView
+			{
+				IsScrollButtonEnabled = expected
+			};
 
-        [Theory]
-        [InlineData(double.MinValue)]
-        [InlineData(double.MaxValue)]
-        [InlineData((double)0)]
-        public void ContentTransitionDuration_SetAndGet_ReturnsExpectedValue(double expected)
-        {
-            var tabView = new SfTabView();
-            tabView.ContentTransitionDuration = expected;
+			Assert.Equal(expected, tabView.IsScrollButtonEnabled);
+		}
 
-            Assert.Equal(expected, tabView.ContentTransitionDuration);
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void EnableSwiping_SetAndGet_ReturnsExpectedValue(bool expected)
+		{
+			var tabView = new SfTabView
+			{
+				EnableSwiping = expected
+			};
+
+			Assert.Equal(expected, tabView.EnableSwiping);
+		}
+
+		[Theory]
+		[InlineData(double.MinValue)]
+		[InlineData(double.MaxValue)]
+		[InlineData((double)0)]
+		public void ContentTransitionDuration_SetAndGet_ReturnsExpectedValue(double expected)
+		{
+			var tabView = new SfTabView
+			{
+				ContentTransitionDuration = expected
+			};
+
+			Assert.Equal(expected, tabView.ContentTransitionDuration);
+		}
 
 		[Fact]
 		public void TestTabView()
@@ -410,7 +466,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				var eventArgs = new TabItemTappedEventArgs { TabItem = expectedTabItem };
 				foreach (var handler in eventDelegate.GetInvocationList())
 				{
-					handler.Method.Invoke(handler.Target, new object[] { tabView, eventArgs });
+					handler.Method.Invoke(handler.Target, [tabView, eventArgs]);
 				}
 				Assert.True(eventTriggered, "TabItemTapped event was not triggered.");
 				Assert.Equal(shouldCancel, eventArgs.Cancel);
@@ -437,7 +493,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				var eventArgs = new TabItemTappedEventArgs { TabItem = expectedTabItem };
 				foreach (var handler in eventDelegate.GetInvocationList())
 				{
-					handler.Method.Invoke(handler.Target, new object[] { tabView, eventArgs });
+					handler.Method.Invoke(handler.Target, [tabView, eventArgs]);
 				}
 			}
 			Assert.True(wasEventTriggered, "TabItemTapped event was not triggered.");
@@ -498,7 +554,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				foreach (var handler in eventDelegate.GetInvocationList())
 				{
-					handler.Method.Invoke(handler.Target, new object[] { tabView, eventArgs });
+					handler.Method.Invoke(handler.Target, [tabView, eventArgs]);
 				}
 			}
 			Assert.True(wasEventTriggered, "SelectionChanging event was not triggered.");
@@ -525,7 +581,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				foreach (var handler in eventDelegate.GetInvocationList())
 				{
-					handler.Method.Invoke(handler.Target, new object[] { tabView, eventArgs });
+					handler.Method.Invoke(handler.Target, [tabView, eventArgs]);
 				}
 			}
 			Assert.True(wasEventCanceled, "SelectionChanging event should have been canceled.");
@@ -544,74 +600,75 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-        public void TestTabBarItemsIndexesUsingHeader()
-        {
-            PopulateTabBarItems();
-            if (tabBar is not null)
-            {
-                var matchingTabItem = tabBar.Items.FirstOrDefault(item => item.Header == "Favorites");
-                if (matchingTabItem != null)
-                {
-                    Assert.Equal(1, tabBar.Items.IndexOf(matchingTabItem));
-                    Assert.NotEqual(0, tabBar.Items.IndexOf(matchingTabItem));
-                    Assert.NotEqual(2, tabBar.Items.IndexOf(matchingTabItem));
-                }
+		public void TestTabBarItemsIndexesUsingHeader()
+		{
+			PopulateTabBarItems();
+			if (tabBar is not null)
+			{
+				var matchingTabItem = tabBar.Items.FirstOrDefault(item => item.Header == "Favorites");
+				if (matchingTabItem != null)
+				{
+					Assert.Equal(1, tabBar.Items.IndexOf(matchingTabItem));
+					Assert.NotEqual(0, tabBar.Items.IndexOf(matchingTabItem));
+					Assert.NotEqual(2, tabBar.Items.IndexOf(matchingTabItem));
+				}
 
-                matchingTabItem = tabBar.Items.FirstOrDefault(item => item.Header == "Call");
-                if (matchingTabItem != null)
-                {
-                    Assert.Equal(0, tabBar.Items.IndexOf(matchingTabItem));
-                    Assert.NotEqual(1, tabBar.Items.IndexOf(matchingTabItem));
-                    Assert.NotEqual(2, tabBar.Items.IndexOf(matchingTabItem));
-                }
+				matchingTabItem = tabBar.Items.FirstOrDefault(item => item.Header == "Call");
+				if (matchingTabItem != null)
+				{
+					Assert.Equal(0, tabBar.Items.IndexOf(matchingTabItem));
+					Assert.NotEqual(1, tabBar.Items.IndexOf(matchingTabItem));
+					Assert.NotEqual(2, tabBar.Items.IndexOf(matchingTabItem));
+				}
 
-                matchingTabItem = tabBar.Items.FirstOrDefault(item => item.Header == "Contacts");
+				matchingTabItem = tabBar.Items.FirstOrDefault(item => item.Header == "Contacts");
 
-                if (matchingTabItem != null)
-                {
-                    Assert.Equal(2, tabBar.Items.IndexOf(matchingTabItem));
-                    Assert.NotEqual(0, tabBar.Items.IndexOf(matchingTabItem));
-                    Assert.NotEqual(1, tabBar.Items.IndexOf(matchingTabItem));
-                }
+				if (matchingTabItem != null)
+				{
+					Assert.Equal(2, tabBar.Items.IndexOf(matchingTabItem));
+					Assert.NotEqual(0, tabBar.Items.IndexOf(matchingTabItem));
+					Assert.NotEqual(1, tabBar.Items.IndexOf(matchingTabItem));
+				}
 
-                tabBar.Items = PopulateMixedItemsCollection();
-                matchingTabItem = tabBar.Items.FirstOrDefault(item => item.Header == "TAB 3");
+				tabBar.Items = PopulateMixedItemsCollection();
+				matchingTabItem = tabBar.Items.FirstOrDefault(item => item.Header == "TAB 3");
 
-                if (matchingTabItem != null)
-                {
-                    Assert.Equal(2, tabBar.Items.IndexOf(matchingTabItem));
-                    Assert.NotEqual(0, tabBar.Items.IndexOf(matchingTabItem));
-                    Assert.NotEqual(1, tabBar.Items.IndexOf(matchingTabItem));
-                }
-            }
-        }
+				if (matchingTabItem != null)
+				{
+					Assert.Equal(2, tabBar.Items.IndexOf(matchingTabItem));
+					Assert.NotEqual(0, tabBar.Items.IndexOf(matchingTabItem));
+					Assert.NotEqual(1, tabBar.Items.IndexOf(matchingTabItem));
+				}
+			}
+		}
 
-        [Fact]
-        public void TestTabBarItemsIndexes()
-        {
-            PopulateTabBarItems();
-            if (tabBar != null)
-            {
-                Assert.Equal(3, tabBar.Items.Count());
-                Assert.True(tabBar.Items[0].IsSelected);
-                Assert.False(tabBar.Items[1].IsSelected);
-                Assert.False(tabBar.Items[2].IsSelected);
+		[Fact]
+		public void TestTabBarItemsIndexes()
+		{
+			PopulateTabBarItems();
+			if (tabBar != null)
+			{
+				Assert.Equal(3, tabBar.Items.Count);
+				Assert.True(tabBar.Items[0].IsSelected);
+				Assert.False(tabBar.Items[1].IsSelected);
+				Assert.False(tabBar.Items[2].IsSelected);
 
-                tabBar.ItemsSource = PopulateButtonsListItemsSource();
-                Assert.Equal(3, tabBar.ItemsSource.Count);
-                Assert.Equal(0, tabBar.SelectedIndex);
-                Assert.NotEqual(1, tabBar.SelectedIndex);
-                Assert.NotEqual(2, tabBar.SelectedIndex);
+				tabBar.ItemsSource = PopulateButtonsListItemsSource();
+				Assert.Equal(3, tabBar.ItemsSource.Count);
+				Assert.Equal(0, tabBar.SelectedIndex);
+				Assert.NotEqual(1, tabBar.SelectedIndex);
+				Assert.NotEqual(2, tabBar.SelectedIndex);
 			}
 		}
 
 		[Fact]
 		public void TestTabBarItemsCount()
 		{
-			SfTabView tabView = new SfTabView();
-			tabView.Items = PopulateLabelItemsCollection();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-			if (tabBar != null)
+			SfTabView tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection()
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(3, tabBar.Items.Count);
 				Assert.NotEmpty(tabBar.Items);
@@ -630,10 +687,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestTabBarItemsHeaderText()
 		{
-			SfTabView tabView = new SfTabView();
-			tabView.Items = PopulateLabelItemsCollection();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-			if (tabBar != null)
+			SfTabView tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection()
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal("TAB 1", tabBar.Items[0].Header);
 				Assert.NotEqual("TAB 2", tabBar.Items[0].Header);
@@ -828,8 +886,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestScrollButtonIconColorSetValueShouldUpdateValue()
 		{
 			var iconColor = Colors.Green;
-			tabBar.ScrollButtonIconColor = iconColor;
-			Assert.Equal(iconColor, tabBar.ScrollButtonIconColor);
+			tabBar.ScrollButtonColor = iconColor;
+			Assert.Equal(iconColor, tabBar.ScrollButtonColor);
+		}
+
+		[Theory]
+		[InlineData(30, 30)]
+		[InlineData(0, 0)]
+		[InlineData(-20, -20)]
+		public void TestIndicatorStrokeThickness(double value, double expected)
+		{
+			tabBar.IndicatorStrokeThickness = value;
+			Assert.Equal(expected, tabBar.IndicatorStrokeThickness);
 		}
 
 		[Fact]
@@ -882,10 +950,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(TabIndicatorPlacement.Fill)]
 		public void TestSfTabBarIndicatorPlacement(TabIndicatorPlacement expected)
 		{
-			SfTabView tabView = new SfTabView();
-			tabView.IndicatorPlacement = expected;
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-			if (tabBar != null)
+			SfTabView tabView = new SfTabView
+			{
+				IndicatorPlacement = expected
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(expected, tabBar.IndicatorPlacement);
 				tabBar.HeightRequest = 60;
@@ -912,11 +981,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestSfTabBarCornerRadiusUpdated()
 		{
-			SfTabView tabView = new SfTabView();
-			tabView.Items = PopulateLabelItemsCollection();
-			tabView.IndicatorCornerRadius = new CornerRadius(6);
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-			if (tabBar != null)
+			SfTabView tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection(),
+				IndicatorCornerRadius = new CornerRadius(6)
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				tabBar.UpdateCornerRadius();
 				var roundRectangle = GetPrivateField<SfTabBar>(tabBar, "_roundRectangle");
@@ -944,7 +1014,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestUpdateFlowDirectionLTR()
 		{
-			SfTabBar _tabBar = new SfTabBar();
+			SfTabBar _tabBar = [];
 			_tabBar.FlowDirection = FlowDirection.LeftToRight;
 			_tabBar.IsScrollButtonEnabled = true;
 			_tabBar.UpdateFlowDirection();
@@ -955,7 +1025,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestUpdateFlowDirectionRTL()
 		{
-			SfTabBar _tabBar = new SfTabBar();
+			SfTabBar _tabBar = [];
 			_tabBar.FlowDirection = FlowDirection.RightToLeft;
 			_tabBar.UpdateFlowDirection();
 			var flowDirection = _tabBar.FlowDirection;
@@ -965,7 +1035,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestUpdateFlowDirectionMultiple()
 		{
-			SfTabBar _tabBar = new SfTabBar();
+			SfTabBar _tabBar = [];
 			_tabBar.FlowDirection = FlowDirection.RightToLeft;
 			_tabBar.UpdateFlowDirection();
 			var flowDirection = _tabBar.FlowDirection;
@@ -978,7 +1048,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestUpdateFlowDirection()
 		{
-			SfTabBar _tabBar = new SfTabBar();
+			SfTabBar _tabBar = [];
 			_tabBar.UpdateFlowDirection();
 			var flowDirection = _tabBar.FlowDirection;
 			Assert.Equal(FlowDirection.MatchParent, flowDirection);
@@ -1003,7 +1073,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestOnTapValidIndexMultipleItems()
 		{
-			SfTabBar _sfTabBar = new SfTabBar();
+			SfTabBar _sfTabBar = [];
 			var items = _sfTabBar.Items;
 			var tabItem1 = new SfTabItem();
 			var tabItem2 = new SfTabItem();
@@ -1022,84 +1092,93 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region Behaviour Tests
 
 		[Theory]
-        [InlineData(TextAlignment.End)]
-        [InlineData(TextAlignment.Start)]
-        [InlineData(TextAlignment.Center)]
-        public void TestSfTabBarHeaderHorizontalTextAlignment(TextAlignment expected)
-        {
-            SfTabView tabView = new SfTabView();
-            tabView.HeaderHorizontalTextAlignment = expected;
-            SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-            Assert.Equal(expected, tabBar?.HeaderHorizontalTextAlignment);
-        }
+		[InlineData(TextAlignment.End)]
+		[InlineData(TextAlignment.Start)]
+		[InlineData(TextAlignment.Center)]
+		public void TestSfTabBarHeaderHorizontalTextAlignment(TextAlignment expected)
+		{
+			SfTabView tabView = new SfTabView
+			{
+				HeaderHorizontalTextAlignment = expected
+			};
+			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			Assert.Equal(expected, tabBar?.HeaderHorizontalTextAlignment);
+		}
 
-        [Theory]
-        [InlineData(IndicatorWidthMode.Fit)]
-        [InlineData(IndicatorWidthMode.Stretch)]
-        public void TestSfTabBarIndicatorWidthMode(IndicatorWidthMode expected)
-        {
-            SfTabView tabView = new SfTabView();
-            tabView.IndicatorWidthMode = expected;
-            SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-            Assert.Equal(expected, tabBar?.IndicatorWidthMode);
-        }
+		[Theory]
+		[InlineData(IndicatorWidthMode.Fit)]
+		[InlineData(IndicatorWidthMode.Stretch)]
+		public void TestSfTabBarIndicatorWidthMode(IndicatorWidthMode expected)
+		{
+			SfTabView tabView = new SfTabView
+			{
+				IndicatorWidthMode = expected
+			};
+			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			Assert.Equal(expected, tabBar?.IndicatorWidthMode);
+		}
 
-        [Theory]
-        [InlineData(TabWidthMode.Default)]
-        [InlineData(TabWidthMode.SizeToContent)]
-        public void TestSfTabBarTabWidthMode(TabWidthMode expected)
-        {
-            SfTabView tabView = new SfTabView();
-            tabView.TabWidthMode = expected;
-            SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-            Assert.Equal(expected, tabBar?.TabWidthMode);
-        }
+		[Theory]
+		[InlineData(TabWidthMode.Default)]
+		[InlineData(TabWidthMode.SizeToContent)]
+		public void TestSfTabBarTabWidthMode(TabWidthMode expected)
+		{
+			SfTabView tabView = new SfTabView
+			{
+				TabWidthMode = expected
+			};
+			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			Assert.Equal(expected, tabBar?.TabWidthMode);
+		}
 
-        [Fact]
-        public void TestSfTabBarTabHeaderPadding()
-        {
-            SfTabView tabView = new SfTabView();
-            SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-            tabView.TabHeaderPadding = new Thickness(-5);
-            if (tabBar != null)
-            {
-                Assert.Equal(new Thickness(-5), tabBar.TabHeaderPadding);
-                Assert.NotEqual(new Thickness(0), tabBar.TabHeaderPadding);
-                tabView.TabHeaderPadding = new Thickness(0);
-                Assert.Equal(new Thickness(0), tabBar.TabHeaderPadding);
-                Assert.NotEqual(new Thickness(-5), tabBar.TabHeaderPadding);
-                tabView.TabHeaderPadding = new Thickness(0, -5, 5, 10);
-                Assert.Equal(new Thickness(0, -5, 5, 10), tabBar.TabHeaderPadding);
-                tabView.TabHeaderPadding = new Thickness(5, 10, 5, 10);
-                Assert.Equal(new Thickness(5, 10, 5, 10), tabBar.TabHeaderPadding);
-            }
-        }
+		[Fact]
+		public void TestSfTabBarTabHeaderPadding()
+		{
+			SfTabView tabView = new SfTabView
+			{
+				TabHeaderPadding = new Thickness(-5)
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			{
+				Assert.Equal(new Thickness(-5), tabBar.TabHeaderPadding);
+				Assert.NotEqual(new Thickness(0), tabBar.TabHeaderPadding);
+				tabView.TabHeaderPadding = new Thickness(0);
+				Assert.Equal(new Thickness(0), tabBar.TabHeaderPadding);
+				Assert.NotEqual(new Thickness(-5), tabBar.TabHeaderPadding);
+				tabView.TabHeaderPadding = new Thickness(0, -5, 5, 10);
+				Assert.Equal(new Thickness(0, -5, 5, 10), tabBar.TabHeaderPadding);
+				tabView.TabHeaderPadding = new Thickness(5, 10, 5, 10);
+				Assert.Equal(new Thickness(5, 10, 5, 10), tabBar.TabHeaderPadding);
+			}
+		}
 
-        [Fact]
-        public void TestSfTabBarIndicatorBackground()
-        {
-            SfTabView tabView = new SfTabView();
-            SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-            tabView.IndicatorBackground = Colors.Maroon;
-            if (tabBar != null)
-            {
-                Assert.Equal(Colors.Maroon, tabBar.IndicatorBackground);
-                tabView.IndicatorBackground = Colors.Red;
-                Assert.Equal(Colors.Red, tabBar.IndicatorBackground);
-                Assert.NotEqual(Colors.Maroon, tabBar.IndicatorBackground);
-                tabView.IndicatorBackground = Colors.Transparent;
-                Assert.Equal(Colors.Transparent, tabBar.IndicatorBackground);
-                Assert.NotEqual(Colors.Red, tabBar.IndicatorBackground);
-            }
-        }
+		[Fact]
+		public void TestSfTabBarIndicatorBackground()
+		{
+			SfTabView tabView = new SfTabView
+			{
+				IndicatorBackground = Colors.Maroon
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			{
+				Assert.Equal(Colors.Maroon, tabBar.IndicatorBackground);
+				tabView.IndicatorBackground = Colors.Red;
+				Assert.Equal(Colors.Red, tabBar.IndicatorBackground);
+				Assert.NotEqual(Colors.Maroon, tabBar.IndicatorBackground);
+				tabView.IndicatorBackground = Colors.Transparent;
+				Assert.Equal(Colors.Transparent, tabBar.IndicatorBackground);
+				Assert.NotEqual(Colors.Red, tabBar.IndicatorBackground);
+			}
+		}
 
 		[Fact]
 		public void TestSfTabBarIndicatorCornerRadius()
 		{
-			SfTabView tabView = new SfTabView();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-			tabView.IndicatorCornerRadius = new CornerRadius(0);
-			if (tabBar != null)
+			SfTabView tabView = new SfTabView
+			{
+				IndicatorCornerRadius = new CornerRadius(0)
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(new CornerRadius(0), tabBar.IndicatorCornerRadius);
 				tabView.IndicatorCornerRadius = new CornerRadius(-5);
@@ -1138,18 +1217,23 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
 			tabView.ContentTransitionDuration = expected;
 			if (expected > 100)
+			{
 				Assert.Equal(expected, tabBar?.ContentTransitionDuration);
+			}
 			else
+			{
 				Assert.Equal(100, tabBar?.ContentTransitionDuration);
+			}
 		}
 
 		[Fact]
 		public void TestSfTabBarFontAutoScalingEnabled()
 		{
-			SfTabView tabView = new SfTabView();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-			tabView.FontAutoScalingEnabled = true;
-			if (tabBar != null)
+			SfTabView tabView = new SfTabView
+			{
+				FontAutoScalingEnabled = true
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.True(tabBar.FontAutoScalingEnabled);
 				tabView.FontAutoScalingEnabled = false;
@@ -1160,24 +1244,25 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestSfTabBarScrollButtonAppearance()
 		{
-			SfTabView tabView = new SfTabView();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			SfTabView tabView = new SfTabView
+			{
+				ScrollButtonBackground = Colors.Green,
+				ScrollButtonColor = Colors.Green
+			};
 			tabView.ScrollButtonBackground = Colors.Green;
-			tabView.ScrollButtonIconColor = Colors.Green;
-			tabView.ScrollButtonBackground = Colors.Green;
-			if (tabBar != null)
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(Colors.Green, tabBar.ScrollButtonBackground);
-				Assert.Equal(Colors.Green, tabBar.ScrollButtonIconColor);
+				Assert.Equal(Colors.Green, tabBar.ScrollButtonColor);
 				Assert.Equal(Colors.Green, tabBar.ScrollButtonBackground);
 
 				tabView.ScrollButtonBackground = Colors.Transparent;
-				tabView.ScrollButtonIconColor = Colors.Transparent;
+				tabView.ScrollButtonColor = Colors.Transparent;
 				tabView.ScrollButtonBackground = Colors.Transparent;
 				Assert.Equal(Colors.Transparent, tabBar.ScrollButtonBackground);
 				Assert.NotEqual(Colors.Green, tabBar.ScrollButtonBackground);
-				Assert.Equal(Colors.Transparent, tabBar.ScrollButtonIconColor);
-				Assert.NotEqual(Colors.Green, tabBar.ScrollButtonIconColor);
+				Assert.Equal(Colors.Transparent, tabBar.ScrollButtonColor);
+				Assert.NotEqual(Colors.Green, tabBar.ScrollButtonColor);
 				Assert.Equal(Colors.Transparent, tabBar.ScrollButtonBackground);
 				Assert.NotEqual(Colors.Green, tabBar.ScrollButtonBackground);
 			}
@@ -1186,10 +1271,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestTabBarGetEffectsView()
 		{
-			SfTabView tabView = new SfTabView();
-			tabView.Items = PopulateLabelItemsCollection();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-			if (tabBar != null)
+			SfTabView tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection()
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				var effectsView = tabBar.GetEffectsView(tabBar.Items[0]);
 				Assert.NotNull(effectsView);
@@ -1199,7 +1285,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestSfTabBarItems()
 		{
-			SfTabBar tabBar = new SfTabBar();
+			SfTabBar tabBar = [];
 			SfHorizontalStackLayout? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
 			Assert.NotNull(tabHeaderItemContent);
 			Assert.Equal(0, tabHeaderItemContent?.Children.Count);
@@ -1225,7 +1311,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 				Assert.Equal(0.01d, tabSelectionIndicator?.WidthRequest);
 
-				tabBar.Items = new TabItemCollection();
+				tabBar.Items = [];
 				Assert.NotNull(tabBar.Items);
 				Assert.Empty(tabBar.Items);
 				Assert.Equal(0, tabHeaderItemContent?.Children.Count);
@@ -1239,7 +1325,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfTabView tabView = new SfTabView();
 			var tabViewItems = PopulateLabelItemsCollection();
 			tabView.Items = tabViewItems;
-			SfTabBar tabBar = new SfTabBar();
+			SfTabBar tabBar = [];
 			Assert.NotNull(tabBar?.Items);
 			Assert.Equal(0, tabBar?.Items.Count);
 
@@ -1293,7 +1379,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				Assert.Empty(tabBar.Items);
 				Assert.Equal(0, tabHeaderItemContent?.Children.Count);
 
-				tabBar.Items = new TabItemCollection();
+				tabBar.Items = [];
 				Assert.NotNull(tabBar?.Items);
 			}
 		}
@@ -1301,7 +1387,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestSfTabBarLargeTabData()
 		{
-			SfTabBar tabBar = new SfTabBar();
+			SfTabBar tabBar = [];
 			var largeDataSet = PopulateLargeData();
 			tabBar.ItemsSource = largeDataSet;
 			Assert.Equal(1000, tabBar?.ItemsSource.Count);
@@ -1317,14 +1403,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestSfTabBarMixedData()
 		{
-			SfTabBar tabBar = new SfTabBar();
+			SfTabBar tabBar = [];
 
 			if (tabBar != null)
 			{
 				tabBar.ItemsSource = PopulateMixedDataItemsSource();
 				Assert.Equal(4, tabBar.ItemsSource?.Count);
 				if (tabBar.ItemsSource != null)
+				{
 					Assert.True(tabBar.ItemsSource[2] is SfTabItem);
+				}
+
 				SfHorizontalStackLayout? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
 				Assert.Equal(4, tabHeaderItemContent?.Children.Count);
 				Assert.True(tabHeaderItemContent?.Children[2] is Label);
@@ -1379,8 +1468,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(TabBarDisplayMode.Default)]
 		public void TestSetHeaderDisplayMode(TabBarDisplayMode displayMode)
 		{
-			var tabView = new SfTabView();
-			tabView.HeaderDisplayMode = displayMode;
+			var tabView = new SfTabView
+			{
+				HeaderDisplayMode = displayMode
+			};
 			Assert.Equal(displayMode, tabView.HeaderDisplayMode);
 
 			SfTabBar? tabHeaderContainer = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
@@ -1392,7 +1483,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var tabView = new SfTabView();
 			var tabContentContainerField = typeof(SfTabView).GetField("_tabContentContainer", BindingFlags.NonPublic | BindingFlags.Instance);
-			var tabContentContainer = new SfHorizontalContent(tabView, new SfTabBar());
+			var tabContentContainer = new SfHorizontalContent(tabView, []);
 			tabContentContainerField?.SetValue(tabView, tabContentContainer);
 			var expectedItemsSource = new object[] { "Content1", "Content2" };
 			var expectedContentItemTemplate = new DataTemplate(typeof(Label));
@@ -1408,11 +1499,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(10d)]
 		public void TestTabBarHeight(double tabBarHeight)
 		{
-			var tabView = new SfTabView();
-			tabView.TabBarHeight = tabBarHeight;
+			var tabView = new SfTabView
+			{
+				TabBarHeight = tabBarHeight
+			};
 			Assert.Equal(tabBarHeight, tabView.TabBarHeight);
-			SfTabBar? tabHeaderContainer = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
-			if (tabHeaderContainer != null)
+			if (GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") is SfTabBar tabHeaderContainer)
 			{
 				if (tabBarHeight > 0)
 				{
@@ -1451,8 +1543,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(FlowDirection.MatchParent)]
 		public void TestTabHeaderContainerFlowDirectionChanges(FlowDirection flowDirection)
 		{
-			var tabView = new SfTabView();
-			tabView.Items = PopulateLabelItemsCollection();
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection()
+			};
 			var tabHeaderContainerField = typeof(SfTabView).GetField("_tabHeaderContainer", BindingFlags.NonPublic | BindingFlags.Instance);
 			var tabHeaderContainer = new SfTabBar();
 			tabHeaderContainerField?.SetValue(tabView, tabHeaderContainer);
@@ -1466,7 +1560,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			bool isEnable = false;
 			SfTabItem tabItem = new SfTabItem() { Header = "Tab 1" };
 			SfTabItem tabItem1 = new SfTabItem() { Header = "Tab 2" };
-			SfTabBar tabBar = new SfTabBar();
+			SfTabBar tabBar = [];
 			tabBar.Items.Add(tabItem);
 			tabBar.Items.Add(tabItem1);
 			tabBar.UpdateFontAutoScalingEnabled(isEnable);
@@ -1534,6 +1628,21 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.True(tabBar.Items != null && tabBar.Items.Count > 0);
 		}
 
+		[Theory]
+		[InlineData(28, 28)]
+		[InlineData(0, 0)]
+		[InlineData(-14, -14)]
+		public void TestUpdateIndicatorStrokeThicknessWithIndicatorPositionBottom(double value, double expected)
+		{
+			tabBar.Items.Add(new SfTabItem { Header = "Tab 1" });
+			tabBar.Items.Add(new SfTabItem { Header = "Tab 2" });
+			tabBar.IndicatorPlacement = TabIndicatorPlacement.Bottom;
+			SfBorder? indicator = GetPrivateField(tabBar, "_tabSelectionIndicator") as SfBorder;
+			tabBar.IndicatorStrokeThickness = value;
+			tabBar.UpdateIndicatorStrokeThickness(value);
+			Assert.Equal(expected, indicator?.HeightRequest);
+		}
+
 		#endregion
 
 		#region TabBar Private Methods
@@ -1570,8 +1679,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			PopulateTabBarItems();
 			if (tabBar != null)
 			{
-				var roundRectangle = GetPrivateField<SfTabBar>(tabBar, "_roundRectangle") as RoundRectangle;
-				if (roundRectangle != null)
+				if (GetPrivateField<SfTabBar>(tabBar, "_roundRectangle") is RoundRectangle roundRectangle)
 				{
 					tabBar.IndicatorCornerRadius = new CornerRadius(-1);
 					InvokePrivateMethod(tabBar, "UpdateTabSelectionIndicator", TabIndicatorPlacement.Fill);
@@ -1599,7 +1707,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestSfTabBarUpdateTabPadding()
 		{
-			SfTabBar tabBar = new SfTabBar();
+			SfTabBar tabBar = [];
 			tabBar.Items = PopulateMixedItemsCollection();
 			tabBar.TabWidthMode = TabWidthMode.Default;
 			InvokePrivateMethod(tabBar, "UpdateTabPadding");
@@ -1610,7 +1718,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestGetNextVisibleItem()
 		{
-			SfTabBar tabBar = new SfTabBar();
+			SfTabBar tabBar = [];
 			tabBar.Items = PopulateMixedItemsCollection();
 			InvokePrivateMethod(tabBar, "UpdateTabPadding");
 			Assert.Equal(0, tabBar.SelectedIndex);
@@ -1619,11 +1727,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestResetEffectsView()
 		{
-			SfTabView tabView = new SfTabView();
-			tabView.Items = PopulateLabelItemsCollection();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			SfTabView tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection()
+			};
 
-			if (tabBar != null)
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				var effectsView = tabBar.GetEffectsView(tabBar.Items[0]);
 
@@ -1645,7 +1754,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestOnTabItemTouched()
 		{
-			tabBar = new SfTabBar();
+			tabBar = [];
 			tabBar.ItemsSource = PopulateButtonsListItemsSource();
 			var pointerEventArgs = new PointerEventArgs(1, PointerActions.Cancelled, new Point(10, 10));
 			SfTabItem item = new SfTabItem() { Header = "Tab 1" };
@@ -1656,12 +1765,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestHandleTabItemTapped()
 		{
-			SfTabView tabView = new SfTabView();
-			tabView.Items = PopulateLabelItemsCollection();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
-			if (tabBar != null)
+			SfTabView tabView = new SfTabView
 			{
-				var effectsView = tabBar.GetEffectsView(tabBar.Items[0]);
+				Items = PopulateLabelItemsCollection()
+			};
+			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			{
+				_ = tabBar.GetEffectsView(tabBar.Items[0]);
 
 				InvokePrivateMethod(tabBar, "HandleTabItemTapped", tabBar.Items[0]);
 				var tabItemTappedEventArgs = GetPrivateField<SfTabBar>(tabBar, "_tabItemTappedEventArgs");
@@ -1681,7 +1791,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestMixedObjectItemSource()
 		{
-			SfTabBar tabBar = new SfTabBar();
+			SfTabBar tabBar = [];
 			Assert.Null(tabBar.ItemsSource);
 			tabBar.ItemsSource = new List<object>();
 			Assert.NotNull(tabBar.ItemsSource);
@@ -1689,7 +1799,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			var tabItems = PopulateMixedObjectItemsSource();
 			if (tabBar != null)
+			{
 				tabBar.ItemsSource = tabItems;
+			}
 
 			InvokePrivateMethod(tabBar, "UpdateItemsSource");
 			if (tabBar != null)
@@ -1734,6 +1846,35 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(-0.5, actualTabX);
 		}
 
+		[Fact]
+		public void TestUpdateScrollButtonBackground()
+		{
+			tabBar.Items.Add(new SfTabItem() { Header = "Tab 1" });
+			InvokePrivateMethod(tabBar, "UpdateScrollButtonBackground", []);
+			ArrowIcon? forwardArrow = GetPrivateField<SfTabBar>(tabBar, "_forwardArrow") as ArrowIcon;
+			ArrowIcon? backwardArrow = GetPrivateField<SfTabBar>(tabBar, "_backwardArrow") as ArrowIcon;
+			tabBar.ScrollButtonBackground = Colors.Blue;
+			Assert.Equal(Colors.Blue, forwardArrow?.ScrollButtonBackground);
+			Assert.Equal(Colors.Blue, backwardArrow?.ScrollButtonBackground);
+		}
+
+		[Fact]
+		public void TestUpdateScrollButtonColor()
+		{
+			tabBar.Items.Add(new SfTabItem() { Header = "Tab 1" });
+			ArrowIcon? forwardArrow = GetPrivateField<SfTabBar>(tabBar, "_forwardArrow") as ArrowIcon;
+			ArrowIcon? backwardArrow = GetPrivateField<SfTabBar>(tabBar, "_backwardArrow") as ArrowIcon;
+			tabBar.ScrollButtonColor = Colors.Blue;
+			tabBar.ScrollButtonDisabledIconColor = Colors.Red;
+			if (forwardArrow != null)
+			{
+				forwardArrow.IsEnabled = false;
+			}
+
+			InvokePrivateMethod(tabBar, "UpdateScrollButtonColor", []);
+			Assert.Equal(Colors.Red, forwardArrow?.ScrollButtonColor);
+			Assert.Equal(Colors.Blue, backwardArrow?.ScrollButtonColor);
+		}
 		#endregion
 
 		#region TabView Internal Methods
@@ -1807,7 +1948,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			var eventArgs = new SelectionChangingEventArgs();
 			var methodInfo = typeof(SfTabView).GetMethod("HeaderContainer_SelectionChanging", BindingFlags.NonPublic | BindingFlags.Instance);
-			methodInfo?.Invoke(tabView, new object?[] { null, eventArgs });
+			methodInfo?.Invoke(tabView, [null, eventArgs]);
 			Assert.True(wasEventRaised, "SelectionChanging event was not raised.");
 		}
 
@@ -1822,7 +1963,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			var eventArgs = new SelectionChangingEventArgs();
 			var methodInfo = typeof(SfTabView).GetMethod("TabContentContainer_SelectionChanging", BindingFlags.NonPublic | BindingFlags.Instance);
-			methodInfo?.Invoke(tabView, new object?[] { null, eventArgs });
+			methodInfo?.Invoke(tabView, [null, eventArgs]);
 			Assert.True(wasEventRaised, "SelectionChanging event was not raised.");
 		}
 
@@ -1837,7 +1978,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			var eventArgs = new TabItemTappedEventArgs();
 			var methodInfo = typeof(SfTabView).GetMethod("TabHeaderContainer_TabItemTapped", BindingFlags.NonPublic | BindingFlags.Instance);
-			methodInfo?.Invoke(tabView, new object?[] { null, eventArgs });
+			methodInfo?.Invoke(tabView, [null, eventArgs]);
 			Assert.True(wasEventRaised, "TabItemTapped event was not raised.");
 		}
 
@@ -1859,7 +2000,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				NewIndex = newIndex
 			};
 			var methodInfo = typeof(SfTabView).GetMethod("HeaderContainer_SelectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-			methodInfo?.Invoke(tabView, new object?[] { null, eventArgs });
+			methodInfo?.Invoke(tabView, [null, eventArgs]);
 			Assert.NotNull(eventArgsReceived);
 			Assert.Equal(newIndex, eventArgsReceived.NewIndex);
 		}
@@ -1881,7 +2022,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				NewIndex = index
 			};
 			var methodInfo = typeof(SfTabView).GetMethod("HeaderContainer_SelectionChanged", BindingFlags.NonPublic | BindingFlags.Instance);
-			methodInfo?.Invoke(tabView, new object?[] { null, eventArgs });
+			methodInfo?.Invoke(tabView, [null, eventArgs]);
 			Assert.False(eventRaised, "SelectionChanged event should not have been raised when the new index is the same as the old index.");
 		}
 
@@ -1915,14 +2056,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region TabItemTappedEventArgs Property
 
 		[Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestTabItemTappedCancelProperty(bool cancelValue)
-        {
-            var eventArgs = new TabItemTappedEventArgs();
-            eventArgs.Cancel = cancelValue;
-            Assert.Equal(cancelValue, eventArgs.Cancel);
-        }
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestTabItemTappedCancelProperty(bool cancelValue)
+		{
+			var eventArgs = new TabItemTappedEventArgs
+			{
+				Cancel = cancelValue
+			};
+			Assert.Equal(cancelValue, eventArgs.Cancel);
+		}
 
 		[Theory]
 		[InlineData("Tab1")]
@@ -1941,31 +2084,31 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region TabView Internal Properties
 
 		[Theory]
-        [InlineData(0, 0, 1, 1)]
-        [InlineData(0.5, 0, 0.5, 0.5)]
-        [InlineData(0.5, 0, 0.5, 0)]
-        public void TestSetScrollButtonBackground(float r, float g, float b, float a)
-        {
-            var tabView = new SfTabView();
-            var expectedColor = new Color(a, r, g, b);
-            tabView.ScrollButtonBackground = expectedColor;
-            Assert.Equal(expectedColor, tabView.ScrollButtonBackground);
-        }
+		[InlineData(0, 0, 1, 1)]
+		[InlineData(0.5, 0, 0.5, 0.5)]
+		[InlineData(0.5, 0, 0.5, 0)]
+		public void TestSetScrollButtonBackground(float r, float g, float b, float a)
+		{
+			var tabView = new SfTabView();
+			var expectedColor = new Color(a, r, g, b);
+			tabView.ScrollButtonBackground = expectedColor;
+			Assert.Equal(expectedColor, tabView.ScrollButtonBackground);
+		}
 
-        [Theory]
-        [InlineData(0, 0.5, 1, 1)]
-        [InlineData(1, 1, 0, 0)]
-        [InlineData(0.5, 1, 0, 0.5)]
-        public void TestSetScrollButtonIconColor(float r, float g, float b, float a)
-        {
-            var tabView = new SfTabView();
-            var expectedColor = new Color(a, r, g, b);
-            tabView.ScrollButtonIconColor = expectedColor;
-            Assert.Equal(expectedColor, tabView.ScrollButtonIconColor);
+		[Theory]
+		[InlineData(0, 0.5, 1, 1)]
+		[InlineData(1, 1, 0, 0)]
+		[InlineData(0.5, 1, 0, 0.5)]
+		public void TestSetScrollButtonIconColor(float r, float g, float b, float a)
+		{
+			var tabView = new SfTabView();
+			var expectedColor = new Color(a, r, g, b);
+			tabView.ScrollButtonColor = expectedColor;
+			Assert.Equal(expectedColor, tabView.ScrollButtonColor);
 
-            SfTabBar? tabHeaderContainer = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
-            Assert.Equal(expectedColor, tabHeaderContainer?.ScrollButtonIconColor);
-        }
+			SfTabBar? tabHeaderContainer = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.Equal(expectedColor, tabHeaderContainer?.ScrollButtonColor);
+		}
 
 		[Fact]
 		public void TestContentTransitionEnabled()
@@ -2026,52 +2169,52 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region TabViewMaterialVisualStyle Private Methods
 
 		[Fact]
-        public void TestUpdateHorizontalOptionsSetsLayoutOptionsToStart()
-        {
-            var tabViewMaterialVisualStyle = new TabViewMaterialVisualStyle();
-            var tabItem = new SfTabItem { HeaderHorizontalTextAlignment = TextAlignment.Start };
-            var horizontalLayoutField = tabViewMaterialVisualStyle.GetType().GetField("_horizontalLayout", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.NotNull(horizontalLayoutField);
-            var horizontalLayoutType = horizontalLayoutField.FieldType;
-            var horizontalLayoutInstance = Activator.CreateInstance(horizontalLayoutType);
-            horizontalLayoutField.SetValue(tabViewMaterialVisualStyle, horizontalLayoutInstance);
-            var updateHorizontalOptionsMethod = tabViewMaterialVisualStyle.GetType().GetMethod("UpdateHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
-            updateHorizontalOptionsMethod?.Invoke(tabViewMaterialVisualStyle, new object[] { tabItem });
-            var horizontalOptionsProperty = horizontalLayoutType.GetProperty("HorizontalOptions");
-            Assert.Equal(LayoutOptions.Start, horizontalOptionsProperty?.GetValue(horizontalLayoutInstance));
-        }
+		public void TestUpdateHorizontalOptionsSetsLayoutOptionsToStart()
+		{
+			var tabViewMaterialVisualStyle = new TabViewMaterialVisualStyle();
+			var tabItem = new SfTabItem { HeaderHorizontalTextAlignment = TextAlignment.Start };
+			var horizontalLayoutField = tabViewMaterialVisualStyle.GetType().GetField("_horizontalLayout", BindingFlags.NonPublic | BindingFlags.Instance);
+			Assert.NotNull(horizontalLayoutField);
+			var horizontalLayoutType = horizontalLayoutField.FieldType;
+			var horizontalLayoutInstance = Activator.CreateInstance(horizontalLayoutType);
+			horizontalLayoutField.SetValue(tabViewMaterialVisualStyle, horizontalLayoutInstance);
+			var updateHorizontalOptionsMethod = tabViewMaterialVisualStyle.GetType().GetMethod("UpdateHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
+			updateHorizontalOptionsMethod?.Invoke(tabViewMaterialVisualStyle, [tabItem]);
+			var horizontalOptionsProperty = horizontalLayoutType.GetProperty("HorizontalOptions");
+			Assert.Equal(LayoutOptions.Start, horizontalOptionsProperty?.GetValue(horizontalLayoutInstance));
+		}
 
-        [Fact]
-        public void TestUpdateHorizontalOptionsSetsLayoutOptionsToEnd()
-        {
-            var tabViewMaterialVisualStyle = new TabViewMaterialVisualStyle();
-            var tabItem = new SfTabItem { HeaderHorizontalTextAlignment = TextAlignment.End };
-            var horizontalLayoutField = tabViewMaterialVisualStyle.GetType().GetField("_horizontalLayout", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.NotNull(horizontalLayoutField);
-            var horizontalLayoutType = horizontalLayoutField.FieldType;
-            var horizontalLayoutInstance = Activator.CreateInstance(horizontalLayoutType);
-            horizontalLayoutField.SetValue(tabViewMaterialVisualStyle, horizontalLayoutInstance);
-            var updateHorizontalOptionsMethod = tabViewMaterialVisualStyle.GetType().GetMethod("UpdateHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
-            updateHorizontalOptionsMethod?.Invoke(tabViewMaterialVisualStyle, new object[] { tabItem });
-            var horizontalOptionsProperty = horizontalLayoutType.GetProperty("HorizontalOptions");
-            Assert.Equal(LayoutOptions.End, horizontalOptionsProperty?.GetValue(horizontalLayoutInstance));
-        }
+		[Fact]
+		public void TestUpdateHorizontalOptionsSetsLayoutOptionsToEnd()
+		{
+			var tabViewMaterialVisualStyle = new TabViewMaterialVisualStyle();
+			var tabItem = new SfTabItem { HeaderHorizontalTextAlignment = TextAlignment.End };
+			var horizontalLayoutField = tabViewMaterialVisualStyle.GetType().GetField("_horizontalLayout", BindingFlags.NonPublic | BindingFlags.Instance);
+			Assert.NotNull(horizontalLayoutField);
+			var horizontalLayoutType = horizontalLayoutField.FieldType;
+			var horizontalLayoutInstance = Activator.CreateInstance(horizontalLayoutType);
+			horizontalLayoutField.SetValue(tabViewMaterialVisualStyle, horizontalLayoutInstance);
+			var updateHorizontalOptionsMethod = tabViewMaterialVisualStyle.GetType().GetMethod("UpdateHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
+			updateHorizontalOptionsMethod?.Invoke(tabViewMaterialVisualStyle, [tabItem]);
+			var horizontalOptionsProperty = horizontalLayoutType.GetProperty("HorizontalOptions");
+			Assert.Equal(LayoutOptions.End, horizontalOptionsProperty?.GetValue(horizontalLayoutInstance));
+		}
 
-        [Fact]
-        public void TestUpdateHorizontalOptionsSetsLayoutOptionsToCenter()
-        {
-            var tabViewMaterialVisualStyle = new TabViewMaterialVisualStyle();
-            var tabItem = new SfTabItem { HeaderHorizontalTextAlignment = TextAlignment.Center };
-            var horizontalLayoutField = tabViewMaterialVisualStyle.GetType().GetField("_horizontalLayout", BindingFlags.NonPublic | BindingFlags.Instance);
-            Assert.NotNull(horizontalLayoutField);
-            var horizontalLayoutType = horizontalLayoutField.FieldType;
-            var horizontalLayoutInstance = Activator.CreateInstance(horizontalLayoutType);
-            horizontalLayoutField.SetValue(tabViewMaterialVisualStyle, horizontalLayoutInstance);
-            var updateHorizontalOptionsMethod = tabViewMaterialVisualStyle.GetType().GetMethod("UpdateHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
-            updateHorizontalOptionsMethod?.Invoke(tabViewMaterialVisualStyle, new object[] { tabItem });
-            var horizontalOptionsProperty = horizontalLayoutType.GetProperty("HorizontalOptions");
-            Assert.Equal(LayoutOptions.Center, horizontalOptionsProperty?.GetValue(horizontalLayoutInstance));
-        }
+		[Fact]
+		public void TestUpdateHorizontalOptionsSetsLayoutOptionsToCenter()
+		{
+			var tabViewMaterialVisualStyle = new TabViewMaterialVisualStyle();
+			var tabItem = new SfTabItem { HeaderHorizontalTextAlignment = TextAlignment.Center };
+			var horizontalLayoutField = tabViewMaterialVisualStyle.GetType().GetField("_horizontalLayout", BindingFlags.NonPublic | BindingFlags.Instance);
+			Assert.NotNull(horizontalLayoutField);
+			var horizontalLayoutType = horizontalLayoutField.FieldType;
+			var horizontalLayoutInstance = Activator.CreateInstance(horizontalLayoutType);
+			horizontalLayoutField.SetValue(tabViewMaterialVisualStyle, horizontalLayoutInstance);
+			var updateHorizontalOptionsMethod = tabViewMaterialVisualStyle.GetType().GetMethod("UpdateHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
+			updateHorizontalOptionsMethod?.Invoke(tabViewMaterialVisualStyle, [tabItem]);
+			var horizontalOptionsProperty = horizontalLayoutType.GetProperty("HorizontalOptions");
+			Assert.Equal(LayoutOptions.Center, horizontalOptionsProperty?.GetValue(horizontalLayoutInstance));
+		}
 
 		[Fact]
 		public void TestUpdateHeaderHorizontalOptionsAlignmentIsStart()
@@ -2084,7 +2227,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var headerInstance = Activator.CreateInstance(sfLabelType);
 			headerField?.SetValue(tabView, headerInstance);
 			var updateMethod = tabView.GetType().GetMethod("UpdateHeaderHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
-			updateMethod?.Invoke(tabView, new object[] { tabItem });
+			updateMethod?.Invoke(tabView, [tabItem]);
 			var horizontalOptionsProperty = sfLabelType.GetProperty("HorizontalOptions");
 			Assert.NotNull(horizontalOptionsProperty);
 			var actualHorizontalOptions = horizontalOptionsProperty.GetValue(headerInstance);
@@ -2102,7 +2245,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var headerInstance = Activator.CreateInstance(sfLabelType);
 			headerField?.SetValue(tabView, headerInstance);
 			var updateMethod = tabView.GetType().GetMethod("UpdateHeaderHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
-			updateMethod?.Invoke(tabView, new object[] { tabItem });
+			updateMethod?.Invoke(tabView, [tabItem]);
 			var horizontalOptionsProperty = sfLabelType.GetProperty("HorizontalOptions");
 			Assert.NotNull(horizontalOptionsProperty);
 			var actualHorizontalOptions = horizontalOptionsProperty.GetValue(headerInstance);
@@ -2120,7 +2263,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var headerInstance = Activator.CreateInstance(sfLabelType);
 			headerField?.SetValue(tabView, headerInstance);
 			var updateMethod = tabView.GetType().GetMethod("UpdateHeaderHorizontalOptions", BindingFlags.NonPublic | BindingFlags.Instance);
-			updateMethod?.Invoke(tabView, new object[] { tabItem });
+			updateMethod?.Invoke(tabView, [tabItem]);
 			var horizontalOptionsProperty = sfLabelType.GetProperty("HorizontalOptions");
 			Assert.NotNull(horizontalOptionsProperty);
 			var actualHorizontalOptions = horizontalOptionsProperty.GetValue(headerInstance);
@@ -2137,7 +2280,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			var updateHeaderDisplayModeMethod = typeof(TabViewMaterialVisualStyle)
 				.GetMethod("UpdateHeaderDisplayMode", BindingFlags.NonPublic | BindingFlags.Instance);
-			onHeaderDisplayModePropertyChangedMethod?.Invoke(null, new object?[] { tabViewMaterialVisualStyle, null, null });
+			onHeaderDisplayModePropertyChangedMethod?.Invoke(null, [tabViewMaterialVisualStyle, null, null]);
 			Assert.NotNull(updateHeaderDisplayModeMethod);
 			var exception = Record.Exception(() => updateHeaderDisplayModeMethod.Invoke(tabViewMaterialVisualStyle, null));
 			Assert.Null(exception);
@@ -2148,130 +2291,140 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region TabViewMaterialVisualStyle Property
 
 		[Theory]
-        [InlineData(TabBarDisplayMode.Default)]
-        [InlineData(TabBarDisplayMode.Image)]
-        [InlineData(TabBarDisplayMode.Text)]
-        public void TestHeaderDisplayModeSetter(TabBarDisplayMode expectedValue)
-        {
-            var tabView = new TabViewMaterialVisualStyle();
-            tabView.HeaderDisplayMode = expectedValue;
-            var actualValue = (TabBarDisplayMode)tabView.GetValue(TabViewMaterialVisualStyle.HeaderDisplayModeProperty); // Correct usage
-            Assert.Equal(expectedValue, actualValue);
-        }
+		[InlineData(TabBarDisplayMode.Default)]
+		[InlineData(TabBarDisplayMode.Image)]
+		[InlineData(TabBarDisplayMode.Text)]
+		public void TestHeaderDisplayModeSetter(TabBarDisplayMode expectedValue)
+		{
+			var tabView = new TabViewMaterialVisualStyle
+			{
+				HeaderDisplayMode = expectedValue
+			};
+			var actualValue = (TabBarDisplayMode)tabView.GetValue(TabViewMaterialVisualStyle.HeaderDisplayModeProperty); // Correct usage
+			Assert.Equal(expectedValue, actualValue);
+		}
 
 		#endregion
 
 		#region TabItem Properties
 
 		[Fact]
-        public void IsEnablePropertyCheck()
-        {
-            SfTabItem item = new SfTabItem();
-            bool expectedValue = false;
-            item.IsEnabled = false;
-            Assert.Equal(expectedValue, item.IsEnabled);
-        }
+		public void IsEnablePropertyCheck()
+		{
+			SfTabItem item = new SfTabItem();
+			bool expectedValue = false;
+			item.IsEnabled = false;
+			Assert.Equal(expectedValue, item.IsEnabled);
+		}
 
-        [Fact]
-        public void FontGetValueCheck()
-        {
-            SfTabItem sfTabItem = new SfTabItem();
-            var defaultFont = sfTabItem.Font;
-            Assert.Equal(Microsoft.Maui.Font.Default, defaultFont);
-        }
+		[Fact]
+		public void FontGetValueCheck()
+		{
+			SfTabItem sfTabItem = new SfTabItem();
+			var defaultFont = sfTabItem.Font;
+			Assert.Equal(Microsoft.Maui.Font.Default, defaultFont);
+		}
 
-        [Fact]
-        public void TestHeaderHorizontalTextAlignment()
-        {
-            SfTabItem item = new SfTabItem();
-            var newAlignment = TextAlignment.Center;
-            item.HeaderHorizontalTextAlignment = newAlignment;
-            var actualAlignment = item.HeaderHorizontalTextAlignment;
-            Assert.Equal(newAlignment, actualAlignment);
-        }
+		[Fact]
+		public void TestHeaderHorizontalTextAlignment()
+		{
+			SfTabItem item = new SfTabItem();
+			var newAlignment = TextAlignment.Center;
+			item.HeaderHorizontalTextAlignment = newAlignment;
+			var actualAlignment = item.HeaderHorizontalTextAlignment;
+			Assert.Equal(newAlignment, actualAlignment);
+		}
 
 		[Theory]
 		[InlineData(false)]
 		[InlineData(true)]
 		public void TestIsFontAutoScalingEnabledPropertyCheck(bool value)
 		{
-			SfTabItem item = new SfTabItem();
-			item.FontAutoScalingEnabled = value;
+			SfTabItem item = new SfTabItem
+			{
+				FontAutoScalingEnabled = value
+			};
 			Assert.Equal(value, item.FontAutoScalingEnabled);
 		}
 
 		[Fact]
-        public void TestTabWidthMode()
-        {
-            SfTabItem item = new SfTabItem();
-            var newMode = TabWidthMode.SizeToContent;
-            item.TabWidthMode = newMode;
-            Assert.Equal(newMode, item.TabWidthMode);
-        }
+		public void TestTabWidthMode()
+		{
+			SfTabItem item = new SfTabItem();
+			var newMode = TabWidthMode.SizeToContent;
+			item.TabWidthMode = newMode;
+			Assert.Equal(newMode, item.TabWidthMode);
+		}
 
-        [Fact]
-        public void TestHeaderDisplayModeCheck()
-        {
-            SfTabItem item = new SfTabItem();
-            var newMode = TabBarDisplayMode.Text;
-            item.HeaderDisplayMode = newMode;
-            Assert.Equal(newMode, item.HeaderDisplayMode);
-        }
+		[Fact]
+		public void TestHeaderDisplayModeCheck()
+		{
+			SfTabItem item = new SfTabItem();
+			var newMode = TabBarDisplayMode.Text;
+			item.HeaderDisplayMode = newMode;
+			Assert.Equal(newMode, item.HeaderDisplayMode);
+		}
 
-        [Theory]
-        [InlineData(10.5)]
-        [InlineData(double.NaN)]
-        [InlineData(0)]
-        [InlineData(-10.5)]
-        public void ImageTextSpacingSetValueUpdatedValue(double value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.ImageTextSpacing = value;
-            Assert.Equal(value, item.ImageTextSpacing);
-        }
+		[Theory]
+		[InlineData(10.5)]
+		[InlineData(double.NaN)]
+		[InlineData(0)]
+		[InlineData(-10.5)]
+		public void ImageTextSpacingSetValueUpdatedValue(double value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				ImageTextSpacing = value
+			};
+			Assert.Equal(value, item.ImageTextSpacing);
+		}
 
-        [Fact]
-        public void TestImagePosition()
-        {
-            SfTabItem item = new SfTabItem();
-            var newPosition = TabImagePosition.Right;
-            item.ImagePosition = newPosition;
-            var actualPosition = item.ImagePosition;
-            Assert.Equal(newPosition, actualPosition);
-        }
+		[Fact]
+		public void TestImagePosition()
+		{
+			SfTabItem item = new SfTabItem();
+			var newPosition = TabImagePosition.Right;
+			item.ImagePosition = newPosition;
+			var actualPosition = item.ImagePosition;
+			Assert.Equal(newPosition, actualPosition);
+		}
 
-        [Fact]
-        public void TestTextColor()
-        {
-            SfTabItem item = new SfTabItem();
-            var newColor = Colors.Red;
-            item.TextColor = newColor;
-            var actualColor = item.TextColor;
-            Assert.Equal(newColor, actualColor);
-        }
+		[Fact]
+		public void TestTextColor()
+		{
+			SfTabItem item = new SfTabItem();
+			var newColor = Colors.Red;
+			item.TextColor = newColor;
+			var actualColor = item.TextColor;
+			Assert.Equal(newColor, actualColor);
+		}
 
-        [Theory]
-        [InlineData(10.5)]
-        [InlineData(double.NaN)]
-        [InlineData(0)]
-        [InlineData(-10.5)]
-        public void TestFontSize(double value)
-        {
-            SfTabItem sfTabItem = new SfTabItem();
-            sfTabItem.FontSize = value;
-            Assert.Equal(value, sfTabItem.FontSize);
-        }
+		[Theory]
+		[InlineData(10.5)]
+		[InlineData(double.NaN)]
+		[InlineData(0)]
+		[InlineData(-10.5)]
+		public void TestFontSize(double value)
+		{
+			SfTabItem sfTabItem = new SfTabItem
+			{
+				FontSize = value
+			};
+			Assert.Equal(value, sfTabItem.FontSize);
+		}
 
-        [Theory]
-        [InlineData(FontAttributes.Bold)]
-        [InlineData(FontAttributes.Italic)]
-        [InlineData(FontAttributes.None)]
-        public void TestFontAttributes(FontAttributes font)
-        {
-            SfTabItem sfTabItem = new SfTabItem();
-            sfTabItem.FontAttributes = font;
-            Assert.Equal(font, sfTabItem.FontAttributes);
-        }
+		[Theory]
+		[InlineData(FontAttributes.Bold)]
+		[InlineData(FontAttributes.Italic)]
+		[InlineData(FontAttributes.None)]
+		public void TestFontAttributes(FontAttributes font)
+		{
+			SfTabItem sfTabItem = new SfTabItem
+			{
+				FontAttributes = font
+			};
+			Assert.Equal(font, sfTabItem.FontAttributes);
+		}
 
 		[Fact]
 		public void TestFontFamily()
@@ -2284,8 +2437,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestHeaderProperty()
 		{
-			SfTabItem _tabItem = new SfTabItem();
-			_tabItem.Header = "New Header";
+			SfTabItem _tabItem = new SfTabItem
+			{
+				Header = "New Header"
+			};
 			Assert.Equal("New Header", _tabItem.Header);
 		}
 
@@ -2303,8 +2458,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData("Serif")]
 		public void TestFontFamilyPropertyValueChange(string fontFamily)
 		{
-			SfTabItem _tabItem = new SfTabItem();
-			_tabItem.FontFamily = fontFamily;
+			SfTabItem _tabItem = new SfTabItem
+			{
+				FontFamily = fontFamily
+			};
 			Assert.Equal(fontFamily, _tabItem.FontFamily);
 		}
 
@@ -2318,8 +2475,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestFontSizePropertySetValue()
 		{
-			SfTabItem _tabItem = new SfTabItem();
-			_tabItem.FontSize = 20.0;
+			SfTabItem _tabItem = new SfTabItem
+			{
+				FontSize = 20.0
+			};
 			Assert.Equal(20.0, _tabItem.FontSize);
 		}
 
@@ -2365,8 +2524,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestImagePositionPropertySetValue()
 		{
-			SfTabItem _tabItem = new SfTabItem();
-			_tabItem.ImagePosition = TabImagePosition.Left;
+			SfTabItem _tabItem = new SfTabItem
+			{
+				ImagePosition = TabImagePosition.Left
+			};
 			Assert.Equal(TabImagePosition.Left, _tabItem.ImagePosition);
 		}
 
@@ -2386,8 +2547,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(0)]
 		public void TestImageTextSpacingPropertySetValue(double value)
 		{
-			SfTabItem _tabItem = new SfTabItem();
-			_tabItem.ImageTextSpacing = value;
+			SfTabItem _tabItem = new SfTabItem
+			{
+				ImageTextSpacing = value
+			};
 			Assert.Equal(value, _tabItem.ImageTextSpacing);
 		}
 
@@ -2398,23 +2561,40 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.False(_tabItem.IsSelected);
 		}
 
+		[Theory]
+		[InlineData(-12)]
+		[InlineData(0)]
+		[InlineData(24)]
+		public void TestImageSize(double value)
+		{
+			SfTabItem _tabItem = new SfTabItem()
+			{
+				ImageSize = value
+			};
+			Assert.Equal(value,_tabItem.ImageSize);
+			
+		}
+
 		#endregion
 
 		#region SelectionChangingEventArgs property
 
 		[Theory]
-        [InlineData(3)]
-        [InlineData(0)]
-        [InlineData(-1)]
-        [InlineData(-6)]
-        public void TestSelectionChangingEventCheck(int index)
-        {
-            var eventArgs = new SelectionChangingEventArgs();
-            if (eventArgs != null)
-                eventArgs.Index = index;
-            Assert.NotNull(eventArgs);
-            Assert.Equal(index, eventArgs.Index);
-        }
+		[InlineData(3)]
+		[InlineData(0)]
+		[InlineData(-1)]
+		[InlineData(-6)]
+		public void TestSelectionChangingEventCheck(int index)
+		{
+			var eventArgs = new SelectionChangingEventArgs();
+			if (eventArgs != null)
+			{
+				eventArgs.Index = index;
+			}
+
+			Assert.NotNull(eventArgs);
+			Assert.Equal(index, eventArgs.Index);
+		}
 
 		[Fact]
 		public void TestSelectionChangingEventPropertyCheck()
@@ -2429,265 +2609,289 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region TabItem Public Methods
 
 		[Fact]
-        public void TestOnTouchEnteredAction()
-        {
-            SfTabItem item = new SfTabItem();
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Entered, new Point(50, 50));
-            item.OnTouch(touchEventArgs);
-            PointerActions pointerActions = PointerActions.Entered;
-            Assert.Equal(touchEventArgs.Action, pointerActions);
-        }
+		public void TestOnTouchEnteredAction()
+		{
+			SfTabItem item = new SfTabItem();
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Entered, new Point(50, 50));
+			item.OnTouch(touchEventArgs);
+			PointerActions pointerActions = PointerActions.Entered;
+			Assert.Equal(touchEventArgs.Action, pointerActions);
+		}
 
-        [Fact]
-        public void TestOnTouchPressedAction()
-        {
-            SfTabItem item = new SfTabItem();
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(50, 50));
-            item.OnTouch(touchEventArgs);
-            PointerActions pointerActions = PointerActions.Pressed;
-            Assert.Equal(touchEventArgs.Action, pointerActions);
-        }
+		[Fact]
+		public void TestOnTouchPressedAction()
+		{
+			SfTabItem item = new SfTabItem();
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(50, 50));
+			item.OnTouch(touchEventArgs);
+			PointerActions pointerActions = PointerActions.Pressed;
+			Assert.Equal(touchEventArgs.Action, pointerActions);
+		}
 
-        [Fact]
-        public void TestOnTouchExitedAction()
-        {
-            SfTabItem item = new SfTabItem();
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Exited, new Point(50, 50));
-            item.OnTouch(touchEventArgs);
-            PointerActions pointerActions = PointerActions.Exited;
-            Assert.Equal(touchEventArgs.Action, pointerActions);
-        }
+		[Fact]
+		public void TestOnTouchExitedAction()
+		{
+			SfTabItem item = new SfTabItem();
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Exited, new Point(50, 50));
+			item.OnTouch(touchEventArgs);
+			PointerActions pointerActions = PointerActions.Exited;
+			Assert.Equal(touchEventArgs.Action, pointerActions);
+		}
 
-        [Fact]
-        public void CheckTestOnTouchReleased()
-        {
-            SfTabItem item = new SfTabItem();
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Released, new Point(50, 50));
-            item.OnTouch(touchEventArgs);
-            PointerActions pointerActions = PointerActions.Released;
-            Assert.Equal(touchEventArgs.Action, pointerActions);
-        }
+		[Fact]
+		public void CheckTestOnTouchReleased()
+		{
+			SfTabItem item = new SfTabItem();
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Released, new Point(50, 50));
+			item.OnTouch(touchEventArgs);
+			PointerActions pointerActions = PointerActions.Released;
+			Assert.Equal(touchEventArgs.Action, pointerActions);
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestOnTouchReleased(bool value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.IsSelected = value;
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Released, new Point(50, 50));
-            item.OnTouch(touchEventArgs);
-            Assert.Equal(touchEventArgs.TouchPoint, new Point(50, 50));
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestOnTouchReleased(bool value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				IsSelected = value
+			};
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Released, new Point(50, 50));
+			item.OnTouch(touchEventArgs);
+			Assert.Equal(touchEventArgs.TouchPoint, new Point(50, 50));
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void OnTouchReleasedActionCheck(bool value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.IsSelected = value;
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Exited, new Point(50, 50));
-            item.OnTouch(touchEventArgs);
-            Assert.Equal(touchEventArgs.TouchPoint, new Point(50, 50));
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void OnTouchReleasedActionCheck(bool value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				IsSelected = value
+			};
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Exited, new Point(50, 50));
+			item.OnTouch(touchEventArgs);
+			Assert.Equal(touchEventArgs.TouchPoint, new Point(50, 50));
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestOnTouchReleasedActionCheck(bool value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.IsSelected = value;
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(50, 50));
-            item.OnTouch(touchEventArgs);
-            Assert.Equal(touchEventArgs.TouchPoint, new Point(50, 50));
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestOnTouchReleasedActionCheck(bool value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				IsSelected = value
+			};
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(50, 50));
+			item.OnTouch(touchEventArgs);
+			Assert.Equal(touchEventArgs.TouchPoint, new Point(50, 50));
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestOnTouchReleasedAction(bool value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.IsSelected = value;
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Entered, new Point(50, 50));
-            item.OnTouch(touchEventArgs);
-            Assert.Equal(touchEventArgs.TouchPoint, new Point(50, 50));
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestOnTouchReleasedAction(bool value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				IsSelected = value
+			};
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Entered, new Point(50, 50));
+			item.OnTouch(touchEventArgs);
+			Assert.Equal(touchEventArgs.TouchPoint, new Point(50, 50));
+		}
 
-        [Fact]
-        public void TestOnTouchEnteredActionForNegativePointValues()
-        {
-            SfTabItem item = new SfTabItem();
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Entered, new Point(-50, 50));
-            item.OnTouch(touchEventArgs);
-            PointerActions pointerActions = PointerActions.Entered;
-            Assert.Equal(touchEventArgs.Action, pointerActions);
-        }
+		[Fact]
+		public void TestOnTouchEnteredActionForNegativePointValues()
+		{
+			SfTabItem item = new SfTabItem();
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Entered, new Point(-50, 50));
+			item.OnTouch(touchEventArgs);
+			PointerActions pointerActions = PointerActions.Entered;
+			Assert.Equal(touchEventArgs.Action, pointerActions);
+		}
 
-        [Fact]
-        public void TestOnTouchPressedActionForNegativePointValues()
-        {
-            SfTabItem item = new SfTabItem();
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(-50, -50));
-            item.OnTouch(touchEventArgs);
-            PointerActions pointerActions = PointerActions.Pressed;
-            Assert.Equal(touchEventArgs.Action, pointerActions);
-        }
+		[Fact]
+		public void TestOnTouchPressedActionForNegativePointValues()
+		{
+			SfTabItem item = new SfTabItem();
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(-50, -50));
+			item.OnTouch(touchEventArgs);
+			PointerActions pointerActions = PointerActions.Pressed;
+			Assert.Equal(touchEventArgs.Action, pointerActions);
+		}
 
-        [Fact]
-        public void TestOnTouchExitedActionForNegativePointValues()
-        {
-            SfTabItem item = new SfTabItem();
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Exited, new Point(-50, -50));
-            item.OnTouch(touchEventArgs);
-            PointerActions pointerActions = PointerActions.Exited;
-            Assert.Equal(touchEventArgs.Action, pointerActions);
-        }
+		[Fact]
+		public void TestOnTouchExitedActionForNegativePointValues()
+		{
+			SfTabItem item = new SfTabItem();
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Exited, new Point(-50, -50));
+			item.OnTouch(touchEventArgs);
+			PointerActions pointerActions = PointerActions.Exited;
+			Assert.Equal(touchEventArgs.Action, pointerActions);
+		}
 
-        [Fact]
-        public void CheckTestOnTouchReleasedForNegativePointValues()
-        {
-            SfTabItem item = new SfTabItem();
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Released, new Point(-50, 50));
-            item.OnTouch(touchEventArgs);
-            PointerActions pointerActions = PointerActions.Released;
-            Assert.Equal(touchEventArgs.Action, pointerActions);
-        }
+		[Fact]
+		public void CheckTestOnTouchReleasedForNegativePointValues()
+		{
+			SfTabItem item = new SfTabItem();
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Released, new Point(-50, 50));
+			item.OnTouch(touchEventArgs);
+			PointerActions pointerActions = PointerActions.Released;
+			Assert.Equal(touchEventArgs.Action, pointerActions);
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestOnTouchReleasedForNegativePointValues(bool value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.IsSelected = value;
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Released, new Point(-50, -50));
-            item.OnTouch(touchEventArgs);
-            Assert.Equal(touchEventArgs.TouchPoint, new Point(-50, -50));
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestOnTouchReleasedForNegativePointValues(bool value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				IsSelected = value
+			};
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Released, new Point(-50, -50));
+			item.OnTouch(touchEventArgs);
+			Assert.Equal(touchEventArgs.TouchPoint, new Point(-50, -50));
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void CheckOnTouchReleasedActionCheckForNegativePointValues(bool value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.IsSelected = value;
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Exited, new Point(-50, 50));
-            item.OnTouch(touchEventArgs);
-            Assert.Equal(touchEventArgs.TouchPoint, new Point(-50, 50));
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void CheckOnTouchReleasedActionCheckForNegativePointValues(bool value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				IsSelected = value
+			};
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Exited, new Point(-50, 50));
+			item.OnTouch(touchEventArgs);
+			Assert.Equal(touchEventArgs.TouchPoint, new Point(-50, 50));
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestOnTouchReleasedActionCheckForNegativePointValues(bool value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.IsSelected = value;
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(-50, -500));
-            item.OnTouch(touchEventArgs);
-            Assert.Equal(touchEventArgs.TouchPoint, new Point(-50, -500));
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestOnTouchReleasedActionCheckForNegativePointValues(bool value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				IsSelected = value
+			};
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(-50, -500));
+			item.OnTouch(touchEventArgs);
+			Assert.Equal(touchEventArgs.TouchPoint, new Point(-50, -500));
+		}
 
-        [Theory]
-        [InlineData(true)]
-        [InlineData(false)]
-        public void TestOnTouchReleasedActionForNegativePointValues(bool value)
-        {
-            SfTabItem item = new SfTabItem();
-            item.IsSelected = value;
-            var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Entered, new Point(-500, 50));
-            item.OnTouch(touchEventArgs);
-            Assert.Equal(touchEventArgs.TouchPoint, new Point(-500, 50));
-        }
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestOnTouchReleasedActionForNegativePointValues(bool value)
+		{
+			SfTabItem item = new SfTabItem
+			{
+				IsSelected = value
+			};
+			var touchEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Entered, new Point(-500, 50));
+			item.OnTouch(touchEventArgs);
+			Assert.Equal(touchEventArgs.TouchPoint, new Point(-500, 50));
+		}
 
 		#endregion
 
 		#region HorizontalContent properties
 
 		[Fact]
-        public void TestItemsProperty()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            Assert.NotNull(horizontal.Items);
-        }
+		public void TestItemsProperty()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			Assert.NotNull(horizontal.Items);
+		}
 
-        [Fact]
-        public void TestItemsPropertyCheck()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            var items = new TabItemCollection()
-            {
-                new SfTabItem { Header = "Item 1", Content = new Grid { BackgroundColor = Colors.Red } },
-                new SfTabItem { Header = "Item 2", Content = new Grid { BackgroundColor = Colors.Green } }
-            };
+		[Fact]
+		public void TestItemsPropertyCheck()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			var items = new TabItemCollection()
+			{
+				new SfTabItem { Header = "Item 1", Content = new Grid { BackgroundColor = Colors.Red } },
+				new SfTabItem { Header = "Item 2", Content = new Grid { BackgroundColor = Colors.Green } }
+			};
 
-            horizontal.Items = items;
-            Assert.Equal(items, horizontal.Items);
-        }
+			horizontal.Items = items;
+			Assert.Equal(items, horizontal.Items);
+		}
 
-        [Fact]
-        public void TestSelectedIndexProperty()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            Assert.Equal(-1, horizontal.SelectedIndex);
-        }
+		[Fact]
+		public void TestSelectedIndexProperty()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			Assert.Equal(-1, horizontal.SelectedIndex);
+		}
 
-        [Fact]
-        public void TestSelectedIndexPropertySetValue()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.SelectedIndex = 1;
-            Assert.Equal(1, horizontal.SelectedIndex);
-        }
+		[Fact]
+		public void TestSelectedIndexPropertySetValue()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				SelectedIndex = 1
+			};
+			Assert.Equal(1, horizontal.SelectedIndex);
+		}
 
-        [Fact]
-        public void ContentTransitionDurationPropertyDefaultValueCheck()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            Assert.Equal(100d, horizontal.ContentTransitionDuration);
-        }
+		[Fact]
+		public void ContentTransitionDurationPropertyDefaultValueCheck()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			Assert.Equal(100d, horizontal.ContentTransitionDuration);
+		}
 
-        [Fact]
-        public void TestContentTransitionDurationPropertySetValue()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.ContentTransitionDuration = 200d;
-            Assert.Equal(200d, horizontal.ContentTransitionDuration);
-        }
+		[Fact]
+		public void TestContentTransitionDurationPropertySetValue()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				ContentTransitionDuration = 200d
+			};
+			Assert.Equal(200d, horizontal.ContentTransitionDuration);
+		}
 
-        [Fact]
-        public void TestContentWidthProperty()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.ContentWidth = 500d;
-            Assert.Equal(500d, horizontal.ContentWidth);
-        }
+		[Fact]
+		public void TestContentWidthProperty()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				ContentWidth = 500d
+			};
+			Assert.Equal(500d, horizontal.ContentWidth);
+		}
 
 		[Fact]
 		public void TestIsEnableProperty()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.IsEnabled = true;
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				IsEnabled = true
+			};
 			Assert.True(horizontal.IsEnabled);
 		}
 
@@ -2695,7 +2899,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void HorizontalContentContentItemTemplateCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var newTemplate = new DataTemplate(() => new Label { Text = "Test" });
 			horizontal.ContentItemTemplate = newTemplate;
@@ -2713,9 +2917,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestHorizontalContentTransition(double value)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.ContentTransitionDuration = value;
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				ContentTransitionDuration = value
+			};
 			Assert.Equal(value, horizontal.ContentTransitionDuration);
 		}
 
@@ -2723,7 +2929,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestHorizontalContentNullCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			Assert.NotNull(horizontal);
 		}
@@ -2738,9 +2944,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestHorizontalContentContentTransitionDuration(double value)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.ContentWidth = value;
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				ContentWidth = value
+			};
 			Assert.Equal(value, horizontal.ContentWidth);
 
 		}
@@ -2750,21 +2958,21 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region SfHorizontalContent Fields
 
 		[Fact]
-        public void TestIsTowardsRightPropertySetValue()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            SetPrivateField(horizontal, "_isTowardsRight", true);
-            var isTowardsRight = (bool?)GetPrivateField(horizontal, "_isTowardsRight");
-            Assert.True(isTowardsRight);
-        }
+		public void TestIsTowardsRightPropertySetValue()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			SetPrivateField(horizontal, "_isTowardsRight", true);
+			var isTowardsRight = (bool?)GetPrivateField(horizontal, "_isTowardsRight");
+			Assert.True(isTowardsRight);
+		}
 
 		[Fact]
 		public void TestsTowardsRightField()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			SetPrivateField(horizontal, "_isTowardsRight", true);
 			var value = GetPrivateField(horizontal, "_isTowardsRight");
@@ -2777,12 +2985,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestHandlerTouchReleasedMethod()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			SetPrivateField(horizontal, "_isPressed", true);
 			SetPrivateField(horizontal, "_isMoved", true);
 			SetPrivateField(horizontal, "_visibleItemCount", 4);
-			SfHorizontalStackLayout views1 = new SfHorizontalStackLayout();
+			SfHorizontalStackLayout views1 = [];
 			views1.Children.Add(new SfTabItem { Header = "Tab 1" });
 			views1.Children.Add(new SfTabItem { Header = "Tab 2" });
 			views1.Children.Add(new SfTabItem { Header = "Tab 3" });
@@ -2811,9 +3019,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestUpdateOnTabItemContentChanged()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.Items = PopulateLabelItemsCollection();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
 			Assert.Equal(0, horizontal.SelectedIndex);
 			Assert.True(horizontal.Items[1].Content is Label);
 
@@ -2834,7 +3044,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void GetVisibleItemsCountMethodCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var visibleItemsCount = InvokePrivateMethod(horizontal, "GetVisibleItemsCount");
 			Assert.NotNull(visibleItemsCount);
@@ -2850,9 +3060,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void ClearItemsMethodCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.Items = PopulateLabelItemsCollection();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
 			var clearItems = InvokePrivateMethod(horizontal, "ClearItems");
 			Assert.Null(clearItems);
 		}
@@ -2861,7 +3073,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void GetCountVisibleItemsMethodCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var visibleItemsCount = InvokePrivateMethod(horizontal, "GetCountVisibleItems");
 			Assert.NotNull(visibleItemsCount);
@@ -2875,28 +3087,30 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void HandlerTouchReleasedCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var handleTouchReleased = InvokePrivateMethod(horizontal, "HandleTouchReleased");
 			Assert.Null(handleTouchReleased);
 		}
 
 		[Fact]
-        public void GetNextVisibleItemIndexMethodCheck()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.Items = PopulateMixedItemsCollection();
-            horizontal.SelectedIndex = 1;
-            SetPrivateField(horizontal, "_isTowardsRight", true);
-            var nextIndex = InvokePrivateMethod(horizontal, "GetNextVisibleItemIndex");
-            Assert.NotNull(nextIndex);
-            double index = (int)nextIndex;
-            Assert.Equal(3, horizontal.Items.Count);
-            Assert.NotNull(nextIndex);
-            Assert.Equal(2, index);
-        }
+		public void GetNextVisibleItemIndexMethodCheck()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateMixedItemsCollection(),
+				SelectedIndex = 1
+			};
+			SetPrivateField(horizontal, "_isTowardsRight", true);
+			var nextIndex = InvokePrivateMethod(horizontal, "GetNextVisibleItemIndex");
+			Assert.NotNull(nextIndex);
+			double index = (int)nextIndex;
+			Assert.Equal(3, horizontal.Items.Count);
+			Assert.NotNull(nextIndex);
+			Assert.Equal(2, index);
+		}
 
 		[Theory]
 		[InlineData(0)]
@@ -2906,14 +3120,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void GetNextItemIndexCheck(int value)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var tabItem1 = new SfTabItem { Header = "Tab 1" };
 			var tabItem2 = new SfTabItem { Header = "Tab 2" };
 			var tabItem3 = new SfTabItem { Header = "Tab 2" };
 			var tabItem4 = new SfTabItem { Header = "Tab 2" };
 			var tabItem5 = new SfTabItem { Header = "Tab 2" };
-			ObservableCollection<SfTabItem> sfTabItems = new ObservableCollection<SfTabItem> { tabItem1, tabItem2, tabItem3, tabItem4, tabItem5 };
+			ObservableCollection<SfTabItem> sfTabItems = [tabItem1, tabItem2, tabItem3, tabItem4, tabItem5];
 			horizontal.ItemsSource = sfTabItems;
 			horizontal.SelectedIndex = value;
 			var nextIndexValue = InvokePrivateMethod(horizontal, "GetNextItemIndex");
@@ -2926,7 +3140,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void HorizontalContentItemSourceCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var newItemsSource = new List<string> { "Item1", "Item2", "Item3" };
 			horizontal.ItemsSource = newItemsSource;
@@ -2937,8 +3151,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			DataTemplate newTemplate = new DataTemplate(() => new Label { Text = "Test" });
 			horizontal.ContentItemTemplate = newTemplate;
 			InvokePrivateMethod<SfHorizontalContent>(horizontal, "UpdateItemsSource");
-			SfHorizontalStackLayout? horizontalStackLayout = GetPrivateField<SfHorizontalContent>(horizontal, "_horizontalStackLayout") as SfHorizontalStackLayout;
-			if (horizontalStackLayout != null)
+			if (GetPrivateField<SfHorizontalContent>(horizontal, "_horizontalStackLayout") is SfHorizontalStackLayout horizontalStackLayout)
 			{
 				Assert.Equal(900, horizontalStackLayout.WidthRequest);
 				foreach (var item in horizontalStackLayout.Children)
@@ -2949,173 +3162,188 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-        public void TestInitializeControl()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            var invoke = InvokePrivateMethod(horizontal, "InitializeControl");
-            Assert.Null(invoke);
-            Assert.NotNull(horizontal.Content);
-        }
+		public void TestInitializeControl()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			var invoke = InvokePrivateMethod(horizontal, "InitializeControl");
+			Assert.Null(invoke);
+			Assert.NotNull(horizontal.Content);
+		}
 
-        [Fact]
-        public void TestOnTabItemsSourceCollectionChangedEvent()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-            var invoke = InvokePrivateMethod(horizontal, "OnTabItemsSourceCollectionChanged", sfTabView, e);
-            Assert.Null(invoke);
-        }
+		[Fact]
+		public void TestOnTabItemsSourceCollectionChangedEvent()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+			var invoke = InvokePrivateMethod(horizontal, "OnTabItemsSourceCollectionChanged", sfTabView, e);
+			Assert.Null(invoke);
+		}
 
-        [Fact]
-        public void TestOnItemsCollectionChangedEventTrigger()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-            var invoke = InvokePrivateMethod(horizontal, "OnItemsCollectionChanged", sfTabView, e);
-            Assert.Null(invoke);
-        }
+		[Fact]
+		public void TestOnItemsCollectionChangedEventTrigger()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+			var invoke = InvokePrivateMethod(horizontal, "OnItemsCollectionChanged", sfTabView, e);
+			Assert.Null(invoke);
+		}
 
-        [Fact]
-        public void TestOnItemsCollectionChangedValueChange()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.Items = PopulateLabelItemsCollection();
-            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-            var invoke = InvokePrivateMethod(horizontal, "OnItemsCollectionChanged", horizontal, e);
-            Assert.Equal(3, horizontal.Items.Count);
-        }
+		[Fact]
+		public void TestOnItemsCollectionChangedValueChange()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
+			NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
 
-        [Fact]
-        public void TestClearTabContent()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            HorizontalStackLayout sfHorizontalStackLayout = new HorizontalStackLayout();
-            var tabItem1 = new SfTabItem { Header = "Tab 1" };
-            var tabItem2 = new SfTabItem { Header = "Tab 2" };
-            horizontal.Add(tabItem1);
-            horizontal.Add(tabItem2);
-            horizontal.Children.Add(sfHorizontalStackLayout);
-            horizontal.Content = sfHorizontalStackLayout;
-            horizontal.Remove(sfHorizontalStackLayout);
-            horizontal.SelectedIndex = 0;
-            InvokePrivateMethod(horizontal, "ClearTabContent", tabItem1, 0);
-            int itemCount = horizontal.Items.Count;
-            Assert.Equal(0, itemCount);
-        }
+			_ = InvokePrivateMethod(horizontal, "OnItemsCollectionChanged", horizontal, e);
+			Assert.Equal(3, horizontal.Items.Count);
+		}
 
-        [Fact]
-        public void OnTabItemPropertyChangedCheck()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            var tabItem1 = new SfTabItem { Header = "Tab 1" };
-            var tabItem2 = new SfTabItem { Header = "Tab 2" };
-            sfTabView.Items.Add(tabItem1);
-            sfTabView.Items.Add(tabItem2);
-            var propertyChangedEventArgs = new PropertyChangedEventArgs(nameof(SfTabItem.Content));
-            var invoke = InvokePrivateMethod(horizontal, "OnTabItemPropertyChanged", sfTabView, propertyChangedEventArgs);
-            Assert.Null(invoke);
-        }
+		[Fact]
+		public void TestClearTabContent()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			HorizontalStackLayout sfHorizontalStackLayout = [];
+			var tabItem1 = new SfTabItem { Header = "Tab 1" };
+			var tabItem2 = new SfTabItem { Header = "Tab 2" };
+			horizontal.Add(tabItem1);
+			horizontal.Add(tabItem2);
+			horizontal.Children.Add(sfHorizontalStackLayout);
+			horizontal.Content = sfHorizontalStackLayout;
+			horizontal.Remove(sfHorizontalStackLayout);
+			horizontal.SelectedIndex = 0;
+			InvokePrivateMethod(horizontal, "ClearTabContent", tabItem1, 0);
+			int itemCount = horizontal.Items.Count;
+			Assert.Equal(0, itemCount);
+		}
 
-        [Fact]
-        public void TestOnTabItemPropertyChanged()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            var tabItem1 = new SfTabItem { Header = "Tab 1" };
-            var tabItem2 = new SfTabItem { Header = "Tab 2" };
-            sfTabView.Items.Add(tabItem1);
-            sfTabView.Items.Add(tabItem2);
-            sfTabView.IsVisible = true;
-            var propertyChangedEventArgs = new PropertyChangedEventArgs(nameof(SfTabItem.Content));
-            var invoke = InvokePrivateMethod(horizontal, "OnTabItemPropertyChanged", sfTabView.IsVisible, propertyChangedEventArgs);
-            Assert.Null(invoke);
-            if (propertyChangedEventArgs.PropertyName != null)
-            {
-                if (propertyChangedEventArgs.PropertyName.Equals(sfTabView.IsVisible))
-                {
-                    var invoked = InvokePrivateMethod(horizontal, "UpdateTabItemContentSize");
-                    Assert.Null(invoked);
-                    var invokes = InvokePrivateMethod(horizontal, "UpdateTabItemContentPosition");
-                    Assert.Null(invokes);
-                }
-            }
-        }
+		[Fact]
+		public void OnTabItemPropertyChangedCheck()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			var tabItem1 = new SfTabItem { Header = "Tab 1" };
+			var tabItem2 = new SfTabItem { Header = "Tab 2" };
+			sfTabView.Items.Add(tabItem1);
+			sfTabView.Items.Add(tabItem2);
+			var propertyChangedEventArgs = new PropertyChangedEventArgs(nameof(SfTabItem.Content));
+			var invoke = InvokePrivateMethod(horizontal, "OnTabItemPropertyChanged", sfTabView, propertyChangedEventArgs);
+			Assert.Null(invoke);
+		}
 
-        [Fact]
-        public void TestOnItemsCollectionChangedValueChanged()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.Items = PopulateLabelItemsCollection();
-            NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-            var invoke = InvokePrivateMethod(horizontal, "OnItemsCollectionChanged", horizontal.Items[1], e);
-            int values = 0;
-            int value = 0;
-            if (e.OldItems != null)
-            {
-                values = e.OldItems.Count;
-            }
-            if (e.NewItems != null && horizontal.Items != null)
-            {
-                foreach (SfTabItem tabItem in e.NewItems)
-                {
-                    var index = horizontal.Items.IndexOf(tabItem);
-                    var invoked = InvokePrivateMethod(horizontal, "AddTabContentItems", tabItem, index);
-                    value = e.NewItems.Count;
-                }
-            }
-            Assert.Equal(0, values);
-            Assert.Equal(0, value);
-        }
+		[Fact]
+		public void TestOnTabItemPropertyChanged()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			var tabItem1 = new SfTabItem { Header = "Tab 1" };
+			var tabItem2 = new SfTabItem { Header = "Tab 2" };
+			sfTabView.Items.Add(tabItem1);
+			sfTabView.Items.Add(tabItem2);
+			sfTabView.IsVisible = true;
+			var propertyChangedEventArgs = new PropertyChangedEventArgs(nameof(SfTabItem.Content));
+			var invoke = InvokePrivateMethod(horizontal, "OnTabItemPropertyChanged", sfTabView.IsVisible, propertyChangedEventArgs);
+			Assert.Null(invoke);
+			if (propertyChangedEventArgs.PropertyName != null)
+			{
+				if (propertyChangedEventArgs.PropertyName.Equals(sfTabView.IsVisible))
+				{
+					var invoked = InvokePrivateMethod(horizontal, "UpdateTabItemContentSize");
+					Assert.Null(invoked);
+					var invokes = InvokePrivateMethod(horizontal, "UpdateTabItemContentPosition");
+					Assert.Null(invokes);
+				}
+			}
+		}
 
-        [Fact]
-        public void ClearTabItemMethodCheck()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.Items = PopulateLabelItemsCollection();
-            var oldItems = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, horizontal.Items[0], 0);
-            var clearTabContentMethod = typeof(SfHorizontalContent).GetMethod("ClearTabContent", BindingFlags.NonPublic | BindingFlags.Instance);
-            horizontal.Items.RemoveAt(0);
-            int itemCount = horizontal.Items.Count;
-            Assert.Equal(2, itemCount);
-        }
+		[Fact]
+		public void TestOnItemsCollectionChangedValueChanged()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
+			NotifyCollectionChangedEventArgs e = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
 
-        [Fact]
-        public void TestItemCollectionChangedShouldClearTabContentOnOldItems()
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.Items = PopulateLabelItemsCollection();
-            var oldItems = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, horizontal.Items[0], 0);
-            var clearTabContentMethod = typeof(SfHorizontalContent).GetMethod("ClearTabContent", BindingFlags.NonPublic | BindingFlags.Instance);
-            horizontal.Items.RemoveAt(0);
-            Assert.NotNull(clearTabContentMethod);
-        }
+			_ = InvokePrivateMethod(horizontal, "OnItemsCollectionChanged", horizontal.Items[1], e);
+			int values = 0;
+			int value = 0;
+			if (e.OldItems != null)
+			{
+				values = e.OldItems.Count;
+			}
+			if (e.NewItems != null && horizontal.Items != null)
+			{
+				foreach (SfTabItem tabItem in e.NewItems)
+				{
+					var index = horizontal.Items.IndexOf(tabItem);
+					var invoked = InvokePrivateMethod(horizontal, "AddTabContentItems", tabItem, index);
+					value = e.NewItems.Count;
+				}
+			}
+			Assert.Equal(0, values);
+			Assert.Equal(0, value);
+		}
+
+		[Fact]
+		public void ClearTabItemMethodCheck()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
+
+			_ = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, horizontal.Items[0], 0);
+
+			_ = typeof(SfHorizontalContent).GetMethod("ClearTabContent", BindingFlags.NonPublic | BindingFlags.Instance);
+			horizontal.Items.RemoveAt(0);
+			int itemCount = horizontal.Items.Count;
+			Assert.Equal(2, itemCount);
+		}
+
+		[Fact]
+		public void TestItemCollectionChangedShouldClearTabContentOnOldItems()
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
+
+			_ = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, horizontal.Items[0], 0);
+			var clearTabContentMethod = typeof(SfHorizontalContent).GetMethod("ClearTabContent", BindingFlags.NonPublic | BindingFlags.Instance);
+			horizontal.Items.RemoveAt(0);
+			Assert.NotNull(clearTabContentMethod);
+		}
 
 		[Fact]
 		public void GetNextVisibleItemIndexMethodValueCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.Items = PopulateLabelItemsCollection();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
 			sfTabView.SelectedIndex = 0;
 			var invoke = InvokePrivateMethod(horizontal, "GetNextVisibleItemIndex");
 			Assert.NotNull(invoke);
@@ -3132,7 +3360,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestTranslateXPositionPositiveValue(double data)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			InvokePrivateMethod(horizontal, "TranslateXPosition", data);
 			var _horizontalStackLayout = GetPrivateField(horizontal, "_horizontalStackLayout");
@@ -3151,7 +3379,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestAdjustForFirstIndex(double data)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			InvokePrivateMethod(horizontal, "AdjustForFirstIndex", data);
 			var _horizontalStackLayout = GetPrivateField(horizontal, "_horizontalStackLayout");
@@ -3171,7 +3399,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestAdjustForFirstIndexMiddleIndexes(double data)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			InvokePrivateMethod(horizontal, "AdjustForMiddleIndices", data);
 			var _horizontalStackLayout = GetPrivateField(horizontal, "_horizontalStackLayout");
@@ -3190,7 +3418,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestAdjustForFirstIndexLastIndex(double data)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			InvokePrivateMethod(horizontal, "AdjustForLastIndex", data);
 			var _horizontalStackLayout = GetPrivateField(horizontal, "_horizontalStackLayout");
@@ -3204,7 +3432,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestUpdateTabItemContentSize()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			SetPrivateField(horizontal, "_contentWidth", 300d);
 			InvokePrivateMethod(horizontal, "UpdateTabItemContentSize");
@@ -3221,16 +3449,20 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestUpdateTabItemContentPosition()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.ContentItemTemplate = new DataTemplate(() =>
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
 			{
-				Label label = new Label();
-				label.BackgroundColor = Colors.Black;
+				ContentItemTemplate = new DataTemplate(() =>
+			{
+				Label label = new Label
+				{
+					BackgroundColor = Colors.Black
+				};
 				return label;
-			});
-			horizontal.ContentWidth = 400d;
-			horizontal.SelectedIndex = 1;
+			}),
+				ContentWidth = 400d,
+				SelectedIndex = 1
+			};
 			InvokePrivateMethod(horizontal, "UpdateTabItemContentPosition");
 			if (horizontal.ContentItemTemplate != null)
 			{
@@ -3244,7 +3476,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestVelocityValueCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			SetPrivateField(horizontal, "_startPoint", new Point(50, 50));
 			var value = GetPrivateField(horizontal, "_startPoint");
@@ -3259,7 +3491,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestClampIndexValue()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var value = InvokePrivateMethod(horizontal, "ClampIndex", 1, 0, 5);
 			Assert.NotNull(value);
@@ -3276,7 +3508,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestAdjustForFirstIndexMiddleIndex(double data)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			SetPrivateField(horizontal, "_isPreviousItemVisible", true);
 			SetPrivateField(horizontal, "_isNextItemVisible", true);
@@ -3297,7 +3529,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestIsTowardsRightSetValue()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			bool eventTriggered = false;
 			horizontal.SelectionChanging += (s, e) => eventTriggered = true;
@@ -3318,11 +3550,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestTranslateXPositionValue(double data, int index)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			views.Add(new SfTabItem { Header = "Tab 1" });
-			views.Add(new SfTabItem { Header = "Tab 1" });
-			views.Add(new SfTabItem { Header = "Tab 1" });
-			views.Add(new SfTabItem { Header = "Tab 1" });
+			SfTabBar views =
+			[
+				new SfTabItem { Header = "Tab 1" },
+				new SfTabItem { Header = "Tab 1" },
+				new SfTabItem { Header = "Tab 1" },
+				new SfTabItem { Header = "Tab 1" },
+			];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			SetPrivateField(horizontal, "_tabBar", views);
 			var tab = GetPrivateField(horizontal, "_tabBar");
@@ -3343,7 +3577,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestItemSource()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			SetPrivateField(horizontal, "_tabBar", views);
 			var view = GetPrivateField(horizontal, "_tabBar");
@@ -3364,9 +3598,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestGetVisibleItemsCount()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.Items = PopulateLabelItemsCollection();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
 			var invoke = InvokePrivateMethod(horizontal, "GetVisibleItemsCount");
 			Assert.Equal(0, invoke);
 			horizontal.SelectedIndex = 2;
@@ -3378,15 +3614,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestMoveToPreviousTabItem()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.Items = PopulateLabelItemsCollection();
-			horizontal.SelectedIndex = 2;
-			var invoke = InvokePrivateMethod(horizontal, "SelectPreviousTabItem");
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection(),
+				SelectedIndex = 2
+			};
+
+			_ = InvokePrivateMethod(horizontal, "SelectPreviousTabItem");
 			SfTabBar? tabBar = GetPrivateField<SfHorizontalContent>(horizontal, "_tabBar") as SfTabBar;
 			Assert.Equal(1, tabBar?.SelectedIndex);
 			horizontal.SelectedIndex = 0;
-			invoke = InvokePrivateMethod(horizontal, "SelectPreviousTabItem");
+			_ = InvokePrivateMethod(horizontal, "SelectPreviousTabItem");
 			Assert.Equal(0, tabBar?.SelectedIndex);
 		}
 
@@ -3394,15 +3633,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestSelectNextItem()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.Items = PopulateLabelItemsCollection();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
 			SetPrivateField(horizontal, "_isTowardsRight", true);
-			var invoke = InvokePrivateMethod(horizontal, "SelectNextItem");
+
+			_ = InvokePrivateMethod(horizontal, "SelectNextItem");
 			SfTabBar? tabBar = GetPrivateField<SfHorizontalContent>(horizontal, "_tabBar") as SfTabBar;
 			Assert.Equal(1, tabBar?.SelectedIndex);
 			horizontal.SelectedIndex = 2;
-			invoke = InvokePrivateMethod(horizontal, "SelectNextItem");
+			_ = InvokePrivateMethod(horizontal, "SelectNextItem");
 			Assert.Equal(2, tabBar?.SelectedIndex);
 		}
 
@@ -3410,16 +3652,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestUpdateItemVisibility()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.Items = PopulateLabelItemsCollection();
-			var invoke = InvokePrivateMethod(horizontal, "UpdateItemVisibility");
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
+			{
+				Items = PopulateLabelItemsCollection()
+			};
+
+			_ = InvokePrivateMethod(horizontal, "UpdateItemVisibility");
 			var isNextItemVisible = (bool?)GetPrivateField(horizontal, "_isNextItemVisible");
 			var isPreviousItemVisible = (bool?)GetPrivateField(horizontal, "_isPreviousItemVisible");
 			Assert.True(isNextItemVisible);
 			Assert.False(isPreviousItemVisible);
 			horizontal.SelectedIndex = 2;
-			invoke = InvokePrivateMethod(horizontal, "UpdateItemVisibility");
+			_ = InvokePrivateMethod(horizontal, "UpdateItemVisibility");
 			isNextItemVisible = (bool?)GetPrivateField(horizontal, "_isNextItemVisible");
 			isPreviousItemVisible = (bool?)GetPrivateField(horizontal, "_isPreviousItemVisible");
 			Assert.False(isNextItemVisible);
@@ -3430,15 +3675,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestUpdateItemVisibilityWithTemplate()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
-			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			horizontal.Items = PopulateLabelItemsCollection();
-			horizontal.ContentItemTemplate = new DataTemplate(() =>
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views)
 			{
-				Label label = new Label();
-				label.BackgroundColor = Colors.Black;
-				return label;
-			});
+				Items = PopulateLabelItemsCollection(),
+				ContentItemTemplate = new DataTemplate(() =>
+				{
+					Label label = new Label
+					{
+						BackgroundColor = Colors.Black
+					};
+					return label;
+				})
+			};
 			var invoke = InvokePrivateMethod(horizontal, "UpdateItemVisibility");
 			var isPreviousItemVisible = (bool?)GetPrivateField(horizontal, "_isPreviousItemVisible");
 			Assert.False(isPreviousItemVisible);
@@ -3448,7 +3697,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestRaiseSelectionChangingEventCheck()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			bool eventInvoked = false;
 			horizontal.SelectionChanging += (s, e) => eventInvoked = true;
@@ -3464,31 +3713,31 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region HorizontalContent Public Methods
 
 		[Theory]
-        [InlineData(PointerActions.Pressed)]
-        [InlineData(PointerActions.Moved)]
-        [InlineData(PointerActions.Released)]
-        public void OnHandlerTouchInteractionMethodCheck(PointerActions pointerActions)
-        {
-            SfTabView sfTabView = new SfTabView();
-            SfTabBar views = new SfTabBar();
-            SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-            horizontal.OnHandleTouchInteraction(pointerActions, new Point(0, 0));
-            if (pointerActions == PointerActions.Pressed)
-            {
-                var invokes = InvokePrivateMethod(horizontal, "InitializeTouchData", new Point(0, 0));
-                Assert.Null(invokes);
-            }
-            if (pointerActions == PointerActions.Moved)
-            {
-                var invokes = InvokePrivateMethod(horizontal, "HandleTouchMovement", new Point(0, 0));
-                Assert.Null(invokes);
-            }
-            if (pointerActions == PointerActions.Released)
-            {
-                var invokes = InvokePrivateMethod(horizontal, "HandleTouchReleased");
-                Assert.Null(invokes);
-            }
-        }
+		[InlineData(PointerActions.Pressed)]
+		[InlineData(PointerActions.Moved)]
+		[InlineData(PointerActions.Released)]
+		public void OnHandlerTouchInteractionMethodCheck(PointerActions pointerActions)
+		{
+			SfTabView sfTabView = new SfTabView();
+			SfTabBar views = [];
+			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
+			horizontal.OnHandleTouchInteraction(pointerActions, new Point(0, 0));
+			if (pointerActions == PointerActions.Pressed)
+			{
+				var invokes = InvokePrivateMethod(horizontal, "InitializeTouchData", new Point(0, 0));
+				Assert.Null(invokes);
+			}
+			if (pointerActions == PointerActions.Moved)
+			{
+				var invokes = InvokePrivateMethod(horizontal, "HandleTouchMovement", new Point(0, 0));
+				Assert.Null(invokes);
+			}
+			if (pointerActions == PointerActions.Released)
+			{
+				var invokes = InvokePrivateMethod(horizontal, "HandleTouchReleased");
+				Assert.Null(invokes);
+			}
+		}
 
 		[Theory]
 		[InlineData(PointerActions.Released)]
@@ -3499,7 +3748,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void PointerActionPressedCheck(PointerActions pointerActions)
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var expectedAction = pointerActions;
 			horizontal.OnHandleTouchInteraction(pointerActions, new Point(0, 0));
@@ -3510,7 +3759,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestOnTouchMethod()
 		{
 			SfTabView sfTabView = new SfTabView();
-			SfTabBar views = new SfTabBar();
+			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			var pointerEventArgs = new Internals.PointerEventArgs(1, Internals.PointerActions.Pressed, new Point(10, 10));
 			horizontal.OnTouch(pointerEventArgs);
@@ -3525,329 +3774,329 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region General Tests
 
 		[Fact]
-        public void TestTabBarPlacementValue()
-        {
-            Assert.Equal(0, (int)TabBarPlacement.Bottom);
-            Assert.Equal(1, (int)TabBarPlacement.Top);
-        }
+		public void TestTabBarPlacementValue()
+		{
+			Assert.Equal(0, (int)TabBarPlacement.Bottom);
+			Assert.Equal(1, (int)TabBarPlacement.Top);
+		}
 
-        [Fact]
-        public void TestTabWidthModeValue()
-        {
-            Assert.Equal(0, (int)TabWidthMode.Default);
-            Assert.Equal(1, (int)TabWidthMode.SizeToContent);
-        }
+		[Fact]
+		public void TestTabWidthModeValue()
+		{
+			Assert.Equal(0, (int)TabWidthMode.Default);
+			Assert.Equal(1, (int)TabWidthMode.SizeToContent);
+		}
 
-        [Fact]
-        public void TestTabIndicatorPlacementValue()
-        {
-            Assert.Equal(0, (int)TabIndicatorPlacement.Bottom);
-            Assert.Equal(1, (int)TabIndicatorPlacement.Fill);
-            Assert.Equal(2, (int)TabIndicatorPlacement.Top);
-        }
+		[Fact]
+		public void TestTabIndicatorPlacementValue()
+		{
+			Assert.Equal(0, (int)TabIndicatorPlacement.Bottom);
+			Assert.Equal(1, (int)TabIndicatorPlacement.Fill);
+			Assert.Equal(2, (int)TabIndicatorPlacement.Top);
+		}
 
-        [Fact]
-        public void TestTabImagePositionValues()
-        {
-            Assert.Equal(0, (int)TabImagePosition.Bottom);
-            Assert.Equal(1, (int)TabImagePosition.Left);
-            Assert.Equal(2, (int)TabImagePosition.Right);
-            Assert.Equal(3, (int)TabImagePosition.Top);
-        }
+		[Fact]
+		public void TestTabImagePositionValues()
+		{
+			Assert.Equal(0, (int)TabImagePosition.Bottom);
+			Assert.Equal(1, (int)TabImagePosition.Left);
+			Assert.Equal(2, (int)TabImagePosition.Right);
+			Assert.Equal(3, (int)TabImagePosition.Top);
+		}
 
-        [Fact]
-        public void TestTabBarDisplayModeValues()
-        {
-            Assert.Equal(0, (int)TabBarDisplayMode.Image);
-            Assert.Equal(1, (int)TabBarDisplayMode.Text);
-            Assert.Equal(2, (int)TabBarDisplayMode.Default);
-            Assert.NotEqual(1, (int)TabBarDisplayMode.Default);
-        }
+		[Fact]
+		public void TestTabBarDisplayModeValues()
+		{
+			Assert.Equal(0, (int)TabBarDisplayMode.Image);
+			Assert.Equal(1, (int)TabBarDisplayMode.Text);
+			Assert.Equal(2, (int)TabBarDisplayMode.Default);
+			Assert.NotEqual(1, (int)TabBarDisplayMode.Default);
+		}
 
-        [Fact]
-        public void ValueIndicatorWidthModeValues()
-        {
-            Assert.Equal(0, (int)IndicatorWidthMode.Fit);
-            Assert.Equal(1, (int)IndicatorWidthMode.Stretch);
-        }
+		[Fact]
+		public void ValueIndicatorWidthModeValues()
+		{
+			Assert.Equal(0, (int)IndicatorWidthMode.Fit);
+			Assert.Equal(1, (int)IndicatorWidthMode.Stretch);
+		}
 
-        [Fact]
-        public void TestArrowTypeValues()
-        {
-            Assert.Equal(0, (int)ArrowType.Backward);
-            Assert.Equal(1, (int)ArrowType.Forward);
-        }
+		[Fact]
+		public void TestArrowTypeValues()
+		{
+			Assert.Equal(0, (int)ArrowType.Backward);
+			Assert.Equal(1, (int)ArrowType.Forward);
+		}
 
-        [Fact]
-        public void EnumUsageTest()
-        {
-            TabBarPlacement placement = TabBarPlacement.Top;
-            string result = placement switch
-            {
-                TabBarPlacement.Bottom => "Bottom",
-                TabBarPlacement.Top => "Top",
-                _ => "Unknown"
-            };
-            Assert.Equal("Top", result);
-        }
+		[Fact]
+		public void EnumUsageTest()
+		{
+			TabBarPlacement placement = TabBarPlacement.Top;
+			string result = placement switch
+			{
+				TabBarPlacement.Bottom => "Bottom",
+				TabBarPlacement.Top => "Top",
+				_ => "Unknown"
+			};
+			Assert.Equal("Top", result);
+		}
 
 		#endregion
 
 		#region TabItem Fields
 
 		[Fact]
-        public void TestIsSelectedPropertySetValue()
-        {
-            SfTabItem _tabItem = new SfTabItem();
-            SetPrivateField(_tabItem, "_isSelected", true);
-            Assert.True(_tabItem.IsSelected);
-        }
+		public void TestIsSelectedPropertySetValue()
+		{
+			SfTabItem _tabItem = new SfTabItem();
+			SetPrivateField(_tabItem, "_isSelected", true);
+			Assert.True(_tabItem.IsSelected);
+		}
 
-        [Fact]
-        public void TestIsSelectedFieldValueChange()
-        {
-            SfTabItem _tabItem = new SfTabItem();
-            var value = GetPrivateField(_tabItem, "_isSelected");
-            bool isSelected = _tabItem.IsSelected;
-            Assert.False(isSelected);
-        }
+		[Fact]
+		public void TestIsSelectedFieldValueChange()
+		{
+			SfTabItem _tabItem = new SfTabItem();
 
-        [Fact]
-        public void TestSetIsSelectedValue()
-        {
-            SfTabItem _tabItem = new SfTabItem();
-            SetPrivateField(_tabItem, "_isSelected", true);
-            var value = GetPrivateField(_tabItem, "_isSelected");
-            bool isSelected = _tabItem.IsSelected;
-            Assert.True(isSelected);
-        }
+			_ = GetPrivateField(_tabItem, "_isSelected");
+			bool isSelected = _tabItem.IsSelected;
+			Assert.False(isSelected);
+		}
+
+		[Fact]
+		public void TestSetIsSelectedValue()
+		{
+			SfTabItem _tabItem = new SfTabItem();
+			SetPrivateField(_tabItem, "_isSelected", true);
+
+			_ = GetPrivateField(_tabItem, "_isSelected");
+			bool isSelected = _tabItem.IsSelected;
+			Assert.True(isSelected);
+		}
 
 		#endregion
 
 		#region ArrowIcon Internal Properties
 
 		[Fact]
-        public void TestForegroundColorPropertyShouldBeDefaultColor()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            Assert.Equal(Color.FromArgb("#49454F"), _arrowIcon.ForegroundColor);
-        }
-        [Fact]
-        public void TestForegroundColorPropertyShouldUpdateValue()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            var color = Color.FromArgb("#FF0000"); 
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Color.FromArgb("#00FF00");
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Color.FromArgb("#0000FF"); 
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Color.FromRgb(255, 0, 0); 
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Color.FromRgb(0, 255, 0); 
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Color.FromRgb(0, 0, 255); 
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Color.FromRgba(255, 0, 0, 128); 
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Color.FromRgba(0, 255, 0, 128); 
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Colors.Red;
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Colors.Green;
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Colors.Blue;
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Colors.White;
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-            color = Colors.Black;
-            _arrowIcon.ForegroundColor = color;
-            Assert.Equal(color, _arrowIcon.ForegroundColor);
-        }
+		public void TestForegroundColorPropertyShouldBeDefaultColor()
+		{
+			ArrowIcon _arrowIcon = [];
+			Assert.Equal(Color.FromArgb("#49454F"), _arrowIcon.ScrollButtonColor);
+		}
+		[Fact]
+		public void TestForegroundColorPropertyShouldUpdateValue()
+		{
+			ArrowIcon _arrowIcon = [];
+			var color = Color.FromArgb("#FF0000");
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Color.FromArgb("#00FF00");
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Color.FromArgb("#0000FF");
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Color.FromRgb(255, 0, 0);
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Color.FromRgb(0, 255, 0);
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Color.FromRgb(0, 0, 255);
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Color.FromRgba(255, 0, 0, 128);
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Color.FromRgba(0, 255, 0, 128);
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Colors.Red;
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Colors.Green;
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Colors.Blue;
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Colors.White;
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+			color = Colors.Black;
+			_arrowIcon.ScrollButtonColor = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonColor);
+		}
 
-        [Fact]
-        public void TestScrollButtonBackgroundColorPropertyShouldBeDefaultColor()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            Assert.Equal(Color.FromArgb("#F7F2FB"), _arrowIcon.ScrollButtonBackgroundColor);
-        }
+		[Fact]
+		public void TestScrollButtonBackgroundColorPropertyShouldBeDefaultColor()
+		{
+			ArrowIcon _arrowIcon = [];
+			Assert.Equal(Color.FromArgb("#F7F2FB"),((SolidColorBrush) _arrowIcon.ScrollButtonBackground).Color);
+		}
 
-        [Fact]
-        public void TestScrollButtonBackgroundColorProperty()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            var color = Color.FromArgb("#FF5733");
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromArgb("#33FF57");
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromArgb("#3357FF"); 
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromArgb("#FF33A1"); 
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromArgb("#FFD700"); 
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromRgb(255, 87, 51);
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromRgb(51, 255, 87);
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromRgb(51, 87, 255);
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromRgba(255, 87, 51, 128); 
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Color.FromRgba(51, 255, 87, 128); 
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Colors.OrangeRed;
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Colors.Green;
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Colors.Blue;
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Colors.Pink;
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-            color = Colors.Gold;
-            _arrowIcon.ScrollButtonBackgroundColor = color;
-            Assert.Equal(color, _arrowIcon.ScrollButtonBackgroundColor);
-        }
+		[Fact]
+		public void TestScrollButtonBackgroundColorProperty()
+		{
+			ArrowIcon _arrowIcon = [];
+			var color = Color.FromArgb("#FF5733");
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromArgb("#33FF57");
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromArgb("#3357FF");
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromArgb("#FF33A1");
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromArgb("#FFD700");
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromRgb(255, 87, 51);
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromRgb(51, 255, 87);
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromRgb(51, 87, 255);
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromRgba(255, 87, 51, 128);
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Color.FromRgba(51, 255, 87, 128);
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Colors.OrangeRed;
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Colors.Green;
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Colors.Blue;
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Colors.Pink;
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+			color = Colors.Gold;
+			_arrowIcon.ScrollButtonBackground = color;
+			Assert.Equal(color, _arrowIcon.ScrollButtonBackground);
+		}
 
-        [Fact]
-        public void TestButtonArrowTypePropertyShouldBeNull()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            Assert.Equal(ArrowType.Backward, _arrowIcon.ButtonArrowType);
-        }
+		[Fact]
+		public void TestButtonArrowTypePropertyShouldBeNull()
+		{
+			ArrowIcon _arrowIcon = [];
+			Assert.Equal(ArrowType.Backward, _arrowIcon.ButtonArrowType);
+		}
 
-        [Fact]
-        public void TestButtonArrowTypePropertyShouldUpdateValue()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            _arrowIcon.ButtonArrowType = ArrowType.Forward;
-            Assert.Equal(ArrowType.Forward, _arrowIcon.ButtonArrowType);
-            _arrowIcon.ButtonArrowType = ArrowType.Backward;
-            Assert.Equal(ArrowType.Backward, _arrowIcon.ButtonArrowType);
-        }
+		[Fact]
+		public void TestButtonArrowTypePropertyShouldUpdateValue()
+		{
+			ArrowIcon _arrowIcon = [];
+			_arrowIcon.ButtonArrowType = ArrowType.Forward;
+			Assert.Equal(ArrowType.Forward, _arrowIcon.ButtonArrowType);
+			_arrowIcon.ButtonArrowType = ArrowType.Backward;
+			Assert.Equal(ArrowType.Backward, _arrowIcon.ButtonArrowType);
+		}
 
-        [Fact]
-        public void ShuffleButtonArrowType()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            _arrowIcon.ButtonArrowType = ArrowType.Forward;
-            _arrowIcon.ButtonArrowType = ArrowType.Backward;
-            Assert.Equal(ArrowType.Backward, _arrowIcon.ButtonArrowType);
-            _arrowIcon.ButtonArrowType = ArrowType.Backward;
-            _arrowIcon.ButtonArrowType = ArrowType.Forward;
-            Assert.Equal(ArrowType.Forward, _arrowIcon.ButtonArrowType);
-        }
+		[Fact]
+		public void ShuffleButtonArrowType()
+		{
+			ArrowIcon _arrowIcon = [];
+			_arrowIcon.ButtonArrowType = ArrowType.Forward;
+			_arrowIcon.ButtonArrowType = ArrowType.Backward;
+			Assert.Equal(ArrowType.Backward, _arrowIcon.ButtonArrowType);
+			_arrowIcon.ButtonArrowType = ArrowType.Backward;
+			_arrowIcon.ButtonArrowType = ArrowType.Forward;
+			Assert.Equal(ArrowType.Forward, _arrowIcon.ButtonArrowType);
+		}
 
 		#endregion
 
 		#region ArrowIcon Events
 
 		[Fact]
-        public void TestScrollButtonClickedEventShouldBeInvoked()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            bool eventInvoked = false;
-            _arrowIcon.ScrollButtonClicked += (s, e) => eventInvoked = true;
-            InvokePrivateMethod(_arrowIcon, "RaiseScrollButtonClickedEvent", new EventArgs());
-            Assert.True(eventInvoked);
-        }
+		public void TestScrollButtonClickedEventShouldBeInvoked()
+		{
+			ArrowIcon _arrowIcon = [];
+			bool eventInvoked = false;
+			_arrowIcon.ScrollButtonClicked += (s, e) => eventInvoked = true;
+			InvokePrivateMethod(_arrowIcon, "RaiseScrollButtonClickedEvent", new EventArgs());
+			Assert.True(eventInvoked);
+		}
 
 		#endregion
 
 		#region ArrowIcon Public Methods
 		[Fact]
-        public void TestOnTouchShouldSetIsPressedToFalse()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            SetPrivateField(_arrowIcon, "_isPressed", true);
-            var pointerEventArgs = new PointerEventArgs(1, PointerActions.Released, new Point(10, 10));
-            _arrowIcon.OnTouch(pointerEventArgs);
-            object? privateField = GetPrivateField(_arrowIcon, "_isPressed");
-            bool isPressed = privateField is bool pressed && pressed;
-            Assert.False(isPressed);
-        }
+		public void TestOnTouchShouldSetIsPressedToFalse()
+		{
+			ArrowIcon _arrowIcon = [];
+			SetPrivateField(_arrowIcon, "_isPressed", true);
+			var pointerEventArgs = new PointerEventArgs(1, PointerActions.Released, new Point(10, 10));
+			_arrowIcon.OnTouch(pointerEventArgs);
+			object? privateField = GetPrivateField(_arrowIcon, "_isPressed");
+			bool isPressed = privateField is bool pressed && pressed;
+			Assert.False(isPressed);
+		}
 
-        [Fact]
-        public void TestOnTouchShouldApplyHighlightEffect()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            var pointerEventArgs = new PointerEventArgs(1, PointerActions.Entered, new Point(10, 10));
-            _arrowIcon.OnTouch(pointerEventArgs);
-            var sfEffectsView = GetPrivateField(_arrowIcon, "_sfEffectsView") as SfEffectsView;
-            Assert.NotNull(sfEffectsView);
-        }
+		[Fact]
+		public void TestOnTouchShouldApplyHighlightEffect()
+		{
+			ArrowIcon _arrowIcon = [];
+			var pointerEventArgs = new PointerEventArgs(1, PointerActions.Entered, new Point(10, 10));
+			_arrowIcon.OnTouch(pointerEventArgs);
+			var sfEffectsView = GetPrivateField(_arrowIcon, "_sfEffectsView") as SfEffectsView;
+			Assert.NotNull(sfEffectsView);
+		}
 
-        [Fact]
-        public void TestOnTouchExited()
-        {
-            ArrowIcon _arrowIcon = new ArrowIcon();
-            var pointerEventArgs = new PointerEventArgs(1, PointerActions.Exited, new Point(10, 10));
-            _arrowIcon.OnTouch(pointerEventArgs);
-            var sfEffectsView = GetPrivateField(_arrowIcon, "_sfEffectsView") as SfEffectsView;
-            Assert.NotNull(sfEffectsView);
-        }
-    }
+		[Fact]
+		public void TestOnTouchExited()
+		{
+			ArrowIcon _arrowIcon = [];
+			var pointerEventArgs = new PointerEventArgs(1, PointerActions.Exited, new Point(10, 10));
+			_arrowIcon.OnTouch(pointerEventArgs);
+			var sfEffectsView = GetPrivateField(_arrowIcon, "_sfEffectsView") as SfEffectsView;
+			Assert.NotNull(sfEffectsView);
+		}
+	}
 	#endregion
 
 	public class Model : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler? PropertyChanged;
+	{
+		public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            var handler = PropertyChanged;
-            if (handler != null)
-                handler(this, new PropertyChangedEventArgs(propertyName));
-        }
+		protected void OnPropertyChanged(string propertyName)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
 
-        private string? name;
+		private string? name;
 
-        public string? Name
-        {
-            get { return name; }
-            set
-            {
-                name = value;
-                OnPropertyChanged("Name");
-            }
-        }
+		public string? Name
+		{
+			get { return name; }
+			set
+			{
+				name = value;
+				OnPropertyChanged(nameof(Name));
+			}
+		}
 
-        private string? subName;
+		private string? subName;
 
-        public string? SubName
-        {
-            get { return subName; }
-            set
-            {
-                subName = value;
-                OnPropertyChanged("SubName");
-            }
-        }
-    }
+		public string? SubName
+		{
+			get { return subName; }
+			set
+			{
+				subName = value;
+				OnPropertyChanged(nameof(SubName));
+			}
+		}
+	}
 }

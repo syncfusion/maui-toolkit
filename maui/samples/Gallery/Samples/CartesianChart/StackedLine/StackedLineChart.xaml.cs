@@ -1,4 +1,3 @@
-
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
 	public partial class StackedLineChart : SampleView

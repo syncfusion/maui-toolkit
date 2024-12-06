@@ -1,19 +1,19 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Helper
 {
-    internal class SfBorder : Border { }
+	internal partial class SfBorder : Border { }
 
-    internal class SfGrid : Grid { }
+	internal partial class SfGrid : Grid { }
 
-    internal class SfStackLayout : StackLayout { }
+	internal partial class SfStackLayout : StackLayout { }
 
-    internal class SfHorizontalStackLayout : HorizontalStackLayout { }
+	internal partial class SfHorizontalStackLayout : HorizontalStackLayout { }
 
-    internal class SfScrollView : ScrollView { }
+	internal partial class SfScrollView : ScrollView { }
 
-    internal class SfLabel : Label { }
+	internal partial class SfLabel : Label { }
 
-    internal class SfImage : Image { }
+	internal partial class SfImage : Image { }
 
-    internal class SfVerticalStackLayout : VerticalStackLayout { }
+	internal partial class SfVerticalStackLayout : VerticalStackLayout { }
 }
 

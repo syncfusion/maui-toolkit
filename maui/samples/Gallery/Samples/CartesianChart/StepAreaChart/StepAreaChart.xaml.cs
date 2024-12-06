@@ -4,7 +4,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
 	public partial class StepAreaChart : SampleView
 	{
-		int month = int.MaxValue;
+		int _month = int.MaxValue;
 
 		public StepAreaChart()
 		{
@@ -21,19 +21,23 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 		{
 			DateTime baseDate = new(1899, 12, 30);
 			var date = baseDate.AddDays(e.Position);
-			if (date.Month != month)
+			if (date.Month != _month)
 			{
-				ChartAxisLabelStyle labelStyle = new();
-				labelStyle.LabelFormat = "MMM-dd";
-				labelStyle.FontAttributes = FontAttributes.Bold;
+				ChartAxisLabelStyle labelStyle = new()
+				{
+					LabelFormat = "MMM-dd",
+					FontAttributes = FontAttributes.Bold
+				};
 				e.LabelStyle = labelStyle;
 
-				month = date.Month;
+				_month = date.Month;
 			}
 			else
 			{
-				ChartAxisLabelStyle labelStyle = new();
-				labelStyle.LabelFormat = "dd";
+				ChartAxisLabelStyle labelStyle = new()
+				{
+					LabelFormat = "dd"
+				};
 				e.LabelStyle = labelStyle;
 			}
 		}
@@ -43,12 +47,12 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			base.OnAppearing();
 
 #if IOS
-            if (IsCardView)
-            {
-                Chart.WidthRequest = 350;
-                Chart.HeightRequest = 400;
-                Chart.VerticalOptions = LayoutOptions.Start;
-            }
+			if (IsCardView)
+			{
+				Chart.WidthRequest = 350;
+				Chart.HeightRequest = 400;
+				Chart.VerticalOptions = LayoutOptions.Start;
+			}
 #endif
 
 			if (!IsCardView)

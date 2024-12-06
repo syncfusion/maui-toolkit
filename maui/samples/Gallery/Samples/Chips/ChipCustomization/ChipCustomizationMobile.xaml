@@ -28,7 +28,7 @@
                              StrokeThickness="{Binding BorderThickness,Mode=TwoWay}"
                              VerticalOptions="Center"
                              HorizontalOptions="Center"
-                             CornerRadius="{Binding CornerRadius,Mode=TwoWay}"
+                             CornerRadius="{Binding CornerRadius}"
                              Stroke="{Binding BorderStroke}"                             
                              TextColor="#FFFFFF"
                              CloseButtonColor="#FFFFFF"
@@ -38,7 +38,7 @@
                              ShowIcon="{Binding IsShownIcon}"
                              ShowCloseButton="{Binding IsShownCloseButton}"
                              ShowSelectionIndicator="{Binding IsShownSelection}"
-                             ImageSource="{Binding Icon,Converter={StaticResource imageconverter}}"
+                             ImageSource="{Binding Icon}"
                              >
                 </chips:SfChip>
             </AbsoluteLayout>

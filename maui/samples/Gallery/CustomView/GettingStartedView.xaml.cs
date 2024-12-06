@@ -11,10 +11,10 @@ namespace Syncfusion.Maui.ControlsGallery.CustomView
 		public GettingStartedSampleView()
 		{
 			InitializeComponent();
-			this.HorizontalOptions = LayoutOptions.Fill;
-			this.VerticalOptions = LayoutOptions.Fill;
-			this.Margin = new Thickness(-6, -8, -6, -8);
-			this.Padding = new Thickness(10, 20);
+			HorizontalOptions = LayoutOptions.Fill;
+			VerticalOptions = LayoutOptions.Fill;
+			Margin = new Thickness(-6, -8, -6, -8);
+			Padding = new Thickness(10, 20);
 		}
 
 		/// <summary>
@@ -71,7 +71,7 @@ namespace Syncfusion.Maui.ControlsGallery.CustomView
 		{
 			if (frame != null)
 			{
-				this.frame.Content = newValue;
+				frame.Content = newValue;
 			}
 		}
 	}

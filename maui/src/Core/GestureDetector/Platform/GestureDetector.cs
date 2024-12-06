@@ -1,357 +1,373 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Internals
 {
-    /// <summary>
-    /// Enables MAUI view to recognize gestures.
-    /// </summary>
-    public partial class GestureDetector : IDisposable
-    {
-        #region Fields
+	/// <summary>
+	/// Enables MAUI view to recognize gestures.
+	/// </summary>
+	public partial class GestureDetector : IDisposable
+	{
+		#region Fields
 
-        List<IRightTapGestureListener>? _rightTapGestureListeners;
-        List<ITapGestureListener>? _tapGestureListeners;
-        List<IDoubleTapGestureListener>? _doubleTapGestureListeners;
-        List<IPinchGestureListener>? _pinchGestureListeners;
-        List<IPanGestureListener>? _panGestureListeners;
-        List<ILongPressGestureListener>? _longPressGestureListeners;
-        bool _disposed;
-        bool _isViewListenerAdded;
+		List<IRightTapGestureListener>? _rightTapGestureListeners;
+		List<ITapGestureListener>? _tapGestureListeners;
+		List<IDoubleTapGestureListener>? _doubleTapGestureListeners;
+		List<IPinchGestureListener>? _pinchGestureListeners;
+		List<IPanGestureListener>? _panGestureListeners;
+		List<ILongPressGestureListener>? _longPressGestureListeners;
+		bool _disposed;
+		bool _isViewListenerAdded;
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        internal View MauiView { get; }
+		internal View MauiView { get; }
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GestureDetector"/> class.
-        /// </summary>
-        /// <param name="mauiView">The MAUI view to attach the gesture detector to.</param>
-        public GestureDetector(View mauiView)
-        {
-            this.MauiView = mauiView;
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GestureDetector"/> class.
+		/// </summary>
+		/// <param name="mauiView">The MAUI view to attach the gesture detector to.</param>
+		public GestureDetector(View mauiView)
+		{
+			MauiView = mauiView;
 
-            if (mauiView.Handler != null)
-            {
-                SubscribeNativeGestureEvents(mauiView);
-            }
-            else
-            {
-                mauiView.HandlerChanged += MauiView_HandlerChanged;
-                mauiView.HandlerChanging += MauiView_HandlerChanging;
-            }
-        }
+			if (mauiView.Handler != null)
+			{
+				SubscribeNativeGestureEvents(mauiView);
+			}
+			else
+			{
+				mauiView.HandlerChanged += MauiView_HandlerChanged;
+				mauiView.HandlerChanging += MauiView_HandlerChanging;
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
 
-        void AddPanGestureListener(IPanGestureListener panGesture)
-        {
-            if (_panGestureListeners == null)
-                _panGestureListeners = new List<IPanGestureListener>();
-            _panGestureListeners.Add(panGesture);
-        }
+		void AddPanGestureListener(IPanGestureListener panGesture)
+		{
+			_panGestureListeners ??= [];
 
-        void AddPinchGestureListener(IPinchGestureListener pinchGesture)
-        {
-            if (_pinchGestureListeners == null)
-                _pinchGestureListeners = new List<IPinchGestureListener>();
-            _pinchGestureListeners.Add(pinchGesture);
-        }
+			_panGestureListeners.Add(panGesture);
+		}
 
-        void AddLongPressGestureListener(ILongPressGestureListener longPressGesture)
-        {
-            if (_longPressGestureListeners == null)
-                _longPressGestureListeners = new List<ILongPressGestureListener>();
-            _longPressGestureListeners.Add(longPressGesture);
-        }
+		void AddPinchGestureListener(IPinchGestureListener pinchGesture)
+		{
+			_pinchGestureListeners ??= [];
 
-        void AddTapGestureListener(ITapGestureListener tapGesture)
-        {
-            if (_tapGestureListeners == null)
-                _tapGestureListeners = new List<ITapGestureListener>();
-            _tapGestureListeners.Add(tapGesture);
-        }
+			_pinchGestureListeners.Add(pinchGesture);
+		}
 
-        void AddRightTapGestureListener(IRightTapGestureListener rightTapGesture)
-        {
-            if (_rightTapGestureListeners == null)
-                _rightTapGestureListeners = new List<IRightTapGestureListener>();
-            _rightTapGestureListeners.Add(rightTapGesture);
-        }
+		void AddLongPressGestureListener(ILongPressGestureListener longPressGesture)
+		{
+			_longPressGestureListeners ??= [];
 
-        void AddDoubleTapGestureListener(IDoubleTapGestureListener doubleTapGesture)
-        {
-            if (_doubleTapGestureListeners == null)
-                _doubleTapGestureListeners = new List<IDoubleTapGestureListener>();
-            _doubleTapGestureListeners.Add(doubleTapGesture);
-        }
+			_longPressGestureListeners.Add(longPressGesture);
+		}
 
-        /// <summary>
-        /// Handles the event when the MAUI view's handler has changed.
-        /// </summary>
-        void MauiView_HandlerChanged(object? sender, EventArgs e)
-        {
-            if (sender is View view && view.Handler != null)
-                SubscribeNativeGestureEvents(view);
-        }
+		void AddTapGestureListener(ITapGestureListener tapGesture)
+		{
+			_tapGestureListeners ??= [];
 
-        /// <summary>
-        /// Handles the event when the MAUI view's handler is changing.
-        /// </summary>
-        void MauiView_HandlerChanging(object? sender, HandlerChangingEventArgs e)
-        {
-            UnsubscribeNativeGestureEvents(e.OldHandler);
-        }
+			_tapGestureListeners.Add(tapGesture);
+		}
 
-        void HandleSingleTap(Point touchPoint, int tapCount)
-        {
-            if (tapCount == 1 && _tapGestureListeners != null)
-            {
-                TapEventArgs eventArgs = new TapEventArgs(touchPoint, tapCount);
-                foreach (var listener in _tapGestureListeners)
-                {
-                    listener.OnTap(MauiView, eventArgs);
-                    listener.OnTap(eventArgs);
-                }
-            }
+		void AddRightTapGestureListener(IRightTapGestureListener rightTapGesture)
+		{
+			_rightTapGestureListeners ??= [];
 
-        }
+			_rightTapGestureListeners.Add(rightTapGesture);
+		}
 
-        void HandleDoubleTap(Point touchPoint, int tapCount)
-        {
-            if (tapCount == 2 && _doubleTapGestureListeners != null)
-            {
-                TapEventArgs eventArgs = new TapEventArgs(touchPoint, tapCount);
-                foreach (var listener in _doubleTapGestureListeners)
-                {
-                    listener.OnDoubleTap(eventArgs);
-                }
-            }
-        }
+		void AddDoubleTapGestureListener(IDoubleTapGestureListener doubleTapGesture)
+		{
+			_doubleTapGestureListeners ??= [];
 
-        /// <summary>
-        /// Unsubscribe the events 
-        /// </summary>
-        void Unsubscribe(View? mauiView)
-        {
-            if (mauiView != null)
-            {
-                if (mauiView.Handler != null)
-                {
-                    UnsubscribeNativeGestureEvents(mauiView.Handler);
-                }
-                mauiView.HandlerChanged -= MauiView_HandlerChanged;
-                mauiView.HandlerChanging -= MauiView_HandlerChanging;
-                mauiView = null;
-            }
-        }
-        #endregion
+			_doubleTapGestureListeners.Add(doubleTapGesture);
+		}
 
-        #region Public Methods
+		/// <summary>
+		/// Handles the event when the MAUI view's handler has changed.
+		/// </summary>
+		void MauiView_HandlerChanged(object? sender, EventArgs e)
+		{
+			if (sender is View view && view.Handler != null)
+			{
+				SubscribeNativeGestureEvents(view);
+			}
+		}
 
-        /// <summary>
-        /// Adds a gesture listener to the detector.
-        /// </summary>
-        /// <param name="listener">The gesture listener to add.</param>
-        public void AddListener(IGestureListener listener)
-        {
-            if (listener is IPanGestureListener panGesture)
-            {
-                AddPanGestureListener(panGesture);
-            }
+		/// <summary>
+		/// Handles the event when the MAUI view's handler is changing.
+		/// </summary>
+		void MauiView_HandlerChanging(object? sender, HandlerChangingEventArgs e)
+		{
+			UnsubscribeNativeGestureEvents(e.OldHandler);
+		}
 
-            if (listener is IPinchGestureListener pinchGesture)
-            {
-                AddPinchGestureListener(pinchGesture);
-            }
+		void HandleSingleTap(Point touchPoint, int tapCount)
+		{
+			if (tapCount == 1 && _tapGestureListeners != null)
+			{
+				TapEventArgs eventArgs = new TapEventArgs(touchPoint, tapCount);
+				foreach (var listener in _tapGestureListeners)
+				{
+					listener.OnTap(MauiView, eventArgs);
+					listener.OnTap(eventArgs);
+				}
+			}
 
-            if (listener is ILongPressGestureListener longPressGesture)
-            {
-                AddLongPressGestureListener(longPressGesture);
-            }
+		}
 
-            if (listener is ITapGestureListener tapGesture)
-            {
-                AddTapGestureListener(tapGesture);
-            }
+		void HandleDoubleTap(Point touchPoint, int tapCount)
+		{
+			if (tapCount == 2 && _doubleTapGestureListeners != null)
+			{
+				TapEventArgs eventArgs = new TapEventArgs(touchPoint, tapCount);
+				foreach (var listener in _doubleTapGestureListeners)
+				{
+					listener.OnDoubleTap(eventArgs);
+				}
+			}
+		}
 
-            if (listener is IRightTapGestureListener rightTapGesture)
-            {
-                AddRightTapGestureListener(rightTapGesture);
-            }
+		/// <summary>
+		/// Unsubscribe the events 
+		/// </summary>
+		void Unsubscribe(View? mauiView)
+		{
+			if (mauiView != null)
+			{
+				if (mauiView.Handler != null)
+				{
+					UnsubscribeNativeGestureEvents(mauiView.Handler);
+				}
+				mauiView.HandlerChanged -= MauiView_HandlerChanged;
+				mauiView.HandlerChanging -= MauiView_HandlerChanging;
+				mauiView = null;
+			}
+		}
+		#endregion
 
-            if (listener is IDoubleTapGestureListener doubleTapGesture)
-            {
-                AddDoubleTapGestureListener(doubleTapGesture);
-            }
+		#region Public Methods
 
-            // Create native listeners if this method is called dynamically or after the MauiView's handler has been set.
-            if (!_isViewListenerAdded)
-            {
-                CreateNativeListener();
-            }
-            _isViewListenerAdded = true;
-        }
+		/// <summary>
+		/// Adds a gesture listener to the detector.
+		/// </summary>
+		/// <param name="listener">The gesture listener to add.</param>
+		public void AddListener(IGestureListener listener)
+		{
+			if (listener is IPanGestureListener panGesture)
+			{
+				AddPanGestureListener(panGesture);
+			}
 
-        /// <summary>
-        /// Removes a gesture listener from the detector.
-        /// </summary>
-        /// <param name="listener">The gesture listener to remove.</param>
-        public void RemoveListener(IGestureListener listener)
-        {
-            if (listener is IPanGestureListener panGesture &&
-                _panGestureListeners != null &&
-                _panGestureListeners.Contains(panGesture))
-                _panGestureListeners.Remove(panGesture);
+			if (listener is IPinchGestureListener pinchGesture)
+			{
+				AddPinchGestureListener(pinchGesture);
+			}
 
-            if (listener is IPinchGestureListener pinchGesture &&
-                _pinchGestureListeners != null &&
-                _pinchGestureListeners.Contains(pinchGesture))
-                _pinchGestureListeners.Remove(pinchGesture);
+			if (listener is ILongPressGestureListener longPressGesture)
+			{
+				AddLongPressGestureListener(longPressGesture);
+			}
 
-            if (listener is ILongPressGestureListener longPressGesture &&
-                _longPressGestureListeners != null &&
-                _longPressGestureListeners.Contains(longPressGesture))
-                _longPressGestureListeners.Remove(longPressGesture);
+			if (listener is ITapGestureListener tapGesture)
+			{
+				AddTapGestureListener(tapGesture);
+			}
 
-            if (listener is ITapGestureListener tapGesture &&
-                _tapGestureListeners != null &&
-                _tapGestureListeners.Contains(tapGesture))
-                _tapGestureListeners.Remove(tapGesture);
+			if (listener is IRightTapGestureListener rightTapGesture)
+			{
+				AddRightTapGestureListener(rightTapGesture);
+			}
 
-            if (listener is IRightTapGestureListener rightTapGesture &&
-                _rightTapGestureListeners != null &&
-                _rightTapGestureListeners.Contains(rightTapGesture))
-                _rightTapGestureListeners.Remove(rightTapGesture);
+			if (listener is IDoubleTapGestureListener doubleTapGesture)
+			{
+				AddDoubleTapGestureListener(doubleTapGesture);
+			}
 
-            if (listener is IDoubleTapGestureListener doubleTapGesture &&
-                _doubleTapGestureListeners != null &&
-                _doubleTapGestureListeners.Contains(doubleTapGesture))
-                _doubleTapGestureListeners.Remove(doubleTapGesture);
-        }
+			// Create native listeners if this method is called dynamically or after the MauiView's handler has been set.
+			if (!_isViewListenerAdded)
+			{
+				CreateNativeListener();
+			}
+			_isViewListenerAdded = true;
+		}
 
-        /// <summary>
-        /// Clears all registered gesture listeners from the <see cref="GestureDetector"/>.
-        /// </summary>
-        public void ClearListeners()
-        {
-            _rightTapGestureListeners?.Clear();
-            _tapGestureListeners?.Clear();
-            _doubleTapGestureListeners?.Clear();
-            _pinchGestureListeners?.Clear();
-            _panGestureListeners?.Clear();
-            _longPressGestureListeners?.Clear();
-        }
+		/// <summary>
+		/// Removes a gesture listener from the detector.
+		/// </summary>
+		/// <param name="listener">The gesture listener to remove.</param>
+		public void RemoveListener(IGestureListener listener)
+		{
+			if (listener is IPanGestureListener panGesture &&
+				_panGestureListeners != null &&
+				_panGestureListeners.Contains(panGesture))
+			{
+				_panGestureListeners.Remove(panGesture);
+			}
 
-        /// <summary>
-        /// Checks if there are any registered gesture listeners.
-        /// </summary>
-        /// <returns>True if there is at least one listener registered; otherwise, false.</returns>
-        public bool HasListener()
-        {
-            return _tapGestureListeners?.Count > 0 ||
-                _doubleTapGestureListeners?.Count > 0 ||
-                _longPressGestureListeners?.Count > 0 ||
-                _pinchGestureListeners?.Count > 0 ||
-                _panGestureListeners?.Count > 0 ||
-                _rightTapGestureListeners?.Count > 0;
-        }
+			if (listener is IPinchGestureListener pinchGesture &&
+				_pinchGestureListeners != null &&
+				_pinchGestureListeners.Contains(pinchGesture))
+			{
+				_pinchGestureListeners.Remove(pinchGesture);
+			}
 
-        /// <summary>
-        /// Disposes the GestureDetector, releasing all managed and unmanaged resources.
-        /// </summary>
-        public void Dispose()
-        {
-            Dispose(true);
-        }
+			if (listener is ILongPressGestureListener longPressGesture &&
+				_longPressGestureListeners != null &&
+				_longPressGestureListeners.Contains(longPressGesture))
+			{
+				_longPressGestureListeners.Remove(longPressGesture);
+			}
 
-        /// <summary>
-        /// Releases the unmanaged resources used by the GestureDetector and optionally releases the managed resources.
-        /// </summary>
-        /// <param name="disposing">True to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-                return;
+			if (listener is ITapGestureListener tapGesture &&
+				_tapGestureListeners != null &&
+				_tapGestureListeners.Contains(tapGesture))
+			{
+				_tapGestureListeners.Remove(tapGesture);
+			}
 
-            _disposed = true;
+			if (listener is IRightTapGestureListener rightTapGesture &&
+				_rightTapGestureListeners != null &&
+				_rightTapGestureListeners.Contains(rightTapGesture))
+			{
+				_rightTapGestureListeners.Remove(rightTapGesture);
+			}
 
-            if (disposing)
-            {
-                _isViewListenerAdded = false;
-                ClearListeners();
-                this.Unsubscribe(MauiView);
-            }
-        }
+			if (listener is IDoubleTapGestureListener doubleTapGesture &&
+				_doubleTapGestureListeners != null &&
+				_doubleTapGestureListeners.Contains(doubleTapGesture))
+			{
+				_doubleTapGestureListeners.Remove(doubleTapGesture);
+			}
+		}
 
-        #endregion
+		/// <summary>
+		/// Clears all registered gesture listeners from the <see cref="GestureDetector"/>.
+		/// </summary>
+		public void ClearListeners()
+		{
+			_rightTapGestureListeners?.Clear();
+			_tapGestureListeners?.Clear();
+			_doubleTapGestureListeners?.Clear();
+			_pinchGestureListeners?.Clear();
+			_panGestureListeners?.Clear();
+			_longPressGestureListeners?.Clear();
+		}
 
-        #region Internal Methods
+		/// <summary>
+		/// Checks if there are any registered gesture listeners.
+		/// </summary>
+		/// <returns>True if there is at least one listener registered; otherwise, false.</returns>
+		public bool HasListener()
+		{
+			return _tapGestureListeners?.Count > 0 ||
+				_doubleTapGestureListeners?.Count > 0 ||
+				_longPressGestureListeners?.Count > 0 ||
+				_pinchGestureListeners?.Count > 0 ||
+				_panGestureListeners?.Count > 0 ||
+				_rightTapGestureListeners?.Count > 0;
+		}
 
-        /// <summary>
-        /// Handles pinch gestures and notifies all registered pinch gesture listeners.
-        /// </summary>
-        internal virtual void OnPinch(Func<IElement?, Point?>? position, GestureStatus state, Point point, double pinchAngle, float scale)
-        {
-            if (_pinchGestureListeners != null)
-            {
-                PinchEventArgs eventArgs = new PinchEventArgs(position, state, point, pinchAngle, scale);
-                foreach (var listener in _pinchGestureListeners)
-                {
-                    listener.OnPinch(eventArgs);
-                }
-            }
-        }
+		/// <summary>
+		/// Disposes the GestureDetector, releasing all managed and unmanaged resources.
+		/// </summary>
+		public void Dispose()
+		{
+			Dispose(true);
+		}
 
-        /// <summary>
-        /// Handles pan gestures and notifies all registered pan gesture listeners.
-        /// </summary>
-        internal virtual void OnScroll(Func<IElement?, Point?> getPosition, GestureStatus state, Point startPoint, Point scalePoint, Point velocity)
-        {
-            if (_panGestureListeners != null)
-            {
-                PanEventArgs eventArgs = new PanEventArgs(getPosition, state, startPoint, scalePoint, velocity);
-                foreach (var listener in _panGestureListeners)
-                {
-                    listener.OnPan(eventArgs);
-                }
-            }
-        }
+		/// <summary>
+		/// Releases the unmanaged resources used by the GestureDetector and optionally releases the managed resources.
+		/// </summary>
+		/// <param name="disposing">True to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+		protected virtual void Dispose(bool disposing)
+		{
+			if (_disposed)
+			{
+				return;
+			}
 
-        /// <summary>
-        /// Handles tap gestures and notifies the appropriate listeners.
-        /// </summary>
-        internal virtual void OnTapped(Point touchPoint, int tapCount)
-        {
-            HandleSingleTap(touchPoint, tapCount);
-            HandleDoubleTap(touchPoint, tapCount);
-        }
+			_disposed = true;
 
-        /// <summary>
-        /// Handles right tap gestures and notifies all registered right tap gesture listeners.
-        /// </summary>
-        internal virtual void OnRightTapped(Point touchPoint, PointerDeviceType pointerDeviceType)
-        {
-            RightTapEventArgs eventArgs;
-            if (_rightTapGestureListeners != null)
-            {
-                eventArgs = new RightTapEventArgs(touchPoint, pointerDeviceType);
-                foreach (var listener in _rightTapGestureListeners)
-                {
-                    listener.OnRightTap(MauiView, eventArgs);
-                    listener.OnRightTap(eventArgs);
-                }
-            }
-        }
+			if (disposing)
+			{
+				_isViewListenerAdded = false;
+				ClearListeners();
+				Unsubscribe(MauiView);
+			}
+		}
 
-        /// <summary>
-        /// Handles long press gestures and notifies all registered long press gesture listeners.
-        /// </summary>
+		#endregion
+
+		#region Internal Methods
+
+		/// <summary>
+		/// Handles pinch gestures and notifies all registered pinch gesture listeners.
+		/// </summary>
+		internal virtual void OnPinch(Func<IElement?, Point?>? position, GestureStatus state, Point point, double pinchAngle, float scale)
+		{
+			if (_pinchGestureListeners != null)
+			{
+				PinchEventArgs eventArgs = new PinchEventArgs(position, state, point, pinchAngle, scale);
+				foreach (var listener in _pinchGestureListeners)
+				{
+					listener.OnPinch(eventArgs);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Handles pan gestures and notifies all registered pan gesture listeners.
+		/// </summary>
+		internal virtual void OnScroll(Func<IElement?, Point?> getPosition, GestureStatus state, Point startPoint, Point scalePoint, Point velocity)
+		{
+			if (_panGestureListeners != null)
+			{
+				PanEventArgs eventArgs = new PanEventArgs(getPosition, state, startPoint, scalePoint, velocity);
+				foreach (var listener in _panGestureListeners)
+				{
+					listener.OnPan(eventArgs);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Handles tap gestures and notifies the appropriate listeners.
+		/// </summary>
+		internal virtual void OnTapped(Point touchPoint, int tapCount)
+		{
+			HandleSingleTap(touchPoint, tapCount);
+			HandleDoubleTap(touchPoint, tapCount);
+		}
+
+		/// <summary>
+		/// Handles right tap gestures and notifies all registered right tap gesture listeners.
+		/// </summary>
+		internal virtual void OnRightTapped(Point touchPoint, PointerDeviceType pointerDeviceType)
+		{
+			RightTapEventArgs eventArgs;
+			if (_rightTapGestureListeners != null)
+			{
+				eventArgs = new RightTapEventArgs(touchPoint, pointerDeviceType);
+				foreach (var listener in _rightTapGestureListeners)
+				{
+					listener.OnRightTap(MauiView, eventArgs);
+					listener.OnRightTap(eventArgs);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Handles long press gestures and notifies all registered long press gesture listeners.
+		/// </summary>
 #if IOS || MACCATALYST
         internal virtual void OnLongPress(Func<IElement?, Point?>? position, Point touchPoint, GestureStatus status)
         {
@@ -365,18 +381,18 @@
             }
         }
 #else
-        internal virtual void OnLongPress(Func<IElement?, Point?>? position, Point touchPoint)
-        {
-            if (_longPressGestureListeners != null)
-            {
-                LongPressEventArgs eventArgs = new LongPressEventArgs(position, touchPoint);
-                foreach (var listener in _longPressGestureListeners)
-                {
-                    listener.OnLongPress(eventArgs);
-                }
-            }
-        }
+		internal virtual void OnLongPress(Func<IElement?, Point?>? position, Point touchPoint)
+		{
+			if (_longPressGestureListeners != null)
+			{
+				LongPressEventArgs eventArgs = new LongPressEventArgs(position, touchPoint);
+				foreach (var listener in _longPressGestureListeners)
+				{
+					listener.OnLongPress(eventArgs);
+				}
+			}
+		}
 #endif
-        #endregion
-    }
+		#endregion
+	}
 }

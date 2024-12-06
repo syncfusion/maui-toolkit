@@ -1,3 +1,4 @@
+
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
 	public partial class RangeBarAnimation : SampleView
@@ -6,7 +7,9 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 		{
 			InitializeComponent();
 			if (!(BaseConfig.RunTimeDeviceLayout == SBLayout.Mobile))
+			{
 				viewModel.StartTimer();
+			}
 		}
 
 		public override void OnAppearing()

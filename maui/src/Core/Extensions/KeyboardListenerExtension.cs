@@ -13,116 +13,108 @@ using Microsoft.Maui.Controls;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {
-    /// <summary>
-    /// Represents the extension class that create instance for <see cref="KeyboardDetector"/> class and set to target class.
-    /// </summary>
-    public static class KeyboardListenerExtension
-    {
-        internal static BindableProperty KeyboardDetectorProperty = BindableProperty.Create(nameof(KeyboardDetector), typeof(KeyboardDetector), typeof(View), null);
+	/// <summary>
+	/// Represents the extension class that create instance for <see cref="KeyboardDetector"/> class and set to target class.
+	/// </summary>
+	public static class KeyboardListenerExtension
+	{
+		internal static BindableProperty KeyboardDetectorProperty = BindableProperty.Create(nameof(KeyboardDetector), typeof(KeyboardDetector), typeof(View), null);
 
-        /// <summary>
-        /// Create the keyboard detector and add the listener to it.
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="listener"></param>
-        public static void AddKeyboardListener(this View target, IKeyboardListener listener)
-        {
-            var keyboardDetector = target.GetValue(KeyboardDetectorProperty) as KeyboardDetector;
+		/// <summary>
+		/// Create the keyboard detector and add the listener to it.
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="listener"></param>
+		public static void AddKeyboardListener(this View target, IKeyboardListener listener)
+		{
+			if (target.GetValue(KeyboardDetectorProperty) is not KeyboardDetector keyboardDetector)
+			{
+				keyboardDetector = new KeyboardDetector(target);
+				target.SetValue(KeyboardDetectorProperty, keyboardDetector);
+			}
 
-            if (keyboardDetector == null)
-            {
-                keyboardDetector = new KeyboardDetector(target);
-                target.SetValue(KeyboardDetectorProperty, keyboardDetector);
-            }
+			keyboardDetector.AddListener(listener);
+		}
 
-            keyboardDetector.AddListener(listener);
-        }
-
-        /// <summary>
-        /// Remove the listener and keyboard detector. 
-        /// </summary>
-        /// <param name="target"></param>
-        /// <param name="listener"></param>
-        public static void RemoveKeyboardListener(this View target, IKeyboardListener listener)
-        {
-            var keyboardDetector = target.GetValue(KeyboardDetectorProperty) as KeyboardDetector;
-
-            if (keyboardDetector != null)
-            {
-                keyboardDetector.RemoveListener(listener);
-                if (!keyboardDetector.HasListener())
-                {
-                    keyboardDetector.Dispose();
-                    target.SetValue(KeyboardDetectorProperty, null);
-                }
-            }
-        }
+		/// <summary>
+		/// Remove the listener and keyboard detector. 
+		/// </summary>
+		/// <param name="target"></param>
+		/// <param name="listener"></param>
+		public static void RemoveKeyboardListener(this View target, IKeyboardListener listener)
+		{
+			if (target.GetValue(KeyboardDetectorProperty) is KeyboardDetector keyboardDetector)
+			{
+				keyboardDetector.RemoveListener(listener);
+				if (!keyboardDetector.HasListener())
+				{
+					keyboardDetector.Dispose();
+					target.SetValue(KeyboardDetectorProperty, null);
+				}
+			}
+		}
 
 #if IOS
-        /// <summary>
-        /// Processes the <see cref="IKeyboardListener.OnKeyDown(KeyEventArgs)"/> when the key press event is triggered from native view".
-        /// </summary>
-        /// <param name="target">The view where the keyboard listener has been added.</param>
-        /// <param name="presses">A set of <see cref="UIPress"/> instances that represent the new presses that occurred.</param>
-        /// <param name="evt">The event to which the presses belong.</param>
-        /// <returns>Returns whether the routed event is handled or not.</returns>
-        /// <remarks>This method is applicable only for iOS platform.</remarks>
-        internal static bool HandleKeyPress(this View target, NSSet<UIPress> presses, UIPressesEvent evt)
-        {
-            var keyboardDetector = target.GetValue(KeyboardDetectorProperty) as KeyboardDetector;
-            if (keyboardDetector != null)
-            {
-                return keyboardDetector.HandleKeyActions(presses, evt, KeyActions.KeyDown);
-            }
+		/// <summary>
+		/// Processes the <see cref="IKeyboardListener.OnKeyDown(KeyEventArgs)"/> when the key press event is triggered from native view".
+		/// </summary>
+		/// <param name="target">The view where the keyboard listener has been added.</param>
+		/// <param name="presses">A set of <see cref="UIPress"/> instances that represent the new presses that occurred.</param>
+		/// <param name="evt">The event to which the presses belong.</param>
+		/// <returns>Returns whether the routed event is handled or not.</returns>
+		/// <remarks>This method is applicable only for iOS platform.</remarks>
+		internal static bool HandleKeyPress(this View target, NSSet<UIPress> presses, UIPressesEvent evt)
+		{
+			if (target.GetValue(KeyboardDetectorProperty) is KeyboardDetector keyboardDetector)
+			{
+				return keyboardDetector.HandleKeyActions(presses, evt, KeyActions.KeyDown);
+			}
 
-            return false;
-        }
+			return false;
+		}
 
-        /// <summary>
-        /// Processes the <see cref="IKeyboardListener.OnKeyUp(KeyEventArgs)"/> when the key release event is triggered from native view".
-        /// </summary>
-        /// <param name="target">The view where the keyboard listener has been added.</param>
-        /// <param name="presses">A set of <see cref="UIPress"/> instances that represent the buttons that the user is no longer pressing.</param>
-        /// <param name="evt">The event to which the presses belong.</param>
-        /// <returns>Returns whether the routed event is handled or not.</returns>
-        /// <remarks>This method is applicable only for iOS platform.</remarks>
-        internal static bool HandleKeyRelease(this View target, NSSet<UIPress> presses, UIPressesEvent evt)
-        {
-            var keyboardDetector = target.GetValue(KeyboardDetectorProperty) as KeyboardDetector;
-            if (keyboardDetector != null)
-            {
-                return keyboardDetector.HandleKeyActions(presses, evt, KeyActions.KeyUp);
-            }
+		/// <summary>
+		/// Processes the <see cref="IKeyboardListener.OnKeyUp(KeyEventArgs)"/> when the key release event is triggered from native view".
+		/// </summary>
+		/// <param name="target">The view where the keyboard listener has been added.</param>
+		/// <param name="presses">A set of <see cref="UIPress"/> instances that represent the buttons that the user is no longer pressing.</param>
+		/// <param name="evt">The event to which the presses belong.</param>
+		/// <returns>Returns whether the routed event is handled or not.</returns>
+		/// <remarks>This method is applicable only for iOS platform.</remarks>
+		internal static bool HandleKeyRelease(this View target, NSSet<UIPress> presses, UIPressesEvent evt)
+		{
+			if (target.GetValue(KeyboardDetectorProperty) is KeyboardDetector keyboardDetector)
+			{
+				return keyboardDetector.HandleKeyActions(presses, evt, KeyActions.KeyUp);
+			}
 
-            return false;
-        }
+			return false;
+		}
 #endif
 
-        /// <summary>
-        /// Clear the listeners and keyboard detector.
-        /// </summary>
-        /// <param name="target"></param>
-        public static void ClearKeyboardListeners(this View target)
-        {
-            var keyboardDetector = target.GetValue(KeyboardDetectorProperty) as KeyboardDetector;
-
-            if (keyboardDetector != null)
-            {
-                keyboardDetector.ClearListeners();
-                keyboardDetector.Dispose();
-                target.SetValue(KeyboardDetectorProperty, null);
-            }
-        }
+		/// <summary>
+		/// Clear the listeners and keyboard detector.
+		/// </summary>
+		/// <param name="target"></param>
+		public static void ClearKeyboardListeners(this View target)
+		{
+			if (target.GetValue(KeyboardDetectorProperty) is KeyboardDetector keyboardDetector)
+			{
+				keyboardDetector.ClearListeners();
+				keyboardDetector.Dispose();
+				target.SetValue(KeyboardDetectorProperty, null);
+			}
+		}
 
 #if __ANDROID__ || WINDOWS10_0_19041_0 || IOS
-        /// <summary>
-        /// Convert native keys to <see cref="KeyboardKey"/>.
-        /// </summary>
-        /// <param name="argsKey">The native key</param>
-        /// <returns>Returns the converted <see cref="KeyboardKey"/></returns>
-        internal static KeyboardKey ConvertToKeyboardKey(Key argsKey)
-        {
-            KeyboardKey keyboardKey = KeyboardKey.None;
+		/// <summary>
+		/// Convert native keys to <see cref="KeyboardKey"/>.
+		/// </summary>
+		/// <param name="argsKey">The native key</param>
+		/// <returns>Returns the converted <see cref="KeyboardKey"/></returns>
+		internal static KeyboardKey ConvertToKeyboardKey(Key argsKey)
+		{
+			KeyboardKey keyboardKey = KeyboardKey.None;
 #if __ANDROID__ || WINDOWS10_0_19041_0
             switch (argsKey)
             {
@@ -488,290 +480,290 @@ namespace Syncfusion.Maui.Toolkit.Internals
                     break;
             }
 #elif IOS
-            switch(argsKey.KeyCode)
-            {
-                case UIKeyboardHidUsage.KeyboardDownArrow:
-                    keyboardKey = KeyboardKey.Down;
-                    break;
-                case UIKeyboardHidUsage.KeyboardUpArrow:
-                    keyboardKey = KeyboardKey.Up;
-                    break;
-                case UIKeyboardHidUsage.KeyboardLeftArrow:
-                    keyboardKey = KeyboardKey.Left;
-                    break;
-                case UIKeyboardHidUsage.KeyboardRightArrow:
-                    keyboardKey = KeyboardKey.Right;
-                    break;
-                case UIKeyboardHidUsage.KeyboardLeftShift:
-                case UIKeyboardHidUsage.KeyboardRightShift:
-                    keyboardKey = KeyboardKey.Shift;
-                    break;
-                case UIKeyboardHidUsage.KeyboardLeftControl:
-                case UIKeyboardHidUsage.KeyboardRightControl:
-                    keyboardKey = KeyboardKey.Ctrl;
-                    break;
-                case UIKeyboardHidUsage.KeyboardLeftGui:
-                case UIKeyboardHidUsage.KeyboardRightGui:
-                    keyboardKey = KeyboardKey.Command;
-                    break;
-                case UIKeyboardHidUsage.KeyboardLeftAlt:
-                case UIKeyboardHidUsage.KeyboardRightAlt:
-                    keyboardKey = KeyboardKey.Alt;
-                    break;
-                case UIKeyboardHidUsage.KeyboardTab:
-                    keyboardKey = KeyboardKey.Tab;
-                    break;
-                case UIKeyboardHidUsage.KeyboardHome:
-                    keyboardKey = KeyboardKey.Home;
-                    break;
-                case UIKeyboardHidUsage.KeyboardEnd:
-                    keyboardKey = KeyboardKey.End;
-                    break;
-                case UIKeyboardHidUsage.KeyboardPageUp:
-                    keyboardKey = KeyboardKey.PageUp;
-                    break;
-                case UIKeyboardHidUsage.KeyboardPageDown:
-                    keyboardKey = KeyboardKey.PageDown;
-                    break;
-                case UIKeyboardHidUsage.KeyboardReturnOrEnter:
-                    keyboardKey = KeyboardKey.Enter;
-                    break;
-                case UIKeyboardHidUsage.KeyboardEscape:
-                    keyboardKey = KeyboardKey.Escape;
-                    break;
-                case UIKeyboardHidUsage.KeyboardDeleteOrBackspace:
-                    keyboardKey = KeyboardKey.Back;
-                    break;
-                case UIKeyboardHidUsage.KeyboardSpacebar:
-                    keyboardKey = KeyboardKey.Space;
-                    break;
-                case UIKeyboardHidUsage.KeyboardDeleteForward:
-                    keyboardKey = KeyboardKey.Delete;
-                    break;
-                case UIKeyboardHidUsage.KeyboardHelp:
-                    keyboardKey = KeyboardKey.Insert;
-                    break;
-                case UIKeyboardHidUsage.KeypadPlus:
-                    keyboardKey = KeyboardKey.Add;
-                    break;
-                case UIKeyboardHidUsage.KeyboardHyphen:
-                case UIKeyboardHidUsage.KeypadHyphen:
-                    keyboardKey = KeyboardKey.Subtract;
-                    break;
-                case UIKeyboardHidUsage.KeypadAsterisk:
-                    keyboardKey = KeyboardKey.Multiply;
-                    break;
-                case UIKeyboardHidUsage.KeyboardSlash:
-                case UIKeyboardHidUsage.KeypadSlash:
-                    keyboardKey = KeyboardKey.Divide;
-                    break;
-                case UIKeyboardHidUsage.KeyboardPeriod:
-                case UIKeyboardHidUsage.KeypadPeriod:
-                    keyboardKey = KeyboardKey.Decimal;
-                    break;
-                case UIKeyboardHidUsage.KeyboardA:
-                    keyboardKey = KeyboardKey.A;
-                    break;
-                case UIKeyboardHidUsage.KeyboardB:
-                    keyboardKey = KeyboardKey.B;
-                    break;
-                case UIKeyboardHidUsage.KeyboardC:
-                    keyboardKey = KeyboardKey.C;
-                    break;
-                case UIKeyboardHidUsage.KeyboardD:
-                    keyboardKey = KeyboardKey.D;
-                    break;
-                case UIKeyboardHidUsage.KeyboardE:
-                    keyboardKey = KeyboardKey.E;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF:
-                    keyboardKey = KeyboardKey.F;
-                    break;
-                case UIKeyboardHidUsage.KeyboardG:
-                    keyboardKey = KeyboardKey.G;
-                    break;
-                case UIKeyboardHidUsage.KeyboardH:
-                    keyboardKey = KeyboardKey.H;
-                    break;
-                case UIKeyboardHidUsage.KeyboardI:
-                    keyboardKey = KeyboardKey.I;
-                    break;
-                case UIKeyboardHidUsage.KeyboardJ:
-                    keyboardKey = KeyboardKey.J;
-                    break;
-                case UIKeyboardHidUsage.KeyboardK:
-                    keyboardKey = KeyboardKey.K;
-                    break;
-                case UIKeyboardHidUsage.KeyboardL:
-                    keyboardKey = KeyboardKey.L;
-                    break;
-                case UIKeyboardHidUsage.KeyboardM:
-                    keyboardKey = KeyboardKey.M;
-                    break;
-                case UIKeyboardHidUsage.KeyboardN:
-                    keyboardKey = KeyboardKey.N;
-                    break;
-                case UIKeyboardHidUsage.KeyboardO:
-                    keyboardKey = KeyboardKey.O;
-                    break;
-                case UIKeyboardHidUsage.KeyboardP:
-                    keyboardKey = KeyboardKey.P;
-                    break;
-                case UIKeyboardHidUsage.KeyboardQ:
-                    keyboardKey = KeyboardKey.Q;
-                    break;
-                case UIKeyboardHidUsage.KeyboardR:
-                    keyboardKey = KeyboardKey.R;
-                    break;
-                case UIKeyboardHidUsage.KeyboardS:
-                    keyboardKey = KeyboardKey.S;
-                    break;
-                case UIKeyboardHidUsage.KeyboardT:
-                    keyboardKey = KeyboardKey.T;
-                    break;
-                case UIKeyboardHidUsage.KeyboardU:
-                    keyboardKey = KeyboardKey.U;
-                    break;
-                case UIKeyboardHidUsage.KeyboardV:
-                    keyboardKey = KeyboardKey.V;
-                    break;
-                case UIKeyboardHidUsage.KeyboardW:
-                    keyboardKey = KeyboardKey.W;
-                    break;
-                case UIKeyboardHidUsage.KeyboardX:
-                    keyboardKey = KeyboardKey.X;
-                    break;
-                case UIKeyboardHidUsage.KeyboardY:
-                    keyboardKey = KeyboardKey.Y;
-                    break;
-                case UIKeyboardHidUsage.KeyboardZ:
-                    keyboardKey = KeyboardKey.Z;
-                    break;
-                case UIKeyboardHidUsage.KeyboardCapsLock:
-                    keyboardKey = KeyboardKey.CapsLock;
-                    break;
-                case UIKeyboardHidUsage.KeyboardScrollLock:
-                    keyboardKey = KeyboardKey.ScrollLock;
-                    break;
-                case UIKeyboardHidUsage.KeypadNumLock:
-                    keyboardKey = KeyboardKey.NumLock;
-                    break;
-                case UIKeyboardHidUsage.Keyboard0:
-                case UIKeyboardHidUsage.Keypad0:
-                    keyboardKey = KeyboardKey.Num0;
-                    break;
-                case UIKeyboardHidUsage.Keyboard1:
-                case UIKeyboardHidUsage.Keypad1:
-                    keyboardKey = KeyboardKey.Num1;
-                    break;
-                case UIKeyboardHidUsage.Keypad2:
-                case UIKeyboardHidUsage.Keyboard2:
-                    keyboardKey = KeyboardKey.Num2;
-                    break;
-                case UIKeyboardHidUsage.Keyboard3:
-                case UIKeyboardHidUsage.Keypad3:
-                    keyboardKey = KeyboardKey.Num3;
-                    break;
-                case UIKeyboardHidUsage.Keyboard4:
-                case UIKeyboardHidUsage.Keypad4:
-                    keyboardKey = KeyboardKey.Num4;
-                    break;
-                case UIKeyboardHidUsage.Keyboard5:
-                case UIKeyboardHidUsage.Keypad5:
-                    keyboardKey = KeyboardKey.Num5;
-                    break;
-                case UIKeyboardHidUsage.Keyboard6:
-                case UIKeyboardHidUsage.Keypad6:
-                    keyboardKey = KeyboardKey.Num6;
-                    break;
-                case UIKeyboardHidUsage.Keyboard7:
-                case UIKeyboardHidUsage.Keypad7:
-                    keyboardKey = KeyboardKey.Num7;
-                    break;
-                case UIKeyboardHidUsage.Keyboard8:
-                case UIKeyboardHidUsage.Keypad8:
-                    keyboardKey = KeyboardKey.Num8;
-                    break;
-                case UIKeyboardHidUsage.Keyboard9:
-                case UIKeyboardHidUsage.Keypad9:
-                    keyboardKey = KeyboardKey.Num9;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF1:
-                    keyboardKey = KeyboardKey.F1;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF2:
-                    keyboardKey = KeyboardKey.F2;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF3:
-                    keyboardKey = KeyboardKey.F3;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF4:
-                    keyboardKey = KeyboardKey.F4;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF5:
-                    keyboardKey = KeyboardKey.F5;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF6:
-                    keyboardKey = KeyboardKey.F6;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF7:
-                    keyboardKey = KeyboardKey.F7;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF8:
-                    keyboardKey = KeyboardKey.F8;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF9:
-                    keyboardKey = KeyboardKey.F9;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF10:
-                    keyboardKey = KeyboardKey.F10;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF11:
-                    keyboardKey = KeyboardKey.F11;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF12:
-                    keyboardKey = KeyboardKey.F12;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF13:
-                    keyboardKey = KeyboardKey.F13;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF14:
-                    keyboardKey = KeyboardKey.F14;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF15:
-                    keyboardKey = KeyboardKey.F15;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF16:
-                    keyboardKey = KeyboardKey.F16;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF17:
-                    keyboardKey = KeyboardKey.F17;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF18:
-                    keyboardKey = KeyboardKey.F18;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF19:
-                    keyboardKey = KeyboardKey.F19;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF20:
-                    keyboardKey = KeyboardKey.F20;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF21:
-                    keyboardKey = KeyboardKey.F21;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF22:
-                    keyboardKey = KeyboardKey.F22;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF23:
-                    keyboardKey = KeyboardKey.F23;
-                    break;
-                case UIKeyboardHidUsage.KeyboardF24:
-                    keyboardKey = KeyboardKey.F24;
-                    break;
-                case UIKeyboardHidUsage.KeyboardEqualSign:
-                    keyboardKey = KeyboardKey.Equals;
-                    break;
-            }
+			switch (argsKey.KeyCode)
+			{
+				case UIKeyboardHidUsage.KeyboardDownArrow:
+					keyboardKey = KeyboardKey.Down;
+					break;
+				case UIKeyboardHidUsage.KeyboardUpArrow:
+					keyboardKey = KeyboardKey.Up;
+					break;
+				case UIKeyboardHidUsage.KeyboardLeftArrow:
+					keyboardKey = KeyboardKey.Left;
+					break;
+				case UIKeyboardHidUsage.KeyboardRightArrow:
+					keyboardKey = KeyboardKey.Right;
+					break;
+				case UIKeyboardHidUsage.KeyboardLeftShift:
+				case UIKeyboardHidUsage.KeyboardRightShift:
+					keyboardKey = KeyboardKey.Shift;
+					break;
+				case UIKeyboardHidUsage.KeyboardLeftControl:
+				case UIKeyboardHidUsage.KeyboardRightControl:
+					keyboardKey = KeyboardKey.Ctrl;
+					break;
+				case UIKeyboardHidUsage.KeyboardLeftGui:
+				case UIKeyboardHidUsage.KeyboardRightGui:
+					keyboardKey = KeyboardKey.Command;
+					break;
+				case UIKeyboardHidUsage.KeyboardLeftAlt:
+				case UIKeyboardHidUsage.KeyboardRightAlt:
+					keyboardKey = KeyboardKey.Alt;
+					break;
+				case UIKeyboardHidUsage.KeyboardTab:
+					keyboardKey = KeyboardKey.Tab;
+					break;
+				case UIKeyboardHidUsage.KeyboardHome:
+					keyboardKey = KeyboardKey.Home;
+					break;
+				case UIKeyboardHidUsage.KeyboardEnd:
+					keyboardKey = KeyboardKey.End;
+					break;
+				case UIKeyboardHidUsage.KeyboardPageUp:
+					keyboardKey = KeyboardKey.PageUp;
+					break;
+				case UIKeyboardHidUsage.KeyboardPageDown:
+					keyboardKey = KeyboardKey.PageDown;
+					break;
+				case UIKeyboardHidUsage.KeyboardReturnOrEnter:
+					keyboardKey = KeyboardKey.Enter;
+					break;
+				case UIKeyboardHidUsage.KeyboardEscape:
+					keyboardKey = KeyboardKey.Escape;
+					break;
+				case UIKeyboardHidUsage.KeyboardDeleteOrBackspace:
+					keyboardKey = KeyboardKey.Back;
+					break;
+				case UIKeyboardHidUsage.KeyboardSpacebar:
+					keyboardKey = KeyboardKey.Space;
+					break;
+				case UIKeyboardHidUsage.KeyboardDeleteForward:
+					keyboardKey = KeyboardKey.Delete;
+					break;
+				case UIKeyboardHidUsage.KeyboardHelp:
+					keyboardKey = KeyboardKey.Insert;
+					break;
+				case UIKeyboardHidUsage.KeypadPlus:
+					keyboardKey = KeyboardKey.Add;
+					break;
+				case UIKeyboardHidUsage.KeyboardHyphen:
+				case UIKeyboardHidUsage.KeypadHyphen:
+					keyboardKey = KeyboardKey.Subtract;
+					break;
+				case UIKeyboardHidUsage.KeypadAsterisk:
+					keyboardKey = KeyboardKey.Multiply;
+					break;
+				case UIKeyboardHidUsage.KeyboardSlash:
+				case UIKeyboardHidUsage.KeypadSlash:
+					keyboardKey = KeyboardKey.Divide;
+					break;
+				case UIKeyboardHidUsage.KeyboardPeriod:
+				case UIKeyboardHidUsage.KeypadPeriod:
+					keyboardKey = KeyboardKey.Decimal;
+					break;
+				case UIKeyboardHidUsage.KeyboardA:
+					keyboardKey = KeyboardKey.A;
+					break;
+				case UIKeyboardHidUsage.KeyboardB:
+					keyboardKey = KeyboardKey.B;
+					break;
+				case UIKeyboardHidUsage.KeyboardC:
+					keyboardKey = KeyboardKey.C;
+					break;
+				case UIKeyboardHidUsage.KeyboardD:
+					keyboardKey = KeyboardKey.D;
+					break;
+				case UIKeyboardHidUsage.KeyboardE:
+					keyboardKey = KeyboardKey.E;
+					break;
+				case UIKeyboardHidUsage.KeyboardF:
+					keyboardKey = KeyboardKey.F;
+					break;
+				case UIKeyboardHidUsage.KeyboardG:
+					keyboardKey = KeyboardKey.G;
+					break;
+				case UIKeyboardHidUsage.KeyboardH:
+					keyboardKey = KeyboardKey.H;
+					break;
+				case UIKeyboardHidUsage.KeyboardI:
+					keyboardKey = KeyboardKey.I;
+					break;
+				case UIKeyboardHidUsage.KeyboardJ:
+					keyboardKey = KeyboardKey.J;
+					break;
+				case UIKeyboardHidUsage.KeyboardK:
+					keyboardKey = KeyboardKey.K;
+					break;
+				case UIKeyboardHidUsage.KeyboardL:
+					keyboardKey = KeyboardKey.L;
+					break;
+				case UIKeyboardHidUsage.KeyboardM:
+					keyboardKey = KeyboardKey.M;
+					break;
+				case UIKeyboardHidUsage.KeyboardN:
+					keyboardKey = KeyboardKey.N;
+					break;
+				case UIKeyboardHidUsage.KeyboardO:
+					keyboardKey = KeyboardKey.O;
+					break;
+				case UIKeyboardHidUsage.KeyboardP:
+					keyboardKey = KeyboardKey.P;
+					break;
+				case UIKeyboardHidUsage.KeyboardQ:
+					keyboardKey = KeyboardKey.Q;
+					break;
+				case UIKeyboardHidUsage.KeyboardR:
+					keyboardKey = KeyboardKey.R;
+					break;
+				case UIKeyboardHidUsage.KeyboardS:
+					keyboardKey = KeyboardKey.S;
+					break;
+				case UIKeyboardHidUsage.KeyboardT:
+					keyboardKey = KeyboardKey.T;
+					break;
+				case UIKeyboardHidUsage.KeyboardU:
+					keyboardKey = KeyboardKey.U;
+					break;
+				case UIKeyboardHidUsage.KeyboardV:
+					keyboardKey = KeyboardKey.V;
+					break;
+				case UIKeyboardHidUsage.KeyboardW:
+					keyboardKey = KeyboardKey.W;
+					break;
+				case UIKeyboardHidUsage.KeyboardX:
+					keyboardKey = KeyboardKey.X;
+					break;
+				case UIKeyboardHidUsage.KeyboardY:
+					keyboardKey = KeyboardKey.Y;
+					break;
+				case UIKeyboardHidUsage.KeyboardZ:
+					keyboardKey = KeyboardKey.Z;
+					break;
+				case UIKeyboardHidUsage.KeyboardCapsLock:
+					keyboardKey = KeyboardKey.CapsLock;
+					break;
+				case UIKeyboardHidUsage.KeyboardScrollLock:
+					keyboardKey = KeyboardKey.ScrollLock;
+					break;
+				case UIKeyboardHidUsage.KeypadNumLock:
+					keyboardKey = KeyboardKey.NumLock;
+					break;
+				case UIKeyboardHidUsage.Keyboard0:
+				case UIKeyboardHidUsage.Keypad0:
+					keyboardKey = KeyboardKey.Num0;
+					break;
+				case UIKeyboardHidUsage.Keyboard1:
+				case UIKeyboardHidUsage.Keypad1:
+					keyboardKey = KeyboardKey.Num1;
+					break;
+				case UIKeyboardHidUsage.Keypad2:
+				case UIKeyboardHidUsage.Keyboard2:
+					keyboardKey = KeyboardKey.Num2;
+					break;
+				case UIKeyboardHidUsage.Keyboard3:
+				case UIKeyboardHidUsage.Keypad3:
+					keyboardKey = KeyboardKey.Num3;
+					break;
+				case UIKeyboardHidUsage.Keyboard4:
+				case UIKeyboardHidUsage.Keypad4:
+					keyboardKey = KeyboardKey.Num4;
+					break;
+				case UIKeyboardHidUsage.Keyboard5:
+				case UIKeyboardHidUsage.Keypad5:
+					keyboardKey = KeyboardKey.Num5;
+					break;
+				case UIKeyboardHidUsage.Keyboard6:
+				case UIKeyboardHidUsage.Keypad6:
+					keyboardKey = KeyboardKey.Num6;
+					break;
+				case UIKeyboardHidUsage.Keyboard7:
+				case UIKeyboardHidUsage.Keypad7:
+					keyboardKey = KeyboardKey.Num7;
+					break;
+				case UIKeyboardHidUsage.Keyboard8:
+				case UIKeyboardHidUsage.Keypad8:
+					keyboardKey = KeyboardKey.Num8;
+					break;
+				case UIKeyboardHidUsage.Keyboard9:
+				case UIKeyboardHidUsage.Keypad9:
+					keyboardKey = KeyboardKey.Num9;
+					break;
+				case UIKeyboardHidUsage.KeyboardF1:
+					keyboardKey = KeyboardKey.F1;
+					break;
+				case UIKeyboardHidUsage.KeyboardF2:
+					keyboardKey = KeyboardKey.F2;
+					break;
+				case UIKeyboardHidUsage.KeyboardF3:
+					keyboardKey = KeyboardKey.F3;
+					break;
+				case UIKeyboardHidUsage.KeyboardF4:
+					keyboardKey = KeyboardKey.F4;
+					break;
+				case UIKeyboardHidUsage.KeyboardF5:
+					keyboardKey = KeyboardKey.F5;
+					break;
+				case UIKeyboardHidUsage.KeyboardF6:
+					keyboardKey = KeyboardKey.F6;
+					break;
+				case UIKeyboardHidUsage.KeyboardF7:
+					keyboardKey = KeyboardKey.F7;
+					break;
+				case UIKeyboardHidUsage.KeyboardF8:
+					keyboardKey = KeyboardKey.F8;
+					break;
+				case UIKeyboardHidUsage.KeyboardF9:
+					keyboardKey = KeyboardKey.F9;
+					break;
+				case UIKeyboardHidUsage.KeyboardF10:
+					keyboardKey = KeyboardKey.F10;
+					break;
+				case UIKeyboardHidUsage.KeyboardF11:
+					keyboardKey = KeyboardKey.F11;
+					break;
+				case UIKeyboardHidUsage.KeyboardF12:
+					keyboardKey = KeyboardKey.F12;
+					break;
+				case UIKeyboardHidUsage.KeyboardF13:
+					keyboardKey = KeyboardKey.F13;
+					break;
+				case UIKeyboardHidUsage.KeyboardF14:
+					keyboardKey = KeyboardKey.F14;
+					break;
+				case UIKeyboardHidUsage.KeyboardF15:
+					keyboardKey = KeyboardKey.F15;
+					break;
+				case UIKeyboardHidUsage.KeyboardF16:
+					keyboardKey = KeyboardKey.F16;
+					break;
+				case UIKeyboardHidUsage.KeyboardF17:
+					keyboardKey = KeyboardKey.F17;
+					break;
+				case UIKeyboardHidUsage.KeyboardF18:
+					keyboardKey = KeyboardKey.F18;
+					break;
+				case UIKeyboardHidUsage.KeyboardF19:
+					keyboardKey = KeyboardKey.F19;
+					break;
+				case UIKeyboardHidUsage.KeyboardF20:
+					keyboardKey = KeyboardKey.F20;
+					break;
+				case UIKeyboardHidUsage.KeyboardF21:
+					keyboardKey = KeyboardKey.F21;
+					break;
+				case UIKeyboardHidUsage.KeyboardF22:
+					keyboardKey = KeyboardKey.F22;
+					break;
+				case UIKeyboardHidUsage.KeyboardF23:
+					keyboardKey = KeyboardKey.F23;
+					break;
+				case UIKeyboardHidUsage.KeyboardF24:
+					keyboardKey = KeyboardKey.F24;
+					break;
+				case UIKeyboardHidUsage.KeyboardEqualSign:
+					keyboardKey = KeyboardKey.Equals;
+					break;
+			}
 #endif
 
 #if WINDOWS10_0_19041_0
@@ -781,8 +773,8 @@ namespace Syncfusion.Maui.Toolkit.Internals
                 keyboardKey = (KeyboardKey)value;
             }
 #endif
-            return keyboardKey;
-        }
+			return keyboardKey;
+		}
 
 #endif
 
@@ -836,5 +828,5 @@ namespace Syncfusion.Maui.Toolkit.Internals
             return false;
         }
 #endif
-    }
+	}
 }

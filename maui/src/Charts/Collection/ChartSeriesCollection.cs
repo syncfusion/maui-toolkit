@@ -2,44 +2,44 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-    /// <summary>
-    /// It's a collection class that holds ChartSeries.
-    /// </summary>
-    public class ChartSeriesCollection : ObservableCollection<ChartSeries>
-    {
-        #region Field
+	/// <summary>
+	/// It's a collection class that holds ChartSeries.
+	/// </summary>
+	public partial class ChartSeriesCollection : ObservableCollection<ChartSeries>
+	{
+		#region Field
 
-        readonly ReadOnlyObservableCollection<ChartSeries> _readOnlyItems;
+		readonly ReadOnlyObservableCollection<ChartSeries> _readOnlyItems;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ChartSeriesCollection"/> class.
-        /// </summary>
-        public ChartSeriesCollection()
-        {
-            _readOnlyItems = new ReadOnlyObservableCollection<ChartSeries>(this);
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ChartSeriesCollection"/> class.
+		/// </summary>
+		public ChartSeriesCollection()
+		{
+			_readOnlyItems = new ReadOnlyObservableCollection<ChartSeries>(this);
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        internal ReadOnlyObservableCollection<ChartSeries> GetVisibleSeries()
-        {
-            //TODO:Need to check the alternative solution.
-            return new ReadOnlyObservableCollection<ChartSeries>(new ObservableCollection<ChartSeries>(from chartSeries in this
-                                                                                                       where chartSeries.IsVisible
-                                                                                                       select chartSeries));
-        }
+		internal ReadOnlyObservableCollection<ChartSeries> GetVisibleSeries()
+		{
+			//TODO:Need to check the alternative solution.
+			return new ReadOnlyObservableCollection<ChartSeries>(new ObservableCollection<ChartSeries>(from chartSeries in this
+																									   where chartSeries.IsVisible
+																									   select chartSeries));
+		}
 
-        internal ReadOnlyObservableCollection<ChartSeries> AsReadOnly()
-        {
-            return _readOnlyItems;
-        }
+		internal ReadOnlyObservableCollection<ChartSeries> AsReadOnly()
+		{
+			return _readOnlyItems;
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

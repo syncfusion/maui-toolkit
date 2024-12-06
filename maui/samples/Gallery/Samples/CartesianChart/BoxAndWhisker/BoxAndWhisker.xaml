@@ -52,11 +52,13 @@
             <VerticalStackLayout Spacing="5">
                 <HorizontalStackLayout>
                     <Label Text="Mode :" HorizontalOptions="Center" VerticalOptions="Start" Padding="5" FontSize="17"/>
-                    <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=BoxPlotMode}" BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                    <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=BoxPlotMode}" 
                         SelectedItem="{Binding Source={x:Reference ViewModel},Path=BoxPlotMode[0]}"
                         HorizontalOptions="Fill" VerticalOptions="Start"                        
                         SelectedIndex="0"
                         SelectedIndexChanged="ModePicker_SelectedIndexChanged"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                         ></Picker>
                 </HorizontalStackLayout>
             </VerticalStackLayout>

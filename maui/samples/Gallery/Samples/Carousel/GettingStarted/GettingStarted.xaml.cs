@@ -1,30 +1,30 @@
 ﻿
 namespace Syncfusion.Maui.ControlsGallery.Carousel.Carousel
 {
-    public partial class GettingStarted : SampleView
-    {
+	public partial class GettingStarted : SampleView
+	{
 #if MACCATALYST || IOS
-		bool isDisappear = false;
+		bool _isDisappear;
 #endif
 
 #if ANDROID || IOS
-		GettingStartedMobile GettingStartedPage;
+		readonly GettingStartedMobile _gettingStartedPage;
 #elif WINDOWS || MACCATALYST
-        GettingStartedDesktop GettingStartedPage;
+		readonly GettingStartedDesktop _gettingStartedPage;
 #endif
 
 		public GettingStarted()
-        {
-            InitializeComponent();
+		{
+			InitializeComponent();
 #if ANDROID || IOS
-			GettingStartedPage = new GettingStartedMobile();
-			this.Content = GettingStartedPage;
+			_gettingStartedPage = new GettingStartedMobile();
+			Content = _gettingStartedPage;
 #elif WINDOWS || MACCATALYST
-			GettingStartedPage = new GettingStartedDesktop();
-			this.Content = GettingStartedPage;
+			_gettingStartedPage = new GettingStartedDesktop();
+			Content = _gettingStartedPage;
 #endif
 #if MACCATALYST || IOS
-			isDisappear = true;
+			_isDisappear = true;
 #endif
 
 		}
@@ -32,10 +32,10 @@ namespace Syncfusion.Maui.ControlsGallery.Carousel.Carousel
 #if MACCATALYST || IOS
 		public override void OnDisappearing()
 		{
-			if (isDisappear)
+			if (_isDisappear)
 			{
-				GettingStartedPage.GettingStarted_Unloaded();
-				isDisappear = false;
+				_gettingStartedPage.GettingStarted_Unloaded();
+				_isDisappear = false;
 			}
 		}
 #endif

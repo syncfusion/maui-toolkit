@@ -1,40 +1,40 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal interface ILayoutCalculator
-    {
-        #region Properties
+	internal interface ILayoutCalculator
+	{
+		#region Properties
 
-        bool IsVisible { get; set; }
+		bool IsVisible { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        void OnDraw(ICanvas canvas, Size finalSize);
+		void OnDraw(ICanvas canvas, Size finalSize);
 
-        double GetLeft();
+		double GetLeft();
 
-        void SetLeft(double left);
+		void SetLeft(double left);
 
-        double GetTop();
+		double GetTop();
 
-        void SetTop(double top);
+		void SetTop(double top);
 
-        Size GetDesiredSize();
+		Size GetDesiredSize();
 
-        Size Measure(Size availableSize);
+		Size Measure(Size availableSize);
 
-        #endregion
-    }
+		#endregion
+	}
 
-    internal interface IAxisLayout
-    {
-        #region Methods
+	internal interface IAxisLayout
+	{
+		#region Methods
 
-        Size Measure(Size availableSize);
+		Size Measure(Size availableSize);
 
-        void OnDraw(ICanvas canvas);
+		void OnDraw(ICanvas canvas);
 
-        #endregion
-    }
+		#endregion
+	}
 }

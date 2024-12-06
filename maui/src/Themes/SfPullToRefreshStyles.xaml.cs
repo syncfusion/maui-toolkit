@@ -11,7 +11,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// </summary>
 		public SfPullToRefreshStyles()
 		{
-			this.InitializeComponent();
+			InitializeComponent();
 		}
 	}
 }

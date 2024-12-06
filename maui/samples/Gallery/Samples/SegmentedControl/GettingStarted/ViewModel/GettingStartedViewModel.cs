@@ -8,54 +8,54 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
     /// <summary>
     /// Providing data to support getting started with the application.
     /// </summary>
-    public class GettingStartedViewModel : INotifyPropertyChanged
+    public partial class GettingStartedViewModel : INotifyPropertyChanged
     {
         #region Fields
 
         /// <summary>
         /// The index of the selected item.
         /// </summary>
-        int selectedColoredIndex = -1;
+        int _selectedColoredIndex = -1;
 
         /// <summary>
         /// The list of speaker fill colors information.
         /// </summary>
-        List<SfSegmentItem>? speakerColorOptionsInfo;
+        List<SfSegmentItem>? _speakerColorOptionsInfo;
 
         /// <summary>
         /// The selected delivery options.
         /// </summary>
-        int selectedDeliveryOptions = -1;
+        int _selectedDeliveryOptions = -1;
 
         /// <summary>
         /// The delivery date.
         /// </summary>
-        DateTime? deliveryDate = DateTime.Now;
+        DateTime? _deliveryDate = DateTime.Now;
 
         /// <summary>
         /// The total price.
         /// </summary>
-        string? totalPrice;
+        string? _totalPrice;
 
         /// <summary>
         /// The total amount.
         /// </summary>
-        int totalAmount;
+        int _totalAmount;
 
         /// <summary>
         /// The date
         /// </summary>
-        string? date;
+        string? _date;
 
         /// <summary>
         /// The selected item size index.
         /// </summary>
-        int selectedWarrantyOption;
+        int _selectedWarrantyOption;
 
         /// <summary>
         /// The file path or URL of an image associated with this object.
         /// </summary>
-        string image = string.Empty;
+        string _image = string.Empty;
 
         #endregion
 
@@ -66,10 +66,10 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         public GettingStartedViewModel()
         {
-            this.InitializeSegmentItemsColorsInfo();
-            this.InitializeAddOnItemsInfo();
-            this.InitializeSpeakerDeliveryOptionInfo();
-            this.InitializeSpeakerResultsInfo();
+            InitializeSegmentItemsColorsInfo();
+            InitializeAddOnItemsInfo();
+            InitializeSpeakerDeliveryOptionInfo();
+            InitializeSpeakerResultsInfo();
         }
 
         #endregion
@@ -103,14 +103,14 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         {
             get
             {
-                return this.speakerColorOptionsInfo;
+                return _speakerColorOptionsInfo;
             }
             set
             {
-                if (this.speakerColorOptionsInfo != value)
+                if (_speakerColorOptionsInfo != value)
                 {
-                    this.speakerColorOptionsInfo = value;
-                    this.OnPropertyChanged(nameof(SpeakerColorOptionsInfo));
+                    _speakerColorOptionsInfo = value;
+                    OnPropertyChanged(nameof(SpeakerColorOptionsInfo));
                 }
             }
         }
@@ -120,11 +120,11 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         public string? Date
         {
-            get { return this.date; }
+            get { return _date; }
             set
             {
-                this.date = value;
-                this.OnPropertyChanged(nameof(Date));
+                _date = value;
+                OnPropertyChanged(nameof(Date));
             }
         }
 
@@ -133,11 +133,11 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         public string? TotalPrice
         {
-            get { return this.totalPrice; }
+            get { return _totalPrice; }
             set
             {
-                this.totalPrice = value;
-                this.OnPropertyChanged(nameof(TotalPrice));
+                _totalPrice = value;
+                OnPropertyChanged(nameof(TotalPrice));
             }
         }
 
@@ -148,12 +148,12 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         {
             get
             {
-                return this.deliveryDate;
+                return _deliveryDate;
             }
             set
             {
-                this.deliveryDate = value;
-                this.OnPropertyChanged(nameof(DeliveryDate));
+                _deliveryDate = value;
+                OnPropertyChanged(nameof(DeliveryDate));
             }
         }
 
@@ -164,14 +164,14 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         {
             get
             {
-                return this.selectedDeliveryOptions;
+                return _selectedDeliveryOptions;
             }
             set
             {
-                this.selectedDeliveryOptions = value;
-                this.UpdateTotalPriceAndDeliveryDate();
-                this.UpdateTotalPriceBasedOnSize();
-                this.OnPropertyChanged(nameof(SelectedDeliveryOption));
+                _selectedDeliveryOptions = value;
+                UpdateTotalPriceAndDeliveryDate();
+                UpdateTotalPriceBasedOnSize();
+                OnPropertyChanged(nameof(SelectedDeliveryOption));
             }
         }
 
@@ -182,15 +182,15 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         {
             get
             {
-                return this.selectedWarrantyOption;
+                return _selectedWarrantyOption;
             }
             set
             {
-                if (this.selectedWarrantyOption != value)
+                if (_selectedWarrantyOption != value)
                 {
-                    this.selectedWarrantyOption = value;
-                    this.UpdateSelectedSegmentItemsValue();
-                    this.OnPropertyChanged(nameof(SelectedWarrantyOption));
+                    _selectedWarrantyOption = value;
+                    UpdateSelectedSegmentItemsValue();
+                    OnPropertyChanged(nameof(SelectedWarrantyOption));
                 }
             }
         }
@@ -202,15 +202,15 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         {
             get
             {
-                return this.selectedColoredIndex;
+                return _selectedColoredIndex;
             }
             set
             {
-                if (this.selectedColoredIndex != value)
+                if (_selectedColoredIndex != value)
                 {
-                    this.selectedColoredIndex = value;
-                    this.OnPropertyChanged(nameof(selectedColoredIndex));
-                    this.UpdateSelectedSegmentItemsValue();
+                    _selectedColoredIndex = value;
+                    OnPropertyChanged(nameof(_selectedColoredIndex));
+                    UpdateSelectedSegmentItemsValue();
                 }
             }
         }
@@ -222,11 +222,11 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         {
             get
             {
-                return image;
+                return _image;
             }
             set
             {
-                image = value;
+                _image = value;
                 OnPropertyChanged(nameof(Image));
             }
         }
@@ -250,7 +250,7 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// <param name="parameter">Represents the property name.</param>
         private void OnPropertyChanged(string parameter)
         {
-            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(parameter));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(parameter));
         }
 
         /// <summary>
@@ -258,12 +258,12 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         private void InitializeAddOnItemsInfo()
         {
-            this.SpeakerWarrantyOptionsInfo = new ObservableCollection<SfSegmentItem>()
-            {
-                 new SfSegmentItem() { Text = "1 Year" },
+            SpeakerWarrantyOptionsInfo =
+			[
+				 new SfSegmentItem() { Text = "1 Year" },
                  new SfSegmentItem() { Text = "2 Years" },
                  new SfSegmentItem() { Text = "3 Years" }
-            };
+            ];
         }
 
         /// <summary>
@@ -271,16 +271,16 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         private void InitializeSegmentItemsColorsInfo()
         {
-            this.SpeakerColorOptionsInfo = new List<SfSegmentItem>()
-            {
-                new SfSegmentItem() { Text = "\uE91F", SelectedSegmentBackground = Color.FromArgb("#8EAEDC"), TextStyle = new SegmentTextStyle() { TextColor = Color.FromArgb("#8EAEDC"), FontSize = 25, FontFamily = "SegmentIcon" } },
+            SpeakerColorOptionsInfo =
+			[
+				new SfSegmentItem() { Text = "\uE91F", SelectedSegmentBackground = Color.FromArgb("#8EAEDC"), TextStyle = new SegmentTextStyle() { TextColor = Color.FromArgb("#8EAEDC"), FontSize = 25, FontFamily = "SegmentIcon" } },
                 new SfSegmentItem() { Text = "\uE91F", SelectedSegmentBackground = Color.FromArgb("#A4AAB4"), TextStyle = new SegmentTextStyle() { TextColor = Color.FromArgb("#A4AAB4"), FontSize = 25, FontFamily = "SegmentIcon" } },
                 new SfSegmentItem() { Text = "\uE91F", SelectedSegmentBackground = Color.FromArgb("#7DC59D"), TextStyle = new SegmentTextStyle() { TextColor = Color.FromArgb("#7DC59D"), FontSize = 25, FontFamily = "SegmentIcon" } },
                 new SfSegmentItem() { Text = "\uE91F", SelectedSegmentBackground = Color.FromArgb("#F5878F"), TextStyle = new SegmentTextStyle() { TextColor = Color.FromArgb("#F5878F"), FontSize = 25, FontFamily = "SegmentIcon" } },
                 new SfSegmentItem() { Text = "\uE91F", SelectedSegmentBackground = Color.FromArgb("#C7B690"), TextStyle = new SegmentTextStyle() { TextColor = Color.FromArgb("#C7B690"), FontSize = 25, FontFamily = "SegmentIcon" } },
-            };
+            ];
 
-            this.SelectedColoredIndex = 0;
+            SelectedColoredIndex = 0;
         }
 
         /// <summary>
@@ -288,13 +288,13 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         private void InitializeSpeakerDeliveryOptionInfo()
         {
-            this.SpeakerDeliveryOptionsInfo = new ObservableCollection<SfSegmentItem>()
-            {
-                new SfSegmentItem() { Text = "Free Delivery" , Width = 120 },
+            SpeakerDeliveryOptionsInfo =
+			[
+				new SfSegmentItem() { Text = "Free Delivery" , Width = 120 },
                 new SfSegmentItem() { Text = "+$6 for 1 Day Delivery" , Width = 180},
-            };
+            ];
 
-            this.selectedDeliveryOptions = 0;
+            _selectedDeliveryOptions = 0;
         }
 
         /// <summary>
@@ -302,10 +302,10 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         private void InitializeSpeakerResultsInfo()
         {
-            this.SpeakerResultsOptionInfo = new ObservableCollection<SfSegmentItem>()
-            {
-                new SfSegmentItem() { Text = "Add to Cart"},
-            };
+            SpeakerResultsOptionInfo =
+			[
+				new SfSegmentItem() { Text = "Add to Cart"},
+            ];
         }
 
         /// <summary>
@@ -313,27 +313,27 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         private void UpdateTotalPriceAndDeliveryDate()
         {
-            if(this.DeliveryDate != null)
+            if(DeliveryDate != null)
             {
-                if (this.selectedDeliveryOptions == 0)
+                if (_selectedDeliveryOptions == 0)
                 {
-                    this.totalAmount = this.FinalPrice;
+                    _totalAmount = FinalPrice;
 #if WINDOWS || MACCATALYST
-                    this.Date = " (Delivery by " + this.DeliveryDate.Value.AddDays(5).ToLongDateString() + ")";
+                    Date = " (Delivery by " + DeliveryDate.Value.AddDays(5).ToLongDateString() + ")";
 #else
-                    this.Date = " (Delivery by " + this.DeliveryDate.Value.AddDays(5).ToString("ddd, MMM dd, yyyy") + ")";
+                    Date = " (Delivery by " + DeliveryDate.Value.AddDays(5).ToString("ddd, MMM dd, yyyy") + ")";
 #endif
-                    this.TotalPrice = "$" + this.totalAmount;
+                    TotalPrice = "$" + _totalAmount;
                 }
                 else
                 {
-                    this.totalAmount += 6;
+                    _totalAmount += 6;
 #if WINDOWS || MACCATALYST
-                    this.Date = " (Delivery by " + this.DeliveryDate.Value.AddDays(1).ToLongDateString() + ")";
+                    Date = " (Delivery by " + DeliveryDate.Value.AddDays(1).ToLongDateString() + ")";
 #else
-                    this.Date = " (Delivery by " + this.DeliveryDate.Value.AddDays(1).ToString("ddd, MMM dd, yyyy") + ")";
+                    Date = " (Delivery by " + DeliveryDate.Value.AddDays(1).ToString("ddd, MMM dd, yyyy") + ")";
 #endif
-                    this.TotalPrice = "$" + this.totalAmount;
+                    TotalPrice = "$" + _totalAmount;
                 }
             }
         }
@@ -343,28 +343,21 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         private void UpdateTotalPriceBasedOnSize()
         {
-            if (this.SpeakerWarrantyOptionsInfo == null || this.SpeakerWarrantyOptionsInfo.Count == 0 || this.SpeakerWarrantyOptionsInfo.Count < this.selectedWarrantyOption)
+            if (SpeakerWarrantyOptionsInfo == null || SpeakerWarrantyOptionsInfo.Count == 0 || SpeakerWarrantyOptionsInfo.Count < _selectedWarrantyOption)
             {
                 return;
             }
 
-            SfSegmentItem? selectedYear = this.SpeakerWarrantyOptionsInfo[this.selectedWarrantyOption];
+            SfSegmentItem? selectedYear = SpeakerWarrantyOptionsInfo[_selectedWarrantyOption];
             string sizeText = selectedYear.Text;
             int warrantyPriceIncrement = 0;
-            switch (sizeText)
-            {
-                case "1 Year":
-                    warrantyPriceIncrement = 0;
-                    break;
-                case "2 Years":
-                    warrantyPriceIncrement = 60;
-                    break;
-                default:
-                    warrantyPriceIncrement = 120;
-                    break;
-            }
-
-            this.TotalPrice = "$ " + (this.totalAmount + warrantyPriceIncrement);
+			warrantyPriceIncrement = sizeText switch
+			{
+				"1 Year" => 0,
+				"2 Years" => 60,
+				_ => 120,
+			};
+			TotalPrice = "$ " + (_totalAmount + warrantyPriceIncrement);
         }
 
         /// <summary>
@@ -372,41 +365,41 @@ namespace Syncfusion.Maui.ControlsGallery.Buttons.SfSegmentedControl
         /// </summary>
         private void UpdateSelectedSegmentItemsValue()
         {
-            if (this.SpeakerColorOptionsInfo == null || this.SpeakerColorOptionsInfo.Count == 0 || this.SpeakerColorOptionsInfo.Count < this.selectedColoredIndex)
+            if (SpeakerColorOptionsInfo == null || SpeakerColorOptionsInfo.Count == 0 || SpeakerColorOptionsInfo.Count < _selectedColoredIndex)
             {
                 return;
             }
 
-            if (this.SelectedColoredIndex == 0)
+            if (SelectedColoredIndex == 0)
             {
-                this.Image = "bluespeaker.png";
+                Image = "bluespeaker.png";
             }
-            else if (this.SelectedColoredIndex == 1)
+            else if (SelectedColoredIndex == 1)
             {
-                this.Image = "greyspeaker.png";
+                Image = "greyspeaker.png";
             }
-            else if (this.SelectedColoredIndex == 2)
+            else if (SelectedColoredIndex == 2)
             {
-                this.Image = "greenspeaker.png";
+                Image = "greenspeaker.png";
             }
-            else if (this.SelectedColoredIndex == 3)
+            else if (SelectedColoredIndex == 3)
             {
-                this.Image = "pinkspeaker.png";
+                Image = "pinkspeaker.png";
             }
-            else if (this.SelectedColoredIndex == 4)
+            else if (SelectedColoredIndex == 4)
             {
-                this.Image = "sandalsspeaker.png";
+                Image = "sandalsspeaker.png";
             }
 
-            this.totalAmount = 399;
-            this.TotalPrice = "$ " + this.totalAmount;
-            this.FinalPrice = this.totalAmount;
+            _totalAmount = 399;
+            TotalPrice = "$ " + _totalAmount;
+            FinalPrice = _totalAmount;
 
             // Update the total price and delivery date information.
-            this.UpdateTotalPriceAndDeliveryDate();
+            UpdateTotalPriceAndDeliveryDate();
 
             // Update the total price based on size.
-            this.UpdateTotalPriceBasedOnSize();
+            UpdateTotalPriceBasedOnSize();
         }
 
         #endregion
