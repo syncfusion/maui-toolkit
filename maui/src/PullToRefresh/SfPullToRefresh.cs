@@ -1474,12 +1474,13 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			Animation animation = new Animation(
 								callback: d =>
 								{
-#if ANDROID
-									(element as IView).Measure(Width, Height);
-#elif IOS && !MACCATALYST
+#if IOS && !MACCATALYST
 
 									(element as IView).Arrange(new Rect(0, d, Width, _previousBounds.Height));
 #else
+#if ANDROID
+									(element as IView).Measure(Width, Height);
+#endif
 									(element as IView).Arrange(new Rect(0, d, Width, Height));
 #endif
 								},
