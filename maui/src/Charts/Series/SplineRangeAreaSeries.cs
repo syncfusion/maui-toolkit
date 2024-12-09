@@ -70,7 +70,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ]]></code>
 	/// ***
 	/// </example>
-	public class SplineRangeAreaSeries : RangeSeriesBase, IMarkerDependent, IDrawCustomLegendIcon
+	public partial class SplineRangeAreaSeries : RangeSeriesBase, IMarkerDependent, IDrawCustomLegendIcon
     {
         #region Fields
 
@@ -336,7 +336,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
 
             PointF visiblePoint = new PointF();
-            List<PointF> segPoints = new List<PointF>();
+            List<PointF> segPoints = [];
             var xValues = GetXValues();
 
             if (xValues != null)
@@ -567,13 +567,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     if (dx != null && Type == SplineType.Monotonic && dx.Length > 0)
                     {
-                        highControlPoints = CalculateControlPoints(x, high, nextX, nextHigh, highYCoef[i], highYCoef[i + 1], dx[i]);
-                        lowControlPoints = CalculateControlPoints(x, low, nextX, nextLow, lowYCoef[i], lowYCoef[i + 1], dx[i]);
+                        highControlPoints = CartesianSeries.CalculateControlPoints(x, high, nextX, nextHigh, highYCoef[i], highYCoef[i + 1], dx[i]);
+                        lowControlPoints = CartesianSeries.CalculateControlPoints(x, low, nextX, nextLow, lowYCoef[i], lowYCoef[i + 1], dx[i]);
                     }
                     else if (Type == SplineType.Cardinal)
                     {
-                        highControlPoints = CalculateControlPoints(x, high, nextX, nextHigh, highYCoef[i], highYCoef[i + 1]);
-                        lowControlPoints = CalculateControlPoints(x, low, nextX, nextLow, lowYCoef[i], lowYCoef[i + 1]);
+                        highControlPoints = CartesianSeries.CalculateControlPoints(x, high, nextX, nextHigh, highYCoef[i], highYCoef[i + 1]);
+                        lowControlPoints = CartesianSeries.CalculateControlPoints(x, low, nextX, nextLow, lowYCoef[i], lowYCoef[i + 1]);
                     }
                     else
                     {
@@ -635,14 +635,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             var dataLabelSettings = DataLabelSettings;
 
-            if (dataLabelSettings == null || Segments == null || Segments.Count <= 0)
+            if (dataLabelSettings == null || _segments == null || _segments.Count <= 0)
             {
                 return;
             }
 
             ChartDataLabelStyle labelStyle = DataLabelSettings.LabelStyle;
 
-            foreach (SplineRangeAreaSegment dataLabel in Segments)
+            foreach (SplineRangeAreaSegment dataLabel in _segments.Cast<SplineRangeAreaSegment>())
             {
                 if (dataLabel == null || dataLabel.XVal == null || dataLabel.HighVal == null || dataLabel.LowVal == null)
                 {
@@ -666,8 +666,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                             CalculateDataPointPosition(i, ref x, ref y);
                             PointF labelPoint = new PointF((float)x, (float)y);
-                            SumOfHighValues = float.IsNaN(SumOfHighValues) ? SumOfValues(HighValues) : SumOfHighValues;
-                            dataLabel.LabelContent = GetLabelContent(dataLabel.HighVal[i], SumOfHighValues);
+                            _sumOfHighValues = float.IsNaN(_sumOfHighValues) ? SumOfValues(HighValues) : _sumOfHighValues;
+                            dataLabel.LabelContent = GetLabelContent(dataLabel.HighVal[i], _sumOfHighValues);
                             dataLabel.LabelPositionPoint = dataLabelSettings.CalculateDataLabelPoint(this, dataLabel, labelPoint, dataLabelSettings.LabelStyle, "HighType");
                             UpdateDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
                         }
@@ -683,8 +683,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                             CalculateDataPointPosition(i, ref x, ref y);
                             PointF labelPoint = new PointF((float)x, (float)y);
-                            SumOfLowValues = float.IsNaN(SumOfLowValues) ? SumOfValues(LowValues) : SumOfLowValues;
-                            dataLabel.LabelContent = GetLabelContent(dataLabel.LowVal[i], SumOfLowValues);
+                            _sumOfLowValues = float.IsNaN(_sumOfLowValues) ? SumOfValues(LowValues) : _sumOfLowValues;
+                            dataLabel.LabelContent = GetLabelContent(dataLabel.LowVal[i], _sumOfLowValues);
                             dataLabel.LabelPositionPoint = dataLabelSettings.CalculateDataLabelPoint(this, dataLabel, labelPoint, dataLabelSettings.LabelStyle, "LowType");
                             UpdateDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
                         }
@@ -696,7 +696,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal override Brush? GetSegmentFillColor(int index)
         {
-            var segment = Segments[0];
+            var segment = _segments[0];
 
             if (segment != null)
             {
@@ -746,18 +746,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     if (xValues == null)
                     {
-                        xValues = new List<double>();
-                        highValues = new List<double>();
-                        highStartControlPointsX = new List<double>();
-                        highStartControlPointsY = new List<double>();
-                        highEndControlPointsX = new List<double>();
-                        highEndControlPointsY = new List<double>();
-                        lowValues = new List<double>();
-                        lowStartControlPointsX = new List<double>();
-                        lowStartControlPointsY = new List<double>();
-                        lowEndControlPointsX = new List<double>();
-                        lowEndControlPointsY = new List<double>();
-                        items = new List<object>();
+                        xValues = [];
+                        highValues = [];
+                        highStartControlPointsX = [];
+                        highStartControlPointsY = [];
+                        highEndControlPointsX = [];
+                        highEndControlPointsY = [];
+                        lowValues = [];
+                        lowStartControlPointsX = [];
+                        lowStartControlPointsY = [];
+                        lowEndControlPointsX = [];
+                        lowEndControlPointsY = [];
+                        items = [];
                     }
 
                     xValues.Add(xVals[i]);
@@ -782,37 +782,35 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     if (xValues != null)
                     {
-                        var segment = CreateSegment() as SplineRangeAreaSegment;
+						if (CreateSegment() is SplineRangeAreaSegment segment)
+						{
+							segment.Series = this;
+							segment.SeriesView = seriesView;
 
-                        if (segment != null)
-                        {
-                            segment.Series = this;
-                            segment.SeriesView = seriesView;
+							if (highValues != null && highStartControlPointsX != null && highStartControlPointsY != null && highStartControlPointsY != null &&
+							   highEndControlPointsX != null && highEndControlPointsY != null && lowValues != null && lowStartControlPointsX != null &&
+							   lowStartControlPointsY != null && lowEndControlPointsX != null && lowEndControlPointsY != null)
+							{
+								segment.SetData(
+								xValues,
+								highValues,
+								highStartControlPointsX,
+								highStartControlPointsY,
+								highEndControlPointsX,
+								highEndControlPointsY,
+								lowValues,
+								lowStartControlPointsX,
+								lowStartControlPointsY,
+								lowEndControlPointsX,
+								lowEndControlPointsY);
+							}
 
-                            if (highValues != null && highStartControlPointsX != null && highStartControlPointsY != null && highStartControlPointsY != null &&
-                               highEndControlPointsX != null && highEndControlPointsY != null && lowValues != null && lowStartControlPointsX != null &&
-                               lowStartControlPointsY != null && lowEndControlPointsX != null && lowEndControlPointsY != null)
-                            {
-                                segment.SetData(
-                                xValues,
-                                highValues,
-                                highStartControlPointsX,
-                                highStartControlPointsY,
-                                highEndControlPointsX,
-                                highEndControlPointsY,
-                                lowValues,
-                                lowStartControlPointsX,
-                                lowStartControlPointsY,
-                                lowEndControlPointsX,
-                                lowEndControlPointsY);
-                            }
+							segment.Item = items;
+							InitiateDataLabels(segment);
+							_segments.Add(segment);
+						}
 
-                            segment.Item = items;
-                            InitiateDataLabels(segment);
-                            Segments.Add(segment);
-                        }
-
-                        highValues = xValues = highStartControlPointsX = highStartControlPointsY = highEndControlPointsX = highEndControlPointsY = null;
+						highValues = xValues = highStartControlPointsX = highStartControlPointsY = highEndControlPointsX = highEndControlPointsY = null;
                         lowValues = lowStartControlPointsX = lowStartControlPointsY = lowEndControlPointsX = lowEndControlPointsY = null;
                         items = null;
                     }
@@ -820,40 +818,39 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (double.IsNaN(highValue) || double.IsNaN(lowValue))
                 {
-                    xValues = new List<double> { xVals[i] };
-                    highValues = new List<double> { highVals[i] };
-                    highStartControlPointsX = new List<double>();
-                    highStartControlPointsY = new List<double>();
-                    highEndControlPointsX = new List<double>();
-                    highEndControlPointsY = new List<double>();
+                    xValues = [xVals[i]];
+                    highValues = [highVals[i]];
+                    highStartControlPointsX = [];
+                    highStartControlPointsY = [];
+                    highEndControlPointsX = [];
+                    highEndControlPointsY = [];
 
-                    lowValues = new List<double> { lowVals[i] };
-                    lowStartControlPointsX = new List<double>();
-                    lowStartControlPointsY = new List<double>();
-                    lowEndControlPointsX = new List<double>();
-                    lowEndControlPointsY = new List<double>();
+                    lowValues = [lowVals[i]];
+                    lowStartControlPointsX = [];
+                    lowStartControlPointsY = [];
+                    lowEndControlPointsX = [];
+                    lowEndControlPointsY = [];
 
-                    var segment = CreateSegment() as SplineRangeAreaSegment;
-                    if (segment != null)
-                    {
-                        segment.Series = this;
-                        segment.SeriesView = seriesView;
-                        segment.Item = items;
-                        segment.SetData(
-                            xValues,
-                            highValues,
-                            highStartControlPointsX,
-                            highStartControlPointsY,
-                            highEndControlPointsX,
-                            highEndControlPointsY,
-                            lowValues,
-                            lowStartControlPointsX,
-                            lowStartControlPointsY,
-                            lowEndControlPointsX,
-                            lowEndControlPointsY);
-                    }
+					if (CreateSegment() is SplineRangeAreaSegment segment)
+					{
+						segment.Series = this;
+						segment.SeriesView = seriesView;
+						segment.Item = items;
+						segment.SetData(
+							xValues,
+							highValues,
+							highStartControlPointsX,
+							highStartControlPointsY,
+							highEndControlPointsX,
+							highEndControlPointsY,
+							lowValues,
+							lowStartControlPointsX,
+							lowStartControlPointsY,
+							lowEndControlPointsX,
+							lowEndControlPointsY);
+					}
 
-                    highValues = xValues = highStartControlPointsX = highStartControlPointsY = highEndControlPointsX = highEndControlPointsY = null;
+					highValues = xValues = highStartControlPointsX = highStartControlPointsY = highEndControlPointsX = highEndControlPointsY = null;
                     lowValues = lowStartControlPointsX = lowStartControlPointsY = lowEndControlPointsX = lowEndControlPointsY = null;
                     items = null;
                 }

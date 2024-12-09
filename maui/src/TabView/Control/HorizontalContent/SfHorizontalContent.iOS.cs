@@ -103,7 +103,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		/// <param name="touchView">The touched view</param>
 		/// <returns>True if it's a special view, otherwise false</returns>
-		bool IsSpecialView(UIKit.UIView? touchView)
+		static bool IsSpecialView(UIKit.UIView? touchView)
 		{
 			return touchView is Syncfusion.Maui.Toolkit.Platform.PlatformGraphicsViewExt ||
 				touchView is Syncfusion.Maui.Toolkit.Carousel.PlatformCarousel ||
@@ -177,21 +177,6 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		}
 
 		/// <summary>
-		/// Raises when <see cref="_panGesture"/> begins.
-		/// </summary>
-		/// <param name="uIGestureRecognizer">Instance of <see cref="_panGesture"/>.</param>
-		bool GestureShouldBegin(UIGestureRecognizer uIGestureRecognizer)
-		{
-			if (!_canProcessTouch)
-			{
-				// Return false if the CanProcessTouch value is false, preventing the control's gesture from starting.
-				return false;
-			}
-
-			return true;
-		}
-
-		/// <summary>
 		/// Unwires wired events and disposes used objects.
 		/// </summary>
 		void Dispose()
@@ -232,12 +217,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 #if IOS || MACCATALYST
 
-	internal class SfHorizontalContentProxy
+	internal class SfHorizontalContentProxy(SfHorizontalContent horizontalContent)
 	{
-		readonly WeakReference<SfHorizontalContent> _view;
-		public SfHorizontalContentProxy(SfHorizontalContent horizontalContent) => _view = new(horizontalContent);
+		readonly WeakReference<SfHorizontalContent> _view = new(horizontalContent);
 
+#pragma warning disable IDE0060 // Remove unused parameter
 		internal bool GestureShouldBegin(UIGestureRecognizer uIGestureRecognizer)
+#pragma warning restore IDE0060 // Remove unused parameter
 		{
 			_view.TryGetTarget(out var view);
 			if (view != null)

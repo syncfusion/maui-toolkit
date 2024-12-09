@@ -1,4 +1,3 @@
-
 namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 {
 	public partial class Tooltip : SampleView

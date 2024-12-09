@@ -55,7 +55,7 @@ namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 			}
 		}
 
-		private void switch_StateChanged(object sender, ToggledEventArgs e)
+		private void checkbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
 		{
 			if (e.Value)
 			{

@@ -6,7 +6,7 @@ using Syncfusion.Maui.Toolkit.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-	internal class PolarChartArea : AreaBase, IChartPlotArea
+	internal partial class PolarChartArea : AreaBase, IChartPlotArea
     {
         #region Fields
         readonly AbsoluteLayout _behaviorLayout;
@@ -23,7 +23,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         IChartLegend? _legend;
         ChartPolarSeriesCollection? _series;
 
-        IChart chart => PolarChart;
+        IChart chart => _polarChart;
         #endregion
 
         #region Public Properties
@@ -52,7 +52,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         #region Internal Properties
 
-        internal readonly SfPolarChart PolarChart;
+        internal readonly SfPolarChart _polarChart;
         internal RectF ActualSeriesClipRect { get { return _actualSeriesClipRect; } set { _actualSeriesClipRect = value; } }
         internal Thickness PlotAreaMargin { get; set; } = Thickness.Zero;
         internal IList<Brush>? PaletteColors { get; set; }
@@ -101,7 +101,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
-        public ReadOnlyObservableCollection<ILegendItem> LegendItems => new ReadOnlyObservableCollection<ILegendItem>(_legendItems);
+        public ReadOnlyObservableCollection<ILegendItem> LegendItems => new(_legendItems);
         EventHandler<EventArgs>? _legendItemsUpdated;
         EventHandler<LegendItemEventArgs>? _legendItemsToggled;
         event EventHandler<EventArgs> IPlotArea.LegendItemsUpdated { add { _legendItemsUpdated += value; } remove { _legendItemsUpdated -= value; } }
@@ -129,16 +129,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// <param name="polarChart"></param>
         public PolarChartArea(SfPolarChart polarChart)
         {
-            PolarChart = polarChart;
-            _series = new ChartPolarSeriesCollection();
-            _legendItems = new ObservableCollection<ILegendItem>();
+            _polarChart = polarChart;
+            _series = [];
+            _legendItems = [];
             PaletteColors = ChartColorModel.DefaultBrushes;
             _gridLineLayout = new PolarGridLineLayout(this);
-            _seriesViews = new AbsoluteLayout();
+            _seriesViews = [];
             _axisLayout = new PolarAxisLayoutView(this);
             _dataLabelView = new PolarDataLabelView(this);
             _behaviorLayout = polarChart.BehaviorLayout;
-            _dataLabelLayout = new AbsoluteLayout();
+            _dataLabelLayout = [];
             AbsoluteLayout.SetLayoutBounds(_gridLineLayout, new Rect(0, 0, 1, 1));
             AbsoluteLayout.SetLayoutFlags(_gridLineLayout, AbsoluteLayoutFlags.All);
             AbsoluteLayout.SetLayoutBounds(_seriesViews, new Rect(0, 0, 1, 1));
@@ -181,19 +181,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal ChartAxis GetPrimaryAxis()
         {
-            return PolarChart.PrimaryAxis;
+            return _polarChart.PrimaryAxis;
         }
 
         internal ChartAxis GetSecondaryAxis()
         {
-            return PolarChart.SecondaryAxis;
+            return _polarChart.SecondaryAxis;
         }
 
         internal void InternalCreateSegments(ChartSeries series)
         {
             foreach (var view in _seriesViews.Children)
             {
-                if (view is SeriesView seriesView && seriesView.IsVisible && series == seriesView.Series)
+                if (view is SeriesView seriesView && seriesView.IsVisible && series == seriesView._series)
                 {
                     seriesView.InternalCreateSegments();
                 }
@@ -224,7 +224,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             PointF point = new PointF();
             theta = axis.IsInversed ? -theta : theta;
-            var angle = PolarChart.PolarStartAngle;
+            var angle = _polarChart.PolarStartAngle;
             point.X = (float)(PolarAxisCenter.X + (radius * Math.Cos((theta + angle) * (Math.PI / 180))));
             point.Y = (float)(PolarAxisCenter.Y + (radius * Math.Sin((theta + angle) * (Math.PI / 180))));
             return point;
@@ -236,9 +236,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         protected override void UpdateAreaCore()
         {
-            if (chart == null) return;
+            if (chart == null)
+			{
+				return;
+			}
 
-            chart.ResetTooltip();
+			chart.ResetTooltip();
 
             _axisLayout.AssignAxisToSeries();
             _axisLayout.LayoutAxis(AreaBounds);
@@ -299,7 +302,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void UpdateVisibleSeries()
         {
-            foreach (SeriesView seriesView in _seriesViews.Children)
+			foreach (SeriesView seriesView in _seriesViews.Children.Cast<SeriesView>())
             {
                 if (seriesView != null && seriesView.IsVisible)
                 {
@@ -312,49 +315,47 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void AddSeries(int index, object series)
         {
-            var chartSeries = series as PolarSeries;
-            if (chartSeries != null)
-            {
-                chartSeries.Chart = PolarChart;
-                chartSeries.Parent = PolarChart;
-                SetInheritedBindingContext(chartSeries, BindingContext);
-                chartSeries.ChartArea = this;
-                chartSeries.SegmentsCreated = false;
+			if (series is PolarSeries chartSeries)
+			{
+				chartSeries.Chart = _polarChart;
+				chartSeries.Parent = _polarChart;
+				SetInheritedBindingContext(chartSeries, BindingContext);
+				chartSeries.ChartArea = this;
+				chartSeries.SegmentsCreated = false;
 				var seriesView = new SeriesView(chartSeries, this);
-                chartSeries.NeedToAnimateSeries = chartSeries.EnableAnimation;
-                AbsoluteLayout.SetLayoutBounds(seriesView, new Rect(0, 0, 1, 1));
-                AbsoluteLayout.SetLayoutFlags(seriesView, AbsoluteLayoutFlags.All);
-                _seriesViews.Insert(index, seriesView);
-                var labelView = chartSeries.LabelTemplateView;
-                AbsoluteLayout.SetLayoutBounds(labelView, new Rect(0, 0, 1, 1));
-                AbsoluteLayout.SetLayoutFlags(labelView, AbsoluteLayoutFlags.All);
-                _dataLabelLayout.Insert(index, labelView);
-            }
-        }
+				chartSeries.NeedToAnimateSeries = chartSeries.EnableAnimation;
+				AbsoluteLayout.SetLayoutBounds(seriesView, new Rect(0, 0, 1, 1));
+				AbsoluteLayout.SetLayoutFlags(seriesView, AbsoluteLayoutFlags.All);
+				_seriesViews.Insert(index, seriesView);
+				var labelView = chartSeries.LabelTemplateView;
+				AbsoluteLayout.SetLayoutBounds(labelView, new Rect(0, 0, 1, 1));
+				AbsoluteLayout.SetLayoutFlags(labelView, AbsoluteLayoutFlags.All);
+				_dataLabelLayout.Insert(index, labelView);
+			}
+		}
 
         void RemoveSeries(int index, object series)
         {
-            var chartSeries = series as ChartSeries;
-            if (chartSeries != null)
-            {
-                chartSeries.ResetData();
-                chartSeries.SegmentsCreated = false;
-                SetInheritedBindingContext(chartSeries, null);
-                chart.IsRequiredDataLabelsMeasure = true;
-                _dataLabelLayout.Children.RemoveAt(index);
-                _seriesViews.Children.RemoveAt(index);
-                chartSeries.Chart = null;
-                chartSeries.Parent = null;
-            }
-        }
+			if (series is ChartSeries chartSeries)
+			{
+				chartSeries.ResetData();
+				chartSeries.SegmentsCreated = false;
+				SetInheritedBindingContext(chartSeries, null);
+				chart.IsRequiredDataLabelsMeasure = true;
+				_dataLabelLayout.Children.RemoveAt(index);
+				_seriesViews.Children.RemoveAt(index);
+				chartSeries.Chart = null;
+				chartSeries.Parent = null;
+			}
+		}
 
         void ResetSeries()
         {
-            foreach (SeriesView seriesView in _seriesViews)
+            foreach (SeriesView seriesView in _seriesViews.Cast<SeriesView>())
             {
-                seriesView.Series.ResetData();
-				seriesView.Series.Chart = null;
-				seriesView.Series.Parent = null;
+                seriesView._series.ResetData();
+				seriesView._series.Chart = null;
+				seriesView._series.Parent = null;
             }
 
             _dataLabelLayout.Clear();
@@ -408,7 +409,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             foreach (var seriesView in _seriesViews.Children)
             {
-                if (seriesView is SeriesView view && view.Series == polarSeries)
+                if (seriesView is SeriesView view && view._series == polarSeries)
                 {
                     view.InvalidateDrawable();
                     break;

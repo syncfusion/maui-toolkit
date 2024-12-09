@@ -26,7 +26,7 @@
                     </Label>
                     <Border Stroke="Gray" Grid.Row="1" BackgroundColor="Transparent">
                         <StackLayout  VerticalOptions="Center">
-                            <Image Source="{Binding Image,Converter={StaticResource imageconverter}}" HeightRequest="350" VerticalOptions="Center"/>
+                            <Image Source="{Binding Image}" HeightRequest="350" VerticalOptions="Center"/>
                         </StackLayout>
                     </Border>
                     <StackLayout HorizontalOptions="Center" Margin="25,15,0,10" Grid.Row="2" VerticalOptions="Start">

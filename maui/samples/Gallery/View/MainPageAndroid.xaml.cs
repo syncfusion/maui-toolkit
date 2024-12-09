@@ -8,16 +8,16 @@ namespace Syncfusion.Maui.ControlsGallery
 	/// </summary>
 	public partial class MainPageAndroid : ContentPage
 	{
-		SampleCategoryModel? previousSampleCategoryModel;
-		SampleSubCategoryModel? subCategoryModel;
-		SampleView? loadedSample;
-		SampleModel? loadedSampleModel;
-		VerticalStackLayout? verticalStackLayout;
-		Uri? uri;
-		bool IsSampleLoadedByFilter = false;
-		bool programmaticUpdate = false;
-		bool isThemePopupOpen = false;
-		static MainPageAndroid? mainPage;
+		SampleCategoryModel? _previousSampleCategoryModel;
+		SampleSubCategoryModel? _subCategoryModel;
+		SampleView? _loadedSample;
+		SampleModel? _loadedSampleModel;
+		VerticalStackLayout? _verticalStackLayout;
+		Uri? _uri;
+		bool _isSampleLoadedByFilter;
+		bool _programmaticUpdate;
+		bool _isThemePopupOpen;
+		static MainPageAndroid? MainPage;
 
 		/// <summary>
 		/// 
@@ -25,7 +25,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		public MainPageAndroid()
 		{
 			InitializeComponent();
-			mainPage = this;
+			MainPage = this;
 			allSamples.IsChecked = true;
 
 			if (Application.Current != null)
@@ -41,26 +41,26 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <returns></returns>
 		public static bool BackPressed()
 		{
-			if (mainPage != null)
+			if (MainPage != null)
 			{
 
-				if (mainPage.sortOptionGrid.IsVisible)
+				if (MainPage.sortOptionGrid.IsVisible)
 				{
-					mainPage.sortOptionGrid.IsVisible = false;
-					mainPage.sortTempGrid.IsVisible = false;
+					MainPage.sortOptionGrid.IsVisible = false;
+					MainPage.sortTempGrid.IsVisible = false;
 					return true;
 				}
 
-				if (mainPage.searchEntryGrid.IsVisible)
+				if (MainPage.searchEntryGrid.IsVisible)
 				{
-					mainPage.searchEntryGrid.IsVisible = false;
-					mainPage.searchListGrid.IsVisible = false;
+					MainPage.searchEntryGrid.IsVisible = false;
+					MainPage.searchListGrid.IsVisible = false;
 					return true;
 				}
 
-				if (mainPage.NavigationDrawerGrid.IsVisible)
+				if (MainPage.NavigationDrawerGrid.IsVisible)
 				{
-					mainPage.GraylayoutGrid();
+					MainPage.GraylayoutGrid();
 					return true;
 				}
 
@@ -71,53 +71,53 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private static bool HandleSampleBackNavigation()
 		{
-			if (mainPage != null)
+			if (MainPage != null)
 			{
-				if (mainPage.IsSampleLoadedByFilter)
+				if (MainPage._isSampleLoadedByFilter)
 				{
-					if (mainPage.popUpSamplePage.IsVisible)
+					if (MainPage.popUpSamplePage.IsVisible)
 					{
-						mainPage.UpdatePopUpPageUI(true);
+						MainPage.UpdatePopUpPageUI(true);
 						return true;
 					}
-					else if (mainPage.properties.IsVisible)
+					else if (MainPage.properties.IsVisible)
 					{
-						mainPage.HidePropertyWindow();
+						MainPage.HidePropertyWindow();
 						return true;
 					}
-					else if (mainPage.UpdatedSortCollection.IsVisible || mainPage.sortAndFilteredGrid.IsVisible)
+					else if (MainPage.UpdatedSortCollection.IsVisible || MainPage.sortAndFilteredGrid.IsVisible)
 					{
 						return false;
 					}
-					else if (!mainPage.UpdatedSortCollection.IsVisible)
+					else if (!MainPage.UpdatedSortCollection.IsVisible)
 					{
-						if (mainPage.allSamples.IsChecked == true)
+						if (MainPage.allSamples.IsChecked == true)
 						{
-							mainPage.NavigateBackToFilterList();
+							MainPage.NavigateBackToFilterList();
 							return true;
 						}
 						else
 						{
-							mainPage.NavigateBackToSortPage();
+							MainPage.NavigateBackToSortPage();
 							return true;
 						}
 					}
 				}
 				else
 				{
-					if (mainPage.popUpSamplePage.IsVisible)
+					if (MainPage.popUpSamplePage.IsVisible)
 					{
-						mainPage.UpdatePopUpPageUI(true);
+						MainPage.UpdatePopUpPageUI(true);
 						return true;
 					}
-					else if (mainPage.properties.IsVisible)
+					else if (MainPage.properties.IsVisible)
 					{
-						mainPage.HidePropertyWindow();
+						MainPage.HidePropertyWindow();
 						return true;
 					}
-					else if (!mainPage.controlListPage.IsVisible)
+					else if (!MainPage.controlListPage.IsVisible)
 					{
-						mainPage.NavigateBacktoControlsPage();
+						MainPage.NavigateBacktoControlsPage();
 						return true;
 					}
 				}
@@ -133,92 +133,90 @@ namespace Syncfusion.Maui.ControlsGallery
 		protected override void OnBindingContextChanged()
 		{
 			base.OnBindingContextChanged();
-			if (this.BindingContext != null)
+			if (BindingContext != null)
 			{
-				this.ArrangeControlInColumn();
+				ArrangeControlInColumn();
 			}
 		}
 
 		private void ArrangeControlInColumn()
 		{
-			if (this.BindingContext is SamplesViewModel viewModel)
+			if (BindingContext is SamplesViewModel viewModel)
 			{
-				BindableLayout.SetItemsSource(this.columOneLayout, viewModel.AllControlCategories);
+				BindableLayout.SetItemsSource(columOneLayout, viewModel.AllControlCategories);
 			}
 		}
 
 		private async void Control_Tapped(object sender, EventArgs e)
 		{
-			this.busyIndicatorPage.IsVisible = false;
-			this.popUpSamplePage.Children.Clear();
-			this.sampleGridView.Children.Clear();
+			busyIndicatorPage.IsVisible = false;
+			popUpSamplePage.Children.Clear();
+			sampleGridView.Children.Clear();
 
-			if (loadedSample != null)
+			if (_loadedSample != null)
 			{
-				loadedSample = null;
+				_loadedSample = null;
 			}
 
-			this.tabViewRowDefinition.Height = 55;
-			if (!this.shadowGrid.IsVisible)
+			tabViewRowDefinition.Height = 55;
+			if (!shadowGrid.IsVisible)
 			{
-				this.shadowGrid.IsVisible = true;
+				shadowGrid.IsVisible = true;
 			}
 
-			if (!this.tabView.IsVisible)
+			if (!tabView.IsVisible)
 			{
-				this.tabView.IsVisible = true;
+				tabView.IsVisible = true;
 			}
 
 			await Task.Delay(100);
-			var control = sender as SfEffectsViewAdv;
-			if (control == null)
+			if (sender is not SfEffectsViewAdv control)
 			{
 				return;
 			}
 
 			control.ForceRemoveEffects();
-			this.searchEntryGrid.IsVisible = false;
+			searchEntryGrid.IsVisible = false;
 			await Task.Delay(200);
 			HandleSampleCategories(control);
-			this.busyIndicatorMainPage.IsVisible = false;
+			busyIndicatorMainPage.IsVisible = false;
 
-			if (this.UpdatedSortCollection.IsVisible)
+			if (UpdatedSortCollection.IsVisible)
 			{
-				this.UpdatedSortCollection.IsVisible = false;
+				UpdatedSortCollection.IsVisible = false;
 			}
 		}
 
 		private void HandleSampleCategories(SfEffectsViewAdv? control)
 		{
-			var controlObjectModel = control?.BindingContext as ControlModel;
-			if (controlObjectModel != null)
+			if (control?.BindingContext is ControlModel controlObjectModel)
 			{
 				var sampleCategories = controlObjectModel.SampleCategories;
 				if (sampleCategories != null && sampleCategories.Count == 1)
 				{
-					this.tabViewRowDefinition.Height = 0;
-					this.tabView.IsVisible = false;
-					this.shadowGrid.IsVisible = false;
+					tabViewRowDefinition.Height = 0;
+					tabView.IsVisible = false;
+					shadowGrid.IsVisible = false;
 				}
 
 				if (sampleCategories != null)
 				{
 					sampleCategories[0].IsCategoryClicked = true;
-					previousSampleCategoryModel = sampleCategories[0];
+					_previousSampleCategoryModel = sampleCategories[0];
 					LoadSamplePage(controlObjectModel, sampleCategories[0]);
-					this.tabView.SelectedIndex = 0;
+					tabView.SelectedIndex = 0;
 				}
 			}
 		}
 
 		private void LoadSamplePage(ControlModel controlModel, SampleCategoryModel? sampleCategoryModel = null)
 		{
-			this.sampleViewPage.BindingContext = controlModel;
-			this.titleGrid.IsVisible = false;
-			this.sampleTitleLabel.Text = controlModel.Title;
-			this.sampleTitleGrid.IsVisible = true;
-			this.controlListPage.IsVisible = false;
-			this.sampleViewPage.IsVisible = true;
+			sampleViewPage.BindingContext = controlModel;
+			titleGrid.IsVisible = false;
+			sampleTitleLabel.Text = controlModel.Title;
+			sampleTitleGrid.IsVisible = true;
+			controlListPage.IsVisible = false;
+			sampleViewPage.IsVisible = true;
 			if (sampleCategoryModel == null)
 			{
 				UpdateChipViewBindingContext(controlModel.SampleCategories![0]);
@@ -228,7 +226,7 @@ namespace Syncfusion.Maui.ControlsGallery
 				UpdateChipViewBindingContext(sampleCategoryModel);
 			}
 
-			this.chipScroll?.ScrollToAsync(0, 0, true);
+			chipScroll?.ScrollToAsync(0, 0, true);
 			LoadSampleBasedOnCategory(controlModel.SampleCategories![0].SampleSubCategories![0]);
 		}
 
@@ -241,27 +239,36 @@ namespace Syncfusion.Maui.ControlsGallery
 		{
 			bool hasSubCategories = sampleSubCategory != null && IsSampleCategoryContainsSubCategory(sampleSubCategory);
 
-			this.chipView.IsVisible = hasSubCategories;
-			this.chipRowDefinition.Height = hasSubCategories ? 50 : 0;
+			chipView.IsVisible = hasSubCategories;
+			chipRowDefinition.Height = hasSubCategories ? 50 : 0;
 
 			if (hasSubCategories)
 			{
-				this.chipView.BindingContext = sampleSubCategory;
+				chipView.BindingContext = sampleSubCategory;
 			}
 		}
 
 		private void Entry_Focused(object sender, FocusEventArgs e)
 		{
-			this.searchListGrid.IsVisible = true;
-			this.searchedSampleScrollViewer.IsVisible = true;
+			searchListGrid.IsVisible = true;
+			searchedSampleScrollViewer.IsVisible = true;
 		}
 		/// <summary>
 		/// Method to nagivate back to filter list page
 		/// </summary>
 		private void NavigateBackToFilterList()
 		{
-			this.CommonNavigation();
-			this.UpdatedSortCollection.IsVisible = true;
+
+			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+			Before:
+						this.CommonNavigation();
+						this.UpdatedSortCollection.IsVisible = true;
+			After:
+						CommonNavigation();
+						this.UpdatedSortCollection.IsVisible = true;
+			*/
+			CommonNavigation();
+			UpdatedSortCollection.IsVisible = true;
 		}
 
 		/// <summary>
@@ -269,9 +276,18 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		private void NavigateBackToSortPage()
 		{
-			this.CommonNavigation();
-			this.sortAndFilteredGrid.IsVisible = true;
-			this.searchedSampleView.IsVisible = false;
+
+			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+			Before:
+						this.CommonNavigation();
+						this.sortAndFilteredGrid.IsVisible = true;
+			After:
+						CommonNavigation();
+						this.sortAndFilteredGrid.IsVisible = true;
+			*/
+			CommonNavigation();
+			sortAndFilteredGrid.IsVisible = true;
+			searchedSampleView.IsVisible = false;
 		}
 
 		/// <summary>
@@ -279,8 +295,17 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		private void NavigateBacktoControlsPage()
 		{
-			this.CommonNavigation();
-			this.controlListPage.IsVisible = true;
+
+			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+			Before:
+						this.CommonNavigation();
+						this.controlListPage.IsVisible = true;
+			After:
+						CommonNavigation();
+						this.controlListPage.IsVisible = true;
+			*/
+			CommonNavigation();
+			controlListPage.IsVisible = true;
 		}
 
 		/// <summary>
@@ -288,85 +313,94 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		void CommonNavigation()
 		{
-			this.CallOnDisappearing();
-			if (this.loadedSampleModel != null)
+			CallOnDisappearing();
+			if (_loadedSampleModel != null)
 			{
-				this.loadedSampleModel = null;
+				_loadedSampleModel = null;
 			}
 
-			this.tabView.SelectedIndex = -1;
-			if (this.previousSampleCategoryModel != null)
+
+			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+			Before:
+						if (this.previousSampleCategoryModel != null)
+						{
+			After:
+						if (previousSampleCategoryModel != null)
+						{
+			*/
+			tabView.SelectedIndex = -1;
+			if (_previousSampleCategoryModel != null)
 			{
-				this.previousSampleCategoryModel.IsCategoryClicked = false;
+				_previousSampleCategoryModel.IsCategoryClicked = false;
 			}
 
-			this.sampleGridView.Children.Clear();
-			this.titleGrid.IsVisible = true;
-			this.sampleTitleGrid.IsVisible = false;
-			this.sampleViewPage.IsVisible = false;
-			this.searchSampleTitleGrid.IsVisible = false;
-			this.searchListGrid.IsVisible = false;
-			this.propertyTempGrid.IsVisible = false;
-			this.properties.IsVisible = false;
-			if (subCategoryModel != null)
+			sampleGridView.Children.Clear();
+			titleGrid.IsVisible = true;
+			sampleTitleGrid.IsVisible = false;
+			sampleViewPage.IsVisible = false;
+			searchSampleTitleGrid.IsVisible = false;
+			searchListGrid.IsVisible = false;
+			propertyTempGrid.IsVisible = false;
+			properties.IsVisible = false;
+			if (_subCategoryModel != null)
 			{
-				this.subCategoryModel.IsSubCategoryClicked = false;
-				this.subCategoryModel = null;
+				_subCategoryModel.IsSubCategoryClicked = false;
+				_subCategoryModel = null;
 			}
 		}
 
 		private async void Category_Tapped(object sender, EventArgs e)
 		{
 			var sampleCategoryModel = (sender as SfEffectsViewAdv)?.BindingContext as SampleCategoryModel;
-			if (previousSampleCategoryModel != null && sampleCategoryModel != null)
+			if (_previousSampleCategoryModel != null && sampleCategoryModel != null)
 			{
-				if (previousSampleCategoryModel == sampleCategoryModel)
+				if (_previousSampleCategoryModel == sampleCategoryModel)
 				{
 					return;
 				}
 
-				previousSampleCategoryModel.IsCategoryClicked = false;
+				_previousSampleCategoryModel.IsCategoryClicked = false;
 			}
 
-			this.busyIndicatorPage.IsVisible = true;
+			busyIndicatorPage.IsVisible = true;
 			await Task.Delay(200);
 			HandleSampleSubcatergories(sampleCategoryModel);
 
-			this.busyIndicatorPage.IsVisible = false;
+			busyIndicatorPage.IsVisible = false;
 		}
 
 		private void HandleSampleSubcatergories(SampleCategoryModel? sampleCategoryModel)
 		{
-			if (subCategoryModel != null)
+			if (_subCategoryModel != null)
 			{
 				if (sampleCategoryModel != null && sampleCategoryModel.HasCategory)
 				{
 					if (sampleCategoryModel.SampleSubCategories != null && sampleCategoryModel.SampleSubCategories.Count > 0)
 					{
-						if (sampleCategoryModel.SampleSubCategories.Contains(subCategoryModel))
+						if (sampleCategoryModel.SampleSubCategories.Contains(_subCategoryModel))
 						{
 							return;
 						}
 					}
 				}
 
-				this.subCategoryModel.IsSubCategoryClicked = false;
+				_subCategoryModel.IsSubCategoryClicked = false;
 			}
 
 			if (sampleCategoryModel != null)
 			{
 				sampleCategoryModel.IsCategoryClicked = true;
-				previousSampleCategoryModel = sampleCategoryModel;
-				this.UpdateChipViewBindingContext(sampleCategoryModel);
+				_previousSampleCategoryModel = sampleCategoryModel;
+				UpdateChipViewBindingContext(sampleCategoryModel);
 
-				this.chipScroll?.ScrollToAsync(0, 0, true);
+				chipScroll?.ScrollToAsync(0, 0, true);
 				LoadSampleBasedOnCategory(sampleCategoryModel.SampleSubCategories![0]);
 			}
 		}
 
 		private void LoadSearchedSample(SampleModel sampleModel)
 		{
-			loadedSampleModel = sampleModel;
+			_loadedSampleModel = sampleModel;
 			try
 			{
 				var assemblyNameCollection = sampleModel?.AssemblyName?.FullName?.Split(",");
@@ -377,10 +411,10 @@ namespace Syncfusion.Maui.ControlsGallery
 				}
 
 				var sampleType = sampleModel?.AssemblyName?.GetType(assemblyName);
-				this.searchedSampleSettingsImage.IsVisible = false;
-				loadedSample = Activator.CreateInstance(sampleType!) as SampleView;
+				searchedSampleSettingsImage.IsVisible = false;
+				_loadedSample = Activator.CreateInstance(sampleType!) as SampleView;
 				UpdateSearchedSampleUI(sampleModel);
-				loadedSample?.OnAppearing();
+				_loadedSample?.OnAppearing();
 			}
 			catch
 			{
@@ -390,18 +424,18 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private void UpdateSearchedSampleUI(SampleModel? sampleModel)
 		{
-			if (loadedSample != null)
+			if (_loadedSample != null)
 			{
 				searchedSampleGrid.Children.Clear();
-				searchedSampleGrid.Children.Add(loadedSample);
+				searchedSampleGrid.Children.Add(_loadedSample);
 
 				// Handle the option view if it exists
-				if (loadedSample.OptionView != null)
+				if (_loadedSample.OptionView != null)
 				{
 					searchedSampleSettingsImage.IsVisible = true;
 					optionViewGrid.Children.Clear();
-					optionViewGrid.Children.Add(loadedSample.OptionView);
-					loadedSample.OptionView = null; // Clear OptionView after using it
+					optionViewGrid.Children.Add(_loadedSample.OptionView);
+					_loadedSample.OptionView = null; // Clear OptionView after using it
 				}
 				else
 				{
@@ -421,14 +455,14 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		internal void LoadSample(SampleModel? sampleModel, CustomCardLayout? parent = null, bool isPopUpView = false, bool isCardLayout = false)
 		{
-			loadedSampleModel = sampleModel;
+			_loadedSampleModel = sampleModel;
 			if (!busyIndicatorPage.IsVisible)
 			{
 				busyIndicatorPage.IsVisible = true;
 			}
 
 			// await Task.Delay(200);
-			this.properties.Opacity = 0;
+			properties.Opacity = 0;
 			try
 			{
 				var assemblyNameCollection = sampleModel?.AssemblyName?.FullName?.Split(",");
@@ -439,24 +473,42 @@ namespace Syncfusion.Maui.ControlsGallery
 				}
 
 				var sampleType = sampleModel?.AssemblyName?.GetType(assemblyName);
-				this.settingsImage.IsVisible = false;
-				this.ResetSettings();
+
+				/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+				Before:
+								this.ResetSettings();
+								if (!isPopUpView)
+				After:
+								ResetSettings();
+								if (!isPopUpView)
+				*/
+				settingsImage.IsVisible = false;
+				ResetSettings();
 				if (!isPopUpView)
 				{
-					this.sampleGridView.Children.Clear();
+					sampleGridView.Children.Clear();
 				}
 
-				this.popUpSamplePage.Children.Clear();
-				loadedSample = Activator.CreateInstance(sampleType!) as SampleView;
-				if (loadedSample != null)
+				popUpSamplePage.Children.Clear();
+				_loadedSample = Activator.CreateInstance(sampleType!) as SampleView;
+				if (_loadedSample != null)
 				{
-					loadedSample.IsCardView = isCardLayout;
-					loadedSample.SetBusyIndicator(this.busyIndicatorPage);
+					_loadedSample.IsCardView = isCardLayout;
+					_loadedSample.SetBusyIndicator(busyIndicatorPage);
 
 					if (isPopUpView)
 					{
-						this.UpdatePopUpPageUI();
-						this.poptitleLabel.Text = sampleModel?.Title;
+
+						/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+						Before:
+												this.UpdatePopUpPageUI();
+												this.poptitleLabel.Text = sampleModel?.Title;
+						After:
+												UpdatePopUpPageUI();
+												this.poptitleLabel.Text = sampleModel?.Title;
+						*/
+						UpdatePopUpPageUI();
+						poptitleLabel.Text = sampleModel?.Title;
 						UpdatePopupSampleUI(sampleModel);
 					}
 					else if (parent == null)
@@ -465,12 +517,12 @@ namespace Syncfusion.Maui.ControlsGallery
 					}
 					else
 					{
-						this.codeViewerImage.IsVisible = false;
-						parent.CardContent = loadedSample;
+						codeViewerImage.IsVisible = false;
+						parent.CardContent = _loadedSample;
 					}
 				}
 
-				loadedSample?.OnAppearing();
+				_loadedSample?.OnAppearing();
 			}
 			catch
 			{
@@ -485,27 +537,27 @@ namespace Syncfusion.Maui.ControlsGallery
 		private void UpdateSampleUI(SampleModel? sampleModel)
 		{
 			// Update visibility and width for various UI elements
-			UpdateUIElementVisibility(codeViewerImage, sampleModel?.CodeViewerPath);
-			UpdateUIElementVisibility(youtubeIconGrid, sampleModel?.VideoLink, youtubeColumnWidth, 40);
-			UpdateUIElementVisibility(sourceLinkGrid, sampleModel?.SourceLink, sourceColumnWidth, 40);
+			MainPageAndroid.UpdateUIElementVisibility(codeViewerImage, sampleModel?.CodeViewerPath);
+			MainPageAndroid.UpdateUIElementVisibility(youtubeIconGrid, sampleModel?.VideoLink, youtubeColumnWidth, 40);
+			MainPageAndroid.UpdateUIElementVisibility(sourceLinkGrid, sampleModel?.SourceLink, sourceColumnWidth, 40);
 
 			// Clear and add the option view if it exists
 			optionViewGrid.Children.Clear();
-			if (loadedSample != null)
+			if (_loadedSample != null)
 			{
-				var optionView = loadedSample.OptionView;
-				loadedSample.OptionView = null;
+				var optionView = _loadedSample.OptionView;
+				_loadedSample.OptionView = null;
 
 				if (optionView != null)
 				{
 					settingsImage.IsVisible = true;
 					optionColumnWidth.Width = 50;
 					optionViewGrid.Children.Add(optionView);
-					SetInheritedBindingContext(optionView, loadedSample.BindingContext);
+					SetInheritedBindingContext(optionView, _loadedSample.BindingContext);
 				}
 
 				// Add the loaded sample to the grid
-				sampleGridView.Children.Add(loadedSample);
+				sampleGridView.Children.Add(_loadedSample);
 			}
 		}
 
@@ -519,15 +571,15 @@ namespace Syncfusion.Maui.ControlsGallery
 			optionViewGrid.Children.Clear();
 
 			// Temporarily store and nullify the option view
-			if (loadedSample != null)
+			if (_loadedSample != null)
 			{
-				var optionView = loadedSample.OptionView;
-				loadedSample.OptionView = null;
+				var optionView = _loadedSample.OptionView;
+				_loadedSample.OptionView = null;
 
 				// Update the visibility and width for each popup element
-				UpdatePopupUIElementVisibility(youtubePopupImage, youtubePopupColumnWidth, sampleModel?.VideoLink);
-				UpdatePopupUIElementVisibility(sourcePopUpImage, sourcePopupColumnWidth, sampleModel?.SourceLink);
-				UpdatePopupUIElementVisibility(codeViewerPopUpImage, codeviewerPopupColumnWidth, sampleModel?.CodeViewerPath);
+				MainPageAndroid.UpdatePopupUIElementVisibility(youtubePopupImage, youtubePopupColumnWidth, sampleModel?.VideoLink);
+				MainPageAndroid.UpdatePopupUIElementVisibility(sourcePopUpImage, sourcePopupColumnWidth, sampleModel?.SourceLink);
+				MainPageAndroid.UpdatePopupUIElementVisibility(codeViewerPopUpImage, codeviewerPopupColumnWidth, sampleModel?.CodeViewerPath);
 
 				// If option view exists, display it
 				if (optionView != null)
@@ -535,11 +587,11 @@ namespace Syncfusion.Maui.ControlsGallery
 					optionPopupColumnWidth.Width = 40;
 					settingsPopupImage.IsVisible = true;
 					optionViewGrid.Children.Add(optionView);
-					SetInheritedBindingContext(optionView, loadedSample.BindingContext);
+					SetInheritedBindingContext(optionView, _loadedSample.BindingContext);
 				}
 
 				// Add the loaded sample to the popup page
-				popUpSamplePage.Children.Add(loadedSample);
+				popUpSamplePage.Children.Add(_loadedSample);
 			}
 		}
 
@@ -550,7 +602,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="data">The data to determine visibility.</param>
 		/// <param name="columnWidth">The optional column width to adjust.</param>
 		/// <param name="widthValue">The width to set if the element is visible.</param>
-		private void UpdateUIElementVisibility(VisualElement element, string? data, ColumnDefinition? columnWidth = null, double widthValue = 0)
+		private static void UpdateUIElementVisibility(VisualElement element, string? data, ColumnDefinition? columnWidth = null, double widthValue = 0)
 		{
 			bool isVisible = !string.IsNullOrEmpty(data);
 			element.IsVisible = isVisible;
@@ -567,7 +619,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="element">The image control to update visibility for.</param>
 		/// <param name="columnWidth">The column width to adjust.</param>
 		/// <param name="data">The data to check for visibility.</param>
-		private void UpdatePopupUIElementVisibility(Border element, ColumnDefinition columnWidth, string? data)
+		private static void UpdatePopupUIElementVisibility(Border element, ColumnDefinition columnWidth, string? data)
 		{
 			bool isVisible = !string.IsNullOrEmpty(data);
 			element.IsVisible = isVisible;
@@ -576,18 +628,18 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private void ResetSettings()
 		{
-			this.youtubePopupImage.IsVisible = false;
-			this.sourcePopUpImage.IsVisible = false;
-			this.youtubeIconGrid.IsVisible = false;
-			this.sourceLinkGrid.IsVisible = false;
+			youtubePopupImage.IsVisible = false;
+			sourcePopUpImage.IsVisible = false;
+			youtubeIconGrid.IsVisible = false;
+			sourceLinkGrid.IsVisible = false;
 
-			this.optionColumnWidth.Width = 0;
-			this.youtubeColumnWidth.Width = 0;
-			this.sourceColumnWidth.Width = 0;
-			this.whatsNewColumnWidth.Width = 0;
-			this.youtubePopupColumnWidth.Width = 0;
-			this.sourcePopupColumnWidth.Width = 0;
-			this.whatsnewPopupColumnWidth.Width = 0;
+			optionColumnWidth.Width = 0;
+			youtubeColumnWidth.Width = 0;
+			sourceColumnWidth.Width = 0;
+			whatsNewColumnWidth.Width = 0;
+			youtubePopupColumnWidth.Width = 0;
+			sourcePopupColumnWidth.Width = 0;
+			whatsnewPopupColumnWidth.Width = 0;
 
 		}
 
@@ -595,24 +647,33 @@ namespace Syncfusion.Maui.ControlsGallery
 		{
 			if (isBackPressed)
 			{
-				this.CallOnDisappearing();
-				this.sampleViewPage.IsVisible = true;
-				this.CardPopUpViewTitleGrid.IsVisible = false;
-				this.popUpSamplePage.IsVisible = false;
-				this.poptitleLabel.Text = "";
-				this.optionPopupColumnWidth.Width = 0;
-				this.youtubePopupColumnWidth.Width = 0;
-				this.sourcePopupColumnWidth.Width = 0;
-				this.whatsnewPopupColumnWidth.Width = 0;
-				this.settingsPopupImage.IsVisible = false;
-				this.youtubePopupImage.IsVisible = false;
-				this.sourcePopUpImage.IsVisible = false;
+
+				/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+				Before:
+								this.CallOnDisappearing();
+								this.sampleViewPage.IsVisible = true;
+				After:
+								CallOnDisappearing();
+								this.sampleViewPage.IsVisible = true;
+				*/
+				CallOnDisappearing();
+				sampleViewPage.IsVisible = true;
+				CardPopUpViewTitleGrid.IsVisible = false;
+				popUpSamplePage.IsVisible = false;
+				poptitleLabel.Text = "";
+				optionPopupColumnWidth.Width = 0;
+				youtubePopupColumnWidth.Width = 0;
+				sourcePopupColumnWidth.Width = 0;
+				whatsnewPopupColumnWidth.Width = 0;
+				settingsPopupImage.IsVisible = false;
+				youtubePopupImage.IsVisible = false;
+				sourcePopUpImage.IsVisible = false;
 			}
 			else
 			{
-				this.sampleViewPage.IsVisible = false;
-				this.CardPopUpViewTitleGrid.IsVisible = true;
-				this.popUpSamplePage.IsVisible = true;
+				sampleViewPage.IsVisible = false;
+				CardPopUpViewTitleGrid.IsVisible = true;
+				popUpSamplePage.IsVisible = true;
 			}
 		}
 
@@ -624,11 +685,11 @@ namespace Syncfusion.Maui.ControlsGallery
 				return;
 			}
 
-			this.busyIndicatorPage.IsVisible = true;
+			busyIndicatorPage.IsVisible = true;
 
-			if (subCategoryModel != null)
+			if (_subCategoryModel != null)
 			{
-				subCategoryModel.IsSubCategoryClicked = false;
+				_subCategoryModel.IsSubCategoryClicked = false;
 			}
 
 			await Task.Delay(200);
@@ -639,19 +700,19 @@ namespace Syncfusion.Maui.ControlsGallery
 #if ANDROID
 				if (sender is Element element)
 				{
-					this.chipScroll?.ScrollToAsync(element, ScrollToPosition.Center, true);
+					chipScroll?.ScrollToAsync(element, ScrollToPosition.Center, true);
 				}
 #endif
 			}
-			this.busyIndicatorPage.IsVisible = false;
+			busyIndicatorPage.IsVisible = false;
 		}
 
 		private void LoadSampleBasedOnCategory(SampleSubCategoryModel sampleSubCategory)
 		{
-			if (subCategoryModel != sampleSubCategory)
+			if (_subCategoryModel != sampleSubCategory)
 			{
-				subCategoryModel = sampleSubCategory;
-				subCategoryModel.IsSubCategoryClicked = true;
+				_subCategoryModel = sampleSubCategory;
+				_subCategoryModel.IsSubCategoryClicked = true;
 				if (sampleSubCategory != null && sampleSubCategory.CardLayouts != null)
 				{
 					var count = sampleSubCategory.CardLayouts.Count;
@@ -659,15 +720,15 @@ namespace Syncfusion.Maui.ControlsGallery
 					{
 						var layout = sampleSubCategory.CardLayouts[0];
 						var model = layout.Samples![0];
-						if (loadedSampleModel == null || model != loadedSampleModel)
+						if (_loadedSampleModel == null || model != _loadedSampleModel)
 						{
-							this.CallOnDisappearing();
+							CallOnDisappearing();
 							LoadSample(model);
 						}
 					}
 					else
 					{
-						this.CallOnDisappearing();
+						CallOnDisappearing();
 						LoadCardView(sampleSubCategory);
 					}
 				}
@@ -677,17 +738,17 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private void CallOnDisappearing()
 		{
-			if (!this.popUpSamplePage.IsVisible)
+			if (!popUpSamplePage.IsVisible)
 			{
-				foreach (var item in this.sampleGridView)
+				foreach (var item in sampleGridView)
 				{
 					if (item is SampleView sampleView)
 					{
 						sampleView.OnDisappearing();
 					}
-					else if (this.verticalStackLayout?.Children.Count > 0)
+					else if (_verticalStackLayout?.Children.Count > 0)
 					{
-						foreach (var sample in this.verticalStackLayout)
+						foreach (var sample in _verticalStackLayout)
 						{
 							if (sample is CustomCardLayout cardLayout)
 							{
@@ -701,9 +762,9 @@ namespace Syncfusion.Maui.ControlsGallery
 				}
 			}
 
-			else if (this.popUpSamplePage.Children.Count > 0)
+			else if (popUpSamplePage.Children.Count > 0)
 			{
-				if (this.popUpSamplePage.Children[0] is SampleView sample)
+				if (popUpSamplePage.Children[0] is SampleView sample)
 				{
 					sample.OnDisappearing();
 				}
@@ -712,20 +773,20 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private void LoadCardView(SampleSubCategoryModel subCategory)
 		{
-			this.sampleGridView.Children.Clear();
+			sampleGridView.Children.Clear();
 			ScrollView scroller = new();
-			verticalStackLayout = new VerticalStackLayout
+			_verticalStackLayout = new VerticalStackLayout
 			{
 				Padding = 10,
 				Spacing = 15
 			};
 			foreach (var item in subCategory.CardLayouts!)
 			{
-				AddToCardView(verticalStackLayout, item.Samples![0]);
+				AddToCardView(_verticalStackLayout, item.Samples![0]);
 			}
 
-			scroller.Content = verticalStackLayout;
-			this.sampleGridView.Children.Add(scroller);
+			scroller.Content = _verticalStackLayout;
+			sampleGridView.Children.Add(scroller);
 		}
 
 
@@ -744,12 +805,12 @@ namespace Syncfusion.Maui.ControlsGallery
 		private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
 		{
 
-			this.searchedSampleScrollViewer.IsVisible = false;
-			this.searchedSampleSettingsImage.IsVisible = false;
-			this.searchedSampleCodeViewerImage.IsVisible = false;
-			this.searchedSampleSourceLinkImage.IsVisible = false;
-			this.searchedSampleYoutubeImage.IsVisible = false;
-			this.searchedSampleView.IsVisible = true;
+			searchedSampleScrollViewer.IsVisible = false;
+			searchedSampleSettingsImage.IsVisible = false;
+			searchedSampleCodeViewerImage.IsVisible = false;
+			searchedSampleSourceLinkImage.IsVisible = false;
+			searchedSampleYoutubeImage.IsVisible = false;
+			searchedSampleView.IsVisible = true;
 			if (sender is not SfEffectsViewAdv effectsView)
 			{
 				return;
@@ -761,25 +822,25 @@ namespace Syncfusion.Maui.ControlsGallery
 
 			if (itemGrid is SearchModel searchModel && searchModel.Sample != null && searchModel.Control != null)
 			{
-				this.searchedSampleTitle.Text = searchModel.Sample.Title;
-				this.searchSampleTitleLabel.Text = searchModel.Sample.ControlName;
-				this.searchSampleTitleGrid.IsVisible = true;
-				this.searchEntryGrid.IsVisible = false;
+				searchedSampleTitle.Text = searchModel.Sample.Title;
+				searchSampleTitleLabel.Text = searchModel.Sample.ControlName;
+				searchSampleTitleGrid.IsVisible = true;
+				searchEntryGrid.IsVisible = false;
 				LoadSearchedSample(searchModel.Sample);
 			}
 		}
 
 		private async void Search_Tapped(object sender, EventArgs e)
 		{
-			this.searchEntryGrid.IsVisible = true;
-			this.searchListGrid.IsVisible = true;
-			this.searchListGrid.ZIndex = 1;
-			this.searchedSampleScrollViewer.IsVisible = true;
+			searchEntryGrid.IsVisible = true;
+			searchListGrid.IsVisible = true;
+			searchListGrid.ZIndex = 1;
+			searchedSampleScrollViewer.IsVisible = true;
 
-			if (this.BindingContext is SamplesViewModel viewModel)
+			if (BindingContext is SamplesViewModel viewModel)
 			{
 				await Task.Delay(16);
-				viewModel.PopulateSearchItem(String.Empty);
+				viewModel.PopulateSearchItem(string.Empty);
 			}
 		}
 
@@ -798,8 +859,17 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private async void GraylayoutGrid()
 		{
-			this.themePopup.IsVisible = false;
-			this.isThemePopupOpen = false;
+
+			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+			Before:
+						this.isThemePopupOpen = false;
+						Graylayout.IsVisible = false;
+			After:
+						isThemePopupOpen = false;
+						Graylayout.IsVisible = false;
+			*/
+			themePopup.IsVisible = false;
+			_isThemePopupOpen = false;
 			Graylayout.IsVisible = false;
 			await NavigationDrawerGrid.TranslateTo(-345, 0, 250, Easing.CubicIn);
 			NavigationDrawerGrid.IsVisible = false;
@@ -812,51 +882,51 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private void BackButtonPressed(object sender, EventArgs e)
 		{
-			if (this.IsSampleLoadedByFilter)
+			if (_isSampleLoadedByFilter)
 			{
-				if (this.allSamples.IsChecked == true)
+				if (allSamples.IsChecked == true)
 				{
-					this.NavigateBackToFilterList();
+					NavigateBackToFilterList();
 				}
 				else
 				{
-					this.NavigateBackToSortPage();
+					NavigateBackToSortPage();
 				}
 			}
 			else
 			{
-				this.NavigateBacktoControlsPage();
+				NavigateBacktoControlsPage();
 			}
 		}
 
 		private void PopUpPageBackButtonPressed(object sender, EventArgs e)
 		{
-			this.UpdatePopUpPageUI(true);
+			UpdatePopUpPageUI(true);
 		}
 
 		private void PropertiesTabPressed(object sender, EventArgs e)
 		{
-			this.properties.IsVisible = true;
-			this.properties.ZIndex = 1;
-			this.properties.Opacity = 1;
-			this.propertyTempGrid.IsVisible = true;
+			properties.IsVisible = true;
+			properties.ZIndex = 1;
+			properties.Opacity = 1;
+			propertyTempGrid.IsVisible = true;
 		}
 
 		private async void CodeViewerTapped(object sender, EventArgs e)
 		{
 			try
 			{
-				var assemblyNameCollection = loadedSampleModel?.AssemblyName?.FullName?.Split(",");
+				var assemblyNameCollection = _loadedSampleModel?.AssemblyName?.FullName?.Split(",");
 				if (assemblyNameCollection != null)
 				{
 					var projectName = assemblyNameCollection[0];
 					if (!Syncfusion.Maui.ControlsGallery.BaseConfig.IsIndividualSB)
 					{
-						projectName = assemblyNameCollection[0] + "." + loadedSampleModel?.ControlShortName;
+						projectName = assemblyNameCollection[0] + "." + _loadedSampleModel?.ControlShortName;
 					}
 
-					string address = "https://github.com/syncfusion/maui-demos/tree/master/MAUI/" + loadedSampleModel?.ControlShortName + "/" + projectName + "/Samples/" + loadedSampleModel?.CodeViewerPath;
-					uri = new Uri(address);
+					string address = "https://github.com/syncfusion/maui-demos/tree/master/MAUI/" + _loadedSampleModel?.ControlShortName + "/" + projectName + "/Samples/" + _loadedSampleModel?.CodeViewerPath;
+					_uri = new Uri(address);
 					await Browser.Default.OpenAsync(address, BrowserLaunchMode.SystemPreferred);
 				}
 			}
@@ -888,8 +958,8 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private void HidePropertyWindow()
 		{
-			this.properties.IsVisible = false;
-			this.propertyTempGrid.IsVisible = false;
+			properties.IsVisible = false;
+			propertyTempGrid.IsVisible = false;
 		}
 
 		private void SampleSearchImage_Clicked(object sender, EventArgs e)
@@ -900,23 +970,23 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private void HideSearchWindow()
 		{
-			this.searchEntryGrid.IsVisible = false;
-			this.searchListGrid.IsVisible = false;
+			searchEntryGrid.IsVisible = false;
+			searchListGrid.IsVisible = false;
 		}
 
 		private void Entry_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			this.searchedSampleScrollViewer.IsVisible = true;
+			searchedSampleScrollViewer.IsVisible = true;
 		}
 
 		private async void YoutubeIconTapped(object sender, EventArgs e)
 		{
 			try
 			{
-				if (loadedSampleModel != null && loadedSampleModel.VideoLink != null)
+				if (_loadedSampleModel != null && _loadedSampleModel.VideoLink != null)
 				{
-					string address = loadedSampleModel.VideoLink.ToString();
-					uri = new Uri(address);
+					string address = _loadedSampleModel.VideoLink.ToString();
+					_uri = new Uri(address);
 					await Browser.Default.OpenAsync(address, BrowserLaunchMode.SystemPreferred);
 				}
 			}
@@ -930,10 +1000,10 @@ namespace Syncfusion.Maui.ControlsGallery
 		{
 			try
 			{
-				if (loadedSampleModel != null && loadedSampleModel.SourceLink != null)
+				if (_loadedSampleModel != null && _loadedSampleModel.SourceLink != null)
 				{
-					string address = loadedSampleModel.SourceLink.ToString();
-					uri = new Uri(address);
+					string address = _loadedSampleModel.SourceLink.ToString();
+					_uri = new Uri(address);
 					await Browser.Default.OpenAsync(address, BrowserLaunchMode.SystemPreferred);
 				}
 			}
@@ -965,9 +1035,9 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e">EventArgs</param>
 		private void Setting_Tapped(object sender, EventArgs e)
 		{
-			this.sortTempGrid.IsVisible = true;
-			this.sortOptionGrid.IsVisible = true;
-			this.sortOptionGrid.ZIndex = 1;
+			sortTempGrid.IsVisible = true;
+			sortOptionGrid.IsVisible = true;
+			sortOptionGrid.ZIndex = 1;
 		}
 
 		/// <summary>
@@ -977,7 +1047,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e">EventArgs</param>
 		private void BackIcon_Pressed(object sender, EventArgs e)
 		{
-			this.sortOptionGrid.IsVisible = false;
+			sortOptionGrid.IsVisible = false;
 		}
 
 		/// <summary>
@@ -987,19 +1057,28 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e">EventArgs</param>
 		private void SortOptionApplyButtonClicked(object sender, EventArgs e)
 		{
-			this.IsSampleLoadedByFilter = false;
-			this.sortOptionGrid.IsVisible = false;
-			this.sortTempGrid.IsVisible = false;
+
+			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
+			Before:
+						this.IsSampleLoadedByFilter = false;
+						this.sortOptionGrid.IsVisible = false;
+			After:
+						IsSampleLoadedByFilter = false;
+						this.sortOptionGrid.IsVisible = false;
+			*/
+			_isSampleLoadedByFilter = false;
+			sortOptionGrid.IsVisible = false;
+			sortTempGrid.IsVisible = false;
 			if (noneOption.IsChecked && ((newSamples.IsChecked == false && updatedSamples.IsChecked == false && allSamples.IsChecked == false) || allSamples.IsChecked == true))
 			{
-				this.controlListPage.IsVisible = true;
-				this.UpdatedSortCollection.IsVisible = false;
-				this.sortAndFilteredGrid.IsVisible = false;
+				controlListPage.IsVisible = true;
+				UpdatedSortCollection.IsVisible = false;
+				sortAndFilteredGrid.IsVisible = false;
 				return;
 			}
 
-			List<string> filterList = new List<string>();
-			if (this.BindingContext is SamplesViewModel viewModel)
+			List<string> filterList = [];
+			if (BindingContext is SamplesViewModel viewModel)
 			{
 				viewModel.exit = true;
 				if (noneOption.IsChecked)
@@ -1030,39 +1109,39 @@ namespace Syncfusion.Maui.ControlsGallery
 					filterList.Add("AllSamples");
 				}
 
-				this.controlListPage.IsVisible = false;
+				controlListPage.IsVisible = false;
 				if (filterList.Contains("AllSamples") || filterList.Count == 0)
 				{
-					this.sortAndFilteredGrid.IsVisible = false;
-					this.UpdatedSortCollection.IsVisible = true;
+					sortAndFilteredGrid.IsVisible = false;
+					UpdatedSortCollection.IsVisible = true;
 					viewModel.GetSortedList(filterList);
 				}
 				else
 				{
-					this.UpdatedSortCollection.IsVisible = false;
-					this.sortAndFilteredGrid.IsVisible = true;
+					UpdatedSortCollection.IsVisible = false;
+					sortAndFilteredGrid.IsVisible = true;
 					viewModel.PopulateSortAndFilterSamples(filterList);
 
 					if (newSamples.IsChecked == true && updatedSamples.IsChecked == false)
 					{
-						this.filteredGridNew.IsVisible = true;
-						this.filteredGridUpdated.IsVisible = false;
+						filteredGridNew.IsVisible = true;
+						filteredGridUpdated.IsVisible = false;
 					}
 					else if (updatedSamples.IsChecked == true && newSamples.IsChecked == false)
 					{
-						this.filteredGridUpdated.IsVisible = true;
-						this.filteredGridNew.IsVisible = false;
+						filteredGridUpdated.IsVisible = true;
+						filteredGridNew.IsVisible = false;
 					}
 					else
 					{
-						this.filteredGridNew.IsVisible = true;
-						this.filteredGridUpdated.IsVisible = true;
+						filteredGridNew.IsVisible = true;
+						filteredGridUpdated.IsVisible = true;
 					}
 				}
 
 				filterList.Clear();
 			}
-			this.IsSampleLoadedByFilter = true;
+			_isSampleLoadedByFilter = true;
 		}
 
 		/// <summary>
@@ -1072,12 +1151,12 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e">CheckedChangedEventArgs</param>
 		private void AllSamplesCheckBoxChanged(object sender, CheckedChangedEventArgs e)
 		{
-			if (!programmaticUpdate)
+			if (!_programmaticUpdate)
 			{
-				programmaticUpdate = true;
+				_programmaticUpdate = true;
 				newSamples.IsChecked = e.Value;
 				updatedSamples.IsChecked = e.Value;
-				programmaticUpdate = false;
+				_programmaticUpdate = false;
 			}
 		}
 
@@ -1103,15 +1182,15 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		private void HandleSampleCheckBoxChange(bool? newSamplesChecked, bool? updatedSamplesChecked)
 		{
-			if (!programmaticUpdate)
+			if (!_programmaticUpdate)
 			{
-				programmaticUpdate = true;
+				_programmaticUpdate = true;
 				if (newSamplesChecked == false || updatedSamplesChecked == false)
 				{
 					allSamples.IsChecked = false;
 				}
 
-				programmaticUpdate = false;
+				_programmaticUpdate = false;
 			}
 		}
 
@@ -1123,16 +1202,16 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e">EventArgs</param>
 		private void SortSampleTapGestureTapped(object sender, EventArgs e)
 		{
-			if (this.BindingContext is SamplesViewModel viewModel)
+			if (BindingContext is SamplesViewModel viewModel)
 			{
 				viewModel.exit = true;
 			}
 
-			this.sortAndFilteredGrid.IsVisible = false;
-			this.searchedSampleView.IsVisible = true;
-			this.searchedSampleView.ZIndex = 1;
-			this.searchListGrid.IsVisible = true;
-			this.searchedSampleScrollViewer.IsVisible = false;
+			sortAndFilteredGrid.IsVisible = false;
+			searchedSampleView.IsVisible = true;
+			searchedSampleView.ZIndex = 1;
+			searchListGrid.IsVisible = true;
+			searchedSampleScrollViewer.IsVisible = false;
 			if (sender is not SfEffectsViewAdv effectsView)
 			{
 				return;
@@ -1144,9 +1223,9 @@ namespace Syncfusion.Maui.ControlsGallery
 
 			if (itemGrid is SearchModel searchModel && searchModel.Sample != null && searchModel.Control != null)
 			{
-				this.searchedSampleTitle.Text = searchModel.Sample.Title;
-				this.searchSampleTitleLabel.Text = searchModel.Sample.ControlName;
-				this.searchSampleTitleGrid.IsVisible = true;
+				searchedSampleTitle.Text = searchModel.Sample.Title;
+				searchSampleTitleLabel.Text = searchModel.Sample.ControlName;
+				searchSampleTitleGrid.IsVisible = true;
 				LoadSearchedSample(searchModel.Sample);
 			}
 		}
@@ -1163,8 +1242,8 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e">EventArgs</param>
 		private void Cancel_Clicked(object sender, EventArgs e)
 		{
-			this.sortOptionGrid.IsVisible = false;
-			this.sortTempGrid.IsVisible = false;
+			sortOptionGrid.IsVisible = false;
+			sortTempGrid.IsVisible = false;
 		}
 
 		/// <summary>
@@ -1174,8 +1253,8 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e">EventArgs</param>
 		private void SortTempGridTapped(object sender, EventArgs e)
 		{
-			this.sortOptionGrid.IsVisible = false;
-			this.sortTempGrid.IsVisible = false;
+			sortOptionGrid.IsVisible = false;
+			sortTempGrid.IsVisible = false;
 		}
 
 		private async void DocumentationTapGestureRecognizer(object sender, EventArgs e)
@@ -1183,7 +1262,7 @@ namespace Syncfusion.Maui.ControlsGallery
 			try
 			{
 				string address = "https://help.syncfusion.com/maui-toolkit/introduction/overview";
-				uri = new Uri(address);
+				_uri = new Uri(address);
 				await Browser.Default.OpenAsync(address, BrowserLaunchMode.SystemPreferred);
 			}
 			catch (Exception)
@@ -1198,7 +1277,7 @@ namespace Syncfusion.Maui.ControlsGallery
 			try
 			{
 				string address = "https://mauitoolkit.syncfusion.com/create";
-				uri = new Uri(address);
+				_uri = new Uri(address);
 				await Browser.Default.OpenAsync(address, BrowserLaunchMode.SystemPreferred);
 			}
 			catch (Exception)
@@ -1214,7 +1293,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e"></param>
 		private void NoneOptionTapGestureTapped(object sender, EventArgs e)
 		{
-			noneOption.IsChecked = noneOption.IsChecked ? false : true;
+			noneOption.IsChecked = !noneOption.IsChecked;
 		}
 
 		/// <summary>
@@ -1224,7 +1303,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e"></param>
 		private void AscendingTapGestureTapped(object sender, EventArgs e)
 		{
-			ascending.IsChecked = ascending.IsChecked ? false : true;
+			ascending.IsChecked = !ascending.IsChecked;
 		}
 
 		/// <summary>
@@ -1234,32 +1313,32 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e"></param>
 		private void DescendingTapGestureTapped(object sender, EventArgs e)
 		{
-			descending.IsChecked = descending.IsChecked ? false : true;
+			descending.IsChecked = !descending.IsChecked;
 		}
 
 		private void ThemePopupCloseIcon_Tapped(object sender, TappedEventArgs e)
 		{
-			this.isThemePopupOpen = false;
+			_isThemePopupOpen = false;
 			themePopup.IsVisible = false;
-			this.Graylayout.IsVisible = false;
+			Graylayout.IsVisible = false;
 		}
 
 		private void ThemeTapGestureRecognizer(object sender, TappedEventArgs e)
 		{
-			if (isThemePopupOpen == true)
+			if (_isThemePopupOpen == true)
 			{
-				isThemePopupOpen = false;
-				this.NavigationDrawerGrid.IsVisible = false;
-				this.Graylayout.IsVisible = false;
-				this.themePopup.IsVisible = false;
+				_isThemePopupOpen = false;
+				NavigationDrawerGrid.IsVisible = false;
+				Graylayout.IsVisible = false;
+				themePopup.IsVisible = false;
 
 			}
 			else
 			{
-				isThemePopupOpen = true;
-				this.NavigationDrawerGrid.IsVisible = false;
-				this.Graylayout.IsVisible = true;
-				this.themePopup.IsVisible = true;
+				_isThemePopupOpen = true;
+				NavigationDrawerGrid.IsVisible = false;
+				Graylayout.IsVisible = true;
+				themePopup.IsVisible = true;
 			}
 		}
 

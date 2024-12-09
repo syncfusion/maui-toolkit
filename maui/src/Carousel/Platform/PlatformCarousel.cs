@@ -5,26 +5,26 @@
 	/// </summary>
 	/// <exclude/>
 	public partial class PlatformCarousel
-    {
-        private ICarousel? virtualView;
+	{
+		private ICarousel? _virtualView;
 
-        /// <summary>
-        /// Connects the Maui carousel view with the platform-specific implementation.
-        /// </summary>
-        /// <param name="mauiView">The carousel view to be connected.</param>
-        internal void Connect(ICarousel mauiView)
-        {
-            virtualView = mauiView;
-        }
+		/// <summary>
+		/// Connects the Maui carousel view with the platform-specific implementation.
+		/// </summary>
+		/// <param name="mauiView">The carousel view to be connected.</param>
+		internal void Connect(ICarousel mauiView)
+		{
+			_virtualView = mauiView;
+		}
 
-        /// <summary>
-        /// Disconnects the carousel view, releasing any platform-specific resources.
-        /// </summary>
-        internal void Disconnect()
-        {
-            virtualView = null;
-        }
+		/// <summary>
+		/// Disconnects the carousel view, releasing any platform-specific resources.
+		/// </summary>
+		internal void Disconnect()
+		{
+			_virtualView = null;
+		}
 
-    }
+	}
 
 }

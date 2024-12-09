@@ -2,151 +2,151 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-	internal class DataLabelView : SfDrawableView
-    {
-        #region Fields
+	internal partial class DataLabelView : SfDrawableView
+	{
+		#region Fields
 
-        readonly ChartPlotArea _chartPlotArea;
+		readonly ChartPlotArea _chartPlotArea;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public DataLabelView(ChartPlotArea plotArea)
-        {
-            _chartPlotArea = plotArea;
-        }
+		public DataLabelView(ChartPlotArea plotArea)
+		{
+			_chartPlotArea = plotArea;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Methods
+		#region Protected Methods
 
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            var visibleSeries = _chartPlotArea.VisibleSeries;
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		{
+			var visibleSeries = _chartPlotArea.VisibleSeries;
 
-            canvas.CanvasSaveState();
-            canvas.ClipRectangle(dirtyRect);
+			canvas.CanvasSaveState();
+			canvas.ClipRectangle(dirtyRect);
 
-            if (visibleSeries != null)
-            {
-                foreach (var series in visibleSeries)
-                {
-                    if (series.IsVisible && !series.CanAnimate() && series.ShowDataLabels && series.Segments.Count > 0 && series.LabelTemplate == null)
-                    {
-                        canvas.CanvasSaveState();
+			if (visibleSeries != null)
+			{
+				foreach (var series in visibleSeries)
+				{
+					if (series.IsVisible && !series.CanAnimate() && series.ShowDataLabels && series._segments.Count > 0 && series.LabelTemplate == null)
+					{
+						canvas.CanvasSaveState();
 
-                        if (series.NeedToAnimateDataLabel)
-                        {
-                            canvas.Alpha = series.AnimationValue;
-                        }
+						if (series.NeedToAnimateDataLabel)
+						{
+							canvas.Alpha = series.AnimationValue;
+						}
 
-                        series.DrawDataLabels(canvas);
-                        canvas.CanvasRestoreState();
-                    }
+						series.DrawDataLabels(canvas);
+						canvas.CanvasRestoreState();
+					}
 
-                    if (series is CircularSeries circularSeries && series.ShowDataLabels && series.Segments.Count > 0 && circularSeries.LabelTemplate != null)
-                    {
-                        circularSeries.UpdateDataLabelPositions(canvas);
-                    }
-                }
-            }
+					if (series is CircularSeries circularSeries && series.ShowDataLabels && series._segments.Count > 0 && circularSeries.LabelTemplate != null)
+					{
+						circularSeries.UpdateDataLabelPositions(canvas);
+					}
+				}
+			}
 
-            canvas.CanvasRestoreState();
-        }
+			canvas.CanvasRestoreState();
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 
-    internal class PyramidDataLabelView : SfDrawableView
-    {
-        #region Fields
+	internal partial class PyramidDataLabelView : SfDrawableView
+	{
+		#region Fields
 
-        readonly IPyramidChartDependent _chart;
+		readonly IPyramidChartDependent _chart;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public PyramidDataLabelView(IPyramidChartDependent chart)
-        {
-            _chart = chart;
-        }
+		public PyramidDataLabelView(IPyramidChartDependent chart)
+		{
+			_chart = chart;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Methods
+		#region Protected Methods
 
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            canvas.CanvasSaveState();
-            _chart.DrawDataLabels(canvas, dirtyRect);
-            canvas.CanvasRestoreState();
-        }
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		{
+			canvas.CanvasSaveState();
+			_chart.DrawDataLabels(canvas, dirtyRect);
+			canvas.CanvasRestoreState();
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 
-    internal class PolarDataLabelView : SfDrawableView
-    {
-        #region Fields
+	internal partial class PolarDataLabelView : SfDrawableView
+	{
+		#region Fields
 
-        readonly PolarChartArea _chartArea;
+		readonly PolarChartArea _chartArea;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        public PolarDataLabelView(PolarChartArea chartArea)
-        {
-            _chartArea = chartArea;
-        }
+		public PolarDataLabelView(PolarChartArea chartArea)
+		{
+			_chartArea = chartArea;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Methods
+		#region Protected Methods
 
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            var visibleSeries = _chartArea.VisibleSeries;
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		{
+			var visibleSeries = _chartArea.VisibleSeries;
 
-            canvas.CanvasSaveState();
-            canvas.ClipRectangle(dirtyRect);
+			canvas.CanvasSaveState();
+			canvas.ClipRectangle(dirtyRect);
 
-            if (visibleSeries != null)
-            {
-                foreach (var series in visibleSeries)
-                {
-                    if (series.IsVisible && !series.CanAnimate() && series.ShowDataLabels && series.Segments.Count > 0 && series.LabelTemplate == null)
-                    {
-                        canvas.CanvasSaveState();
+			if (visibleSeries != null)
+			{
+				foreach (var series in visibleSeries)
+				{
+					if (series.IsVisible && !series.CanAnimate() && series.ShowDataLabels && series._segments.Count > 0 && series.LabelTemplate == null)
+					{
+						canvas.CanvasSaveState();
 
-                        if (series.NeedToAnimateDataLabel)
-                        {
-                            canvas.Alpha = series.AnimationValue;
-                        }
+						if (series.NeedToAnimateDataLabel)
+						{
+							canvas.Alpha = series.AnimationValue;
+						}
 
-                        series.DrawDataLabels(canvas);
-                        canvas.CanvasRestoreState();
-                    }
-                }
-            }
+						series.DrawDataLabels(canvas);
+						canvas.CanvasRestoreState();
+					}
+				}
+			}
 
-            canvas.CanvasRestoreState();
-        }
+			canvas.CanvasRestoreState();
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

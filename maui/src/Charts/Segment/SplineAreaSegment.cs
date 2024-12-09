@@ -3,36 +3,36 @@ using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-    /// <summary>
-    /// Represents a segment of the <see cref="SplineAreaSeries"/>.
-    /// </summary>
-    public class SplineAreaSegment : AreaSegment
+	/// <summary>
+	/// Represents a segment of the <see cref="SplineAreaSeries"/>.
+	/// </summary>
+	public partial class SplineAreaSegment : AreaSegment
 	{
 		#region Fields
 
 		double _minY, _maxY;
 
-        #endregion
+		#endregion
 
-        #region Internal Properties
+		#region Internal Properties
 
-        internal double[] XVal { get; set; }
+		internal double[] XVal { get; set; }
 
-        internal double[] YVal { get; set; }
+		internal double[] YVal { get; set; }
 
-        internal double[] ControlStartX { get; set; }
+		internal double[] ControlStartX { get; set; }
 
-        internal double[] ControlStartY { get; set; }
+		internal double[] ControlStartY { get; set; }
 
-        internal double[] ControlEndX { get; set; }
+		internal double[] ControlEndX { get; set; }
 
-        internal double[] ControlEndY { get; set; }
+		internal double[] ControlEndY { get; set; }
 
-        internal List<float> StartControlPoints { get; set; }
+		internal List<float> StartControlPoints { get; set; }
 
-        internal List<float> EndControlPoints { get; set; }
+		internal List<float> EndControlPoints { get; set; }
 
-        internal List<float> StrokeControlStartPoints { get; set; }
+		internal List<float> StrokeControlStartPoints { get; set; }
 
 		internal List<float> StrokeControlEndPoints { get; set; }
 
@@ -51,10 +51,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			ControlStartY = [];
 			ControlEndX = [];
 			ControlEndY = [];
-			StartControlPoints = new List<float>();
-			EndControlPoints = new List<float>();
-			StrokeControlStartPoints = new List<float>();
-			StrokeControlEndPoints = new List<float>();
+			StartControlPoints = [];
+			EndControlPoints = [];
+			StrokeControlStartPoints = [];
+			StrokeControlEndPoints = [];
 		}
 
 		#endregion
@@ -186,14 +186,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			crossingValue = double.IsNaN(crossingValue) ? 0 : crossingValue;
 
 			var count = XVal.Length;
-			FillPoints = new List<float>();
-			StartControlPoints = new List<float>();
-			EndControlPoints = new List<float>();
-			double yValue = YVal[0], xValue = XVal[0], startX, startY, endX, endY;
+			FillPoints = [];
+			StartControlPoints = [];
+			EndControlPoints = [];
+
+			double xValue = XVal[0], startX, startY, endX, endY;
 
 			FillPoints.Add(cartesian.TransformToVisibleX(xValue, 0));
 			FillPoints.Add(cartesian.TransformToVisibleY(xValue, crossingValue));
 
+			double yValue;
 			for (int i = 0; i < count - 1; i++)
 			{
 				xValue = XVal[i];
@@ -226,10 +228,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (Series is CartesianSeries series && SeriesView != null && series.ActualYAxis != null)
 			{
 				float x, y, ControlStartXVal, ControlStartYVal, ControlEndXVal, ControlEndYVal;
-				StrokePoints = new List<float>();
-				StrokeControlStartPoints = new List<float>();
-				StrokeControlEndPoints = new List<float>();
-				int segsCount = series.Segments.Count;
+				StrokePoints = [];
+				StrokeControlStartPoints = [];
+				StrokeControlEndPoints = [];
+				int segsCount = series._segments.Count;
 				var halfStrokeWidth = (float)StrokeWidth / 2;
 				double yValue, xValue, startX, startY, endX, endY;
 
@@ -255,26 +257,30 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					ControlEndYVal = series.TransformToVisibleY(endX, endY);
 
 					StrokePoints.Add(x);
-					StrokePoints.Add(y += yValue >= 0 ? halfStrokeWidth : -halfStrokeWidth);
+					y += yValue >= 0 ? halfStrokeWidth : -halfStrokeWidth;
+					StrokePoints.Add(y);
 
 					StrokeControlStartPoints.Add(ControlStartXVal);
-					StrokeControlStartPoints.Add(ControlStartYVal += startY >= 0 ? halfStrokeWidth : -halfStrokeWidth);
+					ControlStartYVal += startY >= 0 ? halfStrokeWidth : -halfStrokeWidth;
+					StrokeControlStartPoints.Add(ControlStartYVal);
 					StrokeControlEndPoints.Add(ControlEndXVal);
-					StrokeControlEndPoints.Add(ControlEndYVal += endY >= 0 ? halfStrokeWidth : -halfStrokeWidth);
+					ControlEndYVal += endY >= 0 ? halfStrokeWidth : -halfStrokeWidth;
+					StrokeControlEndPoints.Add(ControlEndYVal);
 				}
 
-				if (segsCount == 1 || series.Segments.Last() == this)
+				if (segsCount == 1 || series._segments.Last() == this)
 				{
 					xValue = XVal[count - 1];
 					x = series.TransformToVisibleX(xValue, start);
 					y = series.TransformToVisibleY(xValue, start);
+					y += start >= 0 ? halfStrokeWidth : -halfStrokeWidth;
 					StrokePoints.Add(x);
-					StrokePoints.Add(y += start >= 0 ? halfStrokeWidth : -halfStrokeWidth);
+					StrokePoints.Add(y);
 				}
 			}
 		}
 
-		void DrawPath(ICanvas canvas, IList<float>? fillPoints, IList<float>? strokePoints)
+		void DrawPath(ICanvas canvas, List<float>? fillPoints, List<float>? strokePoints)
 		{
 			if (Series == null || fillPoints == null)
 			{
@@ -308,7 +314,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			path.LineTo(fillPoints[fillPoints.Count - 2], fillPoints[fillPoints.Count - 1]);
+			var fillPointsCount = fillPoints.Count;
+			path.LineTo(fillPoints[fillPointsCount - 2], fillPoints[fillPointsCount - 1]);
 			path.LineTo(fillPoints[0], fillPoints[1]);
 
 			canvas.SetFillPaint(Fill, path.Bounds);

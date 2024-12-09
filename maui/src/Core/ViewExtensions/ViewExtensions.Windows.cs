@@ -6,9 +6,9 @@ using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {
-    public static partial class ViewExtensions
-    {
-        const double imageResolution = 96.0;
+	public static partial class ViewExtensions
+	{
+		const double imageResolution = 96.0;
 
 		/// <summary>
 		/// <para> To convert a view to a stream in a specific file format, the <b> GetStreamAsync </b> method is used. Currently, the supported file formats are <b> JPEG or PNG </b>. </para>
@@ -20,42 +20,42 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <param name="format">The image format to use for the stream.</param>
 		/// <returns>A task that represents the asynchronous operation, containing the stream of the view's content.</returns>
 		public async static Task<Stream> GetStreamAsync(this View view, ImageFileFormat format)
-        {
-            if (view != null && view.Handler is IViewHandler viewHandler)
-            {
-                if (viewHandler.PlatformView is UIElement uIElement)
-                {
-                    var renderTargetBitmap = new RenderTargetBitmap();
-                    await renderTargetBitmap.RenderAsync(uIElement);
-                    var pixel = await renderTargetBitmap.GetPixelsAsync();
-                    var randomStream = new InMemoryRandomAccessStream();
-                    var imageFormat = ConvertToBitmapEncoder(format);
-                    var encoder = await BitmapEncoder.CreateAsync(imageFormat, randomStream);
-                    var alphaMode = format == ImageFileFormat.Png ? BitmapAlphaMode.Premultiplied : BitmapAlphaMode.Ignore;
-                    encoder.SetPixelData(BitmapPixelFormat.Bgra8, alphaMode, (uint)renderTargetBitmap.PixelWidth, (uint)renderTargetBitmap.PixelHeight, imageResolution, imageResolution, pixel.ToArray());
+		{
+			if (view != null && view.Handler is IViewHandler viewHandler)
+			{
+				if (viewHandler.PlatformView is UIElement uIElement)
+				{
+					var renderTargetBitmap = new RenderTargetBitmap();
+					await renderTargetBitmap.RenderAsync(uIElement);
+					var pixel = await renderTargetBitmap.GetPixelsAsync();
+					var randomStream = new InMemoryRandomAccessStream();
+					var imageFormat = ConvertToBitmapEncoder(format);
+					var encoder = await BitmapEncoder.CreateAsync(imageFormat, randomStream);
+					var alphaMode = format == ImageFileFormat.Png ? BitmapAlphaMode.Premultiplied : BitmapAlphaMode.Ignore;
+					encoder.SetPixelData(BitmapPixelFormat.Bgra8, alphaMode, (uint)renderTargetBitmap.PixelWidth, (uint)renderTargetBitmap.PixelHeight, imageResolution, imageResolution, pixel.ToArray());
 
-                    //screen size
-                    var screenResolution = uIElement.XamlRoot.Size;
+					//screen size
+					var screenResolution = uIElement.XamlRoot.Size;
 
-                    //view size
-                    var viewResolution = uIElement.RenderSize;
+					//view size
+					var viewResolution = uIElement.RenderSize;
 
-                    encoder.BitmapTransform.Bounds = new BitmapBounds
-                    {
-                        X = 0,
-                        Y = 0,
-                        Height = (uint)(renderTargetBitmap.PixelHeight - (viewResolution.Height / screenResolution.Height)),
-                        Width = (uint)(renderTargetBitmap.PixelWidth - (viewResolution.Width / screenResolution.Width))
-                    };
+					encoder.BitmapTransform.Bounds = new BitmapBounds
+					{
+						X = 0,
+						Y = 0,
+						Height = (uint)(renderTargetBitmap.PixelHeight - (viewResolution.Height / screenResolution.Height)),
+						Width = (uint)(renderTargetBitmap.PixelWidth - (viewResolution.Width / screenResolution.Width))
+					};
 
-                    await encoder.FlushAsync();
+					await encoder.FlushAsync();
 
-                    return randomStream.AsStream();
-                }
-            }
+					return randomStream.AsStream();
+				}
+			}
 
-            return Stream.Null;
-        }
+			return Stream.Null;
+		}
 
 		/// <summary>
 		/// <para> To save a view as an image in the desired file format, the <b> SaveAsImage </b> is used.Currently, the supported image formats are <b> JPEG or PNG </b>. </para>
@@ -75,19 +75,19 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <param name="view">The view to save as an image.</param>
 		/// <param name="fileName">The name of the file to save the image as.</param>
 		public static async void SaveAsImage(this View view, string fileName)
-        {
-            string extension = Path.GetExtension(fileName);
-            string imageExtension = string.IsNullOrEmpty(extension) ? "png" : extension.Trim('.').ToLowerInvariant();
-            var imageFormat = imageExtension == "jpg" || imageExtension == "jpeg" ? ImageFileFormat.Jpeg : ImageFileFormat.Png;
-            fileName = Path.GetFileNameWithoutExtension(fileName) + "." + imageFormat.ToString().ToLowerInvariant();
-            string targetFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), fileName);
-            using (Stream stream = await view.GetStreamAsync(imageFormat))
-            using (MemoryStream memoryStream = new MemoryStream())
-            {
-                await stream.CopyToAsync(memoryStream);
-                await File.WriteAllBytesAsync(targetFile, memoryStream.ToArray());
-            }
-        }
+		{
+			string extension = Path.GetExtension(fileName);
+			string imageExtension = string.IsNullOrEmpty(extension) ? "png" : extension.Trim('.').ToLowerInvariant();
+			var imageFormat = imageExtension == "jpg" || imageExtension == "jpeg" ? ImageFileFormat.Jpeg : ImageFileFormat.Png;
+			fileName = Path.GetFileNameWithoutExtension(fileName) + "." + imageFormat.ToString().ToLowerInvariant();
+			string targetFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), fileName);
+			using (Stream stream = await view.GetStreamAsync(imageFormat))
+			using (MemoryStream memoryStream = new MemoryStream())
+			{
+				await stream.CopyToAsync(memoryStream);
+				await File.WriteAllBytesAsync(targetFile, memoryStream.ToArray());
+			}
+		}
 
 		/// <summary>
 		/// Converts the specified image file format to the corresponding bitmap encoder format.
@@ -95,11 +95,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <param name="format">The image file format to convert.</param>
 		/// <returns>The GUID representing the bitmap encoder format.</returns>
 		static Guid ConvertToBitmapEncoder(ImageFileFormat format) =>
-            format switch
-            {
-                ImageFileFormat.Jpeg => BitmapEncoder.JpegEncoderId,
-                ImageFileFormat.Png => BitmapEncoder.PngEncoderId,
-                _ => BitmapEncoder.JpegEncoderId
-            };
-    }
+			format switch
+			{
+				ImageFileFormat.Jpeg => BitmapEncoder.JpegEncoderId,
+				ImageFileFormat.Png => BitmapEncoder.PngEncoderId,
+				_ => BitmapEncoder.JpegEncoderId
+			};
+	}
 }

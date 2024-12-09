@@ -9,7 +9,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	{
 		#region Fields
 
-		Random random = new Random();
+		readonly Random _random = new();
 
 		#endregion
 
@@ -23,7 +23,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			var empInfo = new ObservableCollection<InboxInfo>();
 			int k = 0;
-			for (int i = 0; i < Subject.Count(); i++)
+			for (int i = 0; i < _subject.Length; i++)
 			{
 				if (k >= 10)
 				{
@@ -31,16 +31,16 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 				}
 				var record = new InboxInfo()
 				{
-					ProfileName = ProfileList[i],
-					Name = NameList[i],
-					Subject = Subject[i],
+					ProfileName = _profileList[i],
+					Name = _nameList[i],
+					Subject = _subject[i],
 					Date = DateTime.Today.AddDays(i * -3),
-					Description = Descriptions[i],
-					IsAttached = Attachments[i],
-					IsImportant = Importants[i],
-					IsOpened = Opens[i],
-					AvatarTextColor = Color.FromArgb(AvatarTextColors[k]),
-					AvatarBackgroundColor = Color.FromArgb(AvatarBackgroundColors[k]),
+					Description = _descriptions[i],
+					IsAttached = _attachments[i],
+					IsImportant = _importants[i],
+					IsOpened = _opens[i],
+					AvatarTextColor = Color.FromArgb(_avatarTextColors[k]),
+					AvatarBackgroundColor = Color.FromArgb(_avatarBackgroundColors[k]),
 				};
 				empInfo.Add(record);
 				k++;
@@ -59,7 +59,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			int k = 0;
 			for (int i = 0; i < count; i++)
 			{
-				var j = random.Next(Subject.Count());
+				var j = _random.Next(_subject.Length);
 
 				if (k >= 10)
 				{
@@ -67,16 +67,16 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 				}
 				var record = new InboxInfo()
 				{
-					ProfileName = ProfileList[j],
-					Name = NameList[j],
-					Subject = Subject[j],
+					ProfileName = _profileList[j],
+					Name = _nameList[j],
+					Subject = _subject[j],
 					Date = DateTime.Now.AddMinutes((i * 10)),
-					Description = Descriptions[j],
-					IsAttached = Attachments[j],
-					IsImportant = Importants[j],
+					Description = _descriptions[j],
+					IsAttached = _attachments[j],
+					IsImportant = _importants[j],
 					IsOpened = false,
-					AvatarTextColor = Color.FromArgb(AvatarTextColors[k]),
-					AvatarBackgroundColor = Color.FromArgb(AvatarBackgroundColors[k]),
+					AvatarTextColor = Color.FromArgb(_avatarTextColors[k]),
+					AvatarBackgroundColor = Color.FromArgb(_avatarBackgroundColors[k]),
 				};
 				empInfo.Add(record);
 				k++;
@@ -89,8 +89,8 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 
 		#region Employee Info
 
-		string[] ProfileList = new string[]
-		{
+		readonly string[] _profileList =
+		[
 		"M",
 		"MV",
 		"MV",
@@ -106,10 +106,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		"BT",
 		"M",
 		"M",
-		};
+		];
 
-		string[] NameList = new string[]
-		{
+		readonly string[] _nameList =
+		[
 		"Microsoft",
 		"Microsoft Viva",
 		"Microsoft Viva",
@@ -125,10 +125,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		"Blog Team Site",
 		"Microsoft",
 		"Microsoft",
-		};
+		];
 
-		bool[] Attachments = new bool[]
-		{
+		readonly bool[] _attachments =
+		[
 		false,
 		false,
 		false,
@@ -144,10 +144,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		false,
 		true,
 		false,
-		};
+		];
 
-		bool[] Importants = new bool[]
-		{
+		readonly bool[] _importants =
+		[
 		false,
 		true,
 		false,
@@ -163,10 +163,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		true,
 		false,
 		false,
-		};
+		];
 
-		bool[] Opens = new bool[]
-		{
+		readonly bool[] _opens =
+		[
 		true,
 		false,
 		true,
@@ -182,10 +182,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		false,
 		true,
 		false,
-		};
+		];
 
-		string[] Subject = new string[]
-		{
+		readonly string[] _subject =
+		[
 		"Dev Essentials: Learn about the future of .NET and celebrate Visual Studio's 25th anniversary",
 		"Your daily briefing",
 		"Your digest email",
@@ -201,9 +201,9 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		"You've joined the Blog Team Site group",
 		"Microsoft .NET News: Get started with .NET 6.0 and watch sessions from .NET Conf 2022 on demand",
 		"Microsoft .NET News: Learn about new tools and updates for .NET developers",
-		};
+		];
 
-		string[] Descriptions = new string[] {
+		readonly string[] _descriptions = [
 		"Developer news, updates, and training resources.",
 		"Dear developer, It's almost the end of the week",
 		"Dear developer, Discover trends in your work habits",
@@ -219,10 +219,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		"Welcome to the Blog Team Site group.",
 		"The Xamarin Newsletter is now .NET News.",
 		"Now available: Visual Studio 2019 version 16.9.",
-	};
+	];
 
-		string[] AvatarBackgroundColors = new string[]
-	   {
+		readonly string[] _avatarBackgroundColors =
+	   [
 		"#8BEAF0",
 		"#F5EF9A",
 		"#BACF82",
@@ -233,10 +233,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		"#8BD0F0",
 		"#FFB2BA",
 		"#CFBDFE",
-	   };
+	   ];
 
-		string[] AvatarTextColors = new string[]
-	   {
+		readonly string[] _avatarTextColors =
+	   [
 		"#004448",
 		"#414141",
 		"#273500",
@@ -247,7 +247,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		"#003546",
 		"#561D27",
 		"#36275D",
-	   };
+	   ];
 		#endregion
 	}
 }

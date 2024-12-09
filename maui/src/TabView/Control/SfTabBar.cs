@@ -15,7 +15,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
     /// Represents a tab bar control that manages the display and interaction of tab items.
     /// </summary>
     [ContentProperty(nameof(Items))]
-    internal class SfTabBar : SfStackLayout, ITapGestureListener
+    internal partial class SfTabBar : SfStackLayout, ITapGestureListener
     {
         #region Fields
 
@@ -34,12 +34,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
         double _previousTabX = 0d;
         double _selectedTabX = 0d;
         double _currentIndicatorWidth = 0d;
-        readonly int _defaultIndicatorHeight = 3;
-        readonly double _tabHeaderImageSize = 32d;
-        readonly double _arrowButtonSize = 32;
+		double _tabHeaderImageSize = 32d;
+		readonly double _arrowButtonSize = 32;
 		double _removedItemWidth = 0;
 		bool _itemRemoved = false;
-        bool _isSelectionProcessed;
+		bool _isSelectionProcessed;
+		private Size desiredSize;
 
         // State-tracking fields
 
@@ -58,7 +58,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         ArrowIcon? _backwardArrow;
 
 #if IOS
-        Point _touchDownPoint = new Point();
+        Point _touchDownPoint = new();
 #endif
 
         #endregion
@@ -223,10 +223,25 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 BindingMode.Default,
                 propertyChanged: OnIndicatorCornerRadiusChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="FontAutoScalingEnabled"/> bindable property.
-        /// </summary>
-        internal static readonly BindableProperty FontAutoScalingEnabledProperty =
+		/// <summary>
+		/// Identifies the <see cref="IndicatorStrokeThickness"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="IndicatorStrokeThickness"/> bindable property.
+		/// </value>
+		internal static readonly BindableProperty IndicatorStrokeThicknessProperty = 
+			BindableProperty.Create(
+				nameof(IndicatorStrokeThickness),
+				typeof(double),
+				typeof(SfTabBar),
+				3d,
+				BindingMode.Default,
+				propertyChanged: OnIndicatorStrokeThicknessChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="FontAutoScalingEnabled"/> bindable property.
+		/// </summary>
+		internal static readonly BindableProperty FontAutoScalingEnabledProperty =
             BindableProperty.Create(
                 nameof(FontAutoScalingEnabled),
                 typeof(bool),
@@ -234,18 +249,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 false,
                 propertyChanged: OnFontAutoScalingEnabledChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="ScrollButtonIconColor"/> bindable property.
-        /// </summary>
-        internal static readonly BindableProperty ScrollButtonForegroundColorProperty =
+		/// <summary>
+		/// Identifies the <see cref="ScrollButtonColor"/> bindable property.
+		/// </summary>
+		internal static readonly BindableProperty ScrollButtonColorProperty =
             BindableProperty.Create(
-                nameof(ScrollButtonIconColor),
+                nameof(ScrollButtonColor),
                 typeof(Color),
                 typeof(SfTabBar),
                 Color.FromArgb("#49454F"),
                 BindingMode.Default,
                 null,
-                propertyChanged: OnScrollButtonForegroundColorChanged);
+                propertyChanged: OnScrollButtonColorChanged);
 
         /// <summary>
         /// Identifies the <see cref="ScrollButtonBackground"/> bindable property.
@@ -253,11 +268,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         internal static readonly BindableProperty ScrollButtonBackgroundProperty =
             BindableProperty.Create(
                 nameof(ScrollButtonBackground),
-                typeof(Color),
+                typeof(Brush),
                 typeof(SfTabBar),
-                Color.FromArgb("#F7F2FB"),
+                new SolidColorBrush(Color.FromArgb("#F7F2FB")),
                 BindingMode.Default,
-                propertyChanged: OnScrollButtonBackgroundColorChanged);
+                propertyChanged: OnScrollButtonBackgroundChanged);
 
         /// <summary>
         /// Identifies the <see cref="ScrollButtonDisabledIconColor"/> bindable property.
@@ -280,7 +295,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// </summary>
         public SfTabBar()
         {
-            Items = new TabItemCollection();
+            Items = [];
             InitializeControl();
             _tabSelectionChangedEventArgs = new CoreEventArgs();
             _tabItemTappedEventArgs = new TabItemTappedEventArgs();
@@ -417,16 +432,28 @@ namespace Syncfusion.Maui.Toolkit.TabView
             set => SetValue(IndicatorCornerRadiusProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets the display mode for the tab header, determining whether to show the image and text.
-        /// </summary>
-        /// <value>
-        /// It accepts the TabHeaderDisplayMode values, and the default value is TabHeaderDisplayMode.Default.
-        /// </value>
-        /// <remarks>
-        /// When the <see cref="HeaderDisplayMode"/> is set to TabHeaderDisplayMode.Default, the image and text will be displayed on the tab bar based on the Header and ImageSource properties of the tab item.
-        /// </remarks>
-        internal TabBarDisplayMode HeaderDisplayMode
+		/// <summary>
+		/// Gets or sets a value that can be used to customize the indicator’s border height. 
+		/// </summary>
+		/// <value>
+		/// It accepts the double values and the default value is 3.
+		/// </value>
+		internal double IndicatorStrokeThickness
+		{
+			get => (double)this.GetValue(IndicatorStrokeThicknessProperty);
+			set => this.SetValue(IndicatorStrokeThicknessProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the display mode for the tab header, determining whether to show the image and text.
+		/// </summary>
+		/// <value>
+		/// It accepts the TabHeaderDisplayMode values, and the default value is TabHeaderDisplayMode.Default.
+		/// </value>
+		/// <remarks>
+		/// When the <see cref="HeaderDisplayMode"/> is set to TabHeaderDisplayMode.Default, the image and text will be displayed on the tab bar based on the Header and ImageSource properties of the tab item.
+		/// </remarks>
+		internal TabBarDisplayMode HeaderDisplayMode
         {
             get => (TabBarDisplayMode)GetValue(HeaderDisplayModeProperty);
             set => SetValue(HeaderDisplayModeProperty, value);
@@ -444,40 +471,40 @@ namespace Syncfusion.Maui.Toolkit.TabView
             set => SetValue(ContentTransitionDurationProperty, value);
         }
 
-        /// <summary> 
-        /// Gets or sets a value that Determines whether or not the font of the control should scale automatically according to the operating system settings. 
-        /// </summary>
-        /// <value>
-        /// It accepts Boolean values, and the default value is false.
-        /// </value>
-        internal bool FontAutoScalingEnabled
+		/// <summary> 
+		/// Gets or sets a value that Determines whether or not the font of the control should scale automatically according to the operating system settings. 
+		/// </summary>
+		/// <value>
+		/// It accepts Boolean values, and the default value is false.
+		/// </value>
+		internal bool FontAutoScalingEnabled
         {
             get { return (bool)GetValue(FontAutoScalingEnabledProperty); }
             set { SetValue(FontAutoScalingEnabledProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets a value that can be used to customize the scroll button’s background color in <see cref="SfTabView"/>.
-        /// </summary>
-        /// <value>
-        /// It accepts the Color values. 
-        /// </value>
-        internal Color ScrollButtonBackground
+		/// <summary>
+		/// Gets or sets a value that can be used to customize the scroll button’s background color in <see cref="SfTabView"/>.
+		/// </summary>
+		/// <value> 
+		/// It accepts brush values. 
+		/// </value> 
+		internal Brush ScrollButtonBackground
         {
-            get => (Color)GetValue(ScrollButtonBackgroundProperty);
+            get => (Brush)GetValue(ScrollButtonBackgroundProperty);
             set => SetValue(ScrollButtonBackgroundProperty, value);
         }
 
-        /// <summary>
-        /// Gets or sets a value that can be used to customize the scroll button’s foreground color in <see cref="SfTabView"/>.
-        /// </summary>
-        /// <value>
-        /// It accepts the Color values. 
-        /// </value>
-        internal Color ScrollButtonIconColor
-        {
-            get => (Color)GetValue(ScrollButtonForegroundColorProperty);
-            set => SetValue(ScrollButtonForegroundColorProperty, value);
+		/// <summary>
+		/// Gets or sets a value that can be used to customize the scroll button’s color in <see cref="SfTabView"/>.
+		/// </summary>
+		/// <value> 
+		/// It accepts the Color values. 
+		/// </value>
+		internal Color ScrollButtonColor
+		{
+            get => (Color)GetValue(ScrollButtonColorProperty);
+            set => SetValue(ScrollButtonColorProperty, value);
         }
 
         /// <summary>
@@ -527,8 +554,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         public void OnTap(object sender, TapEventArgs tapEventArgs)
         {
             if (sender is not View)
-                return;
-            var index = _tabHeaderItemContent?.Children.IndexOf((IView)(sender));
+			{
+				return;
+			}
+
+			var index = _tabHeaderItemContent?.Children.IndexOf((IView)(sender));
             if (SelectedIndex != index && index != null)
             {
                 // Raise the TabItemTapped event
@@ -586,11 +616,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// <param name="args">The core event args.</param>
         internal void RaiseSelectionChangedEvent(CoreEventArgs args)
         {
-            if (SelectionChanged != null)
-            {
-                SelectionChanged(this, args);
-            }
-        }
+			SelectionChanged?.Invoke(this, args);
+		}
 
         /// <summary>
         /// Invokes <see cref="TabItemTapped"/> event.
@@ -598,11 +625,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// <param name="args">The tab item tapped event args.</param>
         internal void RaiseTabItemTappedEvent(TabItemTappedEventArgs args)
         {
-            if (TabItemTapped != null)
-            {
-                TabItemTapped(this, args);
-            }
-        }
+			TabItemTapped?.Invoke(this, args);
+		}
 
         /// <summary>
         /// Invokes <see cref="SelectionChanging"/> event.
@@ -610,11 +634,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// <param name="args">The event arguments.</param>
         internal void RaiseSelectionChangingEvent(SelectionChangingEventArgs args)
         {
-            if (SelectionChanging != null)
-            {
-                SelectionChanging(this, args);
-            }
-        }
+			SelectionChanging?.Invoke(this, args);
+		}
 
         /// <summary>
         /// To update the position of the tab indicator.
@@ -645,11 +666,25 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
-        /// <summary>
-        /// To update the indicator placement.
-        /// </summary>
-        /// <param name="indicatorPlacement">The indicator placement.</param>
-        internal void UpdateIndicatorPlacement(TabIndicatorPlacement indicatorPlacement)
+		/// <summary>
+		/// To update the border height for selection indicator.
+		/// </summary>
+		/// <param name="newValue"></param>
+		internal void UpdateIndicatorStrokeThickness(double newValue)
+		{
+			var indicatorPlacement = this.IndicatorPlacement;
+
+			if (this._tabSelectionIndicator != null && indicatorPlacement != TabIndicatorPlacement.Fill)
+			{
+				this._tabSelectionIndicator.HeightRequest = this.IndicatorStrokeThickness;
+			}
+		}
+
+		/// <summary>
+		/// To update the indicator placement.
+		/// </summary>
+		/// <param name="indicatorPlacement">The indicator placement.</param>
+		internal void UpdateIndicatorPlacement(TabIndicatorPlacement indicatorPlacement)
         {
             if (Items != null)
             {
@@ -681,19 +716,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 {
                     SelectedIndex = Items.Count - 1;
                 }
-				else if (index <= this.SelectedIndex)
+				else if (index <= SelectedIndex)
 				{
 					_removedItemWidth = tabItem.Width;
 
-					if (index < this.SelectedIndex)
+					if (index < SelectedIndex)
 					{
-						if(this.SelectedIndex<=Items.Count)
+						if(SelectedIndex<=Items.Count)
 						{
-							this.SelectedIndex--;
+							SelectedIndex--;
 						}
 						else
 						{
-							this.SelectedIndex = Items.Count - 1;
+							SelectedIndex = Items.Count - 1;
 						}
 						
 					}
@@ -725,7 +760,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					_isSelectionProcessed = true;
 				}
 
-                UpdateSelectedTabItemIsSelected(newIndex, oldIndex);
+				UpdateSelectedTabItemIsSelected(newIndex, oldIndex);
                 UpdateTabIndicatorWidth();
                 if (_tabSelectionChangedEventArgs != null)
                 {
@@ -747,8 +782,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 foreach (var item in Items)
                 {
                     if (item != null)
-                        item.FontAutoScalingEnabled = isEnabled;
-                }
+					{
+						item.FontAutoScalingEnabled = isEnabled;
+					}
+				}
             }
         }
 
@@ -798,15 +835,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
             ClearItems();
 
             if (Items is null)
-                return;
+			{
+				return;
+			}
 
-            int count = -1;
+			int count = -1;
             foreach (var item in Items)
             {
                 count++;
                 if (item is not null)
-                    AddTabItemProperties(item, count);
-            }
+				{
+					AddTabItemProperties(item, count);
+				}
+			}
 
             Items.CollectionChanged -= Items_CollectionChanged;
             Items.CollectionChanged += Items_CollectionChanged;
@@ -862,10 +903,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
             if (tabItem != null)
             {
                 // Assign a control template if not already assigned
-                if (tabItem.ControlTemplate == null)
-                {
-                    tabItem.ControlTemplate = new ControlTemplate(typeof(TabViewMaterialVisualStyle));
-                }
+                tabItem.ControlTemplate ??= new ControlTemplate(typeof(TabViewMaterialVisualStyle));
 
                 ConfigureTabItemProperties(tabItem);
 
@@ -927,7 +965,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 Size desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
                 var width = 0d;
-                if (item.IsVisible)
+				_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
+				if (item.IsVisible)
                 {
                     if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
                     {
@@ -1046,9 +1085,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         async void UpdateScrollViewPositionForAndroid(int position, int rtlPosition)
         {
             if (_tabHeaderScrollView == null)
-                return;
+			{
+				return;
+			}
 
-            if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
             {
                 await _tabHeaderScrollView.ScrollToAsync(_tabHeaderItemContent?.Children[rtlPosition] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
             }
@@ -1063,8 +1104,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         async void UpdateScrollViewPositionForWindows(int position, int rtlPosition)
         {
             if (_tabHeaderScrollView == null)
-                return;
-            await _tabHeaderScrollView.ScrollToAsync(_tabHeaderItemContent?.Children[position] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
+			{
+				return;
+			}
+
+			await _tabHeaderScrollView.ScrollToAsync(_tabHeaderItemContent?.Children[position] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
         }
 #endif
 
@@ -1155,8 +1199,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 }
 
                 if (ItemsSource?.Count <= 0)
-                    ClearIndicatorWidth();
-            }
+				{
+					ClearIndicatorWidth();
+				}
+			}
         }
 
         void HandleNewItems(NotifyCollectionChangedEventArgs e, int? headerItemsCount)
@@ -1216,10 +1262,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     UpdateHeaderDisplayMode();
                 }
 
-                if (e.PropertyName.Equals(nameof(SfTabItem.ImagePosition), StringComparison.Ordinal) ||
-                    e.PropertyName.Equals(nameof(SfTabItem.Header), StringComparison.Ordinal) ||
-                    e.PropertyName.Equals(nameof(SfTabItem.FontSize), StringComparison.Ordinal) ||
-                    e.PropertyName.Equals(nameof(SfTabItem.ImageTextSpacing), StringComparison.Ordinal))
+				if (e.PropertyName.Equals(nameof(SfTabItem.ImagePosition), StringComparison.Ordinal) ||
+					e.PropertyName.Equals(nameof(SfTabItem.Header), StringComparison.Ordinal) ||
+					e.PropertyName.Equals(nameof(SfTabItem.FontSize), StringComparison.Ordinal) ||
+					e.PropertyName.Equals(nameof(SfTabItem.ImageTextSpacing), StringComparison.Ordinal)||
+					e.PropertyName.Equals(nameof(SfTabItem.ImageSize),StringComparison.Ordinal))
                 {
                     if (TabWidthMode == TabWidthMode.SizeToContent)
                     {
@@ -1338,9 +1385,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
             HandleEffectsViewReset(effectsView, tabItem, e);
 
             if (ShouldIgnoreTouchRelease(tabItem, e))
-                return;
+			{
+				return;
+			}
 
-            if (_tabItemTappedEventArgs != null)
+			if (_tabItemTappedEventArgs != null)
             {
                 HandleTabItemTapped(tabItem);
                 if (_tabItemTappedEventArgs.Cancel)
@@ -1406,7 +1455,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void HandleEffectsViewReset(SfEffectsView? effectsView, SfTabItem tabItem, TouchEventArgs e)
 		{
 			if (effectsView == null)
+			{
 				return;
+			}
 
 #if WINDOWS || MACCATALYST
 			effectsView.ForceReset = true;
@@ -1463,7 +1514,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 if (indicatorPlacement == TabIndicatorPlacement.Bottom)
                 {
-                    _tabSelectionIndicator.HeightRequest = _defaultIndicatorHeight;
+                    _tabSelectionIndicator.HeightRequest = IndicatorStrokeThickness;
                     _tabSelectionIndicator.VerticalOptions = LayoutOptions.End;
                     if (_roundRectangle != null)
                     {
@@ -1473,7 +1524,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 }
                 else
                 {
-                    _tabSelectionIndicator.HeightRequest = _defaultIndicatorHeight;
+                    _tabSelectionIndicator.HeightRequest = IndicatorStrokeThickness;
                     _tabSelectionIndicator.VerticalOptions = LayoutOptions.Start;
                     if (_roundRectangle != null)
                     {
@@ -1489,12 +1540,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 _tabHeaderParentContainer.Clear();
                 _tabHeaderParentContainer.ColumnDefinitions.Clear();
-                _tabHeaderParentContainer.ColumnDefinitions = new ColumnDefinitionCollection
-                    {
-                        new ColumnDefinition { Width = new GridLength(_arrowButtonSize) },
+                _tabHeaderParentContainer.ColumnDefinitions =
+					[
+						new ColumnDefinition { Width = new GridLength(_arrowButtonSize) },
                         new ColumnDefinition(),
                         new ColumnDefinition { Width = new GridLength(_arrowButtonSize) },
-                    };
+                    ];
 
                 ConfigureArrowButtonTypes();
 
@@ -1508,9 +1559,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         void ConfigureArrowButtonTypes()
         {
             if (_tabHeaderParentContainer == null)
-                return;
+			{
+				return;
+			}
 #if WINDOWS
-            if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
             {
                 if (_forwardArrow != null && _backwardArrow != null)
                 {
@@ -1527,7 +1580,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 }
             }
 #else
-            if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
             {
                 _tabHeaderParentContainer.SetColumn(_backwardArrow, 2);
                 _tabHeaderParentContainer.SetColumn(_tabHeaderScrollView, 1);
@@ -1548,10 +1601,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 _tabHeaderParentContainer.Clear();
                 _tabHeaderParentContainer.ColumnDefinitions.Clear();
-                _tabHeaderParentContainer.ColumnDefinitions = new ColumnDefinitionCollection
-                    {
-                        new ColumnDefinition(),
-                    };
+                _tabHeaderParentContainer.ColumnDefinitions =
+					[
+						new ColumnDefinition(),
+                    ];
                 _tabHeaderParentContainer.Children.Add(_tabHeaderScrollView);
             }
         }
@@ -1616,11 +1669,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         double CalculateWidthWithImageAndText(SfTabItem item, Size desiredSize)
         {
-            double width;
+			_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
+			double width;
             if (item.HeaderDisplayMode == TabBarDisplayMode.Image)
             {
                 width = _tabHeaderImageSize;
-            }
+			}
             else if (item.HeaderDisplayMode == TabBarDisplayMode.Text)
             {
                 width = desiredSize.Width;
@@ -1630,7 +1684,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 if (item.ImagePosition == TabImagePosition.Left || item.ImagePosition == TabImagePosition.Right)
                 {
                     width = desiredSize.Width + item.ImageTextSpacing + _tabHeaderImageSize;
-                }
+				}
                 else
                 {
                     width = Math.Max(desiredSize.Width, _tabHeaderImageSize);
@@ -1645,7 +1699,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 if (item != null)
                 {
-                    if (item.IsSelected)
+					_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
+					if (item.IsSelected)
                     {
                         item.HeaderDisplayMode = TabBarDisplayMode.Default;
                     }
@@ -1666,19 +1721,29 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         void CalculateTabItemWidthForSizeToContent()
         {
-            foreach (var item in Items)
+#if ANDROID || IOS
+                    float _displayScale = (float)DeviceDisplay.MainDisplayInfo.Density;
+#endif
+			foreach (var item in Items)
             {
                 if (item != null)
                 {
-                    Size desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
-                    CalculateTabItemWidthForSizeToContentForItem(item, desiredSize);
+					desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
+#if ANDROID || IOS
+                            if (this.FontAutoScalingEnabled)
+                            {
+                                desiredSize = (item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily)* _displayScale);
+                            }
+#endif
+					CalculateTabItemWidthForSizeToContentForItem(item, desiredSize);
                 }
             }
         }
 
         void CalculateTabItemWidthForSizeToContentForItem(SfTabItem item, Size desiredSize)
         {
-            if (item.IsVisible)
+			_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
+			if (item.IsVisible)
             {
                 double width;
                 if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
@@ -1701,7 +1766,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         double GetWidthForSizeToContentWithImageAndText(SfTabItem item, Size desiredSize)
         {
-            if (HeaderDisplayMode == TabBarDisplayMode.Image)
+			_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
+			if (HeaderDisplayMode == TabBarDisplayMode.Image)
             {
                 item.HeaderDisplayMode = TabBarDisplayMode.Image;
                 return _tabHeaderImageSize + _defaultTextPadding;
@@ -1774,38 +1840,38 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// <summary>
         /// Updates the background color of the scroll buttons.
         /// </summary>
-        void UpdateScrollButtonBackgroundColor()
+        void UpdateScrollButtonBackground()
         {
             if (_forwardArrow != null && _backwardArrow != null)
             {
-                _forwardArrow.ScrollButtonBackgroundColor = ScrollButtonBackground;
-                _backwardArrow.ScrollButtonBackgroundColor = ScrollButtonBackground;
+                _forwardArrow.ScrollButtonBackground = ScrollButtonBackground;
+                _backwardArrow.ScrollButtonBackground = ScrollButtonBackground;
             }
         }
 
-        /// <summary>
-        /// Updates the foreground color of the scroll buttons.
-        /// </summary>
-        void UpdateScrollButtonForegroundColor()
+		/// <summary>
+		/// Updates the color of the scroll buttons.
+		/// </summary>
+		void UpdateScrollButtonColor()
         {
             if (_forwardArrow != null && _backwardArrow != null)
             {
                 if (_forwardArrow.IsEnabled)
                 {
-                    _forwardArrow.ForegroundColor = ScrollButtonIconColor;
+                    _forwardArrow.ScrollButtonColor = ScrollButtonColor;
                 }
                 else
                 {
-                    _forwardArrow.ForegroundColor = ScrollButtonDisabledIconColor;
+                    _forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
                 }
 
                 if (_backwardArrow.IsEnabled)
                 {
-                    _backwardArrow.ForegroundColor = ScrollButtonIconColor;
+                    _backwardArrow.ScrollButtonColor = ScrollButtonColor;
                 }
                 else
                 {
-                    _backwardArrow.ForegroundColor = ScrollButtonDisabledIconColor;
+                    _backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
                 }
             }
         }
@@ -1968,8 +2034,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
                         }
                         else
                         {
-                            var index = this._tabHeaderItemContent.Children.IndexOf(item);
-                            width += this._tabHeaderItemContent.Children[index].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
+                            var index = _tabHeaderItemContent.Children.IndexOf(item);
+                            width += _tabHeaderItemContent.Children[index].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
                         }
                     }
                 }
@@ -1978,8 +2044,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
                 if (ScrollButtonBackground != null)
                 {
-                    _forwardArrow.ScrollButtonBackgroundColor = ScrollButtonBackground;
-                    _backwardArrow.ScrollButtonBackgroundColor = ScrollButtonBackground;
+                    _forwardArrow.ScrollButtonBackground = ScrollButtonBackground;
+                    _backwardArrow.ScrollButtonBackground = ScrollButtonBackground;
                 }
             }
         }
@@ -1992,29 +2058,29 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 {
                     _backwardArrow.IsEnabled = false;
                     _forwardArrow.IsEnabled = false;
-                    _backwardArrow.ForegroundColor = ScrollButtonDisabledIconColor;
-                    _forwardArrow.ForegroundColor = ScrollButtonDisabledIconColor;
+                    _backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+                    _forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
                 }
                 else if (_tabHeaderScrollView.ScrollX == 0)
                 {
                     _backwardArrow.IsEnabled = false;
                     _forwardArrow.IsEnabled = true;
-                    _backwardArrow.ForegroundColor = ScrollButtonDisabledIconColor;
-                    _forwardArrow.ForegroundColor = ScrollButtonIconColor;
+                    _backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+                    _forwardArrow.ScrollButtonColor = ScrollButtonColor;
                 }
                 else if (Math.Round(_tabHeaderScrollView.ScrollX) == Math.Round(_tabHeaderScrollView.ContentSize.Width - _tabHeaderScrollView.Width))
                 {
                     _backwardArrow.IsEnabled = true;
                     _forwardArrow.IsEnabled = false;
-                    _forwardArrow.ForegroundColor = ScrollButtonDisabledIconColor;
-                    _backwardArrow.ForegroundColor = ScrollButtonIconColor;
+                    _forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+                    _backwardArrow.ScrollButtonColor = ScrollButtonColor;
                 }
                 else
                 {
                     _backwardArrow.IsEnabled = true;
                     _forwardArrow.IsEnabled = true;
-                    _backwardArrow.ForegroundColor = ScrollButtonIconColor;
-                    _forwardArrow.ForegroundColor = ScrollButtonIconColor;
+                    _backwardArrow.ScrollButtonColor = ScrollButtonColor;
+                    _forwardArrow.ScrollButtonColor = ScrollButtonColor;
                 }
             }
         }
@@ -2102,9 +2168,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         void UpdateTabIndicatorForSelectedItem()
         {
             if (_tabHeaderItemContent == null)
-                return;
+			{
+				return;
+			}
 
-            SfTabItem item = Items[SelectedIndex];
+			SfTabItem item = Items[SelectedIndex];
 
             if (SelectedIndex > 0 && _selectedTabX <= 0)
             {
@@ -2144,7 +2212,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     _currentIndicatorWidth = _tabHeaderItemContent.Children[SelectedIndex].Width;
                     if (double.IsNaN(_currentIndicatorWidth))
                     {
-                        _currentIndicatorWidth = _tabHeaderItemContent.Children[this.SelectedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
+                        _currentIndicatorWidth = _tabHeaderItemContent.Children[SelectedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
                     }
                 }
                 else
@@ -2166,8 +2234,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				}
 
 				if (_currentIndicatorWidth > _tabSelectionIndicator.Width)
-                    _tabSelectionIndicator.MaximumWidthRequest = _currentIndicatorWidth * 2;
-            }
+				{
+					_tabSelectionIndicator.MaximumWidthRequest = _currentIndicatorWidth * 2;
+				}
+			}
         }
 
 		/// <summary>
@@ -2177,9 +2247,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <param name="tempIndicatorWidth">The width of the tab indicator.</param>
 		(double, double) UpdateIndicatorPosition(double selectedViewX, double tempIndicatorWidth)
 		{
-			if (this._tabHeaderItemContent != null)
+			if (_tabHeaderItemContent != null)
 			{
-				selectedViewX = selectedViewX - _removedItemWidth;
+				selectedViewX -= _removedItemWidth;
 				_removedItemWidth = 0;
 			}
 
@@ -2189,11 +2259,15 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void UpdateIndicatorForFitMode(SfTabItem item)
         {
             if (_tabHeaderItemContent == null)
-                return;
+			{
+				return;
+			}
 
-            if (GetVisibleItems() == 0)
-                _currentIndicatorWidth = 0.1;
-            else
+			if (GetVisibleItems() == 0)
+			{
+				_currentIndicatorWidth = 0.1;
+			}
+			else
             {
                 _currentIndicatorWidth = MeasureHeaderContentWidth(item);
                 UpdateCurrentIndicatorWidth(item);
@@ -2233,9 +2307,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             double previousIndicatorWidth = 0;
             if (_tabSelectionIndicator != null)
-                previousIndicatorWidth = _tabSelectionIndicator.Width;
+			{
+				previousIndicatorWidth = _tabSelectionIndicator.Width;
+			}
 
-            previousIndicatorWidth = previousIndicatorWidth < 0 ? 0 : previousIndicatorWidth;
+			previousIndicatorWidth = previousIndicatorWidth < 0 ? 0 : previousIndicatorWidth;
 
             var selectedItem = _tabHeaderItemContent?.Children[SelectedIndex];
             double selectedItemWidth = (selectedItem != null) ?
@@ -2262,10 +2338,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 translateAnimation = new Animation(TranslateAnimatedMethod, _tabSelectionIndicator.TranslationX, targetX);
             }
 
-            var parentAnimation = new Animation();
-            parentAnimation.Add(0, 0.5, firstWidthAnimation);
-            parentAnimation.Add(0.5, 1, secondWidthAnimation);
-            parentAnimation.Add(0, 1, translateAnimation);
+            var parentAnimation = new Animation
+			{
+				{ 0, 0.5, firstWidthAnimation },
+				{ 0.5, 1, secondWidthAnimation },
+				{ 0, 1, translateAnimation }
+			};
             AnimateTabSelectionIndicator(parentAnimation, animationDuration, targetX);
         }
 
@@ -2314,8 +2392,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
                         _previousIndicatorWidth = _currentIndicatorWidth;
                     });
-                    _isSelectionProcessed = false;
-                }
+					_isSelectionProcessed = false;
+				}
                 else
                 {
                     if (!this.AnimationIsRunning("SelectionIndicatorAnimation") || (this.AnimationIsRunning("SelectionIndicatorAnimation") && (_previousTabX != _selectedTabX)))
@@ -2533,17 +2611,27 @@ namespace Syncfusion.Maui.Toolkit.TabView
             UpdateTabIndicatorWidth();
         }
 
-        #endregion
+		/// <summary>
+		/// Calculates the tab header image size based on the item's ImageSize.
+		/// </summary>
+		/// <param name="imageSize">The ImageSize of the tab item.</param>
+		/// <returns>The calculated tab header image size.</returns>
+		double CalculateTabHeaderImageSize(double imageSize)
+		{
+			return imageSize * 4 / 3;
+		}
 
-        #region Override Methods
+		#endregion
 
-        /// <summary>
-        /// Measure Override method
-        /// </summary>
-        /// <param name="widthConstraint">Width</param>
-        /// <param name="heightConstraint">Height</param>
-        /// <returns>It returns the size</returns>
-        protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
+		#region Override Methods
+
+		/// <summary>
+		/// Measure Override method
+		/// </summary>
+		/// <param name="widthConstraint">Width</param>
+		/// <param name="heightConstraint">Height</param>
+		/// <returns>It returns the size</returns>
+		protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
         {
             if (widthConstraint > 0 && heightConstraint > 0 &&
                 widthConstraint != double.PositiveInfinity &&
@@ -2573,7 +2661,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
             base.OnHandlerChanged();
             if (Handler == null)
             {
-                this.Children.Clear();
+                Children.Clear();
             }
         }
 
@@ -2607,13 +2695,15 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         static void OnIndicatorCornerRadiusChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateCornerRadius();
 
-        static void OnFontAutoScalingEnabledChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateFontAutoScalingEnabled((Boolean)newValue);
+		static void OnIndicatorStrokeThicknessChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateIndicatorStrokeThickness((double)newValue);
 
-        static void OnScrollButtonBackgroundColorChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonBackgroundColor();
+		static void OnFontAutoScalingEnabledChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateFontAutoScalingEnabled((Boolean)newValue);
 
-        static void OnScrollButtonForegroundColorChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonForegroundColor();
+        static void OnScrollButtonBackgroundChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonBackground();
 
-        static void OnScrollButtonDisabledForegroundColorChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonForegroundColor();
+        static void OnScrollButtonColorChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonColor();
+
+        static void OnScrollButtonDisabledForegroundColorChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonColor();
 
         #endregion
 

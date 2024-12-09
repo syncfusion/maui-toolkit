@@ -1,14 +1,13 @@
-﻿
-namespace Syncfusion.Maui.ControlsGallery.EffectsView.SfEffectsView
+﻿namespace Syncfusion.Maui.ControlsGallery.EffectsView.SfEffectsView
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
+	[XamlCompilation(XamlCompilationOptions.Compile)]
 
-    public partial class RippleAnimation : SampleView
-    {
-        public RippleAnimation()
-        {
-            InitializeComponent();
-        }
-    }
+	public partial class RippleAnimation : SampleView
+	{
+		public RippleAnimation()
+		{
+			InitializeComponent();
+		}
+	}
 
 }

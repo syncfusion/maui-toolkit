@@ -8,9 +8,9 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 		{
 			InitializeComponent();
 #if WINDOWS || MACCATALYST
-		this.Content=new ChipGettingStartedDesktop();
+			Content = new ChipGettingStartedDesktop();
 #elif ANDROID || IOS
-			this.Content = new ChipGettingStartedMobile();
+			Content = new ChipGettingStartedMobile();
 #endif
 		}
 	}

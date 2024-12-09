@@ -1,4 +1,5 @@
-﻿namespace Syncfusion.Maui.Toolkit.Internals
+﻿
+namespace Syncfusion.Maui.Toolkit.Internals
 {
 	/// <summary>
 	/// Defines the properties and methods for an area, including layout bounds, relayout requirements, and plot area management.

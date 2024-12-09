@@ -1,9 +1,10 @@
-﻿namespace Syncfusion.Maui.Toolkit
+﻿
+namespace Syncfusion.Maui.Toolkit
 {
-    internal class LegendItemClickedEventArgs : EventArgs
-    {
-        internal LegendItem? LegendItem { get; set; }
-    }
+	internal class LegendItemClickedEventArgs : EventArgs
+	{
+		internal LegendItem? LegendItem { get; set; }
+	}
 
 	/// <summary>
 	/// Delegate for the LegendItemToggleHandler event.  

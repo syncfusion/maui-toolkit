@@ -1,6 +1,6 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
-    internal class DataLabelItemView : SfTemplatedView, ICustomAbsoluteView
+    internal partial class DataLabelItemView : SfTemplatedView, ICustomAbsoluteView
     {
         #region Properties
 

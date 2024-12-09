@@ -8,7 +8,7 @@ namespace Syncfusion.Maui.Toolkit
     /// <summary>
     /// This class represents a content view to show tooltip in absolute layout.
     /// </summary>
-    internal class SfTooltip : ContentView
+    internal partial class SfTooltip : ContentView
     {
         #region Fields
 
@@ -18,7 +18,7 @@ namespace Syncfusion.Maui.Toolkit
         readonly TooltipHelper _tooltipHelper;
         bool _isDisappeared = false;
         bool _isTooltipActivate = false;
-        const string _durationAnimation = "DurationAnimation";
+        const string DurationAnimation = "DurationAnimation";
 
         #endregion
 
@@ -93,7 +93,7 @@ namespace Syncfusion.Maui.Toolkit
         /// </summary>
         public SfTooltip()
         {
-            _parentView = new Grid();
+            _parentView = [];
             _drawableView = new TooltipDrawableView(this);
             _contentView = new ContentView();
             _tooltipHelper = new TooltipHelper(_drawableView.InvalidateDrawable);
@@ -139,16 +139,22 @@ namespace Syncfusion.Maui.Toolkit
         /// <param name="animated"></param>
         public void Show(Rect containerRect, Rect targetRect, bool animated)
         {
-            if (containerRect.IsEmpty || targetRect.IsEmpty || Content == null) return;
+            if (containerRect.IsEmpty || targetRect.IsEmpty || Content == null)
+			{
+				return;
+			}
 
-            var x = containerRect.X;
+			var x = containerRect.X;
             var y = containerRect.Y;
             var width = containerRect.Width;
             var height = containerRect.Height;
 
-            if (targetRect.X > x + width || targetRect.Y > y + height) return;
+            if (targetRect.X > x + width || targetRect.Y > y + height)
+			{
+				return;
+			}
 
-            _tooltipHelper.Position = Position;
+			_tooltipHelper.Position = Position;
             _tooltipHelper.Duration = Duration;
             _tooltipHelper.Background = Background;
             _tooltipHelper.Stroke = Stroke;
@@ -160,13 +166,15 @@ namespace Syncfusion.Maui.Toolkit
             }
 
             if (Opacity == 0f)
-                Opacity = 1f;
+			{
+				Opacity = 1f;
+			}
 
 #if WINDOWS
-            Content.VerticalOptions = LayoutOptions.Fill;
+			Content.VerticalOptions = LayoutOptions.Fill;
             Content.HorizontalOptions = LayoutOptions.Fill;
 #else
-            Content.VerticalOptions = LayoutOptions.Start;
+			Content.VerticalOptions = LayoutOptions.Start;
             Content.HorizontalOptions = LayoutOptions.Start;
 #endif
 
@@ -188,7 +196,7 @@ namespace Syncfusion.Maui.Toolkit
             }
         }
 
-        IAnimationManager? animationManager = null;
+        IAnimationManager? _animationManager = null;
 
         /// <summary>
         /// Hides the tooltip.
@@ -196,7 +204,7 @@ namespace Syncfusion.Maui.Toolkit
         /// <param name="animated"></param>
         public void Hide(bool animated)
         {
-            this.AbortAnimation(_durationAnimation);
+            this.AbortAnimation(DurationAnimation);
             Opacity = 0f;
             AbsoluteLayout.SetLayoutBounds(this, new Rect(0, 0, 1, 1));
             _isTooltipActivate = false;
@@ -213,28 +221,34 @@ namespace Syncfusion.Maui.Toolkit
 
         void Draw(ICanvas canvas)
         {
-            if (_tooltipHelper.RoundedRect == Rect.Zero) return;
-            _tooltipHelper.Draw(canvas);
+            if (_tooltipHelper.RoundedRect == Rect.Zero)
+			{
+				return;
+			}
+
+			_tooltipHelper.Draw(canvas);
         }
 
         void ShowAnimation()
         {
             SetAnimationManager();
-            if (animationManager != null)
+            if (_animationManager != null)
             {
                 var animation = new Animation(UpdateToolTipAnimation, start: 0, 0.25, Easing.SpringOut, AutoHide);
-                animation.Commit(animationManager);
+                animation.Commit(_animationManager);
             }
         }
 
         void SetAnimationManager()
         {
-            if (Application.Current != null && animationManager == null)
+            if (_animationManager == null)
             {
-                var handler = Application.Current.Handler;
+                var handler = Application.Current?.Handler ?? Handler;
                 if (handler != null && handler.MauiContext != null)
-                    animationManager = handler.MauiContext.Services.GetRequiredService<IAnimationManager>();
-            }
+				{
+					_animationManager = handler.MauiContext.Services.GetRequiredService<IAnimationManager>();
+				}
+			}
         }
 
         void UpdateToolTipAnimation(double value)
@@ -244,13 +258,13 @@ namespace Syncfusion.Maui.Toolkit
 
         void AutoHide()
         {
-            this.AbortAnimation(_durationAnimation);
+            this.AbortAnimation(DurationAnimation);
             var duration = _tooltipHelper.Duration;
 
             if (double.IsFinite(duration) && duration > 0)
             {
-                ControlAnimation animation = new ControlAnimation();
-                animation.Commit(this, _durationAnimation, 16, (uint)(_tooltipHelper.Duration * 1000), Easing.Linear, Hide, () => false);
+                ControlAnimation animation = [];
+                animation.Commit(this, DurationAnimation, 16, (uint)(_tooltipHelper.Duration * 1000), Easing.Linear, Hide, () => false);
             }
         }
 
@@ -259,8 +273,10 @@ namespace Syncfusion.Maui.Toolkit
             _isDisappeared = !isCompleted;
 
             if (!isCompleted)
-                Hide(false);
-        }
+			{
+				Hide(false);
+			}
+		}
 
         #region ContentView Methods
 
@@ -313,21 +329,21 @@ namespace Syncfusion.Maui.Toolkit
     /// <summary>
     /// This class represents a drawable view used draw the tooltip using native drawing options. 
     /// </summary>
-    internal class TooltipDrawableView : SfDrawableView
+    internal partial class TooltipDrawableView : SfDrawableView
     {
-        SfTooltip tooltip;
+		readonly SfTooltip _tooltip;
 
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
         {
-            tooltip.Draw(canvas, dirtyRect);
+            _tooltip.Draw(canvas, dirtyRect);
         }
 
         internal TooltipDrawableView(SfTooltip sfTooltip)
         {
-            tooltip = sfTooltip;
+            _tooltip = sfTooltip;
         }
     }
 }

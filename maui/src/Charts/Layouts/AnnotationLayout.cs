@@ -2,79 +2,79 @@
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
-	internal class AnnotationLayout : AbsoluteLayout
-    {
-        #region Fields
+	internal partial class AnnotationLayout : AbsoluteLayout
+	{
+		#region Fields
 
-        readonly SfDrawableView _annotationDrawer;
+		readonly SfDrawableView _annotationDrawer;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        internal AnnotationLayout(SfCartesianChart chart)
-        {
-            _annotationDrawer = new AnnotationDrawableView(chart);
-            AbsoluteLayout.SetLayoutBounds(_annotationDrawer, new Rect(0, 0, 1, 1));
-            AbsoluteLayout.SetLayoutFlags(_annotationDrawer, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.All);
-            Children.Add(_annotationDrawer);
-        }
+		internal AnnotationLayout(SfCartesianChart chart)
+		{
+			_annotationDrawer = new AnnotationDrawableView(chart);
+			AbsoluteLayout.SetLayoutBounds(_annotationDrawer, new Rect(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutFlags(_annotationDrawer, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.All);
+			Children.Add(_annotationDrawer);
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Internal Methods
+		#region Internal Methods
 
-        internal void InvalidateDrawable()
-        {
-            _annotationDrawer.InvalidateDrawable();
-        }
+		internal void InvalidateDrawable()
+		{
+			_annotationDrawer.InvalidateDrawable();
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 
-    internal class AnnotationDrawableView : SfDrawableView
-    {
-        #region Fields
+	internal partial class AnnotationDrawableView : SfDrawableView
+	{
+		#region Fields
 
-        readonly SfCartesianChart _chart;
+		readonly SfCartesianChart _chart;
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        internal AnnotationDrawableView(SfCartesianChart chart)
-        {
-            _chart = chart;
-        }
+		internal AnnotationDrawableView(SfCartesianChart chart)
+		{
+			_chart = chart;
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Protected Methods
+		#region Protected Methods
 
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            if (_chart != null)
-            {
-                foreach (var annotation in _chart.Annotations)
-                {
-                    if (annotation.IsVisible)
-                    {
-                        canvas.CanvasSaveState();
-                        annotation.Draw(canvas, dirtyRect);
-                        canvas.CanvasRestoreState();
-                    }
-                }
-            }
-        }
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		{
+			if (_chart != null)
+			{
+				foreach (var annotation in _chart.Annotations)
+				{
+					if (annotation.IsVisible)
+					{
+						canvas.CanvasSaveState();
+						annotation.Draw(canvas, dirtyRect);
+						canvas.CanvasRestoreState();
+					}
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

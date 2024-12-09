@@ -98,7 +98,9 @@
                             <Label Text="GroupMode" VerticalOptions="CenterAndExpand"  
                                    Margin="0,13,0,0" Grid.Column="0" />
                             <Picker x:Name="groupTo"   Grid.Column="1" SelectedIndex="0"
-                                    VerticalOptions="CenterAndExpand"  BackgroundColor="{AppThemeBinding Dark=lightgray}"
+                                    VerticalOptions="CenterAndExpand"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                                     WidthRequest="130"  Margin="0,13,0,0"
                                     ItemsSource="{Binding PieGroupMode}" SelectedIndexChanged="groupTo_SelectedIndexChanged">
                             </Picker>

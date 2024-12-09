@@ -6,25 +6,25 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// <summary>
 	/// A ViewModel for PullToRefresh sample.
 	/// </summary>
-	public class PullToRefreshViewModel : INotifyPropertyChanged
+	public partial class PullToRefreshViewModel : INotifyPropertyChanged
 	{
-		readonly Random randomNumber = new Random();
-		readonly string[] weatherTypes = { "Sunny", "Rain", "Snow", "Cloudy", "Thunderstorms", "Partly Cloudy", "Foggy" };
-		readonly string[] backgrounds = { "#FFF4C3", "#D5F3FF", "#E4EDF6", "#D5F7FF", "#D0D0D0", "#FFE2B8", "#D5EBFF" };
-		readonly string[] weatherImages = { "sunny", "heavyrain", "snowwithcloudy", "mostlycloudy", "thunderstrom", "partlysunny", "foggywithcloudy" };
-		readonly string[] weatherIcons = { "\ue78e", "\ue793", "\ue792", "\ue790", "\ue791", "\ue795", "\ue794" };
-		WeatherData? data;
-		ObservableCollection<WeatherData>? selectedData;
-		ObservableCollection<WindDetails>? windDetailList;
+		readonly Random _randomNumber = new();
+		readonly string[] _weatherTypes = ["Sunny", "Rain", "Snow", "Cloudy", "Thunderstorms", "Partly Cloudy", "Foggy"];
+		readonly string[] _backgrounds = ["#FFF4C3", "#D5F3FF", "#E4EDF6", "#D5F7FF", "#D0D0D0", "#FFE2B8", "#D5EBFF"];
+		readonly string[] _weatherImages = ["sunny", "heavyrain", "snowwithcloudy", "mostlycloudy", "thunderstrom", "partlysunny", "foggywithcloudy"];
+		readonly string[] _weatherIcons = ["\ue78e", "\ue793", "\ue792", "\ue790", "\ue791", "\ue795", "\ue794"];
+		WeatherData? _data;
+		ObservableCollection<WeatherData>? _selectedData;
+		ObservableCollection<WindDetails>? _windDetailList;
 
 		/// <summary>
 		/// Initializes a new instance of the PullToRefreshViewModel class.
 		/// </summary>
 		public PullToRefreshViewModel()
 		{
-			this.SelectedData = this.GetWeatherData();
-			this.WindDetailList = this.GetWindDetails();
-			this.Data = this.SelectedData[0];
+			SelectedData = GetWeatherData();
+			WindDetailList = PullToRefreshViewModel.GetWindDetails();
+			Data = SelectedData[0];
 		}
 
 		/// <summary>
@@ -39,13 +39,13 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			get
 			{
-				return this.selectedData;
+				return _selectedData;
 			}
 
 			set
 			{
-				this.selectedData = value;
-				this.RaisePropertyChanged("SelectedData");
+				_selectedData = value;
+				RaisePropertyChanged("SelectedData");
 			}
 		}
 
@@ -56,13 +56,13 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			get
 			{
-				return this.windDetailList;
+				return _windDetailList;
 			}
 
 			set
 			{
-				this.windDetailList = value;
-				this.RaisePropertyChanged("WindDetailList");
+				_windDetailList = value;
+				RaisePropertyChanged("WindDetailList");
 			}
 		}
 
@@ -73,13 +73,13 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		{
 			get
 			{
-				return this.data;
+				return _data;
 			}
 
 			set
 			{
-				this.data = value;
-				this.RaisePropertyChanged("Data");
+				_data = value;
+				RaisePropertyChanged("Data");
 			}
 		}
 
@@ -89,17 +89,19 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <returns>data value</returns>
 		private ObservableCollection<WeatherData> GetWeatherData()
 		{
-			DateTime now = DateTime.Now;
-			ObservableCollection<WeatherData> array = new ObservableCollection<WeatherData>();
+			_ = DateTime.Now;
+			ObservableCollection<WeatherData> array = [];
 			for (int i = 0; i < 7; i++)
 			{
-				WeatherData data = new WeatherData();
-				data.WeatherType = this.weatherTypes[i];
-				data.Date = GetDate(i);
-				data.Temperature = this.UpdateTemperature(data.WeatherType);
-				data.BackgroundColor = this.backgrounds[i];
-				data.WeatherImage = this.weatherImages[i] + ".png";
-				data.WeatherIcon = this.weatherIcons[i];
+				WeatherData data = new WeatherData
+				{
+					WeatherType = _weatherTypes[i],
+					Date = PullToRefreshViewModel.GetDate(i)
+				};
+				data.Temperature = UpdateTemperature(data.WeatherType);
+				data.BackgroundColor = _backgrounds[i];
+				data.WeatherImage = _weatherImages[i] + ".png";
+				data.WeatherIcon = _weatherIcons[i];
 
 				array.Add(data);
 			}
@@ -107,14 +109,14 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			return array;
 		}
 
-		private ObservableCollection<WindDetails>? GetWindDetails()
+		private static ObservableCollection<WindDetails>? GetWindDetails()
 		{
-			ObservableCollection<WindDetails> array = new ObservableCollection<WindDetails>()
-		{
+			ObservableCollection<WindDetails> array =
+		[
 			new WindDetails(){ Detail = "Air Quality", Values = "38" },
 			new WindDetails(){ Detail = "Wind", Values = "18km/h" },
 			new WindDetails(){ Detail = "Humidity", Values = "77%" },
-		};
+		];
 
 			return array;
 		}
@@ -123,7 +125,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// Generates date time
 		/// </summary>
 		/// <returns>date time value</returns>
-		private DateTime GetDate(int i)
+		private static DateTime GetDate(int i)
 		{
 			return DateTime.Today.AddDays(i);
 		}
@@ -135,29 +137,21 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <returns>Returns temperature based on weatherType.</returns>
 		internal string UpdateTemperature(string weatherType)
 		{
-			switch (weatherType)
+			return weatherType switch
 			{
-				case "Sunny":
-					return this.sunnyTemperatures[randomNumber.Next(0, sunnyTemperatures.Length)];
-				case "Rain":
-					return this.rainyTemperatures[randomNumber.Next(0, rainyTemperatures.Length)];
-				case "Snow":
-					return this.snowTemperatures[randomNumber.Next(0, snowTemperatures.Length)];
-				case "Cloudy":
-					return this.cloudyTemperatures[randomNumber.Next(0, cloudyTemperatures.Length)];
-				case "Thunderstorms":
-					return this.thunderstormTemperatures[randomNumber.Next(0, thunderstormTemperatures.Length)];
-				case "Partly Cloudy":
-					return this.partiallyCloudyTemperatures[randomNumber.Next(0, partiallyCloudyTemperatures.Length)];
-				case "Foggy":
-					return this.foggyTemperatures[randomNumber.Next(0, foggyTemperatures.Length)];
-				default:
-					return "";
-			}
+				"Sunny" => _sunnyTemperatures[_randomNumber.Next(0, _sunnyTemperatures.Length)],
+				"Rain" => _rainyTemperatures[_randomNumber.Next(0, _rainyTemperatures.Length)],
+				"Snow" => _snowTemperatures[_randomNumber.Next(0, _snowTemperatures.Length)],
+				"Cloudy" => _cloudyTemperatures[_randomNumber.Next(0, _cloudyTemperatures.Length)],
+				"Thunderstorms" => _thunderstormTemperatures[_randomNumber.Next(0, _thunderstormTemperatures.Length)],
+				"Partly Cloudy" => _partiallyCloudyTemperatures[_randomNumber.Next(0, _partiallyCloudyTemperatures.Length)],
+				"Foggy" => _foggyTemperatures[_randomNumber.Next(0, _foggyTemperatures.Length)],
+				_ => "",
+			};
 		}
 
-		string[] sunnyTemperatures = new string[]
-		{
+		readonly string[] _sunnyTemperatures =
+		[
 			"28°",
 			"32°",
 			"26°",
@@ -168,10 +162,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			"27°",
 			"33°",
 			"25°"
-		};
+		];
 
-		string[] rainyTemperatures = new string[]
-		{
+		readonly string[] _rainyTemperatures =
+		[
 			"18°",
 			"22°",
 			"16°",
@@ -182,10 +176,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			"21°",
 			"19°",
 			"14°"
-		};
+		];
 
-		string[] snowTemperatures = new string[]
-		{
+		readonly string[] _snowTemperatures =
+		[
 			"-5°",
 			"2°",
 			"-8°",
@@ -196,10 +190,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			"-6°",
 			"-2°",
 			"1°",
-		};
+		];
 
-		string[] cloudyTemperatures = new string[]
-		{
+		readonly string[] _cloudyTemperatures =
+		[
 			"17°",
 			"20°",
 			"15°",
@@ -210,10 +204,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			"21°",
 			"14°",
 			"23°"
-		};
+		];
 
-		string[] partiallyCloudyTemperatures = new string[]
-		{
+		readonly string[] _partiallyCloudyTemperatures =
+		[
 			"22°",
 			"26°",
 			"20°",
@@ -224,10 +218,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			"19°",
 			"25°",
 			"21°"
-		};
+		];
 
-		string[] thunderstormTemperatures = new string[]
-		{
+		readonly string[] _thunderstormTemperatures =
+		[
 			"25°",
 			"28°",
 			"22°",
@@ -238,10 +232,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			"29°",
 			"23°",
 			"27°"
-		};
+		];
 
-		string[] foggyTemperatures = new string[]
-		{
+		readonly string[] _foggyTemperatures =
+		[
 			"15°",
 			"12°",
 			"18°",
@@ -252,7 +246,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			"16°",
 			"22°",
 			"11°"
-		};
+		];
 
 		#region INotifyPropertyChanged
 
@@ -262,10 +256,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="name">string type parameter named as name represent propertyName</param>
 		private void RaisePropertyChanged(string name)
 		{
-			if (this.PropertyChanged != null)
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(name));
-			}
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
 
 		#endregion

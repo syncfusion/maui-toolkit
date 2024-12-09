@@ -6,7 +6,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 	public class SfChipsUnitTests : BaseUnitTest
 	{
 		#region Fields
-		private readonly BrushTypeConverter _converter = new BrushTypeConverter();
+		private readonly BrushTypeConverter _converter = new();
 		#endregion
 
 		#region Constructor
@@ -62,8 +62,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(false)]
 		public void ShowCloseButton_SetValue_ReturnsExpectedValue(bool expectedValue)
 		{
-			var chip = new SfChip();
-			chip.ShowCloseButton = expectedValue;
+			var chip = new SfChip
+			{
+				ShowCloseButton = expectedValue
+			};
 			var actualValue = chip.ShowCloseButton;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -73,8 +75,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(false)]
 		public void ShowSelectionIndicator_SetValue_ReturnsExpectedValue(bool expectedValue)
 		{
-			var chip = new SfChip();
-			chip.ShowSelectionIndicator = expectedValue;
+			var chip = new SfChip
+			{
+				ShowSelectionIndicator = expectedValue
+			};
 			var actualValue = chip.ShowSelectionIndicator;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -99,7 +103,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var expectedColor = Colors.Blue;
 			var selectionIndicatorColorValueField = typeof(SfChip).GetField("_selectionIndicatorColorValue", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (selectionIndicatorColorValueField == null)
+			{
 				throw new InvalidOperationException("Field 'selectionIndicatorColorValue' not found.");
+			}
 
 			selectionIndicatorColorValueField.SetValue(sfChip, expectedColor);
 			var actualColor = (Color?)GetNonPublicProperty(sfChip, "SelectionIndicatorColorValue");
@@ -112,8 +118,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData("")]
 		public void CloseButtonPath_SetValue_ReturnsExpectedValue(string expectedValue)
 		{
-			var chip = new SfChip();
-			chip.CloseButtonPath = expectedValue;
+			var chip = new SfChip
+			{
+				CloseButtonPath = expectedValue
+			};
 			var actualValue = chip.CloseButtonPath;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -138,8 +146,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(10.0)]
 		public void StrokeThickness_SetValue_ReturnsExpectedValue(double expectedThickness)
 		{
-			var chip = new SfChip();
-			chip.StrokeThickness = expectedThickness;
+			var chip = new SfChip
+			{
+				StrokeThickness = expectedThickness
+			};
 			var actualThickness = chip.StrokeThickness;
 			Assert.Equal(expectedThickness, actualThickness);
 		}
@@ -176,8 +186,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData("SAMPLE")]
 		public void Text_SetValue_ReturnsExpectedValue(string expectedText)
 		{
-			var chip = new SfChip();
-			chip.Text = expectedText;
+			var chip = new SfChip
+			{
+				Text = expectedText
+			};
 			var actualText = chip.Text;
 			Assert.Equal(expectedText, actualText);
 		}
@@ -201,8 +213,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(24.0)]
 		public void FontSize_SetValue_ReturnsExpectedValue(double expectedFontSize)
 		{
-			var chip = new SfChip();
-			chip.FontSize = expectedFontSize;
+			var chip = new SfChip
+			{
+				FontSize = expectedFontSize
+			};
 			var actualFontSize = chip.FontSize;
 			Assert.Equal(expectedFontSize, actualFontSize);
 		}
@@ -212,8 +226,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(false)]
 		public void FontAutoScalingEnabled_SetValue_ReturnsExpectedValue(bool expectedValue)
 		{
-			var chip = new SfChip();
-			chip.FontAutoScalingEnabled = expectedValue;
+			var chip = new SfChip
+			{
+				FontAutoScalingEnabled = expectedValue
+			};
 			var actualValue = chip.FontAutoScalingEnabled;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -224,8 +240,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(TextAlignment.End)]
 		public void HorizontalTextAlignment_SetValue_ReturnsExpectedValue(TextAlignment expectedValue)
 		{
-			var chip = new SfChip();
-			chip.HorizontalTextAlignment = expectedValue;
+			var chip = new SfChip
+			{
+				HorizontalTextAlignment = expectedValue
+			};
 			var actualValue = chip.HorizontalTextAlignment;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -236,8 +254,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(TextAlignment.End)]
 		public void VerticalTextAlignment_SetValue_ReturnsExpectedValue(TextAlignment expectedValue)
 		{
-			var chip = new SfChip();
-			chip.VerticalTextAlignment = expectedValue;
+			var chip = new SfChip
+			{
+				VerticalTextAlignment = expectedValue
+			};
 			var actualValue = chip.VerticalTextAlignment;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -259,8 +279,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(false)]
 		public void ShowIcon_SetValue_ReturnsExpectedValue(bool expectedValue)
 		{
-			var chip = new SfChip();
-			chip.ShowIcon = expectedValue;
+			var chip = new SfChip
+			{
+				ShowIcon = expectedValue
+			};
 			var actualValue = chip.ShowIcon;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -271,8 +293,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(0.0)]
 		public void ImageSize_SetValue_ReturnsExpectedValue(double expectedValue)
 		{
-			var chip = new SfChip();
-			chip.ImageSize = expectedValue;
+			var chip = new SfChip
+			{
+				ImageSize = expectedValue
+			};
 			var actualValue = chip.ImageSize;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -284,8 +308,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(Alignment.Right)]
 		public void ImageAlignment_SetValue_ReturnsExpectedValue(Alignment expectedValue)
 		{
-			var chip = new SfChip();
-			chip.ImageAlignment = expectedValue;
+			var chip = new SfChip
+			{
+				ImageAlignment = expectedValue
+			};
 			var actualValue = chip.ImageAlignment;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -308,8 +334,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData("")]
 		public void CommandParameter_SetValue_ReturnsExpectedValue(object expectedParameter)
 		{
-			var chip = new SfChip();
-			chip.CommandParameter = expectedParameter;
+			var chip = new SfChip
+			{
+				CommandParameter = expectedParameter
+			};
 			var actualParameter = chip.CommandParameter;
 			Assert.Equal(expectedParameter, actualParameter);
 		}
@@ -334,8 +362,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData("")]
 		public void FontFamily_SetValue_ReturnsExpectedValue(string expectedFontFamily)
 		{
-			var chip = new SfChip();
-			chip.FontFamily = expectedFontFamily;
+			var chip = new SfChip
+			{
+				FontFamily = expectedFontFamily
+			};
 			var actualFontFamily = chip.FontFamily;
 			Assert.Equal(expectedFontFamily, actualFontFamily);
 		}
@@ -346,8 +376,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(FontAttributes.Italic)]
 		public void FontAttributes_SetValue_ReturnsExpectedValue(FontAttributes expectedAttributes)
 		{
-			var chip = new SfChip();
-			chip.FontAttributes = expectedAttributes;
+			var chip = new SfChip
+			{
+				FontAttributes = expectedAttributes
+			};
 			var actualAttributes = chip.FontAttributes;
 			Assert.Equal(expectedAttributes, actualAttributes);
 		}
@@ -357,8 +389,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(false)]
 		public void EnableRippleEffect_SetValue_ReturnsExpectedValue(bool expectedValue)
 		{
-			var chip = new SfChip();
-			chip.EnableRippleEffect = expectedValue;
+			var chip = new SfChip
+			{
+				EnableRippleEffect = expectedValue
+			};
 			var actualValue = chip.EnableRippleEffect;
 			Assert.Equal(expectedValue, actualValue);
 		}
@@ -391,7 +425,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var expectedColor = Colors.Red;
 			var chipCloseButtonColorField = typeof(SfChip).GetField("_chipCloseButtonColor", BindingFlags.NonPublic | BindingFlags.Instance);
 			if (chipCloseButtonColorField == null)
+			{
 				throw new InvalidOperationException("Field 'chipcloseButtonColor' not found.");
+			}
 
 			chipCloseButtonColorField.SetValue(sfChip, expectedColor);
 			var actualColor = (Color?)GetNonPublicProperty(sfChip, "ChipCloseButtonColor");
@@ -401,8 +437,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void IsKeyDown_GetterSetter_WorksCorrectly()
 		{
-			var chip = new SfChip();
-			chip.IsKeyDown = true;
+			var chip = new SfChip
+			{
+				IsKeyDown = true
+			};
 			Assert.True(chip.IsKeyDown);
 			chip.IsKeyDown = false;
 			Assert.False(chip.IsKeyDown);
@@ -425,8 +463,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region Private Method
 		private SolidColorBrush GetSolidColorBrush(string colorString)
 		{
-			var brush = _converter.ConvertFromString(colorString) as SolidColorBrush;
-			if (brush == null)
+			if (_converter.ConvertFromString(colorString) is not SolidColorBrush brush)
 			{
 				throw new InvalidOperationException($"Failed to convert color: {colorString}");
 			}
@@ -489,9 +526,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void HandleEnabledState_Should_SetBaseBackgroundColor_ToDefault2_When_BackgroundIsNullOrDefault1(string default1Color, string expectedColor)
 		{
 			var instance = new SfChip();
-			var default1Brush = _converter.ConvertFromString(default1Color) as SolidColorBrush;
-			var expectedBrush = _converter.ConvertFromString(expectedColor) as SolidColorBrush;
-			if (default1Brush == null || expectedBrush == null)
+
+			if (_converter.ConvertFromString(default1Color) is not SolidColorBrush || _converter.ConvertFromString(expectedColor) is not SolidColorBrush expectedBrush)
 			{
 				throw new InvalidOperationException($"Failed to convert colors: {default1Color} or {expectedColor}");
 			}
@@ -514,8 +550,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void HandleEnabledState_Should_SetBaseStrokeColor_When_StrokeIsNotNull(string strokeColorName)
 		{
 			var instance = new SfChip();
-			var strokeBrush = _converter.ConvertFromString(strokeColorName) as SolidColorBrush;
-			if (strokeBrush == null)
+			if (_converter.ConvertFromString(strokeColorName) is not SolidColorBrush strokeBrush)
 			{
 				throw new InvalidOperationException($"Failed to convert '{strokeColorName}' to SolidColorBrush.");
 			}
@@ -575,13 +610,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				Application.Current.Resources["SfChipTheme"] = new object();
 			}
 
-			var backgroundBrush = _converter.ConvertFromString("#FFFBFE") as SolidColorBrush;
-			var selectionIndicatorBrush = _converter.ConvertFromString("rgba(0, 255, 0, 1)") as SolidColorBrush;
-			var closeButtonBrush = _converter.ConvertFromString("#FF0000") as SolidColorBrush;
-			var strokeBrush = _converter.ConvertFromString("rgba(100, 100, 100, 1)") as SolidColorBrush;
-			var textColor = Color.FromRgba(0, 0, 0, 255);
+			_ = Color.FromRgba(0, 0, 0, 255);
 
-			if (backgroundBrush == null || selectionIndicatorBrush == null || closeButtonBrush == null || strokeBrush == null)
+			if (_converter.ConvertFromString("#FFFBFE") is not SolidColorBrush backgroundBrush || _converter.ConvertFromString("rgba(0, 255, 0, 1)") is not SolidColorBrush selectionIndicatorBrush || _converter.ConvertFromString("#FF0000") is not SolidColorBrush closeButtonBrush || _converter.ConvertFromString("rgba(100, 100, 100, 1)") is not SolidColorBrush strokeBrush)
 			{
 				throw new InvalidOperationException("Failed to convert colors for default states.");
 			}
@@ -603,8 +634,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void ChangeVisualState_Should_CallHandleEnabledState_When_IsEnabled()
 		{
-			var sfChip = new SfChip();
-			sfChip.IsEnabled = true;
+			var sfChip = new SfChip
+			{
+				IsEnabled = true
+			};
 			InvokePrivateMethod(sfChip, "ChangeVisualState");
 			Assert.True(sfChip.IsVisible);
 		}
@@ -612,8 +645,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void ChangeVisualState_Should_CallHandleDisabledState_When_IsNotEnabled()
 		{
-			var sfChip = new SfChip();
-			sfChip.IsEnabled = false;
+			var sfChip = new SfChip
+			{
+				IsEnabled = false
+			};
 			InvokePrivateMethod(sfChip, "ChangeVisualState");
 			Assert.True(sfChip.IsVisible);
 		}
@@ -634,7 +669,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var isSelectedProperty = typeof(SfChip).GetProperty("IsSelected", BindingFlags.Public | BindingFlags.Instance);
 			isSelectedProperty?.SetValue(chip, true);
 			var methodInfo = typeof(SfChipGroup).GetMethod("ApplyChipColor", BindingFlags.NonPublic | BindingFlags.Instance);
-			methodInfo?.Invoke(chipGroup, new object[] { chip });
+			methodInfo?.Invoke(chipGroup, [chip]);
 
 			Assert.NotNull(chip.Background);
 			Assert.Equal(Colors.White, chip.TextColor);

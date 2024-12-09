@@ -6,21 +6,21 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 	/// <summary>
 	/// Base generic class for user-defined behaviors that can respond to conditions and events.
 	/// </summary>
-	public class NavigationDrawerBehavior : Behavior<SampleView>
+	public partial class NavigationDrawerBehavior : Behavior<SampleView>
 	{
-		Microsoft.Maui.Controls.ListView? ListView;
-		MailInfoViewModel? ViewModel;
-		Microsoft.Maui.Controls.Picker? positionType;
-		SfEffectsView? inboxeffectsView;
-		SfEffectsView? starredeffectsView;
-		SfEffectsView? senteffectsView;
-		SfEffectsView? draftseffectsView;
-		SfEffectsView? allmailseffectsView;
-		SfEffectsView? trasheffectsView;
-		SfEffectsView? spameffectsView;
-		SfEffectsView? primarynavigationEffectsView;
-		SfNavigationDrawer? navigationdrawer;
-		Label? title;
+		Microsoft.Maui.Controls.ListView? _listView;
+		MailInfoViewModel? _viewModel;
+		Microsoft.Maui.Controls.Picker? _positionType;
+		SfEffectsView? _inboxeffectsView;
+		SfEffectsView? _starredeffectsView;
+		SfEffectsView? _senteffectsView;
+		SfEffectsView? _draftseffectsView;
+		SfEffectsView? _allmailseffectsView;
+		SfEffectsView? _trasheffectsView;
+		SfEffectsView? _spameffectsView;
+		SfEffectsView? _primarynavigationEffectsView;
+		SfNavigationDrawer? _navigationdrawer;
+		Label? _title;
 
 		/// <summary>
 		/// You can override this method to subscribe to AssociatedObject events and initialize properties.
@@ -28,167 +28,167 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// <param name="bindable">SampleView type parameter named as bindable.</param>
 		protected override void OnAttachedTo(SampleView bindable)
 		{
-			this.ViewModel = new MailInfoViewModel();
-			bindable.BindingContext = this.ViewModel;
-			this.ListView = bindable.FindByName<Microsoft.Maui.Controls.ListView>("listView");
-			this.ListView.ItemsSource = this.ViewModel.MailInfos;
-			this.navigationdrawer = bindable.FindByName<SfNavigationDrawer>("navigationDrawer");
-			this.navigationdrawer.BindingContext = this.ViewModel;
-			this.positionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("positioncomboBox");
-			this.positionType.SelectedIndexChanged += this.OnPositionSelectionChanged;
+			_viewModel = new MailInfoViewModel();
+			bindable.BindingContext = _viewModel;
+			_listView = bindable.FindByName<Microsoft.Maui.Controls.ListView>("listView");
+			_listView.ItemsSource = _viewModel.MailInfos;
+			_navigationdrawer = bindable.FindByName<SfNavigationDrawer>("navigationDrawer");
+			_navigationdrawer.BindingContext = _viewModel;
+			_positionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("positioncomboBox");
+			_positionType.SelectedIndexChanged += OnPositionSelectionChanged;
 
-			this.inboxeffectsView = bindable.FindByName<SfEffectsView>("inboxEffects");
+			_inboxeffectsView = bindable.FindByName<SfEffectsView>("inboxEffects");
 			TapGestureRecognizer inboxtapGestureRecognizer = new TapGestureRecognizer();
 			inboxtapGestureRecognizer.Tapped += InboxTapGestureRecognizer_Tapped;
-			this.inboxeffectsView.GestureRecognizers.Add(inboxtapGestureRecognizer);
+			_inboxeffectsView.GestureRecognizers.Add(inboxtapGestureRecognizer);
 
-			this.starredeffectsView = bindable.FindByName<SfEffectsView>("starredEffects");
+			_starredeffectsView = bindable.FindByName<SfEffectsView>("starredEffects");
 			TapGestureRecognizer starredtapGestureRecognizer = new TapGestureRecognizer();
 			starredtapGestureRecognizer.Tapped += StarredTapGestureRecognizer_Tapped;
-			this.starredeffectsView.GestureRecognizers.Add(starredtapGestureRecognizer);
+			_starredeffectsView.GestureRecognizers.Add(starredtapGestureRecognizer);
 
-			this.senteffectsView = bindable.FindByName<SfEffectsView>("sentEffects");
+			_senteffectsView = bindable.FindByName<SfEffectsView>("sentEffects");
 			TapGestureRecognizer senttapGestureRecognizer = new TapGestureRecognizer();
 			senttapGestureRecognizer.Tapped += SentTapGestureRecognizer_Tapped;
-			this.senteffectsView.GestureRecognizers.Add(senttapGestureRecognizer);
+			_senteffectsView.GestureRecognizers.Add(senttapGestureRecognizer);
 
-			this.draftseffectsView = bindable.FindByName<SfEffectsView>("draftEffects");
+			_draftseffectsView = bindable.FindByName<SfEffectsView>("draftEffects");
 			TapGestureRecognizer drafttapGestureRecognizer = new TapGestureRecognizer();
 			drafttapGestureRecognizer.Tapped += DraftTapGestureRecognizer_Tapped;
-			this.draftseffectsView.GestureRecognizers.Add(drafttapGestureRecognizer);
+			_draftseffectsView.GestureRecognizers.Add(drafttapGestureRecognizer);
 
-			this.allmailseffectsView = bindable.FindByName<SfEffectsView>("allMailEffects");
+			_allmailseffectsView = bindable.FindByName<SfEffectsView>("allMailEffects");
 			TapGestureRecognizer allmailtapGestureRecognizer = new TapGestureRecognizer();
 			allmailtapGestureRecognizer.Tapped += AllMailsTapGestureRecognizer_Tapped;
-			this.allmailseffectsView.GestureRecognizers.Add(allmailtapGestureRecognizer);
+			_allmailseffectsView.GestureRecognizers.Add(allmailtapGestureRecognizer);
 
-			this.trasheffectsView = bindable.FindByName<SfEffectsView>("trashEffects");
+			_trasheffectsView = bindable.FindByName<SfEffectsView>("trashEffects");
 			TapGestureRecognizer trashtapGestureRecognizer = new TapGestureRecognizer();
 			trashtapGestureRecognizer.Tapped += TrashTapGestureRecognizer_Tapped;
-			this.trasheffectsView.GestureRecognizers.Add(trashtapGestureRecognizer);
+			_trasheffectsView.GestureRecognizers.Add(trashtapGestureRecognizer);
 
-			this.spameffectsView = bindable.FindByName<SfEffectsView>("spamEffects");
+			_spameffectsView = bindable.FindByName<SfEffectsView>("spamEffects");
 			TapGestureRecognizer spamtapGestureRecognizer = new TapGestureRecognizer();
 			spamtapGestureRecognizer.Tapped += SpamTapGestureRecognizer_Tapped;
-			this.spameffectsView.GestureRecognizers.Add(spamtapGestureRecognizer);
+			_spameffectsView.GestureRecognizers.Add(spamtapGestureRecognizer);
 
-			this.primarynavigationEffectsView = bindable.FindByName<SfEffectsView>("primaryNavigation");
+			_primarynavigationEffectsView = bindable.FindByName<SfEffectsView>("primaryNavigation");
 			TapGestureRecognizer navigationtapGestureRecognizer = new TapGestureRecognizer();
 			navigationtapGestureRecognizer.Tapped += NavigationTapGestureRecognizer_Tapped;
-			this.primarynavigationEffectsView.GestureRecognizers.Add(navigationtapGestureRecognizer);
+			_primarynavigationEffectsView.GestureRecognizers.Add(navigationtapGestureRecognizer);
 
-			this.title = bindable.FindByName<Label>("titleName");
+			_title = bindable.FindByName<Label>("titleName");
 
 			base.OnAttachedTo(bindable);
 		}
 
 		private void NavigationTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
-			this.navigationdrawer?.ToggleDrawer();
+			_navigationdrawer?.ToggleDrawer();
 		}
 
 		private void InboxTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
-			this.ResetSelection();
-			if (this.navigationdrawer != null && this.title != null && this.ViewModel != null && this.ListView != null && this.inboxeffectsView != null)
+			ResetSelection();
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _inboxeffectsView != null)
 			{
-				this.inboxeffectsView.IsSelected = true;
-				this.title.Text = "Inbox";
-				this.ViewModel.AddItemsRefresh(1);
-				this.ListView.ItemsSource = ViewModel.MailInfos;
-				this.navigationdrawer.ToggleDrawer();
+				_inboxeffectsView.IsSelected = true;
+				_title.Text = "Inbox";
+				_viewModel.AddItemsRefresh(1);
+				_listView.ItemsSource = _viewModel.MailInfos;
+				_navigationdrawer.ToggleDrawer();
 			}
 		}
 
 		private void StarredTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
-			this.ResetSelection();
-			if (this.navigationdrawer != null && this.title != null && this.ViewModel != null && this.ListView != null && this.starredeffectsView != null)
+			ResetSelection();
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _starredeffectsView != null)
 			{
-				this.starredeffectsView.IsSelected = true;
-				this.title.Text = "Starred";
-				this.ViewModel.AddItemsRefresh(2);
-				this.ListView.ItemsSource = ViewModel.MailInfos;
-				this.navigationdrawer.ToggleDrawer();
+				_starredeffectsView.IsSelected = true;
+				_title.Text = "Starred";
+				_viewModel.AddItemsRefresh(2);
+				_listView.ItemsSource = _viewModel.MailInfos;
+				_navigationdrawer.ToggleDrawer();
 			}
 		}
 
 		private void SentTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
-			this.ResetSelection();
-			if (this.navigationdrawer != null && this.title != null && this.ViewModel != null && this.ListView != null && this.senteffectsView != null)
+			ResetSelection();
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _senteffectsView != null)
 			{
-				this.senteffectsView.IsSelected = true;
-				this.title.Text = "Sent";
-				this.ViewModel.AddItemsRefresh(3);
-				this.ListView.ItemsSource = ViewModel.MailInfos;
-				this.navigationdrawer.ToggleDrawer();
+				_senteffectsView.IsSelected = true;
+				_title.Text = "Sent";
+				_viewModel.AddItemsRefresh(3);
+				_listView.ItemsSource = _viewModel.MailInfos;
+				_navigationdrawer.ToggleDrawer();
 			}
 		}
 
 		private void DraftTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
-			this.ResetSelection();
-			if (this.navigationdrawer != null && this.title != null && this.ViewModel != null && this.ListView != null && this.draftseffectsView != null)
+			ResetSelection();
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _draftseffectsView != null)
 			{
-				this.draftseffectsView.IsSelected = true;
-				this.title.Text = "Draft";
-				this.ViewModel.AddItemsRefresh(4);
-				this.ListView.ItemsSource = ViewModel.MailInfos;
-				this.navigationdrawer.ToggleDrawer();
+				_draftseffectsView.IsSelected = true;
+				_title.Text = "Draft";
+				_viewModel.AddItemsRefresh(4);
+				_listView.ItemsSource = _viewModel.MailInfos;
+				_navigationdrawer.ToggleDrawer();
 			}
 		}
 
 		private void AllMailsTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
-			this.ResetSelection();
-			if (this.navigationdrawer != null && this.title != null && this.ViewModel != null && this.ListView != null && this.allmailseffectsView != null)
+			ResetSelection();
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _allmailseffectsView != null)
 			{
-				this.allmailseffectsView.IsSelected = true;
-				this.title.Text = "All Mails";
-				this.ViewModel.AddItemsRefresh(1);
-				this.ListView.ItemsSource = ViewModel.MailInfos;
-				this.navigationdrawer.ToggleDrawer();
+				_allmailseffectsView.IsSelected = true;
+				_title.Text = "All Mails";
+				_viewModel.AddItemsRefresh(1);
+				_listView.ItemsSource = _viewModel.MailInfos;
+				_navigationdrawer.ToggleDrawer();
 			}
 		}
 
 		private void TrashTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
-			this.ResetSelection();
-			if (this.navigationdrawer != null && this.title != null && this.ViewModel != null && this.ListView != null && this.trasheffectsView != null)
+			ResetSelection();
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _trasheffectsView != null)
 			{
-				this.trasheffectsView.IsSelected = true;
-				this.title.Text = "Trash";
-				this.ViewModel.AddItemsRefresh(2);
-				this.ListView.ItemsSource = ViewModel.MailInfos;
-				this.navigationdrawer.ToggleDrawer();
+				_trasheffectsView.IsSelected = true;
+				_title.Text = "Trash";
+				_viewModel.AddItemsRefresh(2);
+				_listView.ItemsSource = _viewModel.MailInfos;
+				_navigationdrawer.ToggleDrawer();
 			}
 		}
 
 		private void SpamTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
-			this.ResetSelection();
-			if (this.navigationdrawer != null && this.title != null && this.ViewModel != null && this.ListView != null && this.spameffectsView != null)
+			ResetSelection();
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _spameffectsView != null)
 			{
-				this.spameffectsView.IsSelected = true;
-				this.title.Text = "Spam";
-				this.ViewModel.AddItemsRefresh(1);
-				this.ListView.ItemsSource = ViewModel.MailInfos;
-				this.navigationdrawer.ToggleDrawer();
+				_spameffectsView.IsSelected = true;
+				_title.Text = "Spam";
+				_viewModel.AddItemsRefresh(1);
+				_listView.ItemsSource = _viewModel.MailInfos;
+				_navigationdrawer.ToggleDrawer();
 			}
 		}
 
 		private void ResetSelection()
 		{
-			if (this.inboxeffectsView != null && this.starredeffectsView != null && this.senteffectsView != null && this.draftseffectsView != null && this.allmailseffectsView != null && this.trasheffectsView != null && this.spameffectsView != null)
+			if (_inboxeffectsView != null && _starredeffectsView != null && _senteffectsView != null && _draftseffectsView != null && _allmailseffectsView != null && _trasheffectsView != null && _spameffectsView != null)
 			{
-				this.inboxeffectsView.IsSelected = false;
-				this.starredeffectsView.IsSelected = false;
-				this.senteffectsView.IsSelected = false;
-				this.draftseffectsView.IsSelected = false;
-				this.allmailseffectsView.IsSelected = false;
-				this.trasheffectsView.IsSelected = false;
-				this.spameffectsView.IsSelected = false;
+				_inboxeffectsView.IsSelected = false;
+				_starredeffectsView.IsSelected = false;
+				_senteffectsView.IsSelected = false;
+				_draftseffectsView.IsSelected = false;
+				_allmailseffectsView.IsSelected = false;
+				_trasheffectsView.IsSelected = false;
+				_spameffectsView.IsSelected = false;
 			}
 		}
 
@@ -199,26 +199,15 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// <param name="e">SelectionChangedEventArgs e.</param>
 		private void OnPositionSelectionChanged(object? sender, EventArgs e)
 		{
-			if (positionType != null && this.navigationdrawer != null)
+			if (_positionType != null && _navigationdrawer != null)
 			{
-				switch (positionType.SelectedItem?.ToString())
+				_navigationdrawer.DrawerSettings.Position = (_positionType.SelectedItem?.ToString()) switch
 				{
-					case "Right":
-						this.navigationdrawer.DrawerSettings.Position = Position.Right;
-						break;
-
-					case "Top":
-						this.navigationdrawer.DrawerSettings.Position = Position.Top;
-						break;
-
-					case "Bottom":
-						this.navigationdrawer.DrawerSettings.Position = Position.Bottom;
-						break;
-
-					default:
-						this.navigationdrawer.DrawerSettings.Position = Position.Left;
-						break;
-				}
+					"Right" => Position.Right,
+					"Top" => Position.Top,
+					"Bottom" => Position.Bottom,
+					_ => Position.Left,
+				};
 			}
 		}
 
@@ -230,8 +219,8 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		protected override void OnDetachingFrom(SampleView bindable)
 		{
 
-			this.ListView = null;
-			this.ViewModel = null;
+			_listView = null;
+			_viewModel = null;
 			base.OnDetachingFrom(bindable);
 		}
 
@@ -240,7 +229,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns specific group name.</returns>
-		private GroupName GetKey(DateTime groupName)
+		private static GroupName GetKey(DateTime groupName)
 		{
 			int compare = groupName.Date.CompareTo(DateTime.Now.Date);
 
@@ -252,19 +241,19 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 			{
 				return GroupName.Yesterday;
 			}
-			else if (IsLastWeek(groupName))
+			else if (NavigationDrawerBehavior.IsLastWeek(groupName))
 			{
 				return GroupName.LastWeek;
 			}
-			else if (IsThisWeek(groupName))
+			else if (NavigationDrawerBehavior.IsThisWeek(groupName))
 			{
 				return GroupName.ThisWeek;
 			}
-			else if (IsThisMonth(groupName))
+			else if (NavigationDrawerBehavior.IsThisMonth(groupName))
 			{
 				return GroupName.ThisMonth;
 			}
-			else if (IsLastMonth(groupName))
+			else if (NavigationDrawerBehavior.IsLastMonth(groupName))
 			{
 				return GroupName.LastMonth;
 			}
@@ -279,7 +268,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns true if the mentioned date is in this week.</returns>
-		private bool IsThisWeek(DateTime groupName)
+		private static bool IsThisWeek(DateTime groupName)
 		{
 			var groupWeekSunDay = groupName.AddDays(-(int)groupName.DayOfWeek).Day;
 			var currentSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek).Day;
@@ -297,7 +286,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns true if the mentioned date is in last week.</returns>
-		private bool IsLastWeek(DateTime groupName)
+		private static bool IsLastWeek(DateTime groupName)
 		{
 			var groupWeekSunDay = groupName.AddDays(-(int)groupName.DayOfWeek).Day;
 			var lastSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek).Day - 7;
@@ -315,7 +304,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns true if the mentioned date is in this month.</returns>
-		private bool IsThisMonth(DateTime groupName)
+		private static bool IsThisMonth(DateTime groupName)
 		{
 			var groupMonth = groupName.Month;
 			var currentMonth = DateTime.Today.Month;
@@ -330,7 +319,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns true if the mentioned date is in last month.</returns>
-		private bool IsLastMonth(DateTime groupName)
+		private static bool IsLastMonth(DateTime groupName)
 		{
 			var groupMonth = groupName.Month;
 			var currentMonth = DateTime.Today.AddMonths(-1).Month;

@@ -1,4 +1,4 @@
- using Syncfusion.Maui.Toolkit.Charts;
+using Syncfusion.Maui.Toolkit.Charts;
 using System.Globalization;
 
 namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
@@ -43,7 +43,7 @@ namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 		}
 	}
 
-	public class PolarSeriesExt : PolarAreaSeries
+	public partial class PolarSeriesExt : PolarAreaSeries
 	{
 		protected override void DrawDataLabel(ICanvas canvas, Brush? fillcolor, string label, PointF point, int index)
 		{

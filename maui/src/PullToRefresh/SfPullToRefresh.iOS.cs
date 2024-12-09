@@ -79,7 +79,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 					{
 						PanGesture = panGestureRecognizer;
 						PanGesture.CancelsTouchesInView = false;
-						ChildGestureRecognizers = new List<UIGestureRecognizer>();
+						ChildGestureRecognizers = [];
 						_proxy = new PullToRefreshProxy(this);
 						PanGesture.ShouldRecognizeSimultaneously = null;
 						PanGesture.ShouldRecognizeSimultaneously += _proxy.ShouldRecognizeSimultaneousGesture;
@@ -356,9 +356,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
 			UIGestureRecognizer.Token? gestureToken = null;
 
-			if (gestureToken is null)
-			{
-				gestureToken = gesture2.AddTarget(() =>
+			gestureToken ??= gesture2.AddTarget(() =>
 				{
 					if (gesture2.State == UIGestureRecognizerState.Failed ||
 						gesture2.State == UIGestureRecognizerState.Ended ||
@@ -376,7 +374,6 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 						}
 					}
 				});
-			}
 
 			return true;
 		}

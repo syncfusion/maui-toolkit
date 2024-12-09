@@ -1,4 +1,3 @@
-
 namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 {
 	public partial class SignUpPage : SampleView
@@ -7,9 +6,9 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 		{
 			InitializeComponent();
 #if ANDROID || IOS
-			this.Content = new SignUpPageMobile();
+			Content = new SignUpPageMobile();
 #else
-        this.Content = new SignUpPageDesktop();
+			Content = new SignUpPageDesktop();
 #endif
 		}
 

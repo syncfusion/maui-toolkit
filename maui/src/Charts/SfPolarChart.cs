@@ -321,7 +321,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
     /// ***
     /// </remarks>
     [ContentProperty(nameof(Series))]
-    public class SfPolarChart : ChartBase, ITapGestureListener, ITouchListener, IParentThemeElement
+    public partial class SfPolarChart : ChartBase, ITapGestureListener, ITouchListener, IParentThemeElement
     {
         #region Fields
 
@@ -758,8 +758,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             SetDynamicResource(TooltipBackgroundProperty, "SfPolarChartTooltipBackground");
             SetDynamicResource(TooltipTextColorProperty, "SfPolarChartTooltipTextColor");
             SetDynamicResource(TooltipFontSizeProperty, "SfPolarChartTooltipTextFontSize");
-            _chartArea = (PolarChartArea)LegendLayout.AreaBase;
-            Series = new ChartPolarSeriesCollection();
+            _chartArea = (PolarChartArea)_legendLayout._areaBase;
+            Series = [];
             this.AddTouchListener(this);
             this.AddGestureListener(this);
         }

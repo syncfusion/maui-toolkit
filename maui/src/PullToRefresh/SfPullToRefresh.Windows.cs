@@ -81,12 +81,12 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             }
         }
 
-        /// <summary>
-        /// This method used to get the ScrollViewer.
-        /// </summary>
-        /// <param name="dependencyObject">The dependencyObject.</param>
-        /// <returns>Returns the ScrollViewer.</returns>
-        ScrollViewer? GetScrollViewer(DependencyObject dependencyObject)
+		/// <summary>
+		/// This method used to get the ScrollViewer.
+		/// </summary>
+		/// <param name="dependencyObject">The dependencyObject.</param>
+		/// <returns>Returns the ScrollViewer.</returns>
+		static ScrollViewer? GetScrollViewer(DependencyObject dependencyObject)
         {
             var scrollViewer = dependencyObject as ScrollViewer;
             if (scrollViewer is not null)
@@ -98,7 +98,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             {
                 var child = VisualTreeHelper.GetChild(dependencyObject, i);
 
-                scrollViewer = GetScrollViewer(child);
+                scrollViewer = SfPullToRefresh.GetScrollViewer(child);
                 if (scrollViewer is not null)
                 {
                     return scrollViewer;
@@ -144,7 +144,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             {
                 if (scrollView is UIElement uiElement)
                 {
-                    var control = GetScrollViewer(uiElement);
+                    var control = SfPullToRefresh.GetScrollViewer(uiElement);
                     scrollOffset = control is not null ? control.VerticalOffset : 0;
                 }
                 else
@@ -204,7 +204,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
             {
                 // Since we can't able to get the ScrollBar instance from tapping thumbstick, so we need to loop its parent until its parent was ScrollBar.
                 // If parent is ScrollBar, then return true and no need to continue looping.
-                return dependencyObject is ScrollBar ? true : IsSourceScrollBar(dependencyObject);
+                return dependencyObject is ScrollBar || IsSourceScrollBar(dependencyObject);
             }
             else
             {

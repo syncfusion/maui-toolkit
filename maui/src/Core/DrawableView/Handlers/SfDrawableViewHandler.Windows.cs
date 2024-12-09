@@ -7,7 +7,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 	/// Handles the drawing view functionality for the SfDrawableView on the Windows platform.
 	/// </summary>
 	public partial class SfDrawableViewHandler : ViewHandler<IDrawableView, W2DGraphicsView>
-    {
+	{
 		#region Methods
 
 		/// <summary>
@@ -15,22 +15,24 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		/// </summary>
 		/// <returns>The platform-specific <see cref="W2DGraphicsView"/> object.</returns>
 		protected override W2DGraphicsView CreatePlatformView()
-        {
-            var nativeGraphicsView = new W2DGraphicsView();
-            nativeGraphicsView.Drawable = VirtualView;
-            nativeGraphicsView.UseSystemFocusVisuals = true;
-            nativeGraphicsView.IsTabStop = true;
-            return nativeGraphicsView;
-        }
+		{
+			var nativeGraphicsView = new W2DGraphicsView
+			{
+				Drawable = VirtualView,
+				UseSystemFocusVisuals = true,
+				IsTabStop = true
+			};
+			return nativeGraphicsView;
+		}
 
 		/// <summary>
 		/// Invalidates the view, causing it to be redrawn.
 		/// </summary>
 		public void Invalidate()
-        {
-            this.PlatformView?.Invalidate();
-        }
+		{
+			PlatformView?.Invalidate();
+		}
 
-        #endregion
-    }
+		#endregion
+	}
 }

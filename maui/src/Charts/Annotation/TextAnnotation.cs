@@ -31,279 +31,281 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// ]]>
 	/// </code>
 	/// </example>
-	public class TextAnnotation : ChartAnnotation, IThemeElement
-    {
-        #region Bindable Properties
+	public partial class TextAnnotation : ChartAnnotation, IThemeElement
+	{
+		#region Bindable Properties
 
-        /// <summary>
-        /// Identifies the <see cref="Text"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="Text"/> property defines the text content displayed by the <see cref="TextAnnotation"/> in the chart.
-        /// </remarks>
-        public static readonly BindableProperty TextProperty = BindableProperty.Create(
-            nameof(Text),
-            typeof(string),
-            typeof(TextAnnotation),
-            string.Empty,
-            BindingMode.Default,
-            null,
-            OnAnnotationPropertyChanged);
+		/// <summary>
+		/// Identifies the <see cref="Text"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="Text"/> property defines the text content displayed by the <see cref="TextAnnotation"/> in the chart.
+		/// </remarks>
+		public static readonly BindableProperty TextProperty = BindableProperty.Create(
+			nameof(Text),
+			typeof(string),
+			typeof(TextAnnotation),
+			string.Empty,
+			BindingMode.Default,
+			null,
+			OnAnnotationPropertyChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="LabelStyle"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="LabelStyle"/> property allows to customize the appearance of the label associated with the <see cref="TextAnnotation"/>.
-        /// </remarks>
-        public static readonly BindableProperty LabelStyleProperty = BindableProperty.Create(
-            nameof(LabelStyle),
-            typeof(ChartAnnotationLabelStyle),
-            typeof(TextAnnotation),
-            null,
-            BindingMode.Default,
-            null,
-            OnLabelStylePropertyChanged,
-            defaultValueCreator: LabelStyleDefaultValueCreator);
+		/// <summary>
+		/// Identifies the <see cref="LabelStyle"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="LabelStyle"/> property allows to customize the appearance of the label associated with the <see cref="TextAnnotation"/>.
+		/// </remarks>
+		public static readonly BindableProperty LabelStyleProperty = BindableProperty.Create(
+			nameof(LabelStyle),
+			typeof(ChartAnnotationLabelStyle),
+			typeof(TextAnnotation),
+			null,
+			BindingMode.Default,
+			null,
+			OnLabelStylePropertyChanged,
+			defaultValueCreator: LabelStyleDefaultValueCreator);
 
-        #endregion
+		#endregion
 
-        #region Public Properties
+		#region Public Properties
 
-        /// <summary>
-        /// Gets or sets the text to be displayed on the annotation. 
-        /// </summary>
-        /// <value>This property takes the <c>string</c> as its value and its default value is string.Empty.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-3)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///     <chart:SfCartesianChart.Annotations>
-        ///          <chart:TextAnnotation X1="3" Y1="30" Text="TextAnnotation">         
-        ///          </chart:HorizontalLineAnnotation>
-        ///     </chart:SfCartesianChart.Annotations>  
-        ///     
-        ///     </chart:SfCartesianChart>
-        /// ]]>
-        /// </code>
-        /// # [C#](#tab/tabid-4)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();     
-        ///
-        ///     // Eliminated for simplicity
-        ///     var text = new TextAnnotation()
-        ///     {
-        ///         X1 = 3,
-        ///         Y1 = 30,       
-        ///         Text = "TextAnnotation",
-        ///     };
-        ///  
-        /// chart.Annotations.Add(text);
-        /// ]]>
-        /// </code>
-        /// ***
-        /// </example>
-        public string Text
-        {
-            get { return (string)GetValue(TextProperty); }
-            set { SetValue(TextProperty, value); }
-        }
+		/// <summary>
+		/// Gets or sets the text to be displayed on the annotation. 
+		/// </summary>
+		/// <value>This property takes the <c>string</c> as its value and its default value is string.Empty.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-3)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///     <chart:SfCartesianChart.Annotations>
+		///          <chart:TextAnnotation X1="3" Y1="30" Text="TextAnnotation">         
+		///          </chart:HorizontalLineAnnotation>
+		///     </chart:SfCartesianChart.Annotations>  
+		///     
+		///     </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-4)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();     
+		///
+		///     // Eliminated for simplicity
+		///     var text = new TextAnnotation()
+		///     {
+		///         X1 = 3,
+		///         Y1 = 30,       
+		///         Text = "TextAnnotation",
+		///     };
+		///  
+		/// chart.Annotations.Add(text);
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public string Text
+		{
+			get { return (string)GetValue(TextProperty); }
+			set { SetValue(TextProperty, value); }
+		}
 
-        /// <summary>
-        /// Get or set the value to customize the appearance of annotation text.
-        /// </summary>
-        /// <value>This property takes the <see cref="ChartAnnotationLabelStyle"/> as its value.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-5)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///     <chart:SfCartesianChart.Annotations>
-        ///          <chart:TextAnnotation X1="3" Y1="30" Text="TextAnnotation">
-        ///           <chart:TextAnnotation.LabelStyle>
-        ///             <chart:ChartAnnotationLabelStyle HorizontalTextAlignment="Start" VerticalTextAlignment="Start"/>
-        ///           </chart:TextAnnotation.LabelStyle>
-        ///          </chart:TextAnnotation>
-        ///     </chart:SfCartesianChart.Annotations>  
-        ///     
-        ///     </chart:SfCartesianChart>
-        /// ]]>
-        /// </code>
-        /// # [C#](#tab/tabid-6)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();     
-        ///
-        ///     // Eliminated for simplicity
-        ///     var textAnnotation = new TextAnnotation()
-        ///     {
-        ///         X1 = 3,
-        ///         Y1 = 30,    
-        ///         Text = "TextAnnotation",
-        ///     };
-        ///  
-        ///  textAnnotation.LabelStyle = new ChartAnnotationLabelStyle()
-        ///  {
-        ///     HorizontalTextAlignment = ChartLabelAlignment.Start,
-        ///     VerticalTextAlignment = ChartLabelAlignment.Start,
-        ///  };
-        ///  
-        /// chart.Annotations.Add(textAnnotation);
-        /// ]]>
-        /// </code>
-        /// ***
-        /// </example>
-        public ChartAnnotationLabelStyle LabelStyle
-        {
-            get { return (ChartAnnotationLabelStyle)GetValue(LabelStyleProperty); }
-            set { SetValue(LabelStyleProperty, value); }
-        }
+		/// <summary>
+		/// Get or set the value to customize the appearance of annotation text.
+		/// </summary>
+		/// <value>This property takes the <see cref="ChartAnnotationLabelStyle"/> as its value.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-5)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///     <chart:SfCartesianChart.Annotations>
+		///          <chart:TextAnnotation X1="3" Y1="30" Text="TextAnnotation">
+		///           <chart:TextAnnotation.LabelStyle>
+		///             <chart:ChartAnnotationLabelStyle HorizontalTextAlignment="Start" VerticalTextAlignment="Start"/>
+		///           </chart:TextAnnotation.LabelStyle>
+		///          </chart:TextAnnotation>
+		///     </chart:SfCartesianChart.Annotations>  
+		///     
+		///     </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-6)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();     
+		///
+		///     // Eliminated for simplicity
+		///     var textAnnotation = new TextAnnotation()
+		///     {
+		///         X1 = 3,
+		///         Y1 = 30,    
+		///         Text = "TextAnnotation",
+		///     };
+		///  
+		///  textAnnotation.LabelStyle = new ChartAnnotationLabelStyle()
+		///  {
+		///     HorizontalTextAlignment = ChartLabelAlignment.Start,
+		///     VerticalTextAlignment = ChartLabelAlignment.Start,
+		///  };
+		///  
+		/// chart.Annotations.Add(textAnnotation);
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public ChartAnnotationLabelStyle LabelStyle
+		{
+			get { return (ChartAnnotationLabelStyle)GetValue(LabelStyleProperty); }
+			set { SetValue(LabelStyleProperty, value); }
+		}
 
-        #endregion
+		#endregion
 
-        #region Internal Properties
+		#region Internal Properties
 
-        internal Rect LabelRect { get; set; }
-        internal float XPosition1 { get; set; }
-        internal float YPosition1 { get; set; }
+		internal Rect LabelRect { get; set; }
+		internal float XPosition1 { get; set; }
+		internal float YPosition1 { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public TextAnnotation()
-        {
-            ThemeElement.InitializeThemeResources(this, "SfCartesianChartTheme");
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		public TextAnnotation()
+		{
+			ThemeElement.InitializeThemeResources(this, "SfCartesianChartTheme");
+		}
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        #region Theme Interface Implementation
+		#region Theme Interface Implementation
 
-        void IThemeElement.OnControlThemeChanged(string oldTheme, string newTheme)
-        {
-        }
+		void IThemeElement.OnControlThemeChanged(string oldTheme, string newTheme)
+		{
+		}
 
-        void IThemeElement.OnCommonThemeChanged(string oldTheme, string newTheme)
-        {
-        }
+		void IThemeElement.OnCommonThemeChanged(string oldTheme, string newTheme)
+		{
+		}
 
-        #endregion
+		#endregion
 
-        #region Protected Methods
+		#region Protected Methods
 
-        /// <inheritdoc/>
-        protected internal override void Draw(ICanvas canvas, RectF dirtyRect)
-        {
-            if (!string.IsNullOrEmpty(Text))
-            {
-                if (Chart != null)
-                {
-                    if (CoordinateUnit == ChartCoordinateUnit.Axis)
-                    {
-                        var clipRect = Chart.ChartArea.ActualSeriesClipRect;
-                        canvas.ClipRectangle(clipRect);
-                    }
+		/// <inheritdoc/>
+		protected internal override void Draw(ICanvas canvas, RectF dirtyRect)
+		{
+			if (!string.IsNullOrEmpty(Text))
+			{
+				if (Chart != null)
+				{
+					if (CoordinateUnit == ChartCoordinateUnit.Axis)
+					{
+						var clipRect = Chart._chartArea.ActualSeriesClipRect;
+						canvas.ClipRectangle(clipRect);
+					}
 
-                    canvas.StrokeSize = (float)annotationLabelStyle.StrokeWidth;
-                    canvas.StrokeColor = annotationLabelStyle.Stroke.ToColor();
-                    annotationLabelStyle.DrawTextBackground(canvas, Text, annotationLabelStyle.Background, new Point(LabelRect.X, LabelRect.Y));
-                    annotationLabelStyle.DrawLabel(canvas, Text, new Point(LabelRect.X, LabelRect.Y));
-                }
-            }
-        }
+					canvas.StrokeSize = (float)_annotationLabelStyle.StrokeWidth;
+					canvas.StrokeColor = _annotationLabelStyle.Stroke.ToColor();
+					_annotationLabelStyle.DrawTextBackground(canvas, Text, _annotationLabelStyle.Background, new Point(LabelRect.X, LabelRect.Y));
+					_annotationLabelStyle.DrawLabel(canvas, Text, new Point(LabelRect.X, LabelRect.Y));
+				}
+			}
+		}
 
-        internal override void Dispose()
-        {
-            UnHookStylePropertyChanged(annotationLabelStyle);
-            base.Dispose();
-        }
+		internal override void Dispose()
+		{
+			UnHookStylePropertyChanged(_annotationLabelStyle);
+			base.Dispose();
+		}
 
 		/// <inheritdoc/>
 		/// <exclude/>
 		protected override void OnBindingContextChanged()
-        {
-            base.OnBindingContextChanged();
+		{
+			base.OnBindingContextChanged();
 
-            if (annotationLabelStyle != null)
-            {
-                SetInheritedBindingContext(annotationLabelStyle, BindingContext);
-            }
-        }
+			if (_annotationLabelStyle != null)
+			{
+				SetInheritedBindingContext(_annotationLabelStyle, BindingContext);
+			}
+		}
 
 		/// <inheritdoc/>
 		/// <exclude/>
 		protected override void OnParentSet()
-        {
-            base.OnParentSet();
+		{
+			base.OnParentSet();
 
-            if (annotationLabelStyle != null)
-            {
-                annotationLabelStyle.Parent = Parent;
-            }
-        }
+			if (_annotationLabelStyle != null)
+			{
+				_annotationLabelStyle.Parent = Parent;
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Internal Methods
+		#region Internal Methods
 
-        internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
-        {
-            ResetPosition();
+		internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
+		{
+			ResetPosition();
 
-            if (X1 == null || double.IsNaN(Y1))
-                return;
+			if (X1 == null || double.IsNaN(Y1))
+			{
+				return;
+			}
 
-            if (CoordinateUnit == ChartCoordinateUnit.Axis)
-            {
-                if (!xAxis.IsVertical)
-                {
-                    (x1, y1) = TransformCoordinates(chart, xAxis, yAxis, x1, y1);
-                }
-                else
-                {
-                    (x1, y1) = TransformCoordinates(chart, xAxis, yAxis, x1, y1);
-                }
-            }
-            else
-            {
-                x1 += chart.SeriesBounds.Left;
-            }
+			if (CoordinateUnit == ChartCoordinateUnit.Axis)
+			{
+				if (!xAxis.IsVertical)
+				{
+					(x1, y1) = TransformCoordinates(chart, xAxis, yAxis, x1, y1);
+				}
+				else
+				{
+					(x1, y1) = TransformCoordinates(chart, xAxis, yAxis, x1, y1);
+				}
+			}
+			else
+			{
+				x1 += chart.SeriesBounds.Left;
+			}
 
-            XPosition1 = (float)x1;
-            YPosition1 = (float)y1;
+			XPosition1 = (float)x1;
+			YPosition1 = (float)y1;
 
-            if (!string.IsNullOrEmpty(Text))
-            {
-                SetTextAlignment(XPosition1, YPosition1);
-            }
-        }
+			if (!string.IsNullOrEmpty(Text))
+			{
+				SetTextAlignment(XPosition1, YPosition1);
+			}
+		}
 
-        internal override void ResetPosition()
-        {
-            XPosition1 = YPosition1 = float.NaN;
-            LabelRect = Rect.Zero;
-        }
+		internal override void ResetPosition()
+		{
+			XPosition1 = YPosition1 = float.NaN;
+			LabelRect = Rect.Zero;
+		}
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
 
-        void SetTextAlignment(double xPosition1, double yPosition1)
-        {
-            var labelSize = annotationLabelStyle.MeasureLabel(Text);
+		void SetTextAlignment(double xPosition1, double yPosition1)
+		{
+			var labelSize = _annotationLabelStyle.MeasureLabel(Text);
 
-            var halfBorderWidth = (annotationLabelStyle.StrokeWidth / 2);
-            double labelHeight = labelSize.Height, labelWidth = labelSize.Width;
-            double labelRectX = xPosition1, labelRectY = yPosition1;
-            double labelTop = 0, labelLeft = 0;
+			var halfBorderWidth = (_annotationLabelStyle.StrokeWidth / 2);
+			double labelHeight = labelSize.Height, labelWidth = labelSize.Width;
+			double labelRectX = xPosition1, labelRectY = yPosition1;
+			double labelTop = 0, labelLeft = 0;
 #if Android
 			double leftMargin = annotationLabelStyle.MarginLeft;
 			double rightMargin = annotationLabelStyle.MarginRight;
@@ -312,42 +314,42 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			labelTop = (topMargin / 2) - (bottomMargin / 2);
             labelLeft = (leftMargin / 2) - (rightMargin / 2);
 #endif
-            switch (annotationLabelStyle.VerticalTextAlignment)
-            {
-                case ChartLabelAlignment.Start:
-                    labelRectY = labelRectY - halfBorderWidth - (labelHeight / 2) + labelTop;
-                    break;
-                case ChartLabelAlignment.Center:
-                    labelRectY = labelRectY + labelTop;
-                    break;
-                case ChartLabelAlignment.End:
-                    labelRectY = labelRectY + halfBorderWidth + (labelHeight / 2) + labelTop;
-                    break;
-            }
+			switch (_annotationLabelStyle.VerticalTextAlignment)
+			{
+				case ChartLabelAlignment.Start:
+					labelRectY = labelRectY - halfBorderWidth - (labelHeight / 2) + labelTop;
+					break;
+				case ChartLabelAlignment.Center:
+					labelRectY += labelTop;
+					break;
+				case ChartLabelAlignment.End:
+					labelRectY = labelRectY + halfBorderWidth + (labelHeight / 2) + labelTop;
+					break;
+			}
 
-            switch (annotationLabelStyle.HorizontalTextAlignment)
-            {
-                case ChartLabelAlignment.Start:
-                    labelRectX = labelRectX - (labelWidth / 2) - halfBorderWidth + labelLeft;
-                    break;
-                case ChartLabelAlignment.Center:
-                    labelRectX = labelRectX + labelLeft;
-                    break;
-                case ChartLabelAlignment.End:
-                    labelRectX = labelRectX + halfBorderWidth + (labelWidth / 2) + labelLeft;
-                    break;
-            }
+			switch (_annotationLabelStyle.HorizontalTextAlignment)
+			{
+				case ChartLabelAlignment.Start:
+					labelRectX = labelRectX - (labelWidth / 2) - halfBorderWidth + labelLeft;
+					break;
+				case ChartLabelAlignment.Center:
+					labelRectX += labelLeft;
+					break;
+				case ChartLabelAlignment.End:
+					labelRectX = labelRectX + halfBorderWidth + (labelWidth / 2) + labelLeft;
+					break;
+			}
 
-            LabelRect = new Rect(labelRectX, labelRectY, labelWidth, labelHeight);
-        }
+			LabelRect = new Rect(labelRectX, labelRectY, labelWidth, labelHeight);
+		}
 
-        static object LabelStyleDefaultValueCreator(BindableObject bindable)
-        {
-            return new ChartAnnotationLabelStyle() { FontSize = 12 };
-        }
+		static object LabelStyleDefaultValueCreator(BindableObject bindable)
+		{
+			return new ChartAnnotationLabelStyle() { FontSize = 12 };
+		}
 
-        #endregion
+		#endregion
 
-        #endregion
-    }
+		#endregion
+	}
 }

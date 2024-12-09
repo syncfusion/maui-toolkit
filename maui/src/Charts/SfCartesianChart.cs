@@ -398,16 +398,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
     /// ***
     /// </remarks>
     [ContentProperty(nameof(Series))]
-    public class SfCartesianChart : ChartBase, ITouchListener, IDoubleTapGestureListener, ITapGestureListener, IPanGestureListener, IPinchGestureListener, ILongPressGestureListener, IParentThemeElement
+    public partial class SfCartesianChart : ChartBase, ITouchListener, IDoubleTapGestureListener, ITapGestureListener, IPanGestureListener, IPinchGestureListener, ILongPressGestureListener, IParentThemeElement
     {
         #region Fields
-        internal readonly CartesianChartArea ChartArea;
-        internal readonly ChartTrackballView TrackballView;
-        internal readonly ChartZoomPanView ZoomPanView;
-        internal readonly AnnotationLayout AnnotationLayout;
+        internal readonly CartesianChartArea _chartArea;
+        internal readonly ChartTrackballView _trackballView;
+        internal readonly ChartZoomPanView _zoomPanView;
+        internal readonly AnnotationLayout _annotationLayout;
 
-        ObservableCollection<ChartAxis> _xAxes = new ObservableCollection<ChartAxis>();
-        ObservableCollection<RangeAxisBase> _yAxes = new ObservableCollection<RangeAxisBase>();
+		readonly ObservableCollection<ChartAxis> _xAxes = [];
+		readonly ObservableCollection<RangeAxisBase> _yAxes = [];
 
         /// <summary>
         /// Identifies the <see cref="TrackLineStroke"/> bindable property.
@@ -1091,12 +1091,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
             set { SetValue(CanAnnotationUnderPlotAreaProperty, value); }
         }
 
-        #region Event
+		#region Event
 
-        /// <summary>
-        /// This event is raised when the trackball is moved from one data point to another. This helps to customize the trackball label and marker based on the condition.
-        /// </summary>
-        public event EventHandler<TrackballEventArgs> TrackballCreated;
+		/// <summary>
+		/// This event is raised when the trackball is moved from one data point to another. This helps to customize the trackball label and marker based on the condition.
+		/// </summary>
+		public event EventHandler<TrackballEventArgs> TrackballCreated;
 
         /// <summary>
         /// This event is triggered when zooming begins.
@@ -1138,41 +1138,35 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         public event EventHandler<ChartResetZoomEventArgs> ResetZoom;
 
-        #endregion
+		#endregion
 
-        #endregion
+		#endregion
 
-        #region Constructor
+		#region Constructor
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SfCartesianChart"/> class.
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SfCartesianChart"/> class.
+		/// </summary>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public SfCartesianChart()
+		public SfCartesianChart()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        {
-            ThemeElement.InitializeThemeResources(this, "SfCartesianChartTheme");
+		{
+			ThemeElement.InitializeThemeResources(this, "SfCartesianChartTheme");
             SfCartesianChartResources.InitializeDefaultResource("Chart.Resources.SfCartesianChart");
-            this.SetDynamicResource(TrackLineStrokeProperty, "SfCartesianChartTrackballLineStroke");
-            this.SetDynamicResource(TooltipBackgroundProperty, "SfCartesianChartTooltipBackground");
-            this.SetDynamicResource(TooltipTextColorProperty, "SfCartesianChartTooltipTextColor");
-            this.SetDynamicResource(TooltipFontSizeProperty, "SfCartesianChartTooltipTextFontSize");
-            ChartArea = (CartesianChartArea)LegendLayout.AreaBase;
-            AnnotationLayout = ChartArea.AnnotationLayout;
-            Series = new ChartSeriesCollection();
-            Annotations = new ChartAnnotationCollection();
+            SetDynamicResource(TrackLineStrokeProperty, "SfCartesianChartTrackballLineStroke");
+            SetDynamicResource(TooltipBackgroundProperty, "SfCartesianChartTooltipBackground");
+            SetDynamicResource(TooltipTextColorProperty, "SfCartesianChartTooltipTextColor");
+            SetDynamicResource(TooltipFontSizeProperty, "SfCartesianChartTooltipTextFontSize");
+            _chartArea = (CartesianChartArea)_legendLayout._areaBase;
+            _annotationLayout = _chartArea._annotationLayout;
+            Series = [];
+            Annotations = [];
             this.AddTouchListener(this);
             this.AddGestureListener(this);
+			
+            _trackballView ??= [];
 
-            if (TrackballView == null)
-            {
-                TrackballView = new ChartTrackballView();
-            }
-
-            if (ZoomPanView == null)
-            {
-                ZoomPanView = new ChartZoomPanView();
-            }
+            _zoomPanView ??= [];
 
             UpdateView();
         }
@@ -1203,7 +1197,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal override void UpdateLegendItems()
         {
-            if (ChartArea != null && ChartArea.PlotArea is ChartPlotArea plotArea)
+            if (_chartArea != null && _chartArea.PlotArea is ChartPlotArea plotArea)
             {
                 plotArea.ShouldPopulateLegendItems = true;
             }
@@ -1218,7 +1212,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         public void AnimateSeries()
         {
-            var visibleSeries = ChartArea.VisibleSeries;
+            var visibleSeries = _chartArea.VisibleSeries;
 
             if (visibleSeries != null)
             {
@@ -1335,7 +1329,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             if (SelectionBehavior != null)
             {
-                var visibleSeries = ChartArea.VisibleSeries;
+                var visibleSeries = _chartArea.VisibleSeries;
                 if (visibleSeries != null && SelectionBehavior.Type != ChartSelectionType.None && visibleSeries.Contains(series))
                 {
                     return SelectionBehavior.GetSelectionBrush(visibleSeries.IndexOf(series));
@@ -1347,16 +1341,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void UpdateView()
         {
-            if (ChartArea != null)
+            if (_chartArea != null)
             {
-                if (!ChartArea.Contains(TrackballView))
+                if (!_chartArea.Contains(_trackballView))
                 {
-                    ChartArea.Add(TrackballView);
+                    _chartArea.Add(_trackballView);
                 }
 
-                if (!ChartArea.Contains(ZoomPanView))
+                if (!_chartArea.Contains(_zoomPanView))
                 {
-                   ChartArea.Add(ZoomPanView);
+                   _chartArea.Add(_zoomPanView);
                 }
             }
         }
@@ -1508,17 +1502,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
         internal void OnPanStateChanged(Point touchPoint, Point translatePoint)
         {
 #if WINDOWS
-            if (TrackballBehavior != null && TrackballBehavior.LongPressActive) return;
+            if (TrackballBehavior != null && TrackballBehavior.LongPressActive)
+			{
+				return;
+			}
 #endif
 
 #if WINDOWS || MACCATALYST
-            HideTooltipView();
+			HideTooltipView();
 #endif
 
             if (TrackballBehavior != null && !TrackballBehavior.IsPressed)
-                HideTrackballView();
+			{
+				HideTrackballView();
+			}
 
-            ZoomPanBehavior?.OnScrollChanged(this, touchPoint, translatePoint);
+			ZoomPanBehavior?.OnScrollChanged(this, touchPoint, translatePoint);
         }
 
         void OnPanEnded()
@@ -1549,14 +1548,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 }
                 else
                 {
-                    var visibleSeries = ChartArea.VisibleSeries;
+                    var visibleSeries = _chartArea.VisibleSeries;
                     if (visibleSeries != null)
                     {
                         foreach (var series in visibleSeries.Reverse())
                         {
                             if (series.SelectionHitTest((float)tapPoint.X, (float)tapPoint.Y))
-                                break;
-                        }
+							{
+								break;
+							}
+						}
                     }
                 }
 
@@ -1728,7 +1729,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             if (bindable is SfCartesianChart chart)
             {
-                chart.ChartArea.IsTransposed = (bool)newValue;
+                chart._chartArea.IsTransposed = (bool)newValue;
             }
         }
 
@@ -1736,7 +1737,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             if (bindable is SfCartesianChart chart)
             {
-                chart.ChartArea.Series = newValue as ChartSeriesCollection;
+                chart._chartArea.Series = newValue as ChartSeriesCollection;
             }
         }
 
@@ -1744,7 +1745,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             if (bindable is SfCartesianChart chart)
             {
-                chart.ChartArea.EnableSideBySideSeriesPlacement = (bool)newValue;
+                chart._chartArea.EnableSideBySideSeriesPlacement = (bool)newValue;
             }
         }
 
@@ -1757,13 +1758,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             if (bindable is SfCartesianChart chart)
             {
-                var area = chart.ChartArea;
+                var area = chart._chartArea;
                 //TODO: Need to ensure the behavior. 
                 area.PaletteColors = (IList<Brush>)newValue ?? ChartColorModel.DefaultBrushes;
                 chart.OnPaletteBrushesChanged(oldValue as ObservableCollection<Brush>, newValue as ObservableCollection<Brush>);
 
                 if (area.AreaBounds != Rect.Zero)//Not to call at load time
-                    area.OnPaletteColorChanged();
+				{
+					area.OnPaletteColorChanged();
+				}
 				else if (area.PlotArea.LegendItems.Count > 0 && area.Series != null)
 				{
 					foreach (var series in area.Series)
@@ -1783,7 +1786,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     zoomPan.Chart = chart;
                     SetInheritedBindingContext(zoomPan, chart.BindingContext);
 
-                    var drawableView = chart.ZoomPanView;
+                    var drawableView = chart._zoomPanView;
                     drawableView.Behavior = zoomPan;
                     AbsoluteLayout.SetLayoutBounds(drawableView, new Rect(0, 0, 1, 1));
                     AbsoluteLayout.SetLayoutFlags(drawableView, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.All);
@@ -1792,9 +1795,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (oldValue is ChartZoomPanBehavior oldZoomPan)
                 {
-                    chart.ZoomPanView?.RemoveBinding(AbsoluteLayout.LayoutBoundsProperty);
-                    chart.ZoomPanView?.RemoveBinding(AbsoluteLayout.LayoutFlagsProperty);
-                    chart.ChartArea.Remove(chart.ZoomPanView);
+                    chart._zoomPanView?.RemoveBinding(AbsoluteLayout.LayoutBoundsProperty);
+                    chart._zoomPanView?.RemoveBinding(AbsoluteLayout.LayoutFlagsProperty);
+                    chart._chartArea.Remove(chart._zoomPanView);
                     SetInheritedBindingContext(oldZoomPan, null);
                 }
             }
@@ -1806,7 +1809,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             {
                 if (newValue is SeriesSelectionBehavior selection)
                 {
-                    selection.ChartArea = chart.ChartArea;
+                    selection.ChartArea = chart._chartArea;
                     selection.Chart = chart;
                     SetInheritedBindingContext(selection, chart.BindingContext);
                 }
@@ -1827,7 +1830,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     trackball.CartesianChart = chart;
                     SetInheritedBindingContext(trackball, chart.BindingContext);
 
-                    var drawableView = chart.TrackballView;
+                    var drawableView = chart._trackballView;
                     drawableView.Behavior = trackball;
                     AbsoluteLayout.SetLayoutBounds(drawableView, new Rect(0, 0, 1, 1));
                     AbsoluteLayout.SetLayoutFlags(drawableView, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.All);
@@ -1836,9 +1839,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (oldValue is ChartTrackballBehavior oldTrackball)
                 {
-                    chart.TrackballView?.RemoveBinding(AbsoluteLayout.LayoutBoundsProperty);
-                    chart.TrackballView?.RemoveBinding(AbsoluteLayout.LayoutFlagsProperty);
-                    chart.ChartArea.Remove(chart.TrackballView);
+                    chart._trackballView?.RemoveBinding(AbsoluteLayout.LayoutBoundsProperty);
+                    chart._trackballView?.RemoveBinding(AbsoluteLayout.LayoutFlagsProperty);
+                    chart._chartArea.Remove(chart._trackballView);
                     SetInheritedBindingContext(oldTrackball, null);
                 }
 
@@ -1875,7 +1878,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             if (sender is SfCartesianChart chart)
             {
-                chart.ChartArea.OnPaletteColorChanged();
+                chart._chartArea.OnPaletteColorChanged();
             }
         }
 
@@ -1917,9 +1920,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             if (annotation is ViewAnnotation viewAnnotation && viewAnnotation.View is View view && viewAnnotation.IsVisible)
             {
-                if (viewAnnotation.X1 != null || !double.IsNaN(viewAnnotation.Y1) && !AnnotationLayout.Children.Contains(view))
+                if (viewAnnotation.X1 != null || !double.IsNaN(viewAnnotation.Y1) && !_annotationLayout.Children.Contains(view))
                 {
-                    AnnotationLayout.Children.Add(view);
+                    _annotationLayout.Children.Add(view);
                 }
             }
         }
@@ -1927,11 +1930,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
         internal void ViewAnnotationDetachedToChart(ChartAnnotation annotation)
         {
             if (annotation is ViewAnnotation viewAnnotation && viewAnnotation.View is View view)
-                if (AnnotationLayout.Children.Contains(view))
+			{
+				if (_annotationLayout.Children.Contains(view))
                 {
-                    AnnotationLayout.Children.Remove(view);
+                    _annotationLayout.Children.Remove(view);
                 }
-        }
+			}
+		}
 
         void AnnotationCollection_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
@@ -1945,10 +1950,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void ScheduleUpdateChart()
         {
-            if (ChartArea != null)
+            if (_chartArea != null)
             {
-                ChartArea.NeedsRelayout = true;
-                ChartArea.ScheduleUpdateArea();
+                _chartArea.NeedsRelayout = true;
+                _chartArea.ScheduleUpdateArea();
             }
         }
 
@@ -1980,7 +1985,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void InvalidateAnnotation()
         {
-            AnnotationLayout.InvalidateDrawable();
+            _annotationLayout.InvalidateDrawable();
         }
 
         static void OnAnnotationBehindSeries(BindableObject bindable, object oldValue, object newValue)
@@ -1988,10 +1993,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
             if (bindable is SfCartesianChart chart)
             {
                 if ((bool)newValue)
-                    chart.AnnotationLayout.ZIndex = -1;
-                else
-                    chart.AnnotationLayout.ZIndex = 0;
-            }
+				{
+					chart._annotationLayout.ZIndex = -1;
+				}
+				else
+				{
+					chart._annotationLayout.ZIndex = 0;
+				}
+			}
         }
 
         #endregion

@@ -5,19 +5,19 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 	/// <summary>
 	/// Class contains property and fields for NavigationDrawer.
 	/// </summary>
-	public class MailInfo : INotifyPropertyChanged
+	public partial class MailInfo : INotifyPropertyChanged
 	{
 		#region Fields
 
-		string? profileName;
-		string? name;
-		string? subject;
-		string? description;
-		DateTime date;
-		string? image;
-		bool isAttached;
-		bool isOpened;
-		bool isImportant;
+		string? _profileName;
+		string? _name;
+		string? _subject;
+		string? _description;
+		DateTime _date;
+		string? _image;
+		bool _isAttached;
+		bool _isOpened;
+		bool _isImportant;
 
 		#endregion
 
@@ -30,11 +30,11 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			get
 			{
-				return name;
+				return _name;
 			}
 			set
 			{
-				name = value;
+				_name = value;
 				OnPropertyChanged("Name");
 			}
 		}
@@ -44,10 +44,10 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public string? ProfileName
 		{
-			get { return profileName; }
+			get { return _profileName; }
 			set
 			{
-				profileName = value;
+				_profileName = value;
 				OnPropertyChanged("ProfileName");
 			}
 		}
@@ -59,12 +59,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			get
 			{
-				return subject;
+				return _subject;
 			}
 
 			set
 			{
-				subject = value;
+				_subject = value;
 				OnPropertyChanged("Subject");
 			}
 		}
@@ -76,12 +76,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			get
 			{
-				return description;
+				return _description;
 			}
 
 			set
 			{
-				description = value;
+				_description = value;
 				OnPropertyChanged("Description");
 			}
 		}
@@ -93,12 +93,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			get
 			{
-				return date;
+				return _date;
 			}
 
 			set
 			{
-				date = value;
+				_date = value;
 				OnPropertyChanged("Date");
 			}
 		}
@@ -110,12 +110,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			get
 			{
-				return image;
+				return _image;
 			}
 
 			set
 			{
-				image = value;
+				_image = value;
 				OnPropertyChanged("Image");
 			}
 		}
@@ -125,10 +125,10 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public bool IsAttached
 		{
-			get { return isAttached; }
+			get { return _isAttached; }
 			set
 			{
-				isAttached = value;
+				_isAttached = value;
 				OnPropertyChanged("IsAttached");
 			}
 		}
@@ -138,10 +138,10 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public bool IsImportant
 		{
-			get { return isImportant; }
+			get { return _isImportant; }
 			set
 			{
-				isImportant = value;
+				_isImportant = value;
 				OnPropertyChanged("IsImportant");
 			}
 		}
@@ -151,10 +151,10 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// </summary>
 		public bool IsOpened
 		{
-			get { return isOpened; }
+			get { return _isOpened; }
 			set
 			{
-				isOpened = value;
+				_isOpened = value;
 				OnPropertyChanged("IsOpened");
 			}
 		}
@@ -174,8 +174,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		/// <param name="name">string type parameter represent propertyName as name</param>
 		public void OnPropertyChanged(string name)
 		{
-			if (PropertyChanged != null)
-				PropertyChanged(this, new PropertyChangedEventArgs(name));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
 		}
 
 		#endregion

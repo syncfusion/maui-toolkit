@@ -5,13 +5,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
     /// <summary>
     /// Represents the material design visual style for a <see cref="SfTabView"/> control.
     /// </summary>
-    internal class TabViewMaterialVisualStyle : SfGrid
+    internal partial class TabViewMaterialVisualStyle : SfGrid
     {
         #region Fields
 
         SfImage? _image;
         SfLabel? _header;
-        const double _tabHeaderImageSize = 24d;
         SfHorizontalStackLayout? _horizontalLayout;
         SfVerticalStackLayout? _verticalLayout;
 
@@ -201,8 +200,6 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 Aspect = Aspect.AspectFit,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Center,
-                WidthRequest = _tabHeaderImageSize,
-                HeightRequest = _tabHeaderImageSize,
             };
 
             _verticalLayout?.Children.Add(_image);
@@ -276,9 +273,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         void UpdateVerticalLayout()
         {
             if (_verticalLayout == null)
-                return;
+			{
+				return;
+			}
 
-            if (ImagePosition == TabImagePosition.Top)
+			if (ImagePosition == TabImagePosition.Top)
             {
                 _verticalLayout.Add(_image);
                 _verticalLayout.Add(_header);
@@ -297,9 +296,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
         void UpdateHorizontalLayout()
         {
             if (_horizontalLayout == null)
-                return;
+			{
+				return;
+			}
 
-            if (ImagePosition == TabImagePosition.Left)
+			if (ImagePosition == TabImagePosition.Left)
             {
                 _horizontalLayout.Add(_image);
                 _horizontalLayout.Add(_header);
@@ -325,7 +326,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
             this.SetBinding(TabViewMaterialVisualStyle.ImagePositionProperty, nameof(SfTabItem.ImagePosition), BindingMode.TwoWay);
             _horizontalLayout?.SetBinding(StackBase.SpacingProperty, nameof(SfTabItem.ImageTextSpacing));
             _verticalLayout?.SetBinding(StackBase.SpacingProperty, nameof(SfTabItem.ImageTextSpacing));
-        }
+			_image.SetBinding(SfImage.WidthRequestProperty, "ImageSize");
+			_image.SetBinding(SfImage.HeightRequestProperty, "ImageSize");
+		}
 
         void SetHeaderBinding()
         {
@@ -363,24 +366,21 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (_horizontalLayout != null && _image != null)
             {
-                var options = GetLayoutOptions(item.HeaderHorizontalTextAlignment);
+                var options = TabViewMaterialVisualStyle.GetLayoutOptions(item.HeaderHorizontalTextAlignment);
                 _horizontalLayout.HorizontalOptions = options;
                 _image.HorizontalOptions = options;
             }
         }
 
-        LayoutOptions GetLayoutOptions(TextAlignment alignment)
+		static LayoutOptions GetLayoutOptions(TextAlignment alignment)
         {
-            switch (alignment)
-            {
-                case TextAlignment.Center:
-                    return LayoutOptions.Center;
-                case TextAlignment.End:
-                    return LayoutOptions.End;
-                default:
-                    return LayoutOptions.Start;
-            }
-        }
+			return alignment switch
+			{
+				TextAlignment.Center => LayoutOptions.Center,
+				TextAlignment.End => LayoutOptions.End,
+				_ => LayoutOptions.Start,
+			};
+		}
 
         /// <summary>
         /// Updates the horizontal options of the header label based on the current <see cref="SfTabItem"/>.

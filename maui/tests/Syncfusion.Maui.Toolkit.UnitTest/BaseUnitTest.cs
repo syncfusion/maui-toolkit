@@ -22,12 +22,18 @@ namespace Syncfusion.Maui.Toolkit
 			{
 				field = type.GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 				if (field != null)
+				{
 					break;
+				}
+
 				type = type.BaseType; // Move to the base class
 			}
 
 			if (field == null)
+			{
 				throw new Exception($"Field {fieldName} not found");
+			}
+
 			field.SetValue(obj, value);
 		}
 
@@ -47,11 +53,17 @@ namespace Syncfusion.Maui.Toolkit
 			{
 				field = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 				if (field != null)
+				{
 					break;
+				}
+
 				type = type.BaseType; // Move to the base class
 			}
 			if (field == null)
+			{
 				throw new InvalidOperationException($"Field '{fieldName}' not found.");
+			}
+
 			return field.GetValue(obj);
 		}
 
@@ -74,12 +86,17 @@ namespace Syncfusion.Maui.Toolkit
 			{
 				method = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
 				if (method != null)
+				{
 					break; // Found the method, break out of the loop
+				}
 
 				type = type.BaseType; // Move to the base class
 			}
 			if (method == null)
+			{
 				throw new InvalidOperationException($"Method '{methodName}' not found.");
+			}
+
 			return method.Invoke(obj, parameters);
 		}
 
@@ -96,7 +113,9 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			var method = typeof(T).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance);
 			if (method == null)
+			{
 				throw new InvalidOperationException($"Method '{methodName}' not found.");
+			}
 
 			var result = method.Invoke(obj, parameters);
 			return result;
@@ -113,7 +132,10 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			var property = typeof(T).GetProperty(propertyName, BindingFlags.NonPublic | BindingFlags.Instance);
 			if (property == null)
+			{
 				throw new InvalidOperationException($"Property '{propertyName}' not found.");
+			}
+
 			return property.GetValue(obj);
 		}
 
@@ -128,7 +150,10 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			var property = obj.GetType().GetProperty(propertyName, BindingFlags.SetField | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 			if (property == null)
+			{
 				throw new Exception($"Property {propertyName} not found in {obj.GetType().Name}");
+			}
+
 			property.SetValue(obj, value);
 		}
 
@@ -145,7 +170,9 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			var method = typeof(T).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static);
 			if (method == null)
+			{
 				throw new InvalidOperationException($"Method '{methodName}' not found.");
+			}
 
 			return method.Invoke(obj, parameters)!;
 		}
@@ -164,7 +191,10 @@ namespace Syncfusion.Maui.Toolkit
 			var method = type.GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static);
 
 			if (method == null)
+			{
 				throw new InvalidOperationException($"Method '{methodName}' not found.");
+			}
+
 			return method.Invoke(null, parameters)!;
 		}
 

@@ -6,12 +6,12 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// <summary>
 	/// Base generic class for user-defined behaviors that can respond to conditions and events.
 	/// </summary>
-	public class ListViewPullToRefreshBehavior : Behavior<SampleView>
+	public partial class ListViewPullToRefreshBehavior : Behavior<SampleView>
 	{
-		Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh? pullToRefresh;
-		ListView? ListView;
-		ListViewInboxInfoViewModel? ViewModel;
-		Picker? transitionType;
+		Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh? _pullToRefresh;
+		ListView? _listView;
+		ListViewInboxInfoViewModel? _viewModel;
+		Picker? _transitionType;
 
 		/// <summary>
 		/// You can override this method to subscribe to AssociatedObject events and initialize properties.
@@ -19,15 +19,15 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="bindable">SampleView type parameter named as bindable.</param>
 		protected override void OnAttachedTo(SampleView bindable)
 		{
-			this.ViewModel = new ListViewInboxInfoViewModel();
-			bindable.BindingContext = ViewModel;
-			this.pullToRefresh = bindable.FindByName<Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh>("pullToRefresh");
-			this.ListView = bindable.FindByName<ListView>("listView");
-			this.transitionType = bindable.FindByName<Picker>("comboBox");
-			this.transitionType.SelectedIndexChanged += this.OnSelectionChanged;
-			this.pullToRefresh.Refreshing += this.PullToRefresh_Refreshing;
-			this.pullToRefresh.Refreshed += PullToRefresh_Refreshed;
-			this.ListView.Loaded += ListView_Loaded;
+			_viewModel = new ListViewInboxInfoViewModel();
+			bindable.BindingContext = _viewModel;
+			_pullToRefresh = bindable.FindByName<Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh>("pullToRefresh");
+			_listView = bindable.FindByName<ListView>("listView");
+			_transitionType = bindable.FindByName<Picker>("comboBox");
+			_transitionType.SelectedIndexChanged += OnSelectionChanged;
+			_pullToRefresh.Refreshing += PullToRefresh_Refreshing;
+			_pullToRefresh.Refreshed += PullToRefresh_Refreshed;
+			_listView.Loaded += ListView_Loaded;
 			base.OnAttachedTo(bindable);
 		}
 
@@ -39,14 +39,14 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		private void ListView_Loaded(object? sender, EventArgs e)
 		{
 #if WINDOWS
-        if (this.ListView != null && this.ListView.Handler != null)
-        {
-            var platformView = this.ListView.Handler.PlatformView as Microsoft.UI.Xaml.Controls.ListView;
-            if (platformView != null)
-            {
-                platformView.ItemContainerTransitions = null;
-            }
-        }
+			if (_listView != null && _listView.Handler != null)
+			{
+				var platformView = _listView.Handler.PlatformView as Microsoft.UI.Xaml.Controls.ListView;
+				if (platformView != null)
+				{
+					platformView.ItemContainerTransitions = null;
+				}
+			}
 #endif
 		}
 
@@ -58,10 +58,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		private void PullToRefresh_Refreshed(object? sender, EventArgs e)
 		{
 #if ANDROID
-			if (this.ListView != null && this.ListView.Handler != null)
+			if (_listView != null && _listView.Handler != null)
 			{
-				var platformView = this.ListView.Handler.PlatformView as Android.Views.View;
-				platformView?.InvalidateMeasure(this.ListView as IView);
+				var platformView = _listView.Handler.PlatformView as Android.Views.View;
+				platformView?.InvalidateMeasure(_listView as IView);
 			}
 #endif
 		}
@@ -73,12 +73,12 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="e">PullToRefresh_Refreshing event args</param>
 		private async void PullToRefresh_Refreshing(object? sender, EventArgs e)
 		{
-			if (this.pullToRefresh != null && this.ViewModel != null)
+			if (_pullToRefresh != null && _viewModel != null)
 			{
-				this.pullToRefresh.IsRefreshing = true;
+				_pullToRefresh.IsRefreshing = true;
 				await Task.Delay(2500);
-				this.ViewModel.AddItemsRefresh(3);
-				this.pullToRefresh.IsRefreshing = false;
+				_viewModel.AddItemsRefresh(3);
+				_pullToRefresh.IsRefreshing = false;
 			}
 		}
 
@@ -89,9 +89,9 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="e">EventArgs args e</param>
 		private void OnSelectionChanged(object? sender, EventArgs e)
 		{
-			if (this.pullToRefresh != null && this.transitionType != null)
+			if (_pullToRefresh != null && _transitionType != null)
 			{
-				this.pullToRefresh.TransitionMode = this.transitionType.SelectedIndex == 0 ? PullToRefreshTransitionType.SlideOnTop : PullToRefreshTransitionType.Push;
+				_pullToRefresh.TransitionMode = _transitionType.SelectedIndex == 0 ? PullToRefreshTransitionType.SlideOnTop : PullToRefreshTransitionType.Push;
 			}
 		}
 
@@ -101,16 +101,16 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="bindable">SampleView type parameter named as bindable</param>
 		protected override void OnDetachingFrom(SampleView bindable)
 		{
-			if (this.pullToRefresh != null && this.transitionType != null && this.ListView != null)
+			if (_pullToRefresh != null && _transitionType != null && _listView != null)
 			{
-				this.pullToRefresh.Refreshing -= PullToRefresh_Refreshing;
-				this.pullToRefresh.Refreshed -= PullToRefresh_Refreshed;
-				this.transitionType.SelectedIndexChanged -= this.OnSelectionChanged;
-				this.ListView.Loaded -= ListView_Loaded;
-				this.pullToRefresh = null;
-				this.ListView = null;
-				this.ViewModel = null;
-				this.transitionType = null;
+				_pullToRefresh.Refreshing -= PullToRefresh_Refreshing;
+				_pullToRefresh.Refreshed -= PullToRefresh_Refreshed;
+				_transitionType.SelectedIndexChanged -= OnSelectionChanged;
+				_listView.Loaded -= ListView_Loaded;
+				_pullToRefresh = null;
+				_listView = null;
+				_viewModel = null;
+				_transitionType = null;
 				base.OnDetachingFrom(bindable);
 			}
 		}
@@ -132,19 +132,19 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			{
 				return GroupName.Yesterday;
 			}
-			else if (IsLastWeek(groupName))
+			else if (ListViewPullToRefreshBehavior.IsLastWeek(groupName))
 			{
 				return GroupName.LastWeek;
 			}
-			else if (IsThisWeek(groupName))
+			else if (ListViewPullToRefreshBehavior.IsThisWeek(groupName))
 			{
 				return GroupName.ThisWeek;
 			}
-			else if (IsThisMonth(groupName))
+			else if (ListViewPullToRefreshBehavior.IsThisMonth(groupName))
 			{
 				return GroupName.ThisMonth;
 			}
-			else if (IsLastMonth(groupName))
+			else if (ListViewPullToRefreshBehavior.IsLastMonth(groupName))
 			{
 				return GroupName.LastMonth;
 			}
@@ -159,7 +159,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns true if the mentioned date is in this week.</returns>
-		private bool IsThisWeek(DateTime groupName)
+		private static bool IsThisWeek(DateTime groupName)
 		{
 			var groupWeekSunDay = groupName.AddDays(-(int)groupName.DayOfWeek).Day;
 			var currentSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek).Day;
@@ -177,7 +177,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns true if the mentioned date is in last week.</returns>
-		private bool IsLastWeek(DateTime groupName)
+		private static bool IsLastWeek(DateTime groupName)
 		{
 			var groupWeekSunDay = groupName.AddDays(-(int)groupName.DayOfWeek).Day;
 			var lastSunday = DateTime.Today.AddDays(-(int)DateTime.Today.DayOfWeek).Day - 7;
@@ -195,7 +195,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns true if the mentioned date is in this month.</returns>
-		private bool IsThisMonth(DateTime groupName)
+		private static bool IsThisMonth(DateTime groupName)
 		{
 			var groupMonth = groupName.Month;
 			var currentMonth = DateTime.Today.Month;
@@ -210,7 +210,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		/// <param name="groupName">Date of an item.</param>
 		/// <returns>Returns true if the mentioned date is in last month.</returns>
-		private bool IsLastMonth(DateTime groupName)
+		private static bool IsLastMonth(DateTime groupName)
 		{
 			var groupMonth = groupName.Month;
 			var currentMonth = DateTime.Today.AddMonths(-1).Month;

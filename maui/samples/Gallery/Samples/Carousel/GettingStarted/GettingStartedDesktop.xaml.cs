@@ -18,8 +18,7 @@ namespace Syncfusion.Maui.ControlsGallery.Carousel.Carousel
 		{
 			if (sender is Syncfusion.Maui.Toolkit.Carousel.SfCarousel sfCarousel)
 			{
-				var selectedItem = sfCarousel.ItemsSource.ElementAt(sfCarousel.SelectedIndex) as CarouselModel;
-				if (selectedItem != null)
+				if (sfCarousel.ItemsSource.ElementAt(sfCarousel.SelectedIndex) is CarouselModel selectedItem)
 				{
 					countryDescriptionLabel.Text = selectedItem.Description;
 					countryNameLabel.Text = selectedItem.Name;

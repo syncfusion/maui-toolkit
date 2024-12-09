@@ -4,7 +4,7 @@
 	/// Provides extension methods for views.
 	/// </summary>
 	public static partial class ViewExtensions
-    {
+	{
 		/// <summary>
 		/// <para> To convert a view to a stream in a specific file format, the <b> GetStreamAsync </b> method is used. Currently, the supported file formats are <b> JPEG or PNG </b>. </para>
 		/// <para> To get the stream for the view in <b> PNG </b> file format, use <b> await view.GetStreamAsync(ImageFileFormat.Png); </b> </para>
@@ -15,10 +15,10 @@
 		/// <param name="format">The image format to use for the stream.</param>
 		/// <returns>A task that represents the asynchronous operation, containing the stream of the view's content.</returns>
 		public async static Task<Stream> GetStreamAsync(this View view, ImageFileFormat format)
-        {
-            await Task.Delay(1000);
-            return Stream.Null;
-        }
+		{
+			await Task.Delay(1000);
+			return Stream.Null;
+		}
 
 		/// <summary>
 		/// <para> To save a view as an image in the desired file format, the <b> SaveAsImage </b> is used.Currently, the supported image formats are <b> JPEG or PNG </b>. </para>
@@ -38,8 +38,8 @@
 		/// <param name="view">The view to save as an image.</param>
 		/// <param name="fileName">The name of the file to save the image as.</param>
 		public async static void SaveAsImage(this View view, string fileName)
-        {
-            await Task.Delay(1000);
-        }
-    }
+		{
+			await Task.Delay(1000);
+		}
+	}
 }
