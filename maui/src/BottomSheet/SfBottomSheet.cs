@@ -2,7 +2,6 @@
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
 using Syncfusion.Maui.Toolkit.Helper;
-using Syncfusion.Maui.ToolKit.BottomSheet;
 
 namespace Syncfusion.Maui.Toolkit.BottomSheet
 {
