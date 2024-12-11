@@ -1,6 +1,6 @@
 using Microsoft.Maui.Controls;
 
-namespace Syncfusion.Maui.ToolKit.BottomSheet;
+namespace Syncfusion.Maui.Toolkit.BottomSheet;
 
 /// <summary>
 /// SfBottomSheetStyle provides a set of predefined styles for SfBottomSheet control.
