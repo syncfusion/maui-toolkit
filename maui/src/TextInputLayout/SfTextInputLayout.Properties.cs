@@ -2144,13 +2144,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				if (inputLayout.Content is InputView || inputLayout.Content is Picker)
 				{
-					inputLayout.Content.Opacity = value ? 1 : 0;
+					inputLayout.Content.Opacity = value ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
 				}
 				else if (inputLayout != null && inputLayout.Content is SfView numericEntry && numericEntry.Children.Count > 0)
 				{
 					if (numericEntry.Children[0] is Entry numericInputView)
 					{
-						numericInputView.Opacity = value ? 1 : 0;
+						numericInputView.Opacity = value ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
 					}
 				}
 			}
