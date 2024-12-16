@@ -520,6 +520,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			}
 			if (sender is Entry entry)
 			{
+				//Explicitly reset ReturnType to handle native restrictions.
 				ApplyNativeProperties(entry);
 			}
 #endif

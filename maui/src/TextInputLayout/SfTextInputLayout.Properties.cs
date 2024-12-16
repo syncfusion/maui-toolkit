@@ -2142,6 +2142,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			if (bindable is SfTextInputLayout inputLayout && newValue is bool value)
 			{
+				//Adjusted Opacity from 0 to 0.00001 to ensure the content remains functionally active while enabling the ReturnType property.
 				if (inputLayout.Content is InputView || inputLayout.Content is Picker)
 				{
 					inputLayout.Content.Opacity = value ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);

@@ -665,6 +665,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             }
 
             //For placeholder overlap issue here handled the opacity value for controls.
+            //Adjusted Opacity from 0 to 0.00001 to ensure the content remains functionally active while enabling the ReturnType property.
             if (newValue is InputView entryEditorContent)
             {
 				entryEditorContent.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
