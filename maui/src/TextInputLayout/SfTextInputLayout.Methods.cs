@@ -489,6 +489,27 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			}
 		}
 
+#if ANDROID
+
+		private void ApplyNativeProperties(Entry entry)
+		{
+			if (entry.Handler?.PlatformView is AndroidX.AppCompat.Widget.AppCompatEditText androidEntry)
+			{
+				androidEntry.ImeOptions = entry.ReturnType switch
+				{
+					ReturnType.Default => Android.Views.InputMethods.ImeAction.Unspecified,
+					ReturnType.Next => Android.Views.InputMethods.ImeAction.Next,
+					ReturnType.Done => Android.Views.InputMethods.ImeAction.Done,
+					ReturnType.Go => Android.Views.InputMethods.ImeAction.Go,
+					ReturnType.Search => Android.Views.InputMethods.ImeAction.Search,
+					ReturnType.Send => Android.Views.InputMethods.ImeAction.Send,
+					_ => Android.Views.InputMethods.ImeAction.Unspecified
+				};
+			}
+		}
+
+#endif
+
 		void SetupAndroidView(object? sender)
 		{
 #if ANDROID
@@ -496,6 +517,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				androidView.SetBackgroundColor(Android.Graphics.Color.Transparent);
 				androidView.SetPadding(0, 0, 0, 0);
+			}
+			if (sender is Entry entry)
+			{
+				//Explicitly reset ReturnType to handle native restrictions.
+				ApplyNativeProperties(entry);
 			}
 #endif
 		}
