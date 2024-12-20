@@ -1,6 +1,8 @@
 ﻿using Syncfusion.Maui.Toolkit.EntryRenderer;
 using Syncfusion.Maui.Toolkit.EntryView;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.NumericUpDown;
+using Syncfusion.Maui.Toolkit.NumericEntry;
 using Syncfusion.Maui.Toolkit.Themes;
 using Path = Microsoft.Maui.Controls.Shapes.Path;
 
@@ -238,6 +240,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 		#region Private Methods
 
+		/// <summary>
+		/// Updates the translation animation by modifying the Y-coordinate of the hint text rectangle.
+		/// Also updates the font size and triggers a redraw of the drawable.
+		/// </summary>
+		/// <param name="value">The new Y-coordinate value for the hint text rectangle.</param>
 		void OnTranslateAnimationUpdate(double value)
 		{
 			_isAnimating = true;
@@ -764,17 +771,32 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		}
 
 		/// <summary>
+		/// Initializes or reinitializes the cancellation token source for long press operations.
+		/// </summary>
+		void InitializeTokenSource()
+		{
+			// Cancel any ongoing operation
+			_cancellationTokenSource?.Cancel();
+			_cancellationTokenSource = new CancellationTokenSource();
+		}
+
+		/// <summary>
+		/// Stops the long press timer and cancels any ongoing long press operation.
+		///</summary>
+		void StopLongPressTimer()
+		{
+			_isPressOccurring = false;
+			// Cancel any ongoing operation
+			_cancellationTokenSource?.Cancel();
+		}
+
+		/// <summary>
 		/// Recursively call the increment and decrement value
 		/// </summary>
 		/// <param name="touchpoint">The touchpoint</param>
 		/// <returns></returns>
 		async Task RecursivePressedAsync(Point touchpoint)
 		{
-			if (!_isPressOccurring)
-			{
-				return;
-			}
-
 			if (this.Content is ITextInputLayout numericEntry)
 			{
 				if ((_downIconRectF.Contains(touchpoint) && IsUpDownVerticalAlignment) || (_upIconRectF.Contains(touchpoint) && !IsUpDownVerticalAlignment))
@@ -786,18 +808,53 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					numericEntry.DownButtonPressed();
 				}
 			}
-			// Wait for the specified delay
-			await Task.Delay(200);
 
-			// Call the method recursively
-			await RecursivePressedAsync(touchpoint);
+			InitializeTokenSource();
+			// Wait for the long press duration without throwing TaskCanceledException
+			// If the delay was completed and not cancelled
+			if (await IsLongPressActivate(ContinueDelay))
+			{
+				await RecursivePressedAsync(touchpoint);
+			}
 		}
 
+		/// <summary>
+		/// Determines if a long press has been activated based on a specified delay.
+		/// </summary>
+		/// <param name="delay">The duration in milliseconds to wait before considering the press as a long press.</param>
+		/// <returns>True if the long press is activated, false otherwise.</returns>
+		private async Task<bool> IsLongPressActivate(int delay)
+		{
+			if (_cancellationTokenSource == null)
+			{
+				return false;
+			}
+
+			try
+			{
+				var delayTask = Task.Delay(delay, _cancellationTokenSource.Token);
+				var completedTask = await Task.WhenAny(delayTask, Task.Delay(Timeout.Infinite));
+				return delayTask == completedTask && _isPressOccurring;
+			}
+			catch (Exception)
+			{
+				// The task was canceled, which means the press was released before the delay completed
+				return false;
+			}
+		}
+
+		/// <summary>
+		/// Start the long press timer.
+		///</summary>
 		async void StartPressTimer(Point touchpoint)
 		{
 			_isPressOccurring = true;
-			await Task.Delay(200);
-			await RecursivePressedAsync(touchpoint);
+			InitializeTokenSource();
+
+			if (await IsLongPressActivate(StartDelay))
+			{
+				await RecursivePressedAsync(touchpoint);
+			}
 		}
 
 		void WireEvents()
@@ -904,12 +961,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				_viewBounds.Width = (int)(Width - _leadViewWidth - _trailViewWidth);
 				_viewBounds.Height = (int)Height;
 
-				if (EnablePasswordVisibilityToggle)
+				if (EnablePasswordVisibilityToggle && !ShowUpDownButton)
 				{
 					_viewBounds.Width -= (float)(EnablePasswordVisibilityToggle ? ((IconSize * 2) - RightPadding + DefaultAssistiveLabelPadding + 7) : (IconSize - RightPadding + DefaultAssistiveLabelPadding) + 3);
 				}
 
-				if (IsClearIconVisible)
+				if (IsClearIconVisible && ShowUpDownButton)
 				{
 					_viewBounds.Width -= (float)(IconSize - RightPadding + DefaultAssistiveLabelPadding) + 3;
 				}
@@ -1109,24 +1166,44 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 				if (IsPassowordToggleIconVisible)
 				{
-					_effectsRenderer.RippleBoundsCollection.Add(_passwordToggleIconRectF);
-					_effectsRenderer.HighlightBoundsCollection.Add(_passwordToggleIconRectF);
+					UpdateEffectsBounds(_passwordToggleIconRectF);
 				}
 
 				if (ShowUpDownButton)
 				{
-					_effectsRenderer.RippleBoundsCollection.Add(_downIconRectF);
-					_effectsRenderer.HighlightBoundsCollection.Add(_downIconRectF);
-					_effectsRenderer.RippleBoundsCollection.Add(_upIconRectF);
-					_effectsRenderer.HighlightBoundsCollection.Add(_upIconRectF);
+					if (Content is SfNumericUpDown numericUpDown )
+					{
+						if (numericUpDown._valueStates != ValueStates.Minimum)
+						{
+							UpdateEffectsBounds(_isUpDownVerticalAlignment ? _upIconRectF : _downIconRectF);
+						}
+
+						if (numericUpDown._valueStates != ValueStates.Maximum)
+						{
+							UpdateEffectsBounds(_isUpDownVerticalAlignment ? _downIconRectF : _upIconRectF);
+						}
+					}
 				}
 
 				if (IsClearIconVisible && (IsLayoutFocused))
 				{
-					_effectsRenderer.RippleBoundsCollection.Add(_clearIconRectF);
-					_effectsRenderer.HighlightBoundsCollection.Add(_clearIconRectF);
+					UpdateEffectsBounds(_clearIconRectF);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Updates the bounds of effects (such as shadows or highlights) according to the specified rectangle area.
+		/// </summary>
+		/// <param name="bounds">The bounding rectangle defining the area within which effects should be applied.</param>
+		internal void UpdateEffectsBounds(RectF bounds)
+		{
+			if (_effectsRenderer is null)
+			{
+				return;
+			}
+			_effectsRenderer.RippleBoundsCollection.Add(bounds);
+			_effectsRenderer.HighlightBoundsCollection.Add(bounds);
 		}
 
 		/// <summary>

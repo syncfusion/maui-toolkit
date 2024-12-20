@@ -172,6 +172,72 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// Another separator string for UI layout.
 		/// </summary>
 		string? _anotherSeparator;
+
+		/// <summary>
+		/// Height of the toolbar in points.
+		/// </summary>
+		const float ToolbarHeight = 50.0f;
+
+		/// <summary>
+		/// Thickness of separator lines in points.
+		/// </summary>
+		const float LineThickness = 0.5f;
+
+		/// <summary>
+		/// Width threshold for small screens in points.
+		/// </summary>
+		const float SmallScreenWidth = 320.0f;
+
+		/// <summary>
+		/// Width threshold for medium screens in points.
+		/// </summary>
+		const float LargeScreenWidth = 667.0f;
+
+		/// <summary>
+		/// Divisor used to calculate button width.
+		/// </summary>
+		const int ButtonDivider = 3;
+
+		/// <summary>
+		/// Button spacing for small landscape screens.
+		/// </summary>
+		const float SmallLandscapeButtonSpacing = 2.5f;
+
+		/// <summary>
+		/// Separator spacing for small landscape screens.
+		/// </summary>
+		const float SmallLandscapeSeparatorSpacing = 5.0f;
+
+		/// <summary>
+		/// Button spacing for large landscape screens.
+		/// </summary>
+		const float LargeLandscapeButtonSpacing = 3.1f;
+
+		/// <summary>
+		/// Separator spacing for large landscape screens.
+		/// </summary>
+		const float LargeLandscapeSeparatorSpacing = 6.1f;
+
+		/// <summary>
+		/// Button spacing for medium portrait screens.
+		/// </summary>
+		const float MediumPortraitButtonSpacing = 2.0f;
+
+		/// <summary>
+		/// Separator spacing for medium portrait screens.
+		/// </summary>
+		const float MediumPortraitSeparatorSpacing = 4.0f;
+
+		/// <summary>
+		/// Button spacing for small portrait screens.
+		/// </summary>
+		const float SmallPortraitButtonSpacing = 1.5f;
+
+		/// <summary>
+		/// Separator spacing for small portrait screens.
+		/// </summary>
+		const float SmallPortraitSeparatorSpacing = 3.0f;
+
 #endif
 #elif WINDOWS
         /// <summary>
@@ -403,7 +469,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		{
             // Ensure any necessary size updates are performed
 			UpdateSemanticsSizes();
-			if (SemanticsDataIsCurrent())
+			if (SemanticsDataIsCurrent() && IsTextInputLayout)
 			{
 				return _numericEntrySemanticsNodes;
 			}
@@ -849,11 +915,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         /// Determines whether the current device orientation is portrait or not.
         /// </summary>
         /// <returns>True if the orientation is portrait or face up/down; otherwise, false.</returns>
-        static bool IsPortraitOrientation()
+        static bool IsLandscapeOrientation()
         {
-            return 	UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.Portrait || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.PortraitUpsideDown ||
-                UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceUp || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceDown;
-        }
+			return UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.PortraitUpsideDown || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeLeft || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeRight;
+
+		}
 
         /// <summary>
         /// Configures the frames for minus, separator, and return buttons based on the screen width and provided adjustments.
@@ -878,56 +944,54 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			}
         }
 
-        /// <summary>
-        /// Updates the frames and layout of toolbar buttons, adjusting based on screen orientation and size.
-        /// Ensures the components maintain appropriate spacing and sizing for touch interactions.
-        /// </summary>
-        void UpdateFrames()
+		/// <summary>
+		/// Updates the frames and layout of toolbar buttons, adjusting based on screen orientation and size.
+		/// Ensures the components maintain appropriate spacing and sizing for touch interactions.
+		/// </summary>
+		void UpdateFrames()
         {
-            if (UIDevice.CurrentDevice.Orientation != UIDeviceOrientation.Unknown)
-            {
-				if (_toolbarView == null || _minusButton == null || _separatorButton == null || _returnButton == null
-					|| _lineView1 == null || _lineView2 == null || _lineView3 == null || _lineView4 == null)
-				{
-					return;
-				}
 
-                nfloat width = UIScreen.MainScreen.Bounds.Width;
-                _buttonWidth = width / 3;
-                _toolbarView.Frame = new CGRect(0.0f, 0.0f, (float)width, 50.0f);
-                if (IsPortraitOrientation())
-                {
-                    if (width <= 375 && width > 320)
-                    {
-                        SetButtonFrames(2, 4);
-                    }
-                    else if (width <= 320)
-                    {
-                        SetButtonFrames((nfloat)1.5, 3);
-                        
-                    }
-                    else if (width > 375)
-                    {
-                        SetButtonFrames(2, 4);
-                    }
-                }
-                else if (UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeLeft || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.LandscapeRight)
-                {
-                    if (width <= 667)
-                    {
-                        SetButtonFrames((nfloat)2.5, 5);
-                    }
-                    else if (width > 667)
-                    {
-                        SetButtonFrames((nfloat)3.1, (nfloat)6.1);
-                    }
-                }
-                _lineView1.Frame = new CGRect(0, 0, _toolbarView.Frame.Size.Width, 0.5f);
-                _lineView2.Frame = new CGRect(0, _toolbarView.Frame.Size.Height - 0.5f, _toolbarView.Frame.Size.Width, 0.5f);
-                _lineView3.Frame = new CGRect(_minusButton.Frame.Right - 0.5f, 0, 0.5, _minusButton.Frame.Size.Height);
-                _lineView4.Frame = new CGRect(_returnButton.Frame.Left, 0, 0.5, _minusButton.Frame.Size.Height);
-            }
-        }
+			if (_toolbarView == null || _minusButton == null || _separatorButton == null || _returnButton == null
+					|| _lineView1 == null || _lineView2 == null || _lineView3 == null || _lineView4 == null)
+			{
+				return;
+			}
+
+
+			if (IsLandscapeOrientation())
+			{
+				nfloat width = (nfloat)Math.Max((double)UIScreen.MainScreen.Bounds.Height, (double)UIScreen.MainScreen.Bounds.Width);
+				_buttonWidth = width / ButtonDivider;
+				_toolbarView.Frame = new CGRect(0.0f, 0.0f, (float)width, ToolbarHeight);
+				if (width <= LargeScreenWidth)
+				{
+					SetButtonFrames(SmallLandscapeButtonSpacing, SmallLandscapeSeparatorSpacing);
+				}
+				else if (width > LargeScreenWidth)
+				{
+					SetButtonFrames(LargeLandscapeButtonSpacing, LargeLandscapeSeparatorSpacing);
+				}
+			}
+			else
+			{
+				nfloat width = (nfloat)Math.Min((double)UIScreen.MainScreen.Bounds.Height, (double)UIScreen.MainScreen.Bounds.Width);
+				_buttonWidth = width / ButtonDivider;
+				_toolbarView.Frame = new CGRect(0.0f, 0.0f, (float)width, ToolbarHeight);
+				if (width > SmallScreenWidth)
+				{
+					SetButtonFrames(MediumPortraitButtonSpacing, MediumPortraitSeparatorSpacing);
+				}
+				else if (width <= SmallScreenWidth)
+				{
+					SetButtonFrames(SmallPortraitButtonSpacing, SmallPortraitSeparatorSpacing);
+
+				}
+			}
+			_lineView1.Frame = new CGRect(0, 0, _toolbarView.Frame.Size.Width, LineThickness);
+			_lineView2.Frame = new CGRect(0, _toolbarView.Frame.Size.Height - LineThickness, _toolbarView.Frame.Size.Width, LineThickness);
+			_lineView3.Frame = new CGRect(_minusButton.Frame.Right - LineThickness, 0, LineThickness, _minusButton.Frame.Size.Height);
+			_lineView4.Frame = new CGRect(_returnButton.Frame.Left, 0, LineThickness, _minusButton.Frame.Size.Height);
+		}
 #endif
 		#endregion
 	}
