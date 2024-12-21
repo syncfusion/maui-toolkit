@@ -2393,6 +2393,9 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// <param name="caretPosition">The position of the caret where input should be inserted.</param>
 		void InsertNumbers(string displayText, string selectedText, string input, int caretPosition)
 		{
+#if WINDOWS
+            displayText ??= "";
+#endif
 			displayText = displayText.Remove(caretPosition, Math.Min(selectedText.Length, displayText.Length - caretPosition));
 			string negativeSign = GetNegativeSign(GetNumberFormat());
 			bool isNegative = IsNegative(displayText, GetNumberFormat());
