@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Provides event data for the <see cref="SfNumericEntry.ValueChanged"/> event.
 	/// </summary>
-	public class NumericEntryValueChangedEventArgs
+	public class NumericEntryValueChangedEventArgs : EventArgs
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NumericEntryValueChangedEventArgs"/> class.

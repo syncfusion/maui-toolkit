@@ -344,6 +344,13 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				_textBox.SetBinding(SfEntryView.IsVisibleProperty, "IsVisible");
 				_textBox.SetBinding(SfEntryView.CursorPositionProperty, "CursorPosition", BindingMode.TwoWay);
 				_textBox.SetBinding(SfEntryView.SelectionLengthProperty, "SelectionLength", BindingMode.TwoWay);
+
+#if WINDOWS
+				if(_textBox.Text != null)
+				{
+					_textBox.CursorPosition = _textBox.Text.Length;
+				}
+#endif
 			}
 		}
 
@@ -2360,6 +2367,13 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			}
 
 			_textBox.Text = displayText;
+			if (ValueChangeMode == ValueChangeMode.OnKeyFocus && _textBox.Text != null && _textBox.Text != displayText)
+			{
+				if (Parse(_textBox.Text) == Maximum)
+				{
+					caretPosition = _textBox.Text.Length;
+				}
+			}
 			if (_textBox.Text != null)
 			{
 				_textBox.CursorPosition = caretPosition >= 0 ? (caretPosition <= _textBox.Text.Length) ? caretPosition : _textBox.Text.Length : 0;
@@ -2379,6 +2393,9 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// <param name="caretPosition">The position of the caret where input should be inserted.</param>
 		void InsertNumbers(string displayText, string selectedText, string input, int caretPosition)
 		{
+#if WINDOWS
+            displayText ??= "";
+#endif
 			displayText = displayText.Remove(caretPosition, Math.Min(selectedText.Length, displayText.Length - caretPosition));
 			string negativeSign = GetNegativeSign(GetNumberFormat());
 			bool isNegative = IsNegative(displayText, GetNumberFormat());
@@ -2541,7 +2558,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 					}
 				}
 
+#if WINDOWS
+				if ((resetCursor || _isFirst) && _textBox.Text != null)
+#else
 				if (resetCursor && _textBox.Text != null)
+#endif
 				{
 					_textBox.CursorPosition = _textBox.Text.Length;
 				}

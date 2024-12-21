@@ -37,10 +37,20 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		bool _isPressOccurring = false;
 
-        /// <summary>
-        /// Gets or sets a value updown button alignment is vertical or not.
-        /// </summary>
-        bool _isUpDownVerticalAlignment = false;
+		/// <summary>
+		/// The initial delay in milliseconds before activating a long press.
+		/// </summary>
+		const int StartDelay = 500;
+
+		/// <summary>
+		/// The interval in milliseconds between repeated actions during a continuous long press.
+		/// </summary>
+		const int ContinueDelay = 200;
+
+		/// <summary>
+		/// Gets or sets a value updown button alignment is vertical or not.
+		/// </summary>
+		bool _isUpDownVerticalAlignment = false;
 
         /// <summary>
         /// Gets the padding value of the helper text, error text, counter text.
@@ -171,6 +181,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// Gets or sets a value of trailing view width.
         /// </summary>
         double _trailViewWidth = 0;
+
+        /// <summary>
+        /// Provides a cancellation token source for managing long press operations.
+        /// This allows for cancellation of ongoing long press tasks when needed.
+        /// </summary>
+        CancellationTokenSource? _cancellationTokenSource;
 
         /// <summary>
         /// Gets or sets the left and right padding value for password visibility toggle icon.
@@ -405,8 +421,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         {
             if (e.Action == PointerActions.Cancelled || e.Action == PointerActions.Exited)
             {
-                _isPressOccurring = false;
                 IsLayoutTapped = false;
+				if (ShowUpDownButton)
+				{
+					StopLongPressTimer();
+				}
             }
 #if WINDOWS
             IsIconPressed = false;
@@ -448,6 +467,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 #if WINDOWS
                     IsIconPressed = true;
 #endif
+					StopLongPressTimer();
                     return;
                 }
 

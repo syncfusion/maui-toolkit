@@ -636,7 +636,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// Gets or sets a value that indicates whether to show the up down button.
 		/// </summary>
 		/// <value><c>false</c> if disable up down button; otherwise, <c>true</c>.</value>
-		/// <remarks>This property supports for SfNumericEntry control only.</remarks>
+		/// <remarks>This property supports for SfNumericUpDown control only.</remarks>
 		internal static readonly BindableProperty ShowUpDownButtonProperty =
 			BindableProperty.Create(
 				nameof(ShowUpDownButton),
@@ -650,7 +650,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// Gets or sets a value that indicates whether to show the clear button.
 		/// </summary>
 		/// <value><c>false</c> if disable clear button; otherwise, <c>true</c>.</value>
-		/// <remarks>This property supports for SfComboBox only.</remarks>
+		/// <remarks>This property supports for SfNumericEntry only.</remarks>
 		internal static readonly BindableProperty ShowClearButtonProperty =
 			BindableProperty.Create(
 				nameof(ShowClearButton),
@@ -1525,6 +1525,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// <summary>
 		/// Gets or sets the color of the clear button.
 		/// </summary>
+		/// <remarks>This property supports for SfNumericEntry only.</remarks>
 		internal Color ClearButtonColor
 		{
 			get => (Color)GetValue(ClearButtonColorProperty);
@@ -1684,6 +1685,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// Gets or sets the color of the up button.
 		/// </summary>
 		/// <value>Specifies the value for up button. The default value is Colors.Black.</value>
+		/// <remarks>This property supports for SfNumericUpDown only.</remarks>
 		internal Color UpButtonColor
 		{
 			get => (Color)this.GetValue(UpButtonColorProperty);
@@ -1694,6 +1696,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// Gets or sets the color of the down button.
 		/// </summary>
 		/// <value>Specifies the value for down button. The default value is Colors.Black.</value>
+		/// <remarks>This property supports for SfNumericUpDown only.</remarks>
 		internal Color DownButtonColor
 		{
 			get => (Color)this.GetValue(DownButtonColorProperty);
