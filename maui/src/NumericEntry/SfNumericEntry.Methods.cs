@@ -707,12 +707,12 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
             string decimalSeparator = GetNumberDecimalSeparator(GetNumberFormat());
             if (entry != null && (entry.Text == "-" || entry.Text == decimalSeparator))
             {
-                if (!IsSamsungDevice() && _textBox != null)
+                if (!_isSamsungWithSamsungKeyboard && _textBox != null)
                 {
                     _textBox.Text = AllowNull ? string.Empty : "0";
                 }
             }
-            if (IsSamsungDevice() && _textBox != null && _textBox.Text.Length > 1)
+            if (_isSamsungWithSamsungKeyboard && _textBox != null && _textBox.Text.Length > 1)
             {
                 if (_textBox.Text[0] == decimalSeparator[0] && _textBox.Text.LastIndexOf(decimalSeparator) == 0)
                 {
@@ -732,13 +732,21 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         }
 
 		/// <summary>
-		/// Validate the device is Samsung.
+		/// Validate the device is Samsung and which keyboard is used.
 		/// </summary>
-		/// <returns>It returns <c>True</c> if the device is Samsung</returns>
-        bool IsSamsungDevice()
-        {
-            return string.Equals(global::Android.OS.Build.Manufacturer, "samsung", StringComparison.OrdinalIgnoreCase);
-        }
+		void CheckDeviceAndKeyboard()
+		{
+			if (string.Equals(global::Android.OS.Build.Manufacturer, "samsung", StringComparison.OrdinalIgnoreCase))
+			{
+				var context = Android.App.Application.Context;
+				string currentKeyboard = KeyboardChecker.GetCurrentKeyboard(context);
+				_isSamsungWithSamsungKeyboard = currentKeyboard == "Samsung Keyboard";
+			}
+			else
+			{
+				_isSamsungWithSamsungKeyboard = false;
+			}
+		}
 
 #endif
 
@@ -1597,6 +1605,9 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			{
 				SetFlowDirection();
 			}
+
+#elif ANDROID
+			CheckDeviceAndKeyboard();
 #endif
 
 		}
@@ -1879,7 +1890,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 
 		#if ANDROID
 			// Prefix zero if needed, except on Samsung devices
-			if (!IsSamsungDevice())
+			if (!_isSamsungWithSamsungKeyboard)
 			{
 				PrefixZeroIfNeeded(ref displayText, IsNegative(displayText, GetNumberFormat()), GetNumberFormat());
 			}
@@ -1992,7 +2003,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				return;
 			}
 #if ANDROID
-            if (!IsSamsungDevice())
+            if (!_isSamsungWithSamsungKeyboard)
             {
                 _cursorPosition = decimalIndex + 1;
             }
@@ -2081,7 +2092,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 #endif
 				}
 #if ANDROID
-                else if (displayText.StartsWith('.') && IsSamsungDevice())
+                else if (displayText.StartsWith('.') && _isSamsungWithSamsungKeyboard)
                 {
                     string decimalSeparator = GetNumberDecimalSeparator(GetNumberFormat());
                     displayText = string.Concat("", displayText.AsSpan(1));

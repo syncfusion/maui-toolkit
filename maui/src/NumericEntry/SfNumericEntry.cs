@@ -8,6 +8,10 @@ using Syncfusion.Maui.Toolkit.TextInputLayout;
 using Syncfusion.Maui.Toolkit.EntryView;
 #if ANDROID
 using Android.Text;
+using Android.Provider;
+using Android.Content;
+using Android.Views.InputMethods;
+using System.Linq;
 #elif MACCATALYST || IOS
 using UIKit;
 using Foundation;
@@ -266,6 +270,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         /// </summary>
         readonly CornerRadius _initialCornderRadius = 5;
 #elif ANDROID
+        /// <summary>
+        /// Indicates whether the samsung device use samsung keyboard or any other.
+        /// </summary>
+        bool _isSamsungWithSamsungKeyboard;
+
         /// <summary>
         /// Holds the length of text currently selected by the user.
         /// </summary>
@@ -541,7 +550,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         protected void OnLostFocus()
         {
 #if ANDROID
-            if (IsSamsungDevice() && _textBox != null)
+            if (_isSamsungWithSamsungKeyboard && _textBox != null)
             {
                 // Ensure _textBox.Text isn't just a decimal separator or a minus sign
                 if (_textBox.Text == GetNumberDecimalSeparator(GetNumberFormat()) || _textBox.Text == "-")
@@ -995,4 +1004,71 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 #endif
 		#endregion
 	}
+
+#if ANDROID
+
+	/// <summary>
+	/// A utility class for checking the current keyboard in use on an Android device.
+	/// </summary>
+	internal static class KeyboardChecker
+	{
+
+		/// <summary>
+		/// A constant representing the package name for the Google Keyboard application.
+		/// </summary>
+		const string GboardPackage = "com.google.android.inputmethod.latin";
+
+
+		// Update the known package names for Samsung Keyboard and Gboard
+		static readonly string[] SamsungKeyboardPackages = ["com.samsung.android.keyboard", "com.sec.android.inputmethod", "com.samsung.android.honeyboard"];
+
+		/// <summary>
+		/// Gets the name of the current keyboard being used on the Android device.
+		/// </summary>
+		/// <param name="context">The context of the application, used to access system services.</param>
+		/// <returns>A string representing the name of the keyboard: "Samsung Keyboard", "Gboard", "Other Keyboard", or "Unknown Keyboard".</returns>
+		public static string GetCurrentKeyboard(Context context)
+		{
+			if (context.GetSystemService(Context.InputMethodService) is InputMethodManager inputMethodManager && inputMethodManager != null)
+			{
+				var defaultInputMethodId = Settings.Secure.GetString(
+					context.ContentResolver,
+					Settings.Secure.DefaultInputMethod
+				);
+
+				if (string.IsNullOrEmpty(defaultInputMethodId))
+				{
+					return "Unknown Keyboard";
+				}
+
+				var inputMethodList = inputMethodManager.InputMethodList;
+				foreach (var inputMethod in inputMethodList)
+				{
+					if (inputMethod?.Id != null && inputMethod.Id.Equals(defaultInputMethodId, StringComparison.Ordinal))
+					{
+						var packageName = inputMethod.PackageName;
+						if (!string.IsNullOrEmpty(packageName))
+						{
+							if (SamsungKeyboardPackages.Contains(packageName))
+							{
+								return "Samsung Keyboard";
+							}
+							else if (packageName.Equals(GboardPackage, StringComparison.OrdinalIgnoreCase))
+							{
+								return "Gboard";
+							}
+							else
+							{
+								return "Other Keyboard";
+							}
+						}
+					}
+				}
+			}
+
+			return "Unknown Keyboard";
+		}
+	}
+#endif
+
 }
