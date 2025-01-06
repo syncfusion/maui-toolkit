@@ -338,7 +338,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			typeof(bool),
 			typeof(SfBottomSheet),
 			false,
-			BindingMode.Default,
+			BindingMode.TwoWay,
 			propertyChanged: OnIsOpenPropertyChanged);
 
 		// Appearance (continued)

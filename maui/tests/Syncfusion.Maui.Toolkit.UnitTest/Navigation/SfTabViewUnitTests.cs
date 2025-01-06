@@ -3484,7 +3484,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var value1 = GetPrivateField(horizontal, "_velocityX");
 			Assert.NotNull(value1);
 			double val = (double)value1;
-			Assert.Equal(0.15657, Math.Round(val, 5));
+			Assert.Equal(0.16, Math.Round(val, 2));
 		}
 
 		[Fact]

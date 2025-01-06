@@ -240,7 +240,9 @@ Contributions are welcome! If you'd like to contribute, please check out our [co
 
 See the [Development Guide](./.github/DEVELOPMENT.md) for more details about this repository and project structure.
 
-You can see the full list of contributors [here](https://github.com/syncfusion/maui-toolkit/graphs/contributors)
+<a href="https://github.com/syncfusion/maui-toolkit/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=syncfusion/maui-toolkit" />
+</a>
 
 ## About Syncfusion®
 Founded in 2001 and headquartered in Research Triangle Park, N.C., Syncfusion® has more than 29,000 customers and more than 1 million users, including large financial institutions, Fortune 500 companies, and global IT consultancies.
