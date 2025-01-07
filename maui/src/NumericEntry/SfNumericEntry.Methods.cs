@@ -344,6 +344,13 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				_textBox.SetBinding(SfEntryView.IsVisibleProperty, "IsVisible");
 				_textBox.SetBinding(SfEntryView.CursorPositionProperty, "CursorPosition", BindingMode.TwoWay);
 				_textBox.SetBinding(SfEntryView.SelectionLengthProperty, "SelectionLength", BindingMode.TwoWay);
+
+#if WINDOWS
+				if(_textBox.Text != null)
+				{
+					_textBox.CursorPosition = _textBox.Text.Length;
+				}
+#endif
 			}
 		}
 
@@ -700,12 +707,12 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
             string decimalSeparator = GetNumberDecimalSeparator(GetNumberFormat());
             if (entry != null && (entry.Text == "-" || entry.Text == decimalSeparator))
             {
-                if (!IsSamsungDevice() && _textBox != null)
+                if (!_isSamsungWithSamsungKeyboard && _textBox != null)
                 {
                     _textBox.Text = AllowNull ? string.Empty : "0";
                 }
             }
-            if (IsSamsungDevice() && _textBox != null && _textBox.Text.Length > 1)
+            if (_isSamsungWithSamsungKeyboard && _textBox != null && _textBox.Text.Length > 1)
             {
                 if (_textBox.Text[0] == decimalSeparator[0] && _textBox.Text.LastIndexOf(decimalSeparator) == 0)
                 {
@@ -725,13 +732,21 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         }
 
 		/// <summary>
-		/// Validate the device is Samsung.
+		/// Validate the device is Samsung and which keyboard is used.
 		/// </summary>
-		/// <returns>It returns <c>True</c> if the device is Samsung</returns>
-        bool IsSamsungDevice()
-        {
-            return string.Equals(global::Android.OS.Build.Manufacturer, "samsung", StringComparison.OrdinalIgnoreCase);
-        }
+		void CheckDeviceAndKeyboard()
+		{
+			if (string.Equals(global::Android.OS.Build.Manufacturer, "samsung", StringComparison.OrdinalIgnoreCase))
+			{
+				var context = Android.App.Application.Context;
+				string currentKeyboard = KeyboardChecker.GetCurrentKeyboard(context);
+				_isSamsungWithSamsungKeyboard = currentKeyboard == "Samsung Keyboard";
+			}
+			else
+			{
+				_isSamsungWithSamsungKeyboard = false;
+			}
+		}
 
 #endif
 
@@ -1590,6 +1605,9 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			{
 				SetFlowDirection();
 			}
+
+#elif ANDROID
+			CheckDeviceAndKeyboard();
 #endif
 
 		}
@@ -1872,7 +1890,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 
 		#if ANDROID
 			// Prefix zero if needed, except on Samsung devices
-			if (!IsSamsungDevice())
+			if (!_isSamsungWithSamsungKeyboard)
 			{
 				PrefixZeroIfNeeded(ref displayText, IsNegative(displayText, GetNumberFormat()), GetNumberFormat());
 			}
@@ -1985,7 +2003,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				return;
 			}
 #if ANDROID
-            if (!IsSamsungDevice())
+            if (!_isSamsungWithSamsungKeyboard)
             {
                 _cursorPosition = decimalIndex + 1;
             }
@@ -2074,7 +2092,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 #endif
 				}
 #if ANDROID
-                else if (displayText.StartsWith('.') && IsSamsungDevice())
+                else if (displayText.StartsWith('.') && _isSamsungWithSamsungKeyboard)
                 {
                     string decimalSeparator = GetNumberDecimalSeparator(GetNumberFormat());
                     displayText = string.Concat("", displayText.AsSpan(1));
@@ -2360,6 +2378,13 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			}
 
 			_textBox.Text = displayText;
+			if (ValueChangeMode == ValueChangeMode.OnKeyFocus && _textBox.Text != null && _textBox.Text != displayText)
+			{
+				if (Parse(_textBox.Text) == Maximum)
+				{
+					caretPosition = _textBox.Text.Length;
+				}
+			}
 			if (_textBox.Text != null)
 			{
 				_textBox.CursorPosition = caretPosition >= 0 ? (caretPosition <= _textBox.Text.Length) ? caretPosition : _textBox.Text.Length : 0;
@@ -2379,6 +2404,9 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// <param name="caretPosition">The position of the caret where input should be inserted.</param>
 		void InsertNumbers(string displayText, string selectedText, string input, int caretPosition)
 		{
+#if WINDOWS
+            displayText ??= "";
+#endif
 			displayText = displayText.Remove(caretPosition, Math.Min(selectedText.Length, displayText.Length - caretPosition));
 			string negativeSign = GetNegativeSign(GetNumberFormat());
 			bool isNegative = IsNegative(displayText, GetNumberFormat());
@@ -2541,7 +2569,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 					}
 				}
 
+#if WINDOWS
+				if ((resetCursor || _isFirst) && _textBox.Text != null)
+#else
 				if (resetCursor && _textBox.Text != null)
+#endif
 				{
 					_textBox.CursorPosition = _textBox.Text.Length;
 				}

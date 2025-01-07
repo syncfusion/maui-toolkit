@@ -82,6 +82,16 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		const int ButtonPadding = 2;
 
 		/// <summary>
+		/// The initial delay in milliseconds before activating a long press.
+		/// </summary>
+		const int StartDelay = 500;
+
+		/// <summary>
+		/// The interval in milliseconds between repeated actions during a continuous long press.
+		/// </summary>
+		const int ContinueDelay = 200;
+
+		/// <summary>
 		/// Holds the view for the up button, used to increase the value.
 		/// </summary>
 		View? _upButtonView;
@@ -121,6 +131,12 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// </summary>
 		float _tempUpDownX;
 
+		/// <summary>
+		/// Provides a cancellation token source for managing long press operations.
+		/// This allows for cancellation of ongoing long press tasks when needed.
+		/// </summary>
+		CancellationTokenSource? _cancellationTokenSource;
+
 		#endregion
 
 		#region Bindiable Properties
@@ -137,7 +153,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				false,
 				BindingMode.Default,
 				null,
-				null);
+				propertyChanged:OnAutoReversePropertyChanged);
 
 		/// <summary>
 		/// Identifies <see cref="UpDownPlacementMode"/> dependency property.
@@ -536,6 +552,17 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		#region Property Changed
 
 		/// <summary>
+		/// Occurs when Autoreverse property is changed.
+		/// </summary>
+		static void OnAutoReversePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfNumericUpDown numericUpDown)
+			{
+				numericUpDown.UpdateButtonColor(numericUpDown.Value);
+			}
+		}
+
+		/// <summary>
 		/// Occurs when spin button placement property is changed.
 		/// </summary>
 		static void OnSpinButtonPlacementChanged(BindableObject bindable, object oldValue, object newValue)
@@ -831,11 +858,11 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		{
 			if (value == Minimum)
 			{
-				ChangeButtonColors(UpDownButtonDisableColor, UpDownButtonColor, ValueStates.Minimum);
+				ChangeButtonColors(AutoReverse ? UpDownButtonColor : UpDownButtonDisableColor, UpDownButtonColor, ValueStates.Minimum);
 			}
 			else if (value == Maximum)
 			{
-				ChangeButtonColors(UpDownButtonColor, UpDownButtonDisableColor, ValueStates.Maximum);
+				ChangeButtonColors(UpDownButtonColor, AutoReverse ? UpDownButtonColor : UpDownButtonDisableColor, ValueStates.Maximum);
 			}
 			else
 			{
@@ -1035,6 +1062,8 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		{
 			base.OnParentChanged();
 			OnNumericEntryParentChanged();
+			_numericUpDownSemanticsNodes.Clear();
+			InvalidateSemantics();
 		}
 
 		/// <summary>
@@ -1054,13 +1083,14 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <param name="bounds">The rectangular bounds of the element.</param>
 		/// <param name="id">The ID of the semantics node.</param>
 		/// <param name="description">The text description for the node, used for accessibility.</param>
-		void AddSemanticsNode(RectF bounds, int id, string description)
+		/// <param name="state">The state to identify the updown button is enabled or disabled.</param>
+		void AddSemanticsNode(RectF bounds, int id, string description, bool state=true)
 		{
 			SemanticsNode node = new SemanticsNode
 			{
 				Id = id,
 				Bounds = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height),
-				Text = $"{description} double tap to activate"
+				Text = state ? $"{description}, double tap to activate" : $"{description}, disabled"
 			};
 			_numericUpDownSemanticsNodes.Add(node);
 		}
@@ -1076,25 +1106,44 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		{
 			UpdateSemanticsSizes();
 
-			if (SemanticsDataIsCurrent())
+			if (SemanticsDataIsCurrent() || IsTextInputLayout)
 			{
 				return _numericUpDownSemanticsNodes;
 			}
+			var upbuttonstate = !(_valueStates == ValueStates.Maximum) || AutoReverse;
+			var downbuttonstate = !(_valueStates == ValueStates.Minimum) || AutoReverse;
+			var upButtonRectF = IsInlinePlacement() ? _downButtonRectF : _upButtonRectF;
+			var downButtonRectF = IsInlinePlacement() ? _upButtonRectF : _downButtonRectF;
+			if ((IsInlineVerticalPlacement() && !(UpDownButtonAlignment == UpDownButtonAlignment.Left)) || (!IsInlineVerticalPlacement() && UpDownButtonAlignment == UpDownButtonAlignment.Right))
+			{
+				if (_isClearButtonVisible)
+				{
+					AddSemanticsNode(_clearButtonRectF, 1, "Clear button");
+				}
 
-			if (_isClearButtonVisible && !IsTextInputLayout)
-			{
-				AddSemanticsNode(_clearButtonRectF, 1, "Clear button");
+				AddSemanticsNode(upButtonRectF, 2, "Up button", upbuttonstate);
+				AddSemanticsNode(downButtonRectF, 3, "Down button", downbuttonstate);
 			}
+			else if (UpDownButtonAlignment == UpDownButtonAlignment.Left)
+			{
+				AddSemanticsNode(upButtonRectF, 1, "Up button", upbuttonstate);
+				AddSemanticsNode(downButtonRectF, 2, "Down button", downbuttonstate);
 
-			if (IsInlineVerticalPlacement() && !IsTextInputLayout)
-			{
-				AddSemanticsNode(_upButtonRectF, 2, "Up button");
-				AddSemanticsNode(_downButtonRectF, 3, "Down button");
+				if (_isClearButtonVisible)
+				{
+					AddSemanticsNode(_clearButtonRectF, 3, "Clear button");
+				}
 			}
-			if (IsInlinePlacement() && !IsTextInputLayout)
+			else
 			{
-				AddSemanticsNode(_downButtonRectF, 2, "Up button");
-				AddSemanticsNode(_upButtonRectF, 3, "Down button");
+				AddSemanticsNode(upButtonRectF, 1, "Up button", upbuttonstate);
+
+				if (_isClearButtonVisible)
+				{
+					AddSemanticsNode(_clearButtonRectF, 2, "Clear button");
+				}
+
+				AddSemanticsNode(downButtonRectF, 3, "Down button", downbuttonstate);
 			}
 
 			return _numericUpDownSemanticsNodes;
@@ -1250,13 +1299,53 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		}
 
 		/// <summary>
+		/// Initializes or reinitializes the cancellation token source for long press operations.
+		/// </summary>
+		void InitializeTokenSource()
+		{
+			// Cancel any ongoing operation
+			_cancellationTokenSource?.Cancel();
+			_cancellationTokenSource = new CancellationTokenSource();
+		}
+
+		/// <summary>
 		/// Start the long press timer
 		/// </summary>
 		async void StartPressTimer()
 		{
+			InitializeTokenSource();
+
 			_isPressOccurring = true;
-			await Task.Delay(500);
-			await SfNumericUpDown.RecursivePressedAsync(this);
+			// If the delay was completed and not cancelled
+			if (await IsLongPressActivate(StartDelay))
+			{
+				await RecursivePressedAsync(this);
+			}
+		}
+
+		/// <summary>
+		/// Determines if a long press has been activated based on a specified delay.
+		/// </summary>
+		/// <param name="delay">The duration in milliseconds to wait before considering the press as a long press.</param>
+		/// <returns>True if the long press is activated, false otherwise.</returns>
+		private async Task<bool> IsLongPressActivate(int delay)
+		{
+			if (_cancellationTokenSource == null)
+			{
+				return false;
+			}
+
+			try
+			{
+				var delayTask = Task.Delay(delay, _cancellationTokenSource.Token);
+				var completedTask = await Task.WhenAny(delayTask, Task.Delay(Timeout.Infinite));
+				return delayTask == completedTask && _isPressOccurring;
+			}
+			catch (Exception)
+			{
+				// The task was canceled, which means the press was released before the delay completed
+				return false;
+			}
 		}
 
 		/// <summary>
@@ -1265,19 +1354,17 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <param name="numericUpdown">The numericupdown instance</param>
 		/// <returns></returns>
 		static async Task RecursivePressedAsync(SfNumericUpDown numericUpdown)
-    	{
-        	if (!numericUpdown._isPressOccurring)
-        	{
-            	return;
-        	}
-
+		{
 			numericUpdown.HandleUpDownPressed();
-        	// Wait for the specified delay
-        	await Task.Delay(200);
+			numericUpdown.InitializeTokenSource();
 
-        	// Call the method recursively
-        	await SfNumericUpDown.RecursivePressedAsync(numericUpdown);
-    	}
+			// Wait for the long press duration without throwing TaskCanceledException
+			// If the delay was completed and not cancelled
+			if (await numericUpdown.IsLongPressActivate(ContinueDelay))
+			{
+				await SfNumericUpDown.RecursivePressedAsync(numericUpdown);
+			}
+		}
 
 		/// <summary>
 		/// Method that handles the logic when the clear button is tapped.
@@ -1318,6 +1405,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		private void StopPressTimer()
 		{
 			_isPressOccurring = false;
+			_cancellationTokenSource?.Cancel();
 		}
 
 		/// <summary>
@@ -1363,10 +1451,9 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		{
 			if (_textBox is not null && CanIncrease())
 			{
+				AnnounceButtonPress("Up button pressed");
 				Increase();
 			}
-
-			AnnounceButtonPress("Up button pressed");
 		}
 
 		/// <summary>
@@ -1481,9 +1568,9 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		{
 			if (_textBox != null && CanDecrease())
 			{
+				AnnounceButtonPress("Down button pressed");
 				Decrease();
 			}
-			AnnounceButtonPress("Down button pressed");
 		}
 
 		/// <summary>
