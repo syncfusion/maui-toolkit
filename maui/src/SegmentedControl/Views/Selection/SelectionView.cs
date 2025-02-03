@@ -298,6 +298,17 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			base.OnDraw(canvas, dirtyRect);
 		}
 
+#if WINDOWS
+		protected override void OnHandlerChanged()
+		{
+			base.OnHandlerChanged();
+			if (this.Handler != null && this.Handler.PlatformView != null && this.Handler.PlatformView is Microsoft.UI.Xaml.UIElement platformView)
+			{
+				platformView.IsTabStop = false;
+			}
+		}
+#endif
+
 		#endregion
 	}
 }

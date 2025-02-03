@@ -199,6 +199,21 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			canvas.CanvasRestoreState();
 		}
 
-		#endregion
+#if WINDOWS
+		/// <summary>
+		/// Raises when <see cref="KeyNavigationView"/>'s handler gets changed.
+		/// <exclude/>
+		/// </summary>
+		protected override void OnHandlerChanged()
+		{
+			base.OnHandlerChanged();
+			if (this.Handler != null && this.Handler.PlatformView != null && this.Handler.PlatformView is Microsoft.UI.Xaml.UIElement platformView)
+			{
+				platformView.IsTabStop = false;
+			}
+		}
+#endif
+
+#endregion
 	}
 }
