@@ -1067,6 +1067,21 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			return base.ArrangeContent(bounds);
 		}
 
+#if WINDOWS
+		/// <summary>
+		/// Raises when <see cref="SfSegmentedControl"/>'s handler gets changed.
+		/// <exclude/>
+		/// </summary>
+		protected override void OnHandlerChanged()
+		{
+			base.OnHandlerChanged();
+			if (this.Handler != null && this.Handler.PlatformView != null && this.Handler.PlatformView is Microsoft.UI.Xaml.UIElement nativeView)
+			{
+				nativeView.IsTabStop = true;
+			}
+		}
+#endif
+
 		/// <summary>
 		/// Invokes on the binding context of the view changed.
 		/// </summary>
@@ -1173,6 +1188,16 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		{
 			_keyNavigationView?.ClearFocusedView();
 		}
+
+#if WINDOWS
+		void ISegmentItemInfo.SetFocusVisualState(bool state)
+		{
+			if (this.Handler != null && this.Handler.PlatformView != null && this.Handler.PlatformView is Microsoft.UI.Xaml.UIElement nativeView)
+			{
+				nativeView.UseSystemFocusVisuals = state;
+			}
+		}
+#endif
 
 		/// <summary>
 		/// Updates the scroll view position to focused index for the segment item.

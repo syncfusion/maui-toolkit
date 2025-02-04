@@ -196,6 +196,24 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				_focusedIndex = -1;
 			}
 
+#if WINDOWS
+			if (e.Key == KeyboardKey.Left || e.Key == KeyboardKey.Right)
+			{
+				_itemInfo?.SetFocusVisualState(false);
+			}
+#endif
+
+			if (e.Key == KeyboardKey.Tab || (e.Key == KeyboardKey.Tab && e.IsShiftKeyPressed) || e.Key == KeyboardKey.Down || e.Key == KeyboardKey.Up)
+			{
+				e.Handled = false;
+				_focusedIndex = -1;
+				_itemInfo?.ClearFocusedView();
+#if WINDOWS
+				_itemInfo?.SetFocusVisualState(true);
+#endif
+				return;
+			}
+
 			e.Handled = true;
 		}
 
