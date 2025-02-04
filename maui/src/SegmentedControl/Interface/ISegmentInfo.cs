@@ -134,7 +134,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// <summary>
 		/// Update the keyboard focused view for the segmentedControl.
 		/// </summary>
-		void UpdateFocusState(bool state);
+		void SetFocusVisualState(bool state);
 #endif
 
 		/// <summary>

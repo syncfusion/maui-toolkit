@@ -199,7 +199,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 #if WINDOWS
 			if (e.Key == KeyboardKey.Left || e.Key == KeyboardKey.Right)
 			{
-				_itemInfo?.UpdateFocusState(false);
+				_itemInfo?.SetFocusVisualState(false);
 			}
 #endif
 
@@ -209,7 +209,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				_focusedIndex = -1;
 				_itemInfo?.ClearFocusedView();
 #if WINDOWS
-				_itemInfo?.UpdateFocusState(true);
+				_itemInfo?.SetFocusVisualState(true);
 #endif
 				return;
 			}

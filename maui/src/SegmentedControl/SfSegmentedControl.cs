@@ -1190,7 +1190,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		}
 
 #if WINDOWS
-		void ISegmentItemInfo.UpdateFocusState(bool state)
+		void ISegmentItemInfo.SetFocusVisualState(bool state)
 		{
 			if (this.Handler != null && this.Handler.PlatformView != null && this.Handler.PlatformView is Microsoft.UI.Xaml.UIElement nativeView)
 			{
