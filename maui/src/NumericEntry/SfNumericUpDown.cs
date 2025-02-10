@@ -1251,7 +1251,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <returns>
 		/// <c>true</c> if the placement mode is InlineVertical; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsInlineVerticalPlacement()
+		internal bool IsInlineVerticalPlacement()
 		{
 			return UpDownPlacementMode == NumericUpDownPlacementMode.InlineVertical;
 		}

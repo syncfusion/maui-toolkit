@@ -1981,6 +1981,16 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			get { return (EnablePasswordVisibilityToggle && Content is Entry); }
 		}
+
+		/// <summary>
+		/// Gets a value indicating whether the SemanticProperties.Description is not set by user.
+		/// </summary>
+		internal bool IsDescriptionNotSetByUser
+		{
+			get { return _isDescriptionNotSetByUser; }
+			set { _isDescriptionNotSetByUser = value; }
+		}
+
 		#endregion
 
 		#region Property Changed Methods
