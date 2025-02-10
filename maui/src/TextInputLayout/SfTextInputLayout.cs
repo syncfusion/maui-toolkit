@@ -231,7 +231,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		bool _isDescriptionNotSetByUser;
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the layout has been tapped.
+		/// </summary>
 		internal bool IsLayoutTapped { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating the hint was animating from down to up.
         /// </summary>
