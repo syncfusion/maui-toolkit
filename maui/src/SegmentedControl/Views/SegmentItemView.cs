@@ -9,7 +9,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 	/// <summary>
 	/// Represents a view used to display an individual segment item within a segmented control.
 	/// </summary>
-	internal partial class SegmentItemView : SfContentView, ITouchListener, ITapGestureListener
+	internal partial class SegmentItemView : SfContentView, ITouchListener, ITapGestureListener, IKeyboardListener
 	{
 		#region Fields
 
@@ -70,10 +70,15 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			InitializeEffectsView();
 			this.AddTouchListener(this);
 			this.AddGestureListener(this);
+#if WINDOWS
+			this.AddKeyboardListener(this);
+#endif
 			if (itemInfo?.SegmentTemplate != null)
 			{
 				CreateSegmentItemTemplateView();
 			}
+
+			UpdateSemantics();
 		}
 
 		#endregion
@@ -107,6 +112,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			_isSelected = true;
 			_selectionView?.UpdateVisualState(true);
 			InvalidateDrawable();
+			UpdateSemantics();
 		}
 
 		/// <summary>
@@ -123,6 +129,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			_isSelected = false;
 			_selectionView.UpdateVisualState(_isSelected, false);
 			InvalidateDrawable();
+			UpdateSemantics();
 		}
 
 		/// <summary>
@@ -420,6 +427,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 #endif
 			};
 
+#if WINDOWS
+			AutomationProperties.SetIsInAccessibleTree(_imageView, false);
+#endif
 			Children.Add(_imageView);
 		}
 
@@ -435,6 +445,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			}
 
 			_selectionView = new SelectionView(_segmentItem, itemInfo);
+#if WINDOWS
+			AutomationProperties.SetIsInAccessibleTree(_selectionView, false);
+#endif
 			Children.Add(_selectionView);
 		}
 
@@ -453,6 +466,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			_effectsView.ShouldIgnoreTouches = true;
 			_effectsView.AnimationCompleted += OnEffectsViewAnimationCompleted;
 			_effectsView.ClipToBounds = true;
+#if WINDOWS
+			AutomationProperties.SetIsInAccessibleTree(_effectsView, false);
+#endif
 			Children.Add(_effectsView);
 		}
 
@@ -595,6 +611,28 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			}
 
 			_effectsView.Reset();
+		}
+
+		/// <summary>
+		/// Method to update the semantic properties.
+		/// </summary>
+		void UpdateSemantics()
+		{
+			if (_segmentItem != null)
+			{
+				if (!string.IsNullOrEmpty(SemanticProperties.GetDescription(_segmentItem)))
+				{
+					SemanticProperties.SetDescription(this, SemanticProperties.GetDescription(_segmentItem));
+				}
+				else if (!_segmentItem.IsEnabled || (itemInfo != null && !itemInfo.IsEnabled))
+				{
+					SemanticProperties.SetDescription(this, _segmentItem.Text + SfSegmentedResources.GetLocalizedString("Disabled"));
+				}
+				else
+				{
+					SemanticProperties.SetDescription(this, _isSelected ? _segmentItem.Text + SfSegmentedResources.GetLocalizedString("Selected") : _segmentItem.Text);
+				}
+			}
 		}
 
 		/// <summary>
@@ -746,7 +784,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				semanticsNode.OnClick = OnSemanticsNodeClick;
 			}
 			string text = _segmentItem.Text;
-			if (!_segmentItem.IsEnabled || (itemInfo != null && !itemInfo.IsEnabled))
+			if (!string.IsNullOrEmpty(SemanticProperties.GetDescription(_segmentItem)))
+			{
+				semanticsNode.Text = SemanticProperties.GetDescription(_segmentItem);
+			}
+			else if (!_segmentItem.IsEnabled || (itemInfo != null && !itemInfo.IsEnabled))
 			{
 				semanticsNode.Text = text + SfSegmentedResources.GetLocalizedString("Disabled");
 			}
@@ -757,6 +799,21 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 
 			return [semanticsNode];
 		}
+
+#if WINDOWS
+		/// <summary>
+		/// Raises when <see cref="SegmentItemView"/>'s handler gets changed.
+		/// <exclude/>
+		/// </summary>
+		protected override void OnHandlerChanged()
+		{
+			base.OnHandlerChanged();
+			if (this.Handler != null && this.Handler.PlatformView != null && this.Handler.PlatformView is Microsoft.UI.Xaml.UIElement nativeView)
+			{
+				nativeView.IsTabStop = true;
+			}
+		}
+#endif
 
 		/// <summary>
 		/// Measures the size of the view's content based on the specified constraints.
@@ -873,6 +930,30 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			// Remove the effects when touch is released on Android and iOS platforms, while on other platforms, it handles mouse hovering effects on touch enter and exit.
 			RemoveEffects();
 #endif
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether the view can become the first responder to listen the keyboard actions.
+		/// </summary>
+		/// <remarks>This property will be considered only in iOS Platform.</remarks>
+		bool IKeyboardListener.CanBecomeFirstResponder
+		{
+			get { return true; }
+		}
+
+		/// <inheritdoc/>
+		void IKeyboardListener.OnKeyDown(KeyEventArgs e)
+		{
+			if (e.Key == KeyboardKey.Enter)
+			{
+				UpdateSelectedIndex();
+			}
+		}
+
+		/// <inheritdoc/>
+		void IKeyboardListener.OnKeyUp(KeyEventArgs args)
+		{
+
 		}
 
 		#endregion
