@@ -6,11 +6,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 	/// <summary>
 	/// Represents a layout for arranging and displaying a collection of segment items.
 	/// </summary>
-#if WINDOWS
-	internal partial class SegmentLayout : SfView, IKeyboardListener
-#else
 	internal class SegmentLayout : SfView
-#endif
 	{
 		#region Fields
 
@@ -50,9 +46,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			_itemInfo = itemInfo;
 			DrawingOrder = DrawingOrder.AboveContent;
 			InitializeSegmentItemsView();
-#if WINDOWS
-			this.AddKeyboardListener(this);
-#endif
 		}
 
 		#endregion
@@ -196,21 +189,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				_focusedIndex = -1;
 			}
 
-#if WINDOWS
-			if (e.Key == KeyboardKey.Left || e.Key == KeyboardKey.Right)
-			{
-				_itemInfo?.SetFocusVisualState(false);
-			}
-#endif
-
 			if (e.Key == KeyboardKey.Tab || (e.Key == KeyboardKey.Tab && e.IsShiftKeyPressed) || e.Key == KeyboardKey.Down || e.Key == KeyboardKey.Up)
 			{
 				e.Handled = false;
 				_focusedIndex = -1;
 				_itemInfo?.ClearFocusedView();
-#if WINDOWS
-				_itemInfo?.SetFocusVisualState(true);
-#endif
 				return;
 			}
 
@@ -848,31 +831,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			return bounds.Size;
 		}
 
-		#endregion
-
-		#region Interface implementation
-#if WINDOWS
-		/// <summary>
-		/// Gets a value indicating whether the view can become the first responder to listen the keyboard actions.
-		/// </summary>
-		/// <remarks>This property will be considered only in iOS Platform.</remarks>
-		bool IKeyboardListener.CanBecomeFirstResponder
-		{
-			get { return true; }
-		}
-
-		/// <inheritdoc/>
-		void IKeyboardListener.OnKeyDown(KeyEventArgs e)
-		{
-			ProcessOnKeyDown(e);
-		}
-
-		/// <inheritdoc/>
-		void IKeyboardListener.OnKeyUp(KeyEventArgs e)
-		{
-
-		}
-#endif
 		#endregion
 	}
 }
