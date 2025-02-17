@@ -130,13 +130,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// </summary>
 		void ClearFocusedView();
 
-#if WINDOWS
-		/// <summary>
-		/// Update the keyboard focused view for the segmentedControl.
-		/// </summary>
-		void SetFocusVisualState(bool state);
-#endif
-
 		/// <summary>
 		/// Updates the scroll view position to focused index for the segment item.
 		/// </summary>
