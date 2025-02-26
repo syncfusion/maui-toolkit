@@ -875,7 +875,10 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		{
 			if (e.Action == PointerActions.Pressed)
 			{
-				_effectsView?.ApplyEffects();
+				if (itemInfo?.SegmentTemplate is null)
+				{
+                    _effectsView?.ApplyEffects();
+                }				
 			}
 #if __MACCATALYST__ || WINDOWS
 			else if (e.Action == PointerActions.Entered && e.PointerDeviceType == PointerDeviceType.Mouse)
