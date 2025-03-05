@@ -1,4 +1,6 @@
-﻿namespace Syncfusion.Maui.Toolkit.Charts
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Syncfusion.Maui.Toolkit.Charts
 {
 	public partial class NumericalAxis : RangeAxisBase
 	{
@@ -110,6 +112,7 @@
 		#endregion
 
 		#region Internal Methods
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
 		internal override void GenerateVisibleLabels()
 		{
 			var actualLabels = VisibleLabels;

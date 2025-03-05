@@ -1238,11 +1238,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					var labels = new[]
 					{
-					   new { LabelText = maximumFormat, ValueText = texts[0] },
-					   new { LabelText = Q3Format, ValueText = texts[1] },
-					   new { LabelText = medianFormat, ValueText = texts[2] },
-					   new { LabelText = Q1Format, ValueText = texts[3] },
-					   new { LabelText = minimumFormat, ValueText = texts[4] }
+						new TooltipLabelValue(maximumFormat, texts[0]),
+						new TooltipLabelValue(Q3Format, texts[1]),
+						new TooltipLabelValue(medianFormat, texts[2]),
+						new TooltipLabelValue(Q1Format, texts[3]),
+						new TooltipLabelValue(minimumFormat, texts[4])
 					};
 
 					BindableLayout.SetItemsSource(stackLayout, labels);
@@ -1275,8 +1275,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							FontSize = info.FontSize,
 						});
 
-						((Label)stackLayout1.Children[0]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty, new Binding("LabelText"));
-						((Label)stackLayout1.Children[1]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty, new Binding("ValueText"));
+						((Label)stackLayout1.Children[0]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty,
+							BindingHelper.CreateBinding(nameof(TooltipLabelValue.LabelText), getter: static (TooltipLabelValue label) => label.LabelText));
+						((Label)stackLayout1.Children[1]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty,
+							BindingHelper.CreateBinding(nameof(TooltipLabelValue.ValueText), getter: static (TooltipLabelValue label) => label.ValueText));
 						return stackLayout1;
 					}));
 				}

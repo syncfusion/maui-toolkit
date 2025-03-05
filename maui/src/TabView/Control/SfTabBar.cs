@@ -939,7 +939,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 Style = new Style(typeof(SfGrid))
             };
-            touchEffectGrid.SetBinding(SfGrid.IsVisibleProperty, new Binding("IsVisible", source: item));
+            touchEffectGrid.SetBinding(SfGrid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item) => item.IsVisible, source: item));
 
             CalculateTabItemWidth();
 

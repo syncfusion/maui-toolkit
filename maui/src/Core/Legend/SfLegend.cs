@@ -393,34 +393,34 @@ namespace Syncfusion.Maui.Toolkit
                     Padding = new Thickness(8, 10)
                 };
 
-                ToggleColorConverter toggleColorConverter = new ToggleColorConverter();
-                Binding binding;
-                Binding binding1;
-                MultiBinding multiBinding;
-                SfShapeView shapeView = CreateShapeView();
+				ToggleColorConverter toggleColorConverter = new ToggleColorConverter();
+				MultiBinding multiBinding;
+				SfShapeView shapeView = CreateShapeView();
 
-                if (shapeView != null)
-                {
-                    shapeView.HorizontalOptions = LayoutOptions.Start;
-                    shapeView.VerticalOptions = LayoutOptions.Center;
-					binding = new Binding(nameof(LegendItem.IsToggled))
+				if (shapeView != null)
+				{
+					shapeView.HorizontalOptions = LayoutOptions.Start;
+					shapeView.VerticalOptions = LayoutOptions.Center;
+
+					multiBinding = new MultiBinding()
 					{
-						Converter = toggleColorConverter,
+						Bindings =
+						[
+							BindingHelper.CreateBinding(nameof(LegendItem.IsToggled), getter: static (LegendItem item) => item.IsToggled, mode: BindingMode.Default, converter:toggleColorConverter, converterParameter: shapeView),
+							BindingHelper.CreateBinding(nameof(LegendItem.IconBrush), getter: static (LegendItem item) => item.IconBrush)
+						],
+						Converter = new MultiBindingIconBrushConverter(),
 						ConverterParameter = shapeView
 					};
-					binding1 = new Binding(nameof(LegendItem.IconBrush));
-                    multiBinding = new MultiBinding()
-                    {
-                        Bindings = [binding, binding1],
-                        Converter = new MultiBindingIconBrushConverter(),
-                        ConverterParameter = shapeView
-                    };
 
-                    shapeView.SetBinding(SfShapeView.IconBrushProperty, multiBinding);
-                    shapeView.SetBinding(SfShapeView.ShapeTypeProperty, nameof(LegendItem.IconType));
-                    shapeView.SetBinding(SfShapeView.HeightRequestProperty, nameof(LegendItem.IconHeight));
-                    shapeView.SetBinding(SfShapeView.WidthRequestProperty, nameof(LegendItem.IconWidth));
-                    stack.Children.Add(shapeView);
+					shapeView.SetBinding(SfShapeView.IconBrushProperty, multiBinding);
+					shapeView.SetBinding(SfShapeView.ShapeTypeProperty, 
+						BindingHelper.CreateBinding(nameof(LegendItem.IconType), getter: static (LegendItem item) => item.IconType));
+					shapeView.SetBinding(SfShapeView.HeightRequestProperty, 
+						BindingHelper.CreateBinding(nameof(LegendItem.IconHeight), getter: static (LegendItem item) => item.IconHeight));
+					shapeView.SetBinding(SfShapeView.WidthRequestProperty, 
+						BindingHelper.CreateBinding(nameof(LegendItem.IconWidth), getter: static (LegendItem item) => item.IconWidth));
+					stack.Children.Add(shapeView);
                 }
 
                 Label label = CreateLabelView();
@@ -428,12 +428,18 @@ namespace Syncfusion.Maui.Toolkit
                 if (label != null)
                 {
                     label.VerticalTextAlignment = TextAlignment.Center;
-                    label.SetBinding(Label.TextProperty, nameof(LegendItem.Text));
-                    label.SetBinding(Label.TextColorProperty, nameof(LegendItem.ActualTextColor));
-                    label.SetBinding(Label.MarginProperty, nameof(LegendItem.TextMargin));
-                    label.SetBinding(Label.FontSizeProperty, nameof(LegendItem.FontSize));
-                    label.SetBinding(Label.FontFamilyProperty, nameof(LegendItem.FontFamily));
-                    label.SetBinding(Label.FontAttributesProperty, nameof(LegendItem.FontAttributes));
+					label.SetBinding(Label.TextProperty,
+						BindingHelper.CreateBinding(nameof(LegendItem.Text), getter: static (LegendItem item) => item.Text));
+					label.SetBinding(Label.TextColorProperty,
+						BindingHelper.CreateBinding(nameof(LegendItem.ActualTextColor), getter: static (LegendItem item) => item.ActualTextColor));
+					label.SetBinding(Label.MarginProperty,
+						BindingHelper.CreateBinding(nameof(LegendItem.TextMargin), getter: static (LegendItem item) => item.TextMargin));
+					label.SetBinding(Label.FontSizeProperty,
+						BindingHelper.CreateBinding(nameof(LegendItem.FontSize), getter: static (LegendItem item) => item.FontSize));
+					label.SetBinding(Label.FontFamilyProperty,
+						BindingHelper.CreateBinding(nameof(LegendItem.FontFamily), getter: static (LegendItem item) => item.FontFamily));
+					label.SetBinding(Label.FontAttributesProperty,
+						BindingHelper.CreateBinding(nameof(LegendItem.FontAttributes), getter: static (LegendItem item) => item.FontAttributes));
                     stack.Children.Add(label);
                 }
                 return stack;

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Maui.Controls.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Themes
@@ -49,6 +50,7 @@ namespace Syncfusion.Maui.Toolkit.Themes
 		/// <summary>
 		/// The implicit style property.
 		/// </summary>
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
 		private static readonly BindableProperty ImplicitStyleProperty = BindableProperty.Create(
 			"ImplicitStyle",
 			typeof(Style),
@@ -149,6 +151,7 @@ namespace Syncfusion.Maui.Toolkit.Themes
 		/// <param name="bindable">Bindable.</param>
 		/// <param name="oldValue">Old value.</param>
 		/// <param name="newValue">New value.</param>
+		[RequiresUnreferencedCode("The IsOverriddenMethod method is not trim compatible")]
 		private static void OnImplicitStyleChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			if (bindable is Element element && newValue is Style style && !ApplyStyle(element, style))
@@ -173,6 +176,7 @@ namespace Syncfusion.Maui.Toolkit.Themes
 		/// <param name="element"></param>
 		/// <param name="style"></param>
 		/// <returns></returns>
+		[RequiresUnreferencedCode("The IsOverriddenMethod method is not trim compatible")]
 		private static bool ApplyStyle(Element element, Style style)
 		{
 			var applyMethodInfo = typeof(Style).GetInterface("IStyle")?.GetMethod("Apply");

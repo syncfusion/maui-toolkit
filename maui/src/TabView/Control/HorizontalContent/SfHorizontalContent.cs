@@ -274,13 +274,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <returns>It returns the size</returns>
 		protected override Size MeasureContent(double widthConstraint, double heightConstraint)
 		{
-			if (widthConstraint > 0 && widthConstraint != double.PositiveInfinity)
+			if (widthConstraint > 0 && widthConstraint != double.PositiveInfinity )
 			{
 				ContentWidth = widthConstraint;
 				UpdateTabItemContentSize();
 				UpdateTabItemContentPosition();
 			}
-			if (heightConstraint > 0 && heightConstraint != double.PositiveInfinity)
+			if (heightConstraint > 0 && heightConstraint != double.PositiveInfinity )
 			{
 				UpdateTabItemContentSize();
 				UpdateTabItemContentPosition();
@@ -508,7 +508,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				else
 				{
 					SfGrid parentGrid = [];
-					parentGrid.SetBinding(SfGrid.IsVisibleProperty, new Binding("IsVisible", source: item));
+					parentGrid.SetBinding(SfGrid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item)=> item.IsVisible, source: item));
 					if (index >= 0)
 					{
 						_horizontalStackLayout?.Children.Insert(index, parentGrid);
@@ -541,7 +541,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				Style = new Style(typeof(SfGrid))
 			};
 			parentGrid.Children.Add(item.Content);
-			parentGrid.SetBinding(Grid.IsVisibleProperty, new Binding(nameof(SfTabItem.IsVisible), source: item));
+			parentGrid.SetBinding(Grid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item) => item.IsVisible, source: item));
 			return parentGrid;
 		}
 

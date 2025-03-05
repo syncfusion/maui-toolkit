@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -84,6 +85,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
 		internal override void GenerateVisibleLabels()
 		{
 			if (VisibleRange.IsEmpty)

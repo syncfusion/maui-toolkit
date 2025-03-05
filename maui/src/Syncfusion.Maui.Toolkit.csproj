@@ -44,6 +44,10 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net9.0-android' or '$(TargetFramework)' == 'net9.0-ios' or '$(TargetFramework)' == 'net9.0-maccatalyst' or '$(TargetFramework)' == 'net9.0-windows10.0.19041.0'">
+		<IsAotCompatible>true</IsAotCompatible>
+	</PropertyGroup>
+
 	<PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0-android' OR '$(TargetFramework)' == 'net9.0-android' ">
 		<AndroidGenerateResourceDesigner>false</AndroidGenerateResourceDesigner>
 		<AndroidUseIntermediateDesignerFile>false</AndroidUseIntermediateDesignerFile>
@@ -115,5 +119,5 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  
+
 </Project>

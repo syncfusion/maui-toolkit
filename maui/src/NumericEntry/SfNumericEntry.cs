@@ -754,7 +754,10 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
             _lineView3 = SetupLineView();
             _lineView4 = SetupLineView();
 
-            _toolbarView.AddSubviews(_minusButton, _separatorButton, _returnButton, _lineView1, _lineView2, _lineView3, _lineView4);
+            if (_minusButton != null && _separatorButton != null && _returnButton != null)
+            {
+                _toolbarView.AddSubviews(_minusButton, _separatorButton, _returnButton, _lineView1, _lineView2, _lineView3, _lineView4);
+            }
             _toolbarView.BackgroundColor = UIColor.FromRGB(249, 249, 249);
 
             _toolbarView.BringSubviewToFront(_lineView1);

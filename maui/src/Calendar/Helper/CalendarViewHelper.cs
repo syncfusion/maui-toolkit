@@ -1619,24 +1619,27 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>A calendar instance.</returns>
         internal static Globalization.Calendar GetCalendar(string calendarIdentifier)
         {
-            var type = Type.GetType("System.Globalization." + calendarIdentifier + "Calendar");
-            if (type != null)
+            var calendarTypes = new Dictionary<string, Type>
             {
-                var calendar = Activator.CreateInstance(type) as Globalization.Calendar;
-                if (calendar != null)
+                { "Gregorian", typeof(GregorianCalendar) },
+                { "Hijri", typeof(HijriCalendar) },
+                { "Persian", typeof(PersianCalendar) },
+                { "ThaiBuddhist", typeof(ThaiBuddhistCalendar) },
+                { "Taiwan", typeof(TaiwanCalendar) },
+                { "UmAlQura", typeof(UmAlQuraCalendar) },
+                { "Korean", typeof(KoreanCalendar) }
+            };
+
+            if (calendarTypes.TryGetValue(calendarIdentifier, out var type))
+            {
+                if (Activator.CreateInstance(type) is Globalization.Calendar calendar)
                 {
                     return calendar;
                 }
-                else
-                {
-                    return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
-                }
             }
-            else
-            {
-                // If calendar identifier is specified wrongly, then default calendar will be used.
-                return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
-            }
+
+            // If calendar identifier is specified wrongly, then default calendar will be used.
+            return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
         }
 
         /// <summary>

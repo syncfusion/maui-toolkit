@@ -1119,18 +1119,25 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						LineBreakMode = LineBreakMode.NoWrap
 					};
-					label.SetBinding(Label.TextProperty, new Binding() { Path = "Label" });
+					label.SetBinding(Label.TextProperty, 
+						BindingHelper.CreateBinding(nameof(TrackballPointInfo.Label), getter: static(TrackballPointInfo info) => info.Label));
 					label.VerticalOptions = LayoutOptions.Fill;
 					label.HorizontalOptions = LayoutOptions.Fill;
 					label.VerticalTextAlignment = TextAlignment.Center;
 					label.HorizontalTextAlignment = TextAlignment.Center;
-					label.SetBinding(Label.TextColorProperty, new Binding() { Path = "LabelStyle.TextColor" });
-					label.SetBinding(Label.BackgroundProperty, new Binding() { Path = "LabelStyle.Background" });
-					label.SetBinding(Label.FontAttributesProperty, new Binding() { Path = "LabelStyle.FontAttributes" });
-					label.SetBinding(Label.FontFamilyProperty, new Binding() { Path = "LabelStyle.FontFamily" });
-					label.SetBinding(Label.FontSizeProperty, new Binding() { Path = "LabelStyle.FontSize" });
-					label.SetBinding(Label.MarginProperty, new Binding() { Path = "LabelStyle.Margin" });
-					return label;
+					label.SetBinding(Label.TextColorProperty, 
+						BindingHelper.CreateBinding(nameof(ChartLabelStyle.TextColor), getter: static(ChartLabelStyle labelStyle) => labelStyle.TextColor, source: LabelStyle));
+					label.SetBinding(Label.BackgroundProperty,
+						BindingHelper.CreateBinding(nameof(ChartLabelStyle.Background), getter: static (ChartLabelStyle labelStyle) => labelStyle.Background, source: LabelStyle));
+					label.SetBinding(Label.FontAttributesProperty, 
+						BindingHelper.CreateBinding(nameof(ChartLabelStyle.FontAttributes), getter: static (ChartLabelStyle labelStyle) => labelStyle.FontAttributes, source: LabelStyle));
+					label.SetBinding(Label.FontFamilyProperty, 
+						BindingHelper.CreateBinding(nameof(ChartLabelStyle.FontFamily), getter: static (ChartLabelStyle labelStyle) => labelStyle.FontFamily, source: LabelStyle));
+					label.SetBinding(Label.FontSizeProperty,
+						BindingHelper.CreateBinding(nameof(ChartLabelStyle.FontSize), getter: static (ChartLabelStyle labelStyle) => labelStyle.FontSize, source: LabelStyle));
+					label.SetBinding(Label.MarginProperty,
+						BindingHelper.CreateBinding(nameof(ChartLabelStyle.Margin), getter: static (ChartLabelStyle labelStyle) => labelStyle.Margin, source: LabelStyle));
+				return label;
 				});
 
 				BindableLayout.SetItemTemplate(layout, labelTemplate);

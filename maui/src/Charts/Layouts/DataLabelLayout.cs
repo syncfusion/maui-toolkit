@@ -22,7 +22,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             IsClippedToBounds = true;
             _source = source;
             BindableLayout.SetItemTemplate(this, GetItemTemplate());
-            SetBinding(IsVisibleProperty, new Binding(nameof(IDataTemplateDependent.IsVisible)) { Source = _source });
+            SetBinding(IsVisibleProperty, 
+				BindingHelper.CreateBinding(nameof(IDataTemplateDependent.IsVisible), getter: static(IDataTemplateDependent dataTemplateDependent) => dataTemplateDependent.IsVisible, source: _source));
         }
 
         DataTemplate GetItemTemplate()
@@ -34,17 +35,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
 					Bindings =
 					[
-						new Binding(nameof(ChartDataLabel.XPosition)),
-                        new Binding(nameof(ChartDataLabel.YPosition)),
-                    ],
+						BindingHelper.CreateBinding(nameof(ChartDataLabel.XPosition), getter: static (ChartDataLabel label) => label.XPosition),
+						BindingHelper.CreateBinding(nameof(ChartDataLabel.YPosition), getter: static (ChartDataLabel label) => label.YPosition)
+					],
                     Converter = new TemplateVisibilityConverter(),
                 };
 
                 item.SetBinding(DataLabelItemView.IsVisibleProperty, binding);
-                item.SetBinding(DataLabelItemView.XPositionProperty, new Binding(nameof(ChartDataLabel.XPosition)));
-                item.SetBinding(DataLabelItemView.YPositionProperty, new Binding(nameof(ChartDataLabel.YPosition)));
-                item.SetBinding(SfTemplatedView.ItemTemplateProperty, new Binding(nameof(IDataTemplateDependent.LabelTemplate)) { Source = _source });
-                return item;
+				item.SetBinding(DataLabelItemView.XPositionProperty,
+					BindingHelper.CreateBinding(nameof(ChartDataLabel.XPosition), getter: static (ChartDataLabel label) => label.XPosition));
+				item.SetBinding(DataLabelItemView.YPositionProperty,
+					BindingHelper.CreateBinding(nameof(ChartDataLabel.YPosition), getter: static (ChartDataLabel label) => label.YPosition));
+				item.SetBinding(SfTemplatedView.ItemTemplateProperty,
+					BindingHelper.CreateBinding(nameof(IDataTemplateDependent.LabelTemplate), getter: static (IDataTemplateDependent source) => source.LabelTemplate, source: _source));
+				return item;
             });
         }
     }

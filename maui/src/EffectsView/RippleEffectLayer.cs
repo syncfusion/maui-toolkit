@@ -360,7 +360,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 			{
 				if (GetParent() != null && ((_drawable as View) as SfEffectsView) != null)
 				{
-					if ((GetParent() as View) is SfEffectsView effectView && ((effectView.TouchUpEffects == SfEffects.None || effectView.AutoResetEffects.GetAllItems().Contains(AutoResetEffects.Ripple) || effectView.TouchUpEffects == SfEffects.Ripple || effectView.TouchUpEffects.GetAllItems().Contains(SfEffects.Ripple) || effectView.TouchUpEffects.GetAllItems().Contains(SfEffects.None)) &&
+					if ((GetParent() as View) is SfEffectsView effectView && ((effectView.TouchUpEffects == SfEffects.None || effectView.AutoResetEffects.GetAllAutoResetEffectsItems().Contains(AutoResetEffects.Ripple) || effectView.TouchUpEffects == SfEffects.Ripple || effectView.TouchUpEffects.GetAllItems().Contains(SfEffects.Ripple) || effectView.TouchUpEffects.GetAllItems().Contains(SfEffects.None)) &&
 						(effectView.LongPressEffects.GetAllItems().Contains(SfEffects.None) || !effectView.LongPressHandled || effectView.LongPressEffects.GetAllItems().Contains(SfEffects.Ripple))))
 					{
 						effectView?.InvokeAnimationCompletedEvent();
