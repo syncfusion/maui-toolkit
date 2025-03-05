@@ -484,7 +484,10 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 			{
 				if (child == Content)
 				{
-					Size contentSize = child.Measure(measuredSize.Width, measuredSize.Height);
+					// When the height constraint or width constraint is not valid(infinite), we use double.PositiveInfinity to allow
+					// the content to determine its own natural height or width without any restrictions.
+					// This ensures that the content can lay out properly even when no specific height is provided by the parent.
+					Size contentSize = child.Measure(isValidWidth ?  measuredSize.Width : double.PositiveInfinity, isValidHeight ? measuredSize.Height : double.PositiveInfinity);
 
 					// If the returned content size is zero, the custom view or the shimmer drawable may not get rendered.
 					// Because we are measuring the custom view or the shimmer drawable with the content size.
