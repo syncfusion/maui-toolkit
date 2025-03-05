@@ -1118,8 +1118,8 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			{
 				if (_isClearButtonVisible)
 				{
-					AddSemanticsNode(_clearButtonRectF, 1, "Clear button");
-				}
+				AddSemanticsNode(_clearButtonRectF, 1, "Clear button");
+			}
 
 				AddSemanticsNode(upButtonRectF, 2, "Up button", upbuttonstate);
 				AddSemanticsNode(downButtonRectF, 3, "Down button", downbuttonstate);
@@ -1132,7 +1132,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				if (_isClearButtonVisible)
 				{
 					AddSemanticsNode(_clearButtonRectF, 3, "Clear button");
-				}
+			}
 			}
 			else
 			{
@@ -1141,7 +1141,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				if (_isClearButtonVisible)
 				{
 					AddSemanticsNode(_clearButtonRectF, 2, "Clear button");
-				}
+			}
 
 				AddSemanticsNode(downButtonRectF, 3, "Down button", downbuttonstate);
 			}
@@ -1320,7 +1320,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			if (await IsLongPressActivate(StartDelay))
 			{
 				await RecursivePressedAsync(this);
-			}
+		}
 		}
 
 		/// <summary>
@@ -1354,7 +1354,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <param name="numericUpdown">The numericupdown instance</param>
 		/// <returns></returns>
 		static async Task RecursivePressedAsync(SfNumericUpDown numericUpdown)
-		{
+    	{
 			numericUpdown.HandleUpDownPressed();
 			numericUpdown.InitializeTokenSource();
 
@@ -1362,8 +1362,8 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			// If the delay was completed and not cancelled
 			if (await numericUpdown.IsLongPressActivate(ContinueDelay))
 			{
-				await SfNumericUpDown.RecursivePressedAsync(numericUpdown);
-			}
+        	await SfNumericUpDown.RecursivePressedAsync(numericUpdown);
+    	}
 		}
 
 		/// <summary>
@@ -1897,11 +1897,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <param name="path">The path of the property in the data context to bind to.</param>
 		static void SetupViewBinding(View view, string path)
 		{
-			view.SetBinding(SfNumericEntry.IsVisibleProperty, new Binding
-			{
-				Source = view,
-				Path = path
-			});
+ 			view.SetBinding(SfNumericEntry.IsVisibleProperty, BindingHelper.CreateBinding(nameof(View.IsVisible), getter: static(View view) => view.IsVisible, source:view));
 		}
 
 		/// <summary>

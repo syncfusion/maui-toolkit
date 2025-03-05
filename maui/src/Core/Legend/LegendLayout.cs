@@ -96,7 +96,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			return base.ArrangeOverride(bounds);
         }
 
-        void UpdateLegendLayout(Rect bounds)
+		void UpdateLegendLayout(Rect bounds)
         {
             var areaBounds = new Rect(0, 0, bounds.Width, bounds.Height);
 
@@ -173,7 +173,7 @@ LegendLayout.GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25
             }
         }
 
-        void CreateLegendView()
+		void CreateLegendView()
         {
             //Todo: We need to reimplement the legend feature in chart, once fixed the Bindable layout issue and dynamically change scroll view content issue.
             //https://github.com/dotnet/maui/issues/1393
@@ -187,12 +187,17 @@ LegendLayout.GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25
                 var itemsView = Legend.CreateLegendView();
                 _legendItemsView = itemsView ?? [];
                 _legendItemsView.BindingContext = _legend;
-                _legendItemsView.SetBinding(SfLegend.ToggleVisibilityProperty, "ToggleSeriesVisibility");
-                _legendItemsView.SetBinding(SfLegend.PlacementProperty, nameof(Legend.Placement));
-                _legendItemsView.SetBinding(SfLegend.ItemTemplateProperty, nameof(Legend.ItemTemplate));
-                _legendItemsView.SetBinding(SfLegend.IsVisibleProperty, nameof(Legend.IsVisible));
-                _legendItemsView.SetBinding(SfLegend.ItemsLayoutProperty, nameof(Legend.ItemsLayout));
-                _legendItemsView.ItemsSource = _plotArea.LegendItems;
+				_legendItemsView.SetBinding(SfLegend.ToggleVisibilityProperty,
+					BindingHelper.CreateBinding(nameof(ILegend.ToggleVisibility), getter: static (ILegend legend) => legend.ToggleVisibility));
+				_legendItemsView.SetBinding(SfLegend.PlacementProperty,
+					BindingHelper.CreateBinding(nameof(ILegend.Placement), getter: static (ILegend legend) => legend.Placement));
+				_legendItemsView.SetBinding(SfLegend.ItemTemplateProperty,
+					BindingHelper.CreateBinding(nameof(ILegend.ItemTemplate), getter: static (ILegend legend) => legend.ItemTemplate));
+				_legendItemsView.SetBinding(SfLegend.IsVisibleProperty,
+					BindingHelper.CreateBinding(nameof(ILegend.IsVisible), getter: static (ILegend legend) => legend.IsVisible));
+				_legendItemsView.SetBinding(SfLegend.ItemsLayoutProperty,
+					BindingHelper.CreateBinding(nameof(ILegend.ItemsLayout), getter: static (ILegend legend) => legend.ItemsLayout));
+				_legendItemsView.ItemsSource = _plotArea.LegendItems;
                 _legendItemsView.ItemClicked += OnLegendItemToggled;
                 _legendItemsView.PropertyChanged += LegendItemsView_PropertyChanged;
                 ((ILegend)_legendItemsView).ItemsMaximumHeightRequest = Legend.ItemsMaximumHeightRequest;

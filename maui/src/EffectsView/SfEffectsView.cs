@@ -1503,7 +1503,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 		/// <param name="touchPoint">The touch point.</param>
 		void AddResetEffects(AutoResetEffects effects, Point touchPoint)
 		{
-			foreach (var effect in effects.GetAllItems().Select(v => (AutoResetEffects)v))
+			foreach (var effect in effects.GetAllAutoResetEffectsItems().Select(v => (AutoResetEffects)v))
 			{
 				if (effect == AutoResetEffects.None)
 				{
@@ -1931,7 +1931,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 							InvokeTouchUpEventAndCommand();
 						}
 					}
-					if (AutoResetEffects.GetAllItems().Contains(AutoResetEffects.Ripple))
+					if (AutoResetEffects.GetAllAutoResetEffectsItems().Contains(AutoResetEffects.Ripple))
 					{
 						if (_rippleEffectLayer != null)
 						{

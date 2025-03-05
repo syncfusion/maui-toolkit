@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -17,6 +18,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <param name="obj">Object to retrieve a property.</param>
 		/// <param name="path">Property name</param>
 		/// <returns>The property.</returns>
+		[RequiresUnreferencedCode("The GetPropertyInfo is not trim compatible")]
 		internal static PropertyInfo? GetPropertyInfo(object obj, string path)
 		{
 			//TODO: consider if it needed.

@@ -340,10 +340,10 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			if (_textBox != null)
 			{
 				_textBox.BindingContext = this;
-				_textBox.SetBinding(SfEntryView.IsEnabledProperty, "IsEnabled");
-				_textBox.SetBinding(SfEntryView.IsVisibleProperty, "IsVisible");
-				_textBox.SetBinding(SfEntryView.CursorPositionProperty, "CursorPosition", BindingMode.TwoWay);
-				_textBox.SetBinding(SfEntryView.SelectionLengthProperty, "SelectionLength", BindingMode.TwoWay);
+				_textBox.SetBinding(SfEntryView.IsEnabledProperty, BindingHelper.CreateBinding(nameof(SfNumericEntry.IsEnabled), getter: static(SfNumericEntry entry) => entry.IsEnabled));	
+				_textBox.SetBinding(SfEntryView.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfNumericEntry.IsVisible), getter: static(SfNumericEntry entry) => entry.IsVisible));
+				_textBox.SetBinding(SfEntryView.CursorPositionProperty, BindingHelper.CreateBinding<SfNumericEntry, int>(nameof(SfNumericEntry.CursorPosition), getter: entry => entry.CursorPosition, setter: (entry, value) => entry.CursorPosition = value, mode: BindingMode.TwoWay));
+				_textBox.SetBinding(SfEntryView.SelectionLengthProperty, BindingHelper.CreateBinding<SfNumericEntry, int>(nameof(SfNumericEntry.SelectionLength), getter: entry => entry.SelectionLength, setter: (entry, value) => entry.SelectionLength = value, mode: BindingMode.TwoWay));
 
 #if WINDOWS
 				if(_textBox.Text != null)
