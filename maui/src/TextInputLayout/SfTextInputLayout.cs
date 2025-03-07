@@ -227,11 +227,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 #endif
 
 		/// <summary>
-		/// Indicates if the description has been set by the user.
-		/// </summary>
-		bool _isDescriptionNotSetByUser;
-
-		/// <summary>
 		/// Gets or sets a value indicating whether the layout has been tapped.
 		/// </summary>
 		internal bool IsLayoutTapped { get; set; }
@@ -348,7 +343,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
          UIKit.UITextField? uiEntry;
 #endif
 
-        #endregion
+		private string _initialContentDescription = string.Empty;
+
+		#endregion
 
         #region Constructor
 
@@ -669,210 +666,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		#region Override Methods
 
 		/// <summary>
-		/// The list to add the bounds values of drawing elements as nodes.
-		/// </summary>
-		private readonly List<SemanticsNode> textInputLayoutSemanticsNodes = new();
-
-		/// <summary>
-		/// List of semantic nodes for numeric entry.
-		/// </summary>
-		private readonly List<SemanticsNode> numericSemanticsNodes = new();
-
-		/// <summary>
-		/// Returns the semantics node list.
-		/// </summary>
-		/// <param name="width">The width of the element.</param>
-		/// <param name="height">The height of the element.</param>
-		/// <returns>A list of semantics nodes.</returns>
-		protected override List<SemanticsNode> GetSemanticsNodesCore(double width, double height)
-		{
-			textInputLayoutSemanticsNodes.Clear();
-
-			if (width > 0 && height > 0)
-			{
-				AddLayoutNode();
-			}
-
-			PopulateNumericSemanticsNodes(Content);
-			textInputLayoutSemanticsNodes.AddRange(numericSemanticsNodes);
-
-			if (ShowHelperText && !string.IsNullOrEmpty(HelperText) && _helperTextRect.Width > 0 && _helperTextRect.Height > 0)
-			{
-				AddHelperTextNode();
-			}
-
-			return textInputLayoutSemanticsNodes;
-		}
-
-		/// <summary>
-		/// Retrieves the user-defined semantic description.
-		/// </summary>
-		/// <returns>The semantic description if available; otherwise, an empty string.</returns>
-		private string GetUserDescription()
-		{
-			var description = SemanticProperties.GetDescription(this);
-			IsDescriptionNotSetByUser = string.IsNullOrEmpty(description);
-			return description ?? string.Empty;
-		}
-
-		/// <summary>
-		/// Adds a semantic node for the text input layout.
-		/// </summary>
-		private void AddLayoutNode()
-		{
-			string contentDescription = GetContentDescription(Content);
-			string userDescription = GetUserDescription();
-			string hintText = IsDescriptionNotSetByUser && !string.IsNullOrEmpty(Hint) ? Hint : userDescription;
-
-			var layoutNode = CreateSemanticsNode(
-				1,
-				new Rect(0, 0, _backgroundRectF.Width, _backgroundRectF.Height),
-				$"{hintText}, {contentDescription}"
-			);
-			textInputLayoutSemanticsNodes.Add(layoutNode);
-		}
-
-		/// <summary>
-		/// Adds a semantic node for the helper text.
-		/// </summary>
-		private void AddHelperTextNode()
-		{
-			var helperTextNode = CreateSemanticsNode(5, _helperTextRect, HelperText);
-			textInputLayoutSemanticsNodes.Add(helperTextNode);
-		}
-
-		/// <summary>
-		/// Retrieves the content description based on the provided content type.
-		/// </summary>
-		/// <param name="content">The content object.</param>
-		/// <returns>A string containing the content description.</returns>
-		private static string GetContentDescription(object? content) =>
-			content switch
-			{
-				InputView entryEditorContent => GetDescription(entryEditorContent.IsFocused, entryEditorContent.Text, entryEditorContent.Placeholder),
-				SfView numericEntryContent when numericEntryContent.Children.FirstOrDefault() is Entry numericInputView => GetDescription(numericInputView.IsFocused, numericInputView.Text, numericInputView.Placeholder),
-				Picker picker => GetDescription(picker.IsFocused, GetSelectedItemText(picker), ""),
-				_ => string.Empty
-			};
-
-		/// <summary>
-		/// Generates a formatted description based on the text, placeholder, and focus state.
-		/// </summary>
-		/// <param name="isFocused">Indicates if the element is focused.</param>
-		/// <param name="text">The text content.</param>
-		/// <param name="placeholder">The placeholder text.</param>
-		/// <returns>A formatted string for semantic description.</returns>
-		private static string GetDescription(bool isFocused, string? text, string? placeholder)
-		{
-			string formattedText = string.IsNullOrEmpty(text) ? placeholder ?? string.Empty :
-								   text.EndsWith(".") ? text : text + ".";
-
-			if (isFocused)
-			{
-				return formattedText;
-			}
-
-			return $"{formattedText}\n\n\n\n\n\n\n\n\n Double-tap to edit text.";
-		}
-
-		/// <summary>
-		/// Retrieves the selected item text from a picker.
-		/// </summary>
-		/// <param name="picker">The picker control.</param>
-		/// <returns>The selected item text.</returns>
-		private static string? GetSelectedItemText(Picker picker)
-		{
-			if (picker.SelectedItem == null)
-				return null;
-
-			if (picker.ItemDisplayBinding is Binding binding && binding.Path != null)
-			{
-				var property = picker.SelectedItem.GetType().GetProperty(binding.Path);
-				return property?.GetValue(picker.SelectedItem)?.ToString();
-			}
-
-			return picker.SelectedItem.ToString();
-		}
-
-		/// <summary>
-		/// Populates the list of numeric semantics nodes.
-		/// </summary>
-		/// <param name="content">The content object.</param>
-		private void PopulateNumericSemanticsNodes(object? content)
-		{
-			numericSemanticsNodes.Clear();
-
-			switch (content)
-			{
-				case SfNumericUpDown numericUpDown:
-					AddNumericUpDownNodes(numericUpDown);
-					break;
-				case SfNumericEntry when IsClearIconVisible:
-					AddSemanticsNode(_clearIconRectF, 2, "Clear button");
-					break;
-			}
-		}
-
-		/// <summary>
-		/// Adds semantic nodes for the numeric up-down control.
-		/// </summary>
-		/// <param name="numericUpDown">The numeric up/down control.</param>
-		private void AddNumericUpDownNodes(SfNumericUpDown numericUpDown)
-		{
-			bool isUpEnabled = numericUpDown.AutoReverse || numericUpDown._valueStates != ValueStates.Maximum;
-			bool isDownEnabled = numericUpDown.AutoReverse || numericUpDown._valueStates != ValueStates.Minimum;
-			AddUpDownNodes(numericUpDown, isUpEnabled, isDownEnabled);
-		}
-
-		/// <summary>
-		/// Adds semantic nodes for up-down buttons.
-		/// </summary>
-		private void AddUpDownNodes(SfNumericUpDown numericUpDown, bool isUpEnabled, bool isDownEnabled)
-		{
-			bool isVerticalInline = numericUpDown.IsInlineVerticalPlacement();
-			bool isLeftAlignment = numericUpDown.UpDownButtonAlignment == UpDownButtonAlignment.Left;
-			bool addClearIconFirst = isVerticalInline ? !isLeftAlignment : !isVerticalInline && !isLeftAlignment;
-
-			if (addClearIconFirst && IsClearIconVisible)
-			{
-				AddSemanticsNode(_clearIconRectF, 2, "Clear button");
-			}
-			AddSemanticsNode(_upIconRectF, addClearIconFirst ? 3 : 2, "Up button", isUpEnabled);
-			AddSemanticsNode(_downIconRectF, addClearIconFirst ? 4 : 3, "Down button", isDownEnabled);
-			if (!addClearIconFirst && IsClearIconVisible)
-			{
-				AddSemanticsNode(_clearIconRectF, 4, "Clear button");
-			}
-		}
-
-		/// <summary>
-		/// Creates a semantic node with specified ID, bounds, and description.
-		/// </summary>
-		/// <param name="id">The ID of the semantics node.</param>
-		/// <param name="rect">The bounds of the node.</param>
-		/// <param name="description">The description associated with the node.</param>
-		/// <returns>A newly created SemanticsNode object.</returns>
-		private SemanticsNode CreateSemanticsNode(int id, Rect rect, string description) =>
-			new SemanticsNode
-			{
-				Id = id,
-				Bounds = rect,
-				Text = description
-			};
-
-		/// <summary>
-		/// Adds a semantic node with specified properties.
-		/// </summary>
-		private void AddSemanticsNode(RectF bounds, int id, string description, bool isEnabled = true)
-		{
-			string stateDescription = isEnabled ? $"{description}, double tap to activate" : $"{description}, disabled";
-			if (bounds.Width > 0 && bounds.Height > 0)
-			{
-				numericSemanticsNodes.Add(CreateSemanticsNode(id, new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height), stateDescription));
-			}
-		}
-
-		/// <summary>
 		/// Invoked when the size of the element is allocated.
 		/// </summary>
 		/// <param name="width">The width allocated to the element.</param>
@@ -911,8 +704,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             //Adjusted Opacity from 0 to 0.00001 to ensure the content remains functionally active while enabling the ReturnType property.
             if (newValue is InputView entryEditorContent)
             {
-				entryEditorContent.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-				AutomationProperties.SetIsInAccessibleTree(entryEditorContent, false); // Exclude entry content from accessibility.
+#if ANDROID || IOS
+				entryEditorContent.Opacity = IsHintFloated ? 1 : 0.00001;
+#else
+				entryEditorContent.Opacity = IsHintFloated ? 1 : 0;
+#endif
+				_initialContentDescription = SemanticProperties.GetDescription(entryEditorContent);
 			}
             else if (newValue is SfView numericEntryContent && numericEntryContent.Children.Count > 0)
             {
@@ -937,8 +734,63 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 OnEnabledPropertyChanged(IsEnabled);
             }
+
+			SetCustomDescription(newValue);
         }
 
+		/// <summary>
+		/// Sets a custom semantic description for the content.
+		/// </summary>
+		private void SetCustomDescription(object content)
+		{
+
+			if (this.Content == null || content == null)
+				return;
+
+			var customDescription = string.Empty;
+#if ANDROID || MACCATALYST || IOS
+			
+			if (content is InputView entryEditorContent)
+			{
+				customDescription = (string.IsNullOrEmpty(entryEditorContent.Text) && !string.IsNullOrEmpty(entryEditorContent.Placeholder) && DeviceInfo.Platform ==  DevicePlatform.Android) ? entryEditorContent.Placeholder : string.Empty;
+			}
+
+			var layoutDescription = GetLayoutDescription();
+			
+			var contentDescription = layoutDescription + (IsHintFloated ? customDescription + _initialContentDescription : string.Empty);
+
+			SemanticProperties.SetDescription(this.Content, contentDescription);
+#elif WINDOWS
+
+			customDescription = SemanticProperties.GetDescription(this);
+
+			if (string.IsNullOrEmpty(customDescription))
+			{
+				customDescription = ShowHint && !string.IsNullOrEmpty(Hint) ? Hint : string.Empty;
+				SemanticProperties.SetDescription(this, customDescription);
+			}
+#endif
+		}
+
+#if ANDROID || MACCATALYST || IOS
+		/// <summary>
+		/// Retrieves the layout semantic description.
+		/// </summary>
+		private string GetLayoutDescription()
+		{
+			var description = SemanticProperties.GetDescription(this);
+
+			if (string.IsNullOrEmpty(description))
+			{
+				description = ShowHint && !string.IsNullOrEmpty(Hint) ? Hint : string.Empty;
+			}
+			if(!string.IsNullOrEmpty(description))
+			{
+				description = description.EndsWith(".") ? description : description + ". ";
+			}
+			return description ?? string.Empty;
+		}
+#endif
 		/// <summary>
 		/// Measures the size requirements for the content of the element.
 		/// </summary>
