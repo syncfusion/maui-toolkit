@@ -1993,7 +1993,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			get { return (EnablePasswordVisibilityToggle && Content is Entry); }
 		}
-
 		#endregion
 
 		#region Property Changed Methods

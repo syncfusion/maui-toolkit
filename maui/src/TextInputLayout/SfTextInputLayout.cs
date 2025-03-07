@@ -12,7 +12,6 @@ using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 using Syncfusion.Maui.Toolkit.NumericEntry;
 using Syncfusion.Maui.Toolkit.EntryRenderer;
 using Syncfusion.Maui.Toolkit.EntryView;
-using Syncfusion.Maui.Toolkit.NumericUpDown;
 
 namespace Syncfusion.Maui.Toolkit.TextInputLayout
 {
@@ -393,17 +392,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 if ((_downIconRectF.Contains(touchpoint) && IsUpDownVerticalAlignment) || (_upIconRectF.Contains(touchpoint) && !IsUpDownVerticalAlignment))
                 {
-					// Update the semantic description when the button is pressed
-					SemanticProperties.SetDescription(this, "Up button pressed");
-					numericEntry.UpButtonPressed();
+                    numericEntry.UpButtonPressed();
                 }
                 else if ((_upIconRectF.Contains(touchpoint) && IsUpDownVerticalAlignment) || (_downIconRectF.Contains(touchpoint) && !IsUpDownVerticalAlignment))
                 {
-					// Update the semantic description when the button is pressed
-					SemanticProperties.SetDescription(this, "Down button pressed");
-					numericEntry.DownButtonPressed();
+                    numericEntry.DownButtonPressed();
                 }
-				SemanticScreenReader.Announce(SemanticProperties.GetDescription(this));
 			}
 #if IOS || MACCATALYST
             await Task.Delay(10);
@@ -419,10 +413,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			if (this.Content is ITextInputLayout numericEntry)
             {
-				// Update the semantic description when the button is pressed
-				SemanticProperties.SetDescription(this, "Clear button pressed");
-				SemanticScreenReader.Announce(SemanticProperties.GetDescription(this));
-				numericEntry.ClearIconPressed();
+                numericEntry.ClearIconPressed();
                 if (!IsClearIconVisible && _effectsRenderer != null && _effectsRenderer.HighlightBounds.Width > 0 && _effectsRenderer.HighlightBounds.Height > 0)
                 {
                     _effectsRenderer.RemoveHighlight();
@@ -716,7 +707,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 if (numericEntryContent.Children[0] is Entry numericInputView)
                 {
 					numericInputView.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-					AutomationProperties.SetIsInAccessibleTree(numericInputView, false); // Exclude numeric entry view from accessibility.
 				}
             }
             else if (newValue is Picker picker)
@@ -725,7 +715,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 {
 					picker.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
 				}
-				AutomationProperties.SetIsInAccessibleTree(picker, false); // Exclude picker from accessibility.
 			}
 
             base.OnContentChanged(oldValue, newValue);
