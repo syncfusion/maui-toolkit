@@ -398,7 +398,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 {
                     numericEntry.DownButtonPressed();
                 }
-			}
+            }
 #if IOS || MACCATALYST
             await Task.Delay(10);
             IsIconPressed = false;
@@ -707,15 +707,15 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 if (numericEntryContent.Children[0] is Entry numericInputView)
                 {
 					numericInputView.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-				}
+                }
             }
             else if (newValue is Picker picker)
             {
                 if (DeviceInfo.Platform != DevicePlatform.WinUI)
                 {
 					picker.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-				}
-			}
+                }
+            }
 
             base.OnContentChanged(oldValue, newValue);
 
