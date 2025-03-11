@@ -1,6 +1,7 @@
 using System.Globalization;
 using Syncfusion.Maui.Toolkit.Calendar;
 using Syncfusion.Maui.Toolkit.Buttons;
+using Syncfusion.Maui.Toolkit.Popup;
 using Color = Microsoft.Maui.Graphics.Color;
 
 namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
@@ -27,6 +28,13 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         public AppointmentBooking()
         {
             InitializeComponent();
+
+            if (popUp != null)
+            {
+                popUp.FooterTemplate = GetFooterTemplate(popUp);
+                popUp.ContentTemplate = GetContentTemplate(popUp);
+            }
+
 #if MACCATALYST
             border.IsVisible = true;
             border.Stroke = Colors.Transparent;
@@ -47,6 +55,128 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
                 InitializeCalendar(mobileAppointmentBooking, mobile);
             }
 #endif
+        }
+
+        /// <summary>
+        /// Method to get the dynamic color.
+        /// </summary>
+        /// <param name="resourceName">The resource name.</param>
+        /// <returns>The color.</returns>
+        Color GetDynamicColor(string? resourceName = null)
+        {
+            if (resourceName != null && App.Current != null && App.Current.Resources.TryGetValue(resourceName, out var colorValue) && colorValue is Color color)
+            {
+                return color;
+            }
+            else
+            {
+                if (App.Current != null && App.Current.RequestedTheme == AppTheme.Light)
+                {
+                    return Color.FromRgb(0xFF, 0xFF, 0xFF);
+                }
+                else if (App.Current != null && App.Current.RequestedTheme == AppTheme.Dark)
+                {
+                    return Color.FromRgb(0x38, 0x1E, 0x72);
+                }
+            }
+
+            return Colors.Transparent;
+        }
+
+        /// <summary>
+        /// Method to get the Ok button style.
+        /// </summary>
+        /// <returns>The button style.</returns>
+        Style GetOkButtonStyle()
+        {
+            return new Style(typeof(Button))
+            {
+                Setters =
+                {
+                    new Setter { Property = Button.CornerRadiusProperty, Value = 15 },
+                    new Setter { Property = Button.BorderColorProperty, Value = Color.FromArgb("#6750A4") },
+                    new Setter { Property = Button.BorderWidthProperty, Value = 1 },
+                    new Setter { Property = Button.BackgroundColorProperty, Value = GetDynamicColor("SfCalendarTodayHighlightColor") },
+                    new Setter { Property = Button.TextColorProperty, Value = GetDynamicColor() },
+                    new Setter { Property = Button.FontSizeProperty, Value = 14 },
+                }
+            };
+        }
+
+        /// <summary>
+        /// Method to get the footer template.
+        /// </summary>
+        /// <param name="popup">The pop up.</param>
+        /// <returns>The data template.</returns>
+        DataTemplate GetFooterTemplate(SfPopup popup)
+        {
+            var footerTemplate = new DataTemplate(() =>
+            {
+                var grid = new Grid
+                {
+                    ColumnSpacing = 12,
+                    Padding = new Thickness(24)
+                };
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+                var oKButton = new Button
+                {
+                    Text = "OK",
+                    Style = GetOkButtonStyle(),
+                    WidthRequest = 96,
+                    HeightRequest = 40
+                };
+                oKButton.Clicked += (sender, args) =>
+                {
+                    popup.Dismiss();
+                };
+                grid.Children.Add(oKButton);
+                Grid.SetColumn(oKButton, 1);
+                return grid;
+            });
+
+            return footerTemplate;
+        }
+
+        /// <summary>
+        /// Method to get the content template.
+        /// </summary>
+        /// <param name="popup">The pop up.</param>
+        /// <returns>The data template.</returns>
+        DataTemplate GetContentTemplate(SfPopup popup)
+        {
+            var contentTemplate = new DataTemplate(() =>
+            {
+                var grid = new Grid();
+                grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(0.1, GridUnitType.Star) });
+                var label = new Label
+                {
+                    LineBreakMode = LineBreakMode.WordWrap,
+                    Padding = new Thickness(20, 0, 0, 0),
+                    FontSize = 16,
+                    HorizontalOptions = LayoutOptions.Start,
+                    HorizontalTextAlignment = TextAlignment.Start,
+                    WidthRequest = 300,
+                };
+
+                label.BindingContext = popup;
+                label.SetBinding(Label.TextProperty, "Message");
+                var stackLayout = new StackLayout
+                {
+                    Margin = new Thickness(0, 2, 0, 0),
+                    HeightRequest = 1,
+                };
+
+                stackLayout.BackgroundColor = _isLightTheme ? Color.FromArgb("#611c1b1f") : Color.FromArgb("#61e6e1e5");
+                grid.Children.Add(label);
+                grid.Children.Add(stackLayout);
+                Grid.SetRow(label, 0);
+                Grid.SetRow(stackLayout, 1);
+                return grid;
+            });
+
+            return contentTemplate;
         }
 
         /// <summary>
@@ -135,6 +265,8 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
                 BookAppointment(mobileAppointmentBooking, mobileFlexLayout);
             }
 #endif
+
+            popUp.Show();
         }
 
         /// <summary>
@@ -144,22 +276,29 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// <param name="buttonLayout">Time slot button layout.</param>
         void BookAppointment(SfCalendar calendar, FlexLayout buttonLayout)
         {
+            if (popUp == null)
+            {
+                return;
+            }
+
             if (calendar.SelectedDate == null)
             {
-                Application.Current?.Windows[0].Page?.DisplayAlert("Alert !", "Please select a date to book an appointment ", "Ok");
+                popUp.HeaderTitle = "Alert !";
+                popUp.Message = "Please select a date to book an appointment";
                 return;
             }
 
             if (_timeSlot == string.Empty)
             {
-                Application.Current?.Windows[0].Page?.DisplayAlert("Alert !", "Please select a time to book an appointment ", "Ok");
+                popUp.HeaderTitle = "Alert !";
+                popUp.Message = "Please select a time to book an appointment";
                 return;
             }
 
+            popUp.HeaderTitle = "Confirmation";
             DateTime dateTime = calendar.SelectedDate.Value;
             string dayText = dateTime.ToString("MMMM" + " " + dateTime.Day.ToString() + ", " + dateTime.ToString("yyyy"), CultureInfo.CurrentUICulture);
-            string text = "Appointment booked for " + dayText + " " + _timeSlot;
-            Application.Current?.Windows[0].Page?.DisplayAlert("Confirmation", text, "Ok");
+            popUp.Message = "Appointment booked for " + dayText + " " + _timeSlot;
             calendar.SelectedDate = DateTime.Now.Date;
             calendar.DisplayDate = DateTime.Now.Date;
             _timeSlot = string.Empty;
@@ -203,7 +342,9 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         {
             if (calendar.SelectedDate == null)
             {
-                Application.Current?.Windows[0].Page?.DisplayAlert("Alert !", "Please select a date to book an appointment ", "Ok");
+                popUp.HeaderTitle = "Alert !";
+                popUp.Message = "Please select a date to book an appointment ";
+                popUp.Show();
                 return;
             }
 
