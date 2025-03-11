@@ -20,7 +20,7 @@
 		/// <summary>
 		/// Gets or sets the content of the view.
 		/// </summary>
-		public View Content
+		public View? Content
 		{
 			get { return (View)GetValue(ContentProperty); }
 			set { SetValue(ContentProperty, value); }

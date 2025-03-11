@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Views;
 
 namespace Syncfusion.Maui.ControlsGallery;
 
@@ -11,6 +12,9 @@ public class MainActivity : MauiAppCompatActivity
 	protected override void OnCreate(Bundle? savedInstanceState)
 	{
 		base.OnCreate(savedInstanceState);
+
+		//Window.AddFlags(WindowManagerFlags.Fullscreen);
+		//Window.AddFlags(WindowManagerFlags.LayoutNoLimits);
 
 		//// Git issue link-https://github.com/dotnet/maui/issues/11274
 		//// Layout moves up on keyboard open in android.
