@@ -84,6 +84,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return handler.GetFontManager();
 			}
 
+			if (IPlatformApplication.Current != null)
+			{
+				return IPlatformApplication.Current.Services.GetRequiredService<IFontManager>();
+			}
+
 			return default;
 		}
 
