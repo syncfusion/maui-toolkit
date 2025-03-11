@@ -277,6 +277,7 @@ namespace Syncfusion.Maui.ControlsGallery.CustomView
 			points.Add(new Point(x + roundCornerRadius, y));
 			var path = new PathF();
 
+
 			if (points != null)
 			{
 				path.MoveTo(points[0]);
