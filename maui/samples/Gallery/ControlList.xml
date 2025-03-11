@@ -18,6 +18,7 @@
     <Assembly Name="BottomSheet" />
     <Assembly Name="NumericEntry" />
     <Assembly Name="NumericUpDown" />
-	<Assembly Name="Calendar" />
+    <Assembly Name="Calendar" />
+	 <Assembly Name="OtpInput" />
 	</Assemblies>
 </SampleBrowser>

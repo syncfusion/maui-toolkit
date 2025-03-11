@@ -110,6 +110,7 @@
 	  <EmbeddedResource Include="SampleList\TabViewSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\TextInputLayoutSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NumericEntrySamplesList.xml" />
+    <EmbeddedResource Include="SampleList\OtpInputSamplesList.xml" />
 	  <EmbeddedResource Include="ControlList.xml" />
 	</ItemGroup>
 

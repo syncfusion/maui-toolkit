@@ -10,8 +10,8 @@
     <x:String x:Key="SfNavigationDrawerTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfNavigationDrawerContentBackground" ResourceKey="ContentBackgroundAlt1" />
     <local:StaticThemeResource x:Key="SfNavigationDrawerGreyLayoutBackground" ResourceKey="Overlay" />
-    
-    <!--SfChipGroup-->
+
+  <!--SfChipGroup-->
     <x:String x:Key="SfChipGroupTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfChipGroupDisabledSelectedTextColor" ResourceKey="SecondaryForegroundDisabled" />
     <local:StaticThemeResource x:Key="SfChipGroupHoverSelectedTextColor" ResourceKey="SecondaryForegroundHovered" />
@@ -93,7 +93,7 @@
     <local:StaticThemeResource x:Key="SfPullToRefreshProgressColor" ResourceKey="PrimaryBackground" />
     <sys:Double x:Key="SfPullToRefreshProgressThickness">3</sys:Double>
 
-    <!--SfTabView-->
+  <!--SfTabView-->
     <x:String x:Key="SfTabViewTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfTabViewNormalTextColor" ResourceKey="ContentForegroundAlt1" />
     <local:StaticThemeResource x:Key="SfTabViewSelectedTextColor" ResourceKey="PrimaryBackground"/>
@@ -464,4 +464,21 @@
   <local:StaticThemeResource x:Key="SfCalendarNormalBackground" ResourceKey="ContentBackgroundAlt3" />
 
 
+ <!--SfOtpInput-->
+  <x:String x:Key="SfOtpInputTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfOtpInputDefaultBackground" ResourceKey="Transparent"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderDefault" ResourceKey="InputBoxBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputHoveredBackground" ResourceKey="InputBackgroundHovered"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderHovered" ResourceKey="InputBorderHovered"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderPressed" ResourceKey="InputBorderPressed"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderDisabled" ResourceKey="InputBorderDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBackgroundDisabled" ResourceKey="InputBackgroundDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputDisabledTextColor" ResourceKey="ForegroundDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputPlaceholderColor" ResourceKey="PlaceholderForeground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputFilledBackground" ResourceKey="InputBackground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputSuccessStroke" ResourceKey="SuccessBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputWarningStroke" ResourceKey="WarningBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputErrorStroke" ResourceKey="ErrorBorder"/>
+  
 </local:SyncfusionThemeDictionary>
