@@ -605,6 +605,20 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 CalendarRelativePosition.AlignTop,
                 propertyChanged: OnRelativePositionChanged);
 
+        /// <summary>
+        /// Identifies the <see cref="RelativeView"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="RelativeView"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty RelativeViewProperty =
+            BindableProperty.Create(
+                nameof(RelativeView),
+                typeof(View),
+                typeof(SfCalendar),
+                null,
+                propertyChanged: OnRelativeViewChanged);
+
 #if WINDOWS
         /// <summary>
         /// Identifies the <see cref="FlowDirectionProperty"/> dependency property.
@@ -2265,6 +2279,47 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             set { SetValue(RelativePositionProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the view relative to which the calendar dialog should be displayed based on the RelativePosition.
+        /// <seealso cref="SfCalendar.RelativePosition"/>
+        /// </summary>
+        /// <remarks>
+        /// It is only applicable for RelativeDialog mode. If no relative view is given, the calendar will be set as the relative view.
+        /// </remarks>
+        /// <example>
+        /// The following code demonstrates, how to use the RelativeView property in the calendar
+        /// #[XAML](#tab/tabid-1)
+        /// <code Lang="XAML"><![CDATA[
+        /// <Grid WidthRequest="500">
+        ///     <calendar:SfCalendar x:Name="calendar"
+        ///                         Mode="RelativeDialog"
+        ///                         RelativePosition="AlignToRightOf"
+        ///                         RelativeView="{x:Reference calendarButton}">
+        ///     </calendar:SfCalendar>
+        ///     <Button Text="Open calendar"
+        ///             x:Name="calendarButton"
+        ///             Clicked="Button_Clicked"
+        ///             HorizontalOptions="Center"
+        ///             VerticalOptions="Center"
+        ///             HeightRequest="50"
+        ///             WidthRequest="150">
+        ///     </Button>
+        /// </Grid>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-2)
+        /// <code Lang="C#"><![CDATA[
+        /// private void Button_Clicked(object sender, System.EventArgs e)
+        /// {
+        ///     this.calendar.IsOpen = true;
+        /// }
+        /// ]]></code>
+        /// </example>
+        public View RelativeView
+        {
+            get { return (View)GetValue(RelativeViewProperty); }
+            set { SetValue(RelativeViewProperty, value); }
+        }
+
         //// TODO: Workaround for RTL (Right-to-Left) layout issue - The coordinate points are not calculated correctly in RTL layouts,
         //// causing incorrect positioning. This flag helps to apply RTL-specific adjustments.
 #if WINDOWS
@@ -2497,7 +2552,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     CloseCalendarPopup();
                 }
             }
-            else if(propertyName == "FlowDirection")
+            else if (propertyName == "FlowDirection")
             {
                 if (FlowDirection == FlowDirection.RightToLeft)
                 {
@@ -3514,6 +3569,26 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             if (calendar.IsOpen && calendar.Mode == CalendarMode.RelativeDialog)
+            {
+                calendar.ShowPopup();
+            }
+        }
+
+        /// <summary>
+        /// Called when <see cref="RelativeView"/> property changed.
+        /// </summary>
+        /// <param name="bindable">The bindable.</param>
+        /// <param name="oldValue">The old value.</param>
+        /// <param name="newValue">The new value.</param>
+        static void OnRelativeViewChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfCalendar? calendar = bindable as SfCalendar;
+            if (calendar == null)
+            {
+                return;
+            }
+
+            if (calendar.IsOpen && calendar.Mode == CalendarMode.RelativeDialog && calendar.RelativeView != null)
             {
                 calendar.ShowPopup();
             }

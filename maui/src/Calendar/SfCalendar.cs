@@ -1973,7 +1973,14 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             if (Mode == CalendarMode.RelativeDialog)
             {
-                ShowRelativeToView(this, RelativePosition);
+                if (RelativeView != null)
+                {
+                    ShowRelativeToView(RelativeView, RelativePosition);
+                }
+                else
+                {
+                    ShowRelativeToView(this, RelativePosition);
+                }
             }
             else
             {
@@ -2203,7 +2210,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 return _availableSize;
             }
-    #endif
+#endif
 
             if (_layout.Children.Count == 0)
             {
@@ -2250,7 +2257,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 currentClip = new RoundRectangleGeometry(CornerRadius, rectangle);
             }
-    #endif
+#endif
             RoundRectangleGeometry? previousClip = null;
             if (Clip != null && Clip is RoundRectangleGeometry)
             {
