@@ -79,6 +79,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal double ToleranceCoefficient { get; set; }
 
+		internal override bool IsFillEmptyPoint { get { return false; } }
+		
 		#endregion
 
 		#region Bindable Properties

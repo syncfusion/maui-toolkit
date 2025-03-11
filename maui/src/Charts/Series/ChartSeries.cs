@@ -1161,6 +1161,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void IDatapointSelectionDependent.Invalidate()
         {
+            	InValidateViews();
+        }
+
+        internal void InValidateViews()
+        {
             InvalidateSeries();
 
             if (ShowDataLabels)
@@ -1332,6 +1337,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         #region Internal methods
 
+        internal virtual void UpdateEmptyPointSettings()
+		{
+		}
+
         internal virtual Brush? GetSegmentFillColor(int index)
         {
             var segment = _segments[index];
@@ -1381,7 +1390,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             foreach (ChartSegment segment in _segments)
             {
-                if (!segment.InVisibleRange || segment.IsEmpty)
+                if (!segment.InVisibleRange || segment.IsZero)
 				{
 					continue;
 				}

@@ -118,6 +118,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					_series.OldSegments = null;
 				}
 
+				_series.UpdateEmptyPointSettings();
 				_series.SegmentsCreated = true;
 			}
 		}

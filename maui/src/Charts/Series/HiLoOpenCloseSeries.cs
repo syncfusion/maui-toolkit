@@ -320,7 +320,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					X = xPosition,
 					Y = yPosition,
 					Index = index,
-					Text = yValue.ToString(" #.##") + "/" + lowValue.ToString(" #.##") + "/" + openValue.ToString(" #.##") + "/" + closeValue.ToString(" #.##"),
+					Text = (yValue == 0 ? yValue.ToString(" 0.##") : yValue.ToString(" #.##")) + "/" + (lowValue == 0 ? lowValue.ToString(" 0.##") : lowValue.ToString(" #.##")) + "/" + (openValue == 0 ? openValue.ToString(" 0.##") : openValue.ToString(" #.##")) + "/" + (closeValue == 0 ? closeValue.ToString(" 0.##") : closeValue.ToString(" #.##")),
 					Margin = tooltipBehavior.Margin,
 					TextColor = tooltipBehavior.TextColor,
 					FontFamily = tooltipBehavior.FontFamily,

@@ -165,7 +165,7 @@
 
 		void CalculateDataLabelPositions(double xValue, double high, double low, double open, double close, FinancialSeriesBase series)
 		{
-			IsEmpty = double.IsNaN(high) && double.IsNaN(low);
+			IsZero = double.IsNaN(high) && double.IsNaN(low);
 			InVisibleRange = series.IsDataInVisibleRange(xValue, high) && series.IsDataInVisibleRange(xValue, low);
 			PointF highPoint = GetDataLabelPosition(xValue, high, series);
 			PointF lowPoint = GetDataLabelPosition(xValue, low, series);

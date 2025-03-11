@@ -79,6 +79,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal IList<double> VerticalErrorValues { get; set; }
 
+		internal override bool IsFillEmptyPoint { get { return false; } }
+
 		#endregion
 
 		#region Bindable Properties

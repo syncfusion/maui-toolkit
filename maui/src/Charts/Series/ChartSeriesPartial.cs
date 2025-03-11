@@ -81,6 +81,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+#pragma warning disable IDE0060 // Remove unused parameter
+		internal virtual void AddDataPoint(object data, int index, NotifyCollectionChangedEventArgs e)
+#pragma warning restore IDE0060 // Remove unused parameter
+		{
+			SetIndividualPoint(data, index, false);
+		}
+
 		internal virtual void LegendItemToggled(LegendItem chartLegendItem)
 		{
 		}
@@ -1308,13 +1315,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return parentObj;
-		}
-
-#pragma warning disable IDE0060 // Remove unused parameter
-		void AddDataPoint(int index, object data, NotifyCollectionChangedEventArgs e)
-#pragma warning restore IDE0060 // Remove unused parameter
-		{
-			SetIndividualPoint(index, data, false);
 		}
 
 		void ResetDataPoint()

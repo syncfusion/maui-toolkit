@@ -392,7 +392,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (!double.IsNaN(lowValueContent))
                 {
-                    tooltipInfo.Text += "/" + lowValueContent.ToString("#.##");
+                    tooltipInfo.Text += "/" + (lowValueContent == 0 ? lowValueContent.ToString("0.##") : lowValueContent.ToString("#.##"));
                 }
 
                 return tooltipInfo;
@@ -465,7 +465,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			ChartDataLabelStyle labelStyle = dataLabelSettings.LabelStyle;
             foreach (RangeColumnSegment dataLabel in _segments)
             {
-                if (!dataLabel.InVisibleRange || dataLabel.IsEmpty)
+                if (!dataLabel.InVisibleRange || dataLabel.IsZero)
 				{
 					continue;
 				}
