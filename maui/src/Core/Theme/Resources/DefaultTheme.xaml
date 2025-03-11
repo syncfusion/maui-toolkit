@@ -463,5 +463,11 @@
   <local:StaticThemeResource x:Key="SfCalendarSpecialDayIconColor" ResourceKey="PrimaryBackground" />
   <local:StaticThemeResource x:Key="SfCalendarNormalBackground" ResourceKey="ContentBackgroundAlt3" />
 
+  <!--SfCards-->
+  <x:String x:Key="SfCardViewTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfCardViewBorderColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfCardViewIndicatorColor" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfCardViewNormalBackround" ResourceKey="ContentBackgroundAlt3" />
+  <CornerRadius x:Key="SfCardViewCornerRadius">12</CornerRadius>
 
 </local:SyncfusionThemeDictionary>

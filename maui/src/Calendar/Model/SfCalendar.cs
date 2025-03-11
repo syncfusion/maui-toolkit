@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 
 namespace Syncfusion.Maui.Toolkit.Calendar
@@ -561,6 +562,48 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 typeof(SfCalendar),
                 defaultValueCreator: bindable => null,
                 propertyChanged: OnMonthViewHeaderTemplateChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="IsOpen"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="IsOpen"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty IsOpenProperty =
+            BindableProperty.Create(
+                nameof(IsOpen),
+                typeof(bool),
+                typeof(SfCalendar),
+                false,
+                propertyChanged: OnIsOpenPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="Mode"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="Mode"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty ModeProperty =
+            BindableProperty.Create(
+                nameof(Mode),
+                typeof(CalendarMode),
+                typeof(SfCalendar),
+                CalendarMode.Default,
+                propertyChanged: OnModeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="RelativePosition"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="RelativePosition"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty RelativePositionProperty =
+            BindableProperty.Create(
+                nameof(RelativePosition),
+                typeof(CalendarRelativePosition),
+                typeof(SfCalendar),
+                CalendarRelativePosition.AlignTop,
+                propertyChanged: OnRelativePositionChanged);
 
 #if WINDOWS
         /// <summary>
@@ -2117,6 +2160,111 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             set { SetValue(MonthViewHeaderTemplateProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the calendar popup is open or not.
+        /// </summary>
+        /// <value>The default value of <see cref="SfCalendar.IsOpen"/> is "False".</value>
+        /// <remarks>
+        /// It will be applicable to set the <see cref="CalendarMode.Dialog"/> or <see cref="CalendarMode.RelativeDialog"/>.
+        /// </remarks>
+        /// <example>
+        /// <para>The following code example demonstrates, how to set IsOpen property for the <see cref="SfCalendar"/> control.</para>
+        /// <code lang="C#">
+        /// <![CDATA[
+        /// using System.ComponentModel;
+        ///
+        /// namespace CalendarMAUI
+        /// {
+        ///     public partial class MainPage : ContentPage
+        ///     {
+        ///         public MainPage()
+        ///         {
+        ///            InitializeComponent();
+        ///         }
+        ///         void clickToShowPopup_Clicked(object sender, EventArgs e)
+        ///         {
+        ///             Calendar.IsOpen = true;
+        ///         }
+        ///      }
+        /// }
+        /// ]]>
+        /// </code>
+        /// <code lang="XAML">
+        /// <![CDATA[
+        /// <?xml version = "1.0" encoding="utf-8" ?>
+        /// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
+        ///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        ///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
+        ///     xmlns:local="clr-namespace:CalendarMAUI"
+        ///     x:Class="CalendarMAUI.MainPage">
+        /// <ContentPage.Content>
+        ///    <StackLayout WidthRequest = "500" >
+        ///        <syncfusion:SfCalendar x:Name="Calendar" Mode="Dialog"/>
+        ///        <Button x:Name="clickToShowCalendar" Text="Click To Show Calendar" Clicked="clickToShowPopup_Clicked"/>
+        ///    </StackLayout>
+        /// </ContentPage.Content>
+        /// </ContentPage>
+        /// ]]>
+        /// </code>
+        /// </example>
+        public bool IsOpen
+        {
+            get { return (bool)GetValue(IsOpenProperty); }
+            set { SetValue(IsOpenProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the calendar mode.
+        /// </summary>
+        /// <value>The default value of <see cref="SfCalendar.Mode"/> is <see cref="CalendarMode.Default"/>.</value>
+        /// <remarks>
+        /// The <see cref="CalendarMode.Dialog"/> and <see cref="CalendarMode.RelativeDialog"/> only visible to set the <see cref="SfCalendar.IsOpen"/> is "True".
+        /// </remarks>
+        /// <example>
+        /// The following code demonstrates, how to use the Mode property in the calendar
+        /// #[XAML](#tab/tabid-1)
+        /// <code Lang="XAML"><![CDATA[
+        /// <Calendar:SfCalendar x:Name="Calendar"
+        ///                      Mode="Dialog">
+        /// </Calendar:SfCalendar>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-2)
+        /// <code Lang="C#"><![CDATA[
+        /// Calendar.IsOpen = True;
+        /// ]]></code>
+        /// </example>
+        public CalendarMode Mode
+        {
+            get { return (CalendarMode)GetValue(ModeProperty); }
+            set { SetValue(ModeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the relative position of the calendar popup.
+        /// </summary>
+        /// <value>The default value of <see cref="SfCalendar.RelativePosition"/> is <see cref="CalendarRelativePosition.AlignTop"/>.</value>
+        /// <remarks>
+        /// It will be applicable to set <see cref="SfCalendar.Mode"/> is <see cref="CalendarMode.RelativeDialog"/>.
+        /// </remarks>
+        /// <example>
+        /// The following code demonstrates, how to use the View property in the calendar
+        /// #[XAML](#tab/tabid-1)
+        /// <code Lang="XAML"><![CDATA[
+        /// <Calendar:SfCalendar x:Name="Calendar"
+        ///                      Mode="RelativeDialog" RelativePosition="AlignBottom">
+        /// </Calendar:SfCalendar>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-2)
+        /// <code Lang="C#"><![CDATA[
+        /// Calendar.IsOpen = True;
+        /// ]]></code>
+        /// </example>
+        public CalendarRelativePosition RelativePosition
+        {
+            get { return (CalendarRelativePosition)GetValue(RelativePositionProperty); }
+            set { SetValue(RelativePositionProperty, value); }
+        }
+
         //// TODO: Workaround for RTL (Right-to-Left) layout issue - The coordinate points are not calculated correctly in RTL layouts,
         //// causing incorrect positioning. This flag helps to apply RTL-specific adjustments.
 #if WINDOWS
@@ -2322,7 +2470,34 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="propertyName">The property name.</param>
         protected override void OnPropertyChanged(string? propertyName = null)
         {
-            if (propertyName == "FlowDirection")
+            if (propertyName == nameof(IsVisible) && Mode != CalendarMode.Default)
+            {
+                //// If the calendar is not visible, we have to close the calendar popup only when it is opened previously.
+                if (!IsVisible)
+                {
+                    _isCalendarPreviouslyOpened = IsOpen;
+                    if (_isCalendarPreviouslyOpened)
+                    {
+                        CloseCalendarPopup();
+                    }
+                }
+                //// If the calendar is visible, we have to open the calendar popup only when it is opened initally.
+                else if (IsOpen && IsVisible)
+                {
+                    AddCalendarToPopup();
+                    ShowPopup();
+                }
+                //// If the calendar is visible, we have to open the calendar popup only when it is opened previously.
+                else if (IsVisible && _isCalendarPreviouslyOpened)
+                {
+                    IsOpen = true;
+                }
+                else
+                {
+                    CloseCalendarPopup();
+                }
+            }
+            else if(propertyName == "FlowDirection")
             {
                 if (FlowDirection == FlowDirection.RightToLeft)
                 {
@@ -2365,6 +2540,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             calendar.AddOrRemoveMonthHeaderView();
+            calendar.UpdatePopUpSize();
             calendar._customScrollLayout.UpdateViewChange((CalendarView)oldValue, (CalendarView)newValue);
             if (calendar._customScrollLayout != null)
             {
@@ -2467,6 +2643,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             calendar._headerLayout.UpdateHeaderText();
+            calendar.UpdatePopUpSize();
             calendar._headerLayout.InvalidateNavigationArrowVisibility();
             calendar._headerLayout.UpdateHeaderTextStyle();
             calendar._headerLayout.Background = calendar.HeaderView.Background;
@@ -3234,6 +3411,114 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             calendar._monthViewHeader?.CreateViewHeaderTemplate();
         }
 
+        /// <summary>
+        /// Called when <see cref="IsOpen"/> property changed.
+        /// </summary>
+        /// <param name="bindable">The bindable.</param>
+        /// <param name="oldValue">The old value.</param>
+        /// <param name="newValue">The new value.</param>
+        static void OnIsOpenPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfCalendar? calendar = bindable as SfCalendar;
+            if (calendar == null)
+            {
+                return;
+            }
+
+            if ((bool)newValue && calendar.IsVisible && (calendar.Mode == CalendarMode.Dialog || calendar.Mode == CalendarMode.RelativeDialog))
+            {
+                if (calendar.Children.Count != 0 && calendar._layout != null && calendar._layout.Parent == calendar)
+                {
+                    calendar.Remove(calendar._layout);
+                }
+
+                calendar.AddCalendarToPopup();
+                calendar.ShowPopup();
+            }
+            else
+            {
+                calendar.CloseCalendarPopup();
+                if (calendar.Children.Count != 0 && calendar._layout != null && calendar._layout.Parent != calendar && calendar._layout.Parent is ICollection<View> view)
+                {
+                    view.Remove(calendar._layout);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Called when <see cref="Mode"/> property changed.
+        /// </summary>
+        /// <param name="bindable">The bindable.</param>
+        /// <param name="oldValue">The old value.</param>
+        /// <param name="newValue">The new value.</param>
+        static void OnModeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfCalendar? calendar = bindable as SfCalendar;
+            if (calendar == null)
+            {
+                return;
+            }
+
+            CalendarMode mode = CalendarMode.Default;
+            if (newValue is CalendarMode value)
+            {
+                mode = value;
+            }
+
+            if (mode == CalendarMode.Dialog || mode == CalendarMode.RelativeDialog)
+            {
+                if (calendar.Children.Count != 0 && calendar._layout != null && calendar._layout.Parent == calendar)
+                {
+                    calendar.Remove(calendar._layout);
+                }
+
+                if (calendar.IsOpen)
+                {
+                    calendar.AddCalendarToPopup();
+                    calendar.ShowPopup();
+                }
+                else
+                {
+                    calendar.CloseCalendarPopup();
+                }
+            }
+            else
+            {
+                calendar.ResetPopup();
+                if (calendar._layout != null)
+                {
+                    if (calendar._layout.Parent != null && calendar._layout.Parent is ICollection<IView> view)
+                    {
+                        view.Remove(calendar._layout);
+                    }
+
+                    calendar.Add(calendar._layout);
+                }
+            }
+
+            calendar.InvalidateMeasure();
+        }
+
+        /// <summary>
+        /// Called when <see cref="RelativePosition"/> property changed.
+        /// </summary>
+        /// <param name="bindable">The bindable.</param>
+        /// <param name="oldValue">The old value.</param>
+        /// <param name="newValue">The new value.</param>
+        static void OnRelativePositionChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfCalendar? calendar = bindable as SfCalendar;
+            if (calendar == null)
+            {
+                return;
+            }
+
+            if (calendar.IsOpen && calendar.Mode == CalendarMode.RelativeDialog)
+            {
+                calendar.ShowPopup();
+            }
+        }
+
 #if WINDOWS
         /// <summary>
         /// Method invoke when flow direction property changed.
@@ -3322,6 +3607,26 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// Occurs whenever the cancel button tapped on calendar. It reset the selected values to confirmed selected values.
         /// </summary>
         public event EventHandler ActionButtonCanceled;
+
+        /// <summary>
+        /// Occurs after the calendar popup is opened.
+        /// </summary>
+        public event EventHandler CalendarPopupOpened;
+
+        /// <summary>
+        /// Occurs when the calendar popup is closed.
+        /// </summary>
+        public event EventHandler CalendarPopupClosed;
+
+        /// <summary>
+        /// Occurs when the calendar popup is closing.
+        /// </summary>
+        public event EventHandler<CancelEventArgs> CalendarPopupClosing;
+
+        /// <summary>
+        /// Occurs when the calendar popup is opening.
+        /// </summary>
+        public event EventHandler<CancelEventArgs> CalendarPopupOpening;
 
 #nullable enable
 
