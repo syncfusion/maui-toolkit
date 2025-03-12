@@ -1063,8 +1063,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             ResetAutoScroll();
             InvalidateSideBySideSeries();
-			RequiredEmptyPointReset = true;
-            base.OnDataSourceChanged(oldValue, newValue);
+			foreach (var item in EmptyPointIndexes)
+			{
+				if (item != null)
+
+				{
+					item.Clear();
+				}
+			}
+			base.OnDataSourceChanged(oldValue, newValue);
         }
 
         internal override void OnDataSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -1073,16 +1080,32 @@ namespace Syncfusion.Maui.Toolkit.Charts
             base.OnDataSource_CollectionChanged(sender, e);
         }
 
-        internal override void AddDataPoint(object data, int index, NotifyCollectionChangedEventArgs e)
+        internal override void AddDataPoint(int index, object data,  NotifyCollectionChangedEventArgs e)
         {
-            RequiredEmptyPointReset = true;
-            base.AddDataPoint(data, index, e);
+			ResetEmptyPointIndexes();
+			foreach (var item in EmptyPointIndexes)
+			{
+				if (item != null)
+
+				{
+					item.Clear();
+				}
+			}
+			base.AddDataPoint(index, data,  e);
         }
 
         internal override void RemoveData(int index, NotifyCollectionChangedEventArgs e)
         {
-            RequiredEmptyPointReset = true;
-            base.RemoveData(index, e);
+			ResetEmptyPointIndexes();
+			foreach (var item in EmptyPointIndexes)
+			{
+				if (item != null)
+
+				{
+					item.Clear();
+				}
+			}
+			base.RemoveData(index, e);
         }
 
         internal override void OnBindingPathChanged()

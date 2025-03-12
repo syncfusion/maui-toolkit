@@ -11,7 +11,7 @@
 	///
 	/// <para> To customize empty points, create an instance of <see cref="EmptyPointSettings"/>, configure it as needed, and then add it to the series.</para>
 	///
-	/// <para> EmptyPointSettings is not supported for all area-related series, as well as for FastChart.</para>
+	/// <para> EmptyPointSettings is not supported for all area-related series, as well as for FastChart and ErrorBarSeries.</para>
 	/// # [MainPage.xaml](#tab/tabid-1)
 	/// <code><![CDATA[
 	/// <chart:SfCartesianChart>
@@ -58,7 +58,7 @@
 	///  series.EmptyPointMode = EmptyPointMode.Zero;
 	///  series.EmptyPointSettings = new EmptyPointSettings();
 	///  series.EmptyPointSettings.Fill = Colors.Orange;
-	///  series.MarEmptyPointSettingskerSettings.Stroke = Colors.Red;
+	///  series.EmptyPointSettings.Stroke = Colors.Red;
 	///  series.EmptyPointSettings.StrokeWidth = 3; 
 	///  chart.Series.Add(series);
 	/// ]]>
@@ -187,7 +187,7 @@
 		///           EmptyPointMode = EmptyPointMode.Average,
 		///     };
 		///     series.EmptyPointSettings = new EmptyPointSettings();
-		///     series.MarEmptyPointSettingskerSettings.Stroke = Colors.Red;
+		///     series.EmptyPointSettings.Stroke = Colors.Red;
 		///     series.EmptyPointSettings.StrokeWidth = 3; 
 		///     chart.Series.Add(series);
 		///
