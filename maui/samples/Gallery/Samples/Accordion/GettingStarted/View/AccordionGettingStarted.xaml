@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             x:Class="Syncfusion.Maui.ControlsGallery.Accordion.SfAccordion.AccordionGettingStarted"
+             xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Accordion;assembly=Syncfusion.Maui.ToolKit"         
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlGallery.Accordion"
+             x:DataType="local:EmployeeDetails"
+             xmlns:thickness ="clr-namespace:Microsoft.Maui;assembly=Microsoft.Maui">
+
+  <localCore:SampleView.BindingContext>
+    <local:EmployeeDetails />
+  </localCore:SampleView.BindingContext>
+  <localCore:SampleView.Margin>
+    <OnPlatform x:TypeArguments="thickness:Thickness">
+      <On Platform="MacCatalyst" Value="-4,-4,-6,-6"/>
+      <On Platform="WinUI" Value="-4,-4,-6,-6"/>
+    </OnPlatform>
+  </localCore:SampleView.Margin>
+  <localCore:SampleView.Content>
+    <Grid ColumnDefinitions="0.4*, 0.6*">
+      <Grid IsClippedToBounds="True"  IsVisible="{OnPlatform MacCatalyst=True, WinUI=True, Default=False}"
+                  RowDefinitions="0.3*,100,50,*">
+        <Image Source="registrationform.png" Aspect="AspectFill" Grid.RowSpan="4"/>
+        <Label Text="Meet our Stellar Team" LineBreakMode="WordWrap" HorizontalOptions="Start"
+                       FontSize="30" WidthRequest="230" FontAttributes="Bold" TextColor="White" Grid.Row="1" Margin="50,0,0,0"/>
+        <Label Text="A Look at Our Employee List!" HorizontalOptions="Start" FontSize="16" WidthRequest="240" TextColor="White"
+                       Grid.Row="2" Margin="50,0,0,0"/>
+      </Grid>
+      <syncfusion:SfAccordion x:Name="accordion" BindableLayout.ItemsSource="{Binding Employees}" ExpandMode="SingleOrNone"
+                                    VerticalOptions="{OnPlatform Default=Fill}" 
+                                    IsClippedToBounds="True"
+                                    Grid.ColumnSpan="{OnPlatform Default=2, MacCatalyst=1,WinUI=1}" 
+                                    Grid.Column="{OnPlatform Default=0, MacCatalyst=1,WinUI=1}" 
+                                    HorizontalOptions="Fill">
+
+        <BindableLayout.ItemTemplate>
+          <DataTemplate x:DataType="local:EmployeeInfo">
+            <syncfusion:AccordionItem IsExpanded="{Binding IsExpanded}">
+              <syncfusion:AccordionItem.Header>
+                <Grid  HeightRequest="48">
+                  <Label Text="{Binding Name}" Margin="16,14,0,14" CharacterSpacing="0.25"   FontSize="14" FontFamily="Roboto-Regular"/>
+                </Grid>
+              </syncfusion:AccordionItem.Header>
+              <syncfusion:AccordionItem.Content>
+                <Grid ColumnSpacing="10" RowSpacing="2" BackgroundColor="{AppThemeBinding Light=#F4F4F4, Dark=#14E6E1E5}">
+                  <Grid Margin="16,8,0,0">
+                    <Grid.RowDefinitions >
+                      <RowDefinition Height="25"/>
+                      <RowDefinition Height="25"/>
+                      <RowDefinition Height="25"/>
+                      <RowDefinition Height="25"/>
+                      <RowDefinition Height="{OnPlatform Default=90,Android=90,WinUI=70, iOS=100,MacCatalyst=70 }"/>
+                      <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="100"/>
+                      <ColumnDefinition Width="100"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.RowSpan="4" Grid.Row="0" Grid.Column="0" Padding="0" Margin="0,0,12,7" BackgroundColor="{StaticResource White}">
+                      <Image Source="{Binding Image}"/>
+                    </Border>
+                    <Label TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" FontFamily="Roboto-Regular" Text="Position" Grid.Column="1" Grid.Row="0" Margin='{OnPlatform Default="6,0,0,0",MacCatalyst="12,0,0,0"}' />
+                    <Label TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" FontFamily="Roboto-Regular" Text="{Binding Position}" Grid.Row="0" Grid.Column="2" Margin='{OnPlatform MacCatalyst="6,0,0,0"}'/>
+                    <Label TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" FontFamily="Roboto-Regular" Text="Organization " Grid.Row="1" Grid.Column="1" Margin='{OnPlatform Default="6,0,0,0",MacCatalyst="12,0,0,0"}'/>
+                    <Label TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" FontFamily="Roboto-Regular" Text="{Binding OrganizationUnit}" Grid.Row="1" Grid.Column="2" Margin='{OnPlatform MacCatalyst="6,0,0,0"}'/>
+                    <Label TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" FontFamily="Roboto-Regular" Text="Date Of Birth " Grid.Row="2" Grid.Column="1" Margin='{OnPlatform Default="6,0,0,0",MacCatalyst="12,0,0,0"}'/>
+                    <Label TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" FontFamily="Roboto-Regular" Text="{Binding DateOfBirth}" Grid.Row="2" Grid.Column="2" Margin='{OnPlatform MacCatalyst="6,0,0,0"}'/>
+                    <Label TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" FontFamily="Roboto-Regular" Text="Location " Grid.Row="3" Grid.Column="1" Margin='{OnPlatform Default="6,0,0,0",MacCatalyst="12,0,0,0"}'/>
+                    <Label TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" FontFamily="Roboto-Regular" Text="{Binding Location}" Grid.Row="3" Grid.Column="2" Margin='{OnPlatform MacCatalyst="6,0,0,0"}'/>
+
+                    <Label Padding="0,5,0,12" Grid.Row="4" Grid.ColumnSpan="3"  LineBreakMode="WordWrap"  
+                                              FontSize="14" CharacterSpacing="0.25" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"
+                                              Text="{Binding Description}">
+                    </Label>
+
+                    <StackLayout Grid.Row="5" Orientation="Horizontal" Margin="0,0,0,12" Grid.ColumnSpan="3">
+                      <Label Text="&#xe763;" FontFamily="MauiSampleFontIcon" FontSize="16" Margin="0,2,2,2"
+                                             TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"
+                                             VerticalOptions="Center" VerticalTextAlignment="Center"/>
+                      <Label Text="{Binding Phone}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" VerticalOptions="Center" CharacterSpacing="0.25" FontSize="14"/>
+                    </StackLayout>
+
+                  </Grid>
+
+                </Grid>
+              </syncfusion:AccordionItem.Content>
+            </syncfusion:AccordionItem>
+          </DataTemplate>
+        </BindableLayout.ItemTemplate>
+      </syncfusion:SfAccordion>
+    </Grid>
+  </localCore:SampleView.Content>
+
+</localCore:SampleView>
