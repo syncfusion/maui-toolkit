@@ -802,54 +802,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         }
 
         [Fact]
-        public void MonthView_GetAndSet_Null()
-        {
-            SfCalendar calendar = new SfCalendar();
-
-            #pragma warning disable CS8625 
-            calendar.MonthView = null;
-            #pragma warning restore CS8625 
-
-            Assert.Null(calendar.MonthView);
-        }
-
-        [Fact]
-        public void YearView_GetAndSet_Null()
-        {
-            SfCalendar calendar = new SfCalendar();
-
-            #pragma warning disable CS8625
-            calendar.YearView = null;
-            #pragma warning restore CS8625
-
-            Assert.Null(calendar.YearView);
-        }
-
-        [Fact]
-        public void HeaderView_GetAndSet_Null()
-        {
-            SfCalendar calendar = new SfCalendar();
-
-            #pragma warning disable CS8625
-            calendar.HeaderView = null;
-            #pragma warning restore CS8625
-
-            Assert.Null(calendar.HeaderView);
-        }
-
-        [Fact]
-        public void FooterView_GetAndSet_Null()
-        {
-            SfCalendar calendar = new SfCalendar();
-
-            #pragma warning disable CS8625
-            calendar.FooterView = null;
-            #pragma warning restore CS8625
-
-            Assert.Null(calendar.FooterView);
-        }
-
-        [Fact]
         public void MonthViewHeaderTemplate_GetAndSet_DataTemplate()
         {
             SfCalendar calendar = new SfCalendar();

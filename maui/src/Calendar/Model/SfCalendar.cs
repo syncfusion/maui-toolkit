@@ -7,7 +7,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
     /// Initializes a new instance of the <see cref="SfCalendar"/> class that represents a control,
     /// used to display and select one or more dates with in specified date range.
     /// </summary>
-#pragma warning disable CA1506
     public partial class SfCalendar
     {
         #region Bindable Properties
@@ -3327,6 +3326,5 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
         #endregion
     }
-#pragma warning restore CA1506
 
 }
