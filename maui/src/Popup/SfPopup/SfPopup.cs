@@ -393,54 +393,27 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		#region Public Properties
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the <see cref="_popupView"/> is open or not.
+		/// Gets or sets a value indicating whether the popup view is open or not.
 		/// </summary>
 		/// <value>
-		/// The value indicating whether the <see cref="_popupView"/> is open or not.
+		/// The value indicating whether the popup view is open or not.
 		/// </value>
 		/// <remarks>
-		/// The <see cref="_popupView"/> will be opened and closed based on this value.
+		/// The popup view will be opened and closed based on this value.
 		/// </remarks>
 		/// <example>
-		/// <para>The following code example demonstrates how to set IsOpen property for the <see cref="SfPopup"/> control.</para>
+		/// <para>The following code example demonstrates how to set <see cref="IsOpen"/> property for the <see cref="SfPopup"/> control.</para>
 		/// <code lang="C#">
 		/// <![CDATA[
-		/// using System.ComponentModel;
-		///
-		/// namespace PopupMAUI
+		/// void clickToShowPopup_Clicked(object sender, EventArgs e)
 		/// {
-		///     public partial class MainPage : ContentPage
-		///     {
-		///         public MainPage()
-		///         {
-		///            InitializeComponent();
-		///         }
-		///         void clickToShowPopup_Clicked(object sender, EventArgs e)
-		///         {
-		///             (BindingContext as ViewModel).IsOpen = true;
-		///         }
-		///      }
+		///     popup.IsOpen = true;
 		/// }
 		/// ]]>
 		/// </code>
 		/// <code lang="XAML">
 		/// <![CDATA[
-		/// <?xml version = "1.0" encoding="utf-8" ?>
-		/// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
-		///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-		///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
-		///     xmlns:local="clr-namespace:PopupMAUI"
-		///     x:Class="PopupMAUI.MainPage">
-		/// <ContentPage.BindingContext>
-		///     <local:ViewModel/>
-		/// </ContentPage.BindingContext>
-		/// <ContentPage.Content>
-		///    <StackLayout WidthRequest = "500" >
-		///        <syncfusion:SfPopup x:Name="popup" IsOpen="{Binding IsOpen}"/>
-		///        <Button x:Name="clickToShowPopup" Text="Click To Show Popup" Clicked="clickToShowPopup_Clicked"/>
-		///    </StackLayout>
-		/// </ContentPage.Content>
-		/// </ContentPage>
+		/// <syncfusion:SfPopup x:Name="popup" IsOpen="True"/>
 		/// ]]>
 		/// </code>
 		/// </example>
@@ -466,6 +439,16 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <remarks>
 		/// <b>OverlayMode.Blur</b> will be applied to android 31 and above. In below android 31, <b>OverlayMode.Transparent</b> will be applied by default.
 		/// </remarks>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="OverlayMode"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						OverlayMode="Blur">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="ShowOverlayAlways"/>
 		/// <seealso cref="PopupStyle.OverlayColor"/>
 		/// <seealso cref="PopupStyle.BlurIntensity"/>
@@ -479,6 +462,26 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the relative position, where the pop-up should be displayed relatively to <see cref="RelativeView"/>. The relative position can also be absolutely adjusted using the <see cref="AbsoluteX"/> and <see cref="AbsoluteY"/> properties.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set RelativePosition property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="C#">
+		/// <![CDATA[
+		/// void clickToShowPopup_Clicked(object sender, EventArgs e)
+		/// {
+		///     popup.Show();
+		/// }
+		/// ]]>
+		/// </code>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <StackLayout WidthRequest = "500" >
+		///	   <Button x:Name="setRelativeView" Text="Set Relative" />
+		///	   <syncfusion:SfPopup x:Name="popup" AbsoluteX="10" AbsoluteY="10" RelativeView="{x:Reference setRelativeView}" RelativePosition="AlignBottom"/>
+		///    <Button x:Name="clickToShowPopup" Text="Click To Show Popup" Clicked="clickToShowPopup_Clicked"/>
+		/// </StackLayout>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="RelativeView"/>
 		/// <seealso cref="AbsoluteX"/>
 		/// <seealso cref="AbsoluteY"/>
@@ -495,6 +498,16 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// Gets or sets the absolute x-point to display a pop-up when positioning it relatively to the specified <see cref="RelativeView"/> based on the <see cref="RelativePosition"/>.
 		/// The pop-up will be displayed based on this property value only when relatively displaying it by using the <see cref="RelativeView"/> property.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AbsoluteX"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AbsoluteX="100">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="RelativePosition"/>
 		/// <seealso cref="RelativeView"/>
 		/// <seealso cref="AbsoluteY"/>
@@ -511,6 +524,16 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// Gets or sets the absolute y-point to display a pop-up when positioning it relatively to the specified <see cref="RelativeView"/> based on the <see cref="RelativePosition"/>.
 		/// The pop-up will be displayed based on this property value only when relatively displaying it by using the <see cref="RelativeView"/> property.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AbsoluteY"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AbsoluteY="100">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="RelativePosition"/>
 		/// <seealso cref="RelativeView"/>
 		/// <seealso cref="AbsoluteX"/>
@@ -536,43 +559,19 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <para>The following code example demonstrates how to set RelativeView property for the <see cref="SfPopup"/> control.</para>
 		/// <code lang="C#">
 		/// <![CDATA[
-		/// using System.ComponentModel;
-		///
-		/// namespace PopupMAUI
+		/// void clickToShowPopup_Clicked(object sender, EventArgs e)
 		/// {
-		///     public partial class MainPage : ContentPage
-		///     {
-		///         public MainPage()
-		///         {
-		///            InitializeComponent();
-		///         }
-		///         void clickToShowPopup_Clicked(object sender, EventArgs e)
-		///         {
-		///             (BindingContext as ViewModel).IsOpen = true;
-		///         }
-		///      }
+		///     popup.Show();
 		/// }
 		/// ]]>
 		/// </code>
 		/// <code lang="XAML">
 		/// <![CDATA[
-		/// <?xml version = "1.0" encoding="utf-8" ?>
-		/// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
-		///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-		///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
-		///     xmlns:local="clr-namespace:PopupMAUI"
-		///     x:Class="PopupMAUI.MainPage">
-		/// <ContentPage.BindingContext>
-		///     <local:ViewModel/>
-		/// </ContentPage.BindingContext>
-		/// <ContentPage.Content>
-		///    <StackLayout WidthRequest = "500" >
-		///    <Button x:Name="setRelativeView" Text="Set Relative" />
-		///        <syncfusion:SfPopup x:Name="popup" AbsoluteX="10" AbsoluteY="10" RelativeView="{x:Reference setRelativeView}" RelativePosition="AlignBottom" IsOpen="{Binding IsOpen}"/>
-		///        <Button x:Name="clickToShowPopup" Text="Click To Show Popup" Clicked="clickToShowPopup_Clicked"/>
-		///    </StackLayout>
-		/// </ContentPage.Content>
-		/// </ContentPage>
+		///<StackLayout WidthRequest = "500" >
+		///	   <Button x:Name="setRelativeView" Text="Set Relative" />
+		///	   <syncfusion:SfPopup x:Name="popup" AbsoluteX="10" AbsoluteY="10" RelativeView="{x:Reference setRelativeView}" RelativePosition="AlignBottom"/>
+		///    <Button x:Name="clickToShowPopup" Text="Click To Show Popup" Clicked="clickToShowPopup_Clicked"/>
+		///</StackLayout>
 		/// ]]>
 		/// </code>
 		/// </example>
@@ -591,6 +590,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets a value indicating whether the <see cref="_popupView"/> should be opened, when interacting outside its boundary area.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="StaysOpen"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						StaysOpen="True">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="ShowCloseButton"/>
 		public bool StaysOpen
 		{
@@ -601,6 +609,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or Sets a value indicating whether an overlay can be shown around the <see cref="_popupView"/>.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="ShowOverlayAlways"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						ShowOverlayAlways="True">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="OverlayMode"/>
 		/// <seealso cref="PopupStyle.OverlayColor"/>
 		/// <seealso cref="PopupStyle.BlurIntensity"/>
@@ -612,11 +629,20 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the type of layout template of the _popupView.
+		/// Gets or sets the type of layout template of the popup view.
 		/// </summary>
 		/// <value>
-		/// <b>PopupButtonAppearanceMode.OneButton</b> displays a single button in the _popupView footer. <b>PopupButtonAppearanceMode.TwoButton</b> displays two buttons in the _popupView footer.
+		/// <b>PopupButtonAppearanceMode.OneButton</b> displays a single button in the popup view footer. <b>PopupButtonAppearanceMode.TwoButton</b> displays two buttons in the _popupView footer.
 		/// </value>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AppearanceMode"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AppearanceMode="OneButton">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="PopupStyle"/>
 		/// <seealso cref="FooterTemplate"/>
 		/// <seealso cref="FooterHeight"/>
@@ -640,57 +666,21 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <see cref="PopupStyle"/> does not apply to templated elements.
 		/// </remarks>
 		/// <example>
-		/// <para>The following code example demonstrates how to set HeaderTemplate property for the <see cref="SfPopup"/> control.</para>
-		/// <code lang="C#">
-		/// <![CDATA[
-		/// using System.ComponentModel;
-		///
-		/// namespace PopupMAUI
-		/// {
-		///     public partial class MainPage : ContentPage
-		///     {
-		///         public MainPage()
-		///         {
-		///            InitializeComponent();
-		///         }
-		///         void clickToShowPopup_Clicked(object sender, EventArgs e)
-		///         {
-		///             (BindingContext as ViewModel).IsOpen = true;
-		///         }
-		///      }
-		/// }
-		/// ]]>
-		/// </code>
+		/// <para>The following code example demonstrates how to set <see cref="HeaderTemplate"/> property for the <see cref="SfPopup"/> control.</para>
 		/// <code lang="XAML">
 		/// <![CDATA[
-		/// <?xml version = "1.0" encoding="utf-8" ?>
-		/// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
-		///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-		///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
-		///     xmlns:local="clr-namespace:PopupMAUI"
-		///     x:Class="PopupMAUI.MainPage">
-		/// <ContentPage.BindingContext>
-		///     <local:ViewModel/>
-		/// </ContentPage.BindingContext>
-		/// <ContentPage.Content>
-		///    <StackLayout WidthRequest = "500" >
-		///    <Button x:Name="setRelativeView" Text="Set Relative" />
-		///        <syncfusion:SfPopup x:Name="popup" IsOpen="{Binding IsOpen}">
-		///             <syncfusion:SfPopup.HeaderTemplate>
-		///                 <DataTemplate>
-		///                     <Label Text = "Customized Header"
-		///                        FontAttributes="Bold"
-		///                        BackgroundColor="Blue"
-		///                        FontSize="16"
-		///                        HorizontalTextAlignment="Center"
-		///                        VerticalTextAlignment="Center"/>
-		///                 </DataTemplate>
-		///             </syncfusion:SfPopup.HeaderTemplate>
-		///         </syncfusion:SfPopup>
-		///        <Button x:Name="clickToShowPopup" Text="Click To Show Popup" Clicked="clickToShowPopup_Clicked"/>
-		///    </StackLayout>
-		/// </ContentPage.Content>
-		/// </ContentPage>
+		/// <syncfusion:SfPopup x:Name="popup">
+		///      <syncfusion:SfPopup.HeaderTemplate>
+		///          <DataTemplate>
+		///              <Label Text = "Customized Header"
+		///                 FontAttributes="Bold"
+		///                 BackgroundColor="Blue"
+		///                 FontSize="16"
+		///                 HorizontalTextAlignment="Center"
+		///                 VerticalTextAlignment="Center"/>
+		///          </DataTemplate>
+		///      </syncfusion:SfPopup.HeaderTemplate>
+		///  </syncfusion:SfPopup>
 		/// ]]>
 		/// </code>
 		/// </example>
@@ -716,54 +706,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <see cref="PopupStyle"/> does not apply to templated elements.
 		/// </remarks>
 		/// <example>
-		/// <para>The following code example demonstrates how to set ContentTemplate property for the <see cref="SfPopup"/> control.</para>
-		/// <code lang="C#">
-		/// <![CDATA[
-		/// using System.ComponentModel;
-		///
-		/// namespace PopupMAUI
-		/// {
-		///     public partial class MainPage : ContentPage
-		///     {
-		///         public MainPage()
-		///         {
-		///            InitializeComponent();
-		///         }
-		///         void clickToShowPopup_Clicked(object sender, EventArgs e)
-		///         {
-		///             (BindingContext as ViewModel).IsOpen = true;
-		///         }
-		///      }
-		/// }
-		/// ]]>
-		/// </code>
+		/// <para>The following code example demonstrates how to set <see cref="ContentTemplate"/> property for the <see cref="SfPopup"/> control.</para>
 		/// <code lang="XAML">
 		/// <![CDATA[
-		/// <?xml version = "1.0" encoding="utf-8" ?>
-		/// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
-		///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-		///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
-		///     xmlns:local="clr-namespace:PopupMAUI"
-		///     x:Class="PopupMAUI.MainPage">
-		/// <ContentPage.BindingContext>
-		///     <local:ViewModel/>
-		/// </ContentPage.BindingContext>
-		/// <ContentPage.Content>
-		///    <StackLayout WidthRequest = "500" >
-		///    <Button x:Name="setRelativeView" Text="Set Relative" />
-		///        <syncfusion:SfPopup x:Name="popup" IsOpen="{Binding IsOpen}">
-		///                 <syncfusion:SfPopup.ContentTemplate>
-		///                     <DataTemplate>
-		///                         <Label Text = "This is SfPopup"
-		///                                BackgroundColor="SkyBlue"
-		///                                HorizontalTextAlignment="Center"/>
-		///                     </DataTemplate>
-		///                 </syncfusion:SfPopup.ContentTemplate>
-		///         </syncfusion:SfPopup>
-		///        <Button x:Name="clickToShowPopup" Text="Click To Show Popup" Clicked="clickToShowPopup_Clicked"/>
-		///    </StackLayout>
-		/// </ContentPage.Content>
-		/// </ContentPage>
+		/// <syncfusion:SfPopup x:Name="popup">
+		///          <syncfusion:SfPopup.ContentTemplate>
+		///              <DataTemplate>
+		///                  <Label Text = "This is SfPopup"
+		///                         BackgroundColor="SkyBlue"
+		///                         HorizontalTextAlignment="Center"/>
+		///              </DataTemplate>
+		///          </syncfusion:SfPopup.ContentTemplate>
+		///  </syncfusion:SfPopup>
 		/// ]]>
 		/// </code>
 		/// </example>
@@ -779,67 +733,31 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the template to be loaded in the footer of the _popupView.
+		/// Gets or sets the template to be loaded in the footer of the popup view.
 		/// </summary>
 		/// <value>
-		/// The template to be loaded in the footer of the <see cref="_popupView"/>. The default value is null.
+		/// The template to be loaded in the footer of the popup view,The default value is null.
 		/// </value>
 		/// <remarks>
 		/// <see cref="PopupStyle"/> does not apply to templated elements.
 		/// <see cref="ShowFooter"/> need to be enabled to display footer.
 		/// </remarks>
 		/// <example>
-		/// <para>The following code example demonstrates how to set FooterTemplate property for the <see cref="SfPopup"/> control.</para>
+		/// <para>The following code example demonstrates how to set <see cref="FooterTemplate"/> property for the <see cref="SfPopup"/> control.</para>
 		/// <code lang="C#">
 		/// <![CDATA[
-		/// using System.ComponentModel;
-		///
-		/// namespace PopupMAUI
-		/// {
-		///     public partial class MainPage : ContentPage
-		///     {
-		///         public MainPage()
-		///         {
-		///            InitializeComponent();
-		///         }
-		///         void clickToShowPopup_Clicked(object sender, EventArgs e)
-		///         {
-		///             (BindingContext as ViewModel).IsOpen = true;
-		///         }
-		///      }
-		/// }
-		/// ]]>
-		/// </code>
-		/// <code lang="XAML">
-		/// <![CDATA[
-		/// <?xml version = "1.0" encoding="utf-8" ?>
-		/// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
-		///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-		///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
-		///     xmlns:local="clr-namespace:PopupMAUI"
-		///     x:Class="PopupMAUI.MainPage">
-		/// <ContentPage.BindingContext>
-		///     <local:ViewModel/>
-		/// </ContentPage.BindingContext>
-		/// <ContentPage.Content>
-		///    <StackLayout WidthRequest = "500" >
-		///    <Button x:Name="setRelativeView" Text="Set Relative" />
-		///        <syncfusion:SfPopup x:Name="popup" IsOpen="{Binding IsOpen}" ShowFooter="True">
-		///                 <syncfusion:SfPopup.FooterTemplate>
-		///                     <DataTemplate>
-		///                         <Label Text = "Customized Footer"
-		///                                FontAttributes="Bold"
-		///                                BackgroundColor="Blue"
-		///                                FontSize="16"
-		///                                HorizontalTextAlignment="Center"
-		///                                VerticalTextAlignment="Center"/>
-		///                     </DataTemplate>
-		///                 </syncfusion:SfPopup.FooterTemplate>
-		///         </syncfusion:SfPopup>
-		///        <Button x:Name="clickToShowPopup" Text="Click To Show Popup" Clicked="clickToShowPopup_Clicked"/>
-		///    </StackLayout>
-		/// </ContentPage.Content>
-		/// </ContentPage>
+		/// <syncfusion:SfPopup x:Name="popup">
+		///		<syncfusion:SfPopup.FooterTemplate>
+		///			<DataTemplate>
+		///				<Label Text = "Customized Footer"
+		///					   FontAttributes="Bold"
+		///                    BackgroundColor="Blue"
+		///                    FontSize="16"
+		///                    HorizontalTextAlignment="Center"
+		///                    VerticalTextAlignment="Center"/>
+		///         </DataTemplate>
+		///		</syncfusion:SfPopup.FooterTemplate>
+		/// </syncfusion:SfPopup>
 		/// ]]>
 		/// </code>
 		/// </example>
@@ -860,8 +778,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the header is to be included in the _popupView.
+		/// Gets or sets a value indicating whether the header is to be included in the popup view.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="ShowHeader"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						ShowHeader="True">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="ShowCloseButton"/>
 		/// <seealso cref="HeaderHeight"/>
 		/// <seealso cref="HeaderTemplate"/>
@@ -873,8 +800,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the time delay in milliseconds for automatically closing the Popup.
+		/// Gets or sets the time delay in milliseconds for automatically closing the <see cref="SfPopup"/>.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AutoCloseDuration"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AutoCloseDuration="500">
+		/// ]]>
+		/// </code>
+		/// </example>
 		public int AutoCloseDuration
 		{
 			get => (int)GetValue(AutoCloseDurationProperty);
@@ -882,11 +818,20 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the footer is to be included in the _popupView.
+		/// Gets or sets a value indicating whether the footer is to be included in the popup view.
 		/// </summary>
 		/// <value>
 		/// <c>true</c> if show footer; otherwise, <c>false</c>. The default value is <c>false</c>.
 		/// </value>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="ShowFooter"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						ShowFooter="True">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="FooterTemplate"/>
 		/// <seealso cref="FooterHeight"/>
 		/// <seealso cref="AppearanceMode"/>
@@ -901,8 +846,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the header title of the _popupView.
+		/// Gets or sets the header title of the popup view.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="HeaderTitle"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						HeaderTitle="PopupHeader">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderTemplate"/>
 		/// <seealso cref="ShowCloseButton"/>
 		/// <seealso cref="HeaderHeight"/>
@@ -919,8 +873,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the popup message of the _popupView.
+		/// Gets or sets the popup message of the popup view.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="Message"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						Message="Popup Content">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="ContentTemplate"/>
 		/// <seealso cref="PopupStyle.MessageBackground"/>
 		/// <seealso cref="PopupStyle.MessageTextColor"/>
@@ -933,6 +897,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the text of accept button in the footer.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AcceptButtonText"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AccpetButtonText="OK">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="FooterTemplate"/>
 		/// <seealso cref="FooterHeight"/>
 		/// <seealso cref="PopupStyle.FooterBackground"/>
@@ -950,6 +923,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the text of decline button in the footer.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="DeclineButtonText"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						DeclineButtonText="Cancel">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="FooterTemplate"/>
 		/// <seealso cref="FooterHeight"/>
 		/// <seealso cref="PopupStyle.FooterBackground"/>
@@ -967,6 +949,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the x-position of the _popupView.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="StartX"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						StartX="100">
+		/// ]]>
+		/// </code>
+		/// </example>
 		public int StartX
 		{
 			get => (int)GetValue(StartXProperty);
@@ -976,6 +967,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the y-position of the _popupView.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="StartY"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						StartY="100">
+		/// ]]>
+		/// </code>
+		/// </example>
 		public int StartY
 		{
 			get => (int)GetValue(StartYProperty);
@@ -985,6 +985,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the style to be applied to the _popupView in <see cref="SfPopup"/>.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="PopupStyle"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle PopupBackground="#C3B0D6" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		public PopupStyle PopupStyle
 		{
 			get => (PopupStyle)GetValue(PopupStyleProperty);
@@ -992,8 +1004,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the header height of the _popupView.
+		/// Gets or sets the header height of the popup view.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="HeaderHeight"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						HeaderHeight="100">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderTemplate"/>
 		/// <seealso cref="HeaderTitle"/>
 		/// <seealso cref="ShowHeader"/>
@@ -1004,8 +1025,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the footer height of the _popupView.
+		/// Gets or sets the footer height of the popup view.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set FooterHeight property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						FooterHeight="100">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="FooterTemplate"/>
 		/// <seealso cref="ShowFooter"/>
 		public int FooterHeight
@@ -1017,6 +1047,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets a value indicating whether to show the close button in the header.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="ShowCloseButton"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						ShowCloseButton="True">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderTitle"/>
 		/// <seealso cref="HeaderTemplate"/>
 		/// <seealso cref="ShowHeader"/>
@@ -1030,6 +1069,31 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the command to invoke when the accept button in the footer is tapped.
 		/// </summary>
+		/// <example>
+		/// Here is an example of how to set the <see cref="AcceptCommand"/> property
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <popup:SfPopup AcceptComand="Binding PopupAcceptCommand}" />
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// public class PopupViewModel
+		/// {
+		///		public ICommand PopupAcceptCommand { get; set; }
+		///		public PopupViewModel()
+		///		{
+		///			PopupAcceptCommand = new Command(PopupAccept);
+		///		}
+		///		
+		///		private void PopupAccept()
+		///		{
+		///			// You can write your set of codes that needs to be executed.
+		///		}
+		/// }
+		/// ]]></code>
+		/// </example>
 		/// <seealso cref="AppearanceMode"/>
 		/// <seealso cref="Opening"/>
 		/// <seealso cref="Opened"/>
@@ -1044,6 +1108,31 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the command to invoke when the decline button in the footer is tapped.
 		/// </summary>
+		/// <example>
+		/// Here is an example of how to set the <see cref="DeclineCommand"/> property
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <popup:SfPopup AcceptComand="Binding PopupDeclineCommand}" />
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// public class PopupViewModel
+		/// {
+		///		public ICommand PopupDeclineCommand { get; set; }
+		///		public PopupViewModel()
+		///		{
+		///			PopupDeclineCommand = new Command(PopupDecline);
+		///		}
+		///		
+		///		private void PopupDecline()
+		///		{
+		///			// You can write your set of codes that needs to be executed.
+		///		}
+		/// }
+		/// ]]></code>
+		/// </example>
 		/// <seealso cref="AppearanceMode"/>
 		/// <seealso cref="Opening"/>
 		/// <seealso cref="Opened"/>
@@ -1056,11 +1145,20 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether to show the Popupview in full screen or not.
+		/// Gets or sets a value indicating whether to show the popup view in full screen or not.
 		/// </summary>
 		/// <remarks>
-		/// If <see cref="IsFullScreen"/> is set as true, the height request and width request given for the _popupView will not be considered.
+		/// If <see cref="IsFullScreen"/> is set as true, the height request and width request given for the popup view will not be considered.
 		/// </remarks>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="IsFullScreen"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						IsFullScreen="True">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="IsOpen"/>
 		/// <seealso cref="Show(bool)"/>
 		public bool IsFullScreen
@@ -1070,7 +1168,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets a value that determines how to size the _popupView based on its template contents.
+		/// Gets or sets a value that determines how to size the popup view based on its template contents.
 		/// </summary>
 		/// <value>
 		/// The default value is <see cref="PopupAutoSizeMode.None"/>.
@@ -1078,6 +1176,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <remarks>
 		/// <see cref="AutoSizeMode"/> will be applied to <see cref="SfPopup"/> only if <see cref="ContentTemplate"/> is defined.
 		/// </remarks>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AutoSizeMode"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AutoSizeMode="Both">
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="ContentTemplate"/>
 		public PopupAutoSizeMode AutoSizeMode
 		{
@@ -1086,8 +1193,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the animation to be applied for the _popupView when opening and closing it.
+		/// Gets or sets the animation to be applied for the popup view when opening and closing it.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AnimationMode"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AnimationMode="Fade">
+		/// ]]>
+		/// </code>
+		/// </example>
 		public PopupAnimationMode AnimationMode
 		{
 			get => (PopupAnimationMode)GetValue(AnimationModeProperty);
@@ -1095,11 +1211,20 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the duration in milliseconds of the animation played when opening and closing the _popupView.
+		/// Gets or sets the duration in milliseconds of the animation played when opening and closing the popup view.
 		/// </summary>
 		/// <value>
-		/// The duration in milliseconds of the animation played at the opening and closing of the _popupView.
+		/// The duration in milliseconds of the animation played at the opening and closing of the popup view.
 		/// </value>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AnimationDuration"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AnimationDuration="100">
+		/// ]]>
+		/// </code>
+		/// </example>
 		public double AnimationDuration
 		{
 			get => (double)GetValue(AnimationDurationProperty);
@@ -1107,11 +1232,20 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets the animation easing effect to be applied to the _popupView's opening and closing animation.
+		/// Gets or sets the animation easing effect to be applied to the popup view's opening and closing animation.
 		/// </summary>
 		/// <value>
-		/// The animation easing effect to be applied for the _popupView when it opens and closes.
+		/// The animation easing effect to be applied for the popup view when it opens and closes.
 		/// </value>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="AnimationEasing"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						AnimationEasing="SinIn">
+		/// ]]>
+		/// </code>
+		/// </example>
 		public PopupAnimationEasing AnimationEasing
 		{
 			get => (PopupAnimationEasing)GetValue(AnimationEasingProperty);
@@ -1119,9 +1253,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the action bar bounds should be considered while positioning the Popup.
+		/// Gets or sets a value indicating whether the action bar bounds should be considered while positioning the <see cref="SfPopup"/> .
 		/// </summary>
-		/// <value> <c>true</c> to consider the action bar area to position the Popup. otherwise, <c>false</c>.</value>
+		/// <value> <c>true</c> to consider the action bar area to position the <see cref="SfPopup"/>. otherwise, <c>false</c>.</value>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="IgnoreActionBar"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[ 
+		/// <syncfusion:SfPopup x:Name="popup" 
+		///						IgnoreActionBar="True">
+		/// ]]>
+		/// </code>
+		/// </example>
 		public bool IgnoreActionBar
 		{
 			get => (bool)GetValue(IgnoreActionBarProperty);
@@ -1207,6 +1350,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="title">The title of the popup.</param>
 		/// <param name="message">The message to be displayed in the popup.</param>
 		/// <param name="autoCloseDuration">The delay in milliseconds after which the popup will automatically close.</param>
+		/// <example>
+		/// <para>The following code example demonstrates how to display <see cref="SfPopup"/> control using <see cref="Show(string,string,int)"/> method.</para>
+		/// <code lang="C#">
+		/// <![CDATA[ 
+		///	void OnButton_Clicked(object sender, EventArgs e)
+		///	{
+		///		popup.Show("HeaderTitle","PopupMessageView",1000);	
+		/// }
+		/// ]]>
+		/// </code>
+		/// </example>
 		public static void Show(string title, string message, int autoCloseDuration = 0)
 		{
 			SfPopup popup = new SfPopup()
@@ -1226,6 +1380,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="message">The message to be displayed in the popup.</param>
 		/// <param name="acceptText">The text to be displayed on the accept button in the footer.</param>
 		/// <param name="autoCloseDuration">The delay in milliseconds after which the popup will automatically close.</param>
+		/// <example>
+		/// <para>The following code example demonstrates how to display <see cref="SfPopup"/> control using <see cref="Show(string,string,string,int)"/> method.</para>
+		/// <code lang="C#">
+		/// <![CDATA[ 
+		///	void OnButton_Clicked(object sender, EventArgs e)
+		///	{
+		///		popup.Show("HeaderTitle","PopupMessageView","OK",1000);	
+		/// }
+		/// ]]>
+		/// </code>
+		/// </example>
 		public static void Show(string title, string message, string acceptText, int autoCloseDuration = 0)
 		{
 			SfPopup popup = new SfPopup()
@@ -1249,6 +1414,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="autoCloseDuration">The delay in milliseconds after which the popup will automatically close.</param>
 		/// <returns>A task representing the asynchronous operation.
 		/// The result will be true if the popup was closed using the accept button; otherwise, false.</returns>
+		/// <example>
+		/// <para>The following code example demonstrates how to display <see cref="SfPopup"/> control using <see cref="Show(string,string,string,string,int)"/> method.</para>
+		/// <code lang="C#">
+		/// <![CDATA[ 
+		///	void OnButton_Clicked(object sender, EventArgs e)
+		///	{
+		///		popup.Show("HeaderTitle","PopupMessageView","OK","Cancel",1000);	
+		/// }
+		/// ]]>
+		/// </code>
+		/// </example>
 		public static async Task<bool> Show(string title, string message, string acceptText, string declineText, int autoCloseDuration = 0)
 		{
 			SfPopup popup = new SfPopup()
@@ -1273,6 +1449,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <returns>A task representing the asynchronous operation.
 		/// The result will be true if the popup was closed using the accept button; otherwise, false.
 		/// </returns>
+		/// <example>
+		/// <para>The following code example demonstrates how to display <see cref="SfPopup"/> control using <see cref="ShowAsync()"/> method.</para>
+		/// <code lang="C#"><![CDATA[
+		///	async void OnButton_Clicked(object sender, EventArgs e)
+		///	{
+		///		var result = await popup.ShowAsync();
+		/// }
+		/// ]]></code>
+		///  </example>
 		public async Task<bool> ShowAsync()
 		{
 			_taskCompletionSource = new TaskCompletionSource<bool>();
@@ -1293,20 +1478,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <example>
 		/// <para>The following code example demonstrates how to display <see cref="SfPopup"/> control using <see cref="Show(bool)"/> method.</para>
 		/// <code lang="C#">
-		/// <![CDATA[
-		/// using System.ComponentModel;
-		///
-		/// namespace PopupMAUI
-		/// {
-		///     public partial class MainPage : ContentPage
-		///     {
-		///         public MainPage()
-		///         {
-		///            InitializeComponent();
-		///            SfPopup popup = new SfPopup();
-		///            popup.Show();
-		///         }
-		///      }
+		/// <![CDATA[ 
+		///	void OnButton_Clicked(object sender, EventArgs e)
+		///	{
+		///		popup.Show();	
 		/// }
 		/// ]]>
 		/// </code>
@@ -1345,20 +1520,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <example>
 		/// <para>The following code example demonstrates how to display <see cref="SfPopup"/> control using <see cref="Show(double, double)"/> method.</para>
 		/// <code lang="C#">
-		/// <![CDATA[
-		/// using System.ComponentModel;
-		///
-		/// namespace PopupMAUI
-		/// {
-		///     public partial class MainPage : ContentPage
-		///     {
-		///         public MainPage()
-		///         {
-		///            InitializeComponent();
-		///            SfPopup popup = new SfPopup();
-		///            popup.Show(100, 100);
-		///         }
-		///      }
+		/// <![CDATA[ 
+		///	void OnButton_Clicked(object sender, EventArgs e)
+		///	{
+		///		popup.Show(100,100);	
 		/// }
 		/// ]]>
 		/// </code>
@@ -1448,22 +1613,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <para>The following code example demonstrates how to display <see cref="SfPopup"/> control using <see cref="ShowRelativeToView(View, PopupRelativePosition, double, double)"/> method.</para>
 		/// <code lang="C#">
 		/// <![CDATA[
-		/// using System.ComponentModel;
-		///
-		/// namespace PopupMAUI
+		/// void setRelativeView_Clicked(object sender, EventArgs e)
 		/// {
-		///     public partial class MainPage : ContentPage
-		///     {
-		///         public MainPage()
-		///         {
-		///            InitializeComponent();
-		///            SfPopup popup = new SfPopup();
-		///         }
-		///      }
-		///      void setRelativeView_Clicked(object sender, EventArgs e)
-		///      {
-		///         sfPopup.ShowRelativeToView(showPopup, PopupRelativePosition.AlignToRightOf, 10, 10);
-		///      }
+		///		sfPopup.ShowRelativeToView(showPopup, PopupRelativePosition.AlignToRightOf, 10, 10);
 		/// }
 		/// ]]>
 		/// </code>
@@ -1537,6 +1689,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Dismisses the <see cref="_popupView"/> from the view.
 		/// </summary>
+		/// <example>
+		/// <para>The following code demonstrates how to dismiss the <see cref="SfPopup"/>.</para>
+		/// <code lang="C#">
+		/// <![CDATA[ 
+		///	void DismissButton_Clicked(object sender, EventArgs e)
+		///	{
+		///		popup.Dismiss();	
+		/// }
+		/// ]]>
+		/// </code>
+		/// </example>
 		public void Dismiss()
 		{
 			if (IsOpen && !StaysOpen)
@@ -1546,7 +1709,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Refreshes the <see cref="_popupView"/> for run-time value changes.
+		/// Refreshes the popup view for run-time value changes.
 		/// </summary>
 		public void Refresh()
 		{
@@ -1931,22 +2094,22 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			_popupOverlayContainer = new SfPopupOverlayContainer(this);
 			_popupOverlay.SetWindowOverlayContainer(_popupOverlayContainer);
 			SetPopupPositionBasedOnKeyboard();
-			if (HeaderTitle.Equals("Title", StringComparison.Ordinal))
+			if (!HeaderTitle.Equals("Title", StringComparison.Ordinal))
 			{
 				_popupView.SetHeaderTitleText(HeaderTitle);
 			}
 
-			if (Message.Equals("Popup Message", StringComparison.Ordinal))
+			if (!Message.Equals("Popup Message", StringComparison.Ordinal))
 			{
 				_popupView.SetMessageText(Message);
 			}
 
-			if (AcceptButtonText.Equals("ACCEPT", StringComparison.Ordinal))
+			if (!AcceptButtonText.Equals("ACCEPT", StringComparison.Ordinal))
 			{
 				_popupView.SetAcceptButtonText(AcceptButtonText);
 			}
 
-			if (DeclineButtonText.Equals("DECLINE", StringComparison.Ordinal))
+			if (!DeclineButtonText.Equals("DECLINE", StringComparison.Ordinal))
 			{
 				_popupView.SetDeclineButtonText(DeclineButtonText);
 			}
@@ -3375,7 +3538,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Occurs when the _popupView binding context is changed.
+		/// Occurs when the popup view binding context is changed.
 		/// </summary>
 		protected override void OnBindingContextChanged()
 		{
@@ -3957,30 +4120,75 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		#region Events
 
 		/// <summary>
-		/// This event will be fired whenever the <see cref="_popupView"/> is shown in the view.
+		/// This event will be fired whenever the popupView is shown in the view.
 		/// </summary>
 		/// <remarks>
 		/// This event fires whenever the <see cref="IsOpen"/> property is set as <c>true</c>.
 		/// </remarks>
+		/// <example>
+		/// <para>The following example demonstrates how to use the <see cref="Opened"/> event in the <see cref="SfPopup"/> control.</para>
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <popup:SfPopup x:Name="popup" Closed="Popup_Opened" />
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// private void Popup_Opened(object sender, EventArgs e)
+		/// {
+		///		// Codes that needs to be executed once popup is opened.
+		/// }
+		/// ]]></code>
+		/// </example>
 		/// <seealso cref="Opening"/>
 		/// <seealso cref="Closing"/>
 		/// <seealso cref="Closed"/>
 		public event EventHandler? Opened;
 
 		/// <summary>
-		/// This event will be fired whenever the <see cref="_popupView"/> is dismissed from the view.
+		/// This event will be fired whenever the popup view is dismissed from the view.
 		/// </summary>
 		/// <remarks>
 		/// This event fires whenever the <see cref="IsOpen"/> property is set as <c>false</c>.
 		/// </remarks>
+		/// <example>
+		/// <para>The following example demonstrates how to use the <see cref="Closed"/> event in the <see cref="SfPopup"/> control.</para>
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <popup:SfPopup x:Name="popup" Closed="Popup_Closed" />
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// private void Popup_Closed(object sender, EventArgs e)
+		/// {
+		///		// Codes that needs to be executed once popup is completely closed.
+		/// }
+		/// ]]></code>
+		/// </example>
 		/// <seealso cref="Closing"/>
 		/// <seealso cref="Opening"/>
 		/// <seealso cref="Opened"/>
 		public event EventHandler? Closed;
 
 		/// <summary>
-		/// This event will be fired whenever the <see cref="_popupView"/> is opening in the view. Occurring of this event can be cancelled based on conditions.
+		/// This event will be fired whenever the popup view is opening in the view. Occurring of this event can be cancelled based on conditions.
 		/// </summary>
+		/// <example>
+		/// <para>The following example demonstrates how to use the <see cref="Opening"/> event in the <see cref="SfPopup"/> control.</para>
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <popup:SfPopup x:Name="popup" Closed="Popup_Opening" />
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// private void Popup_Opening(object sender, EventArgs e)
+		/// {
+		///		// Codes that needs to be executed when the popup is opening.
+		/// }
+		/// ]]></code>
+		/// </example>
 		/// <seealso cref="Opened"/>
 		/// <seealso cref="Closing"/>
 		/// <seealso cref="Closed"/>
@@ -3989,6 +4197,21 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// This event will be fired whenever the <see cref="_popupView"/> is closing in the view. Occurring of this event can be cancelled based on conditions.
 		/// </summary>
+		/// <example>
+		/// <para>The following example demonstrates how to use the <see cref="Closing"/> event in the <see cref="SfPopup"/> control.</para>
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <popup:SfPopup x:Name="popup" Closed="Popup_Closing" />
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// private void Popup_Closing(object sender, EventArgs e)
+		/// {
+		///		// Codes that needs to be executed when the popup is closing.
+		/// }
+		/// ]]></code>
+		/// </example>
 		/// <seealso cref="Closed"/>
 		/// <seealso cref="Opening"/>
 		/// <seealso cref="Opened"/>

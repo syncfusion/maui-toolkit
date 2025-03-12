@@ -89,9 +89,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
                 }
             }
 
-#pragma warning disable CS0618 // Type or member is obsolete
-			return (IPlatformApplication.Current?.Application as Microsoft.Maui.Controls.Application)?.MainPage?.Window;
-#pragma warning restore CS0618 // Type or member is obsolete
+			return windowCollection != null && windowCollection.Count > 0 ? windowCollection[0] : new Microsoft.Maui.Controls.Window();
 		}
 
 		/// <summary>

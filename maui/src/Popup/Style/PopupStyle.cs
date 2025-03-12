@@ -250,26 +250,11 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </code>
 		/// <code lang="XAML">
 		/// <![CDATA[
-		/// <?xml version = "1.0" encoding="utf-8" ?>
-		/// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
-		///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-		///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
-		///     xmlns:local="clr-namespace:PopupMAUI"
-		///     x:Class="PopupMAUI.MainPage">
-		/// <ContentPage.BindingContext>
-		///     <local:ViewModel/>
-		/// </ContentPage.BindingContext>
-		/// <ContentPage.Content>
-		///    <StackLayout WidthRequest = "500" >
-		///        <syncfusion:SfPopup x:Name="popup" IsOpen="{Binding IsOpen}">
-		///                    <syncfusion:SfPopup.PopupStyle>
-		///                         <syncfusion:PopupStyle OverlayColor="rgba(0,0,0,0.5)"/>
-		///                     </syncfusion:SfPopup.PopupStyle>
-		///        </syncfusion:SfPopup>
-		///        <Button x:Name="clickToShowPopup" Text="Click To Show Popup" Clicked="clickToShowPopup_Clicked"/>
-		///    </StackLayout>
-		/// </ContentPage.Content>
-		/// </ContentPage>
+		/// <syncfusion:SfPopup x:Name="popup" IsOpen="{Binding IsOpen}">
+		///             <syncfusion:SfPopup.PopupStyle>
+		///                  <syncfusion:PopupStyle OverlayColor="rgba(0,0,0,0.5)"/>
+		///              </syncfusion:SfPopup.PopupStyle>
+		/// </syncfusion:SfPopup>
 		/// ]]>
 		/// </code>
 		/// </example>
@@ -285,6 +270,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the background color to be applied for the header.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="HeaderBackground"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle HeaderBackground="DimGray" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="FooterBackground"/>
 		/// <seealso cref="MessageBackground"/>
 		public Brush HeaderBackground
@@ -296,6 +293,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the text color to be applied for the header title.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="HeaderTextColor"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle HeaderTextColor="White" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="MessageTextColor"/>
 		public Color HeaderTextColor
 		{
@@ -306,6 +315,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the background color of content.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="MessageBackground"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle MessageBackground="Yellow" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderBackground"/>
 		/// <seealso cref="FooterBackground"/>
 		public Brush MessageBackground
@@ -317,6 +338,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the background color of the PopupView.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="PopupBackground"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle PopupBackground="White" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		public Brush PopupBackground
 		{
 			get => (Brush)GetValue(PopupBackgroundProperty);
@@ -326,6 +359,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the foreground color of content.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="MessageTextColor"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle MessageTextColor="White" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderTextColor"/>
 		public Color MessageTextColor
 		{
@@ -336,6 +381,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font size of the content.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="MessageFontSize"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle MessageFontSize="30" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderFontSize"/>
 		/// <seealso cref="FooterFontSize"/>
 		public double MessageFontSize
@@ -347,6 +404,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font style to be applied for the content.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="MessageFontFamily"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle MessageFontFamily="OpenSans-Regular" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderFontFamily"/>
 		/// <seealso cref="FooterFontFamily"/>
 		public string MessageFontFamily
@@ -358,6 +427,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font attribute to be applied for the content.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="MessageFontAttribute"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle MessageFontAttribute="Bold" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderFontAttribute"/>
 		/// <seealso cref="FooterFontAttribute"/>
 		public FontAttributes MessageFontAttribute
@@ -369,6 +450,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the text alignment of the content.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="MessageTextAlignment"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle MessageTextAlignment="Center" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderTextAlignment"/>
 		public TextAlignment MessageTextAlignment
 		{
@@ -379,6 +472,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the background color of the <see cref="SfPopup"/> footer.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="FooterBackground"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle FooterBackground="LightPink" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderBackground"/>
 		/// <seealso cref="MessageBackground"/>
 		public Brush FooterBackground
@@ -390,6 +495,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font size of the footer buttons.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="FooterFontSize"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle FooterFontSize="30" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderFontSize"/>
 		/// <seealso cref="MessageFontSize"/>
 		public double FooterFontSize
@@ -401,6 +518,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font style to be applied for the footer buttons.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="FooterFontFamily"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle FooterFontFamily="OpenSans-Regular" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderFontFamily"/>
 		/// <seealso cref="MessageFontFamily"/>
 		public string FooterFontFamily
@@ -412,6 +541,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font attribute to be applied for the footer buttons.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="FooterFontAttribute"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle FooterFontAttribute="Bold" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderFontAttribute"/>
 		/// <seealso cref="MessageFontAttribute"/>
 		public FontAttributes FooterFontAttribute
@@ -423,6 +564,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the background color of accept button in the footer.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="AcceptButtonBackground"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle AcceptButtonBackground ="DimGray" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderBackground"/>
 		/// <seealso cref="FooterBackground"/>
 		/// <seealso cref="MessageBackground"/>
@@ -436,6 +589,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the foreground color of accept button in the footer.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="AcceptButtonTextColor"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle AcceptButtonTextColor ="White" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderTextColor"/>
 		/// <seealso cref="MessageTextColor"/>
 		/// <seealso cref="DeclineButtonTextColor"/>
@@ -448,6 +613,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the background color of decline button in the footer.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="DeclineButtonBackground"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle DeclineButtonBackground="DimGray" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderBackground"/>
 		/// <seealso cref="FooterBackground"/>
 		/// <seealso cref="AcceptButtonBackground"/>
@@ -461,6 +638,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the foreground color of decline button in the footer.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="DeclineButtonTextColor"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle DeclineButtonTextColor="White" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="HeaderTextColor"/>
 		/// <seealso cref="MessageTextColor"/>
 		/// <seealso cref="AcceptButtonTextColor"/>
@@ -473,6 +662,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the border color for the <see cref="PopupView"/>.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="Stroke"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle Stroke="Red" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		public Color Stroke
 		{
 			get => (Color)GetValue(StrokeProperty);
@@ -482,6 +683,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font size of the header title.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="HeaderFontSize"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle HeaderFontSize="30" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="FooterFontSize"/>
 		/// <seealso cref="MessageFontSize"/>
 		public double HeaderFontSize
@@ -493,6 +706,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font style to be applied for the header title.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="HeaderFontFamily"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle HeaderFontFamily="OpenSans-Regular" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="FooterFontFamily"/>
 		/// <seealso cref="MessageFontFamily"/>
 		public string HeaderFontFamily
@@ -504,6 +729,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the font attribute to be applied for the header title.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="HeaderFontAttribute"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle HeaderFontAttribute="Bold" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="FooterFontAttribute"/>
 		/// <seealso cref="MessageFontAttribute"/>
 		public FontAttributes HeaderFontAttribute
@@ -515,6 +752,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the text alignment of the header.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="HeaderTextAlignment"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle HeaderTextAlignment="Center" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="MessageTextAlignment"/>
 		public TextAlignment HeaderTextAlignment
 		{
@@ -525,6 +774,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the border thickness for the <see cref="PopupView"/>.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="StrokeThickness"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle StrokeThickness="5" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		public int StrokeThickness
 		{
 			get => (int)GetValue(StrokeThicknessProperty);
@@ -534,6 +795,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets a value indicating whether a drop shadow is displayed around the Popupview. The default value is true.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="HasShadow"/> property for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle HasShadow="True" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		public bool HasShadow
 		{
 			get => (bool)GetValue(HasShadowProperty);
@@ -543,6 +816,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets a value that indicates the intensity of the blur effect in the overlay.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="BlurIntensity"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle BlurIntensity ="Custom" BlurRadius="5" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="SfPopup.OverlayMode"/>
 		/// <seealso cref="SfPopup.ShowOverlayAlways"/>
 		public PopupBlurIntensity BlurIntensity
@@ -554,6 +839,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the blur radius of the blur effect applied to the overlay when the <see cref="BlurIntensity"/> is <see cref=" PopupBlurIntensity.Custom"/>. Does not have any effect when <see cref="BlurIntensity"/> has values other than <see cref="PopupBlurIntensity.Custom"/>.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="BlurRadius"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle BlurIntensity ="Custom" BlurRadius="5" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		public float BlurRadius
 		{
 			get => (float)GetValue(BlurRadiusProperty);
@@ -566,6 +863,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <remarks>
 		/// On Android 33 and above, it is possible to set different corner radii for each corner using the <see cref="CornerRadius"/> class. However, on versions below Android 33, if the same value is provided for all corners, a corner radius will be applied. If different values are provided for each corner, the corner radius may not be applied.
 		/// </remarks>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="CornerRadius"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle CornerRadius="5" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		public CornerRadius CornerRadius
 		{
 			get => (CornerRadius)GetValue(CornerRadiusProperty);
@@ -575,6 +884,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the corner radius of the accept and decline buttons in the footer. The default value is 20.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="FooterButtonCornerRadius"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle FooterButtonCornerRadius ="0,20,20,0" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		public CornerRadius FooterButtonCornerRadius
 		{
 			get => (CornerRadius)GetValue(FooterButtonCornerRadiusProperty);
@@ -584,6 +905,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the image to be placed in the header close button for the <see cref="PopupView"/>.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="CloseButtonIcon"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle CloseButtonIcon ="close.png" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		/// <seealso cref="SfPopup.ShowCloseButton"/>
 		public ImageSource CloseButtonIcon
 		{
@@ -616,6 +949,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets or sets the background for close button icon when pointer hover.
 		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to apply <see cref="HoveredCloseButtonIconBackground"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///		<popup:SfPopup.PopupStyle>
+		///		    <popup:PopupStyle HoveredCloseButtonIconBackground="Gray" />
+		///		</popup:SfPopup.PopupStyle>
+		///	</popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
 		internal Color HoveredCloseButtonIconBackground
 		{
 			get => (Color)GetValue(HoveredCloseButtonIconBackgroundProperty);
