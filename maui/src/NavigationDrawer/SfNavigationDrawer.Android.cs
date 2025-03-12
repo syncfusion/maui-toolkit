@@ -77,7 +77,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				switch (ev.Action)
 				{
 					case MotionEventActions.Down:
-						return HandleActionDown(currentTouchPoint);
+						return HandleActionDown(ev, currentTouchPoint);
 
 					case MotionEventActions.Up:
 						_initialPoint = new Point(0, 0);
@@ -95,18 +95,23 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 		#region Private Methods
 
-		private bool HandleActionDown(Point currentTouchPoint)
+		private bool HandleActionDown(MotionEvent? ev, Point currentTouchPoint)
 		{
-			_downX = currentTouchPoint.X;
-			_downY = currentTouchPoint.Y;
-			_initialPoint = currentTouchPoint;
-
-			if (DrawerSettings.Position == Position.Left || DrawerSettings.Position == Position.Right)
+			if (ev != null)
 			{
-				return HandleHorizontalActionDown(currentTouchPoint);
+				_downX = ev.GetX();
+				_downY = ev.GetY();
+				_initialPoint = currentTouchPoint;
+
+				if (DrawerSettings.Position == Position.Left || DrawerSettings.Position == Position.Right)
+				{
+					return HandleHorizontalActionDown(currentTouchPoint);
+				}
+
+				return HandleVerticalActionDown(currentTouchPoint);
 			}
 
-			return HandleVerticalActionDown(currentTouchPoint);
+			return false;
 		}
 
 		private bool HandleHorizontalActionDown(Point currentTouchPoint)
