@@ -49,18 +49,18 @@
                                         <OnPlatform x:TypeArguments="Thickness">
                                             <On Platform="MacCatalyst" Value="5,0,0,0"/>
                                             <On Platform="iOS" Value="5,0,0,0" />
-                                            <On Platform="Android" Value="5,0,10,0" />
-                                            <On Platform="WinUI" Value="5,0,0,0"/>
+                                            <On Platform="Android" Value="10,0,10,0" />
+                                            <On Platform="WinUI" Value="15,0,0,0"/>
                                         </OnPlatform>
                                     </RadioButton.Margin>
                                 </RadioButton>
                                 <RadioButton x:Name="roundTrip" Content="Round-Trip" GroupName="TripType">
                                     <RadioButton.Margin>
                                         <OnPlatform x:TypeArguments="Thickness">
-                                            <On Platform="MacCatalyst" Value="70,0,0,0"/>
-                                            <On Platform="iOS" Value="-10,0,0,0" />
-                                            <On Platform="Android" Value="-15,0,40,0" />
-                                            <On Platform="WinUI" Value="80,0,0,0"/>
+                                            <On Platform="MacCatalyst" Value="40,0,0,0"/>
+                                            <On Platform="iOS" Value="5,0,0,0" />
+                                            <On Platform="Android" Value="5,0,40,0" />
+                                            <On Platform="WinUI" Value="60,0,0,0"/>
                                         </OnPlatform>
                                     </RadioButton.Margin>
                                 </RadioButton>

@@ -299,7 +299,6 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
                     return;
                 }
 
-                //returnStackLayout.Children.Clear();
                 foreach (var child in _returnStackLayout.Children.ToList())
                 {
                      _returnStackLayout.Children.Remove(child);
@@ -350,11 +349,8 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
                 {
                     _fromLabel1.Text = _selectedDate!.Value.Date.ToString("dd MMM yyyy");
                 }
-#if MACCATALYST
-                _views.Children.Add(_fromLabel1);
-#else
+
                 _views.Content = _fromLabel1;
-#endif
 
                 _trailingLabel = new Label
                 {
