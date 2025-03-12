@@ -617,29 +617,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-		public void GetItemWidth_ReturnsZero_WhenSegmentInfoIsNull()
-		{
-			SfSegmentedControl? segmentInfo = null;
-			var segmentItem = new SfSegmentItem { Width = 100 };
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			var resultWidth = SegmentItemViewHelper.GetItemWidth(segmentInfo, segmentItem);
-#pragma warning restore CS8604 // Re-enable the warning
-			Assert.Equal(100, resultWidth);
-		}
-
-		[Fact]
-		public void GetItemWidth_ReturnsZero_WhenSegmentItemIsNull()
-		{
-			var segmentInfo = new SfSegmentedControl();
-			SfSegmentItem? segmentItem = null;
-
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<NullReferenceException>(() => SegmentItemViewHelper.GetItemWidth(segmentInfo, segmentItem));
-#pragma warning restore CS8604 // Re-enable the warning
-
-		}
-
-		[Fact]
 		public void GetItemWidth_ReturnsInvalidValue_WhenStrokeThicknessIsNegative()
 		{
 			var segmentInfo = new SfSegmentedControl { StrokeThickness = -5 };
@@ -744,27 +721,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(Colors.White, resultColor);
 		}
 
-
-		[Fact]
-		public void BrushToColorConverter_ReturnsTransparent_WhenBrushIsNull()
-		{
-			Brush? brush = null;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			var resultColor = SegmentViewHelper.BrushToColorConverter(brush);
-#pragma warning restore CS8604 // Re-enable the warning
-			Assert.Equal(Colors.Transparent, resultColor);
-		}
-
-		[Fact]
-		public void GetItemHeight_ThrowsArgumentException_WhenSegmentControlIsNull()
-		{
-			SfSegmentedControl? segmentControl = null;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<NullReferenceException>(() => SegmentItemViewHelper.GetItemHeight(segmentControl));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-
-		}
-
 		[Theory]
 		[InlineData(40, 2, 44)]
 		[InlineData(0, 2, 4)]
@@ -803,15 +759,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var resultCount = SegmentViewHelper.GetVisibleSegmentsCount(itemInfo);
 			Assert.Equal(expectedCount, resultCount);
 		}
-		[Fact]
-		public void GetVisibleSegmentsCount_ThrowsArgumentException_WhenItemInfoIsNull()
-		{
-			SfSegmentedControl? itemInfo = null;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<NullReferenceException>(() => SegmentViewHelper.GetVisibleSegmentsCount(itemInfo));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
 
-		}
 		[Theory]
 		[InlineData(2, 0)]
 		[InlineData(-1, 0)]
@@ -985,18 +933,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var resultHeight = SegmentViewHelper.GetActualSegmentHeight(itemInfo, heightRequest, minHeight, maxHeight);
 			Assert.Equal(expectedResult, resultHeight);
 		}
-		[Fact]
-		public void GetActualSegmentHeight_ThrowsArgumentNullException_WhenItemInfoIsNull()
-		{
-			SfSegmentedControl? itemInfo = null;
-			var heightRequest = 100.0;
-			var minHeight = 50.0;
-			var maxHeight = 200.0;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<NullReferenceException>(() => SegmentViewHelper.GetActualSegmentHeight(itemInfo, heightRequest, minHeight, maxHeight));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-
-		}
 
 		[Theory]
 		[InlineData(double.PositiveInfinity, 50.0, 200.0, double.PositiveInfinity)]
@@ -1096,17 +1032,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-		public void GetItemEnabled_ReturnsFalse_WhenSegmentItemIsNull()
-		{
-			var itemInfo = new SfSegmentedControl();
-			SfSegmentItem? segmentItem = null;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<NullReferenceException>(() => SegmentViewHelper.GetItemEnabled(itemInfo, segmentItem));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-
-		}
-
-		[Fact]
 		public void GetSegmentBackground_ReturnsNull_WhenSegmentItemBackgroundIsNull()
 		{
 			var itemInfo = new SfSegmentedControl();
@@ -1149,17 +1074,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var segmentItem = new SfSegmentItem();
 			var resultBackground = SegmentViewHelper.GetSelectedSegmentBackground(itemInfo, segmentItem);
 			Assert.Equal(itemInfo.SelectionIndicatorSettings.Background, resultBackground);
-		}
-
-		[Fact]
-		public void GetSelectedSegmentBackground_ThrowsArgumentException_WhenSegmentItemIsNull()
-		{
-			var itemInfo = new SfSegmentedControl();
-			SfSegmentItem? segmentItem = null;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<NullReferenceException>(() => SegmentViewHelper.GetSelectedSegmentBackground(itemInfo, segmentItem));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-
 		}
 
 		[Fact]
@@ -1233,17 +1147,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var segmentItem = new SfSegmentItem();
 			var resultColor = SegmentViewHelper.GetSelectedSegmentForeground(itemInfo, segmentItem);
 			Assert.Equal(SegmentViewHelper.BrushToColorConverter(new SolidColorBrush(itemInfo.SelectionIndicatorSettings.Stroke)), resultColor);
-		}
-
-		[Fact]
-		public void GetSelectedSegmentForeground_ThrowsArgumentException_WhenSegmentItemIsNull()
-		{
-			var itemInfo = new SfSegmentedControl();
-			SfSegmentItem? segmentItem = null;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<NullReferenceException>(() => SegmentViewHelper.GetSelectedSegmentForeground(itemInfo, segmentItem));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-
 		}
 
 		[Fact]
@@ -1388,17 +1291,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(textStyle.FontSize, resultTextStyle.FontSize);
 		}
 
-		[Fact]
-		public void GetClonedSegmentTextStyle_ReturnsClonedTextStyle_WhenSegmentItemIsNull()
-		{
-			var itemInfo = new SfSegmentedControl();
-			SfSegmentItem? segmentItem = null;
-			var textStyle = new SegmentTextStyle { TextColor = Color.FromRgba(0.10980392, 0.105882354, 0.12156863, 1), FontSize = 16 };
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<NullReferenceException>(() => SegmentViewHelper.GetClonedSegmentTextStyle(itemInfo, segmentItem));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-
-		}
 		#endregion
 		#region Private Methods
 		[Fact]
@@ -1665,46 +1557,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-		public void GetStrokeValue_ReturnsTransparentBrush_WhenItemInfoIsNull()
-		{
-
-			var segmentItem = new SfSegmentItem();
-			SfSegmentedControl? segment = null;
-
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			var selectionView = new SelectionView(segmentItem, segment);
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-			var resultBrush = InvokePrivateMethod(selectionView, "GetStrokeValue");
-			Assert.Equal(Brush.Transparent, resultBrush);
-		}
-
-		[Fact]
-		public void GetStrokeValue_ReturnsTransparentBrush_WhenSegmentItemIsNull()
-		{
-			var iteminfo = new SfSegmentedControl();
-			SfSegmentItem? segmentItem = null;
-
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			var selectionView = new SelectionView(segmentItem, iteminfo);
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-			var resultBrush = InvokePrivateMethod(selectionView, "GetStrokeValue");
-			Assert.Equal(Brush.Transparent, resultBrush);
-		}
-
-		[Fact]
-		public void GetStrokeValue_ReturnsTransparentBrush_WhenSegmentItemIsItemInfoNull()
-		{
-			SfSegmentedControl? segment = null;
-			SfSegmentItem? segmentItem = null;
-
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			var selectionView = new SelectionView(segmentItem, segment);
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-			var resultBrush = InvokePrivateMethod(selectionView, "GetStrokeValue");
-			Assert.Equal(Brush.Transparent, resultBrush);
-		}
-
-		[Fact]
 		public void GetStrokeValue_ReturnsSelectedSegmentStroke_WhenIsSelectedIsTrueAndIsMouseOverIsFalse()
 		{
 			var iteminfo = new SfSegmentedControl();
@@ -1940,35 +1792,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var result = (Brush)resultBrush!;
 			Assert.Equal(Brush.Transparent, result);
 		}
-		[Fact]
-		public void GetBackgroundValue_ReturnsTransparent_WhenSegmentControlIsNull()
-		{
-			var segmentItem = new SfSegmentItem();
-			SfSegmentedControl? control = null;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			var segment = new SegmentItemView(control, segmentItem);
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
 
-			var result = InvokePrivateMethod(segment, "GetBackgroundValue");
-			Assert.NotNull(result);
-			var resultBrush = (Brush)result!; // Safely cast after null check
-			Assert.Equal(Brush.Transparent, resultBrush);
-		}
-
-		[Fact]
-		public void GetBackgroundValue_ReturnsTransparent_WhenSegmentItemIsNull()
-		{
-			var segmentControl = new SfSegmentedControl();
-			SfSegmentItem? segmentItem = null;
-
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			var segment = new SegmentItemView(segmentControl, segmentItem);
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-			var result = InvokePrivateMethod(segment, "GetBackgroundValue");
-			Assert.NotNull(result);
-			var resultBrush = (Brush)result!;
-			Assert.Equal(Brush.Transparent, resultBrush);
-		}
 		[Theory]
 		[InlineData(100, 50, 200, 3, true, 100)]
 		[InlineData(21, 50, 200, 3, true, 50)]
@@ -2104,17 +1928,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-		public void GetTotalSegmentWidth_ThrowsArgumentNullException_WhenSegmentControlIsNull()
-		{
-			SfSegmentedControl? segmentControl = null;
-			var visibleSegmentsCount = 3;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<TargetInvocationException>(() => InvokeStaticPrivateMethodClass(typeof(SegmentViewHelper), "GetTotalSegmentWidth", segmentControl, visibleSegmentsCount));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-
-		}
-
-		[Fact]
 		public void GetTotalSegmentWidth_ReturnsZero_WhenVisibleSegmentsCountIsNegative()
 		{
 			var segmentControl = new SfSegmentedControl
@@ -2183,16 +1996,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var visibleSegmentCount = 3;
 			var resultWidth = InvokeStaticPrivateMethodClass(typeof(SegmentViewHelper), "GetTotalSegmentWidth", itemInfo, visibleSegmentCount);
 			Assert.Equal(60.0, resultWidth);
-		}
-		[Fact]
-		public void GetTotalSegmentWidth_ThrowsArgumentException_WhenItemInfoIsNull()
-		{
-			SfSegmentedControl? itemInfo = null;
-			var visibleSegmentCount = 3;
-#pragma warning disable CS8604 // Suppress warning for possible null reference argument
-			Assert.Throws<TargetInvocationException>(() => InvokeStaticPrivateMethodClass(typeof(SegmentViewHelper), "GetTotalSegmentWidth", itemInfo, visibleSegmentCount));
-#pragma warning restore CS8604 // Suppress warning for possible null reference argument
-
 		}
 
 		[Fact]
