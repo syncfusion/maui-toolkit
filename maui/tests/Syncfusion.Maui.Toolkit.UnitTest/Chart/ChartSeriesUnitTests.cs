@@ -1232,6 +1232,78 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
+		public void FastScatterSeries_Constructor_InitializesDefaultsCorrectly()
+		{
+			var fastScatterSeries = new FastScatterSeries();
+
+			Assert.Equal(5, fastScatterSeries.PointHeight);
+			Assert.Equal(5, fastScatterSeries.PointWidth);
+			Assert.Null(fastScatterSeries.Stroke);
+			Assert.Equal(Syncfusion.Maui.Toolkit.Charts.ShapeType.Circle, fastScatterSeries.Type);
+		}
+
+		[Theory]
+		[InlineData(11.0d)]
+		[InlineData(25.0d)]
+		[InlineData(2.5d)]
+		public void FastScatterPointHeight_SetAndGet_ReturnsExpectedValue(double expected)
+		{
+			var fastScatterSeries = new FastScatterSeries
+			{
+				PointHeight = expected
+			};
+
+			Assert.Equal(expected, fastScatterSeries.PointHeight);
+		}
+
+		[Theory]
+		[InlineData(11.0d)]
+		[InlineData(25.0d)]
+		[InlineData(2.5d)]
+		public void FastPointWidth_SetAndGet_ReturnsExpectedValue(double expected)
+		{
+			var fastScatterSeries = new FastScatterSeries
+			{
+				PointWidth = expected
+			};
+
+			Assert.Equal(expected, fastScatterSeries.PointWidth);
+		}
+
+		[Fact]
+		public void FastScatterSeries_Stroke_SetAndGet_ReturnsExpectedValue()
+		{
+			var fastScatterSeries = new FastScatterSeries();
+			var expectedStroke = new SolidColorBrush(Colors.Red);
+
+			fastScatterSeries.Stroke = expectedStroke;
+
+			Assert.Equal(expectedStroke, fastScatterSeries.Stroke);
+		}
+
+		[Theory]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.Circle)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.Rectangle)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.Plus)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.HorizontalLine)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.VerticalLine)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.InvertedTriangle)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.Cross)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.Custom)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.Diamond)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.Hexagon)]
+		[InlineData(Syncfusion.Maui.Toolkit.Charts.ShapeType.Pentagon)]
+		public void FastScatterSeries_Type_SetAndGet_ReturnsExpectedValue(Syncfusion.Maui.Toolkit.Charts.ShapeType expected)
+		{
+			var fastScatterSeries = new FastScatterSeries
+			{
+				Type = expected
+			};
+
+			Assert.Equal(expected, fastScatterSeries.Type);
+		}
+
+		[Fact]
 		public void SplineAreaSeries_Constructor_InitializesDefaultsCorrectly()
 		{
 			var splineAreaSeries = new SplineAreaSeries();
