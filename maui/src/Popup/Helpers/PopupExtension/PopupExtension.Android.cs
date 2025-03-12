@@ -531,10 +531,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static WindowManagerLayoutParams? GetAttributes()
 		{
 			var platformRootView = WindowOverlayHelper._platformRootView;
-			if (platformRootView != null &&
-				platformRootView.Context != null &&
+			if (platformRootView is not null &&
+				platformRootView.Context is not null &&
 				platformRootView.Context.GetActivity() is Android.App.Activity activity &&
-				activity.Window != null && activity.Window.Attributes is WindowManagerLayoutParams attributes)
+				activity.Window is not null && activity.Window.Attributes is WindowManagerLayoutParams attributes)
 			{
 				return attributes;
 			}

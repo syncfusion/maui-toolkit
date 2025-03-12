@@ -295,7 +295,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// Identifies the IgnoreActionBar bindable property.
 		/// </summary>
 		public static readonly BindableProperty IgnoreActionBarProperty =
-			BindableProperty.Create("IgnoreActionBar", typeof(bool), typeof(SfPopup), false, BindingMode.Default, null, null);
+			BindableProperty.Create(nameof(IgnoreActionBar), typeof(bool), typeof(SfPopup), false, BindingMode.Default, null, null);
 
 		/// <summary>
 		/// Identifies the StartY bindable property.
