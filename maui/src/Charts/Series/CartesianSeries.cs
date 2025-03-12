@@ -1355,7 +1355,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					FontSize = tooltipBehavior.FontSize,
 					FontAttributes = tooltipBehavior.FontAttributes,
 					Background = tooltipBehavior.Background,
-					Text = yValue.ToString("#.##"),
+					Text = yValue == 0 ? yValue.ToString("0.##") : yValue.ToString("#.##"),
 					Item = dataPoint
 				};
 				return tooltipInfo;
@@ -1499,9 +1499,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                     if (xValue <= xEnd && xValue >= xStart && xValue < dataCount && xValue >= 0)
                     {
-                        var dataPoint = new object();
+						object? dataPoint;
 
-                        if (isGrouped)
+						if (isGrouped)
                         {
                             dataPoint = GroupedActualData?[(int)xValue];
                         }

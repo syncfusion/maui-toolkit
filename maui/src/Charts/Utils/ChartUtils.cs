@@ -265,7 +265,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			var pointX = touchPoint.X;
 			var pointY = touchPoint.Y;
-			var defaultSelectionStrokeWidth = series.DefaultSelectionStrokeWidth;
+			var defaultSelectionStrokeWidth = series._defaultSelectionStrokeWidth;
 			var leftPoint = new PointF(pointX - defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
 			var rightPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY + defaultSelectionStrokeWidth);
 			var topPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
@@ -286,7 +286,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			var pointX = touchPoint.X;
 			var pointY = touchPoint.Y;
-			var defaultSelectionStrokeWidth = series.DefaultSelectionStrokeWidth;
+			var defaultSelectionStrokeWidth = series._defaultSelectionStrokeWidth;
 			var leftPoint = new PointF(pointX - defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
 			var rightPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY + defaultSelectionStrokeWidth);
 			var topPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
@@ -310,7 +310,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			var pointX = touchPoint.X;
 			var pointY = touchPoint.Y;
-			var defaultSelectionStrokeWidth = series.DefaultSelectionStrokeWidth;
+			var defaultSelectionStrokeWidth = series._defaultSelectionStrokeWidth;
 			var leftPoint = new PointF(pointX - defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
 			var rightPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY + defaultSelectionStrokeWidth);
 			var topPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
