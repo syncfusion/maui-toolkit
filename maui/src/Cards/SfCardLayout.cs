@@ -156,13 +156,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardLayout.SwipeDirection"/> is CardSwipeDirection.Right. </value>
         /// <example>
         /// The following code demonstrates, how to use the SwipeDirection property in the card layout.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-1)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardLayout x:Name="CardLayout"
         ///                   SwipeDirection="Left">
         /// </Cards:SfCardLayout>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-2)
         /// <code Lang="C#"><![CDATA[
         /// CardLayout.SwipeDirection = CardSwipeDirection.Left;
         /// ]]></code>
@@ -179,13 +179,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardLayout.ShowSwipedCard"/> is true. </value>
         /// <example>
         /// The following code demonstrates, how to use the ShowSwipedCard property in the card layout.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-3)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardLayout x:Name="CardLayout"
         ///                   ShowSwipedCard="False">
         /// </Cards:SfCardLayout>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-4)
         /// <code Lang="C#"><![CDATA[
         /// CardLayout.ShowSwipedCard = false;
         /// ]]></code>
@@ -205,13 +205,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardLayout.VisibleIndex"/> is -1. </value>
         /// <example>
         /// The following code demonstrates, how to use the VisibleIndex property in the card layout.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-5)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardLayout x:Name="CardLayout"
         ///                   VisibleIndex="1">
         /// </Cards:SfCardLayout>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-6)
         /// <code Lang="C#"><![CDATA[
         /// CardLayout.VisibleIndex = 1;
         /// ]]></code>
@@ -228,13 +228,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardLayout.HorizontalCardSpacing"/> is 10. </value>
         /// <example>
         /// The following code demonstrates, how to use the HorizontalCardSpacing property in the card layout.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-7)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardLayout x:Name="CardLayout"
         ///                   HorizontalCardSpacing="20">
         /// </Cards:SfCardLayout>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-8)
         /// <code Lang="C#"><![CDATA[
         /// CardLayout.HorizontalCardSpacing = 20;
         /// ]]></code>
@@ -251,13 +251,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardLayout.VerticalCardSpacing"/> is 10. </value>
         /// <example>
         /// The following code demonstrates, how to use the VerticalCardSpacing property in the card layout.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-9)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardLayout x:Name="CardLayout"
         ///                   VerticalCardSpacing="20">
         /// </Cards:SfCardLayout>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-10)
         /// <code Lang="C#"><![CDATA[
         /// CardLayout.VerticalCardSpacing = 20;
         /// ]]></code>

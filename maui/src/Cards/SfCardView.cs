@@ -194,13 +194,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.BorderWidth"/> is 1d. </value>
         /// <example>
         /// The following code demonstrates, how to use the BorderWidth property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-1)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   BorderWidth="10">
         /// </Cards:SfCardView>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-2)
         /// <code Lang="C#"><![CDATA[
         /// CardView.BorderWidth = 10;
         /// ]]></code>
@@ -217,13 +217,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.BorderColor"/> is "#CAC4D0". </value>
         /// <example>
         /// The following code demonstrates, how to use the BorderColor property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-3)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   BorderColor="Blue">
         /// </Cards:SfCardView>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-4)
         /// <code Lang="C#"><![CDATA[
         /// CardView.BorderColor = Colors.Blue;
         /// ]]></code>
@@ -240,13 +240,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.CornerRadius"/> is 5. </value>
         /// <example>
         /// The following code demonstrates, how to use the CornerRadius property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-5)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   CornerRadius="10">
         /// </Cards:SfCardView>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-6)
         /// <code Lang="C#"><![CDATA[
         /// CardView.CornerRadius = 10;
         /// ]]></code>
@@ -263,13 +263,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.IndicatorColor"/> is Transparent. </value>
         /// <example>
         /// The following code demonstrates, how to use the IndicatorColor property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-7)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   IndicatorColor="Blue">
         /// </Cards:SfCardView>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-8)
         /// <code Lang="C#"><![CDATA[
         /// CardView.IndicatorColor = Colors.Blue;
         /// ]]></code>
@@ -286,13 +286,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.IndicatorThickness"/> is 0d. </value>
         /// <example>
         /// The following code demonstrates, how to use the IndicatorThickness property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-9)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   IndicatorThickness="10">
         /// </Cards:SfCardView>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-10)
         /// <code Lang="C#"><![CDATA[
         /// CardView.IndicatorThickness = 10;
         /// ]]></code>
@@ -309,7 +309,7 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.IndicatorPosition"/> is CardIndicatorPosition.Left. </value>
         /// <example>
         /// The following code demonstrates, how to use the IndicatorPosition property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-11)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   IndicatorPosition="Right">
@@ -332,13 +332,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.SwipeToDismiss"/> is false. </value>
         /// <example>
         /// The following code demonstrates, how to use the SwipeToDismiss property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-13)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   SwipeToDismiss="True">
         /// </Cards:SfCardView>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-14)
         /// <code Lang="C#"><![CDATA[
         /// CardView.SwipeToDismiss = true;
         /// ]]></code>
@@ -355,13 +355,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.FadeOutOnSwiping"/> is true. </value>
         /// <example>
         /// The following code demonstrates, how to use the FadeOutOnSwiping property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-15)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   FadeOutOnSwiping="False">
         /// </Cards:SfCardView>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-16)
         /// <code Lang="C#"><![CDATA[
         /// CardView.FadeOutOnSwiping = false;
         /// ]]></code>
@@ -378,13 +378,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
         /// <value>The default value of <see cref="SfCardView.IsDismissed"/> is false. </value>
         /// <example>
         /// The following code demonstrates, how to use the IsDismissed property in the card view.
-        /// #[XAML](#tab/tabid-11)
+        /// # [XAML](#tab/tabid-17)
         /// <code Lang="XAML"><![CDATA[
         /// <Cards:SfCardView x:Name="CardView"
         ///                   IsDismissed="True">
         /// </Cards:SfCardView>
         /// ]]></code>
-        /// # [C#](#tab/tabid-12)
+        /// # [C#](#tab/tabid-18)
         /// <code Lang="C#"><![CDATA[
         /// CardView.IsDismissed = true;
         /// ]]></code>
