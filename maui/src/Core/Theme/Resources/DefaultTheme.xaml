@@ -92,6 +92,29 @@
     <local:StaticThemeResource x:Key="SfPullToRefreshProgressBackground" ResourceKey="ContentBackgroundAlt2" />
     <local:StaticThemeResource x:Key="SfPullToRefreshProgressColor" ResourceKey="PrimaryBackground" />
     <sys:Double x:Key="SfPullToRefreshProgressThickness">3</sys:Double>
+	
+  <!--SfExpander-->
+  <x:String x:Key="SfExpanderTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfExpanderNormalHeaderBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfExpanderHoverHeaderBackground" ResourceKey="ContentBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfExpanderHeaderRippleBackground" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfExpanderNormalHeaderIconColor" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfExpanderHoverHeaderIconColor" ResourceKey="IconColorHovered" />
+  <local:StaticThemeResource x:Key="SfExpanderPressedHeaderIconColor" ResourceKey="IconColorPressed" />
+
+  <!--SfAccordion-->
+  <x:String x:Key="SfAccordionTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfAccordionNormalHeaderIconColor" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfAccordionHoverHeaderIconColor" ResourceKey="IconColorHovered" />
+  <local:StaticThemeResource x:Key="SfAccordionPressedHeaderIconColor" ResourceKey="IconColorPressed" />
+  <local:StaticThemeResource x:Key="SfAccordionFocusedHeaderIconColor" ResourceKey="IconColorPressed" />
+  <local:StaticThemeResource x:Key="SfAccordionExpandedItemStroke" ResourceKey="Border" />
+  <sys:Double x:Key="SfAccordionExpandedItemStrokeThickness">1</sys:Double>
+  <local:StaticThemeResource x:Key="SfAccordionNormalHeaderBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfAccordionHoverHeaderBackground" ResourceKey="ContentBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfAccordionFocusedHeaderBackground" ResourceKey="ContentBackgroundFocused" />
+  <local:StaticThemeResource x:Key="SfAccordionHeaderRippleBackground" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfAccordionFocusedItemStroke" ResourceKey="BorderAlt4" />
 
     <!--SfTabView-->
     <x:String x:Key="SfTabViewTheme">CommonTheme</x:String>

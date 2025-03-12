@@ -18,6 +18,8 @@
     <Assembly Name="BottomSheet" />
     <Assembly Name="NumericEntry" />
     <Assembly Name="NumericUpDown" />
-	<Assembly Name="Calendar" />
+    <Assembly Name="Expander" />
+    <Assembly Name="Calendar" />
+    <Assembly Name="Accordion" />
 	</Assemblies>
 </SampleBrowser>
