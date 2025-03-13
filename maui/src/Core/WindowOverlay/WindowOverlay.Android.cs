@@ -175,14 +175,17 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			{
 				ClearChildren();
 				_overlayStack.LayoutChange -= OnOverlayStackLayoutChange;
-				_overlayStack.RemoveFromParent();
+				if (_overlayStack.Parent is not null && _windowManager is not null)
+				{
+					_windowManager.RemoveView(_overlayStack);
+				}
+
 				_windowManagerLayoutParams = null;
 				_overlayStack = null;
 			}
 
 			_decorViewFrame?.Dispose();
 			_decorViewFrame = null;
-
 			_hasOverlayStackInRoot = false;
 		}
 
