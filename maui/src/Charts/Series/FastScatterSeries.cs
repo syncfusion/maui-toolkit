@@ -291,6 +291,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			set { SetValue(TypeProperty, value); }
 		}
 
+		internal override bool IsFillEmptyPoint { get { return false; } }
+
 		#endregion
 
 		#region Constructor
@@ -392,9 +394,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 			else
 			{
-				foreach (FastScatterSegment segment in _segments)
+				foreach (var segment in _segments)
 				{
-					segment.SetData(xValues, YValues);
+					if (segment is FastScatterSegment fastScatterSegment)
+					{
+						fastScatterSegment.SetData(xValues, YValues);
+					}
 				}
 			}
 		}
@@ -406,8 +411,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			float xPos = pointX - seriesBounds.Left;
 			float yPos = pointY - seriesBounds.Top;
 
-			foreach (FastScatterSegment segment in _segments)
+			foreach (var item in _segments)
 			{
+				if (!(item is FastScatterSegment segment))
+				{
+					continue;
+				}
+
 				var xValues = segment.XValues;
 				var yValues = segment.YValues;
 
