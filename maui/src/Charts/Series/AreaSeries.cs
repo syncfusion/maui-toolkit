@@ -79,7 +79,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Fields
 
 		bool _needToAnimateMarker;
-
+		internal override bool IsFillEmptyPoint { get { return false; } }
 		#endregion
 
 		#region Bindable Properties

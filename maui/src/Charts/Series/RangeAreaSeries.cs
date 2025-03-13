@@ -485,7 +485,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 }
                 else if (!double.IsNaN(lowValueContent))
                 {
-                    tooltipInfo.Text += "/" + lowValueContent.ToString("#.##");
+                    tooltipInfo.Text += "/" + (lowValueContent == 0 ? lowValueContent.ToString("0.##") : lowValueContent.ToString("#.##"));
                 }
 
                 return tooltipInfo;

@@ -31,7 +31,7 @@
 	///         </chart:SfCartesianChart.YAxes>
 	///         
 	///         <chart:SfCartesianChart.Series>
-	///            <chart:LineSeries ItemsSource = "{Binding Data}" XBindingPath="XValue" YBindingPath="YValue1" ShowMarker="True"/>
+	///            <chart:LineSeries ItemsSource = "{Binding Data}" XBindingPath="XValue" YBindingPath="YValue" ShowMarker="True"/>
 	///            <chart:LineSeries.MarkerSettings>
 	///                    <chart:ChartMarkerSettings Type="Diamond" Fill="white" Stroke="Red" StrokeWidth="1" Width="8" Height="8"/>
 	///                </chart:LineSeries.MarkerSettings>         

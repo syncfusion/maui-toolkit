@@ -190,7 +190,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void CalculateDataLabelsPosition(double xValue, double high, double low, RangeColumnSeries series)
 		{
-			IsEmpty = double.IsNaN(high) && double.IsNaN(low);
+			IsZero = double.IsNaN(high) && double.IsNaN(low);
 			InVisibleRange = series.IsDataInVisibleRange(xValue, high) && series.IsDataInVisibleRange(xValue, low);
 			double x = xValue, x1 = xValue, y = series.GetDataLabelPositionAtIndex(Index, high), y1 = series.GetDataLabelPositionAtIndex(Index, low);
 			series.CalculateDataPointPosition(Index, ref x, ref y);

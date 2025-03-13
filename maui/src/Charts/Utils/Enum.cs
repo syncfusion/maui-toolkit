@@ -1,6 +1,30 @@
 ﻿namespace Syncfusion.Maui.Toolkit.Charts
 {
 	/// <summary>
+	/// Defines modes for handling empty data points in a chart series.
+	/// </summary>
+	public enum EmptyPointMode
+	{
+		/// <summary>
+		/// Leaves empty points unmodified, maintaining them as NaN (Not a Number).
+		/// Suitable for explicitly skipping or not displaying missing data points.
+		/// </summary>
+		None,
+
+		/// <summary>
+		/// Replaces empty points with a value of zero.
+		/// Useful for treating missing data points as zero values, maintaining continuity in series where a missing data point logically represents zero impact.
+		/// </summary>
+		Zero,
+
+		/// <summary>
+		/// Calculates empty points as the average of the surrounding data points.
+		/// Ideal for approximating missing data by averaging neighboring values, facilitating smooth transitions in data where interim values are uncertain.
+		/// </summary>
+		Average,
+	}
+	
+	/// <summary>
 	/// 
 	/// </summary>
 	internal enum ChartValueType

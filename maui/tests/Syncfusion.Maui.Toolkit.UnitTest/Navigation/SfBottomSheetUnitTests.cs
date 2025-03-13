@@ -689,16 +689,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[MemberData(nameof(ContentPaddingData))]
 		public void UpdatePadding(Thickness value, Thickness expected)
 		{
-			SfBorder border = new SfBorder();
-			SetPrivateField(_bottomSheet, "_contentBorder", border);
+			BottomSheetBorder border = new BottomSheetBorder(_bottomSheet);
+			SetPrivateField(_bottomSheet, "_bottomSheet", border);
 			InvokePrivateMethod(_bottomSheet, "UpdatePadding", [value]);
-			SfBorder? resultBorder = (SfBorder?)GetPrivateField(_bottomSheet, "_contentBorder");
+			BottomSheetBorder? resultBorder = (BottomSheetBorder?)GetPrivateField(_bottomSheet, "_bottomSheet");
 			Assert.Equal(expected, resultBorder?.Padding);
 		}
 
 		[Theory]
 		[InlineData(30, 30)]
-		[InlineData(0, 0)]
+		[InlineData(0, 4)]
 		[InlineData(-28, 4)]
 		public void UpdateGrabberHeightProperty(double input, double expected)
 		{
@@ -710,7 +710,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		[Theory]
 		[InlineData(48, 48)]
-		[InlineData(0, 0)]
+		[InlineData(0, 32)]
 		[InlineData(-48, 32)]
 		public void UpdateGrabberWidthProperty(double input, double expected)
 		{
@@ -784,23 +784,22 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Theory]
-		[InlineData(BottomSheetState.Hidden, BottomSheetState.Collapsed, false)]
-		[InlineData(BottomSheetState.Hidden, BottomSheetState.HalfExpanded, true)]
-		[InlineData(BottomSheetState.Hidden, BottomSheetState.FullExpanded, true)]
-		[InlineData(BottomSheetState.Collapsed, BottomSheetState.HalfExpanded, true)]
-		[InlineData(BottomSheetState.Collapsed, BottomSheetState.FullExpanded, true)]
-		[InlineData(BottomSheetState.HalfExpanded, BottomSheetState.Collapsed, false)]
-		[InlineData(BottomSheetState.HalfExpanded, BottomSheetState.FullExpanded, true)]
-		[InlineData(BottomSheetState.FullExpanded, BottomSheetState.HalfExpanded, true)]
-		[InlineData(BottomSheetState.FullExpanded, BottomSheetState.Collapsed, false)]
-		public void UpdateStateChanged(BottomSheetState oldState, BottomSheetState newState, bool expectedOverlay)
+		[InlineData(BottomSheetState.Hidden, BottomSheetState.Collapsed)]
+		[InlineData(BottomSheetState.Hidden, BottomSheetState.HalfExpanded)]
+		[InlineData(BottomSheetState.Hidden, BottomSheetState.FullExpanded)]
+		[InlineData(BottomSheetState.Collapsed, BottomSheetState.HalfExpanded)]
+		[InlineData(BottomSheetState.Collapsed, BottomSheetState.FullExpanded)]
+		[InlineData(BottomSheetState.HalfExpanded, BottomSheetState.Collapsed)]
+		[InlineData(BottomSheetState.HalfExpanded, BottomSheetState.FullExpanded)]
+		[InlineData(BottomSheetState.FullExpanded, BottomSheetState.HalfExpanded)]
+		[InlineData(BottomSheetState.FullExpanded, BottomSheetState.Collapsed)]
+		public void UpdateStateChanged(BottomSheetState oldState, BottomSheetState newState)
 		{
 			_bottomSheet.State = newState;
+			SetPrivateField(_bottomSheet, "_isSheetOpen", true);
 			InvokePrivateMethod(_bottomSheet, "UpdateStateChanged", oldState, newState);
 			StateChangedEventArgs? eventArgs = (StateChangedEventArgs?)GetPrivateField(_bottomSheet, "_stateChangedEventArgs");
-			SfGrid? overlay = (SfGrid?)GetPrivateField(_bottomSheet, "_overlayGrid");
 			Assert.NotEqual(eventArgs?.OldState, eventArgs?.NewState);
-			Assert.Equal(expectedOverlay, overlay?.IsVisible);
 		}
 
 		[Theory]

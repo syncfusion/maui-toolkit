@@ -392,7 +392,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                 if (!double.IsNaN(lowValueContent))
                 {
-                    tooltipInfo.Text += "/" + lowValueContent.ToString("#.##");
+                    tooltipInfo.Text += "/" + (lowValueContent == 0 ? lowValueContent.ToString("0.##") : lowValueContent.ToString("#.##"));
                 }
 
                 return tooltipInfo;
@@ -417,6 +417,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     double yValue = yValues[index];
                     double yValue1 = yValues1[index];
                     string label = string.Format("{0} : {1:#.##}\n{2} : {3:#.##}", SfCartesianChartResources.High, yValue, SfCartesianChartResources.Low, yValue1);
+					if (yValue == 0 || yValue1 == 0)
+					{
+						label = string.Format("{0} : {1:0.##}\n{2} : {3:0.##}", SfCartesianChartResources.High, yValue, SfCartesianChartResources.Low, yValue1);
+					}
 
                     if (IsSideBySide)
                     {
@@ -465,7 +469,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			ChartDataLabelStyle labelStyle = dataLabelSettings.LabelStyle;
             foreach (RangeColumnSegment dataLabel in _segments)
             {
-                if (!dataLabel.InVisibleRange || dataLabel.IsEmpty)
+                if (!dataLabel.InVisibleRange || dataLabel.IsZero)
 				{
 					continue;
 				}
