@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localcore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.OtpInput.OtpInput.Customization"
+             xmlns:otpInput="clr-namespace:Syncfusion.Maui.Toolkit.OtpInput;assembly=Syncfusion.Maui.Toolkit"
+              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.OtpInput.OtpInput"
+              xmlns:customView="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView"
+              xmlns:textInput="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localcore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+  <localcore:SampleView.BindingContext>
+    <local:CustomizationViewModel/>
+  </localcore:SampleView.BindingContext>
+
+  <localcore:SampleView.Content>
+    <VerticalStackLayout Spacing="20" VerticalOptions="Center" HorizontalOptions="Center">
+      <Grid RowDefinitions="*,*" >
+        <Label Text="Default (Number) OTP Input" FontAttributes="Bold" FontSize="16" Margin="{OnPlatform Default='14,0,0,0',Android='11,0,0,0',iOS='11,0,0,0'}"/>
+        <otpInput:SfOtpInput  Grid.Row="1"
+                              Value="1234"
+                              Type="Number"
+                              Length="{Binding Length}"
+                              StylingMode="{Binding StylingMode}"
+                              Separator="{Binding Separator}"
+                              InputState="{Binding InputState}"/>
+      </Grid>
+      <Grid RowDefinitions="*,*" >
+        <Label Text="Text OTP Input" FontAttributes="Bold" FontSize="16" Margin="{OnPlatform Default='14,0,0,0',Android='11,0,0,0',iOS='11,0,0,0'}"/>
+        <otpInput:SfOtpInput  Grid.Row="1"
+                              Type="Text"
+                              Value="e3c7"
+                              Length="{Binding Length}"
+                              StylingMode="{Binding StylingMode}"
+                              Separator="{Binding Separator}"
+                              InputState="{Binding InputState}"/>
+      </Grid>
+      <Grid RowDefinitions="*,*" >
+        <Label Text="Password OTP Input" FontAttributes="Bold" FontSize="16" Margin="{OnPlatform Default='14,0,0,0',Android='11,0,0,0',iOS='11,0,0,0'}"/>
+        <otpInput:SfOtpInput  Grid.Row="1"
+                              Value="1234"
+                              Type="Password"
+                              Length="{Binding Length}"
+                              StylingMode="{Binding StylingMode}"
+                              Separator="{Binding Separator}"
+                              InputState="{Binding InputState}"/>
+      </Grid>
+
+    </VerticalStackLayout>
+  </localcore:SampleView.Content>
+
+  <localcore:SampleView.OptionView>
+    <ScrollView VerticalScrollBarVisibility="Never">
+      <VerticalStackLayout Spacing="{OnPlatform Default=10,MacCatalyst=20,iOS=20}">
+        <Grid ColumnDefinitions=".5*,.5*">
+          <Label Text="Length" Margin="0,-12,0,0" VerticalTextAlignment="Center" />
+          <textInput:SfTextInputLayout  Grid.Column="2" ContainerType="Outlined" OutlineCornerRadius="5" ShowHelperText="False" InputViewPadding="10,0" HeightRequest="60" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}">
+            <customView:SfEntry Keyboard="Numeric" VerticalOptions="Center" Text="{Binding Length}" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Placeholder="Enter length" PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"/>
+          </textInput:SfTextInputLayout>
+        </Grid>
+        <Grid Margin="0,-18,0,0" ColumnDefinitions=".5*,.5*">
+          <Label Text="Separator" Margin="0,-12,0,0" VerticalTextAlignment="Center" />
+          <textInput:SfTextInputLayout  Grid.Column="2" ContainerType="Outlined" OutlineCornerRadius="5" ShowHelperText="False" InputViewPadding="10,0" HeightRequest="60" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}">
+            <customView:SfEntry Keyboard="Text" VerticalOptions="Center" Text="{Binding Separator}" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Placeholder="Enter separator" PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"/>
+          </textInput:SfTextInputLayout>
+        </Grid>
+        <Grid Margin="0,-18,0,0"  ColumnDefinitions=".5*,.5*">
+          <Label Text="Styling Mode"  VerticalTextAlignment="Center"/>
+          <Picker Grid.Column="1" ItemsSource="{Binding StylingModeList}" SelectedIndex="{Binding StylingModeIndex}" />
+        </Grid>
+        <Grid ColumnDefinitions=".5*,.5*">
+          <Label Text="InputState"  VerticalTextAlignment="Center"/>
+          <Picker Grid.Column="1" ItemsSource="{Binding InputStateList}" SelectedIndex="{Binding InputStateIndex}" />
+        </Grid>        
+        
+      </VerticalStackLayout>
+    </ScrollView>
+  </localcore:SampleView.OptionView>
+
+</localcore:SampleView>

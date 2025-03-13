@@ -141,7 +141,7 @@
   <local:StaticThemeResource x:Key="SfAccordionHeaderRippleBackground" ResourceKey="ContentForeground" />
   <local:StaticThemeResource x:Key="SfAccordionFocusedItemStroke" ResourceKey="BorderAlt4" />
 
-    <!--SfTabView-->
+  <!--SfTabView-->
     <x:String x:Key="SfTabViewTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfTabViewNormalTextColor" ResourceKey="ContentForegroundAlt1" />
     <local:StaticThemeResource x:Key="SfTabViewSelectedTextColor" ResourceKey="PrimaryBackground"/>
@@ -518,4 +518,21 @@
   <local:StaticThemeResource x:Key="SfCardViewNormalBackround" ResourceKey="ContentBackgroundAlt3" />
   <CornerRadius x:Key="SfCardViewCornerRadius">12</CornerRadius>
 
+ <!--SfOtpInput-->
+  <x:String x:Key="SfOtpInputTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfOtpInputDefaultBackground" ResourceKey="Transparent"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderDefault" ResourceKey="InputBoxBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputHoveredBackground" ResourceKey="InputBackgroundHovered"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderHovered" ResourceKey="InputBorderHovered"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderPressed" ResourceKey="InputBorderPressed"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderDisabled" ResourceKey="InputBorderDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBackgroundDisabled" ResourceKey="InputBackgroundDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputDisabledTextColor" ResourceKey="ForegroundDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputPlaceholderColor" ResourceKey="PlaceholderForeground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputFilledBackground" ResourceKey="InputBackground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputSuccessStroke" ResourceKey="SuccessBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputWarningStroke" ResourceKey="WarningBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputErrorStroke" ResourceKey="ErrorBorder"/>
+  
 </local:SyncfusionThemeDictionary>
