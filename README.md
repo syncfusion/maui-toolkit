@@ -38,6 +38,7 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 | Calendars            | Calendar              | The calendar supports month, year, decade, and century views, multiple selection modes, and customizable appearance.      |
 | Editors              | Numeric Entry         | Advanced control for numeric input with support for various formats and validation.                      |
 |                      | Numeric Up Down       | Adjust values with up/down buttons and culture-specific formatting.                                      |
+|                      | OTP Input             | Secure input field for one-time passwords with customizable length, masking options, and validation.     |
 | Navigation           | Navigation Drawer     | Slide-in menu for navigation, positionable on any side of the app with customizable animations.          |
 |                      | Tab View              | Organize app content with customizable tabs, enabling easy navigation across sections.                   |
 |                      | Bottom Sheet          | Slides up from the bottom of the screen to display additional content or functionality.                  |
