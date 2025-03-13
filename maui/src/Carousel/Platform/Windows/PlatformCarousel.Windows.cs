@@ -3434,6 +3434,19 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		}
 
 		/// <summary>
+		/// Sets parent to the template view.
+		/// </summary>
+		/// <param name="templateLayout"></param>
+		/// <param name="formsCarousel"></param>
+		private static void SetParentContent(View templateLayout, ICarousel formsCarousel)
+		{
+			if (templateLayout != null)
+			{
+				templateLayout.Parent = (Element)formsCarousel;
+			}
+		}
+
+		/// <summary>
 		/// Retrieves a view for the specified item index in the carousel.
 		/// </summary>
 		/// <param name="FormsCarousel"></param>
@@ -3482,6 +3495,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 						return null;
 					}
 
+					SetParentContent(templateLayout, FormsCarousel);
 					if (FormsCarousel.ItemsSource != null && FormsCarousel.ItemsSource.Any())
 					{
 						if (index < FormsCarousel.ItemsSource.Count())

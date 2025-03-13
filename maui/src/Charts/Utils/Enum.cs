@@ -23,7 +23,7 @@
 		/// </summary>
 		Average,
 	}
-	
+
 	/// <summary>
 	/// 
 	/// </summary>

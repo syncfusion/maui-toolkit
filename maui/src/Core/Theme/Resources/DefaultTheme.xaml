@@ -36,7 +36,7 @@
     <local:StaticThemeResource x:Key="SfPopupNormalBackground" ResourceKey="FlyoutBackground"/>
     <sys:Double x:Key="SfPopupNormalCloseButtonIconStrokeThickness">1</sys:Double>
 
-    <!--SfChipGroup-->
+  <!--SfChipGroup-->
     <x:String x:Key="SfChipGroupTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfChipGroupDisabledSelectedTextColor" ResourceKey="SecondaryForegroundDisabled" />
     <local:StaticThemeResource x:Key="SfChipGroupHoverSelectedTextColor" ResourceKey="SecondaryForegroundHovered" />
@@ -117,7 +117,7 @@
     <local:StaticThemeResource x:Key="SfPullToRefreshProgressBackground" ResourceKey="ContentBackgroundAlt2" />
     <local:StaticThemeResource x:Key="SfPullToRefreshProgressColor" ResourceKey="PrimaryBackground" />
     <sys:Double x:Key="SfPullToRefreshProgressThickness">3</sys:Double>
-	
+
   <!--SfExpander-->
   <x:String x:Key="SfExpanderTheme">CommonTheme</x:String>
   <local:StaticThemeResource x:Key="SfExpanderNormalHeaderBackground" ResourceKey="Transparent" />
@@ -184,6 +184,12 @@
     <local:StaticThemeResource x:Key="SfTabViewScrollButtonIconColor" ResourceKey="IconColor" />
     <local:StaticThemeResource x:Key="SfTabViewScrollButtonDisabledIconColor" ResourceKey="IconColorDisabled" />
     <sys:Double x:Key="SfTabViewNormalFontSize">14</sys:Double>
+    <local:StaticThemeResource x:Key="SfTabViewCenterButtonBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfTabViewCenterButtonTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfTabViewCenterButtonStroke" ResourceKey="Transparent" />
+    <sys:Double x:Key="SfTabViewCenterButtonCornerRadius">0</sys:Double>
+    <sys:Double x:Key="SfTabViewCenterButtonFontSize">14</sys:Double>
+    <sys:Double x:Key="SfTabViewCenterButtonStrokeThickness">0</sys:Double>
 
     <!--SfEffectsView-->
     <x:String x:Key="SfEffectsViewTheme">CommonTheme</x:String>

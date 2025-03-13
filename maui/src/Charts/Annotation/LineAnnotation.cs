@@ -256,7 +256,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			switch (_annotationLabelStyle.VerticalTextAlignment)
 			{
 				case ChartLabelAlignment.Start:
-					labelRectY = annotationY + (annotationHeight / 2) - (labelHeight / 2) - halfBorderWidth - StrokeWidth;
+					labelRectY = XPosition1 > XPosition2 ? annotationY + (annotationHeight / 2) + (labelHeight / 2) + halfBorderWidth - StrokeWidth : annotationY + (annotationHeight / 2) - (labelHeight / 2) - halfBorderWidth - StrokeWidth;
 					break;
 				case ChartLabelAlignment.Center:
 					labelRectY = annotationY + (annotationHeight / 2) - (labelHeight / 2) - _annotationLabelStyle.Margin.Bottom - StrokeWidth;
@@ -265,20 +265,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 #endif
 					break;
 				case ChartLabelAlignment.End:
-					labelRectY = annotationY + (annotationHeight / 2) + (labelHeight / 2) + halfBorderWidth - StrokeWidth;
+					labelRectY = XPosition1 > XPosition2 ? annotationY + (annotationHeight / 2) - (labelHeight / 2) - halfBorderWidth - StrokeWidth : annotationY + (annotationHeight / 2) + (labelHeight / 2) + halfBorderWidth - StrokeWidth;
 					break;
 			}
 
 			switch (_annotationLabelStyle.HorizontalTextAlignment)
 			{
 				case ChartLabelAlignment.Start:
-					labelRectX = annotationX + halfBorderWidth + (labelWidth / 2);
+					labelRectX = XPosition1 > XPosition2 ? annotationX + halfBorderWidth + (labelWidth / 2) - labelWidth : annotationX + halfBorderWidth + (labelWidth / 2);
 					break;
 				case ChartLabelAlignment.Center:
 					labelRectX = annotationX + (annotationWidth / 2);
 					break;
 				case ChartLabelAlignment.End:
-					labelRectX = annotationX + annotationWidth - halfBorderWidth - (labelWidth / 2);
+					labelRectX = XPosition1 > XPosition2 ? annotationX + annotationWidth - halfBorderWidth - (labelWidth / 2) + labelWidth : annotationX + annotationWidth - halfBorderWidth - (labelWidth / 2);
 					break;
 			}
 

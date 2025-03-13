@@ -214,11 +214,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
             set { SetValue(MarkerSettingsProperty, value); }
         }
 
-        #endregion
+		#endregion
 
-        #region Interface Implementation
+		#region Constructor
+		/// <summary>
+		///  Initializes a new instance of the <see cref="RangeAreaSeries"/>.
+		/// </summary>
+		public RangeAreaSeries()
+		{
+			MarkerSettings = new ChartMarkerSettings();
+		}
 
-        void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
+		#endregion
+
+		#region Interface Implementation
+
+		void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
         {
             if (isSaveState)
             {
@@ -486,7 +497,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 else if (!double.IsNaN(lowValueContent))
                 {
                     tooltipInfo.Text += "/" + (lowValueContent == 0 ? lowValueContent.ToString("0.##") : lowValueContent.ToString("#.##"));
-                }
+				}
 
                 return tooltipInfo;
             }

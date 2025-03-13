@@ -98,10 +98,10 @@
                                                     </Border.StrokeShape>
                                                     <OnPlatform x:TypeArguments="Image">
                                                         <On Platform="WinUI, MacCatalyst, iOS">
-                                                            <Image Source="{Binding BindingContext.Item.Image,Converter={StaticResource imageConverter}}"   />
+                                                            <Image Source="{Binding BindingContext.Item.Image}"/>
                                                         </On>
                                                         <On Platform="Android">
-                                                            <Image Source="{Binding BindingContext.Item.Image,Converter={StaticResource imageConverter}}" 
+                                                            <Image Source="{Binding BindingContext.Item.Image}" 
                                                                        HeightRequest="20" WidthRequest="40" 
                                                                        HorizontalOptions="Center" VerticalOptions="Center"/>
                                                         </On>
@@ -112,7 +112,7 @@
                                     </chart:SfCircularChart.Series>
                                 </chart:SfCircularChart>
                                 <Label Grid.Row="0" Grid.Column="1" 
-                                       Margin="{OnPlatform WinUI='10,30,0,0',Android='5,0,0,0',MacCatalyst='10,30,0,0',iOS='10,20,0,0'}"
+                                       Margin="{OnPlatform WinUI='10,35,0,0',Android='5,0,0,0',MacCatalyst='10,35,0,0',iOS='10,20,0,0'}"
                                        HeightRequest="{OnPlatform WinUI=30,Android=23,MacCatalyst=30,iOS=23}" x:Name="label" 
                                        FontSize="{OnPlatform WinUI='13' ,Android='10',MacCatalyst='13',iOS='10'}"
                                        TextColor="{Binding IconBrush,Converter={StaticResource brushToColor}}" 

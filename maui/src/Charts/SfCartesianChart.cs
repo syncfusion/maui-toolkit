@@ -1152,7 +1152,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 		{
 			ThemeElement.InitializeThemeResources(this, "SfCartesianChartTheme");
-            SfCartesianChartResources.InitializeDefaultResource("Chart.Resources.SfCartesianChart");
+            SfCartesianChartResources.InitializeDefaultResource("Chart.Resources.SfCartesianChart", typeof(SfCartesianChart));
             SetDynamicResource(TrackLineStrokeProperty, "SfCartesianChartTrackballLineStroke");
             SetDynamicResource(TooltipBackgroundProperty, "SfCartesianChartTooltipBackground");
             SetDynamicResource(TooltipTextColorProperty, "SfCartesianChartTooltipTextColor");

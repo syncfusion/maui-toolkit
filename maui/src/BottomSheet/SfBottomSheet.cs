@@ -41,9 +41,15 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
     	/// </summary>
     	SfBorder? _grabber;
 
-    	/// <summary>
-    	/// The shape used to provide corner radius for the grabber.
-    	/// </summary>
+		// Grabber
+		/// <summary>
+		/// The grid control containing the grabber of the bottom sheet.
+		/// </summary>
+		SfGrid? _grabberGrid;
+
+		/// <summary>
+		/// The shape used to provide corner radius for the grabber.
+		/// </summary>
 		RoundRectangle? _grabberStrokeShape;
 
     	// Shape
@@ -121,7 +127,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
     	/// <summary>
     	/// The default height of the row containing the grabber.
     	/// </summary>
-    	const double DefaultGrabberRowHeight = 30;
+    	const double DefaultGrabberAreaHeight = 30;
 
 		/// <summary>
 		/// The minimum allowed value for the HalfExpandedRatio property.
@@ -455,6 +461,34 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    BindingMode.Default, 
 		    propertyChanged: OnGrabberCornerRadiusPropertyChanged);
 
+		/// <summary>
+		/// Identifies the <see cref="GrabberAreaHeight"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="GrabberAreaHeight"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty GrabberAreaHeightProperty = BindableProperty.Create(
+			nameof(GrabberAreaHeight),
+			typeof(double),
+			typeof(SfBottomSheet),
+			DefaultGrabberAreaHeight,
+			BindingMode.Default,
+			propertyChanged: OnGrabberAreaHeightPropertyChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="CollapseOnOverlayTap"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="CollapseOnOverlayTap"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty CollapseOnOverlayTapProperty = BindableProperty.Create(
+			nameof(CollapseOnOverlayTap),
+			typeof(bool),
+			typeof(SfBottomSheet),
+			false,
+			BindingMode.Default
+			);
+
 		#endregion
 
 		#region Internal Bindable Properties
@@ -527,6 +561,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// - <see cref="BottomSheetState.HalfExpanded"/>
 		/// - <see cref="BottomSheetState.FullExpanded"/>
 		/// </value>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="State"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" State="FullExpanded"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.State = BottomSheetState.FullExpanded;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public BottomSheetState State
 		{
 		    get => (BottomSheetState)GetValue(StateProperty);
@@ -543,6 +594,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// This value represents the fraction of the screen height that the bottom sheet will occupy when half-expanded.
 		/// For example, 0.5 means the bottom sheet will cover half of the screen.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="HalfExpandedRatio"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" HalfExpandedRatio="0.35"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.HalfExpandedRatio = 0.35;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public double HalfExpandedRatio
 		{
 		    get => (double)GetValue(HalfExpandedRatioProperty);
@@ -559,6 +627,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// This value represents the fraction of the screen height that the bottom sheet will occupy when full-expanded.
 		/// For example, 0.75 means the bottom sheet will cover 3/4th of the screen.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="FullExpandedRatio"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" FullExpandedRatio="0.9"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.FullExpandedRatio = 0.9;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public double FullExpandedRatio
 		{
 			get => (double)GetValue(FullExpandedRatioProperty);
@@ -574,6 +659,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <remarks>
 		/// This value represents the height bottom sheet will occupy when collapsed.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="CollapsedHeight"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" CollapsedHeight="100"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.CollapsedHeight = 100;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public double CollapsedHeight
 		{
 			get => (double)GetValue(CollapsedHeightProperty);
@@ -583,6 +685,24 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <summary>
 		/// Specifies the custom width value (in pixels) for the BottomSheet when ContentWidthMode is set to Custom.
 		/// </summary>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="BottomSheetContentWidth"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" ContentWidthMode="Custom" BottomSheetContentWidth="350"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.ContentWidthMode = BottomSheetContentWidthMode.Custom;
+		/// bottomSheet.BottomSheetContentWidth = 350;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public double BottomSheetContentWidth
 		{
 			get => (double)GetValue(BottomSheetContentWidthProperty);
@@ -597,7 +717,24 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// Possible values are:
 		/// - <see cref="BottomSheetContentWidthMode.Full"/>
 		/// - <see cref="BottomSheetContentWidthMode.Custom"/>
-		/// </value> 
+		/// </value>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="ContentWidthMode"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" ContentWidthMode="Custom"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.ContentWidthMode = BottomSheetContentWidthMode.Custom;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public BottomSheetContentWidthMode ContentWidthMode
 		{
 			get => (BottomSheetContentWidthMode)GetValue(ContentWidthModeProperty);
@@ -613,7 +750,24 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// - <see cref="BottomSheetAllowedState.All"/>
 		/// - <see cref="BottomSheetAllowedState.HalfExpanded"/>
 		/// - <see cref="BottomSheetAllowedState.FullExpanded"/>
-		/// </value> 
+		/// </value>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="AllowedState"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" AllowedState="HalfExpanded"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.AllowedState = BottomSheetAllowedState.HalfExpanded;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public BottomSheetAllowedState AllowedState
 		{
 		    get => (BottomSheetAllowedState)GetValue(AllowedStateProperty);
@@ -629,6 +783,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <remarks>
 		/// When set to <c>true</c>, the bottom sheet will behave like a modal dialog, preventing interaction with underlying content.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="IsModal"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" IsModal="True"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.IsModal = true;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public bool IsModal
 		{
 		    get => (bool)GetValue(IsModalProperty);
@@ -641,6 +812,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <value> 
 		/// A <see cref="bool"/> value. The default value is <c>true</c>.
 		/// </value>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="ShowGrabber"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" ShowGrabber="True"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.ShowGrabber = true;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public bool ShowGrabber
 		{
 		    get => (bool)GetValue(ShowGrabberProperty);
@@ -656,6 +844,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <remarks>
 		/// When set to <c>true</c>, the bottom sheet will be opened.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="IsOpen"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" IsOpen="True"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.IsOpen = true;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public bool IsOpen
 		{
 			get => (bool)GetValue(IsOpenProperty);
@@ -671,6 +876,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <remarks>
 		/// This property overrides the background property from the base class.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="Background"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" Background="Beige"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.Background = Colors.Beige;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public new Brush Background
 		{
 		    get => (Brush)GetValue(BackgroundProperty);
@@ -687,6 +909,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// This property allows you to round the corners of the bottom sheet.
 		/// Set all values to 0 for sharp corners, or provide individual values for each corner.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="CornerRadius"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" CornerRadius="15, 15, 0, 0"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.CornerRadius = new CornerRadius(15, 15, 0, 0);
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public CornerRadius CornerRadius
 		{
 		    get => (CornerRadius)GetValue(CornerRadiusProperty);
@@ -702,6 +941,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <remarks>
 		/// Use this property to add space between the content and the edges of the bottom sheet.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="ContentPadding"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" ContentPadding="15"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.ContentPadding = 15;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public Thickness ContentPadding
 		{
 		    get => (Thickness)GetValue(ContentPaddingProperty);
@@ -714,6 +970,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <value>
 		/// A <see cref="Brush"/> value representing the grabber's background color.
 		/// </value>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="GrabberBackground"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" GrabberBackground="Red"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.GrabberBackground = Colors.Red;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public Brush GrabberBackground
 		{
 		    get => (Brush)GetValue(GrabberBackgroundProperty);
@@ -730,6 +1003,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// When set to <c>true</c>, users can swipe the bottom sheet to change its state.
 		/// When set to <c>false</c>, swiping gestures are disabled.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="EnableSwiping"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" EnableSwiping="True"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.EnableSwiping = true;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public bool EnableSwiping
 		{
 		    get => (bool)GetValue(EnableSwipingProperty);
@@ -745,6 +1035,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <remarks>
 		/// This property allows you to customize the size of the grabber handle.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="GrabberHeight"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" GrabberHeight="8"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.GrabberHeight = 8;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public double GrabberHeight
 		{
 		    get => (double)GetValue(GrabberHeightProperty);
@@ -760,6 +1067,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <remarks>
 		/// This property allows you to customize the size of the grabber handle.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="GrabberWidth"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" GrabberWidth="48"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.GrabberWidth = 48;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public double GrabberWidth
 		{
 		    get => (double)GetValue(GrabberWidthProperty);
@@ -775,10 +1099,88 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <remarks>
 		/// Use this property to round the corners of the grabber handle.
 		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="GrabberCornerRadius"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" GrabberCornerRadius="12"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.GrabberCornerRadius = 12;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
 		public CornerRadius GrabberCornerRadius
 		{
 		    get => (CornerRadius)GetValue(GrabberCornerRadiusProperty);
 		    set => SetValue(GrabberCornerRadiusProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the height of the grabber area in SfBottomSheet.
+		/// </summary>
+		/// <value>
+		/// A <see cref="double"/> value representing the grabber area height. The default value is 30.
+		/// </value>
+		/// <remarks>
+		/// This property allows you to customize the height of the grabber area.
+		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="GrabberAreaHeight"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" GrabberAreaHeight="16"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.GrabberAreaHeight = 16;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
+		public double GrabberAreaHeight
+		{
+			get => (double)GetValue(GrabberAreaHeightProperty);
+			set => SetValue(GrabberAreaHeightProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets whether the bottom sheet should collapse to its minimum height instead of closing when tapping outside.
+		/// </summary>
+		/// <value>
+		/// It accepts Boolean values, and the default value is <c>false</c>.
+		/// </value>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="CollapseOnOverlayTap"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" CollapseOnOverlayTap="True"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.CollapseOnOverlayTap = true;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
+		public bool CollapseOnOverlayTap
+		{
+			get => (bool)GetValue(CollapseOnOverlayTapProperty);
+			set => SetValue(CollapseOnOverlayTapProperty, value);
 		}
 
 		#endregion
@@ -998,16 +1400,22 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        Background = Background,
 		        RowDefinitions = new RowDefinitionCollection
 		        {
-		            new RowDefinition { Height = new GridLength(DefaultGrabberRowHeight) },
+		            new RowDefinition { Height = new GridLength((GrabberAreaHeight>=0) ? GrabberAreaHeight : DefaultGrabberAreaHeight) },
 		            new RowDefinition { Height = new GridLength(1, GridUnitType.Star) }
 		        }
 		    };
 
-		    // Add grabber to the first row if it has been initialized
+			_grabberGrid = new SfGrid()
+			{
+				IsClippedToBounds = true
+			};
+
+		    // Add grabber grid to the first row if it has been initialized
    			if (_grabber is not null)
     		{
-        		_bottomSheetContent.Children.Add(_grabber);
-        		SfGrid.SetRow(_grabber, 0);
+				_grabberGrid.Children.Add(_grabber);
+        		_bottomSheetContent.Children.Add(_grabberGrid);
+        		SfGrid.SetRow(_grabberGrid, 0);
     		}
 		}
 
@@ -1185,8 +1593,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    if (_bottomSheetContent is not null)
 		    {
 		        _bottomSheetContent.RowDefinitions[GrabberRowIndex].Height = 
-		            ShowGrabber ? new GridLength(DefaultGrabberRowHeight) : new GridLength(0);
-		    }
+		            ShowGrabber ? new GridLength(GrabberAreaHeight) : new GridLength(0);
+#if ANDROID || IOS || MACCATALYST
+				if(_grabber is not null && ShowGrabber)
+				{
+					_grabber.IsVisible = (GrabberAreaHeight == 0) ? false : true;
+				}
+#endif
+			}
 		}
 
 
@@ -1200,7 +1614,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 		    if (_isSheetOpen)
 		    {
-		        Close();
+		        if(CollapseOnOverlayTap)
+				{
+					State = BottomSheetState.Collapsed;
+				}
+				else
+				{
+					Close();
+				}
 		    }
 		}
 
@@ -1352,6 +1773,20 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        _grabber.StrokeShape = _grabberStrokeShape;
 		        OnPropertyChanged(nameof(GrabberCornerRadius));
 		    }
+		}
+
+		/// <summary>
+		/// Updates the height of the grabber area, ensuring it's not negative.
+		/// </summary>
+		/// <param name="newValue">The new height to be set for the grabber area.</param>
+		void UpdateGrabberRowHeightProperty(double newValue)
+		{
+			if (_bottomSheetContent is null || newValue<0)
+			{
+				return;
+			}
+
+			UpdateRowHeight();
 		}
 
 		/// <summary>
@@ -2366,6 +2801,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			if (bindable is SfBottomSheet sheet)
 			{
 				sheet.UpdateGrabberCornerRadius((CornerRadius)newValue);
+			}
+		}
+
+		/// <summary>
+		/// Handles changes to the <see cref="GrabberAreaHeight"/> property of the bottom sheet.
+		/// </summary>
+		/// <param name="bindable">The bindable object (should be SfBottomSheet).</param>
+		/// <param name="oldValue">The old value of the grabber area height.</param>
+		/// <param name="newValue">The new value of the grabber area height.</param>
+		static void OnGrabberAreaHeightPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfBottomSheet sheet)
+			{
+				if (!oldValue.Equals(newValue) && newValue is not null)
+				{
+					sheet.UpdateGrabberRowHeightProperty((double)newValue);
+				}
 			}
 		}
 

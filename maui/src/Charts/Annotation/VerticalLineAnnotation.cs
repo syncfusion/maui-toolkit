@@ -71,8 +71,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			null,
 			BindingMode.Default,
 			null,
-			OnAxisLabelStylePropertyChanged,
-			defaultValueCreator: AxisLabelStyleDefaultValueCreator);
+			OnAxisLabelStylePropertyChanged);
 
 		#endregion
 
@@ -176,6 +175,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			ThemeElement.InitializeThemeResources(this, "SfCartesianChartTheme");
 			_annotationLabelStyle.HorizontalTextAlignment = ChartLabelAlignment.Start;
 			_annotationLabelStyle.VerticalTextAlignment = ChartLabelAlignment.Start;
+			AxisLabelStyle = new ChartLabelStyle { FontSize = 14 };
 		}
 		#endregion
 
@@ -343,11 +343,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			var labelPosition = new PointF(x, y);
 			_axisLabelRect = new Rect(labelPosition, labelSize);
-		}
-
-		static object AxisLabelStyleDefaultValueCreator(BindableObject bindable)
-		{
-			return new ChartLabelStyle() { FontSize = 14 };
 		}
 
 		#endregion

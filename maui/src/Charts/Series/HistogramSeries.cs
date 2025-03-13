@@ -140,8 +140,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			null,
 			BindingMode.Default,
 			null,
-			OnCurveStylePropertyChanged,
-			defaultValueCreator: OnCurveStyleDefaultValueCreator);
+			OnCurveStylePropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="Stroke"/> bindable property.
@@ -371,6 +370,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			_distributionSegment = new DistributionSegment(this);
 			_distributionXValues = [];
 			_distributionYValues = [];
+
+			CurveStyle = new ChartLineStyle()
+			{
+				Stroke = new SolidColorBrush(Color.FromArgb("#FF1717"))
+			};
 		}
 
 		#endregion
@@ -438,11 +442,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			var xValues = GetXValues();
 			int index = 0;
 			double bottomValue = 0;
-			var xAxis = ActualXAxis;
 
-			if (xAxis != null)
+			if(ActualXAxis is ChartAxis xAxis)
 			{
-				bottomValue = double.IsNaN(xAxis.ActualCrossingValue) ? 0 : xAxis.ActualCrossingValue;
+				bottomValue = xAxis.ActualCrossingValue == double.MinValue ||
+				xAxis.ActualCrossingValue == double.MaxValue ||
+				double.IsNaN(xAxis.ActualCrossingValue) ? 0 : xAxis.ActualCrossingValue;
 			}
 
 			if (xValues != null)
@@ -923,14 +928,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			pathF1.CurveTo(12, 10, (float)11.5, (float)9.5, 11, (float)9.5);
 			pathF1.Close();
 			canvas.FillPath(pathF1);
-		}
-
-		static object OnCurveStyleDefaultValueCreator(BindableObject bindable)
-		{
-			return new ChartLineStyle
-			{
-				Stroke = new SolidColorBrush(Color.FromArgb("#FF1717"))
-			};
 		}
 
 		#endregion

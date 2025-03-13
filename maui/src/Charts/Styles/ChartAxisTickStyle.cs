@@ -183,15 +183,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#endregion
 
 		#region Callback
-		private static void OnTickSizeChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnTickSizeChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 		}
 
-		private static void OnStrokeColorChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnStrokeColorChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 		}
 
-		private static void OnStrokeWidthChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnStrokeWidthChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 		}
 

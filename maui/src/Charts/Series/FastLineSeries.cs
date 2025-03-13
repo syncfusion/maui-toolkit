@@ -1,6 +1,4 @@
-﻿using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -16,7 +14,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// <para> <b>Data Label - </b> Data labels are used to display values related to a chart segment. To render the data labels, you need to set the <see cref="ChartSeries.ShowDataLabels"/> property as <b>true</b> in <see cref="FastLineSeries"/> class. To customize the chart data labels alignment, placement, and label styles, you need to create an instance of <see cref="CartesianDataLabelSettings"/> and set to the <see cref="CartesianSeries.DataLabelSettings"/> property.</para>
 	/// <para> <b>Animation - </b> To animate the series, set <b>True</b> to the <see cref="ChartSeries.EnableAnimation"/> property.</para>
 	/// <para> <b>LegendIcon - </b> To customize the legend icon using the <see cref="ChartSeries.LegendIcon"/> property.</para>
-	/// <para> The FastLineSeries does not support empty points.</para>
+	/// <para>The FastLineSeries does not support empty points.</para>
 	/// </remarks>
 	/// <example>
 	/// # [Xaml](#tab/tabid-1)
@@ -79,9 +77,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Internal Properties
 
 		internal double ToleranceCoefficient { get; set; }
-
 		internal override bool IsFillEmptyPoint { get { return false; } }
-		
+
 		#endregion
 
 		#region Bindable Properties

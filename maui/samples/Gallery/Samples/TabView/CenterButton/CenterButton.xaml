@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.TabView.SfTabView.CenterButton"
+                      xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.TabView.SfTabView"
+                      xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:textInputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.TabView.SfTabView"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                      x:Name="root">
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <converter:DateTimeToStringConverter x:Key="Datetostring"/>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+  <localCore:SampleView.Content>
+    <Grid x:Name="mainGrid">
+      <tabView:SfTabView x:Name="TabView"
+                         TabBarPlacement="Bottom"
+                         TabBarHeight="45"
+                         EnableSwiping="false"
+                         TabBarBackground="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}"
+                         SelectionChanged="Handle_SelectionChanged"
+                         IsCenterButtonEnabled="True"
+                         HeaderDisplayMode="Image"
+                         IndicatorStrokeThickness="3"
+                         IndicatorPlacement="Bottom"
+                         CenterButtonTapped="CenterButton_Tapped">
+        <tabView:SfTabView.CenterButtonSettings>
+          <tabView:CenterButtonSettings Height="45" Width="45"
+                                        CornerRadius="50" Background="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark ={StaticResource PrimaryBackgroundDark}}"
+                                        ImageSize="25" DisplayMode="Image">
+            <tabView:CenterButtonSettings.ImageSource>
+              <FontImageSource Glyph="&#xe73d;" Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark ={StaticResource BackgroundDark}}" FontFamily="MauiSampleFontIcon"/>
+            </tabView:CenterButtonSettings.ImageSource>
+          </tabView:CenterButtonSettings>
+        </tabView:SfTabView.CenterButtonSettings>
+
+        <tabView:SfTabItem ImageSize="28" >
+          <tabView:SfTabItem.ImageSource>
+            <FontImageSource x:Name="Tabimage"
+                             Glyph="&#xe738;"
+                             Color="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+                             FontFamily="MauiSampleFontIcon"/>
+          </tabView:SfTabItem.ImageSource>
+
+          <ListView x:Name="listView"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                    RowHeight="75"
+                    BindingContext="{Binding Path=BindingContext, Source={x:Reference root}}"
+                    ItemsSource="{Binding PrimaryListSource}">
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <ViewCell>
+                  <Grid ColumnDefinitions="5*,*">
+                    <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="2">
+                      <Grid WidthRequest="50" Margin="10" HeightRequest="50"  VerticalOptions="Center"  HorizontalOptions="Center">
+                        <Grid>
+                          <Border BackgroundColor="{Binding ContactImage}">
+                            <Border.StrokeShape>
+                              <RoundRectangle CornerRadius="25"/>
+                            </Border.StrokeShape>
+                          </Border>
+                        </Grid>
+                        <Label Text="{Binding ContactReadType}"
+                                     TextColor="White"
+                                     FontSize="22"
+                                     WidthRequest="50"
+                                     HeightRequest="50"
+                                     VerticalTextAlignment="Center"
+                                     HorizontalTextAlignment="Center"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"/>
+                      </Grid>
+
+                      <VerticalStackLayout Margin="2,8,2,2" Spacing="10">
+                        <Label Text="{Binding ContactName}"
+                               TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding Message}"
+                               FontAttributes="None"
+                               TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"
+                               FontSize="12"
+                               VerticalOptions="Center"/>
+                      </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <StackLayout Margin="2,5,2,5" Grid.Column="1">
+                      <Label Text="{Binding MessagingTime,Converter={StaticResource Datetostring}}"
+                             FontAttributes="None"
+                             FontSize="12"
+                             TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"
+                             VerticalOptions="Center"/>
+                    </StackLayout>
+                  </Grid>
+                </ViewCell>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </tabView:SfTabItem>
+
+        <tabView:SfTabItem ImageSize="25">
+          <tabView:SfTabItem.ImageSource>
+            <FontImageSource x:Name="Tabimage1"
+                    Glyph="&#xe75c;"
+                    Color="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+                    FontFamily="MauiSampleFontIcon"/>
+          </tabView:SfTabItem.ImageSource>
+          <ListView x:Name="listView1"
+        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+        RowHeight="75" 
+        BindingContext="{Binding Path=BindingContext, Source={x:Reference root}}"
+        ItemsSource="{Binding SecondaryListSource}">
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <ViewCell>
+                  <Grid ColumnDefinitions="5*,*">
+                    <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="2">
+                      <Grid WidthRequest="50" Margin="10" HeightRequest="50"  VerticalOptions="Center"  HorizontalOptions="Center">
+                        <Grid>
+                          <Border BackgroundColor="{Binding ContactImage}">
+                            <Border.StrokeShape>
+                              <RoundRectangle CornerRadius="25"/>
+                            </Border.StrokeShape>
+                          </Border>
+                        </Grid>
+                        <Label Text="{Binding ContactReadType}"
+                                    TextColor="White"
+                                    FontSize="22"
+                                    WidthRequest="50"
+                                    HeightRequest="50"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"/>
+                      </Grid>
+                      <VerticalStackLayout Margin="2,8,2,2" Spacing="10">
+                        <Label Text="{Binding ContactName}"
+                               TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding Message}"
+                               FontAttributes="None"
+                               TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"
+                               FontSize="12"
+                               VerticalOptions="Center"/>
+                      </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <StackLayout Margin="2,5,2,5" Grid.Column="1">
+                      <Label Text="{Binding MessagingTime,Converter={StaticResource Datetostring}}"
+                             FontAttributes="None"
+                             FontSize="12"
+                             TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"/>
+                    </StackLayout>
+                  </Grid>
+                </ViewCell>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </tabView:SfTabItem>
+
+        <tabView:SfTabItem ImageSize="25">
+          <tabView:SfTabItem.ImageSource>
+            <FontImageSource x:Name="Tabimage2"
+                             Glyph="&#xe777;"
+                             Color="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+                             FontFamily="MauiSampleFontIcon"/>
+          </tabView:SfTabItem.ImageSource>
+          <ListView x:Name="listView2"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                    RowHeight="75"
+                    BindingContext="{Binding Path=BindingContext, Source={x:Reference root}}"
+                    ItemsSource="{Binding ThirdListSource}">
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <ViewCell>
+                  <Grid ColumnDefinitions="5*,*">
+                    <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="2">
+                      <Grid WidthRequest="50" Margin="10" HeightRequest="50" VerticalOptions="Center" HorizontalOptions="Center">
+                        <Grid>
+                          <Border BackgroundColor="{Binding ContactImage}">
+                            <Border.StrokeShape>
+                              <RoundRectangle CornerRadius="25"/>
+                            </Border.StrokeShape>
+                          </Border>
+                        </Grid>
+                        <Label Text="{Binding ContactReadType}"
+                                     TextColor="White"
+                                     FontSize="22"
+                                     WidthRequest="50"
+                                     HeightRequest="50"
+                                     VerticalTextAlignment="Center"
+                                     HorizontalTextAlignment="Center"
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center"/>
+                      </Grid>
+                      <VerticalStackLayout Margin="2,8,2,2" Spacing="10">
+                        <Label Text="{Binding ContactName}"
+                               TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding Message}"
+                               FontAttributes="None"
+                               TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"
+                               VerticalOptions="Center"/>
+                      </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                    <StackLayout Margin="2,5,2,5" Grid.Column="1">
+                      <Label Text="{Binding MessagingTime,Converter={StaticResource Datetostring}}"
+                   FontAttributes="None"
+                    FontSize="12"
+                  TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"/>
+                    </StackLayout>
+                  </Grid>
+                </ViewCell>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </tabView:SfTabItem>
+
+        <tabView:SfTabItem ImageSize="25" >
+          <tabView:SfTabItem.ImageSource>
+            <FontImageSource x:Name="Tabimage3"
+                             Glyph="&#xe760;"
+                             Color="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+                             FontFamily="MauiSampleFontIcon" />
+          </tabView:SfTabItem.ImageSource>
+          <VerticalStackLayout Margin="2">
+            <Grid RowDefinitions="*,*">
+              <Grid Grid.Row="0" RowDefinitions="*,3*,*" RowSpacing="20" BackgroundColor="#57c4ec">
+                <Image HorizontalOptions="Center"
+                       HeightRequest="150"
+                       WidthRequest="150"
+                       Grid.Row="1"
+                       Source="peoplecircle23.png"
+                       Aspect="AspectFit"
+                       VerticalOptions="Center"/>
+                <Label x:Name="name"
+                       Text="John Steinbeck"
+                       FontAttributes="Bold"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       Grid.Row="2"
+                       TextColor="White"
+                       VerticalTextAlignment="Center"
+                       HorizontalTextAlignment="Center"/>
+              </Grid>
+              <VerticalStackLayout Grid.Row="1" Margin="0,20,0,0" Spacing="5" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                <HorizontalStackLayout Margin="30,0,0,0">
+                  <Image x:Name="mail_Image"
+                         HeightRequest="30"
+                         WidthRequest="30"
+                         VerticalOptions="Center"
+                         HorizontalOptions="End">
+                    <Image.Source>
+                      <FontImageSource Glyph="&#xe75c;" FontFamily="MauiSampleFontIcon" Color="#5772e6"/>
+                    </Image.Source>
+                  </Image>
+                  <Label Margin="20,0,0,0"
+                         Grid.Row="0"
+                         Grid.Column="2"
+                         Text="John@xyz.com"
+                         FontSize="15"
+                         FontAttributes="Bold"
+                         VerticalOptions="Center"
+                         VerticalTextAlignment="Center"
+                         HorizontalTextAlignment="Start"
+                         HorizontalOptions="Center" />
+                </HorizontalStackLayout>
+                <HorizontalStackLayout Margin="30,0,0,0">
+                  <Image HeightRequest="30"
+                         WidthRequest="30"
+                         VerticalOptions="Center"
+                         HorizontalOptions="End" >
+                    <Image.Source>
+                      <FontImageSource Glyph="&#xe763;" FontFamily="MauiSampleFontIcon" Color="#5772e6"/>
+                    </Image.Source>
+                  </Image>
+                  <Label Margin="20,0,0,0"
+                         Text="XXX-XXX-XXX-XX"
+                         FontSize="15"
+                         VerticalOptions="Center"
+                         FontAttributes="Bold"
+                         VerticalTextAlignment="Center"
+                         HorizontalTextAlignment="Start"
+                         HorizontalOptions="Center" />
+                </HorizontalStackLayout>
+              </VerticalStackLayout>
+            </Grid>
+          </VerticalStackLayout>
+        </tabView:SfTabItem>
+
+
+      </tabView:SfTabView>
+      <Grid x:Name="ComposeDialog"
+          IsVisible="False">
+        <Grid Opacity="0.5" BackgroundColor="Black">
+          <Grid.GestureRecognizers>
+            <TapGestureRecognizer Tapped="Grid_Tapped" />
+          </Grid.GestureRecognizers>
+        </Grid>
+       
+        <VerticalStackLayout Margin="25,50" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+          <VerticalStackLayout.GestureRecognizers>
+            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+          </VerticalStackLayout.GestureRecognizers>
+          <Grid ColumnDefinitions="7*,*">
+            <BoxView x:Name="boxView" HeightRequest="40" Grid.Column="0" Grid.ColumnSpan="2" BackgroundColor="#1E90FF"/>
+            <Label Text="Compose" Margin="10,0,0,0" Grid.Column="0" HorizontalTextAlignment="Start" TextColor="White" VerticalTextAlignment="Start" HorizontalOptions="Start" VerticalOptions="Center"/>
+            <Image Source="house_icon.png" HeightRequest="30" WidthRequest="30" VerticalOptions="Center" Grid.Column="1" HorizontalOptions="End" Margin="0,0,10,0">
+              <Image.GestureRecognizers>
+                <TapGestureRecognizer
+                Tapped="SendButton_Clicked" />
+              </Image.GestureRecognizers>
+            </Image>
+          </Grid>
+          <VerticalStackLayout Margin="10,10,10,0" >
+            <VerticalStackLayout>
+              <HorizontalStackLayout Spacing="18">
+                <Label VerticalTextAlignment="Center"
+                  HorizontalTextAlignment="Center"
+                  Text="To" 
+                  TextColor="Gray"/>
+                <textInputLayout:SfTextInputLayout WidthRequest="200" InputViewPadding="10,0,0,0">
+                  <Entry FontSize="14"
+                         MinimumHeightRequest="25"
+                         VerticalOptions="Start"
+                         FontAttributes="Bold"
+                         Text="james@xyz.com"/>
+                </textInputLayout:SfTextInputLayout>
+              </HorizontalStackLayout>
+            </VerticalStackLayout>
+            <VerticalStackLayout>
+              <HorizontalStackLayout Spacing="10">
+                <Label VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Text="Sub" TextColor="Gray"/>
+                <textInputLayout:SfTextInputLayout WidthRequest="200" InputViewPadding="10,0,0,0">
+                  <Entry Text=""
+                         MinimumHeightRequest="25"
+                         VerticalOptions="Start"
+                         FontAttributes="Bold"
+                         FontSize="14"/>
+                </textInputLayout:SfTextInputLayout>
+              </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <textInputLayout:SfTextInputLayout HeightRequest="200">
+              <Editor FontSize="14" Text=" "/>
+            </textInputLayout:SfTextInputLayout>
+          </VerticalStackLayout>
+        </VerticalStackLayout>
+      </Grid>
+    </Grid>
+  </localCore:SampleView.Content>
+</localCore:SampleView>

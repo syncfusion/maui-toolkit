@@ -120,6 +120,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			Assert.Null(tabView.TabBarBackground);
 			Assert.Equal(TabBarDisplayMode.Default, tabView.HeaderDisplayMode);
+			Assert.Equal(TabHeaderAlignment.Start, tabView.TabHeaderAlignment);
 			Assert.Equal(TabBarPlacement.Top, tabView.TabBarPlacement);
 			Assert.Equal(TabIndicatorPlacement.Bottom, tabView.IndicatorPlacement);
 			Assert.Equal(IndicatorWidthMode.Fit, tabView.IndicatorWidthMode);
@@ -141,6 +142,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.False(tabView.IsScrollButtonEnabled);
 			Assert.False(tabView.EnableSwiping);
 			Assert.Equal(100d, tabView.ContentTransitionDuration);
+			Assert.True(tabView.IsContentTransitionEnabled);
 		}
 
 		[Theory]
@@ -169,6 +171,21 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			Assert.Equal(expected, tabView.HeaderDisplayMode);
 		}
+
+		[Theory]
+		[InlineData(TabHeaderAlignment.Start)]
+		[InlineData(TabHeaderAlignment.Center)]
+		[InlineData(TabHeaderAlignment.End)]
+		public void TabHeaderAlignment_SetAndGet_ReturnsExpectedValue(TabHeaderAlignment expected)
+		{
+			var tabView = new SfTabView
+			{
+				TabHeaderAlignment = expected
+			};
+
+			Assert.Equal(expected, tabView.TabHeaderAlignment);
+		}
+
 
 		[Fact]
 		public void TabBarBackground_SetAndGet_ReturnsExpectedValue()
@@ -207,6 +224,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			Assert.Equal(expected, tabView.IndicatorPlacement);
 		}
+
+		[Theory]
+        [InlineData(true)]
+        [InlineData(false)]        
+        public void IsContentTransitionEnabled_SetAndGet_ReturnsExpectedValue(bool expected) 
+        {
+            SfTabView tabView = new SfTabView();
+            tabView.IsContentTransitionEnabled = expected;
+            Assert.Equal(expected, tabView.IsContentTransitionEnabled);
+        }
 
 		[Theory]
 		[InlineData(TabWidthMode.Default)]
@@ -1206,6 +1233,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Theory]
+		[InlineData(TabHeaderAlignment.Start)]
+		[InlineData(TabHeaderAlignment.Center)]
+		[InlineData(TabHeaderAlignment.End)]
+		public void TestSfTabBarTabHeaderAlignment(TabHeaderAlignment expected)
+		{
+			SfTabView tabView = new SfTabView();
+			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			tabView.TabHeaderAlignment = expected;
+			Assert.Equal(expected, tabBar?.TabHeaderAlignment);
+		}
+
+		[Theory]
 		[InlineData(-200)]
 		[InlineData(200)]
 		[InlineData(0)]
@@ -1478,6 +1517,22 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(displayMode, tabHeaderContainer?.HeaderDisplayMode);
 		}
 
+		[Theory]
+		[InlineData(TabHeaderAlignment.Start)]
+		[InlineData(TabHeaderAlignment.Center)]
+		[InlineData(TabHeaderAlignment.End)]
+		public void TestSetTabHeaderAlignment(TabHeaderAlignment headerAlignment)
+		{
+			var tabView = new SfTabView
+			{
+				TabHeaderAlignment = headerAlignment
+			};
+			Assert.Equal(headerAlignment, tabView.TabHeaderAlignment);
+
+			SfTabBar? tabHeaderContainer = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.Equal(headerAlignment, tabHeaderContainer?.TabHeaderAlignment);
+		}
+
 		[Fact]
 		public void TestTabContentContainerSetItemsSourceAndContentItemTemplate()
 		{
@@ -1722,33 +1777,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			tabBar.Items = PopulateMixedItemsCollection();
 			InvokePrivateMethod(tabBar, "UpdateTabPadding");
 			Assert.Equal(0, tabBar.SelectedIndex);
-		}
-
-		[Fact]
-		public void TestResetEffectsView()
-		{
-			SfTabView tabView = new SfTabView
-			{
-				Items = PopulateLabelItemsCollection()
-			};
-
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
-			{
-				var effectsView = tabBar.GetEffectsView(tabBar.Items[0]);
-
-				InvokePrivateMethod(tabBar, "ResetEffectsView", effectsView);
-				Assert.True(effectsView?.ForceReset);
-
-				effectsView = tabBar.GetEffectsView(tabBar.Items[1]);
-
-				InvokePrivateMethod(tabBar, "ResetEffectsView", effectsView);
-				Assert.True(effectsView?.ForceReset);
-
-				effectsView = tabBar.GetEffectsView(tabBar.Items[2]);
-
-				InvokePrivateMethod(tabBar, "ResetEffectsView", effectsView);
-				Assert.True(effectsView?.ForceReset);
-			}
 		}
 
 		[Fact]
@@ -2113,27 +2141,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestContentTransitionEnabled()
 		{
-			var instance = new SfTabView();
-			var propertyInfo = instance.GetType().GetProperty("IsContentTransitionEnabled",
-				BindingFlags.NonPublic | BindingFlags.Instance);
-			propertyInfo?.SetValue(instance, true);
-			Assert.NotNull(propertyInfo);
-			var res = propertyInfo.GetValue(instance);
-			Assert.NotNull(res);
-			bool result = (bool)res;
+			var instance = new SfTabView();			
+			var result = instance.IsContentTransitionEnabled;
 			Assert.True(result);
 		}
-
 		[Fact]
 		public void TestContentTransitionEnabledDefaultValue()
 		{
 			var instance = new SfTabView();
-			var propertyInfo = instance.GetType().GetProperty("IsContentTransitionEnabled",
-				BindingFlags.NonPublic | BindingFlags.Instance);
-			Assert.NotNull(propertyInfo);
-			var res = propertyInfo.GetValue(instance);
-			Assert.NotNull(res);
-			bool result = (bool)res;
+			var result = instance.IsContentTransitionEnabled;
 			Assert.True(result);
 		}
 
@@ -3484,7 +3500,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var value1 = GetPrivateField(horizontal, "_velocityX");
 			Assert.NotNull(value1);
 			double val = (double)value1;
-			Assert.Equal(0.16, Math.Round(val, 2));
+			Assert.Equal(Math.Round(0.15656,2), Math.Round(val, 2));
 		}
 
 		[Fact]
@@ -4063,8 +4079,275 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var sfEffectsView = GetPrivateField(_arrowIcon, "_sfEffectsView") as SfEffectsView;
 			Assert.NotNull(sfEffectsView);
 		}
+		#endregion
+
+		#region Center Button
+
+		[Fact]
+		public void TestInitializeCenterButtonWithItems()
+		{
+			SfTabView sfTabView = new SfTabView();
+			sfTabView.Items = PopulateLabelItemsCollection();
+			sfTabView.IsCenterButtonEnabled = true;
+			sfTabView.CenterButtonSettings = new CenterButtonSettings();
+
+			// From  SfTabView class
+			var _tabHeaderContainer = GetPrivateField(sfTabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(_tabHeaderContainer);
+			Assert.Equal(_tabHeaderContainer.IsCenterButtonEnabled, sfTabView.IsCenterButtonEnabled);
+			var _centerButtonViewPlaceholder = GetPrivateField(_tabHeaderContainer, "_centerButtonViewPlaceholder") as SfGrid;
+			Assert.NotNull(_centerButtonViewPlaceholder);
+			var _tabHeaderItemContent = GetPrivateField(_tabHeaderContainer, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			int _countOfCenterButton = 1;
+			Assert.NotNull(_tabHeaderItemContent);
+			Assert.Equal(_tabHeaderItemContent.Children.Count, sfTabView.Items.Count + _countOfCenterButton);
+			var totalCount = sfTabView.Items.Count;
+			var centerIndex = totalCount / 2 + totalCount % 2;
+			Assert.IsType<SfGrid>((IView)_tabHeaderItemContent.Children[centerIndex]);
+			Assert.Equal(_centerButtonViewPlaceholder, _tabHeaderItemContent.Children[centerIndex]);
+			var _centerButtonView = GetPrivateField(sfTabView, "_centerButtonView") as CenterButtonView;
+			Assert.NotNull(_centerButtonView);
+			var _parentGrid = GetPrivateField(sfTabView, "_parentGrid") as SfGrid;
+			Assert.NotNull(_parentGrid);
+			Assert.True(_parentGrid.Children.Contains(_centerButtonView));
+			Assert.Equal(2, Grid.GetRowSpan(_centerButtonView));
+			Assert.Equal(LayoutOptions.Start, _centerButtonView.VerticalOptions);
+			Assert.Equal(LayoutOptions.Center, _centerButtonView.HorizontalOptions);
+
+			// From CenterButtonView
+			var _centerButtonTitle = GetPrivateField(_centerButtonView, "_centerButtonTitle") as Label;
+			Assert.NotNull(_centerButtonTitle);
+			Assert.Equal(sfTabView.CenterButtonSettings.Title, _centerButtonTitle.Text);
+			Assert.Equal(sfTabView.CenterButtonSettings.TextColor, _centerButtonTitle.TextColor);
+			Assert.Equal(sfTabView.CenterButtonSettings.FontSize, _centerButtonTitle.FontSize);
+			Assert.Equal(sfTabView.CenterButtonSettings.FontAutoScalingEnabled, _centerButtonTitle.FontAutoScalingEnabled);
+			Assert.Equal(sfTabView.CenterButtonSettings.FontAttributes, _centerButtonTitle.FontAttributes);
+			Assert.Equal(sfTabView.CenterButtonSettings.FontFamily, _centerButtonTitle.FontFamily);
+			var _centerButtonBorderView = GetPrivateField(_centerButtonView, "_centerButtonBorderView") as SfBorder;
+			Assert.NotNull(_centerButtonBorderView);
+			Assert.Equal(sfTabView.CenterButtonSettings.Height, _centerButtonBorderView.HeightRequest);
+			Assert.Equal(sfTabView.CenterButtonSettings.Width, _centerButtonBorderView.WidthRequest);
+			Assert.Equal(sfTabView.CenterButtonSettings.Background, _centerButtonBorderView.Background);
+			Assert.Null(_centerButtonBorderView.Stroke);
+			var _centerButtonVerticalLayout = GetPrivateField(_centerButtonView, "_centerButtonVerticalLayout") as SfVerticalStackLayout;
+			Assert.NotNull(_centerButtonVerticalLayout);
+			Assert.Equal(_centerButtonTitle, _centerButtonVerticalLayout.Children[0]);
+			var _centerButtonImage = GetPrivateField(_centerButtonView, "_centerButtonImage") as Image;
+			Assert.NotNull(_centerButtonImage);
+			Assert.Equal(sfTabView.CenterButtonSettings.ImageSource, _centerButtonImage.Source);
+			Assert.Equal(sfTabView.CenterButtonSettings.ImageSize, _centerButtonImage.WidthRequest);
+			Assert.Equal(sfTabView.CenterButtonSettings.ImageSize, _centerButtonImage.HeightRequest);
+
+			sfTabView.IsCenterButtonEnabled = false;
+			Assert.Equal(_tabHeaderItemContent.Children.Count, sfTabView.Items.Count);
+			Assert.False(_parentGrid.Children.Contains(_centerButtonView));
+		}
+
+		[Theory]
+		[InlineData("Center button")]
+		[InlineData("Home")]
+		[InlineData("Profile",20)]
+		[InlineData("Home", -1)]
+		[InlineData("Profile", 5)]
+		[InlineData("Home", 15, "Times New Roman")]
+		[InlineData("Profile", 2, "Arial")]
+		[InlineData("Center button", 30, "", FontAttributes.Italic)]
+		[InlineData("Profile", 4, "", FontAttributes.Bold)]
+		[InlineData("Home", 35, "", FontAttributes.None)]
+		[InlineData("Profile", 4, "", FontAttributes.Bold, true)]
+		[InlineData("Center button", 10, "", FontAttributes.None, false)]
+		public void TestCenterButtonTitle(string title, double fontSize = 14, string fontFamily = "", FontAttributes fontAttributes = FontAttributes.None, bool fontAutoScalingEnabled = false)
+		{
+			SfTabView sfTabView = new SfTabView();
+			sfTabView.Items = PopulateLabelItemsCollection();
+			sfTabView.IsCenterButtonEnabled = true;
+			var centerButtonSettings = new CenterButtonSettings()
+			{
+				Title = title,
+				FontSize = fontSize,
+				FontFamily = fontFamily,
+				FontAttributes = fontAttributes,
+				FontAutoScalingEnabled = fontAutoScalingEnabled
+			};
+			sfTabView.CenterButtonSettings = centerButtonSettings;
+			var _centerButtonView = GetPrivateField(sfTabView, "_centerButtonView") as CenterButtonView;
+			Assert.NotNull(_centerButtonView);
+			var _centerButtonTitle = GetPrivateField(_centerButtonView, "_centerButtonTitle") as Label;
+			Assert.NotNull(_centerButtonTitle);
+			Assert.Equal(title, _centerButtonTitle.Text);
+			Assert.Equal(fontSize, _centerButtonTitle.FontSize);
+			Assert.Equal(fontFamily, _centerButtonTitle.FontFamily);
+			Assert.Equal(fontAttributes, _centerButtonTitle.FontAttributes);
+
+			centerButtonSettings.TextColor = Colors.Green;
+			Assert.Equal(Colors.Green, _centerButtonTitle.TextColor);
+		}
+
+		[Theory]
+		[InlineData(50)]
+		[InlineData(5)]
+		[InlineData(48, 100)]
+		[InlineData(48, 5)]
+		[InlineData(48, 70, 10)]
+		[InlineData(48, 70, -5)]
+		[InlineData(48, 70, 50)]
+		[InlineData(48, 70, 0, 5)]
+		[InlineData(48, 70, 0, -5)]
+		[InlineData(48, 70, 0, 20)]
+		public void TestCenterButtonBorder(double height, double width = 70d, double cornerRadius = 0, double strokeThickness = 0)
+		{
+			SfTabView sfTabView = new SfTabView();
+			sfTabView.Items = PopulateLabelItemsCollection();
+			sfTabView.IsCenterButtonEnabled = true;
+			var centerButtonSettings = new CenterButtonSettings()
+			{
+				Height = height,
+				Width = width,
+				CornerRadius = cornerRadius,
+				StrokeThickness = strokeThickness,
+
+			};
+			sfTabView.CenterButtonSettings = centerButtonSettings;
+			var _centerButtonView = GetPrivateField(sfTabView, "_centerButtonView") as CenterButtonView;
+			Assert.NotNull(_centerButtonView);
+
+			var _centerButtonBorderView = GetPrivateField(_centerButtonView, "_centerButtonBorderView") as SfBorder;
+			Assert.NotNull(_centerButtonBorderView);
+			var _centerButtonRoundRectangle = GetPrivateField(_centerButtonView, "_centerButtonRoundRectangle") as RoundRectangle;
+			Assert.NotNull(_centerButtonRoundRectangle);
+			Assert.Equal(height, _centerButtonBorderView.HeightRequest);
+			Assert.Equal(width, _centerButtonBorderView.WidthRequest);
+			Assert.Equal(cornerRadius, _centerButtonRoundRectangle.CornerRadius);
+			Assert.Equal(strokeThickness, _centerButtonBorderView.StrokeThickness);
+
+			centerButtonSettings.Stroke = Colors.Red;
+			Assert.Equal(Colors.Red, _centerButtonBorderView.Stroke);
+		}
+
+		[Theory]
+		[InlineData(CenterButtonDisplayMode.Text)]
+		[InlineData(CenterButtonDisplayMode.Image)]
+		[InlineData(CenterButtonDisplayMode.ImageWithText)]
+		[InlineData(CenterButtonDisplayMode.ImageWithText,"SampleImage1.png")]
+		[InlineData(CenterButtonDisplayMode.Image, "SampleImage2.png")]
+		[InlineData(CenterButtonDisplayMode.ImageWithText, "SampleImage1.png", 45)]
+		[InlineData(CenterButtonDisplayMode.Image, "SampleImage2.png", -5)]
+		public void TestCenterButtonDisplayMode(CenterButtonDisplayMode centerButtonDisplayMode = CenterButtonDisplayMode.Text, string imagePath = "", double imageSize = 20d)
+		{
+			SfTabView sfTabView = new SfTabView();
+			sfTabView.Items = PopulateLabelItemsCollection();
+			sfTabView.IsCenterButtonEnabled = true;
+			var imageSource = ImageSource.FromFile(imagePath);
+			var centerButtonSettings = new CenterButtonSettings()
+			{
+				DisplayMode = centerButtonDisplayMode,
+				ImageSource = imageSource,
+				ImageSize = imageSize,
+			};
+			sfTabView.CenterButtonSettings = centerButtonSettings;
+			var _centerButtonView = GetPrivateField(sfTabView, "_centerButtonView") as CenterButtonView;
+			Assert.NotNull(_centerButtonView);
+			var _centerButtonVerticalLayout = GetPrivateField(_centerButtonView, "_centerButtonVerticalLayout") as SfVerticalStackLayout;
+			Assert.NotNull(_centerButtonVerticalLayout);
+			var _centerButtonTitle = GetPrivateField(_centerButtonView, "_centerButtonTitle") as SfLabel;
+			Assert.NotNull(_centerButtonTitle);
+			var _centerButtonImage = GetPrivateField(_centerButtonView, "_centerButtonImage") as SfImage;
+			Assert.NotNull(_centerButtonImage);
+			if (centerButtonDisplayMode is CenterButtonDisplayMode.Text)
+			{
+				Assert.Equal(_centerButtonTitle, _centerButtonVerticalLayout.Children[0]);
+			}
+			else if (centerButtonDisplayMode is CenterButtonDisplayMode.Image)
+			{
+				Assert.Equal(_centerButtonImage, _centerButtonVerticalLayout.Children[0]);
+			}
+			else
+			{
+				Assert.Equal(_centerButtonImage, _centerButtonVerticalLayout.Children[0]);
+				Assert.Equal(_centerButtonTitle, _centerButtonVerticalLayout.Children[1]);
+			}
+
+			Assert.Equal(imageSource, _centerButtonImage.Source);
+			Assert.Equal(imageSize, _centerButtonImage.HeightRequest);
+			Assert.Equal(imageSize, _centerButtonImage.WidthRequest);
+		}
+
+		[Theory]
+		[InlineData(TabBarPlacement.Bottom)]
+		[InlineData(TabBarPlacement.Top)]
+		public void TestCenterButtonWithTabBarPlacement(TabBarPlacement tabBarPlacement)
+		{
+			SfTabView sfTabView = new SfTabView();
+			sfTabView.Items = PopulateLabelItemsCollection();
+			sfTabView.IsCenterButtonEnabled = true;
+			sfTabView.TabBarPlacement = tabBarPlacement;
+			var centerButtonSettings = new CenterButtonSettings();
+			sfTabView.CenterButtonSettings = centerButtonSettings;
+			var _centerButtonView = GetPrivateField(sfTabView, "_centerButtonView") as CenterButtonView;
+			Assert.NotNull(_centerButtonView);
+			if (sfTabView.TabBarPlacement is TabBarPlacement.Bottom)
+			{
+				Assert.Equal(LayoutOptions.Center, _centerButtonView.HorizontalOptions);
+				Assert.Equal(LayoutOptions.End, _centerButtonView.VerticalOptions);
+			}
+			else
+			{
+				Assert.Equal(LayoutOptions.Center, _centerButtonView.HorizontalOptions);
+				Assert.Equal(LayoutOptions.Start, _centerButtonView.VerticalOptions);
+			}
+		}
+
+		[Theory]
+		[InlineData(1)]
+		[InlineData(2)]
+		[InlineData(3)]
+		[InlineData(4)]
+		[InlineData(5)]
+		[InlineData(6)]
+		[InlineData(7)]
+		[InlineData(8)]
+		[InlineData(9)]
+		[InlineData(10)]
+		public void TestCenterButtonWithItemsCount(int count)
+		{
+			SfTabView sfTabView = new SfTabView();
+			sfTabView.IsCenterButtonEnabled = true;
+			var centerButtonSettings = new CenterButtonSettings();
+			sfTabView.CenterButtonSettings = centerButtonSettings;
+			TabItemCollection items = new TabItemCollection();
+			for (int i=0; i < count; i++)
+			{
+				items.Add(new SfTabItem
+				{
+					Header = $"Item {items.Count + 1}",
+					Content = new Label(){Text = $"Item {items.Count+1}"},
+				});
+			}
+			sfTabView.Items = items;
+			var totalCount = items.Count;
+			int centerIndex = totalCount / 2 + totalCount % 2;
+			var _centerButtonView = GetPrivateField(sfTabView, "_centerButtonView") as CenterButtonView;
+			Assert.NotNull(_centerButtonView);
+			var _parentGrid = GetPrivateField(sfTabView, "_parentGrid") as SfGrid;
+			Assert.NotNull(_parentGrid);
+			var _tabHeaderContainer = GetPrivateField(sfTabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(_tabHeaderContainer);
+			Assert.Equal(_tabHeaderContainer.IsCenterButtonEnabled, sfTabView.IsCenterButtonEnabled);
+			var _tabHeaderItemContent = GetPrivateField(_tabHeaderContainer, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			int _countOfCenterButton = 1;
+			Assert.NotNull(_tabHeaderItemContent);
+			var _centerButtonViewPlaceholder = GetPrivateField(_tabHeaderContainer, "_centerButtonViewPlaceholder") as SfGrid;
+			Assert.NotNull(_centerButtonViewPlaceholder);
+			Assert.Equal(_tabHeaderItemContent.Children.Count, sfTabView.Items.Count + _countOfCenterButton);
+			Assert.True(_parentGrid.Children.Contains(_centerButtonView));
+			Assert.Equal(2, Grid.GetRowSpan(_centerButtonView));
+			Assert.IsType<SfGrid>((IView)_tabHeaderItemContent.Children[centerIndex]);
+			Assert.True(_tabHeaderItemContent.Children.Contains(_centerButtonViewPlaceholder));
+			Assert.Equal(_centerButtonViewPlaceholder, _tabHeaderItemContent.Children[centerIndex]);
+		}
+
+		#endregion
 	}
-	#endregion
 
 	public class Model : INotifyPropertyChanged
 	{

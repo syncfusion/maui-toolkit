@@ -1054,7 +1054,11 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		{
 			_textRectF.X = _isRTL ? (float)Padding.Left - (float)Padding.Right + _rightPadding : (float)Padding.Left - (float)Padding.Right + DefaultSelectionIndicatorWidth + _leftIconPadding + _rightIconPadding / (float)1.75;
 			_textRectF.Y = IsSelected ? (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - _textSelectionPadding : (float)Padding.Top - (float)Padding.Bottom - dirtyRect.Y - _textSelectionPadding + (float)StrokeThickness / 2;
+#if ANDROID
 			_textRectF.Width = (float)Width - DefaultSelectionIndicatorWidth - _leftIconPadding - _rightIconPadding - _rightPadding;
+#else
+			_textRectF.Width = (float)Width - DefaultSelectionIndicatorWidth - _leftIconPadding - _rightIconPadding / 2 - _rightPadding;
+#endif
 			_textRectF.Height = IsSelected ? Math.Abs((float)Height) : Math.Abs((float)Height - (float)StrokeThickness);
 		}
 
@@ -1300,6 +1304,8 @@ namespace Syncfusion.Maui.Toolkit.Chips
 #endif
 #if ANDROID
 			UpdateBaseClip();
+#elif WINDOWS
+			CreateImageIcon();
 #endif
 
 			return new Size(width, height);

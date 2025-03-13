@@ -182,9 +182,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return;
 			}
 
-			var crossingValue = cartesian.ActualXAxis.ActualCrossingValue;
-			crossingValue = double.IsNaN(crossingValue) ? 0 : crossingValue;
-
+			var xAxis = cartesian.ActualXAxis;
+			var crossingValue = double.IsNaN(xAxis.RenderingCrossesValue) ? cartesian.GetAxisCrossingValue(xAxis) : xAxis.RenderingCrossesValue;
 			var count = XVal.Length;
 			FillPoints = [];
 			StartControlPoints = [];

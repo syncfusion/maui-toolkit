@@ -577,56 +577,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
-		internal override void OnDataSourceChanged(object oldValue, object newValue)
-		{
-			HighValues.Clear();
-			LowValues.Clear();
-			OpenValues.Clear();
-			CloseValues.Clear();
-			GeneratePoints([High, Low, Open, Close], HighValues, LowValues, OpenValues, CloseValues);
-			base.OnDataSourceChanged(oldValue, newValue);
-		}
-
-		internal override void GenerateDataPoints()
-		{
-			GeneratePoints([High, Low, Open, Close], HighValues, LowValues, OpenValues, CloseValues);
-		}
-
-		internal override void OnBindingPathChanged()
-		{
-			ResetData();
-			HighValues.Clear();
-			LowValues.Clear();
-			OpenValues.Clear();
-			CloseValues.Clear();
-
-			GeneratePoints([High, Low, Open, Close], HighValues, LowValues, OpenValues, CloseValues);
-			base.OnBindingPathChanged();
-		}
-
-		internal override void CalculateDataPointPosition(int index, ref double x, ref double y)
-		{
-			if (ChartArea == null)
-			{
-				return;
-			}
-
-			var x1 = SbsInfo.Start + x;
-			var x2 = SbsInfo.End + x;
-			var xCal = x1 + ((x2 - x1) / 2);
-			var yCal = y;
-
-			if (ActualYAxis != null && ActualXAxis != null && !double.IsNaN(yCal))
-			{
-				y = ChartArea.IsTransposed ? ActualXAxis.ValueToPoint(xCal) : ActualYAxis.ValueToPoint(yCal);
-			}
-
-			if (ActualXAxis != null && ActualYAxis != null && !double.IsNaN(x))
-			{
-				x = ChartArea.IsTransposed ? ActualYAxis.ValueToPoint(yCal) : ActualXAxis.ValueToPoint(xCal);
-			}
-		}
-
 		internal override void ResetEmptyPointIndexes()
 		{
 			if (EmptyPointIndexes.Length != 0)
@@ -676,9 +626,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 		}
-		
+
 		internal override void ValidateYValues()
-		{ 
+		{
 			bool highValues = HighValues.Any(value => double.IsNaN(value));
 			bool lowValues = LowValues.Any(value => double.IsNaN(value));
 			bool openValues = OpenValues.Any(value => double.IsNaN(value));
@@ -687,6 +637,56 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if ((highValues || lowValues || openValues || closeValues) && SeriesYValues != null)
 			{
 				ValidateDataPoints(SeriesYValues);
+			}
+		}
+
+		internal override void OnDataSourceChanged(object oldValue, object newValue)
+		{
+			HighValues.Clear();
+			LowValues.Clear();
+			OpenValues.Clear();
+			CloseValues.Clear();
+			GeneratePoints([High, Low, Open, Close], HighValues, LowValues, OpenValues, CloseValues);
+			base.OnDataSourceChanged(oldValue, newValue);
+		}
+
+		internal override void GenerateDataPoints()
+		{
+			GeneratePoints([High, Low, Open, Close], HighValues, LowValues, OpenValues, CloseValues);
+		}
+
+		internal override void OnBindingPathChanged()
+		{
+			ResetData();
+			HighValues.Clear();
+			LowValues.Clear();
+			OpenValues.Clear();
+			CloseValues.Clear();
+
+			GeneratePoints([High, Low, Open, Close], HighValues, LowValues, OpenValues, CloseValues);
+			base.OnBindingPathChanged();
+		}
+
+		internal override void CalculateDataPointPosition(int index, ref double x, ref double y)
+		{
+			if (ChartArea == null)
+			{
+				return;
+			}
+
+			var x1 = SbsInfo.Start + x;
+			var x2 = SbsInfo.End + x;
+			var xCal = x1 + ((x2 - x1) / 2);
+			var yCal = y;
+
+			if (ActualYAxis != null && ActualXAxis != null && !double.IsNaN(yCal))
+			{
+				y = ChartArea.IsTransposed ? ActualXAxis.ValueToPoint(xCal) : ActualYAxis.ValueToPoint(yCal);
+			}
+
+			if (ActualXAxis != null && ActualYAxis != null && !double.IsNaN(x))
+			{
+				x = ChartArea.IsTransposed ? ActualYAxis.ValueToPoint(yCal) : ActualXAxis.ValueToPoint(xCal);
 			}
 		}
 

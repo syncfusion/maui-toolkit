@@ -230,6 +230,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#endregion
 
+		#region Constructor
+
+		/// <summary>
+		///  Initializes a new instance of the <see cref="StackingAreaSeries"/>.
+		/// </summary>
+		public StackingAreaSeries()
+		{
+			MarkerSettings = new ChartMarkerSettings();
+		}
+
+		#endregion
+
 		#region Interface Implementation
 
 		void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)

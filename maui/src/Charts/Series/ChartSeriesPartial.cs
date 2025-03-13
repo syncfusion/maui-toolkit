@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -11,6 +12,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal delegate object? GetReflectedProperty(object obj, string[] paths);
 		internal float _sumOfYValues = float.NaN;
+		internal readonly ObservableCollection<ChartSegment> _segments;
 
 		#endregion
 
@@ -25,8 +27,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#endregion
 
 		#region Internal Properties
-
-		internal readonly ObservableCollection<ChartSegment> _segments;
 
 		internal virtual bool IsMultipleYPathRequired
 		{
@@ -169,10 +169,37 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			ActualData?.RemoveAt(index);
+
+			if (e.OldItems is not null)
+			{
+				UnhookPropertyChangedEvent(ListenPropertyChange, e.OldItems[0]);
+			}
 		}
 
 		internal virtual void UpdateRange()
 		{
+		}
+
+		internal virtual void UnhookPropertyChangedEvent(object oldValue)
+		{
+			if (oldValue is IEnumerable enumerable)
+			{
+				IEnumerator enumerator = enumerable.GetEnumerator();
+
+				if (!enumerator.MoveNext())
+				{
+					return;
+				}
+
+				do
+				{
+					if (enumerator.Current is INotifyPropertyChanged item)
+					{
+						item.PropertyChanged -= OnItemPropertyChanged;
+					}
+				}
+				while (enumerator.MoveNext());
+			}
 		}
 
 		internal virtual void HookAndUnhookCollectionChangedEvent(object oldValue, object? newValue)
@@ -299,7 +326,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						XData = Convert.ToDouble(xVal ?? double.NaN);
 
 						// Check the Data Collection is linear or not
-						if (IsLinearData && (index > 0 && XData < xValue[index - 1]) || (index == 0 && xValue.Count > 0 && XData > xValue[0]))
+						if (IsLinearData && (index > 0 && XData <= xValue[index - 1]) || (index == 0 && xValue.Count > 0 && XData > xValue[0]))
 						{
 							IsLinearData = false;
 						}
@@ -358,7 +385,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						XData = Convert.ToDateTime(xVal).ToOADate();
 
 						// Check the Data Collection is linear or not
-						if (IsLinearData && index > 0 && XData < xValue[index - 1])
+						if (IsLinearData && index > 0 && XData <= xValue[index - 1])
 						{
 							IsLinearData = false;
 						}
@@ -478,7 +505,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						yData = yVal != null ? Convert.ToDouble(yVal) : double.NaN;
 
 						// Check the Data Collection is linear or not
-						if (IsLinearData && (index > 0 && XData < xValue[index - 1]) || (index == 0 && xValue.Count > 0 && XData > xValue[0]))
+						if (IsLinearData && (index > 0 && XData <= xValue[index - 1]) || (index == 0 && xValue.Count > 0 && XData > xValue[0]))
 						{
 							IsLinearData = false;
 						}
@@ -533,7 +560,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						yData = yVal != null ? Convert.ToDouble(yVal) : double.NaN;
 
 						// Check the Data Collection is linear or not
-						if (IsLinearData && index > 0 && XData < xValue[index - 1])
+						if (IsLinearData && index > 0 && XData <= xValue[index - 1])
 						{
 							IsLinearData = false;
 						}
@@ -597,7 +624,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			// TODO:Need to enable this method for MAUI when provide ListenPropertyChange support 
+			// TODO:Need to enable this method for MAUI when provide ListenPropertyChange support
+			HookPropertyChangedEvent(ListenPropertyChange, obj);
 		}
 
 		internal object? GetActualXValue(int index)
@@ -965,6 +993,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 				}
 			}
+
+			HookPropertyChangedEvent(ListenPropertyChange);
 		}
 
 		internal virtual void GenerateComplexPropertyPoints(string[] yPaths, IList<double>[] yLists, GetReflectedProperty? getPropertyValue)
@@ -1179,6 +1209,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						//TODO: Ensure for timespan;
 					}
 				}
+
+				HookPropertyChangedEvent(ListenPropertyChange);
 			}
 		}
 
@@ -1283,6 +1315,61 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return parentObj;
 		}
 
+		internal void HookPropertyChangedEvent(bool listenToPropertyChange)
+		{
+			if (ItemsSource is not IEnumerable enumerable)
+			{
+				return;
+			}
+
+			var enumerator = enumerable.GetEnumerator();
+
+			if (!enumerator.MoveNext())
+			{
+				return;
+			}
+
+			if (enumerator.Current is INotifyPropertyChanged)
+			{
+				do
+				{
+					if (enumerator.Current is INotifyPropertyChanged notifyPropertyChanged)
+					{
+						if (listenToPropertyChange)
+						{
+							if (_isComplexYProperty || XBindingPath.Contains('.', StringComparison.Ordinal))
+							{
+								HookComplexProperty(enumerator.Current, XComplexPaths!);
+
+								for (int i = 0; i < YComplexPaths!.Length; i++)
+								{
+									HookComplexProperty(enumerator.Current, YComplexPaths[i]);
+								}
+							}
+
+							notifyPropertyChanged.PropertyChanged -= OnItemPropertyChanged;
+							notifyPropertyChanged.PropertyChanged += OnItemPropertyChanged;
+						}
+						else
+						{
+							notifyPropertyChanged.PropertyChanged -= OnItemPropertyChanged;
+						}
+					}
+				} while (enumerator.MoveNext());
+			}
+		}
+
+		internal void HookPropertyChangedEvent(bool listenToPropertyChange, object obj)
+		{
+			if (listenToPropertyChange)
+			{
+				if (obj is INotifyPropertyChanged model)
+				{
+					model.PropertyChanged -= OnItemPropertyChanged;
+					model.PropertyChanged += OnItemPropertyChanged;
+				}
+			}
+		}
 		#endregion
 
 		#region Private Methods
@@ -1315,7 +1402,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return parentObj;
-		}
+		} 
 
 		void ResetDataPoint()
 		{
@@ -1372,6 +1459,133 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		void OnItemPropertyChanged(object? sender, PropertyChangedEventArgs e)
+		{
+			if (sender is null)
+			{
+				return;
+			}
+
+			if (_isComplexYProperty || XBindingPath.Contains('.', StringComparison.Ordinal))
+			{
+				ComplexPropertyChanged(sender, e);
+			}
+			else if (XBindingPath == e.PropertyName || YPaths != null && YPaths.Contains(e.PropertyName))
+			{
+				int position = -1;
+
+				var itemsSource = ItemsSource as IEnumerable;
+
+				foreach (object obj in itemsSource!)
+				{
+					position++;
+
+					if (obj == sender)
+					{
+						break;
+					}
+				}
+
+				if (position != -1)
+				{
+					SetIndividualPoint(sender, position, true);
+				}
+
+				SegmentsCreated = false;
+
+				UpdateLegendItems();
+
+				if (!_isRepeatPoint)
+				{
+					ScheduleUpdateChart();
+				}
+			}
+		}
+
+		void ComplexPropertyChanged(object sender, PropertyChangedEventArgs e)
+		{
+			int position = -1;
+			object? parentObj = null;
+			var complexPaths = XComplexPaths;
+			bool isYPath = false;
+
+			for (int i = 0; i < YPaths!.Length; i++)
+			{
+				if (YPaths[i].Contains(e.PropertyName!, StringComparison.Ordinal))
+				{
+					isYPath = true;
+
+					if (isYPath)
+					{
+						complexPaths = YComplexPaths![i];
+					}
+						
+					break;
+				}
+			}
+
+			if (XBindingPath.Contains(e.PropertyName!, StringComparison.Ordinal) || isYPath)
+			{
+				IEnumerable enumerable = (IEnumerable)ItemsSource;
+
+				foreach (object obj in enumerable)
+				{
+					parentObj = obj;
+
+					for (int i = 0; i < complexPaths!.Length - 1; i++)
+					{
+						parentObj = ReflectedObject(parentObj, complexPaths[i]);
+					}
+
+					position++;
+
+					if (parentObj == sender)
+					{
+						parentObj = obj;
+						break;
+					}
+				}
+
+				if (position != -1 && parentObj is not null)
+				{
+					SetIndividualPoint(parentObj, position, true);
+				}
+
+				if (isYPath)
+				{
+					SegmentsCreated = false;
+				}
+
+				UpdateLegendItems();
+
+				ScheduleUpdateChart();
+			}
+		}
+
+		void HookComplexProperty(object? parentObj, string[] paths)
+		{
+			for (int i = 0; i < paths.Length; i++)
+			{
+				parentObj = ReflectedObject(parentObj, paths[i]);
+
+				if (parentObj is INotifyPropertyChanged notifiableObject)
+				{
+					notifiableObject.PropertyChanged -= OnItemPropertyChanged;
+					notifiableObject.PropertyChanged += OnItemPropertyChanged;
+				}
+			}
+		}
+
+		/// <summary>
+		/// Method to unhook the PropertyChange event for individual data point
+		/// </summary>
+		void UnhookPropertyChangedEvent(bool listenToPropertyChange, object? oldValue)
+		{
+			if (oldValue is INotifyPropertyChanged model && listenToPropertyChange)
+			{
+				model.PropertyChanged -= OnItemPropertyChanged;
+			}
+		}
 		#endregion
 
 		#endregion

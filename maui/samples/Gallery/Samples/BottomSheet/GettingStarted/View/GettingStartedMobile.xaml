@@ -15,7 +15,7 @@
     <Grid.BindingContext>
       <local:ItemViewModel />
     </Grid.BindingContext>
-
+ 
     <BottomSheet:SfBottomSheet x:Name="BottomSheet" HalfExpandedRatio="{OnPlatform Android=0.5, iOS=0.6}" FullExpandedRatio="0.9" CollapsedHeight="180" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" CornerRadius="10, 10, 0, 0" ContentPadding="16,16,16,0">
 
       <BottomSheet:SfBottomSheet.Content>

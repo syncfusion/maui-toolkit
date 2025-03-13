@@ -175,7 +175,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			{
 				ClearChildren();
 				_overlayStack.LayoutChange -= OnOverlayStackLayoutChange;
-				if (_overlayStack.Parent is not null && _windowManager is not null)
+				if (_overlayStack.Parent is not null && _windowManager != null)
 				{
 					_windowManager.RemoveView(_overlayStack);
 				}
