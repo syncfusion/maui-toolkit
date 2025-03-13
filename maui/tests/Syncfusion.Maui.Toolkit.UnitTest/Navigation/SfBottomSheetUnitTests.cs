@@ -450,6 +450,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(expected, actual);
 		}
 
+		[Theory]
+		[InlineData(true, true)]
+		[InlineData(false, false)]
+		public void CollapseOnOverlayTap(bool input, bool expected)
+		{
+			_bottomSheet.CollapseOnOverlayTap = input;
+
+			var actual = _bottomSheet.CollapseOnOverlayTap;
+
+			Assert.Equal(expected, actual);
+		}
+
 		#endregion
 
 		#region Internal Properties

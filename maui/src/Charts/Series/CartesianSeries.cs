@@ -54,8 +54,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal bool RequiredEmptyPointReset { get; set; } = false;
 
-		internal virtual bool IsFillEmptyPoint { get { return true; } }
-
         #endregion
 
         #region Bindable properties

@@ -455,6 +455,20 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    BindingMode.Default, 
 		    propertyChanged: OnGrabberCornerRadiusPropertyChanged);
 
+		/// <summary>
+		/// Identifies the <see cref="CollapseOnOverlayTap"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="CollapseOnOverlayTap"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty CollapseOnOverlayTapProperty = BindableProperty.Create(
+			nameof(CollapseOnOverlayTap),
+			typeof(bool),
+			typeof(SfBottomSheet),
+			false,
+			BindingMode.Default
+			);
+
 		#endregion
 
 		#region Internal Bindable Properties
@@ -779,6 +793,18 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 		    get => (CornerRadius)GetValue(GrabberCornerRadiusProperty);
 		    set => SetValue(GrabberCornerRadiusProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets whether the bottom sheet should collapse to its minimum height instead of closing when tapping outside.
+		/// </summary>
+		/// <value>
+		/// It accepts Boolean values, and the default value is <c>false</c>.
+		/// </value>
+		public bool CollapseOnOverlayTap
+		{
+			get => (bool)GetValue(CollapseOnOverlayTapProperty);
+			set => SetValue(CollapseOnOverlayTapProperty, value);
 		}
 
 		#endregion
@@ -1200,7 +1226,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 		    if (_isSheetOpen)
 		    {
-		        Close();
+		        if(CollapseOnOverlayTap)
+				{
+					State = BottomSheetState.Collapsed;
+				}
+				else
+				{
+					Close();
+				}
 		    }
 		}
 
@@ -1814,6 +1847,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    {
 		        return false;
 		    }
+
 
 			double endPosition = 0;
 			double updatedHeight = Height - newTranslationY;
