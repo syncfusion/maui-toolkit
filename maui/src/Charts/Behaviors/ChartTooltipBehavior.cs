@@ -694,7 +694,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         tooltip.BindingContext = tooltipInfo;
                         tooltip.Duration = Duration;
                         tooltip.Position = tooltipInfo.Position;
-                        tooltip.SetBinding(SfTooltip.BackgroundProperty, nameof(TooltipInfo.Background));
+                        tooltip.SetBinding(SfTooltip.BackgroundProperty, 
+							BindingHelper.CreateBinding(nameof(TooltipInfo.Background), getter: static(TooltipInfo tooltipInfo1) => tooltipInfo1.Background));
                         tooltip.Content = GetTooltipTemplate(tooltipInfo);
                         tooltip.Show(seriesBounds, tooltipInfo.TargetRect, canAnimate);
                     }

@@ -176,7 +176,10 @@ namespace Syncfusion.Maui.Toolkit.Platform
 					}
 				}
 
-				Add(_nativeGraphicsView);
+				if(_nativeGraphicsView is not null)
+				{
+					Add(_nativeGraphicsView);
+				}
 			}
 			else if (_nativeGraphicsView != null)
 			{

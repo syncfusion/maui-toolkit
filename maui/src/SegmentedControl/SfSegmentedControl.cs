@@ -84,7 +84,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// </summary>
 		public SfSegmentedControl()
 		{
-			SfSegmentedResources.InitializeDefaultResource("Syncfusion.Maui.Buttons.SegmentedControl.Resources.SfSegmentedControl");
+			SfSegmentedResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.SegmentedControl.Resources.SfSegmentedControl",typeof(SfSegmentedControl));
 			ThemeElement.InitializeThemeResources(this, "SfSegmentedControlTheme");
 			SetDynamicResource(HoveredBackgroundProperty, "SfSegmentedControlHoveredBackground");
 			SetDynamicResource(KeyboardFocusStrokeProperty, "SfSegmentedControlKeyboardFocusStroke");

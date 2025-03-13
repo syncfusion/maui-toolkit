@@ -70,11 +70,12 @@ namespace Syncfusion.Maui.Toolkit.Localization
 		/// Initializes the default localization resource with the specified base name.
 		/// </summary>
 		/// <param name="baseName">The base name of the resource to initialize.</param>
-		public static void InitializeDefaultResource(string baseName)
+		/// /// <param name="resourceType">The optional type used to determine the assembly where resources are located. Defaults to the calling assembly if not specified.</param>/// 
+		public static void InitializeDefaultResource(string baseName, Type? resourceType = null)
 		{
 			if (LocalizationResourceAccessor.ResourceManager == null)
 			{
-				Assembly assembly = Assembly.GetCallingAssembly();
+				Assembly assembly = resourceType?.Assembly ?? Assembly.GetCallingAssembly();
 				LocalizationResourceAccessor.ResourceManager = new System.Resources.ResourceManager(baseName, assembly);
 				LocalizationResourceAccessor.Culture = new CultureInfo("en-US");
 			}

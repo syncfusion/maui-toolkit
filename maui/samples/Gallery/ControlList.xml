@@ -20,5 +20,8 @@
     <Assembly Name="NumericUpDown" />
     <Assembly Name="Calendar" />
 	 <Assembly Name="OtpInput" />
+	<Assembly Name="Calendar" />
+	<Assembly Name="Popup"/>
+	<Assembly Name="Cards" />
 	</Assemblies>
 </SampleBrowser>
