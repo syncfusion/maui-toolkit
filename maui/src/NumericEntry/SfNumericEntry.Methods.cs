@@ -1128,7 +1128,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		void Initialize()
 		{
 			// Initialize resources for the numeric entry control.
-			SfNumericEntryResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.NumericEntry.Resources.SfNumericEntry");
+			SfNumericEntryResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.NumericEntry.Resources.SfNumericEntry", typeof(SfNumericEntry));
 
 			// Set the drawing order to ensure key elements are drawn correctly
 			DrawingOrder = DrawingOrder.AboveContent;
