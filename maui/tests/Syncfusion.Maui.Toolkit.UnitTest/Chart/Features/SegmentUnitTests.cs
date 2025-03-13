@@ -960,5 +960,118 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var result = (float?)InvokePrivateMethod(fastLineSegment, "ValueToPoint", [value, start, delta, isInversed, isVertical, width, height, leftOffset, topOffset]);
 			Assert.Equal(60, result);
 		}
+
+		[Fact]
+		public void FastScatter_SetData_ShouldCalculateXAndYRangesCorrectly()
+		{
+			var xAxis = new NumericalAxis
+			{
+				RenderedRect = new Rect(0, 0, 100, 50),
+				VisibleRange = new DoubleRange(0, 10),
+				IsVertical = false,
+				IsInversed = false,
+			};
+
+			var yAxis = new NumericalAxis
+			{
+				RenderedRect = new Rect(0, 0, 50, 100),
+				VisibleRange = new DoubleRange(0, 40),
+				IsVertical = false,
+				IsInversed = false,
+			};
+			var fastScatterSeries = new FastScatterSeries
+			{
+				ActualXAxis = xAxis,
+				ActualYAxis = yAxis,
+				PointsCount = 5
+			};
+			var fastScatterSegment = new FastScatterSegment
+			{
+				Series = fastScatterSeries
+			};
+			List<double> xValues = [1, 2, 3, 4, 5];
+			List<double> yValues = [10, 20, 15, 30, 25];
+			fastScatterSegment.SetData(xValues, yValues);
+			Assert.Equal(new DoubleRange(1, 5), fastScatterSeries.XRange);
+			Assert.Equal(new DoubleRange(10, 30), fastScatterSeries.YRange);
+		}
+
+		[Fact]
+		public void FastScatter_SetData_ShouldSetEmptyFlagWhenNaNValuesArePresent()
+		{
+			var xAxis = new CategoryAxis
+			{
+				RenderedRect = new Rect(0, 0, 100, 50),
+				VisibleRange = new DoubleRange(0, 10),
+				IsVertical = false,
+				IsInversed = false,
+			};
+
+			var yAxis = new NumericalAxis
+			{
+				RenderedRect = new Rect(0, 0, 50, 100),
+				VisibleRange = new DoubleRange(0, 40),
+				IsVertical = false,
+				IsInversed = false,
+			};
+			var fastScatterSeries = new FastScatterSeries
+			{
+				ActualXAxis = xAxis,
+				ActualYAxis = yAxis,
+				PointsCount = 5
+			};
+
+			var fastScatterSegment = new FastScatterSegment
+			{
+				Series = fastScatterSeries
+			};
+			List<double> xValues = [1, double.NaN, 3, 4, 5];
+			List<double> yValues = [10, 20, double.NaN, 30, 25];
+			fastScatterSegment.SetData(xValues, yValues);
+			Assert.False(fastScatterSegment.Empty);
+		}
+
+		[Fact]
+		public void FastScatter_OnLayout_ShouldUpdateSegmentPointsCorrectly()
+		{
+			var sfCartesianChart = new SfCartesianChart();
+
+			_ = new CartesianChartArea(sfCartesianChart);
+			var fastScatterSeries = new FastScatterSeries
+			{
+				PointsCount = 5
+			};
+
+			var fastScatterSegment = new FastScatterSegment
+			{
+				XValues = [1, 2, 3, 4, 5],
+				YValues = [10, 20, 15, 30, 25],
+				Series = fastScatterSeries
+			};
+			sfCartesianChart.Series.Add(fastScatterSeries);
+			var xAxis = new NumericalAxis
+			{
+				RenderedRect = new Rect(0, 0, 100, 50),
+				VisibleRange = new DoubleRange(0, 10),
+				IsVertical = false,
+				IsInversed = false,
+			};
+
+			var yAxis = new NumericalAxis
+			{
+				RenderedRect = new Rect(0, 0, 50, 100),
+				VisibleRange = new DoubleRange(0, 40),
+				IsVertical = false,
+				IsInversed = false,
+			};
+			fastScatterSeries.ActualXAxis = xAxis;
+			fastScatterSeries.ActualYAxis = yAxis;
+			SetPrivateField(fastScatterSegment, "_fastScatterPlottingPoints", new List<PointF>());
+			fastScatterSegment.OnLayout();
+			var plottingPoints = GetPrivateField(fastScatterSegment, "_fastScatterPlottingPoints") as List<PointF>;
+			Assert.NotNull(plottingPoints);
+			Assert.NotEmpty(plottingPoints);
+			Assert.Equal(fastScatterSeries.PointsCount, plottingPoints.Count);
+		}
 	}
 }

@@ -203,7 +203,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal PointF LabelPositionPoint { get; set; }
 
-		internal bool IsEmpty { get; set; }
+		internal bool IsZero { get; set; }
 
 		internal SeriesView? SeriesView { get; set; }
 

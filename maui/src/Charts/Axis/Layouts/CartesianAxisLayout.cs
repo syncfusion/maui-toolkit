@@ -414,6 +414,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			foreach (CartesianSeries series in visibleSeries.Cast<CartesianSeries>())
 			{
+				if (!series.IsStacking)
+				{
+					if (series.RequiredEmptyPointReset)
+					{
+						series.ResetEmptyPointIndexes();
+						series.RequiredEmptyPointReset = false;
+					}
+
+					series.ValidateYValues();
+				}
 
 				if (!series.SegmentsCreated) //creates segment if segmentsCreated is false. 
 				{

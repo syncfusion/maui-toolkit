@@ -627,6 +627,69 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		internal override void ResetEmptyPointIndexes()
+		{
+			if (EmptyPointIndexes.Length != 0)
+			{
+				if (EmptyPointIndexes[0] != null)
+				{
+					foreach (var index in EmptyPointIndexes[0])
+					{
+						if (HighValues != null && HighValues.Count != 0)
+						{
+							HighValues[(int)index] = double.NaN;
+						}
+					}
+				}
+
+				if (EmptyPointIndexes[1] != null)
+				{
+					foreach (var index in EmptyPointIndexes[1])
+					{
+						if (LowValues != null && LowValues.Count != 0)
+						{
+							LowValues[(int)index] = double.NaN;
+						}
+					}
+				}
+
+				if (EmptyPointIndexes[2] != null)
+				{
+					foreach (var index in EmptyPointIndexes[2])
+					{
+						if (OpenValues != null && OpenValues.Count != 0)
+						{
+							OpenValues[(int)index] = double.NaN;
+						}
+					}
+				}
+
+				if (EmptyPointIndexes[3] != null)
+				{
+					foreach (var index in EmptyPointIndexes[3])
+					{
+						if (CloseValues != null && CloseValues.Count != 0)
+						{
+							CloseValues[(int)index] = double.NaN;
+						}
+					}
+				}
+			}
+		}
+		
+		internal override void ValidateYValues()
+		{ 
+			bool highValues = HighValues.Any(value => double.IsNaN(value));
+			bool lowValues = LowValues.Any(value => double.IsNaN(value));
+			bool openValues = OpenValues.Any(value => double.IsNaN(value));
+			bool closeValues = CloseValues.Any(value => double.IsNaN(value));
+
+			if ((highValues || lowValues || openValues || closeValues) && SeriesYValues != null)
+			{
+				ValidateDataPoints(SeriesYValues);
+			}
+		}
+
 		internal override void DrawDataLabels(ICanvas canvas)
 		{
 			var dataLabelSettings = ChartDataLabelSettings;
@@ -639,7 +702,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			foreach (HiLoOpenCloseSegment dataLabel in _segments.Cast<HiLoOpenCloseSegment>())
 			{
-				if (!dataLabel.InVisibleRange || dataLabel.IsEmpty)
+				if (!dataLabel.InVisibleRange || dataLabel.IsZero)
 				{
 					continue;
 				}

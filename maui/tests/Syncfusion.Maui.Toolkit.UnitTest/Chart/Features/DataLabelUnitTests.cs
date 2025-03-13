@@ -601,6 +601,24 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(expectedContent, result);
 		}
 
+		[Theory]
+		[InlineData(double.NaN, "", "")]
+		[InlineData(0, "0", "")]
+		[InlineData(0, "000", "000")]
+		[InlineData(123.456, "123", "#")]
+		[InlineData(123.456, "123.46", "")]
+		[InlineData(123.456, "123.456", "#.###")]
+		[InlineData(123.0, "123", "0")]
+		public void GetLabelContent_VariousInput_ReturnsExpectedContent(double value, string expectedContent, string format)
+		{
+			var cartesianDataLabelSettings = new CartesianDataLabelSettings
+			{
+				LabelStyle = new ChartDataLabelStyle { LabelFormat = format }
+			};
+			var result = cartesianDataLabelSettings.GetLabelContent(value);
+			Assert.Equal(expectedContent, result);
+		}
+
 		[Fact]
 		public void GetDefaultTextColor_ReturnsExpectedColor()
 		{

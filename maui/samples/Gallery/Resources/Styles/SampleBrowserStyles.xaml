@@ -42,6 +42,7 @@
     <Color x:Key="TileHeaderBackgroundDark">#2A2831</Color>
     <Color x:Key="TextColourAlt1Dark">#CAC4D0</Color>
     <Color x:Key="TileTextColourAlt1Dark">#CAC4D0</Color>
+	<Color x:Key="TileTextColourAlt1">#CAC4D0</Color>
     <Color x:Key="IconColourDark">#CAC4D0</Color>
     <Color x:Key="PlaceholderTextColourDark">#CAC4D0</Color>
     <Color x:Key="PrimaryBackgroundDark">#D0BCFF</Color>

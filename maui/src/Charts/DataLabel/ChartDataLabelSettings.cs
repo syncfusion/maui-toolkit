@@ -360,7 +360,7 @@
 			}
 			else
 			{
-				labelContent = value.ToString("#.##");
+				labelContent = value == 0 ? value.ToString("0.##") : value.ToString("#.##");
 			}
 
 			return labelContent;

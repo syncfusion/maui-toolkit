@@ -139,7 +139,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								dataLabel.Item = series.ActualData[i];
 								dataLabel.Label = LabelContent ?? string.Empty;
 
-								if (!InVisibleRange || IsEmpty)
+								if (!InVisibleRange || IsZero)
 								{
 									LabelPositionPoint = new PointF(float.NaN, float.NaN);
 								}
@@ -173,7 +173,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								dataLabel.Item = series.ActualData[i];
 								dataLabel.Label = LabelContent ?? string.Empty;
 
-								if (!InVisibleRange || IsEmpty)
+								if (!InVisibleRange || IsZero)
 								{
 									LabelPositionPoint = new PointF(float.NaN, float.NaN);
 								}
