@@ -62,7 +62,7 @@
 
 					// Mark as empty if any NaN values are encountered
 					if (double.IsNaN(xValue) || double.IsNaN(yValue))
-					{						
+					{
 						continue;
 					}
 
@@ -217,7 +217,7 @@
 				{
 					foreach (var point in _fastScatterPlottingPoints)
 					{
-						if((double.IsNaN(point.Y) || double.IsNaN(point.X)))
+						if (double.IsNaN(point.Y) || double.IsNaN(point.X))
 						{
 							continue;
 						}
