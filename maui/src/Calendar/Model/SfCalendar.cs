@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows.Input;
 
 namespace Syncfusion.Maui.Toolkit.Calendar
@@ -563,62 +562,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 defaultValueCreator: bindable => null,
                 propertyChanged: OnMonthViewHeaderTemplateChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="IsOpen"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="IsOpen"/> dependency property.
-        /// </value>
-        public static readonly BindableProperty IsOpenProperty =
-            BindableProperty.Create(
-                nameof(IsOpen),
-                typeof(bool),
-                typeof(SfCalendar),
-                false,
-                propertyChanged: OnIsOpenPropertyChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="Mode"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="Mode"/> dependency property.
-        /// </value>
-        public static readonly BindableProperty ModeProperty =
-            BindableProperty.Create(
-                nameof(Mode),
-                typeof(CalendarMode),
-                typeof(SfCalendar),
-                CalendarMode.Default,
-                propertyChanged: OnModeChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="RelativePosition"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="RelativePosition"/> dependency property.
-        /// </value>
-        public static readonly BindableProperty RelativePositionProperty =
-            BindableProperty.Create(
-                nameof(RelativePosition),
-                typeof(CalendarRelativePosition),
-                typeof(SfCalendar),
-                CalendarRelativePosition.AlignTop,
-                propertyChanged: OnRelativePositionChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="RelativeView"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="RelativeView"/> dependency property.
-        /// </value>
-        public static readonly BindableProperty RelativeViewProperty =
-            BindableProperty.Create(
-                nameof(RelativeView),
-                typeof(View),
-                typeof(SfCalendar),
-                null,
-                propertyChanged: OnRelativeViewChanged);
-
 #if WINDOWS
         /// <summary>
         /// Identifies the <see cref="FlowDirectionProperty"/> dependency property.
@@ -750,7 +693,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.ViewChanged"/>
         /// <example>
         /// The following code demonstrates, how to use the View property in the calendar
-        /// # [XAML](#tab/tabid-1)
+        /// #[XAML](#tab/tabid-1)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      View="Month">
@@ -776,7 +719,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <example>
         /// The following code demonstrates, how to use the HeaderView property in the calendar
         /// <code Lang="C#"><![CDATA[
-        /// SfCalendar Calendar = new SfCalendar();
         /// Calendar.View = CalendarView.Month;
         /// var calendarTextStyle = new CalendarTextStyle()
         /// {
@@ -806,7 +748,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="CalendarHeaderView.ShowNavigationArrows"/>
         /// <example>
         /// The following code demonstrates, how to use the NavigationDirection property in the calendar
-        /// # [XAML](#tab/tabid-3)
+        /// #[XAML](#tab/tabid-3)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      NavigationDirection="Vertical">
@@ -838,7 +780,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.Backward"/>
         /// <example>
         /// The following code demonstrates, how to use the DisplayDate property in the calendar
-        /// # [XAML](#tab/tabid-5)
+        /// #[XAML](#tab/tabid-5)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      View="Month"
@@ -872,7 +814,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.SelectedDateRange"/>
         /// <example>
         /// The following code demonstrates, how to use the MinimumDate property in the calendar
-        /// # [XAML](#tab/tabid-7)
+        /// #[XAML](#tab/tabid-7)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      MinimumDate="2022/11/24">
@@ -905,7 +847,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.SelectedDateRange"/>
         /// <example>
         /// The following code demonstrates, how to use the MaximumDate property in the calendar
-        /// # [XAML](#tab/tabid-9)
+        /// #[XAML](#tab/tabid-9)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      MaximumDate="2022/12/25">
@@ -934,7 +876,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.SelectedDateRange"/>
         /// <example>
         /// The following code demonstrates, how to use the EnablePastDates property in the calendar
-        /// # [XAML](#tab/tabid-11)
+        /// #[XAML](#tab/tabid-11)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      EnablePastDates="False">
@@ -956,7 +898,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         /// <example>
         /// The following code demonstrates, how to use the Month view property in the calendar
-        /// # [XAML](#tab/tabid-13)
+        /// #[XAML](#tab/tabid-13)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         /// View="Month">
@@ -992,7 +934,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value>The default value of <see cref="SfCalendar.SelectionShape"/> is circle. </value>
         /// <example>
         /// The following code demonstrates, how to use the SelectionShape property in the calendar
-        /// # [XAML](#tab/tabid-15)
+        /// #[XAML](#tab/tabid-15)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      SelectionShape="Circle">
@@ -1020,7 +962,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.AllowViewNavigation"/>
         /// <example>
         /// The following code demonstrates, how to use the EnableSwipeSelection property in the calendar
-        /// # [XAML](#tab/tabid-17)
+        /// #[XAML](#tab/tabid-17)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      EnableSwipeSelection="True">
@@ -1046,7 +988,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </remarks>
         /// <example>
         /// The following code demonstrates, how to use the NavigateToAdjacentMonth property in the calendar
-        /// # [XAML](#tab/tabid-17)
+        /// #[XAML](#tab/tabid-17)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      NavigateToAdjacentMonth="True">
@@ -1064,7 +1006,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         /// <example>
         /// The following code demonstrates, how to use the YearView property in the calendar
-        /// # [XAML](#tab/tabid-19)
+        /// #[XAML](#tab/tabid-19)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      View="Year">
@@ -1109,7 +1051,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="CalendarYearView.SelectionTextStyle"/>
         /// <example>
         /// The following code demonstrates, how to use the SelectedDate property in the calendar
-        /// # [XAML](#tab/tabid-21)
+        /// #[XAML](#tab/tabid-21)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      View="Month"
@@ -1150,7 +1092,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="CalendarYearView.SelectionTextStyle"/>
         /// <example>
         /// The following code demonstrates, how to use the SelectedDates property in the calendar
-        /// # [XAML](#tab/tabid-23)
+        /// #[XAML](#tab/tabid-23)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      View="Month">
@@ -1200,7 +1142,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="CalendarYearView.RangeTextStyle"/>
         /// <example>
         /// The following code demonstrates, how to use the SelectedDateRange property in the calendar
-        /// # [XAML](#tab/tabid-25)
+        /// #[XAML](#tab/tabid-25)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      View="Month">
@@ -1243,7 +1185,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="CalendarYearView.RangeTextStyle"/>
         /// <example>
         /// The following code demonstrates, how to use the SelectedDateRanges property in the calendar
-        /// # [XAML](#tab/tabid-25)
+        /// #[XAML](#tab/tabid-25)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      View="Month">
@@ -1276,13 +1218,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.SelectionChanged"/>
         /// <example>
         /// The following code demonstrates, how to use the SelectionMode property in the calendar.
-        /// # [XAML](#tab/tabid-27)
+        /// #[XAML](#tab/tabid-27)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      SelectionMode="Single">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-28)
+        /// #[C#](#tab/tabid-28)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.SelectionMode = CalendarSelectionMode.Single;
         /// ]]></code>
@@ -1303,7 +1245,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.SelectionChanged"/>
         /// <example>
         /// The following code demonstrates, how to use the CanToggleDaySelection property in the calendar
-        /// # [XAML](#tab/tabid-29)
+        /// #[XAML](#tab/tabid-29)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                       CanToggleDaySelection="True">
@@ -1331,13 +1273,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <remarks> The selection will be enabled for year, decade and century views, while the property is disabled. </remarks>
         /// <example>
         /// The following code demonstrates, how to use the AllowViewNavigation property in the calendar.
-        /// # [XAML](#tab/tabid-31)
+        /// #[XAML](#tab/tabid-31)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      AllowViewNavigation="True">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-32)
+        /// #[C#](#tab/tabid-32)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.AllowViewNavigation = true;
         /// ]]></code>
@@ -1357,13 +1299,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </remarks>
         /// <example>
         /// The following code demonstrates, how to use the TodayHighlightBrush property in the calendar
-        /// # [XAML](#tab/tabid-33)
+        /// #[XAML](#tab/tabid-33)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      Calendar.TodayHighlightBrush = Colors.Blue;">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-34)
+        /// #[C#](#tab/tabid-34)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.TodayHighlightBrush = Colors.Blue;
         /// ]]></code>
@@ -1391,13 +1333,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.RangeSelectionDirection"/>
         /// <example>
         /// The following code demonstrates, how to use the SelectionBackground property in the calendar
-        /// # [XAML](#tab/tabid-35)
+        /// #[XAML](#tab/tabid-35)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      SelectionBackground="Blue">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-36)
+        /// #[C#](#tab/tabid-36)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.SelectionBackground = Colors.Blue;
         /// ]]></code>
@@ -1421,13 +1363,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="CalendarYearView.SelectionTextStyle"/>
         /// <example>
         /// The following code demonstrates, how to use the StartRangeSelectionBackground property in the calendar
-        /// # [XAML](#tab/tabid-37)
+        /// #[XAML](#tab/tabid-37)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      StartRangeSelectionBackground="Purple">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-38)
+        /// #[C#](#tab/tabid-38)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.StartRangeSelectionBackground = Colors.Purple;
         /// ]]></code>
@@ -1451,13 +1393,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="CalendarYearView.SelectionTextStyle"/>
         /// <example>
         /// The following code demonstrates, how to use the EndRangeSelectionBackground property in the calendar
-        /// # [XAML](#tab/tabid-39)
+        /// #[XAML](#tab/tabid-39)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      EndRangeSelectionBackground="purple">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-40)
+        /// #[C#](#tab/tabid-40)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.EndRangeSelectionBackground = Colors.Purple;
         /// ]]></code>
@@ -1483,13 +1425,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="CalendarYearView.LeadingDatesTextStyle"/>
         /// <example>
         /// The following code demonstrates, how to use the ShowTrailingAndLeadingDates property in the calendar
-        /// # [XAML](#tab/tabid-41)
+        /// #[XAML](#tab/tabid-41)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                       ShowTrailingAndLeadingDates="True">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-42)
+        /// #[C#](#tab/tabid-42)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.ShowTrailingAndLeadingDates = true;
         /// ]]></code>
@@ -1509,13 +1451,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.EnableSwipeSelection"/>
         /// <example>
         /// The following code demonstrates, how to use the RangeSelectionDirection property in the calendar
-        /// # [XAML](#tab/tabid-43)
+        /// #[XAML](#tab/tabid-43)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      RangeSelectionDirection="Default"">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-44)
+        /// #[XAML](#tab/tabid-44)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.RangeSelectionDirection = CalendarRangeSelectionDirection.Default;
         /// ]]></code>
@@ -1547,7 +1489,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </remarks>
         /// <example>
         /// The following code demonstrates, how to use the Identifier in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      Identifier="Hijri">
@@ -1571,13 +1513,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.View"/>
         /// <example>
         /// The following code demonstrates, how to use the ShowOutOfRangeDates property in the calendar
-        /// # [XAML](#tab/tabid-47)
+        /// #[XAML](#tab/tabid-47)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      ShowOutOfRangeDates="False">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-48)
+        /// #[XAML](#tab/tabid-48)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.ShowOutOfRangeDates = false;
         /// ]]></code>
@@ -1597,7 +1539,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <example>
         /// The following code demonstrates, how to use the Footerview property in the calendar
         /// <code Lang="C#"><![CDATA[
-        /// SfCalendar Calendar = new SfCalendar();
         /// Calendar.View = CalendarView.Month;
         /// var calendarTextStyle = new CalendarTextStyle()
         /// {
@@ -1626,13 +1567,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value> The default value of <see cref="SfCalendar.CornerRadius"/> is 20.</value>
         /// <example>
         /// The following code demonstrates, how to use the CornerRadius property in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         /// <Calendar:SfCalendar x:Name="Calendar"
         ///                      CornerRadius="10">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-50)
+        /// #[XAML](#tab/tabid-50)
         /// <code Lang="C#"><![CDATA[
         /// Calendar.CornerRadius = 10;
         /// ]]></code>
@@ -1649,7 +1590,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value> The default value of <see cref="SfCalendar.SelectionChangedCommand"/> is null.</value>
         /// <example>
         /// The following code demonstrates, how to use the SelectionChangedCommand property in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         ///  <ContentPage.BindingContext>
         ///    <local:ViewModel/>
@@ -1658,7 +1599,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         ///                      SelectionChangedCommand="{Binding SelectionCommand}">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-50)
+        /// #[XAML](#tab/tabid-50)
         /// <code Lang="C#"><![CDATA[
         /// public class ViewModel : INotifyPropertyChanged
         /// {
@@ -1699,7 +1640,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value> The default value of <see cref="SfCalendar.ViewChangedCommand"/> is null.</value>
         /// <example>
         /// The following code demonstrates, how to use the ViewChangedCommand property in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         ///  <ContentPage.BindingContext>
         ///    <local:ViewModel/>
@@ -1708,7 +1649,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         ///                      ViewChanged="{Binding ViewChangedCommand}">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-50)
+        /// #[XAML](#tab/tabid-50)
         /// <code Lang="C#"><![CDATA[
         /// public class ViewModel : INotifyPropertyChanged
         /// {
@@ -1749,7 +1690,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value> The default value of <see cref="SfCalendar.TappedCommand"/> is null.</value>
         /// <example>
         /// The following code demonstrates, how to use the TappedCommand property in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         ///  <ContentPage.BindingContext>
         ///    <local:ViewModel/>
@@ -1758,7 +1699,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         ///                      ViewChanged="{Binding ViewChangedCommand}">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-50)
+        /// #[XAML](#tab/tabid-50)
         /// <code Lang="C#"><![CDATA[
         /// public class ViewModel : INotifyPropertyChanged
         /// {
@@ -1799,7 +1740,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value> The default value of <see cref="SfCalendar.DoubleTappedCommand"/> is null.</value>
         /// <example>
         /// The following code demonstrates, how to use the DoubleTappedCommand property in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         ///  <ContentPage.BindingContext>
         ///    <local:ViewModel/>
@@ -1808,7 +1749,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         ///                      DoubleTappedCommand="{Binding DoubleTappedCommand}">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-50)
+        /// #[XAML](#tab/tabid-50)
         /// <code Lang="C#"><![CDATA[
         /// public class ViewModel : INotifyPropertyChanged
         /// {
@@ -1849,7 +1790,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value> The default value of <see cref="SfCalendar.LongPressedCommand"/> is null.</value>
         /// <example>
         /// The following code demonstrates, how to use the LongPressedCommand property in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         ///  <ContentPage.BindingContext>
         ///    <local:ViewModel/>
@@ -1858,7 +1799,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         ///                      LongPressedCommand="{Binding LongPressedCommand}">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-50)
+        /// #[XAML](#tab/tabid-50)
         /// <code Lang="C#"><![CDATA[
         /// public class ViewModel : INotifyPropertyChanged
         /// {
@@ -1899,7 +1840,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value> The default value of <see cref="SfCalendar.AcceptCommand"/> is null.</value>
         /// <example>
         /// The following code demonstrates, how to use the AcceptCommand property in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         ///  <ContentPage.BindingContext>
         ///    <local:ViewModel/>
@@ -1908,7 +1849,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         ///                      AcceptCommand="{Binding AcceptCommand}">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-50)
+        /// #[XAML](#tab/tabid-50)
         /// <code Lang="C#"><![CDATA[
         /// public class ViewModel : INotifyPropertyChanged
         /// {
@@ -1949,7 +1890,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <value> The default value of <see cref="SfCalendar.DeclineCommand"/> is null.</value>
         /// <example>
         /// The following code demonstrates, how to use the DeclineCommand property in the calendar.
-        /// # [XAML](#tab/tabid-49)
+        /// #[XAML](#tab/tabid-49)
         /// <code Lang="XAML"><![CDATA[
         ///  <ContentPage.BindingContext>
         ///    <local:ViewModel/>
@@ -1958,7 +1899,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         ///                      DeclineCommand="{Binding DeclineCommand}">
         /// </Calendar:SfCalendar>
         /// ]]></code>
-        /// # [C#](#tab/tabid-50)
+        /// #[XAML](#tab/tabid-50)
         /// <code Lang="C#"><![CDATA[
         /// public class ViewModel : INotifyPropertyChanged
         /// {
@@ -2082,7 +2023,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </ContentPage.Resources>
         /// ]]>
         /// </code>
-        /// # [MainPage](#tab/tabid-4)
+        /// #[MainPage](#tab/tabid-4)
         /// <code Lang="XAML">
         /// <![CDATA[
         /// <calendar:SfCalendar x:Name="Calendar"
@@ -2160,7 +2101,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </ContentPage.Resources>
         /// ]]>
         /// </code>
-        /// # [MainPage](#tab/tabid-14)
+        /// #[MainPage](#tab/tabid-14)
         /// <code Lang="XAML">
         /// <![CDATA[
         /// <calendar:SfCalendar x:Name="Calendar"
@@ -2174,152 +2115,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             get { return (DataTemplate)GetValue(MonthViewHeaderTemplateProperty); }
             set { SetValue(MonthViewHeaderTemplateProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether the calendar popup is open or not.
-        /// </summary>
-        /// <value>The default value of <see cref="SfCalendar.IsOpen"/> is "False".</value>
-        /// <remarks>
-        /// It will be applicable to set the <see cref="CalendarMode.Dialog"/> or <see cref="CalendarMode.RelativeDialog"/>.
-        /// </remarks>
-        /// <example>
-        /// <para>The following code example demonstrates, how to set IsOpen property for the <see cref="SfCalendar"/> control.</para>
-        /// # [C#](#tab/tabid-2)
-        /// <code lang="C#"><![CDATA[
-        /// using System.ComponentModel;
-        ///
-        /// namespace CalendarMAUI
-        /// {
-        ///     public partial class MainPage : ContentPage
-        ///     {
-        ///         public MainPage()
-        ///         {
-        ///            InitializeComponent();
-        ///         }
-        ///         void clickToShowPopup_Clicked(object sender, EventArgs e)
-        ///         {
-        ///             Calendar.IsOpen = true;
-        ///         }
-        ///      }
-        /// }
-        /// ]]>
-        /// </code>
-        /// # [XAML](#tab/tabid-1)
-        /// <code lang="XAML"><![CDATA[
-        /// <?xml version = "1.0" encoding="utf-8" ?>
-        /// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
-        ///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-        ///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
-        ///     xmlns:local="clr-namespace:CalendarMAUI"
-        ///     x:Class="CalendarMAUI.MainPage">
-        /// <ContentPage.Content>
-        ///    <StackLayout WidthRequest = "500" >
-        ///        <syncfusion:SfCalendar x:Name="Calendar" Mode="Dialog"/>
-        ///        <Button x:Name="clickToShowCalendar" Text="Click To Show Calendar" Clicked="clickToShowPopup_Clicked"/>
-        ///    </StackLayout>
-        /// </ContentPage.Content>
-        /// </ContentPage>
-        /// ]]>
-        /// </code>
-        /// </example>
-        public bool IsOpen
-        {
-            get { return (bool)GetValue(IsOpenProperty); }
-            set { SetValue(IsOpenProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the calendar mode.
-        /// </summary>
-        /// <value>The default value of <see cref="SfCalendar.Mode"/> is <see cref="CalendarMode.Default"/>.</value>
-        /// <remarks>
-        /// The <see cref="CalendarMode.Dialog"/> and <see cref="CalendarMode.RelativeDialog"/> only visible to set the <see cref="SfCalendar.IsOpen"/> is "True".
-        /// </remarks>
-        /// <example>
-        /// The following code demonstrates, how to use the Mode property in the calendar
-        /// # [XAML](#tab/tabid-1)
-        /// <code Lang="XAML"><![CDATA[
-        /// <Calendar:SfCalendar x:Name="Calendar"
-        ///                      Mode="Dialog">
-        /// </Calendar:SfCalendar>
-        /// ]]></code>
-        /// # [C#](#tab/tabid-2)
-        /// <code Lang="C#"><![CDATA[
-        /// Calendar.IsOpen = True;
-        /// ]]></code>
-        /// </example>
-        public CalendarMode Mode
-        {
-            get { return (CalendarMode)GetValue(ModeProperty); }
-            set { SetValue(ModeProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the relative position of the calendar popup.
-        /// </summary>
-        /// <value>The default value of <see cref="SfCalendar.RelativePosition"/> is <see cref="CalendarRelativePosition.AlignTop"/>.</value>
-        /// <remarks>
-        /// It will be applicable to set <see cref="SfCalendar.Mode"/> is <see cref="CalendarMode.RelativeDialog"/>.
-        /// </remarks>
-        /// <example>
-        /// The following code demonstrates, how to use the View property in the calendar
-        /// # [XAML](#tab/tabid-1)
-        /// <code Lang="XAML"><![CDATA[
-        /// <Calendar:SfCalendar x:Name="Calendar"
-        ///                      Mode="RelativeDialog" RelativePosition="AlignBottom">
-        /// </Calendar:SfCalendar>
-        /// ]]></code>
-        /// # [C#](#tab/tabid-2)
-        /// <code Lang="C#"><![CDATA[
-        /// Calendar.IsOpen = True;
-        /// ]]></code>
-        /// </example>
-        public CalendarRelativePosition RelativePosition
-        {
-            get { return (CalendarRelativePosition)GetValue(RelativePositionProperty); }
-            set { SetValue(RelativePositionProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the view relative to which the calendar dialog should be displayed based on the RelativePosition.
-        /// <seealso cref="SfCalendar.RelativePosition"/>
-        /// </summary>
-        /// <remarks>
-        /// It is only applicable for RelativeDialog mode. If no relative view is given, the calendar will be set as the relative view.
-        /// </remarks>
-        /// <example>
-        /// The following code demonstrates, how to use the RelativeView property in the calendar
-        /// # [XAML](#tab/tabid-1)
-        /// <code Lang="XAML"><![CDATA[
-        /// <Grid WidthRequest="500">
-        ///     <calendar:SfCalendar x:Name="calendar"
-        ///                         Mode="RelativeDialog"
-        ///                         RelativePosition="AlignToRightOf"
-        ///                         RelativeView="{x:Reference calendarButton}">
-        ///     </calendar:SfCalendar>
-        ///     <Button Text="Open calendar"
-        ///             x:Name="calendarButton"
-        ///             Clicked="Button_Clicked"
-        ///             HorizontalOptions="Center"
-        ///             VerticalOptions="Center"
-        ///             HeightRequest="50"
-        ///             WidthRequest="150">
-        ///     </Button>
-        /// </Grid>
-        /// ]]></code>
-        /// # [C#](#tab/tabid-2)
-        /// <code Lang="C#"><![CDATA[
-        /// private void Button_Clicked(object sender, System.EventArgs e)
-        /// {
-        ///     this.calendar.IsOpen = true;
-        /// }
-        /// ]]></code>
-        /// </example>
-        public View RelativeView
-        {
-            get { return (View)GetValue(RelativeViewProperty); }
-            set { SetValue(RelativeViewProperty, value); }
         }
 
         //// TODO: Workaround for RTL (Right-to-Left) layout issue - The coordinate points are not calculated correctly in RTL layouts,
@@ -2527,34 +2322,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="propertyName">The property name.</param>
         protected override void OnPropertyChanged(string? propertyName = null)
         {
-            if (propertyName == nameof(IsVisible) && Mode != CalendarMode.Default)
-            {
-                //// If the calendar is not visible, we have to close the calendar popup only when it is opened previously.
-                if (!IsVisible)
-                {
-                    _isCalendarPreviouslyOpened = IsOpen;
-                    if (_isCalendarPreviouslyOpened)
-                    {
-                        CloseCalendarPopup();
-                    }
-                }
-                //// If the calendar is visible, we have to open the calendar popup only when it is opened initally.
-                else if (IsOpen && IsVisible)
-                {
-                    AddCalendarToPopup();
-                    ShowPopup();
-                }
-                //// If the calendar is visible, we have to open the calendar popup only when it is opened previously.
-                else if (IsVisible && _isCalendarPreviouslyOpened)
-                {
-                    IsOpen = true;
-                }
-                else
-                {
-                    CloseCalendarPopup();
-                }
-            }
-            else if (propertyName == "FlowDirection")
+            if (propertyName == "FlowDirection")
             {
                 if (FlowDirection == FlowDirection.RightToLeft)
                 {
@@ -2597,7 +2365,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             calendar.AddOrRemoveMonthHeaderView();
-            calendar.UpdatePopUpSize();
             calendar._customScrollLayout.UpdateViewChange((CalendarView)oldValue, (CalendarView)newValue);
             if (calendar._customScrollLayout != null)
             {
@@ -2700,7 +2467,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             calendar._headerLayout.UpdateHeaderText();
-            calendar.UpdatePopUpSize();
             calendar._headerLayout.InvalidateNavigationArrowVisibility();
             calendar._headerLayout.UpdateHeaderTextStyle();
             calendar._headerLayout.Background = calendar.HeaderView.Background;
@@ -3468,134 +3234,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             calendar._monthViewHeader?.CreateViewHeaderTemplate();
         }
 
-        /// <summary>
-        /// Called when <see cref="IsOpen"/> property changed.
-        /// </summary>
-        /// <param name="bindable">The bindable.</param>
-        /// <param name="oldValue">The old value.</param>
-        /// <param name="newValue">The new value.</param>
-        static void OnIsOpenPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfCalendar? calendar = bindable as SfCalendar;
-            if (calendar == null)
-            {
-                return;
-            }
-
-            if ((bool)newValue && calendar.IsVisible && (calendar.Mode == CalendarMode.Dialog || calendar.Mode == CalendarMode.RelativeDialog))
-            {
-                if (calendar.Children.Count != 0 && calendar._layout != null && calendar._layout.Parent == calendar)
-                {
-                    calendar.Remove(calendar._layout);
-                }
-
-                calendar.AddCalendarToPopup();
-                calendar.ShowPopup();
-            }
-            else
-            {
-                calendar.CloseCalendarPopup();
-                if (calendar.Children.Count != 0 && calendar._layout != null && calendar._layout.Parent != calendar && calendar._layout.Parent is ICollection<View> view)
-                {
-                    view.Remove(calendar._layout);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Called when <see cref="Mode"/> property changed.
-        /// </summary>
-        /// <param name="bindable">The bindable.</param>
-        /// <param name="oldValue">The old value.</param>
-        /// <param name="newValue">The new value.</param>
-        static void OnModeChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfCalendar? calendar = bindable as SfCalendar;
-            if (calendar == null)
-            {
-                return;
-            }
-
-            CalendarMode mode = CalendarMode.Default;
-            if (newValue is CalendarMode value)
-            {
-                mode = value;
-            }
-
-            if (mode == CalendarMode.Dialog || mode == CalendarMode.RelativeDialog)
-            {
-                if (calendar.Children.Count != 0 && calendar._layout != null && calendar._layout.Parent == calendar)
-                {
-                    calendar.Remove(calendar._layout);
-                }
-
-                if (calendar.IsOpen)
-                {
-                    calendar.AddCalendarToPopup();
-                    calendar.ShowPopup();
-                }
-                else
-                {
-                    calendar.CloseCalendarPopup();
-                }
-            }
-            else
-            {
-                calendar.ResetPopup();
-                if (calendar._layout != null)
-                {
-                    if (calendar._layout.Parent != null && calendar._layout.Parent is ICollection<IView> view)
-                    {
-                        view.Remove(calendar._layout);
-                    }
-
-                    calendar.Add(calendar._layout);
-                }
-            }
-
-            calendar.InvalidateMeasure();
-        }
-
-        /// <summary>
-        /// Called when <see cref="RelativePosition"/> property changed.
-        /// </summary>
-        /// <param name="bindable">The bindable.</param>
-        /// <param name="oldValue">The old value.</param>
-        /// <param name="newValue">The new value.</param>
-        static void OnRelativePositionChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfCalendar? calendar = bindable as SfCalendar;
-            if (calendar == null)
-            {
-                return;
-            }
-
-            if (calendar.IsOpen && calendar.Mode == CalendarMode.RelativeDialog)
-            {
-                calendar.ShowPopup();
-            }
-        }
-
-        /// <summary>
-        /// Called when <see cref="RelativeView"/> property changed.
-        /// </summary>
-        /// <param name="bindable">The bindable.</param>
-        /// <param name="oldValue">The old value.</param>
-        /// <param name="newValue">The new value.</param>
-        static void OnRelativeViewChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfCalendar? calendar = bindable as SfCalendar;
-            if (calendar == null)
-            {
-                return;
-            }
-
-            if (calendar.IsOpen && calendar.Mode == CalendarMode.RelativeDialog && calendar.RelativeView != null)
-            {
-                calendar.ShowPopup();
-            }
-        }
-
 #if WINDOWS
         /// <summary>
         /// Method invoke when flow direction property changed.
@@ -3684,26 +3322,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// Occurs whenever the cancel button tapped on calendar. It reset the selected values to confirmed selected values.
         /// </summary>
         public event EventHandler ActionButtonCanceled;
-
-        /// <summary>
-        /// Occurs after the calendar popup is opened.
-        /// </summary>
-        public event EventHandler CalendarPopupOpened;
-
-        /// <summary>
-        /// Occurs when the calendar popup is closed.
-        /// </summary>
-        public event EventHandler CalendarPopupClosed;
-
-        /// <summary>
-        /// Occurs when the calendar popup is closing.
-        /// </summary>
-        public event EventHandler<CancelEventArgs> CalendarPopupClosing;
-
-        /// <summary>
-        /// Occurs when the calendar popup is opening.
-        /// </summary>
-        public event EventHandler<CancelEventArgs> CalendarPopupOpening;
 
 #nullable enable
 

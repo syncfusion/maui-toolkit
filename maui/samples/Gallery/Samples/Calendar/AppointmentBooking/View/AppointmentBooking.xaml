@@ -2,7 +2,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.Calendar.Calendar.AppointmentBooking"
              xmlns:calendar="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
-             xmlns:popUp="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"  BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="-4,-4,-6,-6">
 
@@ -256,13 +255,8 @@
                 </FlexLayout>
             </Grid>
             <Grid Grid.Row="3" HorizontalOptions="Center" Padding="0,0,0,30">
-                <Button  Text="Book Appointment" HorizontalOptions="Center" Clicked="AppointmentanBooking" VerticalOptions="End" WidthRequest="150" HeightRequest="50" CornerRadius="20"/>
-                <popUp:SfPopup Grid.Row="0" Grid.RowSpan="3" IsVisible="false" x:Name="popUp" FooterHeight="70" ShowHeader="True" HeaderHeight="65" ShowFooter="True" HeightRequest="200">
-                    <popUp:SfPopup.PopupStyle>
-                        <popUp:PopupStyle CornerRadius="15" MessageFontSize="15" HeaderFontSize="17" HeaderFontAttribute="Bold" />
-                    </popUp:SfPopup.PopupStyle>
-                </popUp:SfPopup>
-            </Grid>
+        <Button  Text="Book Appointment" HorizontalOptions="Center" Clicked="AppointmentanBooking" VerticalOptions="End" WidthRequest="150" HeightRequest="50" CornerRadius="20"/>
+      </Grid>
         </Grid>
     </Grid>
 </localCore:SampleView>

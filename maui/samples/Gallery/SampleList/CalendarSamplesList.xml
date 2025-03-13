@@ -17,7 +17,6 @@
       <Sample Title="Selection" SampleName="DateSelection"/>
       <Sample Title="Calendar Identifier" SampleName="CalendarIdentifier"/>
       <Sample Title="Appointment Booking" SampleName="AppointmentBooking"/>
-      <Sample Title ="Flight Booking" SampleName="FlightBooking"/>
       <Sample Title="Color Scheme" SampleName="HighlightDates" />
       <Sample Title="Customization" SampleName="AppearanceCustomization" />
     </Control>

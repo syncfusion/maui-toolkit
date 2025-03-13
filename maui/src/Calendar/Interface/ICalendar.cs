@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using Syncfusion.Maui.Toolkit.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Calendar
@@ -30,30 +29,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="date">The date value.</param>
         /// <returns>The calendar special day icon details.</returns>
         CalendarIconDetails? IsSpecialDayPredicate(DateTime date);
-
-        /// <summary>
-        /// Method to trigger the calendar popup closed.
-        /// </summary>
-        /// <param name="e">The Event args.</param>
-        void OnPopupClosed(EventArgs e);
-
-        /// <summary>
-        /// Method to trigger the calendar popup closing.
-        /// </summary>
-        /// <param name="e">The cancel event args.</param>
-        void OnPopupClosing(CancelEventArgs e);
-
-        /// <summary>
-        /// Method to trigger the calendar popup open.
-        /// </summary>
-        /// <param name="e">The event args.</param>
-        void OnPopupOpened(EventArgs e);
-
-        /// <summary>
-        /// Method to trigger the calendar popup opening.
-        /// </summary>
-        /// <param name="e">The event args.</param>
-        void OnPopupOpening(CancelEventArgs e);
     }
 
     /// <summary>
