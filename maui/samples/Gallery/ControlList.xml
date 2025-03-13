@@ -20,7 +20,6 @@
     <Assembly Name="NumericUpDown" />
     <Assembly Name="Calendar" />
 	 <Assembly Name="OtpInput" />
-	<Assembly Name="Popup"/>
     <Assembly Name="Expander" />
     <Assembly Name="Accordion" />
 	<Assembly Name="Cards" />
