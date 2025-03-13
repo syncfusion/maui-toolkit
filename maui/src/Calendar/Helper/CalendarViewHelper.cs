@@ -1617,30 +1617,46 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         /// <param name="calendarIdentifier">The name of the calendar.</param>
         /// <returns>A calendar instance.</returns>
-        [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2067:UnrecognizedReflectionPattern", Justification = "Calendar types are preserved by trimmer configuration")]
         internal static Globalization.Calendar GetCalendar(string calendarIdentifier)
         {
-            var calendarTypes = new Dictionary<string, Type>
+            switch (calendarIdentifier)
             {
-                { "Gregorian", typeof(GregorianCalendar) },
-                { "Hijri", typeof(HijriCalendar) },
-                { "Persian", typeof(PersianCalendar) },
-                { "ThaiBuddhist", typeof(ThaiBuddhistCalendar) },
-                { "Taiwan", typeof(TaiwanCalendar) },
-                { "UmAlQura", typeof(UmAlQuraCalendar) },
-                { "Korean", typeof(KoreanCalendar) }
-            };
 
-            if (calendarTypes.TryGetValue(calendarIdentifier, out var type))
-            {
-                if (Activator.CreateInstance(type) is Globalization.Calendar calendar)
-                {
-                    return calendar;
-                }
+                case "Gregorian":
+
+                    return new GregorianCalendar();
+
+                case "Hijri":
+
+                    return new HijriCalendar();
+
+                case "Persian":
+
+                    return new PersianCalendar();
+
+                case "ThaiBuddhist":
+
+                    return new ThaiBuddhistCalendar();
+
+                case "Taiwan":
+
+                    return new TaiwanCalendar();
+
+                case "UmAlQura":
+
+                    return new UmAlQuraCalendar();
+
+                case "Korean":
+
+                    return new KoreanCalendar();
+
+                default:
+
+                    // If calendar identifier is specified wrongly, then default calendar will be used.
+
+                    return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
+
             }
-
-            // If calendar identifier is specified wrongly, then default calendar will be used.
-            return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
         }
 
         /// <summary>

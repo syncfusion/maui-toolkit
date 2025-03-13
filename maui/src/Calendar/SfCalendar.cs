@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Microsoft.Maui.Controls.Shapes;
 using Syncfusion.Maui.Toolkit.Internals;
+using Syncfusion.Maui.Toolkit.Localization;
 using Syncfusion.Maui.Toolkit.Popup;
 using Syncfusion.Maui.Toolkit.Themes;
 using Globalization = System.Globalization;
@@ -120,6 +121,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         public SfCalendar()
         {
+            SfCalendarResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.Calendar.Resources.SfCalendar", typeof(SfCalendar));
             ThemeElement.InitializeThemeResources(this, "SfCalendarTheme");
             _proxy = new(this);
             DrawingOrder = DrawingOrder.AboveContent;
