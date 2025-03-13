@@ -601,6 +601,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
+        internal virtual bool IsFillEmptyPoint { get { return true; } }
+
         #endregion
 
         #region Constructor
