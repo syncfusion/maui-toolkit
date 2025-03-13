@@ -19,5 +19,7 @@
     <Assembly Name="NumericEntry" />
     <Assembly Name="NumericUpDown" />
 	<Assembly Name="Calendar" />
+	<Assembly Name="Popup"/>
+	<Assembly Name="Cards" />
 	</Assemblies>
 </SampleBrowser>

@@ -10,7 +10,32 @@
     <x:String x:Key="SfNavigationDrawerTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfNavigationDrawerContentBackground" ResourceKey="ContentBackgroundAlt1" />
     <local:StaticThemeResource x:Key="SfNavigationDrawerGreyLayoutBackground" ResourceKey="Overlay" />
-    
+
+    <!-- SfPopup -->
+    <x:String x:Key="SfPopupTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfPopupHoverFooterButtonBackground" ResourceKey="PrimaryBackground"/>
+    <local:StaticThemeResource x:Key="SfPopupFooterButtonRippleBackground" ResourceKey="ContentForeground"/>
+    <local:StaticThemeResource x:Key="SfPopupNormalHeaderBackground" ResourceKey="FlyoutBackground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalHeaderTextColor" ResourceKey="ContentForeground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalMessageBackground" ResourceKey="FlyoutBackground" />
+    <local:StaticThemeResource x:Key="SfpopupNormalMessageTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfPopupNormalFooterBackground" ResourceKey="FlyoutBackground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalAcceptButtonBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfPopupNormalAcceptButtonTextColor" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalDeclineButtonBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfPopupNormalDeclineButtonTextColor" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalStroke" ResourceKey="FlyoutBackground" />
+    <sys:Double x:Key="SfPopupNormalHeaderFontSize">24</sys:Double>
+    <sys:Double x:Key="SfPopupNormalMessageFontSize">14</sys:Double>
+    <sys:Double x:Key="SfPopupNormalFooterFontSize">14</sys:Double>
+    <sys:Double x:Key="SfPopupNormalStrokeThickness">1</sys:Double>
+    <local:StaticThemeResource x:Key="SfPopupNormalOverlayBackground" ResourceKey="Overlay" />
+    <local:StaticThemeResource x:Key="SfPopupHoverCloseButtonIconBackground" ResourceKey="IconBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfPopupPressedCloseButtonIconBackground" ResourceKey="IconBackgroundPressed" />
+    <local:StaticThemeResource x:Key="SfPopupNormalCloseButtonIconStroke" ResourceKey="IconColor" />
+    <local:StaticThemeResource x:Key="SfPopupNormalBackground" ResourceKey="FlyoutBackground"/>
+    <sys:Double x:Key="SfPopupNormalCloseButtonIconStrokeThickness">1</sys:Double>
+
     <!--SfChipGroup-->
     <x:String x:Key="SfChipGroupTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfChipGroupDisabledSelectedTextColor" ResourceKey="SecondaryForegroundDisabled" />
@@ -463,5 +488,11 @@
   <local:StaticThemeResource x:Key="SfCalendarSpecialDayIconColor" ResourceKey="PrimaryBackground" />
   <local:StaticThemeResource x:Key="SfCalendarNormalBackground" ResourceKey="ContentBackgroundAlt3" />
 
+  <!--SfCards-->
+  <x:String x:Key="SfCardViewTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfCardViewBorderColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfCardViewIndicatorColor" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfCardViewNormalBackround" ResourceKey="ContentBackgroundAlt3" />
+  <CornerRadius x:Key="SfCardViewCornerRadius">12</CornerRadius>
 
 </local:SyncfusionThemeDictionary>

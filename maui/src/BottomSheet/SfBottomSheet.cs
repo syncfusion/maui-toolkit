@@ -44,7 +44,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
     	/// <summary>
     	/// The shape used to provide corner radius for the grabber.
     	/// </summary>
-    	RoundRectangle? _grabberStrokeShape;
+		RoundRectangle? _grabberStrokeShape;
 
     	// Shape
     	/// <summary>
@@ -849,7 +849,6 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    }
 
 			SetupBottomSheetForShow();
-			_isSheetOpen = true;
 			AnimateBottomSheet(GetTargetPosition());
 			IsOpen = true;
 		}
@@ -1054,7 +1053,8 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        HeightRequest = CalculateInitialHeight(),
 				IsVisible = false,
 		        StrokeShape = _bottomSheetStrokeShape,
-		        Content = _bottomSheetContent ?? throw new InvalidOperationException("Bottom sheet content is not initialized.")
+		        Content = _bottomSheetContent ?? throw new InvalidOperationException("Bottom sheet content is not initialized."),
+				Padding = ContentPadding
 		    };
 		}
 
@@ -1074,8 +1074,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 		    _contentBorder = new SfBorder()
 		    {
-		        StrokeThickness = 0,
-		        Padding = ContentPadding
+		        StrokeThickness = 0
 		    };
 		}
 
@@ -1331,9 +1330,9 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <param name="padding">The new padding to be applied.</param>
 		void UpdatePadding(Thickness padding)
 		{
-		    if (_contentBorder is not null && !_contentBorder.Padding.Equals(padding))
+		    if (_bottomSheet is not null && !_bottomSheet.Padding.Equals(padding))
 		    {
-		        _contentBorder.Padding = padding;
+		        _bottomSheet.Padding = padding;
 		        OnPropertyChanged(nameof(ContentPadding));
 		    }
 		}
@@ -1349,7 +1348,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        return;
 		    }
 
-		    _grabber.HeightRequest = (newValue<0) ? (double)(GrabberHeightProperty.DefaultValue) : newValue; 
+		    _grabber.HeightRequest = (newValue<=0) ? (double)(GrabberHeightProperty.DefaultValue) : newValue; 
 		}
 
 		/// <summary>
@@ -1363,7 +1362,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        return;
 		    }
 
-		    _grabber.WidthRequest = (newValue<0) ? (double)GrabberWidthProperty.DefaultValue : newValue;
+		    _grabber.WidthRequest = (newValue<=0) ? (double)GrabberWidthProperty.DefaultValue : newValue;
 		}
 
 
@@ -1528,7 +1527,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 			if (nearestPoint == fullExpandedHeight)
 			{
-				State = BottomSheetState.FullExpanded;
+				if(State is not BottomSheetState.FullExpanded)
+				{
+					State = BottomSheetState.FullExpanded;
+				}
+				else
+				{
+					Show();
+				}
 			}
 			else if (nearestPoint == halfExpandedHeight)
 			{
@@ -1536,7 +1542,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			}
 			else
 			{
-				State = BottomSheetState.Collapsed;
+				if (State is not BottomSheetState.Collapsed)
+				{
+					State = BottomSheetState.Collapsed;
+				}
+				else
+				{
+					Show();
+				}
 			}
 		}
 
@@ -1552,12 +1565,13 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    {
 		        _stateChangedEventArgs.OldState = oldState;
 		        _stateChangedEventArgs.NewState = newState;
+
 		        if (_overlayGrid is not null)
 		        {
 		            _overlayGrid.IsVisible = (State is BottomSheetState.Collapsed) ? false : IsModal;
 		        }
 
-				OnStateChanged(_stateChangedEventArgs);
+				    OnStateChanged(_stateChangedEventArgs);
 		    }
 		}
 
@@ -1644,11 +1658,11 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		double GetCollapsedPosition()
 		{
 		    double targetPosition = Height - CollapsedHeight;
+
 			if (_overlayGrid is not null)
 			{
 				_overlayGrid.IsVisible = false;
 			}
-
 			return targetPosition;
 		}
 
@@ -1678,23 +1692,68 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <param name="onFinish">Optional action to be executed when the animation finishes.</param>
 		void AnimateBottomSheet(double targetPosition, Action? onFinish = null)
 		{
-		    const int AnimationDuration = 150;
-		    const int topPadding = 2;
+			if (_bottomSheet.AnimationIsRunning("bottomSheetAnimation"))
+			{
+				_bottomSheet.AbortAnimation("bottomSheetAnimation");
+			}
 
+			if (_overlayGrid.AnimationIsRunning("overlayGridAnimation"))
+			{
+				_overlayGrid.AbortAnimation("overlayGridAnimation");
+			}
+
+			const int animationDuration = 150;
+		    const int topPadding = 2;
+			_isSheetOpen = true;
 			if (_bottomSheet is not null)
 			{
 				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition + topPadding);
-				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: AnimationDuration, easing: Easing.Linear, finished: (v, e) =>
+				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: animationDuration, easing: Easing.Linear, finished: (v, e) =>
 				{
 					UpdateBottomSheetHeight();
 					onFinish?.Invoke();
 				});
 			}
 
+			AnimateOverlay(animationDuration);
+		}
+
+		/// <summary>
+		/// Animates the overlay of the bottom sheet based on state transitions.
+		/// </summary>
+		void AnimateOverlay(int animationDuration)
+		{
 			if (_overlayGrid is not null)
 			{
-				var overlayGridAnimation = new Animation(d => _overlayGrid.Opacity = d, _overlayGrid.Opacity, _isSheetOpen ? DefaultOverlayOpacity : 0);
-				_overlayGrid?.Animate("overlayGridAnimation", overlayGridAnimation, length: AnimationDuration, easing: Easing.Linear);
+				double startValue = 0;
+				double endValue = 0;
+				_overlayGrid.IsVisible = IsModal;
+
+				if (IsModal)
+				{
+					if (State is BottomSheetState.Collapsed || State is BottomSheetState.Hidden)
+					{
+						startValue = _overlayGrid.Opacity;
+						endValue = 0;
+					}
+					else
+					{
+						startValue = _overlayGrid.Opacity;
+						endValue = DefaultOverlayOpacity;
+					}
+
+					var overlayGridAnimation = new Animation(d => _overlayGrid.Opacity = d, startValue, endValue);
+					_overlayGrid.Animate("overlayGridAnimation", overlayGridAnimation,
+						length: (uint)animationDuration,
+						easing: Easing.Linear,
+						finished: (e, v) =>
+						{
+							if (State is BottomSheetState.Collapsed || State is BottomSheetState.Hidden)
+							{
+								_overlayGrid.IsVisible = false;
+							}
+						});
+				}
 			}
 		}
 
@@ -1800,14 +1859,32 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        return false;
 		    }
 
+
+			double endPosition = 0;
+			double updatedHeight = Height - newTranslationY;
+			switch (State)
+			{
+				case BottomSheetState.FullExpanded:
+					endPosition = Height * FullExpandedRatio;
+					break;
+
+				case BottomSheetState.HalfExpanded:
+					endPosition = Height * HalfExpandedRatio;
+					break;
+
+				case BottomSheetState.Collapsed:
+					endPosition = CollapsedHeight;
+					break;
+			}
+
 			bool isHalfExpandedAndRestricted = State is BottomSheetState.HalfExpanded &&
 		                                       AllowedState is BottomSheetAllowedState.HalfExpanded &&
-		                                       _bottomSheet.TranslationY > newTranslationY;
+		                                       updatedHeight > endPosition;
 
-		    bool isCollapsedAndMovingDown = State is BottomSheetState.Collapsed && diffY > 0;
+		    bool isCollapsedAndMovingDown = State is BottomSheetState.Collapsed && updatedHeight < endPosition;
 
 			bool isFullExpandedRestricted = State is BottomSheetState.FullExpanded &&
-											_bottomSheet.TranslationY > newTranslationY;
+											updatedHeight > endPosition;
 
 			bool isBehind = (newTranslationY > Height - CollapsedHeight) || (newTranslationY < Height * (1 - FullExpandedRatio));
 
@@ -1822,7 +1899,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <param name="touchY">The current Y coordinate of the touch point.</param>
 		void UpdateBottomSheetPosition(double newTranslationY, double touchY)
 		{
-		    if (_bottomSheet is null)
+		    if (_bottomSheet is null || _overlayGrid is null)
 		    {
 		        return;
 		    }
@@ -1830,6 +1907,27 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    _bottomSheet.TranslationY = newTranslationY;
 		    _initialTouchY = touchY;
 		    _bottomSheet.HeightRequest = Height - newTranslationY;
+			_overlayGrid.IsVisible = IsModal && (_bottomSheet.HeightRequest > CollapsedHeight);
+			_overlayGrid.Opacity = CalculateOverlayOpacity(_bottomSheet.HeightRequest);
+		}
+
+		/// <summary>
+		/// Calculates the overlay opacity based on the current height of the bottom sheet.
+		/// </summary>
+		/// <param name="currentHeight">The current height of the bottom sheet.</param>
+		/// <returns>The calculated opacity value ranging from 0 to 0.5</returns>
+		double CalculateOverlayOpacity(double currentHeight)
+		{
+			const double maxOpacity = 0.5;
+
+			// Calculate how far along the transition from collapsed to half-expanded.
+			double transitionProgress = (currentHeight - CollapsedHeight) / ((HalfExpandedRatio * Height) - CollapsedHeight);
+
+			// Clamp the transition progress to between 0 and 1.
+			transitionProgress = Math.Clamp(transitionProgress, 0, 1);
+
+			// Calculate and return the opacity based on the transition progress.
+			return transitionProgress * maxOpacity;
 		}
 
 		/// <summary>
@@ -1842,7 +1940,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    _initialTouchY = 0;
 		    _isPointerPressed = false;
 
-		        UpdatePosition();
+		    if(_bottomSheet is not null && touchY >= _bottomSheet.TranslationY)
+			{
+				UpdatePosition();
+			}
 		}
 
 
@@ -1973,9 +2074,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 		    if (bindable is SfBottomSheet sheet)
 		    {
-		        if (sheet._overlayGrid is not null)
+		        if (sheet._overlayGrid is not null && (sheet.State is BottomSheetState.FullExpanded || sheet.State is BottomSheetState.HalfExpanded))
 		        {
 		            sheet._overlayGrid.IsVisible = sheet.IsModal;
+					sheet.AnimateOverlay(150);
 		        }
 		    }
 		}
@@ -2068,7 +2170,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 			if (newState == BottomSheetState.Hidden)
 			{
-				sheet._isHalfExpanded = true;
+				sheet._isHalfExpanded = (sheet.AllowedState != BottomSheetAllowedState.FullExpanded);
 				if (sheet._isSheetOpen)
 				{
 					sheet._isSheetOpen = false;

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// ThemeDictionary class for Syncfusion in which controls themes are to be included.
 	/// </summary>
-	[XamlCompilation(XamlCompilationOptions.Skip)]
+	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SyncfusionThemeDictionary : ResourceDictionary
 	{
 		/// <summary>
