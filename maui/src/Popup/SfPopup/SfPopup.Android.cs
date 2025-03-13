@@ -291,18 +291,11 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (PopupExtension.CheckWindowFlagsHasLayoutNoLimits() && _popupOverlay is not null)
 			{
 				var windowManagerLayoutParams = _popupOverlay.GetWindowManagerLayoutParams();
-				if (OverlayMode == PopupOverlayMode.Blur && OperatingSystem.IsAndroidVersionAtLeast(31))
-				{
-					windowManagerLayoutParams.Flags = WindowManagerFlags.LayoutNoLimits | WindowManagerFlags.LayoutInScreen | WindowManagerFlags.BlurBehind;
-					windowManagerLayoutParams.BlurBehindRadius = (int)PopupExtension.GetBlurRadius(this);
-				}
-				else
-				{
-					windowManagerLayoutParams.Flags = (PopupExtension.CheckWindowFlagsHasFullScreen() && !PopupExtension.CheckNavigationbarIsVisible()) ? WindowManagerFlags.Fullscreen : WindowManagerFlags.LayoutNoLimits | WindowManagerFlags.LayoutInScreen;
-					// To Layout overlay at top left corner.
-					windowManagerLayoutParams.Gravity = GravityFlags.Start | GravityFlags.Top;
-					SetXPositionForWindowManagerLayoutParams(windowManagerLayoutParams);
-				}
+				windowManagerLayoutParams.Flags = (PopupExtension.CheckWindowFlagsHasFullScreen() && !PopupExtension.CheckNavigationbarIsVisible()) ? WindowManagerFlags.Fullscreen : WindowManagerFlags.LayoutNoLimits | WindowManagerFlags.LayoutInScreen;
+
+				// To Layout overlay at top left corner.
+				windowManagerLayoutParams.Gravity = GravityFlags.Start | GravityFlags.Top;
+				SetXPositionForWindowManagerLayoutParams(windowManagerLayoutParams);
 			}
 		}
 
