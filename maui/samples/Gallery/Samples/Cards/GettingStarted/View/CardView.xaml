@@ -189,7 +189,7 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <Grid>
-                                    <Image Source="coins.jpg" Aspect="AspectFill" WidthRequest="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <Image Source="coin.jpg" Aspect="AspectFill" WidthRequest="{OnPlatform MacCatalyst=200, Default=160}"/>
                                     <Grid Background="#265073" Padding="20" Opacity="0.9">
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height=".2*"/>
