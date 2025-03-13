@@ -31,10 +31,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <summary>
 		/// Gets the application window.
 		/// </summary>
-#pragma warning disable IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
-		internal static IWindow? _window => GetActiveWindow();
-#pragma warning restore IL2026 // Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code
-
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
+		internal static IWindow? _window
+		{
+			get => GetActiveWindow();
+		}
 		/// <summary>
 		/// Gets the device density.
 		/// </summary>
@@ -66,6 +67,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// Helps to get the current active window.
 		/// </summary>
 		/// <returns> Current active window.</returns>
+		[DynamicDependency("IsActivated", typeof(Microsoft.Maui.Controls.Window))]
 		[RequiresUnreferencedCode("Uses reflection to access Window.IsActivated property")]
 		static IWindow? GetActiveWindow()
         {
