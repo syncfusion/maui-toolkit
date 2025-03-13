@@ -1657,17 +1657,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			CalculatePopupViewWidth();
 			CalculatePopupViewHeight();
 
-			// Set the blur mode for windowManagerLayoutParams before adding the overlay stack, or the blur won't be applied.
-#if ANDROID
-			ApplyOverlayBackground();
-#endif
-
 			// Position Popup view
 			PositionPopupRelativeToView(_relativeView, _relativePosition, _absoluteXPoint, _absoluteYPoint);
 
-#if !ANDROID
 			ApplyOverlayBackground();
-#endif
 
 			// When set the AutoSizeMode, Popup MessageView is measured after added the view. So, we need to calculate the Height, width and position again.
 			UpdatePopupView();
@@ -2175,14 +2168,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					CalculatePopupViewWidth();
 					CalculatePopupViewHeight();
 
-#if ANDROID
-					// Blur mode must be set on windowManagerLayoutParams before adding the overlay stack to the window manager, or the blur won't be applied.
-					ApplyOverlayBackground();
-#endif
 					PositionPopupView();
-#if !ANDROID
+
 					ApplyOverlayBackground();
-#endif
 
 					// When setting AutoSizeMode, the Popup MessageView is measured after being added, so the height, width, and position need to be recalculated.
 					UpdatePopupView();

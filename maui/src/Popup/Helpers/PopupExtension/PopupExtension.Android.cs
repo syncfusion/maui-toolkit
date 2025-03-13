@@ -1,4 +1,5 @@
-﻿using Android.Views;
+﻿using Android.Graphics;
+using Android.Views;
 using AndroidX.Core.View;
 using Microsoft.Maui.Platform;
 using Syncfusion.Maui.Toolkit.Internals;
@@ -362,11 +363,35 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="isopen">Specifies whether the popup is open or not.</param>
 		internal static void Blur(MauiView view, SfPopup popup, bool isopen)
 		{
-			if (OperatingSystem.IsAndroidVersionAtLeast(31) && popup._popupOverlay is not null)
+			if (OperatingSystem.IsAndroidVersionAtLeast(31))
 			{
-				var windowManagerLayoutParams = popup._popupOverlay.GetWindowManagerLayoutParams();
-				windowManagerLayoutParams.Flags = Android.Views.WindowManagerFlags.BlurBehind;
-				windowManagerLayoutParams.BlurBehindRadius = (int)PopupExtension.GetBlurRadius(popup);
+				if (IPlatformApplication.Current is not null && IPlatformApplication.Current.Application is Microsoft.Maui.Controls.Application application &&
+					application.Windows is not null && application.Windows.Count > 0)
+				{
+					Microsoft.Maui.Controls.Window window = application.Windows[0];
+					bool hasModalPage = window is not null && window.Page is not null && window.Page.Navigation is not null
+						&& window.Page.Navigation.ModalStack is not null && window.Navigation.ModalStack.Count > 0;
+
+					// Applies blur effect to the top page in modal stack when the modal page is displayed.
+					if (hasModalPage)
+					{
+						Page? mainPage = PopupExtension.GetMainPage();
+						if (mainPage is not null && mainPage.Handler is not null && mainPage.Handler.PlatformView is PlatformView pageView)
+						{
+							popup._blurTarget = pageView;
+							popup._blurTarget.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
+							return;
+						}
+					}
+				}
+
+				ViewGroup? platformRootview = WindowOverlayHelper._platformRootView;
+				if (platformRootview is not null && platformRootview.ChildCount > 0 && platformRootview.GetChildAt(0) is PlatformView blurTarget)
+				{
+					// Applies blur effect to target view.
+					popup._blurTarget = blurTarget;
+					popup._blurTarget.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
+				}
 			}
 		}
 
@@ -379,18 +404,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (OperatingSystem.IsAndroidVersionAtLeast(31))
 			{
 				// Clears the blur effect for all views listed in BlurredViews.
-				if (popup._blurredViews is not null)
+				if (popup._blurTarget is not null)
 				{
-					if (popup._blurredViews.Count > 0)
-					{
-						foreach (var blurredView in popup._blurredViews)
-						{
-							blurredView.SetRenderEffect(null);
-						}
-					}
-
-					popup._blurredViews.Clear();
-					popup._blurredViews = null;
+					popup._blurTarget.SetRenderEffect(null);
+					popup._blurTarget = null;
 				}
 			}
 		}
