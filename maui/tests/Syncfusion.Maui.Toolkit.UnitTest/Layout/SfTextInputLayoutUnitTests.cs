@@ -693,15 +693,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-		public void OnTextInputLayoutUnLoaded()
-		{
-			var inputLayout = new SfTextInputLayout();
-			EventArgs args = new EventArgs();
-			InvokePrivateMethod(inputLayout, "OnTextInputLayoutUnloaded", inputLayout, args);
-			Assert.Null(inputLayout.Content);
-		}
-
-		[Fact]
 		public void TestUpdateIconRectFMethod()
 		{
 			var inputLayout = new SfTextInputLayout

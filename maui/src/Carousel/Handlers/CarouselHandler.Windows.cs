@@ -25,7 +25,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <param name="virtualView"></param>
 		private static void MapAllowLoadMore(CarouselHandler handler, ICarousel virtualView)
 		{
-			handler.PlatformView.AllowLoadMore = virtualView.AllowLoadMore;
+			handler.PlatformView.AllowLoadMore = virtualView.AllowLoadMore && virtualView.LoadMoreItemsCount > 0;
 		}
 
 		/// <summary>

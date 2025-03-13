@@ -69,7 +69,7 @@ namespace Syncfusion.Maui.Toolkit
 				}
 			}
 
-			return new SolidColorBrush(Colors.Transparent);
+			return Colors.Transparent;
 		}
 
 		public object[]? ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -65,6 +65,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					if (series != null)
 					{
+						if (series.ActualXAxis != null && series.ActualYAxis != null)
+						{
+							series.ActualXAxis.AssociatedAxes.Clear();
+							series.ActualYAxis.AssociatedAxes.Clear();
+						}
+
 						series.ActualXAxis = null;
 						series.ActualYAxis = null;
 					}
@@ -322,7 +328,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			foreach (ChartAxis chartAxis in axes)
 			{
-				chartAxis.ComputeSize(size);
+				UpdateAxisComputeSize(chartAxis, size);
 				if (!chartAxis.CanRenderNextToCrossingValue())
 				{
 					if (chartAxis.IsOpposed())
@@ -353,7 +359,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			foreach (ChartAxis chartAxis in axes)
 			{
-				chartAxis.ComputeSize(size);
+				UpdateAxisComputeSize(chartAxis, size);
 				if (!chartAxis.CanRenderNextToCrossingValue())
 				{
 					if (chartAxis.IsOpposed())
@@ -372,15 +378,34 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		void UpdateAxisComputeSize(ChartAxis chartAxis, Size size)
+		{
+			var area = chartAxis.Area;
+			if (area == null)
+			{ 
+				return; 
+			}
+
+			var crossingAxis = chartAxis.GetCrossingAxis(area);
+			if (crossingAxis != null)
+			{
+				chartAxis.ComputeSize(size);
+			}
+			else
+			{
+				chartAxis.ResetComputeSize(size);
+			}
+		}
+
 		public void OnDraw(ICanvas canvas)
 		{
 		}
 
 		void UpdateActualAxis(ReadOnlyObservableCollection<ChartSeries> visibleSeries)
 		{
-			foreach (CartesianSeries series in visibleSeries)
+			foreach (var item in visibleSeries)
 			{
-				if (series != null)
+				if (item is CartesianSeries series)
 				{
 					if (series.ActualXAxis == null)
 					{
@@ -412,8 +437,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void UpdateSeriesRange(ReadOnlyObservableCollection<ChartSeries> visibleSeries)
 		{
+			var isStackingSegmentCreated = false;
 			foreach (CartesianSeries series in visibleSeries.Cast<CartesianSeries>())
 			{
+				if (isStackingSegmentCreated && series.IsStacking && series.SegmentsCreated)
+				{
+					series.SegmentsCreated = false;
+				}
+
 				if (!series.IsStacking)
 				{
 					if (series.RequiredEmptyPointReset)
@@ -427,6 +458,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (!series.SegmentsCreated) //creates segment if segmentsCreated is false. 
 				{
+					if (series.IsStacking)
+					{
+						isStackingSegmentCreated = true;
+					}
+
 					series.XRange = DoubleRange.Empty;
 					series.YRange = DoubleRange.Empty;
 
@@ -461,7 +497,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		ChartAxis? GetAxisByName(string name, ObservableCollection<ChartAxis>? axes)
+		static ChartAxis? GetAxisByName(string name, ObservableCollection<ChartAxis>? axes)
 		{
 			var item = (from x in axes where x.Name == name select x).ToList();
 			if (item != null && item.Count > 0)

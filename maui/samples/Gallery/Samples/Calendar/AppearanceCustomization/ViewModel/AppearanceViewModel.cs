@@ -51,11 +51,11 @@ public class AppearanceViewModel : INotifyPropertyChanged
             border.Stroke = _isLightTheme ? Color.FromRgba("#6750A4") : Color.FromRgba("#D0BCFF");
 
             Label label = new Label();
-            label.SetBinding(Label.TextProperty, BindingHelper.CreateBinding(
+			label.SetBinding(Label.TextProperty, BindingHelper.CreateBinding(
    propertyName: "Date.Day",
    getter: static (CalendarCellDetails context) => context.Date.Day));
 
-            label.HorizontalOptions = LayoutOptions.Center;
+			label.HorizontalOptions = LayoutOptions.Center;
             label.VerticalOptions = LayoutOptions.Center;
             label.Padding = new Thickness(2);
             border.Content = label;
@@ -81,11 +81,11 @@ public class AppearanceViewModel : INotifyPropertyChanged
             border.Stroke = _isLightTheme ? Color.FromRgba("#6750A4") : Color.FromRgba("#D0BCFF");
 
             Label label = new Label();
-            label.SetBinding(Label.TextProperty, BindingHelper.CreateBinding(
+			label.SetBinding(Label.TextProperty, BindingHelper.CreateBinding(
 propertyName: "Date.Day",
 getter: static (CalendarCellDetails context) => context.Date.Day));
 
-            label.HorizontalOptions = LayoutOptions.Center;
+			label.HorizontalOptions = LayoutOptions.Center;
             label.VerticalOptions = LayoutOptions.Center;
             border.Content = label;
 

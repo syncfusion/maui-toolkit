@@ -52,7 +52,6 @@
                 <shimmer:SfShimmer.Content>
                     <StackLayout>
                         <ListView x:DataType="local:ViewModel" ItemsSource="{Binding Info}" x:Name="listView"
-                                  ItemTemplate="{StaticResource personTemplate}"
                                   SeparatorVisibility="None"
                                   RowHeight="90"
                                   VerticalScrollBarVisibility="Never"

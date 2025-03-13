@@ -66,7 +66,7 @@ public class SignUpBehavior:Behavior<SampleView>
 		base.OnAttachedTo(bindable);
 	}
 
-	void ResentOTPTapped(object? sender, TappedEventArgs e)
+	private void ResentOTPTapped(object? sender, TappedEventArgs e)
 	{
 		_signUpViewModel = _signUp?.BindingContext as SignUpViewModel;
 		if (_signUpViewModel is not null && _otpPopUp is not null && _otpVerify is not null)

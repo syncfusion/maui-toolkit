@@ -1684,10 +1684,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				chartAxis.ZoomFactor = ZoomMode != ZoomMode.Y ? currentZoomFactor : 1f;
 				if (currentZoomFactor != previousZoomFactor)
 				{
-					var zoomPosition = ZoomMode != ZoomMode.Y
+					chartAxis.ZoomPosition = ZoomMode != ZoomMode.Y
 						? previousZoomPosition +
-						  (Math.Abs((selectionRect.Left - clipRect.Left + (float)(chartAxis.IsInversed ? selectionRect.Width : 0.0)) / clipRect.Width) * previousZoomFactor) : 0;
-					chartAxis.ZoomPosition = chartAxis.IsInversed ? 1 - zoomPosition : zoomPosition;
+						  (Math.Abs((float)(chartAxis.IsInversed ? clipRect.Right - selectionRect.Right : selectionRect.Left - clipRect.Left) / clipRect.Width) * previousZoomFactor) : 0;
 				}
 			}
 
@@ -1708,11 +1707,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				chartAxis.ZoomFactor = ZoomMode != ZoomMode.X ? currentZoomFactor : 1;
 				if (currentZoomFactor != previousZoomFactor)
 				{
-					var zoomPosition = ZoomMode != ZoomMode.X
+					chartAxis.ZoomPosition = ZoomMode != ZoomMode.X
 						? previousZoomPosition +
-							((1 - Math.Abs(((chartAxis.IsInversed ? 0 : selectionRect.Height) + selectionRect.Top - clipRect.Top) / clipRect.Height)) * previousZoomFactor) : 0;
-
-					chartAxis.ZoomPosition = chartAxis.IsInversed ? 1 - zoomPosition : zoomPosition;
+							((1 - Math.Abs(((chartAxis.IsInversed ? clipRect.Bottom - selectionRect.Bottom : selectionRect.Top - clipRect.Top) + selectionRect.Height) / clipRect.Height)) * previousZoomFactor) : 0;
 				}
 			}
 		}

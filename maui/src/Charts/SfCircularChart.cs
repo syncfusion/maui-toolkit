@@ -302,7 +302,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		public SfCircularChart()
 		{
 			ThemeElement.InitializeThemeResources(this, "SfCircularChartTheme");
-			SfCircularChartResources.InitializeDefaultResource("Chart.Resources.SfCircularChart");
+			SfCircularChartResources.InitializeDefaultResource("Chart.Resources.SfCircularChart", typeof(SfCircularChart));
 			SetDynamicResource(TooltipBackgroundProperty, "SfCircularChartTooltipBackground");
 			SetDynamicResource(TooltipTextColorProperty, "SfCircularChartTooltipTextColor");
 			SetDynamicResource(TooltipFontSizeProperty, "SfCircularChartTooltipTextFontSize");

@@ -3,6 +3,8 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Microsoft.Maui.Controls.Shapes;
 using Syncfusion.Maui.Toolkit.Internals;
+using Syncfusion.Maui.Toolkit.Localization;
+using Syncfusion.Maui.Toolkit.Popup;
 using Syncfusion.Maui.Toolkit.Themes;
 using Globalization = System.Globalization;
 
@@ -97,6 +99,19 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         readonly SfCalendarProxy _proxy;
 
+        /// <summary>
+        /// The SfPopup view.
+        /// </summary>
+        SfPopup? _popup;
+
+        /// <summary>
+        /// Boolean to get the previous open state of the calendar in the dialog mode.
+        /// This value is used to maintain the previous state of the calendar while changing the visibility of the calendar in the dialog mode.
+        /// While changing the IsOpen property of the calendar dynamically in the Visibility change the property change will not trigger sometimes.
+        /// So that we are updated the previous state of the calendar when the IsOpen property changed.
+        /// </summary>
+        bool _isCalendarPreviouslyOpened = false;
+
         #endregion
 
         #region Constructor
@@ -106,8 +121,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         public SfCalendar()
         {
-            SfCalendarResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.Calendar.Resources.SfCalendar", typeof(SfCalendar));
-            ThemeElement.InitializeThemeResources(this, "SfCalendarTheme");
+			SfCalendarResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.Calendar.Resources.SfCalendar", typeof(SfCalendar));
+			ThemeElement.InitializeThemeResources(this, "SfCalendarTheme");
             _proxy = new(this);
             DrawingOrder = DrawingOrder.AboveContent;
             BackgroundColor = CalendarBackground;
@@ -140,7 +155,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
         #endregion
 
-        #region Public methods
+        #region Public Methods
 
         /// <summary>
         /// Move to previous view which displays previous view dates.
@@ -210,7 +225,51 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
         #endregion
 
-        #region Private methods
+        #region Internal Methods
+
+        /// <summary>
+        /// Method to invoke the closed event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="eventArgs">The event args.</param>
+        internal void InvokeClosedEvent(object sender, EventArgs eventArgs)
+        {
+            CalendarPopupClosed?.Invoke(sender, eventArgs);
+        }
+
+        /// <summary>
+        /// Method to invoke the closing event.
+        /// </summary>
+        /// <param name="sender">The calendar instance.</param>
+        /// <param name="eventArgs">The event arguments.</param>
+        internal void InvokeClosingEvent(object sender, CancelEventArgs eventArgs)
+        {
+            CalendarPopupClosing?.Invoke(sender, eventArgs);
+        }
+
+        /// <summary>
+        /// Method to invoke the opening event.
+        /// </summary>
+        /// <param name="sender">The calendar instance.</param>
+        /// <param name="eventArgs">The cancel event args.</param>
+        internal void InvokeOpeningEvent(object sender, CancelEventArgs eventArgs)
+        {
+            CalendarPopupOpening?.Invoke(sender, eventArgs);
+        }
+
+        /// <summary>
+        /// Method to invoke the opened event.
+        /// </summary>
+        /// <param name="sender">The calendar instance.</param>
+        /// <param name="eventArgs">The event arguments.</param>
+        internal void InvokeOpenedEvent(object sender, EventArgs eventArgs)
+        {
+            CalendarPopupOpened?.Invoke(sender, eventArgs);
+        }
+
+        #endregion
+
+        #region Private Methods
 
         /// <summary>
         /// Update Visible dates for the calendar Header views.
@@ -355,6 +414,42 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     UpdateMultiRangeSelection(tappedDate.Value);
                     break;
             }
+        }
+
+        /// <summary>
+        /// Method to trigger the calendar popup closed.
+        /// </summary>
+        /// <param name="e">The event args.</param>
+        void ICalendar.OnPopupClosed(EventArgs e)
+        {
+            InvokeClosedEvent(this, e);
+        }
+
+        /// <summary>
+        /// Method to trigger the popup closing.
+        /// </summary>
+        /// <param name="e">The cancel event args.</param>
+        void ICalendar.OnPopupClosing(CancelEventArgs e)
+        {
+            InvokeClosingEvent(this, e);
+        }
+
+        /// <summary>
+        /// Method to trigger the popup opening.
+        /// </summary>
+        /// <param name="e">The cancel event args.</param>
+        void ICalendar.OnPopupOpening(CancelEventArgs e)
+        {
+            InvokeOpeningEvent(this, e);
+        }
+
+        /// <summary>
+        /// Method to trigger the calendar opened.
+        /// </summary>
+        /// <param name="e">The event args.</param>
+        void ICalendar.OnPopupOpened(EventArgs e)
+        {
+            InvokeOpenedEvent(this, e);
         }
 
         /// <summary>
@@ -1837,6 +1932,258 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
         }
 
+        /// <summary>
+        /// Method for add calendar to popup.
+        /// </summary>
+        void AddCalendarToPopup()
+        {
+            if (_popup == null)
+            {
+                _popup = new SfPopup();
+                _popup.ShowHeader = false;
+                _popup.ShowFooter = false;
+                _popup.PopupStyle.CornerRadius = CornerRadius;
+                _popup.Opened += OnPopupOpened;
+                _popup.Opening += OnPopupOpening;
+                _popup.Closed += OnPopupClosed;
+                _popup.Closing += OnPopupClosing;
+                Add(_popup);
+            }
+
+            if (_layout == null)
+            {
+                return;
+            }
+
+            _layout.BackgroundColor = BackgroundColor;
+            _popup.ContentTemplate = new DataTemplate(() =>
+            {
+                return _layout;
+            });
+            UpdatePopUpSize();
+        }
+
+        /// <summary>
+        /// Method to show the popup.
+        /// </summary>
+        void ShowPopup()
+        {
+            if (_popup == null)
+            {
+                return;
+            }
+
+            if (Mode == CalendarMode.RelativeDialog)
+            {
+                if (RelativeView != null)
+                {
+                    ShowRelativeToView(RelativeView, RelativePosition);
+                }
+                else
+                {
+                    ShowRelativeToView(this, RelativePosition);
+                }
+            }
+            else
+            {
+                _popup.IsOpen = true;
+            }
+        }
+
+        /// <summary>
+        /// Method to update the popup size.
+        /// </summary>
+        void UpdatePopUpSize()
+        {
+            if (_popup == null)
+            {
+                return;
+            }
+
+            // Static values used from design specifications provided by the UX team in Figma.
+            _popup.WidthRequest = 300;
+#if WINDOWS || MACCATALYST
+            if (View == CalendarView.Month)
+            {
+                _popup.HeightRequest = 350 + HeaderView.Height + MonthView.HeaderView.Height + FooterView.Height;
+            }
+            else
+            {
+                _popup.HeightRequest = 350 + HeaderView.Height + FooterView.Height;
+            }
+#elif ANDROID || IOS
+            if (View == CalendarView.Month)
+            {
+                _popup.HeightRequest = 250 + HeaderView.Height + MonthView.HeaderView.Height + FooterView.Height;
+            }
+            else
+            {
+                _popup.HeightRequest = 250 + HeaderView.Height + FooterView.Height;
+            }
+#endif
+        }
+
+        /// <summary>
+        /// Method to close the calendar popup.
+        /// </summary>
+        void CloseCalendarPopup()
+        {
+            if (_popup == null)
+            {
+                return;
+            }
+
+            _popup.IsOpen = false;
+            _popup.ContentTemplate = new DataTemplate(() =>
+            {
+                return null;
+            });
+        }
+
+        /// <summary>
+        /// Method to show the calendar popup based on the relative view and relative position.
+        /// </summary>
+        /// <param name="relativeView">The relative view.</param>
+        /// <param name="relativePosition">The relative position.</param>
+        void ShowRelativeToView(View relativeView, CalendarRelativePosition relativePosition)
+        {
+            if (_popup == null)
+            {
+                return;
+            }
+
+            switch (relativePosition)
+            {
+                case CalendarRelativePosition.AlignTop:
+                    _popup.ShowRelativeToView(relativeView, PopupRelativePosition.AlignTop);
+                    break;
+
+                case CalendarRelativePosition.AlignBottom:
+                    _popup.ShowRelativeToView(relativeView, PopupRelativePosition.AlignBottom);
+                    break;
+
+                case CalendarRelativePosition.AlignTopLeft:
+                    _popup.ShowRelativeToView(relativeView, PopupRelativePosition.AlignTopLeft);
+                    break;
+
+                case CalendarRelativePosition.AlignTopRight:
+                    _popup.ShowRelativeToView(relativeView, PopupRelativePosition.AlignTopRight);
+                    break;
+
+                case CalendarRelativePosition.AlignBottomLeft:
+                    _popup.ShowRelativeToView(relativeView, PopupRelativePosition.AlignBottomLeft);
+                    break;
+
+                case CalendarRelativePosition.AlignBottomRight:
+                    _popup.ShowRelativeToView(relativeView, PopupRelativePosition.AlignBottomRight);
+                    break;
+
+                case CalendarRelativePosition.AlignToLeftOf:
+                    _popup.ShowRelativeToView(relativeView, PopupRelativePosition.AlignToLeftOf);
+                    break;
+
+                case CalendarRelativePosition.AlignToRightOf:
+                    _popup.ShowRelativeToView(relativeView, PopupRelativePosition.AlignToRightOf);
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Method to reset the calendar popup.
+        /// </summary>
+        void ResetPopup()
+        {
+            if (_popup == null)
+            {
+                return;
+            }
+
+            _popup.IsOpen = false;
+            _popup.Opened -= OnPopupOpened;
+            _popup.Opening -= OnPopupOpening;
+            _popup.Closed -= OnPopupClosed;
+            _popup.Closing -= OnPopupClosing;
+            Remove(_popup);
+            _popup = null;
+        }
+
+        /// <summary>
+        /// Method to raise the popup closing.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The cancel event args.</param>
+        void OnPopupClosing(object? sender, CancelEventArgs e)
+        {
+            e.Cancel = RaisePopupClosingEvent();
+        }
+
+        /// <summary>
+        /// Method raises while the popup event closing.
+        /// </summary>
+        /// <returns>Returns whether to cancel closing of the popup.</returns>
+        bool RaisePopupClosingEvent()
+        {
+            if (CalendarPopupClosing != null)
+            {
+                CancelEventArgs popupClosingEventArgs = new CancelEventArgs();
+                InvokeClosingEvent(this, popupClosingEventArgs);
+                return popupClosingEventArgs.Cancel;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Method triggered while the popup closed.
+        /// </summary>
+        /// <param name="sender">The popup instance.</param>
+        /// <param name="e">Closed event argument.</param>
+        void OnPopupClosed(object? sender, EventArgs e)
+        {
+            IsOpen = false;
+            InvokeClosedEvent(this, e);
+        }
+
+        /// <summary>
+        /// Method triggered while the popup opened.
+        /// </summary>
+        /// <param name="sender">The popup instance.</param>
+        /// <param name="e">Opened event argument.</param>
+        void OnPopupOpened(object? sender, EventArgs e)
+        {
+            InvokeOpenedEvent(this, e);
+        }
+
+        /// <summary>
+        /// Method triggered while the popup opening.
+        /// </summary>
+        /// <param name="sender">The popup instance.</param>
+        /// <param name="e">Opened event argument.</param>
+        void OnPopupOpening(object? sender, CancelEventArgs e)
+        {
+            e.Cancel = RaisePopupOpeningEvent();
+        }
+
+        /// <summary>
+        /// Method raise while the popup opening.
+        /// </summary>
+        /// <returns>The bool value.</returns>
+        bool RaisePopupOpeningEvent()
+        {
+            if (CalendarPopupOpening != null)
+            {
+                CancelEventArgs popupOpeningEventArgs = new CancelEventArgs();
+                InvokeOpeningEvent(this, popupOpeningEventArgs);
+                return popupOpeningEventArgs.Cancel;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         #region Override Methods
@@ -1865,7 +2212,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 return _availableSize;
             }
-    #endif
+#endif
 
             if (_layout.Children.Count == 0)
             {
@@ -1873,6 +2220,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             _availableSize = new Size(width, height);
+
+            if (Mode != CalendarMode.Default)
+            {
+                return Size.Zero;
+            }
 
             //// This function call to the MeasureContent method of the base class which is used to measure the size of the layout.
             return base.MeasureContent(width, height);
@@ -1885,6 +2237,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="dirtyRect">The dirty rectangle.</param>
         protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
         {
+            if (this.CornerRadius == 0)
+            {
+                return;
+            }
+
             //// Set the clip to the calendar view
             //// The clip is used to ensure that the content within the sfcalendar stays within the boundaries of the rounded rectangle shape,
             //// The content of the rounded corners will be cropped or hidden by the clip, meaning they are not visible in view.
@@ -1902,7 +2259,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 currentClip = new RoundRectangleGeometry(CornerRadius, rectangle);
             }
-    #endif
+#endif
             RoundRectangleGeometry? previousClip = null;
             if (Clip != null && Clip is RoundRectangleGeometry)
             {
@@ -2174,6 +2531,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
                 AddOrRemoveHeaderLayout();
                 _layout.UpdateHeaderHeight(HeaderView.GetHeaderHeight());
+                UpdatePopUpSize();
             }
             else if (e.PropertyName == nameof(CalendarHeaderView.TextFormat))
             {
@@ -2248,6 +2606,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 AddOrRemoveFooterLayout();
                 _layout.UpdateFooterHeight(FooterView.GetFooterHeight());
+                UpdatePopUpSize();
                 if (_availableSize == Size.Zero)
                 {
                     return;

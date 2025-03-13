@@ -96,6 +96,31 @@
 
 	#endregion
 
+	#region TabHeaderAlignment
+
+	/// <summary> 
+	/// Describes the possible values for the header position of SfTabView. 
+	/// </summary>  
+	public enum TabHeaderAlignment
+	{
+		/// <summary> 
+		/// Specifies start position for the tab header. 
+		/// </summary>   
+		Start,
+
+		/// <summary>
+		/// Specifies center position for the tab header.
+		/// </summary>
+		Center,
+
+		/// <summary>
+		/// Specifies end position for the tab header.
+		/// </summary>
+		End
+	}
+
+	#endregion
+
 	#region TabBarDisplayMode
 
 	/// <summary>
@@ -137,6 +162,31 @@
 		/// Specifies that the selection indicator width will be set based on the header width value of the tab view.
 		/// </summary> 
 		Stretch,
+	}
+
+	#endregion
+
+	#region CenterButtonDisplatMode
+
+	/// <summary>
+	/// Specifies the possible values for the display type of center button in TabView. 
+	/// </summary>
+	public enum CenterButtonDisplayMode
+	{
+		/// <summary>
+		/// Specifies the image types for center button in Tab View.
+		/// </summary>  
+		Image,
+
+		/// <summary>
+		/// Specifies the text types for center button in Tab View.
+		/// </summary>
+		Text,
+
+		/// <summary>
+		/// Specifies both image as well as text for center button in Tab View.
+		/// </summary>
+		ImageWithText
 	}
 
 	#endregion

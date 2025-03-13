@@ -57,6 +57,19 @@ namespace Syncfusion.Maui.Toolkit.Carousel.Platform
 		#endregion
 
 		#region Private Methods
+		 /// <summary>
+        /// Sets parent to the template view.
+        /// </summary>
+        /// <param name="templateLayout"></param>
+        /// <param name="formsCarousel"></param>
+        void SetParentContent(View templateLayout, ICarousel formsCarousel)
+        {
+            if (templateLayout != null)
+            {
+                templateLayout.Parent = (Element)formsCarousel;
+            }
+        }
+		
 		/// <summary>
 		/// Get the template view
 		/// </summary>
@@ -80,6 +93,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel.Platform
 			{
 				return null;
 			}
+
+			SetParentContent(templateLayout, _formsCarousel);
 
 			SetBindingContext(templateLayout, index);
 			if (_formsCarousel.Handler == null || _formsCarousel.Handler.MauiContext == null)

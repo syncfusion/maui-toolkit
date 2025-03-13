@@ -103,7 +103,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 										if (!stackingSeries.IsSbsValueCalculated && _seriesGroup != null)
 										{
 											string groupID = _seriesGroup.FirstOrDefault(x => x.Value.Any(s => s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeries.GetType())).Key;
-											StackingSeriesBase stackingSeriesBase; 
+											StackingSeriesBase stackingSeriesBase;
 											int size = SideBySideSeriesPosition.Count > 0 && groupingKeys.Count > 0 && groupingKeys.TryGetValue(groupID, out var groupValue)
 												? SideBySideSeriesPosition[groupValue].Count : 0;
 											var isSameType = false;
@@ -414,7 +414,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				if (series is StackingSeriesBase stackingSeries && stackingSeries.IsVisible)
 				{
-
 					if (stackingSeries.RequiredEmptyPointReset)
 					{
 						stackingSeries.ResetEmptyPointIndexes();
@@ -552,9 +551,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		static double GetYValue(List<StackingSeriesBase> SeriesList, double yValue, int index)
 		{
 			double total = SeriesList.Where(series => series != null && series.YValues.Count > index).Sum(series => double.IsNaN(series.YValues[index]) ? 0 : Math.Abs(series.YValues[index]));
-
 			if (yValue != 0)
-			{ 
+			{
 				yValue = (yValue / total) * 100;
 			}
 

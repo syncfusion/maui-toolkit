@@ -11,26 +11,24 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			ColumnSegment columnSegment = new ColumnSegment
 			{
-				IsZero = expectedIsEmpty
+				IsEmpty = expectedIsEmpty
 			};
-			Assert.Equal(expectedIsEmpty, columnSegment.IsZero);
+			Assert.Equal(expectedIsEmpty, columnSegment.IsEmpty);
 		}
 
 		[Fact]
 		public void ReValidateYValues_SetsValuesToNaN_Correctly()
 		{
-			var columnSeries = new ColumnSeries
-			{
-				YValues = [1, 2, 3, 4, 5]
-			};
-			IList<int>[] emptyPointIndex =
-											[
-											  [1, 3],
-											  []
-											];
+			var columnSeries = new ColumnSeries();
+			columnSeries.YValues = new List<double> { 1, 2, 3, 4, 5 };
+			IList<int>[] emptyPointIndex = new IList<int>[]
+											{
+											  new List<int> { 1, 3 },
+											  new List<int>()
+											};
 			columnSeries.EmptyPointIndexes = emptyPointIndex;
 			columnSeries.ResetEmptyPointIndexes();
-			Assert.Equal([1.0, double.NaN, 3.0, double.NaN, 5.0], columnSeries.YValues);
+			Assert.Equal(new List<double> { 1.0, double.NaN, 3.0, double.NaN, 5.0 }, columnSeries.YValues);
 		}
 
 		[Fact]
@@ -47,17 +45,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var series = new ColumnSeries();
 			var indexes = new List<int>[]
 			{
-			[2, 4],
-			[3],
-			[]
+			new List<int> { 2, 4 },
+			new List<int> {3 },
+			new List<int>()
 			};
 
 			series.EmptyPointIndexes = indexes;
 			var retrievedIndexes = series.EmptyPointIndexes;
 			Assert.NotNull(retrievedIndexes);
 			Assert.Equal(3, retrievedIndexes.Length);
-			Assert.Equal([2, 4], retrievedIndexes[0]);
-			Assert.Equal([3], retrievedIndexes[1]);
+			Assert.Equal(new List<int> { 2, 4 }, retrievedIndexes[0]);
+			Assert.Equal(new List<int> { 3 }, retrievedIndexes[1]);
 			Assert.Empty(retrievedIndexes[2]);
 		}
 
@@ -85,10 +83,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(EmptyPointMode.None)]
 		public void EmptyPointMode_SetAndRetrieveValue(EmptyPointMode emptyPointMode)
 		{
-			var series = new ColumnSeries
-			{
-				EmptyPointMode = emptyPointMode
-			};
+			var series = new ColumnSeries();
+			series.EmptyPointMode = emptyPointMode;
 			var mode = series.EmptyPointMode;
 			Assert.Equal(emptyPointMode, mode);
 		}
@@ -116,13 +112,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void ValidateYPoints_With10Points_EmptyPointMode_Average_ShouldReplaceNaNWithAverage()
 		{
-			var series = new ColumnSeries
-			{
-				YValues = [1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0],
-				EmptyPointMode = EmptyPointMode.Average
-			};
+			var series = new ColumnSeries() { YValues = new List<double> { 1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0 } };
+			series.EmptyPointMode = EmptyPointMode.Average;
 			series.ValidateYValues();
-			Assert.Equal([1.0, 1.5, 2.0, 3.0, 4.25, 5.5, 6.0, 7.0, 8.5, 10.0], series.YValues);
+			Assert.Equal(new List<double> { 1.0, 1.5, 2.0, 3.0, 4.25, 5.5, 6.0, 7.0, 8.5, 10.0 }, series.YValues);
 		}
 
 		[Fact]
@@ -130,47 +123,41 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var series = new ColumnSeries
 			{
-				YValues = [1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0],
+				YValues = new List<double> { 1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0 },
 				EmptyPointMode = EmptyPointMode.Zero
 			};
 			series.ValidateYValues();
-			Assert.Equal([1.0, 0, 2.0, 3.0, 0, 5.5, 6.0, 7.0, 0, 10.0], series.YValues);
+			Assert.Equal(new List<double> { 1.0, 0, 2.0, 3.0, 0, 5.5, 6.0, 7.0, 0, 10.0 }, series.YValues);
 		}
 
 		[Fact]
 		public void ValidateDataPoints_With10Points_EmptyPointMode_None_ShouldRemainUnchanged()
 		{
-			var series = new ColumnSeries
-			{
-				EmptyPointMode = EmptyPointMode.None
-			};
+			var series = new ColumnSeries();
+			series.EmptyPointMode = EmptyPointMode.None;
 			var yValues = new List<double> { 1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0 };
 			series.ValidateDataPoints(yValues);
-			Assert.Equal([1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0], yValues);
+			Assert.Equal(new List<double> { 1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0 }, yValues);
 		}
 
 		[Fact]
 		public void ValidateDataPoints_With10Points_EmptyPointMode_Zero_ShouldReplaceNaNWithZero()
 		{
-			var series = new ColumnSeries
-			{
-				EmptyPointMode = EmptyPointMode.Zero
-			};
+			var series = new ColumnSeries();
+			series.EmptyPointMode = EmptyPointMode.Zero;
 			var yValues = new List<double> { 1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0 };
 			series.ValidateDataPoints(yValues);
-			Assert.Equal([1.0, 0.0, 2.0, 3.0, 0.0, 5.5, 6.0, 7.0, 0.0, 10.0], yValues);
+			Assert.Equal(new List<double> { 1.0, 0.0, 2.0, 3.0, 0.0, 5.5, 6.0, 7.0, 0.0, 10.0 }, yValues);
 		}
 
 		[Fact]
 		public void ValidateDataPoints_With10Points_EmptyPointMode_Average_ShouldReplaceNaNWithAverage()
 		{
-			var series = new ColumnSeries
-			{
-				EmptyPointMode = EmptyPointMode.Average
-			};
+			var series = new ColumnSeries();
+			series.EmptyPointMode = EmptyPointMode.Average;
 			var yValues = new List<double> { 1.0, double.NaN, 2.0, 3.0, double.NaN, 5.5, 6.0, 7.0, double.NaN, 10.0 };
 			series.ValidateDataPoints(yValues);
-			Assert.Equal([1.0, 1.5, 2.0, 3.0, 4.25, 5.5, 6.0, 7.0, 8.5, 10.0], yValues);
+			Assert.Equal(new List<double> { 1.0, 1.5, 2.0, 3.0, 4.25, 5.5, 6.0, 7.0, 8.5, 10.0 }, yValues);
 		}
 
 		[Fact]

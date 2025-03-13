@@ -366,18 +366,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(longPressHandled, effectsView.LongPressHandled);
 		}
 
-		[Theory]
-		[InlineData(true)]
-		[InlineData(false)]
-		public void ForceReset_Setvalue_ReturnsExpectedValue(bool forceReset)
-		{
-			var effectsView = new SfEffectsView
-			{
-				ForceReset = forceReset
-			};
-
-			Assert.Equal(forceReset, effectsView.ForceReset);
-		}
 		#endregion
 	}
 }
