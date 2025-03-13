@@ -43,6 +43,8 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 |                      | Bottom Sheet          | Slides up from the bottom of the screen to display additional content or functionality.                  |
 | Layout               | Carousel              | Smooth, touch-enabled sliding galleries for showcasing images or featured content.                       |
 |                      | Text Input Layout     | Enhances input fields with floating labels and validation, improving user interaction.                   |
+|                      | Expander              | Allows users to expand or collapse content dynamically, improving space management and user experience.  |
+|                      | Accordion             | Organizes content into multiple expandable sections, allowing only one section to be open at a time for better navigation and space management.|
 | Buttons              | Chips                 | Interactive tags for filtering, labeling, or visual options, perfect for e-commerce or task management.  |
 |                      | Segmented Control     | Quickly switch between views or categories, ideal for apps with multiple layout options.                 |
 |                      | Button                | Customizable button control with icon support, background images, and visual state styling.              |
