@@ -1065,12 +1065,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
             InvalidateSideBySideSeries();
 			foreach (var item in EmptyPointIndexes)
 			{
-				if (item != null)
-
-				{
-					item.Clear();
-				}
+				item?.Clear();
 			}
+
 			base.OnDataSourceChanged(oldValue, newValue);
         }
 
@@ -1080,18 +1077,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
             base.OnDataSource_CollectionChanged(sender, e);
         }
 
-        internal override void AddDataPoint(int index, object data,  NotifyCollectionChangedEventArgs e)
+        internal override void AddDataPoint(object data, int index, NotifyCollectionChangedEventArgs e)
         {
 			ResetEmptyPointIndexes();
 			foreach (var item in EmptyPointIndexes)
 			{
-				if (item != null)
-
-				{
-					item.Clear();
-				}
+				item?.Clear();
 			}
-			base.AddDataPoint(index, data,  e);
+
+			base.AddDataPoint(data, index,  e);
         }
 
         internal override void RemoveData(int index, NotifyCollectionChangedEventArgs e)
@@ -1099,12 +1093,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			ResetEmptyPointIndexes();
 			foreach (var item in EmptyPointIndexes)
 			{
-				if (item != null)
-
-				{
-					item.Clear();
-				}
+				item?.Clear();
 			}
+
 			base.RemoveData(index, e);
         }
 

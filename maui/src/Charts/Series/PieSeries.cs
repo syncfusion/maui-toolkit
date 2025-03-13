@@ -599,9 +599,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			CalculateGroupToYValues();
 		}
 
-		internal override void SetIndividualPoint(int index, object obj, bool replace)
+		internal override void SetIndividualPoint(object obj, int index, bool replace)
 		{
-			base.SetIndividualPoint(index, obj, replace);
+			base.SetIndividualPoint(obj, index, replace);
 
 			CalculateGroupToYValues();
 		}

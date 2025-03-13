@@ -491,6 +491,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     double highValue = highValues[index];
                     double lowValue = lowValues[index];
                     string label = string.Format("{0} : {1:#.##}\n{2} : {3:#.##}", SfCartesianChartResources.High, highValue, SfCartesianChartResources.Low, lowValue);
+					if (highValue == 0 || lowValue == 0)
+					{
+						label = string.Format("{0} : {1:0.##}\n{2} : {3:0.##}", SfCartesianChartResources.High, highValue, SfCartesianChartResources.Low, lowValue);
+					}
+
                     var xPoint = TransformToVisibleX(xValue, topValue);
                     var yPoint = TransformToVisibleY(xValue, topValue);
 
