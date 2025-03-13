@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 using Microsoft.Maui.Controls.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
@@ -1356,6 +1357,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// <param name="propertyName">The property name.</param>
 		/// <param name="item">The element from chips collection.</param>
 		/// <returns>The property value from item.</returns>
+		[RequiresUnreferencedCode("The GetPropertyValue method is not trim compatible")] 
 		static object GetPropertyValue(string propertyName, object item)
 		{
 			var propertyInfo = item.GetType().GetProperty(propertyName);
@@ -1410,6 +1412,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// </summary>
 		/// <param name="propertyName"></param>
 		/// <param name="collection">New value.</param>
+		[RequiresUnreferencedCode("The SubscribeCollectionChanged method is not trim compatible")] 
 		void SubscribeCollectionChanged(string propertyName, INotifyCollectionChanged? collection)
 		{
 			if (collection != null)
@@ -1451,6 +1454,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// <param name="oldValue">Old value.</param>
 		/// <param name="newValue">New value.</param>
 		/// <param name="propertyName">Property name.</param>
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
 		void ChipGroupCollectionChanged(object oldValue, object newValue, string propertyName)
 		{
 			if (oldValue != null)
@@ -1614,6 +1618,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// </summary>
 		/// <param name="propertyName">The property name.</param>
 		/// <param name="e">E.</param>
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
 		void CollectionChanged(string? propertyName, NotifyCollectionChangedEventArgs e)
 		{
 			if (e.NewItems != null && e.NewItems.Count > 0)
@@ -1744,6 +1749,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// |         |          |                       |              |           
 		/// |         |          |      PADDING          |              |           
 		/// +---------+----------+-----------------------+--------------+CORNERRADIUS   
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
 		SfChip GetNewChip(object? chipData)
 		{
 			SfChip chip = InitializeChip();
@@ -1800,17 +1806,14 @@ namespace Syncfusion.Maui.Toolkit.Chips
 				customView.BindingContext = chipData;
 				if (customView is SfChip)
 				{
-					chip.SetBinding(SfChip.IsVisibleProperty, new Binding()
-					{
-						Source = customView,
-						Path = "IsVisible",
-					});
+					chip.SetBinding(SfChip.IsVisibleProperty, BindingHelper.CreateBinding(propertyName: "IsVisible", getter: static(View view) => view.IsVisible, source:customView));
 				}
 
 				chip.Add(customView);
 			}
 		}
 
+		[RequiresUnreferencedCode("The ConfigureChipWithoutTemplate method is not trim compatible")] 
 		void ConfigureChipWithoutTemplate(SfChip chip, object chipData)
 		{
 			chip.IsItemTemplate = false;
@@ -2333,6 +2336,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 		/// </summary>
 		/// <param name="oldValue">Old layout.</param>
 		/// <param name="isLayoutChanged">If set to <c>true</c> is layout changed.</param>
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
 		void ClearAndCreateChips(object? oldValue, bool isLayoutChanged)
 		{
 			if (oldValue != null || (_chipGroupChildren != null && _chipGroupChildren.Count > 0))
