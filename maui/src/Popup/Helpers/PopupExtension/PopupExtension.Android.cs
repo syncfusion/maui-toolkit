@@ -363,7 +363,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="isopen">Specifies whether the popup is open or not.</param>
 		internal static void Blur(MauiView view, SfPopup popup, bool isopen)
 		{
-			if (OperatingSystem.IsAndroidVersionAtLeast(31) && Shader.TileMode.Clamp is not null)
+			if (OperatingSystem.IsAndroidVersionAtLeast(31) && Shader.TileMode.Clamp is not null && popup.GetBlurRadius() > 0)
 			{
 				if (IPlatformApplication.Current is not null && IPlatformApplication.Current.Application is Microsoft.Maui.Controls.Application application &&
 					application.Windows is not null && application.Windows.Count > 0)
