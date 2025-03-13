@@ -107,6 +107,7 @@
 	  <EmbeddedResource Include="SampleList\BottomSheetSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NumericUpDownSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PolarChartSamplesList.xml" />
+    <EmbeddedResource Include="SampleList\PopupSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PullToRefreshSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PyramidChartSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\ShimmerSamplesList.xml" />

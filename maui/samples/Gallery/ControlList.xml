@@ -22,5 +22,6 @@
     <Assembly Name="Calendar" />
     <Assembly Name="Accordion" />
 	<Assembly Name="Cards" />
+	<Assembly Name="Popup"/>
 	</Assemblies>
 </SampleBrowser>
