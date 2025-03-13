@@ -743,7 +743,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		internal override void SetIndividualPoint(int index, object obj, bool replace)
+		internal override void SetIndividualPoint(object obj, int index, bool replace)
 		{
 			if (YDataCollection != null && YPaths != null && ItemsSource != null)
 			{

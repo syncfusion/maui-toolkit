@@ -541,7 +541,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						dataLabel.Item = xyDataSeries.ActualData?[i];
 						dataLabel.Label = LabelContent;
 
-						if (!InVisibleRange || IsEmpty)
+						if (!InVisibleRange || IsZero)
 						{
 							LabelPositionPoint = new PointF(float.NaN, float.NaN);
 						}

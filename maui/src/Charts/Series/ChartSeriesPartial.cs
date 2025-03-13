@@ -81,6 +81,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+#pragma warning disable IDE0060 // Remove unused parameter
+		internal virtual void AddDataPoint(object data, int index, NotifyCollectionChangedEventArgs e)
+#pragma warning restore IDE0060 // Remove unused parameter
+		{
+			SetIndividualPoint(data, index, false);
+		}
+
 		internal virtual void LegendItemToggled(LegendItem chartLegendItem)
 		{
 		}
@@ -109,7 +116,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal virtual void OnDataSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 		{
 			IsDataPointAddedDynamically = false;
-			e.ApplyCollectionChanges((obj, index, canInsert) => AddDataPoint(index, obj, e), (obj, index) => RemoveData(index, e), ResetDataPoint);
+			e.ApplyCollectionChanges((obj, index, canInsert) => AddDataPoint(obj, index, e), (obj, index) => RemoveData(index, e), ResetDataPoint);
 
 			if (e.Action == NotifyCollectionChangedAction.Add && EnableAnimation && AnimationDuration > 0)
 			{
@@ -212,7 +219,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		//TODO:Need to remove the replace parameter from this method,
 		//because new notify collectionChanged event first remove
 		//the data and then insert the data. So no need replace parameter here after.
-		internal virtual void SetIndividualPoint(int index, object obj, bool replace)
+		internal virtual void SetIndividualPoint(object obj, int index, bool replace)
 		{
 			if (SeriesYValues != null && YPaths != null && ItemsSource != null)
 			{
@@ -1308,13 +1315,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return parentObj;
-		}
-
-#pragma warning disable IDE0060 // Remove unused parameter
-		void AddDataPoint(int index, object data, NotifyCollectionChangedEventArgs e)
-#pragma warning restore IDE0060 // Remove unused parameter
-		{
-			SetIndividualPoint(index, data, false);
 		}
 
 		void ResetDataPoint()

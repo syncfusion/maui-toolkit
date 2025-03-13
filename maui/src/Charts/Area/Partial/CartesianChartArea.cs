@@ -414,6 +414,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				if (series is StackingSeriesBase stackingSeries && stackingSeries.IsVisible)
 				{
+
+					if (stackingSeries.RequiredEmptyPointReset)
+					{
+						stackingSeries.ResetEmptyPointIndexes();
+						stackingSeries.RequiredEmptyPointReset = false;
+					}
+
+					stackingSeries.ValidateYValues();
+
 					var stackingGroup = stackingSeries.GroupingLabel;
 					var stackingXAxis = stackingSeries.ActualXAxis;
 					var stackingYAxis = stackingSeries.ActualYAxis;
