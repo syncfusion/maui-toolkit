@@ -1565,13 +1565,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    {
 		        _stateChangedEventArgs.OldState = oldState;
 		        _stateChangedEventArgs.NewState = newState;
-
-		        if (_overlayGrid is not null)
-		        {
-		            _overlayGrid.IsVisible = (State is BottomSheetState.Collapsed) ? false : IsModal;
-		        }
-
-				    OnStateChanged(_stateChangedEventArgs);
+				OnStateChanged(_stateChangedEventArgs);
 		    }
 		}
 
@@ -1658,11 +1652,6 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		double GetCollapsedPosition()
 		{
 		    double targetPosition = Height - CollapsedHeight;
-
-			if (_overlayGrid is not null)
-			{
-				_overlayGrid.IsVisible = false;
-			}
 			return targetPosition;
 		}
 
