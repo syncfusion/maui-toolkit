@@ -2074,7 +2074,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		void Initialize()
 		{
-			SfPopupResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.Popup.Resources.SfPopup");
+			SfPopupResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.Popup.Resources.SfPopup", typeof(SfPopup));
 			_popupViewWidth = 313;
 			_popupViewHeight = GetPopupViewDefaultHeight();
 
