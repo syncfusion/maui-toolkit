@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
+using Syncfusion.Maui.Toolkit.Calendar;
 using System.ComponentModel;
 using System.Globalization;
 using System.Xml;
@@ -50,7 +51,10 @@ public class AppearanceViewModel : INotifyPropertyChanged
             border.Stroke = _isLightTheme ? Color.FromRgba("#6750A4") : Color.FromRgba("#D0BCFF");
 
             Label label = new Label();
-            label.SetBinding(Label.TextProperty, "Date.Day");
+            label.SetBinding(Label.TextProperty, BindingHelper.CreateBinding(
+   propertyName: "Date.Day",
+   getter: static (CalendarCellDetails context) => context.Date.Day));
+
             label.HorizontalOptions = LayoutOptions.Center;
             label.VerticalOptions = LayoutOptions.Center;
             label.Padding = new Thickness(2);
@@ -77,7 +81,10 @@ public class AppearanceViewModel : INotifyPropertyChanged
             border.Stroke = _isLightTheme ? Color.FromRgba("#6750A4") : Color.FromRgba("#D0BCFF");
 
             Label label = new Label();
-            label.SetBinding(Label.TextProperty, "Date.Day");
+            label.SetBinding(Label.TextProperty, BindingHelper.CreateBinding(
+propertyName: "Date.Day",
+getter: static (CalendarCellDetails context) => context.Date.Day));
+
             label.HorizontalOptions = LayoutOptions.Center;
             label.VerticalOptions = LayoutOptions.Center;
             border.Content = label;

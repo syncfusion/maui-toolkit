@@ -45,6 +45,7 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 |                      | Text Input Layout     | Enhances input fields with floating labels and validation, improving user interaction.                   |
 |                      | Expander              | Allows users to expand or collapse content dynamically, improving space management and user experience.  |
 |                      | Accordion             | Organizes content into multiple expandable sections, allowing only one section to be open at a time for better navigation and space management.|
+|                      | Cards                 | Create dismissible cards or a stack of cards, and customize their background, borders, and corners.       |
 | Buttons              | Chips                 | Interactive tags for filtering, labeling, or visual options, perfect for e-commerce or task management.  |
 |                      | Segmented Control     | Quickly switch between views or categories, ideal for apps with multiple layout options.                 |
 |                      | Button                | Customizable button control with icon support, background images, and visual state styling.              |

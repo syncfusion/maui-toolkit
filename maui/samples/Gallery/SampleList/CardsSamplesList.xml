@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Layouts">
+		<Control Title="Cards"
+				 Image="cards.png"
+				 ControlName="SfCards"
+				 Description="A container control that allows users to create dismissible cards or a stack of cards.">
+			<Sample Title="Card view" SampleName="CardView"/>
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>

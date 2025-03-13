@@ -4,6 +4,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 	/// Dictionary for theming the pulltorefresh control.
 	/// </summary>
 	/// <exclude/>
+	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SfPullToRefreshStyles : ResourceDictionary
 	{
 		/// <summary>
