@@ -57,6 +57,8 @@
 			  </CardLayout>
 		  </SubCategory>
 
+      <Sample Title="Fast Scatter" StatusTag="New" SampleName="FastScatterChart" SearchTags="scatter, scatter chart, scatter plot, fast scatter, fast scatter chart, fast scatter plot, high performance chart"/>
+
 		  <SubCategory Title="Spline">
 			  <CardLayout>
 				  <Sample Title="Default spline chart" SampleName="SplineChart" Description="This sample demonstrates the default spline chart. The marker, tooltip, and legend are enabled in the model. Tap the data point to view information about that data point in a tooltip." SearchTags="spline"/>
@@ -151,6 +153,7 @@
 				  <Sample Title="OHLC chart" SampleName="OHLC" SearchTags="high,low,open,close"/>
 			  </CardLayout>
 		  </SubCategory>
+
       </Category>
       
 		  <Category Title="Real-time Charts">
