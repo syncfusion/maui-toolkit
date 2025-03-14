@@ -444,9 +444,8 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 				{
 #if MACCATALYST || IOS
 					InvalidateMeasure(); 
-#elif WINDOWS
-					UpdateImageIcon();
 #endif
+					UpdateImageIcon();
 				}
 			}
 		}
