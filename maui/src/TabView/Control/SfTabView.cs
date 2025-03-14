@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Syncfusion.Maui.Toolkit.Themes;
 using Syncfusion.Maui.Toolkit.Helper;
+using System.ComponentModel;
 
 namespace Syncfusion.Maui.Toolkit.TabView
 {
@@ -74,6 +75,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		SfHorizontalContent? _tabContentContainer;
 		SfTabBar? _tabHeaderContainer;
+		CenterButtonView? _centerButtonView;
 		SfGrid? _parentGrid;
 		TabSelectionChangedEventArgs? _selectionChangedEventArgs;
 
@@ -147,6 +149,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				typeof(SfTabView),
 				TabWidthMode.Default,
 				propertyChanged: OnTabWidthModePropertyChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="TabHeaderAlignment"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty TabHeaderAlignmentProperty =
+			BindableProperty.Create(
+				nameof(TabHeaderAlignment), 
+				typeof(TabHeaderAlignment), 
+				typeof(SfTabView), 
+				TabHeaderAlignment.Start, 
+				propertyChanged: OnTabHeaderAlignmentPropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="IndicatorBackground"/> bindable property.
@@ -331,12 +344,43 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				false,
 				propertyChanged: OnEnableVirtualizationChanged);
 
-		static readonly BindableProperty IsContentTransitionEnabledProperty =
+		/// <summary>
+		/// Identifies the <see cref="IsCenterButtonEnabled"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty IsCenterButtonEnabledProperty =
+			BindableProperty.Create(
+				nameof(IsCenterButtonEnabled),
+				typeof(bool),
+				typeof(SfTabView),
+				false,
+				BindingMode.Default,
+				null,
+				propertyChanged: OnIsCenterButtonEnabledChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="CenterButtonSettings"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty CenterButtonSettingsProperty =
+			BindableProperty.Create(
+				nameof(CenterButtonSettings),
+				typeof(CenterButtonSettings),
+				typeof(SfTabView),
+				null,
+				BindingMode.Default,
+				null,
+				defaultValueCreator: bindale => GetCenterButtonSettingsDefaultValue(),
+				propertyChanged: OnCenterButtonSettingsChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="IsContentTransitionEnabled"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty IsContentTransitionEnabledProperty =
 			BindableProperty.Create(
 				nameof(IsContentTransitionEnabled),
 				typeof(bool),
 				typeof(SfTabView),
-				true);
+				true,
+				propertyChanged: OnIsContentTransitionEnabledChanged);
 
 		static readonly BindableProperty IsContentLoopingEnabledProperty =
 			BindableProperty.Create(
@@ -1162,6 +1206,63 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			set => this.SetValue(IndicatorStrokeThicknessProperty, value);
 		}
 
+		/// <summary> 
+		/// Gets or sets a value that can be used to customize the header position of the MAUI TabView. 
+		/// </summary> 
+		/// <value> 
+		/// It accepts the TabHeaderAlignment values, and the default value is TabHeaderAlignment.Start. 
+		/// </value> 		
+		/// <remarks>  
+		/// Note: This property is applicable only when the <c>TabWidthMode</c> is set to <c>SizeToContent</c>.
+		/// </remarks> 
+		/// <example>
+		/// Here is an example of how to set the <see cref="TabHeaderAlignment"/> property.
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView TabWidthMode="SizeToContent" TabHeaderAlignment="Center">
+		///     <tabView:SfTabItem Header="TAB 1">
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		///     <tabView:SfTabItem Header="TAB 2">
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="More Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		/// </tabView:SfTabView>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// var tabView = new SfTabView();
+		/// tabView.TabWidthMode = TabWidthMode.SizeToContent;
+		/// tabView.TabHeaderAlignment = TabHeaderAlignment.Center;
+		/// var tabItems = new TabItemCollection
+		/// {
+		///     new SfTabItem
+		///     {
+		///         Header = "TAB 1",
+		///         Content = new Label { Text = "Content" }
+		///     },
+		///     new SfTabItem
+		///     {
+		///         Header = "TAB 2",
+		///         Content = new Label { Text = "More Content" }
+		///     }
+		/// };
+		///
+		/// tabView.Items = tabItems;
+		/// Content = tabView;
+		/// ]]></code>
+		/// </example>
+		public TabHeaderAlignment TabHeaderAlignment
+		{
+			get => (TabHeaderAlignment)GetValue(TabHeaderAlignmentProperty);
+			set => SetValue(TabHeaderAlignmentProperty, value);
+		}
+
 		/// <summary>
 		/// Gets or sets a value indicating whether to enable the scroll buttons.
 		/// </summary>
@@ -1345,6 +1446,105 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		}
 
 		/// <summary>
+		/// Gets or sets a value that indicates whether the center button is enabled in the Tab View.
+		/// </summary>
+		/// <value>
+		/// It accepts the Boolean values, and the default value is false. 
+		/// </value>
+		/// <example>
+		/// Here is an example of how to set the <see cref="IsCenterButtonEnabled"/> property.
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView IsCenterButtonEnabled="True" />
+		/// ]]></code>
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// SfTabView tabView = new SfTabView();
+		/// tabView.IsCenterButtonEnabled = true;
+		/// ]]></code>
+		/// </example>
+		public bool IsCenterButtonEnabled
+		{
+			get => (bool)GetValue(IsCenterButtonEnabledProperty);
+			set => SetValue(IsCenterButtonEnabledProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets a value that can be used to customize the appearance of the center button in Tab View.
+		/// </summary>
+		/// <value>
+		/// It accepts the <see cref="CenterButtonSettings"/> value.
+		/// </value>
+		/// <example>
+		/// The below examples show, how to use the property.
+		/// # [XAML](#tab/tabid-3)
+		/// <code Lang="XAML"><![CDATA[
+		/// <tabView:SfTabView x:Name="tabView" IsCenterButtonEnabled="True">
+		/// <tabView:SfTabView.CenterButtonSettings>
+		/// <tabView:CenterButtonSettings Height="75", Width="150", CornerRadius="10"
+		///								  StrokeThickness="3" Stroke="Aqua" TextColor="HotPink"
+		///								  Title="Home" FontAttributes="Bold" FontSize="20" FontFamily="SevillanaRegular"
+		///								  ImageSource="home.png" DisplayMode="ImageWithText" ImageSize="30"/>
+		/// </tabView:SfTabView.CenterButtonSettings>
+		/// </tabView:SfTabView>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-4)
+		/// <code Lang="C#"><![CDATA[
+		/// var tabView = new SfTabView()
+		/// {
+		///	   IsCenterButtonEnabled=true,
+		///    CenterButtonSettings = new CenterButtonSettings()
+		///    {
+		///        Height = 75,
+		///        Width = 150,
+		///        CornerRadius = 10,
+		///        StrokeThickness = 3,
+		///        Stroke = Colors.Aqua,
+		///        TextColor = Colors.HotPink,
+		///        Title = "Home",
+		///        FontAttributes = FontAttributes.Bold,
+		///        FontSize = 20,
+		///        FontFamily = "SevillanaRegular",
+		///        ImageSource = "home.png",
+		///        DisplayMode = CenterButtonDisplayMode.ImageWithText,
+		///        ImageSize = 30
+		///    },
+		/// };
+		/// ]]></code>
+		/// </example>
+		public CenterButtonSettings CenterButtonSettings
+		{
+			get { return (CenterButtonSettings)GetValue(CenterButtonSettingsProperty); }
+			set { SetValue(CenterButtonSettingsProperty, value); }
+		}
+
+		/// <summary>  
+		/// Gets or sets a value that determines whether a transition animation is enabled for the tab content when switching between tabs. 
+		/// </summary>  
+		/// <value>  
+		/// It accepts the Boolean values, and the default value is True.  
+		/// </value>  
+		/// <example>
+		/// Here is an example of how to set the <see cref="IsContentTransitionEnabled"/> property.
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView IsContentTransitionEnabled="True" />
+		/// ]]></code>
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// SfTabView tabView = new SfTabView();
+		/// tabView.IsContentTransitionEnabled = true;
+		/// ]]></code>
+		/// </example>
+		public bool IsContentTransitionEnabled
+		{
+			get => (bool)GetValue(IsContentTransitionEnabledProperty);
+			set => SetValue(IsContentTransitionEnabledProperty, value);
+		}
+
+		/// <summary>
 		/// Gets or sets the color of the scroll button icon when it is disabled.
 		/// </summary>
 		/// <value>
@@ -1354,12 +1554,6 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			get { return (Color)GetValue(ScrollButtonDisabledIconColorProperty); }
 			set { SetValue(ScrollButtonDisabledIconColorProperty, value); }
-		}
-
-		bool IsContentTransitionEnabled
-		{
-			get => (bool)GetValue(IsContentTransitionEnabledProperty);
-			set => SetValue(IsContentTransitionEnabledProperty, value);
 		}
 
 		bool IsContentLoopingEnabled
@@ -1430,6 +1624,24 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </example>
 		public event EventHandler<SelectionChangingEventArgs>? SelectionChanging;
 
+		/// <summary>
+		/// Occurs when the Center button is tapped.
+		/// </summary>
+		/// <example>
+		/// Here is an example of how to register the <see cref="CenterButtonTapped"/> event.
+		/// 
+		/// # [C#](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// SfTabView tabView = new SfTabView();
+		/// tabView.CenterButtonTapped += OnCenterButtonTapped;
+		/// private void OnCenterButtonTapped(object sender, SelectionChangingEventArgs e)
+		/// {
+		///    e.Cancel = true;
+		/// }
+		/// ]]></code>
+		/// </example>
+		public event EventHandler<EventArgs>? CenterButtonTapped;
+
 		#endregion
 
 		#region Constructor
@@ -1479,6 +1691,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			base.OnPropertyChanged(propertyName);
 		}
 
+		/// <summary>
+		/// Call when the binding context is changed.
+		/// </summary>
+		/// <exclude/>
+		protected override void OnBindingContextChanged()
+		{
+			base.OnBindingContextChanged();
+			if (CenterButtonSettings != null)
+			{
+				SfTabView.SetInheritedBindingContext(CenterButtonSettings, BindingContext);
+			}
+		}
+
 		#endregion
 
 		#region Internal Methods
@@ -1517,6 +1742,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			SelectionChanging?.Invoke(this, args);
 		}
 
+		/// <summary>
+		/// Invokes <see cref="CenterButtonTapped"/> event.
+		/// </summary>
+		/// <param name="args">The <see cref="EventArgs"/> containing the event data.</param>
+		internal void RaiseCenterButtonTappedEvent(EventArgs args)
+		{
+			CenterButtonTapped?.Invoke(this, args);
+		}
 		#endregion
 
 		#region Property Changed Methods
@@ -1607,6 +1840,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		static void OnContentTransitionDurationChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateContentTransitionDuration();
 
 		/// <summary>
+		/// Handles changes to the <see cref="IsContentTransitionEnabled"/> property.
+		/// </summary>		
+		static void OnIsContentTransitionEnabledChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateContentTransitionDuration();
+
+		/// <summary>
 		/// Handles changes to the <see cref="IndicatorCornerRadius"/> property.
 		/// </summary>
 		static void OnIndicatorCornerRadiusChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateCornerRadius((CornerRadius)newValue);
@@ -1625,6 +1863,57 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// Handles changes to the <see cref="EnableVirtualization"/> property.
 		/// </summary>
 		static void OnEnableVirtualizationChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateEnableVirtualization();
+
+		/// <summary>
+		/// Handles changes to the <see cref="IsCenterButtonEnabled"/> property.
+		/// </summary>
+		static void OnIsCenterButtonEnabledChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateIsCenterButtonEnabled();
+
+		/// <summary>
+		/// Handles changes to the <see cref="CenterButtonSettings"/> property.
+		/// </summary>
+		static void OnCenterButtonSettingsChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfTabView tabView)
+			{
+				tabView.OnDefaultCenterButtonSettingsChanged();
+				tabView.CenterButtonSettings.PropertyChanged -= tabView.OnDefaultCenterButtonSettings_PropertyChanged;
+				tabView.CenterButtonSettings.PropertyChanged += tabView.OnDefaultCenterButtonSettings_PropertyChanged;
+			}
+
+			if (oldValue != null)
+			{
+				if (oldValue is CenterButtonSettings previousSetting)
+				{
+					previousSetting.BindingContext = null;
+					previousSetting.Parent = null;
+				}
+			}
+
+			if (newValue != null)
+			{
+				if (newValue is CenterButtonSettings currentSetting && bindable is SfTabView sfTabView)
+				{
+					currentSetting.Parent = sfTabView;
+					SetInheritedBindingContext(sfTabView.CenterButtonSettings, sfTabView.BindingContext);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Initialize CenterButtonSettings.
+		/// </summary>
+		/// <returns>The default value of BadgeSettings.</returns>
+		private static CenterButtonSettings GetCenterButtonSettingsDefaultValue()
+		{
+			return new CenterButtonSettings();
+		}
+
+		/// <summary>
+		/// Handles changes to the <see cref="TabHeaderAlignment"/> property.
+		/// </summary>		
+
+		static void OnTabHeaderAlignmentPropertyChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateTabHeaderAlignment((TabHeaderAlignment)newValue);
 
 		#endregion
 
@@ -1695,6 +1984,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 			InitializeHeaderContainer();
 			InitializeTabContentContainer();
+			InitializeCenterButton();
 
 			_parentGrid.Children.Add(_tabHeaderContainer);
 			_parentGrid.Children.Add(_tabContentContainer);
@@ -1748,6 +2038,28 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			_tabHeaderContainer.ScrollButtonBackground = ScrollButtonBackground;
 			_tabHeaderContainer.ScrollButtonColor = ScrollButtonColor;
 			_tabHeaderContainer.ScrollButtonDisabledIconColor = ScrollButtonDisabledIconColor;
+		}
+
+		/// <summary>
+		/// Initialize the center button.
+		/// </summary>
+		void InitializeCenterButton()
+		{
+			_centerButtonView = new CenterButtonView()
+			{
+				HorizontalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.Start,
+			};
+
+			_centerButtonView.CenterButtonTapped += OnCenterButtonTapped;
+		}
+
+		/// <summary>
+		/// Handles the CenterButtonTapped event of the center button.
+		/// </summary>
+		void OnCenterButtonTapped(object? sender, EventArgs e)
+		{
+			RaiseCenterButtonTappedEvent(e);
 		}
 
 		/// <summary>
@@ -1869,6 +2181,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 		}
 
+		/// <summary>  
+		/// Updates the header position of the MAUI TabView. 
+		/// </summary>  
+		void UpdateTabHeaderAlignment(TabHeaderAlignment tabHeaderAlignment)
+		{
+			if (_tabHeaderContainer != null)
+			{
+				_tabHeaderContainer.TabHeaderAlignment = tabHeaderAlignment;
+			}
+		}
+
 		/// <summary>
 		/// Updates the placement of the tab bar within the grid.
 		/// </summary>
@@ -1892,8 +2215,36 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					if (TabBarHeight >= 0)
 					{
 						_parentGrid.RowDefinitions[tabHeaderContainerIndex].Height = TabBarHeight;
+						
 					}
 					_parentGrid.RowDefinitions[tabContentContainerIndex].Height = GridLength.Star;
+				}
+
+				UpdateCenterButtonPosition();
+			}
+		}
+
+		/// <summary>
+		/// Updates the position and size of the center button based on the tab bar placement.
+		/// </summary>
+		void UpdateCenterButtonPosition()
+		{
+			if (IsCenterButtonEnabled && _centerButtonView is not null && TabWidthMode is TabWidthMode.Default)
+			{
+				if (TabBarPlacement is TabBarPlacement.Top)
+				{
+					_centerButtonView.HorizontalOptions = LayoutOptions.Center;
+					_centerButtonView.VerticalOptions = LayoutOptions.Start;
+				}
+				else
+				{
+					_centerButtonView.HorizontalOptions = LayoutOptions.Center;
+					_centerButtonView.VerticalOptions = LayoutOptions.End;
+				}
+
+				if (CenterButtonSettings is not null && CenterButtonSettings.Height >= 0)
+				{
+					_centerButtonView.HeightRequest = CenterButtonSettings.Height;
 				}
 			}
 		}
@@ -1906,6 +2257,23 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			if (_tabHeaderContainer != null)
 			{
 				_tabHeaderContainer.TabWidthMode = tabWidthMode;
+
+				if (IsCenterButtonEnabled && _parentGrid is not null)
+				{
+					if (tabWidthMode is TabWidthMode.Default)
+					{
+						UpdateCenterButtonPosition();
+						_parentGrid.Children.Add(_centerButtonView);
+						Grid.SetRowSpan(_centerButtonView, 2);
+					}
+					else
+					{
+						if (_parentGrid.Children.Contains(_centerButtonView))
+						{
+							_parentGrid.Children.Remove(_centerButtonView);
+						}
+					}
+				}
 			}
 		}
 
@@ -2003,14 +2371,16 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void UpdateContentTransitionDuration()
 		{
+			double transitionDuration = this.IsContentTransitionEnabled ? (this.ContentTransitionDuration > 0 ? this.ContentTransitionDuration : (double)ContentTransitionDurationProperty.DefaultValue) : 0;
+
 			if (_tabContentContainer != null)
 			{
-				_tabContentContainer.ContentTransitionDuration = ContentTransitionDuration > 0 ? ContentTransitionDuration : (double)ContentTransitionDurationProperty.DefaultValue;
+				_tabContentContainer.ContentTransitionDuration = transitionDuration;
 			}
 
 			if (_tabHeaderContainer != null)
 			{
-				_tabHeaderContainer.ContentTransitionDuration = ContentTransitionDuration > 0 ? ContentTransitionDuration : (double)ContentTransitionDurationProperty.DefaultValue;
+				_tabHeaderContainer.ContentTransitionDuration = transitionDuration;
 			}
 		}
 
@@ -2051,6 +2421,134 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			if (_tabContentContainer != null)
 				_tabContentContainer.EnableVirtualization = EnableVirtualization;
+		}
+
+		/// <summary>
+		/// Updates the state of the center button in the tab header based on the current value of the <see cref="IsCenterButtonEnabled"/> property.
+		/// </summary>
+		void UpdateIsCenterButtonEnabled()
+		{
+			if (_parentGrid is null)
+			{
+				return;
+			}
+
+			if (_tabHeaderContainer != null)
+			{
+				_tabHeaderContainer.IsCenterButtonEnabled = IsCenterButtonEnabled;
+			}
+
+			if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+			{
+				Grid.SetRowSpan(_centerButtonView, 2);
+				UpdateCenterButtonPosition();
+				_parentGrid.Children.Add(_centerButtonView);
+				if (_centerButtonView is not null && CenterButtonSettings is not null && _centerButtonView.WidthRequest != CenterButtonSettings.Width)
+				{
+					OnDefaultCenterButtonSettingsChanged();
+				}
+			}
+			else
+			{
+				if (_parentGrid.Children.Contains(_centerButtonView))
+				{
+					_parentGrid.Children.Remove(_centerButtonView);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Updates the center button's properties in the tab header container based on the current CenterButtonSettings.
+		/// </summary>
+		void OnDefaultCenterButtonSettingsChanged()
+		{
+			if (_tabHeaderContainer is null || CenterButtonSettings is null || _centerButtonView is null)
+			{
+				return;
+			}
+
+			_tabHeaderContainer.UpdateCenterButtonWidth(CenterButtonSettings.Width);
+			_tabHeaderContainer.UpdateCenterButtonHeight(CenterButtonSettings.Height);
+
+			_centerButtonView.UpdateCenterButtonTitle(CenterButtonSettings.Title);
+			_centerButtonView.UpdateCenterButtonWidth(CenterButtonSettings.Width);
+			_centerButtonView.UpdateCenterButtonHeight(CenterButtonSettings.Height);
+			_centerButtonView.UpdateCenterButtonBackground(CenterButtonSettings.Background);
+			_centerButtonView.UpdateCenterButtonStroke(CenterButtonSettings.Stroke);
+			_centerButtonView.UpdateCenterButtonStrokeThickness(CenterButtonSettings.StrokeThickness);
+			_centerButtonView.UpdateCenterButtonCornerRadius(CenterButtonSettings.CornerRadius);
+			_centerButtonView.UpdateCenterButtonFontFamily(CenterButtonSettings.FontFamily);
+			_centerButtonView.UpdateCenterButtonFontAttributes(CenterButtonSettings.FontAttributes);
+			_centerButtonView.UpdateCenterButtonFontSize(CenterButtonSettings.FontSize);
+			_centerButtonView.UpdateCenterButtonTextColor(CenterButtonSettings.TextColor);
+			_centerButtonView.UpdateCenterButtonImageSource(CenterButtonSettings.ImageSource);
+			_centerButtonView.UpdateCenterButtonImageSize(CenterButtonSettings.ImageSize);
+			_centerButtonView.UpdateCenterButtonDisplayMode(CenterButtonSettings.DisplayMode);
+			_centerButtonView.UpdateCenterButtonFontAutoScalingEnabled(CenterButtonSettings.FontAutoScalingEnabled);
+		}
+
+		/// <summary>
+		/// Updates specific properties of the center button in the tab header container when the property of center button seetings changed.
+		/// </summary>
+		/// <param name="sender">The source of the event.</param>
+		/// <param name="e">The PropertyChangedEventArgs containing the name of the property that changed.</param>
+		void OnDefaultCenterButtonSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+		{
+			if (_tabHeaderContainer is null || CenterButtonSettings is null || _centerButtonView is null)
+			{
+				return;
+			}
+
+			switch (e.PropertyName)
+			{
+				case "Title":
+					_centerButtonView.UpdateCenterButtonTitle(CenterButtonSettings.Title);
+					break;
+				case "Width":
+					_tabHeaderContainer.UpdateCenterButtonWidth(CenterButtonSettings.Width);
+					_centerButtonView.UpdateCenterButtonWidth(CenterButtonSettings.Width);
+					break;
+				case "Height":
+					_tabHeaderContainer.UpdateCenterButtonHeight(CenterButtonSettings.Height);
+					_centerButtonView.UpdateCenterButtonHeight(CenterButtonSettings.Height);
+					break;
+				case "Background":
+					_centerButtonView.UpdateCenterButtonBackground(CenterButtonSettings.Background);
+					break;
+				case "Stroke":
+					_centerButtonView.UpdateCenterButtonStroke(CenterButtonSettings.Stroke);
+					break;
+				case "StrokeThickness":
+					_centerButtonView.UpdateCenterButtonStrokeThickness(CenterButtonSettings.StrokeThickness);
+					break;
+				case "CornerRadius":
+					_centerButtonView.UpdateCenterButtonCornerRadius(CenterButtonSettings.CornerRadius);
+					break;
+				case "FontFamily":
+					_centerButtonView.UpdateCenterButtonFontFamily(CenterButtonSettings.FontFamily);
+					break;
+				case "FontAttributes":
+					_centerButtonView.UpdateCenterButtonFontAttributes(CenterButtonSettings.FontAttributes);
+					break;
+				case "FontSize":
+					_centerButtonView.UpdateCenterButtonFontSize(CenterButtonSettings.FontSize);
+					break;
+				case "FontAutoScalingEnabled":
+					_centerButtonView.UpdateCenterButtonFontAutoScalingEnabled(CenterButtonSettings.FontAutoScalingEnabled);
+					break;
+				case "TextColor":
+					_centerButtonView.UpdateCenterButtonTextColor(CenterButtonSettings.TextColor);
+					break;
+				case "ImageSource":
+					_centerButtonView.UpdateCenterButtonImageSource(CenterButtonSettings.ImageSource);
+					break;
+				case "ImageSize":
+					_centerButtonView.UpdateCenterButtonImageSize(CenterButtonSettings.ImageSize);
+					break;
+				case "DisplayMode":
+					_centerButtonView.UpdateCenterButtonDisplayMode(CenterButtonSettings.DisplayMode);
+					break;
+			}
 		}
 
 		/// <summary>

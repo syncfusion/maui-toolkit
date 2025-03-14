@@ -472,7 +472,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <seealso cref="SfCalendar.SelectionMode"/>
         /// <example>
         /// The following code demonstrates, how to use the Cell Template property in the year view.
-        /// #[XAML](#tab/tabid-1)
+        /// # [XAML](#tab/tabid-1)
         /// <code Lang="XAML"><![CDATA[
         /// <calendar:SfCalendar x:Name= "Calendar" View = "Decade">
         ///              < calendar:SfCalendar.YearView>

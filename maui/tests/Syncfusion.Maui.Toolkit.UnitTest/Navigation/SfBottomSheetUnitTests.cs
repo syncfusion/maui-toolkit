@@ -451,6 +451,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Theory]
+		[InlineData(60, 60)]
+		[InlineData(5, 5)]
+		[InlineData(120, 120)]
+		public void GrabberAreaHeight(double input, double expected)
+		{
+			_bottomSheet.GrabberAreaHeight = input;
+
+			var actual = _bottomSheet.GrabberAreaHeight;
+
+			Assert.Equal(expected, actual);
+		}
+
+		[Theory]
 		[InlineData(true, true)]
 		[InlineData(false, false)]
 		public void CollapseOnOverlayTap(bool input, bool expected)

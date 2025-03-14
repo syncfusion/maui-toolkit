@@ -77,6 +77,11 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		const int UpDownButtonSize = 28;
 
 		/// <summary>
+		/// Represents the size of the up/down button when placed vertically.
+		/// </summary>
+		const int VerticalUpDownButtonSize = 24;
+
+		/// <summary>
 		/// Padding around the buttons in pixels.
 		/// </summary>
 		const int ButtonPadding = 2;
@@ -136,6 +141,13 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// This allows for cancellation of ongoing long press tasks when needed.
 		/// </summary>
 		CancellationTokenSource? _cancellationTokenSource;
+
+#if ANDROID
+		/// <summary>
+		/// Padding around the buttons in pixels.
+		/// </summary>
+		const int AndroidButtonHeightPadding = 8;
+#endif
 
 		#endregion
 
@@ -569,7 +581,6 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		{
 			if (bindable is SfNumericUpDown numericUpDown)
 			{
-
 				SfNumericUpDown.UpdateSpinButtonPlacement(numericUpDown);
 			}
 		}
@@ -585,6 +596,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			if (bindable is SfNumericUpDown numericUpDown)
 			{
 				numericUpDown.AddDownButtonTemplate((DataTemplate)newValue);
+				numericUpDown.GetMinimumSize();
 				numericUpDown.InvalidateDrawable();
 				numericUpDown.UpdateTextInputLayoutUI();
 			}
@@ -601,6 +613,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			if (bindable is SfNumericUpDown numericUpDown)
 			{
 				numericUpDown.AddUpButtonTemplate((DataTemplate)newValue);
+				numericUpDown.GetMinimumSize();
 				numericUpDown.InvalidateDrawable();
 				numericUpDown.UpdateTextInputLayoutUI();
 			}
@@ -780,8 +793,8 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <param name="canvas">The canvas on which the buttons are drawn.</param>
 		void DrawButtons(ICanvas canvas)
 		{
-			bool customUpButton = UpButtonTemplate != null && _upButtonView != null && IsInlinePlacement();
-			bool customDownButton = DownButtonTemplate != null && _downButtonView != null && IsInlinePlacement();
+			bool customUpButton = UpButtonTemplate != null && _upButtonView != null;
+			bool customDownButton = DownButtonTemplate != null && _downButtonView != null;
 
 			// Set layout for the up button or draw default up button
 			if (customUpButton)
@@ -929,12 +942,25 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		}
 
 		/// <summary>
+		/// Gets the size of the up/down button based on its placement and availability.
+		/// </summary>
+		/// <returns>The size of the up/down button, depending on whether it is placed inline vertically.</returns>
+		float GetUpDownButtonSize()
+		{
+			if(_upButtonView != null && _downButtonView != null && IsInlineVerticalPlacement())
+			{
+				return VerticalUpDownButtonSize;
+			}
+			return UpDownButtonSize;
+		}
+
+		/// <summary>
 		/// Configures the vertical positioning of buttons within the given bounding rectangle.
 		/// </summary>
 		/// <param name="bounds">The bounding rectangle that defines the available space for button placement.</param>
 		void ConfigureVerticalButtonPositions(RectF bounds)
 		{
-			float xOffset = bounds.X + bounds.Width - UpDownButtonSize;
+			float xOffset = bounds.X + bounds.Width - GetUpDownButtonSize() - ButtonPadding;
 #if ANDROID
     xOffset -= 4;
 #endif
@@ -961,10 +987,18 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 					_tempUpDownX = 4;
 				}
 			}
-			_upButtonRectF.Y = bounds.Center.Y - (UpDownButtonSize * 0.75f) - ButtonPadding;
-			_downButtonRectF.Y = bounds.Center.Y - (UpDownButtonSize * 0.25f) + ButtonPadding;
+			if (_upButtonView == null || _downButtonView == null)
+			{
+				_upButtonRectF.Y = bounds.Center.Y - (UpDownButtonSize * 0.75f) - ButtonPadding;
+				_downButtonRectF.Y = bounds.Center.Y - (UpDownButtonSize * 0.25f) + ButtonPadding;
+			}
+			else
+			{
+				_upButtonRectF.Y = bounds.Center.Y - GetUpDownButtonSize()-ButtonPadding;
+				_downButtonRectF.Y = _upButtonRectF.Bottom;
+			}
 
-			UpdateButtonSize(UpDownButtonSize);
+			UpdateButtonSize(GetUpDownButtonSize());
 		}
 
 		/// <summary>
@@ -1010,7 +1044,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 					break;
 			}
 			
-			UpdateButtonSize(UpDownButtonSize);
+			UpdateButtonSize(GetUpDownButtonSize());
 		}
 
 		/// <summary>
@@ -1196,24 +1230,36 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 
 			// Calculate minimum height based on placement mode
 			MinimumHeightRequest = UpDownPlacementMode == NumericUpDownPlacementMode.InlineVertical
-				? SfNumericUpDown.DetermineMinimumHeightForVerticalPlacement()
+				? SfNumericUpDown.DetermineMinimumHeightForVerticalPlacement(this)
 				: SfNumericUpDown.DetermineMinimumHeightForInlinePlacement();
 
 			// Set minimum width request commonly for both placement modes
 			MinimumWidthRequest = 2 * ButtonSize;
 		}
 
-		private static double DetermineMinimumHeightForVerticalPlacement()
+		static double DetermineMinimumHeightForVerticalPlacement(SfNumericUpDown numericUpDown)
 		{
 			// Use platform-specific directives only if necessary
-		#if !ANDROID
-			return (2 * UpDownButtonSize) - (UpDownButtonSize / 3);
-		#else
-			return 2 * UpDownButtonSize;
-		#endif
+			bool isVerticalTemplate = numericUpDown._upButtonView != null && numericUpDown._downButtonView != null;
+			if (!isVerticalTemplate)
+			{
+#if !ANDROID
+				return (2 * UpDownButtonSize) - (UpDownButtonSize / 3);
+#else
+				return 2 * UpDownButtonSize;
+#endif
+			}
+			else
+			{
+#if !ANDROID
+				return (2 * VerticalUpDownButtonSize) + ButtonPadding;
+#else
+				return (2 * VerticalUpDownButtonSize) + AndroidButtonHeightPadding + ButtonPadding;
+#endif
+			}
 		}
 
-		private static double DetermineMinimumHeightForInlinePlacement()
+		static double DetermineMinimumHeightForInlinePlacement()
 		{
 			// For inline placement, return height based on button size
 			return ButtonSize;
@@ -1231,6 +1277,8 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				OnNumericEntryParentChanged();
 				_textInputLayout.DownButtonColor = _downButtonColor;
 				_textInputLayout.UpButtonColor = _upButtonColor;
+				_textInputLayout.UpIconTemplate = _upButtonView;
+				_textInputLayout.DownIconTemplate = _downButtonView;
 			}
 		}
 
@@ -1251,7 +1299,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <returns>
 		/// <c>true</c> if the placement mode is InlineVertical; otherwise, <c>false</c>.
 		/// </returns>
-		bool IsInlineVerticalPlacement()
+		internal bool IsInlineVerticalPlacement()
 		{
 			return UpDownPlacementMode == NumericUpDownPlacementMode.InlineVertical;
 		}
@@ -1883,6 +1931,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			if (buttonView != null)
 			{
 				SetupViewBinding(buttonView, "IsVisible");
+				AutomationProperties.SetIsInAccessibleTree(buttonView, false);
 				if (!IsTextInputLayout)
 				{
 					Add(buttonView);
@@ -1921,7 +1970,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		void AddUpButtonTemplate(DataTemplate newView)
 		{
 			RemoveExistingUporDownButtonView(_upButtonView);
-
+			_upButtonView = null;
 			if (UpButtonTemplate != null)
 			{
 				AddNewButtonView(ref _upButtonView, newView);
@@ -1935,8 +1984,8 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		void AddDownButtonTemplate(DataTemplate newView)
 		{
 			RemoveExistingUporDownButtonView(_downButtonView);
-
-			if (UpButtonTemplate != null)
+			_downButtonView = null;
+			if (DownButtonTemplate != null)
 			{
 				AddNewButtonView(ref _downButtonView, newView);
 			}

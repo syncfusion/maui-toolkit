@@ -163,6 +163,18 @@
 			base.OnDataSourceChanged(oldValue, newValue);
 		}
 
+		internal override void ValidateYValues()
+		{
+			foreach (var yValue in YValues)
+			{
+				if (double.IsNaN(yValue))
+				{
+					ValidateDataPoints(YValues);
+					break;
+				}
+			}
+		}
+
 		internal override void GenerateDataPoints()
 		{
 			GeneratePoints([YBindingPath], YValues);
@@ -185,18 +197,6 @@
 			return YValues == null ? 0f : YValues[index];
 		}
 
-		internal override void ValidateYValues()
-		{
-			foreach (var yValue in YValues)
-			{
-				if (double.IsNaN(yValue))
-				{
-					ValidateDataPoints(YValues);
-					break;
-				}
-			}
-		}
-
 		internal override void ResetEmptyPointIndexes()
 		{
 			if (EmptyPointIndexes.Length != 0)
@@ -216,6 +216,7 @@
 				}
 			}
 		}
+
 		#endregion
 
 		#region Private Methods

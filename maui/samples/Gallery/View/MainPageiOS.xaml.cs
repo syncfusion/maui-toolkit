@@ -24,7 +24,8 @@ namespace Syncfusion.Maui.ControlsGallery
 		bool _isThemePopupOpen;
 
 		/// <summary>
-		/// 
+		/// Initializes the main page of the IOS application.
+		/// Sets up the initial state of the UI elements. Configures the theme based on the current application theme.
 		/// </summary>
 		public MainPageiOS()
 		{
@@ -39,7 +40,8 @@ namespace Syncfusion.Maui.ControlsGallery
 		}
 
 		/// <summary>
-		/// 
+		/// Update the UI based on the new binding context.
+		/// Ensures that the UI reflects the latest data from the view model.
 		/// </summary>
 		protected override void OnBindingContextChanged()
 		{
@@ -50,8 +52,10 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-
-		private void ArrangeControlInColumn()
+		/// <summary>
+		///  Arranges the controls in a column layout based on the current view model and displays the list of controls in the main page.
+		/// </summary>
+		void ArrangeControlInColumn()
 		{
 			if (BindingContext is SamplesViewModel viewModel)
 			{
@@ -59,7 +63,12 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private async void Control_Tapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tapped event for a control and manages visibility of various UI elements.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void Control_Tapped(object sender, EventArgs e)
 		{
 			busyIndicatorPage.IsVisible = false;
 			popUpSamplePage.Children.Clear();
@@ -106,7 +115,13 @@ namespace Syncfusion.Maui.ControlsGallery
 				UpdatedSortCollection.IsVisible = false;
 			}
 		}
-		private void HandleSampleCategories(SfEffectsViewAdv? control)
+
+		/// <summary>
+		/// Processes the sample categories associated with the tapped control.
+		/// Adjusts UI elements based on the number of categories.
+		/// </summary>
+		/// <param name="control">The control that was tapped.</param>
+		void HandleSampleCategories(SfEffectsViewAdv? control)
 		{
 			var controlObjectModel = (control?.BindingContext as ControlModel);
 			if (controlObjectModel != null)
@@ -128,7 +143,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private void LoadSamplePage(ControlModel controlModel, SampleCategoryModel? sampleCategoryModel = null)
+		/// <summary>
+		/// Loads the sample page for a given control model and optional sample category.
+		/// Initiates loading of the first sample in the category.
+		/// </summary>
+		/// <param name="controlModel">The control model to load.</param>
+		/// <param name="sampleCategoryModel">Optional sample category model.</param>
+		void LoadSamplePage(ControlModel controlModel, SampleCategoryModel? sampleCategoryModel = null)
 		{
 			sampleViewPage.BindingContext = controlModel;
 			titleGrid.IsVisible = false;
@@ -148,12 +169,22 @@ namespace Syncfusion.Maui.ControlsGallery
 			LoadSampleBasedOnCategory(controlModel.SampleCategories![0].SampleSubCategories![0]);
 		}
 
-		private static bool IsSampleCategoryContainsSubCategory(SampleCategoryModel sampleCategory)
+		/// <summary>
+		/// Checks if the SampleSubCategories collection of the given category has more than one item.
+		/// </summary>
+		/// <param name="sampleCategory">The sample category to check.</param>
+		/// <returns>True if the category contains multiple subcategories, false otherwise.</returns>
+		static bool IsSampleCategoryContainsSubCategory(SampleCategoryModel sampleCategory)
 		{
 			return sampleCategory.SampleSubCategories?.Count > 1;
 		}
 
-		private void UpdateChipViewBindingContext(SampleCategoryModel? sampleSubCategory)
+		/// <summary>
+		/// Sets the visibility and height of the chip view based on the presence of subcategories.
+		/// Updates the chipView visibility and height, and sets its binding context if subcategories exist.
+		/// </summary>
+		/// <param name="sampleSubCategory">The sample subcategory to update the binding for.</param>
+		void UpdateChipViewBindingContext(SampleCategoryModel? sampleSubCategory)
 		{
 			bool hasSubCategories = sampleSubCategory != null && IsSampleCategoryContainsSubCategory(sampleSubCategory);
 
@@ -166,14 +197,23 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-
-		private void Entry_Focused(object sender, FocusEventArgs e)
+		/// <summary>
+		/// Handles the focus event of the search entry.Prepares the UI for the search functionality.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The focus event arguments.</param>
+		void Entry_Focused(object sender, FocusEventArgs e)
 		{
 			searchListGrid.IsVisible = true;
 			searchedSampleScrollViewer.IsVisible = true;
 		}
 
-		private async void Category_Tapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tapped event for a category and update the UI based on the selected category.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void Category_Tapped(object sender, EventArgs e)
 		{
 			var sampleCategoryModel = ((sender as SfEffectsViewAdv)?.BindingContext as SampleCategoryModel);
 			if (_previousSampleCategoryModel != null)
@@ -191,7 +231,12 @@ namespace Syncfusion.Maui.ControlsGallery
 			busyIndicatorPage.IsVisible = false;
 		}
 
-		private void HandleSampleSubcatergories(SampleCategoryModel? sampleCategoryModel)
+		/// <summary>
+		/// Handles the sample subcategories for a given sample category model.
+		/// Resets the state of previously selected subcategories if necessary.
+		/// </summary>
+		/// <param name="sampleCategoryModel">The sample category model to handle.</param>
+		void HandleSampleSubcatergories(SampleCategoryModel? sampleCategoryModel)
 		{
 			if (_subCategoryModel != null)
 			{
@@ -218,7 +263,12 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private void LoadSearchedSample(SampleModel sampleModel)
+		/// <summary>
+		/// Loads a searched sample.
+		/// Updates the UI to display the loaded sample and its associated elements.
+		/// </summary>
+		/// <param name="sampleModel">The sample model to load.</param>
+		void LoadSearchedSample(SampleModel sampleModel)
 		{
 			_loadedSampleModel = sampleModel;
 			try
@@ -241,7 +291,13 @@ namespace Syncfusion.Maui.ControlsGallery
 
 			}
 		}
-		private void UpdateSearchedSampleUI(SampleModel? sampleModel)
+
+		/// <summary>
+		/// Updates the UI for a searched sample.
+		/// Clears and adds the loaded sample to the searchedSampleGrid.
+		/// </summary>
+		/// <param name="sampleModel">The sample model to update the UI with.</param>
+		void UpdateSearchedSampleUI(SampleModel? sampleModel)
 		{
 			if (_loadedSample != null)
 			{
@@ -272,6 +328,14 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
+		/// <summary>
+		/// Loads a sample and prepares the UI to display it.
+		/// Creates an instance of the sample based on its assembly name and type and handles different scenarios for popup views and card layouts.
+		/// </summary>
+		/// <param name="sampleModel">The model of the sample to load.</param>
+		/// <param name="parent">An optional parent layout for card-based samples.</param>
+		/// <param name="isPopUpView">Specifies whether the sample is loaded in a popup view.</param>
+		/// <param name="isCardView">Specifies whether the sample uses a card layout.</param>
 		internal void LoadSample(SampleModel? sampleModel, CustomCardLayout? parent = null, bool isPopUpView = false, bool isCardView = false)
 		{
 			_loadedSampleModel = sampleModel;
@@ -348,9 +412,10 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		/// <summary>
 		/// Updates the sample UI based on the provided sample model.
+		/// Configures visibility and width for various UI elements like code viewer and YouTube icon.
 		/// </summary>
 		/// <param name="sampleModel">The sample model to update the UI with.</param>
-		private void UpdateSampleUI(SampleModel? sampleModel)
+		void UpdateSampleUI(SampleModel? sampleModel)
 		{
 			// Update visibility and width for various UI elements
 			MainPageiOS.UpdateUIElementVisibility(codeViewerImage, sampleModel?.CodeViewerPath);
@@ -379,9 +444,10 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		/// <summary>
 		/// Updates the popup sample UI with the provided sample model.
+		/// Configures visibility and width for popup-specific UI elements.
 		/// </summary>
 		/// <param name="sampleModel">The sample model to update the UI with.</param>
-		private void UpdatePopupSampleUI(SampleModel? sampleModel)
+		void UpdatePopupSampleUI(SampleModel? sampleModel)
 		{
 			// Clear previous option view
 			optionViewGrid.Children.Clear();
@@ -410,14 +476,16 @@ namespace Syncfusion.Maui.ControlsGallery
 				popUpSamplePage.Children.Add(_loadedSample);
 			}
 		}
+
 		/// <summary>
 		/// Updates the visibility of a UI element and optionally adjusts its column width.
+		/// Sets the IsVisible property of the element and adjusts the Width of the column if provided.
 		/// </summary>
 		/// <param name="element">The UI element to update.</param>
 		/// <param name="data">The data to determine visibility.</param>
 		/// <param name="columnWidth">The optional column width to adjust.</param>
 		/// <param name="widthValue">The width to set if the element is visible.</param>
-		private static void UpdateUIElementVisibility(Microsoft.Maui.Controls.VisualElement element, string? data, ColumnDefinition? columnWidth = null, double widthValue = 0)
+		static void UpdateUIElementVisibility(Microsoft.Maui.Controls.VisualElement element, string? data, ColumnDefinition? columnWidth = null, double widthValue = 0)
 		{
 			bool isVisible = !string.IsNullOrEmpty(data);
 			element.IsVisible = isVisible;
@@ -430,17 +498,22 @@ namespace Syncfusion.Maui.ControlsGallery
 
 		/// <summary>
 		/// Updates the visibility and column width of a popup element based on the given data.
+		/// Sets the IsVisible property of the element and adjusts the Width of the column accordingly.
 		/// </summary>
 		/// <param name="element">The image control to update visibility for.</param>
 		/// <param name="columnWidth">The column width to adjust.</param>
 		/// <param name="data">The data to check for visibility.</param>
-		private static void UpdatePopupUIElementVisibility(Border element, ColumnDefinition columnWidth, string? data)
+		static void UpdatePopupUIElementVisibility(Border element, ColumnDefinition columnWidth, string? data)
 		{
 			bool isVisible = !string.IsNullOrEmpty(data);
 			element.IsVisible = isVisible;
 			columnWidth.Width = isVisible ? 40 : 0;
 		}
-		private void ResetSettings()
+
+		/// <summary>
+		/// Resets the settings for the UI elements and widths of multiple column definitions to their default values.
+		/// </summary>
+		void ResetSettings()
 		{
 			youtubePopupImage.IsVisible = false;
 			sourcePopUpImage.IsVisible = false;
@@ -451,7 +524,12 @@ namespace Syncfusion.Maui.ControlsGallery
 			sourcePopupColumnWidth.Width = 0;
 		}
 
-		private void UpdatePopUpPageUI(bool isBackPressed = false)
+		/// <summary>
+		/// Updates the UI for the popup page.
+		/// Manages visibility of various UI elements based on whether the back button was pressed.
+		/// </summary>
+		/// <param name="isBackPressed">Indicates if the back button was pressed.</param>
+		void UpdatePopUpPageUI(bool isBackPressed = false)
 		{
 			if (isBackPressed)
 			{
@@ -485,7 +563,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private async void SubCategory_Tapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tapped event for a subcategory.
+		/// Resets the state of previously selected subcategories if necessary.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void SubCategory_Tapped(object sender, EventArgs e)
 		{
 			var sampleSubCategory = (sender as SfEffectsViewAdv)?.BindingContext as SampleSubCategoryModel;
 			if (sampleSubCategory != null && sampleSubCategory.IsSubCategoryClicked)
@@ -514,7 +598,12 @@ namespace Syncfusion.Maui.ControlsGallery
 			busyIndicatorPage.IsVisible = false;
 		}
 
-		private void LoadSampleBasedOnCategory(SampleSubCategoryModel sampleSubCategory)
+		/// <summary>
+		/// Loads a sample based on the selected subcategory.
+		/// Updates the UI to reflect the newly selected subcategory and its samples.
+		/// </summary>
+		/// <param name="sampleSubCategory">The subcategory model containing the sample(s) to load.</param>
+		void LoadSampleBasedOnCategory(SampleSubCategoryModel sampleSubCategory)
 		{
 			if (_subCategoryModel != sampleSubCategory)
 			{
@@ -543,7 +632,11 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private void CallOnDisappearing()
+		/// <summary>
+		/// Calls the OnDisappearing method for visible samples.
+		/// Ensures proper cleanup when navigating away from samples.
+		/// </summary>
+		void CallOnDisappearing()
 		{
 			if (!popUpSamplePage.IsVisible)
 			{
@@ -577,7 +670,12 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private void LoadCardView(SampleSubCategoryModel subCategory)
+		/// <summary>
+		///  Loads and displays a card view based on the subcategory's card layouts.
+		/// Creates a scrollable layout containing cards for each sample in the subcategory.
+		/// </summary>
+		/// <param name="subCategory">The subcategory model containing the card layouts.</param>
+		void LoadCardView(SampleSubCategoryModel subCategory)
 		{
 			sampleGridView.Children.Clear();
 			ScrollView scroller = new();
@@ -594,8 +692,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			sampleGridView.Children.Add(scroller);
 		}
 
-
-		private void AddToCardView(VerticalStackLayout parent, SampleModel sampleModel)
+		/// <summary>
+		/// Adds a new card layout for the specified sample model to the parent layout.
+		/// Creates and configures a CustomCardLayout for the given sample.
+		/// </summary>
+		/// <param name="parent">The parent layout to which the card will be added.</param>
+		/// <param name="sampleModel">The sample model that contains the data.</param>
+		void AddToCardView(VerticalStackLayout parent, SampleModel sampleModel)
 		{
 			CustomCardLayout card = new(null, this, sampleModel.StatusTag!)
 			{
@@ -607,7 +710,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			LoadSample(sampleModel, card, false, true);
 		}
 
-		private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tap gesture for the search result item.
+		/// Updates the UI to display the selected sample from the search results.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void TapGestureRecognizer_Tapped(object sender, EventArgs e)
 		{
 			searchedSampleScrollViewer.IsVisible = false;
 			searchedSampleSettingsImage.IsVisible = false;
@@ -633,7 +742,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private async void Search_Tapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tap event for the search button.
+		/// Prepares the UI for the search functionality by making relevant elements visible.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void Search_Tapped(object sender, EventArgs e)
 		{
 			searchEntryGrid.IsVisible = true;
 			searchListGrid.IsVisible = true;
@@ -647,7 +762,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private async void NavigationDrawer_Tapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tap gesture on the navigation drawer button.
+		/// Makes the navigation drawer visible and animates it sliding into view.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void NavigationDrawer_Tapped(object sender, EventArgs e)
 		{
 			NavigationDrawerGrid.IsVisible = true;
 			NavigationDrawerGrid.ZIndex = 1;
@@ -655,7 +776,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			Graylayout.IsVisible = true;
 		}
 
-		private void Graylayout_Tapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles taps on the gray layout, closing open popups.
+		/// Animates the closing of the navigation drawer and hides it.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void Graylayout_Tapped(object sender, EventArgs e)
 		{
 			NavigationDrawerGrid.TranslateTo(-500, 0, 250, Easing.SinIn);
 			Graylayout.IsVisible = false;
@@ -673,13 +800,22 @@ namespace Syncfusion.Maui.ControlsGallery
 			_isThemePopupOpen = false;
 		}
 
-		private void NavigationContentGrid_Tapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles taps on the navigation content grid.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void NavigationContentGrid_Tapped(object sender, EventArgs e)
 		{
 			//When the navigation drawer grid is tapped, the navigation content grid and close navigation grid should not be hidden, For that we have added this method.
 		}
 
-
-		private void BackButtonPressed(object sender, EventArgs e)
+		/// <summary>
+		/// Determines the appropriate navigation action based on whether samples were loaded by filter.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void BackButtonPressed(object sender, EventArgs e)
 		{
 			if (_isSampleLoadedByFilter)
 			{
@@ -694,7 +830,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <summary>
 		/// Method to navigate back to the filter list page.
 		/// </summary>
-		private void NavigateBackToFilterList()
+		void NavigateBackToFilterList()
 		{
 
 			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
@@ -712,7 +848,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <summary>
 		/// Method to navigate back to sort page
 		/// </summary>
-		private void NavigateBackToSortPage()
+		void NavigateBackToSortPage()
 		{
 
 			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
@@ -729,9 +865,9 @@ namespace Syncfusion.Maui.ControlsGallery
 		}
 
 		/// <summary>
-		/// Method to navigate back to the controls page which is the default page
+		/// Method to navigate back to the controls page which is the default page.
 		/// </summary>
-		private void NavigateBacktoControlsPage()
+		void NavigateBacktoControlsPage()
 		{
 
 			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
@@ -747,7 +883,8 @@ namespace Syncfusion.Maui.ControlsGallery
 		}
 
 		/// <summary>
-		/// Common method needed for all navigation
+		/// Common method needed for all navigation.
+		/// Prepares the UI for transitioning between different views.
 		/// </summary>
 		void CommonNavigation()
 		{
@@ -776,12 +913,23 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private void PopUpPageBackButtonPressed(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the back button press event for the popup page.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void PopUpPageBackButtonPressed(object sender, EventArgs e)
 		{
 			UpdatePopUpPageUI(true);
 		}
 
-		private void PropertiesTabPressed(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the properties tab press event.
+		/// Makes the properties panel visible and brings it to the front of the UI.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void PropertiesTabPressed(object sender, EventArgs e)
 		{
 			properties.IsVisible = true;
 			properties.ZIndex = 1;
@@ -789,7 +937,12 @@ namespace Syncfusion.Maui.ControlsGallery
 			propertyTempGrid.IsVisible = true;
 		}
 
-		private async void CodeViewerTapped(object sender, EventArgs e)
+		/// <summary>
+		/// Constructs the GitHub URL for the sample's source code.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void CodeViewerTapped(object sender, EventArgs e)
 		{
 			try
 			{
@@ -814,66 +967,88 @@ namespace Syncfusion.Maui.ControlsGallery
 
 
 
-		private void WhatsNewTapped(object sender, EventArgs e)
+		void WhatsNewTapped(object sender, EventArgs e)
 		{
 
 		}
 
-		private void WhatsNewTappedPopup(object sender, EventArgs e)
+		void WhatsNewTappedPopup(object sender, EventArgs e)
 		{
 
 		}
 
-		private void WhatsNewTappedSearchedSample(object sender, EventArgs e)
+		void WhatsNewTappedSearchedSample(object sender, EventArgs e)
 		{
 
 		}
 
-		private void SampleTitleGridTapped(object sender, EventArgs e)
+		void SampleTitleGridTapped(object sender, EventArgs e)
 		{
 			HidePropertyWindow();
 		}
 
-		private void ControlListPageTempGridTapped(object sender, EventArgs e)
+		void ControlListPageTempGridTapped(object sender, EventArgs e)
 		{
 			HideSearchWindow();
 		}
 
-		private void PropertiesCollapeImageTapped(object sender, EventArgs e)
+		void PropertiesCollapeImageTapped(object sender, EventArgs e)
 		{
 			HidePropertyWindow();
 		}
 
-		private void TempGridTapped(object sender, EventArgs e)
+		void TempGridTapped(object sender, EventArgs e)
 		{
 			HidePropertyWindow();
 		}
 
-		private void HidePropertyWindow()
+		/// <summary>
+		/// Hides the property panel by setting its visibility to false.
+		/// </summary>
+		void HidePropertyWindow()
 		{
 			properties.IsVisible = false;
 			propertyTempGrid.IsVisible = false;
 		}
 
-
-		private void SampleSearchImage_Clicked(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the click event of the sample search image.
+		/// Hides both the property window and the search window.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void SampleSearchImage_Clicked(object sender, EventArgs e)
 		{
 			HidePropertyWindow();
 			HideSearchWindow();
 		}
 
-		private void HideSearchWindow()
+		/// <summary>
+		/// Hides the search entry and search list grid by setting its visibility to false.
+		/// </summary>
+		void HideSearchWindow()
 		{
 			searchEntryGrid.IsVisible = false;
 			searchListGrid.IsVisible = false;
 		}
 
-		private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+		/// <summary>
+		/// Makes the searched sample scroll viewer visible when text changes.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The text changed event arguments.</param>
+		void Entry_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			searchedSampleScrollViewer.IsVisible = true;
 		}
 
-		private async void YoutubeIconTapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the YouTube icon tap event.
+		/// Attempts to open the sample's YouTube video link in the device's default web browser.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void YoutubeIconTapped(object sender, EventArgs e)
 		{
 			try
 			{
@@ -890,7 +1065,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private async void SourceLinkTapped(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the source link tap event.
+		///  Attempts to open the sample's source link in the device's default web browser.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void SourceLinkTapped(object sender, EventArgs e)
 		{
 			try
 			{
@@ -908,11 +1089,11 @@ namespace Syncfusion.Maui.ControlsGallery
 		}
 
 		/// <summary>
-		/// Invoked when the sort option settings clicked
+		/// Sets the visibility of sort temporary grid and sort option grid.
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">EventArgs</param>
-		private void Setting_Tapped(object sender, EventArgs e)
+		void Setting_Tapped(object sender, EventArgs e)
 		{
 			sortTempGrid.IsVisible = true;
 			sortOptionGrid.IsVisible = true;
@@ -920,34 +1101,28 @@ namespace Syncfusion.Maui.ControlsGallery
 		}
 
 		/// <summary>
-		/// Method when the back button pressed from sort option
+		/// Handles the back icon press event from the sort option.
+		/// Hides the sort option grid when the back icon is pressed.
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">EventArgs</param>
-		private void BackIcon_Pressed(object sender, EventArgs e)
+		void BackIcon_Pressed(object sender, EventArgs e)
 		{
 			sortOptionGrid.IsVisible = false;
 		}
 
 		/// <summary>
-		/// Invoked when the apply button in the sort option clicked
+		/// Handles the apply button click event in the sort option.
+		/// Applies the selected sorting and filtering options to the sample list.
 		/// </summary>
-		/// <param name="sender">Sender</param>
-		/// <param name="e">EventArgs</param>
-		private void SortOptionApplyButtonClicked(object sender, EventArgs e)
+		/// <param name="sender">The object that raised the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void SortOptionApplyButtonClicked(object sender, EventArgs e)
 		{
-
-			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
-			Before:
-						this.IsSampleLoadedByFilter = false;
-						this.sortOptionGrid.IsVisible = false;
-			After:
-						IsSampleLoadedByFilter = false;
-						this.sortOptionGrid.IsVisible = false;
-			*/
 			_isSampleLoadedByFilter = false;
 			sortOptionGrid.IsVisible = false;
 			sortTempGrid.IsVisible = false;
+
 			if (noneOption.IsChecked && ((newSamples.IsChecked == false && updatedSamples.IsChecked == false && allSamples.IsChecked == false) || allSamples.IsChecked == true))
 			{
 				controlListPage.IsVisible = true;
@@ -955,74 +1130,109 @@ namespace Syncfusion.Maui.ControlsGallery
 				sortAndFilteredGrid.IsVisible = false;
 				return;
 			}
+
 			List<string> filterList = [];
 			if (BindingContext is SamplesViewModel viewModel)
 			{
-				viewModel.exit = true;
-				if (noneOption.IsChecked)
-				{
-					viewModel.SortOption = SortOption.None;
-				}
-				else if (ascending.IsChecked)
-				{
-					viewModel.SortOption = SortOption.Ascending;
-				}
-				else if (descending.IsChecked)
-				{
-					viewModel.SortOption = SortOption.Descending;
-				}
-
-				if (newSamples.IsChecked == true)
-				{
-					filterList.Add("NewSamples");
-				}
-				if (updatedSamples.IsChecked == true)
-				{
-					filterList.Add("UpdatedSamples");
-				}
-				if (allSamples.IsChecked == true)
-				{
-					filterList.Add("AllSamples");
-				}
-				controlListPage.IsVisible = false;
-				if (filterList.Contains("AllSamples") || filterList.Count == 0)
-				{
-					sortAndFilteredGrid.IsVisible = false;
-					UpdatedSortCollection.IsVisible = true;
-					viewModel.GetSortedList(filterList);
-				}
-				else
-				{
-					UpdatedSortCollection.IsVisible = false;
-					sortAndFilteredGrid.IsVisible = true;
-					viewModel.PopulateSortAndFilterSamples(filterList);
-					if (newSamples.IsChecked == true && updatedSamples.IsChecked == false)
-					{
-						filteredGridNew.IsVisible = true;
-						filteredGridUpdated.IsVisible = false;
-					}
-					else if (updatedSamples.IsChecked == true && newSamples.IsChecked == false)
-					{
-						filteredGridUpdated.IsVisible = true;
-						filteredGridNew.IsVisible = false;
-					}
-					else
-					{
-						filteredGridNew.IsVisible = true;
-						filteredGridUpdated.IsVisible = true;
-					}
-				}
-				filterList.Clear();
+				ApplySortingAndFiltering(viewModel, filterList);
 			}
+
 			_isSampleLoadedByFilter = true;
 		}
 
 		/// <summary>
-		/// Invoked when the filter check boxes changed dynamically.
+		/// This method handles the logic for sorting the list, populating filtered samples,
+		/// and updating the visibility of various UI elements.
+		/// </summary>
+		/// <param name="viewModel">The view model containing the data and sorting/filtering methods.</param>
+		/// <param name="filterList">A list to store the selected filter options.</param>
+		void ApplySortingAndFiltering(SamplesViewModel viewModel, List<string> filterList)
+		{
+			viewModel.exit = true;
+			SetSortOption(viewModel);
+			if (newSamples.IsChecked == true)
+			{
+				filterList.Add("NewSamples");
+			}
+
+			if (updatedSamples.IsChecked == true)
+			{
+				filterList.Add("UpdatedSamples");
+			}
+
+			if (allSamples.IsChecked == true)
+			{
+				filterList.Add("AllSamples");
+			}
+
+			controlListPage.IsVisible = false;
+
+			if (filterList.Contains("AllSamples") || filterList.Count == 0)
+			{
+				sortAndFilteredGrid.IsVisible = false;
+				UpdatedSortCollection.IsVisible = true;
+				viewModel.GetSortedList(filterList);
+			}
+			else
+			{
+				UpdatedSortCollection.IsVisible = false;
+				sortAndFilteredGrid.IsVisible = true;
+				viewModel.PopulateSortAndFilterSamples(filterList);
+				UpdateFilteredGridsVisibility();
+			}
+			filterList.Clear();
+		}
+
+		/// <summary>
+		/// Sets the sorting option for the view model based on the user's selection.
+		/// </summary>
+		/// <param name="viewModel">The view model to update with the selected sort option.</param>
+		void SetSortOption(SamplesViewModel viewModel)
+		{
+			if (noneOption.IsChecked)
+			{
+				viewModel.SortOption = SortOption.None;
+			}
+			else if (ascending.IsChecked)
+			{
+				viewModel.SortOption = SortOption.Ascending;
+			}
+			else if (descending.IsChecked)
+			{
+				viewModel.SortOption = SortOption.Descending;
+			}
+		}
+
+		/// <summary>
+		/// Updates the visibility of filtered grids based on the selected filter options.
+		/// This method ensures that the appropriate grids are displayed for new samples,
+		/// updated samples, or both.
+		/// </summary>
+		void UpdateFilteredGridsVisibility()
+		{
+			if (newSamples.IsChecked == true && updatedSamples.IsChecked == false)
+			{
+				filteredGridNew.IsVisible = true;
+				filteredGridUpdated.IsVisible = false;
+			}
+			else if (updatedSamples.IsChecked == true && newSamples.IsChecked == false)
+			{
+				filteredGridUpdated.IsVisible = true;
+				filteredGridNew.IsVisible = false;
+			}
+			else
+			{
+				filteredGridNew.IsVisible = true;
+				filteredGridUpdated.IsVisible = true;
+			}
+		}
+
+		/// <summary>
+		/// Updates the state of new and updated samples checkboxes to match the all samples checkbox.
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">CheckedChangedEventArgs</param>
-		private void AllSamplesCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+		void AllSamplesCheckBoxChanged(object sender, CheckedChangedEventArgs e)
 		{
 			if (!_programmaticUpdate)
 			{
@@ -1034,26 +1244,31 @@ namespace Syncfusion.Maui.ControlsGallery
 		}
 
 		/// <summary>
-		/// Invoked when the new Ssample check box changes dynamically.
+		/// Handles the checkbox change event for new samples.
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">CheckedChangedEventArgs</param>
-		private void NewSamplesCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+		void NewSamplesCheckBoxChanged(object sender, CheckedChangedEventArgs e)
 		{
 			HandleSampleCheckBoxChange(newSamples.IsChecked, updatedSamples.IsChecked);
 		}
 
 		/// <summary>
-		/// Invoked when the UpdateSample check boxes changes dynamically.
+		/// Handles the checkbox change event for updated samples.
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">CheckedChangedEventArgs</param>
-		private void UpdatedSamplesCheckBoxChanged(object sender, Microsoft.Maui.Controls.CheckedChangedEventArgs e)
+		void UpdatedSamplesCheckBoxChanged(object sender, Microsoft.Maui.Controls.CheckedChangedEventArgs e)
 		{
 			HandleSampleCheckBoxChange(newSamples.IsChecked, updatedSamples.IsChecked);
 		}
 
-		private void HandleSampleCheckBoxChange(bool? newSamplesChecked, bool? updatedSamplesChecked)
+		/// <summary>
+		/// Handles the logic for updating the "All Samples" checkbox based on the state of other checkboxes.
+		/// </summary>
+		/// <param name="newSamplesChecked">The checked state of the "New Samples" checkbox.</param>
+		/// <param name="updatedSamplesChecked">The checked state of the "Updated Samples" checkbox.</param>
+		void HandleSampleCheckBoxChange(bool? newSamplesChecked, bool? updatedSamplesChecked)
 		{
 			if (!_programmaticUpdate)
 			{
@@ -1067,11 +1282,11 @@ namespace Syncfusion.Maui.ControlsGallery
 		}
 
 		/// <summary>
-		/// Invoked when the sorted sample tapped
+		/// Updates the UI to display the selected sample from the sorted list.
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">EventArgs</param>
-		private void SortSampleTapGestureTapped(object sender, EventArgs e)
+		void SortSampleTapGestureTapped(object sender, EventArgs e)
 		{
 			if (BindingContext is SamplesViewModel viewModel)
 			{
@@ -1100,34 +1315,40 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private void SortOptionGridTapped(object sender, EventArgs e)
+		void SortOptionGridTapped(object sender, EventArgs e)
 		{
 			//When the sort option grid is tapped, the sort option grid and sort temp grid should not be hidden, For that we have added this method.
 		}
 
 		/// <summary>
-		/// Invoked when the cancel button in the sort option
+		/// Hides the sort option grid and sort temporary grid.
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">EventArgs</param>
-		private void Cancel_Clicked(object sender, EventArgs e)
+		void Cancel_Clicked(object sender, EventArgs e)
 		{
 			sortOptionGrid.IsVisible = false;
 			sortTempGrid.IsVisible = false;
 		}
 
 		/// <summary>
-		/// Temporary grid to make the background black color while sort option is visible
+		/// Temporary grid to make the background black color while sort option is visible.
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">EventArgs</param>
-		private void SortTempGridTapped(object sender, EventArgs e)
+		void SortTempGridTapped(object sender, EventArgs e)
 		{
 			sortOptionGrid.IsVisible = false;
 			sortTempGrid.IsVisible = false;
 		}
 
-		private async void DocumentationTapGestureRecognizer(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tap gesture on the documentation button.
+		/// Attempts to open the MAUI Toolkit documentation link in the device's default web browser.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void DocumentationTapGestureRecognizer(object sender, EventArgs e)
 		{
 			try
 			{
@@ -1141,7 +1362,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private async void ContactTapGestureRecognizer(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tap gesture on the contact button.
+		/// Attempts to open the MAUI Toolkit contact page in the device's default web browser.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		async void ContactTapGestureRecognizer(object sender, EventArgs e)
 		{
 
 			try
@@ -1156,7 +1383,13 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private void ThemeTapGestureRecognizer(object sender, EventArgs e)
+		/// <summary>
+		/// Handles the tap gesture on the theme toggle button.
+		/// Toggles the visibility of the theme popup and gray layout.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The event arguments.</param>
+		void ThemeTapGestureRecognizer(object sender, EventArgs e)
 		{
 			// ThemeTapGestureRecognizer gets hit when tab the change theme in NavigationDrawerGrid
 			if (_isThemePopupOpen == true)
@@ -1176,14 +1409,26 @@ namespace Syncfusion.Maui.ControlsGallery
 			}
 		}
 
-		private void ThemePopupCloseIcon_Tapped(object sender, TappedEventArgs e)
+		/// <summary>
+		/// Handles the tap event on the close icon of the theme popup.
+		/// Manages the visibility of theme popup.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The tap event arguments.</param>
+		void ThemePopupCloseIcon_Tapped(object sender, TappedEventArgs e)
 		{
 			_isThemePopupOpen = false;
 			themePopup.IsVisible = false;
 			Graylayout.IsVisible = false;
 		}
 
-		private void themePopupSwitch_Toggled(object sender, ToggledEventArgs e)
+		/// <summary>
+		/// Handles the toggling of the theme switch.
+		/// Changes the VisualTheme of the SyncfusionThemeResourceDictionary and updates the UserAppTheme.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event.</param>
+		/// <param name="e">The toggle event arguments.</param>
+		void themePopupSwitch_Toggled(object sender, ToggledEventArgs e)
 		{
 			if (Application.Current != null)
 			{

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -79,6 +76,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Fields
 
 		bool _needToAnimateMarker;
+
 		internal override bool IsFillEmptyPoint { get { return false; } }
 		#endregion
 

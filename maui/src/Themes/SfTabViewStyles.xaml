@@ -164,4 +164,13 @@
         </Setter>
     </Style>
 
+  <Style TargetType="tabView:CenterButtonSettings">
+    <Setter Property="TextColor" Value="{DynamicResource SfTabViewCenterButtonTextColor}"/>
+    <Setter Property="Background" Value="{DynamicResource SfTabViewCenterButtonBackground}"/>
+    <Setter Property="Stroke" Value="{DynamicResource SfTabViewCenterButtonStroke}"/>
+    <Setter Property="CornerRadius" Value="{DynamicResource SfTabViewCenterButtonCornerRadius}"/>
+    <Setter Property="FontSize" Value="{DynamicResource SfTabViewCenterButtonFontSize}"/>
+    <Setter Property="StrokeThickness" Value="{DynamicResource SfTabViewCenterButtonStrokeThickness}"/>
+  </Style>
+
 </ResourceDictionary>

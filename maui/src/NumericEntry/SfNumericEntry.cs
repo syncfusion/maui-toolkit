@@ -299,6 +299,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         /// Indicates whether the text field is being focused for the first time, often used for initializing behavior.
         /// </summary>
         bool _isFirstFocus = true;
+
 #endif
 
 #if !WINDOWS
@@ -1073,5 +1074,4 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		}
 	}
 #endif
-
 }

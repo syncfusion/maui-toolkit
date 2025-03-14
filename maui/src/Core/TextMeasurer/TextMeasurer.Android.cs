@@ -19,6 +19,14 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 			return new TextMeasurer();
 		}
 
+		/// <summary>
+		/// Get the device's screen density
+		/// </summary>
+		/// <returns></returns>
+		private static float GetDeviceDensity()
+		{
+			return (float)DeviceDisplay.MainDisplayInfo.Density;
+		}
 
 		/// <summary>
 		/// This method returns the text's measured size 
@@ -39,12 +47,14 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 			}
 			//TODO: Calculate the size with embedded fonts.  
 
-			paint.TextSize = textSize;
-
+			paint.TextSize =  textSize * GetDeviceDensity();
 			_ = textSize > 0 ? textSize : 12;
 			Rect? bounds = TextUtils.BoundsCache;
 			paint.GetTextBounds(text, 0, text.Length, bounds);
-			return new Size(bounds.Width(), (double)(paint.GetFontMetrics()?.Bottom - paint.GetFontMetrics()?.Top)!);
+			var fontMetrics = paint.GetFontMetrics();
+			double fontWidth = (double)(bounds.Width() / GetDeviceDensity());
+        	double fontHeight = fontMetrics != null ? ((double)(fontMetrics.Bottom - fontMetrics.Top)) / GetDeviceDensity() : 0;
+			return new Size(fontWidth, fontHeight);
 		}
 
 		/// <summary>
@@ -64,9 +74,13 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 				Android.Graphics.Typeface? tf = fontManager.GetTypeface(font);
 				paint.SetTypeface(tf);
 				UpdateFontSize(textElement, paint);
+				paint.TextSize = (float) textElement.FontSize * GetDeviceDensity();
 				Android.Graphics.Rect? bounds = Syncfusion.Maui.Toolkit.Graphics.Internals.TextUtils.BoundsCache;
 				paint.GetTextBounds(text, 0, text.Length, bounds);
-				return new Size(bounds.Width(), (double)(paint.GetFontMetrics()?.Bottom - paint.GetFontMetrics()?.Top)!);
+				var fontMetrics = paint.GetFontMetrics();
+				double fontWidth = (double)(bounds.Width() / GetDeviceDensity());
+                double fontHeight = fontMetrics != null ? ((double)(fontMetrics.Bottom - fontMetrics.Top)) / GetDeviceDensity() : 0;
+                return new Size(fontWidth, fontHeight); 
 			}
 			else
 			{

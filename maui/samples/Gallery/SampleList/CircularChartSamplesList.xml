@@ -20,12 +20,12 @@
 					  <!--<Sample SearchTags="CenterElevation" Name="CenterElevation" SampleName="CenterElevation" Title="Center elevation"/>-->
 				  </CardLayout>
 			  </SubCategory>
-        <!--<SubCategory Title="Radial Bar">
-          --><!--<CardLayout>-->
+        <SubCategory Title="Radial Bar">
+          <CardLayout>
             <Sample SearchTags="radialbar" Name="RadialBarChart" SampleName="RadialBarChart" Title="Radial bar"/>
-            <!--<Sample SearchTags="radialbar" Name="CustomizedRadialBarChart" SampleName="CustomizedRadialBarChart" Title="Customized legend"/>-->
-          <!--</CardLayout>-->
-        <!--</SubCategory>-->
+            <Sample SearchTags="radialbar" Name="CustomizedRadialBarChart" SampleName="CustomizedRadialBarChart" Title="Customized legend"/>
+          </CardLayout>
+        </SubCategory>
 		  </Category>
 		  <Category Title="Interaction">
 			  <Sample SearchTags="tooltip" Name="Tooltip" SampleName="Tooltip" Title="Tooltip"  Description="This sample showcases the tooltip feature. On mobile, tap the data points, and on desktop, mouse over to the data points to raise the tooltip."/>

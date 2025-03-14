@@ -68,7 +68,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
                 {
                     AppearanceViewModel appearanceViewModel = (AppearanceViewModel)_calendar.BindingContext;
                     bool isCircleShape = selectionShape == "Circle";
-                    appearanceViewModel.UpdateSelectionShape(isCircleShape);
+					appearanceViewModel.UpdateSelectionShape(isCircleShape);
                     if (isCircleShape)
                     {
                         _calendar.SelectionShape = CalendarSelectionShape.Circle;

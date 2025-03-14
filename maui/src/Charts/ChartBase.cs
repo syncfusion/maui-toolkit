@@ -102,7 +102,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			nameof(LegendStyle),
 			typeof(ChartThemeLegendLabelStyle),
 			typeof(ChartBase),
-			defaultValueCreator: LegendStyleDefaultValueCreator,
 			propertyChanged: OnLegendStylePropertyChanged);
 
 		/// <summary>
@@ -515,6 +514,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			TitleView = new ChartTitleView();
 			BehaviorLayout = [];
+			LegendStyle = new ChartThemeLegendLabelStyle(this);
 			LegendStyle.Parent = this;
 			_area = CreateChartArea();
 			_legendLayout = new LegendLayout(_area);
@@ -874,11 +874,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				newElement.Parent = parent;
 			}
-		}
-
-		static object LegendStyleDefaultValueCreator(BindableObject bindable)
-		{
-			return new ChartThemeLegendLabelStyle((ChartBase)bindable);
 		}
 
 		#endregion

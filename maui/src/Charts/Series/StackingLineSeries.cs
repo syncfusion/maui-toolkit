@@ -227,11 +227,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
             set { SetValue(MarkerSettingsProperty, value); }
         }
 
-        #endregion
+		#endregion
 
-        #region Interface Implementation
+		#region Constructor
+		/// <summary>
+		///  Initializes a new instance of the <see cref="StackingLineSeries"/>.
+		/// </summary>
+		public StackingLineSeries()
+		{
+			MarkerSettings = new ChartMarkerSettings();	
+		}
 
-        bool IMarkerDependent.NeedToAnimateMarker { get => _needToAnimateMarker; set => _needToAnimateMarker = EnableAnimation; }
+		#endregion
+
+		#region Interface Implementation
+
+		bool IMarkerDependent.NeedToAnimateMarker { get => _needToAnimateMarker; set => _needToAnimateMarker = EnableAnimation; }
 
         void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
         {

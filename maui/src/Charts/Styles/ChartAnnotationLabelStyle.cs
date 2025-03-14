@@ -199,6 +199,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#endregion
 
+		#region Internal Properties
+
+		internal bool IsShapeAnnotation { get; set; }
+
+		#endregion
+
 		internal override Color GetDefaultTextColor()
 		{
 			// Same value for shape , text annotation and show axis label
@@ -209,6 +215,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			// Same value for shape , text annotation and show axis label
 			return new SolidColorBrush(Colors.Transparent);
+		}
+
+		internal override double GetDefaultFontSize()
+		{
+			if (IsShapeAnnotation)
+			{
+				return 11;
+			}
+
+			return base.GetDefaultFontSize();
 		}
 	}
 }

@@ -268,11 +268,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
             set { SetValue(TypeProperty, value); }
         }
 
-        #endregion
+		#endregion
 
-        #region Interface Implementation
+		#region Constructor
 
-        ChartMarkerSettings IMarkerDependent.MarkerSettings => MarkerSettings ?? new ChartMarkerSettings();
+		/// <summary>
+		///  Initializes a new instance of the <see cref="SplineRangeAreaSeries"/>.
+		/// </summary>
+		public SplineRangeAreaSeries()
+		{
+			MarkerSettings = new ChartMarkerSettings();
+		}
+
+		#endregion
+
+		#region Interface Implementation
+
+		ChartMarkerSettings IMarkerDependent.MarkerSettings => MarkerSettings ?? new ChartMarkerSettings();
 
         bool IMarkerDependent.NeedToAnimateMarker { get => _needToAnimateMarker; set => _needToAnimateMarker = EnableAnimation; }
 
@@ -465,7 +477,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 else if (!double.IsNaN(lowValueContent))
                 {
                     tooltipInfo.Text += "/" + (lowValueContent == 0 ? lowValueContent.ToString("0.##") : lowValueContent.ToString("#.##"));
-                }
+				}
 
                 return tooltipInfo;
             }
@@ -491,11 +503,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     double highValue = highValues[index];
                     double lowValue = lowValues[index];
                     string label = string.Format("{0} : {1:#.##}\n{2} : {3:#.##}", SfCartesianChartResources.High, highValue, SfCartesianChartResources.Low, lowValue);
-					if (highValue == 0 || lowValue == 0)
-					{
-						label = string.Format("{0} : {1:0.##}\n{2} : {3:0.##}", SfCartesianChartResources.High, highValue, SfCartesianChartResources.Low, lowValue);
-					}
-
                     var xPoint = TransformToVisibleX(xValue, topValue);
                     var yPoint = TransformToVisibleY(xValue, topValue);
 

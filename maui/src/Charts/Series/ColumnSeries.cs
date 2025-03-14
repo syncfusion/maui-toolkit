@@ -372,9 +372,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			var xValues = GetXValues();
 			double bottomValue = 0;
-			if (ActualXAxis != null)
+
+			if (ActualXAxis is ChartAxis axis)
 			{
-				bottomValue = double.IsNaN(ActualXAxis.ActualCrossingValue) ? 0 : ActualXAxis.ActualCrossingValue;
+				bottomValue = axis.ActualCrossingValue == double.MinValue ||
+				axis.ActualCrossingValue == double.MaxValue ||
+				double.IsNaN(axis.ActualCrossingValue) ? 0 : axis.ActualCrossingValue;
 			}
 
 			if (IsGrouped && (IsIndexed || xValues == null))

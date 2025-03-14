@@ -126,11 +126,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			//Hide tooltip if any update happen in chart area.
 			cartesianChart.ResetTooltip();
 
-			if (_xAxes.Count <= 0 || _yAxes.Count <= 0)
-			{
-				return;
-			}
-
 			_axisLayout.AssignAxisToSeries();
 			_axisLayout.LayoutAxis(AreaBounds);
 
@@ -194,6 +189,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				ResetAxes
 				);
 
+			PrimaryAxis = null;
+
 			if (sender is ObservableCollection<ChartAxis> axes && axes.Count > 0)
 			{
 				PrimaryAxis = axes[0];
@@ -211,6 +208,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				(obj, index) => RemoveAxes(obj),
 				ResetAxes
 				);
+
+			SecondaryAxis = null;
 
 			if (sender is ObservableCollection<RangeAxisBase> axes && axes.Count > 0)
 			{

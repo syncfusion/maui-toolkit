@@ -85,7 +85,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
+		[RequiresUnreferencedCode("The GenerateVisibleLabels is not trim compatible")]
 		internal override void GenerateVisibleLabels()
 		{
 			if (VisibleRange.IsEmpty)
@@ -154,7 +154,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				OnCreateLabels();
 				AddVisibleLabels();
 			}
-
 		}
 
 #pragma warning disable IDE0060 // Remove unused parameter

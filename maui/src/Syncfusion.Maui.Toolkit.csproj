@@ -105,7 +105,7 @@
     <MauiXaml Remove="Carousel\Platform\Windows\Styles\Resources.xaml" />
   </ItemGroup>
   
-   <ItemGroup>
+  <ItemGroup>
     <MauiFont Include="Resources\Fonts\MauiMaterialAssets.ttf" />
   </ItemGroup>
   
@@ -123,7 +123,7 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  
+
   <ItemGroup>
     <MauiXaml Update="Themes\SfAccordionStyles.xaml">
       <Generator>MSBuild:Compile</Generator>

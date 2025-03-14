@@ -4,6 +4,13 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 {
 	public class ChartSeriesUnitTests
 	{
+		private TestChartSeries chartSeries;
+		
+		public ChartSeriesUnitTests()
+		{
+			chartSeries = new TestChartSeries();
+		}
+			
 		[Fact]
 		public void AreaSeries_Constructor_InitializesDefaultsCorrectly()
 		{
@@ -1072,7 +1079,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var rangeAreaSeries = new RangeAreaSeries();
 
 			Assert.False(rangeAreaSeries.ShowMarkers);
-			Assert.Null(rangeAreaSeries.MarkerSettings);
+			Assert.NotNull(rangeAreaSeries.MarkerSettings);
 		}
 
 		[Theory]
@@ -1332,7 +1339,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var series = new SplineRangeAreaSeries();
 
 			Assert.False(series.ShowMarkers);
-			Assert.Null(series.MarkerSettings);
+			Assert.NotNull(series.MarkerSettings);
 			Assert.Equal(SplineType.Natural, series.Type);
 		}
 
@@ -1806,6 +1813,28 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			chartMarkerSettings.Stroke = stroke;
 
 			Assert.Same(stroke, chartMarkerSettings.Stroke);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void ListenPropertyChange_SetAndGet_ReturnsExpectedValue(bool expected)
+		{
+			chartSeries.ListenPropertyChange = expected;
+			Assert.Equal(expected, chartSeries.ListenPropertyChange);
+		}
+
+		public class TestChartSeries : ChartSeries
+		{
+			protected override ChartSegment? CreateSegment()
+			{
+				return new TestChartSegment();
+			}
+		}
+
+		public class TestChartSegment : ChartSegment
+		{
+
 		}
 	}
 }

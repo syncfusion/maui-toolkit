@@ -292,7 +292,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				var windowManagerLayoutParams = _popupOverlay.GetWindowManagerLayoutParams();
 				windowManagerLayoutParams.Flags = (PopupExtension.CheckWindowFlagsHasFullScreen() && !PopupExtension.CheckNavigationbarIsVisible()) ? WindowManagerFlags.Fullscreen : WindowManagerFlags.LayoutNoLimits | WindowManagerFlags.LayoutInScreen;
-
+ 
 				// To Layout overlay at top left corner.
 				windowManagerLayoutParams.Gravity = GravityFlags.Start | GravityFlags.Top;
 				SetXPositionForWindowManagerLayoutParams(windowManagerLayoutParams);

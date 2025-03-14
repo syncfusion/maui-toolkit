@@ -1242,11 +1242,6 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 		/// </summary>
 		internal bool LongPressHandled { get; set; }
 
-		/// <summary>
-		/// Gets or sets a value indicating whether to force reset the animation or not.
-		/// </summary>
-		internal bool ForceReset { get; set; }
-
 		#endregion
 
 		#region Public methods
@@ -1254,6 +1249,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 		/// <summary>
 		/// Removes the ripple and highlight effects.
 		/// </summary>
+		/// <param name="forceReset"> Forces the animation to reset. By default, this is set to false. </param>
 		/// <remarks>
 		/// This method stops any ongoing animations and resets the view to its original state.
 		/// It is useful when you want to clear all effects and start fresh.
@@ -1264,14 +1260,14 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 		/// effectsView.Reset();
 		/// ]]></code>
 		/// </example>
-		public void Reset()
+		public void Reset(bool forceReset = false)
 		{
 			_canRepeat = false;
 			LongPressHandled = false;
 			if (_rippleEffectLayer != null)
 			{
 				_rippleEffectLayer.CanRemoveRippleAnimation = this.AnimationIsRunning("RippleAnimator");
-				if (!_rippleEffectLayer.CanRemoveRippleAnimation || ForceReset)
+				if (!_rippleEffectLayer.CanRemoveRippleAnimation || forceReset)
 				{
 					_rippleEffectLayer.OnRippleAnimationFinished();
 				}

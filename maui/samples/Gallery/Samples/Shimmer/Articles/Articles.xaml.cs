@@ -13,6 +13,7 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 			_timer.Interval = TimeSpan.FromMilliseconds(3000);
 			_timer.Tick += Timer_Tick;
 			_timer.Start();
+			Dispatcher.Dispatch(() => listView.ItemTemplate = (DataTemplate)Resources["articleTemplate"]);
 		}
 
 		protected override void OnSizeAllocated(double width, double height)

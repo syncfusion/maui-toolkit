@@ -233,10 +233,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			_tabView = sfTabView;
 			_tabBar = sfTabBar;
-			Style = new Style(typeof(ContentView));
+			Style = new Style(typeof(View));
 			ClipToBounds = true;
 			InitializeControl();
 			this.AddTouchListener(this);
+#if ANDROID
+			this.SetValue(AutomationProperties.IsInAccessibleTreeProperty, false);
+#endif
+
 #if IOS || MACCATALYST
 			this.AddGestureListener(this);
 			_proxy = new(this);

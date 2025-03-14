@@ -1,6 +1,7 @@
 ﻿using Syncfusion.Maui.Toolkit.Themes;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -415,6 +416,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <summary>
 		/// Method implementation for Generate Labels in ChartAxis
 		/// </summary>
+		[RequiresUnreferencedCode("The GenerateVisibleLabels is not trim compatible")]
 		internal virtual void GenerateVisibleLabels()
 		{
 		}
@@ -722,6 +724,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
 		void UpdateLabels()
 		{
 			if (VisibleRange.Delta > 0)

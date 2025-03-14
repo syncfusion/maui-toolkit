@@ -71,7 +71,7 @@
                                                >
                     <chart:FunnelDataLabelSettings.LabelStyle>
                         <chart:ChartDataLabelStyle LabelFormat="#"
-                                                   Margin="0.5" />
+                                                   Margin="5" />
                     </chart:FunnelDataLabelSettings.LabelStyle>
                 </chart:FunnelDataLabelSettings>
             </chart:SfFunnelChart.DataLabelSettings>

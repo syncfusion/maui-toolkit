@@ -70,7 +70,7 @@
 	/// </code>
 	/// ***
 	/// </remarks>
-	public partial class ChartMarkerSettings : BindableObject
+	public partial class ChartMarkerSettings : Element
 	{
 		#region Bindable Properties
 

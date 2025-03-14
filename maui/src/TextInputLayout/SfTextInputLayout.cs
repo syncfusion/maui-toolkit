@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
+﻿using System.Diagnostics.CodeAnalysis;
 using Syncfusion.Maui.Toolkit.EffectsView;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
@@ -12,6 +13,7 @@ using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 using Syncfusion.Maui.Toolkit.NumericEntry;
 using Syncfusion.Maui.Toolkit.EntryRenderer;
 using Syncfusion.Maui.Toolkit.EntryView;
+using Syncfusion.Maui.Toolkit.NumericUpDown;
 
 namespace Syncfusion.Maui.Toolkit.TextInputLayout
 {
@@ -127,10 +129,15 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// </summary>
         const int UpDownButtonSize = 32;
 
-        /// <summary>
-        /// Gets or sets a value of right side space for counter text.
-        /// </summary>
-        const float CounterTextPadding = 12;
+		/// <summary>
+		/// Represents the size of the up/down button when placed vertically.
+		/// </summary>
+		const int VerticalUpDownButtonSize = 28;
+
+		/// <summary>
+		/// Gets or sets a value of right side space for counter text.
+		/// </summary>
+		const float CounterTextPadding = 12;
 
         /// <summary>
         /// Gets or sets the string value of counter text.
@@ -224,7 +231,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// </summary>
         internal bool IsIconPressed { get; private set; } = false;
 #endif
-        internal bool IsLayoutTapped { get; set; }
+
+		internal bool IsLayoutTapped { get; set; }
         /// <summary>
         /// Gets or sets a value indicating the hint was animating from down to up.
         /// </summary>
@@ -337,7 +345,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
          UIKit.UITextField? uiEntry;
 #endif
 
-        #endregion
+		private string _initialContentDescription = string.Empty;
+
+		#endregion
 
         #region Constructor
 
@@ -351,11 +361,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             HintFontSize = (float)HintLabelStyle.FontSize;
             this.AddTouchListener(this);
             _effectsRenderer = new EffectsRenderer(this);
-            Unloaded += OnTextInputLayoutUnloaded;
-            Loaded += OnTextInputLayoutLoaded;
             SetRendererBasedOnPlatform();
 
-        }
+		}
         #endregion
 
         #region Private Methods
@@ -385,13 +393,18 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 if ((_downIconRectF.Contains(touchpoint) && IsUpDownVerticalAlignment) || (_upIconRectF.Contains(touchpoint) && !IsUpDownVerticalAlignment))
                 {
-                    numericEntry.UpButtonPressed();
+					// Update the semantic description when the button is pressed
+					SemanticProperties.SetDescription(this, "Up button pressed");
+					numericEntry.UpButtonPressed();
                 }
                 else if ((_upIconRectF.Contains(touchpoint) && IsUpDownVerticalAlignment) || (_downIconRectF.Contains(touchpoint) && !IsUpDownVerticalAlignment))
                 {
-                    numericEntry.DownButtonPressed();
+					// Update the semantic description when the button is pressed
+					SemanticProperties.SetDescription(this, "Down button pressed");
+					numericEntry.DownButtonPressed();
                 }
-            }
+				SemanticScreenReader.Announce(SemanticProperties.GetDescription(this));
+			}
 #if IOS || MACCATALYST
             await Task.Delay(10);
             IsIconPressed = false;
@@ -406,7 +419,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			if (this.Content is ITextInputLayout numericEntry)
             {
-                numericEntry.ClearIconPressed();
+				// Update the semantic description when the button is pressed
+				SemanticProperties.SetDescription(this, "Clear button pressed");
+				SemanticScreenReader.Announce(SemanticProperties.GetDescription(this));
+				numericEntry.ClearIconPressed();
                 if (!IsClearIconVisible && _effectsRenderer != null && _effectsRenderer.HighlightBounds.Width > 0 && _effectsRenderer.HighlightBounds.Height > 0)
                 {
                     _effectsRenderer.RemoveHighlight();
@@ -684,26 +700,32 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 UpdateContentMargin(view);
             }
 
-            //For placeholder overlap issue here handled the opacity value for controls.
-            //Adjusted Opacity from 0 to 0.00001 to ensure the content remains functionally active while enabling the ReturnType property.
-            if (newValue is InputView entryEditorContent)
+			//For placeholder overlap issue here handled the opacity value for controls.
+			if (newValue is InputView entryEditorContent)
             {
-				entryEditorContent.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-            }
+#if ANDROID || IOS
+				entryEditorContent.Opacity = IsHintFloated ? 1 : 0.00001;
+#else
+				entryEditorContent.Opacity = IsHintFloated ? 1 : 0;
+#endif
+				_initialContentDescription = SemanticProperties.GetDescription(entryEditorContent);
+			}
             else if (newValue is SfView numericEntryContent && numericEntryContent.Children.Count > 0)
             {
                 if (numericEntryContent.Children[0] is Entry numericInputView)
                 {
 					numericInputView.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-                }
+					AutomationProperties.SetIsInAccessibleTree(numericInputView, false); // Exclude numeric entry view from accessibility.
+				}
             }
             else if (newValue is Picker picker)
             {
                 if (DeviceInfo.Platform != DevicePlatform.WinUI)
                 {
 					picker.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-                }
-            }
+				}
+				AutomationProperties.SetIsInAccessibleTree(picker, false); // Exclude picker from accessibility.
+			}
 
             base.OnContentChanged(oldValue, newValue);
 
@@ -711,8 +733,63 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 OnEnabledPropertyChanged(IsEnabled);
             }
+
+			SetCustomDescription(newValue);
         }
 
+		/// <summary>
+		/// Sets a custom semantic description for the content.
+		/// </summary>
+		private void SetCustomDescription(object content)
+		{
+
+			if (this.Content == null || content == null)
+				return;
+
+			var customDescription = string.Empty;
+#if ANDROID || MACCATALYST || IOS
+			
+			if (content is InputView entryEditorContent)
+			{
+				customDescription = (string.IsNullOrEmpty(entryEditorContent.Text) && !string.IsNullOrEmpty(entryEditorContent.Placeholder) && DeviceInfo.Platform ==  DevicePlatform.Android) ? entryEditorContent.Placeholder : string.Empty;
+			}
+
+			var layoutDescription = GetLayoutDescription();
+			
+			var contentDescription = layoutDescription + (IsHintFloated ? customDescription + _initialContentDescription : string.Empty);
+
+			SemanticProperties.SetDescription(this.Content, contentDescription);
+#elif WINDOWS
+
+			customDescription = SemanticProperties.GetDescription(this);
+
+			if (string.IsNullOrEmpty(customDescription))
+			{
+				customDescription = ShowHint && !string.IsNullOrEmpty(Hint) ? Hint : string.Empty;
+				SemanticProperties.SetDescription(this, customDescription);
+			}
+#endif
+		}
+
+#if ANDROID || MACCATALYST || IOS
+		/// <summary>
+		/// Retrieves the layout semantic description.
+		/// </summary>
+		private string GetLayoutDescription()
+		{
+			var description = SemanticProperties.GetDescription(this);
+
+			if (string.IsNullOrEmpty(description))
+			{
+				description = ShowHint && !string.IsNullOrEmpty(Hint) ? Hint : string.Empty;
+			}
+			if(!string.IsNullOrEmpty(description))
+			{
+				description = description.EndsWith(".") ? description : description + ". ";
+			}
+			return description ?? string.Empty;
+		}
+#endif
 		/// <summary>
 		/// Measures the size requirements for the content of the element.
 		/// </summary>
@@ -814,6 +891,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			IsUpDownVerticalAlignment = false;
 			IsUpDownAlignmentLeft = false;
 			IsUpDownAlignmentBoth = false;
+			RemovedExistingView(UpIconTemplate);
+			RemovedExistingView(DownIconTemplate);
+			UpIconTemplate = null;
+			DownIconTemplate = null;
 		}
 
 		/// <summary>
@@ -824,7 +905,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             if (IsUpDownVerticalAlignment)
             {
                 _upIconRectF.X = _downIconRectF.X;
-                _upIconRectF.Y = (float)(_downIconRectF.Y + IconSize / 2 + DefaultAssistiveLabelPadding);
+				_upIconRectF.Y = (float)(_downIconRectF.Y + IconSize / 2 + DefaultAssistiveLabelPadding);
+				if (UpIconTemplate != null && DownIconTemplate != null)
+				{
+					_upIconRectF.Y = (float)(_downIconRectF.Bottom);
+				}
+				
             }
             else
             {
@@ -835,8 +921,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				_upIconRectF.Y = _downIconRectF.Y;
 				HandleUpIconInlinePosition();
             }
-            _upIconRectF.Width = (ShowUpDownButton) ? UpDownButtonSize : 0;
-            _upIconRectF.Height = (ShowUpDownButton) ? UpDownButtonSize : 0;
+            _upIconRectF.Width = (ShowUpDownButton) ? GetButtonSize() : 0;
+            _upIconRectF.Height = (ShowUpDownButton) ? GetButtonSize() : 0;
         }
 
 		/// <summary>
@@ -973,8 +1059,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 _downIconRectF.Y = (float)((Content.Y + (Content.Height / 2)) - (UpDownButtonSize / 2));
                 if (IsUpDownVerticalAlignment)
                 {
-                    _downIconRectF.Y = (float)((Content.Y + (Content.Height / 2)) - (UpDownButtonSize / 2));
-                }
+					_downIconRectF.Y = (float)(Content.Y + (Content.Height / 2) - GetButtonSize() - (DefaultAssistiveLabelPadding * 1.5));
+				}
             }
             else if (IsOutlined)
             {
@@ -993,8 +1079,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 }
             }
 
-            _downIconRectF.Width = (IsPassowordToggleIconVisible || ShowUpDownButton) ? UpDownButtonSize : 0;
-            _downIconRectF.Height = (IsPassowordToggleIconVisible || ShowUpDownButton) ? UpDownButtonSize : 0;
+            _downIconRectF.Width = (IsPassowordToggleIconVisible || ShowUpDownButton) ? GetButtonSize() : 0;
+            _downIconRectF.Height = (IsPassowordToggleIconVisible || ShowUpDownButton) ? GetButtonSize() : 0;
 
             if (IsRTL)
             {
@@ -1064,9 +1150,35 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
 				return;
             }
-			DrawButton(canvas, UpButtonColor, IsUpDownVerticalAlignment ? _downIconRectF : _upIconRectF, _tilRenderer.DrawUpButton);
-			DrawButton(canvas, DownButtonColor, IsUpDownVerticalAlignment ? _upIconRectF : _downIconRectF, _tilRenderer.DrawDownButton);
-        }
+			
+			if (DownIconTemplate != null)
+			{
+				RectF tempRect = IsUpDownVerticalAlignment ? _upIconRectF : _downIconRectF;
+				if (IsRTL)
+				{
+					tempRect.X = (float)Width - tempRect.X - IconSize;
+				}
+				UpdateButtonView(DownIconTemplate, tempRect);
+
+			}
+			else
+			{
+				DrawButton(canvas, DownButtonColor, IsUpDownVerticalAlignment ? _upIconRectF : _downIconRectF, _tilRenderer.DrawDownButton);
+			}
+			if (UpIconTemplate != null)
+			{
+				RectF tempRect = IsUpDownVerticalAlignment ? _downIconRectF : _upIconRectF;
+				if (IsRTL)
+				{
+					tempRect.X = (float)Width - tempRect.X - IconSize;
+				}
+				UpdateButtonView(UpIconTemplate, tempRect);
+			}
+			else
+			{
+				DrawButton(canvas, UpButtonColor, IsUpDownVerticalAlignment ? _downIconRectF : _upIconRectF, _tilRenderer.DrawUpButton);
+			}
+		}
 
 		/// <summary>
 		/// Changes the visual state of the control.
@@ -1120,6 +1232,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             if (Handler != null)
             {
                 WireEvents();
+                OnTextInputViewHandlerChanged(this.Content, new EventArgs());
             }
         }
 

@@ -183,8 +183,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			BindingMode.Default,
 			null,
 			OnCornerRadiusChanged,
-			null,
-			defaultValueCreator: CornerRadiusDefaultValueCreator);
+			null);
 
 		#endregion
 
@@ -316,6 +315,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// </summary>
 		public ChartLabelStyle()
 		{
+			CornerRadius = new CornerRadius(0);
 		}
 
 		#endregion
@@ -347,11 +347,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal virtual Thickness GetDefaultMargin()
 		{
 			return new Thickness(3.5);
-		}
-
-		internal virtual CornerRadius GetDefaultCornerRadius()
-		{
-			return new CornerRadius(0);
 		}
 
 		#endregion
@@ -493,11 +488,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		static object MarginDefaultValueCreator(BindableObject bindable)
 		{
 			return ((ChartLabelStyle)bindable).GetDefaultMargin();
-		}
-
-		static object CornerRadiusDefaultValueCreator(BindableObject bindable)
-		{
-			return ((ChartLabelStyle)bindable).GetDefaultCornerRadius();
 		}
 
 		#endregion

@@ -130,8 +130,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			null,
 			BindingMode.Default,
 			null,
-			propertyChanged: OnLegendStylePropertyChanged,
-			defaultValueCreator: LabelStyleDefaultValueCreator);
+			propertyChanged: OnLegendStylePropertyChanged);
 
 		#endregion
 
@@ -599,11 +598,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		static double GetDefaultLegendSize()
 		{
 			return 0.25d;
-		}
-
-		static object? LabelStyleDefaultValueCreator(BindableObject bindable)
-		{
-			return null;
 		}
 
 		static void OnLegendStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)

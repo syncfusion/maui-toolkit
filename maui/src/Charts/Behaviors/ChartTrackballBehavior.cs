@@ -813,6 +813,29 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		/// <summary>
+		/// <inheritdoc/>
+		/// </summary>
+		protected override void OnParentSet()
+		{
+			base.OnParentSet();
+
+			if (LabelStyle != null)
+			{
+				LabelStyle.Parent = Parent;
+			}
+
+			if (LineStyle != null)
+			{
+				LineStyle.Parent = Parent;
+			}
+
+			if (MarkerSettings != null)
+			{
+				MarkerSettings.Parent = Parent;
+			}
+		}
+
 		/// <inheritdoc/>
 		protected internal override void OnTouchMove(ChartBase chart, float pointX, float pointY)
 		{

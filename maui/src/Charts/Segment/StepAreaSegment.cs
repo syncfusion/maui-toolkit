@@ -28,9 +28,9 @@
 		/// </summary>
 		void CalculateInteriorPoints()
 		{
-			if (Series is CartesianSeries cartesian && cartesian.ActualXAxis != null && XValues != null && YValues != null)
+			if (Series is CartesianSeries cartesian && cartesian.ActualXAxis is ChartAxis xAxis && XValues != null && YValues != null)
 			{
-				var crossingValue = cartesian.ActualXAxis.ActualCrossingValue;
+				var crossingValue = double.IsNaN(xAxis.RenderingCrossesValue) ? cartesian.GetAxisCrossingValue(xAxis) : xAxis.RenderingCrossesValue;
 				var count = XValues.Length;
 				FillPoints = [];
 				double xValue = XValues[0];

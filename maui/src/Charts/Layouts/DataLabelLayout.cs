@@ -1,5 +1,4 @@
 ﻿using Microsoft.Maui.Layouts;
-using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {

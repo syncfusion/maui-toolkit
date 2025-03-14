@@ -63,8 +63,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			null,
 			BindingMode.Default,
 			null,
-			OnLabelStylePropertyChanged,
-			defaultValueCreator: LabelStyleDefaultValueCreator);
+			OnLabelStylePropertyChanged);
 
 		#endregion
 
@@ -341,11 +340,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			LabelRect = new Rect(labelRectX, labelRectY, labelWidth, labelHeight);
-		}
-
-		static object LabelStyleDefaultValueCreator(BindableObject bindable)
-		{
-			return new ChartAnnotationLabelStyle() { FontSize = 12 };
 		}
 
 		#endregion

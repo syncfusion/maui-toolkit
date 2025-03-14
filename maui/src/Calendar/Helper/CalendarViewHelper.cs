@@ -1612,52 +1612,52 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             return string.Empty;
         }
 
-        /// <summary>
-        /// Get calendar instance using its calendar identifier.
-        /// </summary>
-        /// <param name="calendarIdentifier">The name of the calendar.</param>
-        /// <returns>A calendar instance.</returns>
-        internal static Globalization.Calendar GetCalendar(string calendarIdentifier)
-        {
-            switch (calendarIdentifier)
-            {
+		/// <summary>
+		/// Get calendar instance using its calendar identifier.
+		/// </summary>
+		/// <param name="calendarIdentifier">The name of the calendar.</param>
+		/// <returns>A calendar instance.</returns>
+		internal static Globalization.Calendar GetCalendar(string calendarIdentifier)
+		{
+			switch (calendarIdentifier)
+			{
 
-                case "Gregorian":
+				case "Gregorian":
 
-                    return new GregorianCalendar();
+					return new GregorianCalendar();
 
-                case "Hijri":
+				case "Hijri":
 
-                    return new HijriCalendar();
+					return new HijriCalendar();
 
-                case "Persian":
+				case "Persian":
 
-                    return new PersianCalendar();
+					return new PersianCalendar();
 
-                case "ThaiBuddhist":
+				case "ThaiBuddhist":
 
-                    return new ThaiBuddhistCalendar();
+					return new ThaiBuddhistCalendar();
 
-                case "Taiwan":
+				case "Taiwan":
 
-                    return new TaiwanCalendar();
+					return new TaiwanCalendar();
 
-                case "UmAlQura":
+				case "UmAlQura":
 
-                    return new UmAlQuraCalendar();
+					return new UmAlQuraCalendar();
 
-                case "Korean":
+				case "Korean":
 
-                    return new KoreanCalendar();
+					return new KoreanCalendar();
 
-                default:
+				default:
 
-                    // If calendar identifier is specified wrongly, then default calendar will be used.
+					// If calendar identifier is specified wrongly, then default calendar will be used.
 
-                    return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
+					return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
 
-            }
-        }
+			}
+		}
 
         /// <summary>
         /// Method to get the non valid week(first row without monday) while reaching the min date of the month.

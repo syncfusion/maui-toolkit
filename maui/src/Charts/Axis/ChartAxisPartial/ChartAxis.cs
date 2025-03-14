@@ -1895,6 +1895,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal bool IsScrolling { get; set; }
 
+		internal double RenderingCrossesValue = double.NaN;
+
 		//Todo: Need to provide support for next release.
 
 		/// <summary>
@@ -2010,15 +2012,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 			else
 			{
-				//TODO: Need to validate desired size.
-				UpdateLabels(); //Generate visible labels
-				ActualPlotOffsetStart = double.IsNaN(PlotOffsetStart) ? 0f : PlotOffsetStart;
-				ActualPlotOffsetEnd = double.IsNaN(PlotOffsetEnd) ? 0f : PlotOffsetEnd;
-				ActualPlotOffset = ActualPlotOffsetStart + ActualPlotOffsetEnd;
-				InsidePadding = 0;
-				AxisRenderer = null;
-				ComputedDesiredSize = !IsVertical ? new Size(size.Width, 0) : new Size(0, size.Height);
+				ResetComputeSize(size);
 			}
+		}
+
+		internal void ResetComputeSize(Size size)
+		{
+			//TODO: Need to validate desired size.
+			UpdateLabels(); //Generate visible labels
+			ActualPlotOffsetStart = double.IsNaN(PlotOffsetStart) ? 0f : PlotOffsetStart;
+			ActualPlotOffsetEnd = double.IsNaN(PlotOffsetEnd) ? 0f : PlotOffsetEnd;
+			ActualPlotOffset = ActualPlotOffsetStart + ActualPlotOffsetEnd;
+			InsidePadding = 0;
+			AxisRenderer = null;
+			ComputedDesiredSize = !IsVertical ? new Size(size.Width, 0) : new Size(0, size.Height);
 		}
 
 		internal bool RenderRectContains(float x, float y)
@@ -2670,6 +2677,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (bindable is ChartAxis axis && newValue != null)
 			{
+				axis.RenderingCrossesValue = double.NaN;
 				axis.ActualCrossingValue = ChartUtils.ConvertToDouble(newValue);
 				axis.UpdateLayout();
 			}

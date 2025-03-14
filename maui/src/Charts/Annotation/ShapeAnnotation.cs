@@ -130,8 +130,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			null,
 			BindingMode.Default,
 			null,
-			OnLabelStylePropertyChanged,
-			defaultValueCreator: LabelStyleDefaultValueCreator);
+			OnLabelStylePropertyChanged);
 
 		#endregion
 
@@ -535,6 +534,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (_annotationLabelStyle != null)
 			{
 				_annotationLabelStyle.Parent = Parent;
+				_annotationLabelStyle.IsShapeAnnotation = this is ShapeAnnotation;
 			}
 		}
 
@@ -652,11 +652,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		static object StrokeDefaultValueCreator(BindableObject bindable)
 		{
 			return ((ShapeAnnotation)bindable).GetDefaultStrokeColor();
-		}
-
-		static object LabelStyleDefaultValueCreator(BindableObject bindable)
-		{
-			return new ChartAnnotationLabelStyle() { FontSize = 11 };
 		}
 
 		#endregion

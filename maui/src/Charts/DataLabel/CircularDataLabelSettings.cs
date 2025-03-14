@@ -332,12 +332,12 @@
 			InvalidateVisibleDataLabelSeries(bindable);
 		}
 
-		private static void OnLabelPositionPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnLabelPositionPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			InvalidateVisibleDataLabelSeries(bindable);
 		}
 
-		private static void InvalidateVisibleDataLabelSeries(BindableObject bindable)
+		static void InvalidateVisibleDataLabelSeries(BindableObject bindable)
 		{
 			if (bindable is CircularDataLabelSettings chartDataLabelSettings && chartDataLabelSettings.Parent is SfCircularChart circularChart)
 			{
