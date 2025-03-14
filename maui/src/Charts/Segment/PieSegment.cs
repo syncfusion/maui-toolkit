@@ -213,7 +213,7 @@
 			}
 
 			var dataLabelSettings = pieSeries.DataLabelSettings;
-			IsEmpty = double.IsNaN(YValue) || YValue == 0;
+			IsZero = double.IsNaN(YValue) || YValue == 0;
 			float segmentRadius = pieSeries.GetDataLabelRadius();
 			segmentRadius = Index == pieSeries.ExplodeIndex ? segmentRadius + (float)pieSeries.ExplodeRadius : segmentRadius;
 			PointF center = pieSeries.Center;

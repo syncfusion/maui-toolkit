@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localcore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.OtpInput.OtpInput.SignUpMobile"
+             xmlns:localcore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.OtpInput.OtpInput"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:otpInput="clr-namespace:Syncfusion.Maui.Toolkit.OtpInput;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:textInput ="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:customView="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView"
+             x:Name="sampleView"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+  <localcore:SampleView.Behaviors>
+    <local:SignUpBehavior/>
+  </localcore:SampleView.Behaviors>
+
+  <localcore:SampleView.Resources>
+    <ResourceDictionary>
+      <Style TargetType="popup:SfPopup" x:Key="Popupstyle">
+        <Setter Property="PopupStyle">
+          <Setter.Value>
+            <popup:PopupStyle HasShadow="True" CornerRadius="12"/>
+          </Setter.Value>
+        </Setter>
+      </Style>
+    </ResourceDictionary>
+    <local:FirstFourNumberConverter x:Key="NumberFormatConverter"/>
+  </localcore:SampleView.Resources>
+
+  <localcore:SampleView.BindingContext>
+    <local:SignUpViewModel/>
+  </localcore:SampleView.BindingContext>
+
+  <localcore:SampleView.Content>
+    <Grid>
+      <Grid RowDefinitions="250,*,100" IsVisible="True" x:Name="SignUp">
+        <Grid Grid.Row="0">
+          <Image Source="signup.png"
+       HeightRequest="160"
+       WidthRequest="160"
+       HorizontalOptions="Center"
+       VerticalOptions="End"/>
+        </Grid>
+
+        <VerticalStackLayout Spacing="5" Padding="20,10" Grid.Row="1">
+          <!-- Name Entry -->
+          <VerticalStackLayout Spacing="5" >
+            <Label Text="Username" TextColor="{AppThemeBinding Light={StaticResource TitleTextColorLight}, Dark={StaticResource TitleTextColorDark}}"
+           FontSize="14" />
+            <textInput:SfTextInputLayout x:Name="NameTextInput" ContainerType="Outlined" OutlineCornerRadius="10" ShowHelperText="False" InputViewPadding="20,0,20,10" HeightRequest="65" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}">
+              <customView:SfEntry Keyboard="Text" x:Name="NameEntry" VerticalOptions="Center" Text="{Binding Name}" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Placeholder="Enter your username" PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"/>
+            </textInput:SfTextInputLayout>
+          </VerticalStackLayout>
+
+          <!-- Phone Entry -->
+          <VerticalStackLayout Spacing="5" >
+            <Label Text="Phone Number" 
+          TextColor="{AppThemeBinding Light={StaticResource TitleTextColorLight}, Dark={StaticResource TitleTextColorDark}}"
+           FontSize="14" />
+            <textInput:SfTextInputLayout x:Name="PhoneNumberTextInput" ContainerType="Outlined"  OutlineCornerRadius="10" ShowHelperText="False" InputViewPadding="20,0,20,10" HeightRequest="65" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}">
+              <customView:SfEntry Keyboard="Telephone" x:Name="PhoneEntry" VerticalOptions="Center" Text="{Binding PhoneNumber}" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" Placeholder="Enter your phone number" PlaceholderColor="{AppThemeBinding Light={StaticResource PlaceholderTextColourLight}, Dark={StaticResource PlaceholderTextColourDark}}"/>
+            </textInput:SfTextInputLayout>
+          </VerticalStackLayout>
+
+          <!-- Terms and Privacy -->
+          <Label FontSize="14" WidthRequest="{OnPlatform Android=230,iOS=290}" LineBreakMode="CharacterWrap" HorizontalTextAlignment="Center" Padding="0,0,0,12">
+            <Label.FormattedText>
+              <FormattedString>
+                <Span Text="By clicking 'Register,' you agree to our " TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+                <Span Text="Terms of Use"
+                  TextColor="{StaticResource Blue100Accent}"/>
+                <Span Text=" and " TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+                <Span Text="Privacy Policy."
+                  TextColor="{StaticResource Blue100Accent}"/>
+
+              </FormattedString>
+            </Label.FormattedText>
+          </Label>
+
+          <!-- Register Button -->
+          <Button Text="Register" x:Name="Register"
+            HeightRequest="45"
+            Padding="0,10"
+            CornerRadius="10"/>
+
+
+        </VerticalStackLayout>
+        <!-- Login Link -->
+        <Label HorizontalOptions="Center" VerticalOptions="End" Padding="12" Grid.Row="2">
+          <Label.FormattedText>
+            <FormattedString>
+              <Span Text="Have an account? "
+  TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+              <Span Text="Login"
+  TextColor="{StaticResource Blue100Accent}">
+                <Span.GestureRecognizers>
+                  <TapGestureRecognizer />
+                </Span.GestureRecognizers>
+              </Span>
+            </FormattedString>
+          </Label.FormattedText>
+        </Label>
+      </Grid>
+      
+      
+      <Grid IsVisible="False" RowDefinitions="60,*" x:Name="ConfirmOTP">
+        <Grid Padding="20,10" ColumnSpacing="15" ColumnDefinitions="40,*,Auto" Grid.Row="0" VerticalOptions="Center">
+          <!-- Back Button -->
+          <Border HorizontalOptions="Start"  WidthRequest="40" HeightRequest="40" Grid.Column="0" StrokeThickness="0"  BackgroundColor="Transparent" Margin="2,0,0,0">
+            <Border.StrokeShape>
+              <RoundRectangle CornerRadius="30"/>
+            </Border.StrokeShape>
+            <customView:SfEffectsViewAdv x:Name="ConfirmOtpBackButton">
+              <Label Text="&#xe70e;" TextColor="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark }}" FontFamily="MauiSampleFontIcon" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28" />
+            </customView:SfEffectsViewAdv>
+          </Border>
+
+          <!-- Title -->
+          <Label Text="Confirm OTP code"
+     FontSize="18"
+         Grid.Column="1"
+         TextColor="{AppThemeBinding Light={StaticResource TitleTextColorLight}, Dark={StaticResource TitleTextColorDark}}"
+     HorizontalOptions="Start"
+      VerticalOptions="Center"
+     FontAttributes="Bold" />
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="1" Padding="20,20" Spacing="6">
+          <!-- Phone Number Display -->
+          <Label HorizontalOptions="Center" >
+            <Label.FormattedText>
+              <FormattedString>
+                <Span Text="{Binding PhoneNumber,Converter={StaticResource NumberFormatConverter}}" FontSize="24" FontAttributes="Bold"
+TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                <Span Text="******" FontSize="24" FontAttributes="Bold"
+TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+              </FormattedString>
+            </Label.FormattedText>
+          </Label>
+
+          <!-- Instructions -->
+          <Label Text="Enter the 5-digit OTP sent via SMS to complete your registration." LineBreakMode="WordWrap"
+             FontSize="14"
+             TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+             HorizontalTextAlignment="Center" />
+
+          <otpInput:SfOtpInput StylingMode="Filled" x:Name="OTPVerify" HorizontalOptions="Center" Length="5"  />
+
+          <!-- Resend Option -->
+          <Label LineBreakMode="WordWrap" HorizontalTextAlignment="Center" >
+            <Label.FormattedText>
+              <FormattedString>
+                <Span Text="I didn’t receive the confirmation code. "/>
+                <Span Text="Resend." x:Name="ResendOTP" TextColor="{StaticResource Blue100Accent}" />
+              </FormattedString>
+            </Label.FormattedText>
+          </Label>
+
+          <!-- Confirm Button -->
+          <Button Text="Confirm"
+                  x:Name="ConfirmOTPButton"
+                  VerticalOptions="End"
+                  Grid.Row="2"
+                  HeightRequest="50"
+                  Margin="0,20,0,0"
+                  CornerRadius="15"/>
+        </VerticalStackLayout>
+
+        <popup:SfPopup x:Name="OtpPopup" StartY="0" Style="{StaticResource Popupstyle}" IsOpen="{Binding IsPopUpOpen}" ShowOverlayAlways="False"  WidthRequest="360" HeightRequest="{OnPlatform Android=180,iOS=190}"  HeaderHeight="50" ShowCloseButton="False">
+          <!-- Popup Header -->
+          <popup:SfPopup.HeaderTemplate>
+            <DataTemplate>
+              <Label Text="OTP Authentication" FontAttributes="Bold" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+FontSize="{OnPlatform Android=18,iOS=20}" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+            </DataTemplate>
+          </popup:SfPopup.HeaderTemplate>
+          <popup:SfPopup.ContentTemplate>
+            <DataTemplate>
+              <VerticalStackLayout Spacing="{OnPlatform iOS=10, Android=10}" Padding="0,0,0,10" >
+                <Label LineBreakMode="WordWrap"  Padding="12,0"
+FontSize="18"
+TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" VerticalTextAlignment="{OnPlatform iOS=Center}"  HorizontalTextAlignment="{OnPlatform iOS=Center}"
+HorizontalOptions="Center"
+VerticalOptions="Center">
+                  <Label.FormattedText>
+                    <FormattedString>
+                      <Span Text="Hello Mr./Mrs. " />
+                      <Span Text="{Binding Name}"/>
+                      <Span Text=", Use this "/>
+                      <Span Text="one-time password" FontAttributes="Bold"/>
+                      <Span Text=" to validate your login : "/>
+                      <Span Text="{Binding OTP}" FontAttributes="Bold" />
+                    </FormattedString>
+                  </Label.FormattedText>
+                </Label>
+                <Button Text="Copy OTP" WidthRequest="100" HeightRequest="40" Command="{Binding CopyOtpCommand}" />
+              </VerticalStackLayout>
+            </DataTemplate>
+          </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+        
+        <!--Success PopUp-->
+        <popup:SfPopup x:Name="OtpVerficationPopup"  Style="{StaticResource Popupstyle}"
+                HeaderHeight="100"
+                ShowOverlayAlways="False"
+                ShowFooter="True"
+                AppearanceMode="OneButton"
+                HorizontalOptions="Center"
+                VerticalOptions="Center">
+
+          <popup:SfPopup.HeaderTemplate>
+            <DataTemplate>
+              <Label Text="&#xe718;" FontFamily="MauiSampleFontIcon" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+               FontSize="60" TextColor="{AppThemeBinding Light=#205107, Dark=#9DD67E}"/>
+            </DataTemplate>
+          </popup:SfPopup.HeaderTemplate>
+
+          <popup:SfPopup.ContentTemplate>
+            <DataTemplate>
+              <VerticalStackLayout HorizontalOptions="Center" MinimumWidthRequest="250"
+                            VerticalOptions="Center" HeightRequest="{OnPlatform Android=65,iOS=50}"
+                            Spacing="5">
+                <Label Text="Successful!"
+                      FontSize="22" FontAttributes="Bold"
+                      TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                      HorizontalOptions="Center"
+                      VerticalOptions="Center"/>
+                <Label Text=" Your OTP has been verified." VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+                FontSize="18"
+                TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+              </VerticalStackLayout>
+            </DataTemplate>
+          </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+
+        <!--Faild popUp-->
+        <popup:SfPopup x:Name="FailedPopup"  Style="{StaticResource Popupstyle}"
+      HeaderHeight="100"
+      ShowOverlayAlways="False"
+      ShowFooter="True"
+      AppearanceMode="OneButton"
+      HorizontalOptions="Center"
+      VerticalOptions="Center">
+
+          <popup:SfPopup.HeaderTemplate>
+            <DataTemplate>
+              <Label Text="&#xe71a;" FontFamily="MauiSampleFontIcon" VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
+     FontSize="60" TextColor="{AppThemeBinding Light=#B3261E, Dark=#F2B8B5}"/>
+            </DataTemplate>
+          </popup:SfPopup.HeaderTemplate>
+
+          <popup:SfPopup.ContentTemplate>
+            <DataTemplate>
+              <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="{OnPlatform Default=65,iOS=50}"
+                  Spacing="5">
+                <Label Text="Failed"
+            FontSize="22" 
+            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"/>
+                <Label Text=" Your OTP is invalid!" x:Name="OTPStatusDescription"
+      FontSize="18"
+      TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+              </VerticalStackLayout>
+            </DataTemplate>
+          </popup:SfPopup.ContentTemplate>
+        </popup:SfPopup>
+      </Grid>
+    </Grid>
+  </localcore:SampleView.Content>
+</localcore:SampleView>

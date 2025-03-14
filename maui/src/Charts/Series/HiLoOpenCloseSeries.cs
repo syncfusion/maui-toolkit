@@ -320,7 +320,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					X = xPosition,
 					Y = yPosition,
 					Index = index,
-					Text = yValue.ToString(" #.##") + "/" + lowValue.ToString(" #.##") + "/" + openValue.ToString(" #.##") + "/" + closeValue.ToString(" #.##"),
+					Text = (yValue == 0 ? yValue.ToString(" 0.##") : yValue.ToString(" #.##")) + "/" + (lowValue == 0 ? lowValue.ToString(" 0.##") : lowValue.ToString(" #.##")) + "/" + (openValue == 0 ? openValue.ToString(" 0.##") : openValue.ToString(" #.##")) + "/" + (closeValue == 0 ? closeValue.ToString(" 0.##") : closeValue.ToString(" #.##")),
 					Margin = tooltipBehavior.Margin,
 					TextColor = tooltipBehavior.TextColor,
 					FontFamily = tooltipBehavior.FontFamily,
@@ -348,12 +348,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				string closeFormat = $"{SfCartesianChartResources.Close}  :";
 
 				var labels = new[]
-				{
-				   new {LabelText = highFormat,ValueText = texts[0]},
-				   new {LabelText = lowFormat,ValueText = texts[1]},
-				   new {LabelText = openFormat,ValueText = texts[2]},
-				   new {LabelText = closeFormat,ValueText = texts[3]},
-				};
+					{
+						new TooltipLabelValue(highFormat, texts[0]),
+						new TooltipLabelValue(lowFormat, texts[1]),
+						new TooltipLabelValue(openFormat, texts[2]),
+						new TooltipLabelValue(closeFormat, texts[3]),
+					};
 
 				StackLayout stackLayout = [];
 				BindableLayout.SetItemsSource(stackLayout, labels);
@@ -383,8 +383,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						FontSize = info.FontSize,
 					});
 
-					((Label)stackLayout1.Children[0]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty, new Binding("LabelText"));
-					((Label)stackLayout1.Children[1]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty, new Binding("ValueText"));
+					((Label)stackLayout1.Children[0]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty,
+							BindingHelper.CreateBinding(nameof(TooltipLabelValue.LabelText), getter: static (TooltipLabelValue label) => label.LabelText));
+					((Label)stackLayout1.Children[1]).SetBinding(Microsoft.Maui.Controls.Label.TextProperty,
+						BindingHelper.CreateBinding(nameof(TooltipLabelValue.ValueText), getter: static (TooltipLabelValue label) => label.ValueText));
 					return stackLayout1;
 				}));
 

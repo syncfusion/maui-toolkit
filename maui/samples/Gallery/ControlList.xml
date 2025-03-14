@@ -18,6 +18,11 @@
     <Assembly Name="BottomSheet" />
     <Assembly Name="NumericEntry" />
     <Assembly Name="NumericUpDown" />
-	<Assembly Name="Calendar" />
+    <Assembly Name="Calendar" />
+	 <Assembly Name="OtpInput" />
+    <Assembly Name="Expander" />
+    <Assembly Name="Accordion" />
+	<Assembly Name="Cards" />
+	<Assembly Name="Popup"/>
 	</Assemblies>
 </SampleBrowser>

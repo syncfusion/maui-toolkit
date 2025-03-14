@@ -3,7 +3,7 @@
 	/// <summary>
 	/// Dark theme resource dictionary.
 	/// </summary>
-	[XamlCompilation(XamlCompilationOptions.Skip)]
+	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class LightThemeColors : SyncfusionThemeDictionary
 	{
 		/// <summary>

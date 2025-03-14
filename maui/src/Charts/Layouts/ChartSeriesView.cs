@@ -21,7 +21,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			_series = chartSeries;
 			_chartPlotArea = plotArea;
-			SetBinding(IsVisibleProperty, new Binding() { Source = chartSeries, Path = nameof(ChartSeries.IsVisible) });
+			SetBinding(IsVisibleProperty, 
+				BindingHelper.CreateBinding(nameof(ChartSeries.IsVisible), getter: static(ChartSeries series) => series.IsVisible, source: chartSeries));
 		}
 
 		#endregion
@@ -118,6 +119,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					_series.OldSegments = null;
 				}
 
+				_series.UpdateEmptyPointSettings();
 				_series.SegmentsCreated = true;
 			}
 		}

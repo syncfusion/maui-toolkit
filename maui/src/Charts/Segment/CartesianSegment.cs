@@ -7,6 +7,15 @@
 	/// </summary>
 	public abstract class CartesianSegment : ChartSegment
 	{
+		#region Property
+
+		/// <summary>
+		/// Get the bool value to identify the empty point segment.  
+		/// </summary>
+		public bool IsEmpty { get; internal set; }
+
+		#endregion
+
 		#region Methods
 
 		#region Animation Methods
@@ -53,7 +62,7 @@
 				return;
 			}
 
-			IsEmpty = double.IsNaN(yValue);
+			IsZero = double.IsNaN(yValue);
 
 			double x = xValue, y = xyDataSeries.GetDataLabelPositionAtIndex(Index);
 
@@ -81,7 +90,7 @@
 				dataLabel.Item = Item;
 				dataLabel.Label = LabelContent ?? string.Empty;
 
-				LabelPositionPoint = InVisibleRange && !IsEmpty ? CartesianDataLabelSettings.CalculateDataLabelPoint(series, this, new PointF((float)DataLabelXPosition, (float)DataLabelYPosition), dataLabelSettings.LabelStyle) : new PointF(float.NaN, float.NaN);
+				LabelPositionPoint = InVisibleRange && !IsZero ? CartesianDataLabelSettings.CalculateDataLabelPoint(series, this, new PointF((float)DataLabelXPosition, (float)DataLabelYPosition), dataLabelSettings.LabelStyle) : new PointF(float.NaN, float.NaN);
 
 				dataLabel.XPosition = LabelPositionPoint.X;
 				dataLabel.YPosition = LabelPositionPoint.Y;

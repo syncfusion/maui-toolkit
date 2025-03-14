@@ -591,6 +591,45 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			ScheduleUpdateChart();
 		}
 
+		internal override void ResetEmptyPointIndexes()
+		{
+			if (EmptyPointIndexes.Length != 0)
+			{
+				if (EmptyPointIndexes[0] != null)
+				{
+					foreach (var index in EmptyPointIndexes[0])
+					{
+						if (YValues != null && YValues.Count != 0)
+						{
+							YValues[(int)index] = double.NaN;
+						}
+					}
+				}
+
+				if (EmptyPointIndexes[1] != null)
+				{
+					foreach (var index in EmptyPointIndexes[1])
+					{
+						if (_sizeValues != null && _sizeValues.Count != 0)
+						{
+							_sizeValues[(int)index] = double.NaN;
+						}
+					}
+				}
+			}
+		}
+
+		internal override void ValidateYValues()
+		{
+			bool yValues = YValues.Any(value => double.IsNaN(value));
+			bool values = _sizeValues.Any(value => double.IsNaN(value));
+
+			if ((yValues || values) && SeriesYValues != null)
+			{
+				ValidateDataPoints(SeriesYValues);
+			}
+		}
+		
 		#endregion
 
 		#region Private Methods

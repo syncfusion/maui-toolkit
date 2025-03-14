@@ -13,10 +13,11 @@ namespace Syncfusion.Maui.Toolkit.Themes
 	/// ***
 	/// </example>
 
-	[Microsoft.Maui.Controls.Internals.Preserve(AllMembers = true)]
-
 	[ContentProperty(nameof(ResourceKey))]
 
+#if NET9_0
+	[RequireService([typeof(IProvideValueTarget)])]
+#endif
 	public class StaticThemeResourceExtension : IMarkupExtension
 	{
 		/// <summary>
@@ -36,9 +37,9 @@ namespace Syncfusion.Maui.Toolkit.Themes
 				return null;
 			}
 
-			if (serviceProvider.GetService(typeof(IRootObjectProvider)) is IRootObjectProvider rootObjectProvider)
+			if (serviceProvider.GetService(typeof(IProvideValueTarget)) is IProvideValueTarget provideValueTarget)
 			{
-				if (rootObjectProvider.RootObject is ResourceDictionary themeResourceDictionary)
+				if (provideValueTarget.TargetObject is ResourceDictionary themeResourceDictionary)
 				{
 					var mergedDictionaries = themeResourceDictionary.MergedDictionaries ?? Enumerable.Empty<ResourceDictionary>();
 

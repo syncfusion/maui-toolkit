@@ -1,0 +1,285 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Cards.SfCards.CardView"
+             xmlns:cards="clr-namespace:Syncfusion.Maui.Toolkit.Cards;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:imageExtention="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Cards.SfCards"
+             Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+    <localCore:SampleView.Resources>
+        <Style TargetType="Button">
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Default={StaticResource PrimaryBackground}}"/>
+            <Setter Property="TextColor" Value="{AppThemeBinding Default={StaticResource PrimaryForeground}}"/>
+        </Style>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width=".45*"/>
+                <ColumnDefinition Width=".55*"/>
+            </Grid.ColumnDefinitions>
+            <Grid IsClippedToBounds="True" IsVisible="{OnPlatform WinUI=True, MacCatalyst=True, Default=False}" RowDefinitions="40, 60, *" 
+              Margin="0,40" HeightRequest="{OnPlatform MacCatalyst=430}"
+              VerticalOptions="{OnPlatform Default=Fill, WinUI=Center}">
+                <Image Source="gettingstarted.png" Aspect="AspectFit" Margin="50, 0, 0, 0"
+                 VerticalOptions="{OnPlatform WinUI=Center}"
+                 Grid.Row="2"/>
+            </Grid>
+            <Border Padding="0" Margin="10" BackgroundColor="Transparent"
+                   Grid.ColumnSpan="{OnPlatform Default=2, WinUI=1, MacCatalyst=1}"
+                   Grid.Column="{OnPlatform Default=0, WinUI=1, MacCatalyst=1}" 
+                   VerticalOptions="{OnPlatform Default=Center, WinUI=Center, MacCatalyst=Center}"
+                   WidthRequest="{OnPlatform WinUI=400, MacCatalyst=450, Default=350}"
+                   HeightRequest="{OnPlatform MacCatalyst=700}"
+                   HorizontalOptions="{OnPlatform WinUI=Center, MacCatalyst=Center, Default=Fill}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10" />
+                </Border.StrokeShape>
+                <ScrollView Grid.Row="1" Orientation="Vertical" Padding="0,0,0,10" VerticalScrollBarVisibility="Never" >
+                    <VerticalStackLayout>
+                        <cards:SfCardView x:Name="firstCard" WidthRequest="{OnPlatform Android=330, iOS=330, MacCatalyst=430, Default=380}" HeightRequest="220" Margin="0,10,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Image Source="coin.jpg" Aspect="AspectFill" WidthRequest="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <Grid Background="#472902" Padding="20" Opacity="0.9">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height=".3*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label x:DataType="local:ViewModel" Text="{Binding FirstCardDetails.CardName}" HorizontalOptions="Start" TextColor="White" VerticalOptions="Start" FontFamily="Roboto-Medium" />
+                                        <Label Grid.Row="1" x:DataType="local:ViewModel" Text="{Binding FirstCardDetails.CardNumber}" HorizontalOptions="Start" FontSize="12" TextColor="White" VerticalOptions="End" FontFamily="Roboto-Regular"/>
+                                        <Image Grid.Row="2" Source="cardchip.png" WidthRequest="60" HeightRequest="40" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        <Label Grid.Row="3" x:DataType="local:ViewModel" Text="{Binding FirstCardDetails.CardHolderName}" FontSize="18" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Column="1" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".4*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label x:DataType="local:ViewModel" Text="{Binding FirstCardDetails.CardDueDate}" HorizontalOptions="Start" VerticalOptions="Start" Padding="5" FontSize="10" BackgroundColor="{Binding FirstCardDetails.DueIndicatorColor}" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    <Label Grid.Row="1" Text="total due" HorizontalOptions="Start" VerticalOptions="End" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" FontFamily="Roboto-Regular"/>
+                                    <Label Grid.Row="2" x:DataType="local:ViewModel" Text="{Binding FirstCardDetails.CardDueAmount}" HorizontalOptions="Start" VerticalOptions="End" FontSize="25" FontFamily="Roboto-Medium"/>
+                                    <Button Grid.Row="3" Text="Pay now" HorizontalOptions="Fill" VerticalOptions="End" FontFamily="Roboto-Medium"/>
+                                </Grid>
+                            </Grid>
+                        </cards:SfCardView>
+
+                        <cards:SfCardView x:Name="secondCard" WidthRequest="{OnPlatform Android=330, iOS=330, MacCatalyst=430, Default=380}" HeightRequest="220" Margin="0,10,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Image Source="bitcoin.jpg" Aspect="AspectFill" WidthRequest="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <Grid Background="#b03f2b" Padding="20" Opacity="0.9">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height=".3*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label x:DataType="local:ViewModel" Text="{Binding SecondCardDetails.CardName}" HorizontalOptions="Start" TextColor="White" VerticalOptions="Start" FontFamily="Roboto-Medium" />
+                                        <Label Grid.Row="1" x:DataType="local:ViewModel" Text="{Binding SecondCardDetails.CardNumber}" HorizontalOptions="Start" FontSize="12" TextColor="White" VerticalOptions="End" FontFamily="Roboto-Regular"/>
+                                        <Image Grid.Row="2" Source="cardchip.png" WidthRequest="60" HeightRequest="40" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        <Label Grid.Row="3" x:DataType="local:ViewModel" Text="{Binding SecondCardDetails.CardHolderName}" FontSize="18" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Column="1" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".4*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label x:DataType="local:ViewModel" Text="{Binding SecondCardDetails.CardDueDate}" HorizontalOptions="Start" VerticalOptions="Start" Padding="5" FontSize="10" BackgroundColor="{Binding SecondCardDetails.DueIndicatorColor}" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    <Label Grid.Row="1" Text="total due" HorizontalOptions="Start" VerticalOptions="End" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" FontFamily="Roboto-Regular"/>
+                                    <Label Grid.Row="2" x:DataType="local:ViewModel" Text="{Binding SecondCardDetails.CardDueAmount}" HorizontalOptions="Start" VerticalOptions="End" FontSize="25" FontFamily="Roboto-Medium"/>
+                                    <Button Grid.Row="3" Text="Pay now" HorizontalOptions="Fill" VerticalOptions="End" FontFamily="Roboto-Medium"/>
+                                </Grid>
+                            </Grid>
+                        </cards:SfCardView>
+
+                        <cards:SfCardView x:Name="thirdCard" WidthRequest="{OnPlatform Android=330, iOS=330, MacCatalyst=430, Default=380}" HeightRequest="220" Margin="0,10,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Image Source="building.jpg" Aspect="AspectFill" WidthRequest="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <Grid Background="#343434" Padding="20" Opacity="0.9">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height=".3*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label x:DataType="local:ViewModel" Text="{Binding ThirdCardDetails.CardName}" HorizontalOptions="Start" TextColor="White" VerticalOptions="Start" FontFamily="Roboto-Medium" />
+                                        <Label Grid.Row="1" x:DataType="local:ViewModel" Text="{Binding ThirdCardDetails.CardNumber}" HorizontalOptions="Start" FontSize="12" TextColor="White" VerticalOptions="End" FontFamily="Roboto-Regular"/>
+                                        <Image Grid.Row="2" x:DataType="local:ViewModel" Source="cardchip.png" WidthRequest="60" HeightRequest="40" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        <Label Grid.Row="3" x:DataType="local:ViewModel" Text="{Binding ThirdCardDetails.CardHolderName}" FontSize="18" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Column="1" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".4*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label x:DataType="local:ViewModel" Text="{Binding ThirdCardDetails.CardDueDate}" HorizontalOptions="Start" VerticalOptions="Start" Padding="5" FontSize="10" BackgroundColor="{Binding ThirdCardDetails.DueIndicatorColor}" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    <Label Grid.Row="1" Text="total due" HorizontalOptions="Start" VerticalOptions="End" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" FontFamily="Roboto-Regular"/>
+                                    <Label Grid.Row="2" x:DataType="local:ViewModel" Text="{Binding ThirdCardDetails.CardDueAmount}" HorizontalOptions="Start" VerticalOptions="End" FontSize="25" FontFamily="Roboto-Medium"/>
+                                    <Button Grid.Row="3" Text="Pay now" HorizontalOptions="Fill" VerticalOptions="End" FontFamily="Roboto-Medium"/>
+                                </Grid>
+                            </Grid>
+                        </cards:SfCardView>
+
+                        <cards:SfCardView x:Name="fourthCard" WidthRequest="{OnPlatform Android=330, iOS=330, MacCatalyst=430, Default=380}" HeightRequest="220" Margin="0,10,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Image Source="hexagon.jpg" Aspect="AspectFill" WidthRequest="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <Grid Background="#3081D0" Padding="20" Opacity="0.9">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height=".3*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label x:DataType="local:ViewModel" Text="{Binding FourthCardDetails.CardName}" HorizontalOptions="Start" TextColor="White" VerticalOptions="Start" FontFamily="Roboto-Medium" />
+                                        <Label Grid.Row="1" x:DataType="local:ViewModel" Text="{Binding FourthCardDetails.CardNumber}" HorizontalOptions="Start" FontSize="12" TextColor="White" VerticalOptions="End" FontFamily="Roboto-Regular"/>
+                                        <Image Grid.Row="2" Source="cardchip.png" WidthRequest="60" HeightRequest="40" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        <Label Grid.Row="3" x:DataType="local:ViewModel" Text="{Binding FourthCardDetails.CardHolderName}" FontSize="18" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Column="1" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".4*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label x:DataType="local:ViewModel" Text="{Binding FourthCardDetails.CardDueDate}" HorizontalOptions="Start" VerticalOptions="Start" Padding="5" FontSize="10" BackgroundColor="{Binding FourthCardDetails.DueIndicatorColor}" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    <Label Grid.Row="1" Text="total due" HorizontalOptions="Start" VerticalOptions="End" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" FontFamily="Roboto-Regular"/>
+                                    <Label Grid.Row="2" x:DataType="local:ViewModel" Text="{Binding FourthCardDetails.CardDueAmount}" HorizontalOptions="Start" VerticalOptions="End" FontSize="25" FontFamily="Roboto-Medium"/>
+                                    <Button Grid.Row="3" Text="Pay now" HorizontalOptions="Fill" VerticalOptions="End" FontFamily="Roboto-Medium"/>
+                                </Grid>
+                            </Grid>
+                        </cards:SfCardView>
+                        
+                        <cards:SfCardView x:Name="fifthCard" WidthRequest="{OnPlatform Android=330, iOS=330, MacCatalyst=430, Default=380}" HeightRequest="220" Margin="0,10,0,0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Image Source="coin.jpg" Aspect="AspectFill" WidthRequest="{OnPlatform MacCatalyst=200, Default=160}"/>
+                                    <Grid Background="#265073" Padding="20" Opacity="0.9">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height=".2*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height=".3*"/>
+                                        </Grid.RowDefinitions>
+                                        <Label x:DataType="local:ViewModel" Text="{Binding FifthCardDetails.CardName}" HorizontalOptions="Start" TextColor="White" VerticalOptions="Start" FontFamily="Roboto-Medium" />
+                                        <Label Grid.Row="1" x:DataType="local:ViewModel" Text="{Binding FifthCardDetails.CardNumber}" HorizontalOptions="Start" FontSize="12" TextColor="White" VerticalOptions="End" FontFamily="Roboto-Regular"/>
+                                        <Image Grid.Row="2" Source="cardchip.png" WidthRequest="60" HeightRequest="40" HorizontalOptions="Start" VerticalOptions="Center"/>
+                                        <Label Grid.Row="3" x:DataType="local:ViewModel" Text="{Binding FifthCardDetails.CardHolderName}" FontSize="18" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Column="1" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="20">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".3*"/>
+                                        <RowDefinition Height=".4*"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Label x:DataType="local:ViewModel" Text="{Binding FifthCardDetails.CardDueDate}" HorizontalOptions="Start" VerticalOptions="Start" Padding="5" FontSize="10" BackgroundColor="{Binding FifthCardDetails.DueIndicatorColor}" TextColor="White" FontFamily="Roboto-Medium"/>
+                                    <Label Grid.Row="1" Text="total due" HorizontalOptions="Start" VerticalOptions="End" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}" FontFamily="Roboto-Regular"/>
+                                    <Label Grid.Row="2" x:DataType="local:ViewModel" Text="{Binding FifthCardDetails.CardDueAmount}" HorizontalOptions="Start" VerticalOptions="End" FontSize="25" FontFamily="Roboto-Medium"/>
+                                    <Button Grid.Row="3" Text="Paid" HorizontalOptions="Fill" VerticalOptions="End" IsEnabled="False" FontFamily="Roboto-Medium"/>
+                                </Grid>
+                            </Grid>
+                        </cards:SfCardView>
+                    </VerticalStackLayout>
+                </ScrollView>
+            </Border>
+        </Grid>
+    </localCore:SampleView.Content>
+
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel/>
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <ScrollView>
+                <StackLayout Orientation="Vertical">
+                    <Grid Padding="5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Label x:Name="cornerRadiusLabel" Text="Corner radius : 7"/>
+                        <Slider x:Name="cornerRadiusSlider"
+                                Grid.Row="1"
+                                Margin="0"
+                                Maximum="15"
+                                Minimum="0"
+                                VerticalOptions="Center"
+                                x:DataType="local:ViewModel" Value="{Binding CornerRadius}"
+                                MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
+                                MinimumTrackColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorder}}"  
+                                ThumbColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorder}}"/>
+                    </Grid>
+                    <Grid Padding="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Indicator" VerticalOptions="Center" />
+                        <Switch x:Name="indicatorSwitch" Grid.Column="1"
+                            HorizontalOptions="End" VerticalOptions="Center" IsToggled="False"
+                            Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                    </Grid>
+                    <Grid x:Name="indicatorPositionOption" Padding="5" IsVisible="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Indicator position" VerticalOptions="Center" />
+                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="5" />
+                            </Border.StrokeShape>
+                            <Picker x:Name="indicatorPositionComboBox" HeightRequest="38"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                        </Border>
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+
+    <localCore:SampleView.Behaviors>
+        <local:GettingStartedBehavior/>
+    </localCore:SampleView.Behaviors>
+
+</localCore:SampleView>

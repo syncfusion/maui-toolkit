@@ -5,6 +5,7 @@ using Microsoft.Maui.Controls.Shapes;
 using Core = Syncfusion.Maui.Toolkit;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Reflection;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -82,6 +83,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (view != null && view.Handler is IElementHandler handler)
 			{
 				return handler.GetFontManager();
+			}
+
+			if (IPlatformApplication.Current != null)
+			{
+				return IPlatformApplication.Current.Services.GetRequiredService<IFontManager>();
 			}
 
 			return default;
@@ -265,7 +271,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			var pointX = touchPoint.X;
 			var pointY = touchPoint.Y;
-			var defaultSelectionStrokeWidth = series.DefaultSelectionStrokeWidth;
+			var defaultSelectionStrokeWidth = series._defaultSelectionStrokeWidth;
 			var leftPoint = new PointF(pointX - defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
 			var rightPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY + defaultSelectionStrokeWidth);
 			var topPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
@@ -286,7 +292,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			var pointX = touchPoint.X;
 			var pointY = touchPoint.Y;
-			var defaultSelectionStrokeWidth = series.DefaultSelectionStrokeWidth;
+			var defaultSelectionStrokeWidth = series._defaultSelectionStrokeWidth;
 			var leftPoint = new PointF(pointX - defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
 			var rightPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY + defaultSelectionStrokeWidth);
 			var topPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
@@ -310,7 +316,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			var pointX = touchPoint.X;
 			var pointY = touchPoint.Y;
-			var defaultSelectionStrokeWidth = series.DefaultSelectionStrokeWidth;
+			var defaultSelectionStrokeWidth = series._defaultSelectionStrokeWidth;
 			var leftPoint = new PointF(pointX - defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
 			var rightPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY + defaultSelectionStrokeWidth);
 			var topPoint = new PointF(pointX + defaultSelectionStrokeWidth, pointY - defaultSelectionStrokeWidth);
@@ -377,6 +383,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return inside;
 		}
 
+		[RequiresUnreferencedCode("The IsOverriddenMethod is not trim compatible")]
 		internal static bool IsOverriddenMethod(object classObject, string methodName)
 		{
 			var methodInfo = classObject.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
@@ -451,12 +458,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					VerticalTextAlignment = TextAlignment.Center,
 					HorizontalTextAlignment = TextAlignment.Center,					
 				};
-				label.SetBinding(Label.TextProperty, nameof(TooltipInfo.Text));
-				label.SetBinding(Label.TextColorProperty, nameof(TooltipInfo.TextColor));
-				label.SetBinding(Label.MarginProperty, nameof(TooltipInfo.Margin));
-				label.SetBinding(Label.FontSizeProperty, nameof(TooltipInfo.FontSize));
-				label.SetBinding(Label.FontFamilyProperty, nameof(TooltipInfo.FontFamily));
-				label.SetBinding(Label.FontAttributesProperty, nameof(TooltipInfo.FontAttributes));
+
+				label.SetBinding(Label.TextProperty,
+					BindingHelper.CreateBinding(nameof(TooltipInfo.Text), getter: static (TooltipInfo tooltipInfo) => tooltipInfo.Text));
+				label.SetBinding(Label.TextColorProperty,
+					BindingHelper.CreateBinding(nameof(TooltipInfo.TextColor), getter: static (TooltipInfo tooltipInfo) => tooltipInfo.TextColor));
+				label.SetBinding(Label.MarginProperty,
+					BindingHelper.CreateBinding(nameof(TooltipInfo.Margin), getter: static (TooltipInfo tooltipInfo) => tooltipInfo.Margin));
+				label.SetBinding(Label.FontSizeProperty,
+					BindingHelper.CreateBinding(nameof(TooltipInfo.FontSize), getter: static (TooltipInfo tooltipInfo) => tooltipInfo.FontSize));
+				label.SetBinding(Label.FontFamilyProperty,
+					BindingHelper.CreateBinding(nameof(TooltipInfo.FontFamily), getter: static (TooltipInfo tooltipInfo) => tooltipInfo.FontFamily));
+				label.SetBinding(Label.FontAttributesProperty,
+					BindingHelper.CreateBinding(nameof(TooltipInfo.FontAttributes), getter: static (TooltipInfo tooltipInfo) => tooltipInfo.FontAttributes));
 
 				return new ViewCell { View = label };
 			});
@@ -492,6 +506,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return size;
+		}
+	}
+
+	internal class TooltipLabelValue
+	{
+		public string LabelText { get; set; }
+		public string ValueText { get; set; }
+
+		public TooltipLabelValue(string labelText, string valueText)
+		{
+			LabelText = labelText;
+			ValueText = valueText;
 		}
 	}
 }

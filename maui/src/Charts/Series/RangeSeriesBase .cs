@@ -384,6 +384,45 @@
             base.OnDataSourceChanged(oldValue, newValue);
         }
 
+        internal override void ResetEmptyPointIndexes()
+        {
+            if (EmptyPointIndexes.Length != 0)
+            {
+                if (EmptyPointIndexes[0] != null)
+                {
+                    foreach (var index in EmptyPointIndexes[0])
+                    {
+                        if (HighValues != null && HighValues.Count != 0)
+                        {
+                            HighValues[(int)index] = double.NaN;
+                        }
+                    }
+                }
+
+                if (EmptyPointIndexes[1] != null)
+                {
+                    foreach (var index in EmptyPointIndexes[1])
+                    {
+                        if (LowValues != null && LowValues.Count != 0)
+                        {
+                            LowValues[(int)index] = double.NaN;
+                        }
+                    }
+                }
+            }
+        }
+
+        internal override void ValidateYValues()
+        {
+            bool highValues = HighValues.Any(value => double.IsNaN(value));
+            bool lowValues = LowValues.Any(value => double.IsNaN(value));
+
+            if ((highValues || lowValues) && SeriesYValues != null)
+            {
+                ValidateDataPoints(SeriesYValues);
+            }
+        }
+
         internal override void OnBindingPathChanged()
         {
             ResetData();

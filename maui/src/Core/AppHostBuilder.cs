@@ -1,5 +1,6 @@
 using Syncfusion.Maui.Toolkit.Carousel;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Internals;
 #if WINDOWS
 using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -29,6 +30,7 @@ namespace Syncfusion.Maui.Toolkit.Hosting
                 handlers.AddHandler(typeof(IDrawableView), typeof(SfDrawableViewHandler));
                 handlers.AddHandler(typeof(IDrawableLayout), typeof(SfViewHandler));
                 handlers.AddHandler(typeof(ICarousel), typeof(CarouselHandler));
+				handlers.AddHandler(typeof(WindowOverlayContainer), typeof(OverlayContainerHandler));
 #if __ANDROID__
                 handlers.AddHandler(typeof(SnapLayout), typeof(SnapLayoutHandler));
 #endif

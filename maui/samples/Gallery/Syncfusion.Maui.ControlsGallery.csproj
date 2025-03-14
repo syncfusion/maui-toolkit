@@ -92,29 +92,43 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <EmbeddedResource Include="SampleList\AccordionSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\ButtonsSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CalendarSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\CardsSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CarouselSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CartesianChartSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\ChipsSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CircularChartSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\EffectsViewSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\ExpanderSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\FunnelChartSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NavigationDrawerSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\BottomSheetSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NumericUpDownSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PolarChartSamplesList.xml" />
+    <EmbeddedResource Include="SampleList\PopupSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PullToRefreshSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PyramidChartSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\ShimmerSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\TabViewSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\TextInputLayoutSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NumericEntrySamplesList.xml" />
+    <EmbeddedResource Include="SampleList\OtpInputSamplesList.xml" />
 	  <EmbeddedResource Include="ControlList.xml" />
 	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Syncfusion.Maui.Toolkit.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <MauiXaml Update="Samples\Accordion\GettingStarted\View\AccordionGettingStarted.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Samples\Expander\GettingStarted\View\ExpanderGettingStarted.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
   </ItemGroup>
 
 </Project>
