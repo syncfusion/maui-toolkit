@@ -1,0 +1,54 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.FastScatterChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <local:CartesianChartColorResources/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+
+  <localCore:SampleView.Content>
+    <chart:SfCartesianChart x:Name="fastScatterChart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesDark}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="Fill">
+      <chart:SfCartesianChart.BindingContext>
+        <local:FastScatterSeriesViewModel/>
+      </chart:SfCartesianChart.BindingContext>
+      <chart:SfCartesianChart.Legend>
+        <chart:ChartLegend ToggleSeriesVisibility="True"/>
+      </chart:SfCartesianChart.Legend>
+      <chart:SfCartesianChart.Title>
+        <Label Text="Transportation Network Travel Speed Across City Clusters" LineBreakMode="WordWrap" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+      </chart:SfCartesianChart.Title>
+      <chart:SfCartesianChart.XAxes>
+        <chart:NumericalAxis Maximum="1500" Interval="100" EdgeLabelsDrawingMode="Shift" ShowMajorGridLines="False" >
+          <chart:NumericalAxis.Title>
+            <chart:ChartAxisTitle Text="Euclidean Distance (km)"></chart:ChartAxisTitle>
+          </chart:NumericalAxis.Title>
+        </chart:NumericalAxis>
+      </chart:SfCartesianChart.XAxes>
+      <chart:SfCartesianChart.YAxes>
+        <chart:NumericalAxis Interval="30" ShowMajorGridLines="False" >
+          <chart:NumericalAxis.Title>
+            <chart:ChartAxisTitle Text="Transportation Network Travel Speed (km/h)" ></chart:ChartAxisTitle>
+          </chart:NumericalAxis.Title>
+        </chart:NumericalAxis>
+      </chart:SfCartesianChart.YAxes>
+      <chart:FastScatterSeries ItemsSource="{Binding AutomobileTravelData}" 
+                               XBindingPath="Value" 
+                               YBindingPath="Size" 
+                               EnableTooltip="True"
+                               Label="Train travel"/>
+
+      <chart:FastScatterSeries ItemsSource="{Binding TrainTravelData}" 
+                               XBindingPath="Value" 
+                               YBindingPath="Size" 
+                               EnableTooltip="True"
+                               Label="Automobile travel"/>
+    </chart:SfCartesianChart>
+  </localCore:SampleView.Content>
+</localCore:SampleView>

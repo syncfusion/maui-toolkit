@@ -185,6 +185,37 @@
 			return YValues == null ? 0f : YValues[index];
 		}
 
+		internal override void ValidateYValues()
+		{
+			foreach (var yValue in YValues)
+			{
+				if (double.IsNaN(yValue))
+				{
+					ValidateDataPoints(YValues);
+					break;
+				}
+			}
+		}
+
+		internal override void ResetEmptyPointIndexes()
+		{
+			if (EmptyPointIndexes.Length != 0)
+			{
+				foreach (var item in EmptyPointIndexes)
+				{
+					if (item != null)
+					{
+						foreach (var index in item)
+						{
+							if (YValues != null && YValues.Count != 0)
+							{
+								YValues[(int)index] = double.NaN;
+							}
+						}
+					}
+				}
+			}
+		}
 		#endregion
 
 		#region Private Methods

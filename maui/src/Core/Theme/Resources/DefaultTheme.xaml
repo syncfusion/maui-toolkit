@@ -10,7 +10,32 @@
     <x:String x:Key="SfNavigationDrawerTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfNavigationDrawerContentBackground" ResourceKey="ContentBackgroundAlt1" />
     <local:StaticThemeResource x:Key="SfNavigationDrawerGreyLayoutBackground" ResourceKey="Overlay" />
-    
+
+    <!-- SfPopup -->
+    <x:String x:Key="SfPopupTheme">CommonTheme</x:String>
+    <local:StaticThemeResource x:Key="SfPopupHoverFooterButtonBackground" ResourceKey="PrimaryBackground"/>
+    <local:StaticThemeResource x:Key="SfPopupFooterButtonRippleBackground" ResourceKey="ContentForeground"/>
+    <local:StaticThemeResource x:Key="SfPopupNormalHeaderBackground" ResourceKey="FlyoutBackground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalHeaderTextColor" ResourceKey="ContentForeground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalMessageBackground" ResourceKey="FlyoutBackground" />
+    <local:StaticThemeResource x:Key="SfpopupNormalMessageTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfPopupNormalFooterBackground" ResourceKey="FlyoutBackground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalAcceptButtonBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfPopupNormalAcceptButtonTextColor" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalDeclineButtonBackground" ResourceKey="Transparent" />
+    <local:StaticThemeResource x:Key="SfPopupNormalDeclineButtonTextColor" ResourceKey="PrimaryBackground" />
+    <local:StaticThemeResource x:Key="SfPopupNormalStroke" ResourceKey="FlyoutBackground" />
+    <sys:Double x:Key="SfPopupNormalHeaderFontSize">24</sys:Double>
+    <sys:Double x:Key="SfPopupNormalMessageFontSize">14</sys:Double>
+    <sys:Double x:Key="SfPopupNormalFooterFontSize">14</sys:Double>
+    <sys:Double x:Key="SfPopupNormalStrokeThickness">1</sys:Double>
+    <local:StaticThemeResource x:Key="SfPopupNormalOverlayBackground" ResourceKey="Overlay" />
+    <local:StaticThemeResource x:Key="SfPopupHoverCloseButtonIconBackground" ResourceKey="IconBackgroundHovered" />
+    <local:StaticThemeResource x:Key="SfPopupPressedCloseButtonIconBackground" ResourceKey="IconBackgroundPressed" />
+    <local:StaticThemeResource x:Key="SfPopupNormalCloseButtonIconStroke" ResourceKey="IconColor" />
+    <local:StaticThemeResource x:Key="SfPopupNormalBackground" ResourceKey="FlyoutBackground"/>
+    <sys:Double x:Key="SfPopupNormalCloseButtonIconStrokeThickness">1</sys:Double>
+
     <!--SfChipGroup-->
     <x:String x:Key="SfChipGroupTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfChipGroupDisabledSelectedTextColor" ResourceKey="SecondaryForegroundDisabled" />
@@ -92,8 +117,31 @@
     <local:StaticThemeResource x:Key="SfPullToRefreshProgressBackground" ResourceKey="ContentBackgroundAlt2" />
     <local:StaticThemeResource x:Key="SfPullToRefreshProgressColor" ResourceKey="PrimaryBackground" />
     <sys:Double x:Key="SfPullToRefreshProgressThickness">3</sys:Double>
+	
+  <!--SfExpander-->
+  <x:String x:Key="SfExpanderTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfExpanderNormalHeaderBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfExpanderHoverHeaderBackground" ResourceKey="ContentBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfExpanderHeaderRippleBackground" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfExpanderNormalHeaderIconColor" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfExpanderHoverHeaderIconColor" ResourceKey="IconColorHovered" />
+  <local:StaticThemeResource x:Key="SfExpanderPressedHeaderIconColor" ResourceKey="IconColorPressed" />
 
-    <!--SfTabView-->
+  <!--SfAccordion-->
+  <x:String x:Key="SfAccordionTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfAccordionNormalHeaderIconColor" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfAccordionHoverHeaderIconColor" ResourceKey="IconColorHovered" />
+  <local:StaticThemeResource x:Key="SfAccordionPressedHeaderIconColor" ResourceKey="IconColorPressed" />
+  <local:StaticThemeResource x:Key="SfAccordionFocusedHeaderIconColor" ResourceKey="IconColorPressed" />
+  <local:StaticThemeResource x:Key="SfAccordionExpandedItemStroke" ResourceKey="Border" />
+  <sys:Double x:Key="SfAccordionExpandedItemStrokeThickness">1</sys:Double>
+  <local:StaticThemeResource x:Key="SfAccordionNormalHeaderBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfAccordionHoverHeaderBackground" ResourceKey="ContentBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfAccordionFocusedHeaderBackground" ResourceKey="ContentBackgroundFocused" />
+  <local:StaticThemeResource x:Key="SfAccordionHeaderRippleBackground" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfAccordionFocusedItemStroke" ResourceKey="BorderAlt4" />
+
+  <!--SfTabView-->
     <x:String x:Key="SfTabViewTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfTabViewNormalTextColor" ResourceKey="ContentForegroundAlt1" />
     <local:StaticThemeResource x:Key="SfTabViewSelectedTextColor" ResourceKey="PrimaryBackground"/>
@@ -463,5 +511,28 @@
   <local:StaticThemeResource x:Key="SfCalendarSpecialDayIconColor" ResourceKey="PrimaryBackground" />
   <local:StaticThemeResource x:Key="SfCalendarNormalBackground" ResourceKey="ContentBackgroundAlt3" />
 
+  <!--SfCards-->
+  <x:String x:Key="SfCardViewTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfCardViewBorderColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfCardViewIndicatorColor" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfCardViewNormalBackround" ResourceKey="ContentBackgroundAlt3" />
+  <CornerRadius x:Key="SfCardViewCornerRadius">12</CornerRadius>
 
+ <!--SfOtpInput-->
+  <x:String x:Key="SfOtpInputTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfOtpInputDefaultBackground" ResourceKey="Transparent"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderDefault" ResourceKey="InputBoxBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputHoveredBackground" ResourceKey="InputBackgroundHovered"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderHovered" ResourceKey="InputBorderHovered"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderPressed" ResourceKey="InputBorderPressed"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBorderDisabled" ResourceKey="InputBorderDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputBackgroundDisabled" ResourceKey="InputBackgroundDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputDisabledTextColor" ResourceKey="ForegroundDisabled"/>
+  <local:StaticThemeResource x:Key="SfOtpInputPlaceholderColor" ResourceKey="PlaceholderForeground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputTextColor" ResourceKey="ContentForeground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputFilledBackground" ResourceKey="InputBackground"/>
+  <local:StaticThemeResource x:Key="SfOtpInputSuccessStroke" ResourceKey="SuccessBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputWarningStroke" ResourceKey="WarningBorder"/>
+  <local:StaticThemeResource x:Key="SfOtpInputErrorStroke" ResourceKey="ErrorBorder"/>
+  
 </local:SyncfusionThemeDictionary>

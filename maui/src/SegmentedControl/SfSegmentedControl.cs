@@ -84,7 +84,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// </summary>
 		public SfSegmentedControl()
 		{
-			SfSegmentedResources.InitializeDefaultResource("Syncfusion.Maui.Buttons.SegmentedControl.Resources.SfSegmentedControl");
+			SfSegmentedResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.SegmentedControl.Resources.SfSegmentedControl",typeof(SfSegmentedControl));
 			ThemeElement.InitializeThemeResources(this, "SfSegmentedControlTheme");
 			SetDynamicResource(HoveredBackgroundProperty, "SfSegmentedControlHoveredBackground");
 			SetDynamicResource(KeyboardFocusStrokeProperty, "SfSegmentedControlKeyboardFocusStroke");
@@ -92,7 +92,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			MinimumHeightRequest = 40;
 			SelectionIndicatorSettings.Parent = this;
 			TextStyle.Parent = this;
+#if !WINDOWS
 			this.AddKeyboardListener(this);
+#endif
 		}
 
 		#endregion
@@ -1188,16 +1190,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		{
 			_keyNavigationView?.ClearFocusedView();
 		}
-
-#if WINDOWS
-		void ISegmentItemInfo.SetFocusVisualState(bool state)
-		{
-			if (this.Handler != null && this.Handler.PlatformView != null && this.Handler.PlatformView is Microsoft.UI.Xaml.UIElement nativeView)
-			{
-				nativeView.UseSystemFocusVisuals = state;
-			}
-		}
-#endif
 
 		/// <summary>
 		/// Updates the scroll view position to focused index for the segment item.

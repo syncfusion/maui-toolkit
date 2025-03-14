@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.EmptyPointSupport"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <local:CartesianChartColorResources/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+
+  <localCore:SampleView.Content>
+    <chart:SfCartesianChart x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill">
+
+      <chart:SfCartesianChart.BindingContext>
+        <local:EmptyPointViewModel x:Name="ViewModel"/>
+      </chart:SfCartesianChart.BindingContext>
+
+      <chart:SfCartesianChart.Title>
+        <Label Text="Crop Yield Across Climate Zones" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+      </chart:SfCartesianChart.Title>
+
+      <chart:SfCartesianChart.XAxes>
+        <chart:CategoryAxis IsVisible="True" ShowMajorGridLines="False" EdgeLabelsDrawingMode="Shift" LabelRotation="{OnPlatform Android=-45,iOS=-45}"/>
+      </chart:SfCartesianChart.XAxes>
+
+      <chart:SfCartesianChart.YAxes>
+        <chart:NumericalAxis ShowMajorGridLines="True" ShowMinorGridLines="False" Minimum="0" Interval="20" Maximum="100">
+          <chart:NumericalAxis.AxisLineStyle>
+            <chart:ChartLineStyle StrokeWidth="0" />
+          </chart:NumericalAxis.AxisLineStyle>
+          <chart:NumericalAxis.Title>
+            <chart:ChartAxisTitle Text="Crop Yield (Tons)"/>
+          </chart:NumericalAxis.Title>
+        </chart:NumericalAxis>
+      </chart:SfCartesianChart.YAxes>
+
+      <chart:SfCartesianChart.Legend>
+        <chart:ChartLegend/>
+      </chart:SfCartesianChart.Legend>
+
+      <chart:AreaSeries ItemsSource="{Binding EmptyPointData}"
+                XBindingPath="Name"
+                YBindingPath="Value"
+                EnableAnimation="{Binding EnableAnimation}"
+                Stroke="{AppThemeBinding Light={StaticResource series3Light}, Dark={StaticResource series3Dark}}" 
+                Fill="{AppThemeBinding Light={StaticResource series3Light30}, Dark={StaticResource series3Dark30}}" 
+                StrokeWidth="2"
+                ShowMarkers="True"
+                EmptyPointMode="{Binding EmptyPointMode}"
+                Label="Wheat"
+                LegendIcon="SeriesType"
+                EnableTooltip="True">
+        <chart:AreaSeries.MarkerSettings>
+          <chart:ChartMarkerSettings Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series3Light}, Dark={StaticResource series3Dark}}" StrokeWidth="1.5"/>
+        </chart:AreaSeries.MarkerSettings>
+      </chart:AreaSeries>
+
+      <chart:AreaSeries ItemsSource="{Binding EmptyPointData}"
+                XBindingPath="Name"
+                YBindingPath="High"
+                EnableAnimation="{Binding EnableAnimation}"
+                Stroke="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" 
+                Fill="{AppThemeBinding Light={StaticResource series2Light30}, Dark={StaticResource series2Dark30}}" 
+                StrokeWidth="2"
+                ShowMarkers="True"
+                EmptyPointMode="{Binding EmptyPointMode}"
+                Label="Corn"
+                LegendIcon="SeriesType"
+                EnableTooltip="True">
+        <chart:AreaSeries.MarkerSettings>
+          <chart:ChartMarkerSettings Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" StrokeWidth="1.5"/>
+        </chart:AreaSeries.MarkerSettings>
+      </chart:AreaSeries>
+
+      <chart:AreaSeries ItemsSource="{Binding EmptyPointData}"
+                XBindingPath="Name"
+                YBindingPath="Low"
+                EnableAnimation="{Binding EnableAnimation}"
+                Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" 
+                Fill="{AppThemeBinding Light={StaticResource series1Light30}, Dark={StaticResource series1Dark30}}" 
+                StrokeWidth="2"
+                ShowMarkers="True"
+                EmptyPointMode="{Binding EmptyPointMode}"
+                Label="Rice"
+                LegendIcon="SeriesType"
+                EnableTooltip="True">
+        <chart:AreaSeries.MarkerSettings>
+          <chart:ChartMarkerSettings Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="1.5"/>
+        </chart:AreaSeries.MarkerSettings>
+      </chart:AreaSeries>
+
+    </chart:SfCartesianChart>
+  </localCore:SampleView.Content>
+
+  <localCore:SampleView.OptionView>
+    <Grid>
+      <VerticalStackLayout Spacing="15">
+        <HorizontalStackLayout Spacing="5">
+          <Label Text="Empty Point Mode: " VerticalOptions="Start" HorizontalOptions="Center" Padding="5"  FontSize="17"/>
+          <Picker WidthRequest="{OnPlatform MacCatalyst=70, iOS=70}" ItemsSource="{Binding Source={x:Reference ViewModel},Path=EmptyPointModeValues}" 
+                  SelectedItem="{Binding Source={x:Reference ViewModel}, Path=EmptyPointModeValues[0]}"
+                   VerticalOptions="Start" HorizontalOptions="Fill" 
+                  x:Name="picker" 
+                  BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                  TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                  SelectedIndex="0"
+                  SelectedIndexChanged="picker_SelectedIndexChanged">
+          </Picker>
+        </HorizontalStackLayout>
+      </VerticalStackLayout>
+    </Grid>
+  </localCore:SampleView.OptionView>
+
+</localCore:SampleView>

@@ -44,6 +44,10 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net9.0' or '$(TargetFramework)' == 'net9.0-android' or '$(TargetFramework)' == 'net9.0-ios' or '$(TargetFramework)' == 'net9.0-maccatalyst' or '$(TargetFramework)' == 'net9.0-windows10.0.19041.0'">
+		<IsAotCompatible>true</IsAotCompatible>
+	</PropertyGroup>
+
 	<PropertyGroup Condition=" '$(TargetFramework)' == 'net8.0-android' OR '$(TargetFramework)' == 'net9.0-android' ">
 		<AndroidGenerateResourceDesigner>false</AndroidGenerateResourceDesigner>
 		<AndroidUseIntermediateDesignerFile>false</AndroidUseIntermediateDesignerFile>
@@ -101,6 +105,10 @@
     <MauiXaml Remove="Carousel\Platform\Windows\Styles\Resources.xaml" />
   </ItemGroup>
   
+   <ItemGroup>
+    <MauiFont Include="Resources\Fonts\MauiMaterialAssets.ttf" />
+  </ItemGroup>
+  
   <ItemGroup>
 	<None Include="..\..\LICENSE.txt" Link="LICENSE.txt" Pack="true" PackagePath="" />
 	<None Include="..\..\syncfusion_logo.png" Link="syncfusion_logo.png" Pack="true" PackagePath="" />
@@ -114,6 +122,15 @@
     <Page Include="Carousel\Platform\Windows\Styles\Resources.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <MauiXaml Update="Themes\SfAccordionStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Themes\SfExpanderStyles.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
   </ItemGroup>
   
 </Project>

@@ -1861,7 +1861,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <exclude/>
 		protected override Size MeasureContent(double widthConstraint, double heightConstraint)
 		{
-			if ((!IsPulling && !ActualIsRefreshing) || _previousMeasuredSize != new Size(widthConstraint, heightConstraint))
+			if (!IsPulling || _previousMeasuredSize != new Size(widthConstraint, heightConstraint))
 			{
 				if (PullableContent is not null)
 				{
@@ -1883,7 +1883,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		/// <exclude/>
 		protected override Size ArrangeContent(Rect bounds)
 		{
-			if ((!IsPulling && !ActualIsRefreshing) || !bounds.Equals(_previousBounds))
+			if (!IsPulling || !bounds.Equals(_previousBounds))
 			{
 				ManualArrangeContent(false, bounds);
 				_previousBounds = bounds;

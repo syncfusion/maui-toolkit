@@ -18,9 +18,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		// To store the child count of bottom sheet
 		double _childLoopCount;
 
+		// To handle bottom sheet swipe based on initial touch point.
+		bool _canHandleTouch = true;
+
 #endif
 
-#endregion
+		#endregion
 
 		#region Constructor
 
@@ -123,9 +126,20 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			}
 
 			var firstDescendant = Content.GetVisualTreeDescendants().FirstOrDefault();
-			if (firstDescendant is not null && IsChildElementScrolled(firstDescendant, e.TouchPoint))
+			if (firstDescendant is not null && _canHandleTouch && IsChildElementScrolled(firstDescendant, e.TouchPoint))
 			{
 				return;
+			}
+			else
+			{
+				if (e is not null && e.Action == PointerActions.Pressed)
+				{
+					_canHandleTouch = false;
+				}
+				else if (e is not null && e.Action == PointerActions.Released)
+				{
+					_canHandleTouch = true;
+				}
 			}
 
 #endif

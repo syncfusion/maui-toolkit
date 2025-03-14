@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.Toolkit.Themes.SfOtpInputStyles"
+             xmlns:otpinput="clr-namespace:Syncfusion.Maui.Toolkit.OtpInput">
+
+  <Style TargetType="otpinput:SfOtpInput">
+    <Setter Property="TextColor" Value="{DynamicResource SfOtpInputTextColor}"/>
+    <Setter Property="InputBackground" Value="{DynamicResource SfOtpInputFilledBackground}"/>
+    <Setter Property="Stroke" Value="{DynamicResource SfOtpInputBorderDefault}"/>
+    <Setter Property="PlaceholderColor" Value="{DynamicResource SfOtpInputPlaceholderColor}"/>
+  </Style>
+</ResourceDictionary>

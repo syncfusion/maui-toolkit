@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Microsoft.Maui.Controls;
-using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -31,7 +27,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
-        internal readonly float DefaultSelectionStrokeWidth = 5;//Todo: check necessary this default value
+        internal readonly float _defaultSelectionStrokeWidth = 5;//Todo: check necessary this default value
 
         internal IChart? Chart
         {
@@ -1161,6 +1157,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void IDatapointSelectionDependent.Invalidate()
         {
+            	InValidateViews();
+        }
+
+        internal void InValidateViews()
+        {
             InvalidateSeries();
 
             if (ShowDataLabels)
@@ -1332,6 +1333,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         #region Internal methods
 
+        internal virtual void UpdateEmptyPointSettings()
+		{
+		}
+
         internal virtual Brush? GetSegmentFillColor(int index)
         {
             var segment = _segments[index];
@@ -1381,7 +1386,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             foreach (ChartSegment segment in _segments)
             {
-                if (!segment.InVisibleRange || segment.IsEmpty)
+                if (!segment.InVisibleRange || segment.IsZero)
 				{
 					continue;
 				}
@@ -1613,7 +1618,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal virtual Brush? GetFillColor(object item, int index)
         {
-            Brush? fillColor = null;
+            Brush? fillColor;
 
             // Chart selection check. 
             fillColor = Chart?.GetSelectionBrush(this);
@@ -1733,37 +1738,33 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal virtual void InvalidateSeries()
         {
-            var plotArea = Chart?.Area.PlotArea as ChartPlotArea;
-
-            if (plotArea != null)
-            {
-                foreach (SeriesView seriesView in plotArea._seriesViews.Children)
-                {
-                    if (seriesView != null && this == seriesView._series)
-                    {
-                        seriesView.InvalidateDrawable();
-                        break;
-                    }
-                }
-            }
-        }
+			if (Chart?.Area.PlotArea is ChartPlotArea plotArea)
+			{
+				foreach (var view in plotArea._seriesViews.Children)
+				{
+					if (view is SeriesView seriesView && this == seriesView._series)
+					{
+						seriesView.InvalidateDrawable();
+						break;
+					}
+				}
+			}
+		}
 
         internal void Invalidate()
         {
-            var plotArea = Chart?.Area.PlotArea as ChartPlotArea;
-
-            if (plotArea != null)
-            {
-                foreach (SeriesView seriesView in plotArea._seriesViews.Children)
-                {
-                    if (seriesView != null && this == seriesView._series)
-                    {
-                        seriesView.Invalidate();
-                        break;
-                    }
-                }
-            }
-        }
+			if (Chart?.Area.PlotArea is ChartPlotArea plotArea)
+			{
+				foreach (var view in plotArea._seriesViews.Children)
+				{
+					if (view is SeriesView seriesView && this == seriesView._series)
+					{
+						seriesView.Invalidate();
+						break;
+					}
+				}
+			}
+		}
 
         internal void ScheduleUpdateChart()
         {
@@ -1856,12 +1857,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             if (bindable is ChartSeries chartSeries)
             {
-                if (newValue != null && newValue is string)
-                {
-                    chartSeries.XComplexPaths = ((string)newValue).Split(['.']);
-                }
+				if (newValue is string path)
+				{
+					chartSeries.XComplexPaths = path.Split(['.']);
+				}
 
-                chartSeries.OnBindingPathChanged();
+				chartSeries.OnBindingPathChanged();
             }
         }
 
@@ -2082,17 +2083,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void AddSegment(object chartSegment)
         {
-            var segment = chartSegment as ChartSegment;
-
-            if (segment != null)
-            {
-                SetFillColor(segment);
-                SetStrokeColor(segment);
-                SetStrokeWidth(segment);
-                SetDashArray(segment);
-                segment.Opacity = (float)Opacity;
-            }
-        }
+			if (chartSegment is ChartSegment segment)
+			{
+				SetFillColor(segment);
+				SetStrokeColor(segment);
+				SetStrokeWidth(segment);
+				SetDashArray(segment);
+				segment.Opacity = (float)Opacity;
+			}
+		}
 
         void RemoveSegment(object chartSegment)
         {
@@ -2120,11 +2119,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         void LabelStyle_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var labelStyle = sender as ChartDataLabelStyle;
-
-            if (e.PropertyName != null && labelStyle != null && labelStyle.NeedDataLabelMeasure(e.PropertyName))
-            {
-                InvalidateMeasureDataLabel();
+			if (e.PropertyName != null && sender is ChartDataLabelStyle labelStyle && labelStyle.NeedDataLabelMeasure(e.PropertyName))
+			{
+				InvalidateMeasureDataLabel();
             }
 
             InvalidateDataLabel();

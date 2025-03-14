@@ -831,7 +831,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			foreach (ChartSegment dataLabel in _segments)
 			{
 
-				if (!dataLabel.IsEmpty)
+				if (!dataLabel.IsZero)
 				{
 					UpdateDataLabelAppearance(canvas, dataLabel, dataLabelSettings, labelStyle);
 				}

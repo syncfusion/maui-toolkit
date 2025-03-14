@@ -20,6 +20,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         #region Internal Properties
 
+		internal EmptyPointSettings _emptyPointSettings;
+
+        internal IList<int>[] EmptyPointIndexes { get; set; } = [];
+
         internal CartesianChartArea? ChartArea { get; set; }
 
         internal bool IsIndexed
@@ -48,9 +52,29 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal override ChartDataLabelSettings ChartDataLabelSettings => DataLabelSettings;
 
+        internal bool RequiredEmptyPointReset { get; set; } = false;
+
         #endregion
 
         #region Bindable properties
+
+        /// <summary>
+        /// Identifies the <see cref="EmptyPointMode"/> bindable property.
+        /// </summary>
+        /// <remarks>
+        /// Represents how to calculate value for empty point in the series.
+        /// </remarks>
+        public static readonly BindableProperty EmptyPointModeProperty =
+        BindableProperty.Create(nameof(EmptyPointMode), typeof(EmptyPointMode), typeof(CartesianSeries), EmptyPointMode.None, BindingMode.Default, null, OnEmptyPointModeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="EmptyPointSettings"/> bindable property.
+        /// </summary>
+        /// <remarks>
+        /// Provides customization for the empty points.
+        /// </remarks>
+        public static readonly BindableProperty EmptyPointSettingsProperty =
+        BindableProperty.Create(nameof(EmptyPointSettings), typeof(EmptyPointSettings), typeof(CartesianSeries), null, BindingMode.Default, null, propertyChanged: OnEmptyPointSettingsChanged);
 
         /// <summary>
         /// Identifies the <see cref="XAxisName"/> bindable property.
@@ -554,6 +578,108 @@ namespace Syncfusion.Maui.Toolkit.Charts
         }
 
         /// <summary>
+        /// Gets or sets a value that indicates to displays NaN data points for the series. 
+        /// </summary>
+        /// <value> It accepts <see cref="EmptyPointMode"/> values and its default value is <see cref="EmptyPointMode.None"/>.</value>
+        /// <remarks> Empty points are not supported for the Histogram and BoxAndWhisker series</remarks>
+        /// <example>
+        /// # [Xaml](#tab/tabid-13)
+        /// <code><![CDATA[
+        ///     <chart:SfCartesianChart>
+        ///
+        ///     <!-- ... Eliminated for simplicity-->
+        ///
+        ///          <chart:ColumnSeries ItemsSource="{Binding Data}"
+        ///                              XBindingPath="XValue"
+        ///                              YBindingPath="YValue"
+        ///                              EmptyPointMode = "Zero"/>
+        ///
+        ///     </chart:SfCartesianChart>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-14)
+        /// <code><![CDATA[
+        ///     SfCartesianChart chart = new SfCartesianChart();
+        ///     chart.Legend = new ChartLegend();
+        ///     ViewModel viewModel = new ViewModel();
+        ///
+        ///     // Eliminated for simplicity
+        ///
+        ///     ColumnSeries columnSeries = new ColumnSeries()
+        ///     {
+        ///           ItemsSource = viewModel.Data,
+        ///           XBindingPath = "XValue",
+        ///           YBindingPath = "YValue",
+        ///           EmptyPointMode = EmptyPointMode.Zero,
+        ///     };
+        ///     
+        ///     chart.Series.Add(columnSeries);
+        ///
+        /// ]]></code>
+        /// ***
+        /// </example>
+        public EmptyPointMode EmptyPointMode
+        {
+            get { return (EmptyPointMode)GetValue(EmptyPointModeProperty); }
+            set { SetValue(EmptyPointModeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the configuration for how empty or missing data points are handled and displayed within a chart series.
+        /// </summary>
+        /// <value>It accepts <see cref="EmptyPointSettings"/> values.</value>
+        /// <remarks> <para> EmptyPointSettings is not supported for all area-related series, as well as for FastChart and ErrorBarSeries.</para> </remarks>
+        /// <example>
+        /// # [Xaml](#tab/tabid-15)
+        /// <code><![CDATA[
+        ///     <chart:SfCartesianChart>
+        ///
+        ///     <!-- ... Eliminated for simplicity-->
+        ///
+        ///          <chart:LineSeries ItemsSource="{Binding Data}"
+        ///                            XBindingPath="XValue"
+        ///                            YBindingPath="YValue"
+        ///                            EmptyPointMode="Zero">
+        ///               <chart:LineSeries.EmptyPointSettings>
+        ///                     <chart:EmptyPointSettings Fill="Red"/>
+        ///               </chart:LineSeries.MarkerSettings>
+        ///          </chart:LineSeries>
+        ///
+        ///     </chart:SfCartesianChart>
+        /// ]]>
+        /// </code>
+        /// # [C#](#tab/tabid-16)
+        /// <code><![CDATA[
+        ///     SfCartesianChart chart = new SfCartesianChart();
+        ///     ViewModel viewModel = new ViewModel();
+        ///
+        ///     // Eliminated for simplicity
+        ///
+        ///    EmptyPointSettings emptyPointSettings = new EmptyPointSettings()
+        ///    {
+        ///        Fill = new SolidColorBrush(Colors.Red), 
+        ///    };
+        ///     LineSeries series = new LineSeries()
+        ///     {
+        ///           ItemsSource = viewModel.Data,
+        ///           XBindingPath = "XValue",
+        ///           YBindingPath = "YValue",
+        ///           EmptyPointMode= EmptyPointMode.Zero,
+        ///           EmptyPointSettings= emptyPointSettings,
+        ///     };
+        ///     
+        ///     chart.Series.Add(series);
+        ///
+        /// ]]>
+        /// </code>
+        /// ***
+        /// </example>
+        public EmptyPointSettings EmptyPointSettings
+        {
+            get { return (EmptyPointSettings)GetValue(EmptyPointSettingsProperty); }
+            set { SetValue(EmptyPointSettingsProperty, value); }
+        }
+
+        /// <summary>
         /// Gets the actual XAxis value.
         /// </summary>
         public ChartAxis? ActualXAxis
@@ -601,6 +727,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
+        internal virtual bool IsFillEmptyPoint { get { return true; } }
+
         #endregion
 
         #region Constructor
@@ -611,6 +739,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         public CartesianSeries()
         {
             DataLabelSettings = new CartesianDataLabelSettings();
+            _emptyPointSettings = new EmptyPointSettings();
         }
 
         #endregion
@@ -662,6 +791,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
         #region Protected Methods
 
         /// <inheritdoc/>
+        protected override void OnParentSet()
+        {
+            base.OnParentSet();
+
+            if (EmptyPointSettings != null)
+            {
+                EmptyPointSettings.Parent = Parent;
+            }
+        }
+
+        /// <inheritdoc/>
         /// <exclude/>
         protected override void OnBindingContextChanged()
         {
@@ -670,6 +810,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
             if (DataLabelSettings != null)
             {
                 SetInheritedBindingContext(DataLabelSettings, BindingContext);
+            }
+
+            if (_emptyPointSettings != null)
+            {
+                SetInheritedBindingContext(_emptyPointSettings, BindingContext);
             }
         }
 
@@ -918,13 +1063,46 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             ResetAutoScroll();
             InvalidateSideBySideSeries();
-            base.OnDataSourceChanged(oldValue, newValue);
+			foreach (var item in EmptyPointIndexes)
+			{
+				item?.Clear();
+			}
+
+			base.OnDataSourceChanged(oldValue, newValue);
         }
 
         internal override void OnDataSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             ResetAutoScroll();
             base.OnDataSource_CollectionChanged(sender, e);
+        }
+
+        internal override void AddDataPoint(object data, int index, NotifyCollectionChangedEventArgs e)
+        {
+			ResetEmptyPointIndexes();
+			foreach (var item in EmptyPointIndexes)
+			{
+				item?.Clear();
+			}
+
+			base.AddDataPoint(data, index,  e);
+        }
+
+        internal override void RemoveData(int index, NotifyCollectionChangedEventArgs e)
+        {
+			ResetEmptyPointIndexes();
+			foreach (var item in EmptyPointIndexes)
+			{
+				item?.Clear();
+			}
+
+			base.RemoveData(index, e);
+        }
+
+        internal override void OnBindingPathChanged()
+        {
+            RequiredEmptyPointReset = true;
+            base.OnBindingPathChanged();
         }
 
         internal void ResetAutoScroll()
@@ -1168,7 +1346,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					FontSize = tooltipBehavior.FontSize,
 					FontAttributes = tooltipBehavior.FontAttributes,
 					Background = tooltipBehavior.Background,
-					Text = yValue.ToString("#.##"),
+					Text = yValue == 0 ? yValue.ToString("0.##") : yValue.ToString("#.##"),
 					Item = dataPoint
 				};
 				return tooltipInfo;
@@ -1312,9 +1490,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
                     if (xValue <= xEnd && xValue >= xStart && xValue < dataCount && xValue >= 0)
                     {
-                        var dataPoint = new object();
+						object? dataPoint;
 
-                        if (isGrouped)
+						if (isGrouped)
                         {
                             dataPoint = GroupedActualData?[(int)xValue];
                         }
@@ -1597,11 +1775,229 @@ namespace Syncfusion.Maui.Toolkit.Charts
             return yCoeff;
         }
 
+        internal override void UpdateEmptyPointSettings()
+        {
+            if (!IsFillEmptyPoint && EmptyPointMode == EmptyPointMode.None)
+            {
+                return;
+            }
+
+            // Early return if no empty points or segments
+            if (EmptyPointIndexes == null || _segments.Count == 0)
+            {
+                return;
+            }
+
+            // Cache the empty point settings for performance
+            var fill = _emptyPointSettings?.Fill;
+            var stroke = _emptyPointSettings?.Stroke;
+            var strokeWidth = _emptyPointSettings?.StrokeWidth ?? 0;
+
+            // Apply settings to all empty points
+            foreach (var indexCollection in EmptyPointIndexes)
+            {
+                if (indexCollection == null)
+                {
+                    continue;
+                }
+
+                foreach (var index in indexCollection)
+                {
+                    // Bounds check to prevent index out of range exceptions
+                    if (index < 0 || index >= _segments.Count)
+                    {
+                        continue;
+                    }
+
+                    if (_segments[index] is CartesianSegment segment)
+                    {
+                        segment.Fill = fill;
+                        segment.Stroke = stroke;
+                        segment.StrokeWidth = strokeWidth;
+
+                        // Mark segment as empty if it's a average or zero mode, for custom drawing. 
+                        segment.IsZero = true;
+                    }
+                }
+            }
+        }
+
+        internal void ValidateDataPoints(params IList<double>[] yValues)
+        {
+            if (EmptyPointIndexes == null || EmptyPointIndexes.Length == 0)
+            {
+                EmptyPointIndexes = new List<int>[yValues.Length];
+            }
+
+            for (int i = 0; i < yValues.Length; i++)
+            {
+                var values = yValues[i];
+
+                if (EmptyPointIndexes != null && EmptyPointIndexes[i] == null)
+                {
+                    EmptyPointIndexes[i] = [];
+                }
+
+                if (values.Count != 0)
+                {
+                    switch (EmptyPointMode)
+                    {
+                        case EmptyPointMode.Zero:
+                            HandleZeroMode(values, i);
+                            break;
+
+                        case EmptyPointMode.Average:
+                            HandleAverageMode(values, i);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+
+                yValues[i] = values;
+            }
+        }
+
+        internal virtual void ResetEmptyPointIndexes()
+        {
+        }
+
+        internal virtual void ValidateYValues()
+        {
+        }
+
         #endregion
 
         #endregion
 
         #region Private Methods
+
+        void HandleZeroMode(IList<double> values, int emptyPointIndex)
+        {
+            for (int i = 0; i < values.Count; i++)
+            {
+                if (double.IsNaN(values[i]))
+                {
+                    values[i] = 0;
+                    if (!EmptyPointIndexes[emptyPointIndex].Contains(i))
+                    {
+                        EmptyPointIndexes[emptyPointIndex].Add(i);
+                    }
+                }
+            }
+        }
+
+        void HandleAverageMode(IList<double> values, int emptyPointIndex)
+        {
+            int j = 0;
+            //Single Data point
+            if (values.Count == 1 && double.IsNaN(values[j]))
+            {
+                values[j] = 0;
+                EmptyPointIndexes[emptyPointIndex].Add(0);
+                return;
+            }
+
+            //First data point
+            if (double.IsNaN(values[j]))
+            {
+                values[j] = (0 + (double.IsNaN(values[j + 1]) ? 0 : values[j + 1])) / 2;
+                if (!EmptyPointIndexes[emptyPointIndex].Contains(j))
+                {
+                    EmptyPointIndexes[emptyPointIndex].Add(0);
+                }
+            }
+
+            //Middle data points
+            for (; j < values.Count - 1; j++)
+            {
+                if (double.IsNaN(values[j]))
+                {
+                    values[j] = (values[j - 1] + (double.IsNaN(values[j + 1]) ? 0 : values[j + 1])) / 2;
+                    if (!EmptyPointIndexes[emptyPointIndex].Contains(j))
+                    {
+                        EmptyPointIndexes[emptyPointIndex].Add(j);
+                    }
+                }
+            }
+
+            //Last data point
+            if (double.IsNaN(values[j]))
+            {
+                values[j] = values[j - 1] / 2;
+                if (!EmptyPointIndexes[emptyPointIndex].Contains(j))
+                {
+                    EmptyPointIndexes[emptyPointIndex].Add(j);
+                }
+            }
+        }
+
+        static void OnEmptyPointSettingsChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is CartesianSeries series)
+            {
+                series.OnEmptyPointSettingsChanged(oldValue, newValue);
+            }
+        }
+
+        void OnEmptyPointSettingsChanged(object oldValue, object newValue)
+        {
+            // Clean up old settings
+            if (oldValue is EmptyPointSettings oldSettings)
+            {
+                oldSettings.PropertyChanged -= EmptyPointSettings_PropertyChanged;
+                SetInheritedBindingContext(oldSettings, null);
+                oldSettings.Parent = null;
+            }
+
+            // Initialize new settings
+            EmptyPointSettings settingsToUse;
+
+            if (newValue is EmptyPointSettings newSettings)
+            {
+                settingsToUse = newSettings;
+                _emptyPointSettings = newSettings;
+            }
+            else
+            {
+                settingsToUse = new EmptyPointSettings();
+                _emptyPointSettings = settingsToUse;
+            }
+
+            // Configure the settings to use
+            settingsToUse.PropertyChanged += EmptyPointSettings_PropertyChanged;
+            if (Parent != null)
+            {
+                settingsToUse.Parent = Parent;
+            }
+
+            UpdateEmptyPointSettings();
+
+            SetInheritedBindingContext(settingsToUse, BindingContext);
+
+            InValidateViews();
+        }
+
+        void EmptyPointSettings_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            UpdateEmptyPointSettings();
+            InValidateViews();
+        }
+
+        static void OnEmptyPointModeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is CartesianSeries series)
+            {
+                series.SegmentsCreated = false;
+                if (series.SeriesYValues != null)
+                {
+                    series.RequiredEmptyPointReset = true;
+                }
+
+                series.ScheduleUpdateChart();
+            }
+        }
 
         void GeneratePointInfos(List<object> nearestDataPoints, List<TrackballPointInfo> pointInfos)
         {

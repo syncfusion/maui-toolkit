@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <SyncfusionControls>
   <ControlCategory Name="Data Visualization">
-	  <Control Title="Cartesian Charts" ControlName="SfCartesianChart" Image="cartesianchart.png" Description="Plot over 20+ chart types with extensive features like data label, trackball and zooming.">
+	  <Control Title="Cartesian Charts" ControlName="SfCartesianChart" StatusTag="Updated" Image="cartesianchart.png" Description="Plot over 20+ chart types with extensive features like data label, trackball and zooming.">
       <Category Title="Chart Types">
         <SubCategory Title="Column">
           <CardLayout>
@@ -56,6 +56,8 @@
 				  <Sample Title="Dynamic update animation" SampleName="Scatter_DynamicUpdate" SearchTags="scatter, dynamic"/>
 			  </CardLayout>
 		  </SubCategory>
+
+      <Sample Title="Fast Scatter" StatusTag="New" SampleName="FastScatterChart" SearchTags="scatter, scatter chart, scatter plot, fast scatter, fast scatter chart, fast scatter plot, high performance chart"/>
 
 		  <SubCategory Title="Spline">
 			  <CardLayout>
@@ -151,6 +153,7 @@
 				  <Sample Title="OHLC chart" SampleName="OHLC" SearchTags="high,low,open,close"/>
 			  </CardLayout>
 		  </SubCategory>
+
       </Category>
       
 		  <Category Title="Real-time Charts">
@@ -169,6 +172,8 @@
 
 		
 			  <Sample Title="Annotation"  SampleName="ShapeAnnotationSample" Description="This sample showcases the shape annotation support, which includes line, horizontal line, vertical line, rectangle, and ellipse." SearchTags="annotation, chart annotation"/>
+
+        <Sample Title="Empty Points" StatusTag="New" SampleName="EmptyPointSupport" SearchTags="empty points, missing data points, missing values, incomplete data, data gaps, incomplete records, blank entries"/>
 
 		  <Category Title="Plot band">				  
 			  <Sample Title="Horizontal" SampleName="HorizontalPlotBand" Platforms="Android,iOS" SearchTags="horizontal plot, band, plotband"/>

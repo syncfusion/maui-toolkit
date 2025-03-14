@@ -319,27 +319,27 @@ namespace Syncfusion.Maui.Toolkit.TabView
         void SetBinding()
         {
             BindingContext = Parent;
-            _image?.SetBinding(SfImage.SourceProperty, nameof(SfTabItem.ImageSource));
+            _image?.SetBinding(SfImage.SourceProperty, BindingHelper.CreateBinding(nameof(SfTabItem.ImageSource), getter: static (SfTabItem item) => item.ImageSource));
 
             SetHeaderBinding();
 
-            this.SetBinding(TabViewMaterialVisualStyle.ImagePositionProperty, nameof(SfTabItem.ImagePosition), BindingMode.TwoWay);
-            _horizontalLayout?.SetBinding(StackBase.SpacingProperty, nameof(SfTabItem.ImageTextSpacing));
-            _verticalLayout?.SetBinding(StackBase.SpacingProperty, nameof(SfTabItem.ImageTextSpacing));
-			_image.SetBinding(SfImage.WidthRequestProperty, "ImageSize");
-			_image.SetBinding(SfImage.HeightRequestProperty, "ImageSize");
+            this.SetBinding(TabViewMaterialVisualStyle.ImagePositionProperty, BindingHelper.CreateBinding(nameof(SfTabItem.ImagePosition), getter: static (SfTabItem item) => item.ImagePosition, mode: BindingMode.TwoWay));
+            _horizontalLayout?.SetBinding(StackBase.SpacingProperty, BindingHelper.CreateBinding(nameof(SfTabItem.ImageTextSpacing), getter: static (SfTabItem item) => item.ImageTextSpacing));
+            _verticalLayout?.SetBinding(StackBase.SpacingProperty, BindingHelper.CreateBinding(nameof(SfTabItem.ImageTextSpacing), getter: static (SfTabItem item) => item.ImageTextSpacing));
+			_image?.SetBinding(SfImage.WidthRequestProperty, BindingHelper.CreateBinding(nameof(SfTabItem.ImageSize), getter: static (SfTabItem item) => item.ImageSize));
+			_image?.SetBinding(SfImage.HeightRequestProperty, BindingHelper.CreateBinding(nameof(SfTabItem.ImageSize), getter: static (SfTabItem item) => item.ImageSize));
 		}
 
         void SetHeaderBinding()
         {
             if (_header != null)
             {
-                _header.SetBinding(SfLabel.TextProperty, nameof(SfTabItem.Header), BindingMode.OneWay);
-                _header.SetBinding(SfLabel.TextColorProperty, nameof(SfTabItem.TextColor));
-                _header.SetBinding(SfLabel.FontSizeProperty, nameof(SfTabItem.FontSize));
-                _header.SetBinding(SfLabel.FontAttributesProperty, nameof(SfTabItem.FontAttributes));
-                _header.SetBinding(SfLabel.FontFamilyProperty, nameof(SfTabItem.FontFamily));
-                _header.SetBinding(SfLabel.FontAutoScalingEnabledProperty, nameof(SfTabItem.FontAutoScalingEnabled));
+                _header.SetBinding(SfLabel.TextProperty, BindingHelper.CreateBinding(nameof(SfTabItem.Header), getter: static (SfTabItem item) => item.Header, mode: BindingMode.OneWay));
+                _header.SetBinding(SfLabel.TextColorProperty, BindingHelper.CreateBinding(nameof(SfTabItem.TextColor), getter: static (SfTabItem item) => item.TextColor));
+                _header.SetBinding(SfLabel.FontSizeProperty, BindingHelper.CreateBinding(nameof(SfTabItem.FontSize), getter: static (SfTabItem item) => item.FontSize));
+                _header.SetBinding(SfLabel.FontAttributesProperty, BindingHelper.CreateBinding(nameof(SfTabItem.FontAttributes), getter: static (SfTabItem item) => item.FontAttributes));
+                _header.SetBinding(SfLabel.FontFamilyProperty, BindingHelper.CreateBinding(nameof(SfTabItem.FontFamily), getter: static (SfTabItem item) => item.FontFamily));
+                _header.SetBinding(SfLabel.FontAutoScalingEnabledProperty, BindingHelper.CreateBinding(nameof(SfTabItem.FontAutoScalingEnabled), getter: static (SfTabItem item) => item.FontAutoScalingEnabled));
             }
         }
 
