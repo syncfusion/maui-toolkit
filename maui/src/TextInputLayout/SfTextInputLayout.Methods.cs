@@ -170,6 +170,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					InvalidateDrawable();
 				}
 
+				SetCustomDescription(this.Content);
+
 				// Clear icon can't draw when isClearIconVisible property updated based on text.
 				// So here call the InvalidateDrawable to draw the clear icon.
 				if (Text?.Length <= 1)

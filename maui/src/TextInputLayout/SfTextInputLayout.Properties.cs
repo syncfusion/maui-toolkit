@@ -753,7 +753,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		public bool ShowHint
 		{
 			get { return (bool)GetValue(ShowHintProperty); }
-			set { SetValue(ShowHintProperty, value); }
+			set 
+			{ 
+				SetValue(ShowHintProperty, value);
+				SetCustomDescription(this.Content);
+			}
 		}
 
 		/// <summary>
@@ -1274,8 +1278,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </example>
 		public string Hint
 		{
-			get => (string)GetValue(HintProperty);
-			set => SetValue(HintProperty, value);
+			get { return (string)GetValue(HintProperty); }
+			set
+			{
+				SetValue(HintProperty, value);
+				SetCustomDescription(this.Content);
+			}
 		}
 
 		/// <summary>
@@ -1755,7 +1763,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		internal bool IsHintFloated
 		{
 			get { return (bool)GetValue(IsHintFloatedProperty); }
-			set { SetValue(IsHintFloatedProperty, value); }
+			set 
+			{ 
+				SetValue(IsHintFloatedProperty, value);
+				SetCustomDescription(this.Content);
+			}
 		}
 
 		/// <summary>

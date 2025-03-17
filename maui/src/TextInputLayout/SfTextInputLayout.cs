@@ -224,7 +224,12 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// </summary>
         internal bool IsIconPressed { get; private set; } = false;
 #endif
-        internal bool IsLayoutTapped { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the layout has been tapped.
+		/// </summary>
+		internal bool IsLayoutTapped { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating the hint was animating from down to up.
         /// </summary>
@@ -337,7 +342,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
          UIKit.UITextField? uiEntry;
 #endif
 
-        #endregion
+		private string _initialContentDescription = string.Empty;
+
+		#endregion
 
         #region Constructor
 
@@ -688,8 +695,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             //Adjusted Opacity from 0 to 0.00001 to ensure the content remains functionally active while enabling the ReturnType property.
             if (newValue is InputView entryEditorContent)
             {
-				entryEditorContent.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-            }
+#if ANDROID || IOS
+				entryEditorContent.Opacity = IsHintFloated ? 1 : 0.00001;
+#else
+				entryEditorContent.Opacity = IsHintFloated ? 1 : 0;
+#endif
+				_initialContentDescription = SemanticProperties.GetDescription(entryEditorContent);
+			}
             else if (newValue is SfView numericEntryContent && numericEntryContent.Children.Count > 0)
             {
                 if (numericEntryContent.Children[0] is Entry numericInputView)
@@ -711,8 +723,63 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 OnEnabledPropertyChanged(IsEnabled);
             }
+
+			SetCustomDescription(newValue);
         }
 
+		/// <summary>
+		/// Sets a custom semantic description for the content.
+		/// </summary>
+		private void SetCustomDescription(object content)
+		{
+
+			if (this.Content == null || content == null)
+				return;
+
+			var customDescription = string.Empty;
+#if ANDROID || MACCATALYST || IOS
+			
+			if (content is InputView entryEditorContent)
+			{
+				customDescription = (string.IsNullOrEmpty(entryEditorContent.Text) && !string.IsNullOrEmpty(entryEditorContent.Placeholder) && DeviceInfo.Platform ==  DevicePlatform.Android) ? entryEditorContent.Placeholder : string.Empty;
+			}
+
+			var layoutDescription = GetLayoutDescription();
+			
+			var contentDescription = layoutDescription + (IsHintFloated ? customDescription + _initialContentDescription : string.Empty);
+
+			SemanticProperties.SetDescription(this.Content, contentDescription);
+#elif WINDOWS
+
+			customDescription = SemanticProperties.GetDescription(this);
+
+			if (string.IsNullOrEmpty(customDescription))
+			{
+				customDescription = ShowHint && !string.IsNullOrEmpty(Hint) ? Hint : string.Empty;
+				SemanticProperties.SetDescription(this, customDescription);
+			}
+#endif
+		}
+
+#if ANDROID || MACCATALYST || IOS
+		/// <summary>
+		/// Retrieves the layout semantic description.
+		/// </summary>
+		private string GetLayoutDescription()
+		{
+			var description = SemanticProperties.GetDescription(this);
+
+			if (string.IsNullOrEmpty(description))
+			{
+				description = ShowHint && !string.IsNullOrEmpty(Hint) ? Hint : string.Empty;
+			}
+			if(!string.IsNullOrEmpty(description))
+			{
+				description = description.EndsWith(".") ? description : description + ". ";
+			}
+			return description ?? string.Empty;
+		}
+#endif
 		/// <summary>
 		/// Measures the size requirements for the content of the element.
 		/// </summary>
