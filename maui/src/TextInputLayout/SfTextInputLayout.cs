@@ -232,7 +232,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         internal bool IsIconPressed { get; private set; } = false;
 #endif
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the layout has been tapped.
+		/// </summary>
 		internal bool IsLayoutTapped { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating the hint was animating from down to up.
         /// </summary>
