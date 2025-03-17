@@ -52,7 +52,7 @@
         <chart:SfFunnelChart.DataLabelSettings>
             <chart:FunnelDataLabelSettings>
                 <chart:FunnelDataLabelSettings.LabelStyle>
-                    <chart:ChartDataLabelStyle LabelFormat="0'%" Margin="1"/>
+                    <chart:ChartDataLabelStyle LabelFormat="0'%" Margin="5"/>
                 </chart:FunnelDataLabelSettings.LabelStyle>
             </chart:FunnelDataLabelSettings>
         </chart:SfFunnelChart.DataLabelSettings>

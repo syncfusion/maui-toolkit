@@ -629,7 +629,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				ValidateDataPoints(SeriesYValues);
 			}
 		}
-		
+
 		#endregion
 
 		#region Private Methods

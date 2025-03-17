@@ -554,6 +554,37 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				OnIsHintFloatedPropertyChanged);
 
 		/// <summary>
+		/// Identifies the <see cref="DownIconTemplate"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="DownIconTemplate"/> property determines the template for the "down" icon in the user interface.
+		/// It gets or sets a <see cref="DownIconTemplate"/> that represents the icon or visual indication for downward actions.
+		/// </remarks>
+		internal static readonly BindableProperty DownIconTemplateProperty =
+				 BindableProperty.Create(nameof(DownIconTemplate), 
+					typeof(View), 
+					typeof(SfTextInputLayout), 
+					null, BindingMode.OneWay, 
+					null, 
+					OnUpDownTemplateChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="UpIconTemplate"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="UpIconTemplate"/> property defines the template for the "up" icon in the user interface.
+		/// It gets or sets a <see cref="UpIconTemplateProperty"/> that acts as the representation of upward actions or indicators.
+		/// </remarks>
+		internal static readonly BindableProperty UpIconTemplateProperty =
+		 BindableProperty.Create(nameof(UpIconTemplate), 
+					typeof(View), 
+					typeof(SfTextInputLayout), 
+					null, 
+					BindingMode.OneWay, 
+					null, 
+					OnUpDownTemplateChanged);
+
+		/// <summary>
 		/// Identifies the <see cref="CurrentActiveColor"/> bindable property.
 		/// </summary>
 		/// <remarks>
@@ -853,6 +884,24 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// Gets or sets the Hint text font size.
 		/// </summary>
 		internal float HintFontSize { get; set; }
+
+		/// <remarks>
+		/// This property gets or sets a Numeric "Down" button view.
+		/// </remarks>
+		internal View? DownIconTemplate
+		{
+			get { return (View)this.GetValue(DownIconTemplateProperty); }
+			set { this.SetValue(DownIconTemplateProperty, value); }
+		}
+
+		/// <remarks>
+		/// This property gets or sets a Numeric "Up" buttons view.
+		/// </remarks>
+		internal View? UpIconTemplate
+		{
+			get { return (View)this.GetValue(UpIconTemplateProperty); }
+			set { this.SetValue(UpIconTemplateProperty, value); }
+		}
 
 		/// <summary>
 		/// Gets or sets the background of the container.
@@ -1993,6 +2042,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			get { return (EnablePasswordVisibilityToggle && Content is Entry); }
 		}
+
 		#endregion
 
 		#region Property Changed Methods
@@ -2157,7 +2207,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			if (bindable is SfTextInputLayout inputLayout && newValue is bool value)
 			{
-				//Adjusted Opacity from 0 to 0.00001 to ensure the content remains functionally active while enabling the ReturnType property.
 				if (inputLayout.Content is InputView || inputLayout.Content is Picker)
 				{
 					inputLayout.Content.Opacity = value ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
@@ -2201,6 +2250,21 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			if (bindable is SfTextInputLayout inputLayout)
 			{
 				inputLayout.OnEnabledPropertyChanged((bool)newValue);
+			}
+		}
+
+		/// <summary>
+		/// Raised when the <see cref="UpIconTemplate"/> or <see cref="DownIconTemplate"/> property changes.
+		/// </summary>
+		/// <param name="bindable">The object on which the property has changed.</param>
+		/// <param name="oldValue">The previous value of the property.</param>
+		/// <param name="newValue">The new value of the property.</param>
+		static void OnUpDownTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfTextInputLayout sfTextInputLayout)
+			{
+				sfTextInputLayout.RemovedExistingView((View)oldValue);
+				sfTextInputLayout.InvalidateMeasure();
 			}
 		}
 

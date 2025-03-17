@@ -1150,7 +1150,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		//TODO: Need to do code share. 
 		void IPyramidChartDependent.UpdateLegendItemsSource(ObservableCollection<ILegendItem> legendItems)
 		{
-			if (Legend == null || !Legend.IsVisible)
+			if (Legend == null)
 			{
 				return;
 			}

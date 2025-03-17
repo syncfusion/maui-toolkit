@@ -35,7 +35,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		protected override void UpdateLegendItemsSource()
 		{
-			if (Series == null || _legend == null || !_legend.IsVisible)
+			if (Series == null || _legend == null)
 			{
 				return;
 			}

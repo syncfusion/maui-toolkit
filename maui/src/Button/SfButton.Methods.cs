@@ -733,7 +733,11 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 									: TextAlignment.Center;
 			UpdateTextRect(dirtyRect);
 			canvas.SaveState();
-			var trimmedText = _isFontIconText ? Text : StringExtensions.GetTextBasedOnLineBreakMode(ApplyTextTransform(Text), this, _textRectF.Width, _textRectF.Height, LineBreakMode);
+			float availableWidth = _textRectF.Width;
+#if ANDROID
+			availableWidth-=AndroidTextMargin;
+#endif
+			var trimmedText = _isFontIconText ? Text : StringExtensions.GetTextBasedOnLineBreakMode(ApplyTextTransform(Text), this, availableWidth, _textRectF.Height, LineBreakMode);
 			if (_textRectF.Width > 0 && _textRectF.Height > 0)
 			{
 				canvas.DrawText(trimmedText, _textRectF, _isRightToLeft ? (HorizontalAlignment)horizontalTextAlignment : (HorizontalAlignment)HorizontalTextAlignment, (VerticalAlignment)VerticalTextAlignment, this);

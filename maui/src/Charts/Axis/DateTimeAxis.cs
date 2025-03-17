@@ -183,7 +183,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
+		[RequiresUnreferencedCode("The GenerateVisibleLabels is not trim compatible")]
 		internal override void GenerateVisibleLabels()
 		{
 			SmallTickPoints.Clear();

@@ -146,7 +146,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			var xAxis = series.ActualXAxis;
 
-			var crossingValue = xAxis.ActualCrossingValue;
+			var crossingValue = double.IsNaN(xAxis.RenderingCrossesValue) ? series.GetAxisCrossingValue(xAxis) : xAxis.RenderingCrossesValue;
 			var start = Math.Floor(xAxis.VisibleRange.Start);
 			var end = Math.Ceiling(xAxis.VisibleRange.End);
 			double y1Value = _y1;

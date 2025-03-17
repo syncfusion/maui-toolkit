@@ -77,7 +77,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				switch (ev.Action)
 				{
 					case MotionEventActions.Down:
-						return HandleActionDown(ev, currentTouchPoint);
+						return HandleActionDown(ev,currentTouchPoint);
 
 					case MotionEventActions.Up:
 						_initialPoint = new Point(0, 0);

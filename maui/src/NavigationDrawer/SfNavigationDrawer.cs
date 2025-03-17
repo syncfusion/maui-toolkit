@@ -141,7 +141,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				typeof(bool),
 				typeof(SfNavigationDrawer),
 				false,
-				BindingMode.Default,
+				BindingMode.TwoWay,
 				null,
 				propertyChanged: OnIsOpenChanged);
 
@@ -3034,6 +3034,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			{
 				_drawerLayout.IsVisible = isVisible;
 				_greyOverlayGrid.IsVisible = isVisible;
+
+				// Workaround for framework issue https://github.com/dotnet/maui/issues/27434: Content inside DrawerContentView does not resize correctly on macOS and iOS.
+				// This forces an invalidation of the measure to ensure proper layout updates.
+#if MACCATALYST || IOS
+				if (DrawerSettings is not null && DrawerSettings.DrawerContentView is not null)
+				{
+					if (DrawerSettings.DrawerContentView is View view)
+					{
+						if (view.IsVisible)
+						{
+							(view as IView)?.InvalidateMeasure();
+						}
+					}
+				}
+#endif
 			}
 		}
 

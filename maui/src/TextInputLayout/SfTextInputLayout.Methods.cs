@@ -243,6 +243,64 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		#region Private Methods
 
 		/// <summary>
+		/// Gets the button size based on the vertical alignment and icon templates.
+		/// </summary>
+		/// <returns>
+		/// The size of the button. If the up/down buttons are vertically aligned and both icons are set,  
+		/// it returns <see cref="VerticalUpDownButtonSize"/>; otherwise, it returns <see cref="UpDownButtonSize"/>.
+		/// </returns>
+		float GetButtonSize()
+		{
+			if (IsUpDownVerticalAlignment && (UpIconTemplate != null && DownIconTemplate != null))
+			{
+				return VerticalUpDownButtonSize;
+			}
+			return UpDownButtonSize;
+		}
+
+		/// <summary>
+		/// Updates the position of an up/down button view within the layout.
+		/// </summary>
+		/// <param name="view">The view to be positioned.</param>
+		/// <param name="position">The rectangle defining the new position and size of the view.</param>
+		void UpdateUpDownButtonViewPosition(View view, RectF position)
+		{
+			view.Measure(position.Width, position.Height);
+			AbsoluteLayout.SetLayoutBounds(view, position);
+		}
+
+		/// <summary>
+		/// Removes a specified view from the current control if it exists.
+		/// </summary>
+		/// <param name="view">The view to be removed.</param>
+		void RemovedExistingView(View? view)
+		{
+			if (view != null && this.Contains(view))
+			{
+				Remove(view);
+			}
+		}
+
+		/// <summary>
+		/// Updates the button view by adding it to the children if not present,
+		/// updating its position, and invalidating the measure override.
+		/// </summary>
+		/// <param name="newView">The new view to be updated.</param>
+		/// <param name="rectF">The rectangle defining the position and size of the view.</param>
+		void UpdateButtonView(View? newView, RectF rectF)
+		{
+			if (newView != null)
+			{
+				if (!this.Children.Contains(newView))
+				{
+					this.Children.Add(newView);
+					this.InvalidateMeasureOverride();
+				}
+				UpdateUpDownButtonViewPosition(newView, rectF);
+			}
+		}
+		
+		/// <summary>
 		/// Updates the translation animation by modifying the Y-coordinate of the hint text rectangle.
 		/// Also updates the font size and triggers a redraw of the drawable.
 		/// </summary>
@@ -284,16 +342,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				Left = GetLeftPadding(),
 				Right = GetRightPadding()
 			};
-		}
-
-		void OnTextInputLayoutUnloaded(object? sender, EventArgs e)
-		{
-			UnwireEvents();
-		}
-
-		void OnTextInputLayoutLoaded(object? sender, EventArgs e)
-		{
-			WireEvents();
 		}
 
 		void WireLabelStyleEvents()
@@ -529,7 +577,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			}
 			if (sender is Entry entry)
 			{
-				//Explicitly reset ReturnType to handle native restrictions.
 				ApplyNativeProperties(entry);
 			}
 #endif
@@ -749,7 +796,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 						datePicker.Unfocused -= OnTextInputViewUnfocused;
 						break;
 					case Syncfusion.Maui.Toolkit.NumericEntry.SfNumericEntry numericEntryView:
-						if(numericEntryView.Children[0] is Entry numericInputView)
+						if (numericEntryView.Children[0] is Entry numericInputView)
 						{
 							numericInputView.Focused -= OnTextInputViewFocused;
 							numericInputView.Unfocused -= OnTextInputViewUnfocused;
@@ -768,7 +815,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				}
 #endif
 			}
-			
+
 			UnWireLabelStyleEvents();
 		}
 

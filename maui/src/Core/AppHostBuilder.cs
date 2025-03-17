@@ -1,6 +1,7 @@
 using Syncfusion.Maui.Toolkit.Carousel;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
+
 #if WINDOWS
 using System;
 using Microsoft.Extensions.DependencyInjection.Extensions;

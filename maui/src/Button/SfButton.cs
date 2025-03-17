@@ -97,6 +97,14 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		/// This constant used to detect whether the interaction is touch or scroll.
 		/// </summary>
 		const double ScrollThreshold = 5.0;
+#endif 
+
+#if ANDROID
+
+		/// <summary>
+		/// Defines a margin value for text on Android.
+		/// </summary>
+		const float AndroidTextMargin = 3.0f;
 #endif
 
 		#endregion
