@@ -3155,11 +3155,11 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					{
 						_popupOverlayContainer.Parent = page;
 
-						// The issue occurs due to framework changes in version 9.0.50 [https://github.com/dotnet/maui/pull/20154].
-						// We will set _popupOverlayContainer visibility to false after dismissing the popup.
-						// We will set _popupOverlayContainer as the parent to popupView on display.
+						// _popupOverlayContainer visibility is set to false after dismissing the popup.
+						// _popupOverlayContainer will be set as the parent to popupView here from DisplayPopup().
 						// Due to the framework changes, the IsVisible property of _popupView is set to false when reopening with the same instance of the popup, since _popupOverlayContainer visibility will now be false.
-						// We will set the visibility of _popupOverlayContainer to true in a later section and _popupViewvisibility will still remains false.
+						// _popupOverlayContainer visibility is set to true in a later section, but _popupView visibility will still remain false.
+						// causes popup to appear blank for second time.
 						_popupOverlayContainer.IsVisible = true;
 						_popupView.Parent = _popupOverlayContainer;
 					}
