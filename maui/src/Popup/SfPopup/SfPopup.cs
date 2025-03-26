@@ -2261,8 +2261,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				{
 					_popupOverlayContainer.ApplyBackgroundColor(Colors.Transparent);
 				}
-
-				_popupOverlayContainer.IsVisible = true;
 			}
 		}
 
@@ -3156,6 +3154,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					if (_popupOverlayContainer.Parent is null || _popupView.Parent is null)
 					{
 						_popupOverlayContainer.Parent = page;
+
+						// Due to framework change in 9.0.50, popupView visibility was becoming false while setting parent. Framework PR URL(https://github.com/dotnet/maui/pull/20154).
+						_popupOverlayContainer.IsVisible = true;
 						_popupView.Parent = _popupOverlayContainer;
 					}
 				}
