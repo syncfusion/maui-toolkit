@@ -3155,7 +3155,11 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					{
 						_popupOverlayContainer.Parent = page;
 
-						// Due to framework change in 9.0.50, popupView visibility was becoming false while setting parent. Framework PR URL(https://github.com/dotnet/maui/pull/20154).
+						// The issue occurs due to framework changes in version 9.0.50 [https://github.com/dotnet/maui/pull/20154].
+						// We will set _popupOverlayContainer visibility to false after dismissing the popup.
+						// We will set _popupOverlayContainer as the parent to popupView on display.
+						// Due to the framework changes, the IsVisible property of _popupView is set to false when reopening with the same instance of the popup, since _popupOverlayContainer visibility will now be false.
+						// We will set the visibility of _popupOverlayContainer to true in a later section and _popupViewvisibility will still remains false.
 						_popupOverlayContainer.IsVisible = true;
 						_popupView.Parent = _popupOverlayContainer;
 					}
