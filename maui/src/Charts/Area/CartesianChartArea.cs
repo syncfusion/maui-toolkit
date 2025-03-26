@@ -137,6 +137,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				AreaBounds.SubtractThickness(PlotAreaMargin),
 				_cartesianPlotArea._chart.TitleHeight);
 
+			//Need to set the trackballview padding to display the trackball template exact position
+			if (cartesianChart is SfCartesianChart chart)
+				chart._trackballView.Padding = PlotAreaMargin;
+
 			UpdateVisibleSeries(); //series create segment logics.
 
 			if (cartesianChart is SfCartesianChart sfChart)
