@@ -2261,8 +2261,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				{
 					_popupOverlayContainer.ApplyBackgroundColor(Colors.Transparent);
 				}
-
-				_popupOverlayContainer.IsVisible = true;
 			}
 		}
 
@@ -3156,6 +3154,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					if (_popupOverlayContainer.Parent is null || _popupView.Parent is null)
 					{
 						_popupOverlayContainer.Parent = page;
+
+						// _popupOverlayContainer visibility is set to false after dismissing the popup.
+						// _popupOverlayContainer will be set as the parent to popupView here from DisplayPopup().
+						// Due to Maui 9.0.50 changes [https://github.com/dotnet/maui/pull/20154],
+						// the IsVisible property of _popupView is set to false when reopening with the same instance of the popup, since _popupOverlayContainer visibility will now be false.
+						// _popupOverlayContainer visibility is set to true in a later section, but _popupView visibility will still remain false.
+						// causes popup to appear blank for second time.
+						_popupOverlayContainer.IsVisible = true;
 						_popupView.Parent = _popupOverlayContainer;
 					}
 				}
