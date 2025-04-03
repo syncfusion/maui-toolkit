@@ -76,17 +76,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         bool _needToAnimateMarker;
 
-        #endregion
+		internal override bool IsFillEmptyPoint { get { return false; } }
 
-        #region Bindable Properties
+		#endregion
 
-        /// <summary>
-        /// Identifies the <see cref="ShowMarkers"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="ShowMarkers"/> property determines whether the chart markers are visible on the series.
-        /// </remarks>
-        public static readonly BindableProperty ShowMarkersProperty = ChartMarker.ShowMarkersProperty;
+		#region Bindable Properties
+
+		/// <summary>
+		/// Identifies the <see cref="ShowMarkers"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="ShowMarkers"/> property determines whether the chart markers are visible on the series.
+		/// </remarks>
+		public static readonly BindableProperty ShowMarkersProperty = ChartMarker.ShowMarkersProperty;
 
         /// <summary>
         /// Identifies the <see cref="MarkerSettings"/> bindable property.
@@ -503,7 +505,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     double highValue = highValues[index];
                     double lowValue = lowValues[index];
                     string label = string.Format("{0} : {1:#.##}\n{2} : {3:#.##}", SfCartesianChartResources.High, highValue, SfCartesianChartResources.Low, lowValue);
-                    var xPoint = TransformToVisibleX(xValue, topValue);
+					if (highValue == 0 || lowValue == 0)
+					{
+						label = string.Format("{0} : {1:0.##}\n{2} : {3:0.##}", SfCartesianChartResources.High, highValue, SfCartesianChartResources.Low, lowValue);
+					}
+
+					var xPoint = TransformToVisibleX(xValue, topValue);
                     var yPoint = TransformToVisibleY(xValue, topValue);
 
                     TrackballPointInfo? chartPointInfo = CreateTrackballPointInfo(xPoint, yPoint, label, point);

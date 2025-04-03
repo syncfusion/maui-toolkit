@@ -988,6 +988,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			HorizontalErrorValues?.Clear();
 			VerticalErrorValues?.Clear();
 			YValues.Clear();
+			foreach (var item in EmptyPointIndexes)
+			{
+				item?.Clear();
+			}
+
 			GeneratePoints();
 			ScheduleUpdateChart();
 		}
@@ -1020,6 +1025,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override void RemoveData(int index, NotifyCollectionChangedEventArgs e)
 		{
+			ResetEmptyPointIndexes();
+			foreach (var item in EmptyPointIndexes)
+			{
+				item?.Clear();
+			}
+
 			if (XValues is IList<double> list1)
 			{
 				list1.RemoveAt(index);
