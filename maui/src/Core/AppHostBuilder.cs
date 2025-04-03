@@ -37,6 +37,11 @@ namespace Syncfusion.Maui.Toolkit.Hosting
 #endif
 			});
 
+			builder.ConfigureFonts(fonts =>
+			{
+				fonts.AddFont("MauiMaterialAssets.ttf", "MauiMaterialAssets");
+			});
+
 #if WINDOWS
 			builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IMauiInitializeService, MauiControlsInitializer>());
 #endif
