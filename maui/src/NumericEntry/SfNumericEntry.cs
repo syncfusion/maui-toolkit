@@ -457,6 +457,13 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                     }
                     break;
 
+	 			case nameof(IsVisible):
+					if (_textBox != null)
+					{
+						_textBox.IsVisible = IsVisible;
+					}
+					break;
+
         #if WINDOWS
                 case nameof(FlowDirection):
                     SetFlowDirection();
