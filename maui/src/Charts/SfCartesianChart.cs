@@ -1345,7 +1345,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             {
                 if (!_chartArea.Contains(_trackballView))
                 {
-                    _chartArea.Add(_trackballView);
+					var _index = _chartArea.IndexOf(BehaviorLayout);
+                    _chartArea.Insert(_index, _trackballView);
                 }
 
                 if (!_chartArea.Contains(_zoomPanView))
