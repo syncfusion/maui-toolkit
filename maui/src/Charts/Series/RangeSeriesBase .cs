@@ -377,7 +377,7 @@
 				{
 					foreach (var index in EmptyPointIndexes[0])
 					{
-						if (HighValues != null && HighValues.Count != 0)
+						if (HighValues != null && HighValues.Count != 0 && index < HighValues.Count)
 						{
 							HighValues[(int)index] = double.NaN;
 						}
@@ -388,7 +388,7 @@
 				{
 					foreach (var index in EmptyPointIndexes[1])
 					{
-						if (LowValues != null && LowValues.Count != 0)
+						if (LowValues != null && LowValues.Count != 0 && index < LowValues.Count)
 						{
 							LowValues[(int)index] = double.NaN;
 						}

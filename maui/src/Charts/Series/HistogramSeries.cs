@@ -437,6 +437,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override void ValidateYValues()
+		{
+		}
+
 		internal override void GenerateSegments(SeriesView seriesView)
 		{
 			var xValues = GetXValues();
