@@ -1943,7 +1943,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			if (((IsLayoutFocused && !string.IsNullOrEmpty(Hint)) || IsHintFloated) && ShowHint)
 			{
 				CalculateClipRect();
-				canvas.SubtractFromClip(_clipRect);
+				if(_clipRect.Width >= 0 && _clipRect.Height >= 0)
+				{
+					canvas.SubtractFromClip(_clipRect);
+				}
 			}
 
 			SetOutlinedContainerBackground(canvas);
