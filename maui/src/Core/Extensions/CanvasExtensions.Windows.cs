@@ -129,7 +129,10 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 
 						format.HorizontalAlignment = canvasHorizontalAlignment;
 						format.Options = CanvasDrawTextOptions.Clip;
-						w2DCanvas.Session.DrawText(value, new Windows.Foundation.Rect(rect.X, rect.Y, rect.Width, rect.Height), textElement.TextColor.AsColor(), format);
+						if(rect.Width >= 0 && rect.Height >= 0)
+						{
+							w2DCanvas.Session.DrawText(value, new Windows.Foundation.Rect(rect.X, rect.Y, rect.Width, rect.Height), textElement.TextColor.AsColor(), format);
+						}
 					}
 				}
 			}
