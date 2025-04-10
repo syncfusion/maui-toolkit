@@ -106,7 +106,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <MauiFont Include="Resources\Fonts\MauiMaterialAssets.ttf" />
+    <MauiFont Include="Resources\Fonts\MauiMaterialAssets.ttf" >
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </MauiFont>
   </ItemGroup>
   
   <ItemGroup>
