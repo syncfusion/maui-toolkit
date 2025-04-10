@@ -1347,7 +1347,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     _chartArea.Add(_trackballView);
 				
-					if (BehaviorLayout != null)
+					if (BehaviorLayout != null) 
 					{
 						BehaviorLayout.ZIndex = _chartArea.Count;
 					}
