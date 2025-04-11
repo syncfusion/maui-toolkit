@@ -107,6 +107,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			_axisLayout.InputTransparent = true;
 			Add(_annotationLayout);
 			Add(_behaviorLayout);
+			_behaviorLayout.ZIndex = this.Children.Count;
 			BatchCommit();
 		}
 
