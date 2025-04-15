@@ -1940,21 +1940,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		SfTooltip? GetOrCreateTrackballView(SfCartesianChart chart, TrackballPointInfo? prevTrackballInfo)
 		{
-			var itemView = prevTrackballInfo?.ContentTemplateView as SfTooltip;
+			var trackballTooltip = prevTrackballInfo?.ContentTemplateView as SfTooltip;
 
-			if (itemView == null && ShowLabel)
+			if (trackballTooltip == null && ShowLabel)
 			{
-				itemView = new SfTooltip
+				trackballTooltip = new SfTooltip
 				{
 					Background = _actualLabelStyle.Background
 				};
-				chart._trackballView.Add(itemView);
-				itemView.Duration = double.NaN;
-				itemView.Helper.CanNosePointTarget = true;
-				ContentList.Add(itemView);
+				chart._trackballView.Add(trackballTooltip);
+				trackballTooltip.Duration = double.NaN;
+				trackballTooltip.Helper.CanNosePointTarget = true;
+				ContentList.Add(trackballTooltip);
 			}
 
-			return itemView;
+			return trackballTooltip;
 		}
 
 		static View? GetTheTrackballTemplate(DataTemplate trackballTemplate, object bindingContext)
