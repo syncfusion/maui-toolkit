@@ -107,6 +107,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			_axisLayout.InputTransparent = true;
 			Add(_annotationLayout);
 			Add(_behaviorLayout);
+			_behaviorLayout.ZIndex = this.Children.Count;
 			BatchCommit();
 		}
 
@@ -136,6 +137,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			cartesianChart.ActualSeriesClipRect = ChartUtils.GetSeriesClipRect(
 				AreaBounds.SubtractThickness(PlotAreaMargin),
 				_cartesianPlotArea._chart.TitleHeight);
+
+			//Need to set the trackballview padding to display the trackball template exact position
+			if (cartesianChart is SfCartesianChart chart)
+				chart._trackballView.Padding = PlotAreaMargin;
 
 			UpdateVisibleSeries(); //series create segment logics.
 
