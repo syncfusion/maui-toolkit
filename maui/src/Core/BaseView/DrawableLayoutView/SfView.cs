@@ -25,6 +25,11 @@ namespace Syncfusion.Maui.Toolkit
 
         private bool clipToBounds = true;
 
+        /// <summary>
+		/// The field indicates whether it is layout based control.
+		/// </summary>
+		private bool isLayoutControl = false;
+
         private Thickness padding = new(0);
 
         readonly List<IView> children = [];
@@ -63,6 +68,21 @@ namespace Syncfusion.Maui.Toolkit
                 ignoreSafeArea = value;
             }
         }
+
+        /// <summary>
+		/// Gets or sets a value indicating whether it is layout based control.
+		/// </summary>
+		internal bool IsLayoutControl
+		{
+			get
+			{
+				return this.isLayoutControl;
+			}
+			set
+			{
+				this.isLayoutControl = value;
+			}
+		}
 
         /// <summary>
         /// Gets the collection of child views contained within this view.
