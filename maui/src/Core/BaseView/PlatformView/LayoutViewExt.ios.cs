@@ -203,7 +203,7 @@ namespace Syncfusion.Maui.Toolkit.Platform
 			var widthConstraint = bounds.Width;
 			var heightConstraint = bounds.Height;
 
-			if (!IsMeasureValid(widthConstraint, heightConstraint) && Superview is not Microsoft.Maui.Platform.MauiView)
+			if (!IsMeasureValid(widthConstraint, heightConstraint) && Superview is not Microsoft.Maui.Platform.MauiView && View is SfView sfView && !sfView.IsLayoutControl)
 			{
 				layout.CrossPlatformMeasure(bounds.Width, bounds.Height);
 				CacheMeasureConstraints(widthConstraint, heightConstraint);

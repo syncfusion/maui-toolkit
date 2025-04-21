@@ -112,7 +112,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				typeof(ICommand),
 				typeof(SfPullToRefresh),
 				null,
-				BindingMode.TwoWay,
+				BindingMode.Default,
 				null);
 
 		/// <summary>
@@ -127,7 +127,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			   typeof(object),
 			   typeof(SfPullToRefresh),
 			   null,
-			   BindingMode.TwoWay,
+			   BindingMode.Default,
 			   null);
 
 		/// <summary>
@@ -360,6 +360,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			Children.Add(_progressCircleView);
 			ClipToBounds = true;
 			ThemeElement.InitializeThemeResources(this, "SfPullToRefreshTheme");
+			this.IsLayoutControl = true;
 		}
 
 		#endregion
