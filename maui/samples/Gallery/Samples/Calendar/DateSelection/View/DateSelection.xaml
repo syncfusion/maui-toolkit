@@ -50,7 +50,7 @@
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="0.5*"/>
                         </Grid.ColumnDefinitions>
-                        <Label Text="Selection Type"
+                        <Label Text="Selection type"
                               Grid.Column="0"
                               LineBreakMode="WordWrap"
                               FontSize="14"

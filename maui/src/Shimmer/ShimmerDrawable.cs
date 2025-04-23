@@ -800,7 +800,8 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 		/// <param name="animationValue">The current value of the animation.</param>
 		void OnAnimationUpdate(double animationValue)
 		{
-			if (Shimmer == null)
+			IShimmer? shimmer = Shimmer;
+			if (shimmer == null)
 			{
 				return;
 			}
@@ -808,28 +809,41 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 			float offset = (float)animationValue;
 
 			// Calculating the wave width in factor value.
-			float waveWidthFactor = (float)(Shimmer.WaveWidth / _availableSize.Width);
+			float waveWidthFactor = (float)(shimmer.WaveWidth / _availableSize.Width);
 
 			// Validating the factor, because the factor should lie between 0 and 1.
 			waveWidthFactor = Math.Clamp(waveWidthFactor, 0, 1);
-
 			float gradientOffset3 = Math.Clamp(offset, 0, 1);
 			float gradientOffset2 = Math.Clamp(offset - (waveWidthFactor / 2), 0, 1);
 			float gradientOffset1 = Math.Clamp(offset - waveWidthFactor, 0, 1);
 			if (_gradient != null)
 			{
 				// If gradient brush was set to fill property. only the first gradient stop color will be used for shimmer fill.
-				Color color = ((Paint)Shimmer.Fill).ToColor() ?? Colors.Transparent;
+				Color color = BrushToColorConverter(shimmer.Fill);
 				_gradient.GradientStops =
 				[
 					new GradientStop(){Color = color,Offset = gradientOffset1},
-					new GradientStop(){Color = Shimmer.WaveColor,Offset = gradientOffset2},
+					new GradientStop(){Color = shimmer.WaveColor,Offset = gradientOffset2},
 					new GradientStop(){Color = color,Offset = gradientOffset3},
 				];
 			}
 
 			// Invalidate the drawable to reflect the changes.
 			InvalidateDrawable();
+		}
+
+		/// <summary>
+		/// Converts a <see cref="Brush"/> to a <see cref="Color"/>.
+		/// </summary>
+		/// <param name="color">The <see cref="Brush"/> to convert.</param>
+		/// <returns>
+		/// Returns the <see cref="Color"/> representation of the <see cref="Brush"/>. 
+		/// If the conversion fails, returns <see cref="Colors.Transparent"/>.
+		/// </returns>
+		static Color BrushToColorConverter(Brush color)
+		{
+			Paint paint = color;
+			return paint.ToColor() ?? Colors.Transparent;
 		}
 
 		#endregion

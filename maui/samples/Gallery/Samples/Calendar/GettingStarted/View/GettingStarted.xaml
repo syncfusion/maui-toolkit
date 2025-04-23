@@ -30,7 +30,7 @@
               <ColumnDefinition Width="0.5*"/>
               <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Calendar View"
+            <Label Text="Calendar view"
                         Grid.Column="0"
                         LineBreakMode="WordWrap"
                         FontSize="14"
@@ -51,7 +51,7 @@
               <ColumnDefinition Width="0.5*"/>
               <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Calendar Selection"
+            <Label Text="Calendar selection"
                         Grid.Column="0"
                         LineBreakMode="WordWrap"
                         FontSize="14"
@@ -93,7 +93,7 @@
               <ColumnDefinition Width="0.5*"/>
               <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Selection Direction"
+            <Label Text="Selection direction"
                            x:Name="selectionDirectionText"
                         Grid.Column="0"
                         LineBreakMode="WordWrap"
@@ -115,13 +115,16 @@
               <ColumnDefinition Width="0.5*"/>
               <ColumnDefinition Width="0.5*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Display Date" 
+            <Label Text="Display date" 
                         LineBreakMode="WordWrap"
                         FontSize="14"
                         VerticalOptions="Center"
-                        HorizontalOptions="Start"/>
-            <DatePicker x:Name="datePicker" HeightRequest="37"
-                                Grid.Column="1"/>
+                        HorizontalOptions="Start"
+                        HeightRequest="37"
+                        VerticalTextAlignment="Center"/>
+            <DatePicker x:Name="datePicker"
+                                Grid.Column="1"
+                                VerticalOptions="Center"/>
           </Grid>
 
           <Grid x:Name="allowViewNavigationGrid">
@@ -187,7 +190,7 @@
               <ColumnDefinition Width="0.7*"/>
               <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Enable Past Dates"  
+            <Label Text="Enable past dates"  
                         LineBreakMode="WordWrap"
                         FontSize="14"
                         VerticalOptions="Center"
@@ -206,7 +209,7 @@
               <ColumnDefinition Width="0.7*"/>
               <ColumnDefinition Width="0.3*"/>
             </Grid.ColumnDefinitions>
-            <Label Text="Enable swipe Selection"  
+            <Label Text="Enable swipe selection"  
                         LineBreakMode="WordWrap"
                         FontSize="14"
                         VerticalOptions="Center"

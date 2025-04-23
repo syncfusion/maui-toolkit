@@ -161,7 +161,7 @@ namespace Syncfusion.Maui.ControlsGallery.Cards.SfCards
                 _thirdCard.CornerRadius = new CornerRadius(Math.Round(e.NewValue));
                 _fourthCard.CornerRadius = new CornerRadius(Math.Round(e.NewValue));
                 _fifthCard.CornerRadius = new CornerRadius(Math.Round(e.NewValue));
-                _cornerRadiusLabel.Text = "CornerRadius: " + Math.Round(e.NewValue);
+                _cornerRadiusLabel.Text = "Corner radius: " + Math.Round(e.NewValue);
             }
         }
 
