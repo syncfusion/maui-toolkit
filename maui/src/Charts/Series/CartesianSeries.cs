@@ -1793,7 +1793,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override void UpdateEmptyPointSettings()
 		{
-			if (!IsFillEmptyPoint && EmptyPointMode == EmptyPointMode.None)
+			if (!IsFillEmptyPoint || EmptyPointMode == EmptyPointMode.None)
 			{
 				return;
 			}
