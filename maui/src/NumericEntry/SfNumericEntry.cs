@@ -308,6 +308,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         /// </summary>
         string _previousText = string.Empty;
 #endif
+
+#if MACCATALYST || IOS
+		const double MinimumMargin = 7;
+#endif
+
 		#endregion
 
 		#region Constructor

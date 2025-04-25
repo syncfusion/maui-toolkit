@@ -291,6 +291,19 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				defaultValueCreator: bindable => null);
 
 		/// <summary>
+		/// Identifies the <see cref="SelectedSegmentTextColor"/> dependency property.
+		/// </summary>
+		/// <value>
+		/// Identifies the <see cref="SelectedSegmentTextColor"/> bindable property.
+		/// </value>
+		internal static readonly BindableProperty SelectedSegmentTextColorProperty =
+			BindableProperty.Create(
+				nameof(SelectedSegmentTextColor),
+				typeof(Color), typeof(SfSegmentedControl),
+				defaultValueCreator: bindable => Color.FromArgb("#FFFFFF"),
+				propertyChanged: OnSelectedSegmentTextColorChanged);
+
+		/// <summary>
 		/// Identifies the <see cref="KeyboardFocusStroke"/> dependency property.
 		/// </summary>
 		/// <value>
@@ -994,6 +1007,15 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		}
 
 		/// <summary>
+		/// Gets or sets the selected text color brush for the segment.
+		/// </summary>
+		internal Color SelectedSegmentTextColor
+		{
+			get { return (Color)this.GetValue(SelectedSegmentTextColorProperty); }
+			set { this.SetValue(SelectedSegmentTextColorProperty, value); }
+		}
+
+		/// <summary>
 		/// Gets or sets the focused keyboard stroke for the segment.
 		/// </summary>
 		internal Brush KeyboardFocusStroke
@@ -1278,6 +1300,23 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			}
 
 			segmentedControl._keyNavigationView?.InvalidateDrawable();
+		}
+
+		/// <summary>
+		/// Occurs when <see cref="SelectedSegmentTextColor"/> property changed.
+		/// </summary>
+		/// <param name="bindable">The bindable object.</param>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		static void OnSelectedSegmentTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			SfSegmentedControl segmentedControl = (SfSegmentedControl)bindable;
+			if (segmentedControl == null || segmentedControl._segmentLayout == null || !segmentedControl.IsLoaded)
+			{
+				return;
+			}
+
+			segmentedControl._segmentLayout?.UpdateSelectedSegmentItemStyle();
 		}
 
 		/// <summary>
