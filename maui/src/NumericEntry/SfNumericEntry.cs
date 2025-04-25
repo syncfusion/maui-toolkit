@@ -457,19 +457,18 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                     }
                     break;
 
-	 			case nameof(IsVisible):
+        #if WINDOWS
+                case nameof(FlowDirection):
+                    SetFlowDirection();
+                    break;
+		#endif
+				case nameof(IsVisible):
 					if (_textBox != null)
 					{
 						_textBox.IsVisible = IsVisible;
 					}
 					break;
-
-        #if WINDOWS
-                case nameof(FlowDirection):
-                    SetFlowDirection();
-                    break;
-        #endif
-            }
+			}
 
             // Ensure the base method is always called
             base.OnPropertyChanged(propertyName);
@@ -844,12 +843,44 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
             }
         }
 
-        /// <summary>
-        /// Searches for the next focusable element in the UI tree starting from the given element.
-        /// </summary>
-        /// <param name="currentElement">The current visual element from which the search starts.</param>
-        /// <returns>The next focusable <see cref="VisualElement"/> if found; otherwise, null.</returns>
-        static VisualElement? FindNextFocusableElement(VisualElement currentElement)
+		/// <summary>
+		/// Retrieves the next focusable element within the visual tree.
+		/// If no next element is found, it searches in the parent hierarchy.
+		/// </summary>
+		/// <param name="parent">The starting parent element to search from.</param>
+		/// <returns>The next focusable VisualElement, or null if none is found.</returns>
+		static VisualElement? GetNextFocusableElement(VisualElement parent)
+		{
+			var elements = parent.GetVisualTreeDescendants()
+                     .Where(e => (e is Entry || e is InputView || e is Picker || e is DatePicker || e is TimePicker || e is SearchBar))
+                     .OfType<VisualElement>()
+                     .Where(ve => ve.IsEnabled && ve.IsVisible)
+                     .ToList();
+
+			var focusedElement = elements.FirstOrDefault(e => e.IsFocused);
+
+			if (focusedElement != null)
+			{
+				int currentIndex = elements.IndexOf(focusedElement);
+
+				// Return the next focusable element if available
+				if (currentIndex >= 0 && currentIndex < elements.Count - 1)
+				{
+					return elements[currentIndex + 1];
+				}
+			}
+
+			// If no next focusable element is found, search in the parent
+			return parent.Parent is VisualElement currentParent ? GetNextFocusableElement(currentParent) : null;
+		}
+
+
+		/// <summary>
+		/// Searches for the next focusable element in the UI tree starting from the given element.
+		/// </summary>
+		/// <param name="currentElement">The current visual element from which the search starts.</param>
+		/// <returns>The next focusable <see cref="VisualElement"/> if found; otherwise, null.</returns>
+		static VisualElement? FindNextFocusableElement(VisualElement currentElement)
         {
 			// Start searching from the parent of the current element
 			if (currentElement.Parent is not VisualElement rootElement || rootElement == null)
@@ -857,40 +888,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				return null;
 			}
 
-            // Track if we have found the current element in the tree
-            bool foundCurrent = false;
-
-            // Recursive method to search for the next focusable element
-            VisualElement? SearchNextFocusableElement(VisualElement parent)
-            {
-#pragma warning disable CS0618 // Type or member is obsolete
-                foreach (var child in parent.LogicalChildren)
-                {
-                    if (foundCurrent && child is VisualElement ve && ve.IsEnabled && ve.IsVisible && ve.Focus())
-                    {
-                        return ve; // Found the next focusable element
-                    }
-
-                    if (child == currentElement)
-                    {
-                        foundCurrent = true; // Mark that we found the current element
-                    }
-
-                    if (child is VisualElement childVisualElement && childVisualElement.LogicalChildren.Count > 0)
-                    {
-                        var result = SearchNextFocusableElement(childVisualElement);
-                        if (result != null)
-                        {
-                            return result;
-                        }
-                    }
-                }
-#pragma warning restore CS0618 // Type or member is obsolete
-
-                return null;
-            }
-
-            return SearchNextFocusableElement(rootElement);
+			return GetNextFocusableElement(rootElement);
         }
 
         /// <summary>
@@ -905,16 +903,21 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                 if (ReturnType == ReturnType.Next)
                 {
                     VisualElement? nextControl = FindNextFocusableElement(this);
-					if(nextControl is not null && nextControl is SfNumericEntry numeric && numeric is not null)
+					switch (nextControl)
 					{
-						numeric.Focus();
+						case SfNumericEntry numeric:
+							numeric.Focus();
+							break;
+
+						case SfTextInputLayout textInputLayout:
+							textInputLayout.Focus();
+							break;
+
+						default:
+							nextControl?.Focus();
+							break;
 					}
-					else
-					{
-						nextControl?.Focus();
-					}
-                    
-                }
+				}
                 else
                 {
                     Unfocus();

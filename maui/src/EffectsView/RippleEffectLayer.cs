@@ -99,9 +99,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 		/// <param name="dirtyRect">The rectangle.</param>
 		/// <param name="color">The color.</param>
 		/// <param name="clipBounds">The clip bounds value.</param>
-#pragma warning disable IDE0060 // Remove unused parameter
 		internal void DrawRipple(ICanvas canvas, RectF dirtyRect, Brush color, bool clipBounds = false)
-#pragma warning restore IDE0060 // Remove unused parameter
 		{
 			if (_rippleColor != null)
 			{

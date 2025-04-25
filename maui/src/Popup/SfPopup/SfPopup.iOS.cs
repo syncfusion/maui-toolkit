@@ -188,6 +188,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					var maskLayer = new CAShapeLayer { Frame = view.Bounds, Path = maskPath.CGPath };
 					view.Layer.Mask = maskLayer;
 				}
+				else
+				{
+					view.Layer.Mask = null;
+				}
 			}
 		}
 

@@ -8,6 +8,7 @@
                       xmlns:textInputLayout="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit"
                       xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.TabView.SfTabView"
                       xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:base="clr-namespace:Syncfusion.Maui.ControlsGallery.Samples.TabView.CenterButton"
                       BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
                       x:Name="root">
   <localCore:SampleView.Resources>
@@ -47,12 +48,12 @@
           </tabView:SfTabItem.ImageSource>
 
           <ListView x:Name="listView"
+                    x:DataType="{x:Type local:CenterButton}"
                     BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
                     RowHeight="75"
-                    BindingContext="{Binding Path=BindingContext, Source={x:Reference root}}"
                     ItemsSource="{Binding PrimaryListSource}">
             <ListView.ItemTemplate>
-              <DataTemplate>
+              <DataTemplate x:DataType="{x:Type base:ContactsInfo}">
                 <ViewCell>
                   <Grid ColumnDefinitions="5*,*">
                     <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="2">
@@ -110,12 +111,12 @@
                     FontFamily="MauiSampleFontIcon"/>
           </tabView:SfTabItem.ImageSource>
           <ListView x:Name="listView1"
+        x:DataType="{x:Type local:CenterButton}"
         BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-        RowHeight="75" 
-        BindingContext="{Binding Path=BindingContext, Source={x:Reference root}}"
+        RowHeight="75"
         ItemsSource="{Binding SecondaryListSource}">
             <ListView.ItemTemplate>
-              <DataTemplate>
+              <DataTemplate x:DataType="{x:Type base:ContactsInfo}">
                 <ViewCell>
                   <Grid ColumnDefinitions="5*,*">
                     <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="2">
@@ -171,12 +172,12 @@
                              FontFamily="MauiSampleFontIcon"/>
           </tabView:SfTabItem.ImageSource>
           <ListView x:Name="listView2"
+                    x:DataType="{x:Type local:CenterButton}"
                     BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
                     RowHeight="75"
-                    BindingContext="{Binding Path=BindingContext, Source={x:Reference root}}"
                     ItemsSource="{Binding ThirdListSource}">
             <ListView.ItemTemplate>
-              <DataTemplate>
+              <DataTemplate x:DataType="{x:Type base:ContactsInfo}">
                 <ViewCell>
                   <Grid ColumnDefinitions="5*,*">
                     <HorizontalStackLayout Grid.Column="0" Grid.ColumnSpan="2">

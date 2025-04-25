@@ -192,7 +192,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		List<string>? _addOnItems = ["Fast Charge", "512 MB SD Card", "2 Years Extended Warranty"];
 
 		/// <summary>
-		/// The devivery option choice collection.
+		/// The delivery option choice collection.
 		/// </summary>
 		List<string>? _deliveryOptions = ["Free Delivery", "+$5 for 1 Day Delivery"];
 
@@ -236,9 +236,9 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		int _sdCardPrice = 0;
 
 		/// <summary>
-		/// The warrenty price.
+		/// The warranty price.
 		/// </summary>
-		int _warrentyPrice = 0;
+		int _warrantyPrice = 0;
 
 		/// <summary>
 		/// The delivery date.
@@ -922,7 +922,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		}
 
 		/// <summary>
-		/// Gets or sets the contols list.
+		/// Gets or sets the controls list.
 		/// </summary>
 		/// <value>The ControlsList.</value>
 		public List<string>? ControlsList
@@ -1020,13 +1020,13 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		}
 
 		/// <summary>
-		/// Gets or sets the warrenty price.
+		/// Gets or sets the warranty price.
 		/// </summary>
-		/// <value>The WarrentyPrice.</value>
-		public int WarrentyPrice
+		/// <value>The WarrantyPrice.</value>
+		public int WarrantyPrice
 		{
-			get { return _warrentyPrice; }
-			set { _warrentyPrice = value; OnPropertyChanged(nameof(WarrentyPrice)); }
+			get { return _warrantyPrice; }
+			set { _warrantyPrice = value; OnPropertyChanged(nameof(WarrantyPrice)); }
 		}
 
 		/// <summary>
@@ -1183,7 +1183,6 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		/// <summary>
 		/// Initializes a new instance of the <see cref="T:Chip.ChipViewModel"/> class.
 		/// </summary>
-		[Obsolete]
 		public ChipViewModel()
 		{
 			ActionCommand = new Command(HandleAction);
@@ -1196,9 +1195,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 		void HandleAction(object obj)
 		{
 			Result.Clear();
-
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-			if (obj != null && obj.ToString().Equals("Search by brands", StringComparison.Ordinal) && _selectedItem != null && _brands.Count > 0)
+			if (obj?.ToString()?.Equals("Search by brands", StringComparison.Ordinal) == true && _selectedItem != null && _brands?.Count > 0)
 			{
 				foreach (var brand in _brands)
 				{
@@ -1206,10 +1203,8 @@ namespace Syncfusion.Maui.ControlsGallery.Chips
 				}
 			}
 
-			else if (FilterItems.Count > 0 && _selectedItem != null && _selectedFilterItems.Count > 0 && _brands.Count > 0)
+			else if (FilterItems.Count > 0 && _selectedItem != null && _selectedFilterItems.Count > 0 && _brands?.Count > 0)
 			{
-
-
 				foreach (var feature in _selectedFilterItems)
 				{
 					foreach (var brand in _brands)

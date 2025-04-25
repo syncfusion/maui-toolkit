@@ -585,7 +585,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					foreach (var index in EmptyPointIndexes[0])
 					{
-						if (HighValues != null && HighValues.Count != 0)
+						if (HighValues != null && HighValues.Count != 0 && index < HighValues.Count)
 						{
 							HighValues[(int)index] = double.NaN;
 						}
@@ -596,7 +596,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					foreach (var index in EmptyPointIndexes[1])
 					{
-						if (LowValues != null && LowValues.Count != 0)
+						if (LowValues != null && LowValues.Count != 0 && index < LowValues.Count)
 						{
 							LowValues[(int)index] = double.NaN;
 						}
@@ -607,7 +607,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					foreach (var index in EmptyPointIndexes[2])
 					{
-						if (OpenValues != null && OpenValues.Count != 0)
+						if (OpenValues != null && OpenValues.Count != 0 && index < OpenValues.Count)
 						{
 							OpenValues[(int)index] = double.NaN;
 						}
@@ -618,7 +618,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					foreach (var index in EmptyPointIndexes[3])
 					{
-						if (CloseValues != null && CloseValues.Count != 0)
+						if (CloseValues != null && CloseValues.Count != 0 && index < CloseValues.Count)
 						{
 							CloseValues[(int)index] = double.NaN;
 						}

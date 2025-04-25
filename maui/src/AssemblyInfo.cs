@@ -1,9 +1,11 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Resources;
 
+[assembly: NeutralResourcesLanguage("en-US")]
 [assembly: InternalsVisibleTo("Syncfusion.Maui.Toolkit.UnitTest")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Accordion")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.BottomSheet")]
-[assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Buttons")]
+[assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Butttons")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Calendar")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Cards")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Carousel")]

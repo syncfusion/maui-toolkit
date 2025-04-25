@@ -285,10 +285,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			_footerView = new SfGrid();
 			_footerView.Style = new Style(typeof(SfGrid));
 			_acceptButton = new SfButton() { IsVisible = false };
+			_acceptButton.AutomationId = "PopupAcceptButton";
 			_acceptButton.Style = new Style(typeof(SfButton));
 			_acceptButton.Text = SfPopupResources.GetLocalizedString("AcceptButtonText");
 			_acceptButton.Clicked += OnAcceptButtonClicked;
 			_declineButton = new SfButton() { IsVisible = false };
+			_declineButton.AutomationId = "PopupDeclineButton";
 			_declineButton.Style = new Style(typeof(SfButton));
 			_declineButton.Text = SfPopupResources.GetLocalizedString("DeclineButtonText");
 			_declineButton.Clicked += OnDeclineButtonClicked;

@@ -3369,9 +3369,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method used for handle the touch.
 		/// </summary>
 		/// <param name="e">e.</param>
-#pragma warning disable IDE0060 // Remove unused parameter
 		public static void OnTouch(PointerEventArgs e)
-#pragma warning restore IDE0060 // Remove unused parameter
 		{
 			// throw new NotImplementedException();
 		}

@@ -23,9 +23,9 @@ namespace Syncfusion.Maui.Toolkit
         /// </summary>
         private bool ignoreSafeArea = false;
 
-        private bool clipToBounds = true;
+		private bool clipToBounds = true;
 
-        /// <summary>
+		/// <summary>
 		/// The field indicates whether it is layout based control.
 		/// </summary>
 		private bool isLayoutControl = false;
@@ -69,7 +69,7 @@ namespace Syncfusion.Maui.Toolkit
             }
         }
 
-        /// <summary>
+		/// <summary>
 		/// Gets or sets a value indicating whether it is layout based control.
 		/// </summary>
 		internal bool IsLayoutControl
@@ -84,10 +84,10 @@ namespace Syncfusion.Maui.Toolkit
 			}
 		}
 
-        /// <summary>
-        /// Gets the collection of child views contained within this view.
-        /// </summary>
-        public IList<IView> Children => this;
+		/// <summary>
+		/// Gets the collection of child views contained within this view.
+		/// </summary>
+		public IList<IView> Children => this;
 
         /// <summary>
         /// Gets or sets a value indicating whether the content of this view is clipped to its bounds.

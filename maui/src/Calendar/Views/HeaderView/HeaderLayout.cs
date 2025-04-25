@@ -112,7 +112,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 Add(_headerTextLabel);
                 AddOrRemoveNavigationArrows();
             }
-        }
+#if IOS
+			IgnoreSafeArea = true;
+#endif
+		}
 
         #endregion
 

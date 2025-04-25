@@ -95,6 +95,10 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 #if !WINDOWS
 			this.AddKeyboardListener(this);
 #endif
+
+#if __IOS__
+			this.IgnoreSafeArea = true;
+#endif
 		}
 
 		#endregion
@@ -316,6 +320,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 
 			RemoveOutlinedBorderView();
 			_grid = [];
+#if __IOS__
+			_grid.IgnoreSafeArea = true;
+#endif
 			_grid.SizeChanged += GridSizeChanged;
 
 			// The FlowDirection of the grid is set to LeftToRight to handle RTL rendering logic manually, as RTL behavior may not be consistent across Windows and macOS platforms.

@@ -2,7 +2,7 @@
 using Syncfusion.Maui.Toolkit.Charts;
 using Syncfusion.Maui.Toolkit.Themes;
 
-namespace Syncfusion.Maui.Toolkit.UnitTest
+namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class InterfaceUnitTests : BaseUnitTest
 	{

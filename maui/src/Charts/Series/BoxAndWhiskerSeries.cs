@@ -609,6 +609,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods 
 
+		internal override void ValidateYValues()
+		{
+		}
+
 		internal override void OnDataSourceChanged(object oldValue, object newValue)
 		{
 			if (YDataCollection != null)

@@ -1,6 +1,6 @@
 ﻿using Syncfusion.Maui.Toolkit.Charts;
 
-namespace Syncfusion.Maui.Toolkit.UnitTest
+namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class LabelStyleUnitTest
 	{
@@ -299,7 +299,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void ChartMarkerSettings_DefaultConstructor_SetsDefaultValues()
 		{
 			var markerSettings = new ChartMarkerSettings(); 
-			Assert.Equal(Charts.ShapeType.Circle, markerSettings.Type);
+			Assert.Equal(Syncfusion.Maui.Toolkit.Charts.ShapeType.Circle, markerSettings.Type);
 			Assert.Null(markerSettings.Fill);
 			Assert.Null(markerSettings.Stroke);
 			Assert.Equal(0d, markerSettings.StrokeWidth);

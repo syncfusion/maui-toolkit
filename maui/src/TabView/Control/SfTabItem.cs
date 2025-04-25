@@ -99,7 +99,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				nameof(Header),
 				typeof(string),
 				typeof(SfTabItem),
-				string.Empty);
+				string.Empty,
+				BindingMode.TwoWay);
 
 		/// <summary>
 		/// Identifies the <see cref="FontFamily"/> bindable property.

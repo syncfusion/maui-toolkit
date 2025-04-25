@@ -72,6 +72,16 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
         /// </summary>
         Color _stroke = Color.FromArgb("#49454F");
 
+		/// <summary>
+		/// Specifies the default disabled text color for the control
+		/// </summary>
+		Color _disabledTextColor = Color.FromArgb("#611c1b1f");
+
+		/// <summary>
+		/// Specifies the default text color for the control
+		/// </summary>
+		Color _textColor = Color.FromArgb("#1C1B1F");
+
         #endregion
 
         #region Constructor
@@ -167,9 +177,11 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
 	/// <param name="sfotpinput">The instance of the OTP input control.</param>
 	/// <param name="isEnabled">Indicates whether the control is enabled.</param>
 	/// <param name="inputState">Input state for the OTP input.</param>
-	/// <param name="background">Input state for the OTP input.</param>
-	/// <param name="stroke">Input state for the OTP input.</param>
-	internal void UpdateParameters(OtpInputStyle StylingMode, double cornerRadius, PointF startPoint, PointF endPoint, SfOtpInput sfotpinput, bool isEnabled, OtpInputState inputState,Color stroke, Color background)
+	/// <param name="background">Background for the OTP input.</param>
+	/// <param name="stroke">Stroke for the OTP input.</param>
+	/// <param name="textColor">TextColor for the OTP input.</param>
+	/// <param name="disabledTextColor">Disabled texxt Color for the OTP input.</param>
+	internal void UpdateParameters(OtpInputStyle StylingMode, double cornerRadius, PointF startPoint, PointF endPoint, SfOtpInput sfotpinput, bool isEnabled, OtpInputState inputState,Color stroke, Color background,Color textColor, Color disabledTextColor)
         {
             _styleMode = StylingMode;
             _cornerRadius = cornerRadius;
@@ -180,6 +192,8 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
             _inputState = inputState;
 			_background = background;
 			_stroke = stroke;
+            _textColor = textColor;
+			_disabledTextColor = disabledTextColor;
 
              GetVisualState();
         }
@@ -225,6 +239,8 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
                         ? _sfOtpInput.InputBackground 
                         : Colors.Transparent;
 				}
+
+                TextColor = _textColor;
 			}
 			else
 			{
@@ -233,6 +249,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
                 _background = _styleMode == OtpInputStyle.Filled 
                     ? _sfOtpInput.FilledDisableBackground 
                     : Colors.Transparent;
+                TextColor = _disabledTextColor;
 			}
 
 		}

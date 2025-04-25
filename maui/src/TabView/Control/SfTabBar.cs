@@ -1446,7 +1446,20 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (!string.IsNullOrEmpty(e.PropertyName))
             {
-                if (e.PropertyName.Equals(nameof(SfTabItem.IsVisible), StringComparison.Ordinal))
+				if (e.PropertyName.Equals(nameof(SfTabItem.Header), StringComparison.Ordinal))
+				{
+					if (sender is SfTabItem)
+					{
+						var item = sender as SfTabItem;
+						if (item is not null && item.Header is null)
+						{
+							item.Header = string.Empty;
+							return;
+						}
+					}
+				}
+
+				if (e.PropertyName.Equals(nameof(SfTabItem.IsVisible), StringComparison.Ordinal))
                 {
                     if (sender is SfTabItem item && item != null)
                     {
@@ -1865,7 +1878,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 tabItem.HeaderHorizontalTextAlignment = HeaderHorizontalTextAlignment;
                 tabItem.IndicatorPlacement = IndicatorPlacement;
                 tabItem.HeaderDisplayMode = HeaderDisplayMode;
-                tabItem.Touched += OnTabItemTouched;
+				tabItem.Header = tabItem.Header ?? string.Empty;
+				tabItem.Touched += OnTabItemTouched;
                 tabItem.PropertyChanged += OnTabItemPropertyChanged;
                 tabItem.IsDescriptionNotSetByUser = String.IsNullOrEmpty(SemanticProperties.GetDescription(tabItem));
                 tabItem.FontAutoScalingEnabled = FontAutoScalingEnabled;

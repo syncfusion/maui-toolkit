@@ -363,34 +363,66 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="isopen">Specifies whether the popup is open or not.</param>
 		internal static void Blur(MauiView view, SfPopup popup, bool isopen)
 		{
-			if (OperatingSystem.IsAndroidVersionAtLeast(31) && Shader.TileMode.Clamp is not null && popup.GetBlurRadius() > 0)
+			ClearBlurViews(popup);
+
+			if (OperatingSystem.IsAndroidVersionAtLeast(31) && Shader.TileMode.Clamp is not null && popup.GetBlurRadius() > 0 && SfWindowOverlay.ViewList is not null)
 			{
+				popup._blurredViews = new List<PlatformView>();
+				bool hasModalPage = false;
 				if (IPlatformApplication.Current is not null && IPlatformApplication.Current.Application is Microsoft.Maui.Controls.Application application &&
 					application.Windows is not null && application.Windows.Count > 0)
 				{
 					Microsoft.Maui.Controls.Window window = application.Windows[0];
-					bool hasModalPage = window is not null && window.Page is not null && window.Page.Navigation is not null
+					hasModalPage = window is not null && window.Page is not null && window.Page.Navigation is not null
 						&& window.Page.Navigation.ModalStack is not null && window.Navigation.ModalStack.Count > 0;
 
-					// Applies blur effect to the top page in modal stack when the modal page is displayed.
-					if (hasModalPage)
+					// In the case of multiple popups, if none of the popups in the view list have a blur effect, we need to apply the blur to the main view.
+					if (!SfWindowOverlay.ViewList.Any(view => view.HasBlurMode))
 					{
-						Page? mainPage = PopupExtension.GetMainPage();
-						if (mainPage is not null && mainPage.Handler is not null && mainPage.Handler.PlatformView is PlatformView pageView)
+						// Applies blur effect to the top page in modal stack when the modal page is displayed.
+						if (hasModalPage)
 						{
-							popup._blurTarget = pageView;
-							popup._blurTarget.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
-							return;
+							Page? mainPage = PopupExtension.GetMainPage();
+							if (mainPage is not null && mainPage.Handler is not null && mainPage.Handler.PlatformView is PlatformView pageView)
+							{
+								popup._blurredViews.Add(pageView);
+								pageView.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
+							}
+						}
+						else
+						{
+							ViewGroup? platformRootview = WindowOverlayHelper._platformRootView;
+							if (platformRootview is not null && platformRootview.GetChildAt(0) is PlatformView blurTarget)
+							{
+								// Applies blur effect to target view.
+								popup._blurredViews.Add(blurTarget);
+								blurTarget.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
+							}
 						}
 					}
-				}
 
-				ViewGroup? platformRootview = WindowOverlayHelper._platformRootView;
-				if (platformRootview is not null && platformRootview.ChildCount > 0 && platformRootview.GetChildAt(0) is PlatformView blurTarget)
-				{
-					// Applies blur effect to target view.
-					popup._blurTarget = blurTarget;
-					popup._blurTarget.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
+					// Applying Blur for nested popup.
+					foreach (WindowOverlayStack windowOverlay in SfWindowOverlay.ViewList.SkipLast(1).Reverse())
+					{
+						if (windowOverlay is not null)
+						{
+							windowOverlay.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
+							popup._blurredViews.Add(windowOverlay);
+							if (windowOverlay.HasBlurMode)
+							{
+								break; // If the HasBlurMode is enabled, the blurring of previous views will be handled.
+							}
+						}
+						else
+						{
+							continue;
+						}
+					}
+
+					if (popup._popupOverlay is not null && popup._popupOverlay._overlayStack is not null)
+					{
+						popup._popupOverlay._overlayStack.HasBlurMode = true;
+					}
 				}
 			}
 		}
@@ -404,10 +436,20 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (OperatingSystem.IsAndroidVersionAtLeast(31))
 			{
 				// Clears the blur effect for all views listed in BlurredViews.
-				if (popup._blurTarget is not null)
+				if (popup._blurredViews is not null)
 				{
-					popup._blurTarget.SetRenderEffect(null);
-					popup._blurTarget = null;
+					foreach (var blurredView in popup._blurredViews)
+					{
+						blurredView.SetRenderEffect(null);
+					}
+
+					if (popup._popupOverlay is not null && popup._popupOverlay._overlayStack is not null)
+					{
+						popup._popupOverlay._overlayStack.HasBlurMode = false;
+					}
+
+					popup._blurredViews.Clear();
+					popup._blurredViews = null;
 				}
 			}
 		}
@@ -432,6 +474,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			PlatformView relativeView = relative.ToPlatform(relative.Handler.MauiContext);
 
+			absoluteX *= WindowOverlayHelper._density;
+			absoluteY *= WindowOverlayHelper._density;
+
 			var popupViewWidth = popupView._popup._popupViewWidth * WindowOverlayHelper._density;
 			var popupViewHeight = popupView._popup._popupViewHeight * WindowOverlayHelper._density;
 
@@ -443,8 +488,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			var top = decorViewFrame is not null && decorViewFrame.Top > 0 ? decorViewFrame.Top : 0;
 			var left = decorViewFrame is not null && decorViewFrame.Left > 0 ? decorViewFrame.Left : 0;
 
-			// Adds the absolute points to the location of the relative view.
-			location[0] += (int)(absoluteX - left);
+			// Adding the absolute points to the Relative View's location, if Flow direction is RTL means we need to move in opposite direction.
+			location[0] += (popupView._popup._isRTL ? -(int)absoluteX : (int)absoluteX) - left;
 			if (GetAttributes() is WindowManagerLayoutParams attributes && (attributes.Flags & WindowManagerFlags.Fullscreen) is WindowManagerFlags.Fullscreen)
 			{
 				location[1] += (int)absoluteY;
@@ -580,40 +625,41 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				if (popupView._popup._isRTL)
 				{
-					relativeX = Math.Max(location[0] - (2 * absoluteX) - popupViewWidth, 0);
+					relativeX = location[0] + widthOfRelativeView;
 				}
 				else
 				{
-					relativeX = location[0] - popupViewWidth > 0 ? location[0] - popupViewWidth : 0;
+					relativeX = location[0] - popupViewWidth;
 				}
 			}
 			else if (position == PopupRelativePosition.AlignToRightOf || position == PopupRelativePosition.AlignTopRight || position == PopupRelativePosition.AlignBottomRight)
 			{
 				if (popupView._popup._isRTL)
 				{
-					relativeX = Math.Max(location[0] - (2 * absoluteX) + widthOfRelativeView - popupViewWidth, 0);
+					relativeX = location[0] - popupViewWidth;
 
 					// In the RTL case, if the button's width request exceeds the screen size, the popup is not displayed correctly within the view.
 					relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
 				}
 				else
 				{
-					relativeX = location[0] + widthOfRelativeView + popupViewWidth < screenWidth ? location[0] + widthOfRelativeView : screenWidth - popupViewWidth;
+					relativeX = location[0] + widthOfRelativeView;
 				}
 			}
 			else
 			{
 				if (popupView._popup._isRTL)
 				{
-					relativeX = Math.Max(location[0] - (2 * absoluteX) + widthOfRelativeView - popupViewWidth, 0);
+					relativeX = location[0] + widthOfRelativeView - popupViewWidth;
 					relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
 				}
 				else
 				{
-					relativeX = location[0] + popupViewWidth < screenWidth ? location[0] : screenWidth - popupViewWidth;
-					relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
+					relativeX = location[0];
 				}
 			}
+
+			relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
 		}
 
 		/// <summary>
@@ -633,17 +679,19 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			if (position == PopupRelativePosition.AlignTop || position == PopupRelativePosition.AlignTopLeft || position == PopupRelativePosition.AlignTopRight)
 			{
-				relativeY = Math.Max(statusBarHeight + actionBarHeight, location[1] - popupViewHeight);
+				relativeY = location[1] - popupViewHeight;
 			}
 			else if (position == PopupRelativePosition.AlignBottom || position == PopupRelativePosition.AlignBottomLeft || position == PopupRelativePosition.AlignBottomRight)
 			{
-				relativeY = location[1] + heightOfRelativeView + popupViewHeight < screenHeight ? location[1] + heightOfRelativeView : screenHeight - popupViewHeight;
+				relativeY = location[1] + heightOfRelativeView;
 			}
 			else
 			{
 				// When the button's height exceeds the screen size, the popup is not displayed correctly within the view.
-				relativeY = Math.Max(statusBarHeight + actionBarHeight, location[1] + popupViewHeight < screenHeight ? location[1] : screenHeight - popupViewHeight);
+				relativeY = location[1];
 			}
+
+			relativeY = popupView._popup.ValidatePopupPosition(relativeY, popupViewHeight, screenHeight, statusBarHeight + (!popupView._popup.IgnoreActionBar ? actionBarHeight : 0));
 		}
 
 		/// <summary>

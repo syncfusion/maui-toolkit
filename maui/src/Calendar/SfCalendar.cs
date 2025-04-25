@@ -123,11 +123,17 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
 			SfCalendarResources.InitializeDefaultResource("Syncfusion.Maui.Toolkit.Calendar.Resources.SfCalendar", typeof(SfCalendar));
 			ThemeElement.InitializeThemeResources(this, "SfCalendarTheme");
-            _proxy = new(this);
+#if IOS
+			IgnoreSafeArea = true;
+#endif
+			_proxy = new(this);
             DrawingOrder = DrawingOrder.AboveContent;
             BackgroundColor = CalendarBackground;
             _layout = new CalendarVerticalStackLayout(HeaderView.Height, FooterView.ShowActionButtons || FooterView.ShowTodayButton, FooterView.Height);
-            Add(_layout);
+#if IOS
+			_layout.IgnoreSafeArea = true;
+#endif
+			Add(_layout);
             _displayDate = DisplayDate;
             _selectedDates = new ObservableCollection<DateTime>();
             _selectedDateRanges = new ObservableCollection<CalendarDateRange>();

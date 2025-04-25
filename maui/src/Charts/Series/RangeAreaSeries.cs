@@ -83,17 +83,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal override bool IsMultipleYPathRequired => true;
 
-        #endregion
+		internal override bool IsFillEmptyPoint { get { return false; } }
 
-        #region Bindable Properties
+		#endregion
 
-        /// <summary>
-        /// Identifies the <see cref="ShowMarkers"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The <see cref="ShowMarkers"/> property determines whether markers are displayed on the chart points.
-        /// </remarks>      
-        public static readonly BindableProperty ShowMarkersProperty = ChartMarker.ShowMarkersProperty;
+		#region Bindable Properties
+
+		/// <summary>
+		/// Identifies the <see cref="ShowMarkers"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="ShowMarkers"/> property determines whether markers are displayed on the chart points.
+		/// </remarks>      
+		public static readonly BindableProperty ShowMarkersProperty = ChartMarker.ShowMarkersProperty;
 
         /// <summary>
         /// Identifies the <see cref="MarkerSettings"/> bindable property.

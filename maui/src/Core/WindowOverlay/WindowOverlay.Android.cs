@@ -20,11 +20,6 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		float _density = 1f;
 
 		/// <summary>
-		/// Platform view of overlay container.
-		/// </summary>
-		WindowOverlayStack? _overlayStack;
-
-		/// <summary>
 		/// WindowManagerLayoutParams for Window overlay.
 		/// </summary>
 		WindowManagerLayoutParams? _windowManagerLayoutParams;
@@ -33,6 +28,20 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// Window manager of platform window.
 		/// </summary>
 		IWindowManager? _windowManager;
+
+		#endregion
+
+		#region Internal Fields
+
+		/// <summary>
+		/// List of window overlay stacks.
+		/// </summary>
+		internal static List<WindowOverlayStack>? ViewList;
+
+		/// <summary>
+		/// Platform view of overlay container.
+		/// </summary>
+		internal WindowOverlayStack? _overlayStack;
 
 		#endregion
 
@@ -180,6 +189,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 					_windowManager.RemoveView(_overlayStack);
 				}
 
+				if (ViewList is not null && ViewList.Contains(_overlayStack))
+				{
+					ViewList.Remove(_overlayStack);
+				}
+
 				_windowManagerLayoutParams = null;
 				_overlayStack = null;
 			}
@@ -187,6 +201,12 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			_decorViewFrame?.Dispose();
 			_decorViewFrame = null;
 			_hasOverlayStackInRoot = false;
+
+			// Disposing the view list if there is no overlay stack in the collection.
+			if (ViewList is not null && ViewList.Count is 0)
+			{
+				ViewList = null;
+			}
 		}
 
 		/// <summary>
@@ -366,6 +386,16 @@ namespace Syncfusion.Maui.Toolkit.Internals
 				if (_windowManagerLayoutParams is null)
 				{
 					GetWindowManagerLayoutParams();
+				}
+
+				// Stacking the popup overlay added in the application into the static collection to handle the blur effect in multiple popup scenarios.
+				if (ViewList is null)
+				{
+					ViewList = [_overlayStack];
+				}
+				else
+				{
+					ViewList.Add(_overlayStack);
 				}
 
 				var platformWindow = WindowOverlayHelper.GetPlatformWindow();

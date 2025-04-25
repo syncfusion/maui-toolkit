@@ -772,7 +772,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// </summary>
 		public void Hide()
 		{
-			if (CartesianChart?._trackballView.Children.Count > 0)
+			if (CartesianChart?.BehaviorLayout.Children.Count > 0)
 			{
 				RemoveTrackballTemplateInfo(CartesianChart);
 			}
@@ -959,7 +959,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			foreach (var item in _axisPointInfos)
 			{
-				if (!item.HasTrackballAxisTemplate)
+				if (ShowLabel && !item.HasTrackballAxisTemplate)
 				{
 					item.Helper.Draw(canvas);
 				}
@@ -1097,9 +1097,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				foreach (var info in PreviousPointInfos)
 				{
-					if (info.ContentTemplateView != null && CartesianChart._trackballView.Contains(info.ContentTemplateView))
+					if (CartesianChart.BehaviorLayout.Contains(info.ContentTemplateView))
 					{
-						CartesianChart._trackballView.Remove(info.ContentTemplateView);
+						CartesianChart.BehaviorLayout.Remove(info.ContentTemplateView);
 					}
 				}
 
@@ -1110,9 +1110,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				foreach (var info in _previousAxisPointInfos)
 				{
-					if (CartesianChart._trackballView.Contains(info.AxisTemplateView) && info.AxisTemplateView != null)
+					if (CartesianChart.BehaviorLayout.Contains(info.AxisTemplateView))
 					{
-						CartesianChart._trackballView.Remove(info.AxisTemplateView);
+						CartesianChart.BehaviorLayout.Remove(info.AxisTemplateView);
 					}
 				}
 
@@ -1252,7 +1252,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						{
 							Duration = double.NaN
 						};
-						CartesianChart._trackballView.Add(trackballTemp);
+						CartesianChart.BehaviorLayout.Add(trackballTemp);
 						trackballTemp.Helper.CanNosePointTarget = true;
 						trackballTemp.Background = TrackballBackground;
 						ContentList.Add(trackballTemp);
@@ -1868,9 +1868,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					foreach (var info in PreviousPointInfos)
 					{
-						if (info.DataItem == pointInfo.DataItem && info.Series == pointInfo.Series && info.ContentTemplateView != null)
+						if (info.DataItem == pointInfo.DataItem && info.Series == pointInfo.Series)
 						{
-							CartesianChart?._trackballView.Remove(info.ContentTemplateView);
+							CartesianChart?.BehaviorLayout.Remove(info.ContentTemplateView);
 							PreviousPointInfos.Remove(info);
 
 							return;
@@ -1940,21 +1940,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		SfTooltip? GetOrCreateTrackballView(SfCartesianChart chart, TrackballPointInfo? prevTrackballInfo)
 		{
-			var trackballTooltip = prevTrackballInfo?.ContentTemplateView as SfTooltip;
+			var trackballView = prevTrackballInfo?.ContentTemplateView as SfTooltip;
 
-			if (trackballTooltip == null && ShowLabel)
+			if (trackballView == null && ShowLabel)
 			{
-				trackballTooltip = new SfTooltip
+				trackballView = new SfTooltip
 				{
 					Background = _actualLabelStyle.Background
 				};
-				chart._trackballView.Add(trackballTooltip);
-				trackballTooltip.Duration = double.NaN;
-				trackballTooltip.Helper.CanNosePointTarget = true;
-				ContentList.Add(trackballTooltip);
+				chart.BehaviorLayout.Add(trackballView);
+				trackballView.Duration = double.NaN;
+				trackballView.Helper.CanNosePointTarget = true;
+				ContentList.Add(trackballView);
 			}
 
-			return trackballTooltip;
+			return trackballView;
 		}
 
 		static View? GetTheTrackballTemplate(DataTemplate trackballTemplate, object bindingContext)
@@ -1977,7 +1977,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				foreach (var item in ContentList)
 				{
-					cartesianChart._trackballView.Remove(item);
+					cartesianChart.BehaviorLayout.Remove(item);
 				}
 			}
 		}

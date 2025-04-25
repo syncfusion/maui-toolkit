@@ -234,8 +234,11 @@ namespace Syncfusion.Maui.ControlsGallery.Popup.SfPopup
 
         void OnSignUp(Syncfusion.Maui.Toolkit.Popup.SfPopup popup)
         {
-            FullScreenModel = new FullScreenModel();
-            popup.IsOpen = false;
+			FullScreenModel.UserName = string.Empty;
+			FullScreenModel.Email = string.Empty;
+			FullScreenModel.Password = string.Empty;
+			FullScreenModel.RePassword = string.Empty;
+			popup.IsOpen = false;
         }
 
         async void OnFileAction(Syncfusion.Maui.Toolkit.Popup.SfPopup popup)

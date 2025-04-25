@@ -279,6 +279,11 @@ namespace Syncfusion.Maui.Toolkit
 
 		private TextAlignment _horizontalTextAlignment;
 
+#if MACCATALYST || IOS
+        private Point _pressedPoint;
+		private const double _scrollThreshold = 10;
+#endif
+
 #if WINDOWS
         // The native view element for the button control.
         private FrameworkElement? _buttonNativeView;
@@ -1621,6 +1626,11 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			if (e.Action == PointerActions.Pressed)
 			{
+
+#if IOS || MACCATALYST
+                _pressedPoint = e.TouchPoint;
+#endif
+
 				if (_background != HighlightColor && !IsEditorControl)
 				{
 					_background = HighlightColor;
@@ -1651,15 +1661,32 @@ namespace Syncfusion.Maui.Toolkit
 					chip = Children as SfChip;
 				}
 
+#if IOS || MACCATALYST
+				var releasedPoint = e.TouchPoint;
+                double diffX = Math.Abs(this._pressedPoint.X - releasedPoint.X);
+                double diffY = Math.Abs(this._pressedPoint.Y - releasedPoint.Y);
+                bool isScrolled = false;
+                if (diffX >= _scrollThreshold || diffY >= _scrollThreshold)
+                {
+                   isScrolled = true;
+                }
+#endif
+
 				if (chip is not null)
 				{
 					if (!chip.IsTouchInsideCloseButton(e.TouchPoint) && IsEnabled)
 					{
+#if MACCATALYST || IOS
+                        if(!isScrolled)
+#endif
 						RaiseClicked(EventArgs.Empty);
 					}
 				}
 				else
 				{
+#if MACCATALYST || IOS
+                    if(!isScrolled)
+#endif
 					RaiseClicked(EventArgs.Empty);
 				}
 #if ANDROID || IOS

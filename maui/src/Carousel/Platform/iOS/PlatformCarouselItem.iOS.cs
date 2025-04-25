@@ -182,9 +182,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// </summary>
 		/// <param name="touches">Touches value.</param>
 		/// <param name="evt">Event parameter.</param>
-#pragma warning disable CS8765
-		public override void TouchesEnded(NSSet touches, UIEvent evt)
-#pragma warning restore CS8765
+		public override void TouchesEnded(NSSet touches, UIEvent? evt)
 		{
 			UITouch touch = (UITouch)touches.AnyObject;
 			CGPoint touchPoint = touch.LocationInView(this);

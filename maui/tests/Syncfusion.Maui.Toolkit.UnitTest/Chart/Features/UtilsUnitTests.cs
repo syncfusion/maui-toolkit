@@ -1,7 +1,7 @@
 ﻿using Syncfusion.Maui.Toolkit.Charts;
 using Core = Syncfusion.Maui.Toolkit;
 
-namespace Syncfusion.Maui.Toolkit.UnitTest
+namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class UtilsUnitTests : BaseUnitTest
 	{
@@ -302,7 +302,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			_ = new ChartMarkerSettings();
 			var expectedShape = Core.ShapeType.Circle;
-			var result = ChartUtils.GetShapeType(Charts.ShapeType.Circle);
+			var result = ChartUtils.GetShapeType(Syncfusion.Maui.Toolkit.Charts.ShapeType.Circle);
 			Assert.Equal(expectedShape, result);
 		}
 
