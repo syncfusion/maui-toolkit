@@ -88,6 +88,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			ThemeElement.InitializeThemeResources(this, "SfSegmentedControlTheme");
 			SetDynamicResource(HoveredBackgroundProperty, "SfSegmentedControlHoveredBackground");
 			SetDynamicResource(KeyboardFocusStrokeProperty, "SfSegmentedControlKeyboardFocusStroke");
+			SetDynamicResource(SelectedSegmentTextColorProperty, "SfSegmentedControlSelectionTextColor");
 			MinimumWidthRequest = 180;
 			MinimumHeightRequest = 40;
 			SelectionIndicatorSettings.Parent = this;
@@ -129,6 +130,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// Gets the focused keyboard stroke for the segment.
 		/// </summary>
 		Brush ISegmentInfo.KeyboardFocusStroke => KeyboardFocusStroke;
+
+		/// <summary>
+		/// Gets the selected text color for the segment.
+		/// </summary>
+		Color ISegmentInfo.SelectedSegmentTextColor => this.SelectedSegmentTextColor;
 
 		#endregion
 
