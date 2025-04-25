@@ -78,8 +78,16 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 			{
 				case 0:
 					{
-						radialBarSeries.TrackFill = new SolidColorBrush(Color.FromRgba(0, 0, 0, 0.08));
-						break;
+						if (Application.Current?.RequestedTheme == AppTheme.Dark)
+						{
+							radialBarSeries.TrackFill = new SolidColorBrush(Color.FromRgba("#36323B"));
+							break;
+						}
+						else
+						{
+							radialBarSeries.TrackFill = new SolidColorBrush(Color.FromRgba(0, 0, 0, 0.08));
+							break;
+						}
 					}
 				case 1:
 					{
