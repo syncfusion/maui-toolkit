@@ -67,7 +67,7 @@
 
     <localCore:SampleView.OptionView>
         <ContentView>
-            <Grid RowDefinitions="*" ColumnDefinitions="5*,5*">
+            <Grid RowDefinitions="*" ColumnDefinitions="6*,4*">
                 <Grid.BindingContext>
                     <local:PieSeriesViewModel/>
                 </Grid.BindingContext>
@@ -75,11 +75,11 @@
                        Margin="0,15,0,0" Grid.Column="0" />
                 <Picker x:Name="dataLabel" Grid.Column="1" 
                         VerticalOptions="Start" 
-                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
-                        WidthRequest="130"  Margin="0,13,0,0"
+                        WidthRequest="100"  Margin="0,13,0,0"
                         ItemsSource="{Binding SmartLabelAlignment}" 
-                        SelectedIndexChanged="smartDataLabel_SelectedIndexChanged">
+                        SelectedIndexChanged="smartDataLabel_SelectedIndexChanged"
+                        Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                        TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                 </Picker>
             </Grid>
         </ContentView>

@@ -71,8 +71,9 @@
             <VerticalStackLayout Spacing="5">
                 <HorizontalStackLayout>
                     <Label Text="Plot band types :" HorizontalOptions="Center" VerticalOptions="Start" Padding="5" FontSize="17"/>
-                    <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=PlotBandType}" SelectedItem="{Binding Source={x:Reference ViewModel},Path=PlotBandType[0]}" WidthRequest="{OnPlatform MacCatalyst=80}" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" HorizontalOptions="Fill" VerticalOptions="Start" SelectedIndex="0" SelectedIndexChanged="Picker_SelectedIndexChanged"/>
+                    <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=PlotBandType}" SelectedItem="{Binding Source={x:Reference ViewModel},Path=PlotBandType[0]}" WidthRequest="{OnPlatform MacCatalyst=80}"
+                            HorizontalOptions="Fill" VerticalOptions="Start" SelectedIndex="0" SelectedIndexChanged="Picker_SelectedIndexChanged" Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                            TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </Grid>
