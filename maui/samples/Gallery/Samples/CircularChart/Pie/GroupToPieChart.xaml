@@ -20,10 +20,10 @@
                 <ResourceDictionary>
                     <local:ItemsSourceConverter x:Key="valueConvert"/>
                     <local:StringFormatConverter x:Key="StingConvert"/>
-                    <DataTemplate x:Key="tooltipTemplate">
+                    <DataTemplate x:Key="tooltipTemplate" x:DataType="chart:TooltipInfo">
                             <VerticalStackLayout Spacing="2" BindableLayout.ItemsSource="{Binding Item, Converter={StaticResource valueConvert}}">
                                 <BindableLayout.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="local:ChartDataModel">
                                         <Grid ColumnSpacing="10" ColumnDefinitions="*,Auto">
                                         <Label Text="{Binding Name}"
                                                    TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" Grid.Column="0"

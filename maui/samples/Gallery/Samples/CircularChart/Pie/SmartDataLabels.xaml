@@ -21,13 +21,14 @@
             <chart:SfCircularChart x:Name="Chart" VerticalOptions="FillAndExpand">
 
                 <chart:SfCircularChart.Resources>
+                    <local:TooltipValueConverter x:Key="valueConverter"/>
                     <DataTemplate x:Key="dataLabelTemplate">
                         <HorizontalStackLayout>
-                            <Label Text="{Binding Item.Name}" VerticalOptions="Center" FontSize = "13"
+                            <Label Text="{Binding Item, Converter={StaticResource valueConverter}, ConverterParameter='Name'}" VerticalOptions="Center" FontSize = "13"
                                     LineBreakMode="{OnPlatform Android='TailTruncation', iOS='TailTruncation'}" 
                                     MaximumWidthRequest="{OnPlatform Android='35', iOS='35'}" HorizontalTextAlignment="End"/>
                             <Label Text=":" VerticalOptions="Center" FontSize = "13" HorizontalTextAlignment="Center"/>
-                            <Label Text="{Binding Item.Value, StringFormat=' {0}'}" VerticalOptions="Center" FontSize="13" HorizontalTextAlignment="Center"/>
+                            <Label Text="{Binding Item, Converter={StaticResource valueConverter}, ConverterParameter='Value', StringFormat=' {0}'}" VerticalOptions="Center" FontSize="13" HorizontalTextAlignment="Center"/>
                         </HorizontalStackLayout>
                     </DataTemplate>
                 </chart:SfCircularChart.Resources>
