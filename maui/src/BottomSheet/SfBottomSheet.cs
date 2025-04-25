@@ -2330,7 +2330,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    _initialTouchY = 0;
 		    _isPointerPressed = false;
 
-		    if(_bottomSheet is not null && touchY >= _bottomSheet.TranslationY)
+		    if(_bottomSheet is not null)
 			{
 				UpdatePosition();
 			}
