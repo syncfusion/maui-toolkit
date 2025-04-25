@@ -1,5 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Resources;
 
+[assembly: NeutralResourcesLanguage("en-US")]
 [assembly: InternalsVisibleTo("Syncfusion.Maui.Toolkit.UnitTest")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Accordion")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.BottomSheet")]
