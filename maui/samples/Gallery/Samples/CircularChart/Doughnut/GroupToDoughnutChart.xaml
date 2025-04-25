@@ -99,10 +99,10 @@
                                    Margin="0,13,0,0" Grid.Column="0" />
                             <Picker x:Name="groupTo"   Grid.Column="1" SelectedIndex="0"
                                     VerticalOptions="CenterAndExpand"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                                     WidthRequest="130"  Margin="0,13,0,0"
-                                    ItemsSource="{Binding PieGroupMode}" SelectedIndexChanged="groupTo_SelectedIndexChanged">
+                                    ItemsSource="{Binding PieGroupMode}" SelectedIndexChanged="groupTo_SelectedIndexChanged"
+                                    Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                                    TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                             </Picker>
                         </Grid>
                     </VerticalStackLayout>
