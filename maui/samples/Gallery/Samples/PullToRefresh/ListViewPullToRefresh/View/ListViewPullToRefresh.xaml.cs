@@ -4,13 +4,13 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh.SfPullToRefresh
 	{
 		public ListViewPullToRefresh()
 		{
-			InitializeComponent();
-			this.Unloaded += ListViewPullToRefresh_Unloaded;
+			InitializeComponent();			
 		}
 
-		private void ListViewPullToRefresh_Unloaded(object? sender, EventArgs e)
+		public override void OnDisappearing()
 		{
-			pullToRefresh.DisconnectHandlers();
+			base.OnDisappearing();
+			pullToRefresh.Handler?.DisconnectHandler();
 		}
 	}
 }
