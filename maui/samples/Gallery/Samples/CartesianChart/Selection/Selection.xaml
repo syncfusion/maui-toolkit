@@ -75,7 +75,7 @@
             </chart:SfCartesianChart>
             <AbsoluteLayout VerticalOptions="Start" Margin="0,40,0,0" HeightRequest="40">
                 <HorizontalStackLayout AbsoluteLayout.LayoutFlags="PositionProportional" AbsoluteLayout.LayoutBounds="1,0">
-                    <Label Text="Multiple Selection :" VerticalOptions="Center" FontSize="16" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+                    <Label Text="Multiple Selection : " VerticalOptions="Center" FontSize="16" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
                     <CheckBox x:Name="checkbox" HeightRequest="35" VerticalOptions="Center" CheckedChanged="checkbox_CheckedChanged"/>
                 </HorizontalStackLayout>
             </AbsoluteLayout>

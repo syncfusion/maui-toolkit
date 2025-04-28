@@ -88,6 +88,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		Brush KeyboardFocusStroke { get; }
 
 		/// <summary>
+		/// Gets the selected text color for the segment.
+		/// </summary>
+		Color SelectedSegmentTextColor { get; }
+
+		/// <summary>
 		/// Gets the background brush for the segment when it is disabled.
 		/// </summary>
 		Brush DisabledSegmentBackground { get; }
