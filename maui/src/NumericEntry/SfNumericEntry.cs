@@ -486,8 +486,12 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		{
             // Ensure any necessary size updates are performed
 			UpdateSemanticsSizes();
-			if (SemanticsDataIsCurrent() && IsTextInputLayout)
+			if (SemanticsDataIsCurrent() || IsTextInputLayout)
 			{
+				if(IsTextInputLayout)
+				{
+					_numericEntrySemanticsNodes.Clear();
+				}
 				return _numericEntrySemanticsNodes;
 			}
 

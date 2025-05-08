@@ -1779,7 +1779,18 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// <summary>
 		/// Gets the value of the input text of the <see cref="SfTextInputLayout"/>.
 		/// </summary>
-		public string Text { get; internal set; } = string.Empty;
+		public string Text
+		{
+			get => _text;
+			internal set
+			{
+				if (value != _text)
+				{
+					_text = value;
+					HandleSemanticsReset();
+				}
+			}
+		}
 
 		/// <summary>
 		/// Gets a value indicating whether the background mode is outline.
@@ -2151,6 +2162,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				inputLayout.ChangeVisualState();
 				inputLayout.StartAnimation();
+				inputLayout.ResetSemantics();
 			}
 		}
 
@@ -2399,6 +2411,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			if (bindable is SfTextInputLayout inputLayout && inputLayout._initialLoaded)
 			{
 				inputLayout.UpdateViewBounds();
+				inputLayout.ResetSemantics();
 			}
 		}
 
