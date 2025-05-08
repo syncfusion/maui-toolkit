@@ -567,6 +567,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			ResetAutoScroll();
 			YValues.Clear();
 			_sizeValues.Clear();
+			foreach (var item in EmptyPointIndexes)
+			{
+				item?.Clear();
+			}
+
 			GeneratePoints([YBindingPath, SizeValuePath], YValues, _sizeValues);
 		}
 
@@ -599,7 +604,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					foreach (var index in EmptyPointIndexes[0])
 					{
-						if (YValues != null && YValues.Count != 0)
+						if (YValues != null && YValues.Count != 0 && index < YValues.Count)
 						{
 							YValues[(int)index] = double.NaN;
 						}
@@ -610,7 +615,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					foreach (var index in EmptyPointIndexes[1])
 					{
-						if (_sizeValues != null && _sizeValues.Count != 0)
+						if (_sizeValues != null && _sizeValues.Count != 0 && index < _sizeValues.Count)
 						{
 							_sizeValues[(int)index] = double.NaN;
 						}

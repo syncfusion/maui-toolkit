@@ -36,12 +36,19 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 	{
 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 		{
-			if (value is not double || parameter is not string para)
-			{
+			if (parameter is not string para)
 				return null;
-			}
 
-			var doubleValue = (double)value;
+			double doubleValue = 0;
+
+			if (value is ChartDataModel model)
+			{
+				if (para == "GrossLastYearDelta")
+				{
+					return model.GrossLastYearDelta;
+				}
+				doubleValue = (double)model.GrossLastYearDelta;
+			}
 
 			string text = "\ue704";
 			Color color = Colors.Red;

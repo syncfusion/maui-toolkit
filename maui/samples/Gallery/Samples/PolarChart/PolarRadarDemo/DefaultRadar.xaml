@@ -74,18 +74,18 @@
                     <Label Text="Type        :" HorizontalOptions="Center" VerticalOptions="Center" 
                            FontFamily="Helvetica" Padding="5" FontSize="14" Margin="0,0,4,0"/>
                     <Picker ItemsSource="{Binding Source={x:Reference viewModel},Path=SeriesType}" 
-                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
-                            SelectedIndex="0" SelectedIndexChanged="type_SelectedIndexChanged"/>
+                            SelectedIndex="0" SelectedIndexChanged="type_SelectedIndexChanged"
+                            Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                            TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}"/>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout>
                     <Label Text="Angle      :" HorizontalOptions="Center" VerticalOptions="Center" 
                            FontFamily="Helvetica" Padding="5" FontSize="14" Margin="0,0,4,0"/>
                     <Picker x:Name="angle" ItemsSource="{Binding Source={x:Reference viewModel},Path=PolarAngle}" 
-                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
-                            SelectedIndex="4" SelectedIndexChanged="Angle_SelectedIndexChanged"/>
+                            SelectedIndex="4" SelectedIndexChanged="Angle_SelectedIndexChanged"
+                            Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                            TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}"/>
                 </HorizontalStackLayout>
 
                 <HorizontalStackLayout>

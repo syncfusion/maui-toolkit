@@ -1960,7 +1960,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
         void ResetAnnotation()
         {
             int i = _annotationLayout.Children.Count - 1;
-            if (i < 0) return; 
+
+            if (i < 0)
+            {
+                return;
+            }
 
             do
             {
@@ -1968,9 +1972,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     _annotationLayout.Children.RemoveAt(i);
                 }
+
                 i--;
             } while (i >= 0);
-        }
+		}
 
         void RemoveAnnotation(int index, object item)
         {

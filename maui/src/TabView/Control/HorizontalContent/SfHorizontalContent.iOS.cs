@@ -221,9 +221,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 	{
 		readonly WeakReference<SfHorizontalContent> _view = new(horizontalContent);
 
-#pragma warning disable IDE0060 // Remove unused parameter
 		internal bool GestureShouldBegin(UIGestureRecognizer uIGestureRecognizer)
-#pragma warning restore IDE0060 // Remove unused parameter
 		{
 			_view.TryGetTarget(out var view);
 			if (view != null)

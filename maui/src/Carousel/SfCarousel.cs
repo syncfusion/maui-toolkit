@@ -1121,7 +1121,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			DesiredSize = new Size(widthConstraint, heightConstraint);
 			if (Parent is HorizontalStackLayout)
 			{
-				DesiredSize = MeasureForHorizontalLayout(widthConstraint, heightConstraint);
+				DesiredSize = MeasureForHorizontalLayout(heightConstraint);
 			}
 			else if (Parent is StackLayout stackLayout)
 			{
@@ -1129,7 +1129,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			}
 			else if (Parent is VerticalStackLayout)
 			{
-				DesiredSize = MeasureForVerticalLayout(widthConstraint, heightConstraint);
+				DesiredSize = MeasureForVerticalLayout(widthConstraint);
 			}
 			else if (Parent is ScrollView scrollView)
 			{
@@ -1168,23 +1168,16 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <summary>
 		/// Calculates the size requirement for an element within a <see cref="HorizontalStackLayout"/> parent.
 		/// </summary>
-		/// <param name="widthConstraint">The maximum width available for the element.</param>
 		/// <param name="heightConstraint">The maximum height available for the element.</param>
 		/// <returns>A <see cref="Size"/> structure representing the calculated size based on the constraints and requests.</returns>
-#pragma warning disable IDE0060 // Remove unused parameter
-		Size MeasureForHorizontalLayout(double widthConstraint, double heightConstraint) => new(WidthRequest >= 0 ? WidthRequest : ItemWidth, HeightRequest >= 0 && WidthRequest >= 0 ? HeightRequest : heightConstraint);
-#pragma warning restore IDE0060 // Remove unused parameter
-
+		Size MeasureForHorizontalLayout(double heightConstraint) => new(WidthRequest >= 0 ? WidthRequest : ItemWidth, HeightRequest >= 0 && WidthRequest >= 0 ? HeightRequest : heightConstraint);
 		/// <summary>
 		/// Calculates the size of a VerticalStackLayout based on given width and height constraints.
 		/// Takes into account specified width and height requests, defaulting to constraints or item height as needed.
 		/// </summary>
 		/// <param name="widthConstraint">The available width for the layout.</param>
-		/// <param name="heightConstraint">The available height for the layout.</param>
 		/// <returns>A Size object representing the dimensions of the layout.</returns>
-#pragma warning disable IDE0060 // Remove unused parameter
-		Size MeasureForVerticalLayout(double widthConstraint, double heightConstraint)
-#pragma warning restore IDE0060 // Remove unused parameter
+		Size MeasureForVerticalLayout(double widthConstraint)
 		{
 			return new Size(HeightRequest >= 0 && WidthRequest >= 0 ? WidthRequest : widthConstraint, HeightRequest >= 0 ? HeightRequest : ItemHeight);
 		}

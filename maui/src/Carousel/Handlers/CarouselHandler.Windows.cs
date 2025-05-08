@@ -235,13 +235,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		private static void MapItemHeight(CarouselHandler handler, ICarousel virtualView)
 		{
 			handler.PlatformView.ItemHeight = virtualView.ItemHeight;
-#pragma warning disable IDE0031
-			SfCarouselLinearPanel? linerPanel = handler.PlatformView.CarouselLinearPanel;
-			if (linerPanel != null)
-			{
-				linerPanel.InvalidateMeasure();
-			}
-#pragma warning restore IDE0031
+			SfCarouselLinearPanel? linearPanel = handler.PlatformView.CarouselLinearPanel;
+			linearPanel?.InvalidateMeasure();
 		}
 
 		/// <summary>

@@ -847,7 +847,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 
 				if (ShowIcon)
 				{
-					xOffset = _isRTL ? _leftIconPadding + (float)(LinePadding / 0.95) : (float)(Width - DefaultCloseButtonWidth - _rightIconPadding + (float)(LinePadding * 1.75));
+					xOffset = _isRTL ? _leftIconPadding + (float)(LinePadding / 0.95) : (float)(Width - DefaultCloseButtonWidth - _rightIconPadding + (float)(LinePadding /0.95));
 				}
 				else
 				{

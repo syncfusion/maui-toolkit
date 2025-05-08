@@ -65,11 +65,11 @@
         </Grid>
         <Grid Margin="0,-18,0,0"  ColumnDefinitions=".5*,.5*">
           <Label Text="Styling Mode"  VerticalTextAlignment="Center"/>
-          <Picker Grid.Column="1" ItemsSource="{Binding StylingModeList}" SelectedIndex="{Binding StylingModeIndex}" />
+          <Picker Grid.Column="1" ItemsSource="{Binding StylingModeList}" SelectedIndex="{Binding StylingModeIndex}" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
         </Grid>
         <Grid ColumnDefinitions=".5*,.5*">
-          <Label Text="InputState"  VerticalTextAlignment="Center"/>
-          <Picker Grid.Column="1" ItemsSource="{Binding InputStateList}" SelectedIndex="{Binding InputStateIndex}" />
+          <Label Text="Input State"  VerticalTextAlignment="Center"/>
+          <Picker Grid.Column="1" ItemsSource="{Binding InputStateList}" SelectedIndex="{Binding InputStateIndex}" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
         </Grid>        
         
       </VerticalStackLayout>

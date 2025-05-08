@@ -99,7 +99,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             Background = _footerViewInfo.FooterView.Background;
             BackgroundColor = _footerViewInfo.FooterView.Background.ToColor();
             AddOrRemoveFooterButtons();
-        }
+#if IOS
+			IgnoreSafeArea = true;
+#endif
+		}
 
         #endregion
 

@@ -128,6 +128,11 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// Represents the previous value of the OTP input.
 		/// </summary>
 		string? _oldText;
+
+		/// <summary>
+		/// Stores the last UITextField to unhook event handlers.
+		/// </summary>
+		UIKit.UITextField? _lastPlatformView;
 #endif
 
 		/// <summary>
@@ -216,7 +221,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// <summary>
 		/// Identifies the <see cref="TextColor"/> bindable property.
 		/// </summary>
-		public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(SfOtpInput), Color.FromArgb("#1C1B1F"), BindingMode.TwoWay);
+		public static readonly BindableProperty TextColorProperty = BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(SfOtpInput), Color.FromArgb("#1C1B1F"), BindingMode.TwoWay,propertyChanged:OnPropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="Stroke"/> bindable property.
@@ -281,6 +286,12 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// Identifies the <see cref="ErrorStroke"/> bindable property.
 		/// </summary>
 		internal static readonly BindableProperty ErrorStrokeProperty = BindableProperty.Create(nameof(ErrorStroke), typeof(Color), typeof(SfOtpInput), Color.FromArgb("#B3261E"), BindingMode.TwoWay, propertyChanged: OnPropertyChanged);
+		
+		/// <summary>
+		/// Identifies the <see cref="DisabledTextColor"/> bindable property.
+		/// </summary>
+		internal static readonly BindableProperty DisabledTextColorProperty = BindableProperty.Create(nameof(DisabledTextColor), typeof(Color), typeof(SfOtpInput), Color.FromArgb("#611c1b1f"), BindingMode.TwoWay);
+
 		#endregion
 
 		#region Constructor
@@ -293,6 +304,9 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
             ThemeElement.InitializeThemeResources(this, "SfOtpInputTheme");
             DrawingOrder = DrawingOrder.BelowContent;
             InitializeFields();
+#if IOS
+            this.IgnoreSafeArea = true;
+#endif
             this.AddKeyboardListener(this);
             HookEvents();
 			this.SetDynamicResource(FilledHoveredBackgroundProperty, "SfOtpInputHoveredBackground");
@@ -303,6 +317,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 			this.SetDynamicResource(SuccessStrokeProperty, "SfOtpInputSuccessStroke");
 			this.SetDynamicResource(WarningStrokeProperty, "SfOtpInputWarningStroke");
 			this.SetDynamicResource(ErrorStrokeProperty, "SfOtpInputErrorStroke");
+			this.SetDynamicResource(DisabledTextColorProperty, "SfOtpInputDisabledTextColor");
 		}
 
 		#endregion
@@ -818,6 +833,15 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 			set { SetValue(FilledHoveredBackgroundProperty, value); }
 		}
 
+		/// <summary>
+		/// Gets or sets the disabled text color of the Input.
+		/// </summary>
+		internal Color DisabledTextColor
+		{
+			get { return (Color)GetValue(DisabledTextColorProperty); }
+			set { SetValue(DisabledTextColorProperty, value); }
+		}
+
 		#endregion
 
 		#region OnPropertyChanged
@@ -1098,7 +1122,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
                 {
                     UpdateDrawingParameters(i);
                     canvas.StrokeSize = GetStrokeThickness(i);
-                    _otpEntries[i].UpdateParameters(StylingMode, _cornerRadius, _startPoint, _endPoint, this, IsEnabled, InputState,Stroke,InputBackground);
+                    _otpEntries[i].UpdateParameters(StylingMode, _cornerRadius, _startPoint, _endPoint, this, IsEnabled, InputState,Stroke,InputBackground ,TextColor, DisabledTextColor);
                     _otpEntries[i].Draw(canvas, _outlineRectF);
 
                 }
@@ -1246,6 +1270,9 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
             _separators = new SfLabel[(int)Length - 1];
 
             var layout = new AbsoluteLayout();
+#if IOS
+            layout.IgnoreSafeArea = true;
+#endif
 			layout.BindingContext = this;
 #if WINDOWS || ANDROID
 			layout.SetBinding(AbsoluteLayout.FlowDirectionProperty, BindingHelper.CreateBinding(nameof(FlowDirection), getter: static (SfOtpInput otpInput) => otpInput.FlowDirection));
@@ -2219,6 +2246,15 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         {
             if (sender is OTPEntry textBox)
             {
+#if MACCATALYST || IOS
+				// Unhook from previous handler if exists
+				if (_lastPlatformView is not null)
+				{
+					_lastPlatformView.ShouldChangeCharacters -= ValidateText;
+					_lastPlatformView = null;
+				}
+#endif
+
 #if WINDOWS
                 if ((sender as OTPEntry)?.Handler is not null && (sender as OTPEntry)?.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.TextBox platformView)
                 {
@@ -2234,10 +2270,11 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
                 }
 
 #elif MACCATALYST || IOS
-                if ((sender as OTPEntry)?.Handler is not null && (sender as OTPEntry)?.Handler?.PlatformView is UIKit.UITextField platformView)
+				if ((sender as OTPEntry)?.Handler is not null && (sender as OTPEntry)?.Handler?.PlatformView is UIKit.UITextField platformView)
                 {
                     platformView.ShouldChangeCharacters += ValidateText;
-                }
+					_lastPlatformView = platformView;
+				}
 #endif
 			}
 		}

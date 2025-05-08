@@ -369,12 +369,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		{
 
 			ClipToOutline = true;
-#pragma warning disable CA1422
-#pragma warning disable CS0618
+#if !ANDROID22_0_OR_GREATER
 			AnimationCacheEnabled = true;
 			DrawingCacheEnabled = true;
-#pragma warning restore CS0618
-#pragma warning restore CA1422
+#endif
 			LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
 		}
 
@@ -1973,7 +1971,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			// Preventing the event from being triggered multiple times
 			if (!canStopEvent)
 			{
-				RefreshSelection(_selectedIndex);
+				RefreshSelection();
 			}
 			_prevIndex = _selectedIndex;
 		}
@@ -2236,10 +2234,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <summary>
 		/// Refresh the selection.
 		/// </summary>
-		/// <param name="selectedIndexArgs">Selected index.</param>
-#pragma warning disable IDE0060 // Remove unused parameter
-		void RefreshSelection(int selectedIndexArgs)
-#pragma warning restore IDE0060 // Remove unused parameter
+		void RefreshSelection()
 		{
 			if (SelectionChangedEventArgs != null)
 			{

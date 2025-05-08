@@ -433,7 +433,7 @@
                               <ColumnDefinition Width="Auto"/>
                               <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Text="BackgroundImage Aspect"  
+                            <Label Text="Background Image Aspect"  
                                     FontFamily="Roboto-Medium"
                                     HorizontalTextAlignment="Start"
                                     Grid.Column="0"
@@ -442,6 +442,7 @@
                                     WidthRequest="120"
                                     HorizontalOptions="End"
                                     FontSize="15"
+                                    IsEnabled="{Binding EnableAspectList}"
                                     ItemsSource="{Binding AspectList}" 
                                     SelectedIndex="{Binding AspectSelectedIndex}"/>
                         </Grid>

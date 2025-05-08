@@ -17,14 +17,14 @@
                 <chart:SfCartesianChart.Resources>
                     <local:DoubleToFontIconConverter x:Key="doubleToFontIconConverter"/>
 
-                    <DataTemplate x:Key="labelTemplate">
+                    <DataTemplate x:Key="labelTemplate" x:DataType="chart:ChartDataLabel">
                         <Grid ColumnSpacing="2" ColumnDefinitions="Auto,Auto" RowDefinitions="{OnPlatform MacCatalyst='20', iOS='20'}" Margin="{OnPlatform MacCatalyst='0, 0, 0, 10', Android='0, 0, 0, -5'}">
                             <!--<Image WidthRequest="30" HeightRequest="30" HorizontalOptions="Start" VerticalOptions="Start" Source="{Binding Item.GrossLastYearDelta, Converter={StaticResource doubleToFontIconConverter}, ConverterParameter='image'}"/>-->
-                            <Label Grid.Column="0" FontSize="{OnPlatform MacCatalyst='50', WinUI='Large', Default='40'}" Margin="{OnPlatform WinUI='-4', Default='-4,-4,-10, -4'}" Text="{Binding Item.GrossLastYearDelta, Converter={StaticResource doubleToFontIconConverter}, ConverterParameter='icon'}" 
-                                   TextColor="{Binding Item.GrossLastYearDelta, Converter={StaticResource doubleToFontIconConverter}, ConverterParameter='image'}"
+                            <Label Grid.Column="0" FontSize="{OnPlatform MacCatalyst='50', WinUI='Large', Default='40'}" Margin="{OnPlatform WinUI='-4', Default='-4,-4,-10, -4'}" Text="{Binding Item, Converter={StaticResource doubleToFontIconConverter}, ConverterParameter='icon'}" 
+                                   TextColor="{Binding Item, Converter={StaticResource doubleToFontIconConverter}, ConverterParameter='image'}"
                                       FontFamily="MauiSampleFontIcon" VerticalOptions="Center">
                             </Label>
-                            <Label Grid.Column="1" Text="{Binding Item.GrossLastYearDelta, StringFormat='{0:0.###}%'}" FontSize="{OnPlatform Default='14', MacCatalyst='16'}" 
+                            <Label Grid.Column="1" Text="{Binding Item,Converter={StaticResource doubleToFontIconConverter},ConverterParameter='GrossLastYearDelta', StringFormat='{0:0.###}%'}" FontSize="{OnPlatform Default='14', MacCatalyst='16'}" 
                                     VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center" >
                             </Label>
                         </Grid>

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Color = Microsoft.Maui.Graphics.Color;
 
-namespace Syncfusion.Maui.Toolkit.UnitTest
+namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class LegendConverterUnitTest : BaseUnitTest
 	{

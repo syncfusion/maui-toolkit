@@ -15,7 +15,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         <converters:TagToPaddingConverter x:Key="TagToPaddingConverter"/>
-    </ContentPage.Resources>
+    <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <converters:TextToInitialConverter x:Key="TextToInitialConverter"/>
+  </ContentPage.Resources>
 
     <Grid>
         <Grid RowDefinitions="48,*" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
@@ -27,7 +29,7 @@
                             <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" CornerRadius="20" VerticalOptions="Fill"/>
                         <VerticalStackLayout x:Name="columOneLayout" Margin="10,0,10,0">
                             <BindableLayout.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="base:ControlCategoryModel">
                                         <VerticalStackLayout Spacing="12" Padding="0,12,0,0" >
                                             <Grid HeightRequest="40">
                                             <Grid HeightRequest="40">
@@ -50,13 +52,13 @@
                                                         <Binding Path="AllControls" />
                                                     </BindableLayout.ItemsSource>
                                                 <BindableLayout.ItemTemplate>
-                                                    <DataTemplate>
+                                                    <DataTemplate x:DataType="base:ControlModel">
                                                         <customView:SfEffectsViewAdv TouchDownEffects="Ripple">
                                                                 <customView:SfEffectsViewAdv.GestureRecognizers>
                                                                     <TapGestureRecognizer Tapped="Control_Tapped"/>
                                                                 </customView:SfEffectsViewAdv.GestureRecognizers>
                                                                 <Grid>
-                                                                    <Grid Padding="16" ColumnSpacing="16" ColumnDefinitions="56,*" >
+                                                                    <Grid Padding="16" ColumnSpacing="16" ColumnDefinitions="56,*,auto" >
                                                                         <Image Source="{Binding Image}" HeightRequest="56" WidthRequest="56" />
                                                                         <VerticalStackLayout   Grid.Column="1" HorizontalOptions="Fill" VerticalOptions="Center">
                                                                             <HorizontalStackLayout Spacing="5">
@@ -75,7 +77,29 @@
                                                                                        LineBreakMode="WordWrap"/>
                                                                             </Grid>
                                                                         </VerticalStackLayout>
-                                                                    </Grid>
+                                                                       
+                                                                               <Border Background="{AppThemeBinding Light={StaticResource BadgeColour1Light}, Dark={StaticResource BadgeColour1Dark}}"
+                                                                                       Grid.Column="2" IsVisible="{Binding StatusTag, Converter={StaticResource StringToVisibilityConverter}}"
+                                                                                       Padding="2,2,2,3"
+                                                                                       Margin="0" 
+                                                                                       x:Name="StatusTagBorder"
+                                                                                       HorizontalOptions="End"
+                                                                                       VerticalOptions="Start">
+                                        <Border.StrokeShape>
+                                          <RoundRectangle CornerRadius="8" />
+                                        </Border.StrokeShape>
+                                        <Label TextColor="{AppThemeBinding Light={StaticResource BadgeTextColourLight}, Dark={StaticResource BadgeTextColourDark}}"
+                                               Padding="6,0,6,0"
+                                               Text="{Binding StatusTag}"
+                                               FontSize="10"
+                                               FontAttributes="Bold"
+                                               VerticalOptions="Center"
+                                               HorizontalTextAlignment="Center"
+                                               FontFamily="Roboto-Regular"
+                                               VerticalTextAlignment="Start"/>
+                                      </Border>
+                                   
+                                  </Grid>
                                                                         
                                                                         <BoxView Grid.Row="1" VerticalOptions="End" HeightRequest="2" Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"/>
                                                                 </Grid>
@@ -264,7 +288,7 @@
                 </Grid>
                 
                 <Grid x:Name="searchedSampleScrollViewer" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
-                    <ScrollView Orientation="Vertical" VerticalScrollBarVisibility="Always" VerticalOptions="Fill" >
+                    <ScrollView Orientation="Vertical" x:DataType="base:SamplesViewModel" VerticalScrollBarVisibility="Always" VerticalOptions="Fill" >
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding SearchList}"
                                              x:Name="searchedResultList" 
                                              HorizontalOptions="Fill"
@@ -272,7 +296,7 @@
                                              Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
                                              Padding="10">
                             <BindableLayout.ItemTemplate >
-                                <DataTemplate>
+                                <DataTemplate x:DataType="base:SearchModel">
                                         
                                         <customView:SfEffectsViewAdv TouchDownEffects="Ripple" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
                                         <customView:SfEffectsViewAdv.GestureRecognizers>
@@ -317,9 +341,9 @@
                                     <Grid BackgroundColor="Transparent">
                                             
                                             <BoxView Color="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" CornerRadius="20" HorizontalOptions="Fill" VerticalOptions="Fill"/>
-                                        <CollectionView ItemsSource="{Binding SortedListNew}">
+                                        <CollectionView ItemsSource="{Binding SortedListNew}" x:DataType="base:SamplesViewModel">
                                             <CollectionView.ItemTemplate>
-                                                <DataTemplate>
+                                                <DataTemplate x:DataType="base:SearchModel">
                                                     <customView:SfEffectsViewAdv TouchDownEffects="Ripple">
                                                         <customView:SfEffectsViewAdv.GestureRecognizers>
                                                             <TapGestureRecognizer Tapped="SortSampleTapGestureTapped"/>
@@ -327,9 +351,9 @@
                                                         <VerticalStackLayout>
                                                             <HorizontalStackLayout Padding="10" Spacing="10">
                                                                     
-                                                                    <Label Text="{Binding Control.Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16" FontFamily="Roboto-Medium"  />
+                                                                    <Label Text="{Binding Control.Title}"  TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16" FontFamily="Roboto-Medium"  />
                                                                     <Label Text="-" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="16" FontFamily="Roboto-Medium"  />
-                                                                    <Label Text="{Binding Sample.Title}" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"  FontSize="16" FontFamily="Roboto-Regular"/>
+                                                                    <Label Text="{Binding Sample.Title}"  TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1Dark}}"  FontSize="16" FontFamily="Roboto-Regular"/>
                                                             </HorizontalStackLayout>
                                                                
                                                                 <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" HeightRequest="2"/>
@@ -364,9 +388,9 @@
                                     <Grid BackgroundColor="Transparent">
                                             
                                             <BoxView Color="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" CornerRadius="20" HorizontalOptions="Fill" VerticalOptions="Fill"/>
-                                        <CollectionView ItemsSource="{Binding SortedListUpdated}">
+                                        <CollectionView ItemsSource="{Binding SortedListUpdated}" x:DataType="base:SamplesViewModel">
                                             <CollectionView.ItemTemplate>
-                                                <DataTemplate>
+                                                <DataTemplate x:DataType="base:SearchModel">
                                                     <customView:SfEffectsViewAdv TouchDownEffects="Ripple">
                                                         <customView:SfEffectsViewAdv.GestureRecognizers>
                                                             <TapGestureRecognizer Tapped="SortSampleTapGestureTapped"/>
@@ -395,9 +419,9 @@
                     <Grid Margin="0,16,0,0" x:Name="UpdatedSortCollection" BackgroundColor="Transparent" IsVisible="False">
                         
                     <BoxView CornerRadius="20" Color="{AppThemeBinding Light={StaticResource TileBackgroundLight}, Dark={StaticResource TileBackgroundDark}}" VerticalOptions="Fill"/>
-                        <CollectionView ItemsSource="{Binding UpdatedSortedList}" Margin="10" BackgroundColor="Transparent">
+                        <CollectionView ItemsSource="{Binding UpdatedSortedList}" Margin="10" BackgroundColor="Transparent" x:DataType="base:SamplesViewModel">
                             <CollectionView.ItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="base:ControlModel">
 
                                     <customView:SfEffectsViewAdv TouchDownEffects="Ripple">
                                     <customView:SfEffectsViewAdv.GestureRecognizers>
@@ -447,30 +471,57 @@
                             </Grid.Shadow>
                         </Grid>
                     
-                    <sfTab:SfTabView x:Name="tabView"  ItemsSource="{Binding SampleCategories}" TabWidthMode="SizeToContent" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" IndicatorBackground="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}">
+                    <sfTab:SfTabView x:Name="tabView"  ItemsSource="{Binding SampleCategories}" x:DataType="base:ControlModel"  TabWidthMode="SizeToContent" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" IndicatorBackground="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}">
                             <sfTab:SfTabView.HeaderItemTemplate>
-                                <DataTemplate>
+                                <DataTemplate x:DataType="base:SampleCategoryModel">
                                
                                 <customView:SfEffectsViewAdv Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
                                         <customView:SfEffectsViewAdv.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="Category_Tapped"/>
                                         </customView:SfEffectsViewAdv.GestureRecognizers>
-                                        <Grid  Padding="{Binding StatusTag, Converter={StaticResource TagToPaddingConverter}}" VerticalOptions="Center"  >
-                                            <Label VerticalTextAlignment="Center" Text="{Binding CategoryName}" FontAttributes="Bold">
-                                                <Label.Triggers>
-                                                    <DataTrigger TargetType="Label" Binding="{Binding IsCategoryClicked}" Value="True">
-                                                        
-                                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
-                                                    </DataTrigger>
-                                                    <DataTrigger TargetType="Label" Binding="{Binding IsCategoryClicked}" Value="False">
-                                                        
-                                                        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
-                                                    </DataTrigger>
-                                                </Label.Triggers>
-                                            </Label>
-                                            </Grid>
+                  <Grid ColumnDefinitions="*,Auto"
+                        ColumnSpacing="4"
+                        Padding="5"
+                        Margin="0"
+                        HorizontalOptions="Fill">
+                    <Grid Padding="0" Margin="0">
+                      <Label VerticalTextAlignment="Center"
+                             Text="{Binding CategoryName}"
+                             FontAttributes="Bold">
+                        <Label.Triggers>
+                          <DataTrigger TargetType="Label" Binding="{Binding IsCategoryClicked}" Value="True">
+                            <Setter Property="TextColor"  Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+                          </DataTrigger>
+                          <DataTrigger TargetType="Label" Binding="{Binding IsCategoryClicked}" Value="False">
+                            <Setter Property="TextColor"  Value="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+                          </DataTrigger>
+                        </Label.Triggers>
+                      </Label>
+                    </Grid>
+                    
+                      <Border Background="#608C1B"
+                              Grid.Column="1"
+                              IsVisible="{Binding StatusTag, Converter={StaticResource StringToVisibilityConverter}}"
+                              Padding="2,2,2,3"
+                              Margin="0"
+                              HorizontalOptions="End"
+                              VerticalOptions="Center">
+                        <Border.StrokeShape>
+                          <RoundRectangle CornerRadius="10" />
+                        </Border.StrokeShape>
+                        <Label TextColor="{AppThemeBinding Light={StaticResource BadgeTextColourLight}, Dark={StaticResource BadgeTextColourDark}}"
+                               Padding="6,0,6,0"
+                               Text="{Binding StatusTag,Converter={StaticResource TextToInitialConverter}}"
+                               FontSize="10"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               FontFamily="Roboto-Regular"
+                               VerticalTextAlignment="Start"/>
+                      </Border>                   
+                  </Grid>
 
-                                    </customView:SfEffectsViewAdv>
+                </customView:SfEffectsViewAdv>
                                 </DataTemplate>
                             </sfTab:SfTabView.HeaderItemTemplate>
                             <sfTab:SfTabView.ContentItemTemplate>
@@ -482,10 +533,10 @@
                         <Grid Margin="0,10,0,10" Grid.Row="1" x:Name="chipView" >
                         
                         <Grid BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" HeightRequest="50" IsClippedToBounds="True">
-                            <ScrollView x:Name="chipScroll" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" HeightRequest="40" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" >
-                                    <HorizontalStackLayout BindableLayout.ItemsSource="{Binding SampleSubCategories}" >
+              <ScrollView x:Name="chipScroll"  Orientation="Horizontal" HorizontalScrollBarVisibility="Never"  HeightRequest="40" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" >
+                <HorizontalStackLayout BindableLayout.ItemsSource="{Binding SampleSubCategories}" x:DataType="base:SampleCategoryModel">
                                         <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="base:SampleSubCategoryModel">
                                            
                                             <Grid x:Name="customGrid" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Padding="5,0,5,0">
                                                 <Border Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
@@ -510,29 +561,59 @@
                                                         <customView:SfEffectsViewAdv.GestureRecognizers>
                                                             <TapGestureRecognizer Tapped="SubCategory_Tapped"/>
                                                         </customView:SfEffectsViewAdv.GestureRecognizers>
-                                                        <Grid Padding="{Binding StatusTag, Converter={StaticResource TagToPaddingConverter}}">
-                                                                <Label FontSize="14"  
-                                                                   x:Name="label" 
-                                                                   FontFamily="Roboto-Medium"
-                                                                   Text="{Binding SubCategoryName}"
-                                                                   LineBreakMode="NoWrap"
-                                                                   HorizontalOptions="Center" 
-                                                                   VerticalOptions="Center"
-                                                                   HorizontalTextAlignment="Center" 
-                                                                   VerticalTextAlignment="Center">
-                                                                    <Label.Triggers>
-                                                                        <DataTrigger TargetType="Label" Binding="{Binding IsSubCategoryClicked}" Value="True">
-                                                                           
-                                                                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" />
-                                                                        </DataTrigger>
-                                                                        <DataTrigger TargetType="Label" Binding="{Binding IsSubCategoryClicked}" Value="False">
-                                                                           
-                                                                            <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
-                                                                        </DataTrigger>
-                                                                    </Label.Triggers>
-                                                                </Label>
-                                                                </Grid>
-                                                        </customView:SfEffectsViewAdv>
+
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="4"
+                                  Padding="5"
+                                  Margin="0"
+                                  HorizontalOptions="Fill">
+                              <Grid Padding="0" Margin="0">
+                                <Label FontSize="14"  
+                                       x:Name="label" 
+                                       FontFamily="Roboto-Medium"
+                                       Text="{Binding SubCategoryName}"
+                                       LineBreakMode="NoWrap"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center"
+                                       HorizontalTextAlignment="Center" 
+                                       VerticalTextAlignment="Center">
+                                  <Label.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsSubCategoryClicked}" Value="True">
+
+                                      <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsSubCategoryClicked}" Value="False">
+
+                                      <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+                                    </DataTrigger>
+                                  </Label.Triggers>
+                                </Label>
+                              </Grid>
+                              
+
+                                <Border Background="#608C1B"
+                                        IsVisible="{Binding StatusTag, Converter={StaticResource StringToVisibilityConverter}}"
+                                        Grid.Column="1"
+                                        Padding="2,2,2,3"
+                                        Margin="0"
+                                        HorizontalOptions="End"
+                                        VerticalOptions="Center">
+                                  <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                  </Border.StrokeShape>
+                                  <Label TextColor="{AppThemeBinding Light={StaticResource BadgeTextColourLight}, Dark={StaticResource BadgeTextColourDark}}"
+                                         Padding="6,0,6,0"
+                                         Text="{Binding StatusTag,Converter={StaticResource TextToInitialConverter}}"
+                                         FontSize="10"
+                                         FontAttributes="Bold"
+                                         VerticalOptions="Center"
+                                         HorizontalTextAlignment="Center"
+                                         FontFamily="Roboto-Regular"
+                                         VerticalTextAlignment="Start"/>
+                                </Border>                         
+                            </Grid>
+
+                          </customView:SfEffectsViewAdv>
                                                     </Border>
                                                 </Grid>
                                             </DataTemplate>
@@ -664,7 +745,7 @@
                             <Label Text="&#xe70e;" TextColor="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark }}" FontFamily="MauiSampleFontIcon" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28" />
                         </customView:SfEffectsViewAdv>
                     </Border>
-                    <Label x:Name="sampleTitleLabel" 
+                    <Label x:Name="sampleTitleLabel" x:DataType="base:ControlModel"
                        Grid.Column="1"
                         
                        TextColor="{AppThemeBinding Light={StaticResource HeaderForegroundLight}, Dark={StaticResource HeaderForegroundDark}}" 
@@ -760,7 +841,7 @@
                 </Border>
                
                 <BoxView Grid.Column="1" Color="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}" CornerRadius="1" Grid.ColumnSpan="2"/>
-                <local:SfEntry Grid.Column="1"
+                <local:SfEntry Grid.Column="1" x:DataType="base:SamplesViewModel"
                    Margin="10,5,0,0"
                    Placeholder="Search"
                    TextColor="{AppThemeBinding Light={StaticResource InputTextColourLight}, Dark={StaticResource InputTextColourDark}}"
@@ -797,7 +878,7 @@
                             <Label Text="&#xe70e;" Style="{StaticResource IconStyle}" FontFamily="MauiSampleFontIcon" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center"  />
                         </customView:SfEffectsViewAdv>
                     </Border>
-                    <Label x:Name="searchSampleTitleLabel" 
+                    <Label x:Name="searchSampleTitleLabel" x:DataType="base:ControlModel"
                        Grid.Column="1"
                       
                        TextColor="{AppThemeBinding Light={StaticResource HeaderForegroundLight}, Dark={StaticResource HeaderForegroundDark}}"

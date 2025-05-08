@@ -706,20 +706,17 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			{
 				int newIndex = SelectedIndex + (isForward ? 1 : -1);
 				var newItem = _virtualItemList[newIndex] as PlatformCarouselItem;
-				HandleSelectionChange(tempCollection, args, newIndex, newItem);
+				HandleSelectionChange(args, newIndex, newItem);
 			}
 		}
 
 		/// <summary>
 		/// Handle selection change 
 		/// </summary>
-		/// <param name="tempCollection"></param>
 		/// <param name="args"></param>
 		/// <param name="newIndex"></param>
 		/// <param name="newItem"></param>
-#pragma warning disable IDE0060 // Remove unused parameter
-		void HandleSelectionChange(IList tempCollection, SelectionChangedEventArgs args, int newIndex, PlatformCarouselItem? newItem)
-#pragma warning restore IDE0060 // Remove unused parameter
+		void HandleSelectionChange(SelectionChangedEventArgs args, int newIndex, PlatformCarouselItem? newItem)
 		{
 			var containerItem = ContainerFromIndex(newIndex) as PlatformCarouselItem;
 			if (containerItem == null || (containerItem != null && containerItem != newItem))
@@ -831,7 +828,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 				{
 					int newIndex = SelectedIndex + (isBackward ? 1 : -1);
 					var newItem = _virtualItemList[newIndex] as PlatformCarouselItem;
-					HandleSelectionChange(tempCollection, args, newIndex, newItem);
+					HandleSelectionChange(args, newIndex, newItem);
 				}
 			}
 		}
@@ -2228,7 +2225,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		private static void OnLoadMoreViewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			PlatformCarousel carousel = (PlatformCarousel)d;
-			carousel.OnLoadMoreViewChanged(e);
+			carousel.OnLoadMoreViewChanged();
 		}
 
 		/// <summary>
@@ -2327,7 +2324,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		private static void OnAllowLoadMoreChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
 		{
 			PlatformCarousel? control = d as PlatformCarousel;
-			control?.OnAllowLoadMoreChanged(e);
+			control?.OnAllowLoadMoreChanged();
 		}
 
 		/// <summary>
@@ -2671,10 +2668,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <summary>
 		/// method for load more view
 		/// </summary>
-		/// <param name="e">instance contains event data</param>
-#pragma warning disable IDE0060 // Remove unused parameter
-		private void OnLoadMoreViewChanged(DependencyPropertyChangedEventArgs e)
-#pragma warning restore IDE0060 // Remove unused parameter
+		private void OnLoadMoreViewChanged()
 		{
 			if (LoadMoreItemsCount > 0 && AllowLoadMore)
 			{
@@ -2796,7 +2790,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 					var tempCollection = _tempCollection as IList;
 					for (int i = 0; i < tempCollection?.Count; i++)
 					{
-						var virtualItem = GetVirtualizedItem(tempCollection[i], i);
+						var virtualItem = GetVirtualizedItem(i);
 						if (virtualItem != null)
 						{
 							_virtualItemList.Add(virtualItem);
@@ -2835,7 +2829,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 				View? contentView = null;
 				if (_virtualView != null && _virtualView.ItemTemplate != null)
 				{
-					contentView = GetItemView(_virtualView, this, j);
+					contentView = GetItemView(_virtualView, j);
 					j++;
 				}
 				if (contentView != null && _carouselHandler != null && _virtualView != null)
@@ -2848,10 +2842,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <summary>
 		/// On Allow Load More Changed method
 		/// </summary>
-		/// <param name="e">instance containing the event data.</param>
-#pragma warning disable IDE0060 // Remove unused parameter
-		private void OnAllowLoadMoreChanged(DependencyPropertyChangedEventArgs e)
-#pragma warning restore IDE0060 // Remove unused parameter
+		private void OnAllowLoadMoreChanged()
 		{
 			if (!AllowLoadMore && LoadMoreItemsCount == 0)
 			{
@@ -2896,17 +2887,14 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <summary>
 		/// Retrieves the virtualized item as a native view.
 		/// </summary>
-		/// <param name="item"></param>
 		/// <param name="index"></param>
 		/// <returns></returns>
-#pragma warning disable IDE0060 // Remove unused parameter
-		private Syncfusion.Maui.Toolkit.Carousel.PlatformCarouselItem? GetVirtualizedItem(object? item, int index)
-#pragma warning restore IDE0060 // Remove unused parameter
+		private Syncfusion.Maui.Toolkit.Carousel.PlatformCarouselItem? GetVirtualizedItem(int index)
 		{
 			View? contentView = null;
 			if (_virtualView != null && _virtualView.ItemTemplate != null)
 			{
-				contentView = GetItemView(_virtualView, this, index);
+				contentView = GetItemView(_virtualView, index);
 			}
 			if (contentView != null && _carouselHandler != null && _virtualView != null)
 			{
@@ -2962,9 +2950,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <param name="itemRegion"></param>
 		/// <param name="startRegion"></param>
 		/// <param name="endRegion"></param>
-#pragma warning disable IDE0060 // Remove unused parameter
 		void UpdateLinearStartEndPosition(double horizontalCenterPoint, double verticalCenterPoint, bool isUpdateStartPosition, double itemRegion, double startRegion, double endRegion)
-#pragma warning restore IDE0060 // Remove unused parameter
 		{
 			if (_tempCollection != null)
 			{
@@ -3342,7 +3328,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 								View? contentView = null;
 								if (virtualView.ItemTemplate != null)
 								{
-									contentView = GetItemView(virtualView, this, i);
+									contentView = GetItemView(virtualView, i);
 									i++;
 								}
 								if (contentView != null)
@@ -3393,12 +3379,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <param name="args">Arguments of selection changed event.</param>
 		internal virtual void OnSelectionChanged(SelectionChangedEventArgs args)
 		{
-#pragma warning disable IDE0031
-			if (_virtualView != null)
-			{
-				_virtualView.RaiseSelectionChanged(args);
-			}
-#pragma warning restore IDE0031
+			_virtualView?.RaiseSelectionChanged(args);
 		}
 
 		/// <summary>
@@ -3407,12 +3388,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <param name="args">Arguments of SwipeStarted event.</param>
 		internal void OnSwipeStarted(SwipeStartedEventArgs args)
 		{
-#pragma warning disable IDE0031
-			if (_virtualView != null)
-			{
-				_virtualView.RaiseSwipeStarted(args);
-			}
-#pragma warning restore IDE0031
+			_virtualView?.RaiseSwipeStarted(args);
 
 			_isSwipeEnded = false;
 		}
@@ -3423,12 +3399,7 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <param name="args">Arguments of SwipeEnded event.</param>
 		internal virtual void OnSwipeEnded(EventArgs args)
 		{
-#pragma warning disable IDE0031
-			if (_virtualView != null)
-			{
-				_virtualView.RaiseSwipeEnded(args);
-			}
-#pragma warning restore IDE0031
+			_virtualView?.RaiseSwipeEnded(args);
 
 			_isSwipeEnded = true;
 		}
@@ -3450,12 +3421,9 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// Retrieves a view for the specified item index in the carousel.
 		/// </summary>
 		/// <param name="FormsCarousel"></param>
-		/// <param name="carousel"></param>
 		/// <param name="index"></param>
 		/// <returns></returns>
-#pragma warning disable IDE0060 // Remove unused parameter
-		internal static View? GetItemView(ICarousel FormsCarousel, PlatformCarousel carousel, int index)
-#pragma warning restore IDE0060 // Remove unused parameter
+		internal static View? GetItemView(ICarousel FormsCarousel, int index)
 		{
 			if ((FormsCarousel.ItemsSource is System.Collections.IList itemSource && itemSource.Count > 0))
 			{

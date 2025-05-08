@@ -280,10 +280,20 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			{
 				return segmentItem.SelectedSegmentTextColor ?? itemInfo?.SelectionIndicatorSettings?.TextColor ?? Colors.White;
 			}
+			else
+			{
+				Color textColor;
+				if (itemInfo != null && itemInfo.SelectionIndicatorSettings != null && !itemInfo.SelectedSegmentTextColor.Equals(itemInfo.SelectionIndicatorSettings.TextColor))
+				{
+					textColor = itemInfo.SelectionIndicatorSettings.TextColor;
+				}
+				else
+				{
+					textColor = BrushToColorConverter(GetSelectedSegmentStroke(itemInfo, segmentItem));
+				}
 
-			// If the selection indicator is not filled, get the text color from the selected segment background.
-			Brush textColor = GetSelectedSegmentStroke(itemInfo, segmentItem);
-			return BrushToColorConverter(textColor);
+				return segmentItem.SelectedSegmentTextColor ?? textColor;
+			}
 		}
 
 		/// <summary>

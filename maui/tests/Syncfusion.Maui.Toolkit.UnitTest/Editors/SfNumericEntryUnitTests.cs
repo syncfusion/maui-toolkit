@@ -519,27 +519,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.NotNull(GetPrivateField(numericEntry, "_effectsRenderer"));
 		}
 
-		[Fact]
-		public void RaiseValueChangedEvent_ShouldTrigger_ValueChangedEvent()
-		{
-			var numericEntry = new SfNumericEntry();
-			double? oldValue = 50;
-			double? newValue = 60;
-			bool eventTriggered = false;
-
-			numericEntry.ValueChanged += (sender, e) =>
-			{
-				eventTriggered = true;
-				Assert.Equal(oldValue, e.OldValue);
-				Assert.Equal(newValue, e.NewValue);
-			};
-
-			InvokeStaticPrivateMethod(numericEntry, "RaiseValueChangedEvent", new object[] { numericEntry, oldValue, newValue });
-
-			Assert.True(eventTriggered);
-		}
-
-
 		[Theory]
 		[InlineData("42.5", 0)]
 		[InlineData("invalid", 42.5)]

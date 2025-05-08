@@ -237,10 +237,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		internal bool IsLayoutTapped { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating the hint was animating from down to up.
-        /// </summary>
-        internal bool IsHintDownToUp = true;
+		/// <summary>
+		/// Gets or sets a value indicating the hint was animating from down to up.
+		/// </summary>
+		internal bool IsHintDownToUp = true;
 
         ///<summary>
         /// Gets or sets a value indicating whether the alignment of the up-down button alignment is left.
