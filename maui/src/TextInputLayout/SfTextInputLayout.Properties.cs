@@ -1787,7 +1787,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				if (value != _text)
 				{
 					_text = value;
-					ResetSemantics();
+					HandleSemanticsReset();
 				}
 			}
 		}
@@ -2160,9 +2160,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			if (bindable is SfTextInputLayout inputLayout)
 			{
-				inputLayout.ResetSemantics();
 				inputLayout.ChangeVisualState();
 				inputLayout.StartAnimation();
+				inputLayout.ResetSemantics();
 			}
 		}
 

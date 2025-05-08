@@ -255,6 +255,23 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		}
 
 		/// <summary>
+		/// Resets semantics on first character input or when text is cleared.
+		/// </summary>
+		void HandleSemanticsReset()
+		{
+			if (string.IsNullOrEmpty(_text))
+			{
+				_hasResetSemantics = false;
+				ResetSemantics();
+			}
+			else if (_text.Length == 1 && !_hasResetSemantics)
+			{
+				ResetSemantics();
+				_hasResetSemantics = true;
+			}
+		}
+
+		/// <summary>
 		/// Gets the button size based on the vertical alignment and icon templates.
 		/// </summary>
 		/// <returns>

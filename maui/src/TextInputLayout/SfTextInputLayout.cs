@@ -293,6 +293,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		Size _controlSize = Size.Zero;
 		
 		/// <summary>
+		/// Indicates whether semantics need to be reset.
+		/// </summary>
+		bool _hasResetSemantics = false;
+
+		/// <summary>
 		/// The field sets and checks the text.
 		/// </summary>
 		string _text = string.Empty;
@@ -700,7 +705,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					AddNumericUpDownNodes(numericUpDown);
 					break;
 				case SfNumericEntry when IsClearIconVisible:
-					AddSemanticsNode(_clearIconRectF, 2, "Clear button");
+					AddClearButtonNodes(2);
 					break;
 			}
 		}
@@ -727,7 +732,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 			if (addClearIconFirst && IsClearIconVisible)
 			{
-				AddSemanticsNode(_clearIconRectF, 2, "Clear button");
+				AddClearButtonNodes(2);
 			}
 
 			AddSemanticsNode(isVerticalInline ? _downIconRectF : _upIconRectF, addClearIconFirst ? 3 : 2, "Up button", isUpEnabled);
@@ -735,8 +740,18 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 			if (!addClearIconFirst && IsClearIconVisible)
 			{
-				AddSemanticsNode(_clearIconRectF, 4, "Clear button");
+				AddClearButtonNodes(4);
 			}
+		}
+
+		/// <summary>
+		/// Adds a semantic node for clear button.
+		/// </summary>
+		void AddClearButtonNodes(int index)
+		{
+			var tempBounds = _clearIconRectF;
+			tempBounds.Width = tempBounds.Height = IconSize;
+			AddSemanticsNode(tempBounds, index, "Clear button");
 		}
 
 		/// <summary>
