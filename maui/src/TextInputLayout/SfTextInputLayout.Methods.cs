@@ -243,6 +243,18 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		#region Private Methods
 
 		/// <summary>
+		/// This refresh the semantic nodes of the textinputlayout
+		/// </summary>
+		void ResetSemantics()
+		{
+			if (_textInputLayoutSemanticsNodes != null)
+			{
+				_textInputLayoutSemanticsNodes.Clear();
+				this.InvalidateSemantics();
+			}
+		}
+
+		/// <summary>
 		/// Gets the button size based on the vertical alignment and icon templates.
 		/// </summary>
 		/// <returns>
