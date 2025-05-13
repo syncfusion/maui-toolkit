@@ -89,8 +89,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 			var button = new SfButton();
 			var expectedBrush = GetSolidColorBrush(colorHex);
 			button.Stroke = expectedBrush;
-			var actualBrush = button.Stroke;
-			Assert.Equal(expectedBrush.Color, actualBrush);
+			var actualStroke = (Color?)GetNonPublicProperty(button, "BaseStrokeColor");
+			Assert.Equal(expectedBrush.Color, actualStroke);
 		}
 
 		[Theory]
@@ -115,7 +115,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 			var button = new SfButton();
 			button.Text = expectedText;
 			var actualText = button.Text;
+			var isTextChanged = (bool?)GetPrivateMember(button, "_isSemanticTextChanged");
 			Assert.Equal(expectedText, actualText);
+			Assert.True(isTextChanged);
 		}
 
 		[Theory]
@@ -185,9 +187,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 		{
 			var button = new SfButton();
 			var expectedImageSource = ImageSource.FromFile(imagePath);
+			button.ShowIcon = true;
 			button.ImageSource = expectedImageSource;
 			var actualImageSource = button.ImageSource;
+			var isImageUpdated = (bool?)GetPrivateMember(button, "_isImageIconUpdated");
 			Assert.Equal(expectedImageSource, actualImageSource);
+			Assert.True(isImageUpdated);
 		}
 
 		[Theory]
@@ -197,20 +202,28 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 		{
 			var button = new SfButton();
 			button.ShowIcon = expectedValue;
+			button.ImageSource = "SampleImage1.png";
 			var actualValue = button.ShowIcon;
+			var isImageUpdated = (bool?)GetPrivateMember(button, "_isImageIconUpdated");
 			Assert.Equal(expectedValue, actualValue);
+			Assert.Equal(expectedValue, isImageUpdated);
 		}
 
 		[Theory]
-		[InlineData(10.0)]
-		[InlineData(20.5)]
-		[InlineData(0.0)]
-		public void ImageSize_ShouldSetAndGetCorrectly(double expectedValue)
+		[InlineData(10.0, 24)]
+		[InlineData(20.5, 34.5)]
+		[InlineData(0.0, 14)]
+		public void ImageSize_ShouldSetAndGetCorrectly(double expectedValue, double expectedHeight)
 		{
 			var button = new SfButton();
+			button.IsCreatedInternally = true;
+			button.ShowIcon = true;
+			button.ImageSource = "SampleImage1.png";
 			button.ImageSize = expectedValue;
 			var actualValue = button.ImageSize;
+			var actualHeight = button.HeightRequest;
 			Assert.Equal(expectedValue, actualValue);
+			Assert.Equal(expectedHeight, actualHeight);
 		}
 
 		[Theory]
@@ -235,7 +248,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 			var expectedValue = ImageSource.FromFile(imagePath);
 			button.BackgroundImageSource = expectedValue;
 			var actualValue = button.BackgroundImageSource;
+			var backgroundImageView = (Image?)GetPrivateMember(button, "_backgroundImageView");
 			Assert.Equal(expectedValue, actualValue);
+			Assert.Equal(expectedValue, backgroundImageView?.Source);
 		}
 
 		[Theory]
@@ -388,13 +403,39 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 			var button = new SfButton();
 
 			button.BackgroundImageAspect = expectedAspect;
+			var backgroundImageView = (Image?)GetPrivateMember(button, "_backgroundImageView");
+			button.BackgroundImageSource = "SampleImage1.png";
 
 			Assert.Equal(expectedAspect, button.BackgroundImageAspect);
-		}
+			Assert.Equal(expectedAspect, backgroundImageView?.Aspect);
 
+		}
 		#endregion
 
 		#region Private Method
+
+		protected object? GetPrivateMember<T>(T obj, string memberName)
+		{
+			var type = obj?.GetType();
+			while (type != null)
+			{
+				var field = type.GetField(memberName, BindingFlags.NonPublic | BindingFlags.Instance);
+				if (field != null)
+				{
+					return field.GetValue(obj);
+				}
+
+				var property = type.GetProperty(memberName, BindingFlags.NonPublic | BindingFlags.Instance);
+				if (property != null)
+				{
+					return property.GetValue(obj);
+				}
+
+				type = type.BaseType;
+			}
+
+			throw new InvalidOperationException($"Field or property '{memberName}' not found.");
+		}
 
 		private SolidColorBrush GetSolidColorBrush(string colorString)
 		{
@@ -731,6 +772,28 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 
 			visualStateGroupList.Add(visualStateGroup);
 			VisualStateManager.SetVisualStateGroups(button, visualStateGroupList);
+		}
+
+		#endregion
+
+		#region AutomationScenario
+
+		[Theory]
+		[InlineData("SampleImage1.png", "#FFFFFF")]
+		[InlineData("SampleImage2.png", "#FF5733")]
+		public void BackgroundImageSource_Background(string imagePath, string colorHex)
+		{
+			var button = new SfButton();
+			var expectedValue = ImageSource.FromFile(imagePath);
+			var expectedBrush = GetSolidColorBrush(colorHex);
+			button.BackgroundImageSource = expectedValue;
+			button.Background = expectedBrush;
+			var actualValue = button.BackgroundImageSource;
+			var actualBrush = button.Background;
+			var backgroundImageView = (Image?)GetPrivateMember(button, "_backgroundImageView");
+			Assert.Equal(expectedValue, actualValue);
+			Assert.Equal(expectedValue, backgroundImageView?.Source);
+			Assert.Equal(expectedBrush.Color, actualBrush);
 		}
 
 		#endregion

@@ -63,7 +63,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		private List<object> PopulateMixedObjectItemsSource()
 		{
-			List<object> tabItems = [new Button() { Text = "button" }, new Label() { Text = "label" }, new Picker() { }];
+			List<object> tabItems = [new Button() { Text = "button" }, new Label() { Text = "label" }, new Microsoft.Maui.Controls.Picker() { }];
 
 			return tabItems;
 		}
@@ -74,7 +74,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				{
 					new SfTabItem { Header = "TAB 1", Content = new Label { Text = "Content 1" } },
 					new SfTabItem { Header = "TAB 2", Content = new Button { Text = "Content 2" } },
-					new SfTabItem { Header = "TAB 3", Content = new Picker { } }
+					new SfTabItem { Header = "TAB 3", Content = new Microsoft.Maui.Controls.Picker { } }
 				};
 
 			return tabItems;

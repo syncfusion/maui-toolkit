@@ -27,6 +27,14 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				inputView.Focus();
 			}
+			else if(Content is SfNumericEntry numericEntry)
+			{
+				numericEntry.Focus();
+			}
+			else
+			{
+				Content?.Focus();
+			}
 		}
 
 		/// <summary>
@@ -1972,7 +1980,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			if (((IsLayoutFocused && !string.IsNullOrEmpty(Hint)) || IsHintFloated) && ShowHint)
 			{
 				CalculateClipRect();
-				if(_clipRect.Width >= 0 && _clipRect.Height >= 0)
+				if (_clipRect.Width >= 0 && _clipRect.Height >= 0)
 				{
 					canvas.SubtractFromClip(_clipRect);
 				}

@@ -135,9 +135,8 @@
                     <Grid ColumnDefinitions="2*,*">
 						<Label Text="Formatting" FontSize="18" FontAttributes="Bold" VerticalOptions="Center"  />
                         <HorizontalStackLayout Grid.Column="1" Spacing="5" HeightRequest="45" BackgroundColor="Transparent" VerticalOptions="Center">
-                            <CheckBox BindingContext="{StaticResource numericEntryViewModel}"
-				IsChecked="{Binding ShowGroupSeparator}" />
-                            <Label Text="ShowGroupSeparator"  VerticalOptions="Center"/>
+                            <CheckBox BindingContext="{StaticResource numericEntryViewModel}" IsChecked="{Binding ShowGroupSeparator}" MinimumWidthRequest="20"/>
+                            <Label Text="Show Group Separator" HorizontalTextAlignment="Start" VerticalOptions="Center"/>
                         </HorizontalStackLayout>
                     </Grid>
 

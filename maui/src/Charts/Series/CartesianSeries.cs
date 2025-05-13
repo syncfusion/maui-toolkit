@@ -52,6 +52,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override ChartDataLabelSettings ChartDataLabelSettings => DataLabelSettings;
 
+		internal bool RequiredEmptyPointReset { get; set; } = false;
+		internal virtual bool IsFillEmptyPoint { get { return true; } }
+
 		#endregion
 
 		#region Bindable properties
@@ -723,10 +726,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					_actualYAxis = value;
 				}
 			}
-		}
-
-		internal bool RequiredEmptyPointReset { get; set; } = false;
-		internal virtual bool IsFillEmptyPoint { get { return true; } }
+		} 
 
 		#endregion
 
@@ -1793,7 +1793,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override void UpdateEmptyPointSettings()
 		{
-			if (!IsFillEmptyPoint && EmptyPointMode == EmptyPointMode.None)
+			if (!IsFillEmptyPoint || EmptyPointMode == EmptyPointMode.None)
 			{
 				return;
 			}

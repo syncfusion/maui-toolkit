@@ -1582,7 +1582,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 				else
 				{
-					_positionYPoint = ValidatePopupPosition(yPosition, _popupViewHeight, screenHeight - PopupExtension.GetStatusBarHeight() - PopupExtension.GetActionBarHeight(IgnoreActionBar)) + PopupExtension.GetStatusBarHeight() + PopupExtension.GetActionBarHeight(IgnoreActionBar);
+					_positionYPoint = ValidatePopupPosition(yPosition, _popupViewHeight, screenHeight - PopupExtension.GetStatusBarHeight() - (IgnoreActionBar ? 0 : PopupExtension.GetSafeAreaHeight("Top")) - PopupExtension.GetActionBarHeight(IgnoreActionBar)) + PopupExtension.GetStatusBarHeight() + PopupExtension.GetActionBarHeight(IgnoreActionBar) + (IgnoreActionBar ? 0 : PopupExtension.GetSafeAreaHeight("Top"));
 				}
 
 				if (!IsOpen)
@@ -2055,14 +2055,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Validates the position of the popup view.
 		/// </summary>
-		/// <param name="point">The point at which the layout is expected.</param>
-		/// <param name="actualSize">The actual size of the view.</param>
-		/// <param name="availableSize">The available size of the view.</param>
+		/// <param name="point">The Point calculated to position the popup.</param>
+		/// <param name="popupViewSize">The actual size of the view.</param>
+		/// <param name="availableScreenSize">The available size of the view.</param>
+		/// <param name="screenStartingPoint">Indicates the starting bounds of the application.</param>
 		/// <returns>Returns the validated position of the popup view.</returns>
-		internal double ValidatePopupPosition(double point, double actualSize, double availableSize)
+		internal double ValidatePopupPosition(double point, double popupViewSize, double availableScreenSize, double screenStartingPoint = 0)
 		{
 			// When the button's width request exceeds the screen size, the popup is not displayed correctly.
-			return Math.Max(point + actualSize > availableSize ? availableSize - actualSize : point, 0);
+			return Math.Max(point + popupViewSize > availableScreenSize ? availableScreenSize - popupViewSize : point, screenStartingPoint);
 		}
 
 		#endregion
@@ -2167,13 +2168,29 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					// Need to test if sizing has already been called when laying out relative to the view.
 					CalculatePopupViewWidth();
 					CalculatePopupViewHeight();
-
+#if WINDOWS
+					// IsViewLoaded will be true after the position popup.
+					// It will be set during the initialization of the child view.
+					// This flag is used to determine whether the calculations for size have been done with or without the child.
+					bool isChildViewInitialized = false;
+					if (_popupView is not null)
+					{
+						isChildViewInitialized = _popupView.IsViewLoaded;
+					}
+#endif
 					PositionPopupView();
 
 					ApplyOverlayBackground();
 
 					// When setting AutoSizeMode, the Popup MessageView is measured after being added, so the height, width, and position need to be recalculated.
 					UpdatePopupView();
+#if WINDOWS
+                // When setting AutoSizeMode, the measure happened without child initialization and is not called after calculating the width, so remeasuring is required; otherwise, the OnDraw dirtyRect will have the wrong width.
+                if (_popupView is not null && AutoSizeMode is not PopupAutoSizeMode.None && !IsFullScreen && !isChildViewInitialized)
+                {
+                    _popupView.Measure(double.PositiveInfinity, double.PositiveInfinity);
+                }
+#endif
 					if (!RaisePopupOpeningEvent())
 					{
 						ApplyContainerAnimation();
@@ -2380,7 +2397,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					}
 				}
 
-				if (StartY == -1)
+				if (StartY == -1 || CanShowPopupInFullScreen)
 				{
 					// TODO when IsFullScreen is true, popup need to position from below statusbar.
 					// when IsFullScreen is false, popup need to position from below actionbar.
@@ -2398,7 +2415,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					}
 					else
 					{
-						y = (screenHeight - _popupViewHeight) / 2;
+						if (((screenHeight - _popupViewHeight) / 2) < statusBarHeight)
+						{
+							y = statusBarHeight;
+						}
+						else
+						{
+							y = (screenHeight - _popupViewHeight) / 2;
+						}
 					}
 				}
 				else
@@ -2505,7 +2529,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 			}
 
-			_popupViewWidth = Math.Min(_popupViewWidth, PopupExtension.GetScreenWidth() - (PopupExtension.GetSafeAreaHeight("Left") + PopupExtension.GetSafeAreaHeight("Right")));
+			_popupViewWidth = Math.Min(_popupViewWidth + PopupStyle.GetStrokeThickness(), PopupExtension.GetScreenWidth() - (PopupExtension.GetSafeAreaHeight("Left") + PopupExtension.GetSafeAreaHeight("Right")));
 		}
 
 		double GetFinalWidth(View template)
@@ -2612,7 +2636,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 						AppliedBodyHeight = (screenHeight - (AppliedHeaderHeight + AppliedFooterHeight + safeAreaHeightAtTop + safeAreaHeightAtBottom + statusBarHeight + actionBarHeight));
 					}
 
-					_popupViewHeight = AppliedHeaderHeight + AppliedBodyHeight + AppliedFooterHeight;
+					_popupViewHeight = AppliedHeaderHeight + AppliedBodyHeight + AppliedFooterHeight + strokeThickness;
 
 					// _popupViewHeight is not updated when the content size is increased in runtime when the keyboard is in open.
 					if (_popupViewHeightBeforeKeyboardInView != 0 && _keyboardPoints != 0)
@@ -2623,7 +2647,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				else
 				{
 					// When changing the device orientation from landscape to portrait, the popup, which was shrunk in landscape, does not return to its default height in portrait.
-					_popupViewHeight = GetPopupViewDefaultHeight();
+					_popupViewHeight = GetPopupViewDefaultHeight() + strokeThickness;
 				}
 
 			}
@@ -3155,7 +3179,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					{
 						_popupOverlayContainer.Parent = page;
 
-						// _popupOverlayContainer visibility is set to false after dismissing the popup.
+   						// _popupOverlayContainer visibility is set to false after dismissing the popup.
 						// _popupOverlayContainer will be set as the parent to popupView here from DisplayPopup().
 						// Due to Maui 9.0.50 changes [https://github.com/dotnet/maui/pull/20154],
 						// the IsVisible property of _popupView is set to false when reopening with the same instance of the popup, since _popupOverlayContainer visibility will now be false.
@@ -3203,7 +3227,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		void ApplyContainerAnimation()
 		{
-			if (_isContainerAnimationInProgress || _popupOverlayContainer is null || AnimationMode is PopupAnimationMode.None)
+			if (_isContainerAnimationInProgress || _popupOverlayContainer is null || AnimationMode is PopupAnimationMode.None || !CanAnimate())
 			{
 				return;
 			}
@@ -3226,9 +3250,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				return;
 			}
+
+			if (!CanAnimate())
+			{
+				ProcessAnimationCompleted(_popupView);
+				return;
+			}
 #if IOS
 			// Native configuration for Scale and Translation will get skipped if Parent is null and Frame is Zero.
-			if (AnimationMode is not PopupAnimationMode.None && _popupView is IView popupView)
+			if (_popupView is IView popupView)
 			{
 				popupView.Frame = new Rect(_popupXPosition, _popupYPosition, _popupViewHeight, _popupViewWidth);
 			}
@@ -3302,10 +3332,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					endTranslate = 0;
 #endif
 					SlideAnimate(_popupView, IsOpen ? startTranslate : endTranslate, IsOpen ? endTranslate : startTranslate);
-					break;
-
-				case PopupAnimationMode.None:
-					ProcessAnimationCompleted(_popupView);
 					break;
 			}
 		}
@@ -3406,6 +3432,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
+		/// Checks if the animation should proceed based on the animation duration and mode.
+		/// </summary>
+		/// <returns>Returns true if the animation duration is greater than 0 and the animation mode is not None, indicating that the animation should proceed. Returns false otherwise.</returns>
+		private bool CanAnimate()
+		{
+			return AnimationDuration > 0 && AnimationMode is not PopupAnimationMode.None;
+		}
+
+		/// <summary>
 		/// Reset the _popupView Animated Properties.
 		/// </summary>
 		void ResetAnimatedProperties()
@@ -3429,27 +3464,25 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		void AbortPopupViewAnimation()
 		{
-			if (AnimationMode is PopupAnimationMode.None)
+			if (CanAnimate())
 			{
-				return;
-			}
+				if (_popupView.AnimationIsRunning("ZoomAnimation"))
+				{
+					_popupView.AbortAnimation("ZoomAnimation");
+				}
+				else if (_popupView.AnimationIsRunning("FadeAnimation"))
+				{
+					_popupView.AbortAnimation("FadeAnimation");
+				}
+				else if (_popupView.AnimationIsRunning("SlideAnimation"))
+				{
+					_popupView.AbortAnimation("SlideAnimation");
+				}
 
-			if (_popupView.AnimationIsRunning("ZoomAnimation"))
-			{
-				_popupView.AbortAnimation("ZoomAnimation");
-			}
-			else if (_popupView.AnimationIsRunning("FadeAnimation"))
-			{
-				_popupView.AbortAnimation("FadeAnimation");
-			}
-			else if (_popupView.AnimationIsRunning("SlideAnimation"))
-			{
-				_popupView.AbortAnimation("SlideAnimation");
-			}
-
-			if (_popupOverlayContainer.AnimationIsRunning("ContainerFadeAnimation"))
-			{
-				_popupOverlayContainer.AbortAnimation("ContainerFadeAnimation");
+				if (_popupOverlayContainer.AnimationIsRunning("ContainerFadeAnimation"))
+				{
+					_popupOverlayContainer.AbortAnimation("ContainerFadeAnimation");
+				}
 			}
 		}
 

@@ -57,8 +57,8 @@
                         HorizontalOptions="Fill" VerticalOptions="Start"                        
                         SelectedIndex="0"
                         SelectedIndexChanged="ModePicker_SelectedIndexChanged"
-                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                        Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                        TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}"
                         ></Picker>
                 </HorizontalStackLayout>
             </VerticalStackLayout>

@@ -115,12 +115,12 @@
                     <Label Text="Mode: " VerticalOptions="Start" HorizontalOptions="Center" Padding="5"  FontSize="17"/>
                         <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=DisplayMode}" 
                         SelectedItem="{Binding Source={x:Reference ViewModel}, Path=DisplayMode[0]}"
-                         VerticalOptions="Start" HorizontalOptions="Fill" 
+                        VerticalOptions="Start" HorizontalOptions="Fill" 
                         x:Name="picker" 
-                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                         SelectedIndex="0"
-                        SelectedIndexChanged="picker_SelectedIndexChanged">
+                        SelectedIndexChanged="picker_SelectedIndexChanged"
+                        Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                        TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                         </Picker>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout Spacing="5">

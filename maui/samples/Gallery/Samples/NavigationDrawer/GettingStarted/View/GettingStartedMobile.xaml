@@ -31,7 +31,7 @@
                                 <Label Grid.Row="1" Text="Leslie Alexander" Margin="0,5,0,0"  VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="20" WidthRequest="148" HeightRequest="24" HorizontalOptions="Center"/>
                                 <Label Grid.Row="2" Text="UX Designer" Margin="0,5,0,0"  VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="14" WidthRequest="148" HeightRequest="24" HorizontalOptions="Center"/>
                             </Grid>
-                            <BoxView WidthRequest="264" HeightRequest="1" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBorderLight1}, Dark={StaticResource FilledInputBorderDark}}"/>
+                            <BoxView HeightRequest="1" Margin="20,0" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBorderLight1}, Dark={StaticResource FilledInputBorderDark}}"/>
                         </VerticalStackLayout>
                     </navigationdrawer:DrawerSettings.DrawerHeaderView>
                     <navigationdrawer:DrawerSettings.DrawerContentView>

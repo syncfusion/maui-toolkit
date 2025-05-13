@@ -38,6 +38,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(4d, _bottomSheet.GrabberHeight);
 			Assert.Equal(32d, _bottomSheet.GrabberWidth);
 			Assert.Equal(12d, _bottomSheet.GrabberCornerRadius);
+			Assert.Equal(150d,_bottomSheet.AnimationDuration);
 			if (_bottomSheet.GrabberBackground is SolidColorBrush grabberBrush)
 			{
 				var grabberColor = grabberBrush.Color;
@@ -475,6 +476,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(expected, actual);
 		}
 
+		[Theory]
+		[InlineData(500d,500d)]
+		[InlineData(0d,0d)]
+		[InlineData(-500d,-500d)]
+		public void AnimationDuration(double input, double expected)
+		{
+			_bottomSheet.AnimationDuration=input;
+
+			var actual = _bottomSheet.AnimationDuration;
+
+			Assert.Equal(expected, actual);
+		}
+
 		#endregion
 
 		#region Internal Properties
@@ -718,7 +732,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(_bottomSheet, "_bottomSheet", border);
 			InvokePrivateMethod(_bottomSheet, "UpdatePadding", [value]);
 			BottomSheetBorder? resultBorder = (BottomSheetBorder?)GetPrivateField(_bottomSheet, "_bottomSheet");
-			Assert.Equal(expected, resultBorder?.Padding);
+			var expectedPadding = new Thickness(Math.Max(0, expected.Left), Math.Max(0, expected.Top), Math.Max(0, expected.Right), Math.Max(0, expected.Bottom));
+			Assert.Equal(expectedPadding, resultBorder?.Padding);
 		}
 
 		[Theory]
@@ -731,6 +746,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfBorder? grabber = (SfBorder?)GetPrivateField(_bottomSheet, "_grabber");
 			var actual = grabber?.HeightRequest;
 			Assert.Equal(expected, actual);
+		}
+
+		[Fact]
+		public void SetAnimationDuration()
+		{
+			_bottomSheet.AnimationDuration = -500;
+			var actual = InvokePrivateMethod(_bottomSheet, "SetAnimationDuration");
+			Assert.Equal(0, actual);
 		}
 
 		[Theory]

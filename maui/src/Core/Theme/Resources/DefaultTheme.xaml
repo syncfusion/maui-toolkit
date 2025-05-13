@@ -18,7 +18,7 @@
     <local:StaticThemeResource x:Key="SfPopupNormalHeaderBackground" ResourceKey="FlyoutBackground" />
     <local:StaticThemeResource x:Key="SfPopupNormalHeaderTextColor" ResourceKey="ContentForeground" />
     <local:StaticThemeResource x:Key="SfPopupNormalMessageBackground" ResourceKey="FlyoutBackground" />
-    <local:StaticThemeResource x:Key="SfpopupNormalMessageTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfPopupNormalMessageTextColor" ResourceKey="ContentForegroundAlt1" />
     <local:StaticThemeResource x:Key="SfPopupNormalFooterBackground" ResourceKey="FlyoutBackground" />
     <local:StaticThemeResource x:Key="SfPopupNormalAcceptButtonBackground" ResourceKey="Transparent" />
     <local:StaticThemeResource x:Key="SfPopupNormalAcceptButtonTextColor" ResourceKey="PrimaryBackground" />

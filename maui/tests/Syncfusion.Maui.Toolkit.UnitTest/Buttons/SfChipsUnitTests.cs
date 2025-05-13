@@ -53,7 +53,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var chips = new SfChip();
 			var expectedColor = Color.FromArgb(colorName);
 			chips.CloseButtonColor = expectedColor;
-			var actualColor = chips.CloseButtonColor;
+			var actualColor = chips.ChipCloseButtonColor;
 			Assert.Equal(expectedColor, actualColor);
 		}
 
@@ -91,8 +91,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var chip = new SfChip();
 			var expectedValue = Color.FromArgb(colorName);
+			chip.ShowSelectionIndicator = true;
 			chip.SelectionIndicatorColor = expectedValue;
-			var actualValue = chip.SelectionIndicatorColor;
+			var actualValue = chip.SelectionIndicatorColorValue;
 			Assert.Equal(expectedValue, actualValue);
 		}
 
@@ -163,8 +164,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var chip = new SfChip();
 			var expectedBrush = GetSolidColorBrush(colorHex);
 			chip.Stroke = expectedBrush;
-			var actualBrush = chip.Stroke;
-			Assert.Equal(expectedBrush.Color, actualBrush);
+			var actualStroke = (Color?)GetNonPublicProperty(chip, "BaseStrokeColor");
+			Assert.Equal(expectedBrush.Color, actualStroke);
 		}
 
 		[Theory]
@@ -191,7 +192,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				Text = expectedText
 			};
 			var actualText = chip.Text;
+			var isTextChanged = (bool?)GetPrivateMember(chip, "_isSemanticTextChanged");
 			Assert.Equal(expectedText, actualText);
+			Assert.True(isTextChanged);
 		}
 
 		[Theory]
@@ -269,9 +272,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var chip = new SfChip();
 			var expectedImageSource = ImageSource.FromFile(imagePath);
+			chip.ShowIcon = true;
 			chip.ImageSource = expectedImageSource;
+			var isImageUpdated = (bool?)GetPrivateMember(chip, "_isImageIconUpdated");
 			var actualImageSource = chip.ImageSource;
 			Assert.Equal(expectedImageSource, actualImageSource);
+			Assert.True(isImageUpdated);
 		}
 
 		[Theory]
@@ -281,24 +287,33 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var chip = new SfChip
 			{
-				ShowIcon = expectedValue
+				ShowIcon = expectedValue,
+				ImageSource = "SampleImage1.png"
 			};
 			var actualValue = chip.ShowIcon;
+			var isImageUpdated = (bool?)GetPrivateMember(chip, "_isImageIconUpdated");
 			Assert.Equal(expectedValue, actualValue);
+			Assert.Equal(expectedValue, isImageUpdated);
 		}
 
 		[Theory]
-		[InlineData(10.0)]
-		[InlineData(20.5)]
-		[InlineData(0.0)]
-		public void ImageSize_SetValue_ReturnsExpectedValue(double expectedValue)
+		[InlineData(10.0, 24)]
+		[InlineData(20.5, 34.5)]
+		[InlineData(0.0, 14)]
+		public void ImageSize_SetValue_ReturnsExpectedValue(double expectedValue, double expectedHeight)
 		{
 			var chip = new SfChip
 			{
+				IsCreatedInternally = true,
+				ShowIcon = true,
+				ImageSource = "SampleImage1.png",
 				ImageSize = expectedValue
+				
 			};
 			var actualValue = chip.ImageSize;
+			var actualHeight = chip.HeightRequest;
 			Assert.Equal(expectedValue, actualValue);
+			Assert.Equal(expectedHeight, actualHeight);
 		}
 
 		[Theory]
@@ -325,7 +340,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var expectedValue = ImageSource.FromFile(imagePath);
 			chip.BackgroundImageSource = expectedValue;
 			var actualValue = chip.BackgroundImageSource;
+			var backgroundImageView = (Image?)GetPrivateMember(chip, "_backgroundImageView");
 			Assert.Equal(expectedValue, actualValue);
+			Assert.Equal(expectedValue, backgroundImageView?.Source);
 		}
 
 		[Theory]
@@ -461,6 +478,29 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#endregion
 
 		#region Private Method
+
+		protected object? GetPrivateMember<T>(T obj, string memberName)
+		{
+			var type = obj?.GetType();
+			while (type != null)
+			{
+				var field = type.GetField(memberName, BindingFlags.NonPublic | BindingFlags.Instance);
+				if (field != null)
+				{
+					return field.GetValue(obj);
+				}
+
+				var property = type.GetProperty(memberName, BindingFlags.NonPublic | BindingFlags.Instance);
+				if (property != null)
+				{
+					return property.GetValue(obj);
+				}
+
+				type = type.BaseType;
+			}
+
+			throw new InvalidOperationException($"Field or property '{memberName}' not found.");
+		}
 		private SolidColorBrush GetSolidColorBrush(string colorString)
 		{
 			if (_converter.ConvertFromString(colorString) is not SolidColorBrush brush)

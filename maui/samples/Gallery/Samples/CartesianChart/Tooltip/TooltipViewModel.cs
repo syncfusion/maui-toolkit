@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
@@ -20,6 +21,34 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 				new ChartDataModel( 2011,43.62, 49.17),
 				new ChartDataModel( 2012,43.93, 50.64),
 			];
+		}
+	}
+
+	public class TooltipValuesConverter : IValueConverter
+	{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			if (value is ChartDataModel model)
+			{
+				var param = parameter?.ToString();
+
+				switch (param)
+				{
+					case "Value":
+						return $": {model.Value}M";
+					case "Size":
+						return $": {model.Size}M";
+					case "Value1":
+						return model.Value1;
+				}
+			}
+
+			return value;
+		}
+
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			return value;
 		}
 	}
 }

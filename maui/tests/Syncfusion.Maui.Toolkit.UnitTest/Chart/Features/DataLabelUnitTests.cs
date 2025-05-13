@@ -3,7 +3,7 @@ using Syncfusion.Maui.Toolkit.Charts;
 using PointF = Microsoft.Maui.Graphics.PointF;
 using SizeF = Microsoft.Maui.Graphics.SizeF;
 
-namespace Syncfusion.Maui.Toolkit.UnitTest
+namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class DataLabelUnitTests : BaseUnitTest
 	{

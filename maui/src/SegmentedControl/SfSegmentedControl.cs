@@ -88,12 +88,17 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			ThemeElement.InitializeThemeResources(this, "SfSegmentedControlTheme");
 			SetDynamicResource(HoveredBackgroundProperty, "SfSegmentedControlHoveredBackground");
 			SetDynamicResource(KeyboardFocusStrokeProperty, "SfSegmentedControlKeyboardFocusStroke");
+			SetDynamicResource(SelectedSegmentTextColorProperty, "SfSegmentedControlSelectionTextColor");
 			MinimumWidthRequest = 180;
 			MinimumHeightRequest = 40;
 			SelectionIndicatorSettings.Parent = this;
 			TextStyle.Parent = this;
 #if !WINDOWS
 			this.AddKeyboardListener(this);
+#endif
+
+#if __IOS__
+			this.IgnoreSafeArea = true;
 #endif
 		}
 
@@ -125,6 +130,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// Gets the focused keyboard stroke for the segment.
 		/// </summary>
 		Brush ISegmentInfo.KeyboardFocusStroke => KeyboardFocusStroke;
+
+		/// <summary>
+		/// Gets the selected text color for the segment.
+		/// </summary>
+		Color ISegmentInfo.SelectedSegmentTextColor => this.SelectedSegmentTextColor;
 
 		#endregion
 
@@ -316,6 +326,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 
 			RemoveOutlinedBorderView();
 			_grid = [];
+#if __IOS__
+			_grid.IgnoreSafeArea = true;
+#endif
 			_grid.SizeChanged += GridSizeChanged;
 
 			// The FlowDirection of the grid is set to LeftToRight to handle RTL rendering logic manually, as RTL behavior may not be consistent across Windows and macOS platforms.

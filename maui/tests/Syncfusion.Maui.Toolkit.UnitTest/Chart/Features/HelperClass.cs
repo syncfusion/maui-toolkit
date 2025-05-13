@@ -1,4 +1,4 @@
-﻿namespace Syncfusion.Maui.Toolkit.UnitTest
+﻿namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class Person
 	{

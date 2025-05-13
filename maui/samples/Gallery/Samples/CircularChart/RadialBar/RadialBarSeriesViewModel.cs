@@ -55,7 +55,6 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 
             Track = new List<string>()
             {
-                "Select Color",
                 "Light Gray",
                 "Blue Gray",
                 "Pale Blue",

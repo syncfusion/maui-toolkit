@@ -921,13 +921,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			if (_textBox != null)
 			{
 				_textBox.ButtonSize = ButtonSize + 4;
-				int defaultMargin = IsTextInputLayout ? 0 : 10;
-
-#if ANDROID || IOS || MACCATALYST
-				_textBox.Margin = new Thickness(_leftMargin + defaultMargin, 0, _rightMargin, 0);
-#else
-				_textBox.Margin = new Thickness(_leftMargin, 0, _rightMargin, 0);
-#endif
+				_textBox.Margin = GetMarginBasedOnTextAlignment(_leftMargin, 0, _rightMargin, 0);
 			}
 		}
 

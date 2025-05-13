@@ -21,7 +21,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// List to store the views blurred by this popup.
 		/// </summary>
-		internal PlatformView? _blurTarget;
+		internal List<PlatformView>? _blurredViews;
 
 		/// <summary>
 		/// Backing field to store the decorView content.

@@ -42,6 +42,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// <param name="itemInfo">The <see cref="ISegmentItemInfo"/> providing information about the segment items.</param>
 		internal SegmentLayout(ISegmentItemInfo itemInfo)
 		{
+#if __IOS__
+			this.IgnoreSafeArea = true;
+#endif
 			FlowDirection = Microsoft.Maui.FlowDirection.LeftToRight;
 			_itemInfo = itemInfo;
 			DrawingOrder = DrawingOrder.AboveContent;

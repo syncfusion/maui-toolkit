@@ -4,7 +4,7 @@
              x:Class="Syncfusion.Maui.Toolkit.Buttons.SfButtonStyles"
              xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons">
 
-    <Style TargetType="buttons:SfButton">
+  <Style TargetType="buttons:SfButton" ApplyToDerivedTypes="True">
         <Setter Property="Background" Value="{DynamicResource SfButtonNormalBackground}"/>
         <Setter Property="TextColor" Value="{DynamicResource SfButtonNormalTextColor}"/>
         <Setter Property="Stroke" Value="{DynamicResource SfButtonNormalStroke}"/>

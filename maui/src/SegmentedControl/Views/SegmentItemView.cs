@@ -61,6 +61,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// <param name="item">The segment item.</param>
 		internal SegmentItemView(ISegmentItemInfo itemInfo, SfSegmentItem item)
 		{
+#if __IOS__
+			this.IgnoreSafeArea = true;
+#endif
 			this.itemInfo = itemInfo;
 			_segmentItem = item;
 			DrawingOrder = DrawingOrder.BelowContent;

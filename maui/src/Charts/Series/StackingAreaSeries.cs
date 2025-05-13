@@ -103,6 +103,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#endregion
 
+		#region Internal Properties
+
+		internal override bool IsFillEmptyPoint { get { return false; } }
+
+		#endregion
+
 		#region Bindable Properties
 
 		/// <summary>

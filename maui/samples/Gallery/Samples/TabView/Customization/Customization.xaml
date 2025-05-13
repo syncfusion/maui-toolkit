@@ -37,7 +37,7 @@
                             <VisualStateGroup>
                                 <VisualState x:Name="Selected" >
                                     <VisualState.Setters>
-                                        <Setter Property="TextColor" Value="{Binding SelectedItemColor}" />
+                                        <Setter x:DataType="{x:Type local:Customization}" Property="TextColor" Value="{Binding SelectedItemColor}" />
                                         <Setter Property="FontAttributes" Value="Bold" />
                                         <Setter Property="FontSize" Value="16" />
                                     </VisualState.Setters>
@@ -88,7 +88,7 @@
                                 <DataTemplate>
                                     <HorizontalStackLayout Padding="5,0,5,0">
                                         <Image Source="document.png"/>
-                                        <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.docx}"/>
+                                        <Label x:DataType="{x:Type x:String}" Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.docx}"/>
                                     </HorizontalStackLayout>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -117,7 +117,7 @@
                                 <DataTemplate>
                                     <HorizontalStackLayout Padding="5,0,5,0">
                                         <Image Source="excel.png"/>
-                                        <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.xlsx}"/>
+                                        <Label x:DataType="{x:Type x:String}" Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.xlsx}"/>
                                     </HorizontalStackLayout>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -153,7 +153,7 @@
                                 <DataTemplate>
                                     <HorizontalStackLayout Padding="5,0,5,0">
                                         <Image Source="pdftab.png"/>
-                                        <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.pdf}"/>
+                                        <Label x:DataType="{x:Type x:String}" Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.pdf}"/>
                                     </HorizontalStackLayout>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -179,7 +179,7 @@
                                 <DataTemplate>
                                     <HorizontalStackLayout Padding="5,0,5,0">
                                         <Image Source="powerpoint.png"/>
-                                        <Label Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.pptx}"/>
+                                        <Label x:DataType="{x:Type x:String}" Margin="10,20,0,20" Text="{Binding Converter={StaticResource TextToFileNameConverter}, ConverterParameter=.pptx}"/>
                                     </HorizontalStackLayout>
                             </DataTemplate>
                             </BindableLayout.ItemTemplate>
