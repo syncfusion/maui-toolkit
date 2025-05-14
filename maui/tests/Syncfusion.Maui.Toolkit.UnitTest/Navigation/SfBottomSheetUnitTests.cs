@@ -748,10 +748,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-		public void SetAnimationDuration()
+		public void GetClampedAnimationDuration()
 		{
 			_bottomSheet.AnimationDuration = -500;
-			var actual = InvokePrivateMethod(_bottomSheet, "SetAnimationDuration");
+			var actual = InvokePrivateMethod(_bottomSheet, "GetClampedAnimationDuration");
 			Assert.Equal(0, actual);
 		}
 

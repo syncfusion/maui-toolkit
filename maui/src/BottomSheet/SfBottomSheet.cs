@@ -1285,7 +1285,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <summary>
 		/// Updates the animation duration with the given value.
 		/// </summary>
-		int SetAnimationDuration()
+		int GetClampedAnimationDuration()
 		{
 			return (int)Math.Max(0, AnimationDuration);
 		}
@@ -2127,7 +2127,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				_overlayGrid.AbortAnimation("overlayGridAnimation");
 			}
 
-			int animationDuration = this.SetAnimationDuration();
+			int animationDuration = this.GetClampedAnimationDuration();
 			const int topPadding = 2;
 			_isSheetOpen = true;
 			if (_bottomSheet is not null)
