@@ -1197,7 +1197,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		}
 
 		/// <summary> 
-		/// Gets or sets a value that can be used to adjust the duration of the opening and closing animations.
+		/// Gets or sets the duration, in milliseconds, for the opening and closing animations.
 		/// </summary> 
 		/// <value> 
 		/// It accepts double values, and the default value is 150ms.
