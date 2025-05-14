@@ -489,6 +489,19 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			BindingMode.Default
 			);
 
+		/// <summary>
+		/// Identifies the <see cref="AnimationDuration"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="AnimationDuration"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty AnimationDurationProperty = BindableProperty.Create(
+			nameof(AnimationDuration),
+			typeof(double),
+			typeof(SfBottomSheet),
+			150d,
+			BindingMode.Default);
+
 		#endregion
 
 		#region Internal Bindable Properties
@@ -1183,6 +1196,19 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			set => SetValue(CollapseOnOverlayTapProperty, value);
 		}
 
+		/// <summary> 
+		/// Gets or sets a value that can be used to adjust the duration of the opening and closing animations.
+		/// </summary> 
+		/// <value> 
+		/// It accepts double values, and the default value is 150ms.
+		/// </value> 
+
+		public double AnimationDuration
+		{
+			get => (double)GetValue(AnimationDurationProperty);
+			set => SetValue(AnimationDurationProperty, value);
+		}
+
 		#endregion
 
 		#region Internal Properties
@@ -1254,6 +1280,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				IsOpen = false;
 				State = BottomSheetState.Hidden;
 		    }
+		}
+
+		/// <summary>
+		/// Updates the animation duration with the given value.
+		/// </summary>
+		int SetAnimationDuration()
+		{
+			return (int)Math.Max(0, AnimationDuration);
 		}
 
 		#endregion
@@ -2093,13 +2127,13 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				_overlayGrid.AbortAnimation("overlayGridAnimation");
 			}
 
-			const int animationDuration = 150;
-		    const int topPadding = 2;
+			int animationDuration = this.SetAnimationDuration();
+			const int topPadding = 2;
 			_isSheetOpen = true;
 			if (_bottomSheet is not null)
 			{
 				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition + topPadding);
-				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: animationDuration, easing: Easing.Linear, finished: (v, e) =>
+				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) => 
 				{
 					UpdateBottomSheetHeight();
 					onFinish?.Invoke();
@@ -2133,7 +2167,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 						endValue = DefaultOverlayOpacity;
 					}
 
-					var overlayGridAnimation = new Animation(d => _overlayGrid.Opacity = d, startValue, endValue);
+					var overlayGridAnimation = new Animation(d =>
+					{
+						if (!double.IsNaN(d))
+						{
+							_overlayGrid.Opacity = d;
+						}
+					}
+					, startValue, endValue);
 					_overlayGrid.Animate("overlayGridAnimation", overlayGridAnimation,
 						length: (uint)animationDuration,
 						easing: Easing.Linear,
