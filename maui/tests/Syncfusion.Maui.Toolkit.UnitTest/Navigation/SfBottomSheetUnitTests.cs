@@ -480,7 +480,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(500d, 500d)]
 		[InlineData(0d, 0d)]
 		[InlineData(-500d, -500d)]
-		public void AnimationDuration(double input, double expected)
+		public void AnimationDurationProperty_ReturnsSetValue(double input, double expected)
 		{
 			_bottomSheet.AnimationDuration = input;
 

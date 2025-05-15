@@ -1283,8 +1283,11 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		}
 
 		/// <summary>
-		/// Updates the animation duration with the given value.
+		/// Returns the value of <c>AnimationDuration</c>, ensuring it is clamped to a non-negative integer.
+		/// This method is useful when passing the duration to animation APIs that require a <c>uint</c> value,
+		/// preventing issues caused by negative durations.
 		/// </summary>
+		/// <returns>A non-negative integer representing the animation duration.</returns>
 		int GetClampedAnimationDuration()
 		{
 			return (int)Math.Max(0, AnimationDuration);
@@ -2169,6 +2172,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 					var overlayGridAnimation = new Animation(d =>
 					{
+						// Ensure the opacity is only updated with valid numeric values to avoid rendering issues.
 						if (!double.IsNaN(d))
 						{
 							_overlayGrid.Opacity = d;
