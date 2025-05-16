@@ -275,7 +275,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			canvas.SetFillPaint(solidPaint, _fillRect);
 #if ANDROID
 			const int androidShadowSize = 4;
-			if (PullToRefresh.ProgressBackground is SolidColorBrush brush && brush.Color.ToArgbHex() == "#00000000")
+			if (PullToRefresh.ProgressBackground is SolidColorBrush brush && brush.Color.Alpha == 0)
 			{
 				shadowColor = Color.FromArgb("#00000000");
 			}
