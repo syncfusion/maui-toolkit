@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using Microsoft.Maui.Controls;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -642,14 +643,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				Y = yPosition,
 				Index = index,
 				Margin = tooltipBehavior.Margin,
-				TextColor = tooltipBehavior.TextColor,
 				FontFamily = tooltipBehavior.FontFamily,
-				FontSize = tooltipBehavior.FontSize,
 				FontAttributes = tooltipBehavior.FontAttributes,
-				Background = tooltipBehavior.Background,
 				Text = yValue.ToString("#.##"),
 				Item = dataPoint
 			};
+
+			UpdateTooltipAppearance(tooltipInfo, tooltipBehavior);
 
 			return tooltipInfo;
 		}

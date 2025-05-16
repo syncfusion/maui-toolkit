@@ -1737,6 +1737,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 		}
 
+		/// <summary>
+		/// Updates the tooltip appearance including background, text color, and font size.
+		/// 
+		/// ChartTooltipBehavior Background with AppThemeBinding · Issue #159 · syncfusion/maui-toolkit
+		/// Resolved the issue where tooltip background doesn't update dynamically by changing the theme when using AppThemeBinding.
+		/// </summary>
+		internal void UpdateTooltipAppearance(TooltipInfo info, ChartTooltipBehavior tooltipBehavior)
+		{
+			if (Chart is ChartBase chart)
+			{
+				info.Background = tooltipBehavior.Background ?? chart.TooltipBackground ?? new SolidColorBrush(Color.FromArgb("#1C1B1F"));
+				info.TextColor = tooltipBehavior.TextColor ?? chart.TooltipTextColor ?? Color.FromArgb("#F4EFF4");
+				info.FontSize = !float.IsNaN(tooltipBehavior.FontSize) ? tooltipBehavior.FontSize : !float.IsNaN((float)chart.TooltipFontSize) ? (float)chart.TooltipFontSize : 14.0f;
+			}
+		}	
+
 		internal virtual void InitiateDataLabels(ChartSegment segment)
 		{
 			if (DataLabels.Count > _segments.Count)
