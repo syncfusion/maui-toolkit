@@ -279,6 +279,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			{
 				shadowColor = Color.FromArgb("#00000000");
 			}
+
 			canvas.SetShadow(new SizeF(0, 1), androidShadowSize, shadowColor);
 #else
 			const int defaultShadowSize = 3;
