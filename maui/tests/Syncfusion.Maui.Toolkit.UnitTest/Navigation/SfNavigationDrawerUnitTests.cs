@@ -1,3 +1,4 @@
+using Syncfusion.Maui.Toolkit.Helper;
 using Syncfusion.Maui.Toolkit.NavigationDrawer;
 using System.Reflection;
 
@@ -920,7 +921,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfNavigationDrawer navigationDrawer = [];
 			navigationDrawer.DrawerSettings.Position = Position.Right;
 			navigationDrawer.DrawerSettings.Transition = Transition.Push;
-			SetPrivateField(navigationDrawer, "_velocityX", -550);
+			SetPrivateField(navigationDrawer, "_velocityX", 550);
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
 			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.False(expectedValue);
@@ -943,7 +944,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfNavigationDrawer navigationDrawer = [];
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			navigationDrawer.DrawerSettings.Transition = Transition.Push;
-			SetPrivateField(navigationDrawer, "_velocityY", -550);
+			SetPrivateField(navigationDrawer, "_velocityY", 550);
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
 			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.False(expectedValue);
@@ -1348,7 +1349,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
 			SetPrivateField(navigationDrawer, "_isRTL", true);
 			InvokePrivateMethod(navigationDrawer, "UpdateDrawerFlowDirection");
-			Assert.Equal(FlowDirection.RightToLeft, navigationDrawer.ContentView.FlowDirection);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, _mainContentGrid?.FlowDirection);
 		}
 
 		[Fact]
@@ -1371,7 +1373,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Right;
 			navigationDrawer.DrawerSettings.Transition = transition;
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(0, navigationDrawer.ContentView.TranslationX);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(0, _mainContentGrid?.TranslationX);
 
 		}
 
@@ -1405,7 +1408,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Left;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(0, navigationDrawer.ContentView.TranslationX);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(0, _mainContentGrid?.TranslationX);
 		}
 
 		[Theory]
@@ -1418,7 +1422,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Transition = transition;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(navigationDrawer.DrawerSettings.DrawerWidth, navigationDrawer.ContentView.TranslationX);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(navigationDrawer.DrawerSettings.DrawerWidth, _mainContentGrid?.TranslationX);
 		}
 
 		[Fact]
@@ -1428,7 +1433,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(0, navigationDrawer.ContentView.TranslationY);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(0, _mainContentGrid?.TranslationY);
 		}
 
 		[Fact]
@@ -1438,7 +1444,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			navigationDrawer.DrawerSettings.Transition = Transition.Push;
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(0, navigationDrawer.ContentView.TranslationY);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(0, _mainContentGrid?.TranslationY);
 		}
 
 		[Fact]
@@ -1448,7 +1455,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(0, navigationDrawer.ContentView.TranslationY);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(0, _mainContentGrid?.TranslationY);
 		}
 
 		[Theory]
@@ -1461,7 +1469,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Transition = transition;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(navigationDrawer.DrawerSettings.DrawerHeight, navigationDrawer.ContentView.TranslationY);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(navigationDrawer.DrawerSettings.DrawerHeight, _mainContentGrid?.TranslationY);
 		}
 
 		[Fact]
@@ -1471,7 +1480,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(0, navigationDrawer.ContentView.TranslationY);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(0, _mainContentGrid?.TranslationY);
 		}
 
 		[Theory]
@@ -1484,7 +1494,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Transition = transition;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(-navigationDrawer.DrawerSettings.DrawerHeight, navigationDrawer.ContentView.TranslationY);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(-navigationDrawer.DrawerSettings.DrawerHeight, _mainContentGrid?.TranslationY);
 		}
 
 		[Theory]
@@ -1496,7 +1507,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			navigationDrawer.DrawerSettings.Transition = transition;
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			Assert.Equal(0, navigationDrawer.ContentView.TranslationY);
+			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
+			Assert.Equal(0, _mainContentGrid?.TranslationY);
 		}
 
 		[Fact]
