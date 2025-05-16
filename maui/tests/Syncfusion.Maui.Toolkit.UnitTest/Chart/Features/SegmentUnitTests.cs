@@ -1,7 +1,7 @@
 ﻿using System.Data;
 using Syncfusion.Maui.Toolkit.Charts;
 
-namespace Syncfusion.Maui.Toolkit.UnitTest
+namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class SegmentUnitTests : BaseUnitTest
 	{
