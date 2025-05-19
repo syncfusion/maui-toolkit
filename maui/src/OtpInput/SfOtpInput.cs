@@ -128,6 +128,11 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// Represents the previous value of the OTP input.
 		/// </summary>
 		string? _oldText;
+
+		/// <summary>
+		/// Stores the last UITextField to unhook event handlers.
+		/// </summary>
+		UIKit.UITextField? _lastPlatformView;
 #endif
 
 		/// <summary>
@@ -2241,6 +2246,15 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         {
             if (sender is OTPEntry textBox)
             {
+#if MACCATALYST || IOS
+				// Unhook from previous handler if exists
+				if (_lastPlatformView is not null)
+				{
+					_lastPlatformView.ShouldChangeCharacters -= ValidateText;
+					_lastPlatformView = null;
+				}
+#endif
+
 #if WINDOWS
                 if ((sender as OTPEntry)?.Handler is not null && (sender as OTPEntry)?.Handler?.PlatformView is Microsoft.UI.Xaml.Controls.TextBox platformView)
                 {
@@ -2256,10 +2270,11 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
                 }
 
 #elif MACCATALYST || IOS
-                if ((sender as OTPEntry)?.Handler is not null && (sender as OTPEntry)?.Handler?.PlatformView is UIKit.UITextField platformView)
+				if ((sender as OTPEntry)?.Handler is not null && (sender as OTPEntry)?.Handler?.PlatformView is UIKit.UITextField platformView)
                 {
                     platformView.ShouldChangeCharacters += ValidateText;
-                }
+					_lastPlatformView = platformView;
+				}
 #endif
 			}
 		}

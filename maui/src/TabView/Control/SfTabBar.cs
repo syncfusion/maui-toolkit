@@ -3213,12 +3213,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// </summary>
         protected override void OnHandlerChanged()
         {
-            base.OnHandlerChanged();
-            if (Handler == null)
-            {
-                Children.Clear();
-            }
-        }
+			if (Handler == null)
+			{
+				if (Items != null)
+				{
+					foreach (var item in Items)
+					{
+						item.Touched -= OnTabItemTouched;
+					}
+				}
+			}
+
+			base.OnHandlerChanged();
+		}
 
         #endregion
 
