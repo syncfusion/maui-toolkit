@@ -270,15 +270,20 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				return;
 			}
 
-			const string shadowColor = "#59000000";
+			Color shadowColor = Color.FromArgb("#59000000");
 			Paint solidPaint = PullToRefresh.ProgressBackground;
 			canvas.SetFillPaint(solidPaint, _fillRect);
 #if ANDROID
 			const int androidShadowSize = 4;
-			canvas.SetShadow(new SizeF(0, 1), androidShadowSize, Color.FromArgb(shadowColor));
+			if (PullToRefresh.ProgressBackground is SolidColorBrush brush && brush.Color.Alpha == 0)
+			{
+				shadowColor = Color.FromArgb("#00000000");
+			}
+
+			canvas.SetShadow(new SizeF(0, 1), androidShadowSize, shadowColor);
 #else
 			const int defaultShadowSize = 3;
-			canvas.SetShadow(new SizeF(0, 1), defaultShadowSize, Color.FromArgb(shadowColor));
+			canvas.SetShadow(new SizeF(0, 1), defaultShadowSize, shadowColor);
 #endif
 			canvas.FillEllipse((float)_fillRect.X, (float)_fillRect.Y, (float)_fillRect.Width, (float)_fillRect.Height);
         }
