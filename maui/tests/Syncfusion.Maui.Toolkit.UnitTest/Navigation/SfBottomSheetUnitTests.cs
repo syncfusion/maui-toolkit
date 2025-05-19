@@ -38,7 +38,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(4d, _bottomSheet.GrabberHeight);
 			Assert.Equal(32d, _bottomSheet.GrabberWidth);
 			Assert.Equal(12d, _bottomSheet.GrabberCornerRadius);
-			Assert.Equal(150d,_bottomSheet.AnimationDuration);
+			Assert.Equal(150d, _bottomSheet.AnimationDuration);
 			if (_bottomSheet.GrabberBackground is SolidColorBrush grabberBrush)
 			{
 				var grabberColor = grabberBrush.Color;
@@ -477,12 +477,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Theory]
-		[InlineData(500d,500d)]
-		[InlineData(0d,0d)]
-		[InlineData(-500d,-500d)]
-		public void AnimationDuration(double input, double expected)
+		[InlineData(500d, 500d)]
+		[InlineData(0d, 0d)]
+		[InlineData(-500d, -500d)]
+		public void AnimationDurationProperty_ReturnsSetValue(double input, double expected)
 		{
-			_bottomSheet.AnimationDuration=input;
+			_bottomSheet.AnimationDuration = input;
 
 			var actual = _bottomSheet.AnimationDuration;
 
@@ -749,10 +749,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-		public void SetAnimationDuration()
+		public void GetClampedAnimationDuration()
 		{
 			_bottomSheet.AnimationDuration = -500;
-			var actual = InvokePrivateMethod(_bottomSheet, "SetAnimationDuration");
+			var actual = InvokePrivateMethod(_bottomSheet, "GetClampedAnimationDuration");
 			Assert.Equal(0, actual);
 		}
 

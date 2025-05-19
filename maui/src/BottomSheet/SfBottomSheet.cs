@@ -1201,7 +1201,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		}
 
 		/// <summary> 
-		/// Gets or sets a value that can be used to adjust the duration of the opening and closing animations.
+		/// Gets or sets the duration, in milliseconds, for the opening and closing animations.
 		/// </summary> 
 		/// <value> 
 		/// It accepts double values, and the default value is 150ms.
@@ -1287,9 +1287,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		}
 
 		/// <summary>
-		/// Updates the animation duration with the given value.
+		/// Returns the value of <c>AnimationDuration</c>, ensuring it is clamped to a non-negative integer.
+		/// This method is useful when passing the duration to animation APIs that require a <c>uint</c> value,
+		/// preventing issues caused by negative durations.
 		/// </summary>
-		int SetAnimationDuration()
+		/// <returns>A non-negative integer representing the animation duration.</returns>
+		int GetClampedAnimationDuration()
 		{
 			return (int)Math.Max(0, AnimationDuration);
 		}
@@ -2135,13 +2138,13 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				_overlayGrid.AbortAnimation("overlayGridAnimation");
 			}
 
-			int animationDuration =this.SetAnimationDuration();
-		    const int topPadding = 2;
+			int animationDuration = this.GetClampedAnimationDuration();
+			const int topPadding = 2;
 			_isSheetOpen = true;
 			if (_bottomSheet is not null)
 			{
 				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition + topPadding);
-				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) =>
+				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) => 
 				{
 					UpdateBottomSheetHeight();
 					onFinish?.Invoke();
@@ -2177,6 +2180,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 					var overlayGridAnimation = new Animation(d =>
 					{
+						// Ensure the opacity is only updated with valid numeric values to avoid rendering issues.
 						if (!double.IsNaN(d))
 						{
 							_overlayGrid.Opacity = d;
