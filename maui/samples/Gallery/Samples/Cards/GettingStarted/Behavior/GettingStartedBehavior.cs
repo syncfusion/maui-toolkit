@@ -35,7 +35,7 @@ namespace Syncfusion.Maui.ControlsGallery.Cards.SfCards
         /// <summary>
         /// This combo box is used to choose the indicator position of the cards.
         /// </summary>
-        Picker? _indicatorPositionComboBox;
+        Microsoft.Maui.Controls.Picker? _indicatorPositionComboBox;
 
         /// <summary>
         /// Begins when the behavior attached to the view 
@@ -55,7 +55,7 @@ namespace Syncfusion.Maui.ControlsGallery.Cards.SfCards
             _indicatorSwitch = sampleView.Content.FindByName<Switch>("indicatorSwitch");
             _indicatorPositionOption = sampleView.Content.FindByName<Grid>("indicatorPositionOption");
 
-            _indicatorPositionComboBox = sampleView.Content.FindByName<Picker>("indicatorPositionComboBox");
+            _indicatorPositionComboBox = sampleView.Content.FindByName<Microsoft.Maui.Controls.Picker>("indicatorPositionComboBox");
             _indicatorPositionComboBox.ItemsSource = Enum.GetValues(typeof(CardIndicatorPosition)).Cast<CardIndicatorPosition>().ToList();
             _indicatorPositionComboBox.SelectedIndex = 0;
             _indicatorPositionComboBox.SelectedIndexChanged += IndicatorPositionComboBox_SelectedIndexChanged;
@@ -110,7 +110,7 @@ namespace Syncfusion.Maui.ControlsGallery.Cards.SfCards
         /// <param name="e">Event Arguments.</param>
         void IndicatorPositionComboBox_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (sender is Picker picker && _firstCard != null && _secondCard != null && _thirdCard != null && _fourthCard != null && _fifthCard != null)
+            if (sender is Microsoft.Maui.Controls.Picker picker && _firstCard != null && _secondCard != null && _thirdCard != null && _fourthCard != null && _fifthCard != null)
             {
                 string? selectedPosition = picker.SelectedItem.ToString();
                 switch (selectedPosition)

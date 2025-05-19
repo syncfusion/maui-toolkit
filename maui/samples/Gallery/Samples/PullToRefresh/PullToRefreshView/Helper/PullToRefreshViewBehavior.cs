@@ -9,7 +9,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	{
 		CollectionView? _listView;
 		Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh? _pullToRefresh;
-		Picker? _transitionType;
+		Microsoft.Maui.Controls.Picker? _transitionType;
 		PullToRefreshViewModel? _viewModel;
 
 		/// <summary>
@@ -31,7 +31,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			bindable.BindingContext = _viewModel;
 			_pullToRefresh = bindable.FindByName<Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh>("pullToRefresh");
 			_listView = bindable.FindByName<CollectionView>("listView");
-			_transitionType = bindable.FindByName<Picker>("comboBox");
+			_transitionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("comboBox");
 			_pullToRefresh.PullingThreshold = 100;
 			_listView.BindingContext = _viewModel;
 			_listView.ItemsSource = _viewModel.SelectedData;

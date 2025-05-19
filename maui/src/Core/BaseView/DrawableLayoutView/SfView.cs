@@ -54,6 +54,18 @@ namespace Syncfusion.Maui.Toolkit
             }
         }
 
+#if WINDOWS
+        /// <summary>
+        /// If the SfView drawing canvas size exceeds MaximumBitmapSizeInPixels when adding more items,
+        /// an OS limitation with CanvasImageSource size (refer: https://github.com/dotnet/maui/issues/3785)
+        /// requires restricting the draw function when semantics or accessibility are used on SfView. This prevents OS limitation issues on the Windows platform.
+        /// For accessibility, SfView should be enabled with AboveContentWithTouch to add a native user control and override the AutomationPeer.
+        /// Virtualization isn't possible because automation peers must be added initially to access scrollable content. 
+        /// Since accessibility highlights are managed by native framework automation peers, SfView canvas drawing is unnecessary.
+        /// </summary>
+        internal bool IsCanvasNeeded { get; set; } = true;
+#endif
+
         /// <summary>
         /// This property is used to ignore the safe area.
         /// </summary>

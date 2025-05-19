@@ -71,14 +71,14 @@
                     </Grid.ColumnDefinitions>
                     <Label  Grid.Row="0" Grid.Column="0" Text="Zoom Mode"  HorizontalOptions="Start" Padding="5"  FontSize="15"/>
                     <Picker Grid.Row="0" Grid.Column="1" Margin="0,0,1,0"
-                          ItemsSource="{Binding Source={x:Reference ViewModel},Path=ZoomModeType}"
-                          SelectedItem="{Binding Source={x:Reference ViewModel},Path=ZoomModeType[2]}"
-                          VerticalOptions="Start" HorizontalOptions="Fill"
-                          x:Name="ZoomModePicker"
-                          SelectedIndex="2"
-                          SelectedIndexChanged="ZoomModeChanged"
-                          Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
-                          TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
+                            ItemsSource="{Binding Source={x:Reference ViewModel},Path=ZoomModeType}"
+                            SelectedItem="{Binding Source={x:Reference ViewModel},Path=ZoomModeType[2]}"
+                            VerticalOptions="Start" HorizontalOptions="Fill"
+                            x:Name="ZoomModePicker"
+                            SelectedIndex="2"
+                            SelectedIndexChanged="ZoomModeChanged"
+                            Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                            TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                     </Picker>
                 </Grid>
                 <Grid>

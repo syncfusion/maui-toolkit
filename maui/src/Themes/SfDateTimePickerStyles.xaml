@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker"
+             x:Class="Syncfusion.Maui.Toolkit.Picker.SfDateTimePickerStyles">
+
+    <Style TargetType="picker:SfDateTimePicker">
+        <Setter Property="BackgroundColor" Value="{DynamicResource SfDateTimePickerNormalBackground}"/>
+        <Setter Property="ColumnDividerColor" Value="{DynamicResource SfDateTimePickerNormalColumnDividerColor}" />
+    </Style>
+
+    <Style TargetType="picker:DateTimePickerHeaderView">
+        <Setter Property="Background"  Value="{DynamicResource SfDateTimePickerNormalHeaderBackground}"/>
+        <Setter Property="DividerColor"  Value="{DynamicResource SfDateTimePickerNormalHeaderDividerColor}"/>
+
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <picker:PickerTextStyle TextColor="{DynamicResource SfDateTimePickerNormalHeaderTextColor}" FontSize="{DynamicResource SfDateTimePickerNormalHeaderFontSize}" />
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="SelectionTextStyle">
+            <Setter.Value>
+                <picker:PickerTextStyle TextColor="{DynamicResource SfDateTimePickerHeaderSelectionTextColor}" FontSize="{DynamicResource SfDateTimePickerHeaderSelectionFontSize}"/>
+            </Setter.Value>
+        </Setter>
+
+    </Style>
+
+    <Style TargetType="picker:DateTimePickerColumnHeaderView">
+        <Setter Property="Background"  Value="{DynamicResource SfDateTimePickerNormalColumnHeaderBackground}"/>
+        <Setter Property="DividerColor"  Value="{DynamicResource SfDateTimePickerNormalColumnHeaderDividerColor}"/>
+
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <picker:PickerTextStyle TextColor="{DynamicResource SfDateTimePickerNormalColumnHeaderTextColor}" FontSize="{DynamicResource SfDateTimePickerNormalColumnHeaderFontSize}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

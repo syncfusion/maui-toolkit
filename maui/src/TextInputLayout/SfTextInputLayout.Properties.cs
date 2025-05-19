@@ -211,7 +211,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				_defaultContainerBackground,
 				BindingMode.Default,
 				null,
-				OnPropertyChanged);
+				OnContainerBackgroundPropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="OutlineCornerRadius"/> bindable property.
@@ -633,19 +633,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			 typeof(Color),
 			 typeof(LabelStyle),
 			 Color.FromArgb("#49454F"));
-
-		/// <summary>
-		/// Identifies the <see cref="OutlinedContainerBackground"/> bindable property.
-		/// </summary>
-		/// <remarks>
-		/// The <see cref="OutlinedContainerBackground"/> property determines the background color of the outline container in <see cref="SfTextInputLayout"/>.
-		/// </remarks>
-		internal static readonly BindableProperty OutlinedContainerBackgroundProperty =
-		 BindableProperty.Create(
-			 nameof(OutlinedContainerBackground),
-			 typeof(Brush),
-			 typeof(SfTextInputLayout),
-			 new SolidColorBrush(Colors.Transparent));
 
 		/// <summary>
 		/// Identifies the <see cref="ClearButtonPath"/> bindable property.
@@ -1612,7 +1599,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// inputLayout.Content = new Entry();
 		/// ]]></code>
 		/// </example>
-		public LabelStyle HintLabelStyle
+		public LabelStyle? HintLabelStyle
 		{
 			get { return (LabelStyle)GetValue(HintLabelStyleProperty); }
 			set { SetValue(HintLabelStyleProperty, value); }
@@ -1643,7 +1630,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// inputLayout.Content = new Entry();
 		/// ]]></code>
 		/// </example>
-		public LabelStyle HelperLabelStyle
+		public LabelStyle? HelperLabelStyle
 		{
 			get { return (LabelStyle)GetValue(HelperLabelStyleProperty); }
 			set { SetValue(HelperLabelStyleProperty, value); }
@@ -1675,7 +1662,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// inputLayout.Content = new Entry();
 		/// ]]></code>
 		/// </example>
-		public LabelStyle ErrorLabelStyle
+		public LabelStyle? ErrorLabelStyle
 		{
 			get { return (LabelStyle)GetValue(ErrorLabelStyleProperty); }
 			set { SetValue(ErrorLabelStyleProperty, value); }
@@ -1705,15 +1692,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			get { return (Color)GetValue(HelperTextColorProperty); }
 			set { SetValue(HelperTextColorProperty, value); }
-		}
-
-		/// <summary>
-		/// Gets or sets the color value of Outlined ContainerBackground
-		/// </summary>
-		internal Brush OutlinedContainerBackground
-		{
-			get { return (Brush)GetValue(OutlinedContainerBackgroundProperty); }
-			set { SetValue(OutlinedContainerBackgroundProperty, value); }
 		}
 
 		/// <summary>
@@ -1779,7 +1757,18 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// <summary>
 		/// Gets the value of the input text of the <see cref="SfTextInputLayout"/>.
 		/// </summary>
-		public string Text { get; internal set; } = string.Empty;
+		public string Text
+		{
+			get => _text;
+			internal set
+			{
+				if (value != _text)
+				{
+					_text = value;
+					HandleSemanticsReset();
+				}
+			}
+		}
 
 		/// <summary>
 		/// Gets a value indicating whether the background mode is outline.
@@ -2151,6 +2140,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				inputLayout.ChangeVisualState();
 				inputLayout.StartAnimation();
+				inputLayout.ResetSemantics();
 			}
 		}
 
@@ -2207,7 +2197,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			if (bindable is SfTextInputLayout inputLayout && newValue is bool value)
 			{
-				if (inputLayout.Content is InputView || inputLayout.Content is Picker)
+				if (inputLayout.Content is InputView || inputLayout.Content is Microsoft.Maui.Controls.Picker)
 				{
 					inputLayout.Content.Opacity = value ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
 				}
@@ -2382,14 +2372,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 		static void OnContainerTypePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is SfTextInputLayout inputLayout && inputLayout.Content != null)
+			if (bindable is SfTextInputLayout inputLayout)
 			{
 				inputLayout.UpdateContentMargin(inputLayout.Content);
-				if (inputLayout._initialLoaded)
-				{
+				if (inputLayout._initialLoaded && inputLayout.Content != null)
 					inputLayout.UpdateViewBounds();
-				}
-
 				inputLayout.ChangeVisualState();
 			}
 		}
@@ -2398,6 +2385,16 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			if (bindable is SfTextInputLayout inputLayout && inputLayout._initialLoaded)
 			{
+				inputLayout.UpdateViewBounds();
+				inputLayout.ResetSemantics();
+			}
+		}
+
+		static void OnContainerBackgroundPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfTextInputLayout inputLayout)
+			{
+				inputLayout._outlinedContainerBackground = (Brush)newValue;
 				inputLayout.UpdateViewBounds();
 			}
 		}

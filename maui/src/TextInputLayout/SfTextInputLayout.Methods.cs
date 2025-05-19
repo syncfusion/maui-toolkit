@@ -251,6 +251,35 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		#region Private Methods
 
 		/// <summary>
+		/// This refresh the semantic nodes of the textinputlayout
+		/// </summary>
+		void ResetSemantics()
+		{
+			if (_textInputLayoutSemanticsNodes != null)
+			{
+				_textInputLayoutSemanticsNodes.Clear();
+				this.InvalidateSemantics();
+			}
+		}
+
+		/// <summary>
+		/// Resets semantics on first character input or when text is cleared.
+		/// </summary>
+		void HandleSemanticsReset()
+		{
+			if (string.IsNullOrEmpty(_text))
+			{
+				_hasResetSemantics = false;
+				ResetSemantics();
+			}
+			else if (_text.Length == 1 && !_hasResetSemantics)
+			{
+				ResetSemantics();
+				_hasResetSemantics = true;
+			}
+		}
+
+		/// <summary>
 		/// Gets the button size based on the vertical alignment and icon templates.
 		/// </summary>
 		/// <returns>
@@ -597,7 +626,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				ConfigureWindowsEntry(windowEntry);
 			}
-			else if (sender is Picker picker && picker.Handler != null && picker.Handler.PlatformView is Microsoft.UI.Xaml.Controls.ComboBox windowPicker)
+			else if (sender is Microsoft.Maui.Controls.Picker picker && picker.Handler != null && picker.Handler.PlatformView is Microsoft.UI.Xaml.Controls.ComboBox windowPicker)
 			{
 				ConfigureWindowsPicker(windowPicker);
 			}
@@ -787,7 +816,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 						inputView.TextChanged -= OnTextInputViewTextChanged;
 						inputView.HandlerChanged -= OnTextInputViewHandlerChanged;
 						break;
-					case Picker picker:
+					case Microsoft.Maui.Controls.Picker picker:
 						picker.Focused -= OnTextInputViewFocused;
 						picker.Unfocused -= OnTextInputViewUnfocused;
 						picker.HandlerChanged -= OnTextInputViewHandlerChanged;
@@ -926,7 +955,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 						inputView.TextChanged += OnTextInputViewTextChanged;
 						inputView.HandlerChanged += OnTextInputViewHandlerChanged;
 						break;
-					case Picker picker:
+					case Microsoft.Maui.Controls.Picker picker:
 						picker.Focused += OnTextInputViewFocused;
 						picker.Unfocused += OnTextInputViewUnfocused;
 						picker.HandlerChanged += OnTextInputViewHandlerChanged;
@@ -1744,36 +1773,39 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		void UpdateHintColor()
 		{
-			if (!HintLabelStyle.TextColor.Equals(Color.FromRgba(0, 0, 0, 0.87)))
+			if(HintLabelStyle != null)
 			{
-				_internalHintLabelStyle.TextColor = HintLabelStyle.TextColor;
-			}
-			else
-			{
-				if (Application.Current != null && !Application.Current.Resources.TryGetValue("SfTextInputLayoutTheme", out _))
+				if (!HintLabelStyle.TextColor.Equals(Color.FromRgba(0, 0, 0, 0.87)))
 				{
-					_internalHintLabelStyle.TextColor = IsEnabled ? ((IsLayoutFocused || HasError) && Stroke != null) ? Stroke : HintLabelStyle.TextColor : DisabledColor;
+					_internalHintLabelStyle.TextColor = HintLabelStyle.TextColor;
 				}
 				else
 				{
-					if (IsEnabled)
+					if (Application.Current != null && !Application.Current.Resources.TryGetValue("SfTextInputLayoutTheme", out _))
 					{
-						if (IsLayoutFocused)
-						{
-							SetDynamicResource(HintTextColorProperty, "SfTextInputLayoutFocusedHintTextColor");
-							_internalHintLabelStyle.TextColor = HintTextColor;
-						}
-						else
-						{
-							SetDynamicResource(HintTextColorProperty, "SfTextInputLayoutHintTextColor");
-							_internalHintLabelStyle.TextColor = HintTextColor;
-						}
-
+						_internalHintLabelStyle.TextColor = IsEnabled ? ((IsLayoutFocused || HasError) && Stroke != null) ? Stroke : HintLabelStyle.TextColor : DisabledColor;
 					}
 					else
 					{
-						SetDynamicResource(HintTextColorProperty, "SfTextInputLayoutDisabledHintTextColor");
-						_internalHintLabelStyle.TextColor = HintTextColor;
+						if (IsEnabled)
+						{
+							if (IsLayoutFocused)
+							{
+								SetDynamicResource(HintTextColorProperty, "SfTextInputLayoutFocusedHintTextColor");
+								_internalHintLabelStyle.TextColor = HintTextColor;
+							}
+							else
+							{
+								SetDynamicResource(HintTextColorProperty, "SfTextInputLayoutHintTextColor");
+								_internalHintLabelStyle.TextColor = HintTextColor;
+							}
+
+						}
+						else
+						{
+							SetDynamicResource(HintTextColorProperty, "SfTextInputLayoutDisabledHintTextColor");
+							_internalHintLabelStyle.TextColor = HintTextColor;
+						}
 					}
 				}
 			}
@@ -1784,27 +1816,30 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		void UpdateHelperTextColor()
 		{
-			if (!HelperLabelStyle.TextColor.Equals(Color.FromRgba(0, 0, 0, 0.87)))
+			if(HelperLabelStyle != null)
 			{
-				_internalHelperLabelStyle.TextColor = HelperLabelStyle.TextColor;
-			}
-			else
-			{
-				if (Application.Current != null && !Application.Current.Resources.TryGetValue("SfTextInputLayoutTheme", out _))
+				if (!HelperLabelStyle.TextColor.Equals(Color.FromRgba(0, 0, 0, 0.87)))
 				{
-					_internalHelperLabelStyle.TextColor = IsEnabled ? ((HasError) && Stroke != null) ? Stroke : HelperLabelStyle.TextColor : DisabledColor;
+					_internalHelperLabelStyle.TextColor = HelperLabelStyle.TextColor;
 				}
 				else
 				{
-					if (IsEnabled)
+					if (Application.Current != null && !Application.Current.Resources.TryGetValue("SfTextInputLayoutTheme", out _))
 					{
-						SetDynamicResource(HelperTextColorProperty, "SfTextInputLayoutHelperTextColor");
-						_internalHelperLabelStyle.TextColor = HelperTextColor;
+						_internalHelperLabelStyle.TextColor = IsEnabled ? ((HasError) && Stroke != null) ? Stroke : HelperLabelStyle.TextColor : DisabledColor;
 					}
 					else
 					{
-						SetDynamicResource(HelperTextColorProperty, "SfTextInputLayoutDisabledHelperTextColor");
-						_internalHelperLabelStyle.TextColor = HelperTextColor;
+						if (IsEnabled)
+						{
+							SetDynamicResource(HelperTextColorProperty, "SfTextInputLayoutHelperTextColor");
+							_internalHelperLabelStyle.TextColor = HelperTextColor;
+						}
+						else
+						{
+							SetDynamicResource(HelperTextColorProperty, "SfTextInputLayoutDisabledHelperTextColor");
+							_internalHelperLabelStyle.TextColor = HelperTextColor;
+						}
 					}
 				}
 			}
@@ -1815,7 +1850,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		void UpdateErrorTextColor()
 		{
-			_internalErrorLabelStyle.TextColor = IsEnabled ? ErrorLabelStyle.TextColor.Equals(Color.FromRgba(0, 0, 0, 0.87)) ? Stroke : ErrorLabelStyle.TextColor : DisabledColor;
+			if(ErrorLabelStyle != null)
+			{
+				_internalErrorLabelStyle.TextColor = IsEnabled ? ErrorLabelStyle.TextColor.Equals(Color.FromRgba(0, 0, 0, 0.87)) ? Stroke : ErrorLabelStyle.TextColor : DisabledColor;
+			}
 		}
 
 		/// <summary>
@@ -1823,7 +1861,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		void UpdateCounterTextColor()
 		{
-			_internalCounterLabelStyle.TextColor = IsEnabled ? HasError ? ErrorLabelStyle.TextColor.Equals(Color.FromRgba(0, 0, 0, 0.87)) ? Stroke : ErrorLabelStyle.TextColor : CounterLabelStyle.TextColor : DisabledColor;
+			if(ErrorLabelStyle != null)
+			{
+				_internalCounterLabelStyle.TextColor = IsEnabled ? HasError ? ErrorLabelStyle.TextColor.Equals(Color.FromRgba(0, 0, 0, 0.87)) ? Stroke : ErrorLabelStyle.TextColor : CounterLabelStyle.TextColor : DisabledColor;
+			}
 		}
 
 		/// <summary>
@@ -1975,20 +2016,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 		void SetOutlinedContainerBackground(ICanvas canvas)
 		{
-			if (Application.Current != null && Application.Current.Resources.TryGetValue("SfTextInputLayoutTheme", out _))
+			if (_outlinedContainerBackground is SolidColorBrush backgroundColor)
 			{
-				SetDynamicResource(OutlinedContainerBackgroundProperty, "SfTextInputLayoutOutlinedContainerBackground");
-				if (OutlinedContainerBackground is SolidColorBrush backgroundColor)
-				{
-					canvas.FillColor = backgroundColor.Color;
-				}
-			}
-			else
-			{
-				if (ContainerBackground is SolidColorBrush backgroundColor)
-				{
-					canvas.FillColor = backgroundColor.Color;
-				}
+				canvas.FillColor = backgroundColor.Color;
 			}
 		}
 

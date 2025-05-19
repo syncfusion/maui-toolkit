@@ -136,7 +136,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="oldValue">Property old value.</param>
         private void RaisePropertyChanged(string propertyName, object? oldValue = null)
         {
-            this.CalendarPropertyChanged?.Invoke(this, new CalendarPropertyChangedEventArgs(propertyName) { OldValue = oldValue });
+            CalendarPropertyChanged?.Invoke(this, new CalendarPropertyChangedEventArgs(propertyName) { OldValue = oldValue });
         }
 
         /// <summary>

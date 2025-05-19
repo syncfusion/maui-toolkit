@@ -32,6 +32,7 @@ namespace Syncfusion.Maui.Toolkit.Hosting
                 handlers.AddHandler(typeof(IDrawableLayout), typeof(SfViewHandler));
                 handlers.AddHandler(typeof(ICarousel), typeof(CarouselHandler));
 				handlers.AddHandler(typeof(WindowOverlayContainer), typeof(OverlayContainerHandler));
+                handlers.AddHandler(typeof(SfPickerView), typeof(SfPickerScrollViewHandler));
 #if __ANDROID__
                 handlers.AddHandler(typeof(SnapLayout), typeof(SnapLayoutHandler));
 #endif

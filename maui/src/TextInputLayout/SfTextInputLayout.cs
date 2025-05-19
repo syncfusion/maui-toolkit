@@ -179,10 +179,20 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// </summary>
         readonly double _defaultLeadAndTrailViewWidth = 24;
 
-        /// <summary>
-        /// Gets or sets a value of leading view width.
-        /// </summary>
-        double _leadViewWidth = 0;
+		/// <summary>
+		/// The list to add the bounds values of drawing elements as nodes.
+		/// </summary>
+		readonly List<SemanticsNode> _textInputLayoutSemanticsNodes = new();
+
+		/// <summary>
+		/// List of semantic nodes for numeric entry.
+		/// </summary>
+		readonly List<SemanticsNode> _numericSemanticsNodes = new();
+
+		/// <summary>
+		/// Gets or sets a value of leading view width.
+		/// </summary>
+		double _leadViewWidth = 0;
 
         /// <summary>
         /// Gets or sets a value of trailing view width.
@@ -225,11 +235,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// </summary>
         bool _isPasswordTextVisible = false;
 
+		Brush _outlinedContainerBackground = Colors.Transparent;
+
 #if !ANDROID
-        /// <summary>
-        /// Gets or sets a value indicating the clear icon or toggle icon is pressing.
-        /// </summary>
-        internal bool IsIconPressed { get; private set; } = false;
+		/// <summary>
+		/// Gets or sets a value indicating the clear icon or toggle icon is pressing.
+		/// </summary>
+		internal bool IsIconPressed { get; private set; } = false;
 #endif
 
 		/// <summary>
@@ -277,10 +289,25 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// </summary>
         float _fontsize = DefaultHintFontSize;
 
-        /// <summary>
-        /// Gets the stroke color of the clear button
-        /// </summary>
-        static readonly Color ClearIconStrokeColor = Color.FromArgb("#49454F");
+		/// <summary>
+		/// The field sets and checks the new size of the drawn elements.
+		/// </summary>
+		Size _controlSize = Size.Zero;
+
+		/// <summary>
+		/// Indicates whether semantics need to be reset.
+		/// </summary>
+		bool _hasResetSemantics = false;
+
+		/// <summary>
+		/// The field sets and checks the text.
+		/// </summary>
+		string _text = string.Empty;
+
+		/// <summary>
+		/// Gets the stroke color of the clear button
+		/// </summary>
+		static readonly Color ClearIconStrokeColor = Color.FromArgb("#49454F");
 
         readonly EffectsRenderer _effectsRenderer;
 
@@ -362,7 +389,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         {
             ThemeElement.InitializeThemeResources(this, "SfTextInputLayoutTheme");
             DrawingOrder = DrawingOrder.BelowContent;
-            HintFontSize = (float)HintLabelStyle.FontSize;
+			if(HintLabelStyle != null)
+			{
+				HintFontSize = (float)HintLabelStyle.FontSize;
+			}
             this.AddTouchListener(this);
             _effectsRenderer = new EffectsRenderer(this);
             SetRendererBasedOnPlatform();
@@ -601,7 +631,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
         void HandlePickerView(object newValue)
         {
-            if (newValue is Picker picker)
+            if (newValue is Microsoft.Maui.Controls.Picker picker)
             {
                 picker.Focused += OnTextInputViewFocused;
                 picker.Unfocused += OnTextInputViewUnfocused;
@@ -645,7 +675,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// <param name="e">Represents the event data</param>
         void OnPickerSelectedIndexChanged(object? sender, EventArgs e)
         {
-            var picker = sender as Picker;
+            var picker = sender as Microsoft.Maui.Controls.Picker;
             if (picker == null)
             {
                 return;
@@ -665,9 +695,118 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             }
             InvalidateDrawable();
         }
-#endregion
+
+		/// <summary>
+		/// Populates the list of numeric semantics nodes.
+		/// </summary>
+		/// <param name="content">The content object.</param>
+		void PopulateNumericSemanticsNodes(object? content)
+		{
+			_numericSemanticsNodes.Clear();
+
+			switch (content)
+			{
+				case SfNumericUpDown numericUpDown:
+					AddNumericUpDownNodes(numericUpDown);
+					break;
+				case SfNumericEntry when IsClearIconVisible:
+					AddClearButtonNodes(2);
+					break;
+			}
+		}
+
+		/// <summary>
+		/// Adds semantic nodes for the numeric up-down control.
+		/// </summary>
+		/// <param name="numericUpDown">The numeric up/down control.</param>
+		void AddNumericUpDownNodes(SfNumericUpDown numericUpDown)
+		{
+			bool isUpEnabled = numericUpDown.AutoReverse || numericUpDown._valueStates != ValueStates.Maximum;
+			bool isDownEnabled = numericUpDown.AutoReverse || numericUpDown._valueStates != ValueStates.Minimum;
+			AddUpDownNodes(numericUpDown, isUpEnabled, isDownEnabled);
+		}
+
+		/// <summary>
+		/// Adds semantic nodes for up-down buttons.
+		/// </summary>
+		void AddUpDownNodes(SfNumericUpDown numericUpDown, bool isUpEnabled, bool isDownEnabled)
+		{
+			bool isVerticalInline = numericUpDown.IsInlineVerticalPlacement();
+			bool isLeftAlignment = numericUpDown.UpDownButtonAlignment == UpDownButtonAlignment.Left;
+			bool addClearIconFirst = isVerticalInline ? !isLeftAlignment : !isVerticalInline && !isLeftAlignment;
+
+			if (addClearIconFirst && IsClearIconVisible)
+			{
+				AddClearButtonNodes(2);
+			}
+
+			AddSemanticsNode(isVerticalInline ? _downIconRectF : _upIconRectF, addClearIconFirst ? 3 : 2, "Up button", isUpEnabled);
+			AddSemanticsNode(isVerticalInline ? _upIconRectF : _downIconRectF, addClearIconFirst ? 4 : 3, "Down button", isDownEnabled);
+
+			if (!addClearIconFirst && IsClearIconVisible)
+			{
+				AddClearButtonNodes(4);
+			}
+		}
+
+		/// <summary>
+		/// Adds a semantic node for clear button.
+		/// </summary>
+		void AddClearButtonNodes(int index)
+		{
+			var tempBounds = _clearIconRectF;
+			tempBounds.Width = tempBounds.Height = IconSize;
+			AddSemanticsNode(tempBounds, index, "Clear button");
+		}
+
+		/// <summary>
+		/// Adds a semantic node with specified properties.
+		/// </summary>
+		void AddSemanticsNode(RectF bounds, int id, string description, bool isEnabled = true)
+		{
+			string stateDescription = isEnabled ? $"{description}, double tap to activate" : $"{description}, disabled";
+			if (bounds.Width > 0 && bounds.Height > 0)
+			{
+				_numericSemanticsNodes.Add(CreateSemanticsNode(id, new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height), stateDescription));
+			}
+		}
+
+		/// <summary>
+		/// Creates a semantic node with specified ID, bounds, and description.
+		/// </summary>
+		/// <param name="id">The ID of the semantics node.</param>
+		/// <param name="rect">The bounds of the node.</param>
+		/// <param name="description">The description associated with the node.</param>
+		/// <returns>A newly created SemanticsNode object.</returns>
+		SemanticsNode CreateSemanticsNode(int id, Rect rect, string description) =>
+			new SemanticsNode
+			{
+				Id = id,
+				Bounds = rect,
+				Text = description
+			};
+		#endregion
 
 		#region Override Methods
+
+		/// <summary>
+		/// Returns the semantics node list.
+		/// </summary>
+		/// <param name="width">The width of the element.</param>
+		/// <param name="height">The height of the element.</param>
+		/// <returns>A list of semantics nodes.</returns>
+		protected override List<SemanticsNode> GetSemanticsNodesCore(double width, double height)
+		{
+			Size newControlSize = new(Width, Height);
+			if (_controlSize == newControlSize && _textInputLayoutSemanticsNodes.Count != 0)
+			{
+				return _textInputLayoutSemanticsNodes;
+			}
+			_controlSize = newControlSize;
+			PopulateNumericSemanticsNodes(Content);
+			_textInputLayoutSemanticsNodes.AddRange(_numericSemanticsNodes);
+			return _textInputLayoutSemanticsNodes;
+		}
 
 		/// <summary>
 		/// Invoked when the size of the element is allocated.
@@ -718,17 +857,19 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 if (numericEntryContent.Children[0] is Entry numericInputView)
                 {
-					numericInputView.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-					AutomationProperties.SetIsInAccessibleTree(numericInputView, false); // Exclude numeric entry view from accessibility.
+#if ANDROID || IOS
+					numericInputView.Opacity = IsHintFloated ? 1 : 0.00001;
+#else
+					numericInputView.Opacity = IsHintFloated ? 1 : 0;
+#endif
 				}
             }
-            else if (newValue is Picker picker)
+            else if (newValue is Microsoft.Maui.Controls.Picker picker)
             {
                 if (DeviceInfo.Platform != DevicePlatform.WinUI)
                 {
 					picker.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
 				}
-				AutomationProperties.SetIsInAccessibleTree(picker, false); // Exclude picker from accessibility.
 			}
 
             base.OnContentChanged(oldValue, newValue);
@@ -737,8 +878,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 OnEnabledPropertyChanged(IsEnabled);
             }
-
 			SetCustomDescription(newValue);
+			ResetSemantics();
         }
 
 		/// <summary>
@@ -1238,7 +1379,16 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 WireEvents();
                 OnTextInputViewHandlerChanged(this.Content, new EventArgs());
             }
-        }
+			else
+			{
+				if (HintLabelStyle != null && HelperLabelStyle != null && ErrorLabelStyle != null)
+				{
+					HintLabelStyle = null;
+					ErrorLabelStyle = null;
+					HelperLabelStyle = null;
+				}
+			}
+		}
 
         #endregion
 

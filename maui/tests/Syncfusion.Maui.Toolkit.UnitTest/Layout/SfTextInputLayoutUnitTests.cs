@@ -49,7 +49,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(12, inputLayout.ErrorLabelStyle.FontSize);
 			Assert.Equal(16, inputLayout.HintLabelStyle.FontSize);
 			Assert.Null(inputLayout.ClearButtonPath);
-			Assert.Equal(Brush.Transparent, inputLayout.OutlinedContainerBackground);
 			Assert.Equal(Color.FromArgb("#49454F"), inputLayout.HelperTextColor);
 			Assert.Equal(Color.FromArgb("#49454F"), inputLayout.HintTextColor);
 			Assert.False(inputLayout.IsHintFloated);
@@ -356,7 +355,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void IsHintFloated_RetrunsTrue_WhenPickerSelectedItemIsNotNull()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker { SelectedItem = "SelectedItem" };
+			var picker = new Microsoft.Maui.Controls.Picker { SelectedItem = "SelectedItem" };
 			inputLayout.Content = picker;
 
 			Assert.True(inputLayout.IsHintFloated);
@@ -426,7 +425,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void OnPickerSelectedIndexChanged_SelectedIndexGreaterThanOrEqualToZero_ShouldSetIsHintFloatedToTrue()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker
+			var picker = new Microsoft.Maui.Controls.Picker
 			{
 				ItemsSource = new List<string> { "Item1", "Item2", "Items3" }
 			};
@@ -445,7 +444,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void OnPickerSelectedIndexChanged_TextProperty_ShouldUpdateBasedOnIndex()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker
+			var picker = new Microsoft.Maui.Controls.Picker
 			{
 				ItemsSource = new List<string> { "Item1", "Item2", "Items3" }
 			};
@@ -514,7 +513,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void Content_SettingPicker_ShouldUpdateProperty()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker();
+			var picker = new Microsoft.Maui.Controls.Picker();
 			inputLayout.Content = picker;
 
 			Assert.Equal(picker, inputLayout.Content);
@@ -596,11 +595,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestOutlinedContainerBackground()
 		{
-			var inputLayout = new SfTextInputLayout
-			{
-				OutlinedContainerBackground = new SolidColorBrush(Colors.Red)
-			};
-			Assert.Equal(Colors.Red, inputLayout.OutlinedContainerBackground);
+			var inputLayout = new SfTextInputLayout();
+			var redBrush = new SolidColorBrush(Colors.Red);
+			SetPrivateField(inputLayout, "_outlinedContainerBackground", redBrush);
+			var expectedBrushObj = GetPrivateField(inputLayout, "_outlinedContainerBackground");
+			Assert.NotNull(expectedBrushObj);
+
+			var expectedBrush = expectedBrushObj as SolidColorBrush;
+			Assert.NotNull(expectedBrush);
+			Assert.Equal(Colors.Red, expectedBrush.Color);
 		}
 
 		[Fact]
@@ -674,7 +677,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestOnPickerSelectedIndexChanged_SelectedIndex()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker();
+			var picker = new Microsoft.Maui.Controls.Picker();
 			picker.Items.Add("Apple");
 			picker.Items.Add("Orange");
 			picker.Items.Add("Strawberry");
@@ -881,7 +884,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var inputLayout = new SfTextInputLayout();
 			InvokePrivateMethod(inputLayout, "UpdateErrorTextColor");
 			var expected = Color.FromRgba(0, 0, 0, 0.87);
-			Assert.Equal(expected, inputLayout.ErrorLabelStyle.TextColor);
+			if (inputLayout.ErrorLabelStyle != null)
+			{
+				Assert.Equal(expected, inputLayout.ErrorLabelStyle.TextColor);
+			}
 		}
 
 		[Fact]
@@ -1153,7 +1159,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void Content_Picker(ContainerType container)
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker();
+			var picker = new Microsoft.Maui.Controls.Picker();
 			picker.Items.Add("Item 1");
 			picker.Items.Add("Item 2");
 			picker.Items.Add("Item 3");

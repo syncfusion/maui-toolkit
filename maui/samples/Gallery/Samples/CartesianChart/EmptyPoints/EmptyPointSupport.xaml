@@ -106,7 +106,7 @@
           <Picker WidthRequest="{OnPlatform MacCatalyst=70, iOS=70}" ItemsSource="{Binding Source={x:Reference ViewModel},Path=EmptyPointModeValues}" 
                   SelectedItem="{Binding Source={x:Reference ViewModel}, Path=EmptyPointModeValues[0]}"
                   VerticalOptions="Start" HorizontalOptions="Fill" 
-                  x:Name="picker"
+                  x:Name="picker" 
                   SelectedIndex="0"
                   SelectedIndexChanged="picker_SelectedIndexChanged"
                   Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:circularProgressBar="clr-namespace:Syncfusion.Maui.Toolkit.ProgressBar"
+                    x:Class="Syncfusion.Maui.Toolkit.ProgressBar.SfCircularProgressBarStyles">
+
+    <Style TargetType="circularProgressBar:SfCircularProgressBar">
+        <Setter Property="TrackFill" Value="{DynamicResource SfCircularProgressBarTrackColor}"/>
+        <Setter Property="ProgressFill" Value="{DynamicResource SfCircularProgressBarProgressColor}"/>
+    </Style>
+
+    <Style TargetType="circularProgressBar:ProgressGradientStop">
+        <Setter Property="Color" Value="{DynamicResource SfProgressBarProgressGradientStopColor}"/>
+    </Style>
+    
+</ResourceDictionary>

@@ -15,7 +15,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// <summary>
         /// The combo box that allows users to choose to whether to select date or a range.
         /// </summary>
-        Picker? _comboBox;
+        Microsoft.Maui.Controls.Picker? _comboBox;
 
         /// <summary>
         /// The label to display the selected date or range.
@@ -67,7 +67,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
             _label = bindable.Content.FindByName<Label>("label");
             _selectionLabel = bindable.Content.FindByName<Label>("selectionLabel");
 #endif
-            _comboBox = bindable.Content.FindByName<Picker>("comboBox");
+            _comboBox = bindable.Content.FindByName<Microsoft.Maui.Controls.Picker>("comboBox");
             _comboBox.ItemsSource = new List<string>() { "Date", "Range" };
             _comboBox.SelectedIndex = 0;
             _comboBox.SelectedIndexChanged += ComboBox_SelectionChanged;
@@ -125,7 +125,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// <param name="e">Event Arguments</param>
         void ComboBox_SelectionChanged(object? sender, EventArgs e)
         {
-            if (_calendar != null && sender is Picker picker && picker.SelectedItem is string selectionMode)
+            if (_calendar != null && sender is Microsoft.Maui.Controls.Picker picker && picker.SelectedItem is string selectionMode)
 			{
                 if (selectionMode != null)
                 {

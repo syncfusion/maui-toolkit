@@ -278,6 +278,19 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				defaultValueCreator: bindable => true);
 
 		/// <summary>
+		/// Identifies the <see cref="EnableRippleEffect"/> dependency property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="EnableRippleEffect"/> dependency property.
+		/// </value>
+		public static readonly BindableProperty EnableRippleEffectProperty =
+			BindableProperty.Create(
+				nameof(EnableRippleEffect), 
+				typeof(bool), 
+				typeof(SfSegmentedControl), 
+				true);
+
+		/// <summary>
 		/// Identifies the <see cref="HoveredBackground"/> dependency property.
 		/// </summary>
 		/// <value>
@@ -995,6 +1008,39 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		{
 			get { return (bool)GetValue(ShowSeparatorProperty); }
 			set { SetValue(ShowSeparatorProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the ripple effect animation should be applied to a segment item when it is selected for default and segment template added.
+		/// </summary>
+		/// <value>
+		/// The default value is true.
+		/// </value>
+		/// <example>
+		/// The below examples shows, how to use the <see cref="EnableRippleEffect"/> property in the <see cref="SfSegmentedControl"/>.
+		/// # [XAML](#tab/tabid-37)
+		/// <code Lang="XAML"><![CDATA[
+		/// <button:SfSegmentedControl x:Name="segmentedControl"
+		///                            EnableRippleEffect="False">
+		///    <button:SfSegmentedControl.ItemsSource>
+		///        <x:Array Type="{x:Type x:String}">
+		///            <x:String>Day</x:String>
+		///            <x:String>Week</x:String>
+		///            <x:String>Month</x:String>
+		///            <x:String>Year</x:String>
+		///        </x:Array>
+		///    </button:SfSegmentedControl.ItemsSource>
+		/// </button:SfSegmentedControl>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-38)
+		/// <code Lang="C#"><![CDATA[
+		/// this.segmentedControl.EnableRippleEffect = false;
+		/// ]]></code>
+		/// </example>
+		public bool EnableRippleEffect
+		{
+			get { return (bool)this.GetValue(EnableRippleEffectProperty); }
+			set { this.SetValue(EnableRippleEffectProperty, value); }
 		}
 
 		/// <summary>

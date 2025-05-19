@@ -98,7 +98,7 @@
                             <Picker x:Name="trackFill" ItemsSource="{Binding Track}" 
                                     Margin="0,13,0,0" Grid.Column="1" VerticalOptions="CenterAndExpand"
                                     SelectedIndexChanged="trackFill_SelectedIndexChanged" 
-                                    WidthRequest="{OnPlatform Default=130, WinUI=138}"
+                                    WidthRequest="{OnPlatform Default=130, WinUI=138}" 
                                     Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
                                     TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                             </Picker>

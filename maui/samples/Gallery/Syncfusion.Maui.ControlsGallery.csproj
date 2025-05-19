@@ -120,6 +120,7 @@
 	  <EmbeddedResource Include="SampleList\NavigationDrawerSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\BottomSheetSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NumericUpDownSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\PickerSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PolarChartSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PopupSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\PullToRefreshSamplesList.xml" />
@@ -129,6 +130,7 @@
 	  <EmbeddedResource Include="SampleList\TextInputLayoutSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NumericEntrySamplesList.xml" />
     <EmbeddedResource Include="SampleList\OtpInputSamplesList.xml" />
+    <EmbeddedResource Include="SampleList\ProgressBarSamplesList.xml" />
 	  <EmbeddedResource Include="ControlList.xml" />
 	</ItemGroup>
 

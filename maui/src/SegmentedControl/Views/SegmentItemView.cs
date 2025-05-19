@@ -70,7 +70,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			UpdateItemViewEnabledState();
 			InitializeSelectionView();
 			InitializeImageView();
-			InitializeEffectsView();
 			this.AddTouchListener(this);
 			this.AddGestureListener(this);
 #if WINDOWS
@@ -81,6 +80,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				CreateSegmentItemTemplateView();
 			}
 
+			InitializeEffectsView();
 			UpdateSemantics();
 		}
 
@@ -878,10 +878,10 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		{
 			if (e.Action == PointerActions.Pressed)
 			{
-				if (itemInfo?.SegmentTemplate is null)
+				if (itemInfo != null && itemInfo.EnableRippleEffect)
 				{
-                    _effectsView?.ApplyEffects();
-                }				
+					_effectsView?.ApplyEffects();
+				}
 			}
 #if __MACCATALYST__ || WINDOWS
 			else if (e.Action == PointerActions.Entered && e.PointerDeviceType == PointerDeviceType.Mouse)

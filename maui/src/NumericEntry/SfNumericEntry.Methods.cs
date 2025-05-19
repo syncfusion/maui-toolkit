@@ -171,6 +171,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			}
 		}
 
+
 		/// <summary>
 		/// Clears the collection of effect bounds, typically used to reset or remove visual effects on the control.
 		/// </summary>

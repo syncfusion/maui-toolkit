@@ -1136,6 +1136,10 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 
 			if (SemanticsDataIsCurrent() || IsTextInputLayout)
 			{
+				if (IsTextInputLayout)
+				{
+					_numericUpDownSemanticsNodes.Clear();
+				}
 				return _numericUpDownSemanticsNodes;
 			}
 			var upbuttonstate = !(_valueStates == ValueStates.Maximum) || AutoReverse;

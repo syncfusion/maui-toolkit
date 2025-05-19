@@ -2243,7 +2243,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="dirtyRect">The dirty rectangle.</param>
         protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
         {
-            if (this.CornerRadius == 0)
+            if (CornerRadius == 0)
             {
                 return;
             }

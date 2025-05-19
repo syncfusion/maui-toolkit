@@ -6,5 +6,11 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh.SfPullToRefresh
 		{
 			InitializeComponent();
 		}
+		
+		public override void OnDisappearing()
+		{
+			base.OnDisappearing();
+			pullToRefresh.Handler?.DisconnectHandler();
+		}
 	}
 }

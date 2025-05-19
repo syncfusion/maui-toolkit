@@ -25,9 +25,9 @@
                 <chart:SfCartesianChart.Legend>
                     <chart:ChartLegend ToggleSeriesVisibility="True"/>
                 </chart:SfCartesianChart.Legend>
-                <chart:SfCartesianChart.Resources>
-                    <ResourceDictionary>
-                        <local:TooltipValuesConverter x:Key="ValueConverter"/>
+        <chart:SfCartesianChart.Resources>
+          <ResourceDictionary>
+            <local:TooltipValuesConverter x:Key="ValueConverter"/>
                         <DataTemplate x:Key="template1">
                             <StackLayout>
                                 <Label Text="Germany" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>

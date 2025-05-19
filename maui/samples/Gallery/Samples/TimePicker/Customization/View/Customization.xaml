@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker.Customization"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:timePicker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:popup="clr-namespace:Syncfusion.Maui.Toolkit.Popup;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:converters="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:ViewModel"
+             Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="{OnPlatform WinUI=-10, MacCatalyst=-10, Default=0}"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker">
+
+    <localCore:SampleView.Resources>
+        <local:TimeSpanConverter x:Key="TimeSpanConverter"/>
+        <local:AlarmTimer x:Key="AlarmTimer"/>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel/>
+    </localCore:SampleView.BindingContext>
+    <localCore:SampleView.Content>
+        <Grid>
+            <Border IsVisible="{OnPlatform Default=True, Android=False, iOS=False}" Margin="0" Padding="0" BackgroundColor="Transparent" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}" HeightRequest="550" WidthRequest="375" VerticalOptions="Center" HorizontalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16" />
+                </Border.StrokeShape>
+                <Grid Grid.Column="{OnPlatform Default=0, WinUI=1, MacCatalyst=1}" WidthRequest="{OnPlatform WinUI=350, MacCatalyst=350, Default=350}" HorizontalOptions="{OnPlatform Android=Center, iOS=Center, MacCatalyst=End, WinUI=End}"  Grid.ColumnSpan="{OnPlatform Default=2, WinUI=1, MacCatalyst=1}" BackgroundColor="Transparent" Margin="{OnPlatform WinUI=10, MacCatalyst=10, Default=0}">
+
+                    <CollectionView ZIndex="{OnPlatform MacCatalyst=1}" x:Name="alarmListView" WidthRequest="{OnPlatform WinUI=330, MacCatalyst=330, Default=350}" ItemsSource="{Binding AlarmCollection}" VerticalScrollBarVisibility="Never" HorizontalOptions="Center" Margin="10">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="local:AlarmDetails">
+                                <Grid>
+                                    <Border x:Name="alarmBorder" StrokeShape="RoundRectangle 5" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}" BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt1}}" Margin="0,0,0,5" HeightRequest="130" WidthRequest="{OnPlatform WinUI=330}">
+                                        <Grid Padding="10">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="2*"/>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="60" />
+                                            </Grid.ColumnDefinitions>
+                                            <HorizontalStackLayout VerticalOptions="Center" Margin="0" Padding="0">
+                                                <Label>
+                                                    <Label.FormattedText>
+                                                        <FormattedString>
+                                                            <Span Text="{Binding AlarmTime, Converter={StaticResource TimeSpanConverter}, ConverterParameter={x:Boolean True}}" FontSize="36" FontAttributes="Bold" TextColor="{Binding AlarmTextColor}"/>
+                                                            <Span Text="{Binding AlarmTime, Converter={StaticResource TimeSpanConverter}, ConverterParameter={x:Boolean False}}" FontSize="16" FontAttributes="Bold" TextColor="{Binding AlarmTextColor}"/>
+                                                        </FormattedString>
+                                                    </Label.FormattedText>
+                                                </Label>
+                                            </HorizontalStackLayout>
+                                            <Switch x:Name="alarmSwitch" Grid.Column="1" IsToggled="{Binding IsAlarmEnabled}" HorizontalOptions="End" VerticalOptions="Center" Toggled="alarmSwitch_Toggled" Margin="0"
+                                                Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                                            <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Margin="0, 10, 0, 0" Spacing="5" >
+                                                <Label FontFamily="MauiSampleFontIcon" TextColor="{Binding AlarmSecondaryTextColor}" FontSize="15" HorizontalOptions="Start" Text="&#xe759;" VerticalOptions="Center"/>
+                                                <Label Text="{Binding AlarmTime, Converter={StaticResource AlarmTimer}}" TextColor="{Binding AlarmSecondaryTextColor}" FontSize="13"/>
+                                            </HorizontalStackLayout>
+                                            <Label Text="{Binding AlarmMessage}" Grid.Row="2" Grid.ColumnSpan="2" Margin="0, 0, 10, 0" VerticalOptions="End" TextColor="{Binding AlarmTextColor}" FontSize="14"/>
+                                        </Grid>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnAlarmTapped"/>
+                                        </Border.GestureRecognizers>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <local:AlarmPopup x:Name="alarmPopup" OnCreated="alarmPopup_OnCreated"/>
+                    <timePicker:SfTimePicker x:Name="alarmEditPicker" Background="Transparent" InputTransparent="True" Mode="Dialog" Format="hh_mm_tt" OkButtonClicked="AlarmEditPicker_OkButtonClicked" CancelButtonClicked="alarmEditPicker_CancelButtonClicked"/>
+
+                    <Grid ZIndex="{OnPlatform MacCatalyst=1}" Grid.Row="1" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin ="10">
+                        <Path Fill="{AppThemeBinding Default={StaticResource PrimaryBackground}}">
+                            <Path.Data>
+                                <EllipseGeometry Center="25,25" RadiusX="25" RadiusY="25" />
+                            </Path.Data>
+                        </Path>
+                        <Grid VerticalOptions="Center">
+                            <Label TextColor="{AppThemeBinding Default={StaticResource PrimaryForeground}}" FontSize="25" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="+"/>
+                        </Grid>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAddAlarmTapped"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <Grid IsVisible="{OnPlatform Default=True, WinUI=False, MacCatalyst=False}" WidthRequest="{OnPlatform WinUI=350, MacCatalyst=350, Default=350}" HorizontalOptions="{OnPlatform Android=Center, iOS=Center, MacCatalyst=End, WinUI=End}" BackgroundColor="Transparent" Margin="{OnPlatform WinUI=10, MacCatalyst=10, Default=0}">
+
+                <CollectionView ZIndex="{OnPlatform iOS=1}" x:Name="alarmListView1" WidthRequest="{OnPlatform WinUI=330, MacCatalyst=330, Default=350}" ItemsSource="{Binding AlarmCollection}" VerticalScrollBarVisibility="Never" HorizontalOptions="Center" Margin="10">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="local:AlarmDetails">
+                            <Grid>
+                                <Border x:Name="alarmBorder1" StrokeShape="RoundRectangle 5" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}" BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt1}}" Margin="0,0,0,5" HeightRequest="130" WidthRequest="{OnPlatform WinUI=330}">
+                                    <Grid Padding="5">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="2*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="60" />
+                                        </Grid.ColumnDefinitions>
+                                        <HorizontalStackLayout VerticalOptions="End" Margin="0" Padding="0">
+                                            <Label>
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding AlarmTime, Converter={StaticResource TimeSpanConverter}, ConverterParameter={x:Boolean True}}" FontSize="50" FontAttributes="Bold" TextColor="{Binding AlarmTextColor}"/>
+                                                        <Span Text="{Binding AlarmTime, Converter={StaticResource TimeSpanConverter}, ConverterParameter={x:Boolean False}}" FontSize="15" FontAttributes="Bold" TextColor="{Binding AlarmTextColor}"/>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </HorizontalStackLayout>
+                                        <Switch x:Name="alarmSwitch1" Grid.Column="1" IsToggled="{Binding IsAlarmEnabled}" HorizontalOptions="End" VerticalOptions="Start" Toggled="alarmSwitch_Toggled" Margin="0"
+                                            Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                                        <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2" Margin="0, 10, 0, 0" Spacing="5" >
+                                            <Label FontFamily="MauiSampleFontIcon" TextColor="{Binding AlarmSecondaryTextColor}" FontSize="15" HorizontalOptions="Start" Text="&#xe759;" VerticalOptions="Center"/>
+                                            <Label Text="{Binding AlarmTime, Converter={StaticResource AlarmTimer}}" TextColor="{Binding AlarmSecondaryTextColor}" />
+                                        </HorizontalStackLayout>
+                                        <Label Text="{Binding AlarmMessage}" Grid.Row="2" Grid.ColumnSpan="2" Margin="0, 0, 10, 0" VerticalOptions="End" TextColor="{Binding AlarmTextColor}"/>
+                                    </Grid>
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnAlarmTapped"/>
+                                    </Border.GestureRecognizers>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <local:AlarmPopup x:Name="alarmPopup1" OnCreated="alarmPopup_OnCreated"/>
+                <timePicker:SfTimePicker x:Name="alarmEditPicker1" Background="Transparent" InputTransparent="True" Mode="Dialog" Format="hh_mm_tt" OkButtonClicked="AlarmEditPicker_OkButtonClicked" CancelButtonClicked="alarmEditPicker_CancelButtonClicked"/>
+
+                <Grid ZIndex="{OnPlatform iOS=1}" Grid.Row="1" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin ="10">
+                    <Path Fill="{AppThemeBinding Default={StaticResource PrimaryBackground}}">
+                        <Path.Data>
+                            <EllipseGeometry Center="25,25" RadiusX="25" RadiusY="25" />
+                        </Path.Data>
+                    </Path>
+                    <Grid VerticalOptions="Center">
+                        <Label TextColor="{AppThemeBinding Default={StaticResource PrimaryForeground}}" FontSize="25" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="+"/>
+                    </Grid>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnAddAlarmTapped"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </Grid>
+
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

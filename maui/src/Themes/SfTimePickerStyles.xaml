@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker"
+             x:Class="Syncfusion.Maui.Toolkit.Picker.SfTimePickerStyles">
+
+    <Style TargetType="picker:SfTimePicker">
+        <Setter Property="ColumnDividerColor" Value="{DynamicResource SfTimePickerNormalColumnDividerColor}" />
+    </Style>
+
+    <Style TargetType="picker:TimePickerColumnHeaderView">
+        <Setter Property="Background"  Value="{DynamicResource SfTimePickerNormalColumnHeaderBackground}"/>
+        <Setter Property="DividerColor"  Value="{DynamicResource SfTimePickerNormalColumnHeaderDividerColor}"/>
+
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <picker:PickerTextStyle TextColor="{DynamicResource SfTimePickerNormalColumnHeaderTextColor}" FontSize="{DynamicResource SfTimePickerNormalColumnHeaderFontSize}" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

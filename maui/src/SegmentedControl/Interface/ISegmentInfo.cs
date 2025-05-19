@@ -23,6 +23,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		bool ShowSeparator { get; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether the ripple effect animation should be applied to a segment item when it is selected for default and segment template added. 
+		/// </summary>
+		bool EnableRippleEffect { get; }
+
+		/// <summary>
 		/// Gets a value indicating whether the layout is in Right-to-Left (RTL) direction.
 		/// </summary>
 		bool IsRTL { get; }

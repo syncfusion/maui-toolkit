@@ -490,8 +490,12 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		{
             // Ensure any necessary size updates are performed
 			UpdateSemanticsSizes();
-			if (SemanticsDataIsCurrent() && IsTextInputLayout)
+			if (SemanticsDataIsCurrent() || IsTextInputLayout)
 			{
+				if(IsTextInputLayout)
+				{
+					_numericEntrySemanticsNodes.Clear();
+				}
 				return _numericEntrySemanticsNodes;
 			}
 
@@ -857,7 +861,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		static VisualElement? GetNextFocusableElement(VisualElement parent)
 		{
 			var elements = parent.GetVisualTreeDescendants()
-                     .Where(e => (e is Entry || e is InputView || e is Picker || e is DatePicker || e is TimePicker || e is SearchBar))
+                     .Where(e => (e is Entry || e is InputView || e is Microsoft.Maui.Controls.Picker || e is DatePicker || e is TimePicker || e is SearchBar))
                      .OfType<VisualElement>()
                      .Where(ve => ve.IsEnabled && ve.IsVisible)
                      .ToList();

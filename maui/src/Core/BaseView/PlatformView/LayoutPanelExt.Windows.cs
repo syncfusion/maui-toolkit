@@ -245,8 +245,18 @@ namespace Syncfusion.Maui.Toolkit.Platform
 		private void UserControl_Loaded(object sender, RoutedEventArgs e)
 		{
 			_canvasControl = new CanvasControl();
-			_canvasControl.Draw += OnDraw;
-			base.Content = _canvasControl;
+
+			//// If the SfView drawing canvas size exceeds MaximumBitmapSizeInPixels when adding more items,
+			//// an OS limitation with CanvasImageSource size (refer: https://github.com/dotnet/maui/issues/3785)
+			//// requires restricting the draw function when semantics or accessibility are used on SfView. This prevents OS limitation issues on the Windows platform.
+			//// For accessibility, SfView should be enabled with AboveContentWithTouch to add a native user control and override the AutomationPeer.
+			//// Virtualization isn't possible because automation peers must be added initially to access scrollable content. 
+			//// Since accessibility highlights are managed by native framework automation peers, SfView canvas drawing is unnecessary.
+			if (MauiView != null && MauiView.IsCanvasNeeded)
+			{
+				_canvasControl.Draw += OnDraw;
+				base.Content = _canvasControl;
+			}
 		}
 
 		private void UserControl_Unloaded(object sender, RoutedEventArgs e)

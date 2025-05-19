@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+  <ControlCategory Name="Picker">
+	  
+	  <Control Title="Picker"
+             Image="picker.png"
+             ControlName="SfPicker"
+             Description="A versatile UI element designed for making selections from a set of options.">
+		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
+		  <Sample Title="Flight booking" SampleName="FlightBooking"/>
+	  </Control>
+
+	  <Control Title="Date Picker"
+             Image="datepicker.png"
+             ControlName="SfDatePicker"
+             Description="A user interface element for selecting specific dates.">
+		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
+		  <Sample Title="To-Do" SampleName="Customization"/>
+	  </Control>
+
+	  <Control Title="Time Picker"
+             Image="timepicker.png"
+             ControlName="SfTimePicker"
+             Description="An interface for choosing specific times of day.">
+		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
+		  <Sample Title="Alarm" SampleName="Customization"/>
+	  </Control>
+
+	  <Control Title="Date Time Picker"
+             Image="datetimepicker.png"
+             ControlName="SfDateTimePicker"
+             Description="A combined interface to select dates and times.">
+		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
+	  </Control>
+	  
+  </ControlCategory>
+</SyncfusionControls>

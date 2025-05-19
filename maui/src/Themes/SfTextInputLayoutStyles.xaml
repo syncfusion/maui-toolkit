@@ -17,7 +17,7 @@
                     </VisualState>
                     <VisualState x:Name="OutlinedNormal">
                         <VisualState.Setters>
-                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutOutlinedContainerBackground}"/>
                             <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutStroke}"/>
                         </VisualState.Setters>
                     </VisualState>
@@ -34,7 +34,7 @@
                     </VisualState>
                     <VisualState x:Name="OutlinedHover">
                         <VisualState.Setters>
-                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutMouseHoveredOutlinedContainerBackground}"/>
                             <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutHoveredStroke}"/>
                         </VisualState.Setters>
                     </VisualState>
@@ -51,7 +51,7 @@
                     </VisualState>
                     <VisualState x:Name="OutlinedFocused">
                         <VisualState.Setters>
-                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutFocusedOutlinedContainerBackground}"/>
                             <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutCommonStroke}"/>
                         </VisualState.Setters>
                     </VisualState>
@@ -68,7 +68,7 @@
                     </VisualState>
                     <VisualState x:Name="OutlinedDisabled">
                         <VisualState.Setters>
-                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutDisabledOutlinedContainerBackground}"/>
                             <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutDisabledStroke}"/>
                         </VisualState.Setters>
                     </VisualState>
@@ -90,7 +90,7 @@
                     </VisualState>
                     <VisualState x:Name="OutlinedError">
                         <VisualState.Setters>
-                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutContainerBackground}"/>
+                            <Setter Property="ContainerBackground" Value="{DynamicResource SfTextInputLayoutErrorOutlinedContainerBackground}"/>
                             <Setter Property="Stroke" Value="{DynamicResource SfTextInputLayoutErrorStroke}"/>
                         </VisualState.Setters>
                     </VisualState>

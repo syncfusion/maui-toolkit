@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker.GettingStarted"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:dateTimePicker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="{OnPlatform WinUI=-10, MacCatalyst=-10, Default=0}">
+
+    <localCore:SampleView.Content>
+
+        <Grid WidthRequest="300" HeightRequest="375" HorizontalOptions="Center" VerticalOptions="Center">
+            <Border x:Name="frame" IsVisible="{OnPlatform WinUI=True, Android=True, Default=False}" StrokeThickness="1" BackgroundColor="White" StrokeShape="RoundRectangle 5,5,5,5" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                <dateTimePicker:SfDateTimePicker HeightRequest="370" x:Name="DateTimePicker"/>
+            </Border>
+
+            <Border x:Name="border" IsVisible="{OnPlatform WinUI=False, Android=False, Default=True}" BackgroundColor="White" StrokeThickness="2" StrokeShape="RoundRectangle 5,5,5,5" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
+                <dateTimePicker:SfDateTimePicker HeightRequest="370" x:Name="DateTimePicker1"/>
+            </Border>
+        </Grid>
+
+    </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <ScrollView Padding="0, 0, 5, 0">
+                <StackLayout Orientation="Vertical">
+
+                    <Grid x:Name="showHeaderGrid" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Show Header"  LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Switch  x:Name="showHeaderSwitch" Grid.Column="1" Margin="5,0,0,0" VerticalOptions="Center" IsToggled="True" HorizontalOptions="End"
+                                 Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                    </Grid>
+
+                    <Grid x:Name="showColumnHeaderGrid" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Show Column Header"  LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Switch  x:Name="showColumnHeaderSwitch" Grid.Column="1" Margin="5,0,0,0" VerticalOptions="Center" IsToggled="True" HorizontalOptions="End"
+                                 Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                    </Grid>
+
+                    <Grid x:Name="showFooterGrid" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Show Footer"  LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Switch  x:Name="showFooterSwitch" Grid.Column="1" Margin="5,0,0,0" VerticalOptions="Center" IsToggled="False" HorizontalOptions="End"
+                                 Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                    </Grid>
+
+                    <Grid x:Name="clearSelectionGrid" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Clear Selection"  LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Switch x:Name="clearSelectionSwitch" Grid.Column="1" Margin="5,0,0,0" VerticalOptions="Center" HorizontalOptions="End"
+                                Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                    </Grid>
+
+                    <Grid  x:Name="dateFormatGrid" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Date Format" LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="5" />
+                            </Border.StrokeShape>
+                            <Picker x:Name="dateFormatComboBox" HeightRequest="38"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                        </Border>
+                    </Grid>
+
+                    <Grid  x:Name="timeFormatGrid" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Time Format" LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="5" />
+                            </Border.StrokeShape>
+                            <Picker x:Name="timeFormatComboBox" HeightRequest="38"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                        </Border>
+                    </Grid>
+
+                    <Grid  x:Name="textDisplayModeGrid" Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Text Display Mode" LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="5" />
+                            </Border.StrokeShape>
+                            <Picker x:Name="textDisplayComboBox" HeightRequest="38"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                        </Border>
+                    </Grid>
+
+                </StackLayout>
+            </ScrollView>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+
+    <localCore:SampleView.Behaviors>
+        <local:GettingStartedBehavior />
+    </localCore:SampleView.Behaviors>
+
+</localCore:SampleView>

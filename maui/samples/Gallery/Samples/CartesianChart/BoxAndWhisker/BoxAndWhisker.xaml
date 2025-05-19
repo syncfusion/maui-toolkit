@@ -53,13 +53,13 @@
                 <HorizontalStackLayout>
                     <Label Text="Mode :" HorizontalOptions="Center" VerticalOptions="Start" Padding="5" FontSize="17"/>
                     <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=BoxPlotMode}" 
-                        SelectedItem="{Binding Source={x:Reference ViewModel},Path=BoxPlotMode[0]}"
-                        HorizontalOptions="Fill" VerticalOptions="Start"                        
-                        SelectedIndex="0"
-                        SelectedIndexChanged="ModePicker_SelectedIndexChanged"
-                        Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
-                        TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}"
-                        ></Picker>
+                            SelectedItem="{Binding Source={x:Reference ViewModel},Path=BoxPlotMode[0]}"
+                            HorizontalOptions="Fill" VerticalOptions="Start"                        
+                            SelectedIndex="0"
+                            SelectedIndexChanged="ModePicker_SelectedIndexChanged"
+                            Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                            TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
+                    </Picker>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </Grid>
