@@ -10,12 +10,10 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 		}
 		private void SfChipGroup_SelectionChanged(object sender, Syncfusion.Maui.Toolkit.Chips.SelectionChangedEventArgs e)
 		{
-			if (sender != null && ((sender as SfChipGroup)?.BindingContext as ChipViewModel) != null)
+			if (sender != null && sender is SfChipGroup chipGroup && chipGroup.BindingContext is ChipViewModel viewModel)
 			{
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
 				if (!string.IsNullOrEmpty("SelectedAddOnItems"))
 				{
-					var viewModel = ((sender as SfChipGroup).BindingContext as ChipViewModel);
 					if (viewModel.SelectedAddOnItems.Contains("Fast Charge"))
 					{
 						viewModel.FastChargePrice = 399;
@@ -26,7 +24,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 					}
 					if (viewModel.SelectedAddOnItems.Contains("2 Years Extended Warranty"))
 					{
-						viewModel.WarrentyPrice = 799;
+						viewModel.WarrantyPrice = 799;
 					}
 					if (!viewModel.SelectedAddOnItems.Contains("Fast Charge"))
 					{
@@ -38,11 +36,11 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 					}
 					if (!viewModel.SelectedAddOnItems.Contains("2 Years Extended Warranty"))
 					{
-						viewModel.WarrentyPrice = 0;
+						viewModel.WarrantyPrice = 0;
 					}
 					if (viewModel.SelectedAddOnItems.Contains("Fast Charge") || viewModel.SelectedAddOnItems.Contains("512 MB SD Card") || viewModel.SelectedAddOnItems.Contains("2 Years Extended Warranty"))
 					{
-						viewModel.TotalAmount = viewModel.FastChargePrice + viewModel.SDCardPrice + viewModel.WarrentyPrice;
+						viewModel.TotalAmount = viewModel.FastChargePrice + viewModel.SDCardPrice + viewModel.WarrantyPrice;
 						viewModel.TotalPrice = "$ " + viewModel.TotalAmount;
 					}
 					else
@@ -51,8 +49,10 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 						viewModel.TotalPrice = "$ " + viewModel.TotalAmount;
 					}
 				}
-			} ((sender as SfChipGroup).BindingContext as ChipViewModel).FinalAmount = ((sender as SfChipGroup).BindingContext as ChipViewModel).TotalAmount;
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+
+				viewModel.FinalAmount = viewModel.TotalAmount;
+			}
+
 		}
 	}
 }

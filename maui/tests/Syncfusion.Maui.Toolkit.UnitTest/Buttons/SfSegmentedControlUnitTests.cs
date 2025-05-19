@@ -1222,7 +1222,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var itemInfo = new SfSegmentedControl { SelectionIndicatorSettings = new SelectionIndicatorSettings { SelectionIndicatorPlacement = SelectionIndicatorPlacement.Border } };
 			var segmentItem = new SfSegmentItem { SelectedSegmentTextColor = Colors.Yellow };
 			var resultColor = SegmentViewHelper.GetSelectedSegmentForeground(itemInfo, segmentItem);
-			var expected = Color.FromRgba(0.40392157, 0.3137255, 0.6431373, 1);
+			var expected = Color.FromRgba(255, 255, 0, 255);
 			Assert.Equal(expected, resultColor);
 		}
 

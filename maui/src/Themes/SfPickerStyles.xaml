@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker"
+             x:Class="Syncfusion.Maui.Toolkit.Picker.SfPickerStyles">
+
+    <Style TargetType="picker:SfPicker">
+        <Setter Property="ColumnDividerColor" Value="{DynamicResource SfPickerNormalColumnDividerColor}" />
+    </Style>
+
+    <Style TargetType="picker:PickerColumnHeaderView">
+        <Setter Property="Background"  Value="{DynamicResource SfPickerNormalColumnHeaderBackground}"/>
+        <Setter Property="DividerColor"  Value="{DynamicResource SfPickerNormalColumnHeaderDividerColor}"/>
+
+        <Setter Property="TextStyle">
+            <Setter.Value>
+                <picker:PickerTextStyle TextColor="{DynamicResource SfPickerNormalColumnHeaderTextColor}" FontSize="{DynamicResource SfPickerNormalColumnHeaderFontSize}"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

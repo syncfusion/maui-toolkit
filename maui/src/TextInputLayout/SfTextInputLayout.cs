@@ -235,11 +235,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// </summary>
         bool _isPasswordTextVisible = false;
 
+		Brush _outlinedContainerBackground = Colors.Transparent;
+
 #if !ANDROID
-        /// <summary>
-        /// Gets or sets a value indicating the clear icon or toggle icon is pressing.
-        /// </summary>
-        internal bool IsIconPressed { get; private set; } = false;
+		/// <summary>
+		/// Gets or sets a value indicating the clear icon or toggle icon is pressing.
+		/// </summary>
+		internal bool IsIconPressed { get; private set; } = false;
 #endif
 
 		/// <summary>
@@ -247,10 +249,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		internal bool IsLayoutTapped { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating the hint was animating from down to up.
-        /// </summary>
-        internal bool IsHintDownToUp = true;
+		/// <summary>
+		/// Gets or sets a value indicating the hint was animating from down to up.
+		/// </summary>
+		internal bool IsHintDownToUp = true;
 
         ///<summary>
         /// Gets or sets a value indicating whether the alignment of the up-down button alignment is left.
@@ -291,7 +293,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// The field sets and checks the new size of the drawn elements.
 		/// </summary>
 		Size _controlSize = Size.Zero;
-		
+
 		/// <summary>
 		/// Indicates whether semantics need to be reset.
 		/// </summary>
@@ -387,7 +389,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         {
             ThemeElement.InitializeThemeResources(this, "SfTextInputLayoutTheme");
             DrawingOrder = DrawingOrder.BelowContent;
-            HintFontSize = (float)HintLabelStyle.FontSize;
+			if(HintLabelStyle != null)
+			{
+				HintFontSize = (float)HintLabelStyle.FontSize;
+			}
             this.AddTouchListener(this);
             _effectsRenderer = new EffectsRenderer(this);
             SetRendererBasedOnPlatform();
@@ -626,7 +631,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
         void HandlePickerView(object newValue)
         {
-            if (newValue is Picker picker)
+            if (newValue is Microsoft.Maui.Controls.Picker picker)
             {
                 picker.Focused += OnTextInputViewFocused;
                 picker.Unfocused += OnTextInputViewUnfocused;
@@ -670,7 +675,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         /// <param name="e">Represents the event data</param>
         void OnPickerSelectedIndexChanged(object? sender, EventArgs e)
         {
-            var picker = sender as Picker;
+            var picker = sender as Microsoft.Maui.Controls.Picker;
             if (picker == null)
             {
                 return;
@@ -859,7 +864,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 #endif
 				}
             }
-            else if (newValue is Picker picker)
+            else if (newValue is Microsoft.Maui.Controls.Picker picker)
             {
                 if (DeviceInfo.Platform != DevicePlatform.WinUI)
                 {
@@ -1374,7 +1379,16 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 WireEvents();
                 OnTextInputViewHandlerChanged(this.Content, new EventArgs());
             }
-        }
+			else
+			{
+				if (HintLabelStyle != null && HelperLabelStyle != null && ErrorLabelStyle != null)
+				{
+					HintLabelStyle = null;
+					ErrorLabelStyle = null;
+					HelperLabelStyle = null;
+				}
+			}
+		}
 
         #endregion
 

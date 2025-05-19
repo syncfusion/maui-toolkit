@@ -61,13 +61,15 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// <param name="item">The segment item.</param>
 		internal SegmentItemView(ISegmentItemInfo itemInfo, SfSegmentItem item)
 		{
+#if __IOS__
+			this.IgnoreSafeArea = true;
+#endif
 			this.itemInfo = itemInfo;
 			_segmentItem = item;
 			DrawingOrder = DrawingOrder.BelowContent;
 			UpdateItemViewEnabledState();
 			InitializeSelectionView();
 			InitializeImageView();
-			InitializeEffectsView();
 			this.AddTouchListener(this);
 			this.AddGestureListener(this);
 #if WINDOWS
@@ -78,6 +80,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				CreateSegmentItemTemplateView();
 			}
 
+			InitializeEffectsView();
 			UpdateSemantics();
 		}
 
@@ -875,10 +878,10 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		{
 			if (e.Action == PointerActions.Pressed)
 			{
-				if (itemInfo?.SegmentTemplate is null)
+				if (itemInfo != null && itemInfo.EnableRippleEffect)
 				{
-                    _effectsView?.ApplyEffects();
-                }				
+					_effectsView?.ApplyEffects();
+				}
 			}
 #if __MACCATALYST__ || WINDOWS
 			else if (e.Action == PointerActions.Entered && e.PointerDeviceType == PointerDeviceType.Mouse)

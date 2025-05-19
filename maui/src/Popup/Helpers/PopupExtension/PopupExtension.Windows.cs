@@ -220,10 +220,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static void CalculateRelativePoint(PopupView popupView, MauiView relative, PopupRelativePosition position, double absoluteX, double absoluteY, ref double relativeX, ref double relativeY)
 		{
 			var isRelativeViewRTL = false;
-			if (((relative as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
-			{
-				isRelativeViewRTL = true;
-			}
 
 			var rootView = WindowOverlayHelper._platformRootView;
 			if (rootView is null || relative.Handler is null || relative.Handler.MauiContext is null)
@@ -244,8 +240,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			location[1] = transform.TransformPoint(new PlatformPoint(0, 0)).Y;
 
 			// Adds absolute points to the location of the relative view.
-			location[0] += absoluteX;
-			location[1] += absoluteY;
+			location[0] = location[0] + (popupView._popup._isRTL ? -absoluteX : absoluteX);
+			location[1] = location[1] + absoluteY;
 
 			var screenHeight = GetScreenHeight();
 			var screenWidth = GetScreenWidth();
@@ -267,72 +263,55 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				if (popupView._popup._isRTL)
 				{
-					if (isRelativeViewRTL)
-					{
-						relativeX = Math.Max(location[0] - (2 * absoluteX) - widthOfRelativeView - popupViewWidth, 0);
-					}
-					else
-					{
-						relativeX = Math.Max(location[0] - (2 * absoluteX) - popupViewWidth, 0);
-					}
+					relativeX = location[0] + widthOfRelativeView;
 				}
 				else
 				{
-					relativeX = location[0] - popupViewWidth > 0 ? location[0] - popupViewWidth : 0;
+					relativeX = location[0] - popupViewWidth;
 				}
 			}
 			else if (position == PopupRelativePosition.AlignToRightOf || position == PopupRelativePosition.AlignTopRight || position == PopupRelativePosition.AlignBottomRight)
 			{
 				if (popupView._popup._isRTL)
 				{
-					if (isRelativeViewRTL)
-					{
-						relativeX = Math.Max(location[0] - (2 * absoluteX) - popupViewWidth, 0);
-					}
-					else
-					{
-						relativeX = Math.Max(location[0] - (2 * absoluteX) + widthOfRelativeView - popupViewWidth, 0);
-					}
+					relativeX = location[0] - popupViewWidth;
 				}
 				else
 				{
-					relativeX = location[0] + widthOfRelativeView + popupViewWidth < screenWidth ? location[0] + widthOfRelativeView : screenWidth - popupViewWidth;
+					relativeX = location[0] + widthOfRelativeView;
 				}
 			}
 			else
 			{
 				if (popupView._popup._isRTL)
 				{
-					if (isRelativeViewRTL)
-					{
-						relativeX = Math.Max(location[0] - (2 * absoluteX) - popupViewWidth, 0);
-					}
-					else
-					{
-						relativeX = Math.Max(location[0] - (2 * absoluteX) + widthOfRelativeView - popupViewWidth, 0);
-					}
+					relativeX = location[0] + widthOfRelativeView - popupViewWidth;
 				}
 				else
 				{
-					relativeX = location[0] + popupViewWidth < screenWidth ? location[0] : screenWidth - popupViewWidth;
+					relativeX = location[0];
 				}
 			}
+
+			relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
 		}
 
 		static void CalculateYPosition(PopupView popupView, PopupRelativePosition position, ref double relativeY, double popupViewHeight, double[] location, float heightOfRelativeView, float screenHeight)
 		{
 			if (position == PopupRelativePosition.AlignTop || position == PopupRelativePosition.AlignTopLeft || position == PopupRelativePosition.AlignTopRight)
 			{
-				relativeY = Math.Max(GetStatusBarHeight() + GetActionBarHeight(popupView._popup.IgnoreActionBar), location[1] - popupViewHeight);
+				relativeY = location[1] - popupViewHeight;
 			}
 			else if (position == PopupRelativePosition.AlignBottom || position == PopupRelativePosition.AlignBottomLeft || position == PopupRelativePosition.AlignBottomRight)
 			{
-				relativeY = location[1] + heightOfRelativeView + popupViewHeight < screenHeight ? location[1] + heightOfRelativeView : screenHeight - popupViewHeight;
+				relativeY = location[1] + heightOfRelativeView;
 			}
 			else
 			{
-				relativeY = location[1] + popupViewHeight < screenHeight ? location[1] : screenHeight - popupViewHeight;
+				relativeY = location[1];
 			}
+
+			relativeY = popupView._popup.ValidatePopupPosition(relativeY, popupViewHeight, screenHeight, GetStatusBarHeight() + (!popupView._popup.IgnoreActionBar ? GetActionBarHeight(popupView._popup.IgnoreActionBar) : 0));
 		}
 
 		static void BlurEffect(UIElement blurElement, SfPopup popup, IReadOnlyList<Microsoft.UI.Xaml.Controls.Primitives.Popup>? popupList)

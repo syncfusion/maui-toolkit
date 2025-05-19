@@ -531,6 +531,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		public SfBottomSheet()
         {
             ThemeElement.InitializeThemeResources(this, "SfBottomSheetTheme");
+#if IOS
+			this.IgnoreSafeArea = true;
+#endif
+
 			InitializeLayout();
 			ApplyThemeResources();
         }
@@ -1442,6 +1446,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        }
 		    };
 
+#if IOS
+			_bottomSheetContent.IgnoreSafeArea = true;
+#endif
+
 			_grabberGrid = new SfGrid()
 			{
 				IsClippedToBounds = true
@@ -1757,7 +1765,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 		    if (_bottomSheet is not null && !_bottomSheet.Padding.Equals(padding))
 		    {
-		        _bottomSheet.Padding = padding;
+		        _bottomSheet.Padding = new Thickness(Math.Max(0, padding.Left), Math.Max(0, padding.Top), Math.Max(0, padding.Right), Math.Max(0, padding.Bottom));
 		        OnPropertyChanged(nameof(ContentPadding));
 		    }
 		}
@@ -2614,9 +2622,9 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			}
 			else if(newState == BottomSheetState.Collapsed)
 			{
+				sheet._isHalfExpanded = true;
 				if(sheet._isSheetOpen)
 				{
-					sheet._isHalfExpanded = true;
 					sheet.Show();
 				}
 			}

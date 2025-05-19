@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Syncfusion.Maui.Toolkit.Charts;
+using Chart = Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest;
 
@@ -32,7 +33,7 @@ public partial class SeriesDefaultTests
 		Assert.Null(series.TooltipTemplate);
 		Assert.IsType<ChartMarkerSettings>(series.MarkerSettings);
 		var markerSettings = series.MarkerSettings;
-		Assert.Equal(Charts.ShapeType.Circle, markerSettings.Type);
+		Assert.Equal(Chart.ShapeType.Circle, markerSettings.Type);
 		Assert.Null(markerSettings.Fill);
 		Assert.Null(markerSettings.Stroke);
 		Assert.Equal(0d, markerSettings.StrokeWidth);
@@ -176,7 +177,7 @@ public partial class SeriesDefaultTests
 	{
 		var series = new BoxAndWhiskerSeries();
 		Assert.Equal(BoxPlotMode.Exclusive, series.BoxPlotMode);
-		Assert.Equal(Charts.ShapeType.Circle, series.OutlierShapeType);
+		Assert.Equal(Chart.ShapeType.Circle, series.OutlierShapeType);
 		Assert.False(series.ShowMedian);
 		Assert.True(series.ShowOutlier);
 		Assert.Equal(0d, series.Spacing);
@@ -865,7 +866,7 @@ public partial class SeriesDefaultTests
         Assert.Null(series.ItemsSource);
         Assert.Equal(LabelContext.YValue, series.LabelContext);
         Assert.Null(series.LabelTemplate);
-        Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+        Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
         Assert.Null(series.PaletteBrushes);
         Assert.False(series.ShowDataLabels);
         Assert.Null(series.TooltipTemplate);
@@ -1033,7 +1034,7 @@ public partial class SeriesDefaultTests
         Assert.Null(series.ItemsSource);
         Assert.Equal(LabelContext.YValue, series.LabelContext);
         Assert.Null(series.LabelTemplate);
-        Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+        Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
         Assert.Null(series.PaletteBrushes);
         Assert.False(series.ShowDataLabels);
         Assert.Null(series.TooltipTemplate);
@@ -1211,7 +1212,7 @@ public partial class SeriesDefaultTests
     public void StackingLineSeriesDefaultTests_Part4()
     {
         var series = new StackingLineSeries();
-        Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+        Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
         Assert.Null(series.PaletteBrushes);
         Assert.False(series.ShowDataLabels);
         Assert.Null(series.TooltipTemplate);
@@ -1390,7 +1391,7 @@ public partial class SeriesDefaultTests
     public void StackingLine100SeriesDefaultTests_Part4()
     {
         var series = new StackingLine100Series();
-        Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+        Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
         Assert.Null(series.PaletteBrushes);
         Assert.False(series.ShowDataLabels);
         Assert.Null(series.TooltipTemplate);
@@ -1569,7 +1570,7 @@ public partial class SeriesDefaultTests
     public void StackingColumnSeriesDefaultTests_Part4()
     {
         var series = new StackingColumnSeries();
-        Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+        Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
         Assert.Null(series.PaletteBrushes);
         Assert.False(series.ShowDataLabels);
         Assert.Null(series.TooltipTemplate);
@@ -1748,7 +1749,7 @@ public partial class SeriesDefaultTests
     public void StackingColumn100SeriesDefaultTests_Part4()
     {
         var series = new StackingColumn100Series();
-        Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+        Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
         Assert.Null(series.PaletteBrushes);
         Assert.False(series.ShowDataLabels);
         Assert.Null(series.TooltipTemplate);
@@ -1927,7 +1928,7 @@ public partial class SeriesDefaultTests
     public void StackingAreaSeriesDefaultTests_Part4()
     {
         var series = new StackingAreaSeries();
-        Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+        Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
         Assert.Null(series.PaletteBrushes);
         Assert.False(series.ShowDataLabels);
         Assert.Null(series.TooltipTemplate);
@@ -2106,7 +2107,7 @@ public partial class SeriesDefaultTests
     public void StackingArea100SeriesDefaultTests_Part4()
     {
         var series = new StackingArea100Series();
-        Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+        Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
         Assert.Null(series.PaletteBrushes);
         Assert.False(series.ShowDataLabels);
         Assert.Null(series.TooltipTemplate);
@@ -2279,11 +2280,11 @@ public partial class SeriesDefaultTests
 
 		// Test inherited properties from ChartSeries
 		Assert.True(series.IsVisible);
-		Assert.True(series.IsVisibleOnLegend);
+		Assert.True(series.IsVisibleOnLegend);	
 		Assert.Null(series.ItemsSource);
 		Assert.Equal(LabelContext.YValue, series.LabelContext);
 		Assert.Null(series.LabelTemplate);
-		Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+		Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
 		Assert.Null(series.PaletteBrushes);
 		Assert.False(series.ShowDataLabels);
 		Assert.Null(series.TooltipTemplate);
@@ -2467,7 +2468,7 @@ public partial class SeriesDefaultTests
 		Assert.Null(series.ItemsSource);
 		Assert.Equal(LabelContext.YValue, series.LabelContext);
 		Assert.Null(series.LabelTemplate);
-		Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+		Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
 		Assert.Null(series.PaletteBrushes);
 		Assert.False(series.ShowDataLabels);
 		Assert.Null(series.TooltipTemplate);
@@ -2656,7 +2657,7 @@ public partial class SeriesDefaultTests
 		Assert.Null(series.ItemsSource);
 		Assert.Equal(LabelContext.YValue, series.LabelContext);
 		Assert.Null(series.LabelTemplate);
-		Assert.Equal(Charts.ChartLegendIconType.Circle, series.LegendIcon);
+		Assert.Equal(Chart.ChartLegendIconType.Circle, series.LegendIcon);
 		Assert.Null(series.PaletteBrushes);
 		Assert.False(series.ShowDataLabels);
 		Assert.Null(series.TooltipTemplate);
@@ -2805,7 +2806,7 @@ public partial class SeriesDefaultTests
 		Assert.Equal(5d, series.PointHeight);
 		Assert.Equal(5d, series.PointWidth);
 		Assert.Null(series.Stroke);
-		Assert.Equal(Charts.ShapeType.Circle, series.Type);
+		Assert.Equal(Chart.ShapeType.Circle, series.Type);
 		// Test inherited properties from XYDataSeries
 		Assert.Equal(1d, series.StrokeWidth);
 		Assert.Null(series.YBindingPath);

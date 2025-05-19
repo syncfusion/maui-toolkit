@@ -80,15 +80,15 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label  Grid.Row="0" Grid.Column="0"     Text=" Type"  HorizontalOptions="Start" Padding="5"  FontSize="15"/>
-                <Picker Grid.Row="0" Grid.Column="1"  
+                <Picker Grid.Row="0" Grid.Column="1"  Margin="0,0,1,0"
                         ItemsSource="{Binding Source={x:Reference ViewModel},Path=ErrorBarType}" 
                         SelectedItem="{Binding Source={x:Reference ViewModel}, Path=ErrorBarType[0]}"
                         VerticalOptions="Start" HorizontalOptions="Fill" 
                         x:Name="typePicker" 
                         SelectedIndex="0" 
-                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
-                        SelectedIndexChanged="typePicker_SelectedIndexChanged">
+                        SelectedIndexChanged="typePicker_SelectedIndexChanged"
+                        Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                        TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
             </Picker>
         </Grid>
             <Grid>
@@ -97,15 +97,15 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Text="Mode" HorizontalOptions="Start"  Padding="5"  FontSize="15"/>
-                <Picker  Grid.Row="0" Grid.Column="1"
+                <Picker  Grid.Row="0" Grid.Column="1" Margin="0,0,1,0"
                          ItemsSource="{Binding Source={x:Reference ViewModel},Path=ErrorBarMode}" 
                          SelectedItem="{Binding Source={x:Reference ViewModel}, Path=ErrorBarMode[0]}"
                          VerticalOptions="Start" HorizontalOptions="Fill" 
                          x:Name="modePicker" 
-                         BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                         TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                          SelectedIndex="0"
-                         SelectedIndexChanged="modePicker_SelectedIndexChanged">
+                         SelectedIndexChanged="modePicker_SelectedIndexChanged"
+                         Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                         TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                 </Picker>
             </Grid>
             <Grid>
@@ -114,15 +114,15 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Text="Direction" HorizontalOptions="Start" Padding="5"  FontSize="15"/>
-                <Picker Grid.Row="0" Grid.Column="1" 
-                              ItemsSource="{Binding Source={x:Reference ViewModel},Path=ErrorBarDirection}" 
-                              SelectedItem="{Binding Source={x:Reference ViewModel}, Path=ErrorBarDirection[0]}"
-                              VerticalOptions="Start" HorizontalOptions="Fill" 
-                              x:Name="directionPicker" 
-                              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                              TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
-                              SelectedIndex="0"
-                              SelectedIndexChanged="directionPicker_SelectedIndexChanged">
+                <Picker Grid.Row="0" Grid.Column="1" Margin="0,0,1,0"
+                        ItemsSource="{Binding Source={x:Reference ViewModel},Path=ErrorBarDirection}" 
+                        SelectedItem="{Binding Source={x:Reference ViewModel}, Path=ErrorBarDirection[0]}"
+                        VerticalOptions="Start" HorizontalOptions="Fill" 
+                        x:Name="directionPicker" 
+                        SelectedIndex="0"
+                        SelectedIndexChanged="directionPicker_SelectedIndexChanged"
+                        Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                        TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                 </Picker>
             </Grid>
                 <Grid>

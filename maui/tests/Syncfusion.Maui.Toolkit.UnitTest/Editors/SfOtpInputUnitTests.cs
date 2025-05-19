@@ -112,22 +112,24 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region Internal Properties
 
 		[Theory]
-		[InlineData(OtpInputStyle.Underlined, 10, true, OtpInputState.Default, "#FF0000", "#008000")]
-		[InlineData(OtpInputStyle.Underlined, 12, false, OtpInputState.Success, "#0000FF", "#008000")]
-		[InlineData(OtpInputStyle.Filled, 9, true, OtpInputState.Default, "#0000FF", "#FFA500")]
-		[InlineData(OtpInputStyle.Filled, 5, false, OtpInputState.Warning, "#FFA500", "#FF0000")]
-		[InlineData(OtpInputStyle.Outlined, 15, true, OtpInputState.Default, "#FF0000", "#008000")]
-		[InlineData(OtpInputStyle.Outlined, 13, false, OtpInputState.Error, "#008000", "#FF0000")]
-		public void UpdateParameters(OtpInputStyle otpInputStyle, double cornerRadius, bool isEnabled, OtpInputState otpInputState, string stroke, string background)
+		[InlineData(OtpInputStyle.Underlined, 10, true, OtpInputState.Default, "#FF0000", "#008000", "#1C1B1F", "#611c1b1f")]
+		[InlineData(OtpInputStyle.Underlined, 12, false, OtpInputState.Success, "#0000FF", "#008000", "#1C1B1F", "#611c1b1f")]
+		[InlineData(OtpInputStyle.Filled, 9, true, OtpInputState.Default, "#0000FF", "#FFA500", "#1C1B1F", "#611c1b1f")]
+		[InlineData(OtpInputStyle.Filled, 5, false, OtpInputState.Warning, "#FFA500", "#FF0000", "#1C1B1F", "#611c1b1f")]
+		[InlineData(OtpInputStyle.Outlined, 15, true, OtpInputState.Default, "#FF0000", "#008000", "#1C1B1F", "#611c1b1f")]
+		[InlineData(OtpInputStyle.Outlined, 13, false, OtpInputState.Error, "#008000", "#FF0000", "#1C1B1F", "#611c1b1f")]
+		public void UpdateParameters(OtpInputStyle otpInputStyle, double cornerRadius, bool isEnabled, OtpInputState otpInputState, string stroke, string background, string textColor, string disabledTextColor)
 		{
 			OTPEntry otpEntry = new OTPEntry();			
-			otpEntry.UpdateParameters(otpInputStyle, cornerRadius, new PointF(10, 10), new PointF(30, 30), new SfOtpInput(),isEnabled, otpInputState, Color.FromArgb(stroke), Color.FromArgb(background));
+			otpEntry.UpdateParameters(otpInputStyle, cornerRadius, new PointF(10, 10), new PointF(30, 30), new SfOtpInput(),isEnabled, otpInputState, Color.FromArgb(stroke), Color.FromArgb(background), Color.FromArgb(textColor), Color.FromArgb(disabledTextColor));
 			OtpInputStyle? resultInputStyle = (OtpInputStyle?)GetPrivateField(otpEntry, "_styleMode");
 			double? resultCornerRadius = (double?)GetPrivateField(otpEntry, "_cornerRadius");
 			bool? resultIsEnabled = (bool?)GetPrivateField(otpEntry, "_isEnabled");
 			OtpInputState? resultInputState = (OtpInputState?)GetPrivateField(otpEntry, "_inputState");
 			Color? resultStroke = (Color?)GetPrivateField(otpEntry, "_stroke");
 			Color? resultBackground = (Color?)GetPrivateField(otpEntry, "_background");
+			Color? resultTextColor = (Color?)GetPrivateField(otpEntry, "_textColor");
+			Color? resultBackgrounDisabledTextColor = (Color?)GetPrivateField(otpEntry, "_disabledTextColor");
 			Assert.Equal(otpInputStyle, resultInputStyle);
 			Assert.Equal(cornerRadius, resultCornerRadius);
 			Assert.Equal(isEnabled, resultIsEnabled);

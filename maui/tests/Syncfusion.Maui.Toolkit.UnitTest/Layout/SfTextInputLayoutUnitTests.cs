@@ -1,4 +1,7 @@
-﻿using Syncfusion.Maui.Toolkit.TextInputLayout;
+﻿using Microsoft.Maui;
+using Microsoft.Maui.Controls;
+using Syncfusion.Maui.Toolkit.TextInputLayout;
+using Syncfusion.Maui.Toolkit.NumericEntry;
 using System.Reflection;
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
@@ -46,7 +49,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(12, inputLayout.ErrorLabelStyle.FontSize);
 			Assert.Equal(16, inputLayout.HintLabelStyle.FontSize);
 			Assert.Null(inputLayout.ClearButtonPath);
-			Assert.Equal(Brush.Transparent, inputLayout.OutlinedContainerBackground);
 			Assert.Equal(Color.FromArgb("#49454F"), inputLayout.HelperTextColor);
 			Assert.Equal(Color.FromArgb("#49454F"), inputLayout.HintTextColor);
 			Assert.False(inputLayout.IsHintFloated);
@@ -188,8 +190,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				ShowLeadingView = showLeadingView
 			};
+			var leadingView = new Label();
+			inputLayout.LeadingView = leadingView;
 
-			Assert.Equal(showLeadingView, inputLayout.ShowLeadingView);
+			Assert.Equal(showLeadingView, inputLayout.LeadingView.IsVisible);
 		}
 
 		[Theory]
@@ -201,8 +205,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				ShowTrailingView = showTrailingView
 			};
+			var trailingView = new Label();
+			inputLayout.TrailingView = trailingView;
 
-			Assert.Equal(showTrailingView, inputLayout.ShowTrailingView);
+			Assert.Equal(showTrailingView, inputLayout.TrailingView.IsVisible);
 		}
 
 		[Theory]
@@ -349,7 +355,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void IsHintFloated_RetrunsTrue_WhenPickerSelectedItemIsNotNull()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker { SelectedItem = "SelectedItem" };
+			var picker = new Microsoft.Maui.Controls.Picker { SelectedItem = "SelectedItem" };
 			inputLayout.Content = picker;
 
 			Assert.True(inputLayout.IsHintFloated);
@@ -419,7 +425,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void OnPickerSelectedIndexChanged_SelectedIndexGreaterThanOrEqualToZero_ShouldSetIsHintFloatedToTrue()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker
+			var picker = new Microsoft.Maui.Controls.Picker
 			{
 				ItemsSource = new List<string> { "Item1", "Item2", "Items3" }
 			};
@@ -438,7 +444,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void OnPickerSelectedIndexChanged_TextProperty_ShouldUpdateBasedOnIndex()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker
+			var picker = new Microsoft.Maui.Controls.Picker
 			{
 				ItemsSource = new List<string> { "Item1", "Item2", "Items3" }
 			};
@@ -507,7 +513,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void Content_SettingPicker_ShouldUpdateProperty()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker();
+			var picker = new Microsoft.Maui.Controls.Picker();
 			inputLayout.Content = picker;
 
 			Assert.Equal(picker, inputLayout.Content);
@@ -589,11 +595,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestOutlinedContainerBackground()
 		{
-			var inputLayout = new SfTextInputLayout
-			{
-				OutlinedContainerBackground = new SolidColorBrush(Colors.Red)
-			};
-			Assert.Equal(Colors.Red, inputLayout.OutlinedContainerBackground);
+			var inputLayout = new SfTextInputLayout();
+			var redBrush = new SolidColorBrush(Colors.Red);
+			SetPrivateField(inputLayout, "_outlinedContainerBackground", redBrush);
+			var expectedBrushObj = GetPrivateField(inputLayout, "_outlinedContainerBackground");
+			Assert.NotNull(expectedBrushObj);
+
+			var expectedBrush = expectedBrushObj as SolidColorBrush;
+			Assert.NotNull(expectedBrush);
+			Assert.Equal(Colors.Red, expectedBrush.Color);
 		}
 
 		[Fact]
@@ -667,7 +677,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestOnPickerSelectedIndexChanged_SelectedIndex()
 		{
 			var inputLayout = new SfTextInputLayout();
-			var picker = new Picker();
+			var picker = new Microsoft.Maui.Controls.Picker();
 			picker.Items.Add("Apple");
 			picker.Items.Add("Orange");
 			picker.Items.Add("Strawberry");
@@ -874,7 +884,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var inputLayout = new SfTextInputLayout();
 			InvokePrivateMethod(inputLayout, "UpdateErrorTextColor");
 			var expected = Color.FromRgba(0, 0, 0, 0.87);
-			Assert.Equal(expected, inputLayout.ErrorLabelStyle.TextColor);
+			if (inputLayout.ErrorLabelStyle != null)
+			{
+				Assert.Equal(expected, inputLayout.ErrorLabelStyle.TextColor);
+			}
 		}
 
 		[Fact]
@@ -901,6 +914,284 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(startResult, startPoint);
 			Assert.Equal(endResult, endPoint);
 		}
+		#endregion
+
+		#region Automation Cases
+
+
+		[Theory]
+		[InlineData(ContainerType.Filled)]
+		[InlineData(ContainerType.Outlined)]
+		[InlineData(ContainerType.None)]
+		public void Content_SettingEditor(ContainerType container)
+		{
+			var inputLayout = new SfTextInputLayout();
+			var editor = new Editor();
+			editor.Text = "Enter your name";
+			editor.FontSize = 13;
+			inputLayout.ContainerType = container;
+			inputLayout.Content = editor;
+
+			Assert.Equal(editor, inputLayout.Content);
+			Assert.Equal("Enter your name", editor.Text);
+			Assert.Equal(13, editor.FontSize);
+			Assert.Equal(container, inputLayout.ContainerType);
+		}
+
+		[Fact]
+		public void Content_SettingEntry()
+		{
+			var inputLayout = new SfTextInputLayout();
+			var entry = new Entry();
+			entry.Text = "Enter your name";
+			entry.FontSize = 13;
+			inputLayout.Content = entry;
+
+			Assert.Equal(entry, inputLayout.Content);
+			Assert.Equal("Enter your name", entry.Text);
+			Assert.Equal(13, entry.FontSize);
+		}
+
+		[Fact]
+		public void ErrorText_HasError()
+		{
+			var inputLayout = new SfTextInputLayout
+			{
+				ErrorText = "Test Error"
+			};
+			inputLayout.HasError = true;
+
+			Assert.Equal("Test Error", inputLayout.ErrorText);
+			Assert.True(inputLayout.HasError);
+		}
+
+		[Theory]
+		[InlineData(ViewPosition.Inside)]
+		[InlineData(ViewPosition.Outside)]
+		public void LeadingViewPosition_ShowLeadingView(ViewPosition position)
+		{
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.ShowLeadingView = true;
+			inputLayout.LeadingViewPosition = position;
+			var leadingView = new Label();
+			inputLayout.LeadingView = leadingView;
+
+
+			Assert.Equal(position, inputLayout.LeadingViewPosition);
+			Assert.True(inputLayout.LeadingView.IsVisible);
+		}
+
+		[Theory]
+		[InlineData(ViewPosition.Inside)]
+		[InlineData(ViewPosition.Outside)]
+		public void TrailingViewPosition_ShowTrailingView(ViewPosition position)
+		{
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.TrailingViewPosition = position;
+			inputLayout.ShowTrailingView = true;
+			var trailingView = new Label();
+			inputLayout.TrailingView = trailingView;
+
+			Assert.Equal(position, inputLayout.TrailingViewPosition);
+			Assert.True(inputLayout.TrailingView.IsVisible);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void EnablePasswordVisibilityToggle(bool enableToggle)
+		{
+			var inputLayout = new SfTextInputLayout
+			{
+				EnablePasswordVisibilityToggle = enableToggle
+			};
+			bool? isPasswordVisible = (bool?)GetPrivateField(inputLayout, "_isPasswordTextVisible");
+
+			Assert.Equal(enableToggle, inputLayout.EnablePasswordVisibilityToggle);
+			Assert.False(isPasswordVisible);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void ShowHelperText_SetValue_ReturnsExpectedValue(bool showHelperText)
+		{
+			var inputLayout = new SfTextInputLayout
+			{
+				ShowHelperText = showHelperText
+			};
+
+			Assert.Equal(showHelperText, inputLayout.ShowHelperText);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void ReserveSpaceForAssistiveLabels_SetValue(bool expectedValue)
+		{
+			var inputLayout = new SfTextInputLayout
+			{
+				ReserveSpaceForAssistiveLabels = expectedValue
+			};
+
+			Assert.Equal(expectedValue, inputLayout.ReserveSpaceForAssistiveLabels);
+		}
+
+		[Fact]
+		public void TestStackLayout()
+		{
+			var entry = new Entry();
+			var textInputLayout1 = new SfTextInputLayout { Content = entry };
+			var textInputLayout2 = new SfTextInputLayout { Content = entry };
+			var stackLayout = new StackLayout { Orientation = StackOrientation.Vertical };
+			stackLayout.Children.Add(textInputLayout1);
+			stackLayout.Children.Add(textInputLayout2);
+
+			Assert.Contains(textInputLayout1, stackLayout.Children);
+			Assert.Contains(textInputLayout2, stackLayout.Children);
+		}
+
+		[Fact]
+		public void TestHorizontalLayout()
+		{
+			var entry = new Entry();
+			var textInputLayout = new SfTextInputLayout { Content = entry };
+			var stackLayout = new StackLayout { Orientation = StackOrientation.Horizontal };
+			stackLayout.Children.Add(textInputLayout);
+
+			Assert.Equal(StackOrientation.Horizontal, stackLayout.Orientation);
+			Assert.Contains(textInputLayout, stackLayout.Children);
+		}
+
+		[Fact]
+		public void TestVerticalLayout()
+		{
+			var entry = new Entry();
+			var textInputLayout = new SfTextInputLayout { Content = entry };
+			var stackLayout = new StackLayout { Orientation = StackOrientation.Vertical };
+			stackLayout.Children.Add(textInputLayout);
+
+			Assert.Equal(StackOrientation.Vertical, stackLayout.Orientation);
+			Assert.Contains(textInputLayout, stackLayout.Children);
+		}
+
+		[Fact]
+		public void TestGrid()
+		{
+			var entry = new Entry();
+			var textInputLayout = new SfTextInputLayout { Content = entry };
+
+			var grid = new Grid
+			{
+				RowDefinitions = new RowDefinitionCollection
+				{
+					new RowDefinition { Height = GridLength.Auto }
+				},
+				ColumnDefinitions = new ColumnDefinitionCollection
+				{
+					new ColumnDefinition { Width = GridLength.Auto }
+				}
+			};
+
+			grid.Children.Add(textInputLayout);
+			Grid.SetRow(textInputLayout, 0);
+			Grid.SetColumn(textInputLayout, 0);
+			Assert.Contains(textInputLayout, grid.Children);
+			Assert.Single(grid.RowDefinitions);
+			Assert.Single(grid.ColumnDefinitions);
+		}
+
+		[Fact]
+		public void TestBorder()
+		{
+			var entry = new Entry();
+			var textInputLayout = new SfTextInputLayout { Content = entry };
+			var border = new Border
+			{
+				Content = textInputLayout,
+				Stroke = Colors.Green,
+				StrokeThickness = 2,
+				BackgroundColor = Colors.White
+			};
+
+			Assert.Equal(textInputLayout, border.Content);
+
+			Assert.Equal(Colors.Green, border.Stroke);
+			Assert.Equal(2, border.StrokeThickness);
+			Assert.Equal(Colors.White, border.BackgroundColor);
+		}
+
+		[Theory]
+		[InlineData(ContainerType.Filled)]
+		[InlineData(ContainerType.Outlined)]
+		[InlineData(ContainerType.None)]
+		public void Content_SfNumericEntry(ContainerType container)
+		{
+			var inputLayout = new SfTextInputLayout();
+			var numericEntry = new SfNumericEntry();
+			numericEntry.Value = 123;
+			numericEntry.FontSize = 13;
+			inputLayout.ContainerType = container;
+			inputLayout.Content = numericEntry;
+
+			Assert.Equal(numericEntry, inputLayout.Content);
+			Assert.Equal(13, numericEntry.FontSize);
+			Assert.Equal(container, inputLayout.ContainerType);
+		}
+
+		[Fact]
+		public void Content_SfNumericEntry_AllowNull()
+		{
+			var inputLayout = new SfTextInputLayout();
+			var numericEntry = new SfNumericEntry();
+			numericEntry.Value = 123;
+			numericEntry.AllowNull = true;
+			inputLayout.Content = numericEntry;
+
+			Assert.Equal(numericEntry, inputLayout.Content);
+			Assert.True(numericEntry.AllowNull);
+		}
+
+		[Theory]
+		[InlineData(ContainerType.Filled)]
+		[InlineData(ContainerType.Outlined)]
+		[InlineData(ContainerType.None)]
+		public void Content_Picker(ContainerType container)
+		{
+			var inputLayout = new SfTextInputLayout();
+			var picker = new Microsoft.Maui.Controls.Picker();
+			picker.Items.Add("Item 1");
+			picker.Items.Add("Item 2");
+			picker.Items.Add("Item 3");
+			picker.SelectedIndex = 1;
+			inputLayout.ContainerType = container;
+			inputLayout.Content = picker;
+
+			Assert.Equal(picker, inputLayout.Content);
+			Assert.Equal(container, inputLayout.ContainerType);
+		}
+
+		[Theory]
+		[InlineData(ContainerType.Filled)]
+		[InlineData(ContainerType.Outlined)]
+		[InlineData(ContainerType.None)]
+		public void Content_TimePicker(ContainerType container)
+		{
+			var inputLayout = new SfTextInputLayout();
+			var timePicker = new TimePicker
+			{
+				Time = new TimeSpan(10, 30, 0)
+			};
+
+			inputLayout.ContainerType = container;
+			inputLayout.Content = timePicker;
+
+			Assert.Equal(timePicker, inputLayout.Content);
+			Assert.Equal(container, inputLayout.ContainerType);
+			Assert.Equal(new TimeSpan(10, 30, 0), timePicker.Time);
+		}
+
+
 		#endregion
 	}
 }

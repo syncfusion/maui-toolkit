@@ -48,22 +48,22 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
 		/// The combo box is a text box component that allows users to type a value or choose
 		/// an option from the list of predefined options.
 		/// </summary>
-		Picker? _comboBox;
+		Microsoft.Maui.Controls.Picker? _comboBox;
 
 		/// <summary>
 		/// This combo box is used to choose the selection mode of the calendar
 		/// </summary>
-		Picker? _selectionComboBox;
+		Microsoft.Maui.Controls.Picker? _selectionComboBox;
 
 		/// <summary>
 		/// This combo box is used to choose the selection shape of the calendar
 		/// </summary>
-		Picker? _selectionShapeComboBox;
+		Microsoft.Maui.Controls.Picker? _selectionShapeComboBox;
 
 		/// <summary>
 		/// This combo box is used to choose the selection direction of the calendar
 		/// </summary>
-		Picker? _directionComboBox;
+		Microsoft.Maui.Controls.Picker? _directionComboBox;
 
 		/// <summary>
 		/// Grid for SelectionDirection, TrailingDates and EnableSwipeSelection
@@ -119,23 +119,23 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
 
 			_cornerRadiusSlider = bindable.Content.FindByName<Slider>("cornerRadiusSlider");
 
-			_comboBox = bindable.Content.FindByName<Picker>("comboBox");
+			_comboBox = bindable.Content.FindByName<Microsoft.Maui.Controls.Picker>("comboBox");
 			_comboBox.ItemsSource = Enum.GetValues(typeof(CalendarView)).Cast<CalendarView>().ToList();
 			_comboBox.SelectedIndex = 0;
 			_comboBox.SelectedIndexChanged += ComboBox_SelectionChanged;
 
-			_selectionComboBox = bindable.Content.FindByName<Picker>("selectionComboBox");
+			_selectionComboBox = bindable.Content.FindByName<Microsoft.Maui.Controls.Picker>("selectionComboBox");
 			_selectionComboBox.ItemsSource = Enum.GetValues(typeof(CalendarSelectionMode)).Cast<CalendarSelectionMode>().ToList();
 			_selectionComboBox.SelectedIndex = 0;
 			_selectionComboBox.SelectedIndexChanged += ComboBox_SelectionTypeChanged;
 
-			_selectionShapeComboBox = bindable.Content.FindByName<Picker>("selectionShapeComboBox");
+			_selectionShapeComboBox = bindable.Content.FindByName<Microsoft.Maui.Controls.Picker>("selectionShapeComboBox");
 			_selectionShapeComboBox.ItemsSource = Enum.GetValues(typeof(CalendarSelectionShape)).Cast<CalendarSelectionShape>().ToList();
 			_selectionShapeComboBox.SelectedIndex = 0;
 			_selectionShapeComboBox.SelectedIndexChanged += ComboBox_SelectionShapeChanged;
 
 			_selectionDirectionGrid = bindable.Content.FindByName<Grid>("selectionDirectionGrid");
-			_directionComboBox = bindable.Content.FindByName<Picker>("directionComboBox");
+			_directionComboBox = bindable.Content.FindByName<Microsoft.Maui.Controls.Picker>("directionComboBox");
 			_directionComboBox.ItemsSource = Enum.GetValues(typeof(CalendarRangeSelectionDirection)).Cast<CalendarRangeSelectionDirection>().ToList();
 			_directionComboBox.SelectedIndex = 0;
 			_directionComboBox.SelectedIndexChanged += DirectionComboBox_SelectionChanged;
@@ -240,7 +240,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
 		/// <param name="e">Event Arguments</param>
 		void DirectionComboBox_SelectionChanged(object? sender, EventArgs e)
 		{
-			if (_calendar != null && sender is Picker picker && picker.SelectedItem is CalendarRangeSelectionDirection selectionDirection)
+			if (_calendar != null && sender is Microsoft.Maui.Controls.Picker picker && picker.SelectedItem is CalendarRangeSelectionDirection selectionDirection)
 			{
 				_calendar.RangeSelectionDirection = selectionDirection;
 			}
@@ -300,7 +300,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
 		/// <param name="e">Event Arguments</param>
 		void ComboBox_SelectionTypeChanged(object? sender, EventArgs e)
 		{
-			if (_calendar != null && sender is Picker picker && picker.SelectedItem is CalendarSelectionMode selectionMode)
+			if (_calendar != null && sender is Microsoft.Maui.Controls.Picker picker && picker.SelectedItem is CalendarSelectionMode selectionMode)
 			{
 				_calendar.SelectionMode = selectionMode;
 				if (_calendar.SelectionMode == CalendarSelectionMode.Range)
@@ -349,7 +349,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
 		/// <param name="e">Event Arguments</param>
 		void ComboBox_SelectionShapeChanged(object? sender, EventArgs e)
 		{
-			if (_calendar != null && sender is Picker picker && picker.SelectedItem is CalendarSelectionShape selectionShape)
+			if (_calendar != null && sender is Microsoft.Maui.Controls.Picker picker && picker.SelectedItem is CalendarSelectionShape selectionShape)
 			{
 				_calendar.SelectionShape = selectionShape;
 			}
@@ -362,7 +362,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
 		/// <param name="e">Event Arguments</param>
 		void ComboBox_SelectionChanged(object? sender, EventArgs e)
 		{
-			if (_calendar != null && sender is Picker picker && picker.SelectedItem is CalendarView view)
+			if (_calendar != null && sender is Microsoft.Maui.Controls.Picker picker && picker.SelectedItem is CalendarView view)
 			{
 				_calendar.View = view;
 				if (_trailingDatesGrid != null)

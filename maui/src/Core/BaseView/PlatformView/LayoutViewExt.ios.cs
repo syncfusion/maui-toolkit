@@ -201,7 +201,7 @@ namespace Syncfusion.Maui.Toolkit.Platform
 
 			var bounds = AdjustForSafeArea(Bounds).ToRectangle();
 			var widthConstraint = bounds.Width;
-			var heightConstraint = bounds.Height;
+			var heightConstraint = bounds.Height;			
 
 			if (!IsMeasureValid(widthConstraint, heightConstraint) && Superview is not Microsoft.Maui.Platform.MauiView && View is SfView sfView && !sfView.IsLayoutControl)
 			{

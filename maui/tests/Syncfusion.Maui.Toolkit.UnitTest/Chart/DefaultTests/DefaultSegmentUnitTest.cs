@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Syncfusion.Maui.Toolkit.Charts; 
 
-namespace Syncfusion.Maui.Toolkit.UnitTest
+namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class DefaultSegmentUnitTest : BaseUnitTest
 	{
@@ -1126,7 +1126,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var segment = new ScatterSegment(); 
 			Assert.Equal(1f, segment.Opacity);
-			Assert.Equal(Charts.ShapeType.Custom, segment.Type);
+			Assert.Equal(Syncfusion.Maui.Toolkit.Charts.ShapeType.Custom, segment.Type);
 			Assert.Equal(0f, segment.PointWidth);
 			Assert.Equal(0f, segment.PointHeight);
 			Assert.Equal(0f, segment.CenterX);

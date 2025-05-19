@@ -207,9 +207,9 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			options.InSampleSize = 8;
 			options.InJustDecodeBounds = false;
 			options.InScaled = false;
-#pragma warning disable CA1422
+#if !ANDROID24_0_OR_GREATER
 			options.InDither = false;
-#pragma warning restore CA1422
+#endif
 			options.InPreferredConfig = Bitmap.Config.Rgb565;
 			BitmapFactory.DecodeResource(res, resId, options);
 			options.InSampleSize = CalculateInSampleSize(options, reqWidth, reqHeight);
@@ -373,24 +373,23 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			{
 				return;
 			}
-
-#pragma warning disable CS8602
-			int resID = Resources.GetIdentifier(imageName, "drawable", _contextCarouselItem.PackageName);
-#pragma warning restore CS8602
-
-			PlatformCarouselItem.RemoveViewFromParent(imageView);
-
-			Bitmap? originalBitmap = DecodeSampledBitmapFromResource(Resources, resID, ParentItem.ItemWidth, ParentItem.ItemHeight);
-			if (originalBitmap != null)
+			if (_contextCarouselItem != null && Resources != null)
 			{
-				PlatformCarouselItem.SetImageBitmap(imageView, originalBitmap);
-				originalBitmap.Recycle();
-				originalBitmap = null;
-			}
+				int resID = Resources.GetIdentifier(imageName, "drawable", _contextCarouselItem.PackageName);
+				PlatformCarouselItem.RemoveViewFromParent(imageView);
 
-			_childView = imageView;
-			_childView.LayoutParameters = new LayoutParams(ParentItem.ItemWidth, ParentItem.ItemHeight);
-			AddView(_childView);
+				Bitmap? originalBitmap = DecodeSampledBitmapFromResource(Resources, resID, ParentItem.ItemWidth, ParentItem.ItemHeight);
+				if (originalBitmap != null)
+				{
+					PlatformCarouselItem.SetImageBitmap(imageView, originalBitmap);
+					originalBitmap.Recycle();
+					originalBitmap = null;
+				}
+
+				_childView = imageView;
+				_childView.LayoutParameters = new LayoutParams(ParentItem.ItemWidth, ParentItem.ItemHeight);
+				AddView(_childView);
+			}
 		}
 
 		/// <summary>

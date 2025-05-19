@@ -91,7 +91,10 @@ public class SignUpBehavior:Behavior<SampleView>
 					_phoneVerification = false;
 					_phoneInputLayout.HasError = true;
 					_phoneInputLayout.ErrorText = "Enter a 10-digit mobile number";
-					_phoneInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					if (_phoneInputLayout.ErrorLabelStyle is not null)
+					{
+						_phoneInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					}
 				}
 			}
 			else
@@ -107,7 +110,10 @@ public class SignUpBehavior:Behavior<SampleView>
 					_phoneVerification = false;
 					_phoneInputLayout.HasError = true;
 					_phoneInputLayout.ErrorText = "Enter a 10-digit mobile number";
-					_phoneInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					if (_phoneInputLayout.ErrorLabelStyle is not null)
+					{
+						_phoneInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					}
 				}
 			}
 		}
@@ -125,7 +131,10 @@ public class SignUpBehavior:Behavior<SampleView>
 					_nameVerification = false;
 					_nameInputLayout.HasError = true;
 					_nameInputLayout.ErrorText = "Invalid input";
-					_nameInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					if (_nameInputLayout.ErrorLabelStyle is not null)
+					{
+						_nameInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					}
 				}
 				
 			}
@@ -194,7 +203,10 @@ public class SignUpBehavior:Behavior<SampleView>
 					_nameVerification = false;
 					_nameInputLayout.HasError = true;
 					_nameInputLayout.ErrorText = "Invalid input";
-					_nameInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					if (_nameInputLayout.ErrorLabelStyle is not null)
+					{
+						_nameInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					}
 				}
 
 				if (_phoneEntry is not null && _phoneInputLayout is not null && string.IsNullOrEmpty(_phoneEntry.Text))
@@ -202,7 +214,10 @@ public class SignUpBehavior:Behavior<SampleView>
 					_phoneVerification = false;
 					_phoneInputLayout.HasError = true;
 					_phoneInputLayout.ErrorText = "Invalid input";
-					_phoneInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					if (_phoneInputLayout.ErrorLabelStyle is not null)
+					{
+						_phoneInputLayout.ErrorLabelStyle.TextColor = Colors.Red;
+					}
 				}
 			}
 		}

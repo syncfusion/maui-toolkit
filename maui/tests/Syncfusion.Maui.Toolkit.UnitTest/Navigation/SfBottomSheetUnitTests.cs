@@ -732,7 +732,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(_bottomSheet, "_bottomSheet", border);
 			InvokePrivateMethod(_bottomSheet, "UpdatePadding", [value]);
 			BottomSheetBorder? resultBorder = (BottomSheetBorder?)GetPrivateField(_bottomSheet, "_bottomSheet");
-			Assert.Equal(expected, resultBorder?.Padding);
+			var expectedPadding = new Thickness(Math.Max(0, expected.Left), Math.Max(0, expected.Top), Math.Max(0, expected.Right), Math.Max(0, expected.Bottom));
+			Assert.Equal(expectedPadding, resultBorder?.Padding);
 		}
 
 		[Theory]

@@ -609,6 +609,24 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 				return;
 			}
 
+			//// Issue Scenario: In Android platform when we use the shimmer along with the PullToRefresh, collection view and change the IsActive property on refresh
+			//// "Cannot access disposed object" exception occurs after certain number of refresh and page navigations.
+			//// Fix: So we are check if the Android native view is still valid before proceeding
+			//// This prevents "Cannot access disposed object" exceptions that occur when
+			//// trying to interact with platform views that have been disposed during
+			//// page navigation or when the control is removed from the visual tree.
+#if ANDROID
+			var layoutHandler = shimmer.Handler;
+			if (layoutHandler != null)
+			{
+				var nativeView = layoutHandler.PlatformView as Android.Views.View;
+				if (nativeView == null || nativeView.Handle == IntPtr.Zero || nativeView.Context == null)
+				{
+					return;
+				}
+			}
+#endif
+
 			bool isActive = (bool)newValue;
 			if (isActive)
 			{
@@ -643,18 +661,22 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 					shimmer.ShimmerDrawable.AbortAnimation("ShimmerAnimation");
 				}
 
-				shimmer.Remove(shimmer.ShimmerDrawable);
-				if (shimmer.ShimmerDrawable.Handler != null && shimmer.ShimmerDrawable.Handler.PlatformView != null)
+				if (shimmer.ShimmerDrawable != null)
 				{
-					shimmer.ShimmerDrawable.Handler.DisconnectHandler();
-				}
+					shimmer.Remove(shimmer.ShimmerDrawable);
 
-				if (shimmer.CustomView != null)
-				{
-					shimmer.Remove(shimmer.CustomView);
-				}
+					if (shimmer.ShimmerDrawable.Handler != null && shimmer.ShimmerDrawable.Handler.PlatformView != null)
+					{
+						shimmer.ShimmerDrawable.Handler.DisconnectHandler();
+					}
 
-				shimmer.ShimmerDrawable = null;
+					if (shimmer.CustomView != null)
+					{
+						shimmer.Remove(shimmer.CustomView);
+					}
+
+					shimmer.ShimmerDrawable = null;
+				}
 			}
 		}
 

@@ -278,6 +278,19 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				defaultValueCreator: bindable => true);
 
 		/// <summary>
+		/// Identifies the <see cref="EnableRippleEffect"/> dependency property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="EnableRippleEffect"/> dependency property.
+		/// </value>
+		public static readonly BindableProperty EnableRippleEffectProperty =
+			BindableProperty.Create(
+				nameof(EnableRippleEffect), 
+				typeof(bool), 
+				typeof(SfSegmentedControl), 
+				true);
+
+		/// <summary>
 		/// Identifies the <see cref="HoveredBackground"/> dependency property.
 		/// </summary>
 		/// <value>
@@ -289,6 +302,19 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				typeof(Brush),
 				typeof(SfSegmentedControl),
 				defaultValueCreator: bindable => null);
+
+		/// <summary>
+		/// Identifies the <see cref="SelectedSegmentTextColor"/> dependency property.
+		/// </summary>
+		/// <value>
+		/// Identifies the <see cref="SelectedSegmentTextColor"/> bindable property.
+		/// </value>
+		internal static readonly BindableProperty SelectedSegmentTextColorProperty =
+			BindableProperty.Create(
+				nameof(SelectedSegmentTextColor),
+				typeof(Color), typeof(SfSegmentedControl),
+				defaultValueCreator: bindable => Color.FromArgb("#FFFFFF"),
+				propertyChanged: OnSelectedSegmentTextColorChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="KeyboardFocusStroke"/> dependency property.
@@ -985,12 +1011,54 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether the ripple effect animation should be applied to a segment item when it is selected for default and segment template added.
+		/// </summary>
+		/// <value>
+		/// The default value is true.
+		/// </value>
+		/// <example>
+		/// The below examples shows, how to use the <see cref="EnableRippleEffect"/> property in the <see cref="SfSegmentedControl"/>.
+		/// # [XAML](#tab/tabid-37)
+		/// <code Lang="XAML"><![CDATA[
+		/// <button:SfSegmentedControl x:Name="segmentedControl"
+		///                            EnableRippleEffect="False">
+		///    <button:SfSegmentedControl.ItemsSource>
+		///        <x:Array Type="{x:Type x:String}">
+		///            <x:String>Day</x:String>
+		///            <x:String>Week</x:String>
+		///            <x:String>Month</x:String>
+		///            <x:String>Year</x:String>
+		///        </x:Array>
+		///    </button:SfSegmentedControl.ItemsSource>
+		/// </button:SfSegmentedControl>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-38)
+		/// <code Lang="C#"><![CDATA[
+		/// this.segmentedControl.EnableRippleEffect = false;
+		/// ]]></code>
+		/// </example>
+		public bool EnableRippleEffect
+		{
+			get { return (bool)this.GetValue(EnableRippleEffectProperty); }
+			set { this.SetValue(EnableRippleEffectProperty, value); }
+		}
+
+		/// <summary>
 		/// Gets or sets the hovered selected background brush for the segment.
 		/// </summary>
 		internal Brush HoveredBackground
 		{
 			get { return (Brush)GetValue(HoveredBackgroundProperty); }
 			set { SetValue(HoveredBackgroundProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the selected text color brush for the segment.
+		/// </summary>
+		internal Color SelectedSegmentTextColor
+		{
+			get { return (Color)this.GetValue(SelectedSegmentTextColorProperty); }
+			set { this.SetValue(SelectedSegmentTextColorProperty, value); }
 		}
 
 		/// <summary>
@@ -1278,6 +1346,23 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			}
 
 			segmentedControl._keyNavigationView?.InvalidateDrawable();
+		}
+
+		/// <summary>
+		/// Occurs when <see cref="SelectedSegmentTextColor"/> property changed.
+		/// </summary>
+		/// <param name="bindable">The bindable object.</param>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		static void OnSelectedSegmentTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			SfSegmentedControl segmentedControl = (SfSegmentedControl)bindable;
+			if (segmentedControl == null || segmentedControl._segmentLayout == null || !segmentedControl.IsLoaded)
+			{
+				return;
+			}
+
+			segmentedControl._segmentLayout?.UpdateSelectedSegmentItemStyle();
 		}
 
 		/// <summary>

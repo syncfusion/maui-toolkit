@@ -1149,7 +1149,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			ApplyDynamicResource(HeaderBackgroundProperty, "SfPopupNormalHeaderBackground");
 			ApplyDynamicResource(HeaderTextColorProperty, "SfPopupNormalHeaderTextColor");
 			ApplyDynamicResource(MessageBackgroundProperty, "SfPopupNormalMessageBackground");
-			ApplyDynamicResource(MessageTextColorProperty, "SfpopupNormalMessageTextColor");
+			ApplyDynamicResource(MessageTextColorProperty, "SfPopupNormalMessageTextColor");
 			ApplyDynamicResource(FooterBackgroundProperty, "SfPopupNormalFooterBackground");
 			ApplyDynamicResource(AcceptButtonBackgroundProperty, "SfPopupNormalAcceptButtonBackground");
 			ApplyDynamicResource(AcceptButtonTextColorProperty, "SfPopupNormalAcceptButtonTextColor");

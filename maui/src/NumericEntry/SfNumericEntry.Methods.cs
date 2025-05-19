@@ -166,16 +166,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			if (_textBox != null)
 			{
 				_textBox.ButtonSize = ButtonSize + 4;
-				int defaultMargin = IsTextInputLayout ? 0 : 10;
 				double rightMargin = _buttonSpace;
-
-		#if ANDROID || IOS || MACCATALYST
-				_textBox.Margin = new Thickness(defaultMargin, 0, rightMargin, 0);
-		#else
-				_textBox.Margin = new Thickness(0, 0, rightMargin, 0);
-		#endif
+				_textBox.Margin = GetMarginBasedOnTextAlignment(0, 0, rightMargin, 0);
 			}
 		}
+
 
 		/// <summary>
 		/// Clears the collection of effect bounds, typically used to reset or remove visual effects on the control.
@@ -947,9 +942,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// <param name="numberBox">The SfNumericEntry control.</param>
 		/// <param name="oldValue">The previous value.</param>
 		/// <param name="newValue">The new value.</param>
-		static void RaiseValueChangedEvent(SfNumericEntry numberBox, double? oldValue, double? newValue)
+		static async void RaiseValueChangedEvent(SfNumericEntry numberBox, double? oldValue, double? newValue)
 		{
 			var valueChangedEventArgs = new NumericEntryValueChangedEventArgs(newValue, oldValue);
+			//Fix included for Value loop issue.
+			await Task.Yield();
 			numberBox.ValueChanged?.Invoke(numberBox, valueChangedEventArgs);
 		}
 
@@ -2273,6 +2270,30 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 					_maximumNegativeFractionDigit = GetMaximumFractionDigits(customFormats[1]);
 				}
 			}
+		}
+
+		/// <summary> 
+		/// On iOS and MacCatalyst, it ensures a minimum left or right margin value when the 
+		/// text alignment is Start or End respectively.
+		/// On other platforms, it returns the provided thickness without modification.
+		/// <param name="left">The original left margin.</param>
+		/// <param name="top">The original top margin.</param>
+		/// <param name="right">The original right margin.</param>
+		/// <param name="bottom">The original bottom margin.</param>
+		/// <returns>Returns a <see cref="Thickness"/> value adjusted based on the specified text alignment.</returns>
+		/// </summary>
+		internal Thickness GetMarginBasedOnTextAlignment(double left, double top, double right, double bottom)
+		{
+#if MACCATALYST || IOS
+			return HorizontalTextAlignment switch
+			{
+				TextAlignment.Start => new Thickness(left > 0 ? left : MinimumMargin, top, right, bottom),
+				TextAlignment.End => new Thickness(left, top, right > 0 ? right : MinimumMargin, bottom),
+				_ => new Thickness(left, top, right, bottom)
+			};
+#else
+			return new Thickness(left, top, right, bottom);
+#endif
 		}
 
 		/// <summary>

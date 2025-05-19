@@ -421,7 +421,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 
 					stackingSeries.ValidateYValues();
-
 					var stackingGroup = stackingSeries.GroupingLabel;
 					var stackingXAxis = stackingSeries.ActualXAxis;
 					var stackingYAxis = stackingSeries.ActualYAxis;

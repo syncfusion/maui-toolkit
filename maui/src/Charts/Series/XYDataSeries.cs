@@ -207,7 +207,7 @@
 					{
 						foreach (var index in item)
 						{
-							if (YValues != null && YValues.Count != 0)
+							if (YValues != null && YValues.Count != 0 && index < YValues.Count)
 							{
 								YValues[(int)index] = double.NaN;
 							}

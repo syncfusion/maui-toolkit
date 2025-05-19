@@ -18,7 +18,7 @@
     <local:StaticThemeResource x:Key="SfPopupNormalHeaderBackground" ResourceKey="FlyoutBackground" />
     <local:StaticThemeResource x:Key="SfPopupNormalHeaderTextColor" ResourceKey="ContentForeground" />
     <local:StaticThemeResource x:Key="SfPopupNormalMessageBackground" ResourceKey="FlyoutBackground" />
-    <local:StaticThemeResource x:Key="SfpopupNormalMessageTextColor" ResourceKey="ContentForegroundAlt1" />
+    <local:StaticThemeResource x:Key="SfPopupNormalMessageTextColor" ResourceKey="ContentForegroundAlt1" />
     <local:StaticThemeResource x:Key="SfPopupNormalFooterBackground" ResourceKey="FlyoutBackground" />
     <local:StaticThemeResource x:Key="SfPopupNormalAcceptButtonBackground" ResourceKey="Transparent" />
     <local:StaticThemeResource x:Key="SfPopupNormalAcceptButtonTextColor" ResourceKey="PrimaryBackground" />
@@ -203,8 +203,11 @@
     <!--SfTextInputLayout-->
     <x:String x:Key="SfTextInputLayoutTheme">CommonTheme</x:String>
     <local:StaticThemeResource x:Key="SfTextInputLayoutStroke" ResourceKey="InputBoxBorder"/>
-    <local:StaticThemeResource x:Key="SfTextInputLayoutNormalContainerBackground" ResourceKey="ContentBackgroundAlt5" />
-    <local:StaticThemeResource x:Key="SfTextInputLayoutContainerBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfTextInputLayoutNormalContainerBackground" ResourceKey="ContentBackgroundAlt5" />
+  <local:StaticThemeResource x:Key="SfTextInputLayoutMouseHoveredOutlinedContainerBackground" ResourceKey="Transparent"/>
+    <local:StaticThemeResource x:Key="SfTextInputLayoutFocusedOutlinedContainerBackground" ResourceKey="Transparent"/>
+    <local:StaticThemeResource x:Key="SfTextInputLayoutErrorOutlinedContainerBackground" ResourceKey="Transparent"/>
+    <local:StaticThemeResource x:Key="SfTextInputLayoutDisabledOutlinedContainerBackground" ResourceKey="Transparent"/>
     <local:StaticThemeResource x:Key="SfTextInputLayoutNormalErrorTextColor" ResourceKey="ErrorBorder" />
     <local:StaticThemeResource x:Key="SfTextInputLayoutHintTextColor" ResourceKey="PlaceholderForeground" />
     <local:StaticThemeResource x:Key="SfTextInputLayoutHelperTextColor" ResourceKey="ContentForegroundAlt1" />
@@ -540,5 +543,127 @@
   <local:StaticThemeResource x:Key="SfOtpInputSuccessStroke" ResourceKey="SuccessBorder"/>
   <local:StaticThemeResource x:Key="SfOtpInputWarningStroke" ResourceKey="WarningBorder"/>
   <local:StaticThemeResource x:Key="SfOtpInputErrorStroke" ResourceKey="ErrorBorder"/>
+
+  <!--SfCircularProgressBar-->
+  <x:String x:Key="SfCircularProgressBarTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfCircularProgressBarTrackColor" ResourceKey="ContentBackgroundAlt5"/>
+  <local:StaticThemeResource x:Key="SfCircularProgressBarProgressColor" ResourceKey="PrimaryBackground"/>
+  <local:StaticThemeResource x:Key="SfCircularProgressBarBackground" ResourceKey="ContentBackground"/>
+
+  <!--SfProgressBarCommon-->
+  <local:StaticThemeResource x:Key="SfProgressBarProgressGradientStopColor" ResourceKey="PrimaryBackground"/>
+
+  <!--SfLinearProgressBar-->
+  <x:String x:Key="SfLinearProgressBarTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfLinearProgressBarTrackColor" ResourceKey="ContentBackgroundAlt5"/>
+  <local:StaticThemeResource x:Key="SfLinearProgressBarBackground" ResourceKey="ContentBackground"/>
+  <local:StaticThemeResource x:Key="SfLinearProgressBarProgressColor" ResourceKey="PrimaryBackground"/>
+  <local:StaticThemeResource x:Key="SfLinearProgressBarSecondaryProgressColor" ResourceKey="PrimaryBackgroundOpacity1"/>
+  <CornerRadius x:Key="SfLinearProgressBarTrackCornerRadius">0</CornerRadius>
+  <CornerRadius x:Key="SfLinearProgressBarProgressCornerRadius">0</CornerRadius>
+  <CornerRadius x:Key="SfLinearProgressBarSecondaryProgressCornerRadius">0</CornerRadius>
+
+  <!--SfPicker-->
+  <x:String x:Key="SfPickerTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfPickerNormalBackground" ResourceKey="FlyoutBackground" />
+  <local:StaticThemeResource x:Key="SfPickerNormalHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfPickerNormalHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfPickerNormalHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfPickerSelectionTextColor" ResourceKey="PrimaryBackground"/>
+  <local:StaticThemeResource x:Key="SfPickerNormalFooterTextColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfPickerNormalFooterBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfPickerNormalFooterDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfPickerSelectionBackground" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfPickerSelectionStroke" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfPickerNormalColumnHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfPickerNormalColumnHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfPickerNormalColumnHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfPickerNormalColumnDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfPickerSelectedTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfPickerNormalTextColor" ResourceKey="ContentForeground" />
+
+  <sys:Double x:Key="SfPickerNormalHeaderFontSize">16</sys:Double>
+  <sys:Double x:Key="SfPickerNormalFooterFontSize">14</sys:Double>
+  <sys:Double x:Key="SfPickerSelectionCornerRadius">20</sys:Double>
+  <sys:Double x:Key="SfPickerNormalColumnHeaderFontSize">14</sys:Double>
+  <sys:Double x:Key="SfPickerSelectedFontSize">16</sys:Double>
+  <sys:Double x:Key="SfPickerNormalFontSize">16</sys:Double>
+
+  <!--SfDatePicker-->
+  <x:String x:Key="SfDatePickerTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfDatePickerNormalBackground" ResourceKey="FlyoutBackground" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalFooterTextColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalFooterBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalFooterDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalColumnHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalColumnHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalColumnHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDatePickerSelectedTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfDatePickerSelectionBackground" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfDatePickerSelectionStroke" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalColumnDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDatePickerDisabledTextColor" ResourceKey="ForegroundDisabled" />
+  <sys:Double x:Key="SfDatePickerNormalHeaderFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDatePickerNormalFooterFontSize">14</sys:Double>
+  <sys:Double x:Key="SfDatePickerNormalColumnHeaderFontSize">14</sys:Double>
+  <sys:Double x:Key="SfDatePickerSelectedFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDatePickerNormalFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDatePickerSelectionCornerRadius">20</sys:Double>
+
+  <!--SfTimePicker-->
+  <x:String x:Key="SfTimePickerTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfTimePickerNormalBackground" ResourceKey="FlyoutBackground" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalFooterTextColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalFooterBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalFooterDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalColumnHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalColumnHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalColumnHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfTimePickerSelectedTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfTimePickerSelectionBackground" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfTimePickerSelectionStroke" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalColumnDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfTimePickerDisabledTextColor" ResourceKey="ForegroundDisabled" />
+  <sys:Double x:Key="SfTimePickerNormalHeaderFontSize">16</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalFooterFontSize">14</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalColumnHeaderFontSize">14</sys:Double>
+  <sys:Double x:Key="SfTimePickerSelectedFontSize">16</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalFontSize">16</sys:Double>
+  <sys:Double x:Key="SfTimePickerSelectionCornerRadius">20</sys:Double>
+
+  <!--SfDateTimePicker-->
+  <x:String x:Key="SfDateTimePickerTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalBackground" ResourceKey="FlyoutBackground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerHeaderSelectionTextColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalFooterTextColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalFooterBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalFooterDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalColumnHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalColumnHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalColumnHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerSelectedTextColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerSelectionBackground" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerSelectionStroke" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalColumnDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerDisabledTextColor" ResourceKey="ForegroundDisabled" />
+  <sys:Double x:Key="SfDateTimePickerNormalHeaderFontSize">14</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerHeaderSelectionFontSize">14</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalFooterFontSize">14</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalColumnHeaderFontSize">14</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerSelectedFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerSelectionCornerRadius">20</sys:Double>
   
 </local:SyncfusionThemeDictionary>

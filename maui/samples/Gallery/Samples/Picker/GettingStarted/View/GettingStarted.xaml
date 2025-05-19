@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Picker.SfPicker.GettingStarted"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:converters="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:buttons="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Picker.SfPicker"  Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="{OnPlatform WinUI=-10, MacCatalyst=-10, Default=0}">
+
+    <localCore:SampleView.Content>
+
+        <Grid>
+            <Grid IsVisible="{OnPlatform WinUI=True, MacCatalyst=True, Default=False}" HorizontalOptions="Center" VerticalOptions="Center" HeightRequest="360" WidthRequest="600">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="282"/>
+                    <ColumnDefinition Width="308"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Border x:Name="frame" BackgroundColor="Transparent" StrokeShape="RoundRectangle 5,5,5,5" StrokeThickness="0" IsVisible="{OnPlatform WinUI=True, Android=True, Default=False}" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0" >
+                        <picker:SfPicker x:Name="Picker"  SelectionChanged="OnPickerSelectionChanged" />
+                    </Border>
+
+                    <Border x:Name="border" BackgroundColor="Transparent" IsVisible="{OnPlatform WinUI=False, Android=False, Default=True}" StrokeThickness="0" StrokeShape="RoundRectangle 5,5,5,5" Margin="0" Padding="0">
+                        <picker:SfPicker x:Name="Picker1" SelectionChanged="OnPickerSelectionChanged" />
+                    </Border>
+                </Grid>
+
+                <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="Transparent" Margin="0" Padding="0" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <Grid Grid.Column="1" BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt1}}" HeightRequest="360" WidthRequest="298">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition Height="1"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Padding="10, 0, 5, 5" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label HeightRequest="30" Text="Event Log" FontSize="15" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+                            <Button Grid.Column="1" Text="Clear" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="{AppThemeBinding Default={StaticResource PrimaryBackground}}" VerticalOptions="Center" HorizontalOptions="End" Clicked="OnClearButtonClicked"/>
+                        </Grid>
+                        <BoxView Grid.Row="1" BackgroundColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}"/>
+                        <ScrollView Grid.Row="2" VerticalScrollBarVisibility="Always" Margin="0, 10, 0, 0">
+                            <StackLayout Padding="5, 0" x:Name="labelStack">
+                                <Label Text="Australia has been selected" VerticalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+                            </StackLayout>
+                        </ScrollView>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Grid IsVisible="{OnPlatform Default=False, Android=True, iOS=True}" HorizontalOptions="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" WidthRequest="320" HeightRequest="330" HorizontalOptions="Center" VerticalOptions="Center">
+                    <Border x:Name="frame1" BackgroundColor="Transparent" IsVisible="{OnPlatform WinUI=True, Android=True, Default=False}" StrokeShape="RoundRectangle 5,5,5,5" StrokeThickness="2" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0" >
+                        <picker:SfPicker x:Name="Picker2" HeightRequest="330"  SelectionChanged="OnPickerSelectionChanged" />
+                    </Border>
+
+                    <Border x:Name="border1" BackgroundColor="Transparent" IsVisible="{OnPlatform WinUI=False, Android=False, Default=True}" StrokeThickness="2" StrokeShape="RoundRectangle 5,5,5,5" Margin="0" Padding="0">
+                        <picker:SfPicker x:Name="Picker3" SelectionChanged="OnPickerSelectionChanged" />
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0, 10, 0, 10" Padding="5" BackgroundColor="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource Border}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="45"/>
+                        <RowDefinition Height="1"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid Padding="5, 0, 5, 5" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label HeightRequest="30" Text="Event Log" FontSize="15" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+                        <Button Grid.Column="1" Text="Clear" BackgroundColor="Transparent" BorderColor="Transparent" TextColor="{AppThemeBinding Default={StaticResource PrimaryBackground}}" VerticalOptions="Center" HorizontalOptions="End" Clicked="OnClearButtonClicked"/>
+                    </Grid>
+                    <BoxView Grid.Row="1" BackgroundColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}"/>
+                    <ScrollView Grid.Row="2" VerticalScrollBarVisibility="Always" Margin="0, 10, 0, 0">
+                        <StackLayout Padding="5, 0" x:Name="labelStack1">
+                            <Label Text="Australia has been selected" VerticalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+                        </StackLayout>
+                    </ScrollView>
+                </Grid>
+            </Grid>
+        </Grid>
+
+    </localCore:SampleView.Content>
+
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel/>
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <ScrollView Padding="0, 0, 5, 0">
+                <StackLayout Orientation="Vertical">
+
+                    <Grid x:Name="showHeaderGrid" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Show Header"  LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Switch  x:Name="showHeaderSwitch" Grid.Column="1" Margin="5,0,0,0" VerticalOptions="Center" IsToggled="True" HorizontalOptions="End"
+                                 Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                    </Grid>
+
+                    <Grid x:Name="showFooterGrid" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Show Footer"  LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Switch  x:Name="showFooterSwitch" Grid.Column="1" Margin="5,0,0,0" VerticalOptions="Center" IsToggled="False" HorizontalOptions="End"
+                                 Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                    </Grid>
+
+                    <Grid  x:Name="textDisplayModeGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Text Display Mode" LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{OnPlatform Default={AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}, Android=Transparent}" Margin="0" Padding="0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="5" />
+                            </Border.StrokeShape>
+                            <Picker x:Name="textDisplayComboBox" HeightRequest="38"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+                        </Border>
+                    </Grid>
+
+                </StackLayout>
+            </ScrollView>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+
+    <localCore:SampleView.Behaviors>
+        <local:GettingStartedBehavior />
+    </localCore:SampleView.Behaviors>
+
+</localCore:SampleView>

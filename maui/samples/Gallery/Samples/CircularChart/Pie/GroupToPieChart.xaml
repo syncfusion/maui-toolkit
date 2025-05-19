@@ -20,10 +20,10 @@
                 <ResourceDictionary>
                     <local:ItemsSourceConverter x:Key="valueConvert"/>
                     <local:StringFormatConverter x:Key="StingConvert"/>
-                    <DataTemplate x:Key="tooltipTemplate">
+                    <DataTemplate x:Key="tooltipTemplate" x:DataType="chart:TooltipInfo">
                             <VerticalStackLayout Spacing="2" BindableLayout.ItemsSource="{Binding Item, Converter={StaticResource valueConvert}}">
                                 <BindableLayout.ItemTemplate>
-                                    <DataTemplate>
+                                    <DataTemplate x:DataType="local:ChartDataModel">
                                         <Grid ColumnSpacing="10" ColumnDefinitions="*,Auto">
                                         <Label Text="{Binding Name}"
                                                    TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" Grid.Column="0"
@@ -98,10 +98,10 @@
                                    Margin="0,13,0,0" Grid.Column="0" />
                             <Picker x:Name="groupTo"   Grid.Column="1" SelectedIndex="0"
                                     VerticalOptions="CenterAndExpand" 
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
                                     WidthRequest="130"  Margin="0,13,0,0"
-                                    ItemsSource="{Binding PieGroupMode}" SelectedIndexChanged="groupTo_SelectedIndexChanged">
+                                    ItemsSource="{Binding PieGroupMode}" SelectedIndexChanged="groupTo_SelectedIndexChanged"
+                                    Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                                    TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                             </Picker>
                         </Grid>
                     </VerticalStackLayout>

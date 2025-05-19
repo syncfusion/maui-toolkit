@@ -23,7 +23,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             NativeSnapLayout viewGroup = new NativeSnapLayout(Context!);
-            SnapLayout? scrollLayout = this.VirtualView as SnapLayout;
+            SnapLayout? scrollLayout = VirtualView as SnapLayout;
             if (scrollLayout != null)
             {
                 //// Set the native intercept event property by Maui intercept method because in native we did not decide the whether the child scroll view reaches it end and try to scroll after the end so that we call the Maui method for intercept event.

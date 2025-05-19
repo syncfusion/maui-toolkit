@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.ProgressBar.SfCircularProgressBar.CircularProgressBar"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:progressBar="clr-namespace:Syncfusion.Maui.Toolkit.ProgressBar;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <Style x:Key="labelStyle"
+               TargetType="Label">
+            <Setter Property="Margin"
+                    Value="0,0,0,10"/>
+        </Style>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <ScrollView>
+            <StackLayout Spacing="25"
+                         VerticalOptions="Center"
+                         Margin="10">
+
+                <!--#region Circular radius -->
+
+                <StackLayout>
+                    <Label Text="Radius customization"
+                           Style="{StaticResource labelStyle}"/>
+                    <Grid HorizontalOptions="Start">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <progressBar:SfCircularProgressBar x:Name="TrackOutsideProgressBar"
+                                                           AnimationDuration="2000"
+                                                           Progress="100"
+                                                           ThicknessUnit="Factor"
+                                                           TrackThickness="0.05"
+                                                           ProgressRadiusFactor="0.85"
+                                                           ProgressThickness="0.05"
+                                                           ProgressChanged="TrackOutsideProgressBar_ProgressChanged">
+                        </progressBar:SfCircularProgressBar>
+
+                        <progressBar:SfCircularProgressBar x:Name="FilledIndicatorProgressBar"
+                                                           Grid.Column="1"
+                                                           AnimationDuration="2000"
+                                                           Progress="100"
+                                                           ThicknessUnit="Factor"
+                                                           TrackThickness="0.05"
+                                                           ProgressRadiusFactor="0.85"
+                                                           ProgressThickness="1"
+                                                           ProgressChanged="FilledIndicatorProgressBar_ProgressChanged">
+
+                        </progressBar:SfCircularProgressBar>
+
+                        <progressBar:SfCircularProgressBar x:Name="TrackInsideProgressBar"
+                                                           Grid.Column="2"
+                                                           AnimationDuration="0"
+                                                           TrackRadiusFactor="0.8"
+                                                           TrackThickness="50">
+
+                            <progressBar:SfCircularProgressBar.Content>
+                                <StackLayout>
+                                    <Label x:Name="TrackInsideProgressBarProgressLabel"
+                                           TextColor="{AppThemeBinding Default={StaticResource PrimaryBackground}}"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           HeightRequest="45"
+                                           WidthRequest="60"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center">
+                                    </Label>
+                                </StackLayout>
+                            </progressBar:SfCircularProgressBar.Content>
+                        </progressBar:SfCircularProgressBar>
+
+                        <progressBar:SfCircularProgressBar x:Name="ThinTrackStyle"
+                                                           Grid.Row="{OnPlatform WinUI=0,MacCatalyst=0, Default=1}"
+                                                           Grid.Column="{OnPlatform WinUI=3,MacCatalyst=3, Default=0}"
+                                                           VerticalOptions="Center"
+                                                           AnimationDuration="2000"
+                                                           Progress="100"
+                                                           ThicknessUnit="Factor"
+                                                           TrackRadiusFactor="0.65"
+                                                           TrackThickness="0.05"
+                                                           ProgressThickness="0.1"
+                                                           ProgressRadiusFactor="0.675"
+                                                           ProgressChanged="ThinTrackStyle_ProgressChanged"/>
+                    </Grid>
+                </StackLayout>
+
+                <!--#endregion-->
+
+                <!--#region Circular segment -->
+
+                <StackLayout>
+                    <Label Text="Segment"
+                           Style="{StaticResource labelStyle}"/>
+                    <Grid HorizontalOptions="Start">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--Circular progress bar with segment-->
+
+                        <progressBar:SfCircularProgressBar x:Name="SegmentedCircularProgressBar"
+                                                           AnimationDuration="2000"
+                                                           Progress="75"
+                                                           SegmentCount="4"
+                                                           ProgressChanged="SegmentedCircularProgressBar_ProgressChanged">
+
+                        </progressBar:SfCircularProgressBar>
+
+                        <!--Circular progress bar with segment-->
+
+                        <progressBar:SfCircularProgressBar x:Name="SegmentedPaddingCircularProgressBar"
+                                                           Grid.Column="1"
+                                                           AnimationDuration="2000"
+                                                           Progress="75"
+                                                           ThicknessUnit="Factor"
+                                                           TrackThickness="0.15"
+                                                           ProgressRadiusFactor="0.85"
+                                                           ProgressThickness="0.05"
+                                                           SegmentCount="4"
+                                                           ProgressChanged="SegmentedPaddingCircularProgressBar_ProgressChanged">
+
+                        </progressBar:SfCircularProgressBar>
+
+                        <progressBar:SfCircularProgressBar x:Name="SegmentedFillingStyle"
+                                                           Grid.Column="2"
+                                                           AnimationDuration="0"
+                                                           SegmentCount="20">
+
+                        </progressBar:SfCircularProgressBar>
+
+                    </Grid>
+                </StackLayout>
+
+                <!--#endregion-->
+
+                <!--#region Custom content -->
+
+                <StackLayout>
+                    <Label Text="Custom content"
+                           Style="{StaticResource labelStyle}"/>
+                    <Grid HorizontalOptions="Start">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <progressBar:SfCircularProgressBar x:Name="CustomContentCircularProgressBar"
+                                                           AnimationDuration="0">
+                            <progressBar:SfCircularProgressBar.Content>
+                                <Grid HeightRequest="30">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label x:Name="CustomContentProgressBarLabel"
+                                           TextColor="{AppThemeBinding Default={StaticResource PrimaryBackground}}"
+                                           HorizontalTextAlignment="Center">
+                                    </Label>
+                                    <Label Grid.Row="1"
+                                           TextColor="{AppThemeBinding Default={StaticResource PrimaryBackground}}"
+                                           Text="used"
+                                           FontSize="12"
+                                           HorizontalTextAlignment="Center">
+                                    </Label>
+                                </Grid>
+                            </progressBar:SfCircularProgressBar.Content>
+                        </progressBar:SfCircularProgressBar>
+
+                        <progressBar:SfCircularProgressBar x:Name="VideoPlayerProgressBar"
+                                                           Grid.Column="1"
+                                                           AnimationDuration="0"
+                                                           TrackThickness="50"
+                                                           ProgressRadiusFactor="0.8"
+                                                           ProgressThickness="3">
+
+                            <progressBar:SfCircularProgressBar.Content>
+                                <Grid>
+                                    <Button x:Name="PlayButton"
+                                            Clicked="PlayButton_Clicked"
+                                            IsVisible="true"
+                                            Text="&#xe769;"
+                                            FontSize="Large"
+                                            FontFamily="SyncFontIcons"
+                                            TextColor="{AppThemeBinding Default={StaticResource PrimaryBackground}}"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            BackgroundColor="Transparent"
+                                            BorderWidth="0">
+                                    </Button>
+                                </Grid>
+                            </progressBar:SfCircularProgressBar.Content>
+
+                        </progressBar:SfCircularProgressBar>
+                    </Grid>
+                </StackLayout>
+
+                <!--#endregion-->
+
+                <!--#region Circular determinate and indeterminate -->
+
+                <StackLayout>
+                    <Label Text="Determinate and indeterminate"
+                           Style="{StaticResource labelStyle}"/>
+                    <Grid HorizontalOptions="Start">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <progressBar:SfCircularProgressBar x:Name="DeterminateCircularProgressBar"
+                                                           Progress="75"/>
+
+                        <progressBar:SfCircularProgressBar  x:Name="IndeterminateCircularProgressBar"
+                                                            Grid.Column="1"
+                                                            Progress="75"
+                                                            IsIndeterminate="True"/>
+                    </Grid>
+                </StackLayout>
+
+                <!--#endregion-->
+
+                <!--#region Custom Angle -->
+
+                <StackLayout>
+                    <Label Text="Custom angle"
+                           Style="{StaticResource labelStyle}"/>
+                    <Grid HorizontalOptions="Start">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <progressBar:SfCircularProgressBar x:Name="AngleCustomizationProgressBar"
+                                                           Progress="100"
+                                                           StartAngle="130"
+                                                           EndAngle="410"
+                                                           AnimationDuration="2000"
+                                                           ProgressChanged="AngleCustomizationProgressBar_ProgressChanged">
+
+                        </progressBar:SfCircularProgressBar>
+                    </Grid>
+                </StackLayout>
+
+                <!--#endregion-->
+
+                <!--#region Range colors -->
+
+                <StackLayout>
+                    <Label Text="Range colors"
+                           Style="{StaticResource labelStyle}"/>
+                    <Grid HorizontalOptions="Start">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <progressBar:SfCircularProgressBar x:Name="RangeColorProgressBar"
+                                                           Grid.Column="0"
+                                                           Progress="100"
+                                                           AnimationDuration="2000"
+                                                           ProgressChanged="RangeColorProgressBar_ProgressChanged">
+
+                            <!--Range colors collection without fadding-->
+
+                            <progressBar:SfCircularProgressBar.GradientStops>
+                                <progressBar:ProgressGradientStop Color="#36BBE1"
+                                                                  Value="0"/>
+                                <progressBar:ProgressGradientStop Color="#36BBE1"
+                                                                  Value="25"/>
+                                <progressBar:ProgressGradientStop Color="#9AEDE1"
+                                                                  Value="25"/>
+                                <progressBar:ProgressGradientStop Color="#9AEDE1"
+                                                                  Value="50"/>
+                                <progressBar:ProgressGradientStop Color="#FFDC28"
+                                                                  Value="50"/>
+                                <progressBar:ProgressGradientStop Color="#FFDC28"
+                                                                  Value="75"/>
+                                <progressBar:ProgressGradientStop Color="#E15E0D"
+                                                                  Value="75"/>
+                                <progressBar:ProgressGradientStop Color="#E15E0D"
+                                                                  Value="100"/>
+                            </progressBar:SfCircularProgressBar.GradientStops>
+
+                        </progressBar:SfCircularProgressBar>
+                    </Grid>
+                </StackLayout>
+
+                <!--#endregion-->
+
+            </StackLayout>
+        </ScrollView>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

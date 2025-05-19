@@ -54,6 +54,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					_horizontalContentNativeView.ManipulationCompleted += OnManipulationCompleted;
 					_horizontalContentNativeView.PointerReleased += OnPointerReleased;
 					_horizontalContentNativeView.PointerMoved += OnPointerMoved;
+					_horizontalContentNativeView.PointerCaptureLost += OnPointerCaptureLost;
 				}
 			}
 		}
@@ -72,6 +73,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					_horizontalContentNativeView.ManipulationCompleted -= OnManipulationCompleted;
 					_horizontalContentNativeView.PointerReleased -= OnPointerReleased;
 					_horizontalContentNativeView.PointerMoved -= OnPointerMoved;
+					_horizontalContentNativeView.PointerCaptureLost -= OnPointerCaptureLost;
 				}
 			}
 		}
@@ -105,6 +107,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			{
 				_isTouchHandled = false;
 			}
+			_horizontalContentNativeView?.ReleasePointerCapture(e.Pointer);
+		}
+
+		void OnPointerCaptureLost(object sender, PointerRoutedEventArgs e)
+		{
+			if (_horizontalContentNativeView != null)
+			{
+				var point = e.GetCurrentPoint(_horizontalContentNativeView).Position;
+				OnHandleTouchInteraction(PointerActions.Released, new Point(point.X, point.Y));
+			}
+			_isManipulationStarted = false;
+			_isTouchHandled = false;
 		}
 
 		void OnPointerMoved(object sender, PointerRoutedEventArgs e)

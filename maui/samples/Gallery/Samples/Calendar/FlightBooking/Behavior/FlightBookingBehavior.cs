@@ -112,6 +112,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
             if (_calendar != null)
             {
                 _calendar.SelectedDate = DateTime.Now;
+                _calendar.MinimumDate = DateTime.Now;
                 _calendar.ActionButtonClicked += Calendar_ActionButtonClicked;
                 _calendar.ActionButtonCanceled += Calendar_ActionButtonCanceled;
             }

@@ -608,10 +608,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		void InitializeAnimations()
 		{
 			_animation = new Storyboard();
-			_rotationKeyFrame = CreateDoubleAnimation("Rotator", "RotationY", 0.9, 0);
-			_offsetZKeyFrame = CreateDoubleAnimation("Rotator", "LocalOffsetZ", 0.9, 0);
-			_scaleXKeyFrame = CreateDoubleAnimation("ScaleTransform", "ScaleX", 0.9, 1);
-			_scaleYKeyFrame = CreateDoubleAnimation("ScaleTransform", "ScaleY", 0.9, 1);
+			_rotationKeyFrame = CreateDoubleAnimation(0.9, 0);
+			_offsetZKeyFrame = CreateDoubleAnimation(0.9, 0);
+			_scaleXKeyFrame = CreateDoubleAnimation(0.9, 1);
+			_scaleYKeyFrame = CreateDoubleAnimation(0.9, 1);
 
 			_layoutGrid?.Resources.Add("Animation", _animation);
 
@@ -666,16 +666,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		/// <summary>
 		/// Create double animation.
 		/// </summary>
-		/// <param name="targetName"></param>
-		/// <param name="targetProperty"></param>
 		/// <param name="keyTimeSeconds"></param>
 		/// <param name="value"></param>
 		/// <returns></returns>
-#pragma warning disable IDE0060 // Remove unused parameter
-#pragma warning disable IDE0060 // Remove unused parameter
-		private static EasingDoubleKeyFrame CreateDoubleAnimation(string targetName, string targetProperty, double keyTimeSeconds, double value)
-#pragma warning restore IDE0060 // Remove unused parameter
-#pragma warning restore IDE0060 // Remove unused parameter
+		private static EasingDoubleKeyFrame CreateDoubleAnimation(double keyTimeSeconds, double value)
 		{
 			EasingDoubleKeyFrame keyFrame = new EasingDoubleKeyFrame
 			{

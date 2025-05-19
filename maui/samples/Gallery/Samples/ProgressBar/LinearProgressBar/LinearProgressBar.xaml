@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.ProgressBar.SfLinearProgressBar.LinearProgressBar"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery"
+                      xmlns:progressBar="clr-namespace:Syncfusion.Maui.Toolkit.ProgressBar;assembly=Syncfusion.Maui.Toolkit">
+
+    <localCore:SampleView.Resources>
+        <Style TargetType="StackLayout">
+            <Setter Property="Spacing"
+                    Value="10"/>
+        </Style>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <ScrollView>
+            <Grid HorizontalOptions="{OnPlatform MacCatalyst=Center, WinUI=Center}"
+                  VerticalOptions="{OnPlatform MacCatalyst=Center, WinUI=Center}">
+                <StackLayout Spacing="30"
+                             Margin="10">
+
+                    <!--#region Determinate -->
+
+                    <StackLayout>
+                        <Label Text="Determinate"/>
+                        <progressBar:SfLinearProgressBar x:Name="DeterminateProgressBar"
+                                                         AnimationEasing="{x:Static Easing.CubicOut}"
+                                                         Progress="75"/>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                    <!--#region Indeterminate -->
+
+                    <StackLayout>
+                        <Label Text="Indeterminate"/>
+                        <progressBar:SfLinearProgressBar x:Name="IndeterminateProgressBar"
+                                                         IsIndeterminate="True"/>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                    <!--#region Corner radius -->
+
+                    <StackLayout>
+                        <Label Text="Corner radius"/>
+                        <progressBar:SfLinearProgressBar x:Name="CornerRadiusProgressBar"
+                                                         ProgressCornerRadius="5"
+                                                         TrackCornerRadius="5"
+                                                         Progress="100"
+                                                         ProgressChanged="CornerRadiusProgressBar_ProgressChanged"
+                                                         AnimationDuration="2000"
+                                                         AnimationEasing="{x:Static Easing.CubicOut}"/>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                    <!--#region Padding progress bar -->
+
+                    <StackLayout>
+                        <Label Text="Padding"/>
+                        <progressBar:SfLinearProgressBar x:Name="PaddingProgressBar"
+                                                         ProgressCornerRadius="5"
+                                                         TrackCornerRadius="5"
+                                                         Progress="100"
+                                                         TrackHeight="8"
+                                                         ProgressHeight="4"
+                                                         ProgressChanged="PaddingProgressBar_ProgressChanged"
+                                                         AnimationDuration="2000"
+                                                         AnimationEasing="{x:Static Easing.CubicOut}"/>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                    <!--#region Range progress bar -->
+
+                    <StackLayout>
+                        <Label Text="Range colors"/>
+                        <progressBar:SfLinearProgressBar x:Name="RangeProgressBar"
+                                                         Progress="100"
+                                                         ProgressChanged="RangeProgressBar_ProgressChanged"
+                                                         AnimationDuration="2000">
+                            <progressBar:SfLinearProgressBar.GradientStops>
+                                <progressBar:ProgressGradientStop Color="#36BBE1"
+                                                                  Value="0"/>
+                                <progressBar:ProgressGradientStop Color="#36BBE1"
+                                                                  Value="25"/>
+                                <progressBar:ProgressGradientStop Color="#9AEDE1"
+                                                                  Value="25"/>
+                                <progressBar:ProgressGradientStop Color="#9AEDE1"
+                                                                  Value="50"/>
+                                <progressBar:ProgressGradientStop Color="#FFDC28"
+                                                                  Value="50"/>
+                                <progressBar:ProgressGradientStop Color="#FFDC28"
+                                                                  Value="75"/>
+                                <progressBar:ProgressGradientStop Color="#E15E0D"
+                                                                  Value="75"/>
+                                <progressBar:ProgressGradientStop Color="#E15E0D"
+                                                                  Value="100"/>
+                            </progressBar:SfLinearProgressBar.GradientStops>
+                        </progressBar:SfLinearProgressBar>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                    <!--#region Gradient progress bar -->
+
+                    <StackLayout>
+                        <Label Text="Gradient"/>
+                        <progressBar:SfLinearProgressBar x:Name="GradientProgressBar"
+                                                         Progress="100"
+                                                         ProgressChanged="GradientProgressBar_ProgressChanged"
+                                                         AnimationDuration="2000"
+                                                         AnimationEasing="{x:Static Easing.CubicOut}">
+                            <progressBar:SfLinearProgressBar.GradientStops>
+                                <progressBar:ProgressGradientStop Color="#c1e7f4"
+                                                                  Value="0"/>
+                                <progressBar:ProgressGradientStop Color="#A0D9EF"
+                                                                  Value="20"/>
+                                <progressBar:ProgressGradientStop Color="#62C1E5"
+                                                                  Value="40"/>
+                                <progressBar:ProgressGradientStop Color="#20A7DB"
+                                                                  Value="60"/>
+                                <progressBar:ProgressGradientStop Color="#1C96C5"
+                                                                  Value="80"/>
+                            </progressBar:SfLinearProgressBar.GradientStops>
+                        </progressBar:SfLinearProgressBar>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                    <!--#region Linear buffer -->
+
+                    <StackLayout>
+                        <Label Text="Buffer"/>
+                        <progressBar:SfLinearProgressBar x:Name="SecondaryProgressProgressBar"
+                                                         Progress="100"
+                                                         SecondaryProgress="100"
+                                                         AnimationDuration="2000"
+                                                         SecondaryAnimationDuration="1000"
+                                                         ProgressChanged="SecondaryProgressProgressBar_ValueChanged"/>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                    <!--#region Linear segment -->
+
+                    <StackLayout>
+                        <Label Text="Segment"/>
+                        <progressBar:SfLinearProgressBar  x:Name="SegmentedProgressBar"
+                                                          SegmentCount="4"
+                                                          Progress="75"
+                                                          AnimationEasing="{x:Static Easing.CubicOut}"/>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                    <!--#region Segemented corner radius -->
+
+                    <StackLayout>
+                        <Label Text="Segment with corner radius"/>
+                        <progressBar:SfLinearProgressBar  x:Name="SegmentedCornerRadiusProgressBar"
+                                                          Progress="100"
+                                                          SegmentCount="4"
+                                                          AnimationDuration="2000"
+                                                          ProgressCornerRadius="5"
+                                                          TrackCornerRadius="5"
+                                                          ProgressChanged="SegmentedCornerRadiusProgressBar_ProgressChanged"
+                                                          SegmentGapWidth="7"/>
+                    </StackLayout>
+
+                    <!--#endregion-->
+
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+
+    </localCore:SampleView.Content>
+</localCore:SampleView>

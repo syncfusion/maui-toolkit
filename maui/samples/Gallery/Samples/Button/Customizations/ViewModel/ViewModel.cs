@@ -104,6 +104,12 @@ public partial class ViewModel : INotifyPropertyChanged
 	/// Selected Index of BackgroundImageAspect.
 	/// </summary>
     private int _aspectSelectedIndex = 0;
+    
+    /// <summary>
+    /// Represents whether the AspectList feature is enabled.
+    /// </summary>
+    private bool _enableAspectList = false;
+
     #endregion
 
     #region Property
@@ -314,10 +320,12 @@ public partial class ViewModel : INotifyPropertyChanged
             if (value)
             {
 				BackgroundImage = "april.png";
+                EnableAspectList = true;
 			}
             else
             {
                 BackgroundImage = null;
+                EnableAspectList = false;
             }
             OnPropertyChanged("CanShowBackgroundImage");
             OnPropertyChanged("BackgroundImage");
@@ -414,6 +422,15 @@ public partial class ViewModel : INotifyPropertyChanged
         }
     }
 
+    public bool EnableAspectList 
+    { 
+        get { return _enableAspectList; } 
+        set
+        {
+            _enableAspectList = value;
+            OnPropertyChanged("EnableAspectList"); 
+        }
+    }
 
     #endregion
 

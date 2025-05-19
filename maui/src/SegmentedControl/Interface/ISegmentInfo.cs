@@ -23,6 +23,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		bool ShowSeparator { get; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether the ripple effect animation should be applied to a segment item when it is selected for default and segment template added. 
+		/// </summary>
+		bool EnableRippleEffect { get; }
+
+		/// <summary>
 		/// Gets a value indicating whether the layout is in Right-to-Left (RTL) direction.
 		/// </summary>
 		bool IsRTL { get; }
@@ -86,6 +91,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// Gets the focused keyboard stroke for the segment.
 		/// </summary>
 		Brush KeyboardFocusStroke { get; }
+
+		/// <summary>
+		/// Gets the selected text color for the segment.
+		/// </summary>
+		Color SelectedSegmentTextColor { get; }
 
 		/// <summary>
 		/// Gets the background brush for the segment when it is disabled.

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:linearProgressBar="clr-namespace:Syncfusion.Maui.Toolkit.ProgressBar"
+             x:Class="Syncfusion.Maui.Toolkit.ProgressBar.SfLinearProgressBarStyles">
+
+    <Style TargetType="linearProgressBar:SfLinearProgressBar">
+        <Setter Property="TrackFill" Value="{DynamicResource SfLinearProgressBarTrackColor}"/>
+        <Setter Property="ProgressFill" Value="{DynamicResource SfLinearProgressBarProgressColor}"/>
+        <Setter Property="SecondaryProgressFill" Value="{DynamicResource SfLinearProgressBarSecondaryProgressColor}"/>
+        <Setter Property="TrackCornerRadius" Value="{DynamicResource SfLinearProgressBarTrackCornerRadius}"/>
+        <Setter Property="ProgressCornerRadius" Value="{DynamicResource SfLinearProgressBarProgressCornerRadius}"/>
+        <Setter Property="SecondaryProgressCornerRadius" Value="{DynamicResource SfLinearProgressBarSecondaryProgressCornerRadius}"/>
+    </Style>
+
+    <Style TargetType="linearProgressBar:ProgressGradientStop">
+        <Setter Property="Color" Value="{DynamicResource SfProgressBarProgressGradientStopColor}"/>
+    </Style>
+
+</ResourceDictionary>

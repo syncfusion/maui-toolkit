@@ -11,7 +11,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh? _pullToRefresh;
 		ListView? _listView;
 		ListViewInboxInfoViewModel? _viewModel;
-		Picker? _transitionType;
+		Microsoft.Maui.Controls.Picker? _transitionType;
 
 		/// <summary>
 		/// You can override this method to subscribe to AssociatedObject events and initialize properties.
@@ -23,7 +23,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			bindable.BindingContext = _viewModel;
 			_pullToRefresh = bindable.FindByName<Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh>("pullToRefresh");
 			_listView = bindable.FindByName<ListView>("listView");
-			_transitionType = bindable.FindByName<Picker>("comboBox");
+			_transitionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("comboBox");
 			_transitionType.SelectedIndexChanged += OnSelectionChanged;
 			_pullToRefresh.Refreshing += PullToRefresh_Refreshing;
 			_pullToRefresh.Refreshed += PullToRefresh_Refreshed;

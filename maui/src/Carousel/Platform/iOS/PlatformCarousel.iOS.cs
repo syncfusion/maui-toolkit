@@ -15,24 +15,8 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 	/// Represents a platform-specific handler for connecting a carousel view.
 	/// </summary>
 	/// <exclude/>
-	public partial class PlatformCarousel : UIView, IComponent
+	public partial class PlatformCarousel : UIView
     {
-
-		#region IComponent implementation
-
-		/// <summary>
-		/// The site field
-		/// </summary>
-		ISite? IComponent.Site { get; set; }
-
-#pragma warning disable 0067
-		/// <summary>
-		/// The disposed event
-		/// </summary>
-		public event EventHandler? Disposed;
-
-#pragma warning disable 0067
-		#endregion
 
 		#region Private Variables
 

@@ -4,9 +4,9 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh.SfPullToRefresh
 	{
 		public PullToRefreshView()
 		{
-			InitializeComponent();			
+			InitializeComponent();
 		}
-
+		
 		public override void OnDisappearing()
 		{
 			base.OnDisappearing();

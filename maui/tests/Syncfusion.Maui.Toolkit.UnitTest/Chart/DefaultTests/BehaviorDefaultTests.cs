@@ -1,7 +1,7 @@
 using Syncfusion.Maui.Toolkit.Charts;
 using Syncfusion.Maui.Toolkit.Internals;
 
-namespace Syncfusion.Maui.Toolkit.UnitTest
+namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class BehaviorDefaultTests
 	{

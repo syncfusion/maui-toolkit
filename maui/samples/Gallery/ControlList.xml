@@ -24,5 +24,7 @@
 	  <Assembly Name="Cards" />
 	<Assembly Name="Popup"/>
 	 <Assembly Name="OtpInput" />
+	 <Assembly Name="ProgressBar" />
+	 <Assembly Name="Picker" />
 	</Assemblies>
 </SampleBrowser>

@@ -59,9 +59,9 @@
                         </tabView:SfTabItem.ImageSource>
                         <tabView:SfTabItem.Content>
                                 <ScrollView VerticalScrollBarVisibility="Never">
-                                    <FlexLayout Wrap="Wrap" Padding="0" AlignItems="Start" AlignContent="Start"  BindableLayout.ItemsSource="{Binding TabModelSource}" >
+                                    <FlexLayout x:DataType="{x:Type local:TabViewModel}" Wrap="Wrap" Padding="0" AlignItems="Start" AlignContent="Start"  BindableLayout.ItemsSource="{Binding TabModelSource}" >
                                         <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="{x:Type local:TabModel}">
                                                 <Border WidthRequest="{OnPlatform WinUI=110,MacCatalyst=110}" HeightRequest="{OnPlatform WinUI=120,MacCatalyst=120}" Margin="10" Padding="0" BackgroundColor="Transparent">
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="10" />
@@ -69,8 +69,8 @@
                                                     <VerticalStackLayout Padding="10" VerticalOptions="Center" Spacing="10">
                                                         <Border  
                                                        Stroke="#E5E5E5"
-                                                        HeightRequest="70"
-                                                       WidthRequest="70"
+                                                        HeightRequest="{OnPlatform WinUI=72,Android=70,MacCatalyst=75,iOS=70}"
+                                                       WidthRequest="{OnPlatform WinUI=75,Android=70,MacCatalyst=75,iOS=70}"
                                                        VerticalOptions="Center" 
                                                        HorizontalOptions="Center"
                                                        BackgroundColor="{Binding ImageBackground}" 
@@ -131,7 +131,7 @@
                                             </x:Array>
                                         </BindableLayout.ItemsSource>
                                         <BindableLayout.ItemTemplate>
-                                            <DataTemplate>
+                                            <DataTemplate x:DataType="{x:Type x:String}">
                                                 <Grid ColumnDefinitions="48,*,48" Margin="10,5">
                                                     <Label Grid.Column="0" 
                                                           FontSize="22"
@@ -197,7 +197,7 @@
                         </x:Array>
                                     </BindableLayout.ItemsSource>
                                         <BindableLayout.ItemTemplate>
-                                        <DataTemplate>
+                                        <DataTemplate x:DataType="{x:Type x:String}">
                                                 <Grid ColumnDefinitions="48,*,48,48" Margin="10,5">
                                                     <Image Grid.Column="0" 
                                                            WidthRequest="35" 

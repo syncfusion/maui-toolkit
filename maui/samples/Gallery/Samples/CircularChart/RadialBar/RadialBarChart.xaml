@@ -47,7 +47,7 @@
                     <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
                 </chart:SfCircularChart.TooltipBehavior>
                 <chart:SfCircularChart.Series>
-                    <chart:RadialBarSeries x:Name="radialBarSeries" Radius="0.9" TrackFill="{AppThemeBinding Light={StaticResource TrackColorLight}, Dark={StaticResource TrackColorDark}}"
+                    <chart:RadialBarSeries x:Name="radialBarSeries" Radius="0.9"
                                            StartAngle="{Binding Source={x:Reference startAngle}, Path=Value, Mode=TwoWay}" 
                                            EndAngle="{Binding Source={x:Reference endAngle}, Path=Value, Mode=TwoWay}"   
                                            ItemsSource="{Binding RadialBarSeriesData}"  PaletteBrushes="{AppThemeBinding Light={StaticResource RadialPaletteBrushesLight1}, Dark={StaticResource RadialPaletteBrushesDark1}}"
@@ -82,10 +82,10 @@
                                    Margin="0,13,0,0" Grid.Column="0" />
                             <Picker x:Name="capStyle"   Grid.Column="1"
                                     VerticalOptions="CenterAndExpand"
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
-                                    WidthRequest="{OnPlatform Default=130, WinUI=140}"  Margin="0,13,0,0"
-                                    ItemsSource="{Binding CapStyles}">
+                                    WidthRequest="{OnPlatform Default=130, WinUI=138}"  Margin="0,13,0,0"
+                                    ItemsSource="{Binding CapStyles}"
+                                    Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                                    TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                             </Picker>
                         </Grid>
                         <Grid>
@@ -98,9 +98,9 @@
                             <Picker x:Name="trackFill" ItemsSource="{Binding Track}" 
                                     Margin="0,13,0,0" Grid.Column="1" VerticalOptions="CenterAndExpand"
                                     SelectedIndexChanged="trackFill_SelectedIndexChanged" 
-                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
-                                    WidthRequest="{OnPlatform Default=130, WinUI=140}" >
+                                    WidthRequest="{OnPlatform Default=130, WinUI=138}" 
+                                    Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                                    TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                             </Picker>
                         </Grid>
                         <Grid>
@@ -110,12 +110,12 @@
                             </Grid.ColumnDefinitions>
                             <Label Text="Track Stroke" VerticalOptions="CenterAndExpand" 
                                    Margin="0,13,0,0" Grid.Column="0"/>
-                            <Picker  Margin="0,13,0,0" x:Name="trackStroke" Grid.Column="1" 
-                                     BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                                     TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
-                                     SelectedIndexChanged="trackStroke_SelectedIndexChanged"
-                                     ItemsSource="{Binding Track}" VerticalOptions="CenterAndExpand"
-                                     WidthRequest="{OnPlatform Default=130, WinUI=140}">
+                            <Picker Margin="0,13,0,0" x:Name="trackStroke" Grid.Column="1" 
+                                    SelectedIndexChanged="trackStroke_SelectedIndexChanged"
+                                    ItemsSource="{Binding Track}" VerticalOptions="CenterAndExpand"
+                                    WidthRequest="{OnPlatform Default=130, WinUI=138}"
+                                    Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                                    TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                             </Picker>
                         </Grid>
                         <Grid HeightRequest="50">
@@ -125,7 +125,7 @@
                             </Grid.ColumnDefinitions>
                             <Label Text="Track Stroke Width" 
                                    VerticalOptions="CenterAndExpand" Grid.Column="0"/>
-                            <Slider x:Name="trackStrokeWidth" Grid.Column="1"  Margin="0,5,0,0"
+                            <Slider x:Name="trackStrokeWidth" Grid.Column="1"  Margin="0,5,2,0"
                                     VerticalOptions="CenterAndExpand" 
                                     Minimum="0" Value="0" Maximum="1">
                             </Slider>
@@ -137,7 +137,7 @@
                             </Grid.ColumnDefinitions>
                             <Label Text="Start Angle" Grid.Column="0"
                                        VerticalOptions="CenterAndExpand"   />
-                            <Slider x:Name="startAngle" Margin="0,5,0,0"
+                            <Slider x:Name="startAngle" Margin="0,5,2,0"
                                     VerticalOptions="CenterAndExpand"
                                     Grid.Column="1"  Minimum="-90" Maximum="90" >
                             </Slider>
@@ -150,7 +150,7 @@
                             <Label Text="End Angle" Grid.Column="0" 
                                    VerticalOptions="CenterAndExpand" />
                             <Slider x:Name="endAngle" Grid.Column="1" 
-                                    VerticalOptions="CenterAndExpand" Margin="0,5,0,0"
+                                    VerticalOptions="CenterAndExpand" Margin="0,5,2,0"
                                         Minimum="90" Maximum="270">
                             </Slider>
                         </Grid>

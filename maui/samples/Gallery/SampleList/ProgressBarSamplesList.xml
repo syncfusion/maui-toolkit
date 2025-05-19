@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Notification">
+
+		<Control Title="Linear Progress Bar" ControlName="SfLinearProgressBar" Image="linearprogressbar.png" Description="Indicates the progress of a task along a line.">
+			<Sample SampleName="LinearProgressBar" Title="Features"/>
+		</Control>
+
+		<Control Title="Circular Progress Bar" ControlName="SfCircularProgressBar" Image="circularprogressbar.png" Description="Indicates the progress of a task along a circle.">
+			<Sample SampleName="CircularProgressBar" Title="Features"/>
+		</Control>
+
+	</ControlCategory>
+</SyncfusionControls>

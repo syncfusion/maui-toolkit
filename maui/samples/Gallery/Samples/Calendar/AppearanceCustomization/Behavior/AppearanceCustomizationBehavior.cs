@@ -15,7 +15,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// <summary>
         /// The combo box that allows users to choose to whether to select date or a range.
         /// </summary>
-        Picker? _comboBox;
+        Microsoft.Maui.Controls.Picker? _comboBox;
 
         /// <summary>
         /// Check the application theme is light or dark.
@@ -35,7 +35,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
             _calendar.SelectionBackground = _isLightTheme ? Color.FromRgba("#6750A4").WithAlpha(0.5f) : Color.FromRgba("#D0BCFF").WithAlpha(0.5f);
             _calendar.TodayHighlightBrush = _isLightTheme ? Color.FromRgba("#6750A4") : Color.FromRgba("#D0BCFF");
             _calendar.SelectionShape = CalendarSelectionShape.Circle;
-            _comboBox = bindable.Content.FindByName<Picker>("comboBox");
+            _comboBox = bindable.Content.FindByName<Microsoft.Maui.Controls.Picker>("comboBox");
             _comboBox.ItemsSource = new List<string>() { "Circle", "Rectangle" };
             _comboBox.SelectedIndex = 0;
             _comboBox.SelectedIndexChanged += ComboBox_SelectionChanged;
@@ -62,7 +62,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// <param name="e">Event Arguments</param>
         void ComboBox_SelectionChanged(object? sender, EventArgs e)
         {
-            if (_calendar != null && sender is Picker picker && picker.SelectedItem is string selectionShape)
+            if (_calendar != null && sender is Microsoft.Maui.Controls.Picker picker && picker.SelectedItem is string selectionShape)
             {
                 if (_calendar.BindingContext is AppearanceViewModel)
                 {

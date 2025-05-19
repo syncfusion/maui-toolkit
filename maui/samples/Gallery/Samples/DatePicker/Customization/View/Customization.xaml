@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.Picker.SfDatePicker.Customization"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:converters="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:DatePickerCustomizationViewModel"
+             Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Margin="{OnPlatform WinUI=-10, MacCatalyst=-10, Default=0}"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.Picker.SfDatePicker">
+
+    <localCore:SampleView.Resources>
+        <local:DateTimeToColorConverter x:Key="ColorConverter"/>
+        
+        <DataTemplate x:Key="frameTemplate" x:DataType="local:ToDoDetails">
+            <Grid HeightRequest="60">
+                <Border BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt1}}" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}" StrokeShape="RoundRectangle 5,5,5,5" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0" >
+                    <Grid VerticalOptions="Center" HeightRequest="50" WidthRequest="300">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label FontFamily="MauiSampleFontIcon" TextColor="{Binding Date, Converter={StaticResource ColorConverter}}" FontSize="15" HorizontalOptions="Center" VerticalOptions="Center" Text="&#xe72e;" />
+
+                        <Label Grid.Column="1" Text="{Binding Subject}" Margin="0, 0, 5, 0" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="13" VerticalOptions="Center" LineBreakMode="WordWrap"/>
+
+                        <Label Grid.Column="2" Text="{Binding DateString}" FontSize="13" TextColor="{Binding Date, Converter={StaticResource ColorConverter}}"  VerticalTextAlignment="Center" LineBreakMode="WordWrap"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnItemTapGestureTapped"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </Border>
+            </Grid>
+        </DataTemplate>
+
+        <DataTemplate x:Key="borderTemplate" x:DataType="local:ToDoDetails">
+            <Grid HeightRequest="60" Padding="0, 5">
+                <Border BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackgroundAlt1}}" Stroke="LightGray" StrokeShape="RoundRectangle 5,5,5,5" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0" >
+                    <Grid VerticalOptions="Center" HeightRequest="50" WidthRequest="300">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label FontFamily="MauiSampleFontIcon" TextColor="{Binding Date, Converter={StaticResource ColorConverter}}" FontSize="15" HorizontalOptions="Center" VerticalOptions="Center" Text="&#xe72e;" />
+
+                        <Label Grid.Column="1" Text="{Binding Subject}" Margin="0, 0, 5, 0" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="13" VerticalOptions="Center" LineBreakMode="WordWrap"/>
+
+                        <Label Grid.Column="2" Text="{Binding DateString}" FontSize="13" TextColor="{Binding Date, Converter={StaticResource ColorConverter}}"  VerticalTextAlignment="Center" LineBreakMode="WordWrap"/>
+
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnItemTapGestureTapped"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </Border>
+            </Grid>
+        </DataTemplate>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.BindingContext>
+        <local:DatePickerCustomizationViewModel/>
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Content>
+        <Grid>
+            <Border IsVisible="{OnPlatform Default=True, Android=False, iOS=False}" Margin="0" Padding="0" BackgroundColor="Transparent" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}" HeightRequest="500" WidthRequest="375" VerticalOptions="Center" HorizontalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="16" />
+                </Border.StrokeShape>
+                <Grid Grid.Column="{OnPlatform Default=0, WinUI=1, MacCatalyst=1}" WidthRequest="{OnPlatform WinUI=350, MacCatalyst=350, Default=350}" HorizontalOptions="Center" BackgroundColor="Transparent" Margin="{OnPlatform WinUI=10, MacCatalyst=10, Default=0}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <Label Text="TASKS" FontSize="18" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+                    <CollectionView ZIndex="{OnPlatform MacCatalyst=1}" Grid.Row="1" WidthRequest="{OnPlatform WinUI=330, MacCatalyst=330, Default=350}" ItemTemplate="{OnPlatform Android={StaticResource frameTemplate}, WinUI={StaticResource frameTemplate}, Default={StaticResource borderTemplate}}" ItemsSource="{Binding DataSource}" SelectionMode="None" VerticalScrollBarVisibility="Never" Margin="10, 0" />
+
+                    <Grid ZIndex="{OnPlatform MacCatalyst=1}" Grid.Row="1" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin ="10">
+                        <Path Fill="{AppThemeBinding Default={StaticResource PrimaryBackground}}">
+                            <Path.Data>
+                                <EllipseGeometry Center="25,25" RadiusX="25" RadiusY="25" />
+                            </Path.Data>
+                        </Path>
+                        <Grid VerticalOptions="Center">
+                            <Label TextColor="{AppThemeBinding Default={StaticResource PrimaryForeground}}" FontSize="25" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="+"/>
+                        </Grid>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnTapGestureTapped"/>
+                        </Grid.GestureRecognizers>
+                    </Grid>
+
+                    <picker:SfDatePicker Mode="Dialog" x:Name="datePicker" Background="Transparent" OkButtonClicked="OnDatePickerOkButtonClicked" CancelButtonClicked="OnDatePickerCancelButtonClicked" Closed="OnDatePickerClosed"/>
+                    <local:CustomPopUp x:Name="popup" OnCreated="OnPopupItemCreated"/>
+                </Grid>
+            </Border>
+
+            <Grid IsVisible="{OnPlatform Default=True, WinUI=False, MacCatalyst=False}" WidthRequest="{OnPlatform WinUI=350, MacCatalyst=350, Default=350}" HorizontalOptions="{OnPlatform Android=Center, iOS=Center, MacCatalyst=End, WinUI=End}" BackgroundColor="Transparent" Margin="{OnPlatform WinUI=10, MacCatalyst=10, Default=0}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Label Text="TASKS" FontSize="18" VerticalOptions="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+                <CollectionView ZIndex="{OnPlatform iOS=1}" Grid.Row="1" WidthRequest="{OnPlatform WinUI=330, MacCatalyst=330, Default=350}" ItemTemplate="{OnPlatform Android={StaticResource frameTemplate}, WinUI={StaticResource frameTemplate}, Default={StaticResource borderTemplate}}" ItemsSource="{Binding DataSource}" SelectionMode="None" VerticalScrollBarVisibility="Never" Margin="10, 0" />
+
+                <Grid ZIndex="{OnPlatform iOS=1}" Grid.Row="1" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin ="10">
+                    <Path Fill="{AppThemeBinding Default={StaticResource PrimaryBackground}}">
+                        <Path.Data>
+                            <EllipseGeometry Center="25,25" RadiusX="25" RadiusY="25" />
+                        </Path.Data>
+                    </Path>
+                    <Grid VerticalOptions="Center">
+                        <Label TextColor="{AppThemeBinding Default={StaticResource PrimaryForeground}}" FontSize="25" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" Text="+"/>
+                    </Grid>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTapGestureTapped"/>
+                    </Grid.GestureRecognizers>
+                </Grid>
+
+                <picker:SfDatePicker Mode="Dialog" x:Name="datePicker1" Background="Transparent" OkButtonClicked="OnDatePickerOkButtonClicked" CancelButtonClicked="OnDatePickerCancelButtonClicked" Closed="OnDatePickerClosed"/>
+                <local:CustomPopUp x:Name="popup1" OnCreated="OnPopupItemCreated"/>
+            </Grid>
+
+        </Grid>
+    </localCore:SampleView.Content>
+
+</localCore:SampleView>

@@ -31,7 +31,7 @@
                                 <Label Grid.Row="1" Text="Leslie Alexander" Margin="0,5,0,0"  VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontAttributes="Bold" FontSize="20" WidthRequest="154" HeightRequest="24" HorizontalOptions="Center"/>
                                 <Label Grid.Row="2" Text="UX Designer" Margin="0,5,0,0" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" FontSize="14" WidthRequest="148" HeightRequest="24" HorizontalOptions="Center"/>
                             </Grid>
-                            <BoxView WidthRequest="304" HeightRequest="1" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBorderLight1}, Dark={StaticResource FilledInputBorderDark}}"/>
+                            <BoxView HeightRequest="1" Margin="20,0" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBorderLight1}, Dark={StaticResource FilledInputBorderDark}}"/>
                         </VerticalStackLayout>
                     </navigationdrawer:DrawerSettings.DrawerHeaderView>
                     <navigationdrawer:DrawerSettings.DrawerContentView>
@@ -308,13 +308,9 @@
 
     <localcore:SampleView.OptionView>
         <VerticalStackLayout Spacing="20" Margin="10">
-            <Grid ColumnDefinitions="*,*">
+            <Grid ColumnDefinitions="*,*" Margin="0,-18,0,0">
                 <Label Text="Position" VerticalOptions="Center"/>
-                <Border Grid.Column="1" BackgroundColor="Transparent" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" Margin="0" Padding="0">
-                    <Border.StrokeShape>
-                        <RoundRectangle CornerRadius="5" />
-                    </Border.StrokeShape>
-                    <Picker HeightRequest="37" x:Name="positioncomboBox"
+                    <Picker Grid.Column="1" HeightRequest="37" x:Name="positioncomboBox"
                             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
                             TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}">
                         <Picker.ItemsSource>
@@ -329,7 +325,6 @@
                             <x:String>Left</x:String>
                         </Picker.SelectedItem>
                     </Picker>
-                </Border>
             </Grid>
         </VerticalStackLayout>
     </localcore:SampleView.OptionView>
