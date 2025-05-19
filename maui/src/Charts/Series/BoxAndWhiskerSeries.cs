@@ -1189,13 +1189,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						Y = yPosition,
 						Index = index,
 						Margin = tooltipBehavior.Margin,
-						TextColor = tooltipBehavior.TextColor,
 						FontFamily = tooltipBehavior.FontFamily,
-						FontSize = tooltipBehavior.FontSize,
 						FontAttributes = tooltipBehavior.FontAttributes,
-						Background = tooltipBehavior.Background,
 						Item = dataPoint
 					};
+
+					UpdateTooltipAppearance(tooltipInfo, tooltipBehavior);
 
 					if (IsOutlierTouch)
 					{

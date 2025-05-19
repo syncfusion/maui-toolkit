@@ -1737,6 +1737,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 		}
 
+		internal void UpdateTooltipAppearance(TooltipInfo info, ChartTooltipBehavior tooltipBehavior)
+		{
+			if (Chart is ChartBase chart)
+			{
+				info.Background = tooltipBehavior.Background ?? chart.TooltipBackground ?? new SolidColorBrush(Color.FromArgb("#1C1B1F"));
+				info.TextColor = tooltipBehavior.TextColor ?? chart.TooltipTextColor ?? Color.FromArgb("#F4EFF4");
+				info.FontSize = !float.IsNaN(tooltipBehavior.FontSize) ? tooltipBehavior.FontSize : !float.IsNaN((float)chart.TooltipFontSize) ? (float)chart.TooltipFontSize : 14.0f;
+			}
+		}	
+
 		internal virtual void InitiateDataLabels(ChartSegment segment)
 		{
 			if (DataLabels.Count > _segments.Count)

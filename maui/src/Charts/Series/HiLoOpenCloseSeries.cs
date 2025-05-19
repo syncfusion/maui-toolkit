@@ -322,13 +322,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					Index = index,
 					Text = (yValue == 0 ? yValue.ToString(" 0.##") : yValue.ToString(" #.##")) + "/" + (lowValue == 0 ? lowValue.ToString(" 0.##") : lowValue.ToString(" #.##")) + "/" + (openValue == 0 ? openValue.ToString(" 0.##") : openValue.ToString(" #.##")) + "/" + (closeValue == 0 ? closeValue.ToString(" 0.##") : closeValue.ToString(" #.##")),
 					Margin = tooltipBehavior.Margin,
-					TextColor = tooltipBehavior.TextColor,
 					FontFamily = tooltipBehavior.FontFamily,
-					FontSize = tooltipBehavior.FontSize,
 					FontAttributes = tooltipBehavior.FontAttributes,
-					Background = tooltipBehavior.Background,
 					Item = dataPoint
 				};
+
+				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior);
 
 				return tooltipInfo;
 			}

@@ -1199,7 +1199,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				object dataPoint = _actualData[index];
 				double yValue = _yValues[index];
 				var segment = (FunnelSegment)_segments[index];
-				SetDefaultTooltipValue(behavior);
 
 				TooltipInfo tooltipInfo = new TooltipInfo(this)
 				{
@@ -1207,11 +1206,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					Y = segment.SegmentBounds.Center.Y + (float)_seriesBounds.Top,
 					Index = index,
 					Margin = behavior.Margin,
-					TextColor = behavior.TextColor,
+					TextColor = behavior.TextColor ?? TooltipTextColor ?? Color.FromArgb("#F4EFF4"),
 					FontFamily = behavior.FontFamily,
-					FontSize = behavior.FontSize,
+					FontSize = !float.IsNaN(behavior.FontSize) ? behavior.FontSize : !float.IsNaN((float)TooltipFontSize) ? (float)TooltipFontSize : 14.0f,
 					FontAttributes = behavior.FontAttributes,
-					Background = behavior.Background,
+					Background = behavior.Background ?? TooltipBackground ?? new SolidColorBrush(Color.FromArgb("#1C1B1F")),
 					Text = yValue.ToString("#.##"),
 					Item = dataPoint
 				};

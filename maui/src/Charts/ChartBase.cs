@@ -117,6 +117,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			typeof(ChartBase),
 			null,
 			BindingMode.Default,
+			null,
 			null);
 
 		/// <summary>
@@ -603,7 +604,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					continue;
 				}
 
-				SetDefaultTooltipValue(behavior);
 				var tooltipInfo = chartSeries.GetTooltipInfo(behavior, x, y);
 				if (tooltipInfo != null)
 				{
@@ -682,7 +682,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					if (_defaultToolTipBehavior == null)
 					{
 						_defaultToolTipBehavior = new ChartTooltipBehavior();
-						SetDefaultTooltipValue(_defaultToolTipBehavior);
 						_defaultToolTipBehavior.Chart = this;
 						// defaultToolTipBehavior.IsDefault = true;
 					}
@@ -696,13 +695,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				_toolTipBehavior = value;
 			}
-		}
-
-		internal void SetDefaultTooltipValue(ChartTooltipBehavior behavior)
-		{
-			behavior.Background = TooltipBackground ?? behavior.Background;
-			behavior.TextColor = TooltipTextColor ?? behavior.TextColor;
-			behavior.FontSize = !double.IsNaN(TooltipFontSize) ? (float)TooltipFontSize : behavior.FontSize;
 		}
 
 		SfTooltip? IChart.TooltipView

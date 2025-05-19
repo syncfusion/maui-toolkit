@@ -54,13 +54,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			var behavior = new ChartTooltipBehavior();
 
 			// ChartTooltipBehavior specific properties
-			Assert.NotNull(behavior.Background);
-			Assert.IsType<SolidColorBrush>(behavior.Background);
-			Assert.Equal(Color.FromArgb("#1C1B1F"), ((SolidColorBrush)behavior.Background).Color);
+			Assert.Null(behavior.Background);
 			Assert.Equal(2, behavior.Duration);
-			Assert.Equal(Color.FromArgb("#F4EFF4"), behavior.TextColor);
+			Assert.Null(behavior.TextColor);
 			Assert.Equal(new Thickness(0), behavior.Margin);
-			Assert.Equal(14f, behavior.FontSize);
+			Assert.Equal(float.NaN, behavior.FontSize);
 			Assert.Null(behavior.FontFamily);
 			Assert.Equal(FontAttributes.None, behavior.FontAttributes);
 

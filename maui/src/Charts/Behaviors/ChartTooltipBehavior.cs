@@ -68,7 +68,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             null,
             BindingMode.Default,
             null,
-            defaultValueCreator: BackgroundDefaultValueCreator);
+            null);
 
         /// <summary>
         /// Identifies the <see cref="Duration"/> bindable property.
@@ -98,7 +98,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             null,
             BindingMode.Default,
             null,
-            defaultValueCreator: TextColorDefaultValueCreator);
+            null);
 
         /// <summary>
         /// Identifies the <see cref="Margin"/> bindable property.
@@ -125,7 +125,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
             nameof(FontSize),
             typeof(float),
             typeof(ChartTooltipBehavior),
-            14f,
+            float.NaN,
             BindingMode.Default,
             null);
 
@@ -736,16 +736,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
 
             return view;
-        }
-
-        static object TextColorDefaultValueCreator(BindableObject bindable)
-        {
-            return Color.FromArgb("#F4EFF4");
-        }
-
-        static object BackgroundDefaultValueCreator(BindableObject bindable)
-        {
-            return new SolidColorBrush(Color.FromArgb("#1C1B1F"));
         }
 
         #endregion
