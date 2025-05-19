@@ -283,7 +283,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			canvas.SetShadow(new SizeF(0, 1), androidShadowSize, shadowColor);
 #else
 			const int defaultShadowSize = 3;
-			canvas.SetShadow(new SizeF(0, 1), defaultShadowSize, Color.FromArgb(shadowColor));
+			canvas.SetShadow(new SizeF(0, 1), defaultShadowSize, shadowColor);
 #endif
 			canvas.FillEllipse((float)_fillRect.X, (float)_fillRect.Y, (float)_fillRect.Width, (float)_fillRect.Height);
         }
