@@ -881,7 +881,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         continue;
                     }
 
-                    SetDefaultTooltipValue(behavior);
                     TooltipInfo? tooltipInfo = chartSeries.GetTooltipInfo(behavior, x, y);
 
                     if (tooltipInfo != null)

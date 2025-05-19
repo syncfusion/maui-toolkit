@@ -43,14 +43,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 		{
 
 			var chartTooltipBehavior = new ChartTooltipBehavior();
-			var sfCartesianChart = new SfCartesianChart();
 			var background = Colors.Blue;
 			var textColor = Colors.Orange;
 			var fontSize = 14;
 			chartTooltipBehavior.Background = background;
 			chartTooltipBehavior.TextColor = textColor;
 			chartTooltipBehavior.FontSize = fontSize;
-			sfCartesianChart.SetDefaultTooltipValue(chartTooltipBehavior);
 			Assert.Equal(chartTooltipBehavior.Background, background);
 			Assert.Equal(chartTooltipBehavior.TextColor, textColor);
 			Assert.Equal(chartTooltipBehavior.FontSize, fontSize);
@@ -63,8 +61,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			var chartTooltipBehavior = new ChartTooltipBehavior();
 			var sfCartesianChart = new SfCartesianChart { TooltipBackground = Colors.Red };
 			var background = Colors.Red;
-			sfCartesianChart.SetDefaultTooltipValue(chartTooltipBehavior);
-			Assert.Equal(background, chartTooltipBehavior.Background);
+			Assert.Equal(background, sfCartesianChart.TooltipBackground);
 		}
 
 		[Fact]
@@ -74,9 +71,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			var chartTooltipBehavior = new ChartTooltipBehavior();
 			var sfCartesianChart = new SfCartesianChart { TooltipTextColor = Colors.Blue };
 			var textColor = Colors.Blue;
-			sfCartesianChart.SetDefaultTooltipValue(chartTooltipBehavior);
-
-			Assert.Equal(textColor, chartTooltipBehavior.TextColor);
+			Assert.Equal(textColor, sfCartesianChart.TooltipTextColor);
 		}
 
 		[Fact]
@@ -86,18 +81,65 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			var chartTooltipBehavior = new ChartTooltipBehavior();
 			var sfCartesianChart = new SfCartesianChart { TooltipFontSize = 12.0 };
 			var fontSize = 12.0;
-			sfCartesianChart.SetDefaultTooltipValue(chartTooltipBehavior);
-			Assert.Equal(fontSize, chartTooltipBehavior.FontSize);
+			Assert.Equal(fontSize, sfCartesianChart.TooltipFontSize);
+		}
+
+		[Fact]
+		public void UpdateTooltipAppearance_TestWithTooltipBehaviorValues()
+		{
+			var backgroundColor = Colors.Red;
+			var textColor = Colors.Blue;
+			var fontSize = 12.0f;
+
+			var chartTooltipBehavior = new ChartTooltipBehavior();
+			var sfCartesianChart = new SfCartesianChart();
+
+			chartTooltipBehavior.Background = backgroundColor;
+			chartTooltipBehavior.TextColor = textColor;
+			chartTooltipBehavior.FontSize = fontSize;
+
+			var columnSeries  = new ColumnSeries();
+			columnSeries.Chart = sfCartesianChart;
+			TooltipInfo info = new TooltipInfo(columnSeries);
+
+			columnSeries.UpdateTooltipAppearance(info, chartTooltipBehavior);
+
+			Assert.Equal(info.Background, backgroundColor);
+			Assert.Equal(info.TextColor, textColor);
+			Assert.Equal(info.FontSize, fontSize);
+		}
+
+		[Fact]
+		public void UpdateTooltipAppearance_TestWithCartesianChartValues()
+		{
+			var backgroundColor = Colors.Red;
+			var textColor = Colors.Blue;
+			var fontSize = 12.0f;
+
+			var chartTooltipBehavior = new ChartTooltipBehavior();
+			var sfCartesianChart = new SfCartesianChart();
+
+			sfCartesianChart.TooltipBackground = backgroundColor;
+			sfCartesianChart.TooltipTextColor = textColor;
+			sfCartesianChart.TooltipFontSize = fontSize;
+
+			var columnSeries = new ColumnSeries();
+			columnSeries.Chart = sfCartesianChart;
+			TooltipInfo info = new TooltipInfo(columnSeries);
+
+			columnSeries.UpdateTooltipAppearance(info, chartTooltipBehavior);
+
+			Assert.Equal(info.Background, backgroundColor);
+			Assert.Equal(info.TextColor, textColor);
+			Assert.Equal(info.FontSize, fontSize);
 		}
 
 		[Fact]
 		public void CreateChartArea_InitializesWithCurrentInstance()
 		{
-
 			var sfCartesianChart = new SfCartesianChart();
 			var result = sfCartesianChart.CreateChartArea();
 			Assert.NotNull(result);
-
 		}
 
 		[Fact]
