@@ -2230,7 +2230,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         static void UpdateTabItemWidth(SfTabItem item, double width)
         {
-            item.WidthRequest = width;
+			if (double.IsNaN(width) || double.IsInfinity(width) || width <= 0)
+			{
+				return;
+			}
+
+			item.WidthRequest = width;
             if (item.Parent != null && (item.Parent is SfGrid grid))
             {
                 var parentGrid = grid;
