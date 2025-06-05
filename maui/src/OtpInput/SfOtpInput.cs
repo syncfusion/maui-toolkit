@@ -862,12 +862,28 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 					return;
 				}
 
-                if (otpInput.ValueChanged != null)
-                {
-                    RaiseValueChangedEvent(otpInput, oldValue?.ToString() ?? string.Empty, newValue?.ToString() ?? string.Empty);
+				string newValueStr = newValue?.ToString() ?? string.Empty;
+				string oldValueStr = oldValue?.ToString() ?? string.Empty;
+
+				if (otpInput.Type == OtpInputType.Number)
+				{
+					newValueStr = new string(newValueStr.Where(c => !char.IsControl(c)).ToArray());
+					oldValueStr = new string(oldValueStr.Where(c => !char.IsControl(c)).ToArray());
 				}
-                
-                otpInput.UpdateValue(bindable, newValue?? string.Empty);
+
+				if (otpInput.ValueChanged != null)
+				{
+					if (otpInput.Type == OtpInputType.Number)
+					{
+						RaiseValueChangedEvent(otpInput, oldValueStr, newValueStr);
+					}
+					else
+					{
+						RaiseValueChangedEvent(otpInput, oldValue?.ToString() ?? string.Empty, newValue?.ToString() ?? string.Empty);
+					}
+				}
+
+				otpInput.UpdateValue(bindable, newValue?? string.Empty);
             }
         }
 
