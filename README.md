@@ -32,32 +32,32 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 |----------------------|-----------------------|---------------------------------------------------------------------------------------------------------|
 | Data Visualization   | Cartesian Charts      | Versatile data representation using line, bar, and area charts.                                          |
 |                      | Circular Charts       | Display proportions and comparisons using pie and doughnut charts.                                       |
-|                      | Pyramid Charts        | Visualize hierarchical data, perfect for business and analytics applications.                            |
 |                      | Funnel Charts         | Represent processes and data flow, often used in sales and analytics.                                    |
 |                      | Polar Charts          | Showcase categories in a circular format, ideal for unordered data.                                      |
+|                      | Pyramid Charts        | Visualize hierarchical data, perfect for business and analytics applications.                            |
 | Calendars            | Calendar              | The calendar supports month, year, decade, and century views, multiple selection modes, and customizable appearance.      |
-| Editors              | Numeric Entry         | Advanced control for numeric input with support for various formats and validation.                      |
+| Editors              | Date Picker           | User interface element for selecting specific dates.                                                     |
+|                      | Date Time Picker      | Combined interface to select dates and times.                                                            |
+|                      | Numeric Entry         | Advanced control for numeric input with support for various formats and validation.                      |
 |                      | Numeric Up Down       | Adjust values with up/down buttons and culture-specific formatting.                                      |
 |                      | OTP Input             | Secure input field for one-time passwords with customizable length, masking options, and validation.     |
 |                      | Picker               | Versatile UI Element for making selections in set of options.                                             |
-|                      | Date Picker           | User interface element for selecting specific dates.                                                     |
 |                      | Time Picker           | Interface for choosing specific times of day.                                                            |
-|                      | Date Time Picker      | Combined interface to select dates and times.                                                            |
-| Navigation           | Navigation Drawer     | Slide-in menu for navigation, positionable on any side of the app with customizable animations.          |
+| Navigation           | Bottom Sheet          | Slides up from the bottom of the screen to display additional content or functionality.                  |
+|                      | Navigation Drawer     | Slide-in menu for navigation, positionable on any side of the app with customizable animations.          |
 |                      | Tab View              | Organize app content with customizable tabs, enabling easy navigation across sections.                   |
-|                      | Bottom Sheet          | Slides up from the bottom of the screen to display additional content or functionality.                  |
-| Layout               | Carousel              | Smooth, touch-enabled sliding galleries for showcasing images or featured content.                       |
-|                      | Text Input Layout     | Enhances input fields with floating labels and validation, improving user interaction.                   |
+| Layout               | Accordion             | Organizes content into multiple expandable sections, allowing only one section to be open at a time for better navigation and space management.|
 |                      | Cards                 | Create dismissible cards or a stack of cards, and customize their background, borders, and corners.      |
+|                      | Carousel              | Smooth, touch-enabled sliding galleries for showcasing images or featured content.                       |
 |                      | Expander              | Allows users to expand or collapse content dynamically, improving space management and user experience.  |
-|                      | Accordion             | Organizes content into multiple expandable sections, allowing only one section to be open at a time for better navigation and space management.|
 |                      | Popup                 | Allows users to display an alert message with customizable buttons or load any desired content inside a popup view.|
-| Buttons              | Chips                 | Interactive tags for filtering, labeling, or visual options, perfect for e-commerce or task management.  |
+|                      | Text Input Layout     | Enhances input fields with floating labels and validation, improving user interaction.                   |
+| Buttons              | Button                | Customizable button control with icon support, background images, and visual state styling.              |
+|                      | Chips                 | Interactive tags for filtering, labeling, or visual options, perfect for e-commerce or task management.  |
 |                      | Segmented Control     | Quickly switch between views or categories, ideal for apps with multiple layout options.                 |
-|                      | Button                | Customizable button control with icon support, background images, and visual state styling.              |
-| Notification         | Pull to Refresh       | Allows users to refresh live data by pulling down, ideal for real-time data syncing.                     |
-|                      | Circular Progress Bar | Represents task progression through a circular visualization.                                            |
+| Notification         | Circular Progress Bar | Represents task progression through a circular visualization.                                            |
 |                      | Linear Progress Bar   | Represents task progression through a linear visualization.                                              |
+|                      | Pull to Refresh       | Allows users to refresh live data by pulling down, ideal for real-time data syncing.                     |
 | Miscellaneous        | Effects View          | Add visual enhancements like shadows, blurs, or highlights to make UI elements stand out.                |
 |                      | Shimmer               | Indicates loading content with customizable wave directions, great for data-heavy apps.                  |
 
