@@ -56,7 +56,7 @@
 		{
 			if (VisibleMinimum == null && VisibleMaximum == null)
 			{
-				return DoubleRange.Empty;
+				return new DoubleRange(double.NaN, double.NaN);
 			}
 
 			double start, end;

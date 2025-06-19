@@ -44,7 +44,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		internal DoubleRange SbsInfo { get; set; } = DoubleRange.Empty;
+		internal DoubleRange SbsInfo { get; set; } = new DoubleRange(double.NaN, double.NaN);
 
 		internal int SideBySideIndex { get; set; }
 
@@ -968,8 +968,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (PointsCount <= 0)
 			{
-				XRange = DoubleRange.Empty;
-				YRange = DoubleRange.Empty;
+				XRange = new DoubleRange(double.NaN, double.NaN);
+				YRange = new DoubleRange(double.NaN, double.NaN);
 				VisibleXRange = XRange;
 				VisibleYRange = YRange;
 			}

@@ -131,8 +131,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				if (!series.SegmentsCreated)
 				{
-					series.XRange = DoubleRange.Empty;
-					series.YRange = DoubleRange.Empty;
+					series.XRange = new DoubleRange(double.NaN, double.NaN);
+					series.YRange = new DoubleRange(double.NaN, double.NaN);
 				}
 
 				_chartArea.InternalCreateSegments(series);
