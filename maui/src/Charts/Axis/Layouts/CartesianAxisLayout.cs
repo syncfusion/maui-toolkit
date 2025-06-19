@@ -463,8 +463,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						isStackingSegmentCreated = true;
 					}
 
-					series.XRange = DoubleRange.Empty;
-					series.YRange = DoubleRange.Empty;
+					series.XRange = new DoubleRange(double.NaN, double.NaN);
+					series.YRange = new DoubleRange(double.NaN, double.NaN);
 
 					if (series.SbsInfo.IsEmpty)
 					{

@@ -1188,12 +1188,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <summary>
 		/// Gets the XRange values.
 		/// </summary>
-		public DoubleRange XRange { get; internal set; } = DoubleRange.Empty;
+		public DoubleRange XRange { get; internal set; } = new DoubleRange(double.NaN, double.NaN);
 
 		/// <summary>
 		/// Gets the YRange values.
 		/// </summary>
-		public DoubleRange YRange { get; internal set; } = DoubleRange.Empty;
+		public DoubleRange YRange { get; internal set; } = new DoubleRange(double.NaN, double.NaN);
 
 		#endregion
 

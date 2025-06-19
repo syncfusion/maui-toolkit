@@ -334,8 +334,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <returns>A boolean indicating whether the exclusion was successful.</returns>
 		public static bool Exclude(DoubleRange range, DoubleRange excluder, out DoubleRange leftRange, out DoubleRange rightRange)
 		{
-			leftRange = DoubleRange.Empty;
-			rightRange = DoubleRange.Empty;
+			leftRange = new DoubleRange(double.NaN, double.NaN);
+			rightRange = new DoubleRange(double.NaN, double.NaN);
 
 			if (!(range.IsEmpty || excluder.IsEmpty))
 			{

@@ -121,8 +121,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (Series != null)
 			{
-				Series.XRange += !double.IsNaN(_x) ? DoubleRange.Union(_x) : DoubleRange.Empty;
-				Series.YRange += !double.IsNaN(_y) ? DoubleRange.Union(_y) : DoubleRange.Empty;
+				Series.XRange += !double.IsNaN(_x) ? DoubleRange.Union(_x) : new DoubleRange(double.NaN, double.NaN);
+				Series.YRange += !double.IsNaN(_y) ? DoubleRange.Union(_y) : new DoubleRange(double.NaN, double.NaN);
 			}
 		}
 
