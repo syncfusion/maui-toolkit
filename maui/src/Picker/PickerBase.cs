@@ -240,6 +240,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void AddChildren()
         {
             _pickerStackLayout = new PickerStackLayout(this);
+            _pickerStackLayout.HorizontalOptions = this.HorizontalOptions;
+            _pickerStackLayout.VerticalOptions = this.VerticalOptions;
             AddOrRemoveHeaderLayout();
             _pickerContainer = new PickerContainer(this);
             _pickerStackLayout.Children.Add(_pickerContainer);
