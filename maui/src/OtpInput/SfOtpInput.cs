@@ -57,12 +57,12 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         /// <summary>
         /// Width of each OTP input field.
         /// </summary>
-        float _entryWidth = 40;
+        float _entryWidth;
 
         /// <summary>
         /// Height of each OTP input field.
         /// </summary>
-        float _entryHeight = 40;
+        float _entryHeight;
 
         /// <summary>
         /// Corner radius for the rounded edges of OTP input fields.
@@ -155,6 +155,18 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// </summary>
 		bool _isPasteHandled = false;
 #endif
+
+        /// <summary>
+        /// Identifies the BoxWidth bindable property.
+        /// </summary>
+        public static readonly BindableProperty BoxWidthProperty =
+            BindableProperty.Create(nameof(BoxWidth), typeof(double), typeof(SfOtpInput), 40.0, BindingMode.TwoWay, propertyChanged: OnBoxSizePropertyChanged);
+
+        /// <summary>
+        /// Identifies the BoxHeight bindable property.
+        /// </summary>
+        public static readonly BindableProperty BoxHeightProperty =
+            BindableProperty.Create(nameof(BoxHeight), typeof(double), typeof(SfOtpInput), 40.0, BindingMode.TwoWay, propertyChanged: OnBoxSizePropertyChanged);
 		#endregion
 		#region BindableProperties
 
@@ -303,6 +315,8 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         {
             ThemeElement.InitializeThemeResources(this, "SfOtpInputTheme");
             DrawingOrder = DrawingOrder.BelowContent;
+            _entryWidth = (float)BoxWidth;
+            _entryHeight = (float)BoxHeight;
             InitializeFields();
 #if IOS
             this.IgnoreSafeArea = true;
@@ -737,6 +751,24 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		{
 			get { return (Color)GetValue(InputBackgroundProperty); }
 			set { SetValue(InputBackgroundProperty, value); }
+			}
+
+		/// <summary>
+		/// Gets or sets the width of each OTP input box.
+		/// </summary>
+		public double BoxWidth
+		{
+			get => (double)GetValue(BoxWidthProperty);
+			set => SetValue(BoxWidthProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the height of each OTP input box.
+		/// </summary>
+		public double BoxHeight
+		{
+			get => (double)GetValue(BoxHeightProperty);
+			set => SetValue(BoxHeightProperty, value);
 		}
 
 		#endregion
@@ -1118,6 +1150,20 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 			if (bindable is SfOtpInput otpInput)
 			{
 				otpInput?.InvalidateDrawable();
+			}
+		}
+
+		/// <summary>
+		/// Add this property changed handler
+		/// </summary>
+		static void OnBoxSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfOtpInput otpInput)
+			{
+				otpInput._entryWidth = (float)otpInput.BoxWidth;
+				otpInput._entryHeight = (float)otpInput.BoxHeight;
+				otpInput.InvalidateMeasure();
+				otpInput.InvalidateDrawable();
 			}
 		}
 
@@ -1970,7 +2016,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         /// Handles key down events for OTP input fields.
         /// </summary>
         /// <param name="sender">The object that triggered the event.</param>
-        /// <param name="e">Event arguments containing key information.</param>
+        /// <param { get; set; }="e">Event arguments containing key information.</param>
         void OnKeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (_otpEntries is null)
@@ -2257,7 +2303,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         /// Sets up platform-specific event handlers for key input validation and handling.
         /// </summary>
         /// <param name="sender">The OTPEntry control whose handler has changed.</param>
-        /// <param name="e">Event arguments containing details of the change.</param>
+        /// <param { get; set; }="e">Event arguments containing details of the change.</param>
         void OnHandlerChanged(object? sender, EventArgs e)
         {
             if (sender is OTPEntry textBox)
