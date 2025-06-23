@@ -1,10 +1,10 @@
-﻿using Syncfusion.Maui.Toolkit.Internals;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using Rect = Microsoft.Maui.Graphics.Rect; // Alias for Maui's Rect
-using TextAlignment = Microsoft.Maui.TextAlignment; // Alias for Maui's TextAlignment
-using ResourceDictionary = Microsoft.Maui.Controls.ResourceDictionary; // Alias for Maui's ResourceDictionary
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Helper;
+using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
+using Rect = Microsoft.Maui.Graphics.Rect;
+using ResourceDictionary = Microsoft.Maui.Controls.ResourceDictionary;
+using TextAlignment = Microsoft.Maui.TextAlignment;
 using System.Globalization;
 #if WINDOWS
 using Microsoft.UI.Xaml;
@@ -1057,10 +1057,10 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				if ((bool)newValue)
 				{
 #if !(MACCATALYST || IOS)
-                    otpInput.Loaded += (s, e) =>
-                    {
-                        otpInput._otpEntries[0].Focus();
-                    };
+					otpInput.Loaded += (s, e) =>
+					{
+						otpInput._otpEntries[0].Focus();
+					};
 #else
 					Task.Run(() =>
 					{
@@ -1154,7 +1154,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		}
 
 		/// <summary>
-		/// Add this property changed handler
+		/// Updates all OTP entry dimensions when BoxWidth or BoxHeight changes.
 		/// </summary>
 		static void OnBoxSizePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
@@ -1166,10 +1166,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				{
 					foreach (var entry in otpInput._otpEntries)
 					{
-						entry.MinimumWidthRequest = otpInput._entryWidth;
-						entry.MinimumHeightRequest = otpInput._entryHeight;
-						entry.WidthRequest = otpInput._entryWidth;
-						entry.HeightRequest = otpInput._entryHeight;
+						otpInput.ApplyEntrySize(entry);
 					}
 				}
 				otpInput.InvalidateMeasure();
@@ -1411,21 +1408,29 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		{
 			OTPEntry otpEntry = new OTPEntry
 			{
-				MinimumWidthRequest = _entryWidth,
-				MinimumHeightRequest = _entryHeight,
-				WidthRequest = _entryWidth,
-				HeightRequest = _entryHeight,
 				FontSize = 16,
 				HorizontalTextAlignment = TextAlignment.Center,
 				VerticalTextAlignment = TextAlignment.Center,
 				Keyboard = Type is OtpInputType.Number ? Keyboard.Numeric : Keyboard.Text,
 			};
 
+			ApplyEntrySize(otpEntry);
 			otpEntry.BindingContext = this;
 			otpEntry.SetBinding(OTPEntry.PlaceholderColorProperty, BindingHelper.CreateBinding(nameof(PlaceholderColor), getter: static (SfOtpInput otpInput) => otpInput.PlaceholderColor));
 			otpEntry.SetBinding(OTPEntry.TextColorProperty, BindingHelper.CreateBinding(nameof(TextColor), getter: static (SfOtpInput otpInput) => otpInput.TextColor));
 
 			return otpEntry;
+		}
+
+		/// <summary>
+		/// Applies the current entry size to the given OTPEntry.
+		/// </summary>
+		void ApplyEntrySize(OTPEntry entry)
+		{
+			entry.MinimumWidthRequest = _entryWidth;
+			entry.MinimumHeightRequest = _entryHeight;
+			entry.WidthRequest = _entryWidth;
+			entry.HeightRequest = _entryHeight;
 		}
 
 		/// <summary>
@@ -1533,19 +1538,19 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				});
 			}
 #else
+			{
+				if (Type is OtpInputType.Password && e.NewTextValue is not "")
 				{
-					if (Type is OtpInputType.Password && e.NewTextValue is not "")
-					{
-						_otpEntries[index].Text = MaskCharacter.ToString();
-					}
-
-					if (isValidText)
-					{
-						Value = new string(valueArray);
-					}
-
-					HandleFocus(index, hasText);
+					_otpEntries[index].Text = MaskCharacter.ToString();
 				}
+
+				if (isValidText)
+				{
+					Value = new string(valueArray);
+				}
+
+				HandleFocus(index, hasText);
+			}
 #endif
 
 #if ANDROID || WINDOWS
