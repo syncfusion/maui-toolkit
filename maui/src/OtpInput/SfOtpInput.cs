@@ -2028,7 +2028,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         /// Handles key down events for OTP input fields.
         /// </summary>
         /// <param name="sender">The object that triggered the event.</param>
-        /// <param { get; set; }="e">Event arguments containing key information.</param>
+        /// <param name="e">Event arguments containing key information.</param>
         void OnKeyDown(object sender, Microsoft.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (_otpEntries is null)
@@ -2315,7 +2315,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// Sets up platform-specific event handlers for key input validation and handling.
 		/// </summary>
 		/// <param name="sender">The OTPEntry control whose handler has changed.</param>
-		/// <param { get; set; }="e">Event arguments containing details of the change.</param>
+		/// <param name="e">Event arguments containing details of the change.</param>
 		void OnHandlerChanged(object? sender, EventArgs e)
 		{
 			if (sender is OTPEntry textBox)
