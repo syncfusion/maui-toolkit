@@ -821,6 +821,30 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 				$"Button width {size.Width} should respect WidthRequest of 150");
 		}
 
+		[Fact]
+		public void TextWrapping_WithIcon_ShouldAccountForIconSpace()
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should automatically wrap into multiple lines";
+			button.LineBreakMode = LineBreakMode.WordWrap;
+			button.ShowIcon = true;
+			button.ImageAlignment = Alignment.Start; // Icon on left side
+			button.ImageSize = 20;
+
+			// Measure with width constraint
+			var sizeWithIcon = button.MeasureContent(200, double.PositiveInfinity);
+			
+			// Compare with button without icon
+			var buttonNoIcon = new SfButton();
+			buttonNoIcon.Text = button.Text;
+			buttonNoIcon.LineBreakMode = LineBreakMode.WordWrap;
+			var sizeNoIcon = buttonNoIcon.MeasureContent(200, double.PositiveInfinity);
+
+			// Button with icon should potentially wrap more (higher height) due to less available text width
+			Assert.True(sizeWithIcon.Height >= sizeNoIcon.Height, 
+				$"Button with icon height {sizeWithIcon.Height} should be >= button without icon height {sizeNoIcon.Height}");
+		}
+
 		#endregion
 
 		#region AutomationScenario

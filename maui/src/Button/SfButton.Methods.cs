@@ -568,6 +568,13 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 					{
 						// Calculate available text width by subtracting padding and stroke thickness
 						double availableTextWidth = width - Padding.Left - Padding.Right - StrokeThickness - (_leftPadding * 2) - (_rightPadding * 2);
+						
+						// If icon is positioned left or right (not top/bottom), subtract icon size from available text width
+						if (ShowIcon && ImageSource != null && ImageAlignment != Alignment.Top && ImageAlignment != Alignment.Bottom)
+						{
+							availableTextWidth -= ImageSize;
+						}
+						
 						// Ensure minimum width to avoid negative values
 						availableTextWidth = Math.Max(availableTextWidth, 1);
 						_numberOfLines = StringExtensions.GetLinesCount(Text, (float)availableTextWidth, this, LineBreakMode, out _);
