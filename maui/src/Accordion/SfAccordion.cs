@@ -1487,7 +1487,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of items property. </param>
 		static void OnItemsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is SfAccordion accordion && accordion.IsViewLoaded)
+			if (bindable is SfAccordion accordion)
 			{
 				ObservableCollection<AccordionItem> oldItems = (ObservableCollection<AccordionItem>)oldValue;
 				ObservableCollection<AccordionItem> newItems = (ObservableCollection<AccordionItem>)newValue;
