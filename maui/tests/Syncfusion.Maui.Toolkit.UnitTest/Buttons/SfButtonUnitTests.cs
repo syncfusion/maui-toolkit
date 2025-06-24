@@ -776,6 +776,53 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 
 		#endregion
 
+		#region Text Wrapping Tests
+
+		[Fact]
+		public void TextWrapping_ShouldWrapWithoutWidthRequest()
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should automatically wrap into multiple lines and resize the button height accordingly";
+			button.LineBreakMode = LineBreakMode.WordWrap;
+			button.HorizontalOptions = LayoutOptions.Start;
+			button.VerticalOptions = LayoutOptions.Start;
+
+			// Measure with width constraint but no WidthRequest
+			var size = button.MeasureContent(200, double.PositiveInfinity);
+			
+			// Calculate expected single line height for comparison
+			var singleLineButton = new SfButton();
+			singleLineButton.Text = "Short text";
+			singleLineButton.LineBreakMode = LineBreakMode.NoWrap;
+			var singleLineSize = singleLineButton.MeasureContent(200, double.PositiveInfinity);
+
+			// Height should be greater than single line due to text wrapping
+			Assert.True(size.Height > singleLineSize.Height, 
+				$"Button height {size.Height} should be greater than single line height {singleLineSize.Height} when text wraps");
+			
+			// Width should not exceed the constraint
+			Assert.True(size.Width <= 200, 
+				$"Button width {size.Width} should not exceed width constraint of 200");
+		}
+
+		[Fact]
+		public void TextWrapping_ShouldRespectWidthRequest()
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should automatically wrap into multiple lines and resize the button height accordingly";
+			button.LineBreakMode = LineBreakMode.WordWrap;
+			button.WidthRequest = 150;
+
+			// Measure with larger width constraint, but WidthRequest should take precedence
+			var size = button.MeasureContent(300, double.PositiveInfinity);
+			
+			// Width should be close to WidthRequest (accounting for padding)
+			Assert.True(size.Width >= 150, 
+				$"Button width {size.Width} should respect WidthRequest of 150");
+		}
+
+		#endregion
+
 		#region AutomationScenario
 
 		[Theory]

@@ -566,7 +566,11 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 			{
 				if (LineBreakMode == LineBreakMode.WordWrap || LineBreakMode == LineBreakMode.CharacterWrap)
 					{
-						_numberOfLines = StringExtensions.GetLinesCount(Text, (float)width, this, LineBreakMode, out _);
+						// Calculate available text width by subtracting padding and stroke thickness
+						double availableTextWidth = width - Padding.Left - Padding.Right - StrokeThickness - (_leftPadding * 2) - (_rightPadding * 2);
+						// Ensure minimum width to avoid negative values
+						availableTextWidth = Math.Max(availableTextWidth, 1);
+						_numberOfLines = StringExtensions.GetLinesCount(Text, (float)availableTextWidth, this, LineBreakMode, out _);
 					}
 					else
 					{
@@ -690,7 +694,10 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 			base.MeasureContent(widthConstraint, heightConstraint);
 
 			double width = CalculateWidth(widthConstraint);
-			double height = CalculateHeight(heightConstraint, WidthRequest > 0 ? WidthRequest : width);
+			// For text wrapping calculations, use available width constraint if finite, otherwise use calculated width
+			double widthForHeight = WidthRequest > 0 ? WidthRequest : 
+				(widthConstraint != double.PositiveInfinity && widthConstraint > 0 ? widthConstraint : width);
+			double height = CalculateHeight(heightConstraint, widthForHeight);
 
 			if (Children.Count > 0 && IsItemTemplate)
 			{
