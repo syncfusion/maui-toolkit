@@ -292,7 +292,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(expected, actual);
 		}
 
-		
+
 
 		[Theory]
 		[InlineData(40)]
@@ -313,7 +313,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 		}
 
-		
+
 
 		[Theory]
 		[InlineData(40)]
@@ -657,16 +657,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 
 		[Theory]
-		[InlineData(0, 30f, 40f, 5f, 3f, 50f, false, 300f)]
-		[InlineData(1, 35f, 45f, 10f, 5f, 60f, false, 300f)]
-		public void UpdateDrawingParameters(int index, float entryWidth, float entryHeight, float spacing, float extraSpacing, float lineLength, bool isRTL, float controlWidth)
+		[InlineData(0, 30f, 40f, 5f, 3f, false, 300f)]
+		[InlineData(1, 35f, 45f, 10f, 5f, false, 300f)]
+		public void UpdateDrawingParameters(int index, float entryWidth, float entryHeight, float spacing, float extraSpacing, bool isRTL, float controlWidth)
 		{
 			var otpInput = new SfOtpInput();
 			SetPrivateField(otpInput, "_entryWidth", entryWidth);
 			SetPrivateField(otpInput, "_entryHeight", entryHeight);
 			SetPrivateField(otpInput, "_spacing", spacing);
 			SetPrivateField(otpInput, "_extraSpacing", extraSpacing);
-			SetPrivateField(otpInput, "_lineLength", lineLength);
 			otpInput.WidthRequest = controlWidth;
 
 			var flowDirection = isRTL ? EffectiveFlowDirection.RightToLeft : 0;
@@ -689,11 +688,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			// Assert start point
 			Assert.Equal(xPos, startPoint.X);
-			Assert.Equal(lineLength + extraSpacing + yPadding, startPoint.Y);
+			Assert.Equal(entryHeight + extraSpacing + yPadding, startPoint.Y);
 
 			// Assert end point
 			Assert.Equal(xPos + entryWidth, endPoint.X);
-			Assert.Equal(lineLength + extraSpacing + yPadding, endPoint.Y);
+			Assert.Equal(entryHeight + extraSpacing + yPadding, endPoint.Y);
 
 			// Assert outline rectangle
 			Assert.Equal(xPos, outlineRectF.X);

@@ -1,11 +1,11 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using System.Globalization;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Helper;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
 using Rect = Microsoft.Maui.Graphics.Rect;
 using ResourceDictionary = Microsoft.Maui.Controls.ResourceDictionary;
 using TextAlignment = Microsoft.Maui.TextAlignment;
-using System.Globalization;
 #if WINDOWS
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
@@ -85,11 +85,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// Space between each OTP input field.
 		/// </summary>
 		float _spacing;
-
-		/// <summary>
-		/// Length of a decorative line element within the OTP control.
-		/// </summary>
-		float _lineLength = 40;
 
 #if WINDOWS
 		/// <summary>
@@ -1682,9 +1677,8 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				? (float)(this.Width - _entryWidth - baseXPos)
 				: baseXPos;
 
-			// Update base line points
-			_startPoint = new PointF(xPos, _lineLength + _extraSpacing + yPadding);
-			_endPoint = new PointF(xPos + _entryWidth, _lineLength + _extraSpacing + yPadding);
+			_startPoint = new PointF(xPos, _entryHeight + _extraSpacing + yPadding);
+			_endPoint = new PointF(xPos + _entryWidth, _entryHeight + _extraSpacing + yPadding);
 
 			// Update outline rectangle
 			_outlineRectF = new RectF(xPos, _extraSpacing + yPadding, _entryWidth, _entryHeight);
