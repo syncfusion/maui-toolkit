@@ -538,20 +538,29 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		/// <returns>Calculated width.</returns>
 		double CalculateWidth(double widthConstraint)
 		{
-			if (widthConstraint == double.PositiveInfinity || widthConstraint < 0 || WidthRequest < 0)
+			// If WidthRequest is explicitly set, use it
+			if (WidthRequest > 0)
 			{
-				if (ShowIcon && ImageSource != null)
-				{
-					return ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
-						? Math.Max(ImageSize, TextSize.Width) + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2)
-						: ImageSize + TextSize.Width + StrokeThickness + Padding.Left + Padding.Right + (_leftPadding * 2) + (_rightPadding * 2);
-				}
-				else
-				{
-					return TextSize.Width + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2);
-				}
+				return WidthRequest;
 			}
-			return widthConstraint;
+			
+			// If widthConstraint is finite and positive, use it
+			if (widthConstraint != double.PositiveInfinity && widthConstraint > 0)
+			{
+				return widthConstraint;
+			}
+			
+			// Otherwise, calculate natural width based on content
+			if (ShowIcon && ImageSource != null)
+			{
+				return ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
+					? Math.Max(ImageSize, TextSize.Width) + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2)
+					: ImageSize + TextSize.Width + StrokeThickness + Padding.Left + Padding.Right + (_leftPadding * 2) + (_rightPadding * 2);
+			}
+			else
+			{
+				return TextSize.Width + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2);
+			}
 		}
 
 		/// <summary>
@@ -566,21 +575,11 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 			{
 				if (LineBreakMode == LineBreakMode.WordWrap || LineBreakMode == LineBreakMode.CharacterWrap)
 					{
-						// Calculate available text width by subtracting padding and stroke thickness
-						double availableTextWidth = width - Padding.Left - Padding.Right - StrokeThickness - (_leftPadding * 2) - (_rightPadding * 2);
-						
-						// If icon is positioned left or right (not top/bottom), subtract icon size from available text width
-						if (ShowIcon && ImageSource != null && ImageAlignment != Alignment.Top && ImageAlignment != Alignment.Bottom)
-						{
-							availableTextWidth -= ImageSize;
-						}
-						
-						// Ensure minimum width to avoid negative values
-						availableTextWidth = Math.Max(availableTextWidth, 1);
-						_numberOfLines = StringExtensions.GetLinesCount(Text, (float)availableTextWidth, this, LineBreakMode, out _);
+						_numberOfLines = StringExtensions.GetLinesCount(Text, (float)width, this, LineBreakMode, out _);
 					}
 					else
 					{
+						// For truncation modes (Head, Middle, Tail) and NoWrap, text should always be on a single line
 						_numberOfLines = 1;
 					}
 				if (ShowIcon && ImageSource != null)
