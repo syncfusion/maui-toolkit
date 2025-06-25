@@ -462,11 +462,6 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 			// Content does not get collapsed when item is being collapsed in PCL view.
 			if (bindable is AccordionItem accordionItem)
 			{
-				if (accordionItem.Content != null && (bool)newValue && accordionItem.Content.IsVisible)
-				{
-					accordionItem.Content.IsVisible = true;
-				}
-
 				if (accordionItem._accordion != null && accordionItem._accordionItemView != null && accordionItem._accordionItemView.IsExpanded != accordionItem.IsExpanded)
 				{
 					accordionItem.OnIsExpandedChanging((bool)newValue);

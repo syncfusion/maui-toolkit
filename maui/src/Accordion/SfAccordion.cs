@@ -1392,7 +1392,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of expand mode property. </param>
 		static void OnExpandModePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is SfAccordion accordion)
+			if (bindable is SfAccordion accordion && accordion.IsViewLoaded)
 			{
 				accordion.UpdateAccordionItemsBasedOnExpandModes(true);
 			}
@@ -1406,7 +1406,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of item spacing property. </param>
 		static void OnItemSpacingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is SfAccordion accordion)
+			if (bindable is SfAccordion accordion && accordion.IsViewLoaded)
 			{
 				foreach (var item in accordion.Items)
 				{
@@ -1427,7 +1427,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of animation duration property. </param>
 		static void OnAnimationDurationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is SfAccordion accordion)
+			if (bindable is SfAccordion accordion && accordion.IsViewLoaded)
 			{
 				foreach (AccordionItem item in accordion.Items)
 				{
@@ -1447,7 +1447,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of animation easing property. </param>
 		static void OnAnimationEasingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is SfAccordion accordion)
+			if (bindable is SfAccordion accordion && accordion.IsViewLoaded)
 			{
 				foreach (AccordionItem item in accordion.Items)
 				{
@@ -1467,7 +1467,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of header icon position property. </param>
 		static void OnHeaderIconPositionPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is SfAccordion accordion)
+			if (bindable is SfAccordion accordion && accordion.IsViewLoaded)
 			{
 				foreach (AccordionItem item in accordion.Items)
 				{
