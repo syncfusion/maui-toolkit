@@ -203,7 +203,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 						if (cartesianSeries.ActualXAxis == null)
 						{
-							cartesianSeries.SbsInfo = DoubleRange.Empty;
+							cartesianSeries.SbsInfo = new DoubleRange(double.NaN, double.NaN);
 						}
 
 						double sideBySideMinWidth = SideBySideMinWidth == double.MaxValue ? 1 : SideBySideMinWidth;
