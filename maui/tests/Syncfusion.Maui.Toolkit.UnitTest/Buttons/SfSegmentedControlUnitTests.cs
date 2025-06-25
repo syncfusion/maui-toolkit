@@ -221,6 +221,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		[Theory]
 		[InlineData("#FF0000")]
+		public void SegmentBackground_WithZeroStrokeThickness_ReturnsExpectedValue(string colorHex)
+		{
+			var segmentedControl = new SfSegmentedControl();
+			Brush segmentBackground = new SolidColorBrush(Color.FromArgb(colorHex));
+			segmentedControl.SegmentBackground = segmentBackground;
+			segmentedControl.StrokeThickness = 0;
+			Assert.Equal(segmentBackground, segmentedControl.SegmentBackground);
+			Assert.Equal(0, segmentedControl.StrokeThickness);
+		}
+
+		[Theory]
+		[InlineData("#FF0000")]
 		public void DisabledSegmentBackground_SetValue_ReturnsExpectedValue(string colorHex)
 		{
 			var segmentedControl = new SfSegmentedControl();
@@ -1122,6 +1134,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var segmentItem = new SfSegmentItem();
 			var resultBackground = SegmentViewHelper.GetSegmentBackground(itemInfo, segmentItem);
 			Assert.Equal(itemInfo.SegmentBackground, resultBackground);
+		}
+
+		[Fact]
+		public void GetSegmentBackground_ReturnsItemInfoSegmentBackground_WhenStrokeThicknessIsZero()
+		{
+			var itemInfo = new SfSegmentedControl { SegmentBackground = Brush.Red, StrokeThickness = 0 };
+			var segmentItem = new SfSegmentItem();
+			var resultBackground = SegmentViewHelper.GetSegmentBackground(itemInfo, segmentItem);
+			Assert.Equal(itemInfo.SegmentBackground, resultBackground);
+			Assert.Equal(0, itemInfo.StrokeThickness);
 		}
 
 		[Fact]
