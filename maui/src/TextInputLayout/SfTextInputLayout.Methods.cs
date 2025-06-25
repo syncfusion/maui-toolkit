@@ -735,6 +735,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			iOSEntry.Layer.BorderColor = UIKit.UIColor.Clear.CGColor;
 			iOSEntry.LeftViewMode = UIKit.UITextFieldViewMode.Never;
 			iOSEntry.ShouldEndEditing += ShouldEndEditing;
+			
+			// Configure accessibility for Tab navigation support
+			iOSEntry.IsAccessibilityElement = true;
+			iOSEntry.AccessibilityTraits = UIKit.UIAccessibilityTrait.Updatable;
+			
 			uiEntry = iOSEntry;
 		}
 
