@@ -264,7 +264,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			{
 				canvas.StrokeSize = (float)itemInfo.StrokeThickness;
 				canvas.StrokeColor = SegmentViewHelper.BrushToColorConverter(itemInfo.Stroke);
-				canvas.DrawRoundedRectangle(dirtyRect.Left, dirtyRect.Top, dirtyRect.Width, dirtyRect.Height, cornerRadiusTopLeft, cornerRadiusTopRight, cornerRadiusBottomRight, cornerRadiusBottomLeft);
 			}
 
 			canvas.CanvasRestoreState();
