@@ -776,6 +776,76 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 
 		#endregion
 
+		#region HorizontalOptions Width Tests
+
+		[Theory]
+		[InlineData(LayoutAlignment.Start)]
+		[InlineData(LayoutAlignment.Center)]
+		[InlineData(LayoutAlignment.End)]
+		public void CalculateWidth_WithNonFillHorizontalOptions_ShouldUseContentWidth(LayoutAlignment alignment)
+		{
+			var button = new SfButton();
+			button.Text = "Sample Text";
+			button.HorizontalOptions = new LayoutOptions(alignment, false);
+			
+			// Test with available width constraint larger than content
+			double widthConstraint = 300;
+			var actualWidth = (double)InvokePrivateMethod(button, "CalculateWidth", widthConstraint);
+			
+			// Should not use the full constraint width, but rather content-based width
+			Assert.True(actualWidth < widthConstraint, 
+				$"Button with HorizontalOptions.{alignment} should not fill constraint width {widthConstraint}, but got {actualWidth}");
+		}
+
+		[Fact]
+		public void CalculateWidth_WithFillHorizontalOptions_ShouldUseConstraintWidth()
+		{
+			var button = new SfButton();
+			button.Text = "Sample Text";
+			button.HorizontalOptions = LayoutOptions.Fill;
+			
+			// Test with available width constraint
+			double widthConstraint = 300;
+			var actualWidth = (double)InvokePrivateMethod(button, "CalculateWidth", widthConstraint);
+			
+			// Should use the constraint width when HorizontalOptions is Fill
+			Assert.Equal(widthConstraint, actualWidth);
+		}
+
+		[Fact]
+		public void CalculateWidth_WithWidthRequest_ShouldAlwaysUseWidthRequest()
+		{
+			var button = new SfButton();
+			button.Text = "Sample Text";
+			button.WidthRequest = 150;
+			button.HorizontalOptions = LayoutOptions.Fill;
+			
+			// Test with larger width constraint
+			double widthConstraint = 300;
+			var actualWidth = (double)InvokePrivateMethod(button, "CalculateWidth", widthConstraint);
+			
+			// Should use WidthRequest regardless of HorizontalOptions
+			Assert.Equal(150, actualWidth);
+		}
+
+		[Fact]
+		public void CalculateWidth_WithInfiniteConstraint_ShouldUseContentWidth()
+		{
+			var button = new SfButton();
+			button.Text = "Sample Text";
+			button.HorizontalOptions = LayoutOptions.Fill;
+			
+			// Test with infinite width constraint
+			double widthConstraint = double.PositiveInfinity;
+			var actualWidth = (double)InvokePrivateMethod(button, "CalculateWidth", widthConstraint);
+			
+			// Should fall back to content width even with Fill when constraint is infinite
+			Assert.True(actualWidth > 0 && actualWidth != double.PositiveInfinity, 
+				$"Button should calculate content width when constraint is infinite, but got {actualWidth}");
+		}
+
+		#endregion
+
 		#region Text Wrapping Tests
 
 		[Fact]

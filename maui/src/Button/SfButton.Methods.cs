@@ -544,13 +544,15 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 				return WidthRequest;
 			}
 			
-			// If widthConstraint is finite and positive, use it
-			if (widthConstraint != double.PositiveInfinity && widthConstraint > 0)
+			// If HorizontalOptions is Fill, use the constraint width when available
+			if (HorizontalOptions.Alignment == LayoutAlignment.Fill && 
+				widthConstraint != double.PositiveInfinity && widthConstraint > 0)
 			{
 				return widthConstraint;
 			}
 			
-			// Otherwise, calculate natural width based on content
+			// For HorizontalOptions Start, Center, End, or when constraint is not available,
+			// calculate natural width based on content
 			if (ShowIcon && ImageSource != null)
 			{
 				return ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
