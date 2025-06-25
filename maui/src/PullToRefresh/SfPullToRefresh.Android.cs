@@ -67,7 +67,12 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                 _isChildScrolledVertically = IsChildElementScrolled(PullableContent.GetVisualTreeDescendants().FirstOrDefault(), new Point(ev.RawX / _density, ev.RawY / _density));
             }
 
-            if (_downY < currenTouchPoint.Y && !_isChildScrolledVertically)
+            // Only intercept touch if there's sufficient downward movement to indicate pull-to-refresh intent
+            // This prevents interference with child view interactions like ListView ItemTapped events
+            double verticalMovement = currenTouchPoint.Y - _downY;
+            const double MinimumPullThreshold = 15.0; // Minimum movement before intercepting touches
+            
+            if (verticalMovement > MinimumPullThreshold && !_isChildScrolledVertically)
             {
                 return true;
             }
