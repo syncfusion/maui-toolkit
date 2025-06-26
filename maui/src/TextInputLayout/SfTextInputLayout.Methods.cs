@@ -738,7 +738,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			
 			// Configure accessibility for Tab navigation support
 			iOSEntry.IsAccessibilityElement = true;
-			iOSEntry.AccessibilityTraits = UIKit.UIAccessibilityTrait.Updatable;
+			iOSEntry.AccessibilityTraits = UIKit.UIAccessibilityTrait.None;
 			
 			uiEntry = iOSEntry;
 		}
