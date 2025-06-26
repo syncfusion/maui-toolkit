@@ -538,20 +538,41 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		/// <returns>Calculated width.</returns>
 		double CalculateWidth(double widthConstraint)
 		{
-			if (widthConstraint == double.PositiveInfinity || widthConstraint < 0 || WidthRequest < 0)
+			// If WidthRequest is explicitly set, use it
+			if (WidthRequest > 0)
 			{
-				if (ShowIcon && ImageSource != null)
-				{
-					return ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
-						? Math.Max(ImageSize, TextSize.Width) + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2)
-						: ImageSize + TextSize.Width + StrokeThickness + Padding.Left + Padding.Right + (_leftPadding * 2) + (_rightPadding * 2);
-				}
-				else
-				{
-					return TextSize.Width + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2);
-				}
+				return WidthRequest;
 			}
-			return widthConstraint;
+			
+			// If HorizontalOptions is Fill, use the constraint width when available
+			if (HorizontalOptions.Alignment == LayoutAlignment.Fill && 
+				widthConstraint != double.PositiveInfinity && widthConstraint > 0)
+			{
+				return widthConstraint;
+			}
+			
+			// For HorizontalOptions Start, Center, End, calculate natural width based on content
+			// but ensure it doesn't exceed available width constraint to prevent overflow
+			double naturalWidth;
+			if (ShowIcon && ImageSource != null)
+			{
+				naturalWidth = ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
+					? Math.Max(ImageSize, TextSize.Width) + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2)
+					: ImageSize + TextSize.Width + StrokeThickness + Padding.Left + Padding.Right + (_leftPadding * 2) + (_rightPadding * 2);
+			}
+			else
+			{
+				naturalWidth = TextSize.Width + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2);
+			}
+			
+			// If we have a finite width constraint and the natural width would exceed it,
+			// constrain the width to prevent overflow (especially important on Android)
+			if (widthConstraint != double.PositiveInfinity && widthConstraint > 0 && naturalWidth > widthConstraint)
+			{
+				return widthConstraint;
+			}
+			
+			return naturalWidth;
 		}
 
 		/// <summary>
@@ -570,6 +591,7 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 					}
 					else
 					{
+						// For truncation modes (Head, Middle, Tail) and NoWrap, text should always be on a single line
 						_numberOfLines = 1;
 					}
 				if (ShowIcon && ImageSource != null)
@@ -690,7 +712,7 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 			base.MeasureContent(widthConstraint, heightConstraint);
 
 			double width = CalculateWidth(widthConstraint);
-			double height = CalculateHeight(heightConstraint, WidthRequest > 0 ? WidthRequest : width);
+			double height = CalculateHeight(heightConstraint, width);
 
 			if (Children.Count > 0 && IsItemTemplate)
 			{
