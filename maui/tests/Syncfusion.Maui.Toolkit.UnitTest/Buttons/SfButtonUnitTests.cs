@@ -915,6 +915,28 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 				$"Button with icon height {sizeWithIcon.Height} should be >= button without icon height {sizeNoIcon.Height}");
 		}
 
+		[Fact]
+		public void TextWrapping_AndroidOverflowPrevention_ShouldConstrainWidth()
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should automatically wrap into multiple lines and resize the button height accordingly without overflowing the screen bounds on Android";
+			button.LineBreakMode = LineBreakMode.WordWrap;
+			button.HorizontalOptions = LayoutOptions.Start; // Non-Fill alignment
+			button.VerticalOptions = LayoutOptions.Start;
+
+			// Simulate Android screen constraint (smaller width)
+			var size = button.MeasureContent(250, double.PositiveInfinity);
+			
+			// Button width should be constrained to prevent overflow
+			Assert.True(size.Width <= 250, 
+				$"Button width {size.Width} should be constrained to prevent overflow on Android (max 250)");
+			
+			// Height should be greater than single line height due to wrapping
+			var singleLineHeight = button.MeasureContent(double.PositiveInfinity, double.PositiveInfinity).Height;
+			Assert.True(size.Height >= singleLineHeight, 
+				$"Button height {size.Height} should accommodate wrapped text (>= {singleLineHeight})");
+		}
+
 		#endregion
 
 		#region AutomationScenario

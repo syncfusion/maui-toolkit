@@ -551,18 +551,28 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 				return widthConstraint;
 			}
 			
-			// For HorizontalOptions Start, Center, End, or when constraint is not available,
-			// calculate natural width based on content
+			// For HorizontalOptions Start, Center, End, calculate natural width based on content
+			// but ensure it doesn't exceed available width constraint to prevent overflow
+			double naturalWidth;
 			if (ShowIcon && ImageSource != null)
 			{
-				return ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
+				naturalWidth = ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
 					? Math.Max(ImageSize, TextSize.Width) + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2)
 					: ImageSize + TextSize.Width + StrokeThickness + Padding.Left + Padding.Right + (_leftPadding * 2) + (_rightPadding * 2);
 			}
 			else
 			{
-				return TextSize.Width + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2);
+				naturalWidth = TextSize.Width + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2);
 			}
+			
+			// If we have a finite width constraint and the natural width would exceed it,
+			// constrain the width to prevent overflow (especially important on Android)
+			if (widthConstraint != double.PositiveInfinity && widthConstraint > 0 && naturalWidth > widthConstraint)
+			{
+				return widthConstraint;
+			}
+			
+			return naturalWidth;
 		}
 
 		/// <summary>
@@ -702,10 +712,7 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 			base.MeasureContent(widthConstraint, heightConstraint);
 
 			double width = CalculateWidth(widthConstraint);
-			// For text wrapping calculations, use available width constraint if finite, otherwise use calculated width
-			double widthForHeight = WidthRequest > 0 ? WidthRequest : 
-				(widthConstraint != double.PositiveInfinity && widthConstraint > 0 ? widthConstraint : width);
-			double height = CalculateHeight(heightConstraint, widthForHeight);
+			double height = CalculateHeight(heightConstraint, width);
 
 			if (Children.Count > 0 && IsItemTemplate)
 			{
