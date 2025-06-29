@@ -1191,6 +1191,51 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(new TimeSpan(10, 30, 0), timePicker.Time);
 		}
 
+		[Fact]
+		public void VerySmallContainerWidth_ShouldNotCrash()
+		{
+			// Test for the fix of issue where very small container widths cause Android crash
+			// with Java.Lang.IllegalArgumentException: 'Layout: -46 < 0'
+			var inputLayout = new SfTextInputLayout
+			{
+				Content = new Entry { Text = "Test" },
+				Hint = "Name",
+				WidthRequest = 10, // Very small width that could cause negative layout bounds
+				HeightRequest = 50
+			};
+
+			// The control should handle very small dimensions gracefully without throwing exceptions
+			Assert.NotNull(inputLayout);
+			Assert.NotNull(inputLayout.Content);
+			Assert.Equal("Test", ((Entry)inputLayout.Content).Text);
+			Assert.Equal("Name", inputLayout.Hint);
+		}
+
+		[Fact]
+		public void VerySmallContainerWidthWithLeadingAndTrailingViews_ShouldNotCrash()
+		{
+			// Test for the fix where very small container widths with leading/trailing views cause crashes
+			var inputLayout = new SfTextInputLayout
+			{
+				Content = new Entry { Text = "Test" },
+				Hint = "Name",
+				LeadingView = new Label { Text = "L" },
+				TrailingView = new Label { Text = "T" },
+				ShowLeadingView = true,
+				ShowTrailingView = true,
+				WidthRequest = 10, // Very small width that could cause negative layout bounds
+				HeightRequest = 50
+			};
+
+			// The control should handle very small dimensions gracefully without throwing exceptions
+			Assert.NotNull(inputLayout);
+			Assert.NotNull(inputLayout.Content);
+			Assert.NotNull(inputLayout.LeadingView);
+			Assert.NotNull(inputLayout.TrailingView);
+			Assert.True(inputLayout.ShowLeadingView);
+			Assert.True(inputLayout.ShowTrailingView);
+		}
+
 
 		#endregion
 	}
