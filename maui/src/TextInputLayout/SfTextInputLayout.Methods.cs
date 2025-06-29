@@ -1061,7 +1061,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					_viewBounds.Width -= (float)(IconSize * (IsUpDownVerticalAlignment ? 1 : 2));
 				}
 
-				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
+				if (_viewBounds.Height >= 0 && _viewBounds.Width >= 0)
 				{
 					AbsoluteLayout.SetLayoutBounds(Content, _viewBounds);
 				}
@@ -1117,7 +1117,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					LeadingView.VerticalOptions = LayoutOptions.End;
 				}
 
-				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
+				if (_viewBounds.Height >= 0 && _viewBounds.Width >= 0)
 				{
 					AbsoluteLayout.SetLayoutBounds(LeadingView, _viewBounds);
 				}
@@ -1151,7 +1151,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					TrailingView.VerticalOptions = LayoutOptions.End;
 				}
 
-				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
+				if (_viewBounds.Height >= 0 && _viewBounds.Width >= 0)
 				{
 					AbsoluteLayout.SetLayoutBounds(TrailingView, _viewBounds);
 				}
