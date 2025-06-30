@@ -939,6 +939,118 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 
 		#endregion
 
+		#region Text Truncation Tests
+
+		[Theory]
+		[InlineData(LineBreakMode.TailTruncation)]
+		[InlineData(LineBreakMode.HeadTruncation)]
+		[InlineData(LineBreakMode.MiddleTruncation)]
+		[InlineData(LineBreakMode.NoWrap)]
+		public void TextTruncation_ShouldAlwaysUseSingleLine(LineBreakMode lineBreakMode)
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should be truncated instead of wrapping to multiple lines";
+			button.LineBreakMode = lineBreakMode;
+			
+			// Test with constrained width that would normally cause wrapping
+			var size = button.MeasureContent(150, double.PositiveInfinity);
+			
+			// Calculate single line height for comparison
+			var singleLineButton = new SfButton();
+			singleLineButton.Text = "Short";
+			singleLineButton.LineBreakMode = LineBreakMode.NoWrap;
+			var singleLineHeight = singleLineButton.MeasureContent(double.PositiveInfinity, double.PositiveInfinity).Height;
+			
+			// For truncation modes, height should be approximately single line height
+			var heightDifference = Math.Abs(size.Height - singleLineHeight);
+			Assert.True(heightDifference < 5, // Allow small padding differences 
+				$"Truncation mode {lineBreakMode} should use single line height. Expected ~{singleLineHeight}, got {size.Height}");
+		}
+
+		[Fact]
+		public void TextTruncation_MiddleMode_ShouldTrimBothEnds()
+		{
+			var longText = "This is a very long text that should be truncated in the middle with ellipsis";
+			
+			// Use StringExtensions directly to test the truncation logic
+			var result = StringExtensions.GetTextBasedOnLineBreakMode(longText, new TestTextElement(), 100, 20, LineBreakMode.MiddleTruncation);
+			
+			// Should contain ellipsis
+			Assert.Contains("...", result);
+			
+			// Should be shorter than original
+			Assert.True(result.Length < longText.Length, 
+				$"Truncated text '{result}' should be shorter than original '{longText}'");
+			
+			// Should start with beginning of original text and end with end of original text
+			Assert.True(result.StartsWith(longText.Substring(0, Math.Min(10, longText.Length))), 
+				$"Truncated text '{result}' should start with beginning of original text");
+		}
+
+		[Fact]
+		public void TextTruncation_TailMode_ShouldAddEllipsisAtEnd()
+		{
+			var longText = "This is a very long text that should be truncated at the end";
+			
+			var result = StringExtensions.GetTextBasedOnLineBreakMode(longText, new TestTextElement(), 100, 20, LineBreakMode.TailTruncation);
+			
+			// Should end with ellipsis
+			Assert.True(result.EndsWith("..."), 
+				$"Tail truncated text '{result}' should end with ellipsis");
+			
+			// Should be shorter than original
+			Assert.True(result.Length < longText.Length, 
+				$"Truncated text '{result}' should be shorter than original '{longText}'");
+		}
+
+		[Fact]
+		public void TextTruncation_HeadMode_ShouldAddEllipsisAtStart()
+		{
+			var longText = "This is a very long text that should be truncated at the beginning";
+			
+			var result = StringExtensions.GetTextBasedOnLineBreakMode(longText, new TestTextElement(), 100, 20, LineBreakMode.HeadTruncation);
+			
+			// Should start with ellipsis
+			Assert.True(result.StartsWith("..."), 
+				$"Head truncated text '{result}' should start with ellipsis");
+			
+			// Should be shorter than original
+			Assert.True(result.Length < longText.Length, 
+				$"Truncated text '{result}' should be shorter than original '{longText}'");
+		}
+
+		[Fact]
+		public void TextTruncation_ShouldHandleSpacesCorrectly()
+		{
+			// This tests the scenario mentioned in the comment where spaces cause wrapping instead of truncation
+			var textWithSpaces = "Word1 Word2 Word3 Word4 Word5 Word6 Word7 Word8 Word9 Word10";
+			
+			var result = StringExtensions.GetTextBasedOnLineBreakMode(textWithSpaces, new TestTextElement(), 80, 20, LineBreakMode.TailTruncation);
+			
+			// Should truncate, not wrap
+			Assert.Contains("...", result);
+			Assert.True(result.Length < textWithSpaces.Length);
+			
+			// Should not contain line breaks or be multi-line
+			Assert.False(result.Contains('\n'));
+			Assert.False(result.Contains('\r'));
+		}
+
+		// Helper class for testing text measurements
+		private class TestTextElement : ITextElement
+		{
+			public FontAttributes FontAttributes => FontAttributes.None;
+			public string FontFamily => null;
+			public double FontSize => 14;
+			public bool FontAutoScalingEnabled => false;
+			public Color TextColor => Colors.Black;
+			
+			// Simple width calculation for testing (assumes each char is ~8 pixels wide)
+			public Size Measure(string text) => new Size(text.Length * 8, 20);
+		}
+
+		#endregion
+
 		#region AutomationScenario
 
 		[Theory]

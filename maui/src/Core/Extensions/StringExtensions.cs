@@ -166,20 +166,52 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 					return text.TrimTextToFit(textElement, availableWidth);
 
 				case LineBreakMode.MiddleTruncation:
-					int charsToKeep = (int)((availableWidth - ("...").Measure(textElement).Width) / 2);
-					string leftTrimmedText = text;
-					var leftTrimmedTextSize = leftTrimmedText.Measure((ITextElement)textElement);
-					int leftLength = 0;
-
-					while (leftTrimmedTextSize.Width > charsToKeep && leftTrimmedText.Length > 0)
+					// Calculate available width for each half after subtracting ellipsis width
+					double ellipsisWidth = ("...").Measure(textElement).Width;
+					double halfAvailableWidth = (availableWidth - ellipsisWidth) / 2;
+					
+					// Trim from the left side
+					string leftPart = text;
+					while (leftPart.Length > 0 && leftPart.Measure(textElement).Width > halfAvailableWidth)
 					{
-						leftTrimmedText = leftTrimmedText.Substring(0, leftTrimmedText.Length - 1);
-						leftTrimmedTextSize = leftTrimmedText.Measure((ITextElement)textElement);
-						leftLength++;
+						leftPart = leftPart.Substring(0, leftPart.Length - 1);
 					}
-					string rightText = text.Substring(leftLength);
-					string trimmedText = leftTrimmedText + "..." + rightText;
-					return trimmedText;
+					
+					// Trim from the right side
+					string rightPart = text;
+					while (rightPart.Length > 0 && rightPart.Measure(textElement).Width > halfAvailableWidth)
+					{
+						rightPart = rightPart.Substring(1);
+					}
+					
+					// Ensure we don't duplicate characters from the middle
+					int leftLength = leftPart.Length;
+					int rightStartIndex = text.Length - rightPart.Length;
+					
+					// If there's overlap, adjust the split point
+					if (leftLength >= rightStartIndex)
+					{
+						int midPoint = text.Length / 2;
+						leftPart = text.Substring(0, Math.Min(leftLength, midPoint));
+						rightPart = text.Substring(Math.Max(rightStartIndex, midPoint));
+						
+						// Final trim to ensure we fit in available width
+						string candidateText = leftPart + "..." + rightPart;
+						while (candidateText.Measure(textElement).Width > availableWidth && (leftPart.Length > 0 || rightPart.Length > 0))
+						{
+							if (leftPart.Length > rightPart.Length && leftPart.Length > 0)
+							{
+								leftPart = leftPart.Substring(0, leftPart.Length - 1);
+							}
+							else if (rightPart.Length > 0)
+							{
+								rightPart = rightPart.Substring(1);
+							}
+							candidateText = leftPart + "..." + rightPart;
+						}
+					}
+					
+					return leftPart + "..." + rightPart;
 
 				case LineBreakMode.HeadTruncation:
 

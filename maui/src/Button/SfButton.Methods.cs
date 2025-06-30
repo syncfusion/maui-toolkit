@@ -576,6 +576,30 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		}
 
 		/// <summary>
+		/// Calculates the available text width considering padding, stroke thickness, and icon positioning.
+		/// </summary>
+		/// <param name="totalWidth">Total width of the button.</param>
+		/// <returns>Available width for text.</returns>
+		double CalculateAvailableTextWidth(double totalWidth)
+		{
+			// Start with total width and subtract padding and stroke thickness
+			double availableWidth = totalWidth - Padding.Left - Padding.Right - StrokeThickness - (_textAreaPadding * 2);
+			
+			// If icon is positioned left or right (not top/bottom), subtract icon size
+			if (ShowIcon && ImageSource != null && ImageAlignment != Alignment.Top && ImageAlignment != Alignment.Bottom)
+			{
+				availableWidth -= ImageSize + (_leftIconPadding * 2);
+			}
+			
+#if ANDROID
+			// Account for Android-specific text margin
+			availableWidth -= AndroidTextMargin;
+#endif
+			
+			return Math.Max(0, availableWidth);
+		}
+
+		/// <summary>
 		/// Calculates the height based on constraints, alignment, and line breaks.
 		/// </summary>
 		/// <param name="heightConstraint">Height constraint.</param>
@@ -587,7 +611,9 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 			{
 				if (LineBreakMode == LineBreakMode.WordWrap || LineBreakMode == LineBreakMode.CharacterWrap)
 					{
-						_numberOfLines = StringExtensions.GetLinesCount(Text, (float)width, this, LineBreakMode, out _);
+						// Calculate available text width considering padding, stroke thickness, and icon
+						double availableTextWidth = CalculateAvailableTextWidth(width);
+						_numberOfLines = StringExtensions.GetLinesCount(Text, (float)availableTextWidth, this, LineBreakMode, out _);
 					}
 					else
 					{
@@ -755,14 +781,35 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 									: TextAlignment.Center;
 			UpdateTextRect(dirtyRect);
 			canvas.SaveState();
+			
+			// Calculate available width consistently with height calculation
 			float availableWidth = _textRectF.Width;
 #if ANDROID
-			availableWidth-=AndroidTextMargin;
+			availableWidth -= AndroidTextMargin;
 #endif
-			var trimmedText = _isFontIconText ? Text : StringExtensions.GetTextBasedOnLineBreakMode(ApplyTextTransform(Text), this, availableWidth, _textRectF.Height, LineBreakMode);
+			
+			// For truncation modes, ensure we have adequate width and avoid wrapping
+			string textToRender;
+			if (_isFontIconText)
+			{
+				textToRender = Text;
+			}
+			else
+			{
+				// Apply text transformation first
+				string transformedText = ApplyTextTransform(Text);
+				
+				// For truncation modes, make sure we don't allow wrapping by using single line height
+				double effectiveHeight = LineBreakMode == LineBreakMode.WordWrap || LineBreakMode == LineBreakMode.CharacterWrap 
+					? _textRectF.Height 
+					: TextSize.Height; // Use single line height for truncation modes
+				
+				textToRender = StringExtensions.GetTextBasedOnLineBreakMode(transformedText, this, availableWidth, effectiveHeight, LineBreakMode);
+			}
+			
 			if (_textRectF.Width > 0 && _textRectF.Height > 0)
 			{
-				canvas.DrawText(trimmedText, _textRectF, _isRightToLeft ? (HorizontalAlignment)horizontalTextAlignment : (HorizontalAlignment)HorizontalTextAlignment, (VerticalAlignment)VerticalTextAlignment, this);
+				canvas.DrawText(textToRender, _textRectF, _isRightToLeft ? (HorizontalAlignment)horizontalTextAlignment : (HorizontalAlignment)HorizontalTextAlignment, (VerticalAlignment)VerticalTextAlignment, this);
 			}
 			canvas.RestoreState();
 		}
