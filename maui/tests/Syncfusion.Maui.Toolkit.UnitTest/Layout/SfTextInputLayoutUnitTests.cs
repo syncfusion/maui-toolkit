@@ -1236,6 +1236,27 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.True(inputLayout.ShowTrailingView);
 		}
 
+		[Fact]
+		public void VerySmallContainerWidthWithErrorAndHelperText_ShouldNotCrash()
+		{
+			// Test for the fix where very small container widths with error/helper text cause crashes
+			var inputLayout = new SfTextInputLayout
+			{
+				Content = new Entry { Text = "Test" },
+				Hint = "Name",
+				ErrorText = "This is an error message",
+				HelperText = "This is a helper message",
+				WidthRequest = 10, // Very small width that could cause negative text layout bounds
+				HeightRequest = 50
+			};
+
+			// The control should handle very small dimensions gracefully without throwing exceptions
+			Assert.NotNull(inputLayout);
+			Assert.NotNull(inputLayout.Content);
+			Assert.Equal("This is an error message", inputLayout.ErrorText);
+			Assert.Equal("This is a helper message", inputLayout.HelperText);
+		}
+
 
 		#endregion
 	}
