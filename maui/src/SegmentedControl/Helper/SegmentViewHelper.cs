@@ -63,7 +63,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			// Calculated width based on widthRequest and maxWidth.
 			if (widthRequest < 0)
 			{
-				return totalWidth > maxWidth ? maxWidth - keyFocusedViewPadding : totalWidth;
+				return totalWidth + keyFocusedViewPadding > maxWidth ? maxWidth - keyFocusedViewPadding : totalWidth;
 			}
 
 			// Left and right of the keyboard layout in order to avoid the control crop issue while given the heightrequest.
