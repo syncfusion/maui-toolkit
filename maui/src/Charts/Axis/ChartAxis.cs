@@ -15,7 +15,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		double _previousLabelCoefficientValue = -1;
 		CartesianChartArea? _cartesianArea;
 		internal bool _isOverriddenOnCreateLabelsMethod;
-		DoubleRange _actualRange = new DoubleRange(double.NaN, double.NaN);
+		DoubleRange _actualRange = DoubleRange.Empty;
 		internal static readonly int[] IntervalDivs = [10, 5, 2, 1];
 
 		#region labelFormats
@@ -357,7 +357,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// </summary>
 		protected virtual DoubleRange CalculateActualRange()
 		{
-			var range = new DoubleRange(double.NaN, double.NaN);
+			var range = DoubleRange.Empty;
 			var visibleSeries = GetVisibleSeries();
 
 			if (visibleSeries == null)

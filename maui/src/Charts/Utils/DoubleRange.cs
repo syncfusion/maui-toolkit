@@ -8,10 +8,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	public struct DoubleRange
 	{
 		#region Members
-		/// <summary>
-		/// Initializes _empty
-		/// </summary>
-		static readonly DoubleRange _empty = new(double.NaN, double.NaN);
+		
 		readonly bool _isEmpty;
 
 		/// <summary>
@@ -36,7 +33,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			get
 			{
-				return _empty;
+				return new DoubleRange(double.NaN, double.NaN);
 			}
 		}
 
@@ -334,8 +331,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <returns>A boolean indicating whether the exclusion was successful.</returns>
 		public static bool Exclude(DoubleRange range, DoubleRange excluder, out DoubleRange leftRange, out DoubleRange rightRange)
 		{
-			leftRange = new DoubleRange(double.NaN, double.NaN);
-			rightRange = new DoubleRange(double.NaN, double.NaN);
+			leftRange = DoubleRange.Empty;
+			rightRange = DoubleRange.Empty;
 
 			if (!(range.IsEmpty || excluder.IsEmpty))
 			{
