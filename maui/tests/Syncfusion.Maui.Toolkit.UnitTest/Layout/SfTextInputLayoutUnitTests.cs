@@ -715,12 +715,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				TrailingViewPosition = ViewPosition.Outside
 			};
 			InvokePrivateMethod(inputLayout, "UpdateIconRectF");
-			var outRectExpected = new RectF() { X = 21, Y = 2, Width = -43, Height = -24 };
+			var outRectExpected = new RectF() { X = 21, Y = 2, Width = 1, Height = -24 };
 			var resultOutRect = GetPrivateField(inputLayout, "_outlineRectF");
-			Assert.Equal(resultOutRect, outRectExpected);
-			var backgroundRectExpected = new RectF() { X = 19, Y = 0, Width = -39, Height = -22 };
+			Assert.Equal(outRectExpected, resultOutRect);
+			var backgroundRectExpected = new RectF() { X = 19, Y = 0, Width = 1, Height = -22 };
 			var resultBackgroundRect = GetPrivateField(inputLayout, "_backgroundRectF");
-			Assert.Equal(resultBackgroundRect, backgroundRectExpected);
+			Assert.Equal(backgroundRectExpected, resultBackgroundRect);
 			var _passwordToggleIconRectF = new RectF() { X = -83, Y = -27, Width = 32, Height = 32 };
 			var resultPassToggleRect = GetPrivateField(inputLayout, "_passwordToggleIconRectF");
 			Assert.Equal(resultPassToggleRect, _passwordToggleIconRectF);
@@ -816,7 +816,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				TrailingView = new Entry(),
 				TrailingViewPosition = ViewPosition.Outside
 			};
-			var expected = new RectF() { X = 60, Y = -18, Width = -96, Height = 16 };
+			var expected = new RectF() { X = 60, Y = -18, Width = 1, Height = 16 };
 			InvokePrivateMethod(inputLayout, "UpdateHelperTextPosition");
 			var result = GetPrivateField(inputLayout, "_helperTextRect");
 			Assert.Equal(expected, result);
@@ -873,7 +873,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var inputLayout = new SfTextInputLayout();
 			InvokePrivateMethod(inputLayout, "UpdateErrorTextPosition");
-			RectF expectedRect = new RectF() { X = 16, Y = -18, Width = -33, Height = 16 };
+			RectF expectedRect = new RectF() { X = 16, Y = -18, Width = 1, Height = 16 };
 			var result = GetPrivateField(inputLayout, "_errorTextRect");
 			Assert.Equal(expectedRect, result);
 		}

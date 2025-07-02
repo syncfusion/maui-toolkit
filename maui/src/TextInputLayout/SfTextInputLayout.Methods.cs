@@ -1609,14 +1609,14 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				_backgroundRectF.X = (float)(_outlineRectF.X + (FocusedStrokeThickness / 2));
 				_backgroundRectF.Y = (float)(_outlineRectF.Y + (FocusedStrokeThickness / 2));
-				_backgroundRectF.Width = (float)(_outlineRectF.Width - (FocusedStrokeThickness));
+				_backgroundRectF.Width = (float)Math.Max(1, _outlineRectF.Width - FocusedStrokeThickness);
 				_backgroundRectF.Height = (float)(_outlineRectF.Height - (FocusedStrokeThickness));
 			}
 			else
 			{
 				_backgroundRectF.X = (float)(_outlineRectF.X + (UnfocusedStrokeThickness / 2));
 				_backgroundRectF.Y = (float)(_outlineRectF.Y + (UnfocusedStrokeThickness / 2));
-				_backgroundRectF.Width = (float)(_outlineRectF.Width - (UnfocusedStrokeThickness));
+				_backgroundRectF.Width = (float)Math.Max(1, _outlineRectF.Width - UnfocusedStrokeThickness);
 				_backgroundRectF.Height = (float)(_outlineRectF.Height - (UnfocusedStrokeThickness));
 			}
 
