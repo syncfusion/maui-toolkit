@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Maui.Layouts;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
@@ -1745,7 +1746,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		static object? ReflectedObject(object? parentObj, string actualPath)
+		static object? ReflectedObject([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] object? parentObj, string actualPath)
 		{
 			var fastReflection = new FastReflection();
 
@@ -1757,7 +1758,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return null;
 		}
 
-		static object? GetArrayPropertyValue(object obj, string[]? paths)
+		static object? GetArrayPropertyValue([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] object obj, string[]? paths)
 		{
 			var parentObj = obj;
 

@@ -13,7 +13,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]
-		internal bool SetPropertyName(string name, object obj)
+		internal bool SetPropertyName(string name, [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] object obj)
 		{
 			var propertyInfo = ChartDataUtils.GetPropertyInfo(obj, name);
 

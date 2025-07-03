@@ -19,7 +19,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <param name="path">Property name</param>
 		/// <returns>The property.</returns>
 		[RequiresUnreferencedCode("The GetPropertyInfo is not trim compatible")]
-		internal static PropertyInfo? GetPropertyInfo(object obj, string path)
+		internal static PropertyInfo? GetPropertyInfo([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] object obj, string path)
 		{
 			//TODO: consider if it needed.
 			//return obj.GetType().GetTypeInfo().GetDeclaredProperty(path);

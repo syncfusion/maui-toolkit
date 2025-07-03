@@ -384,7 +384,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		[RequiresUnreferencedCode("The IsOverriddenMethod is not trim compatible")]
-		internal static bool IsOverriddenMethod(object classObject, string methodName)
+		internal static bool IsOverriddenMethod([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.NonPublicMethods)] object classObject, string methodName)
 		{
 			var methodInfo = classObject.GetType().GetMethod(methodName, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
 

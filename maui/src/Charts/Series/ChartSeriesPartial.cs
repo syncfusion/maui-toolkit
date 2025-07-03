@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -1264,7 +1265,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return GetDataType(obj);
 		}
 
-		internal static object? GetArrayPropertyValue(object obj, string[]? paths)
+		internal static object? GetArrayPropertyValue([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] object obj, string[]? paths)
 		{
 			var parentObj = obj;
 
@@ -1374,7 +1375,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Private Methods
 
-		static object? ReflectedObject(object? parentObj, string actualPath)
+		static object? ReflectedObject([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] object? parentObj, string actualPath)
 		{
 			var fastReflection = new FastReflection();
 			if (parentObj != null && fastReflection.SetPropertyName(actualPath, parentObj))
@@ -1385,7 +1386,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return null;
 		}
 
-		static object? GetPropertyValue(object obj, string[] paths)
+		static object? GetPropertyValue([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] object obj, string[] paths)
 		{
 			object? parentObj = obj;
 			for (int i = 0; i < paths.Length; i++)
