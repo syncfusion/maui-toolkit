@@ -785,6 +785,34 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				Bounds = rect,
 				Text = description
 			};
+
+		/// <summary>
+		/// Adds semantic nodes for assistive text (helper text and error text).
+		/// </summary>
+		void PopulateAssistiveTextSemanticsNodes()
+		{
+			// Add semantic node for helper text when visible and not empty
+			if (ShowHelperText && !string.IsNullOrEmpty(HelperText) && _helperTextRect.Width > 0 && _helperTextRect.Height > 0 && !HasError)
+			{
+				var helperTextNode = CreateSemanticsNode(
+					1000, // Use a high ID to avoid conflicts with numeric control IDs
+					new Rect(_helperTextRect.X, _helperTextRect.Y, _helperTextRect.Width, _helperTextRect.Height),
+					$"Helper text: {HelperText}"
+				);
+				_textInputLayoutSemanticsNodes.Add(helperTextNode);
+			}
+
+			// Add semantic node for error text when visible and not empty
+			if (HasError && !string.IsNullOrEmpty(ErrorText) && _errorTextRect.Width > 0 && _errorTextRect.Height > 0)
+			{
+				var errorTextNode = CreateSemanticsNode(
+					1001, // Use a high ID to avoid conflicts with numeric control IDs
+					new Rect(_errorTextRect.X, _errorTextRect.Y, _errorTextRect.Width, _errorTextRect.Height),
+					$"Error text: {ErrorText}"
+				);
+				_textInputLayoutSemanticsNodes.Add(errorTextNode);
+			}
+		}
 		#endregion
 
 		#region Override Methods
@@ -803,8 +831,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				return _textInputLayoutSemanticsNodes;
 			}
 			_controlSize = newControlSize;
+			_textInputLayoutSemanticsNodes.Clear(); // Clear previous nodes before repopulating
 			PopulateNumericSemanticsNodes(Content);
 			_textInputLayoutSemanticsNodes.AddRange(_numericSemanticsNodes);
+			PopulateAssistiveTextSemanticsNodes();
 			return _textInputLayoutSemanticsNodes;
 		}
 

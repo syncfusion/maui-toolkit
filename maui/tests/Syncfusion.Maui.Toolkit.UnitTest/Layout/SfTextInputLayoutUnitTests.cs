@@ -3,6 +3,7 @@ using Microsoft.Maui.Controls;
 using Syncfusion.Maui.Toolkit.TextInputLayout;
 using Syncfusion.Maui.Toolkit.NumericEntry;
 using System.Reflection;
+using System.Linq;
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
 	public class SfTextInputLayoutUnitTests : BaseUnitTest
@@ -1191,6 +1192,126 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(new TimeSpan(10, 30, 0), timePicker.Time);
 		}
 
+
+		#endregion
+
+		#region Accessibility Tests
+
+		[Fact]
+		public void GetSemanticsNodes_HelperTextVisible_CreatesHelperTextSemanticNode()
+		{
+			// Arrange
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.HelperText = "Test helper text";
+			inputLayout.ShowHelperText = true;
+			inputLayout.HasError = false;
+			
+			// Set up size to ensure layout has occurred
+			inputLayout.Width = 300;
+			inputLayout.Height = 100;
+			
+			// Use reflection to set the helper text rect as it would be set during layout
+			var helperTextRectField = typeof(SfTextInputLayout).GetField("_helperTextRect", BindingFlags.NonPublic | BindingFlags.Instance);
+			helperTextRectField?.SetValue(inputLayout, new RectF(10, 70, 200, 20));
+
+			// Act
+			var semanticsNodes = inputLayout.GetSemanticsNodes(300, 100);
+
+			// Assert
+			Assert.NotNull(semanticsNodes);
+			var helperTextNode = semanticsNodes.FirstOrDefault(n => n.Text.Contains("Helper text: Test helper text"));
+			Assert.NotNull(helperTextNode);
+			Assert.Equal(1000, helperTextNode.Id);
+			Assert.Equal(10, helperTextNode.Bounds.X);
+			Assert.Equal(70, helperTextNode.Bounds.Y);
+			Assert.Equal(200, helperTextNode.Bounds.Width);
+			Assert.Equal(20, helperTextNode.Bounds.Height);
+		}
+
+		[Fact]
+		public void GetSemanticsNodes_ErrorTextVisible_CreatesErrorTextSemanticNode()
+		{
+			// Arrange
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.ErrorText = "Test error text";
+			inputLayout.HasError = true;
+			
+			// Set up size to ensure layout has occurred
+			inputLayout.Width = 300;
+			inputLayout.Height = 100;
+			
+			// Use reflection to set the error text rect as it would be set during layout
+			var errorTextRectField = typeof(SfTextInputLayout).GetField("_errorTextRect", BindingFlags.NonPublic | BindingFlags.Instance);
+			errorTextRectField?.SetValue(inputLayout, new RectF(10, 70, 200, 20));
+
+			// Act
+			var semanticsNodes = inputLayout.GetSemanticsNodes(300, 100);
+
+			// Assert
+			Assert.NotNull(semanticsNodes);
+			var errorTextNode = semanticsNodes.FirstOrDefault(n => n.Text.Contains("Error text: Test error text"));
+			Assert.NotNull(errorTextNode);
+			Assert.Equal(1001, errorTextNode.Id);
+			Assert.Equal(10, errorTextNode.Bounds.X);
+			Assert.Equal(70, errorTextNode.Bounds.Y);
+			Assert.Equal(200, errorTextNode.Bounds.Width);
+			Assert.Equal(20, errorTextNode.Bounds.Height);
+		}
+
+		[Fact]
+		public void GetSemanticsNodes_ErrorTextVisibleOverridesHelperText_OnlyCreatesErrorTextSemanticNode()
+		{
+			// Arrange
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.HelperText = "Test helper text";
+			inputLayout.ErrorText = "Test error text";
+			inputLayout.ShowHelperText = true;
+			inputLayout.HasError = true; // Error text should override helper text
+			
+			// Set up size to ensure layout has occurred
+			inputLayout.Width = 300;
+			inputLayout.Height = 100;
+			
+			// Use reflection to set both text rects
+			var helperTextRectField = typeof(SfTextInputLayout).GetField("_helperTextRect", BindingFlags.NonPublic | BindingFlags.Instance);
+			var errorTextRectField = typeof(SfTextInputLayout).GetField("_errorTextRect", BindingFlags.NonPublic | BindingFlags.Instance);
+			helperTextRectField?.SetValue(inputLayout, new RectF(10, 70, 200, 20));
+			errorTextRectField?.SetValue(inputLayout, new RectF(10, 70, 200, 20));
+
+			// Act
+			var semanticsNodes = inputLayout.GetSemanticsNodes(300, 100);
+
+			// Assert
+			Assert.NotNull(semanticsNodes);
+			var errorTextNode = semanticsNodes.FirstOrDefault(n => n.Text.Contains("Error text: Test error text"));
+			var helperTextNode = semanticsNodes.FirstOrDefault(n => n.Text.Contains("Helper text: Test helper text"));
+			
+			Assert.NotNull(errorTextNode);
+			Assert.Null(helperTextNode); // Helper text should not be present when error text is shown
+		}
+
+		[Fact]
+		public void GetSemanticsNodes_NoAssistiveText_DoesNotCreateAssistiveTextSemanticNodes()
+		{
+			// Arrange
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.HelperText = "";
+			inputLayout.ErrorText = "";
+			inputLayout.ShowHelperText = true;
+			inputLayout.HasError = false;
+			
+			// Set up size to ensure layout has occurred
+			inputLayout.Width = 300;
+			inputLayout.Height = 100;
+
+			// Act
+			var semanticsNodes = inputLayout.GetSemanticsNodes(300, 100);
+
+			// Assert
+			Assert.NotNull(semanticsNodes);
+			var assistiveTextNode = semanticsNodes.FirstOrDefault(n => n.Text.Contains("Helper text:") || n.Text.Contains("Error text:"));
+			Assert.Null(assistiveTextNode);
+		}
 
 		#endregion
 	}
