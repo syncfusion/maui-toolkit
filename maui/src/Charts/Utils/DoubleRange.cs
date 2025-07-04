@@ -8,10 +8,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	public struct DoubleRange
 	{
 		#region Members
-		/// <summary>
-		/// Initializes _empty
-		/// </summary>
-		static readonly DoubleRange _empty = new(double.NaN, double.NaN);
+		
 		readonly bool _isEmpty;
 
 		/// <summary>
@@ -36,7 +33,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			get
 			{
-				return _empty;
+				return new DoubleRange(double.NaN, double.NaN);
 			}
 		}
 
