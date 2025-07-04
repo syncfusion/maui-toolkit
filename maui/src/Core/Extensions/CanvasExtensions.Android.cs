@@ -2,6 +2,7 @@
 using Android.Graphics;
 using Android.Text;
 using Microsoft.Maui.Graphics.Platform;
+using System;
 using Font = Microsoft.Maui.Font;
 using Paint = Android.Graphics.Paint;
 using Rect = Microsoft.Maui.Graphics.Rect;
@@ -106,7 +107,9 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 						alignment = Android.Text.Layout.Alignment.AlignOpposite;
 					}
 
-					StaticTextLayout layout = new StaticTextLayout(value, paint, (int)(rect.Width * nativeCanvas.DisplayScale), alignment, 1.0f, 0.0f, false);
+					// Ensure width is positive to prevent Android StaticLayout crashes
+					int layoutWidth = Math.Max(1, (int)(rect.Width * nativeCanvas.DisplayScale));
+					StaticTextLayout layout = new StaticTextLayout(value, paint, layoutWidth, alignment, 1.0f, 0.0f, false);
 					double rectDensityHeight = rect.Height * nativeCanvas.DisplayScale;
 					//// Check the layout does not accommodate the text inside the specified rect then
 					//// restrict the text rendering with line count.
