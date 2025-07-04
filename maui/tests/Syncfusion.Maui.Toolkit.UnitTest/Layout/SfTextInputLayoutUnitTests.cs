@@ -3,6 +3,7 @@ using Microsoft.Maui.Controls;
 using Syncfusion.Maui.Toolkit.TextInputLayout;
 using Syncfusion.Maui.Toolkit.NumericEntry;
 using System.Reflection;
+using System.Linq;
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
 	public class SfTextInputLayoutUnitTests : BaseUnitTest
@@ -1257,6 +1258,114 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal("This is a helper message", inputLayout.HelperText);
 		}
 
+
+		#endregion
+
+		#region Accessibility Tests
+
+		[Fact]
+		public void HelperText_WhenVisible_CreatesVisibleLabel()
+		{
+			// Arrange
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.HelperText = "Test helper text";
+			inputLayout.ShowHelperText = true;
+			inputLayout.HasError = false;
+			
+			// Trigger initialization
+			inputLayout.Width = 300;
+			inputLayout.Height = 100;
+
+			// Act
+			// Access the private helper label through reflection
+			var helperLabelField = typeof(SfTextInputLayout).GetField("_helperLabel", BindingFlags.NonPublic | BindingFlags.Instance);
+			var helperLabel = helperLabelField?.GetValue(inputLayout) as Label;
+
+			// Assert
+			Assert.NotNull(helperLabel);
+			Assert.Equal("Test helper text", helperLabel.Text);
+			Assert.True(helperLabel.IsVisible);
+		}
+
+		[Fact]
+		public void ErrorText_WhenVisible_CreatesVisibleLabel()
+		{
+			// Arrange
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.ErrorText = "Test error text";
+			inputLayout.HasError = true;
+			
+			// Trigger initialization
+			inputLayout.Width = 300;
+			inputLayout.Height = 100;
+
+			// Act
+			// Access the private error label through reflection
+			var errorLabelField = typeof(SfTextInputLayout).GetField("_errorLabel", BindingFlags.NonPublic | BindingFlags.Instance);
+			var errorLabel = errorLabelField?.GetValue(inputLayout) as Label;
+
+			// Assert
+			Assert.NotNull(errorLabel);
+			Assert.Equal("Test error text", errorLabel.Text);
+			Assert.True(errorLabel.IsVisible);
+		}
+
+		[Fact]
+		public void ErrorText_WhenVisible_OverridesHelperText()
+		{
+			// Arrange
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.HelperText = "Test helper text";
+			inputLayout.ErrorText = "Test error text";
+			inputLayout.ShowHelperText = true;
+			inputLayout.HasError = true;
+			
+			// Trigger initialization
+			inputLayout.Width = 300;
+			inputLayout.Height = 100;
+
+			// Act
+			// Access the private labels through reflection
+			var helperLabelField = typeof(SfTextInputLayout).GetField("_helperLabel", BindingFlags.NonPublic | BindingFlags.Instance);
+			var errorLabelField = typeof(SfTextInputLayout).GetField("_errorLabel", BindingFlags.NonPublic | BindingFlags.Instance);
+			var helperLabel = helperLabelField?.GetValue(inputLayout) as Label;
+			var errorLabel = errorLabelField?.GetValue(inputLayout) as Label;
+
+			// Assert
+			Assert.NotNull(helperLabel);
+			Assert.NotNull(errorLabel);
+			Assert.False(helperLabel.IsVisible); // Helper text should be hidden when error is present
+			Assert.True(errorLabel.IsVisible);   // Error text should be visible
+			Assert.Equal("Test error text", errorLabel.Text);
+		}
+
+		[Fact]
+		public void AssistiveLabels_WhenTextEmpty_HideLabels()
+		{
+			// Arrange
+			var inputLayout = new SfTextInputLayout();
+			inputLayout.HelperText = "";
+			inputLayout.ErrorText = "";
+			inputLayout.ShowHelperText = true;
+			inputLayout.HasError = true;
+			
+			// Trigger initialization
+			inputLayout.Width = 300;
+			inputLayout.Height = 100;
+
+			// Act
+			// Access the private labels through reflection
+			var helperLabelField = typeof(SfTextInputLayout).GetField("_helperLabel", BindingFlags.NonPublic | BindingFlags.Instance);
+			var errorLabelField = typeof(SfTextInputLayout).GetField("_errorLabel", BindingFlags.NonPublic | BindingFlags.Instance);
+			var helperLabel = helperLabelField?.GetValue(inputLayout) as Label;
+			var errorLabel = errorLabelField?.GetValue(inputLayout) as Label;
+
+			// Assert
+			Assert.NotNull(helperLabel);
+			Assert.NotNull(errorLabel);
+			Assert.False(helperLabel.IsVisible); // Helper text should be hidden when text is empty
+			Assert.False(errorLabel.IsVisible);  // Error text should be hidden when text is empty
+		}
 
 		#endregion
 	}

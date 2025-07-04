@@ -2387,6 +2387,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				inputLayout.UpdateViewBounds();
 				inputLayout.ResetSemantics();
+				
+				// Update assistive labels when relevant properties change
+				inputLayout.UpdateAssistiveLabels();
 			}
 		}
 
