@@ -2069,44 +2069,21 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 		void DrawAssistiveText(ICanvas canvas, RectF dirtyRect)
 		{
-			if (HasError)
-			{
-				DrawErrorText(canvas, dirtyRect);
-			}
-			else
-			{
-				DrawHelperText(canvas, dirtyRect);
-			}
-
+			// Note: Helper text and error text are now handled by Label controls for better accessibility
+			// Only counter text still uses canvas drawing
 			DrawCounterText(canvas, dirtyRect);
 		}
 
+		// Note: These methods are no longer used as helper and error text are now rendered using Label controls
+		// Keeping them for compatibility but they should be considered deprecated
 		void DrawHelperText(ICanvas canvas, RectF dirtyRect)
 		{
-			if (ShowHelperText && !string.IsNullOrEmpty(HelperText) && HelperLabelStyle != null)
-			{
-				canvas.CanvasSaveState();
-				UpdateHelperTextPosition();
-				UpdateHelperTextColor();
-
-				canvas.DrawText(HelperText, _helperTextRect, IsRTL ? HorizontalAlignment.Right : HorizontalAlignment.Left, VerticalAlignment.Top, _internalHelperLabelStyle);
-
-				canvas.CanvasRestoreState();
-			}
+			// This method is no longer used - helper text is now rendered using a Label control
 		}
 
 		void DrawErrorText(ICanvas canvas, RectF dirtyRect)
 		{
-			if (!string.IsNullOrEmpty(ErrorText) && ErrorLabelStyle != null)
-			{
-				canvas.CanvasSaveState();
-				UpdateErrorTextPosition();
-				UpdateErrorTextColor();
-
-				canvas.DrawText(ErrorText, _errorTextRect, IsRTL ? HorizontalAlignment.Right : HorizontalAlignment.Left, VerticalAlignment.Top, _internalErrorLabelStyle);
-
-				canvas.CanvasRestoreState();
-			}
+			// This method is no longer used - error text is now rendered using a Label control
 		}
 
 		void DrawCounterText(ICanvas canvas, RectF dirtyRect)

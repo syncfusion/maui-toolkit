@@ -351,6 +351,16 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
         readonly LabelStyle _internalCounterLabelStyle = new();
 
+        /// <summary>
+        /// Label control for displaying helper text
+        /// </summary>
+        Label? _helperLabel;
+
+        /// <summary>
+        /// Label control for displaying error text
+        /// </summary>
+        Label? _errorLabel;
+
         static Color _defaultStrokeColor = Color.FromRgba("#49454F");
 
         static Brush _defaultContainerBackground = new SolidColorBrush(Color.FromRgba("#E7E0EC"));
@@ -396,7 +406,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             this.AddTouchListener(this);
             _effectsRenderer = new EffectsRenderer(this);
             SetRendererBasedOnPlatform();
-
+            InitializeAssistiveLabels();
 		}
         #endregion
 
@@ -787,31 +797,92 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			};
 
 		/// <summary>
-		/// Adds semantic nodes for assistive text (helper text and error text).
+		/// Initializes the assistive labels (helper and error text labels).
 		/// </summary>
-		void PopulateAssistiveTextSemanticsNodes()
+		void InitializeAssistiveLabels()
 		{
-			// Add semantic node for helper text when visible and not empty
-			if (ShowHelperText && !string.IsNullOrEmpty(HelperText) && _helperTextRect.Width > 0 && _helperTextRect.Height > 0 && !HasError)
+			// Initialize helper label
+			_helperLabel = new Label
 			{
-				var helperTextNode = CreateSemanticsNode(
-					1000, // Use a high ID to avoid conflicts with numeric control IDs
-					new Rect(_helperTextRect.X, _helperTextRect.Y, _helperTextRect.Width, _helperTextRect.Height),
-					$"Helper text: {HelperText}"
-				);
-				_textInputLayoutSemanticsNodes.Add(helperTextNode);
+				IsVisible = false,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				VerticalOptions = LayoutOptions.End,
+				HorizontalTextAlignment = TextAlignment.Start,
+				VerticalTextAlignment = TextAlignment.Start,
+				LineBreakMode = LineBreakMode.WordWrap,
+				FontSize = 12,
+				Margin = new Thickness(0),
+				Padding = new Thickness(0)
+			};
+
+			// Initialize error label
+			_errorLabel = new Label
+			{
+				IsVisible = false,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				VerticalOptions = LayoutOptions.End,
+				HorizontalTextAlignment = TextAlignment.Start,
+				VerticalTextAlignment = TextAlignment.Start,
+				LineBreakMode = LineBreakMode.WordWrap,
+				FontSize = 12,
+				Margin = new Thickness(0),
+				Padding = new Thickness(0)
+			};
+
+			// Add labels to the layout
+			Add(_helperLabel);
+			Add(_errorLabel);
+		}
+
+		/// <summary>
+		/// Updates the assistive labels visibility and content.
+		/// </summary>
+		void UpdateAssistiveLabels()
+		{
+			// Initialize labels if not already created
+			if (_helperLabel == null || _errorLabel == null)
+			{
+				InitializeAssistiveLabels();
+				return;
 			}
 
-			// Add semantic node for error text when visible and not empty
-			if (HasError && !string.IsNullOrEmpty(ErrorText) && _errorTextRect.Width > 0 && _errorTextRect.Height > 0)
+			// Update helper label
+			if (ShowHelperText && !string.IsNullOrEmpty(HelperText) && !HasError)
 			{
-				var errorTextNode = CreateSemanticsNode(
-					1001, // Use a high ID to avoid conflicts with numeric control IDs
-					new Rect(_errorTextRect.X, _errorTextRect.Y, _errorTextRect.Width, _errorTextRect.Height),
-					$"Error text: {ErrorText}"
-				);
-				_textInputLayoutSemanticsNodes.Add(errorTextNode);
+				_helperLabel.Text = HelperText;
+				_helperLabel.IsVisible = true;
+				ApplyLabelStyle(_helperLabel, _internalHelperLabelStyle);
 			}
+			else
+			{
+				_helperLabel.IsVisible = false;
+			}
+
+			// Update error label (error text overrides helper text)
+			if (HasError && !string.IsNullOrEmpty(ErrorText))
+			{
+				_errorLabel.Text = ErrorText;
+				_errorLabel.IsVisible = true;
+				ApplyLabelStyle(_errorLabel, _internalErrorLabelStyle);
+			}
+			else
+			{
+				_errorLabel.IsVisible = false;
+			}
+		}
+
+		/// <summary>
+		/// Applies the label style to a label control.
+		/// </summary>
+		void ApplyLabelStyle(Label label, LabelStyle style)
+		{
+			if (label == null || style == null)
+				return;
+
+			label.FontSize = style.FontSize;
+			label.FontFamily = style.FontFamily;
+			label.FontAttributes = style.FontAttributes;
+			label.TextColor = style.TextColor;
 		}
 		#endregion
 
@@ -834,7 +905,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			_textInputLayoutSemanticsNodes.Clear(); // Clear previous nodes before repopulating
 			PopulateNumericSemanticsNodes(Content);
 			_textInputLayoutSemanticsNodes.AddRange(_numericSemanticsNodes);
-			PopulateAssistiveTextSemanticsNodes();
+			// Note: Removed PopulateAssistiveTextSemanticsNodes() as Label controls handle accessibility automatically
 			return _textInputLayoutSemanticsNodes;
 		}
 
@@ -1053,7 +1124,37 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 UpdateViewBounds();
             }
 #endif
-            return base.ArrangeContent(bounds);
+            var result = base.ArrangeContent(bounds);
+            ArrangeAssistiveLabels(bounds);
+            return result;
+        }
+
+        /// <summary>
+        /// Arranges the assistive labels (helper and error text) at the bottom of the layout.
+        /// </summary>
+        void ArrangeAssistiveLabels(Rect bounds)
+        {
+            if (_helperLabel == null || _errorLabel == null)
+                return;
+
+            // Calculate the position for assistive text
+            var startPadding = IsNone ? 0 : StartX + DefaultAssistiveLabelPadding + (IsOutlined ? BaseLineMaxHeight : 0);
+            var textY = bounds.Height - TotalAssistiveTextHeight() - (BaseLineMaxHeight <= 2 ? BaseLineMaxHeight / 2 : DefaultAssistiveLabelPadding);
+            var textWidth = bounds.Width - startPadding - _leadViewWidth - _trailViewWidth;
+
+            // Arrange helper label
+            if (_helperLabel.IsVisible)
+            {
+                var helperBounds = new Rect(startPadding + _leadViewWidth, textY, textWidth, DefaultAssistiveTextHeight);
+                _helperLabel.Arrange(helperBounds);
+            }
+
+            // Arrange error label
+            if (_errorLabel.IsVisible)
+            {
+                var errorBounds = new Rect(startPadding + _leadViewWidth, textY, textWidth, DefaultAssistiveTextHeight);
+                _errorLabel.Arrange(errorBounds);
+            }
         }
 
 		/// <summary>
@@ -1280,6 +1381,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             DrawHintText(canvas, dirtyRect);
             DrawClearIcon(canvas, _clearIconRectF);
             DrawUpDownIcon(canvas, dirtyRect);
+            // Note: Helper and error text are now handled by Label controls
+            UpdateAssistiveLabels();
+            // Still need to draw counter text on canvas
             DrawAssistiveText(canvas, dirtyRect);
             DrawPasswordToggleIcon(canvas, dirtyRect);
             if (_effectsRenderer != null)
