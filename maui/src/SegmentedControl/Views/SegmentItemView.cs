@@ -246,7 +246,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			canvas.Antialias = true;
 			float strokeRadius = (float)itemInfo.StrokeThickness / 2f;
 			CornerRadius cornerRadius = itemInfo.SegmentCornerRadius;
-
 			// Calculate corner radius values, subtracting stroke radius when there's stroke thickness
 			float cornerRadiusTopLeft = itemInfo.StrokeThickness > 0 ? (float)cornerRadius.TopLeft - strokeRadius : (float)cornerRadius.TopLeft;
 			float cornerRadiusTopRight = itemInfo.StrokeThickness > 0 ? (float)cornerRadius.TopRight - strokeRadius : (float)cornerRadius.TopRight;
@@ -258,14 +257,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			Brush background = isEnabled ? SegmentViewHelper.GetSegmentBackground(itemInfo, _segmentItem) : itemInfo.DisabledSegmentBackground;
 			canvas.FillColor = SegmentViewHelper.BrushToColorConverter(background);
 			canvas.FillRoundedRectangle(dirtyRect.Left, dirtyRect.Top, dirtyRect.Width, dirtyRect.Height, cornerRadiusTopLeft, cornerRadiusTopRight, cornerRadiusBottomRight, cornerRadiusBottomLeft);
-
-			// Only draw stroke if stroke thickness is greater than 0
-			if (itemInfo.StrokeThickness > 0)
-			{
-				canvas.StrokeSize = (float)itemInfo.StrokeThickness;
-				canvas.StrokeColor = SegmentViewHelper.BrushToColorConverter(itemInfo.Stroke);
-			}
-
 			canvas.CanvasRestoreState();
 		}
 
