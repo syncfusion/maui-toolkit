@@ -854,6 +854,18 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			}
 
 			UnWireLabelStyleEvents();
+			
+#if ANDROID
+			// Unwire assistive label handler changed events
+			if (_helperLabel != null)
+			{
+				_helperLabel.HandlerChanged -= OnAssistiveLabelHandlerChanged;
+			}
+			if (_errorLabel != null)
+			{
+				_errorLabel.HandlerChanged -= OnAssistiveLabelHandlerChanged;
+			}
+#endif
 		}
 
 		/// <summary>
