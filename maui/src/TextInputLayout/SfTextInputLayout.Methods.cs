@@ -4,6 +4,7 @@ using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.NumericUpDown;
 using Syncfusion.Maui.Toolkit.NumericEntry;
 using Syncfusion.Maui.Toolkit.Themes;
+using System;
 using Path = Microsoft.Maui.Controls.Shapes.Path;
 
 namespace Syncfusion.Maui.Toolkit.TextInputLayout
@@ -1044,7 +1045,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				_viewBounds.X = (int)_leadViewWidth;
 				UpdatePosition();
 				_viewBounds.Y = 0;
-				_viewBounds.Width = (int)(Width - _leadViewWidth - _trailViewWidth);
+				_viewBounds.Width = (int)Math.Max(1, Width - _leadViewWidth - _trailViewWidth);
 				_viewBounds.Height = (int)Height;
 
 				if (EnablePasswordVisibilityToggle && !ShowUpDownButton)
@@ -1061,7 +1062,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					_viewBounds.Width -= (float)(IconSize * (IsUpDownVerticalAlignment ? 1 : 2));
 				}
 
-				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
+				// Ensure width doesn't become negative after all subtractions
+				_viewBounds.Width = (float)Math.Max(1, _viewBounds.Width);
+
+				if (_viewBounds.Height >= 0 && _viewBounds.Width >= 0)
 				{
 					AbsoluteLayout.SetLayoutBounds(Content, _viewBounds);
 				}
@@ -1117,7 +1121,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					LeadingView.VerticalOptions = LayoutOptions.End;
 				}
 
-				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
+				if (_viewBounds.Height >= 0 && _viewBounds.Width >= 0)
 				{
 					AbsoluteLayout.SetLayoutBounds(LeadingView, _viewBounds);
 				}
@@ -1151,7 +1155,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					TrailingView.VerticalOptions = LayoutOptions.End;
 				}
 
-				if (_viewBounds.Height >= 0 || _viewBounds.Width >= 0)
+				if (_viewBounds.Height >= 0 && _viewBounds.Width >= 0)
 				{
 					AbsoluteLayout.SetLayoutBounds(TrailingView, _viewBounds);
 				}
@@ -1454,7 +1458,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				_helperTextRect.Y = (int)(Height - TotalAssistiveTextHeight());
 			}
 
-			_helperTextRect.Width = (int)(Width - startPadding - CounterTextPadding - DefaultAssistiveLabelPadding - ((ShowCharCount) ? CounterTextSize.Width + CounterTextPadding : 0) - _trailViewWidth - _leadViewWidth);
+			_helperTextRect.Width = (int)Math.Max(1, Width - startPadding - CounterTextPadding - DefaultAssistiveLabelPadding - ((ShowCharCount) ? CounterTextSize.Width + CounterTextPadding : 0) - _trailViewWidth - _leadViewWidth);
 			_helperTextRect.Height = HelperTextSize.Height;
 
 			if (IsRTL)
@@ -1471,11 +1475,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 			if (Width >= 0)
 			{
-				return Width - (IsNone ? 0 : StartX + DefaultAssistiveLabelPadding) - CounterTextPadding - DefaultAssistiveLabelPadding - ((ShowCharCount) ? CounterTextSize.Width + CounterTextPadding : 0) - _trailViewWidth - _leadViewWidth;
+				var calculatedWidth = Width - (IsNone ? 0 : StartX + DefaultAssistiveLabelPadding) - CounterTextPadding - DefaultAssistiveLabelPadding - ((ShowCharCount) ? CounterTextSize.Width + CounterTextPadding : 0) - _trailViewWidth - _leadViewWidth;
+				return Math.Max(1, calculatedWidth);
 			}
 			else if (WidthRequest != -1)
 			{
-				return WidthRequest - (IsNone ? 0 : StartX + DefaultAssistiveLabelPadding) - CounterTextPadding - DefaultAssistiveLabelPadding - ((ShowCharCount) ? CounterTextSize.Width + CounterTextPadding : 0) - _trailViewWidth - _leadViewWidth;
+				var calculatedWidth = WidthRequest - (IsNone ? 0 : StartX + DefaultAssistiveLabelPadding) - CounterTextPadding - DefaultAssistiveLabelPadding - ((ShowCharCount) ? CounterTextSize.Width + CounterTextPadding : 0) - _trailViewWidth - _leadViewWidth;
+				return Math.Max(1, calculatedWidth);
 			}
 			else
 			{
@@ -1495,11 +1501,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 			if (Width >= 0)
 			{
-				return Width - (IsNone ? 0 : ((2 * StartX) + DefaultAssistiveLabelPadding)) - _trailViewWidth - _leadViewWidth;
+				var calculatedWidth = Width - (IsNone ? 0 : ((2 * StartX) + DefaultAssistiveLabelPadding)) - _trailViewWidth - _leadViewWidth;
+				return Math.Max(1, calculatedWidth);
 			}
 			else if (WidthRequest != -1)
 			{
-				return WidthRequest - (IsNone ? 0 : 2 * (StartX + DefaultAssistiveLabelPadding)) - _trailViewWidth - _leadViewWidth;
+				var calculatedWidth = WidthRequest - (IsNone ? 0 : 2 * (StartX + DefaultAssistiveLabelPadding)) - _trailViewWidth - _leadViewWidth;
+				return Math.Max(1, calculatedWidth);
 			}
 			else
 			{
@@ -1525,7 +1533,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				_errorTextRect.Y = (int)(Height - TotalAssistiveTextHeight());
 			}
 
-			_errorTextRect.Width = (int)(Width - startPadding - CounterTextPadding - DefaultAssistiveLabelPadding - ((ShowCharCount) ? CounterTextSize.Width + CounterTextPadding : 0) - _trailViewWidth - _leadViewWidth);
+			_errorTextRect.Width = (int)Math.Max(1, Width - startPadding - CounterTextPadding - DefaultAssistiveLabelPadding - ((ShowCharCount) ? CounterTextSize.Width + CounterTextPadding : 0) - _trailViewWidth - _leadViewWidth);
 			_errorTextRect.Height = ErrorTextSize.Height;
 
 			if (IsRTL)
@@ -1585,11 +1593,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			UpdateTrailViewWidthForBorder();
 			if (BaseLineMaxHeight <= 2)
 			{
-				_outlineRectF.Width = (float)((Width - (BaseLineMaxHeight * 2)) - _leadViewWidth - _trailViewWidth);
+				_outlineRectF.Width = (float)Math.Max(1, (Width - (BaseLineMaxHeight * 2)) - _leadViewWidth - _trailViewWidth);
 			}
 			else
 			{
-				_outlineRectF.Width = (float)((Width - (BaseLineMaxHeight)) - _leadViewWidth - _trailViewWidth);
+				_outlineRectF.Width = (float)Math.Max(1, (Width - (BaseLineMaxHeight)) - _leadViewWidth - _trailViewWidth);
 			}
 
 			_outlineRectF.Height = (float)(Height - _outlineRectF.Y - TotalAssistiveTextHeight() - AssistiveLabelPadding);
@@ -1601,14 +1609,14 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				_backgroundRectF.X = (float)(_outlineRectF.X + (FocusedStrokeThickness / 2));
 				_backgroundRectF.Y = (float)(_outlineRectF.Y + (FocusedStrokeThickness / 2));
-				_backgroundRectF.Width = (float)(_outlineRectF.Width - (FocusedStrokeThickness));
+				_backgroundRectF.Width = (float)Math.Max(1, _outlineRectF.Width - FocusedStrokeThickness);
 				_backgroundRectF.Height = (float)(_outlineRectF.Height - (FocusedStrokeThickness));
 			}
 			else
 			{
 				_backgroundRectF.X = (float)(_outlineRectF.X + (UnfocusedStrokeThickness / 2));
 				_backgroundRectF.Y = (float)(_outlineRectF.Y + (UnfocusedStrokeThickness / 2));
-				_backgroundRectF.Width = (float)(_outlineRectF.Width - (UnfocusedStrokeThickness));
+				_backgroundRectF.Width = (float)Math.Max(1, _outlineRectF.Width - UnfocusedStrokeThickness);
 				_backgroundRectF.Height = (float)(_outlineRectF.Height - (UnfocusedStrokeThickness));
 			}
 
@@ -1623,7 +1631,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			UpdateTrailViewWidthForBorder();
 			_backgroundRectF.X = (float)_leadViewWidth;
 			_backgroundRectF.Y = 0;
-			_backgroundRectF.Width = (float)(Width - _leadViewWidth - _trailViewWidth);
+			_backgroundRectF.Width = (float)Math.Max(1, Width - _leadViewWidth - _trailViewWidth);
 			if (BaseLineMaxHeight <= 2)
 			{
 				_backgroundRectF.Height = (float)(Height - TotalAssistiveTextHeight() - AssistiveLabelPadding);

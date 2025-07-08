@@ -715,12 +715,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				TrailingViewPosition = ViewPosition.Outside
 			};
 			InvokePrivateMethod(inputLayout, "UpdateIconRectF");
-			var outRectExpected = new RectF() { X = 21, Y = 2, Width = -43, Height = -24 };
+			var outRectExpected = new RectF() { X = 21, Y = 2, Width = 1, Height = -24 };
 			var resultOutRect = GetPrivateField(inputLayout, "_outlineRectF");
-			Assert.Equal(resultOutRect, outRectExpected);
-			var backgroundRectExpected = new RectF() { X = 19, Y = 0, Width = -39, Height = -22 };
+			Assert.Equal(outRectExpected, resultOutRect);
+			var backgroundRectExpected = new RectF() { X = 19, Y = 0, Width = 1, Height = -22 };
 			var resultBackgroundRect = GetPrivateField(inputLayout, "_backgroundRectF");
-			Assert.Equal(resultBackgroundRect, backgroundRectExpected);
+			Assert.Equal(backgroundRectExpected, resultBackgroundRect);
 			var _passwordToggleIconRectF = new RectF() { X = -83, Y = -27, Width = 32, Height = 32 };
 			var resultPassToggleRect = GetPrivateField(inputLayout, "_passwordToggleIconRectF");
 			Assert.Equal(resultPassToggleRect, _passwordToggleIconRectF);
@@ -816,7 +816,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				TrailingView = new Entry(),
 				TrailingViewPosition = ViewPosition.Outside
 			};
-			var expected = new RectF() { X = 60, Y = -18, Width = -96, Height = 16 };
+			var expected = new RectF() { X = 60, Y = -18, Width = 1, Height = 16 };
 			InvokePrivateMethod(inputLayout, "UpdateHelperTextPosition");
 			var result = GetPrivateField(inputLayout, "_helperTextRect");
 			Assert.Equal(expected, result);
@@ -873,7 +873,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var inputLayout = new SfTextInputLayout();
 			InvokePrivateMethod(inputLayout, "UpdateErrorTextPosition");
-			RectF expectedRect = new RectF() { X = 16, Y = -18, Width = -33, Height = 16 };
+			RectF expectedRect = new RectF() { X = 16, Y = -18, Width = 1, Height = 16 };
 			var result = GetPrivateField(inputLayout, "_errorTextRect");
 			Assert.Equal(expectedRect, result);
 		}
@@ -1189,6 +1189,72 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(timePicker, inputLayout.Content);
 			Assert.Equal(container, inputLayout.ContainerType);
 			Assert.Equal(new TimeSpan(10, 30, 0), timePicker.Time);
+		}
+
+		[Fact]
+		public void VerySmallContainerWidth_ShouldNotCrash()
+		{
+			// Test for the fix of issue where very small container widths cause Android crash
+			// with Java.Lang.IllegalArgumentException: 'Layout: -46 < 0'
+			var inputLayout = new SfTextInputLayout
+			{
+				Content = new Entry { Text = "Test" },
+				Hint = "Name",
+				WidthRequest = 10, // Very small width that could cause negative layout bounds
+				HeightRequest = 50
+			};
+
+			// The control should handle very small dimensions gracefully without throwing exceptions
+			Assert.NotNull(inputLayout);
+			Assert.NotNull(inputLayout.Content);
+			Assert.Equal("Test", ((Entry)inputLayout.Content).Text);
+			Assert.Equal("Name", inputLayout.Hint);
+		}
+
+		[Fact]
+		public void VerySmallContainerWidthWithLeadingAndTrailingViews_ShouldNotCrash()
+		{
+			// Test for the fix where very small container widths with leading/trailing views cause crashes
+			var inputLayout = new SfTextInputLayout
+			{
+				Content = new Entry { Text = "Test" },
+				Hint = "Name",
+				LeadingView = new Label { Text = "L" },
+				TrailingView = new Label { Text = "T" },
+				ShowLeadingView = true,
+				ShowTrailingView = true,
+				WidthRequest = 10, // Very small width that could cause negative layout bounds
+				HeightRequest = 50
+			};
+
+			// The control should handle very small dimensions gracefully without throwing exceptions
+			Assert.NotNull(inputLayout);
+			Assert.NotNull(inputLayout.Content);
+			Assert.NotNull(inputLayout.LeadingView);
+			Assert.NotNull(inputLayout.TrailingView);
+			Assert.True(inputLayout.ShowLeadingView);
+			Assert.True(inputLayout.ShowTrailingView);
+		}
+
+		[Fact]
+		public void VerySmallContainerWidthWithErrorAndHelperText_ShouldNotCrash()
+		{
+			// Test for the fix where very small container widths with error/helper text cause crashes
+			var inputLayout = new SfTextInputLayout
+			{
+				Content = new Entry { Text = "Test" },
+				Hint = "Name",
+				ErrorText = "This is an error message",
+				HelperText = "This is a helper message",
+				WidthRequest = 10, // Very small width that could cause negative text layout bounds
+				HeightRequest = 50
+			};
+
+			// The control should handle very small dimensions gracefully without throwing exceptions
+			Assert.NotNull(inputLayout);
+			Assert.NotNull(inputLayout.Content);
+			Assert.Equal("This is an error message", inputLayout.ErrorText);
+			Assert.Equal("This is a helper message", inputLayout.HelperText);
 		}
 
 

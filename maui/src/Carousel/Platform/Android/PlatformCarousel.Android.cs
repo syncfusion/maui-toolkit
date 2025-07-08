@@ -3126,7 +3126,6 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 						_tempList?.Add(carouselItem);
 					}
 				}
-				ArrangeItemsBasedOnVirtualization();
 			}
 		}
 

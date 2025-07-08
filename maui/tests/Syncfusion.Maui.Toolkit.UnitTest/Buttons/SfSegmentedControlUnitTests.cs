@@ -221,6 +221,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		[Theory]
 		[InlineData("#FF0000")]
+		public void SegmentBackground_WithZeroStrokeThickness_ReturnsExpectedValue(string colorHex)
+		{
+			var segmentedControl = new SfSegmentedControl();
+			Brush segmentBackground = new SolidColorBrush(Color.FromArgb(colorHex));
+			segmentedControl.SegmentBackground = segmentBackground;
+			segmentedControl.StrokeThickness = 0;
+			Assert.Equal(segmentBackground, segmentedControl.SegmentBackground);
+			Assert.Equal(0, segmentedControl.StrokeThickness);
+		}
+
+		[Theory]
+		[InlineData("#FF0000")]
 		public void DisabledSegmentBackground_SetValue_ReturnsExpectedValue(string colorHex)
 		{
 			var segmentedControl = new SfSegmentedControl();
@@ -884,6 +896,78 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Theory]
+		[InlineData(100.0, 50.0, 200.0, LayoutAlignment.Fill, 94.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 194.0)]
+		[InlineData(100.0, 50.0, 100.0, LayoutAlignment.Start, 94.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Start, 50.0)]
+		
+		public void GetActualSegmentWidth_ReturnsExpectedWidth_WithStrokethicknessZero(double widthRequest, double minWidth, double maxWidth, LayoutAlignment alignment, double expectedResult)
+		{
+			var segmentInfo = new SfSegmentedControl
+			{
+				_items = [new SfSegmentItem { }, new SfSegmentItem { }],
+				VisibleSegmentsCount = 2,
+				StrokeThickness = 0
+			};
+			var resultWidth = SegmentViewHelper.GetActualSegmentWidth(segmentInfo, widthRequest, minWidth, maxWidth, alignment);
+			Assert.Equal(expectedResult, resultWidth);
+		}
+
+		[Theory]
+		[InlineData(100.0, 50.0, 200.0, LayoutAlignment.Fill, 94.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 194.0)]
+		[InlineData(100.0, 50.0, 100.0, LayoutAlignment.Start, 94.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Start, 50.0)]
+
+		public void GetActualSegmentWidth_DifferentCount_ReturnsExpectedWidth_WithStrokethicknessZero(double widthRequest, double minWidth, double maxWidth, LayoutAlignment alignment, double expectedResult)
+		{
+			var segmentInfo = new SfSegmentedControl
+			{
+				_items = [new SfSegmentItem { }, new SfSegmentItem { }],
+				VisibleSegmentsCount = 1,
+				StrokeThickness = 0
+			};
+			var resultWidth = SegmentViewHelper.GetActualSegmentWidth(segmentInfo, widthRequest, minWidth, maxWidth, alignment);
+			Assert.Equal(expectedResult, resultWidth);
+		}
+
+		[Theory]
+		[InlineData(100.0, 50.0, 200.0, LayoutAlignment.Fill, 94.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 194.0)]
+		[InlineData(100.0, 50.0, 100.0, LayoutAlignment.Start, 94.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Start, 194.0)]
+
+		public void GetActualSegmentWidth_NegativeCount_ReturnsExpectedWidth_WithStrokethicknessZero(double widthRequest, double minWidth, double maxWidth, LayoutAlignment alignment, double expectedResult)
+		{
+			var segmentInfo = new SfSegmentedControl
+			{
+				_items = [new SfSegmentItem { }, new SfSegmentItem { }],
+				VisibleSegmentsCount = -1,
+				StrokeThickness = 0
+			};
+			var resultWidth = SegmentViewHelper.GetActualSegmentWidth(segmentInfo, widthRequest, minWidth, maxWidth, alignment);
+			Assert.Equal(expectedResult, resultWidth);
+		}
+
+		[Theory]
+		[InlineData(100.0, 50.0, 200.0, LayoutAlignment.Fill, 94.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 194.0)]
+		[InlineData(100.0, 50.0, 100.0, LayoutAlignment.Start, 94.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Start, 194.0)]
+
+		public void GetActualSegmentWidth_NegativeCount_ReturnsExpectedWidth_WithStrokethickness(double widthRequest, double minWidth, double maxWidth, LayoutAlignment alignment, double expectedResult)
+		{
+			var segmentInfo = new SfSegmentedControl
+			{
+				_items = [new SfSegmentItem { }, new SfSegmentItem { }],
+				VisibleSegmentsCount = -1,
+				StrokeThickness = 1
+			};
+			var resultWidth = SegmentViewHelper.GetActualSegmentWidth(segmentInfo, widthRequest, minWidth, maxWidth, alignment);
+			Assert.Equal(expectedResult, resultWidth);
+		}
+
+		[Theory]
 		[InlineData(LayoutAlignment.Fill)]
 		[InlineData(LayoutAlignment.Start)]
 		public void GetActualSegmentWidth_ReturnsTotalWidth_WhenVisibleSegmentsCountIsGreaterThanZero(LayoutAlignment alignment)
@@ -1122,6 +1206,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var segmentItem = new SfSegmentItem();
 			var resultBackground = SegmentViewHelper.GetSegmentBackground(itemInfo, segmentItem);
 			Assert.Equal(itemInfo.SegmentBackground, resultBackground);
+		}
+
+		[Fact]
+		public void GetSegmentBackground_ReturnsItemInfoSegmentBackground_WhenStrokeThicknessIsZero()
+		{
+			var itemInfo = new SfSegmentedControl { SegmentBackground = Brush.Red, StrokeThickness = 0 };
+			var segmentItem = new SfSegmentItem();
+			var resultBackground = SegmentViewHelper.GetSegmentBackground(itemInfo, segmentItem);
+			Assert.Equal(itemInfo.SegmentBackground, resultBackground);
+			Assert.Equal(0, itemInfo.StrokeThickness);
 		}
 
 		[Fact]

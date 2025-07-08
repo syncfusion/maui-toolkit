@@ -237,7 +237,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// <param name="dirtyRect">The area that needs to be redrawn.</param>
 		void DrawRoundedRectangle(ICanvas canvas, RectF dirtyRect)
 		{
-			if (itemInfo?.SegmentTemplate != null || itemInfo == null || itemInfo.StrokeThickness == 0)
+			if (itemInfo?.SegmentTemplate != null || itemInfo == null)
 			{
 				return;
 			}
@@ -245,15 +245,14 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			canvas.CanvasSaveState();
 			canvas.Antialias = true;
 			float strokeRadius = (float)itemInfo.StrokeThickness / 2f;
-			canvas.StrokeSize = (float)itemInfo.StrokeThickness;
-			canvas.StrokeColor = SegmentViewHelper.BrushToColorConverter(itemInfo.Stroke);
 			CornerRadius cornerRadius = itemInfo.SegmentCornerRadius;
+			// Calculate corner radius values, subtracting stroke radius when there's stroke thickness
+			float cornerRadiusTopLeft = itemInfo.StrokeThickness > 0 ? (float)cornerRadius.TopLeft - strokeRadius : (float)cornerRadius.TopLeft;
+			float cornerRadiusTopRight = itemInfo.StrokeThickness > 0 ? (float)cornerRadius.TopRight - strokeRadius : (float)cornerRadius.TopRight;
+			float cornerRadiusBottomRight = itemInfo.StrokeThickness > 0 ? (float)cornerRadius.BottomRight - strokeRadius : (float)cornerRadius.BottomRight;
+			float cornerRadiusBottomLeft = itemInfo.StrokeThickness > 0 ? (float)cornerRadius.BottomLeft - strokeRadius : (float)cornerRadius.BottomLeft;
 
-			// Subtracting stroke radius value to resolve the stroke thickness cropping issue.
-			float cornerRadiusTopLeft = (float)cornerRadius.TopLeft - strokeRadius;
-			float cornerRadiusTopRight = (float)cornerRadius.TopRight - strokeRadius;
-			float cornerRadiusBottomRight = (float)cornerRadius.BottomRight - strokeRadius;
-			float cornerRadiusBottomLeft = (float)cornerRadius.BottomLeft - strokeRadius;
+			// Always draw the background
 			bool isEnabled = SegmentViewHelper.GetItemEnabled(itemInfo, _segmentItem);
 			Brush background = isEnabled ? SegmentViewHelper.GetSegmentBackground(itemInfo, _segmentItem) : itemInfo.DisabledSegmentBackground;
 			canvas.FillColor = SegmentViewHelper.BrushToColorConverter(background);
