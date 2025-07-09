@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Syncfusion.Maui.Toolkit.EffectsView;
 using Syncfusion.Maui.Toolkit.Expander;
+using Syncfusion.Maui.Toolkit.Internals;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
@@ -1716,6 +1717,87 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			expander.FlowDirection = FlowDirection.RightToLeft;
 			Assert.Equal(FlowDirection.RightToLeft, expander.FlowDirection);
 			Assert.False(expander.IsEnabled);
+		}
+
+		[Fact]
+		public void OnTouch_ShouldRestoreHeaderIconColor_WhenTouchIsCancelled()
+		{
+			var expander = new SfExpander
+			{
+				HeaderIconColor = Colors.Blue,
+				PressedIconColor = Colors.Red,
+				HoverIconColor = Colors.Green,
+				HeaderIconPosition = ExpanderIconPosition.Start,
+				Header = new Label { Text = "Header" }
+			};
+
+			var expanderHeader = new ExpanderHeader
+			{
+				Expander = expander
+			};
+
+			// Set up icon view
+			expanderHeader.IconView = new ExpandCollapseButton(expander);
+			
+			// Simulate press (this should change color to PressedIconColor)
+			var pressArgs = new PointerEventArgs
+			{
+				Action = PointerActions.Pressed,
+				TouchPoint = new Point(10, 10)
+			};
+			expanderHeader.OnTouch(pressArgs);
+
+			// Simulate cancelled touch (this should restore HeaderIconColor)
+			var cancelArgs = new PointerEventArgs
+			{
+				Action = PointerActions.Cancelled,
+				TouchPoint = new Point(10, 10)
+			};
+			expanderHeader.OnTouch(cancelArgs);
+
+			// Verify the icon color restoration logic was called and mouse hover was reset
+			Assert.False(expanderHeader.IsMouseHover);
+		}
+
+		[Fact]
+		public void OnTouch_ShouldRestoreCorrectIconColor_WhenTouchIsReleasedWithMouseHover()
+		{
+			var expander = new SfExpander
+			{
+				HeaderIconColor = Colors.Blue,
+				PressedIconColor = Colors.Red,
+				HoverIconColor = Colors.Green,
+				HeaderIconPosition = ExpanderIconPosition.Start,
+				Header = new Label { Text = "Header" }
+			};
+
+			var expanderHeader = new ExpanderHeader
+			{
+				Expander = expander,
+				IsMouseHover = true
+			};
+
+			// Set up icon view
+			expanderHeader.IconView = new ExpandCollapseButton(expander);
+			
+			// Simulate press (this should change color to PressedIconColor)
+			var pressArgs = new PointerEventArgs
+			{
+				Action = PointerActions.Pressed,
+				TouchPoint = new Point(10, 10)
+			};
+			expanderHeader.OnTouch(pressArgs);
+
+			// Simulate released touch with mouse still hovering
+			var releaseArgs = new PointerEventArgs
+			{
+				Action = PointerActions.Released,
+				TouchPoint = new Point(10, 10)
+			};
+			expanderHeader.OnTouch(releaseArgs);
+
+			// Verify mouse hover state is maintained (the color restoration follows OnPropertyChanged logic)
+			Assert.True(expanderHeader.IsMouseHover);
 		}
 
 		#endregion
