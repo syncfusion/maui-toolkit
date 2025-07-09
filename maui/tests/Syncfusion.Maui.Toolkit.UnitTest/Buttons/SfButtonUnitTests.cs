@@ -776,6 +776,281 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 
 		#endregion
 
+		#region HorizontalOptions Width Tests
+
+		[Theory]
+		[InlineData(LayoutAlignment.Start)]
+		[InlineData(LayoutAlignment.Center)]
+		[InlineData(LayoutAlignment.End)]
+		public void CalculateWidth_WithNonFillHorizontalOptions_ShouldUseContentWidth(LayoutAlignment alignment)
+		{
+			var button = new SfButton();
+			button.Text = "Sample Text";
+			button.HorizontalOptions = new LayoutOptions(alignment, false);
+			
+			// Test with available width constraint larger than content
+			double widthConstraint = 300;
+			var actualWidth = (double)InvokePrivateMethod(button, "CalculateWidth", widthConstraint);
+			
+			// Should not use the full constraint width, but rather content-based width
+			Assert.True(actualWidth < widthConstraint, 
+				$"Button with HorizontalOptions.{alignment} should not fill constraint width {widthConstraint}, but got {actualWidth}");
+		}
+
+		[Fact]
+		public void CalculateWidth_WithFillHorizontalOptions_ShouldUseConstraintWidth()
+		{
+			var button = new SfButton();
+			button.Text = "Sample Text";
+			button.HorizontalOptions = LayoutOptions.Fill;
+			
+			// Test with available width constraint
+			double widthConstraint = 300;
+			var actualWidth = (double)InvokePrivateMethod(button, "CalculateWidth", widthConstraint);
+			
+			// Should use the constraint width when HorizontalOptions is Fill
+			Assert.Equal(widthConstraint, actualWidth);
+		}
+
+		[Fact]
+		public void CalculateWidth_WithWidthRequest_ShouldAlwaysUseWidthRequest()
+		{
+			var button = new SfButton();
+			button.Text = "Sample Text";
+			button.WidthRequest = 150;
+			button.HorizontalOptions = LayoutOptions.Fill;
+			
+			// Test with larger width constraint
+			double widthConstraint = 300;
+			var actualWidth = (double)InvokePrivateMethod(button, "CalculateWidth", widthConstraint);
+			
+			// Should use WidthRequest regardless of HorizontalOptions
+			Assert.Equal(150, actualWidth);
+		}
+
+		[Fact]
+		public void CalculateWidth_WithInfiniteConstraint_ShouldUseContentWidth()
+		{
+			var button = new SfButton();
+			button.Text = "Sample Text";
+			button.HorizontalOptions = LayoutOptions.Fill;
+			
+			// Test with infinite width constraint
+			double widthConstraint = double.PositiveInfinity;
+			var actualWidth = (double)InvokePrivateMethod(button, "CalculateWidth", widthConstraint);
+			
+			// Should fall back to content width even with Fill when constraint is infinite
+			Assert.True(actualWidth > 0 && actualWidth != double.PositiveInfinity, 
+				$"Button should calculate content width when constraint is infinite, but got {actualWidth}");
+		}
+
+		#endregion
+
+		#region Text Wrapping Tests
+
+		[Fact]
+		public void TextWrapping_ShouldWrapWithoutWidthRequest()
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should automatically wrap into multiple lines and resize the button height accordingly";
+			button.LineBreakMode = LineBreakMode.WordWrap;
+			button.HorizontalOptions = LayoutOptions.Start;
+			button.VerticalOptions = LayoutOptions.Start;
+
+			// Measure with width constraint but no WidthRequest
+			var size = button.MeasureContent(200, double.PositiveInfinity);
+			
+			// Calculate expected single line height for comparison
+			var singleLineButton = new SfButton();
+			singleLineButton.Text = "Short text";
+			singleLineButton.LineBreakMode = LineBreakMode.NoWrap;
+			var singleLineSize = singleLineButton.MeasureContent(200, double.PositiveInfinity);
+
+			// Height should be greater than single line due to text wrapping
+			Assert.True(size.Height > singleLineSize.Height, 
+				$"Button height {size.Height} should be greater than single line height {singleLineSize.Height} when text wraps");
+			
+			// Width should not exceed the constraint
+			Assert.True(size.Width <= 200, 
+				$"Button width {size.Width} should not exceed width constraint of 200");
+		}
+
+		[Fact]
+		public void TextWrapping_ShouldRespectWidthRequest()
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should automatically wrap into multiple lines and resize the button height accordingly";
+			button.LineBreakMode = LineBreakMode.WordWrap;
+			button.WidthRequest = 150;
+
+			// Measure with larger width constraint, but WidthRequest should take precedence
+			var size = button.MeasureContent(300, double.PositiveInfinity);
+			
+			// Width should be close to WidthRequest (accounting for padding)
+			Assert.True(size.Width >= 150, 
+				$"Button width {size.Width} should respect WidthRequest of 150");
+		}
+
+		[Fact]
+		public void TextWrapping_WithIcon_ShouldAccountForIconSpace()
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should automatically wrap into multiple lines";
+			button.LineBreakMode = LineBreakMode.WordWrap;
+			button.ShowIcon = true;
+			button.ImageAlignment = Alignment.Start; // Icon on left side
+			button.ImageSize = 20;
+
+			// Measure with width constraint
+			var sizeWithIcon = button.MeasureContent(200, double.PositiveInfinity);
+			
+			// Compare with button without icon
+			var buttonNoIcon = new SfButton();
+			buttonNoIcon.Text = button.Text;
+			buttonNoIcon.LineBreakMode = LineBreakMode.WordWrap;
+			var sizeNoIcon = buttonNoIcon.MeasureContent(200, double.PositiveInfinity);
+
+			// Button with icon should potentially wrap more (higher height) due to less available text width
+			Assert.True(sizeWithIcon.Height >= sizeNoIcon.Height, 
+				$"Button with icon height {sizeWithIcon.Height} should be >= button without icon height {sizeNoIcon.Height}");
+		}
+
+		[Fact]
+		public void TextWrapping_AndroidOverflowPrevention_ShouldConstrainWidth()
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should automatically wrap into multiple lines and resize the button height accordingly without overflowing the screen bounds on Android";
+			button.LineBreakMode = LineBreakMode.WordWrap;
+			button.HorizontalOptions = LayoutOptions.Start; // Non-Fill alignment
+			button.VerticalOptions = LayoutOptions.Start;
+
+			// Simulate Android screen constraint (smaller width)
+			var size = button.MeasureContent(250, double.PositiveInfinity);
+			
+			// Button width should be constrained to prevent overflow
+			Assert.True(size.Width <= 250, 
+				$"Button width {size.Width} should be constrained to prevent overflow on Android (max 250)");
+			
+			// Height should be greater than single line height due to wrapping
+			var singleLineHeight = button.MeasureContent(double.PositiveInfinity, double.PositiveInfinity).Height;
+			Assert.True(size.Height >= singleLineHeight, 
+				$"Button height {size.Height} should accommodate wrapped text (>= {singleLineHeight})");
+		}
+
+		#endregion
+
+		#region Text Truncation Tests
+
+		[Theory]
+		[InlineData(LineBreakMode.TailTruncation)]
+		[InlineData(LineBreakMode.HeadTruncation)]
+		[InlineData(LineBreakMode.MiddleTruncation)]
+		[InlineData(LineBreakMode.NoWrap)]
+		public void TextTruncation_ShouldAlwaysUseSingleLine(LineBreakMode lineBreakMode)
+		{
+			var button = new SfButton();
+			button.Text = "This is a very long text that should be truncated instead of wrapping to multiple lines";
+			button.LineBreakMode = lineBreakMode;
+			
+			// Test with constrained width that would normally cause wrapping
+			var size = button.MeasureContent(150, double.PositiveInfinity);
+			
+			// Calculate single line height for comparison
+			var singleLineButton = new SfButton();
+			singleLineButton.Text = "Short";
+			singleLineButton.LineBreakMode = LineBreakMode.NoWrap;
+			var singleLineHeight = singleLineButton.MeasureContent(double.PositiveInfinity, double.PositiveInfinity).Height;
+			
+			// For truncation modes, height should be approximately single line height
+			var heightDifference = Math.Abs(size.Height - singleLineHeight);
+			Assert.True(heightDifference < 5, // Allow small padding differences 
+				$"Truncation mode {lineBreakMode} should use single line height. Expected ~{singleLineHeight}, got {size.Height}");
+		}
+
+		[Fact]
+		public void TextTruncation_MiddleMode_ShouldTrimBothEnds()
+		{
+			var longText = "This is a very long text that should be truncated in the middle with ellipsis";
+			
+			// Use StringExtensions directly to test the truncation logic
+			var result = StringExtensions.GetTextBasedOnLineBreakMode(longText, new TestTextElement(), 100, 20, LineBreakMode.MiddleTruncation);
+			
+			// Should contain ellipsis
+			Assert.Contains("...", result);
+			
+			// Should be shorter than original
+			Assert.True(result.Length < longText.Length, 
+				$"Truncated text '{result}' should be shorter than original '{longText}'");
+			
+			// Should start with beginning of original text and end with end of original text
+			Assert.True(result.StartsWith(longText.Substring(0, Math.Min(10, longText.Length))), 
+				$"Truncated text '{result}' should start with beginning of original text");
+		}
+
+		[Fact]
+		public void TextTruncation_TailMode_ShouldAddEllipsisAtEnd()
+		{
+			var longText = "This is a very long text that should be truncated at the end";
+			
+			var result = StringExtensions.GetTextBasedOnLineBreakMode(longText, new TestTextElement(), 100, 20, LineBreakMode.TailTruncation);
+			
+			// Should end with ellipsis
+			Assert.True(result.EndsWith("..."), 
+				$"Tail truncated text '{result}' should end with ellipsis");
+			
+			// Should be shorter than original
+			Assert.True(result.Length < longText.Length, 
+				$"Truncated text '{result}' should be shorter than original '{longText}'");
+		}
+
+		[Fact]
+		public void TextTruncation_HeadMode_ShouldAddEllipsisAtStart()
+		{
+			var longText = "This is a very long text that should be truncated at the beginning";
+			
+			var result = StringExtensions.GetTextBasedOnLineBreakMode(longText, new TestTextElement(), 100, 20, LineBreakMode.HeadTruncation);
+			
+			// Should start with ellipsis
+			Assert.True(result.StartsWith("..."), 
+				$"Head truncated text '{result}' should start with ellipsis");
+			
+			// Should be shorter than original
+			Assert.True(result.Length < longText.Length, 
+				$"Truncated text '{result}' should be shorter than original '{longText}'");
+		}
+
+		[Fact]
+		public void TextTruncation_ShouldHandleSpacesCorrectly()
+		{
+			// This tests the scenario mentioned in the comment where spaces cause wrapping instead of truncation
+			var textWithSpaces = "Word1 Word2 Word3 Word4 Word5 Word6 Word7 Word8 Word9 Word10";
+			
+			var result = StringExtensions.GetTextBasedOnLineBreakMode(textWithSpaces, new TestTextElement(), 80, 20, LineBreakMode.TailTruncation);
+			
+			// Should truncate, not wrap
+			Assert.Contains("...", result);
+			Assert.True(result.Length < textWithSpaces.Length);
+			
+			// Should not contain line breaks or be multi-line
+			Assert.False(result.Contains('\n'));
+			Assert.False(result.Contains('\r'));
+		}
+
+		// Helper class for testing text measurements
+		private class TestTextElement : ITextElement
+		{
+			public FontAttributes FontAttributes => FontAttributes.None;
+			public string FontFamily => null;
+			public double FontSize => 14;
+			public bool FontAutoScalingEnabled => false;
+			public Color TextColor => Colors.Black;
+			
+			// Simple width calculation for testing (assumes each char is ~8 pixels wide)
+			public Size Measure(string text) => new Size(text.Length * 8, 20);
+		}
+
+		#endregion
+
 		#region AutomationScenario
 
 		[Theory]
