@@ -1740,19 +1740,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			expanderHeader.IconView = new ExpandCollapseButton(expander);
 			
 			// Simulate press (this should change color to PressedIconColor)
-			var pressArgs = new PointerEventArgs
-			{
-				Action = PointerActions.Pressed,
-				TouchPoint = new Point(10, 10)
-			};
+			var pressArgs = new Syncfusion.Maui.Toolkit.Internals.PointerEventArgs(0, PointerActions.Pressed, new Point(10, 10));
 			expanderHeader.OnTouch(pressArgs);
 
 			// Simulate cancelled touch (this should restore HeaderIconColor)
-			var cancelArgs = new PointerEventArgs
-			{
-				Action = PointerActions.Cancelled,
-				TouchPoint = new Point(10, 10)
-			};
+			var cancelArgs = new Syncfusion.Maui.Toolkit.Internals.PointerEventArgs(0, PointerActions.Cancelled, new Point(10, 10));
 			expanderHeader.OnTouch(cancelArgs);
 
 			// Verify the icon color restoration logic was called and mouse hover was reset
@@ -1781,19 +1773,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			expanderHeader.IconView = new ExpandCollapseButton(expander);
 			
 			// Simulate press (this should change color to PressedIconColor)
-			var pressArgs = new PointerEventArgs
-			{
-				Action = PointerActions.Pressed,
-				TouchPoint = new Point(10, 10)
-			};
+			var pressArgs = new Syncfusion.Maui.Toolkit.Internals.PointerEventArgs(0, PointerActions.Pressed, new Point(10, 10));
 			expanderHeader.OnTouch(pressArgs);
 
 			// Simulate released touch with mouse still hovering
-			var releaseArgs = new PointerEventArgs
-			{
-				Action = PointerActions.Released,
-				TouchPoint = new Point(10, 10)
-			};
+			var releaseArgs = new Syncfusion.Maui.Toolkit.Internals.PointerEventArgs(0, PointerActions.Released, new Point(10, 10));
 			expanderHeader.OnTouch(releaseArgs);
 
 			// Verify mouse hover state is maintained (the color restoration follows OnPropertyChanged logic)
