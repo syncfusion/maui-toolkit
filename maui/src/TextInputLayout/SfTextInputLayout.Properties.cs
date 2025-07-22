@@ -2193,24 +2193,32 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			}
 		}
 
-		static void OnIsHintFloatedPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-		{
-			if (bindable is SfTextInputLayout inputLayout && newValue is bool value)
-			{
-				if (inputLayout.Content is InputView || inputLayout.Content is Microsoft.Maui.Controls.Picker)
-				{
-					inputLayout.Content.Opacity = value ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-				}
-				else if (inputLayout != null && inputLayout.Content is SfView numericEntry && numericEntry.Children.Count > 0)
-				{
-					if (numericEntry.Children[0] is Entry numericInputView)
-					{
-						numericInputView.Opacity = value ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
-					}
-				}
-			}
-			
-		}
+        static void OnIsHintFloatedPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is SfTextInputLayout inputLayout && newValue is bool value)
+            {
+				double minOpacity = 0;
+#if ANDROID || IOS
+				minOpacity  = 0.00001;
+#elif MACCATALYST
+				minOpacity  = 0.011;
+#endif
+
+                double targetOpacity = value ? 1 : minOpacity;
+
+                if (inputLayout.Content is InputView || inputLayout.Content is Microsoft.Maui.Controls.Picker)
+                {
+                    inputLayout.Content.Opacity = targetOpacity;
+                }
+                else if (inputLayout.Content is SfView numericEntry && numericEntry.Children.Count > 0)
+                {
+                    if (numericEntry.Children[0] is Entry numericInputView)
+                    {
+                        numericInputView.Opacity = targetOpacity;
+                    }
+                }
+            }
+        }
 
 		static void OnInputViewPaddingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{

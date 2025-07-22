@@ -843,32 +843,31 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 UpdateContentMargin(view);
             }
 
+			double minOpacity = 0;
+#if ANDROID || IOS
+			minOpacity  = 0.00001;
+#elif MACCATALYST
+			minOpacity  = 0.011;
+#endif
+
 			//For placeholder overlap issue here handled the opacity value for controls.
 			if (newValue is InputView entryEditorContent)
             {
-#if ANDROID || IOS
-				entryEditorContent.Opacity = IsHintFloated ? 1 : 0.00001;
-#else
-				entryEditorContent.Opacity = IsHintFloated ? 1 : 0;
-#endif
+				entryEditorContent.Opacity = IsHintFloated ? 1 : minOpacity;
 				_initialContentDescription = SemanticProperties.GetDescription(entryEditorContent);
 			}
             else if (newValue is SfView numericEntryContent && numericEntryContent.Children.Count > 0)
             {
                 if (numericEntryContent.Children[0] is Entry numericInputView)
                 {
-#if ANDROID || IOS
-					numericInputView.Opacity = IsHintFloated ? 1 : 0.00001;
-#else
-					numericInputView.Opacity = IsHintFloated ? 1 : 0;
-#endif
+					numericInputView.Opacity = IsHintFloated ? 1 : minOpacity;
 				}
             }
             else if (newValue is Microsoft.Maui.Controls.Picker picker)
             {
                 if (DeviceInfo.Platform != DevicePlatform.WinUI)
                 {
-					picker.Opacity = IsHintFloated ? 1 : (DeviceInfo.Platform == DevicePlatform.iOS ? 0.00001 : 0);
+					picker.Opacity = IsHintFloated ? 1 : minOpacity;
 				}
 			}
 
