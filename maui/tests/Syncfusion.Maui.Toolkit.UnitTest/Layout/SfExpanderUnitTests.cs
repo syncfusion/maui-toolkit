@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Syncfusion.Maui.Toolkit.EffectsView;
 using Syncfusion.Maui.Toolkit.Expander;
-using Syncfusion.Maui.Toolkit.Internals;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
