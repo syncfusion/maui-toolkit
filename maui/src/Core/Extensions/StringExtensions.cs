@@ -47,13 +47,15 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		/// </summary>
 		/// Note: It can be used from chart and sunbrust chart datalabels implement. 
 		public static string TrimTextToFit(this string inputText, ITextElement textElement, double availableWidth)
-		{
-			while (inputText.Measure(textElement).Width > availableWidth && inputText.Length > 0)
-			{
-				inputText = inputText.Substring(0, inputText.Length - 1);
-			}
-			return inputText;
-		}
+        {
+            string trimmedText = inputText.TrimEnd();
+            while (trimmedText.Measure(textElement).Width >= availableWidth && trimmedText.Length > 0)
+            {
+                trimmedText = trimmedText.Substring(0, trimmedText.Length - 1);
+                trimmedText = trimmedText.TrimEnd();
+            }
+            return trimmedText;
+        }
 
 		/// <summary>
 		/// This method is utilized to get the total number of lines count from the text to fit within the available width.
@@ -171,13 +173,24 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 					var leftTrimmedTextSize = leftTrimmedText.Measure((ITextElement)textElement);
 					int leftLength = 0;
 
-					while (leftTrimmedTextSize.Width > charsToKeep && leftTrimmedText.Length > 0)
+					while (leftTrimmedTextSize.Width >= charsToKeep && leftTrimmedText.Length > 0)
 					{
 						leftTrimmedText = leftTrimmedText.Substring(0, leftTrimmedText.Length - 1);
 						leftTrimmedTextSize = leftTrimmedText.Measure((ITextElement)textElement);
 						leftLength++;
 					}
 					string rightText = text.Substring(leftLength);
+
+					leftTrimmedText = leftTrimmedText.TrimEnd();
+					rightText = rightText.TrimStart();
+
+					var rightTrimmedTextSize = rightText.Measure((ITextElement)textElement);
+					while (rightTrimmedTextSize.Width >= charsToKeep && rightText.Length > 0)
+					{
+						leftLength++;
+						rightText = text.Substring(leftLength).TrimStart();
+						rightTrimmedTextSize = rightText.Measure((ITextElement)textElement);
+					}
 					string trimmedText = leftTrimmedText + "..." + rightText;
 					return trimmedText;
 
