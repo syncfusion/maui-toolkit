@@ -406,7 +406,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 
 					SizeF actualSize = DesiredSizes[i];
-					SizeF originalActualSize = actualSize; // Store original size for positioning calculations
 #if ANDROID
 					actualSize = new SizeF(actualSize.Width, (float)DesiredHeight);
 #endif
@@ -425,9 +424,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					//Added platform specific code for position the label.
 #if ANDROID
-					// Fix for XXHDPI density issue: Use original actualSize.Height instead of DesiredHeight for positioning
-					// to ensure labels are properly positioned regardless of device density
-					float textY = ((float)yPos + MarginTop + originalActualSize.Height / 2);
+					float textY = ((float)yPos + MarginTop + (float)DesiredHeight / 2);
 #else
 					float textY = yPos + MarginTop;
 #endif

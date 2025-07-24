@@ -239,6 +239,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		protected internal double GetActualDesiredIntervalsCount(Size availableSize)
 		{
 			double size = !IsVertical ? availableSize.Width : availableSize.Height;
+			
+#if ANDROID
+			// Fix for CategoryAxis labels not visible on XXHDPI devices
+			// Normalize size by display density to ensure consistent interval calculation across different screen densities
+			size = size / Android.Content.Res.Resources.System.DisplayMetrics.Density;
+#endif
+			
 			double adjustedDesiredIntervalsCount = size * (!IsVertical ? 0.54 : 1.0) * MaximumLabels;
 			var actualDesiredIntervalsCount = Math.Max(adjustedDesiredIntervalsCount / 100, 1.0);
 			return actualDesiredIntervalsCount;
