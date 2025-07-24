@@ -467,7 +467,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 					accordionItem.Content.IsVisible = true;
 				}
 
-				if (accordionItem._accordion != null && accordionItem.accordion.IsViewLoaded && accordionItem._accordionItemView != null && accordionItem._accordionItemView.IsExpanded != accordionItem.IsExpanded)
+				if (accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded && accordionItem._accordionItemView != null && accordionItem._accordionItemView.IsExpanded != accordionItem.IsExpanded)
 				{
 					accordionItem.OnIsExpandedChanging((bool)newValue);
 				}
