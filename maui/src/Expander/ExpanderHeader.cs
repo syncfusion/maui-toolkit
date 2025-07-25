@@ -604,12 +604,35 @@ namespace Syncfusion.Maui.Toolkit.Expander
 				if (e.Action == PointerActions.Released)
 				{
 					Expander._effectsView.Reset();
+
+					// Restore icon color based on current state (following same logic as OnPropertyChanged)
+                    if (this.IsMouseHover)
+                    {
+                        if (this.Expander.HasVisualStateGroups())
+                        {
+                            this.UpdateIconColor(this.Expander.HeaderIconColor);
+                        }
+                        else
+                        {
+                            this.UpdateIconColor(this.Expander.HoverIconColor);
+                        }
+                    }
+                    else if (!this.Expander.IsSelected)
+                    {
+                        this.UpdateIconColor(this.Expander.HeaderIconColor);
+                    }
 				}
 
 				if (e.Action == PointerActions.Cancelled)
 				{
 					Expander._effectsView.Reset();
 					IsMouseHover = false;
+
+					// Restore icon color to normal state since mouse hover is reset
+                    if (!this.Expander.IsSelected)
+                    {
+                        this.UpdateIconColor(this.Expander.HeaderIconColor);
+                    }
 				}
 			}
 		}
