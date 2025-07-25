@@ -540,15 +540,20 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		{
 			if (widthConstraint == double.PositiveInfinity || widthConstraint < 0 || WidthRequest < 0)
 			{
+				double buttonContentWidth = 0;
 				if (ShowIcon && ImageSource != null)
 				{
-					return ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
+					buttonContentWidth = ImageAlignment == Alignment.Top || ImageAlignment == Alignment.Bottom
 						? Math.Max(ImageSize, TextSize.Width) + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2)
 						: ImageSize + TextSize.Width + StrokeThickness + Padding.Left + Padding.Right + (_leftPadding * 2) + (_rightPadding * 2);
 				}
 				else
 				{
-					return TextSize.Width + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2);
+					buttonContentWidth = TextSize.Width + Padding.Left + Padding.Right + StrokeThickness + (_leftPadding * 2) + (_rightPadding * 2);
+				}
+				if (buttonContentWidth <= widthConstraint)
+				{
+					return buttonContentWidth;
 				}
 			}
 			return widthConstraint;
@@ -564,6 +569,7 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		{
 			if (heightConstraint == double.PositiveInfinity || heightConstraint < 0 || VerticalOptions != LayoutOptions.Fill)
 			{
+				width = CalculateAvailableTextWidth(width);
 				if (LineBreakMode == LineBreakMode.WordWrap || LineBreakMode == LineBreakMode.CharacterWrap)
 					{
 						_numberOfLines = StringExtensions.GetLinesCount(Text, (float)width, this, LineBreakMode, out _);
@@ -585,6 +591,46 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 				}
 			}
 			return heightConstraint;
+		}
+
+		/// <summary>
+		/// Calculates the available width for the text area within the button.
+		/// </summary>
+		/// <param name="width"></param>
+		/// <returns></returns>
+		double CalculateAvailableTextWidth(double width)
+		{
+			if (ShowIcon && ImageSource != null)
+			{
+				if (ImageAlignment == Alignment.Start || ImageAlignment == Alignment.Left)
+				{
+					width = (ImageAlignment == Alignment.Start && _isRightToLeft) ? Math.Abs((float)(width - _textRectF.X - ImageSize - (_leftIconPadding * 2) - _textAreaPadding - (StrokeThickness / 2) - Padding.Right))
+										: Math.Abs((float)(width - _textRectF.X - (StrokeThickness / 2) - _textAreaPadding - Padding.Right));
+
+				}
+				else if (ImageAlignment == Alignment.End || ImageAlignment == Alignment.Right)
+				{
+					width = (ImageAlignment == Alignment.End && _isRightToLeft) ? Math.Abs((float)(width - _textRectF.X - (StrokeThickness / 2) - _textAreaPadding - Padding.Right))
+										: Math.Abs((float)(width - _textRectF.X - ImageSize - _leftIconPadding - _leftIconPadding - _textAreaPadding - (StrokeThickness / 2) - Padding.Right));
+				}
+				else if (ImageAlignment == Alignment.Top)
+				{
+					width = Math.Abs((float)(width - _textAreaPadding - Padding.Left - Padding.Right - _textAreaPadding - (StrokeThickness / 2) - (StrokeThickness / 2)));
+				}
+				else if (ImageAlignment == Alignment.Bottom)
+				{
+					width = Math.Abs((float)(width - _textAreaPadding - Padding.Left - Padding.Right - _textAreaPadding - (StrokeThickness / 2) - (StrokeThickness / 2)));
+				}
+				else
+				{
+					width =  Math.Abs((float)(width - _textRectF.X - (StrokeThickness / 2) - _textAreaPadding - Padding.Right));
+				}
+			}
+			else
+			{
+				width = Math.Abs((float)(width - _textAreaPadding - Padding.Left - Padding.Right - _textAreaPadding - StrokeThickness));
+			}
+			return width;
 		}
 
 		/// <summary>
@@ -735,7 +781,10 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 			canvas.SaveState();
 			float availableWidth = _textRectF.Width;
 #if ANDROID
-			availableWidth-=AndroidTextMargin;
+			if (LineBreakMode != LineBreakMode.WordWrap)
+			{
+				availableWidth -= AndroidTextMargin;
+			}
 #endif
 			var trimmedText = _isFontIconText ? Text : StringExtensions.GetTextBasedOnLineBreakMode(ApplyTextTransform(Text), this, availableWidth, _textRectF.Height, LineBreakMode);
 			if (_textRectF.Width > 0 && _textRectF.Height > 0)
