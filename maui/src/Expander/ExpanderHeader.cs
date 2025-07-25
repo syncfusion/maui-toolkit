@@ -605,7 +605,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 				{
 					Expander._effectsView.Reset();
 
-					// Restore icon color based on current state (following same logic as OnPropertyChanged)
+					// Restore icon color based on current state.
                     if (IsMouseHover)
                     {
                         if (Expander.HasVisualStateGroups())
