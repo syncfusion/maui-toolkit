@@ -523,6 +523,68 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(2, itemsFromProperty.Count);
 		}
 
+		[Fact]
+		public void AccordionStyle_WhenApplied_SetsCorrectProperties()
+		{
+			// Arrange
+			var animationDuration = 100;
+			ExpanderAnimationEasing easing = new ExpanderAnimationEasing();
+			easing = ExpanderAnimationEasing.SinInOut;
+			ExpanderIconPosition expanderIconPosition = new ExpanderIconPosition();
+			expanderIconPosition = ExpanderIconPosition.Start;
+			var itemSpacing = 100;
+			AccordionExpandMode expandMode = new AccordionExpandMode();
+			expandMode = AccordionExpandMode.Multiple;
+			AccordionAutoScrollPosition autoScrollPosition = new AccordionAutoScrollPosition();
+			autoScrollPosition = AccordionAutoScrollPosition.MakeVisible;
+			var style = new Style(typeof(SfAccordion));
+			style.Setters.Add(new Setter
+			{
+				Property = SfAccordion.AnimationDurationProperty,
+				Value = animationDuration
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = SfAccordion.HeaderIconPositionProperty,
+				Value = expanderIconPosition
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = SfAccordion.AnimationEasingProperty,
+				Value = easing
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = SfAccordion.ExpandModeProperty,
+				Value = expandMode
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = SfAccordion.ItemSpacingProperty,
+				Value = itemSpacing
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = SfAccordion.AutoScrollPositionProperty,
+				Value = autoScrollPosition
+			});
+			var resources = new ResourceDictionary();
+			resources.Add("AccordionStyle", style);
+			Application.Current = new Application();
+			Application.Current.Resources = resources;
+			var accordion = new SfAccordion();
+			// Act
+			accordion.Style = (Style)Application.Current.Resources["AccordionStyle"];
+			// Assert
+			Assert.Equal(animationDuration, accordion.AnimationDuration);
+			Assert.Equal(expanderIconPosition, accordion.HeaderIconPosition);
+			Assert.Equal(easing, accordion.AnimationEasing);
+			Assert.Equal(expandMode, accordion.ExpandMode);
+			Assert.Equal(animationDuration, accordion.AnimationDuration);
+			Assert.Equal(itemSpacing, accordion.ItemSpacing);
+			Assert.Equal(autoScrollPosition, accordion.AutoScrollPosition);
+		}
+
 		#endregion
 
 		#region Methods
@@ -1044,6 +1106,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var accordionItem = new AccordionItem();
 			accordion.Items.Add(accordionItem);
 			accordionItem._accordionItemView = [];
+			accordion.IsViewLoaded = true;
 			accordion.HeaderIconPosition = ExpanderIconPosition.Start;
 			var oldValue = ExpanderIconPosition.End;
 			var newValue = ExpanderIconPosition.Start;
@@ -1070,6 +1133,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var accordionItem = new AccordionItem();
 			accordion.Items.Add(accordionItem);
 			accordionItem._accordionItemView = [];
+			accordion.IsViewLoaded = true;
 			accordion.AnimationEasing = newValue;
 			MethodInfo? methodInfo = typeof(SfAccordion).GetMethod(
 				"OnAnimationEasingPropertyChanged",
@@ -1093,6 +1157,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var accordionItem = new AccordionItem();
 			accordion.Items.Add(accordionItem);
 			accordionItem._accordionItemView = [];
+			accordion.IsViewLoaded = true;
 			accordion.AnimationDuration = newValue;
 			MethodInfo? methodInfo = typeof(SfAccordion).GetMethod(
 				"OnAnimationDurationPropertyChanged",
