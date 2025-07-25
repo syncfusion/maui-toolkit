@@ -821,7 +821,9 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 #if ANDROID || IOS
             else if (e.Action == PointerActions.Cancelled)
             {
-                RemoveEffects();
+				_isPressed = false;
+				RemoveEffects();
+				ChangeVisualState();
             }
 #endif
 			else if (e.Action == PointerActions.Exited)
