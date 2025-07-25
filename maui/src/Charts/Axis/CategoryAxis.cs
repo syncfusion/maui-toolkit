@@ -14,10 +14,41 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (double.IsNaN(AxisInterval) || AxisInterval <= 0)
 			{
+#if ANDROID
+				// Fix for CategoryAxis labels not visible on Android XXHDPI devices
+				// Normalize size by display density to ensure consistent interval calculation across different screen densities
+				var density = Android.Content.Res.Resources.System?.DisplayMetrics?.Density ?? 1.0f;
+				var normalizedAvailableSize = new Size(availableSize.Width / density, availableSize.Height / density);
+				return Math.Max(1d, Math.Floor(range.Delta / GetActualDesiredIntervalsCount(normalizedAvailableSize)));
+#else
 				return Math.Max(1d, Math.Floor(range.Delta / GetActualDesiredIntervalsCount(availableSize)));
+#endif
 			}
 
 			return AxisInterval;
+		}
+
+		/// <inheritdoc/>
+		protected override double CalculateVisibleInterval(DoubleRange visibleRange, Size availableSize)
+		{
+			if (ZoomFactor < 1 || ZoomPosition > 0)
+			{
+#if ANDROID
+				// Fix for CategoryAxis labels not visible on Android XXHDPI devices
+				// Normalize size by display density to ensure consistent interval calculation across different screen densities
+				var density = Android.Content.Res.Resources.System?.DisplayMetrics?.Density ?? 1.0f;
+				var normalizedAvailableSize = new Size(availableSize.Width / density, availableSize.Height / density);
+				return EnableAutoIntervalOnZooming
+						? CalculateNiceInterval(visibleRange, normalizedAvailableSize)
+						: ActualInterval;
+#else
+				return EnableAutoIntervalOnZooming
+						? CalculateNiceInterval(visibleRange, availableSize)
+						: ActualInterval;
+#endif
+			}
+
+			return ActualInterval;
 		}
 
 		/// <inheritdoc/>
