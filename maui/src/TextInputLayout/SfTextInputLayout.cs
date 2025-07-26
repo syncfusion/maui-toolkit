@@ -351,6 +351,16 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
         readonly LabelStyle _internalCounterLabelStyle = new();
 
+        /// <summary>
+        /// Label control for displaying helper text
+        /// </summary>
+        Label? _helperLabel;
+
+        /// <summary>
+        /// Label control for displaying error text
+        /// </summary>
+        Label? _errorLabel;
+
         static Color _defaultStrokeColor = Color.FromRgba("#49454F");
 
         static Brush _defaultContainerBackground = new SolidColorBrush(Color.FromRgba("#E7E0EC"));
@@ -396,7 +406,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             this.AddTouchListener(this);
             _effectsRenderer = new EffectsRenderer(this);
             SetRendererBasedOnPlatform();
-
+            InitializeAssistiveLabels();
 		}
         #endregion
 
@@ -785,6 +795,186 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				Bounds = rect,
 				Text = description
 			};
+
+		/// <summary>
+		/// Initializes the assistive labels (helper and error text labels).
+		/// </summary>
+		void InitializeAssistiveLabels()
+		{
+			// Initialize helper label
+			_helperLabel = new Label
+			{
+				IsVisible = false,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				VerticalOptions = LayoutOptions.End,
+				HorizontalTextAlignment = TextAlignment.Start,
+				VerticalTextAlignment = TextAlignment.Start,
+				LineBreakMode = LineBreakMode.WordWrap,
+				FontSize = 12,
+				Margin = new Thickness(0),
+				Padding = new Thickness(0)
+			};
+
+			// Initialize error label
+			_errorLabel = new Label
+			{
+				IsVisible = false,
+				HorizontalOptions = LayoutOptions.FillAndExpand,
+				VerticalOptions = LayoutOptions.End,
+				HorizontalTextAlignment = TextAlignment.Start,
+				VerticalTextAlignment = TextAlignment.Start,
+				LineBreakMode = LineBreakMode.WordWrap,
+				FontSize = 12,
+				Margin = new Thickness(0),
+				Padding = new Thickness(0)
+			};
+
+			// Configure accessibility properties for Android
+			ConfigureAccessibilityForAssistiveLabels();
+
+			// Add labels to the layout
+			Add(_helperLabel);
+			Add(_errorLabel);
+		}
+
+		/// <summary>
+		/// Configures accessibility properties for assistive labels to ensure proper focus order on Android.
+		/// </summary>
+		void ConfigureAccessibilityForAssistiveLabels()
+		{
+#if ANDROID
+			// Configure helper label accessibility
+			if (_helperLabel != null)
+			{
+				// Set accessibility properties to prevent interference with main control focus
+				SemanticProperties.SetDescription(_helperLabel, "Helper text");
+				// Make sure the helper label doesn't interfere with TalkBack focus order
+				// by setting it as not important for accessibility when invisible
+				UpdateLabelAccessibilityImportance(_helperLabel, false);
+				
+				// Hook handler changed event to ensure accessibility properties are set when platform view is ready
+				_helperLabel.HandlerChanged += OnAssistiveLabelHandlerChanged;
+			}
+
+			// Configure error label accessibility  
+			if (_errorLabel != null)
+			{
+				SemanticProperties.SetDescription(_errorLabel, "Error text");
+				// Make sure the error label doesn't interfere with TalkBack focus order
+				// by setting it as not important for accessibility when invisible
+				UpdateLabelAccessibilityImportance(_errorLabel, false);
+				
+				// Hook handler changed event to ensure accessibility properties are set when platform view is ready
+				_errorLabel.HandlerChanged += OnAssistiveLabelHandlerChanged;
+			}
+#endif
+		}
+
+#if ANDROID
+		/// <summary>
+		/// Handles the HandlerChanged event for assistive labels to ensure proper accessibility setup.
+		/// </summary>
+		void OnAssistiveLabelHandlerChanged(object? sender, EventArgs e)
+		{
+			if (sender is Label label)
+			{
+				// Update accessibility importance when handler is ready
+				bool isVisible = label.IsVisible && !string.IsNullOrEmpty(label.Text);
+				UpdateLabelAccessibilityImportance(label, isVisible);
+			}
+		}
+
+		/// <summary>
+		/// Updates the accessibility importance of a label based on its visibility and content.
+		/// This ensures proper focus order in TalkBack.
+		/// </summary>
+		/// <param name="label">The label to update</param>
+		/// <param name="isVisible">Whether the label should be important for accessibility</param>
+		void UpdateLabelAccessibilityImportance(Label label, bool isVisible)
+		{
+			if (label?.Handler?.PlatformView is Android.Views.View androidView)
+			{
+				// Set ImportantForAccessibility based on visibility and content
+				if (isVisible && !string.IsNullOrEmpty(label.Text))
+				{
+					androidView.ImportantForAccessibility = Android.Views.ImportantForAccessibility.Yes;
+					androidView.Focusable = true;
+				}
+				else
+				{
+					androidView.ImportantForAccessibility = Android.Views.ImportantForAccessibility.No;
+					androidView.Focusable = false;
+				}
+			}
+		}
+#endif
+
+		/// <summary>
+		/// Updates the assistive labels visibility and content.
+		/// </summary>
+		void UpdateAssistiveLabels()
+		{
+			// Initialize labels if not already created
+			if (_helperLabel == null || _errorLabel == null)
+			{
+				InitializeAssistiveLabels();
+				return;
+			}
+
+			// Update helper label
+			if (ShowHelperText && !string.IsNullOrEmpty(HelperText) && !HasError)
+			{
+				_helperLabel.Text = HelperText;
+				_helperLabel.IsVisible = true;
+				ApplyLabelStyle(_helperLabel, _internalHelperLabelStyle);
+#if ANDROID
+				// Update accessibility importance when label becomes visible
+				UpdateLabelAccessibilityImportance(_helperLabel, true);
+#endif
+			}
+			else
+			{
+				_helperLabel.IsVisible = false;
+#if ANDROID
+				// Update accessibility importance when label becomes hidden
+				UpdateLabelAccessibilityImportance(_helperLabel, false);
+#endif
+			}
+
+			// Update error label (error text overrides helper text)
+			if (HasError && !string.IsNullOrEmpty(ErrorText))
+			{
+				_errorLabel.Text = ErrorText;
+				_errorLabel.IsVisible = true;
+				ApplyLabelStyle(_errorLabel, _internalErrorLabelStyle);
+#if ANDROID
+				// Update accessibility importance when label becomes visible
+				UpdateLabelAccessibilityImportance(_errorLabel, true);
+#endif
+			}
+			else
+			{
+				_errorLabel.IsVisible = false;
+#if ANDROID
+				// Update accessibility importance when label becomes hidden
+				UpdateLabelAccessibilityImportance(_errorLabel, false);
+#endif
+			}
+		}
+
+		/// <summary>
+		/// Applies the label style to a label control.
+		/// </summary>
+		void ApplyLabelStyle(Label label, LabelStyle style)
+		{
+			if (label == null || style == null)
+				return;
+
+			label.FontSize = style.FontSize;
+			label.FontFamily = style.FontFamily;
+			label.FontAttributes = style.FontAttributes;
+			label.TextColor = style.TextColor;
+		}
 		#endregion
 
 		#region Override Methods
@@ -803,8 +993,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				return _textInputLayoutSemanticsNodes;
 			}
 			_controlSize = newControlSize;
+			_textInputLayoutSemanticsNodes.Clear(); // Clear previous nodes before repopulating
 			PopulateNumericSemanticsNodes(Content);
 			_textInputLayoutSemanticsNodes.AddRange(_numericSemanticsNodes);
+			// Note: Removed PopulateAssistiveTextSemanticsNodes() as Label controls handle accessibility automatically
 			return _textInputLayoutSemanticsNodes;
 		}
 
@@ -1022,7 +1214,37 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 UpdateViewBounds();
             }
 #endif
-            return base.ArrangeContent(bounds);
+            var result = base.ArrangeContent(bounds);
+            ArrangeAssistiveLabels(bounds);
+            return result;
+        }
+
+        /// <summary>
+        /// Arranges the assistive labels (helper and error text) at the bottom of the layout.
+        /// </summary>
+        void ArrangeAssistiveLabels(Rect bounds)
+        {
+            if (_helperLabel == null || _errorLabel == null)
+                return;
+
+            // Calculate the position for assistive text
+            var startPadding = IsNone ? 0 : StartX + DefaultAssistiveLabelPadding + (IsOutlined ? BaseLineMaxHeight : 0);
+            var textY = bounds.Height - TotalAssistiveTextHeight() - (BaseLineMaxHeight <= 2 ? BaseLineMaxHeight / 2 : DefaultAssistiveLabelPadding);
+            var textWidth = bounds.Width - startPadding - _leadViewWidth - _trailViewWidth;
+
+            // Arrange helper label
+            if (_helperLabel.IsVisible)
+            {
+                var helperBounds = new Rect(startPadding + _leadViewWidth, textY, textWidth, DefaultAssistiveTextHeight);
+                _helperLabel.Arrange(helperBounds);
+            }
+
+            // Arrange error label
+            if (_errorLabel.IsVisible)
+            {
+                var errorBounds = new Rect(startPadding + _leadViewWidth, textY, textWidth, DefaultAssistiveTextHeight);
+                _errorLabel.Arrange(errorBounds);
+            }
         }
 
 		/// <summary>
@@ -1249,6 +1471,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             DrawHintText(canvas, dirtyRect);
             DrawClearIcon(canvas, _clearIconRectF);
             DrawUpDownIcon(canvas, dirtyRect);
+            // Note: Helper and error text are now handled by Label controls
+            UpdateAssistiveLabels();
+            // Still need to draw counter text on canvas
             DrawAssistiveText(canvas, dirtyRect);
             DrawPasswordToggleIcon(canvas, dirtyRect);
             if (_effectsRenderer != null)
@@ -1377,6 +1602,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 WireEvents();
                 OnTextInputViewHandlerChanged(this.Content, new EventArgs());
+#if ANDROID
+                // Ensure accessibility properties are configured when handler is ready
+                ConfigureAccessibilityForAssistiveLabels();
+#endif
             }
 			else
 			{
