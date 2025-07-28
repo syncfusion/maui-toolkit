@@ -2059,7 +2059,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <returns>The target Y position for the bottom sheet.</returns>
 		double GetTargetPosition()
 		{
-		    if (State is BottomSheetState.FullExpanded || !_isHalfExpanded)
+		    if ((State is BottomSheetState.FullExpanded || !_isHalfExpanded) && State is not BottomSheetState.Collapsed && AllowedState is not BottomSheetAllowedState.HalfExpanded)
 		    {
 		        return GetFullExpandedPosition();
 		    }
@@ -2078,7 +2078,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <returns>The calculated position for the fully expanded state. Currently, it always returns 0.</returns>
 		double GetFullExpandedPosition()
 		{
-		    if (State is BottomSheetState.Hidden)
+		    if (State is BottomSheetState.Hidden || State is not BottomSheetState.FullExpanded)
 		    {
 		        State = BottomSheetState.FullExpanded;
 		    }
@@ -2139,12 +2139,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			}
 
 			int animationDuration = this.GetClampedAnimationDuration();
-			const int topPadding = 2;
+		    const int topPadding = 2;
 			_isSheetOpen = true;
 			if (_bottomSheet is not null)
 			{
 				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition + topPadding);
-				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) => 
+				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) =>
 				{
 					UpdateBottomSheetHeight();
 					onFinish?.Invoke();
