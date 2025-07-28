@@ -855,6 +855,19 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			}
 
 			UnWireLabelStyleEvents();
+			
+#if ANDROID
+			// Unwire assistive label handler changed events
+			if (_helperLabel != null)
+			{
+				_helperLabel.HandlerChanged -= OnAssistiveLabelHandlerChanged;
+			}
+			if (_errorLabel != null)
+			{
+				_errorLabel.HandlerChanged -= OnAssistiveLabelHandlerChanged;
+			}
+#endif
+			DisposeAssistiveLabels();
 		}
 
 		/// <summary>
@@ -2077,44 +2090,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 		void DrawAssistiveText(ICanvas canvas, RectF dirtyRect)
 		{
-			if (HasError)
-			{
-				DrawErrorText(canvas, dirtyRect);
-			}
-			else
-			{
-				DrawHelperText(canvas, dirtyRect);
-			}
-
 			DrawCounterText(canvas, dirtyRect);
-		}
-
-		void DrawHelperText(ICanvas canvas, RectF dirtyRect)
-		{
-			if (ShowHelperText && !string.IsNullOrEmpty(HelperText) && HelperLabelStyle != null)
-			{
-				canvas.CanvasSaveState();
-				UpdateHelperTextPosition();
-				UpdateHelperTextColor();
-
-				canvas.DrawText(HelperText, _helperTextRect, IsRTL ? HorizontalAlignment.Right : HorizontalAlignment.Left, VerticalAlignment.Top, _internalHelperLabelStyle);
-
-				canvas.CanvasRestoreState();
-			}
-		}
-
-		void DrawErrorText(ICanvas canvas, RectF dirtyRect)
-		{
-			if (!string.IsNullOrEmpty(ErrorText) && ErrorLabelStyle != null)
-			{
-				canvas.CanvasSaveState();
-				UpdateErrorTextPosition();
-				UpdateErrorTextColor();
-
-				canvas.DrawText(ErrorText, _errorTextRect, IsRTL ? HorizontalAlignment.Right : HorizontalAlignment.Left, VerticalAlignment.Top, _internalErrorLabelStyle);
-
-				canvas.CanvasRestoreState();
-			}
 		}
 
 		void DrawCounterText(ICanvas canvas, RectF dirtyRect)
@@ -2237,6 +2213,188 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		{
 			_isAnimating = false;
 			IsHintDownToUp = !IsHintDownToUp;
+		}
+
+		/// <summary>
+		/// Initializes the assistive labels (helper and error text labels).
+		/// </summary>
+		void InitializeAssistiveLabels()
+		{
+			if (_helperLabel != null && Children.Contains(_helperLabel))
+				Remove(_helperLabel);
+			if (_errorLabel != null && Children.Contains(_errorLabel))
+				Remove(_errorLabel);
+
+			if (_helperLabel == null)
+			{
+				_helperLabel = new Label
+				{
+					IsVisible = false,
+					LineBreakMode = LineBreakMode.WordWrap,
+				};
+			}
+
+			if (_errorLabel == null)
+			{
+				_errorLabel = new Label
+				{
+					IsVisible = false,
+					LineBreakMode = LineBreakMode.WordWrap,
+				};
+			}
+
+			ConfigureAccessibilityForAssistiveLabels();
+
+			Add(_helperLabel);
+			Add(_errorLabel);
+		}
+
+		/// <summary>
+		/// Configures accessibility properties for assistive labels to ensure proper focus order on Android.
+		/// </summary>
+		void ConfigureAccessibilityForAssistiveLabels()
+		{
+#if ANDROID
+			// Configure helper label accessibility
+			if (_helperLabel != null)
+			{
+				UpdateLabelAccessibilityImportance(_helperLabel, false);
+				_helperLabel.HandlerChanged += OnAssistiveLabelHandlerChanged;
+			}
+
+			// Configure error label accessibility  
+			if (_errorLabel != null)
+			{
+				UpdateLabelAccessibilityImportance(_errorLabel, false);
+				_errorLabel.HandlerChanged += OnAssistiveLabelHandlerChanged;
+			}
+#endif
+		}
+
+#if ANDROID
+		/// <summary>
+		/// Handles the HandlerChanged event for assistive labels to ensure proper accessibility setup.
+		/// </summary>
+		void OnAssistiveLabelHandlerChanged(object? sender, EventArgs e)
+		{
+			if (sender is Label label)
+			{
+				bool isVisible = label.IsVisible && !string.IsNullOrEmpty(label.Text);
+				UpdateLabelAccessibilityImportance(label, isVisible);
+			}
+		}
+
+		/// <summary>
+		/// Updates the accessibility importance of a label based on its visibility and content.
+		/// This ensures proper focus order in TalkBack.
+		/// </summary>
+		/// <param name="label">The label to update</param>
+		/// <param name="isVisible">Whether the label should be important for accessibility</param>
+		void UpdateLabelAccessibilityImportance(Label label, bool isVisible)
+		{
+			if (label?.Handler?.PlatformView is Android.Views.View androidView)
+			{
+				if (isVisible && !string.IsNullOrEmpty(label.Text))
+				{
+					androidView.ImportantForAccessibility = Android.Views.ImportantForAccessibility.Yes;
+					androidView.Focusable = true;
+				}
+				else
+				{
+					androidView.ImportantForAccessibility = Android.Views.ImportantForAccessibility.No;
+					androidView.Focusable = false;
+				}
+			}
+		}
+#endif
+
+		/// <summary>
+		/// Updates the assistive labels visibility and content.
+		/// </summary>
+		void UpdateAssistiveLabels()
+		{
+			// Initialize labels if not already created
+			if (_helperLabel == null || _errorLabel == null)
+			{
+				InitializeAssistiveLabels();
+			}
+
+			if(_helperLabel != null)
+			{
+				if (ShowHelperText && !string.IsNullOrEmpty(HelperText) && !HasError && ReserveSpaceForAssistiveLabels)
+				{
+					_helperLabel.Text = HelperText;
+					_helperLabel.IsVisible = true;
+					UpdateHelperTextPosition();
+					UpdateHelperTextColor();
+					ApplyLabelStyle(_helperLabel, _internalHelperLabelStyle);
+#if ANDROID
+					UpdateLabelAccessibilityImportance(_helperLabel, true);
+#endif
+					AbsoluteLayout.SetLayoutBounds(_helperLabel, _helperTextRect);
+				}
+				else
+				{
+					_helperLabel.IsVisible = false;
+#if ANDROID
+					UpdateLabelAccessibilityImportance(_helperLabel, false);
+#endif
+				}
+			}
+			
+			if (_errorLabel != null)
+			{
+				if (HasError && !string.IsNullOrEmpty(ErrorText) && ReserveSpaceForAssistiveLabels)
+				{
+					_errorLabel.Text = ErrorText;
+					_errorLabel.IsVisible = true;
+					UpdateErrorTextPosition();
+					UpdateErrorTextColor();
+					ApplyLabelStyle(_errorLabel, _internalErrorLabelStyle);
+#if ANDROID
+					UpdateLabelAccessibilityImportance(_errorLabel, true);
+#endif
+					AbsoluteLayout.SetLayoutBounds(_errorLabel, _errorTextRect);
+				}
+				else
+				{
+					_errorLabel.IsVisible = false;
+#if ANDROID
+					UpdateLabelAccessibilityImportance(_errorLabel, false);
+#endif
+				}
+			}
+			
+		}
+
+		/// <summary>
+		/// Applies the label style to a label control.
+		/// </summary>
+		void ApplyLabelStyle(Label label, LabelStyle style)
+		{
+			if (label == null || style == null)
+				return;
+
+			label.FontSize = style.FontSize;
+			label.FontFamily = style.FontFamily;
+			label.FontAttributes = style.FontAttributes;
+			label.TextColor = style.TextColor;
+			label.FontAutoScalingEnabled = style.FontAutoScalingEnabled;
+
+		}
+
+		/// <summary>
+		/// Disposes and removes the assistive labels (helper and error labels) from the control
+		/// </summary>
+		void DisposeAssistiveLabels()
+		{
+			if (_helperLabel != null && Children.Contains(_helperLabel))
+				Children.Remove(_helperLabel);
+			if (_errorLabel != null && Children.Contains(_errorLabel))
+				Children.Remove(_errorLabel);
+
+			_helperLabel = null;
+			_errorLabel = null;
 		}
 
 		/// <summary>

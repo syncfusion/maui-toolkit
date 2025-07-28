@@ -2394,6 +2394,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			if (bindable is SfTextInputLayout inputLayout && inputLayout._initialLoaded)
 			{
 				inputLayout.UpdateViewBounds();
+				// Update assistive labels when relevant properties change
+				inputLayout.UpdateAssistiveLabels();
 				inputLayout.ResetSemantics();
 			}
 		}

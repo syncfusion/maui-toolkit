@@ -14,6 +14,7 @@ using Syncfusion.Maui.Toolkit.NumericEntry;
 using Syncfusion.Maui.Toolkit.EntryRenderer;
 using Syncfusion.Maui.Toolkit.EntryView;
 using Syncfusion.Maui.Toolkit.NumericUpDown;
+using System.Runtime.CompilerServices;
 
 namespace Syncfusion.Maui.Toolkit.TextInputLayout
 {
@@ -309,7 +310,17 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// </summary>
 		static readonly Color ClearIconStrokeColor = Color.FromArgb("#49454F");
 
-        readonly EffectsRenderer _effectsRenderer;
+		/// <summary>
+		/// Label control for displaying helper text
+		/// </summary>
+		Label? _helperLabel;
+
+		/// <summary>
+		/// Label control for displaying error text
+		/// </summary>
+		Label? _errorLabel;
+
+		readonly EffectsRenderer _effectsRenderer;
 
         readonly PathBuilder _pathBuilder = new();
 
@@ -375,8 +386,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
          /// </summary>
          UIKit.UITextField? uiEntry;
 #endif
-
-		private string _initialContentDescription = string.Empty;
 
 		#endregion
 
@@ -789,6 +798,34 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 		#region Override Methods
 
+#if IOS
+        /// <summary>
+        /// Handles property changes and updates child element flow directions appropriately, especially for right-to-left layouts.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that changed.</param>
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            base.OnPropertyChanged(propertyName);
+            if (Content == null || string.IsNullOrEmpty(propertyName))
+                return;
+ 
+            if (propertyName == nameof(FlowDirection))
+            {
+                var flowDirection = IsRTL ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
+                Content.FlowDirection = flowDirection;
+                if (_helperLabel != null)
+                {
+                    _helperLabel.FlowDirection = flowDirection;;
+                }
+                if (_errorLabel != null)
+                {
+                    _errorLabel.FlowDirection = flowDirection;
+                }
+            }
+        }
+ 
+#endif
+
 		/// <summary>
 		/// Returns the semantics node list.
 		/// </summary>
@@ -854,7 +891,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			if (newValue is InputView entryEditorContent)
             {
 				entryEditorContent.Opacity = IsHintFloated ? 1 : minOpacity;
-				_initialContentDescription = SemanticProperties.GetDescription(entryEditorContent);
 			}
             else if (newValue is SfView numericEntryContent && numericEntryContent.Children.Count > 0)
             {
@@ -877,6 +913,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 OnEnabledPropertyChanged(IsEnabled);
             }
+			InitializeAssistiveLabels();
 			SetCustomDescription(newValue);
 			ResetSemantics();
         }
@@ -900,7 +937,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 			var layoutDescription = GetLayoutDescription();
 			
-			var contentDescription = layoutDescription + (IsHintFloated ? customDescription + _initialContentDescription : string.Empty);
+			var contentDescription = layoutDescription + (IsHintFloated ? customDescription : string.Empty);
 
 			SemanticProperties.SetDescription(this.Content, contentDescription);
 #elif WINDOWS
@@ -1250,7 +1287,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             DrawClearIcon(canvas, _clearIconRectF);
             DrawUpDownIcon(canvas, dirtyRect);
             DrawAssistiveText(canvas, dirtyRect);
-            DrawPasswordToggleIcon(canvas, dirtyRect);
+			UpdateAssistiveLabels();
+			DrawPasswordToggleIcon(canvas, dirtyRect);
             if (_effectsRenderer != null)
             {
                 _effectsRenderer.ControlWidth = Width;
@@ -1377,7 +1415,10 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 WireEvents();
                 OnTextInputViewHandlerChanged(this.Content, new EventArgs());
-            }
+#if ANDROID
+				ConfigureAccessibilityForAssistiveLabels();
+#endif
+			}
 			else
 			{
 				if (HintLabelStyle != null && HelperLabelStyle != null && ErrorLabelStyle != null)
