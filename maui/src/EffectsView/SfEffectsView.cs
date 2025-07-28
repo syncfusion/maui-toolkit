@@ -58,6 +58,16 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 
 		bool _canRepeat;
 
+#if WINDOWS
+		// Flag to track if touch is currently pressed
+		bool _isTouchDown;
+
+		// Timer for custom long press detection
+		System.Timers.Timer? _longPressTimer;
+
+		// Default long press duration in milliseconds
+		const int _longPressDuration = 500;
+#endif
 		double _tempScaleFactor;
 
 		readonly string _rotationAnimation = "Rotation";
@@ -400,6 +410,9 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 		{
 			ThemeElement.InitializeThemeResources(this, "SfEffectsViewTheme");
 			InitializeEffects();
+#if WINDOWS
+			InitializeLongPressTimer();
+#endif
 			this.AddGestureListener(this);
 			this.AddTouchListener(this);
 		}
@@ -1719,6 +1732,67 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 			}
 		}
 
+#if WINDOWS
+		/// <summary>
+		/// Initialize the long press timer.
+		/// </summary>
+		void InitializeLongPressTimer()
+		{
+			// Create and configure a timer with a simple timer implementation
+			_longPressTimer = new System.Timers.Timer(_longPressDuration);
+			_longPressTimer.AutoReset = false;
+			_longPressTimer.Elapsed += OnLongPressTimerElapsed;
+		}
+
+		/// <summary>
+		/// Start the long press timer.
+		/// </summary>
+		/// <param name="touchPoint">The point where the touch started.</param>
+		void StartLongPressTimer(Point touchPoint)
+		{
+			// Store touch point and reset state
+			_touchDownPoint = touchPoint;
+			LongPressHandled = false;
+
+			// Start the timer - ensure it's stopped first
+			if (_longPressTimer != null)
+			{
+				_longPressTimer.Stop();
+				_longPressTimer.Start();
+			}
+		}
+
+		/// <summary>
+		/// Stop the long press timer.
+		/// </summary>
+		void StopLongPressTimer()
+		{
+			_longPressTimer?.Stop();
+		}
+
+		/// <summary>
+		/// Callback for the long press timer elapsed event.
+		/// </summary>
+		/// <param name="sender">The sender object.</param>
+		/// <param name="e">The event args.</param>
+		void OnLongPressTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+		{
+			// We need to dispatch back to the UI thread since timer callbacks occur on a background thread
+			Application.Current?.Dispatcher.Dispatch(() =>
+			{
+				// Check if touch is still active and not already handled
+				if (_isTouchDown && !LongPressHandled)
+				{
+					var args = new LongPressEventArgs(_touchDownPoint);
+					// Trigger the long press method
+					OnLongPress(args);
+					// Set handled flag to prevent multiple triggers
+					LongPressHandled = true;
+				}
+			});
+		}
+#endif
+
 		#endregion
 
 		#region Override methods
@@ -1893,6 +1967,9 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 				{
 					_touchDownPoint = e.TouchPoint;
 					LongPressHandled = false;
+#if WINDOWS
+					_isTouchDown = true;
+#endif
 
 					if (_rippleEffectLayer != null)
 					{
@@ -1909,10 +1986,19 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 					{
 						AddEffects(TouchDownEffects, e.TouchPoint);
 					}
+#if WINDOWS
+					// Start the long press timer
+					StartLongPressTimer(e.TouchPoint);
+#endif
 				}
 
 				if (e.Action == PointerActions.Released)
 				{
+#if WINDOWS
+					// Stop the long press timer
+					StopLongPressTimer();
+					_isTouchDown = false;
+#endif
 					_elementBounds.X = 0;
 					_elementBounds.Y = 0;
 					_elementBounds.Height = (float)Height;
@@ -1975,6 +2061,11 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 				}
 				else if (e.Action == PointerActions.Cancelled)
 				{
+#if WINDOWS
+					// Stop the timer and reset state
+					StopLongPressTimer();
+					_isTouchDown = false;
+#endif
 					LongPressHandled = false;
 					RemoveRippleEffect();
 					RemoveHighlightEffect();
@@ -1987,6 +2078,10 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 
 					if (diffX >= 20 || diffY >= 20)
 					{
+#if WINDOWS
+						// Cancel the long press timer since the finger has moved too much
+						StopLongPressTimer();
+#endif
 						RemoveRippleEffect();
 						RemoveHighlightEffect();
 					}
