@@ -2171,11 +2171,6 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				_bottomSheet.AbortAnimation("bottomSheetAnimation");
 			}
 
-			if (_overlayGrid.AnimationIsRunning("overlayGridAnimation"))
-			{
-				_overlayGrid.AbortAnimation("overlayGridAnimation");
-			}
-
 			int animationDuration = this.GetClampedAnimationDuration();
 		    const int topPadding = 2;
 			_isSheetOpen = true;
