@@ -1,0 +1,75 @@
+name: Triage Issues and PRs
+
+on:
+  issues:
+    types: [opened, edited]
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Assign Labels
+      if: github.event.issue
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const issue = context.issue;
+          const labels = [];
+          if (issue.title.includes('bug')) {
+            labels.push('bug');
+          } else if (issue.title.includes('feature')) {
+            labels.push('enhancement');
+          } else {
+            labels.push('needs-triage');
+          }
+          github.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issue.number,
+            labels: labels
+          });
+
+    - name: Assign Issues
+      if: github.event.issue
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const issue = context.issue;
+          const assignees = [];
+          if (issue.title.includes('bug')) {
+            assignees.push('bug-fixer');
+          } else if (issue.title.includes('feature')) {
+            assignees.push('feature-dev');
+          }
+          github.issues.addAssignees({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issue.number,
+            assignees: assignees
+          });
+
+    - name: Add Comment
+      if: github.event.issue
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const issue = context.issue;
+          const comment = `Thank you for your ${issue.title.includes('bug') ? 'bug report' : 'feature request'}! We will review it soon.`;
+          github.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: issue.number,
+            body: comment
+          });
+
+    - name: Close Stale Issues
+      uses: actions/stale@v4
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.'
+        stale-pr-message: 'This pull request has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.'
+        days-before-stale: 30
+        days-before-close: 7
