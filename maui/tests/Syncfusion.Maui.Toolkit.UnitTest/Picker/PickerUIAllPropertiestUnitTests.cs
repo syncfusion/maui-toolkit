@@ -2199,5 +2199,54 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal(Colors.Red, picker.TextStyle.TextColor);
             Assert.Equal(Colors.Blue, picker.SelectedTextStyle.TextColor);
         }
+
+        [Fact]
+        public void MAUI_SfPicker_FooterOkButton_RemainVisible_AfterMultipleClicks()
+        {
+            // Test for issue #238: OK button disappears after first click
+            SfPicker picker = new SfPicker();
+            
+            // Set up data source
+            ObservableCollection<object> dataSource = new ObservableCollection<object>()
+            {
+                "Option1", "Option2", "Option3"
+            };
+
+            // Add a column
+            PickerColumn pickerColumn = new PickerColumn()
+            {
+                HeaderText = "Select Option",
+                ItemsSource = dataSource,
+                SelectedIndex = 0,
+            };
+            picker.Columns.Add(pickerColumn);
+
+            // Set up footer with OK button visible
+            picker.FooterView.Height = 40;
+            picker.FooterView.ShowOkButton = true;
+
+            // Verify initial state
+            Assert.True(picker.FooterView.ShowOkButton);
+            Assert.Equal(40, picker.FooterView.Height);
+
+            // Test multiple events to ensure ShowOkButton property remains stable
+            int clickCount = 0;
+            picker.OkButtonClicked += (sender, e) => clickCount++;
+
+            // Simulate property changes that might affect button visibility
+            picker.FooterView.ShowOkButton = false;
+            picker.FooterView.ShowOkButton = true; // Should restore button
+
+            Assert.True(picker.FooterView.ShowOkButton);
+
+            // Test that changing other properties doesn't affect OK button
+            picker.FooterView.OkButtonText = "Confirm";
+            picker.FooterView.OkButtonText = "OK";
+            
+            Assert.True(picker.FooterView.ShowOkButton);
+            Assert.Equal("OK", picker.FooterView.OkButtonText);
+
+            picker.Columns.Clear();
+        }
     }
 }

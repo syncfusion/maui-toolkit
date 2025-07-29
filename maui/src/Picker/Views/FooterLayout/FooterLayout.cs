@@ -181,8 +181,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void AddConfirmButton()
         {
-            if (_confirmButtonView != null)
+            if (_confirmButtonView != null && _confirmButton != null)
             {
+                // If button exists but is not in Children collection, add it back
+                if (!Children.Contains(_confirmButton))
+                {
+                    Children.Add(_confirmButton);
+                }
                 return;
             }
 
@@ -207,8 +212,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void AddCancelButton()
         {
-            if (_cancelButtonView != null)
+            if (_cancelButtonView != null && _cancelButton != null)
             {
+                // If button exists but is not in Children collection, add it back
+                if (!Children.Contains(_cancelButton))
+                {
+                    Children.Add(_cancelButton);
+                }
                 return;
             }
 
