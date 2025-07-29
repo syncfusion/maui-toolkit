@@ -15,20 +15,9 @@ jobs:
       uses: actions/github-script@v6
       with:
         script: |
-          let issue_number;
-          let title = '';
-          let body = '';
-          if (context.payload.issue) {
-            issue_number = context.payload.issue.number;
-            title = context.payload.issue.title.toLowerCase();
-            body = context.payload.issue.body ? context.payload.issue.body.toLowerCase() : '';
-          } else if (context.payload.pull_request) {
-            issue_number = context.payload.pull_request.number;
-            title = context.payload.pull_request.title.toLowerCase();
-            body = context.payload.pull_request.body ? context.payload.pull_request.body.toLowerCase() : '';
-          } else {
-            throw new Error('No issue or pull request found in context.');
-          }
+          let issue_number = context.payload.issue?.number || context.payload.pull_request?.number;
+          let title = context.payload.issue?.title?.toLowerCase() || context.payload.pull_request?.title?.toLowerCase() || '';
+          let body = context.payload.issue?.body?.toLowerCase() || context.payload.pull_request?.body?.toLowerCase() || '';
 
           const labels = [];
           if (title.includes('bug') || body.includes('bug') || title.includes('error') || body.includes('error') || title.includes('problem') || body.includes('problem')) {
@@ -43,12 +32,14 @@ jobs:
             labels.push('needs-triage');
           }
 
-          await github.issues.addLabels({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number,
-            labels,
-          });
+          if (issue_number) {
+            await github.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number,
+              labels,
+            });
+          }
 
     - name: Assign to PaulAndersonS (Issues only)
       if: github.event.issue != null
