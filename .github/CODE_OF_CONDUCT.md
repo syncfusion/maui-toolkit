@@ -63,7 +63,7 @@ All violations must be reported to: **legal@syncfusion.com**
 
 ## 4. Open Source Contribution Ethics – MAUI Toolkit
 
-Syncfusion maintains high ethical and community standards for its open-source projects. Contributors and users of the Syncfusion .NET MAUI Toolkit are expected to adhere to its [Code of Conduct](https://github.com/syncfusion/maui-toolkit harassment-free collaboration environment.
+Syncfusion maintains high ethical and community standards for its open-source projects. Contributors and users of the Syncfusion .NET MAUI Toolkit are expected to adhere to its [Code of Conduct](https://github.com/syncfusion/maui-toolkit) harassment-free collaboration environment.
 
 Anyone participating in the open-source community representing Syncfusion should:
 - Follow the same integrity and professionalism expected of internal employees.
