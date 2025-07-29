@@ -11,65 +11,131 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Assign Labels
-      if: github.event.issue
+    - name: Assign Labels to Issue
+      if: github.event.issue != null
       uses: actions/github-script@v6
       with:
         script: |
-          const issue = context.issue;
+          const title = context.payload.issue.title.toLowerCase();
+          const body = context.payload.issue.body ? context.payload.issue.body.toLowerCase() : '';
           const labels = [];
-          if (issue.title.includes('bug')) {
+          if (title.includes('bug') || body.includes('bug') || title.includes('error') || body.includes('error') || title.includes('problem') || body.includes('problem')) {
             labels.push('bug');
-          } else if (issue.title.includes('feature')) {
+          } else if (title.includes('feature') || body.includes('feature') || title.includes('request') || body.includes('request') || title.includes('suggestion') || body.includes('suggestion') || title.includes('improvement') || body.includes('improvement')) {
             labels.push('enhancement');
+          } else if (title.includes('docs') || body.includes('docs') || title.includes('documentation') || body.includes('documentation')) {
+            labels.push('documentation');
+          } else if (title.includes('question') || body.includes('question')) {
+            labels.push('question');
           } else {
             labels.push('needs-triage');
           }
           github.issues.addLabels({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: issue.number,
+            issue_number: context.payload.issue.number,
             labels: labels
           });
 
-    - name: Assign Issues
-      if: github.event.issue
+    - name: Assign Issue to Maintainer
+      if: github.event.issue != null
       uses: actions/github-script@v6
       with:
         script: |
-          const issue = context.issue;
+          const title = context.payload.issue.title.toLowerCase();
           const assignees = [];
-          if (issue.title.includes('bug')) {
+          // Replace these usernames with your repo's contributors or teams
+          if (title.includes('bug')) {
             assignees.push('bug-fixer');
-          } else if (issue.title.includes('feature')) {
+          } else if (title.includes('feature')) {
             assignees.push('feature-dev');
+          } else if (title.includes('docs') || title.includes('documentation')) {
+            assignees.push('docs-maintainer');
           }
-          github.issues.addAssignees({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            issue_number: issue.number,
-            assignees: assignees
-          });
+          if (assignees.length > 0) {
+            github.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              assignees: assignees
+            });
+          }
 
-    - name: Add Comment
-      if: github.event.issue
+    - name: Add Thank You Comment on Issue
+      if: github.event.issue != null
       uses: actions/github-script@v6
       with:
         script: |
-          const issue = context.issue;
-          const comment = `Thank you for your ${issue.title.includes('bug') ? 'bug report' : 'feature request'}! We will review it soon.`;
+          const title = context.payload.issue.title.toLowerCase();
+          let type = 'issue';
+          if (title.includes('bug')) {
+            type = 'bug report';
+          } else if (title.includes('feature')) {
+            type = 'feature request';
+          } else if (title.includes('docs') || title.includes('documentation')) {
+            type = 'documentation update';
+          } else if (title.includes('question')) {
+            type = 'question';
+          }
+          const comment = `Thank you for your ${type}! We will review it soon.`;
           github.issues.createComment({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            issue_number: issue.number,
+            issue_number: context.payload.issue.number,
             body: comment
           });
 
-    - name: Close Stale Issues
+    - name: Assign Labels to PR
+      if: github.event.pull_request != null
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const title = context.payload.pull_request.title.toLowerCase();
+          const body = context.payload.pull_request.body ? context.payload.pull_request.body.toLowerCase() : '';
+          const labels = [];
+          if (title.includes('bugfix') || body.includes('bugfix') || title.includes('fix') || body.includes('fix')) {
+            labels.push('bug');
+          } else if (title.includes('feature') || body.includes('feature') || title.includes('enhancement') || body.includes('enhancement')) {
+            labels.push('enhancement');
+          } else if (title.includes('docs') || body.includes('docs') || title.includes('documentation') || body.includes('documentation')) {
+            labels.push('documentation');
+          } else {
+            labels.push('needs-triage');
+          }
+          github.issues.addLabels({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            labels: labels
+          });
+
+    - name: Add Thank You Comment on PR
+      if: github.event.pull_request != null
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const title = context.payload.pull_request.title.toLowerCase();
+          let type = 'pull request';
+          if (title.includes('bugfix') || title.includes('fix')) {
+            type = 'bug fix PR';
+          } else if (title.includes('feature')) {
+            type = 'feature PR';
+          } else if (title.includes('docs') || title.includes('documentation')) {
+            type = 'documentation PR';
+          }
+          const comment = `Thank you for your ${type}! We will review it soon.`;
+          github.issues.createComment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            issue_number: context.payload.pull_request.number,
+            body: comment
+          });
+
+    - name: Close Stale Issues and PRs
       uses: actions/stale@v4
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         stale-issue-message: 'This issue has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.'
         stale-pr-message: 'This pull request has been automatically marked as stale because it has not had recent activity. It will be closed if no further activity occurs.'
-        days-before-stale: 30
-        days-before-close: 7
+        days-before-stale: 60
+        days-before-close: 14
