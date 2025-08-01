@@ -67,8 +67,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             DrawingOrder = DrawingOrder.AboveContent;
             _footerViewInfo = footerViewInfo;
-            AddOrRemoveFooterButtons();
+            //// Create a template view by checking the template property else default view is created.
+            if (_footerViewInfo.FooterTemplate != null)
+            {
+                InitializeTemplateView();
+            }
+            else
+            {
+                AddOrRemoveFooterButtons();
+            }
+
             ThemeElement.InitializeThemeResources(this, "SfPickerTheme");
+#if IOS
+            IgnoreSafeArea = true;
+#endif
         }
 
         #endregion
@@ -80,6 +92,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void AddOrRemoveFooterButtons()
         {
+            //// Need to prevent the add confirm or cancel button view in footerlayout once template is not null.
+            if (_footerViewInfo.FooterTemplate != null)
+            {
+                return;
+            }
+
             if (_footerViewInfo.FooterView.ShowOkButton)
             {
                 AddConfirmButton();
@@ -106,14 +124,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void UpdateButtonTextStyle()
         {
-            if (_cancelButtonView != null)
+            if (_cancelButtonView != null && _footerViewInfo.FooterTemplate == null)
             {
                 _cancelButtonView.UpdateStyle(_footerViewInfo.FooterView.TextStyle);
                 _cancelButtonView.HighlightTextColor = _footerViewInfo.FooterView.TextStyle.TextColor;
                 _cancelButtonView.TextStyle.FontAutoScalingEnabled = _footerViewInfo.FooterView.TextStyle.FontAutoScalingEnabled;
             }
 
-            if (_confirmButtonView != null)
+            if (_confirmButtonView != null && _footerViewInfo.FooterTemplate == null)
             {
                 _confirmButtonView.UpdateStyle(_footerViewInfo.FooterView.TextStyle);
                 _confirmButtonView.HighlightTextColor = _footerViewInfo.FooterView.TextStyle.TextColor;
@@ -134,7 +152,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void UpdateConfirmButtonText()
         {
-            if (_confirmButtonView == null)
+            if (_confirmButtonView == null || _footerViewInfo.FooterTemplate != null)
             {
                 return;
             }
@@ -150,7 +168,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void UpdateCancelButtonText()
         {
-            if (_cancelButtonView == null)
+            if (_cancelButtonView == null || _footerViewInfo.FooterTemplate != null)
             {
                 return;
             }
@@ -172,6 +190,51 @@ namespace Syncfusion.Maui.Toolkit.Picker
             UpdateButtonTextStyle();
         }
 
+        /// <summary>
+        /// Method to create a template view.
+        /// </summary>
+        internal void InitializeTemplateView()
+        {
+            View? footerTemplateView = null;
+            if (_footerViewInfo.FooterTemplate == null)
+            {
+                return;
+            }
+
+            //// Clear the previous data in footerlayout.
+            if (Children.Count > 0)
+            {
+                for (int i = Children.Count - 1; i >= 0; i--)
+                {
+                    Children.RemoveAt(i);
+                }
+            }
+
+            DataTemplate footerTemplate = _footerViewInfo.FooterTemplate;
+
+            switch (_footerViewInfo)
+            {
+                case SfDatePicker datepicker:
+                    footerTemplateView = PickerHelper.CreateLayoutTemplateViews(footerTemplate, _footerViewInfo.FooterView, datepicker);
+                    break;
+                case SfDateTimePicker:
+                    SfDateTimePicker datetimepicker = (SfDateTimePicker)_footerViewInfo;
+                    footerTemplateView = PickerHelper.CreateLayoutTemplateViews(footerTemplate, _footerViewInfo.FooterView, datetimepicker);
+                    break;
+                case SfPicker picker:
+                    footerTemplateView = PickerHelper.CreateLayoutTemplateViews(footerTemplate, _footerViewInfo.FooterView, picker);
+                    break;
+                case SfTimePicker timepicker:
+                    footerTemplateView = PickerHelper.CreateLayoutTemplateViews(footerTemplate, _footerViewInfo.FooterView, timepicker);
+                    break;
+            }
+
+            if (footerTemplateView != null && Children.Count == 0)
+            {
+                Children.Add(footerTemplateView);
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -181,7 +244,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void AddConfirmButton()
         {
-            if (_confirmButtonView != null)
+            if (_confirmButtonView != null || _footerViewInfo.FooterTemplate != null)
             {
                 return;
             }
@@ -207,7 +270,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void AddCancelButton()
         {
-            if (_cancelButtonView != null)
+            if (_cancelButtonView != null || _footerViewInfo.FooterTemplate != null)
             {
                 return;
             }
@@ -233,7 +296,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void RemoveConfirmButton()
         {
-            if (_confirmButton == null)
+            if (_confirmButton == null || _footerViewInfo.FooterTemplate != null)
             {
                 return;
             }
@@ -269,7 +332,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void RemoveCancelButton()
         {
-            if (_cancelButton == null)
+            if (_cancelButton == null || _footerViewInfo.FooterTemplate != null)
             {
                 return;
             }
@@ -371,6 +434,17 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <returns>The layout size.</returns>
         protected override Size ArrangeContent(Rect bounds)
         {
+            //// Arrange the template for the entire footer layout and return the size.
+            if (_footerViewInfo.FooterTemplate != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.Arrange(bounds);
+                }
+
+                return bounds.Size;
+            }
+
             //// It holds the size of the confirm button text size.
             Size confirmButtonTextSize = Size.Zero;
             //// It holds the size of the cancel button text size.
@@ -460,6 +534,17 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             double width = double.IsFinite(widthConstraint) ? widthConstraint : 0;
             double height = double.IsFinite(heightConstraint) ? heightConstraint : 0;
+            //// Return the full width and height when the template has a value.
+            if (_footerViewInfo.FooterTemplate != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.Measure(width, height);
+                }
+
+                return new Size(width, height);
+            }
+
             Size confirmButtonTextSize = Size.Zero;
             Size cancelButtonTextSize = Size.Zero;
             if (_footerViewInfo.FooterView.ShowOkButton && _confirmButtonView != null)

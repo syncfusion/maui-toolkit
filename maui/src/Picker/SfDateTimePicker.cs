@@ -2647,7 +2647,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnDayIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDateTimePicker? picker = bindable as SfDateTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -2677,7 +2677,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnMonthIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDateTimePicker? picker = bindable as SfDateTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -2707,7 +2707,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnYearIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDateTimePicker? picker = bindable as SfDateTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -2736,7 +2736,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnHourIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDateTimePicker? picker = bindable as SfDateTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -2765,7 +2765,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnMinuteIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDateTimePicker? picker = bindable as SfDateTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -2798,7 +2798,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnSecondIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDateTimePicker? picker = bindable as SfDateTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }

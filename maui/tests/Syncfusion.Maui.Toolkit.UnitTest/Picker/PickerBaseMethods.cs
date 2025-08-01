@@ -111,6 +111,52 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         }
 
         [Fact]
+        public void TestAddOrRemoveHeaderLayout_WhenPickerHeaderTemplate()
+        {
+            var picker = new SfPicker();
+            picker.HeaderView.Height = 40;
+
+            Label expectedValue = new Label { Text = "Header Content" };
+            picker.HeaderTemplate = new DataTemplate(() =>
+            {
+                return expectedValue;
+            });
+            ;
+
+            SetPrivateField(picker, "_headerLayout", null);
+
+            ObservableCollection<object> cityName = new ObservableCollection<object>();
+            cityName.Add("Chennai");
+            cityName.Add("Mumbai");
+            cityName.Add("Delhi");
+            cityName.Add("Kolkata");
+            PickerColumn pickerColumn = new PickerColumn()
+            {
+                HeaderText = "Select City",
+                ItemsSource = cityName,
+                SelectedIndex = 1,
+            };
+            picker.Columns.Add(pickerColumn);
+
+            InvokePrivateMethod(picker, "AddOrRemoveHeaderLayout");
+
+            PickerBase pickerBase = (PickerBase)picker;
+
+            var layout = GetPrivateField(pickerBase, "_headerLayout");
+            HeaderLayout headerLayout = new HeaderLayout(pickerBase);
+
+            if (layout != null)
+            {
+                headerLayout = (HeaderLayout)layout;
+            }
+            Label actualValue = (Label)headerLayout.Children[0];
+
+            Assert.NotNull(picker.HeaderTemplate);
+            Assert.Equal(expectedValue, actualValue);
+            picker.Columns.Clear();
+        }
+
+        [Fact]
         public void TestAddOrRemoveFooterLayout_WhenAdd()
         {
             var pickerBase = new SfPicker();
@@ -132,6 +178,56 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             InvokePrivateMethod(pickerBase, "AddOrRemoveFooterLayout");
             var pickerStackLayout = (PickerStackLayout)pickerBase.Children[0];
             Assert.Null(pickerStackLayout.Children.FirstOrDefault(c => c is FooterLayout));
+        }
+
+        [Fact]
+        public void TestAddOrRemoveFooterLayout_WhenPickerFooterTemplate()
+        {
+            var picker = new SfPicker();
+            picker.FooterView.Height = 40;
+
+            Label expectedValue = new Label { Text = "Footer Content" };
+            picker.FooterTemplate = new DataTemplate(() =>
+            {
+                return expectedValue;
+            });
+
+            SetPrivateField(picker, "_footerLayout", null);
+
+            ObservableCollection<object> cityName = new ObservableCollection<object>();
+            cityName.Add("Chennai");
+            cityName.Add("Mumbai");
+            cityName.Add("Delhi");
+            cityName.Add("Kolkata");
+            cityName.Add("Bangalore");
+            cityName.Add("Hyderabad");
+            cityName.Add("Pune");
+            PickerColumn pickerColumn = new PickerColumn()
+            {
+                HeaderText = "Select City",
+                ItemsSource = cityName,
+                SelectedIndex = 1,
+            };
+            picker.Columns.Add(pickerColumn);
+
+            InvokePrivateMethod(picker, "AddOrRemoveFooterLayout");
+
+            PickerBase pickerBase = (PickerBase)picker;
+
+            var layout = GetPrivateField(pickerBase, "_footerLayout");
+            FooterLayout footerLayout = new FooterLayout(pickerBase);
+
+            if (layout != null)
+            {
+                footerLayout = (FooterLayout)layout;
+            }
+            Label actualValue = (Label)footerLayout.Children[0];
+
+            Assert.NotNull(pickerBase.FooterTemplate);
+            Assert.Equal(expectedValue, actualValue);
+
+            Assert.Equal(pickerColumn.SelectedIndex, picker.Columns[0].SelectedIndex);
+            picker.Columns.Clear();
         }
 
         [Theory]

@@ -29,6 +29,9 @@
             //// Due to this inconsistent behavior in windows, set flow direction to LTR for the inner layout of the calendar, so we manually arrange and draw child elements for all the platforms as common.
             //// In the Windows platform, the draw view does not arrange based on the flow direction. https://github.com/dotnet/maui/issues/6978
             FlowDirection = FlowDirection.LeftToRight;
+#if IOS
+            IgnoreSafeArea = true;
+#endif
         }
 
         #endregion
@@ -78,15 +81,32 @@
             double height = double.IsFinite(heightConstraint) ? heightConstraint : 300;
             double headerHeight = GetValidHeight(_pickerInfo.HeaderView.Height);
             double footerHeight = GetValidHeight(_pickerInfo.FooterView.Height);
+            double columnHeaderHeight = 0;
+            if (_pickerInfo.ColumnHeaderTemplate != null)
+            {
+                columnHeaderHeight = GetValidHeight(_pickerInfo.ColumnHeaderView.Height);
+            }
+
             foreach (var child in Children)
             {
                 if (child is HeaderLayout)
                 {
                     child.Measure(width, headerHeight);
                 }
+                else if (child is ColumnHeaderLayout)
+                {
+                    child.Measure(width, columnHeaderHeight);
+                }
                 else if (child is PickerContainer)
                 {
-                    child.Measure(width, height - footerHeight - headerHeight);
+                    if (_pickerInfo.ColumnHeaderTemplate != null)
+                    {
+                        child.Measure(width, height - footerHeight - columnHeaderHeight - headerHeight);
+                    }
+                    else
+                    {
+                        child.Measure(width, height - footerHeight - headerHeight);
+                    }
                 }
                 else if (child is FooterLayout)
                 {
@@ -108,15 +128,32 @@
             double topPosition = bounds.Top;
             double headerHeight = GetValidHeight(_pickerInfo.HeaderView.Height);
             double footerHeight = GetValidHeight(_pickerInfo.FooterView.Height);
+            double columnHeaderHeight = 0;
+            if (_pickerInfo.ColumnHeaderTemplate != null)
+            {
+                columnHeaderHeight = GetValidHeight(_pickerInfo.ColumnHeaderView.Height);
+            }
+
             foreach (var child in Children)
             {
                 if (child is HeaderLayout)
                 {
                     child.Arrange(new Rect(bounds.Left, topPosition, width, headerHeight));
                 }
+                else if (child is ColumnHeaderLayout)
+                {
+                    child.Arrange(new Rect(bounds.Left, topPosition + headerHeight, width, columnHeaderHeight));
+                }
                 else if (child is PickerContainer)
                 {
-                    child.Arrange(new Rect(bounds.Left, topPosition + headerHeight, width, bounds.Height - headerHeight - footerHeight));
+                    if (_pickerInfo.ColumnHeaderTemplate != null)
+                    {
+                        child.Arrange(new Rect(bounds.Left, topPosition + headerHeight + columnHeaderHeight, width, bounds.Height - headerHeight - columnHeaderHeight - footerHeight));
+                    }
+                    else
+                    {
+                        child.Arrange(new Rect(bounds.Left, topPosition + headerHeight, width, bounds.Height - headerHeight - footerHeight));
+                    }
                 }
                 else if (child is FooterLayout)
                 {

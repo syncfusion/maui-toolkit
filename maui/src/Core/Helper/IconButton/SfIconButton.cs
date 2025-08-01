@@ -39,14 +39,14 @@ namespace Syncfusion.Maui.Toolkit
         readonly SfIconView? _iconView;
 
         /// <summary>
-        /// Used to identify the button need to hover while released the press.
-        /// </summary>
-        readonly bool _isHoveringOnReleased;
-
-        /// <summary>
         /// Holds the view which is used to clip.
         /// </summary>
         Grid clipView;
+
+        /// <summary>
+        /// Used to identify the button need to hover while released the press.
+        /// </summary>
+        readonly bool _isHoveringOnReleased;
 
 #if __MACCATALYST__ || (!__ANDROID__ && !__IOS__)
         /// <summary>
@@ -217,7 +217,7 @@ namespace Syncfusion.Maui.Toolkit
             EllipseGeometry? previousClip = null;
             if (clipView.Clip != null && clipView.Clip is EllipseGeometry)
             {
-                previousClip = (EllipseGeometry)clipView.Clip;
+                previousClip = (EllipseGeometry)EffectsView.Clip;
             }
 
             //// If the previous and current clip values are same, then no need to update the effects view clip.
@@ -288,11 +288,11 @@ namespace Syncfusion.Maui.Toolkit
         /// </summary>
         /// <param name="width">The width allocated to the element.</param>
         /// <param name="height">The height allocated to the element.</param>
-        protected override void OnSizeAllocated(double width, double height)
-        {
-            base.OnSizeAllocated(width, height);
+		protected override void OnSizeAllocated(double width, double height)
+		{
+			base.OnSizeAllocated(width, height);
 #if __MACCATALYST__ || (!__ANDROID__ && !__IOS__)
-            this.ApplyCornerClip();
+			this.ApplyCornerClip();
 #endif
         }
 

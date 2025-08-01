@@ -71,6 +71,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		double _angleDifference;
 		float _yValue;
 		double _centerHoleSize = 1;
+		float _gapRadius;
 
 		#endregion
 
@@ -107,6 +108,38 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			BindingMode.Default,
 			null,
 			OnCenterViewChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="GapRatio"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="GapRatio"/> property defines the space between segments
+		/// </remarks>
+		public static readonly BindableProperty GapRatioProperty = BindableProperty.Create(
+			nameof(GapRatio),
+			typeof(double),
+			typeof(DoughnutSeries),
+			0d,
+			BindingMode.Default,
+			null,
+			OnSpacingPropertyChanged,
+			null,
+			coerceValue: CoerceSpacing);
+
+		/// <summary>
+		/// Identifies the <see cref="CapStyle"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The <see cref="CapStyle"/> property represents the shape of the start and end points of a doughnut segment.
+		/// </remarks>
+		public static readonly BindableProperty CapStyleProperty = BindableProperty.Create(
+			nameof(CapStyle),
+			typeof(CapStyle),
+			typeof(DoughnutSeries),
+			CapStyle.BothFlat,
+			BindingMode.Default,
+			null,
+			OnCapStylePropertyChanged);
 
 		#endregion
 
@@ -223,6 +256,92 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		/// <summary>
+		/// Gets or sets a value to adjust spacing between segments
+		/// </summary>
+		/// <value>It accepts <c>double</c> values, and the default value is 0. Here, the value is between 0 and 1.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-8)
+		/// <code><![CDATA[
+		/// <chart:SfCircularChart>
+		///
+		///     <chart:DoughnutSeries ItemsSource = "{Binding Data}"
+		///                           XBindingPath = "XValue"
+		///                           YBindingPath = "YValue"
+		///                           GapRatio = "0.5"/>
+		///
+		/// </chart:SfCircularChart>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-9)
+		/// <code><![CDATA[
+		/// SfCircularChart chart = new SfCircularChart();
+		/// ViewModel viewModel = new ViewModel();
+		///
+		/// DoughnutSeries series = new DoughnutSeries()
+		/// {
+		///      ItemsSource = viewModel.Data,
+		///      XBindingPath = "XValue",
+		///      YBindingPath = "YValue",
+		///      GapRatio = 0.5,
+		/// };
+		///     
+		/// chart.Series.Add(series);
+		///
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public double GapRatio
+		{
+			get { return (double)GetValue(GapRatioProperty); }
+			set { SetValue(GapRatioProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the <see cref="CapStyle"/> value, that represents the shape of the start and end points of a doughnut segment.
+		/// </summary>
+		/// <value>It accepts <see cref="CapStyle"/> values, and its default value is <see cref="CapStyle.BothFlat"/></value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-10)
+		/// <code><![CDATA[
+		/// <chart:SfCircularChart>
+		///     
+		///     <chart:SfCircularChart.BindingContext>
+		///         <local:ViewModel/>
+		///     </chart:SfCircularChart.BindingContext>
+		///         
+		///     <chart:DoughnutSeries ItemsSource="{Binding Data}"
+		///                           XBindingPath="XValue"
+		///                           YBindingPath="YValue"
+		///                           CapStyle="BothCurve"/>  
+		///                           
+		/// </chart:SfCircularChart>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-11)
+		/// <code><![CDATA[
+		/// SfCircularChart chart = new SfCircularChart();
+		///     
+		/// ViewModel viewModel = new ViewModel();
+		/// chart.BindingContext = viewModel;
+		///     
+		/// DoughnutSeries series = new DoughnutSeries()
+		/// {
+		///     ItemsSource = viewModel.Data,
+		///     XBindingPath = "XValue",
+		///     YBindingPath = "YValue",
+		///     CapStyle = CapStyle.BothCurve
+		/// };
+		///     
+		/// chart.Series.Add(series);
+		///
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public CapStyle CapStyle
+		{
+			get { return (CapStyle)GetValue(CapStyleProperty); }
+			set { SetValue(CapStyleProperty, value); }
+		}
+
+		/// <summary>
 		/// Gets the size of the doughnut center hole.
 		/// </summary>
 		/// <value>Default value is 1.</value>
@@ -291,6 +410,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				_angleDifference = GetAngleDifference();
 				_total = CalculateTotalYValues();
 
+				var gapPercentage = VisibleSegmentCount == 1 ? 0 : GapRatio;
+				_gapRadius = (float)(gapPercentage * _total / (VisibleSegmentCount * 2));
+				_total += gapPercentage * _total;
+
+				float gapAngle = (float)((_gapRadius * _angleDifference) / _total);
+
 				var oldSegments = OldSegments != null && OldSegments.Count > 0 && PointsCount == OldSegments.Count ? OldSegments : null;
 				var legendItems = GetLegendItems();
 
@@ -298,6 +423,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					_yValue = (legendItems == null || legendItems.Count == 0) ? (float)Math.Abs(double.IsNaN(ActualYValues[i]) ? double.NaN : ActualYValues[i]) : (float)(legendItems[i].IsToggled ? double.NaN : ActualYValues[i]);
 					_doughnutEndAngle = (float)(Math.Abs(float.IsNaN(_yValue) ? 0 : _yValue) * (_angleDifference / _total));
+
+					if (!float.IsNaN(_yValue) && _yValue != 0)
+					{
+						_doughnutStartAngle += gapAngle;
+					}
 
 					if (i < _segments.Count && _segments[i] is DoughnutSegment segment1)
 					{
@@ -333,6 +463,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					if (_segments[i].IsVisible)
 					{
 						_doughnutStartAngle += _doughnutEndAngle;
+
+						if(!float.IsNaN(_yValue) && _yValue != 0)
+						{
+							_doughnutStartAngle += gapAngle;
+
+						}
 					}
 				}
 			}
@@ -407,10 +543,33 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		static void OnSpacingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is DoughnutSeries series)
+			{
+				series.SegmentsCreated = false;
+				series.ScheduleUpdateChart();
+			}
+		}
+
 		static object CoerceDoughnutCoefficient(BindableObject bindable, object value)
 		{
 			double coefficient = Convert.ToDouble(value);
 			return coefficient > 1 ? 1 : coefficient < 0 ? 0 : value;
+		}
+
+		static object CoerceSpacing(BindableObject bindable, object value)
+		{
+			return Math.Clamp(Convert.ToDouble(value), 0.0, 1.0);
+		}
+
+		static void OnCapStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is DoughnutSeries series)
+			{
+				series.SegmentsCreated = false;
+				series.ScheduleUpdateChart();
+			}
 		}
 
 		void AddCenterView()

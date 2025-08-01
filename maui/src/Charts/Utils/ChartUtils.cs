@@ -100,7 +100,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <returns></returns>
 		internal static IFontManager? GetFontManager(this IElementHandler? handler)
 		{
-			if (IPlatformApplication.Current != null)
+			if (IPlatformApplication.Current != null && IPlatformApplication.Current.Services != null)
 			{
 				return IPlatformApplication.Current.Services.GetRequiredService<IFontManager>();
 			}

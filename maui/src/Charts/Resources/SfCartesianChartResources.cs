@@ -1,92 +1,44 @@
 ﻿using Syncfusion.Maui.Toolkit.Localization;
+using System.Globalization;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
+
 	/// <summary>
-	/// Localization resource for <see cref="SfCartesianChart"/>.
+	/// Represents the localization resource accessor for the <see cref="SfCartesianChart"/> control.
+	/// This class is responsible for retrieving culture-specific localized strings based on the application's current UI culture settings.
 	/// </summary>
 	public class SfCartesianChartResources : LocalizationResourceAccessor
 	{
-		internal static string High
+		internal static CultureInfo CultureInfo => CultureInfo.CurrentUICulture;
+
+		private static string GetResourceString(string key, string defaultValue)
 		{
-			get
+			string? value = string.Empty;
+			if (ResourceManager != null)
 			{
-				var high = GetString("High");
-				return string.IsNullOrEmpty(high) ? "High" : high;
+				Culture = CultureInfo;
+				value = GetString(key);
 			}
+			return string.IsNullOrEmpty(value) ? defaultValue : value;
 		}
 
-		internal static string Low
-		{
-			get
-			{
-				var low = GetString("Low");
-				return string.IsNullOrEmpty(low) ? "Low" : low;
-			}
-		}
+		internal static string High => GetResourceString("High", "High");
 
-		internal static string Open
-		{
-			get
-			{
-				var open = GetString("Open");
-				return string.IsNullOrEmpty(open) ? "Open" : open;
-			}
-		}
+		internal static string Low => GetResourceString("Low", "Low");
 
-		internal static string Close
-		{
-			get
-			{
-				var close = GetString("Close");
-				return string.IsNullOrEmpty(close) ? "Close" : close;
-			}
-		}
+		internal static string Open => GetResourceString("Open", "Open");
 
-		internal static string Maximum
-		{
-			get
-			{
-				var maximum = GetString("Maximum");
-				return string.IsNullOrEmpty(maximum) ? "Maximum" : maximum;
-			}
-		}
+		internal static string Close => GetResourceString("Close", "Close");
 
-		internal static string Minimum
-		{
-			get
-			{
-				var minimum = GetString("Minimum");
-				return string.IsNullOrEmpty(minimum) ? "Minimum" : minimum;
-			}
-		}
+		internal static string Maximum => GetResourceString("Maximum", "Maximum");
 
-		internal static string Median
-		{
-			get
-			{
-				var median = GetString("Median");
-				return string.IsNullOrEmpty(median) ? "Median" : median;
-			}
-		}
+		internal static string Minimum => GetResourceString("Minimum", "Minimum");
 
-		internal static string Q3
-		{
-			get
-			{
-				var upperQuartile = GetString("Q3");
-				return string.IsNullOrEmpty(upperQuartile) ? "Q3" : upperQuartile;
-			}
-		}
+		internal static string Median => GetResourceString("Median", "Median");
 
-		internal static string Q1
-		{
-			get
-			{
-				var lowerQuartile = GetString("Q1");
-				return string.IsNullOrEmpty(lowerQuartile) ? "Q1" : lowerQuartile;
-			}
-		}
+		internal static string Q3 => GetResourceString("Q3", "Q3");
 
+		internal static string Q1 => GetResourceString("Q1", "Q1");
 	}
 }

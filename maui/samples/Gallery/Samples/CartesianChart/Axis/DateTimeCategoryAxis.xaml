@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.DateTimeCategoryAxis"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:DateTimeCategoryAxisViewModel">
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <local:CartesianChartColorResources/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+  
+  <localCore:SampleView.Content>
+    <chart:SfCartesianChart  x:Name="dateTimeChart" HorizontalOptions="Fill" VerticalOptions="Fill">
+     
+      <chart:SfCartesianChart.BindingContext>
+        <local:DateTimeCategoryAxisViewModel/>
+      </chart:SfCartesianChart.BindingContext>
+      
+      <chart:SfCartesianChart.Resources>
+        <local:TooltipValuesConverter x:Key="valueConverter"/>
+        <ResourceDictionary>
+          <DataTemplate x:Key="template">
+            <StackLayout>
+              <StackLayout x:DataType="chart:TooltipInfo" Orientation="Horizontal"  VerticalOptions="Fill" Spacing="0" Padding="0" Margin="0">
+                <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Date',StringFormat='{0:MMM-d}'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"  VerticalTextAlignment="Center" HorizontalOptions="Start"   FontAttributes="Bold"    FontSize="14" Margin="2,0,2,0" />
+                <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat=' :  {0}M'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" VerticalTextAlignment="Center" HorizontalOptions="End"  FontAttributes="Bold"   Margin="0,0,3,0" FontSize="14" />
+              </StackLayout>
+            </StackLayout>
+          </DataTemplate>
+        </ResourceDictionary>
+      </chart:SfCartesianChart.Resources>
+      <chart:SfCartesianChart.Title>
+        <Label Text="Sales revenue comparison" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
+      </chart:SfCartesianChart.Title>
+
+      <chart:SfCartesianChart.XAxes>
+        <chart:DateTimeCategoryAxis ShowMajorGridLines="False">
+          <chart:DateTimeCategoryAxis.Title>
+            <chart:ChartAxisTitle  Margin="5,10,5,2" Text="Months">
+            </chart:ChartAxisTitle>
+          </chart:DateTimeCategoryAxis.Title>
+          <chart:DateTimeCategoryAxis.LabelStyle>
+            <chart:ChartAxisLabelStyle LabelFormat="MMM-dd"/>
+          </chart:DateTimeCategoryAxis.LabelStyle>
+        </chart:DateTimeCategoryAxis>
+      </chart:SfCartesianChart.XAxes>
+
+      <chart:SfCartesianChart.YAxes>
+        <chart:NumericalAxis Maximum="100" Minimum="10" >
+          <chart:NumericalAxis.Title>
+            <chart:ChartAxisTitle Text="Sales rate in millions">
+            </chart:ChartAxisTitle>
+          </chart:NumericalAxis.Title>
+        </chart:NumericalAxis>
+      </chart:SfCartesianChart.YAxes>
+
+      <chart:ColumnSeries EnableAnimation="{Binding EnableAnimation}" TooltipTemplate="{StaticResource template}" PaletteBrushes="{Binding ChartColors}"
+                          ItemsSource="{Binding SalesRevenue}"  CornerRadius="5"
+                          XBindingPath="Date" EnableTooltip="True"
+                          YBindingPath="Value"/>
+
+    </chart:SfCartesianChart>
+  </localCore:SampleView.Content>
+</localCore:SampleView>

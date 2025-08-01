@@ -16,9 +16,11 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 
 		#region  Public Constructor
 
-		public ErrorBarChart()
-		{
-			InitializeComponent();
+        public ErrorBarChart()
+        {
+            InitializeComponent();
+			errorBar.HorizontalErrorValue = 1;
+			errorBar.VerticalErrorValue = 5;
 		}
 
 		#endregion
@@ -141,7 +143,20 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-
+	    private void stepper_ValueChanged(object sender, ValueChangedEventArgs e)
+		{
+			var stepper = (Stepper)sender;
+			var selectedValue = stepper.StyleId;
+			switch (selectedValue)
+			{
+				case "horStepper":
+					errorBar.HorizontalErrorValue = stepper.Value;
+					break;
+				case "verStepper":
+					errorBar.VerticalErrorValue = stepper.Value;
+					break;
+			}
+		}
 
 		#endregion
 

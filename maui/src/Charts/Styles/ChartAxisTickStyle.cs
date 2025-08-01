@@ -165,23 +165,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#endregion
 
-		#region Internal Methods
-
-		internal void InitializeDynamicResource(string tickStyle)
-		{
-			if (tickStyle == "MajorTickStyle")
-			{
-				SetDynamicResource(StrokeProperty, "SfCartesianChartMajorTickLineStroke");
-			}
-
-			if (tickStyle == "MinorTickStyle")
-			{
-				SetDynamicResource(StrokeProperty, "SfCartesianChartMinorTickLineStroke");
-			}
-		}
-
-		#endregion
-
 		#region Callback
 		static void OnTickSizeChanged(BindableObject bindable, object oldValue, object newValue)
 		{

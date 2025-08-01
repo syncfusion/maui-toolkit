@@ -50,5 +50,14 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 				YAxis.Title = new ChartAxisTitle() { Text = "Index Price" };
 			}
 		}
+
+		private void checkBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		{
+			var checkBox = (CheckBox)sender;
+			if (ViewModel != null)
+			{
+				Candle.EnableSolidCandle = checkBox.IsChecked;
+			}
+		}
 	}
 }

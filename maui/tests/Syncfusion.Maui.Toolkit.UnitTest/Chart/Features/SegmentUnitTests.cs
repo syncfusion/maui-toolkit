@@ -582,8 +582,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			doughnutSegment.Series = doughnutSeries;
 			sfCircularChart.Series.Add(doughnutSeries);
 			SetPrivateField(doughnutSegment, "_currentBounds", new RectF(10, 20, 100, 100));
-			var store = Array.Empty<object>();
-			InvokePrivateMethod(doughnutSegment, "UpdatePosition", store);
+			InvokePrivateMethod(doughnutSegment, "UpdatePosition", doughnutSeries);
 			var actualBounds = GetPrivateField(doughnutSegment, "_actualBounds");
 			var segmentRadius = GetPrivateField(doughnutSegment, "_segmentRadius");
 			Assert.NotEqual(RectF.Zero, actualBounds);
@@ -1072,6 +1071,39 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.NotNull(plottingPoints);
 			Assert.NotEmpty(plottingPoints);
 			Assert.Equal(fastScatterSeries.PointsCount, plottingPoints.Count);
+		}
+
+		
+		[Fact]
+		public void CalculateCurvePoints_ShouldCalculateCorrectPoints()
+		{
+			float segmentAngle = 24.5553341f;
+			float arcAngle = 0f;
+			float innerRadius = 79.488f;
+			float outerRadius = 198.72f;
+			float midRadius = 139.104f;
+			
+			DoughnutSeries series = new DoughnutSeries();
+			series.Center = new PointF(447.2f, 248.4f);
+			DoughnutSegment segment = new DoughnutSegment();
+
+			PointF[]? result = (PointF[]?)InvokePrivateMethod(segment, "CalculateCurvePoints", [series, segmentAngle, arcAngle, innerRadius, outerRadius, midRadius]);
+
+			if (result != null)
+			{
+				PointF innerPoint = result[0];
+				PointF innerMidPoint = result[1];
+				PointF centerPoint = result[2];
+				PointF outerMidPoint = result[3];
+				PointF outerPoint = result[4];
+				Assert.Equal(new PointF(519.499146f, 281.432983f), innerPoint);
+				Assert.Equal(new PointF(627.9479f, 330.982422f), outerPoint);
+				Assert.Equal(new PointF(586.304f, 248.4f), centerPoint);
+				Assert.Equal(new PointF(526.688f, 248.4f), innerMidPoint);
+				Assert.Equal(new PointF(645.920044f, 248.4f), outerMidPoint);
+			}
+
+			
 		}
 	}
 }

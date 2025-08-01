@@ -21,6 +21,14 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
+		private void checkBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		{
+			var checkBox = (CheckBox)sender;
+			if (viewModel != null)
+			{
+				series.ShowNormalDistributionCurve = checkBox.IsChecked;
+			}
+		}
 
 		public override void OnDisappearing()
 		{

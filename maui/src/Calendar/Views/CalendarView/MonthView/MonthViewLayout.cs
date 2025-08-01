@@ -202,20 +202,21 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             _monthView.SetFocusOnViewChanged();
         }
 
-        /// <summary>
-        /// Method to update when visible dates changed.
-        /// </summary>
-        /// <param name="visibleDates">The visible dates.</param>
-        /// <param name="isCurrentView">Defines whether the view is current view or not.</param>
-        void ICalendarView.UpdateVisibleDatesChange(List<DateTime> visibleDates, bool isCurrentView)
-        {
+		/// <summary>
+		/// Method to update when visible dates changed.
+		/// </summary>
+		/// <param name="visibleDates">The visible dates.</param>
+		/// <param name="isCurrentView">Defines whether the view is current view or not.</param>
+		/// <param name="customSnapLayout">Gets the month view instance for current canvas.</param>
+		void ICalendarView.UpdateVisibleDatesChange(List<DateTime> visibleDates, bool isCurrentView, CustomSnapLayout customSnapLayout)
+		{
             if (_visibleDates == visibleDates)
             {
                 return;
             }
 
             _visibleDates = visibleDates;
-            _monthView.UpdateVisibleDatesChange(visibleDates, isCurrentView);
+            _monthView.UpdateVisibleDatesChange(visibleDates, isCurrentView, customSnapLayout);
             _monthViewHeader?.UpdateVisibleDatesChange(visibleDates);
         }
 

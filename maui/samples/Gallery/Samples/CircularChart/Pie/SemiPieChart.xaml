@@ -2,8 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.SemiPieChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
-              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:PieSeriesViewModel">
 
     <localCore:SampleView.Resources>
         <ResourceDictionary>

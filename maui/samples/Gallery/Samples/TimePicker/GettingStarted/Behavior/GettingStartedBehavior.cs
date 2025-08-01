@@ -13,7 +13,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         /// <summary>
         /// The show header switch
         /// </summary>
-        Switch? _showHeaderSwitch, _showColumnHeaderSwitch, _showFooterSwitch, _clearSelectionSwitch;
+        Switch? _showHeaderSwitch, _showColumnHeaderSwitch, _showFooterSwitch, _clearSelectionSwitch, _showEnableLoopingSwitch;
 
         /// <summary>
         /// The date format combo box.
@@ -100,6 +100,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
             _showColumnHeaderSwitch = bindable.Content.FindByName<Switch>("showColumnHeaderSwitch");
             _showFooterSwitch = bindable.Content.FindByName<Switch>("showFooterSwitch");
             _clearSelectionSwitch = bindable.Content.FindByName<Switch>("clearSelectionSwitch");
+            _showEnableLoopingSwitch = bindable.Content.FindByName<Switch>("enableLoopingSwitch");
             _minimumTimePicker = bindable.Content.FindByName<TimePicker>("minimumTime");
             _maximumTimePicker = bindable.Content.FindByName<TimePicker>("maximumTime");
             _timePicker.SelectedTextStyle.TextColor = _isLightTheme ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#381E72");
@@ -122,6 +123,11 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
             if (_clearSelectionSwitch != null)
             {
                 _clearSelectionSwitch.Toggled += ClearSelectionSwitch_Toggled;
+            }
+
+            if (_showEnableLoopingSwitch != null)
+            {
+                _showEnableLoopingSwitch.Toggled += EnableLoopingSwitch_Toggled;
             }
 
             if (_minimumTimePicker != null)
@@ -284,6 +290,26 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         }
 
         /// <summary>
+        /// Method for enable looping switch toggle changed.
+        /// </summary>
+        /// <param name="sender">Return the object.</param>
+        /// <param name="e">The Event Arguments.</param>
+        void EnableLoopingSwitch_Toggled(object? sender, ToggledEventArgs e)
+        {
+            if (_timePicker != null)
+            {
+                if (e.Value == true)
+                {
+                    _timePicker.EnableLooping = true;
+                }
+                else if (e.Value == false)
+                {
+                    _timePicker.EnableLooping = false;
+                }
+            }
+        }
+
+        /// <summary>
         /// The format combo box selection changed event.
         /// </summary>
         /// <param name="sender">Return the object.</param>
@@ -407,6 +433,12 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
             {
                 _clearSelectionSwitch.Toggled -= ClearSelectionSwitch_Toggled;
                 _clearSelectionSwitch = null;
+            }
+
+            if (_showEnableLoopingSwitch != null)
+            {
+                _showEnableLoopingSwitch.Toggled -= EnableLoopingSwitch_Toggled;
+                _showEnableLoopingSwitch = null;
             }
 
             if (_minimumTimePicker != null)

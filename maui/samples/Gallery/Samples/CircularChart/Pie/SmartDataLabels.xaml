@@ -2,8 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.SmartDataLabels"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
-              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:PieSeriesViewModel">
 
     <localCore:SampleView.Resources>
         <ResourceDictionary>
@@ -14,16 +15,20 @@
     </localCore:SampleView.Resources>
 
     <localCore:SampleView.Content>
-        <StackLayout x:Name="stackLayout"  HorizontalOptions="Fill">
-            <StackLayout.BindingContext>
+        <Grid HorizontalOptions="Fill"> 
+            <Grid.BindingContext>
                 <local:PieSeriesViewModel/>
-            </StackLayout.BindingContext>
-            <chart:SfCircularChart x:Name="Chart" VerticalOptions="FillAndExpand">
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <chart:SfCircularChart Grid.Row="0" x:Name="Chart" VerticalOptions="Fill">
 
                 <chart:SfCircularChart.Resources>
                     <local:TooltipValueConverter x:Key="valueConverter"/>
                     <DataTemplate x:Key="dataLabelTemplate">
-                        <HorizontalStackLayout>
+                        <HorizontalStackLayout x:DataType="chart:ChartDataLabel">
                             <Label Text="{Binding Item, Converter={StaticResource valueConverter}, ConverterParameter='Name'}" VerticalOptions="Center" FontSize = "13"
                                     LineBreakMode="{OnPlatform Android='TailTruncation', iOS='TailTruncation'}" 
                                     MaximumWidthRequest="{OnPlatform Android='35', iOS='35'}" HorizontalTextAlignment="End"/>
@@ -38,7 +43,7 @@
             </chart:SfCircularChart.Title>
 
             <chart:SfCircularChart.Series>
-                <chart:PieSeries ShowDataLabels="True" x:Name="pieSeries1"  EnableAnimation="{Binding EnableAnimation}" 
+                <chart:PieSeries ShowDataLabels="True" x:Name="pieSeries1" EnableAnimation="{Binding EnableAnimation}" 
                                  ItemsSource="{Binding GoldMedalCountData}"
                                  XBindingPath="Name" Radius="{OnPlatform Android='0.5', iOS='0.5', Default='0.6'}"
                                  YBindingPath="Value" LabelTemplate="{StaticResource dataLabelTemplate}"
@@ -54,7 +59,7 @@
             </chart:SfCircularChart.Series>
         </chart:SfCircularChart>
 
-        <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+        <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
             <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
             <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" insidethegames.biz" VerticalOptions="Center">
                 <Label.GestureRecognizers>
@@ -62,7 +67,7 @@
                 </Label.GestureRecognizers>
             </Label>
         </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 
     <localCore:SampleView.OptionView>
@@ -76,7 +81,7 @@
                 <Picker x:Name="dataLabel" Grid.Column="1" 
                         VerticalOptions="Start" 
                         WidthRequest="100"  Margin="0,13,0,0"
-                        ItemsSource="{Binding SmartLabelAlignment}" 
+                        ItemsSource="{Binding SmartLabelAlignment}"
                         SelectedIndexChanged="smartDataLabel_SelectedIndexChanged"
                         Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
                         TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">

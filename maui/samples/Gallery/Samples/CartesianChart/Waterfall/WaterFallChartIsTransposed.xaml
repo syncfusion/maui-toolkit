@@ -3,14 +3,15 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.WaterFallChartIsTransposed"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:WaterFallSeriesViewModel">
     <localCore:SampleView.Content>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"></RowDefinition>
                 <RowDefinition Height="*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label Text="Breaking Down Yearly Net Profit" x:Name="headingLabel" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Grid.Row="0" Grid.Column="0"></Label>
+            <Label Text="Breaking Down Yearly Net Profit" x:Name="headingLabel" HorizontalOptions="Center" VerticalOptions="Center" Grid.Row="0" Grid.Column="0"></Label>
             
             <Grid Grid.Row="1" Grid.Column="0" IsVisible="{OnPlatform Android=True,iOS=True,Default=False}">
                 <chart:SfCartesianChart x:Name="WindowChart"  IsTransposed="True"  Grid.Row="0" Grid.Column="0">
@@ -18,7 +19,7 @@
                         <local:WaterFallSeriesViewModel></local:WaterFallSeriesViewModel>
                     </chart:SfCartesianChart.BindingContext>
                     <chart:SfCartesianChart.Title>
-                        <Label  Text="2015" x:Name="windowLabel" HorizontalOptions="CenterAndExpand"/>
+                        <Label  Text="2015" x:Name="windowLabel" HorizontalOptions="Center"/>
                     </chart:SfCartesianChart.Title>
                     <chart:SfCartesianChart.XAxes>
                         <chart:CategoryAxis x:Name="windowXAxis" LabelPlacement="BetweenTicks" ShowMajorGridLines="False" >
@@ -29,7 +30,7 @@
                         </chart:NumericalAxis>
                     </chart:SfCartesianChart.YAxes>
                     <chart:WaterfallSeries EnableAnimation="True"  ItemsSource="{Binding Sales}"   SummaryBindingPath="IsSummary" AllowAutoSum="True"  XBindingPath="Department"   YBindingPath="Value"   Fill="#95DB9C" NegativePointsBrush="#B95375" SummaryPointsBrush="#327DBE" 
-                                            ShowDataLabels="{OnPlatform Android=False,iOS=False,Default=True}" EnableTooltip="{OnPlatform Android=True,iOS=True,Default=False}">
+                                           ShowDataLabels="{OnPlatform Android=False,iOS=False,Default=True}" EnableTooltip="{OnPlatform Android=True,iOS=True,Default=False}">
                         <chart:WaterfallSeries.DataLabelSettings >
                             <chart:CartesianDataLabelSettings BarAlignment="Middle" >
                                     <chart:CartesianDataLabelSettings.LabelStyle>
@@ -51,7 +52,7 @@
                         <local:WaterFallSeriesViewModel></local:WaterFallSeriesViewModel>
                     </chart:SfCartesianChart.BindingContext>
                     <chart:SfCartesianChart.Title>
-                        <Label  Text="2015" x:Name="firstLabel" HorizontalOptions="CenterAndExpand"/>
+                        <Label  Text="2015" x:Name="firstLabel" HorizontalOptions="Center"/>
                     </chart:SfCartesianChart.Title>
                     <chart:SfCartesianChart.XAxes>
                         <chart:CategoryAxis x:Name="myXAxis" LabelPlacement="BetweenTicks" ShowMajorGridLines="False" >
@@ -62,7 +63,7 @@
                         </chart:NumericalAxis>
                     </chart:SfCartesianChart.YAxes>
                     <chart:WaterfallSeries EnableAnimation="True"  ItemsSource="{Binding Sales}"   SummaryBindingPath="IsSummary" AllowAutoSum="True"  XBindingPath="Department"   YBindingPath="Value"   Fill="#95DB9C" NegativePointsBrush="#B95375" SummaryPointsBrush="#327DBE" 
-                                            ShowDataLabels="{OnPlatform Android=False,iOS=False,Default=True}" EnableTooltip="{OnPlatform Android=True,iOS=True,Default=False}">
+                                           ShowDataLabels="{OnPlatform Android=False,iOS=False,Default=True}" EnableTooltip="{OnPlatform Android=True,iOS=True,Default=False}">
                         <chart:WaterfallSeries.DataLabelSettings >
                             <chart:CartesianDataLabelSettings   >
                                 <chart:CartesianDataLabelSettings.LabelStyle>
@@ -77,7 +78,7 @@
                         <local:WaterFallSeriesViewModel></local:WaterFallSeriesViewModel>
                     </chart:SfCartesianChart.BindingContext>
                     <chart:SfCartesianChart.Title>
-                        <Label  Text="2016" x:Name="secondLabel" HorizontalOptions="CenterAndExpand"/>
+                        <Label  Text="2016" x:Name="secondLabel" HorizontalOptions="Center"/>
                     </chart:SfCartesianChart.Title>
                     <chart:SfCartesianChart.XAxes>
                         <chart:CategoryAxis x:Name="XAxis"  ShowMajorGridLines="False" >
@@ -99,8 +100,8 @@
                             </chart:NumericalAxis.Title>
                         </chart:NumericalAxis>
                     </chart:SfCartesianChart.YAxes>
-                    <chart:WaterfallSeries  ItemsSource="{Binding NewSales}" EnableAnimation="True"  SummaryBindingPath="IsSummary" AllowAutoSum="True"  XBindingPath="Department"   YBindingPath="Value"   Fill="#95DB9C" NegativePointsBrush="#B95375" SummaryPointsBrush="#327DBE"
-                                            ShowDataLabels="{OnPlatform Android=False,iOS=False,Default=True}" EnableTooltip="{OnPlatform Android=True,iOS=True,Default=False}">
+                <chart:WaterfallSeries  ItemsSource="{Binding NewSales}" EnableAnimation="True"  SummaryBindingPath="IsSummary" AllowAutoSum="True"  XBindingPath="Department"   YBindingPath="Value"   Fill="#95DB9C" NegativePointsBrush="#B95375" SummaryPointsBrush="#327DBE"
+                                        ShowDataLabels="{OnPlatform Android=False,iOS=False,Default=True}" EnableTooltip="{OnPlatform Android=True,iOS=True,Default=False}">
                         <chart:WaterfallSeries.DataLabelSettings >
                             <chart:CartesianDataLabelSettings >
                                 <chart:CartesianDataLabelSettings.LabelStyle>

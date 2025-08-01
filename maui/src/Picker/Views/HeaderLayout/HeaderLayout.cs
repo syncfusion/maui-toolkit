@@ -51,7 +51,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 DrawingOrder = DrawingOrder.BelowContent;
             }
 
-            AddChildren();
+            //// Create a template view by checking the template property else default view is created.
+            if (_pickerInfo.HeaderTemplate != null)
+            {
+                InitializeTemplateView();
+            }
+            else
+            {
+                AddChildren();
+            }
+#if IOS
+            IgnoreSafeArea = true;
+#endif
         }
 
         #endregion
@@ -71,7 +82,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void UpdateHeaderDateText()
         {
-            if (Children.Count != 2)
+            if (Children.Count != 2 || _pickerInfo.HeaderTemplate != null)
             {
                 return;
             }
@@ -89,7 +100,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void UpdateHeaderTimeText()
         {
-            if (Children.Count != 2)
+            if (Children.Count != 2 || _pickerInfo.HeaderTemplate != null)
             {
                 return;
             }
@@ -107,7 +118,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void UpdateIconButtonTextStyle()
         {
-            if (Children.Count != 2)
+            if (Children.Count != 2 || _pickerInfo.HeaderTemplate != null)
             {
                 return;
             }
@@ -131,6 +142,53 @@ namespace Syncfusion.Maui.Toolkit.Picker
             OnDateButtonClicked("Date");
         }
 
+        /// <summary>
+        /// Method to create a template view.
+        /// </summary>
+        internal void InitializeTemplateView()
+        {
+            View? headerTemplateView = null;
+            //// Need to ensure the template is not null
+            if (_pickerInfo.HeaderTemplate == null)
+            {
+                return;
+            }
+
+            //// Clear the previous data in headerlayout.
+            if (Children.Count > 0)
+            {
+                for (int i = Children.Count - 1; i >= 0; i--)
+                {
+                    Children.RemoveAt(i);
+                }
+            }
+
+            DataTemplate headerTemplate = _pickerInfo.HeaderTemplate;
+
+            switch (_pickerInfo)
+            {
+                case SfDatePicker datePicker:
+                    headerTemplateView = PickerHelper.CreateLayoutTemplateViews(headerTemplate, _pickerInfo.HeaderView, datePicker);
+                    break;
+                case SfDateTimePicker:
+                    SfDateTimePicker dateTimePicker = (SfDateTimePicker)_pickerInfo;
+                    headerTemplateView = PickerHelper.CreateLayoutTemplateViews(headerTemplate, _pickerInfo.HeaderView, dateTimePicker);
+                    break;
+                case SfPicker picker:
+                    headerTemplateView = PickerHelper.CreateLayoutTemplateViews(headerTemplate, _pickerInfo.HeaderView, picker);
+                    break;
+                case SfTimePicker timePicker:
+                    headerTemplateView = PickerHelper.CreateLayoutTemplateViews(headerTemplate, _pickerInfo.HeaderView, timePicker);
+                    break;
+            }
+
+            if (headerTemplateView != null && Children.Count == 0)
+            {
+                Children.Add(headerTemplateView);
+                InvalidateDrawable();
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -140,7 +198,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void AddChildren()
         {
-            if (Children.Count != 0)
+            if (Children.Count != 0 || _pickerInfo.HeaderTemplate != null)
             {
                 return;
             }
@@ -222,7 +280,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void OnTimeButtonClicked()
         {
-            if (Children.Count != 2)
+            if (Children.Count != 2 || _pickerInfo.HeaderTemplate != null)
             {
                 return;
             }
@@ -247,7 +305,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void OnDateButtonClicked()
         {
-            if (Children.Count != 2)
+            if (Children.Count != 2 || _pickerInfo.HeaderTemplate != null)
             {
                 return;
             }
@@ -292,13 +350,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
             //// To avoid the separator line overlapping with the text, the height of the rectangle is reduced by the stroke thickness.
             Rect rectangle = new Rect(xPosition, yPosition, width, height - (isDividerEnabled ? StrokeThickness : 0));
             Color fillColor = _pickerInfo.HeaderView.Background.ToColor();
-            if (fillColor != Colors.Transparent)
+            if (fillColor != Colors.Transparent && _pickerInfo.HeaderTemplate == null)
             {
                 canvas.FillColor = fillColor;
                 canvas.FillRectangle(rectangle);
             }
 
-            if (!string.IsNullOrEmpty(_pickerInfo.HeaderView.Text))
+            if (!string.IsNullOrEmpty(_pickerInfo.HeaderView.Text) && _pickerInfo.HeaderTemplate == null)
             {
                 string headerText = PickerHelper.TrimText(_pickerInfo.HeaderView.Text, width, _pickerInfo.HeaderView.TextStyle);
                 SemanticProperties.SetDescription(this, headerText);
@@ -339,6 +397,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 buttonXPosition = width;
             }
 
+            if (_pickerInfo.HeaderTemplate != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.Arrange(new Rect(0, 0, bounds.Width, height));
+                }
+
+                return bounds.Size;
+            }
+
             foreach (var child in Children)
             {
                 child.Arrange(new Rect(buttonXPosition, 0, width, height));
@@ -373,6 +441,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double buttonWidth = width / 2;
             //// Stroke thickness denotes the below divider line space.
             double buttonHeight = height - 1;
+            if (_pickerInfo.HeaderTemplate != null)
+            {
+                foreach (var child in Children)
+                {
+                    child.Measure(width, buttonHeight);
+                }
+
+                return new Size(width, height);
+            }
+
             foreach (var child in Children)
             {
                 child.Measure(buttonWidth, buttonHeight);

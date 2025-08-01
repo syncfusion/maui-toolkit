@@ -1099,31 +1099,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					actualMaximum = Math.Max(outliers.Max(), actualMaximum);
 				}
 
-				if (IsIndexed && IsGrouped && xValues != null)
+				if (xValues != null)
 				{
+					var x = xValues[i];
+
 					if (i < _segments.Count && _segments[i] is BoxAndWhiskerSegment segment)
 					{
-						segment.SetData([i + SbsInfo.Start, i + SbsInfo.End, actualMinimum, minimum, lowerQuartile, median, upperQuartile, maximum, actualMaximum, xValues[i] + SbsInfo.Median, average]);
+						segment.SetData([x + SbsInfo.Start, x + SbsInfo.End, actualMinimum, minimum, lowerQuartile, median, upperQuartile, maximum, actualMaximum, xValues[i] + SbsInfo.Median, average]);
 					}
 					else
 					{
-						CreateSegment(seriesView, [i + SbsInfo.Start, i + SbsInfo.End, actualMinimum, minimum, lowerQuartile, median, upperQuartile, maximum, actualMaximum, xValues[i] + SbsInfo.Median, average], i, outliers);
-					}
-				}
-				else
-				{
-					if (xValues != null)
-					{
-						var x = xValues[i];
-
-						if (i < _segments.Count && _segments[i] is BoxAndWhiskerSegment segment)
-						{
-							segment.SetData([x + SbsInfo.Start, x + SbsInfo.End, actualMinimum, minimum, lowerQuartile, median, upperQuartile, maximum, actualMaximum, xValues[i] + SbsInfo.Median, average]);
-						}
-						else
-						{
-							CreateSegment(seriesView, [x + SbsInfo.Start, x + SbsInfo.End, actualMinimum, minimum, lowerQuartile, median, upperQuartile, maximum, actualMaximum, xValues[i] + SbsInfo.Median, average], i, outliers);
-						}
+						CreateSegment(seriesView, [x + SbsInfo.Start, x + SbsInfo.End, actualMinimum, minimum, lowerQuartile, median, upperQuartile, maximum, actualMaximum, xValues[i] + SbsInfo.Median, average], i, outliers);
 					}
 				}
 

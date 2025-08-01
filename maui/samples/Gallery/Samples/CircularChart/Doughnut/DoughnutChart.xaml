@@ -2,8 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.DoughnutChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
-              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:DoughnutSeriesViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -30,10 +31,14 @@
                                       XBindingPath="Name" YBindingPath="Value" EnableAnimation="False" StrokeWidth="1" 
                                       Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" LegendIcon="SeriesType">
                     <chart:DoughnutSeries.CenterView>
-                        <StackLayout x:Name="layout" HeightRequest="{Binding CenterHoleSize}" WidthRequest="{Binding CenterHoleSize}">
-                            <Label Text="{Binding Name,Source={x:Reference doughnutViewModel}}" FontSize="13"  HorizontalOptions="Center" VerticalOptions="EndAndExpand" Margin="5"/>
-                            <Label Text="{Binding Value,Source={x:Reference doughnutViewModel},StringFormat='{0}%'}" FontSize="12"  HorizontalOptions="Center" VerticalOptions="StartAndExpand" Margin="5"/>
-                        </StackLayout>
+                        <Grid x:Name="layout" x:DataType="chart:DoughnutSeries" HeightRequest="{Binding CenterHoleSize}" WidthRequest="{Binding CenterHoleSize}">
+                            <Grid.RowDefinitions>
+                                 <RowDefinition Height="*"></RowDefinition>
+                                 <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" x:DataType="local:DoughnutSeriesViewModel" Text="{Binding Name,Source={x:Reference doughnutViewModel}}" FontSize="13"  HorizontalOptions="Center" VerticalOptions="End" Margin="5"/>
+                            <Label Grid.Row="1" x:DataType="local:DoughnutSeriesViewModel" Text="{Binding Value,Source={x:Reference doughnutViewModel},StringFormat='{0}%'}" FontSize="12"  HorizontalOptions="Center" VerticalOptions="Start" Margin="5"/>
+                        </Grid>
                     </chart:DoughnutSeries.CenterView>
                     <chart:DoughnutSeries.DataLabelSettings>
                         <chart:CircularDataLabelSettings>

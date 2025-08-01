@@ -636,7 +636,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 		{
 			var series = new HistogramSeries();
 			Assert.False(series.IsIndexed);
-			Assert.False(series.IsGrouped);
 			Assert.True(series.SbsInfo.IsEmpty);
 			Assert.Equal(0, series.SideBySideIndex);
 			Assert.False(series.IsSbsValueCalculated);
@@ -1457,7 +1456,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.False(series.IsSbsValueCalculated);
 			Assert.Null(series.ChartArea);
 			Assert.False(series.IsIndexed);
-			Assert.False(series.IsGrouped);
 		}
 
 		[Fact]
