@@ -11,6 +11,11 @@
         PickerHeaderView HeaderView { get; }
 
         /// <summary>
+        /// Gets the settings of the header template.
+        /// </summary>
+        DataTemplate HeaderTemplate { get; }
+
+        /// <summary>
         /// Method to update after the time button clicked.
         /// </summary>
         void OnTimeButtonClicked();

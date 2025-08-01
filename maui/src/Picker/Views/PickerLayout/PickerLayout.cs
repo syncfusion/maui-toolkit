@@ -54,8 +54,15 @@ internal class PickerLayout : SfView, IPickerLayout
         _itemsSource = new ObservableCollection<string>();
         UpdateItemSource(false);
         DrawingOrder = DrawingOrder.AboveContent;
-        ColumnHeaderLayout columnHeaderLayout = new ColumnHeaderLayout(_pickerViewInfo, _column.HeaderText);
-        Add(columnHeaderLayout);
+#if IOS
+        IgnoreSafeArea = true;
+#endif
+        if (_pickerViewInfo.ColumnHeaderTemplate == null)
+        {
+            ColumnHeaderLayout columnHeaderLayout = new ColumnHeaderLayout(_pickerViewInfo, _column.HeaderText);
+            Add(columnHeaderLayout);
+        }
+
         _pickerScrollView = new PickerScrollView(this, _pickerViewInfo, _itemsSource);
         Add(_pickerScrollView);
     }
@@ -289,6 +296,20 @@ internal class PickerLayout : SfView, IPickerLayout
         }
     }
 
+    /// <summary>
+    /// Method to update the enable looping.
+    /// </summary>
+    internal void UpdateEnableLooping()
+    {
+        foreach (var child in this.Children)
+        {
+            if (child is PickerScrollView pickerScrollView)
+            {
+                pickerScrollView.UpdateEnableLooping();
+            }
+        }
+    }
+
     #endregion
 
     #region Private Methods
@@ -327,15 +348,29 @@ internal class PickerLayout : SfView, IPickerLayout
         {
             if (child is ColumnHeaderLayout)
             {
-                child.Arrange(new Rect(0, 0, width, headerColumHeight));
+                if (_pickerViewInfo.ColumnHeaderTemplate != null)
+                {
+                    child.Arrange(new Rect(0, 0, 0, 0));
+                }
+                else
+                {
+                    child.Arrange(new Rect(0, 0, width, headerColumHeight));
+                }
             }
             else if (child is PickerScrollView)
             {
                 double childWidth = width - StrokeThickness;
                 childWidth = childWidth < 0 ? 0 : childWidth;
-                double childHeight = height - headerColumHeight;
-                childHeight = childHeight < 0 ? 0 : childHeight;
-                child.Arrange(new Rect(0, headerColumHeight, childWidth, childHeight));
+                if (_pickerViewInfo.ColumnHeaderTemplate != null)
+                {
+                    child.Arrange(new Rect(0, 0, childWidth, height));
+                }
+                else
+                {
+                    double childHeight = height - headerColumHeight;
+                    childHeight = childHeight < 0 ? 0 : childHeight;
+                    child.Arrange(new Rect(0, headerColumHeight, childWidth, childHeight));
+                }
             }
         }
 
@@ -356,15 +391,29 @@ internal class PickerLayout : SfView, IPickerLayout
         {
             if (child is ColumnHeaderLayout)
             {
-                child.Measure(widthConstraint, headerColumHeight);
+                if (_pickerViewInfo.ColumnHeaderTemplate != null)
+                {
+                    child.Measure(0, 0);
+                }
+                else
+                {
+                    child.Measure(widthConstraint, headerColumHeight);
+                }
             }
             else if (child is PickerScrollView)
             {
                 double childWidth = widthConstraint - StrokeThickness;
                 childWidth = childWidth < 0 ? 0 : childWidth;
-                double childHeight = heightConstraint - headerColumHeight;
-                childHeight = childHeight < 0 ? 0 : childHeight;
-                child.Measure(childWidth, childHeight);
+                if (_pickerViewInfo.ColumnHeaderTemplate != null)
+                {
+                    child.Measure(childWidth, heightConstraint);
+                }
+                else
+                {
+                    double childHeight = heightConstraint - headerColumHeight;
+                    childHeight = childHeight < 0 ? 0 : childHeight;
+                    child.Measure(childWidth, childHeight);
+                }
             }
         }
 
@@ -381,7 +430,7 @@ internal class PickerLayout : SfView, IPickerLayout
         float width = dirtyRectangle.Width;
         float height = dirtyRectangle.Height;
         float headerColumHeight = (float)_pickerViewInfo.ColumnHeaderView.Height;
-        float topPosition = dirtyRectangle.Top + headerColumHeight;
+        float topPosition = _pickerViewInfo.ColumnHeaderTemplate != null ? dirtyRectangle.Top + 1 : dirtyRectangle.Top + headerColumHeight;
         float leftPosition = dirtyRectangle.Left;
         canvas.SaveState();
 
@@ -424,9 +473,9 @@ internal class PickerLayout : SfView, IPickerLayout
         {
             tappedIndex = _itemsSource.Count - 1;
         }
-        else if (tappedIndex < 0)
+        else if (tappedIndex <= -1)
         {
-            tappedIndex = 0;
+            tappedIndex = -1;
         }
 
         _pickerViewInfo.UpdateSelectedIndexValue(tappedIndex, _column._columnIndex, isInitialLoading);

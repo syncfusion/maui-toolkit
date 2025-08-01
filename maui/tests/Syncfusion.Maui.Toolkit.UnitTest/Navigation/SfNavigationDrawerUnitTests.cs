@@ -1,4 +1,6 @@
+using Microsoft.Maui.Controls;
 using Syncfusion.Maui.Toolkit.Helper;
+using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.NavigationDrawer;
 using System.Reflection;
 
@@ -12,7 +14,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void Constructor_InitializesDefaultsCorrectly()
 		{
 			SfNavigationDrawer navigationDrawer = [];
-
 			Assert.False(navigationDrawer.IsOpen);
 			Assert.Null(navigationDrawer.ContentView);
 			Assert.NotNull(navigationDrawer.DrawerSettings);
@@ -790,12 +791,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(-20, expectedValue);
 		}
 
-		[Fact]
-		public void TestValidateCurrentDuration()
+		[Theory]
+		[InlineData(-20d)]
+		[InlineData(0d)]
+		[InlineData(500d)]
+		public void TestValidateCurrentDuration(double expectedValue)
 		{
 			SfNavigationDrawer navigationDrawer = [];
-			double expectedValue = 20;
 			double actualValue = Convert.ToDouble(InvokePrivateStaticMethod(navigationDrawer, "ValidateCurrentDuration", expectedValue));
+			expectedValue = expectedValue <= 0 ? 1 : expectedValue;
 			Assert.Equal(expectedValue, actualValue);
 		}
 
@@ -1557,6 +1561,467 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.True(actualValue);
 		}
 
+		[Fact]
+		public void TestUpdateGridOverlayTranslate()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
+			var greyOverlayGrid = new SfGrid();
+			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
+			InvokePrivateMethod(navigationDrawer, "UpdateGridOverlayTranslate");
+			var actualGreyOverlay = GetPrivateField(navigationDrawer, "_greyOverlayGrid") as Grid;
+			Assert.NotNull(actualGreyOverlay);
+			Assert.Equal(0, actualGreyOverlay.TranslationX);
+		}
+
+		[Fact]
+		public void TestHandleLeftSwipeIn()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerWidth = 200 };
+			var greyOverlayGrid = new SfGrid();
+			var drawerLayout = new SfGrid();
+			var mainContentGrid = new SfGrid() { TranslationX = navigationDrawer.DrawerSettings.DrawerWidth };
+			SetPrivateField(navigationDrawer, "_mainContentGrid", mainContentGrid);
+			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
+			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftSwipeIn");
+			bool isDrawerOpen;
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.True(isDrawerOpen);
+			navigationDrawer.DrawerSettings.Transition = Transition.Push;
+			var actualDrawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as Grid;
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			Assert.NotNull(actualDrawerLayout);
+			actualDrawerLayout.TranslationX = 0;
+			InvokePrivateMethod(navigationDrawer, "HandleLeftSwipeIn");
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.True(isDrawerOpen);
+		}
+
+		[Fact]
+		public void TestHandleLeftSwipeOut()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerWidth = 200 };
+			var greyOverlayGrid = new SfGrid();
+			var drawerLayout = new SfGrid();
+			var mainContentGrid = new SfGrid();
+			mainContentGrid.TranslationX = 0;
+			SetPrivateField(navigationDrawer, "_mainContentGrid", mainContentGrid);
+			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
+			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", true);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftSwipeOut");
+			bool isDrawerOpen;
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.False(isDrawerOpen);
+			navigationDrawer.DrawerSettings.Transition = Transition.Push;
+			var actualDrawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as Grid;
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", true);
+			Assert.NotNull(actualDrawerLayout);
+			actualDrawerLayout.TranslationX = -navigationDrawer.DrawerSettings.DrawerWidth;
+			InvokePrivateMethod(navigationDrawer, "HandleLeftSwipeOut");
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.False(isDrawerOpen);
+		}
+
+		[Fact]
+		public void TestHandleLeftSwipeByPosition()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			var greyOverlayGrid = new SfGrid();
+			var drawerLayout = new SfGrid();
+			bool isDrawerOpen;
+			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
+			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
+			navigationDrawer.DrawerSettings.Transition = Transition.Push;
+			var actualDrawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as Grid;
+			Assert.NotNull(actualDrawerLayout);
+			actualDrawerLayout.TranslationX = 0;
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftSwipeByPosition");
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.True(isDrawerOpen);
+			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
+			navigationDrawer.ContentView.TranslationX = navigationDrawer.DrawerSettings.DrawerWidth;
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftSwipeByPosition");
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.True(isDrawerOpen);
+		}
+
+		[Fact]
+		public void TestHandleRightSwipeIn()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerWidth = 200 };
+			var greyOverlayGrid = new SfGrid();
+			var drawerLayout = new SfGrid();
+			var mainGrid = new SfGrid { TranslationX = -navigationDrawer.DrawerSettings.DrawerWidth };
+			SetPrivateField(navigationDrawer, "_mainContentGrid", mainGrid);
+			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
+			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			InvokePrivateMethod(navigationDrawer, "HandleRightSwipeIn");
+			bool isDrawerOpen;
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.True(isDrawerOpen);
+			navigationDrawer.DrawerSettings.Transition = Transition.Push;
+			var actualDrawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as Grid;
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			Assert.NotNull(actualDrawerLayout);
+			actualDrawerLayout.TranslationX = (navigationDrawer.ScreenWidth - navigationDrawer.DrawerSettings.DrawerWidth);
+			InvokePrivateMethod(navigationDrawer, "HandleRightSwipeIn");
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.True(isDrawerOpen);
+
+		}
+
+		[Fact]
+		public void HandleRightSwipeOut_Reveal_Transition_MainAtZero_TogglesDrawerOut()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings
+			{
+				Transition = Transition.Reveal,
+				DrawerHeight = 300
+			};
+			nav.ScreenWidth = 1200;
+
+			var mainContentGrid = new SfGrid { TranslationX = 0 };
+			SetPrivateField(nav, "_mainContentGrid", mainContentGrid);
+			SetPrivateField(nav, "_drawerLayout", new SfGrid());
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 0 });
+
+			SetPrivateField(nav, "_isDrawerOpen", true);
+			SetPrivateField(nav, "_isTransitionDifference", true);
+
+			InvokePrivateMethod(nav, "HandleRightSwipeOut");
+
+			// Assert that the drawer has toggled (example: isDrawerOpen = false after toggling out)
+			Assert.False((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void HandleRightSwipeOut_NonReveal_DrawerAtScreenWidth_TogglesDrawerOut()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings
+			{
+				Transition = Transition.Push,
+				DrawerHeight = 300
+			};
+			nav.ScreenWidth = 1200;
+
+			var drawerLayout = new SfGrid { TranslationX = 1200 };
+			SetPrivateField(nav, "_mainContentGrid", new SfGrid());
+			SetPrivateField(nav, "_drawerLayout", drawerLayout);
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 0 });
+
+			SetPrivateField(nav, "_isDrawerOpen", true);
+			SetPrivateField(nav, "_isTransitionDifference", true);
+
+			InvokePrivateMethod(nav, "HandleRightSwipeOut");
+
+			Assert.False((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void HandleRightSwipeByPosition_PushTransition_AtRightEdge_TogglesDrawer()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings { Transition = Transition.Push, DrawerWidth = 200 };
+			nav.ScreenWidth = 1080;
+
+			SetPrivateField(nav, "_drawerLayout", new SfGrid { TranslationX = 1080 - 200 });
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid());
+
+			SetPrivateField(nav, "_remainDrawerWidth", -(200 / 2.0));  // = –100, meets first clause
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleRightSwipeByPosition");
+
+			Assert.True((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void HandleRightSwipeByPosition_RevealTransition_MainGridAtFullLeft_TogglesDrawer()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerWidth = 200 };
+			nav.ScreenWidth = 1080;
+
+			SetPrivateField(nav, "_mainContentGrid", new SfGrid { TranslationX = -200 });
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 100 });
+
+			SetPrivateField(nav, "_drawerLayout", new SfGrid());
+			SetPrivateField(nav, "_remainDrawerWidth", -150); // <= -100, meets second clause
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleRightSwipeByPosition");
+
+			Assert.True((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void HandleBottomSwipeIn_WhenRevealAndContentAtNegativeHeight_TogglesDrawer()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings
+			{
+				Transition = Transition.Reveal,
+				DrawerHeight = 300
+			};
+
+			var drawerLayout = new SfGrid();
+			var greyOverlay = new SfGrid();
+			var mainGrid = new SfGrid { TranslationY = -300 };
+
+			SetPrivateField(nav, "_drawerLayout", drawerLayout);
+			SetPrivateField(nav, "_greyOverlayGrid", greyOverlay);
+			SetPrivateField(nav, "_mainContentGrid", mainGrid);
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleBottomSwipeIn");
+
+			bool? isOpen = (bool?)GetPrivateField(nav, "_isDrawerOpen");
+			Assert.True(isOpen);
+		}
+
+		[Fact]
+		public void HandleBottomSwipeIn_WhenNonRevealAndLayoutAtEdge_TogglesDrawer()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings
+			{
+				Transition = Transition.Push,
+				DrawerHeight = 300
+			};
+
+			nav.ScreenHeight = 1200;
+			double expectedY = (1200 / 2.0) - (300 / 2.0);
+
+			var drawerLayout = new SfGrid { TranslationY = expectedY };
+			var greyOverlay = new SfGrid();
+			var mainGrid = new SfGrid();
+
+			SetPrivateField(nav, "_drawerLayout", drawerLayout);
+			SetPrivateField(nav, "_greyOverlayGrid", greyOverlay);
+			SetPrivateField(nav, "_mainContentGrid", mainGrid);
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleBottomSwipeIn");
+
+			bool? isOpen = (bool?)GetPrivateField(nav, "_isDrawerOpen");
+			Assert.True(isOpen);
+		}
+
+		[Fact]
+		public void HandleTopSwipeIn_Reveal_MainContentAtDrawerHeight_TogglesIn()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings
+			{
+				Transition = Transition.Reveal,
+				DrawerHeight = 300
+			};
+
+			var mainContent = new SfGrid { TranslationY = 300 };
+			SetPrivateField(nav, "_mainContentGrid", mainContent);
+			SetPrivateField(nav, "_drawerLayout", new SfGrid());
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid());
+
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleTopSwipeIn");
+
+			Assert.True((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void HandleTopSwipeIn_NonReveal_DrawerAtExpectedPosition_TogglesIn()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings
+			{
+				Transition = Transition.Push,
+				DrawerHeight = 300
+			};
+			nav.ScreenHeight = 1200;
+
+			double expectedTranslationY = -((1200 / 2.0) - (300 / 2.0)) - 0; // Assuming _drawerMoveTop = 0
+			var drawerLayout = new SfGrid { TranslationY = expectedTranslationY };
+
+			SetPrivateField(nav, "_mainContentGrid", new SfGrid());
+			SetPrivateField(nav, "_drawerLayout", drawerLayout);
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid());
+
+			SetPrivateField(nav, "_drawerMoveTop", 0.0);
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleTopSwipeIn");
+
+			Assert.True((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void TestHandleTopSwipeOut()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			var greyOverlayGrid = new SfGrid();
+			var drawerLayout = new SfGrid();
+			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
+			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", true);
+			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
+			navigationDrawer.ContentView.TranslationY = 0;
+			InvokePrivateMethod(navigationDrawer, "HandleTopSwipeOut");
+			bool isDrawerOpen;
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.False(isDrawerOpen);
+			navigationDrawer.DrawerSettings.Transition = Transition.Push;
+			var actualDrawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as Grid;
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", true);
+			Assert.NotNull(actualDrawerLayout);
+			actualDrawerLayout.TranslationY = -((navigationDrawer.ScreenHeight / 2) - (navigationDrawer.DrawerSettings.DrawerHeight / 2)) - Convert.ToDouble(GetPrivateField(navigationDrawer, "_drawerMoveTop"));
+			InvokePrivateMethod(navigationDrawer, "HandleTopSwipeOut");
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.False(isDrawerOpen);
+		}
+
+		[Fact]
+		public void HandleTopSwipeByPosition_NonReveal_TopEdge_TogglesDrawer()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings { Transition = Transition.Push, DrawerHeight = 300 };
+			nav.ScreenHeight = 1200;
+			SetPrivateField(nav, "_drawerMoveTop", 0.0);
+
+			var drawerLayout = new SfGrid
+			{
+				TranslationY = -((1200 / 2.0) - (300 / 2.0)) // -450
+			};
+			SetPrivateField(nav, "_drawerLayout", drawerLayout);
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid());
+			SetPrivateField(nav, "_mainContentGrid", new SfGrid());
+
+			SetPrivateField(nav, "_remainDrawerHeight", -(300 / 2.0)); // -150
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleTopSwipeByPosition");
+
+			Assert.True((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void HandleTopSwipeByPosition_Reveal_MainDownShift_TogglesDrawer()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerHeight = 300 };
+			nav.ScreenHeight = 1200;
+
+			SetPrivateField(nav, "_mainContentGrid", new SfGrid { TranslationY = 300 });
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 100 });
+			SetPrivateField(nav, "_drawerLayout", new SfGrid());
+
+			SetPrivateField(nav, "_remainDrawerHeight", 200); // >= 150
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleTopSwipeByPosition");
+
+			Assert.True((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void TestHandleBottomSwipeOut()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			var greyOverlayGrid = new SfGrid();
+			var drawerLayout = new SfGrid();
+			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
+			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", true);
+			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
+			navigationDrawer.ContentView.TranslationY = 0;
+			InvokePrivateMethod(navigationDrawer, "HandleBottomSwipeOut");
+			bool isDrawerOpen;
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.False(isDrawerOpen);
+			navigationDrawer.DrawerSettings.Transition = Transition.Push;
+			var actualDrawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as Grid;
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", true);
+			Assert.NotNull(actualDrawerLayout);
+			actualDrawerLayout.TranslationY = ((navigationDrawer.ScreenHeight / 2) + (navigationDrawer.DrawerSettings.DrawerHeight / 2)) - Convert.ToDouble(GetPrivateField(navigationDrawer, "_drawerMoveTop"));
+			InvokePrivateMethod(navigationDrawer, "HandleBottomSwipeOut");
+			isDrawerOpen = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isDrawerOpen"));
+			Assert.False(isDrawerOpen);
+		}
+
+		[Fact]
+		public void HandleBottomSwipeByPosition_NonReveal_AtBottomEdge_TogglesDrawer()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings
+			{
+				Transition = Transition.Push,
+				DrawerHeight = 300
+			};
+			nav.ScreenHeight = 1200;
+
+			double expectedY = (1200 / 2.0) - (300 / 2.0) - 300; // = 150 - 300 = -150
+			var drawerLayout = new SfGrid { TranslationY = expectedY };
+			SetPrivateField(nav, "_drawerLayout", drawerLayout);
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid());
+
+			SetPrivateField(nav, "_remainDrawerHeight", -(300 / 2.0)); // -150
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleBottomSwipeByPosition");
+
+			Assert.True((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
+		[Fact]
+		public void HandleBottomSwipeByPosition_Reveal_MainShiftedUp_TogglesDrawer()
+		{
+			var nav = new SfNavigationDrawer();
+			nav.DrawerSettings = new DrawerSettings
+			{
+				Transition = Transition.Reveal,
+				DrawerHeight = 300
+			};
+			nav.ScreenHeight = 1200;
+
+			SetPrivateField(nav, "_drawerLayout", new SfGrid());
+			SetPrivateField(nav, "_mainContentGrid", new SfGrid { TranslationY = -300 });
+			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 20 }); // < ScreenWidth
+
+			SetPrivateField(nav, "_remainDrawerHeight", -200);
+			SetPrivateField(nav, "_isDrawerOpen", false);
+			SetPrivateField(nav, "_isTransitionDifference", false);
+
+			InvokePrivateMethod(nav, "HandleBottomSwipeByPosition");
+
+			Assert.True((bool?)GetPrivateField(nav, "_isDrawerOpen"));
+		}
+
 		protected object? InvokePrivateStaticMethod<T>(T obj, string methodName, params object[] parameters)
 		{
 			var method = typeof(T).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static);
@@ -1566,6 +2031,133 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 
 			return method.Invoke(obj, parameters);
+		}
+
+		#endregion
+
+		#region Drawer Scripts
+
+		[Fact]
+		public void Test_ParentFlowDirection1()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
+		}
+
+		[Fact]
+		public void Test_ParentFlowDirection2()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
+			navigationDrawer.FlowDirection = FlowDirection.LeftToRight;
+			Assert.Equal(FlowDirection.LeftToRight, drawerLayout?.FlowDirection);
+		}
+
+		[Fact]
+		public void Test_ParentFlowDirection3()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid(), IsOpen = true };
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent");
+			Assert.True(navigationDrawer.IsOpen);
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent");
+			Assert.False(navigationDrawer.IsOpen);
+			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
+			navigationDrawer.FlowDirection = FlowDirection.LeftToRight;
+			Assert.Equal(FlowDirection.LeftToRight, drawerLayout?.FlowDirection);
+		}
+
+		[Fact]
+		public void Test_ParentFlowDirection4()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid(), IsOpen = true };
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent");
+			Assert.True(navigationDrawer.IsOpen);
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent");
+			Assert.False(navigationDrawer.IsOpen);
+			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
+		}
+
+		[Theory]
+		[InlineData(100)]
+		[InlineData(0)]
+		[InlineData(600)]
+		public void Test_DrawerWidth(double drawerWidth)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.DrawerSettings.DrawerFooterView = new Label();
+			navigationDrawer.DrawerSettings.DrawerFooterHeight = 350;
+			navigationDrawer.DrawerSettings.DrawerWidth = drawerWidth;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
+			if (drawerLayout != null)
+			{
+				foreach (var child in drawerLayout.Children)
+				{
+					var width = child.DesiredSize.Width;
+				}
+			}
+			Assert.Equal(drawerWidth, drawerLayout?.WidthRequest);
+		}
+
+		[Fact]
+		public void Test_Bug907855_1()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.DrawerSettings.DrawerFooterView = new Label();
+			navigationDrawer.DrawerSettings.DrawerFooterHeight = 350;
+			navigationDrawer.DrawerSettings.DrawerWidth = -1;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
+			if (drawerLayout != null)
+			{
+				foreach (var child in drawerLayout.Children)
+				{
+					var width = child.DesiredSize.Width;
+				}
+			}
+			Assert.Equal(200, drawerLayout?.WidthRequest);
+		}
+
+		[Fact]
+		public void Test_Bug907855_10()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.DrawerSettings.DrawerFooterView = new Label();
+			navigationDrawer.DrawerSettings.DrawerFooterHeight = 350;
+			navigationDrawer.DrawerSettings.DrawerWidth = -10;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
+			if (drawerLayout != null)
+			{
+				foreach (var child in drawerLayout.Children)
+				{
+					var width = child.DesiredSize.Width;
+				}
+			}
+			Assert.Equal(200, drawerLayout?.WidthRequest);
+		}
+
+		[Fact]
+		public void Test_Bug907855_11()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.DrawerSettings.DrawerFooterView = new Label();
+			navigationDrawer.DrawerSettings.DrawerFooterHeight = 350;
+			navigationDrawer.DrawerSettings.DrawerWidth = -100;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
+			if (drawerLayout != null)
+			{
+				foreach (var child in drawerLayout.Children)
+				{
+					var width = child.DesiredSize.Width;
+				}
+			}
+			Assert.Equal(200, drawerLayout?.WidthRequest);
 		}
 
 		#endregion
@@ -1601,6 +2193,20 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
+		public void TestDrawerOpeningInvoked()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				DrawerSettings = new DrawerSettings { Transition = Transition.Reveal }
+			};
+			var fired = false;
+			navigationDrawer.DrawerOpening += (sender, e) => fired = true;
+			InvokePrivateMethod(navigationDrawer, "SetDrawerOpeningEvent");
+			Assert.True(fired);
+		}
+
+		[Fact]
 		public void TestDrawerToggledInvoked()
 		{
 			SfNavigationDrawer navigationDrawer = [];
@@ -1609,6 +2215,51 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			InvokePrivateMethod(navigationDrawer, "OnDrawerOpenedToggledEvent");
 			Assert.True(fired);
 		}
+
+		[Theory]
+		[InlineData(PointerActions.Pressed, Position.Left)]
+		[InlineData(PointerActions.Pressed, Position.Right)]
+		[InlineData(PointerActions.Pressed, Position.Top)]
+		[InlineData(PointerActions.Pressed, Position.Bottom)]
+		[InlineData(PointerActions.Moved, Position.Left)]
+		[InlineData(PointerActions.Exited, Position.Left)]
+		[InlineData(PointerActions.Cancelled, Position.Left)]
+		public void Test_Drawer_OnHandleTouch(PointerActions action, Position position)
+		{
+			var navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.DrawerSettings.Position = position;
+			SetPrivateField(navigationDrawer, "_isPressed", true);
+			SetPrivateField(navigationDrawer, "_isMoved", true);
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			var eventArgs = new Syncfusion.Maui.Toolkit.Internals.PointerEventArgs(1, action, new Point(30, 30));
+
+			var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "OnHandleTouchInteraction", action, new Point(30, 30)));
+			Assert.Null(exception);
+		}
+
+		[Theory]
+		[InlineData(PointerActions.Pressed)]
+		[InlineData(PointerActions.Released)]
+		[InlineData(PointerActions.Moved)]
+		[InlineData(PointerActions.Exited)]
+		[InlineData(PointerActions.Cancelled)]
+		public void Test_Drawer_OnTouch(PointerActions action)
+		{
+			var navigationDrawer = new SfNavigationDrawer();
+			var eventArgs = new Syncfusion.Maui.Toolkit.Internals.PointerEventArgs(1, action, new Point(30, 30));
+
+			var exception = Record.Exception(() => ((ITouchListener)navigationDrawer).OnTouch(eventArgs));
+			Assert.Null(exception);
+		}
+
+		[Fact]
+		public void Test_ValidateCurrentDuration()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var currentDuration = InvokePrivateMethod(navigationDrawer, "ValidateCurrentDuration", 0);
+			Assert.Equal(1.0, currentDuration);
+		}
+
 		#endregion
 	}
 }

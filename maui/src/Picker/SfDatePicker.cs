@@ -1720,9 +1720,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     TextStyle = newStyle.TextStyle,
                 };
 
-                picker._dayColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.DayHeaderText);
-                picker._monthColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MonthHeaderText);
-                picker._yearColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.YearHeaderText);
+                if (picker._dayColumn != null)
+                {
+                    picker._dayColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.DayHeaderText);
+                }
+
+                if (picker._monthColumn != null)
+                {
+                    picker._monthColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MonthHeaderText);
+                }
+
+                if (picker._yearColumn != null)
+                {
+                    picker._yearColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.YearHeaderText);
+                }
             }
         }
 
@@ -1878,7 +1889,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnDayIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDatePicker? datepicker = bindable as SfDatePicker;
-            if (datepicker == null)
+            if (datepicker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -1908,7 +1919,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnMonthIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDatePicker? datepicker = bindable as SfDatePicker;
-            if (datepicker == null)
+            if (datepicker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -1938,7 +1949,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnYearIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfDatePicker? datepicker = bindable as SfDatePicker;
-            if (datepicker == null)
+            if (datepicker == null || (int)newValue <= 0)
             {
                 return;
             }

@@ -4,7 +4,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.EmptyPointSupport"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:EmptyPointViewModel">
 
   <localCore:SampleView.Resources>
     <ResourceDictionary>
@@ -104,9 +105,8 @@
         <HorizontalStackLayout Spacing="5">
           <Label Text="Empty Point Mode : " VerticalOptions="Start" HorizontalOptions="Center" Padding="5"  FontSize="17"/>
           <Picker WidthRequest="{OnPlatform MacCatalyst=70, iOS=70}" ItemsSource="{Binding Source={x:Reference ViewModel},Path=EmptyPointModeValues}" 
-                  SelectedItem="{Binding Source={x:Reference ViewModel}, Path=EmptyPointModeValues[0]}"
                   VerticalOptions="Start" HorizontalOptions="Fill" 
-                  x:Name="picker" 
+                  x:Name="picker"
                   SelectedIndex="0"
                   SelectedIndexChanged="picker_SelectedIndexChanged"
                   Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"

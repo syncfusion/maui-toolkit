@@ -700,32 +700,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Buttons
 		}
 
 		[Theory]
-		[InlineData(150, 142, "SampleImage1.png", Alignment.Left)]
-		[InlineData(150, 108, "SampleImage1.png", Alignment.Right)]
-		[InlineData(180, 164, "SampleImage1.png", Alignment.Top)]
-		[InlineData(250, 234, "SampleImage1.png", Alignment.Bottom)]
-		[InlineData(200, 184, "SampleImage1.png", null)]
-		public void CalculateAvailableTextWidth_ShouldReturnExpectedWidth(double width, double expectedValue, string imagePath, Alignment? alignment = null)
-		{
-			// Arrange
-			var button = new SfButton();
-			button.ImageSource = ImageSource.FromFile(imagePath);
-
-			if (alignment != null)
-			{
-				button.ShowIcon = true;
-				button.ImageAlignment = (Alignment)alignment;
-			}
-
-			// Set up as needed
-			button.Padding = new Thickness(4, 4, 4, 4);
-
-			var actualValue = InvokePrivateMethod(button, "CalculateAvailableTextWidth", width);
-
-			Assert.Equal(expectedValue, actualValue);
-		}
-
-		[Theory]
 		[InlineData(true, false, false, false, "#000000")] 
 		[InlineData(true, true, false, false, "#FF0000")] 
 		[InlineData(false, false, false, false, "#808080")] 

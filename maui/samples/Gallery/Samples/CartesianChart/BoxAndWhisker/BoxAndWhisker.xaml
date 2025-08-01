@@ -4,20 +4,27 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.BoxAndWhisker"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:BoxAndWhiskerViewModel">
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill" x:Name="layout">
+        <Grid HorizontalOptions="Fill" x:Name="layout">
 
-            <StackLayout.Resources>
+            <Grid.Resources>
                 <Label x:Key="title" x:Name="titleName" Text="Charpy Impact Test"
                            FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
                           LineBreakMode="WordWrap" Padding="0,0,0,5"/>
-            </StackLayout.Resources>
+            </Grid.Resources>
             
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:BoxAndWhiskerViewModel x:Name="ViewModel"/>
-            </StackLayout.BindingContext>
-            <chart:SfCartesianChart  x:Name="Chart" VerticalOptions="FillAndExpand" Title="{OnPlatform iOS={StaticResource title},MacCatalyst={StaticResource title}}">
+            </Grid.BindingContext>
+
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" VerticalOptions="Fill" Title="{OnPlatform iOS={StaticResource title},MacCatalyst={StaticResource title}}">
 
                 <chart:SfCartesianChart.XAxes>
                 <chart:CategoryAxis x:Name="xAxis" LabelPlacement="BetweenTicks">
@@ -35,9 +42,9 @@
                                        ShowOutlier="True"
                                        ShowMedian="True">
                 </chart:BoxAndWhiskerSeries>
-        </chart:SfCartesianChart>
+            </chart:SfCartesianChart>
 
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+      <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" itl.nist.gov" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -45,7 +52,7 @@
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
     <localCore:SampleView.OptionView>
         <Grid>
@@ -53,7 +60,6 @@
                 <HorizontalStackLayout>
                     <Label Text="Mode :" HorizontalOptions="Center" VerticalOptions="Start" Padding="5" FontSize="17"/>
                     <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=BoxPlotMode}" 
-                            SelectedItem="{Binding Source={x:Reference ViewModel},Path=BoxPlotMode[0]}"
                             HorizontalOptions="Fill" VerticalOptions="Start"                        
                             SelectedIndex="0"
                             SelectedIndexChanged="ModePicker_SelectedIndexChanged"

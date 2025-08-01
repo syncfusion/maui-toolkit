@@ -235,6 +235,51 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
+        /// Method to create a data template view.
+        /// </summary>
+        /// <param name="template">The data template.</param>
+        /// <param name="info">The picker control info.</param>
+        /// <returns>Returns the view from the view template</returns>
+        internal static View CreateDataTemplateView(DataTemplate template, object info)
+        {
+            View view;
+            var content = template.CreateContent();
+            if (content is ViewCell)
+            {
+                view = ((ViewCell)content).View;
+            }
+            else
+            {
+                view = (View)content;
+            }
+
+            if (view.BindingContext == null && info != null)
+            {
+                view.BindingContext = info;
+            }
+
+            return view;
+        }
+
+        /// <summary>
+        /// Method to select the appropriate template or template selector for the view.
+        /// </summary>
+        /// <param name="template">data template.</param>
+        /// <param name="containerView">layout info</param>
+        /// <param name="context">picker info</param>
+        /// <returns>Returns the view from the view template</returns>
+        internal static View CreateLayoutTemplateViews(DataTemplate template, BindableObject containerView, object context)
+        {
+            if (template is DataTemplateSelector selector)
+            {
+                DataTemplate selectedTemplate = selector.SelectTemplate(context, containerView);
+                return CreateDataTemplateView(selectedTemplate, context);
+            }
+
+            return CreateDataTemplateView(template, context);
+        }
+
+        /// <summary>
         /// Method to get the name based on parent.
         /// </summary>
         /// <param name="parent">The parent details.</param>

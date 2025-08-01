@@ -31,6 +31,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         double _availableHeight = 0;
 
+#if WINDOWS || MACCATALYST
+        /// <summary>
+        /// Check whether the looping is enabled or not.
+        /// </summary>
+        bool _isLoopingEnabled = false;
+
+        /// <summary>
+        /// The new scroll position value.
+        /// </summary>
+        double _newScrollPosition = 0;
+#endif
+
 #if __ANDROID__
 
         /// <summary>
@@ -141,7 +153,48 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
             int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
             int selectedIndex = PickerHelper.GetValidSelectedIndex(_pickerLayoutInfo.Column.SelectedIndex, itemsCount);
-            ScrollToAsync(0, selectedIndex * itemHeight, false);
+            double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
+            double scrollPosition = selectedIndex * itemHeight;
+            //// Check if looping is enabled and the current scroll end position is reaches the view height.
+            if (enableLooping && scrollPosition < (viewPortItemCount * itemHeight) && scrollPosition >= 0)
+            {
+                //// Adjust the scroll end position by adding the total height of all items to the current scroll end position.
+                scrollPosition = (itemsCount * itemHeight) + scrollPosition;
+#if WINDOWS || MACCATALYST
+                //// In Window and Mac, need to update the new scroll position to avoid the scroll restriction.
+                if (!_isLoopingEnabled && enableLooping)
+                {
+                    _newScrollPosition = scrollPosition;
+                }
+#endif
+            }
+
+            ScrollToAsync(0, enableLooping ? scrollPosition : selectedIndex * itemHeight, false);
+        }
+
+        /// <summary>
+        /// Method to update the enable looping.
+        /// </summary>
+        internal void UpdateEnableLooping()
+        {
+#if WINDOWS || MACCATALYST
+            //// While looping is enabled, call the measure and arrange to increase the picker view height to get proper scroll position.
+            int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
+            double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / _pickerLayoutInfo.PickerInfo.ItemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
+            if (enableLooping)
+            {
+                _isLoopingEnabled = false;
+            }
+#endif
+            UpdateSelectedIndexPosition();
+            if (_pickerLayoutInfo.PickerInfo.ItemTemplate != null)
+            {
+                _pickerView.UpdateItemTemplate();
+            }
+
+            _pickerView.UpdateItemHeight();
         }
 
         /// <summary>
@@ -185,10 +238,47 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void OnViewScrolling(object? sender, ScrolledEventArgs e)
         {
             double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
+            int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
+            double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
+            if (enableLooping)
+            {
+                double totalContentHeight = itemsCount * itemHeight;
+                //// When scrolling upward, update the scroll position based on the total content height.
+                if (e.ScrollY < (viewPortItemCount * itemHeight))
+                {
+                    ScrollToAsync(0, e.ScrollY + totalContentHeight, false);
+                }
+                //// When scrolling downward, update the scroll position based on the total content height.
+                else if (e.ScrollY > totalContentHeight + (viewPortItemCount * itemHeight))
+                {
+                    ScrollToAsync(0, e.ScrollY - totalContentHeight, false);
+                }
+            }
+
             //// Assume the scrollY position is 109 and the item height is 20, While using Math.Round then the selectionIndex is 109 / 20 = 5.4 => 5(SelectionIndex).
             //// Assume the scrollY position is 110 and the item height is 20, While using Math.Round then the selectionIndex is 110 / 20 = 5.5 => 6(SelectionIndex).
             int selectionIndex = (int)Math.Round(e.ScrollY / itemHeight);
-            int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
+#if WINDOWS || MACCATALYST
+            //// While looping change dynamically, update the selected index based on new position.
+            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - e.ScrollY) > 0 && e.ScrollY != (itemsCount * itemHeight) - itemHeight)
+            {
+                selectionIndex = (int)Math.Round(_newScrollPosition / itemHeight);
+                _isLoopingEnabled = true;
+                _newScrollPosition = 0;
+            }
+#endif
+
+            //// While looping, check the selected index value.
+            if (enableLooping)
+            {
+                selectionIndex = selectionIndex % itemsCount;
+                if (selectionIndex < 0)
+                {
+                    selectionIndex = 0;
+                }
+            }
+
             selectionIndex = PickerHelper.GetValidSelectedIndex(selectionIndex, itemsCount);
             if (UpdateBlackoutSelection())
             {
@@ -196,6 +286,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             _pickerView.UpdateSelectedIndexValue(selectionIndex);
+            if (enableLooping && _pickerLayoutInfo.PickerInfo.ItemTemplate != null)
+            {
+                _pickerView.UpdateItemTemplate();
+            }
+
+#if !WINDOWS
+            //// Need to trigger the measure to update the height.
+            if (enableLooping)
+            {
+                _pickerView.UpdateItemHeight();
+            }
+#endif
         }
 
 #if __ANDROID__
@@ -218,6 +320,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     double selectionIndex = Math.Round(_touchEndPosition / itemHeight);
                     //// From above example the selectionIndex is 5. So that the current item position is 5 * 20 = 100.
                     double currentItemPosition = selectionIndex * itemHeight;
+                    int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
+                    double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
+                    bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
+                    //// While looping, check the selected index value.
+                    if (enableLooping)
+                    {
+                        selectionIndex = selectionIndex % itemsCount;
+                        if (selectionIndex < 0)
+                        {
+                            selectionIndex = 0;
+                        }
+                    }
+
                     //// From above example the scrollEndPosition is 109. So that the positionDifference is 109 - 100 = 9.
                     double positionDifference = _touchEndPosition - currentItemPosition;
                     //// For windows, While using custom animation for windows, triggers scroll event. So that default scroll to async method is used.
@@ -296,10 +411,32 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double totalContentSize = (itemsCount * itemHeight) + DesiredSize.Height - itemHeight;
             double scrollPosition = selectedIndex * itemHeight;
             double contentHeight = Math.Floor(ContentSize.Height);
+            double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
             if (contentHeight < Math.Floor(totalContentSize) && contentHeight - DesiredSize.Height <= Math.Ceiling(scrollPosition))
             {
                 return;
             }
+
+            //// Check if looping is enabled and the current scroll end position is reaches the view height.
+            if (enableLooping && scrollPosition < (viewPortItemCount * itemHeight) && scrollPosition >= 0)
+            {
+                //// Adjust the scroll end position by adding the total height of all items to the current scroll end position.
+                scrollPosition = (itemsCount * itemHeight) + scrollPosition;
+#if WINDOWS || MACCATALYST
+                if (!_isLoopingEnabled && enableLooping)
+                {
+                    _newScrollPosition = scrollPosition;
+                }
+#endif
+            }
+
+#if MACCATALYST
+            if (!_isLoopingEnabled && enableLooping)
+            {
+                _isLoopingEnabled = true;
+            }
+#endif
 
             //// No need to animate the scroll position while changing the selected index value.
             ScrollToAsync(0, scrollPosition, false);
@@ -343,6 +480,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             double newScrollPosition = selectedIndex * itemHeight;
+            double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
+            //// Check if looping is enabled and the current scroll end position is reaches the view height.
+            if (enableLooping && newScrollPosition < (viewPortItemCount * itemHeight) && newScrollPosition >= 0)
+            {
+                //// Adjust the scroll end position by adding the total height of all items to the current scroll end position.
+                newScrollPosition = (itemsCount * itemHeight) + newScrollPosition;
+#if WINDOWS || MACCATALYST
+                if (!_isLoopingEnabled && enableLooping)
+                {
+                    _newScrollPosition = newScrollPosition;
+                }
+#endif
+            }
+
             //// Checking position rather than index because switching to default mode and change screen height and again move into dialog mode then the selected item does not shown correctly center of selection highlight.
             if (newScrollPosition == ScrollY)
             {
@@ -369,7 +521,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
             double totalContentSize = (itemsCount * itemHeight) + DesiredSize.Height - itemHeight;
             double availableContentSize = Math.Floor(ContentSize.Height);
-            if (availableContentSize - 1 > totalContentSize || availableContentSize + 1 < totalContentSize)
+            double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
+            if (!enableLooping && (availableContentSize - 1 > totalContentSize || availableContentSize + 1 < totalContentSize))
             {
                 return;
             }
@@ -613,17 +767,32 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="scrollEndPosition">The scroll end position.</param>
         internal override void OnPickerViewScrollEnd(double scrollEndPosition)
         {
+            double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
+            int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
+            double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
+#if WINDOWS || MACCATALYST
+            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - scrollEndPosition) > 0 && scrollEndPosition != (itemsCount * itemHeight) - itemHeight)
+            {
+                //// Set the scroll end position to the new scroll position to continue the looping behavior.
+                scrollEndPosition = _newScrollPosition;
+            }
+#endif
+            //// If the selected index is less than 0, then set the scroll end position to -40 to avoid selected index rendering in center position.
+            if (!enableLooping && _pickerLayoutInfo.Column.SelectedIndex <= -1)
+            {
+                scrollEndPosition = -40;
+            }
+
 #if __ANDROID__
             _touchEndPosition = scrollEndPosition;
             OnTouchCompleted();
             return;
 #else
-            double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
-            int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
             double totalContentSize = (itemsCount * itemHeight) + _availableHeight - itemHeight;
             //// On windows, while change mode from default(resize the height) to dialog native change, base measure automatically change the scroll position, so it moves to other positions, so checking the content size before the scroll to fix the issue.
             double availableContentSize = Math.Floor(ContentSize.Height);
-            if (availableContentSize - 1 > totalContentSize || availableContentSize + 1 < totalContentSize)
+            if (!enableLooping && (availableContentSize - 1 > totalContentSize || availableContentSize + 1 < totalContentSize))
             {
                 return;
             }
@@ -638,6 +807,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double selectionIndex = Math.Round(scrollEndPosition / itemHeight);
             //// From above example the selectionIndex is 5. So that the current item position is 5 * 20 = 100.
             double currentItemPosition = selectionIndex * itemHeight;
+            //// While looping is enabled, ensure the selection index is within valid range.
+            if (enableLooping)
+            {
+                selectionIndex = selectionIndex % itemsCount;
+                if (selectionIndex < 0)
+                {
+                    selectionIndex += itemsCount;
+                }
+            }
+
             //// From above example the scrollEndPosition is 109. So that the positionDifference is 109 - 100 = 9.
             double positionDifference = scrollEndPosition - currentItemPosition;
             //// While scroll view fast scrolling and we started new scrolling before end of the previous scrolling then the scroll view is not scrolled to the exact position.
@@ -645,7 +824,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             void UpdateProperty(double value)
             {
                 //// From above example the positionDifference is 9. So that the center position is 109 - (9 * 1) = 100. So that the scroll position is 100.
-                double centerPosition = scrollEndPosition - (positionDifference * value);
+                double centerPosition = Math.Round(scrollEndPosition - (positionDifference * value));
                 //// From above example the center position is 100. So that the scroll position is 100.
                 //// The scroll to async does not trigger the scroll event. Because in android we handled scroll using touch event.
                 //// In iOS and Mac we handled scroll end using drag end event.
@@ -675,9 +854,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <returns>Returns size of the scroll view.</returns>
         protected override Size MeasureOverride(double widthConstraint, double heightConstraint)
         {
+            //// FB65959 - UpdateSelectedIndexPosition resets selection even when the size does not change.
 #if MACCATALYST || IOS
             if (DesiredSize.Width == widthConstraint && DesiredSize.Height == heightConstraint)
             {
+                //// We need to update blackout selection for mac and ios to update when both height and width or same.
+                UpdateBlackoutSelection();
                 return new Size(widthConstraint, heightConstraint);
             }
 #endif

@@ -119,6 +119,113 @@ internal class PickerDrawableView : SfDrawableView
     #region Private Methods
 
     /// <summary>
+    /// Method to draw the item source element inside the scroll view.
+    /// </summary>
+    /// <param name="canvas">The canvas.</param>
+    /// <param name="dirtyRect">The dirty rect.</param>
+    /// <param name="index">The selected index.</param>
+    /// <param name="yPosition">The yposition.</param>
+    /// <param name="itemHeight">The item height.</param>
+    /// <param name="maxDistance">The maximum distance.</param>
+    /// <param name="unselectedTextStyle">The unselected textstyle.</param>
+    /// <param name="selectedTextStyle">The selected textstyle.</param>
+    /// <param name="minimumThresholdFontSize">The minimum threshold font size.</param>
+    void DrawItem(ICanvas canvas, RectF dirtyRect, int index, double yPosition, double itemHeight, int maxDistance, PickerTextStyle unselectedTextStyle, PickerTextStyle selectedTextStyle, float minimumThresholdFontSize)
+    {
+        Rect rectangle = new Rect(0, yPosition, dirtyRect.Width, itemHeight);
+        PickerTextStyle blackoutStyle = _pickerLayoutInfo.PickerInfo.DisabledTextStyle;
+        blackoutStyle.FontSize = unselectedTextStyle.FontSize;
+
+        bool isSelected = index == _selectedIndex;
+
+        if (isSelected)
+        {
+            PickerTextStyle defaultSelectedStyle = new PickerTextStyle { FontSize = selectedTextStyle.FontSize, TextColor = selectedTextStyle.TextColor, FontFamily = selectedTextStyle.FontFamily, FontAttributes = selectedTextStyle.FontAttributes, FontAutoScalingEnabled = selectedTextStyle.FontAutoScalingEnabled };
+            if (_pickerLayoutInfo.Column.SelectedItem == null || _pickerLayoutInfo.Column.SelectedIndex <= -1)
+            {
+                defaultSelectedStyle = _pickerLayoutInfo.PickerInfo.TextStyle;
+            }
+
+            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, defaultSelectedStyle);
+        }
+        else
+        {
+            int distance = Math.Abs(index - _selectedIndex);
+            if (_pickerLayoutInfo.PickerInfo.EnableLooping && distance > _sizeBasedItemsSource.Count / 2)
+            {
+                distance = _sizeBasedItemsSource.Count - distance;
+            }
+
+            if (distance <= maxDistance || _pickerLayoutInfo.PickerInfo.EnableLooping)
+            {
+                switch (_pickerLayoutInfo.PickerInfo.TextDisplayMode)
+                {
+                    case PickerTextDisplayMode.Default:
+                        PickerTextStyle textStyle = unselectedTextStyle;
+                        canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[index], false) ? blackoutStyle : textStyle);
+                        break;
+
+                    case PickerTextDisplayMode.Fade:
+                        {
+                            PickerTextStyle fadeStyle = new PickerTextStyle()
+                            {
+                                TextColor = unselectedTextStyle.TextColor,
+                                FontSize = unselectedTextStyle.FontSize,
+                                FontAttributes = unselectedTextStyle.FontAttributes,
+                                FontFamily = unselectedTextStyle.FontFamily,
+                                FontAutoScalingEnabled = unselectedTextStyle.FontAutoScalingEnabled,
+                            };
+
+                            float opacity = 1.0f - (distance / (float)maxDistance);
+                            fadeStyle.TextColor = fadeStyle.TextColor.WithAlpha(opacity);
+                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[index], false) ? blackoutStyle : fadeStyle);
+                        }
+
+                        break;
+
+                    case PickerTextDisplayMode.Shrink:
+                        {
+                            PickerTextStyle shrinkStyle = new PickerTextStyle()
+                            {
+                                TextColor = unselectedTextStyle.TextColor,
+                                FontSize = unselectedTextStyle.FontSize,
+                                FontAttributes = unselectedTextStyle.FontAttributes,
+                                FontFamily = unselectedTextStyle.FontFamily,
+                                FontAutoScalingEnabled = unselectedTextStyle.FontAutoScalingEnabled,
+                            };
+
+                            float size = (float)(shrinkStyle.FontSize - (distance / (float)maxDistance * (shrinkStyle.FontSize - minimumThresholdFontSize)));
+                            shrinkStyle.FontSize = Math.Max(minimumThresholdFontSize, size);
+                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[index], false) ? blackoutStyle : shrinkStyle);
+                        }
+
+                        break;
+
+                    case PickerTextDisplayMode.FadeAndShrink:
+                        {
+                            PickerTextStyle fadeandShrinkStyle = new PickerTextStyle()
+                            {
+                                TextColor = unselectedTextStyle.TextColor,
+                                FontSize = unselectedTextStyle.FontSize,
+                                FontAttributes = unselectedTextStyle.FontAttributes,
+                                FontFamily = unselectedTextStyle.FontFamily,
+                                FontAutoScalingEnabled = unselectedTextStyle.FontAutoScalingEnabled,
+                            };
+
+                            float opacity = 1.0f - (distance / (float)maxDistance);
+                            float size = (float)(fadeandShrinkStyle.FontSize - (distance / (float)maxDistance * (fadeandShrinkStyle.FontSize - minimumThresholdFontSize)));
+                            fadeandShrinkStyle.FontSize = Math.Max(minimumThresholdFontSize, size);
+                            fadeandShrinkStyle.TextColor = fadeandShrinkStyle.TextColor.WithAlpha(opacity);
+                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[index], false) ? blackoutStyle : fadeandShrinkStyle);
+                        }
+
+                        break;
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Used for checking whether value is disabled or not.
     /// </summary>
     /// <param name="currentValue">Current value of picker column.</param>
@@ -195,9 +302,12 @@ internal class PickerDrawableView : SfDrawableView
             double maxTextWidth = _drawnWidth - padding;
             foreach (string value in _itemsSource)
             {
-                //// Initially checks that the given value is need to be trimmed by using font size and text length.
-                string unSelectedText = value.Length * (_pickerLayoutInfo.PickerInfo.TextStyle.FontSize * 0.6) > maxTextWidth ? PickerHelper.TrimText(value, maxTextWidth, _pickerLayoutInfo.PickerInfo.TextStyle) : value;
-                string selectedText = value.Length * (_pickerLayoutInfo.PickerInfo.SelectedTextStyle.FontSize * 0.6) > maxTextWidth ? PickerHelper.TrimText(value, maxTextWidth, _pickerLayoutInfo.PickerInfo.SelectedTextStyle) : value;
+                string unSelectedText = value.Length * (_pickerLayoutInfo.PickerInfo.TextStyle.FontSize * 0.6) > maxTextWidth
+                    ? PickerHelper.TrimText(value, maxTextWidth, _pickerLayoutInfo.PickerInfo.TextStyle)
+                    : value;
+                string selectedText = value.Length * (_pickerLayoutInfo.PickerInfo.SelectedTextStyle.FontSize * 0.6) > maxTextWidth
+                    ? PickerHelper.TrimText(value, maxTextWidth, _pickerLayoutInfo.PickerInfo.SelectedTextStyle)
+                    : value;
 
                 string textToAdd = unSelectedText.Length < selectedText.Length ? unSelectedText : selectedText;
                 _sizeBasedItemsSource.Add(textToAdd);
@@ -205,87 +315,59 @@ internal class PickerDrawableView : SfDrawableView
         }
 
         canvas.SaveState();
-        //// The item height.
         double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
-        double yPosition = 0;
-        int startIndex = _getStartingIndex();
+        double currentViewPortCount = _pickerView.GetPickerItemViewPortCount();
+        bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && _sizeBasedItemsSource.Count > currentViewPortCount;
 
         float minimumThresholdFontSize = 8;
         var unselectedTextStyle = _pickerLayoutInfo.PickerInfo.TextStyle;
         var selectedTextStyle = _pickerLayoutInfo.PickerInfo.SelectedTextStyle;
-        int maxDistance = (int)(_pickerView.GetPickerItemViewPortCount() / 2) + 1;
+        int maxDistance = (int)(currentViewPortCount / 2) + 1;
 
-        //// Draw item source item based on the item source collection. And change the text style based on selected item and selected index.
-        for (int i = startIndex; i < _sizeBasedItemsSource.Count; i++)
+        double yPosition = 0;
+        int index;
+
+        if (enableLooping)
         {
-            Rect rectangle = new Rect(0, yPosition, dirtyRect.Width, itemHeight);
-            PickerTextStyle textStyle;
-            PickerTextStyle blackoutStyle = _pickerLayoutInfo.PickerInfo.DisabledTextStyle;
-            blackoutStyle.FontSize = unselectedTextStyle.FontSize;
-
-            if (i == _selectedIndex)
+            if (currentViewPortCount % 2 == 0)
             {
-                PickerTextStyle defaultSelectedStyle = new PickerTextStyle { FontSize = selectedTextStyle.FontSize, TextColor = selectedTextStyle.TextColor, FontFamily = selectedTextStyle.FontFamily, FontAttributes = selectedTextStyle.FontAttributes, FontAutoScalingEnabled = selectedTextStyle.FontAutoScalingEnabled };
-                if (_pickerLayoutInfo.Column.SelectedItem == null || _pickerLayoutInfo.Column.SelectedIndex <= -1)
-                {
-                    defaultSelectedStyle = _pickerLayoutInfo.PickerInfo.TextStyle;
-                }
-
-                canvas.DrawText(_sizeBasedItemsSource[i], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, defaultSelectedStyle);
+                index = _selectedIndex - (int)Math.Floor(currentViewPortCount / 2) + 1;
             }
             else
             {
-                int distance = Math.Abs(i - _selectedIndex);
-
-                if (distance <= maxDistance)
-                {
-                    switch (_pickerLayoutInfo.PickerInfo.TextDisplayMode)
-                    {
-                        case PickerTextDisplayMode.Default:
-                            textStyle = _pickerLayoutInfo.PickerInfo.TextStyle;
-                            canvas.DrawText(_sizeBasedItemsSource[i], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[i], false) ? blackoutStyle : textStyle);
-                            break;
-
-                        case PickerTextDisplayMode.Fade:
-                            {
-                                PickerTextStyle fadeStyle = new PickerTextStyle() { TextColor = unselectedTextStyle.TextColor, FontSize = unselectedTextStyle.FontSize, FontAttributes = unselectedTextStyle.FontAttributes, FontFamily = unselectedTextStyle.FontFamily, FontAutoScalingEnabled = unselectedTextStyle.FontAutoScalingEnabled };
-                                float opacity = 1.0f - (distance / (float)maxDistance);
-                                fadeStyle.TextColor = fadeStyle.TextColor.WithAlpha(opacity);
-                                canvas.DrawText(_sizeBasedItemsSource[i], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[i], false) ? blackoutStyle : fadeStyle);
-                            }
-
-                            break;
-
-                        case PickerTextDisplayMode.Shrink:
-                            {
-                                PickerTextStyle shrinkStyle = new PickerTextStyle() { TextColor = unselectedTextStyle.TextColor, FontSize = unselectedTextStyle.FontSize, FontAttributes = unselectedTextStyle.FontAttributes, FontFamily = unselectedTextStyle.FontFamily, FontAutoScalingEnabled = unselectedTextStyle.FontAutoScalingEnabled };
-                                float size = (float)(shrinkStyle.FontSize - (distance / (float)maxDistance * (shrinkStyle.FontSize - minimumThresholdFontSize)));
-                                shrinkStyle.FontSize = Math.Max(minimumThresholdFontSize, size);
-                                canvas.DrawText(_sizeBasedItemsSource[i], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[i], false) ? blackoutStyle : shrinkStyle);
-                            }
-
-                            break;
-
-                        case PickerTextDisplayMode.FadeAndShrink:
-                            {
-                                PickerTextStyle fadeandShrinkStyle = new PickerTextStyle() { TextColor = unselectedTextStyle.TextColor, FontSize = unselectedTextStyle.FontSize, FontAttributes = unselectedTextStyle.FontAttributes, FontFamily = unselectedTextStyle.FontFamily, FontAutoScalingEnabled = unselectedTextStyle.FontAutoScalingEnabled };
-                                float opacity = 1.0f - (distance / (float)maxDistance);
-                                float size = (float)(fadeandShrinkStyle.FontSize - (distance / (float)maxDistance * (fadeandShrinkStyle.FontSize - minimumThresholdFontSize)));
-                                fadeandShrinkStyle.FontSize = Math.Max(minimumThresholdFontSize, size);
-                                fadeandShrinkStyle.TextColor = fadeandShrinkStyle.TextColor.WithAlpha(opacity);
-                                canvas.DrawText(_sizeBasedItemsSource[i], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[i], false) ? blackoutStyle : fadeandShrinkStyle);
-                            }
-
-                            break;
-                    }
-                }
+                index = _selectedIndex - (int)Math.Floor(currentViewPortCount / 2);
             }
 
-            yPosition += itemHeight;
-            if (yPosition >= dirtyRect.Height)
+            if (index < 0)
+            {
+                index += _sizeBasedItemsSource.Count;
+            }
+        }
+        else
+        {
+            index = _getStartingIndex();
+        }
+
+        int totalItemsToDraw = (int)(dirtyRect.Height / itemHeight);
+        int itemsDrawn = 0;
+
+        while (itemsDrawn < totalItemsToDraw)
+        {
+            if (enableLooping && index >= _sizeBasedItemsSource.Count)
+            {
+                index = 0;
+            }
+
+            if (!enableLooping && index >= _sizeBasedItemsSource.Count)
             {
                 break;
             }
+
+            DrawItem(canvas, dirtyRect, index, yPosition, itemHeight, maxDistance, unselectedTextStyle, selectedTextStyle, minimumThresholdFontSize);
+
+            index++;
+            yPosition += itemHeight;
+            itemsDrawn++;
         }
 
         canvas.RestoreState();

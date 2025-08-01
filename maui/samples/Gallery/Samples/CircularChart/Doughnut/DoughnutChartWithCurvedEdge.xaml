@@ -1,0 +1,66 @@
+﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.DoughnutChartWithCurvedEdge"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+                      x:DataType="local:DoughnutSeriesViewModel">
+  
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CircularChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.BindingContext>
+        <local:DoughnutSeriesViewModel x:Name="doughnutViewModel"/>
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Content>
+
+    <chart:SfCircularChart x:Name="chart" HorizontalOptions="Fill" VerticalOptions="Fill">
+
+        <chart:SfCircularChart.Title>
+            <Label Text="Distribution status report" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
+        </chart:SfCircularChart.Title>
+
+        <chart:SfCircularChart.Legend>
+            <chart:ChartLegend/>
+        </chart:SfCircularChart.Legend>
+
+        <chart:SfCircularChart.Series>
+            <chart:DoughnutSeries x:Name="series"
+                                  PaletteBrushes="{AppThemeBinding Light={StaticResource RadialPaletteBrushesLight1}, Dark={StaticResource RadialPaletteBrushesDark1}}"
+                                  ItemsSource="{Binding CapStyleData}" XBindingPath="Name" YBindingPath="Value"
+                                  EnableAnimation="False" LegendIcon="SeriesType" CapStyle="BothCurve" Radius="0.8"
+                                  StartAngle="-90" EndAngle="270" GapRatio="0.008" LabelContext="Percentage" ShowDataLabels="True" InnerRadius="0.8">
+                 <chart:DoughnutSeries.CenterView>
+                     <Grid x:Name="layout" x:DataType="chart:DoughnutSeries" HeightRequest="{Binding CenterHoleSize}" WidthRequest="{Binding CenterHoleSize}">
+                           <Grid.RowDefinitions>
+                                  <RowDefinition Height="*"></RowDefinition>
+                                  <RowDefinition Height="*"></RowDefinition>
+                           </Grid.RowDefinitions>
+                           <Path Grid.Row="0" x:Name="pathData" x:DataType="local:DoughnutSeriesViewModel"
+                                 Scale="1.5"
+                                 Fill="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}" HorizontalOptions="Center" VerticalOptions="End">
+                           </Path>
+                           <Label Grid.Row="1" FontSize="15" Margin="0,10,0,0" Padding="2" 
+                                 Text="Success Rate: 56%"
+                                 TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"
+                                 HorizontalOptions="Center" VerticalOptions="Start"/>
+                     </Grid>
+                 </chart:DoughnutSeries.CenterView>
+                 <chart:DoughnutSeries.DataLabelSettings>
+                     <chart:CircularDataLabelSettings>
+                         <chart:CircularDataLabelSettings.LabelStyle>
+                             <chart:ChartDataLabelStyle FontSize="{OnPlatform Default=12,iOS=10}"/>
+                         </chart:CircularDataLabelSettings.LabelStyle>
+                     </chart:CircularDataLabelSettings>
+                 </chart:DoughnutSeries.DataLabelSettings>
+             </chart:DoughnutSeries>
+         </chart:SfCircularChart.Series>
+    </chart:SfCircularChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

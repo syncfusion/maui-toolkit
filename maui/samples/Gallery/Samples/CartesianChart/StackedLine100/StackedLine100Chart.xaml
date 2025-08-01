@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.StackedLine100Chart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-            xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:StackedLine100ViewModel">
     
     <localCore:SampleView.Resources>
         <ResourceDictionary>
@@ -14,26 +15,30 @@
     </localCore:SampleView.Resources>
     
     <localCore:SampleView.Content>
-        <StackLayout>
+        <Grid>
             
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:StackedLine100ViewModel/>
-            </StackLayout.BindingContext>
-            
-            <chart:SfCartesianChart x:Name="Chart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesDark}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" >
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesDark}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="Fill" >
 
                 <chart:SfCartesianChart.Resources>
-                    <ResourceDictionary>
+                  <local:TooltipValuesConverter x:Key="valueConverter"/>
+                  <ResourceDictionary>
                         <DataTemplate x:Key="template1">
-                            <StackLayout Orientation="Horizontal">
+                                <StackLayout Orientation="Horizontal" x:DataType="chart:TooltipInfo">
                                 <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series1Light}, Dark={StaticResource series1Dark}}"/>
                                 <StackLayout Orientation="Vertical">
-                                    <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
+                                    <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Name'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
                                     <Label FontSize="12" Padding="5,0,0,0" Margin="0,0,3,0" >
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="O+" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                                <Span Text="{Binding Item.High, StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                                <Span Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='High', StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -41,15 +46,15 @@
                             </StackLayout>
                         </DataTemplate>
                         <DataTemplate x:Key="template2">
-                            <StackLayout Orientation="Horizontal">
+                                <StackLayout Orientation="Horizontal" x:DataType="chart:TooltipInfo">
                                 <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series2Dark}, Dark={StaticResource series2Dark}}"/>
                                 <StackLayout Orientation="Vertical">
-                                    <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
+                                   <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Name'}"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
                                     <Label FontSize="12" Padding="5,0,0,0" Margin="0,0,3,0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="A+" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                                <Span Text="{Binding Item.Low, StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                                <Span Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Low',StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -57,15 +62,15 @@
                             </StackLayout>
                         </DataTemplate>
                         <DataTemplate x:Key="template3">
-                            <StackLayout Orientation="Horizontal">
+                            <StackLayout Orientation="Horizontal" x:DataType="chart:TooltipInfo">
                                 <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series3Dark}, Dark={StaticResource series3Dark}}"/>
                                 <StackLayout Orientation="Vertical">
-                                    <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
+                                    <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Name'}"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
                                     <Label FontSize="12" Padding="5,0,0,0" Margin="0,0,3,0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="B+" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                                <Span Text="{Binding Item.Value, StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                                <Span Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Value', StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -73,15 +78,15 @@
                             </StackLayout>
                         </DataTemplate>
                         <DataTemplate x:Key="template4">
-                            <StackLayout Orientation="Horizontal">
+                            <StackLayout Orientation="Horizontal" x:DataType="chart:TooltipInfo">
                                 <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series4Dark}, Dark={StaticResource series4Dark}}"/>
                                 <StackLayout Orientation="Vertical">
-                                    <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
+                                    <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Name'}"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0"/>
                                     <Label FontSize="12" Padding="5,0,0,0" Margin="0,0,3,0">
                                         <Label.FormattedText>
                                             <FormattedString>
                                                 <Span Text="Others" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                                <Span Text="{Binding Item.Size, StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                                <Span Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Size', StringFormat=' : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                                             </FormattedString>
                                         </Label.FormattedText>
                                     </Label>
@@ -158,8 +163,8 @@
                     </chart:StackingLine100Series.MarkerSettings>
                 </chart:StackingLine100Series>
             </chart:SfCartesianChart>
-       
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" rhesusnegative.net" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -168,6 +173,6 @@
                 </Label>
             </HorizontalStackLayout>
        
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 </localCore:SampleView>

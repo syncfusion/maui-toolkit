@@ -3,16 +3,22 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.DataLabelTemplate"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:DataLabelViewModel">
     <localCore:SampleView.Content>
 
-        <StackLayout HorizontalOptions="Fill" x:Name="layout">
+        <Grid HorizontalOptions="Fill" x:Name="layout">
 
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:DataLabelViewModel x:Name="ViewModel"/>
-            </StackLayout.BindingContext>
-
-            <chart:SfCartesianChart x:Name="chart" VerticalOptions="FillAndExpand" BackgroundColor="White">
+            </Grid.BindingContext>
+          
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+ 
+            <chart:SfCartesianChart Grid.Row="0" x:Name="chart" VerticalOptions="Fill" BackgroundColor="White">
 
                 <chart:SfCartesianChart.Resources>
                     <local:DoubleToFontIconConverter x:Key="doubleToFontIconConverter"/>
@@ -22,10 +28,10 @@
                             <!--<Image WidthRequest="30" HeightRequest="30" HorizontalOptions="Start" VerticalOptions="Start" Source="{Binding Item.GrossLastYearDelta, Converter={StaticResource doubleToFontIconConverter}, ConverterParameter='image'}"/>-->
                             <Label Grid.Column="0" FontSize="{OnPlatform MacCatalyst='50', WinUI='Large', Default='40'}" Margin="{OnPlatform WinUI='-4', Default='-4,-4,-10, -4'}" Text="{Binding Item, Converter={StaticResource doubleToFontIconConverter}, ConverterParameter='icon'}" 
                                    TextColor="{Binding Item, Converter={StaticResource doubleToFontIconConverter}, ConverterParameter='image'}"
-                                      FontFamily="MauiSampleFontIcon" VerticalOptions="Center">
+                                   FontFamily="MauiSampleFontIcon" VerticalOptions="Center">
                             </Label>
                             <Label Grid.Column="1" Text="{Binding Item,Converter={StaticResource doubleToFontIconConverter},ConverterParameter='GrossLastYearDelta', StringFormat='{0:0.###}%'}" FontSize="{OnPlatform Default='14', MacCatalyst='16'}" 
-                                    VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center" >
+                                   VerticalTextAlignment="Center" HorizontalOptions="Start" VerticalOptions="Center" >
                             </Label>
                         </Grid>
                     </DataTemplate>
@@ -60,18 +66,18 @@
              
                 <!--Initialize the series for chart-->
                 <chart:ColumnSeries CornerRadius="15, 15, 0, 0" Fill="#F7CB05" 
-                                ShowDataLabels="True"
-                                ItemsSource="{Binding RevenueCollection}" 
-                                XBindingPath="Year"
-                                YBindingPath="TotalGrossInBillion"
-                                LabelTemplate="{StaticResource labelTemplate}">
+                                    ShowDataLabels="True"
+                                    ItemsSource="{Binding RevenueCollection}" 
+                                    XBindingPath="Year"
+                                    YBindingPath="TotalGrossInBillion"
+                                    LabelTemplate="{StaticResource labelTemplate}">
                     <chart:ColumnSeries.DataLabelSettings>
                         <chart:CartesianDataLabelSettings x:Name="dataLabelSettings" LabelPlacement="Outer"/>
                     </chart:ColumnSeries.DataLabelSettings>
                 </chart:ColumnSeries>
             </chart:SfCartesianChart>
 
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text="Box Office Mojo" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -80,7 +86,7 @@
                 </Label>
             </HorizontalStackLayout>
 
-        </StackLayout>
+        </Grid>
 
     </localCore:SampleView.Content>
  

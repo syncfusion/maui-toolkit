@@ -3,11 +3,13 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.CartesianLegend"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                      xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters"
-                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:LegendViewModel">
     <localCore:SampleView.Content>
         <Grid HorizontalOptions="Fill" VerticalOptions="Fill">
-            <chart:SfCartesianChart x:Name="tooltipChart" PaletteBrushes="{Binding CustomColor3}">
+           <chart:SfCartesianChart x:Name="tooltipChart" PaletteBrushes="{Binding CustomColor3}">
                 <chart:SfCartesianChart.Title>
                     <Label Text="Automobile Production by Category" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
                 </chart:SfCartesianChart.Title>
@@ -21,21 +23,21 @@
                 <chart:SfCartesianChart.Resources>
                     <ResourceDictionary>
                         <converter:BrushToColorConverter x:Key="brushToColor" />
-                        <DataTemplate x:Key="LegendTemplate">
+                        <local:TooltipValuesConverter x:Key="valueConverter"/>
+                        <DataTemplate x:Key="LegendTemplate" x:DataType="core:LegendItem">
                             <Grid ColumnDefinitions="Auto,Auto"  ColumnSpacing="5">
                                 <HorizontalStackLayout Grid.Column="0" WidthRequest="35" HeightRequest="35">
-                                    <Path Scale="0.5" TranslationX="0.5"  HorizontalOptions="Start" VerticalOptions="Center"
-                                      Data="{Binding Item.PathData}" 
-                                      Fill="{Binding IconBrush,Converter={StaticResource brushToColor}}"/>
+                                <Path Scale="0.5" TranslationX="0.5"  HorizontalOptions="Start" VerticalOptions="Center"
+                                      Data="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='PathData'}"
+                                      Fill="{Binding IconBrush, Converter={StaticResource brushToColor}}"/>
                                 </HorizontalStackLayout>
-                                <Label Grid.Column="1"
+                                <Label Grid.Column="1" 
                                        FontSize="13" 
                                        VerticalTextAlignment="Center"
-                                       Text="{Binding Item.Label}"
+                                       Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Label'}"
                                        TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}" Margin="0,2,0,0"
                                        HorizontalOptions="Center"
-                                       HorizontalTextAlignment="Start"
-                                       />
+                                       HorizontalTextAlignment="Start"/>
                             </Grid>
                         </DataTemplate>
                         
@@ -43,10 +45,10 @@
                             <VerticalStackLayout>
                                 <Label Text="Truck" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
                                 <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100" />
-                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                <HorizontalStackLayout x:DataType="chart:TooltipInfo" HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
                                     <Ellipse Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" HorizontalOptions="Center" HeightRequest="10" WidthRequest="10" Fill="#04ABC1" Margin="0,3,3,0" />
-                                    <Label Text="{Binding Item.Name}"  HorizontalOptions="Center" VerticalTextAlignment="Center"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
-                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                                    <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Name'}"  HorizontalOptions="Center" VerticalTextAlignment="Center"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                    <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat=' :  {0}'}" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </DataTemplate>
@@ -55,10 +57,10 @@
                             <VerticalStackLayout>
                                 <Label Text="Car" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
                                 <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100" />
-                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                <HorizontalStackLayout x:DataType="chart:TooltipInfo" HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
                                     <Ellipse Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" HorizontalOptions="Center" StrokeThickness="2" HeightRequest="10" WidthRequest="10" Fill="#234A76" Margin="0,3,3,0" />
-                                    <Label Text="{Binding Item.Name}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
-                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                                    <Label Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Name'}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                    <Label Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </DataTemplate>
@@ -67,10 +69,10 @@
                             <VerticalStackLayout>
                                 <Label Text="Motorcycle" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
                                 <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100" />
-                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                <HorizontalStackLayout x:DataType="chart:TooltipInfo" HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
                                     <Ellipse Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" HeightRequest="10" WidthRequest="10" Fill="#7642A9" Margin="0,3,3,0" />
-                                    <Label Text="{Binding Item.Name}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
-                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                                    <Label Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Name'}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                    <Label Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </DataTemplate>
@@ -79,10 +81,10 @@
                             <VerticalStackLayout>
                                 <Label Text="Bus" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
                                 <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="100" />
-                                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
+                                <HorizontalStackLayout x:DataType="chart:TooltipInfo" HorizontalOptions="Center" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
                                     <Ellipse Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" HeightRequest="10" WidthRequest="10" Fill="#DD6031" Margin="0,3,3,0" />
-                                    <Label Text="{Binding Item.Name}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
-                                    <Label Text="{Binding Item.Value,StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
+                                    <Label Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Name'}"  VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                    <Label Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat=' :  {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" Margin="0,0,3,0"  FontSize="12" />
                                 </HorizontalStackLayout>
                             </VerticalStackLayout>
                         </DataTemplate>

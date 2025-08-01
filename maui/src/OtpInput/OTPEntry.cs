@@ -273,6 +273,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
 #if WINDOWS
                 case Microsoft.UI.Xaml.Controls.TextBox textbox:
                     OptimizeWindowsTextBox(textbox);
+                    textbox.CornerRadius = new Microsoft.UI.Xaml.CornerRadius(4, 4, 0, 0);
                     break;
 #elif ANDROID
                 case AndroidX.AppCompat.Widget.AppCompatEditText textbox:

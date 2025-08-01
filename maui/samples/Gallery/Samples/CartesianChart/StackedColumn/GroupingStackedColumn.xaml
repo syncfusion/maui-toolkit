@@ -3,16 +3,17 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.GroupingStackedColumn"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:StackedColumnViewModel">
     <localCore:SampleView.Resources>
         <Label x:Key="title" x:Name="titleName" Text="Actual Vs Forecast"
-                           FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
-                          LineBreakMode="WordWrap" Padding="0,0,0,5"/>
+               FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
+               LineBreakMode="WordWrap" Padding="0,0,0,5"/>
     </localCore:SampleView.Resources>
 
     <localCore:SampleView.Content>
         <ScrollView>
-        <chart:SfCartesianChart x:Name="chart" Title="{StaticResource title}" >
+        <chart:SfCartesianChart x:Name="chart" Title="{StaticResource title}">
             <chart:SfCartesianChart.BindingContext>
                 <local:StackedColumnViewModel></local:StackedColumnViewModel>
             </chart:SfCartesianChart.BindingContext>
@@ -41,7 +42,7 @@
                                          EnableTooltip="True"
                                          Fill="#45D669"
                                          Spacing="0.07"
-                                        LegendIcon="SeriesType"
+                                         LegendIcon="SeriesType"
                                          GroupingLabel="GroupOne"
                                          Label="Forecast Labor Cost"/>
 
@@ -53,7 +54,7 @@
                                         Fill="#6EDE8A"
                                         Spacing="0.07"
                                         LegendIcon="SeriesType"
-                                         GroupingLabel="GroupOne"
+                                        GroupingLabel="GroupOne"
                                         Label="Forecast Material Cost"/>
 
 
@@ -63,9 +64,9 @@
                                         EnableAnimation="True"
                                         EnableTooltip="True"
                                         Fill="#B7EFC5"
-                                         Spacing="0.07"
+                                        Spacing="0.07"
                                         LegendIcon="SeriesType"
-                                         GroupingLabel="GroupOne"
+                                        GroupingLabel="GroupOne"
                                         Label="Forecast Misc Cost"/>
 
 
@@ -75,9 +76,9 @@
                                          EnableAnimation="True"
                                          EnableTooltip="True"
                                          Fill="#D65F45"
-                                        LegendIcon="SeriesType"
+                                         LegendIcon="SeriesType"
                                          Spacing="0.07"
-                                          GroupingLabel="GroupTwo"
+                                         GroupingLabel="GroupTwo"
                                          Label="Actual Labor Cost"/>
             
                 <chart:StackingColumnSeries  XBindingPath="Name"
@@ -87,7 +88,7 @@
                                          EnableTooltip="True"
                                          Fill="#DE896E"
                                          Spacing="0.07"
-                                        LegendIcon="SeriesType"
+                                         LegendIcon="SeriesType"
                                          GroupingLabel="GroupTwo"
                                          Label="Actual Material Cost"/>
 
@@ -97,9 +98,9 @@
                                          EnableAnimation="True"
                                          EnableTooltip="True"
                                          Fill="#EFC4B7"
-                                        LegendIcon="SeriesType"
-                                          Spacing="0.07"
-                                          GroupingLabel="GroupTwo"
+                                         LegendIcon="SeriesType"
+                                         Spacing="0.07"
+                                         GroupingLabel="GroupTwo"
                                          Label="Actual Misc Cost"/>
 
         </chart:SfCartesianChart>

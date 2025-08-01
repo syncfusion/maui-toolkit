@@ -13,7 +13,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// <summary>
         /// The show header switch
         /// </summary>
-        Switch? _showHeaderSwitch, _showFooterSwitch;
+        Switch? _showHeaderSwitch, _showFooterSwitch, _showEnableLoopingSwitch;
 
         /// <summary>
         /// The text display mode combo box.
@@ -67,7 +67,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
 
             _showHeaderSwitch = sampleView.Content.FindByName<Switch>("showHeaderSwitch");
             _showFooterSwitch = sampleView.Content.FindByName<Switch>("showFooterSwitch");
-
+            _showEnableLoopingSwitch = sampleView.Content.FindByName<Switch>("enableLoopingSwitch");
             _textDisplay = new ObservableCollection<object>()
             {
                 "Default", "Fade", "Shrink", "FadeAndShrink"
@@ -86,6 +86,11 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
             if (_showFooterSwitch != null)
             {
                 _showFooterSwitch.Toggled += ShowFooterSwitch_Toggled;
+            }
+
+            if (_showEnableLoopingSwitch != null)
+            {
+                _showEnableLoopingSwitch.Toggled += EnableLoopingSwitch_Toggled;
             }
         }
 
@@ -180,6 +185,26 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         }
 
         /// <summary>
+        /// Method for enable looping switch toggle changed.
+        /// </summary>
+        /// <param name="sender">Return the object.</param>
+        /// <param name="e">The Event Arguments.</param>
+        void EnableLoopingSwitch_Toggled(object? sender, ToggledEventArgs e)
+        {
+            if (_picker != null)
+            {
+                if (e.Value == true)
+                {
+                    _picker.EnableLooping = true;
+                }
+                else if (e.Value == false)
+                {
+                    _picker.EnableLooping = false;
+                }
+            }
+        }
+
+        /// <summary>
         /// Begins when the behavior attached to the view 
         /// </summary>
         /// <param name="sampleView">bindable value</param>
@@ -196,6 +221,12 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
             {
                 _showFooterSwitch.Toggled -= ShowFooterSwitch_Toggled;
                 _showFooterSwitch = null;
+            }
+
+            if (_showEnableLoopingSwitch != null)
+            {
+                _showEnableLoopingSwitch.Toggled -= EnableLoopingSwitch_Toggled;
+                _showEnableLoopingSwitch = null;
             }
         }
 

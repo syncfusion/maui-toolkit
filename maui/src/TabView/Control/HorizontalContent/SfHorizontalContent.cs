@@ -283,11 +283,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				ContentWidth = widthConstraint;
 				UpdateTabItemContentSize();
 				UpdateTabItemContentPosition();
+				_tabBar?.UpdateTabIndicatorWidth();
 			}
 			if (heightConstraint > 0 && heightConstraint != double.PositiveInfinity )
 			{
 				UpdateTabItemContentSize();
 				UpdateTabItemContentPosition();
+				_tabBar?.UpdateTabIndicatorWidth();
 			}
 
 			return base.MeasureContent(widthConstraint, heightConstraint);

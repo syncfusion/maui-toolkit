@@ -18,7 +18,7 @@
     
     <localCore:SampleView.Content>
         <chart:SfFunnelChart  HorizontalOptions="Fill"
-                              VerticalOptions="FillAndExpand"
+                              VerticalOptions="Fill"
                               Margin="{OnPlatform Android='0,0,0,50', iOS='0,0,0,50', Default='0,0,0,0'}"
                               PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight2}, Dark={StaticResource PaletteBrushesDark2}}" 
                               StrokeWidth="2"

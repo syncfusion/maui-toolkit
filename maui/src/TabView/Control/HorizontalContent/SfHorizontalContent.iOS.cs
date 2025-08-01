@@ -3,6 +3,7 @@ using Syncfusion.Maui.Toolkit.Internals;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 using UIKit;
 using Syncfusion.Maui.Toolkit.Platform;
+using Syncfusion.Maui.Toolkit.TextInputLayout;
 
 namespace Syncfusion.Maui.Toolkit.TabView
 {
@@ -46,6 +47,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			{
 				_canProcessTouch = false;
 			}
+			else if (touchView is Syncfusion.Maui.Toolkit.Platform.LayoutViewExt layoutViewExt)
+			{
+				if (layoutViewExt.Drawable is SfTextInputLayout || layoutViewExt.Drawable is Editor )
+				{
+					// for SfTextInputLayout || for Editor inside LayoutViewExt
+					this._canProcessTouch = false;
+				}
+            }
 			else if (touchView is Microsoft.Maui.Platform.MauiImageView)
 			{
 				HandleMauiImageViewOnTap(view);
@@ -56,10 +65,66 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				if (touchView is not Syncfusion.Maui.Toolkit.Platform.LayoutViewExt &&
 					touchView is not Syncfusion.Maui.Toolkit.Platform.NativePlatformGraphicsView)
 				{
-					HandleOtherViewsOnTap(touchView, view);
+					if (touchView is MauiTextField || touchView is MauiTextView || touchView is UIKit.UITextField)
+					{
+						this._canProcessTouch = false;
+					}
+				}
+                else if (view is UIKit.UITouch uiTouch)
+                {
+				// For SfTextInputLayout or similar views that require precise touch interactions.
+                    var touchLocation = uiTouch.LocationInView(uiTouch.View?.Superview);
+					var textInputView = FindSfTextInputLayout(uiTouch.View?.Superview);
+                    this._canProcessTouch = true;
+                    if (textInputView != null)
+                    {
+                        if (uiTouch.GestureRecognizers != null)
+                        {
+                            foreach (var gesture in uiTouch.GestureRecognizers)
+                            {
+                                if (gesture is UILongPressGestureRecognizer)
+                                {
+                                    this.RemoveGestureListener(this);
+                                    this._isTapGestureRemoved = true;
+                                }
+                            }
+                        }
+                    }
+					else
+                    {
+					    if (uiTouch.GestureRecognizers != null)
+						{
+							foreach (var gesture in uiTouch.GestureRecognizers)
+							{
+								if (gesture is UILongPressGestureRecognizer)
+								{
+									this._canProcessTouch = false;
+								}
+							}
+				        }
+                    }
 				}
 			}
 #endif
+		}
+
+		/// <summary>
+		/// Finds and returns the native <see cref="UIView"/> that represents a <see cref="SfTextInputLayout"/>
+		/// </summary>
+		/// <param name="root">The root <see cref="UIView"/> to start the search from.</param>
+		/// <returns>
+		/// The matching <see cref="UIView"/> that wraps a <see cref="SfTextInputLayout"/> if found; otherwise, <c>null</c>.
+		/// </returns>
+		private UIView? FindSfTextInputLayout(UIView? root)
+		{
+			if (root == null)
+			{
+				return null;
+			}
+			else
+			{
+				return root;
+			}
 		}
 
 		/// <summary>

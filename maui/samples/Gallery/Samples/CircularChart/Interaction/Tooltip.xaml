@@ -1,9 +1,10 @@
 ﻿<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.Tooltip"
-                 xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
-              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:PieSeriesViewModel">
 
 
     <localCore:SampleView.Resources>
@@ -44,8 +45,8 @@
 
             <chart:SfCircularChart.Series>
                 <chart:PieSeries Radius="0.9" EnableTooltip="True" TooltipTemplate="{StaticResource template1}" 
-                            x:Name="pieSeries" StrokeWidth="2" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" EnableAnimation="{Binding EnableAnimation}" ItemsSource="{Binding PieSeriesData}" 
-                            XBindingPath="Name" YBindingPath="Value" LegendIcon="SeriesType"  PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}">
+                                 x:Name="pieSeries" StrokeWidth="2" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" EnableAnimation="{Binding EnableAnimation}" ItemsSource="{Binding PieSeriesData}" 
+                                 XBindingPath="Name" YBindingPath="Value" LegendIcon="SeriesType"  PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}">
                 </chart:PieSeries>
             </chart:SfCircularChart.Series>
         </chart:SfCircularChart>

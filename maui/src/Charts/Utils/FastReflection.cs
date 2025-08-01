@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -160,7 +161,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			var instance = Expression.Parameter(typeof(object), "instance");
 
 			var methodInfo = propertyInfo.GetGetMethod();
-
+#if MACCATALYST
+            if (RuntimeFeature.IsDynamicCodeSupported)
+            {
+#endif
 			// non-instance for static method, or ((TInstance)instance)
 			var instanceCast = methodInfo != null && methodInfo.IsStatic ? null :
 				Expression.Convert(instance, propertyInfo.DeclaringType);
@@ -175,7 +179,50 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			var lambda = Expression.Lambda<Func<object, object>>(castPropertyValue, instance);
 
 			_getter = lambda.Compile();
+#if MACCATALYST
+            }
+            else
+            {
+                this.InitializeGet(propertyInfo, methodInfo);
+            }
+#endif
 		}
+
+#if MACCATALYST
+        /// <summary>
+        /// Method to initialize get value.
+        /// </summary>
+        /// <param name="propertyInfo">The property info value.</param>
+        /// <param name="getMethod">The method info.</param>
+        [UnconditionalSuppressMessage("Trimming", "IL3050:Using member 'typeof(Func<,>)' which has 'RequiresDynamicCodeAttribute' can break functionality when AOT compiling.", Justification = "<Pending>")]
+        private void InitializeGet(PropertyInfo propertyInfo, MethodInfo? getMethod)
+        {
+            if (getMethod != null)
+            {
+                // AOT — use MethodInfo.CreateDelegate for better performance and AOT compatibility
+                if (getMethod.IsStatic)
+                {
+                    // Static property: () => (object)Property
+                    var staticDelegate = (Func<object>)Delegate.CreateDelegate(typeof(Func<object>), getMethod);
+                    this._getter = _ => staticDelegate();
+                }
+                else
+                {
+                    // Instance property: instance => (object)((TInstance)instance).Property
+                    var declaringType = propertyInfo.DeclaringType!;
+                    var propertyType = propertyInfo.PropertyType;
+
+                    var delegateType = typeof(Func<,>).MakeGenericType(declaringType, propertyType);
+                    var typedDelegate = getMethod.CreateDelegate(delegateType);
+
+                    this._getter = (object instance) =>
+                    {
+                        return typedDelegate.DynamicInvoke(instance) !;
+                    };
+                }
+            }
+        }
+#endif
 
 		void InitializeSet(PropertyInfo propertyInfo)
 		{
@@ -250,6 +297,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		static Func<object, object[], object> CreateInvokeDelegate(MethodInfo methodInfo)
 		{
+#if MACCATALYST
+			if (RuntimeFeature.IsDynamicCodeSupported)
+			{
+#endif
 			// Target: ((TInstance)instance).Method((T0)parameters[0], (T1)parameters[1], ...)
 			// parameters to execute
 			var instanceParameter = Expression.Parameter(typeof(object), "instance");
@@ -301,7 +352,43 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				return lambda.Compile();
 			}
+#if MACCATALYST
+			}
+			else
+			{
+				return CreateInvokeDelegateForAOTCompile(methodInfo);
+			}
+#endif
 		}
+
+#if MACCATALYST
+		/// <summary>
+		/// Method to create invoke delegate.
+		/// </summary>
+		/// <param name="methodInfo">The method info.</param>
+		/// <returns>The invoke delegate.</returns>
+		[UnconditionalSuppressMessage("Trimming", "IL3050:Using member 'GetFuncType(params Type[])' which has 'RequiresDynamicCodeAttribute' can break functionality when AOT compiling.", Justification = "<Pending>")]
+		private static Func<object, object[], object> CreateInvokeDelegateForAOTCompile(MethodInfo methodInfo)
+		{
+			// AOT-safe version using MethodInfo.CreateDelegate and DynamicInvoke
+			if (methodInfo.IsStatic)
+			{
+				// Create delegate for static method
+				var staticDelegate = methodInfo.CreateDelegate(
+					Expression.GetFuncType(methodInfo.GetParameters()
+						.Select(p => typeof(object))
+						.Append(typeof(object))
+						.ToArray()));
+
+				return (instance, parameters) => staticDelegate.DynamicInvoke(parameters)!;
+			}
+			else
+			{
+				// Create delegate for instance method
+				return (instance, parameters) => methodInfo.Invoke(instance, parameters)!;
+			}
+		}
+#endif
 
 		#region IMethodInvoker Members
 

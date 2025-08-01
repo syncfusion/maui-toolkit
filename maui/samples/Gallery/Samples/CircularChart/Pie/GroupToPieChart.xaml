@@ -2,8 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.GroupToPieChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
-              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
     
     <localCore:SampleView.Resources>
         <ResourceDictionary>
@@ -14,9 +14,9 @@
     </localCore:SampleView.Resources>
     
     <localCore:SampleView.Content>
-        
-        <StackLayout HorizontalOptions="Fill" Padding="20" x:Name="layout">
-            <StackLayout.Resources>
+
+        <Grid HorizontalOptions="Fill" Padding="20" x:Name="layout" x:DataType="local:PieSeriesViewModel">
+            <Grid.Resources>
                 <ResourceDictionary>
                     <local:ItemsSourceConverter x:Key="valueConvert"/>
                     <local:StringFormatConverter x:Key="StingConvert"/>
@@ -42,11 +42,15 @@
                             </VerticalStackLayout>
                     </DataTemplate>
                 </ResourceDictionary>
-            </StackLayout.Resources>
-            <StackLayout.BindingContext>
+            </Grid.Resources>
+            <Grid.BindingContext>
                 <local:PieSeriesViewModel/>
-            </StackLayout.BindingContext>
-            <chart:SfCircularChart x:Name="Chart"  VerticalOptions="FillAndExpand">
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <chart:SfCircularChart Grid.Row="0" x:Name="Chart"  VerticalOptions="Fill">
                 <chart:SfCircularChart.Title>
                     <Label Text="World Economy in 2021" Margin="0,0,6,10" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
                 </chart:SfCircularChart.Title>
@@ -57,9 +61,9 @@
                     <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
                 </chart:SfCircularChart.TooltipBehavior>
                 <chart:SfCircularChart.Series>
-                    <chart:PieSeries ShowDataLabels="True" TooltipTemplate="{StaticResource tooltipTemplate}" GroupTo="3" x:Name="pieSeries1" 
-                                 StrokeWidth="1" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" EnableAnimation="{Binding EnableAnimation}"
-                                 ItemsSource="{Binding GroupToData}" XBindingPath="Name" YBindingPath="Value" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight2}, Dark={StaticResource PaletteBrushesDark2}}">
+                    <chart:PieSeries ShowDataLabels="True" TooltipTemplate="{StaticResource tooltipTemplate}" GroupTo="3" x:Name="pieSeries1"
+                                     StrokeWidth="1" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" EnableAnimation="{Binding EnableAnimation}"
+                                     ItemsSource="{Binding GroupToData}" XBindingPath="Name" YBindingPath="Value" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight2}, Dark={StaticResource PaletteBrushesDark2}}">
                         <chart:PieSeries.DataLabelSettings>
                             <chart:CircularDataLabelSettings LabelPlacement="Outer">
                                 <chart:CircularDataLabelSettings.LabelStyle>
@@ -71,7 +75,7 @@
                 </chart:SfCircularChart.Series>
             </chart:SfCircularChart>
 
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" world-economy.com" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -79,7 +83,7 @@
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
     <localCore:SampleView.OptionView>
     <ContentView>
@@ -94,10 +98,10 @@
                             <Grid.BindingContext>
                                 <local:BaseViewModel x:Name="viewModel"/>
                             </Grid.BindingContext>
-                            <Label Text="GroupMode" VerticalOptions="CenterAndExpand"  
+                            <Label Text="GroupMode" VerticalOptions="Center"  
                                    Margin="0,13,0,0" Grid.Column="0" />
-                            <Picker x:Name="groupTo"   Grid.Column="1" SelectedIndex="0"
-                                    VerticalOptions="CenterAndExpand" 
+                            <Picker x:Name="groupTo" x:DataType="local:BaseViewModel" Grid.Column="1" SelectedIndex="0"
+                                    VerticalOptions="Center" 
                                     WidthRequest="130"  Margin="0,13,0,0"
                                     ItemsSource="{Binding PieGroupMode}" SelectedIndexChanged="groupTo_SelectedIndexChanged"
                                     Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"

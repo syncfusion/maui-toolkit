@@ -104,18 +104,33 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         DateTime? _previousSelectedDateRange;
 
-        #endregion
+		/// <summary>
+		/// To store the selected date data template view
+		/// </summary>
+		View? _selectionCellTemplateView;
 
-        #region Constructor
+		/// <summary>
+		/// To store the selected cell template view
+		/// </summary>
+		View? _previousSelectionCellTemplateView;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="YearView"/> class.
-        /// </summary>
-        /// <param name="calendarViewInfo">The Calendar Year view info.</param>
-        /// <param name="visibleDates">The visible dates collection.</param>
-        /// <param name="disabledDates">The disabled dates collection.</param>
-        /// <param name="isCurrentView">Defines whether the view is current view or not.</param>
-        internal YearView(ICalendar calendarViewInfo, List<DateTime> visibleDates, List<DateTime> disabledDates, bool isCurrentView)
+		/// <summary>
+		/// To store the previous year cell template view
+		/// </summary>
+		View? _previousYearCellTemplateView;
+
+		#endregion
+
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="YearView"/> class.
+		/// </summary>
+		/// <param name="calendarViewInfo">The Calendar Year view info.</param>
+		/// <param name="visibleDates">The visible dates collection.</param>
+		/// <param name="disabledDates">The disabled dates collection.</param>
+		/// <param name="isCurrentView">Defines whether the view is current view or not.</param>
+		internal YearView(ICalendar calendarViewInfo, List<DateTime> visibleDates, List<DateTime> disabledDates, bool isCurrentView)
         {
             _calendarViewInfo = calendarViewInfo;
             _visibleDates = visibleDates;
@@ -162,9 +177,45 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             InvalidateSemantics();
         }
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
+
+		/// <summary>
+		/// This method is used to remove selection template and insert the normal year cell template
+		/// </summary>
+		/// <param name="year">Get the year details from current canvas</param>
+		/// <param name="child">Get the view details from the year</param>
+		static void RemoveTemplateView(YearView year, View child)
+		{
+			int index = -1;
+#if !WINDOWS
+            if (year._yearCells != null && year._yearCells.Count > 0)
+            {
+                for (int i = 0; i < year._yearCells.Count; i++)
+                {
+                    if (year._yearCells[i] != year.Children[i])
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+#else
+			index = year.Children.IndexOf(child);
+#endif
+			if (index != -1)
+			{
+				year.Children.RemoveAt(index);
+				if (year._previousYearCellTemplateView != null)
+				{
+					year.Insert(index, year._previousYearCellTemplateView);
+				}
+
+				year._previousYearCellTemplateView = null;
+				year._selectionCellTemplateView = null;
+			}
+		}
 
 #if __IOS__ || __MACCATALYST__
 
@@ -181,16 +232,16 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
 #endif
 
-        /// <summary>
-        /// Method to draw the start range selection highlight
-        /// </summary>
-        /// <param name="canvas">The canvas to draw</param>
-        /// <param name="rect">Position to draw</param>
-        /// <param name="highlightRect">Position and size for highlight</param>
-        /// <param name="circleCornerRadius">The circle corner radius</param>
-        /// <param name="rectCornerRadius">The rectangle corner radius</param>
-        /// <param name="selectionBackground">The end range background to apply</param>
-        void DrawStartRangeSelectionHighlight(ICanvas canvas, RectF rect, RectF highlightRect, float circleCornerRadius, float rectCornerRadius, Color selectionBackground)
+		/// <summary>
+		/// Method to draw the start range selection highlight
+		/// </summary>
+		/// <param name="canvas">The canvas to draw</param>
+		/// <param name="rect">Position to draw</param>
+		/// <param name="highlightRect">Position and size for highlight</param>
+		/// <param name="circleCornerRadius">The circle corner radius</param>
+		/// <param name="rectCornerRadius">The rectangle corner radius</param>
+		/// <param name="selectionBackground">The end range background to apply</param>
+		void DrawStartRangeSelectionHighlight(ICanvas canvas, RectF rect, RectF highlightRect, float circleCornerRadius, float rectCornerRadius, Color selectionBackground)
         {
             canvas.FillColor = selectionBackground;
             float leftPadding = (rect.Width - highlightRect.Width) * 0.5f;
@@ -361,8 +412,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                         //// If it is selected date then the selection is drawn based on the selection shape.
                         if (isSelectedDate)
                         {
-                            textStyle = _calendarViewInfo.YearView.SelectionTextStyle;
-                            DrawSelectionHighlight(canvas, highlightRect, rectCornerRadius, circleCornerRadius, selectionBackground);
+							bool useCustomTemplate = _calendarViewInfo.SelectionCellTemplate == null;
+							textStyle = useCustomTemplate ? _calendarViewInfo.YearView.SelectionTextStyle : (_calendarViewInfo.SelectionMode == CalendarSelectionMode.Single ? new CalendarTextStyle { TextColor = Colors.Transparent } : _calendarViewInfo.YearView.SelectionTextStyle);
+							DrawSelectionHighlight(canvas, highlightRect, rectCornerRadius, circleCornerRadius, selectionBackground);
                         }
 
                         break;
@@ -711,15 +763,113 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="backgroundColor">The background Color to fill</param>
         void DrawSelectionHighlight(ICanvas canvas, RectF highlightRect, float rectCornerRadius, float circleCornerRadius, Color backgroundColor)
         {
-            canvas.FillColor = backgroundColor;
-            if (_calendarViewInfo.SelectionShape == CalendarSelectionShape.Circle)
-            {
-                canvas.FillRoundedRectangle(highlightRect, circleCornerRadius);
-            }
-            else
-            {
-                canvas.FillRoundedRectangle(highlightRect, rectCornerRadius);
-            }
+			if (_calendarViewInfo.SelectionCellTemplate != null && _calendarViewInfo.SelectionMode == CalendarSelectionMode.Single && !_calendarViewInfo.AllowViewNavigation && _calendarViewInfo.View != CalendarView.Month && _selectedDate != null)
+			{
+				// Create the selection cell template view based on the selected date and template settings.
+				// This calls a helper function to generate the view for the year view using the selected date and visible dates.
+				// To get the selected date cell details
+				CalendarCellDetails details = GetYearCellDetails(_selectedDate.Value, _visibleDates[0]);
+				if (details != null)
+				{
+					_selectionCellTemplateView = CalendarViewHelper.CreateSelectionCellTemplate(_selectedDate, _calendarViewInfo.SelectionCellTemplate, _calendarViewInfo.MonthView, details, highlightRect);
+				}
+
+				// Only proceed if the selection cell template view was successfully created (i.e., it is not null).
+				if (_selectionCellTemplateView != null)
+				{
+					// Proceed only if a YearView CellTemplate is defined and a date is currently selected
+					if (_calendarViewInfo.YearView.CellTemplate != null && _selectedDate != null)
+					{
+						// Get the value of the selected date
+						DateTime selected = _selectedDate.Value;
+
+						// Adjust the selected date based on specific year view logic
+						selected = SelectedDateBasedOnYearViews(selected);
+
+						// Ensure yearCells is not null or empty before proceeding
+						if (_yearCells == null || _yearCells.Count == 0)
+						{
+							return; // Exit early if there's nothing to work with
+						}
+
+						// Try to find the index of the cell that matches the adjusted selected date
+						int index = _yearCells.FindIndex(cell =>
+						{
+							var cellDetails = ((View)cell).BindingContext as CalendarCellDetails;
+							return cellDetails?.Date == selected;
+						});
+
+						// If a matching cell was found
+						if (index != -1)
+						{
+							// Retrieve the current cell view at the found index
+							var currentYearCellView = (View)_yearCells[index];
+
+							// If a previous selection template exists and is different from the current index
+							// Also check that the stored index is within valid range
+							if (_previousYearCellTemplateView != null)
+							{
+								int previousYearCellIndex = _yearCells.IndexOf(_previousYearCellTemplateView);
+								if (previousYearCellIndex != index && previousYearCellIndex >= 0 && previousYearCellIndex < _yearCells.Count)
+								{
+									// Remove the previous selection view from the layout
+									Children.RemoveAt(previousYearCellIndex);
+
+									// Reinsert the original view that was replaced by the selection view
+									Insert(previousYearCellIndex, _previousYearCellTemplateView);
+#if !WINDOWS
+                                    // Reset the tracking variables for the previous selection view
+                                    _previousYearCellTemplateView = null;
+#endif
+								}
+							}
+
+#if WINDOWS
+							UpdateSelectionCellTemplate(index);
+#else
+                            // If no previous selection template is currently tracked
+                            if (_previousYearCellTemplateView == null)
+                            {
+                                UpdateSelectionCellTemplate(index);
+                            }
+#endif
+						}
+					}
+					else
+					{
+						// Add the new selection view to the parent container (likely the calendar or its view).
+						Add(_selectionCellTemplateView);
+
+						// If there was a previously existing cell template view, remove it from the container.
+						// This ensures only one selection cell template is visible at a time.
+						if (_previousSelectionCellTemplateView != null)
+						{
+							Remove(_previousSelectionCellTemplateView);
+						}
+
+						// Update the previous cell template view reference to the current one.
+						// This allows the next time to know which view to remove (for reusability).
+						_previousSelectionCellTemplateView = _selectionCellTemplateView;
+						AbsoluteLayout.SetLayoutBounds(_selectionCellTemplateView, highlightRect);
+					}
+				}
+
+#if ANDROID
+                InvalidateViewMeasure();
+#endif
+			}
+			else
+			{
+				canvas.FillColor = backgroundColor;
+				if (_calendarViewInfo.SelectionShape == CalendarSelectionShape.Circle)
+				{
+					canvas.FillRoundedRectangle(highlightRect, circleCornerRadius);
+				}
+				else
+				{
+					canvas.FillRoundedRectangle(highlightRect, rectCornerRadius);
+				}
+			}
         }
 
         /// <summary>
@@ -1629,16 +1779,78 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             CalendarViewHelper.ValidateDateOnKeyNavigation(args, oldSelectedDates, newDate, _calendarViewInfo, _visibleDates, _disabledDates);
         }
 
-        #endregion
+		/// <summary>
+		/// This method handle the selected date based on year views
+		/// </summary>
+		/// <param name="selected">The selected date on year view</param>
+		/// <returns>Returns the updated select date based on year view</returns>
+		DateTime SelectedDateBasedOnYearViews(DateTime selected)
+		{
+			selected = _calendarViewInfo.View switch
+			{
+				CalendarView.Year => new DateTime(selected.Year, selected.Month, 1),
+				CalendarView.Decade => new DateTime(selected.Year, 1, 1),
+				CalendarView.Century => new DateTime((selected.Year / 10) * 10, 1, 1),
+				_ => selected // or handle default case appropriately
+			};
 
-        #region Override Methods
+			return selected;
+		}
 
-        /// <summary>
-        /// Method to draw the Year view cells.
-        /// </summary>
-        /// <param name="canvas">The draw canvas.</param>
-        /// <param name="dirtyRect">The rectangle.</param>
-        protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
+		/// <summary>
+		/// Insert the selection cell template instead of selected year cell.
+		/// </summary>
+		/// <param name="index">Gets the selected month cell index</param>
+		void UpdateSelectionCellTemplate(int index)
+		{
+			// Insert the selection cell template view at the current index
+			if (_yearCells != null && _selectionCellTemplateView != null)
+			{
+				// Store current selection info
+				_previousYearCellTemplateView = (View)_yearCells[index];
+
+				// Replace with the selection view
+				Children.RemoveAt(index);
+				Insert(index, _selectionCellTemplateView);
+			}
+		}
+
+		/// <summary>
+		/// This method handle the selection cell template visibility for date restrictions
+		/// </summary>
+		void HideSelectionCellTemplateView()
+		{
+			if (_selectionCellTemplateView == null)
+			{
+				return;
+			}
+
+			// to check If the month cell template value not null
+			if (_calendarViewInfo.YearView.CellTemplate != null)
+			{
+				YearView.RemoveTemplateView(this, _selectionCellTemplateView);
+			}
+			else
+			{
+				// Check if the selectionCellTemplateView is not null and is already part of the view's children.
+				if (_selectionCellTemplateView != null && Children.Contains(_selectionCellTemplateView))
+				{
+					// Set the IsVisible property to false, effectively hiding the selectionCellTemplateView.
+					_selectionCellTemplateView.IsVisible = false;
+				}
+			}
+		}
+
+		#endregion
+
+		#region Override Methods
+
+		/// <summary>
+		/// Method to draw the Year view cells.
+		/// </summary>
+		/// <param name="canvas">The draw canvas.</param>
+		/// <param name="dirtyRect">The rectangle.</param>
+		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
         {
             //// If the Width and Height value is less than or equal to zero, no need to draw the view.
             if (dirtyRect.Width <= 0 || dirtyRect.Height <= 0)
@@ -1930,7 +2142,14 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                         if (_calendarViewInfo.CanToggleDaySelection && CalendarViewHelper.IsSameDate(_calendarViewInfo.View, _selectedDate, tappedDate, _calendarViewInfo.Identifier))
                         {
                             tappedDate = null;
-                        }
+
+							// If the selection cell template applied over click the same date while the CanToggleDaySelection value true.
+							if (_selectionCellTemplateView != null)
+							{
+								// To handle the selection cell template visibility
+								HideSelectionCellTemplateView();
+							}
+						}
 
                         _calendarViewInfo.UpdateSelectedDate(tappedDate);
                         break;
@@ -2016,20 +2235,145 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
         }
 
-        /// <summary>
-        /// Method to update visible dates on view change.
-        /// </summary>
-        /// <param name="visibleDatesCollection">The visible dates collection.</param>
-        /// <param name="isCurrentView">Defines whether the view is current view or not.</param>
-        void ICalendarView.UpdateVisibleDatesChange(List<DateTime> visibleDatesCollection, bool isCurrentView)
+		/// <summary>
+		/// Method to update visible dates on view change.
+		/// </summary>
+		/// <param name="visibleDatesCollection">The visible dates collection.</param>
+		/// <param name="isCurrentView">Defines whether the view is current view or not.</param>
+		/// <param name="customSnapLayout">Gets the month view instance for current canvas.</param>
+		void ICalendarView.UpdateVisibleDatesChange(List<DateTime> visibleDatesCollection, bool isCurrentView, CustomSnapLayout customSnapLayout)
         {
             if (_visibleDates == visibleDatesCollection)
             {
                 return;
             }
 
-            List<DateTime> previousVisibleDates = _visibleDates;
+			// Check if a SelectionCellTemplate is defined in the calendar configuration
+			if (_calendarViewInfo.SelectionCellTemplate != null && _calendarViewInfo.SelectionMode == CalendarSelectionMode.Single)
+			{
+				// If the custom layout container is null, exit early — nothing to process
+				if (customSnapLayout == null)
+				{
+					return;
+				}
+
+				// Iterate through each child view within the custom layout (expected to be YearView instances)
+				foreach (var yearView in customSnapLayout.Children)
+				{
+					var year = yearView as YearView;
+
+					// Proceed only if the view is a YearView and all essential data is present
+					if (year != null && year._visibleDates != null && year._selectionCellTemplateView != null && year.Children != null)
+					{
+						// Loop through each child view of the YearView
+						for (int i = 0; i < year.Children.Count; i++)
+						{
+							View view = (View)year.Children[i];
+
+							// If a CellTemplate is being used for YearView
+							if (_calendarViewInfo.YearView.CellTemplate != null)
+							{
+								// Ensure valid indexing and matching view before proceeding
+								if (year._yearCells != null && year._yearCells.Count > 0 && i < year._yearCells.Count)
+								{
+									// Skip if the current view is already part of the yearCells collection (i.e., already properly placed)
+									if (year._yearCells[i] == view)
+									{
+										continue;
+									}
+
+									// Skip if the selected date is already visible in this year view
+									if (year._visibleDates.Contains(_selectedDate!.Value))
+									{
+										continue;
+									}
+								}
+							}
+							else
+							{
+								// Skip views that are not the selection cell template view
+								if (view != year._selectionCellTemplateView)
+								{
+									continue;
+								}
+							}
+
+							// Process only when a date is selected and the selection mode is single
+							if (_selectedDate != null)
+							{
+								// Get the selected date value
+								DateTime selected = _selectedDate.Value;
+
+								// Determine whether the selected date falls within the allowed range for the current calendar view
+								bool isSelectedDateAfterMinDateForView = _calendarViewInfo.View switch
+								{
+									CalendarView.Year => selected.Month >= _calendarViewInfo.MinimumDate.Month,
+									CalendarView.Decade => selected.Year >= _calendarViewInfo.MinimumDate.Year,
+									CalendarView.Century => (selected.Year / 100) >= (_calendarViewInfo.MinimumDate.Year / 100),
+									_ => false
+								};
+
+								bool isSelectedDateBeforeMaxDateForView = _calendarViewInfo.View switch
+								{
+									CalendarView.Year => selected.Month <= _calendarViewInfo.MaximumDate.Month,
+									CalendarView.Decade => selected.Year <= _calendarViewInfo.MaximumDate.Year,
+									CalendarView.Century => (selected.Year / 100) <= (_calendarViewInfo.MaximumDate.Year / 100),
+									_ => false
+								};
+
+								// Adjust selected date using helper method for the specific view type
+								selected = SelectedDateBasedOnYearViews(selected);
+
+								// It's applicable only Decade and Century views. Because these have trailing and leading dates.
+								bool check = GetYearCellDetails(selected, year._visibleDates[0]).IsTrailingOrLeadingDate;
+
+								// Check if the selected date is part of the visible date range of the YearView
+								bool isInVisibleDates = year._visibleDates.Contains(selected);
+
+								// Determine whether the view should be visible, based on several calendar settings
+								bool isVisible = _calendarViewInfo.EnablePastDates && isSelectedDateAfterMinDateForView && isSelectedDateBeforeMaxDateForView &&
+									_calendarViewInfo.IsSelectableDayPredicate(selected) && (_calendarViewInfo.ShowTrailingAndLeadingDates || !check);
+
+								// Handle visibility or removal depending on template usage
+								if (_calendarViewInfo.YearView.CellTemplate != null)
+								{
+									// Remove the template if date isn't visible or isn't valid
+									if (!isVisible || !isInVisibleDates)
+									{
+										YearView.RemoveTemplateView(year, view);
+									}
+								}
+								else
+								{
+									// If not using template, just set visibility accordingly
+									view.IsVisible = isVisible && isInVisibleDates;
+								}
+							}
+							else
+							{
+								// If no selection is made
+								if (_calendarViewInfo.YearView.CellTemplate != null)
+								{
+									// Remove the selection view if using template
+									YearView.RemoveTemplateView(year, view);
+								}
+								else
+								{
+									// Otherwise, just hide the view
+									view.IsVisible = false;
+								}
+							}
+
+							// Exit the inner loop after processing the selection view for this YearView
+							break;
+						}
+					}
+				}
+			}
+
+			List<DateTime> previousVisibleDates = _visibleDates;
             _visibleDates = visibleDatesCollection;
+
 #if MACCATALYST || (!ANDROID && !IOS)
             _hoverView.UpdateVisibleDatesChange(_visibleDates);
 #endif
@@ -2104,7 +2448,14 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         void ICalendarView.UpdateSelectionValue()
         {
-            DateTime? previousSelectedDate = _selectedDate;
+			// If Selected date changed dynamically that time it can perform
+			if (_selectionCellTemplateView != null && _calendarViewInfo.SelectionMode == CalendarSelectionMode.Single)
+			{
+				// To handle the selection cell template visibility
+				HideSelectionCellTemplateView();
+			}
+
+			DateTime? previousSelectedDate = _selectedDate;
             _selectedDate = _calendarViewInfo.SelectedDate;
             if (_calendarViewInfo.SelectionMode != CalendarSelectionMode.Single || CalendarViewHelper.IsSameDate(_calendarViewInfo.View, previousSelectedDate, _selectedDate, _calendarViewInfo.Identifier))
             {
@@ -2221,13 +2572,23 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return;
             }
 
+			if (_selectionCellTemplateView != null && _calendarViewInfo.SelectionMode == CalendarSelectionMode.Single)
+			{
+				// If I select any date on current year and selectable predicate date is same as selected date.
+				if (_selectedDate != null && !_calendarViewInfo.IsSelectableDayPredicate((DateTime)_selectedDate))
+				{
+					// To handle the selection cell template visibility
+					HideSelectionCellTemplateView();
+				}
+			}
+
 #if MACCATALYST || (!ANDROID && !IOS)
-            //// Here we are updating the hover position before checking the previous and current disabled dates are equal.
-            //// Because the previous and current view disabled dates may be same and we can't update the hover position on swiping to next or previous view.
-            //// On view navigation, the mouse hover position will remain same but visible dates will be changed.
-            //// So we are removing hovering when updating disabled date for each view.
-            //// If we not update the hover position, the hovering view will be remain even after view changed.
-            _hoverView.UpdateHoverPosition(null);
+			//// Here we are updating the hover position before checking the previous and current disabled dates are equal.
+			//// Because the previous and current view disabled dates may be same and we can't update the hover position on swiping to next or previous view.
+			//// On view navigation, the mouse hover position will remain same but visible dates will be changed.
+			//// So we are removing hovering when updating disabled date for each view.
+			//// If we not update the hover position, the hovering view will be remain even after view changed.
+			_hoverView.UpdateHoverPosition(null);
 #endif
 
             //// Disabled dates is null then the method called only for update special dates.
@@ -2255,7 +2616,25 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         void ICalendarView.InvalidateView()
         {
-            InvalidateDrawable();
+			// Check if selectedDate and selectionCellTemplateView is not null before proceeding with the date restriction validation logic.
+			if (_selectionCellTemplateView != null && _selectedDate != null)
+			{
+				bool isInVisibleDates = _visibleDates?.Contains(_selectedDate.Value) ?? false;
+				bool isTemplateView = false;
+				if (_selectedDate >= _calendarViewInfo.MinimumDate && _selectedDate <= _calendarViewInfo.MaximumDate &&
+					(!isInVisibleDates || _calendarViewInfo.EnablePastDates))
+				{
+					isTemplateView = isInVisibleDates;
+				}
+
+				if (!isTemplateView)
+				{
+					// To handle the selection cell template visibility
+					HideSelectionCellTemplateView();
+				}
+			}
+
+			InvalidateDrawable();
 #if MACCATALYST || (!ANDROID && !IOS)
             _hoverView.InvalidateDrawable();
 #endif
@@ -2266,7 +2645,15 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         void ICalendarView.InvalidateViewCells()
         {
-            InvalidateDrawable();
+			// Check if the SelectionMode is not set to 'Single'.
+			// If the SelectionMode is not 'Single', hide the selection cell template view by calling the SelectionCellTemplateVisibility method.
+			if (_selectionCellTemplateView != null && _calendarViewInfo.SelectionMode != CalendarSelectionMode.Single)
+			{
+				// To handle the selection cell template visibility
+				HideSelectionCellTemplateView();
+			}
+
+			InvalidateDrawable();
         }
 
         /// <summary>
@@ -2291,7 +2678,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
             else
             {
-                DrawingOrder = DrawingOrder.AboveContent;
+				// It's perform when i change show trailing and leading date dynamically
+				if (_calendarViewInfo.SelectionCellTemplate != null && _previousYearCellTemplateView != null)
+				{
+					_previousYearCellTemplateView = null;
+				}
+
+				DrawingOrder = DrawingOrder.AboveContent;
                 RemoveYearCellsHandler();
                 _yearCells = new List<View>();
                 GenerateYearCells(isCurrentView);

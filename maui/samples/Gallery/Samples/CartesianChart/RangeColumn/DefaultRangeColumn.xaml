@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.DefaultRangeColumn"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:RangeColumnSerieViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,19 +13,24 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill" x:Name="layout">
+        <Grid HorizontalOptions="Fill" x:Name="layout">
 
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:RangeColumnSerieViewModel/>
-            </StackLayout.BindingContext>
+            </Grid.BindingContext>
 
-            <StackLayout.Resources>
+            <Grid.Resources>
                 <Label x:Key="title" x:Name="titleName" Text="Annual Average Temperature Variations in Rome"
-                           FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
-                          LineBreakMode="WordWrap" Padding="0,0,0,5"/>
-            </StackLayout.Resources>
+                       FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap" Padding="0,0,0,5"/>
+            </Grid.Resources>
 
-            <chart:SfCartesianChart  x:Name="Chart" VerticalOptions="FillAndExpand" 
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" VerticalOptions="Fill" 
                                      Title="{StaticResource title}" >
                 <chart:SfCartesianChart.ZoomPanBehavior>
                     <chart:ChartZoomPanBehavior EnableDoubleTap="False" EnablePinchZooming="False"/>
@@ -64,7 +70,7 @@
         </chart:SfCartesianChart>
 
 
-        <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+        <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
             <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" holiday-weather.com" VerticalOptions="Center">
                 <Label.GestureRecognizers>
@@ -73,6 +79,6 @@
             </Label>
         </HorizontalStackLayout>
 
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 </localCore:SampleView>

@@ -1,5 +1,6 @@
 ﻿using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Platform;
+using CoreGraphics;
 using UIKit;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
@@ -29,7 +30,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// </summary>
 		LayoutViewExt? _nativeView;
 
+#if !MACCATALYST
+
+        /// <summary>
+        /// Represents a scrollable UIView.
+        /// </summary>
+        internal UIView? ScrollableView;
+
+        /// <summary>
+        /// Indicates whether scrolling is currently active or not.
+        /// </summary>
+        internal bool isScroll = false;
+#endif
+
 		#endregion
+
 
 		#region Private Methods
 
@@ -120,6 +135,14 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				return;
 			}
 
+#if !MACCATALYST
+            if (isScroll)
+            {
+                isScroll = false;
+                return;
+            }
+#endif
+
 			switch (e.Action)
 			{
 				case PointerActions.Pressed:
@@ -153,6 +176,40 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			InitializeGesture();
 		}
 
+#if !MACCATALYST
+
+        /// <summary>
+        /// Determines if the specified UIView or any of its parent views is a UIScrollView or UICollectionView.
+        /// </summary>
+        /// <param name="view">The UIView to check.</param>
+        /// <returns>True if a scrollable view is found, otherwise false.</returns>
+        internal bool IsScrollableView(UIView? view)
+        {
+            if (view == null)
+                return false;
+
+            if (view is UIScrollView || view is UICollectionView)
+            {
+                ScrollableView = view;
+                return true;
+            }
+
+            UIView? parent = view.Superview;
+            while (parent != null)
+            {
+                if (parent is UIScrollView || parent is UICollectionView)
+                {
+                    ScrollableView = parent;
+                    return true;
+                }
+
+                parent = parent.Superview;
+            }
+
+            return false;
+        }
+
+#endif
 		#endregion
 
 		#region Override Methods
@@ -192,8 +249,88 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				}
 			}
 
+#if !MACCATALYST
+
+            // Use the improved gesture detection logic
+            if (view is not null && view.IsOpen)
+            {
+                if(view.DrawerSettings.Position == Position.Bottom || view.DrawerSettings.Position == Position.Top)
+                {
+                    if (uIGestureRecognizer is UIPanGestureRecognizer panGesture)
+                    {
+                        var translation = panGesture.TranslationInView(panGesture.View);
+                        var location = panGesture.LocationInView(panGesture.View);
+                        UIView? hitView = panGesture.View?.HitTest(location, null);
+                        bool isScrollableContent = view?.IsScrollableView(hitView) ?? false;
+                        bool isHorizontalGesture = Math.Abs(translation.X) > Math.Abs(translation.Y);
+                        if (isScrollableContent && !isHorizontalGesture && view is not null)
+                        {
+                            view.isScroll = true;
+                            if (view.ScrollableView is UIScrollView scrollView)
+                            {
+                                bool atTop = scrollView.ContentOffset.Y <= 0;
+                                bool atBottom = scrollView.ContentOffset.Y >= scrollView.ContentSize.Height - scrollView.Bounds.Height;
+                                if(ShouldProcessDrawerScroll(atTop, atBottom, view.DrawerSettings.Position,translation))
+                                {
+                                    view.isScroll =false;
+                                    return true;
+                                }
+
+                                return false;
+                            }
+
+                            if(view.ScrollableView is UITableView collectionView)
+                            {
+                                bool atTop = collectionView.ContentOffset.Y <= 0;
+                                bool atBottom = collectionView.ContentOffset.Y >= collectionView.ContentSize.Height - collectionView.Bounds.Height;
+                                if (ShouldProcessDrawerScroll(atTop, atBottom, view.DrawerSettings.Position, translation))
+                                {
+                                    view.isScroll = false;
+                                    return true;
+                                }
+
+                                return false;
+                            }
+
+                            return false;
+                        }
+                    }
+                }
+            }
+#endif
 			return true;
 		}
+
+#if !MACCATALYST
+        /// <summary>
+        /// Determines whether a scroll gesture should be handled by the drawer.
+        /// </summary>
+        /// <param name="atTop">Whether the scrollable content is at the top position</param>
+        /// <param name="atBottom">Whether the scrollable content is at the bottom position</param>
+        /// <param name="position">The position of the drawer (Top or Bottom)</param>
+        /// <param name="translation">The translation point of the gesture</param>
+        /// <returns>True if the drawer should handle the gesture; otherwise, false</returns>
+        bool ShouldProcessDrawerScroll(bool atTop, bool  atBottom,Position position,CGPoint translation)
+        {
+            _view.TryGetTarget(out var view);
+            if (view is not null)
+            {
+                if (position == Position.Bottom)
+                {
+                    if (atTop && translation.Y > 0)
+                    {
+                        return true;
+                    }
+                }
+                else if (atBottom && translation.Y < 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+#endif
 
 	}
 

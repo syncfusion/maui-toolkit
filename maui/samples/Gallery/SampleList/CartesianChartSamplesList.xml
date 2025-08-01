@@ -57,7 +57,7 @@
 			  </CardLayout>
 		  </SubCategory>
 
-      <Sample Title="Fast Scatter" StatusTag="New" SampleName="FastScatterChart" SearchTags="scatter, scatter chart, scatter plot, fast scatter, fast scatter chart, fast scatter plot, high performance chart"/>
+      <Sample Title="Fast Scatter" SampleName="FastScatterChart" SearchTags="scatter, scatter chart, scatter plot, fast scatter, fast scatter chart, fast scatter plot, high performance chart"/>
 
 		  <SubCategory Title="Spline">
 			  <CardLayout>
@@ -166,14 +166,15 @@
 			  <Sample Title="Category" SampleName="CategoryAxisChart" SearchTags="string, name, category, axis"/>
 			  <Sample Title="Numerical" SampleName="NumericalAxisChart" SearchTags="numeric, axis"/>
 			  <Sample Title="Logarithm" SampleName="LogarithmicAxisChart" SearchTags="logarithmic, axis"/>
-			  <Sample Title="Date Time" SampleName="DateTimeAxisChart" SearchTags="date, axis"/>
+        <Sample Title="Date Time" SampleName="DateTimeAxisChart" SearchTags="date, axis"/>
+        <Sample Title="Date time category" SampleName="DateTimeCategoryAxis" SearchTags="date, category, axis" StatusTag="New" Description="This sample demonstrates a comparison of sales revenue using a date-time category axis."/>
 			  <Sample Title="Axis crossing" SampleName="AxisCrossing" SearchTags="axis, crossing" />
 		  </Category>
 
 		
 			  <Sample Title="Annotation"  SampleName="ShapeAnnotationSample" Description="This sample showcases the shape annotation support, which includes line, horizontal line, vertical line, rectangle, and ellipse." SearchTags="annotation, chart annotation"/>
 
-        <Sample Title="Empty Points" StatusTag="New" SampleName="EmptyPointSupport" SearchTags="empty points, missing data points, missing values, incomplete data, data gaps, incomplete records, blank entries"/>
+        <Sample Title="Empty Points" SampleName="EmptyPointSupport" SearchTags="empty points, missing data points, missing values, incomplete data, data gaps, incomplete records, blank entries"/>
 
 		  <Category Title="Plot band">				  
 			  <Sample Title="Horizontal" SampleName="HorizontalPlotBand" Platforms="Android,iOS" SearchTags="horizontal plot, band, plotband"/>

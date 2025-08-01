@@ -2053,39 +2053,36 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			string label = string.Empty;
 
-			if (axis is CategoryAxis categoryAxis)
+			switch (axis)
 			{
-				var currSeries = categoryAxis.GetActualSeries();
-				if (currSeries != null)
-				{
-					label = categoryAxis.GetLabelContent(currSeries, (int)Math.Round(xValue), labelFormat);
-				}
-			}
-			else if (axis is NumericalAxis)
-			{
-				label = ((int)Math.Round(xValue)).ToString(labelFormat);
-			}
-			else if (axis is LogarithmicAxis)
-			{
-				label = ChartAxis.GetActualLabelContent(xValue, labelFormat).ToString();
-			}
-			else if (axis is DateTimeAxis datetimeAxis)
-			{
-				string format;
-				if (labelFormat != null)
-				{
-					format = labelFormat;
-				}
-				else
-				{
-					format = ChartAxis.GetSpecificFormattedLabel(datetimeAxis.ActualIntervalType);
-				}
+				case CategoryAxis categoryAxis:
+					var currSeries = categoryAxis.GetActualSeries();
+					if (currSeries != null)
+					{
+						label = categoryAxis.GetLabelContent(currSeries, (int)Math.Round(xValue), labelFormat);
+					}
+					break;
 
-				label = ChartAxis.GetFormattedAxisLabel(format, xValue);
-			}
-			else
-			{
-				label = ChartAxis.GetActualLabelContent(xValue, labelFormat);
+				case DateTimeCategoryAxis dateTimeCategoryAxis:
+					label = dateTimeCategoryAxis.GetLabelContent(xValue, labelFormat);
+					break;
+
+				case NumericalAxis:
+					label = ((int)Math.Round(xValue)).ToString(labelFormat);
+					break;
+
+				case LogarithmicAxis:
+					label = ChartAxis.GetActualLabelContent(xValue, labelFormat).ToString();
+					break;
+
+				case DateTimeAxis datetimeAxis:
+					string format = labelFormat ?? ChartAxis.GetSpecificFormattedLabel(datetimeAxis.ActualIntervalType);
+					label = ChartAxis.GetFormattedAxisLabel(format, xValue);
+					break;
+
+				default:
+					label = ChartAxis.GetActualLabelContent(xValue, labelFormat);
+					break;
 			}
 
 			return label;

@@ -4,24 +4,29 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.MultipleColorBubbleSeries"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:CartesianBubbleViewModel">
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill" x:Name="layout">
+        <Grid HorizontalOptions="Fill" x:Name="layout">
 
-            <StackLayout.Resources>
+            <Grid.Resources>
                 <Label x:Key="title" x:Name="titleName" Text="Top Cross-Genre Movie Hits: A Performance Overview"
                            FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
                           LineBreakMode="WordWrap" Padding="0,0,0,5"/>
-            </StackLayout.Resources>
+            </Grid.Resources>
 
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:CartesianBubbleViewModel/>
-            </StackLayout.BindingContext>
-
-            <chart:SfCartesianChart x:Name="Chart2" VerticalOptions="FillAndExpand" Title="{StaticResource title}">
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart2" VerticalOptions="Fill" Title="{StaticResource title}">
 
                 <chart:SfCartesianChart.Resources>
-                    <DataTemplate x:Key="tooltiptemplate">
+                <local:TooltipValuesConverter x:Key="valueConverter"/>
+                    <DataTemplate x:Key="tooltiptemplate" x:DataType="chart:TooltipInfo">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -31,19 +36,19 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Row="0" Grid.Column="0" LineBreakMode="WordWrap" MaximumWidthRequest="100"  Text="{Binding Item.Name,StringFormat='{0}'}"  HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" FontFamily="Helvetica" FontAttributes="Bold"  Margin="0,2,0,2" FontSize="10"
-                                    TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                            <Label Grid.Row="0" Grid.Column="0" LineBreakMode="WordWrap" MaximumWidthRequest="100"  Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Name',StringFormat='{0}'}"  HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" FontFamily="Helvetica" FontAttributes="Bold"  Margin="0,2,0,2" FontSize="10"
+                                   TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                             <BoxView Grid.Row="1" Grid.Column="0" VerticalOptions="Center" Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" />
                             <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Vertical"  VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0">
-                                <Label Text="{Binding Item.High,StringFormat='Budget   : ${0}M'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="10"
-                                        TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                <Label Text="{Binding Item.Low,StringFormat='Revenue : ${0}M'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="10"
-                                        TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                    <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Horizontal"  VerticalOptions="Fill" Spacing="0" Margin="0">
-                                    <Label Text="{Binding Item.Size,StringFormat='Rating    : {0}/10'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="10"
-                                            TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                    <Label Text="{Binding Item.Value,StringFormat=' ({0}K)'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="10"
-                                            TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                  <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='High',StringFormat='Budget   : ${0}M'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="10"
+                                         TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                  <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Low',StringFormat='Revenue : ${0}M'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="10"
+                                         TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                  <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Horizontal"  VerticalOptions="Fill" Spacing="0" Margin="0">
+                                        <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Size',StringFormat='Rating    : {0}/10'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="10"
+                                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                        <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat=' ({0}K)'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" Margin="0,0,3,0" FontSize="10"
+                                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                                 </StackLayout>
                             </StackLayout>
                         </Grid>
@@ -90,7 +95,7 @@
                         </chart:BubbleSeries>
 
                 <chart:BubbleSeries MinimumRadius="{OnPlatform Default=15,Android=8,iOS=8}" MaximumRadius="{OnPlatform Default=30,Android=15,iOS=15}"   TooltipTemplate="{StaticResource tooltiptemplate}" Label="Science fiction" SizeValuePath="Value"  EnableTooltip="True"              
-                                        ItemsSource="{Binding ScienceFictionData}" ShowDataLabels="False"
+                                        ItemsSource="{Binding ScienceFictionData}" ShowDataLabels="False" 
                                         XBindingPath="High" EnableAnimation="True" YBindingPath="Low" >
                         <chart:BubbleSeries.Fill>
                             <RadialGradientBrush Center="0.35,0.35" Radius="0.5" >
@@ -112,8 +117,8 @@
                     </chart:BubbleSeries>
                 
             </chart:SfCartesianChart>
-            
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" kaggle.com" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -122,7 +127,7 @@
                 </Label>
             </HorizontalStackLayout>
 
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 
 

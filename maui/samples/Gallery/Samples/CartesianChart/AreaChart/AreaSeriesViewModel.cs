@@ -25,7 +25,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 				new ChartDataModel("2012", 3.126, 2.69, 2.44, 2.16),
 				new ChartDataModel("2013", 3.34, 3.01, 2.77, 2.51),
 				new ChartDataModel("2014", 3.58, 3.22, 2.91, 2.61),
-	   ];
+	        ];
 		}
 	}
 

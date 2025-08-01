@@ -4,7 +4,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.RangeColumnAnimation"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:DynamicAnimationViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -13,15 +14,15 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill" x:Name="layout">
+        <Grid HorizontalOptions="Fill" x:Name="layout">
 
-            <StackLayout.Resources>
+            <Grid.Resources>
                 <Label x:Key="title" x:Name="titleName" Text="Range Column Chart Dynamic Animation"
-                           FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
-                          LineBreakMode="WordWrap" Padding="0,0,0,5"/>
-            </StackLayout.Resources>
+                       FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap" Padding="0,0,0,5"/>
+            </Grid.Resources>
 
-            <chart:SfCartesianChart x:Name="Chart" VerticalOptions="FillAndExpand" 
+            <chart:SfCartesianChart x:Name="Chart" VerticalOptions="Fill" 
                                     Title="{StaticResource title}">
                 <chart:SfCartesianChart.BindingContext>
                     <local:DynamicAnimationViewModel x:Name="viewModel"/>
@@ -37,10 +38,10 @@
                 </chart:SfCartesianChart.YAxes>
 
                 <chart:RangeColumnSeries EnableTooltip="False" Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" EnableAnimation="True"                  
-                                        ItemsSource="{Binding DynamicRangeColumnMotionAnimation}" 
+                                        ItemsSource="{Binding DynamicRangeColumnMotionAnimation}"
                                         XBindingPath="Value1"  High="Value" Low="Size"/>
             </chart:SfCartesianChart>
 
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 </localCore:SampleView>

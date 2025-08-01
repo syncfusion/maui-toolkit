@@ -455,37 +455,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (yEndValues != null && yStartValues != null)
 			{
-				if (IsGrouped && (IsIndexed || xValues == null))
+				for (var i = 0; i < PointsCount; i++)
 				{
-					for (int i = 0; i < PointsCount; i++)
+					if (xValues != null)
+
 					{
+						var x = xValues[i];
+
 						if (i < _segments.Count && _segments[i] is ColumnSegment segment)
 						{
-							segment.SetData([i + SbsInfo.Start, i + SbsInfo.End, yEndValues[i], yStartValues[i], i, YValues[i]]);
+							segment.SetData([x + SbsInfo.Start, x + SbsInfo.End, yEndValues[i], yStartValues[i], x, YValues[i]]);
 						}
 						else
 						{
-							CreateSegment(i, [i + SbsInfo.Start, i + SbsInfo.End, yEndValues[i], yStartValues[i], i, YValues[i]]);
-						}
-					}
-				}
-				else
-				{
-					for (var i = 0; i < PointsCount; i++)
-					{
-						if (xValues != null)
-
-						{
-							var x = xValues[i];
-
-							if (i < _segments.Count && _segments[i] is ColumnSegment segment)
-							{
-								segment.SetData([x + SbsInfo.Start, x + SbsInfo.End, yEndValues[i], yStartValues[i], x, YValues[i]]);
-							}
-							else
-							{
-								CreateSegment(i, [x + SbsInfo.Start, x + SbsInfo.End, yEndValues[i], yStartValues[i], x, YValues[i]]);
-							}
+							CreateSegment(i, [x + SbsInfo.Start, x + SbsInfo.End, yEndValues[i], yStartValues[i], x, YValues[i]]);
 						}
 					}
 				}

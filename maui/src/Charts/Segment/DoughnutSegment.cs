@@ -7,13 +7,15 @@
 	public partial class DoughnutSegment : PieSegment
 	{
 		#region Fields
-
+		
 		RectF _actualBounds, _currentBounds;
-
 		double _startAngle, _endAngle;
-
 		double _segmentRadius;
-
+        PointF _innerCurveStartPoint, _innerCurveStartMidpoint, _startCurveCeterPoint, _outerCurveStartMidPoint, _outerCurveStartPoint,
+               _innerCurveEndPoint, _innerCurveEndMidpoint, _outerCurveEndMidPoint, _outerCurveEndPoint, _endCurveCenterPoint;
+        float _explodeOffsetX, _explodeOffsetY;
+        bool _isExploded;
+		
 		#endregion
 
 		#region Internal Properties
@@ -29,14 +31,14 @@
 		/// <inheritdoc/>
 		protected internal override void OnLayout()
 		{
-			if (Series is not DoughnutSeries || double.IsNaN(YValue))
+			if (Series is not DoughnutSeries series || double.IsNaN(YValue))
 			{
 				return;
 			}
 
 			//For calculating doughnut center angle.
 			MidAngle = (StartAngle + (EndAngle / 2)) * 0.0174532925f;
-			UpdatePosition();
+			UpdatePosition(series);
 		}
 
 		/// <inheritdoc/>
@@ -66,36 +68,9 @@
 				}
 			}
 
-			UpdatePosition();
+			UpdatePosition(series);
 			var endArcAngle = series._isClockWise ? drawStartAngle + drawEndAngle : drawEndAngle;
-
-			PathF path = new PathF();
-
-			//Drawing segment.
-			path.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom, -drawStartAngle, -(endArcAngle), series._isClockWise);
-			path.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -(endArcAngle), -drawStartAngle, !series._isClockWise);
-			path.Close();
-			canvas.SetFillPaint(Fill, path.Bounds);
-			canvas.Alpha = Opacity;
-			canvas.FillPath(path);
-
-			//Drawing stroke.
-			if (HasStroke)
-			{
-#if WINDOWS
-				//MAUI-582: Exception faced "Value not fall within expected range, due to path closed before stroke drawing" 
-				var radius = (float)series.InnerRadius * (Math.Min(_actualBounds.Width, _actualBounds.Height) / 2);
-				var x = (float)(_currentBounds.X + (_currentBounds.Width / 2) + (radius * Math.Cos(drawStartAngle * (Math.PI / 180))));
-				var y = (float)(_currentBounds.Y + (_currentBounds.Width / 2) + (radius * Math.Sin(drawStartAngle * (Math.PI / 180))));
-				path.MoveTo(x, y);
-#endif
-				path.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom, -drawStartAngle, -(endArcAngle), series._isClockWise);
-				path.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -(endArcAngle), -drawStartAngle, !series._isClockWise);
-				path.Close();
-				canvas.StrokeColor = Stroke.ToColor();
-				canvas.StrokeSize = (float)StrokeWidth;
-				canvas.DrawPath(path);
-			}
+			DrawSegment(canvas, series, drawStartAngle, endArcAngle);
 		}
 
 		#endregion
@@ -131,30 +106,46 @@
 
 		#region private Methods
 
-		void UpdatePosition()
+		void UpdatePosition(DoughnutSeries series)
 		{
-			if (Series is not DoughnutSeries series)
-			{
-				return;
-			}
-
 			var center = series.Center;
 			RectF seriesClipRect = series.AreaBounds;
 			double minScale = Math.Min(seriesClipRect.Width, seriesClipRect.Height) * series.Radius;
-			_actualBounds = new RectF((float)((center.X * 2) - minScale) / 2, (float)((center.Y * 2) - minScale) / 2, (float)minScale, (float)minScale);
-			_currentBounds = new RectF(_actualBounds.Left, _actualBounds.Top, _actualBounds.Width, _actualBounds.Height);
+
+  			float halfMinScale = (float)minScale / 2;
+    		float centerOffsetX = (float)(center.X - halfMinScale);
+    		float centerOffsetY = (float)(center.Y - halfMinScale);
+
+    		_actualBounds = new RectF(centerOffsetX, centerOffsetY, halfMinScale * 2, halfMinScale * 2);
+			_currentBounds = new RectF(_actualBounds.Location, _actualBounds.Size);
 
 			if (series.ExplodeIndex == Index || series.ExplodeAll)
 			{
+				if (!_isExploded)
+				{
+					_explodeOffsetX = 0;
+					_explodeOffsetY = 0;
+				}
+
 				float angle = series._isClockWise ? (float)((2f * (series.StartAngle + ((StartAngle - series.StartAngle) * series.AnimationValue)) * 0.0174532925f) + ((EndAngle * series.AnimationValue) * 0.0174532925f)) / 2f
-				: (float)(((series.StartAngle + ((StartAngle - series.StartAngle) * series.AnimationValue)) * 0.0174532925f) +
-				(EndAngle * series.AnimationValue * 0.0174532925f)) / 2;
-				_actualBounds = _actualBounds.Offset((float)(series.ExplodeRadius * Math.Cos(angle)), (float)(series.ExplodeRadius * Math.Sin(angle)));
+			   : (float)(((series.StartAngle + ((StartAngle - series.StartAngle) * series.AnimationValue)) * 0.0174532925f) + (EndAngle * series.AnimationValue * 0.0174532925f)) / 2;
+				_explodeOffsetX = (float)(series.ExplodeRadius * Math.Cos(angle));
+				_explodeOffsetY = (float)(series.ExplodeRadius * Math.Sin(angle));
+				_actualBounds = _actualBounds.Offset(_explodeOffsetX, _explodeOffsetY);
 				_currentBounds = _actualBounds;
+
+				_isExploded = true;
+			}
+			else if (_isExploded)
+			{
+				_explodeOffsetX = 0;
+				_explodeOffsetY = 0;
+				_isExploded = false;
 			}
 
 			InnerRadius = (float)series.InnerRadius * (Math.Min(_actualBounds.Width, _actualBounds.Height) / 2);
 			_currentBounds = new RectF(_currentBounds.X + (_currentBounds.Width / 2) - InnerRadius, _currentBounds.Y + (_currentBounds.Height / 2) - InnerRadius, 2 * InnerRadius, 2 * InnerRadius);
+
 			series.ActualRadius = (float)minScale / 2;
 			_segmentRadius = series.ActualRadius;
 		}
@@ -221,6 +212,218 @@
 			}
 
 			return false;
+		}
+
+		void DrawSegment(ICanvas canvas, DoughnutSeries series, float drawStartAngle, float drawEndAngle)
+		{
+			PathF path = new PathF();
+			float outerRadius = (float)_segmentRadius;
+			float innerRadius = InnerRadius;
+			float midRadius = (float)(outerRadius + innerRadius) / 2;
+			float radius = (float)(outerRadius - innerRadius) / 2;
+			float deviationAngle = ChartUtils.CalculateAngleDeviation(midRadius, radius, 360);
+
+			if (series.CapStyle == CapStyle.BothFlat || series.VisibleSegmentCount == 1)
+			{
+				DrawFlatSegment(canvas, series, drawStartAngle, drawEndAngle, path);
+			}
+			else
+			{
+				float segmentStartAngle = drawStartAngle;
+				float segmentEndAngle = drawEndAngle;
+
+				if (series.CapStyle == CapStyle.StartCurve || series.CapStyle == CapStyle.BothCurve)
+				{
+					if ((drawStartAngle + deviationAngle) >= drawEndAngle && series.CapStyle == CapStyle.StartCurve)
+					{ 
+						deviationAngle = drawEndAngle - drawStartAngle;
+					}
+
+					if (series.CapStyle == CapStyle.BothCurve)
+					{
+						float segmentSweepAngle = drawEndAngle - drawStartAngle;
+						float maxDeviation = 2 * deviationAngle;
+
+						if (segmentSweepAngle < maxDeviation)
+						{ 
+							deviationAngle = segmentSweepAngle / 2;
+						}
+					}
+
+					segmentStartAngle += deviationAngle;
+					PointF[] startCurvePoints = CalculateCurvePoints(series, segmentStartAngle, drawStartAngle, innerRadius, outerRadius, midRadius);
+					_innerCurveStartPoint = startCurvePoints[0];
+					_innerCurveStartMidpoint = startCurvePoints[1];
+					_startCurveCeterPoint = startCurvePoints[2];
+					_outerCurveStartMidPoint = startCurvePoints[3];
+					_outerCurveStartPoint = startCurvePoints[4];
+
+				}
+
+				if (series.CapStyle == CapStyle.EndCurve || series.CapStyle == CapStyle.BothCurve)
+				{
+					if ((drawEndAngle - deviationAngle) <= drawStartAngle && series.CapStyle == CapStyle.EndCurve)
+					{
+						deviationAngle = drawEndAngle - drawStartAngle;
+					}
+
+					segmentEndAngle -= deviationAngle;
+					PointF[] endCurvePoints = CalculateCurvePoints(series, segmentEndAngle, drawEndAngle, innerRadius, outerRadius, midRadius);
+					_innerCurveEndPoint = endCurvePoints[0];
+					_innerCurveEndMidpoint = endCurvePoints[1];
+					_endCurveCenterPoint = endCurvePoints[2];
+					_outerCurveEndMidPoint = endCurvePoints[3];
+					_outerCurveEndPoint = endCurvePoints[4];
+				}
+
+				// To draw the start curve for the segment
+				if (series.CapStyle == CapStyle.StartCurve || series.CapStyle == CapStyle.BothCurve)
+				{
+					path.MoveTo(_innerCurveStartPoint);
+					path.CurveTo(_innerCurveStartPoint, _innerCurveStartMidpoint, _startCurveCeterPoint);
+					path.CurveTo(_startCurveCeterPoint, _outerCurveStartMidPoint, _outerCurveStartPoint);		
+				}
+
+				if (NormalizeAngle(segmentStartAngle) != NormalizeAngle(segmentEndAngle))
+				{
+					// To draw the outer arc for the segment 
+					path.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom, -segmentStartAngle, -(segmentEndAngle), series._isClockWise);
+
+					// To draw the inner arc for the segment 
+					path.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -(segmentEndAngle), -segmentStartAngle, !series._isClockWise);
+				}
+
+				// To draw the end curve for the segment
+				if (series.CapStyle == CapStyle.EndCurve || series.CapStyle == CapStyle.BothCurve)
+				{
+					path.MoveTo(_innerCurveEndPoint);
+					path.CurveTo(_innerCurveEndPoint, _innerCurveEndMidpoint, _endCurveCenterPoint);
+					path.CurveTo(_endCurveCenterPoint, _outerCurveEndMidPoint, _outerCurveEndPoint);
+				}
+
+				canvas.SetFillPaint(Fill, path.Bounds);
+				canvas.Alpha = Opacity;
+				canvas.FillPath(path);
+				SegmentStrokePath(canvas, series, segmentStartAngle, segmentEndAngle, drawStartAngle);
+			}
+		}
+
+		void DrawFlatSegment(ICanvas canvas, DoughnutSeries series, float drawStartAngle, float drawEndAngle, PathF path)
+		{
+			var radius = (float)series.InnerRadius * (Math.Min(_actualBounds.Width, _actualBounds.Height) / 2);
+			var x = (float)(_currentBounds.X + (_currentBounds.Width / 2) + (radius * Math.Cos(drawStartAngle * (Math.PI / 180))));
+			var y = (float)(_currentBounds.Y + (_currentBounds.Width / 2) + (radius * Math.Sin(drawStartAngle * (Math.PI / 180))));
+
+			path.MoveTo(x, y);
+			path.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom, -drawStartAngle, -(drawEndAngle), series._isClockWise);
+			path.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -(drawEndAngle), -drawStartAngle, !series._isClockWise);
+			path.Close();
+			canvas.SetFillPaint(Fill, path.Bounds);
+			canvas.Alpha = Opacity;
+			canvas.FillPath(path);
+
+			if (HasStroke)
+			{
+				canvas.StrokeColor = Stroke.ToColor();
+				canvas.StrokeSize = (float)StrokeWidth;
+				canvas.DrawPath(path);
+			}
+		}
+
+		PointF[] CalculateCurvePoints(DoughnutSeries series, float segmentAngle, float arcAngle, float innerRadius, float outerRadius, float midRadius)
+		{
+			// Convert degrees to radians
+			const double DegreeToRadian = Math.PI / 180;
+			double angleRadius = segmentAngle * DegreeToRadian;
+			double arcRadius = arcAngle * DegreeToRadian;
+
+			var center = series.Center;
+
+			// Calculate points using a helper function for readability
+			PointF innerPoint = ComputePoint(center, innerRadius, angleRadius);
+			PointF outerPoint = ComputePoint(center, outerRadius, angleRadius);
+			PointF centerPoint = ComputePoint(center, midRadius, arcRadius);
+			PointF innerMidPoint = ComputePoint(center, innerRadius, arcRadius);
+			PointF outerMidPoint = ComputePoint(center, outerRadius, arcRadius);
+
+			return [innerPoint, innerMidPoint, centerPoint, outerMidPoint, outerPoint];
+		}
+
+		private PointF ComputePoint(PointF center, float radius, double angle)
+		{
+			return new PointF(
+				(float)(center.X + (radius * Math.Cos(angle)) + _explodeOffsetX),
+				(float)(center.Y + (radius * Math.Sin(angle)) + _explodeOffsetY)
+			);
+		}
+
+		void SegmentStrokePath(ICanvas canvas, DoughnutSeries series, float segmentStartAngle, float segmentEndAngle, float segmentAngle)
+		{
+			if (HasStroke)
+			{
+				PathF strokePath = new PathF();
+
+				// To draw the start curve for the segment stroke
+				if (series.CapStyle == CapStyle.BothCurve || series.CapStyle == CapStyle.StartCurve)
+				{
+					strokePath.MoveTo(_innerCurveStartPoint);
+					strokePath.CurveTo(_innerCurveStartPoint, _innerCurveStartMidpoint, _startCurveCeterPoint);
+					strokePath.CurveTo(_startCurveCeterPoint, _outerCurveStartMidPoint, _outerCurveStartPoint);
+				}
+
+				if (NormalizeAngle(segmentStartAngle) != NormalizeAngle(segmentEndAngle))
+				{
+					// To draw the outer arc for the segment stroke
+					strokePath.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom, -segmentStartAngle, -(segmentEndAngle), series._isClockWise);
+				}
+
+				// To draw the end curve for the segment stroke
+				if (series.CapStyle == CapStyle.EndCurve || series.CapStyle == CapStyle.BothCurve)
+				{
+					strokePath.MoveTo(_innerCurveEndPoint);
+					strokePath.CurveTo(_innerCurveEndPoint, _innerCurveEndMidpoint, _endCurveCenterPoint);
+					strokePath.CurveTo(_endCurveCenterPoint, _outerCurveEndMidPoint, _outerCurveEndPoint);
+					strokePath.MoveTo(_innerCurveEndPoint);
+				}
+
+				if (NormalizeAngle(segmentStartAngle) != NormalizeAngle(segmentEndAngle))
+				{
+					// To draw the inner arc for the segment stroke
+					strokePath.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -(segmentEndAngle), -segmentStartAngle, !series._isClockWise);
+				}
+
+				if (NormalizeAngle(segmentStartAngle) == NormalizeAngle(segmentEndAngle) && series.CapStyle == CapStyle.StartCurve)
+				{
+					strokePath.Close();
+				}
+
+				canvas.StrokeColor = Stroke.ToColor();
+				canvas.StrokeLineCap = LineCap.Round;
+				canvas.StrokeSize = (float)StrokeWidth;
+				canvas.DrawPath(strokePath); 
+
+				if (series.CapStyle == CapStyle.EndCurve)
+				{
+					double angleRad = segmentAngle * (Math.PI / 180);
+					var innerPoint = new PointF((float)(series.Center.X + (InnerRadius * Math.Cos(angleRad)) + _explodeOffsetX), (float)(series.Center.Y + (InnerRadius * Math.Sin(angleRad)) + _explodeOffsetY));
+					var outerPoint = new PointF((float)(series.Center.X + (_segmentRadius * Math.Cos(angleRad)) + _explodeOffsetX), (float)(series.Center.Y + (_segmentRadius * Math.Sin(angleRad)) + _explodeOffsetY));
+
+					canvas.StrokeLineCap = LineCap.Round;
+
+					//To draw line for the segment stroke
+					canvas.DrawLine(innerPoint, outerPoint);
+				}
+			}
+		}
+
+        // Normalizes angle precision to avoid rendering artifacts specific to platform.
+		static float NormalizeAngle(float angle)
+		{
+#if IOS || MACCATALYST
+			return MathF.Round(angle, 4); 
+#else
+			return MathF.Round(angle, 5);
+#endif
 		}
 
 		#endregion

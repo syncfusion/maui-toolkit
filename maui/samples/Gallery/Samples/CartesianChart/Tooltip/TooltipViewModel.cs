@@ -23,32 +23,4 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			];
 		}
 	}
-
-	public class TooltipValuesConverter : IValueConverter
-	{
-		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-		{
-			if (value is ChartDataModel model)
-			{
-				var param = parameter?.ToString();
-
-				switch (param)
-				{
-					case "Value":
-						return $": {model.Value}M";
-					case "Size":
-						return $": {model.Size}M";
-					case "Value1":
-						return model.Value1;
-				}
-			}
-
-			return value;
-		}
-
-		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-		{
-			return value;
-		}
-	}
 }

@@ -465,7 +465,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			foreach (var seriesList in seriesGroup.Values)
 			{
-				var xValues = seriesList[0].GetXValues();
 				var positiveYValues = new Dictionary<double, double>();
 				var negativeYValues = new Dictionary<double, double>();
 
@@ -482,15 +481,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						axisCross = 1;
 					}
 				}
-
-				if (xValues != null)
+				
+				foreach (var series in seriesList)
 				{
-					foreach (var series in seriesList)
-					{
-						var yValues = series.YValues;
-						var bottomValues = new List<double>();
-						var topValues = new List<double>();
+					var xValues = series.GetXValues();
+					var yValues = series.YValues;
+					var bottomValues = new List<double>();
+					var topValues = new List<double>();
 
+					if (xValues != null)
+					{
 						for (int i = 0; i < xValues.Count; i++)
 						{
 							var xValue = xValues[i];

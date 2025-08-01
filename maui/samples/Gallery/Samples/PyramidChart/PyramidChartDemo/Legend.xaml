@@ -19,7 +19,7 @@
     <localCore:SampleView.Content>
         <chart:SfPyramidChart x:Name="Chart"
                              HorizontalOptions="Fill"
-                             VerticalOptions="FillAndExpand"
+                             VerticalOptions="Fill"
                              Margin="{OnPlatform Android='0,0,0,50', iOS='0,0,0,50', Default='0,0,0,0'}"
                             PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight2}, Dark={StaticResource PaletteBrushesDark2}}" 
                              StrokeWidth="2"
@@ -74,9 +74,9 @@
             </chart:SfPyramidChart.Legend>
 
             <chart:SfPyramidChart.DataLabelSettings>
-                <chart:PyramidDataLabelSettings UseSeriesPalette="{OnPlatform Android=True, iOS=True, Default=False}">
+                <chart:PyramidDataLabelSettings>
                     <chart:PyramidDataLabelSettings.LabelStyle>
-                        <chart:ChartDataLabelStyle LabelFormat="#.##'%" Margin="{OnPlatform Android=5, iOS=5, Default='1,0,0,0'}"/>
+                        <chart:ChartDataLabelStyle LabelFormat="#.##'%" Margin="5"/>
                     </chart:PyramidDataLabelSettings.LabelStyle>
                 </chart:PyramidDataLabelSettings>
             </chart:SfPyramidChart.DataLabelSettings>

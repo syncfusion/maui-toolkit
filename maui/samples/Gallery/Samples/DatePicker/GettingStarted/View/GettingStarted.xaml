@@ -63,6 +63,16 @@
                         <Switch x:Name="clearSelectionSwitch" Grid.Column="1" Margin="5,0,0,0" VerticalOptions="Center" HorizontalOptions="End"
                                 Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
                     </Grid>
+                  
+                    <Grid x:Name="enableLoopingGrid" HeightRequest="50">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.7*"/>
+                            <ColumnDefinition Width="0.3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Text="Enable Looping" LineBreakMode="WordWrap" FontSize="14" VerticalOptions="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}"/>
+                        <Switch x:Name="enableLoopingSwitch" Grid.Column="1" Margin="5,0,0,0" VerticalOptions="Center" HorizontalOptions="End"
+                                Style="{OnPlatform Default={StaticResource switchStyle}, Android={AppThemeBinding Dark={StaticResource switchStyle}}}"/>
+                    </Grid>
 
                     <Grid  x:Name="formatGrid" Margin="0,5">
                         <Grid.ColumnDefinitions>

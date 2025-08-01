@@ -4,17 +4,21 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.OHLC"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:FinancialViewModel">
     <localCore:SampleView.Content>
-        <StackLayout x:Name="layout">
-            <StackLayout.Resources>
+        <Grid x:Name="layout">
+            <Grid.Resources>
                 <Label x:Key="title" Text="XNAS of ABM" FontSize="16" HorizontalOptions="Fill" HorizontalTextAlignment="Center"></Label>
-            </StackLayout.Resources>
-            
-            <StackLayout.BindingContext>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.BindingContext>
                 <local:FinancialViewModel></local:FinancialViewModel>
-            </StackLayout.BindingContext>
-            <chart:SfCartesianChart  x:Name="Chart" Title="{StaticResource title}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+            </Grid.BindingContext>
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" Title="{StaticResource title}" HorizontalOptions="Fill" VerticalOptions="Fill">
                 <chart:SfCartesianChart.XAxes>
                     <chart:DateTimeAxis x:Name="xAxis" AutoScrollingDelta="{OnPlatform Android='2', iOS='2', Default='3'}" AutoScrollingMode="End" AutoScrollingDeltaType="Months" LabelCreated="Primary_LabelCreated" ShowMajorGridLines="False" >
                         <chart:DateTimeAxis.LabelStyle>
@@ -44,7 +48,7 @@
                     <chart:ChartZoomPanBehavior x:Name="ZoomPan" ZoomMode="X" EnableDoubleTap="False" EnablePanning="True" EnablePinchZooming="True"></chart:ChartZoomPanBehavior>
                 </chart:SfCartesianChart.ZoomPanBehavior>
             </chart:SfCartesianChart>
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" Text=" marketwatch.com" FontAttributes="Italic">
                     <Label.GestureRecognizers>
@@ -52,6 +56,6 @@
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>                  
 </localCore:SampleView>

@@ -1,5 +1,10 @@
-﻿using Syncfusion.Maui.Toolkit.Helper;
+using Syncfusion.Maui.Toolkit.Helper;
 using Syncfusion.Maui.Toolkit.Internals;
+
+#if IOS || MACCATALYST
+using UIKit;
+using CoreGraphics;
+#endif
 
 namespace Syncfusion.Maui.Toolkit.BottomSheet
 {
@@ -13,13 +18,22 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		// To store the weak reference of bottom sheet instance.
         readonly WeakReference<SfBottomSheet>? _bottomSheetRef;
 
-#if IOS
+#if IOS || MACCATALYST
 
-		// To store the child count of bottom sheet
-		double _childLoopCount;
+		/// <summary>
+		/// Represents a scrollable UIView.
+		/// </summary>
+		UIView? _scrollableView;
 
-		// To handle bottom sheet swipe based on initial touch point.
-		bool _canHandleTouch = true;
+		/// <summary>
+		/// Indicates whether pressed occurs inside a scrollable view.
+		/// </summary>
+		bool _isPressed = false;
+
+		/// <summary>
+		/// Determines whether the touch should be processed.
+		/// </summary>
+		bool _canProcessTouch = true;
 
 #endif
 
@@ -45,66 +59,41 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 		#region Private Methods
 
-#if IOS
+#if IOS || MACCATALYST
+
 		/// <summary>
-		/// Gets the X and Y coordinates of the specified element based on the screen.
+		/// Determines if the specified UIView or any of its parent views is a UIScrollView or UICollectionView.
 		/// </summary>
-		/// <param name="element">The current element for which coordinates are requested.</param>
-		/// <param name="touchPoint">The current element for which coordinates are requested.</param>
-		bool IsChildElementScrolled(IVisualTreeElement? element, Point touchPoint)
+		/// <param name="view">The UIView to check.</param>
+		/// <returns>True if a scrollable view is found, otherwise false.</returns>
+		bool IsScrollableView(UIView? view)
 		{
-			if (element is null)
+			if (view == null)
 			{
 				return false;
 			}
 
-			var view = element as View;
-			if (view is null || view.Handler is null || view.Handler.PlatformView is null)
+			if (view is UIScrollView || view is UICollectionView)
 			{
-				return false;
-			}
-
-			if (view is ScrollView || view is ListView || view is CollectionView)
-			{
+				_scrollableView = view;
 				return true;
 			}
 
-			foreach (var childView in element.GetVisualChildren().OfType<View>())
+			UIView? parent = view.Superview;
+			while (parent != null)
 			{
-				if (childView is null || childView.Handler is null || childView.Handler.PlatformView is null)
+				if (parent is UIScrollView || parent is UICollectionView)
 				{
-					return false;
+					_scrollableView = parent;
+					return true;
 				}
 
-				var childNativeView = childView.Handler.PlatformView;
-
-				// Here items X and Y position converts based on screen.
-				Point locationOnScreen = ChildLocationToScreen(childNativeView);
-				var bottom = locationOnScreen.Y + childView.Bounds.Height;
-				var right = locationOnScreen.X + childView.Bounds.Width;
-
-				// We loop through child only 10 times.
-				if (touchPoint.Y >= locationOnScreen.Y && touchPoint.Y <= bottom && touchPoint.X >= locationOnScreen.X && touchPoint.X <= right && _childLoopCount <= 10)
-				{
-					_childLoopCount++;
-					return IsChildElementScrolled(childView, touchPoint);
-				}
+				parent = parent.Superview;
 			}
 
-			_childLoopCount = 0;
 			return false;
 		}
 
-		Point ChildLocationToScreen(object child)
-		{
-			if (child is UIKit.UIView view && this.Handler is not null)
-			{
-				var point = view.ConvertPointToView(view.Bounds.Location, Handler.PlatformView as UIKit.UIView);
-				return new Microsoft.Maui.Graphics.Point(point.X, point.Y);
-			}
-
-			return new Microsoft.Maui.Graphics.Point(0, 0);
-		}
 #endif
 
 		#endregion
@@ -115,34 +104,59 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// Method to invoke swiping in bottom sheet.
 		/// </summary>
 		/// <param name="e">e.</param>
-		public void OnTouch(Toolkit.Internals.PointerEventArgs e)
+		public void OnTouch(Internals.PointerEventArgs e)
 		{
 #if IOS || MACCATALYST || ANDROID
 
-#if IOS
-			if (Content is null)
+#if IOS || MACCATALYST
+			if (!_canProcessTouch)
 			{
+				_canProcessTouch = true;
 				return;
 			}
 
-			var firstDescendant = Content.GetVisualTreeDescendants().FirstOrDefault();
-			if (firstDescendant is not null && _canHandleTouch && IsChildElementScrolled(firstDescendant, e.TouchPoint))
-			{
-				return;
-			}
-			else
-			{
-				if (e is not null && e.Action == PointerActions.Pressed)
+			// Track touch points for translation calculation
+			if (e.Action == PointerActions.Pressed)
+			{				
+				if (Handler?.PlatformView is UIView platformView)
 				{
-					_canHandleTouch = false;
-				}
-				else if (e is not null && e.Action == PointerActions.Released)
-				{
-					_canHandleTouch = true;
-				}
-			}
+					var nativePoint = new CGPoint(e.TouchPoint.X, e.TouchPoint.Y);
+					UIView? hitView = platformView.HitTest(nativePoint, null);
 
+					if (IsScrollableView(hitView))
+					{
+						_canProcessTouch = false; // Only disable bottom sheet swipe if touch is inside scrollable view
+						_isPressed = true;
+						return;
+					}
+					else
+					{
+						_canProcessTouch = true; // Allow bottom sheet swipe
+					}
+				}
+
+			}
+			else if (e.Action == PointerActions.Moved)
+			{
+				// When moved is called multiple times, this flag helps us prevent the bottom sheet scrolling	
+				if(_isPressed)
+				{
+					return;
+				}
+			}
+			else if (e.Action == PointerActions.Released || e.Action == PointerActions.Exited || e.Action == PointerActions.Cancelled)
+			{
+				_canProcessTouch = true;
+
+				// Early return to avoid bottom sheet position update after the scroll occured in a scrollable view
+				if(_isPressed)
+				{
+					_isPressed = false;
+					return;
+				}
+			}
 #endif
+
 			if (e is not null && _bottomSheetRef is not null)
 			{
 				if (_bottomSheetRef.TryGetTarget(out var bottomSheet))

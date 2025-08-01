@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.SplineRangeAreaChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:SplineRangeAreaChartViewModel">
     
     <localCore:SampleView.Resources>
         <ResourceDictionary>
@@ -14,16 +15,22 @@
     </localCore:SampleView.Resources>
     
     <localCore:SampleView.Content>
-        <StackLayout>
+        <Grid>
             
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:SplineRangeAreaChartViewModel/>
-            </StackLayout.BindingContext>
-            
-            <chart:SfCartesianChart x:Name="Chart" PaletteBrushes="{Binding PaletteBrushes}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+            </Grid.BindingContext>
+          
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+        <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" PaletteBrushes="{Binding PaletteBrushes}" HorizontalOptions="Fill" VerticalOptions="Fill">
            
                 <chart:SfCartesianChart.Resources>
                     <ResourceDictionary>
+                    <local:TooltipValuesConverter x:Key="valueConverter"/>
                         <DataTemplate x:Key="template1">
                             <Grid>
                                 <Grid.RowDefinitions>
@@ -40,12 +47,12 @@
                                     <Label Text="Madrid" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="13" Grid.Row="0"/>
                                 </StackLayout>
                                 <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="70" Margin="2" Grid.Row="1"/>
-                                <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Vertical"  VerticalOptions="Fill" Spacing="0" Padding="2" Margin="0">
-                                    <Label Text="{Binding DataItem.Value,StringFormat='High : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
+                                <StackLayout x:DataType="chart:TrackballPointInfo" Grid.Row="2" Grid.Column="0" Orientation="Vertical"  VerticalOptions="Fill" Spacing="0" Padding="2" Margin="0">
+                                           <Label Text="{Binding DataItem,Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat='High : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
                                            TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                    <Label Text="{Binding DataItem.High,StringFormat='Avg  : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
+                                           <Label Text="{Binding DataItem,Converter={StaticResource valueConverter},ConverterParameter='High',StringFormat='Avg  : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
                                            TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                    <Label Text="{Binding DataItem.Low,StringFormat='Low  : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
+                                           <Label Text="{Binding DataItem,Converter={StaticResource valueConverter},ConverterParameter='Low',StringFormat='Low  : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="12"
                                            TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                                 </StackLayout>
                             </Grid>
@@ -105,8 +112,8 @@
                 
               
             </chart:SfCartesianChart>
-    
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+
+        <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" wunderground.com " VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -115,6 +122,6 @@
                 </Label>
             </HorizontalStackLayout>
             
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 </localCore:SampleView>

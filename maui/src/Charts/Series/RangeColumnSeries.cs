@@ -320,42 +320,26 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         #region Internal Methods
 
-        internal override void GenerateSegments(SeriesView seriesView)
-        {
-            var xValues = GetXValues();
-            if (IsGrouped && (IsIndexed || xValues == null))
-            {
-                for (var i = 0; i < PointsCount; i++)
-                {
-                    if (i < _segments.Count && _segments[i] is RangeColumnSegment)
-                    {
-                        ((RangeColumnSegment)_segments[i]).SetData([i + SbsInfo.Start, i + SbsInfo.End, HighValues[i], LowValues[i], i]);
-                    }
-                    else
-                    {
-                        CreateSegment(seriesView, [i + SbsInfo.Start, i + SbsInfo.End, HighValues[i], LowValues[i], i], i);
-                    }
-                }
-            }
-            else
-            {
-                if (xValues != null)
-                {
-                    for (var i = 0; i < PointsCount; i++)
-                    {
-                        var x = xValues[i];
-                        if (i < _segments.Count && _segments[i] is RangeColumnSegment)
-                        {
-                            ((RangeColumnSegment)_segments[i]).SetData([x + SbsInfo.Start, x + SbsInfo.End, HighValues[i], LowValues[i], x]);
-                        }
-                        else
-                        {
-                            CreateSegment(seriesView, [x + SbsInfo.Start, x + SbsInfo.End, HighValues[i], LowValues[i], x], i);
-                        }
-                    }
-                }
-            }
-        }
+		internal override void GenerateSegments(SeriesView seriesView)
+		{
+			var xValues = GetXValues();
+
+			if (xValues != null)
+			{
+				for (var i = 0; i < PointsCount; i++)
+				{
+					var x = xValues[i];
+					if (i < _segments.Count && _segments[i] is RangeColumnSegment)
+					{
+						((RangeColumnSegment)_segments[i]).SetData([x + SbsInfo.Start, x + SbsInfo.End, HighValues[i], LowValues[i], x]);
+					}
+					else
+					{
+						CreateSegment(seriesView, [x + SbsInfo.Start, x + SbsInfo.End, HighValues[i], LowValues[i], x], i);
+					}
+				}
+			}
+		}
 
         internal override double GetActualWidth()
         {

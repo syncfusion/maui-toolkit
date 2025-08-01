@@ -3,9 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.CustomizedRadialBarChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
-              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
-             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:RadialBarSeriesViewModel">
 
     <localCore:SampleView.Resources>
         <ResourceDictionary>
@@ -18,6 +20,8 @@
     <localCore:SampleView.Content>
         <chart:SfCircularChart x:Name="chart" >
             <chart:SfCircularChart.Resources>
+                <local:TooltipValueConverter x:Key="valueConverter"/>
+                <local:ImageValueConverter x:Key="imageValueConverter"/>
                 <local:CornerRadiusConverter x:Key="innerRadiusConverter" />
                 <converter:BrushToColorConverter x:Key="brushToColor" />
                 <local:IndexToItemSourceConverter x:Key="indexToItemSourceConverter" />
@@ -34,38 +38,39 @@
                                    YBindingPath="Value"  
                                    GapRatio="{OnPlatform WinUI='0.4',Android='0.4',iOS='0.5',MacCatalyst='0.4'}" 
                                    CapStyle="BothCurve" XBindingPath="Name" 
-                                  Radius="1" MaximumValue="100">
+                                   Radius="1" MaximumValue="100">
                 <chart:RadialBarSeries.CenterView>
                     <Border Stroke="{OnPlatform WinUI='White',Android='White'}" 
                             HeightRequest="{Binding CenterHoleSize}"  
-                            WidthRequest="{Binding CenterHoleSize}">
+                            WidthRequest="{Binding CenterHoleSize}"
+                            x:DataType="chart:RadialBarSeries">
                         <Border.StrokeShape>
                             <RoundRectangle CornerRadius="{Binding CenterHoleSize,
                                 Converter={StaticResource innerRadiusConverter},
-                                Source={x:Reference series}}" />
+                                Source={x:Reference series}}"/>
                         </Border.StrokeShape>
-                        <StackLayout>
+                        <Grid>
                             <OnPlatform x:TypeArguments="Image">
                                 <On Platform="WinUI, MacCatalyst,Android">
-                                    <Image HorizontalOptions="CenterAndExpand" 
-                                           VerticalOptions="CenterAndExpand" 
+                                    <Image HorizontalOptions="Center" 
+                                           VerticalOptions="Center" 
                                            Source="person.png" />
                                 </On>
                                 <On Platform="iOS">
-                                    <Image HorizontalOptions="CenterAndExpand"
+                                    <Image HorizontalOptions="Center"
                                            HeightRequest="140" WidthRequest="140" 
-                                           VerticalOptions="CenterAndExpand" 
+                                           VerticalOptions="Center" 
                                            Source="person.png" />
                                 </On>
                             </OnPlatform>
-                        </StackLayout>
+                        </Grid>
                     </Border>
                 </chart:RadialBarSeries.CenterView>
             </chart:RadialBarSeries>
             <chart:SfCircularChart.Legend>
                 <chart:ChartLegend Placement="{OnPlatform WinUI='Bottom', MacCatalyst='Bottom', iOS='Bottom', Android='Bottom'}">
                     <chart:ChartLegend.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="core:LegendItem">
                             <Grid HeightRequest="{OnPlatform WinUI=100,Android=75,MacCatalyst=100,iOS=75}" Margin="5,0,0,0" WidthRequest="{OnPlatform WinUI='120',Android='80',MacCatalyst='120',iOS='90'}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*" />
@@ -78,9 +83,9 @@
                                 <chart:SfCircularChart Grid.RowSpan="2" 
                                                        Margin="{OnPlatform WinUI='0,0,0,12',Android='0,0,0,32',MacCatalyst='0,0,0,12',iOS='5,0,0,15'}" 
                                                        Grid.ColumnSpan="1" WidthRequest="40" HeightRequest="100"   
-                                                       VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                       VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <chart:SfCircularChart.Series>
-                                        <chart:RadialBarSeries StartAngle="-90" CapStyle="BothCurve" 
+                                        <chart:RadialBarSeries StartAngle="-90" CapStyle="BothCurve"
                                                                    InnerRadius="{OnPlatform WinUI='0.5',Android='0.6',iOS='0.6',MacCatalyst='0.6'}" 
                                                                    EndAngle="270" 
                                                                    MaximumValue="100" Radius="1"  x:Name="series1" 
@@ -91,17 +96,17 @@
                                                                    TrackFill="{AppThemeBinding Light={StaticResource TrackColorLight}, Dark={StaticResource TrackColorDark}}">
                                             <chart:RadialBarSeries.CenterView>
                                                 <Border Stroke="{OnPlatform WinUI='White',Android='White'}"  HeightRequest="{Binding CenterHoleSize}"  
-                                                        WidthRequest="{Binding CenterHoleSize}">
+                                                        WidthRequest="{Binding CenterHoleSize}" x:DataType="chart:RadialBarSeries">
                                                     <Border.StrokeShape>
                                                         <RoundRectangle CornerRadius="{Binding CenterHoleSize,
-                                                            Converter={StaticResource innerRadiusConverter},Source={x:Reference series1}}" />
+                                                            Converter={StaticResource innerRadiusConverter},Source={x:Reference series1}}"/>
                                                     </Border.StrokeShape>
                                                     <OnPlatform x:TypeArguments="Image">
                                                         <On Platform="WinUI, MacCatalyst, iOS">
-                                                            <Image Source="{Binding BindingContext.Item.Image}"/>
+                                                            <Image Source="{Binding BindingContext, Converter={StaticResource imageValueConverter}}"/>
                                                         </On>
                                                         <On Platform="Android">
-                                                            <Image Source="{Binding BindingContext.Item.Image}" 
+                                                            <Image Source="{Binding BindingContext, Converter={StaticResource imageValueConverter}}" 
                                                                        HeightRequest="20" WidthRequest="40" 
                                                                        HorizontalOptions="Center" VerticalOptions="Center"/>
                                                         </On>
@@ -111,15 +116,15 @@
                                         </chart:RadialBarSeries>
                                     </chart:SfCircularChart.Series>
                                 </chart:SfCircularChart>
-                                <Label Grid.Row="0" Grid.Column="1" 
+                                <Label Grid.Row="0" Grid.Column="1"
                                        Margin="{OnPlatform WinUI='10,35,0,0',Android='5,0,0,0',MacCatalyst='10,35,0,0',iOS='10,20,0,0'}"
                                        HeightRequest="{OnPlatform WinUI=30,Android=23,MacCatalyst=30,iOS=23}" x:Name="label" 
                                        FontSize="{OnPlatform WinUI='13' ,Android='10',MacCatalyst='13',iOS='10'}"
                                        TextColor="{Binding IconBrush,Converter={StaticResource brushToColor}}" 
                                        HorizontalTextAlignment="Start" VerticalTextAlignment="Start" 
-                                       Text="{Binding Item.Value, StringFormat='\{0,0\}%'}">
+                                       Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Value', StringFormat='\{0,0\}%'}">
                                 </Label>
-                                <Label FontSize="{OnPlatform WinUI='13' ,Android='10',MacCatalyst='13',iOS='10'}" Grid.Row="1" 
+                                <Label FontSize="{OnPlatform WinUI='13' ,Android='10',MacCatalyst='13',iOS='10'}" Grid.Row="1"
                                        Margin="{OnPlatform WinUI='10,0,0,30',Android='5,0,0,50',MacCatalyst='10,0,0,30',iOS='10,0,0,27'}" 
                                        HeightRequest="{OnPlatform WinUI=30,Android=23,MacCatalyst=30,iOS=23}" Text="{Binding Item.Name}" 
                                        Grid.Column="1" VerticalTextAlignment="Start"  HorizontalTextAlignment="Start" />

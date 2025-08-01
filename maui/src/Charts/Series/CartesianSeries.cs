@@ -28,20 +28,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal bool IsIndexed
 		{
-			get { return ActualXAxis is CategoryAxis; }
-		}
-
-		internal bool IsGrouped
-		{
-			get
-			{
-				if (ActualXValues is CategoryAxis category)
-				{
-					return category.ArrangeByIndex;
-				}
-
-				return false;
-			}
+			get { return ActualXAxis is CategoryAxis || ActualXAxis is DateTimeCategoryAxis; }
 		}
 
 		internal DoubleRange SbsInfo { get; set; } = DoubleRange.Empty;

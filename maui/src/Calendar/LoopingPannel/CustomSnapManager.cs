@@ -750,7 +750,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             for (int i = 0; i < Children.Count; i++)
             {
                 List<DateTime> visibleDates = GetVisibleDatesForView(i);
-                (Children[i] as ICalendarView)?.UpdateVisibleDatesChange(visibleDates, i == _currentChildIndex);
+                (Children[i] as ICalendarView)?.UpdateVisibleDatesChange(visibleDates, i == _currentChildIndex, this);
                 //// Condition to update the disabled date only for the current view.
                 if (_visibleDates == visibleDates)
                 {
@@ -996,7 +996,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return;
             }
 
-            (Children[currentIndex] as ICalendarView)?.UpdateVisibleDatesChange(GetVisibleDatesForView(currentIndex), currentIndex == _currentChildIndex);
+            (Children[currentIndex] as ICalendarView)?.UpdateVisibleDatesChange(GetVisibleDatesForView(currentIndex), currentIndex == _currentChildIndex, this);
             for (int i = 0; i < ChildCount; i++)
             {
                 (Children[i] as YearView)?.InvalidateSemanticsNode(i == _currentChildIndex);
@@ -1358,6 +1358,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="visibleDates">The visible dates collection.</param>
         void UpdateSpecialAndDisableDates(List<DateTime> visibleDates)
         {
+            if (visibleDates.Count == 0)
+            {
+                return;
+            }
+
             List<DateTime>? disabledDates = UpdateDisabledDates(visibleDates);
             List<CalendarIconDetails>? specialDates = UpdateSpecialDates(visibleDates);
             //// Disable dates null means the disabled dates are already updated for current visible dates.

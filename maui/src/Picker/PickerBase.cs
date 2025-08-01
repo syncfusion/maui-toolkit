@@ -43,6 +43,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         FooterLayout? _footerLayout;
 
         /// <summary>
+        /// The column header layout contains the text of the column header.
+        /// </summary>
+        ColumnHeaderLayout? _columnHeaderLayout;
+
+        /// <summary>
         /// The picker container contains picker view layouts.
         /// </summary>
         PickerContainer? _pickerContainer;
@@ -89,6 +94,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
 #endif
 
+        #endregion
+
+        #region Constructor
+#if IOS
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PickerBase"/> class.
+        /// </summary>
+        protected PickerBase()
+        {
+            IgnoreSafeArea = true;
+        }
+#endif
         #endregion
 
         #region Internal Properties
@@ -265,6 +282,23 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
+        /// Method to add or remove column header layout.
+        /// </summary>
+        void AddorRemoveColumnHeaderLayout()
+        {
+            if (BaseColumnHeaderView.Height > 0 && _columnHeaderLayout == null && ColumnHeaderTemplate != null)
+            {
+                _columnHeaderLayout = new ColumnHeaderLayout(this, string.Empty);
+                _pickerStackLayout?.Children.Insert(1, _columnHeaderLayout);
+            }
+            else if (_columnHeaderLayout != null && BaseColumnHeaderView.Height <= 0 && ColumnHeaderTemplate != null)
+            {
+                _pickerStackLayout?.Children.Remove(_columnHeaderLayout);
+                _columnHeaderLayout = null;
+            }
+        }
+
+        /// <summary>
         /// Method to add or remove footer layout.
         /// </summary>
         void AddOrRemoveFooterLayout()
@@ -289,6 +323,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             InvalidateMeasure();
             _pickerStackLayout?.InvalidateView();
+#if WINDOWS || MACCATALYST
+            if (EnableLooping)
+            {
+                _pickerContainer?.UpdateItemHeight();
+            }
+#endif
         }
 
         /// <summary>
@@ -526,26 +566,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            double width = 0;
-            int count = 0;
-            int columnCount = BaseColumns.Count;
-            for (int i = 0; i < columnCount; i++)
-            {
-                ICollection itemsSource = (ICollection)BaseColumns[i].ItemsSource;
-                if (itemsSource != null)
-                {
-                    count = count < itemsSource.Count ? itemsSource.Count : count;
-                    if (BaseColumns[i].SelectedIndex <= -1)
-                    {
-                        count = count + 1;
-                    }
-                }
-
-                width += BaseColumns[i].Width <= 0 ? 100 : BaseColumns[i].Width;
-            }
-
-            _popup.WidthRequest = width < 200 ? 200 : width;
-            _popup.HeightRequest = BaseHeaderView.Height + BaseColumnHeaderView.Height + (ItemHeight * (count >= 5 ? 5 : count)) + FooterView.Height;
+            _popup.WidthRequest = PopupWidth == 0 ? GetDefaultPopupWidth(this) : PopupWidth;
+            _popup.HeightRequest = PopupHeight == 0 ? GetDefaultPopupHeight(this) : PopupHeight;
         }
 
         /// <summary>
@@ -640,6 +662,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 HeightRequest = height;
             }
+
+#if IOS
+            if (DesiredSize.Width == width && DesiredSize.Height == height && EnableLooping)
+            {
+                return new Size(width, height);
+            }
+#endif
 
             foreach (var child in Children)
             {
@@ -881,6 +910,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             pickerColumn.SelectedIndex = tappedIndex;
+            //// Call the template view for when selected value changed based on scroll the selected value.
+            if (_headerLayout != null && BaseHeaderView.Height > 0 && HeaderTemplate != null)
+            {
+                _headerLayout?.InitializeTemplateView();
+            }
+
+            if (_columnHeaderLayout != null && BaseColumnHeaderView.Height > 0 && ColumnHeaderTemplate != null)
+            {
+                _columnHeaderLayout?.InitializeTemplateView();
+            }
+
+            if (_footerLayout != null && FooterView.Height > 0 && FooterTemplate != null)
+            {
+                _footerLayout?.InitializeTemplateView();
+            }
         }
 
         /// <summary>

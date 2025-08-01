@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
@@ -169,6 +170,48 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 propertyChanged: OnRelativeViewChanged);
 
         /// <summary>
+        /// Identifies the <see cref="HeaderTemplate"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="HeaderTemplate"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty HeaderTemplateProperty =
+            BindableProperty.Create(
+                nameof(HeaderTemplate),
+                typeof(DataTemplate),
+                typeof(PickerBase),
+                null,
+                propertyChanged: OnHeaderTemplateChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="ColumnHeaderTemplate"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="ColumnHeaderTemplate"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty ColumnHeaderTemplateProperty =
+            BindableProperty.Create(
+                nameof(ColumnHeaderTemplate),
+                typeof(DataTemplate),
+                typeof(PickerBase),
+                null,
+                propertyChanged: OnColumnHeaderTemplateChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="FooterTemplate"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="FooterTemplate"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty FooterTemplateProperty =
+            BindableProperty.Create(
+                nameof(FooterTemplate),
+                typeof(DataTemplate),
+                typeof(PickerBase),
+                null,
+                propertyChanged: OnFooterTemplateChanged);
+
+        /// <summary>
         /// Identifies the <see cref="AcceptCommand"/> dependency property.
         /// </summary>
         /// <value>
@@ -193,6 +236,48 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 typeof(ICommand),
                 typeof(PickerBase),
                 null);
+
+        /// <summary>
+        /// Identifies the <see cref="EnableLoopingProperty"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="EnableLoopingProperty"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty EnableLoopingProperty =
+            BindableProperty.Create(
+                nameof(EnableLooping),
+                typeof(bool),
+                typeof(PickerBase),
+                false,
+                propertyChanged: OnEnableLoopingChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="PopupWidthProperty"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="PopupWidthProperty"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty PopupWidthProperty =
+            BindableProperty.Create(
+                nameof(PopupWidth),
+                typeof(double),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => GetDefaultPopupWidth(bindable),
+                propertyChanged: OnPopupWidthPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="PopupHeightProperty"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="PopupHeightProperty"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty PopupHeightProperty =
+            BindableProperty.Create(
+                nameof(PopupHeight),
+                typeof(double),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => GetDefaultPopupHeight(bindable),
+                propertyChanged: OnPopupHeightPropertyChanged);
 
         #endregion
 
@@ -630,6 +715,42 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
+        /// Gets or sets the header template or template selector for picker header
+        /// </summary>
+        /// <remarks>
+        /// The BindingContext of the HeaderTemplate is respective picker control. When using header template, the header style customization will not be applicable.
+        /// </remarks>
+        public DataTemplate HeaderTemplate
+        {
+            get { return (DataTemplate)GetValue(HeaderTemplateProperty); }
+            set { SetValue(HeaderTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the column header template or template selector for picker column header.
+        /// </summary>
+        /// <remarks>
+        /// The BindingContext of the ColumnHeaderTemplate is respective picker control. When using column header template, the column header style customization will not be applicable.
+        /// </remarks>
+        public DataTemplate ColumnHeaderTemplate
+        {
+            get { return (DataTemplate)GetValue(ColumnHeaderTemplateProperty); }
+            set { SetValue(ColumnHeaderTemplateProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the footer template or template selector for picker footer.
+        /// </summary>
+        /// <remarks>
+        /// The BindingContext of the FooterTemplate is respective picker control. When using footer template, the footer style customization will not be applicable.
+        /// </remarks>
+        public DataTemplate FooterTemplate
+        {
+            get { return (DataTemplate)GetValue(FooterTemplateProperty); }
+            set { SetValue(FooterTemplateProperty, value); }
+        }
+
+        /// <summary>
         /// Gets or sets the picker ok button clicked command.
         /// </summary>
         /// <value> The default value of <see cref="PickerBase.AcceptCommand"/> is null.</value>
@@ -729,6 +850,39 @@ namespace Syncfusion.Maui.Toolkit.Picker
             set { SetValue(DeclineCommandProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the picker can perform looping.
+        /// </summary>
+        public bool EnableLooping
+        {
+            get { return (bool)GetValue(EnableLoopingProperty); }
+            set { SetValue(EnableLoopingProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width of the popup in the picker.
+        /// </summary>
+        /// <remarks>
+        /// The default width of the popup will be the addition of picker column width.
+        /// </remarks>
+        public double PopupWidth
+        {
+            get { return (double)GetValue(PopupWidthProperty); }
+            set { SetValue(PopupWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the height of the popup in the picker.
+        /// </summary>
+        /// <remarks>
+        /// The default height of the popup will be the addition of header height, column header height, picker items' five items height, and footer height.
+        /// </remarks>
+        public double PopupHeight
+        {
+            get { return (double)GetValue(PopupHeightProperty); }
+            set { SetValue(PopupHeightProperty, value); }
+        }
+
         #endregion
 
         #region Internal Properties
@@ -762,6 +916,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// Gets a value indicating whether the parent value have valid value because dynamic scrolling on dialog opening does not scroll because the picker stack layout does not have a parent value.
         /// </summary>
         bool IPickerView.IsValidParent => _pickerStackLayout != null && _pickerStackLayout.Parent != null && Parent != null;
+
+        /// <summary>
+        /// Gets a value indicating whether the enable looping value of the picker.
+        /// </summary>
+        bool IPickerView.EnableLooping => EnableLooping;
 
         /// <summary>
         /// Gets or sets the value of header view. This property can be used to customize the of header in Picker.
@@ -1315,13 +1474,28 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
             }
 
-            picker._pickerContainer?.UpdateColumnHeaderHeight();
-            picker._pickerContainer?.UpdateColumnHeaderDraw();
-            picker._pickerContainer?.UpdateColumnHeaderDividerColor();
-#if ANDROID || IOS
-            //// While adding the picker item height, the picker selected item not updated properly in android and ios. So, we have updated that.
-            picker._pickerContainer?.UpdateItemHeight();
+            //// Apply the column header template to the sfpicker control.
+            if (picker.BaseColumnHeaderView.Height > 0 && picker.ColumnHeaderTemplate != null && picker._columnHeaderLayout == null)
+            {
+                picker.AddorRemoveColumnHeaderLayout();
+            }
+
+            if (picker.ColumnHeaderTemplate == null)
+            {
+                picker._pickerContainer?.UpdateColumnHeaderHeight();
+                picker._pickerContainer?.UpdateColumnHeaderDraw();
+                picker._pickerContainer?.UpdateColumnHeaderDividerColor();
+#if WINDOWS
+				//// When looping is enabled, the selected item is not updated properly when the column height changes in Windows. Therefore, the item height is updated.
+				if (picker.EnableLooping)
+				{
+					picker._pickerContainer?.UpdateItemHeight();
+				}
+#elif ANDROID || IOS
+                //// While adding the picker item height, the picker selected item not updated properly in android and ios. So, we have updated that.
+                picker._pickerContainer?.UpdateItemHeight();
 #endif
+			}
         }
 
         /// <summary>
@@ -1482,12 +1656,63 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
+        /// Method invokes on the picker enable looping changed.
+        /// </summary>
+        /// <param name="bindable">The picker setting object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnEnableLoopingChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker._pickerContainer?.UpdateEnableLooping();
+        }
+
+        /// <summary>
+        /// Update the PopupWidth.
+        /// </summary>
+        /// <param name="bindable">the Picker settings object</param>
+        /// <param name="oldValue">Property old value</param>
+        /// <param name="newValue">Property new value</param>
+        static void OnPopupWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.UpdatePopupSize();
+        }
+
+        /// <summary>
+        /// Update the PopupHeight.
+        /// </summary>
+        /// <param name="bindable">the Picker settings object</param>
+        /// <param name="oldValue">Property old value</param>
+        /// <param name="newValue">Property new value</param>
+        static void OnPopupHeightPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.UpdatePopupSize();
+        }
+
+        /// <summary>
         /// Method invokes on the picker popup relative view changed.
         /// </summary>
         /// <param name="bindable">The picker setting object.</param>
-        /// <param name="oldvalue">Property old value.</param>
-        /// <param name="newvalue">Property new value.</param>
-        static void OnRelativeViewChanged(BindableObject bindable, object oldvalue, object newvalue)
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnRelativeViewChanged(BindableObject bindable, object oldValue, object newValue)
         {
             PickerBase? picker = bindable as PickerBase;
             if (picker == null)
@@ -1499,6 +1724,119 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 picker.ShowPopup();
             }
+        }
+
+        /// <summary>
+        /// Method to invoke the header template changed.
+        /// </summary>
+        /// <param name="bindable">The picker setting object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnHeaderTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            if (picker._headerLayout != null && picker.BaseHeaderView.Height > 0 && picker.HeaderTemplate != null)
+            {
+                picker._headerLayout.InitializeTemplateView();
+            }
+        }
+
+        /// <summary>
+        /// Method to invoke the column header template changed.
+        /// </summary>
+        /// <param name="bindable">The picker setting object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnColumnHeaderTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            if (picker.BaseColumnHeaderView.Height > 0 && picker.ColumnHeaderTemplate != null)
+            {
+                picker.AddorRemoveColumnHeaderLayout();
+            }
+        }
+
+        /// <summary>
+        /// Method to invoke the footer template view changed.
+        /// </summary>
+        /// <param name="bindable">The picker setting object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnFooterTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            if (picker._footerLayout != null && picker.FooterView.Height > 0 && picker.FooterTemplate != null)
+            {
+                picker._footerLayout?.InitializeTemplateView();
+            }
+        }
+
+        /// <summary>
+        /// Method to set the default width for the popup
+        /// </summary>
+        /// <returns>Returns the default value of PopupWidth</returns>
+        static double GetDefaultPopupWidth(BindableObject bindable)
+        {
+            var pickerBase = (PickerBase)bindable;
+            double popupWidth = 0;
+            double width = 0;
+            int columnCount = pickerBase.BaseColumns.Count;
+            for (int i = 0; i < columnCount; i++)
+            {
+                width += pickerBase.BaseColumns[i].Width <= 0 ? 100 : pickerBase.BaseColumns[i].Width;
+            }
+
+            popupWidth = width < 200 ? 200 : width;
+
+            //// Based on the Header,Column Header and Footer Height popupwidth value gets returned.
+            if (pickerBase.BaseHeaderView.Height != 0 || pickerBase.FooterView.Height != 0 || pickerBase.BaseColumnHeaderView.Height != 0)
+            {
+                return popupWidth;
+            }
+
+            return columnCount == 0 ? 0 : popupWidth;
+        }
+
+        /// <summary>
+        /// Method to set the default height of the popup
+        /// </summary>
+        /// <returns>Returns the default value of PopupHeight</returns>
+        static double GetDefaultPopupHeight(BindableObject bindable)
+        {
+            var pickerBase = (PickerBase)bindable;
+            double popupHeight = 0;
+            int count = 0;
+            int columnCount = pickerBase.BaseColumns.Count;
+            for (int i = 0; i < columnCount; i++)
+            {
+                ICollection itemsSource = (ICollection)pickerBase.BaseColumns[i].ItemsSource;
+                if (itemsSource != null)
+                {
+                    count = count < itemsSource.Count ? itemsSource.Count : count;
+                    if (pickerBase.BaseColumns[i].SelectedIndex <= -1)
+                    {
+                        count = count + 1;
+                    }
+                }
+            }
+
+            popupHeight = pickerBase.BaseHeaderView.Height + pickerBase.BaseColumnHeaderView.Height + (pickerBase.ItemHeight * (count >= 5 ? 5 : count)) + pickerBase.FooterView.Height;
+            return popupHeight;
         }
 
         /// <summary>
@@ -1551,6 +1889,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 SelectionIndexChanged?.Invoke(this, new PickerSelectionChangedEventArgs { NewValue = column.SelectedIndex, OldValue = oldIndex, ColumnIndex = column._columnIndex });
                 column._isSelectedItemChanged = false;
                 column.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(column);
+                if (EnableLooping && newIndex <= -1)
+                {
+                    return;
+                }
+
                 if (newIndex == -1)
                 {
                     //// If selected index is -1, then change all column selected item value as null.
@@ -1619,9 +1962,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     column.Parent = this;
                     if (column.Parent is SfPicker)
                     {
-                        column.SelectedIndex = -1;
-                        column._isSelectedItemChanged = true;
-                        return;
+                        if (!this.EnableLooping)
+                        {
+                            column.SelectedIndex = -1;
+                            column._isSelectedItemChanged = true;
+                            return;
+                        }
+                        else
+                        {
+                            _pickerContainer?.UpdateScrollViewDraw();
+                            _pickerContainer?.InvalidateDrawable();
+                            return;
+                        }
                     }
                     else
                     {
@@ -1975,7 +2327,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             if (e.PropertyName == nameof(PickerFooterView.Background))
             {
-                if (_footerLayout == null)
+                if (_footerLayout == null || FooterTemplate != null)
                 {
                     return;
                 }
@@ -2097,7 +2449,28 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             if (e.PropertyName == nameof(PickerColumnHeaderView.Height))
             {
-                _pickerContainer?.UpdateColumnHeaderHeight();
+                if (ColumnHeaderTemplate != null)
+                {
+                    AddorRemoveColumnHeaderLayout();
+                    UpdatePopupSize();
+                    if (_availableSize == Size.Zero)
+                    {
+                        return;
+                    }
+
+                    InvalidatePickerView();
+                }
+                else
+                {
+                    _pickerContainer?.UpdateColumnHeaderHeight();
+#if WINDOWS || MACCATALYST
+                    if (EnableLooping)
+                    {
+                        _pickerContainer?.UpdateItemHeight();
+                    }
+#endif
+                }
+
 #if ANDROID || IOS
                 //// While adding the picker item height, the picker selected item not updated properly in android and ios. So, we have updated that.
                 _pickerContainer?.UpdateItemHeight();
@@ -2161,6 +2534,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 SelectedTextStyle = UpdateSelectedTextStyle();
                 _isInternalPropertyChange = false;
             }
+#if ANDROID
+            else if (e.PropertyName == nameof(HeightRequest))
+            {
+                _pickerContainer?.UpdateItemHeight();
+            }
+#endif
         }
 
         /// <summary>
@@ -2265,7 +2644,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             PickerTextStyle pickerTextStyle = new PickerTextStyle()
             {
                 FontSize = 14,
-                TextColor = Color.FromArgb("#1C1B1F61"),
+                TextColor = Color.FromArgb("#611c1b1f"),
                 Parent = pickerBase,
             };
 

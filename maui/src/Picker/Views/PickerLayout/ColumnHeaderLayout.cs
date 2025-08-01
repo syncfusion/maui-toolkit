@@ -42,7 +42,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             DrawingOrder = DrawingOrder.BelowContent;
             _columnHeaderInfo = columnHeaderInfo;
+            if (columnHeaderInfo.ColumnHeaderTemplate != null)
+            {
+                InitializeTemplateView();
+            }
+
             _columnHeaderText = headerText;
+#if IOS
+            IgnoreSafeArea = true;
+#endif
         }
 
         #endregion
@@ -63,13 +71,55 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="columnHeaderText">The column header text.</param>
         internal void UpdateColumnHeaderText(string columnHeaderText)
         {
-            if (_columnHeaderText == columnHeaderText)
+            if (_columnHeaderText == columnHeaderText || _columnHeaderInfo.ColumnHeaderTemplate != null)
             {
                 return;
             }
 
             _columnHeaderText = columnHeaderText;
             InvalidateDrawable();
+        }
+
+        /// <summary>
+        /// Method to create a template view.
+        /// </summary>
+        internal void InitializeTemplateView()
+        {
+            View? colmnHeaderTemplateView = null;
+            if (_columnHeaderInfo.ColumnHeaderTemplate == null)
+            {
+                return;
+            }
+
+            //// Clear the previous data in columnheaderlayout.
+            if (Children.Count > 0)
+            {
+                Children.Clear();
+            }
+
+            DataTemplate columnHeaderTemplate = _columnHeaderInfo.ColumnHeaderTemplate;
+
+            switch (_columnHeaderInfo)
+            {
+                case SfDatePicker datepicker:
+                    colmnHeaderTemplateView = PickerHelper.CreateLayoutTemplateViews(columnHeaderTemplate, _columnHeaderInfo.ColumnHeaderView, datepicker);
+                    break;
+                case SfDateTimePicker:
+                    SfDateTimePicker datetimepicker = (SfDateTimePicker)_columnHeaderInfo;
+                    colmnHeaderTemplateView = PickerHelper.CreateLayoutTemplateViews(columnHeaderTemplate, _columnHeaderInfo.ColumnHeaderView, datetimepicker);
+                    break;
+                case SfPicker picker:
+                    colmnHeaderTemplateView = PickerHelper.CreateLayoutTemplateViews(columnHeaderTemplate, _columnHeaderInfo.ColumnHeaderView, picker);
+                    break;
+                case SfTimePicker timepicker:
+                    colmnHeaderTemplateView = PickerHelper.CreateLayoutTemplateViews(columnHeaderTemplate, _columnHeaderInfo.ColumnHeaderView, timepicker);
+                    break;
+            }
+
+            if (Children.Count == 0 && colmnHeaderTemplateView != null)
+            {
+                Children.Add(colmnHeaderTemplateView);
+            }
         }
 
         #endregion
@@ -122,7 +172,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="dirtyRect">The dirtyRectangle.</param>
         protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
         {
-            if (dirtyRect.Width == 0 || dirtyRect.Height == 0)
+            if (dirtyRect.Width == 0 || dirtyRect.Height == 0 || _columnHeaderInfo.ColumnHeaderTemplate != null)
             {
                 return;
             }

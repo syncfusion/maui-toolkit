@@ -4,7 +4,8 @@
              xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:CartesianTrackballViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -13,12 +14,17 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill">
-            <chart:SfCartesianChart x:Name="trackballChart" TrackballCreated="trackballChart_TrackballCreated" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}">
+        <Grid HorizontalOptions="Fill">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <chart:SfCartesianChart Grid.Row="0" x:Name="trackballChart" TrackballCreated="trackballChart_TrackballCreated" HorizontalOptions="Fill" VerticalOptions="Fill" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}">
                 <chart:SfCartesianChart.Resources>
+                    <local:TooltipValuesConverter x:Key="valueConverter"/>
                     <DataTemplate x:Key="trackballLabelTemplate">
-                        <HorizontalStackLayout Spacing="5">
-                            <Path Fill="{Binding Series.MarkerSettings.Stroke}" Margin="0,2,0,0">
+                        <HorizontalStackLayout Spacing="5" x:DataType="chart:TrackballPointInfo">
+                            <Path Fill="{Binding Series,Converter={StaticResource valueConverter},ConverterParameter='MarkerSettings.Stroke'}" Margin="0,2,0,0">
                                 <Path.Data>
                                     <PathGeometry>
                                         <PathFigure StartPoint="5,0">
@@ -35,7 +41,7 @@
                                 </Path.Data>
                             </Path>
 
-                            <Label Text="{Binding Series.Label, StringFormat='{0}:'}" FontSize="12"  HorizontalOptions="Center"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                            <Label Text="{Binding Series,Converter={StaticResource valueConverter},ConverterParameter='Label',StringFormat='{0}:'}" FontSize="12"  HorizontalOptions="Center"  TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                             <Label Text="{Binding Label,StringFormat='{0}M'}" FontSize="12" Margin="0,0,2,0" HorizontalOptions="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                         </HorizontalStackLayout>
                     </DataTemplate>
@@ -65,7 +71,7 @@
                 </chart:SfCartesianChart.Legend>
 
                 <chart:SfCartesianChart.XAxes>
-                    <chart:DateTimeAxis IntervalType="Years" Interval="1" EdgeLabelsVisibilityMode="Visible" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" ShowMajorGridLines="false"
+                    <chart:DateTimeAxis x:DataType="chart:DateTimeAxis" IntervalType="Years" Interval="1" EdgeLabelsVisibilityMode="Visible" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" ShowMajorGridLines="false"
                                         PlotOffsetStart="10" PlotOffsetEnd="10" AxisLineOffset="10">
                         <chart:DateTimeAxis.MajorTickStyle>
                             <chart:ChartAxisTickStyle TickSize="10">
@@ -105,8 +111,8 @@
                     </chart:LineSeries>
                 </chart:SfCartesianChart.Series>
             </chart:SfCartesianChart>
-            <Label Text="Presss and hold to enable trackball." Grid.Row="1" HorizontalOptions="Center" FontSize="12" TextColor="#000000" Opacity="0.8" IsVisible="{OnPlatform WinUI='False', MacCatalyst='False', Android='True',iOS='True'}"/>
-        </StackLayout>
+            <Label Grid.Row="1" Text="Presss and hold to enable trackball." HorizontalOptions="Center" FontSize="12" TextColor="#000000" Opacity="0.8" IsVisible="{OnPlatform WinUI='False', MacCatalyst='False', Android='True',iOS='True'}"/>
+        </Grid>
     </localCore:SampleView.Content>
     <localCore:SampleView.OptionView>
         <Grid>
@@ -114,7 +120,6 @@
                 <HorizontalStackLayout Spacing="5">
                     <Label Text="Mode: " VerticalOptions="Start" HorizontalOptions="Center" Padding="5"  FontSize="17"/>
                         <Picker ItemsSource="{Binding Source={x:Reference ViewModel},Path=DisplayMode}" 
-                                SelectedItem="{Binding Source={x:Reference ViewModel}, Path=DisplayMode[0]}"
                                 VerticalOptions="Start" HorizontalOptions="Fill" 
                                 x:Name="picker" 
                                 SelectedIndex="0"

@@ -2197,12 +2197,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         {
             if (bindable is SfTextInputLayout inputLayout && newValue is bool value)
             {
-				double minOpacity = 0;
-#if ANDROID || IOS
-				minOpacity  = 0.00001;
-#elif MACCATALYST
-				minOpacity  = 0.011;
-#endif
+                double minOpacity = DeviceInfo.Platform.ToString() switch
+                {
+                    nameof(DevicePlatform.MacCatalyst) => 0.011,
+                    nameof(DevicePlatform.iOS) => 0.00001,
+                    nameof(DevicePlatform.Android) => 0.00001,
+                    _ => 0 
+                };
 
                 double targetOpacity = value ? 1 : minOpacity;
 
@@ -2394,7 +2395,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			if (bindable is SfTextInputLayout inputLayout && inputLayout._initialLoaded)
 			{
 				inputLayout.UpdateViewBounds();
-				// Update assistive labels when relevant properties change
 				inputLayout.UpdateAssistiveLabels();
 				inputLayout.ResetSemantics();
 			}

@@ -2445,19 +2445,49 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             return visibleDates[0].Month != currentMonth && numberOfVisibleWeeks == 6 ? visibleDates[0].Date.AddDays(7) : visibleDates[0];
         }
 
-        #endregion
+		/// <summary>
+		/// Creates a selection cell template for a calendar view based on the provided date and template information.
+		/// </summary>
+		/// <param name="selectedDate">The selected date for the cell template creation.</param>
+		/// <param name="selectionCellTemplate">The template for the selection cell, can be a custom DataTemplate or a DataTemplateSelector.</param>
+		/// <param name="templateSelectorContext">The context used for template selection (if a DataTemplateSelector is used).</param>
+		/// <param name="details">A function to get the details for a specific date.</param>
+		/// <param name="rect">The rectangle defining the bounds and position for the view.</param>
+		/// <returns>A view representing the selection cell template, or null if the template cannot be created.</returns>
+		internal static View? CreateSelectionCellTemplate(DateTime? selectedDate, DataTemplate selectionCellTemplate, BindableObject templateSelectorContext, CalendarCellDetails details, RectF rect)
+		{
+			// Early exit on nulls
+			if (selectedDate == null || details == null || selectionCellTemplate == null)
+			{
+				return null;
+			}
 
-        #region Private Method
+			var template = selectionCellTemplate is DataTemplateSelector selector ? selector.SelectTemplate(details, templateSelectorContext) : selectionCellTemplate;
+			var selectionView = CalendarViewHelper.CreateTemplateView(template, details);
+			if (selectionView is not View viewResult)
+			{
+				return null;
+			}
 
-        /// <summary>
-        /// Method to update selected date on key navigation.
-        /// </summary>
-        /// <param name="args">The keyboard event args.</param>
-        /// <param name="oldSelectedDate">The old selected date.</param>
-        /// <param name="calendarViewInfo">The calendar instance.</param>
-        /// <param name="visibleDates">The visible dates collections.</param>
-        /// <param name="disabledDates">The disabled dates collections.</param>
-        static void UpdateSelectionOnKeyNavigation(KeyEventArgs args, DateTime oldSelectedDate, ICalendar calendarViewInfo, List<DateTime> visibleDates, List<DateTime> disabledDates)
+			viewResult.WidthRequest = rect.Width;
+			viewResult.HeightRequest = rect.Height;
+
+			return viewResult;
+		}
+
+		#endregion
+
+		#region Private Method
+
+		/// <summary>
+		/// Method to update selected date on key navigation.
+		/// </summary>
+		/// <param name="args">The keyboard event args.</param>
+		/// <param name="oldSelectedDate">The old selected date.</param>
+		/// <param name="calendarViewInfo">The calendar instance.</param>
+		/// <param name="visibleDates">The visible dates collections.</param>
+		/// <param name="disabledDates">The disabled dates collections.</param>
+		static void UpdateSelectionOnKeyNavigation(KeyEventArgs args, DateTime oldSelectedDate, ICalendar calendarViewInfo, List<DateTime> visibleDates, List<DateTime> disabledDates)
         {
             DateTime? newDate = CalendarViewHelper.GeKeyNavigationDate(calendarViewInfo, args, oldSelectedDate);
             ValidateDateOnKeyNavigation(args, oldSelectedDate, newDate, calendarViewInfo, visibleDates, disabledDates);

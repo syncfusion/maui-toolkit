@@ -1,18 +1,28 @@
-﻿using Syncfusion.Maui.Toolkit.Localization;
+﻿using System.Globalization;
+using Syncfusion.Maui.Toolkit.Localization;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
+
 	/// <summary>
-	/// Localization resource for <see cref="SfCircularChart"/>.
+	/// Represents the localization resource accessor for the <see cref="SfCircularChart"/> control.
+	/// This class is responsible for retrieving culture-specific localized strings based on the application's current UI culture settings.
 	/// </summary>
 	public class SfCircularChartResources : LocalizationResourceAccessor
 	{
+		internal static CultureInfo CultureInfo => CultureInfo.CurrentUICulture;
+
 		internal static string Others
 		{
 			get
 			{
-				var others = GetString("Others");
-				return string.IsNullOrEmpty(others) ? "Others" : others;
+				string? value = string.Empty;
+				if (ResourceManager != null)
+				{
+					Culture = CultureInfo;
+					value = GetString("Others");
+				}
+				return string.IsNullOrEmpty(value) ? "Others" : value;
 			}
 		}
 	}

@@ -4,7 +4,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.DefaultBubbleChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:CartesianBubbleViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -13,24 +14,29 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill" x:Name="layout">
+        <Grid HorizontalOptions="Fill" x:Name="layout">
 
-            <StackLayout.Resources>
+            <Grid.Resources>
                 <Label x:Key="title" x:Name="titleName" Text="Literacy rate vs. GDP per capita by Country - 2018"
-                           FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
-                           LineBreakMode="WordWrap" Padding="0,0,0,5"/>
-            </StackLayout.Resources>
+                       FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap" Padding="0,0,0,5"/>
+            </Grid.Resources>
 
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:CartesianBubbleViewModel x:Name="viewModel"/>
-            </StackLayout.BindingContext>
-            <chart:SfCartesianChart VerticalOptions="FillAndExpand"
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <chart:SfCartesianChart Grid.Row="0" VerticalOptions="Fill" 
                                     HorizontalOptions="Fill"
                                     x:Name="Chart" 
                                     Title="{StaticResource title}">
 
                 <chart:SfCartesianChart.Resources>
-                    <DataTemplate x:Key="tooltiptemplate">
+                <local:TooltipValuesConverter x:Key="valueConverter"/>
+                    <DataTemplate x:Key="tooltiptemplate" x:DataType="chart:TooltipInfo">  
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -41,16 +47,16 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="0" Grid.Column="0" Text="{Binding Item.Name,StringFormat='{0}'}" HorizontalTextAlignment="Center" Margin="0,0,0,2" HorizontalOptions="Center" VerticalTextAlignment="Center" FontFamily="Helvetica" FontAttributes="Bold" FontSize="10"
+                            <Label  Grid.Row="0" Grid.Column="0" Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Name',StringFormat='{0}'}" HorizontalTextAlignment="Center" Margin="0,0,0,2" HorizontalOptions="Center" VerticalTextAlignment="Center" FontFamily="Helvetica" FontAttributes="Bold" FontSize="10"
                                    TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                             <BoxView Grid.Row="1" Grid.Column="0" VerticalOptions="Center" Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" />
                             <StackLayout Grid.Row="2" Grid.Column="0" Orientation="Vertical"  VerticalOptions="Fill" Spacing="0" Padding="2" Margin="0">
-                                <Label Text="{Binding Item.Value,StringFormat='Literacy rate         : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="10"
-                                    TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                <Label Text="{Binding Item.High,StringFormat='GDP growth rate : {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="10"
-                                        TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
-                                <Label Text="{Binding Item.Low,StringFormat='Population           : {0}B'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="10"
-                                    TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                    <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat='Literacy rate         : {0}%'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="10"
+                                           TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                    <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='High',StringFormat='GDP growth rate : {0}'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="10"
+                                           TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                                    <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Low',StringFormat='Population           : {0}B'}" VerticalTextAlignment="Center" HorizontalOptions="Start" FontFamily="Helvetica" FontSize="10"
+                                           TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
                             </StackLayout>
                         </Grid>
                     </DataTemplate>
@@ -72,17 +78,16 @@
                                      PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}"
                                      EnableTooltip="True" TooltipTemplate="{StaticResource tooltiptemplate}"             
                                      ItemsSource="{Binding GDPGrowthCollection}" ShowDataLabels="False"
-                                      XBindingPath="Value"  YBindingPath="High"/>
+                                     XBindingPath="Value"  YBindingPath="High"/>
             </chart:SfCartesianChart>
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" ourworldindata.org" VerticalOptions="Center">
                     <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://ourworldindata.org/grapher/literacy-rate-vs-gdp-per-capita?zoomToSelection=true&amp;time=2018&amp;country=IND~IDN~ITA~CHN~MYS~ROU~RUS~MEX~UGA~NGA~DZA~GRC~JOR~COL~MNG~BRA~NPL~SDN"
-/>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://ourworldindata.org/grapher/literacy-rate-vs-gdp-per-capita?zoomToSelection=true&amp;time=2018&amp;country=IND~IDN~ITA~CHN~MYS~ROU~RUS~MEX~UGA~NGA~DZA~GRC~JOR~COL~MNG~BRA~NPL~SDN"/>
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 </localCore:SampleView>

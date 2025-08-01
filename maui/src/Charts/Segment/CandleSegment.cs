@@ -33,7 +33,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			XValue = values[7];
 			IsFill = isFill;
 			IsBull = isBull;
-
+			if (Open < Close)
+			{
+				(Open, Close) = (Close, Open);
+			}
+			 
 			series.XRange += DoubleRange.Union(XValue);
 			series.YRange += new DoubleRange(High, Low);
 		}
@@ -171,14 +175,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					AnimationValuesCalculation(series);
 				}
 
-				if (Left > Right)
+				if (series.ChartArea != null && series.ChartArea.SecondaryAxis != null)
 				{
-					(Right, Left) = (Left, Right);
-				}
 
-				if (Top > Bottom)
-				{
-					(Bottom, Top) = (Top, Bottom);
+					if (Left > Right || series.ChartArea.SecondaryAxis.IsInversed)
+					{
+						(Right, Left) = (Left, Right);
+					}
 				}
 			}
 			else

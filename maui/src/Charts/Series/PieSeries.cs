@@ -79,6 +79,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal List<object> GroupToDataPoints { get; set; }
 
+		internal int VisibleSegmentCount { get; set; }
+
 		#endregion
 
 		#region Bindable Properties
@@ -769,6 +771,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal override double CalculateTotalYValues()
 		{
 			double total = 0;
+			VisibleSegmentCount = 0;
 			var legendItems = GetLegendItems();
 
 			for (int i = 0; i < ActualYValues.Count; i++)
@@ -778,10 +781,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					if (legendItems == null || legendItems.Count == 0)
 					{
 						total += Math.Abs(ActualYValues[i]);
+						VisibleSegmentCount++;
 					}
 					else
 					{
-						total += legendItems[i].IsToggled ? 0 : Math.Abs(ActualYValues[i]);
+						if(!legendItems[i].IsToggled)
+						{
+							total += Math.Abs(ActualYValues[i]);
+							VisibleSegmentCount++;
+						}
 					}
 				}
 			}

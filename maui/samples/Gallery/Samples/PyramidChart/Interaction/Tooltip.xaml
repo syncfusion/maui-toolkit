@@ -65,9 +65,9 @@
                     <local:ViewModel />
                 </chart:SfPyramidChart.BindingContext>
             <chart:SfPyramidChart.DataLabelSettings>
-                <chart:PyramidDataLabelSettings UseSeriesPalette="False">
+                <chart:PyramidDataLabelSettings>
                     <chart:PyramidDataLabelSettings.LabelStyle>
-                        <chart:ChartDataLabelStyle LabelFormat="0'%" Margin="0.5"/>
+                        <chart:ChartDataLabelStyle LabelFormat="0'%" Margin="5"/>
                     </chart:PyramidDataLabelSettings.LabelStyle>
                 </chart:PyramidDataLabelSettings>
             </chart:SfPyramidChart.DataLabelSettings>

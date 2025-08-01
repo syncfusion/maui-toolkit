@@ -19,7 +19,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		bool IsIndexed
 		{
-			get { return ActualXAxis is CategoryAxis; }
+			get { return ActualXAxis is CategoryAxis || ActualXAxis is DateTimeCategoryAxis; }
 		}
 
 		#endregion

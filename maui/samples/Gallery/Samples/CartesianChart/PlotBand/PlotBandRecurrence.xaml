@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.PlotBandRecurrence"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:PlotBandRecurrenceViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,13 +13,18 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <StackLayout>
+        <Grid>
 
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:PlotBandRecurrenceViewModel x:Name="ViewModel"/>
-            </StackLayout.BindingContext>
-            
-        <chart:SfCartesianChart VerticalOptions="FillAndExpand" Margin="5,0,5,0" EnableSideBySideSeriesPlacement="False"
+            </Grid.BindingContext>
+          
+           <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+        <chart:SfCartesianChart Grid.Row="0" VerticalOptions="Fill" Margin="5,0,5,0" EnableSideBySideSeriesPlacement="False"
                                 x:Name="plotBandRecurrenceChart">
 
                 <chart:SfCartesianChart.ZoomPanBehavior>
@@ -27,7 +33,7 @@
 
                 <chart:SfCartesianChart.Title>
                     <Label Text="Comparison of Petrol and Diesel Prices (in pence per litre) in the UK" HorizontalOptions="Center" HorizontalTextAlignment="Center" 
-                       VerticalOptions="CenterAndExpand" FontSize="16" LineBreakMode="WordWrap" Margin="2,0,2,0"/>
+                       VerticalOptions="Center" FontSize="16" LineBreakMode="WordWrap" Margin="2,0,2,0"/>
             </chart:SfCartesianChart.Title>
 
             <chart:SfCartesianChart.Legend>
@@ -39,8 +45,7 @@
                                     AutoScrollingDelta="{OnPlatform iOS=4, Android=4}" AutoScrollingMode="Start">
                     <chart:DateTimeAxis.PlotBands>
                         <chart:DateTimePlotBandCollection>
-                            <chart:DateTimePlotBand Start="2013,07,01" Size="1" RepeatEvery="2" IsRepeatable="True" AssociatedAxisEnd="250"
-                                                     IsVisible="{Binding Source={x:Reference xAxis},Path=IsChecked}"/>
+                             <chart:DateTimePlotBand x:Name="dateTimePlotBand" Start="2013,07,01" Size="1" RepeatEvery="2" IsRepeatable="True" AssociatedAxisEnd="250"/>
                         </chart:DateTimePlotBandCollection>
                     </chart:DateTimeAxis.PlotBands>
                 </chart:DateTimeAxis>
@@ -50,8 +55,8 @@
                 <chart:NumericalAxis ShowMajorGridLines="False" Minimum="-200" Maximum="260" IsVisible="False">
                     <chart:NumericalAxis.PlotBands>
                         <chart:NumericalPlotBandCollection>
-                            <chart:NumericalPlotBand Start="-200" Size="40" RepeatEvery="80" RepeatUntil="250" 
-                                                     IsRepeatable="True" IsVisible="{Binding Source={x:Reference yAxis},Path=IsChecked}"/>
+                              <chart:NumericalPlotBand x:Name="numericalPlotBand"  Start="-200" Size="40" RepeatEvery="80" RepeatUntil="250" 
+                                                       IsRepeatable="True"/>
                         </chart:NumericalPlotBandCollection>
                     </chart:NumericalAxis.PlotBands>
                 </chart:NumericalAxis>
@@ -85,7 +90,7 @@
 
         </chart:SfCartesianChart>
 
-        <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,15,0,0">
+        <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,15,0,0">
             <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" ULSP and ULSD prices in the United Kingdom" VerticalOptions="Center">
                 <Label.GestureRecognizers>
@@ -93,7 +98,7 @@
                 </Label.GestureRecognizers>
             </Label>
         </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 
     <localCore:SampleView.OptionView>
@@ -101,11 +106,11 @@
             <VerticalStackLayout Spacing="10">
                 <HorizontalStackLayout>
                     <Label Text="X Axis" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
-                    <CheckBox x:Name="xAxis" IsChecked="False" VerticalOptions="Center" Margin="30,0,0,0"/>
+                    <CheckBox x:Name="xAxis" IsChecked="False" CheckedChanged="axis_CheckedChanged" VerticalOptions="Center" Margin="30,0,0,0"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Label Text="Y Axis" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
-                    <CheckBox x:Name="yAxis" IsChecked="True" VerticalOptions="Center" Margin="30,0,0,0"/>
+                    <CheckBox x:Name="yAxis" IsChecked="True" CheckedChanged="axis_CheckedChanged" VerticalOptions="Center" Margin="30,0,0,0"/>
                 </HorizontalStackLayout>
             </VerticalStackLayout>
         </Grid>

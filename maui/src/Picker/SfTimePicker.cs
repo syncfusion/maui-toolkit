@@ -1870,7 +1870,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnHourIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -1898,7 +1898,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnMinuteIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }
@@ -1925,7 +1925,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         static void OnSecondIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
+            if (picker == null || (int)newValue <= 0)
             {
                 return;
             }

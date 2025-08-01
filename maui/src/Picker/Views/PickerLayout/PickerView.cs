@@ -100,6 +100,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             Focus();
+#if IOS
+            IgnoreSafeArea = true;
+#endif
         }
 
         #endregion
@@ -143,7 +146,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             int maximumViewPortCount = GetMaximumViewPort();
             double maximumViewPortHeight = maximumViewPortCount * _pickerLayoutInfo.PickerInfo.ItemHeight;
-            if (maximumViewPortHeight + GetViewPortHeight() - _pickerLayoutInfo.PickerInfo.ItemHeight < Height)
+            double viewPortItemCount = Math.Round(GetViewPortHeight() / _pickerLayoutInfo.PickerInfo.ItemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && _itemsSource.Count > viewPortItemCount;
+            if (!enableLooping && maximumViewPortHeight + GetViewPortHeight() - _pickerLayoutInfo.PickerInfo.ItemHeight < Height)
+            {
+                ArrangeContent(new Rect(0, 0, Width, Height));
+            }
+            else if (enableLooping)
             {
                 ArrangeContent(new Rect(0, 0, Width, Height));
             }
@@ -165,7 +174,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             int maximumViewPortCount = GetMaximumViewPort();
             double maximumViewPortHeight = maximumViewPortCount * _pickerLayoutInfo.PickerInfo.ItemHeight;
-            if (maximumViewPortHeight + GetViewPortHeight() - _pickerLayoutInfo.PickerInfo.ItemHeight < Height)
+            double viewPortItemCount = Math.Round(GetViewPortHeight() / _pickerLayoutInfo.PickerInfo.ItemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && _itemsSource.Count > viewPortItemCount;
+            if (!enableLooping && maximumViewPortHeight + GetViewPortHeight() - _pickerLayoutInfo.PickerInfo.ItemHeight < Height)
+            {
+                ArrangeContent(new Rect(0, 0, Width, Height));
+            }
+            else if (enableLooping)
             {
                 ArrangeContent(new Rect(0, 0, Width, Height));
             }
@@ -301,6 +316,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return Math.Round(GetViewPortHeight() / itemHeight);
         }
 
+        /// <summary>
+        /// Method to get the valid view port height.
+        /// </summary>
+        /// <returns>Returns view port height.</returns>
+        internal double GetViewPortHeight()
+        {
+            if (_pickerViewPortHeight <= 0)
+            {
+                return 0;
+            }
+
+            return _pickerViewPortHeight;
+        }
+
         #endregion
 
         #region Private Methods
@@ -369,21 +398,74 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void GeneratePickerItemsTemplate()
         {
             DataTemplate template = _pickerLayoutInfo.PickerInfo.ItemTemplate;
-            if (template is DataTemplateSelector itemTemplateSelector)
+            double currentViewPortCount = GetPickerItemViewPortCount();
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && _itemsSource.Count > currentViewPortCount;
+            if (enableLooping)
             {
-                for (int index = 0; index < _itemsSource.Count; index++)
+                int index = 0;
+                if (currentViewPortCount % 2 == 0)
                 {
-                    PickerItemDetails itemDetails = GetColumnDetails(index);
-                    DataTemplate templateSelector = itemTemplateSelector.SelectTemplate(itemDetails, this);
-                    CreatePickerTemplateView(templateSelector, itemDetails);
+                    index = _selectedIndex - (int)Math.Floor(3 * currentViewPortCount / 2) + 1;
+                }
+                else
+                {
+                    index = _selectedIndex - (int)Math.Floor(3 * currentViewPortCount / 2);
+                }
+
+                if (index < 0)
+                {
+                    index += _itemsSource.Count;
+                    if (index < 0)
+                    {
+                        index += _itemsSource.Count;
+                    }
+                }
+
+                double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
+                int totalItemsToDraw = (int)((currentViewPortCount * 3) * itemHeight / itemHeight);
+                int itemsDrawn = 0;
+
+                while (itemsDrawn < totalItemsToDraw)
+                {
+                    if (template is DataTemplateSelector itemTemplateSelector)
+                    {
+                        PickerItemDetails itemDetails = GetColumnDetails(index);
+                        DataTemplate templateSelector = itemTemplateSelector.SelectTemplate(itemDetails, this);
+                        CreatePickerTemplateView(templateSelector, itemDetails);
+                    }
+                    else
+                    {
+                        PickerItemDetails itemDetails = GetColumnDetails(index);
+                        CreatePickerTemplateView(template, itemDetails);
+                    }
+
+                    index++;
+                    if (index >= _itemsSource.Count)
+                    {
+                        index = 0;
+                    }
+
+                    itemsDrawn++;
                 }
             }
             else
             {
-                for (int index = 0; index < _itemsSource.Count; index++)
+                if (template is DataTemplateSelector itemTemplateSelector)
                 {
-                    PickerItemDetails itemDetails = GetColumnDetails(index);
-                    CreatePickerTemplateView(template, itemDetails);
+                    for (int index = 0; index < _itemsSource.Count; index++)
+                    {
+                        PickerItemDetails itemDetails = GetColumnDetails(index);
+                        DataTemplate templateSelector = itemTemplateSelector.SelectTemplate(itemDetails, this);
+                        CreatePickerTemplateView(templateSelector, itemDetails);
+                    }
+                }
+                else
+                {
+                    for (int index = 0; index < _itemsSource.Count; index++)
+                    {
+                        PickerItemDetails itemDetails = GetColumnDetails(index);
+                        CreatePickerTemplateView(template, itemDetails);
+                    }
                 }
             }
         }
@@ -408,20 +490,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             PickerItemDetails columnDetails = new PickerItemDetails(_itemsSource[index]);
             return columnDetails;
-        }
-
-        /// <summary>
-        /// Method to get the valid view port height.
-        /// </summary>
-        /// <returns>Returns view port height.</returns>
-        double GetViewPortHeight()
-        {
-            if (_pickerViewPortHeight <= 0)
-            {
-                return 0;
-            }
-
-            return _pickerViewPortHeight;
         }
 
         #endregion
@@ -459,6 +527,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int maximumViewPortCount = (int)(viewPortItemCount * 3);
             //// The maximum items height based on the maximum view port count.
             double pickerHeight = maximumViewPortCount * itemHeight;
+            //// Ensure the valid looping or not.
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && viewPortItemCount < _itemsSource.Count;
+            if (enableLooping && DesiredSize.Width != widthConstraint && _pickerLayoutInfo.PickerInfo.ItemTemplate != null)
+            {
+                UpdateItemTemplate();
+            }
+
             foreach (var child in Children)
             {
                 if (!(child is PickerDrawableView))
@@ -479,8 +554,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             //// Need to add the empty space to the picker view. So by adding the picker view port height and it subtracted by single item height then we get total picker scroll view height.
             //// Need to show space before 0th item and after last item for showing the selected item at middle position.
             //// So that the total picker scroll view height is calculated by adding the picker view port height and it subtracted by single item height.
-            DesiredSize = new Size(widthConstraint, totalHeight);
-            return new Size(widthConstraint, totalHeight);
+            DesiredSize = new Size(widthConstraint, enableLooping ? totalHeight + (viewPortHeight * 2) : totalHeight);
+            return new Size(widthConstraint, enableLooping ? totalHeight + (viewPortHeight * 2) : totalHeight);
         }
 
         /// <summary>
@@ -500,6 +575,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int maximumViewPortCount = (int)(viewPortItemCount * 3);
             //// The maximum items height based on the maximum view port count.
             double pickerHeight = maximumViewPortCount * itemHeight;
+            //// Ensure the valid looping or not.
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && viewPortItemCount < _itemsSource.Count;
             //// The drawingStartIndex is calculated based on the view port item count.
             //// From above example the view port item count is 5, then the drawingStartIndex is 2. While using the Math.Ceiling the drawingStartIndex is 5/2 = 2.5 => 3.
             int drawingStartIndex = (int)Math.Ceiling(viewPortItemCount / 2) - 1;
@@ -518,34 +595,47 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double lastIndex = _itemsSource.Count - maximumViewPortCount;
             lastIndex = lastIndex < 0 ? 0 : lastIndex;
             double maxPosition = (lastIndex * itemHeight) + yPosition;
+            if (enableLooping)
+            {
+                yPosition = enableLooping ? _pickerLayoutInfo.ScrollOffset - (Math.Floor(2 * viewPortItemCount / 2) * itemHeight) : yPosition;
+            }
+
             foreach (var child in Children)
             {
                 if (child is PickerDrawableView)
                 {
-                    if (lastIndex != 0)
+                    if (enableLooping)
                     {
-                        //// Get the current scrolled item based on scroll offset.
-                        int selectedIndex = (int)(_pickerLayoutInfo.ScrollOffset / itemHeight);
-                        //// Calculate the virtualized drawable view start index based on view port count and selected index.
-                        double startingIndex = selectedIndex - viewPortItemCount;
-                        startingIndex = startingIndex < 0 ? 0 : startingIndex;
-                        //// Does not need to move after the last index value.
-                        startingIndex = startingIndex > lastIndex ? lastIndex : startingIndex;
-                        double startPosition = startingIndex * itemHeight;
-                        double topPosition = startPosition + yPosition;
-                        if (topPosition > maxPosition)
-                        {
-                            topPosition = maxPosition;
-                        }
-
-                        _initialNodeTopPosition = topPosition;
-                        child.Arrange(new Rect(0, topPosition, bounds.Width, pickerHeight));
+                        _initialNodeTopPosition = _pickerLayoutInfo.ScrollOffset;
+                        child.Arrange(new Rect(0, _pickerLayoutInfo.ScrollOffset, bounds.Width, lastIndex != 0 ? pickerHeight : _itemsSource.Count * itemHeight));
                     }
                     else
                     {
-                        //// Arrange the drawable view only for item source items without top and bottom empty spacing.
-                        child.Arrange(new Rect(0, yPosition, bounds.Width, _itemsSource.Count * itemHeight));
-                        _initialNodeTopPosition = yPosition;
+                        if (lastIndex != 0)
+                        {
+                            //// Get the current scrolled item based on scroll offset.
+                            int selectedIndex = (int)(_pickerLayoutInfo.ScrollOffset / itemHeight);
+                            //// Calculate the virtualized drawable view start index based on view port count and selected index.
+                            double startingIndex = selectedIndex - viewPortItemCount;
+                            startingIndex = startingIndex < 0 ? 0 : startingIndex;
+                            //// Does not need to move after the last index value.
+                            startingIndex = startingIndex > lastIndex ? lastIndex : startingIndex;
+                            double startPosition = startingIndex * itemHeight;
+                            double topPosition = startPosition + yPosition;
+                            if (topPosition > maxPosition)
+                            {
+                                topPosition = maxPosition;
+                            }
+
+                            _initialNodeTopPosition = topPosition;
+                            child.Arrange(new Rect(0, topPosition, bounds.Width, pickerHeight));
+                        }
+                        else
+                        {
+                            //// Arrange the drawable view only for item source items without top and bottom empty spacing.
+                            child.Arrange(new Rect(0, yPosition, bounds.Width, _itemsSource.Count * itemHeight));
+                            _initialNodeTopPosition = yPosition;
+                        }
                     }
                 }
                 else
@@ -574,25 +664,77 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
             double yPosition = _initialNodeTopPosition;
             int startIndex = GetStartingIndex();
-            //// Draw item source item based on the item source collection.
-            for (int i = startIndex; i < _itemsSource.Count; i++)
+            double viewPortItemCount = Math.Round(GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && _itemsSource.Count > viewPortItemCount;
+            if (enableLooping)
             {
-                Rect rectangle = new Rect(0, yPosition, width, itemHeight);
-                //// The yPosition is adjusted based on the item height.
-                //// Assume the item height is 20, then the yPosition is 40. So that the next item is drawn from 60.
-                yPosition += itemHeight;
-                if (yPosition >= height)
+                if (viewPortItemCount % 2 == 0)
                 {
-                    break;
+                    startIndex = _selectedIndex - (int)Math.Floor(viewPortItemCount / 2) + 1;
+                }
+                else
+                {
+                    startIndex = _selectedIndex - (int)Math.Floor(viewPortItemCount / 2);
                 }
 
-                SemanticsNode node = new SemanticsNode()
+                //// For looping mode, we create nodes based on the current scroll position.
+                double currentYPosition = _pickerLayoutInfo.ScrollOffset;
+                for (int i = 0; i <= (_itemsSource.Count * 3); i++)
                 {
-                    Text = _itemsSource[i],
-                    Bounds = rectangle,
-                    Id = i,
-                };
-                _semanticsNodes.Add(node);
+                    int adjustedIndex = (startIndex + i) % _itemsSource.Count;
+                    if (adjustedIndex < 0)
+                    {
+                        adjustedIndex += _itemsSource.Count;
+                    }
+
+                    double totalContentHeight = _itemsSource.Count * itemHeight;
+                    //// When scrolling upward, update the scroll position based on the total content height.
+                    if (currentYPosition < (viewPortItemCount * itemHeight))
+                    {
+                        currentYPosition = totalContentHeight;
+                    }
+                    //// When scrolling downward, update the scroll position based on the total content height.
+                    else if (currentYPosition >= totalContentHeight + (viewPortItemCount * itemHeight))
+                    {
+                        currentYPosition = currentYPosition - totalContentHeight;
+                    }
+
+                    //// Create rectangle based on the current yPosition.
+                    Rect rectangle = new Rect(0, currentYPosition, width, itemHeight);
+
+                    SemanticsNode node = new SemanticsNode()
+                    {
+                        Text = _itemsSource[adjustedIndex],
+                        Bounds = rectangle,
+                        Id = adjustedIndex,
+                    };
+                    _semanticsNodes.Add(node);
+                    //// The yPosition is adjusted based on the item height.
+                    currentYPosition += itemHeight;
+                }
+            }
+            else
+            {
+                //// Draw item source item based on the item source collection.
+                for (int i = startIndex; i < _itemsSource.Count; i++)
+                {
+                    Rect rectangle = new Rect(0, yPosition, width, itemHeight);
+                    //// The yPosition is adjusted based on the item height.
+                    //// Assume the item height is 20, then the yPosition is 40. So that the next item is drawn from 60.
+                    yPosition += itemHeight;
+                    if (yPosition >= height)
+                    {
+                        break;
+                    }
+
+                    SemanticsNode node = new SemanticsNode()
+                    {
+                        Text = _itemsSource[i],
+                        Bounds = rectangle,
+                        Id = i,
+                    };
+                    _semanticsNodes.Add(node);
+                }
             }
 
             return _semanticsNodes;
@@ -611,20 +753,35 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 double nodeHeight = node.Bounds.Height;
                 double nodeTopPosition = node.Bounds.Top;
                 double scrollYPosition = scrollView.ScrollY;
-                if ((nodeTopPosition > scrollYPosition && nodeTopPosition < scrollYPosition + scrollHeight) ||
-                    (nodeTopPosition + nodeHeight > scrollYPosition && nodeTopPosition + nodeHeight < scrollYPosition + scrollHeight))
-                {
-                    return;
-                }
-
+                double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
+                double viewPortItemCount = Math.Round(GetViewPortHeight() / itemHeight);
+                bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && _itemsSource.Count > viewPortItemCount;
                 double maxScrollPosition = scrollView.ContentSize.Height - scrollView.Height;
-                if (maxScrollPosition > node.Bounds.Top)
+                if (!enableLooping)
                 {
-                    scrollView.ScrollToAsync(0, node.Bounds.Top, false);
+                    if ((nodeTopPosition > scrollYPosition && nodeTopPosition < scrollYPosition + scrollHeight) ||
+                        (nodeTopPosition + nodeHeight > scrollYPosition && nodeTopPosition + nodeHeight < scrollYPosition + scrollHeight))
+                    {
+                        return;
+                    }
+
+                    if (maxScrollPosition > node.Bounds.Top)
+                    {
+                        scrollView.ScrollToAsync(0, node.Bounds.Top, false);
+                    }
+                    else
+                    {
+                        scrollView.ScrollToAsync(0, maxScrollPosition, false);
+                    }
                 }
                 else
                 {
-                    scrollView.ScrollToAsync(0, maxScrollPosition, false);
+                    if (nodeTopPosition >= scrollYPosition && nodeTopPosition <= scrollYPosition + scrollHeight - nodeHeight)
+                    {
+                        return;
+                    }
+
+                    scrollView.ScrollToAsync(0, nodeTopPosition, false);
                 }
             }
         }
@@ -664,6 +821,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             //// Assume the view port height is 109 and the item height is 20, While using Math.Round then the view port item count is 109 / 20 = 5.4 => 5(view port item count).
             //// Assume the view port height is 110 and the item height is 20, While using Math.Round then the view port item count is 110 / 20 = 5.5 => 6(view port item count).
             double viewPortItemCount = Math.Round(GetViewPortHeight() / itemHeight);
+            int itemCount = _itemsSource.Count;
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemCount > viewPortItemCount;
             //// The drawingStartIndex is calculated based on the view port item count.
             //// From above example the view port item count is 5, then the drawingStartIndex is 2. While using the Math.Ceiling the drawingStartIndex is 5/2 = 2.5 => 3.
             int drawingStartIndex = (int)Math.Ceiling(viewPortItemCount / 2) - 1;
@@ -677,10 +836,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             //// It means tapped point is before the first item then need to render first item as selected item.
             if (e.TapPoint.Y < firstItemYPosition)
             {
-                selectedIndex = 0;
+                int offset = (int)((firstItemYPosition - e.TapPoint.Y) / itemHeight) + 1;
+                selectedIndex = enableLooping ? (itemCount - offset) % itemCount : 0;
             }
             //// The tapped point is after the last item then need to render last item as selected item.
-            else if (e.TapPoint.Y > Height - firstItemYPosition - itemHeight)
+            else if (!enableLooping && e.TapPoint.Y > Height - firstItemYPosition - itemHeight)
             {
                 selectedIndex = _itemsSource.Count;
             }
@@ -689,6 +849,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 //// Assume tap y position is 100 and first item y position is 50 and item height is 10.
                 //// Then the selected index is 5 => (100 - 50) / 10.
                 selectedIndex = (int)((e.TapPoint.Y - firstItemYPosition) / itemHeight);
+            }
+
+            //// While looping, check the selected index value.
+            if (enableLooping)
+            {
+                selectedIndex = selectedIndex % itemCount;
+                if (selectedIndex < 0)
+                {
+                    selectedIndex = 0;
+                }
+            }
+            else
+            {
+                selectedIndex = _pickerLayoutInfo.Column.SelectedIndex < 0 ? selectedIndex - 1 : selectedIndex;
             }
 
             _pickerLayoutInfo.UpdateSelectedIndexValue(selectedIndex);

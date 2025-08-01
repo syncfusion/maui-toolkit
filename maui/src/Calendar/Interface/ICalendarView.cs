@@ -8,17 +8,18 @@ namespace Syncfusion.Maui.Toolkit.Calendar
     /// </summary>
     internal interface ICalendarView
     {
-        /// <summary>
-        /// Method to update when visible dates change.
-        /// </summary>
-        /// <param name="visibleDates">The visible dates collection.</param>
-        /// <param name="isCurrentView">Checks whether the view is current view or not.</param>
-        void UpdateVisibleDatesChange(List<DateTime> visibleDates, bool isCurrentView);
+		/// <summary>
+		/// Method to update when visible dates change.
+		/// </summary>
+		/// <param name="visibleDates">The visible dates collection.</param>
+		/// <param name="isCurrentView">Checks whether the view is current view or not.</param>
+		/// <param name="customSnapLayout">Gets the month view instance for current canvas.</param>
+		void UpdateVisibleDatesChange(List<DateTime> visibleDates, bool isCurrentView, CustomSnapLayout customSnapLayout);
 
-        /// <summary>
-        /// Method to update selected date on visible date change.
-        /// </summary>
-        void UpdateSelectionValue();
+		/// <summary>
+		/// Method to update selected date on visible date change.
+		/// </summary>
+		void UpdateSelectionValue();
 
         /// <summary>
         /// Method to update the selected dates.

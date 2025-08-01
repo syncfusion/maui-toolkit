@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.RadialBarChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
-              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:RadialBarSeriesViewModel">
 
     <localCore:SampleView.Resources>
         <ResourceDictionary>
@@ -16,18 +17,18 @@
     
     <localCore:SampleView.Content>
         <Grid>
-            <chart:SfCircularChart x:Name="chart"   HorizontalOptions="Fill" VerticalOptions="FillAndExpand" >
+            <chart:SfCircularChart x:Name="chart" HorizontalOptions="Fill" VerticalOptions="Fill" >
 
                 <chart:SfCircularChart.Resources>
                     <ResourceDictionary>
-
-                        <DataTemplate x:Key="tooltipTemplate">
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="{Binding Item.Name}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica"
-	                FontSize="14"	HorizontalOptions="Center"	VerticalOptions="Center"/>
-                                <Label Text="{Binding Item.Value, StringFormat='  :  \{0}M'}"
-	               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"	FontAttributes="Bold" FontSize="14" FontFamily="Helvetica"
-	               HorizontalOptions="Center" VerticalOptions="Center"/>
+                      <local:TooltipValueConverter x:Key="valueConverter"/>
+                      <DataTemplate x:Key="tooltipTemplate">
+                            <StackLayout Orientation="Horizontal" x:DataType="chart:TooltipInfo">
+                                <Label Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Name'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica"
+	                                     FontSize="14"	HorizontalOptions="Center"	VerticalOptions="Center"/>
+                                <Label Text="{Binding Item, Converter={StaticResource valueConverter},ConverterParameter='Value', StringFormat='  :  \{0}M'}"
+	                                     TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"	FontAttributes="Bold" FontSize="14" FontFamily="Helvetica"
+	                                     HorizontalOptions="Center" VerticalOptions="Center"/>
                             </StackLayout>
                         </DataTemplate>
                     </ResourceDictionary>
@@ -48,14 +49,10 @@
                 </chart:SfCircularChart.TooltipBehavior>
                 <chart:SfCircularChart.Series>
                     <chart:RadialBarSeries x:Name="radialBarSeries" Radius="0.9"
-                                           StartAngle="{Binding Source={x:Reference startAngle}, Path=Value, Mode=TwoWay}" 
-                                           EndAngle="{Binding Source={x:Reference endAngle}, Path=Value, Mode=TwoWay}"   
                                            ItemsSource="{Binding RadialBarSeriesData}"  PaletteBrushes="{AppThemeBinding Light={StaticResource RadialPaletteBrushesLight1}, Dark={StaticResource RadialPaletteBrushesDark1}}"
                                            XBindingPath="Name" YBindingPath="Value"  EnableAnimation="True"
-                                           TrackStrokeWidth="{Binding Source={x:Reference trackStrokeWidth}, Path=Value, Mode=TwoWay}"
                                            MaximumValue="15"  EnableTooltip="True" 
                                            GapRatio="{OnPlatform Android='0.4',WinUI='0.3',MacCatalyst='0.4',iOS='0.5'}"
-                                           CapStyle="{Binding Source={x:Reference capStyle}, Path=SelectedItem}" 
                                            TooltipTemplate="{StaticResource tooltipTemplate}" LegendIcon="SeriesType">
                     </chart:RadialBarSeries>
                 </chart:SfCircularChart.Series>
@@ -78,12 +75,12 @@
                             <Grid.BindingContext>
                                 <local:RadialBarSeriesViewModel x:Name="viewModel"/>
                             </Grid.BindingContext>
-                            <Label Text="Cap Style" VerticalOptions="CenterAndExpand"  
+                            <Label Text="Cap Style" VerticalOptions="Center"  
                                    Margin="0,13,0,0" Grid.Column="0" />
-                            <Picker x:Name="capStyle"   Grid.Column="1"
-                                    VerticalOptions="CenterAndExpand"
+                            <Picker x:Name="capStyle" Grid.Column="1"
+                                    VerticalOptions="Center"
                                     WidthRequest="{OnPlatform Default=130, WinUI=138}"  Margin="0,13,0,0"
-                                    ItemsSource="{Binding CapStyles}"
+                                    ItemsSource="{Binding CapStyles}" SelectedIndexChanged="capStyle_SelectedIndexChanged"
                                     Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
                                     TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
                             </Picker>
@@ -93,10 +90,10 @@
                                 <ColumnDefinition Width="5*"/>
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Text="Track Fill" VerticalOptions="CenterAndExpand"  
+                            <Label Text="Track Fill" VerticalOptions="Center"  
                                    Margin="0,13,0,0" Grid.Column="0"/>
                             <Picker x:Name="trackFill" ItemsSource="{Binding Track}" 
-                                    Margin="0,13,0,0" Grid.Column="1" VerticalOptions="CenterAndExpand"
+                                    Margin="0,13,0,0" Grid.Column="1" VerticalOptions="Center"
                                     SelectedIndexChanged="trackFill_SelectedIndexChanged" 
                                     WidthRequest="{OnPlatform Default=130, WinUI=138}" 
                                     Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
@@ -108,11 +105,11 @@
                                 <ColumnDefinition Width="5*"/>
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
-                            <Label Text="Track Stroke" VerticalOptions="CenterAndExpand" 
+                            <Label Text="Track Stroke" VerticalOptions="Center" 
                                    Margin="0,13,0,0" Grid.Column="0"/>
                             <Picker Margin="0,13,0,0" x:Name="trackStroke" Grid.Column="1" 
                                     SelectedIndexChanged="trackStroke_SelectedIndexChanged"
-                                    ItemsSource="{Binding Track}" VerticalOptions="CenterAndExpand"
+                                    ItemsSource="{Binding Track}" VerticalOptions="Center"
                                     WidthRequest="{OnPlatform Default=130, WinUI=138}"
                                     Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
                                     TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}">
@@ -124,9 +121,9 @@
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Track Stroke Width" 
-                                   VerticalOptions="CenterAndExpand" Grid.Column="0"/>
+                                   VerticalOptions="Center" Grid.Column="0"/>
                             <Slider x:Name="trackStrokeWidth" Grid.Column="1"  Margin="0,5,2,0"
-                                    VerticalOptions="CenterAndExpand" 
+                                    VerticalOptions="Center" ValueChanged="slider_ValueChanged"  
                                     Minimum="0" Value="0" Maximum="1">
                             </Slider>
                         </Grid>
@@ -136,9 +133,9 @@
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Start Angle" Grid.Column="0"
-                                       VerticalOptions="CenterAndExpand"   />
+                                       VerticalOptions="Center"   />
                             <Slider x:Name="startAngle" Margin="0,5,2,0"
-                                    VerticalOptions="CenterAndExpand"
+                                    VerticalOptions="Center" ValueChanged="slider_ValueChanged"  
                                     Grid.Column="1"  Minimum="-90" Maximum="90" >
                             </Slider>
                         </Grid>
@@ -148,10 +145,10 @@
                                 <ColumnDefinition Width="5*"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="End Angle" Grid.Column="0" 
-                                   VerticalOptions="CenterAndExpand" />
+                                   VerticalOptions="Center" />
                             <Slider x:Name="endAngle" Grid.Column="1" 
-                                    VerticalOptions="CenterAndExpand" Margin="0,5,2,0"
-                                        Minimum="90" Maximum="270">
+                                    VerticalOptions="Center" Margin="0,5,2,0" ValueChanged="slider_ValueChanged"  
+                                    Minimum="90" Maximum="270">
                             </Slider>
                         </Grid>
                     </VerticalStackLayout>

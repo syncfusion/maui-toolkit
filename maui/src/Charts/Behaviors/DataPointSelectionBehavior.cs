@@ -15,22 +15,18 @@
 
 		internal bool OnTapped(float pointX, float pointY)
 		{
-			if (Source != null)
+			if (Source is ChartSeries series)
 			{
-				RectF bounds = Source.AreaBounds;
-				foreach (var segment in Source.Segments)
-				{
-					if (segment.HitTest(pointX - bounds.Left, pointY - bounds.Top))
-					{
-						var index = segment.Index;
-						if (IsSelectionChangingInvoked(Source, index))
-						{
-							UpdateSelectionChanging(index, true);
-							InvokeSelectionChangedEvent(Source, index);
-						}
+				int index;
 
-						return true;
+				if (series.UpdateDataPointSelection(pointX, pointY, out index))
+				{
+					if (IsSelectionChangingInvoked(series, index))
+					{
+						UpdateSelectionChanging(index, true);
+						InvokeSelectionChangedEvent(series, index);
 					}
+					return true;
 				}
 			}
 

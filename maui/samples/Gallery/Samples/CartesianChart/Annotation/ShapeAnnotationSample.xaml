@@ -15,7 +15,7 @@
 
     <localCore:SampleView.Content>
 
-        <chart:SfCartesianChart VerticalOptions="FillAndExpand" Margin="0,0,5,0" x:Name="Chart">
+        <chart:SfCartesianChart VerticalOptions="Fill" Margin="0,0,5,0" x:Name="Chart">
             
             <chart:SfCartesianChart.XAxes>
                 <chart:NumericalAxis Minimum="0" Maximum="4">

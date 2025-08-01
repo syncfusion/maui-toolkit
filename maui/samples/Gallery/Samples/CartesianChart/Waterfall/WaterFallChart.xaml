@@ -3,13 +3,14 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.WaterFallChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:WaterFallSeriesViewModel">
     <localCore:SampleView.Content>
         <Grid x:Name="layout">
             <Grid.Resources>
                 <Label x:Key="title" x:Name="titleName" Text="Net Cash Flow - 2021"
-                           FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
-                          LineBreakMode="WordWrap" Padding="0,0,0,5"/>
+                       FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap" Padding="0,0,0,5"/>
             </Grid.Resources>
 
             <chart:SfCartesianChart x:Name="Chart1" HorizontalOptions="Fill" VerticalOptions="Fill"
@@ -30,7 +31,7 @@
                 </chart:NumericalAxis>
             </chart:SfCartesianChart.YAxes>
             <chart:WaterfallSeries ItemsSource="{Binding RevenueDetails}" AllowAutoSum="True" XBindingPath="Department"   EnableAnimation="True" YBindingPath="Value" x:Name="waterfall"   Fill="#95DB9C" NegativePointsBrush="#B95375" SummaryPointsBrush="#327DBE" 
-                                                   SummaryBindingPath="IsSummary"  ShowDataLabels="{OnPlatform Android=False,iOS=False,Default=True}" EnableTooltip="{OnPlatform Android=True,iOS=True,Default=False}">
+                                   SummaryBindingPath="IsSummary"  ShowDataLabels="{OnPlatform Android=False,iOS=False,Default=True}" EnableTooltip="{OnPlatform Android=True,iOS=True,Default=False}">
                 <chart:WaterfallSeries.DataLabelSettings>
                     <chart:CartesianDataLabelSettings >
                         <chart:CartesianDataLabelSettings.LabelStyle>

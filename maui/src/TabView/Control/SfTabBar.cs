@@ -1469,7 +1469,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
                         }
                     }
                     CalculateTabItemWidth();
-                }
+					UpdateTabIndicatorWidth();
+				}
                 else if (e.PropertyName.Equals(nameof(SfTabItem.Width), StringComparison.Ordinal) ||
                     e.PropertyName.Equals(nameof(SfTabItem.WidthRequest), StringComparison.Ordinal))
                 {
@@ -2086,7 +2087,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				{
 					foreach (var item in Items)
 					{
-						if (item != null)
+						if (item != null && item.IsVisible)
 						{
 							SetHeaderDisplayMode(item);
 							UpdateTabItemWidth(item, width);
@@ -2553,7 +2554,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// <summary>
         /// Update indicator width based on items.
         /// </summary>
-        void UpdateTabIndicatorWidth()
+        internal void UpdateTabIndicatorWidth()
         {
             if (_tabSelectionIndicator != null &&
                 _tabHeaderItemContent != null &&

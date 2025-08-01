@@ -3,19 +3,26 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.RangeAreaChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:RangeAreaSeriesViewModel">
 
     <localCore:SampleView.Content>
 
-        <StackLayout>
+        <Grid>
+          
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
 
-            <StackLayout.BindingContext>
+            <Grid.BindingContext>
                 <local:RangeAreaSeriesViewModel/>
-            </StackLayout.BindingContext>
+            </Grid.BindingContext>
 
-            <chart:SfCartesianChart x:Name="Chart" PaletteBrushes="{Binding PaletteBrushes}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" PaletteBrushes="{Binding PaletteBrushes}" HorizontalOptions="Fill" VerticalOptions="Fill">
 
                 <chart:SfCartesianChart.Resources>
+                    <local:TooltipValuesConverter x:Key="valueConverter"/>
                     <ResourceDictionary>
                         <DataTemplate x:Key="template1">
                             <StackLayout>
@@ -24,9 +31,9 @@
                                     <Label Text="Arizona" HorizontalTextAlignment="Center" HorizontalOptions="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold" FontFamily="Helvetica" Margin="0,2,0,2" FontSize="12" Grid.Row="0"/>
                                 </StackLayout>
                                 <BoxView Color="{AppThemeBinding Default={StaticResource ContentBackground}}" HeightRequest="1" WidthRequest="65"/>
-                                <StackLayout Orientation="Vertical" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0" Grid.Row="1">
-                                    <Label Text="{Binding Item.Value,StringFormat='High : {0}&#186;C'}" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
-                                    <Label Text="{Binding Item.Size,StringFormat='Low  : {0}&#186;C'}" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                <StackLayout  x:DataType="chart:TooltipInfo" Orientation="Vertical" VerticalOptions="Fill" Spacing="0" Padding="3" Margin="0" Grid.Row="1">
+                                     <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat='High : {0}&#186;C'}" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
+                                     <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Size',StringFormat='Low  : {0}&#186;C'}" VerticalTextAlignment="Center" HorizontalOptions="Start" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontFamily="Helvetica" FontSize="12" Margin="3,0,3,0" />
                                 </StackLayout>
                             </StackLayout>
                         </DataTemplate>
@@ -61,7 +68,7 @@
 
             </chart:SfCartesianChart>
 
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" accuweather.com " VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -69,7 +76,7 @@
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 
 </localCore:SampleView>

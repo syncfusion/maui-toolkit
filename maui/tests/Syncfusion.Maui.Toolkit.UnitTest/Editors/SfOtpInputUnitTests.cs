@@ -120,7 +120,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(OtpInputStyle.Outlined, 13, false, OtpInputState.Error, "#008000", "#FF0000", "#1C1B1F", "#611c1b1f")]
 		public void UpdateParameters(OtpInputStyle otpInputStyle, double cornerRadius, bool isEnabled, OtpInputState otpInputState, string stroke, string background, string textColor, string disabledTextColor)
 		{
-			OTPEntry otpEntry = new OTPEntry();
+			OTPEntry otpEntry = new OTPEntry();			
 			otpEntry.UpdateParameters(otpInputStyle, cornerRadius, new PointF(10, 10), new PointF(30, 30), new SfOtpInput(),isEnabled, otpInputState, Color.FromArgb(stroke), Color.FromArgb(background), Color.FromArgb(textColor), Color.FromArgb(disabledTextColor));
 			OtpInputStyle? resultInputStyle = (OtpInputStyle?)GetPrivateField(otpEntry, "_styleMode");
 			double? resultCornerRadius = (double?)GetPrivateField(otpEntry, "_cornerRadius");
@@ -292,9 +292,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(expected, actual);
 		}
 
-
-
 		[Theory]
+		[InlineData(0)]
+		[InlineData(-5)]
+		[InlineData(-30)]
 		[InlineData(40)]
 		[InlineData(60)]
 		[InlineData(100)]
@@ -307,15 +308,24 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				foreach (var entry in _otpEntries)
 				{
-					Assert.Equal(newWidth, entry.MinimumWidthRequest);
-					Assert.Equal(newWidth, entry.WidthRequest);
+					if(newWidth > 0)
+					{
+						Assert.Equal(newWidth, entry.MinimumWidthRequest);
+						Assert.Equal(newWidth, entry.WidthRequest);
+					}
+					else
+					{
+						Assert.NotEqual(newWidth, entry.MinimumWidthRequest);
+						Assert.NotEqual(newWidth, entry.WidthRequest);
+					}
 				}
 			}
 		}
 
-
-
 		[Theory]
+		[InlineData(0)]
+		[InlineData(-5)]
+		[InlineData(-45)]
 		[InlineData(40)]
 		[InlineData(55)]
 		[InlineData(80)]
@@ -328,8 +338,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				foreach (var entry in _otpEntries)
 				{
-					Assert.Equal(newHeight, entry.MinimumHeightRequest);
-					Assert.Equal(newHeight, entry.HeightRequest);
+					if(newHeight > 0)
+					{
+						Assert.Equal(newHeight, entry.MinimumHeightRequest);
+						Assert.Equal(newHeight, entry.HeightRequest);
+					}
+					else
+					{
+						Assert.NotEqual(newHeight, entry.MinimumHeightRequest);
+						Assert.NotEqual(newHeight, entry.HeightRequest);
+					}
 				}
 			}
 		}
@@ -590,11 +608,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var otpInput = new SfOtpInput();
 			OTPEntry[]? otpEntries = (OTPEntry[]?)GetPrivateField(otpInput, "_otpEntries");
 			SetPrivateField(otpInput, "_otpEntries", otpEntries);
-			var sender = otpEntries?[2];
+			var sender = otpEntries?[2]; 
 			var focusEventArgs = new FocusEventArgs(otpInput,true);
 			InvokePrivateMethod(otpInput, "FocusAsync", sender, focusEventArgs);
 			var focusedIndex = (int?)GetPrivateField(otpInput, "_focusedIndex");
-			Assert.Equal(2, focusedIndex);
+			Assert.Equal(2, focusedIndex); 
 		}
 
 
@@ -609,14 +627,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Theory]
-		[InlineData(0, true, 0)]
+		[InlineData(0, true, 0)]  
 		[InlineData(1, false, 1)]
 		public void FocusEntry(int index, bool setCursorToStart, int expectedCursorPosition)
 		{
 			var otpInput = new SfOtpInput();
 			OTPEntry[]? otpEntries = (OTPEntry[]?)GetPrivateField(otpInput, "_otpEntries");
 			SetPrivateField(otpInput, "_otpEntries", otpEntries);
-			SetPrivateField(otpInput, "_focusedIndex", 0);
+			SetPrivateField(otpInput, "_focusedIndex", 0); 
 			otpEntries?[0].Focus();
 			InvokePrivateMethod(otpInput, "FocusEntry", index, setCursorToStart);
 			int? resultFocusedIndex = (int?)GetPrivateField(otpInput, "_focusedIndex");
@@ -626,9 +644,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Theory]
-		[InlineData(3, true, 3)]
+		[InlineData(3, true, 3)] 
 		[InlineData(0, false, 0)]
-		[InlineData(3, false, 3)]
+		[InlineData(3, false, 3)] 
 		public void HandleFocus(int index, bool hasText, int expectedFocusIndex)
 		{
 			var otpInput = new SfOtpInput ();
@@ -638,26 +656,26 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(otpInput, "_focusedIndex", index);
 			InvokePrivateMethod(otpInput,"HandleFocus", index, hasText);
 			focusedIndex = GetPrivateField(otpInput, "_focusedIndex");
-			Assert.Equal(expectedFocusIndex, focusedIndex);
+			Assert.Equal(expectedFocusIndex, focusedIndex); 
 		}
 
 		[Theory]
-		[InlineData(0, 1)]
+		[InlineData(0, 1)] 
 		[InlineData(1, 1)]
-		[InlineData(2,1)]
-		[InlineData(3, 1)]
+		[InlineData(2,1)] 
+		[InlineData(3, 1)] 
 		public void GetStrokeThickness(int index, float expectedStrokeThickness)
 		{
 			var otpInput = new SfOtpInput();
 			OTPEntry[]? otpEntries = (OTPEntry[]?)GetPrivateField(otpInput, "_otpEntries");
 			SetPrivateField(otpInput,"_otpEntries", otpEntries);
 			float? strokeThickness =(float?) InvokePrivateMethod(otpInput, "GetStrokeThickness", index);
-			Assert.Equal(expectedStrokeThickness, strokeThickness);
+			Assert.Equal(expectedStrokeThickness, strokeThickness); 
 		}
 
 
 		[Theory]
-		[InlineData(0, 30f, 40f, 5f, 3f, false, 300f)]
+		[InlineData(0, 30f, 40f, 5f, 3f, false, 300f)] 
 		[InlineData(1, 35f, 45f, 10f, 5f, false, 300f)]
 		public void UpdateDrawingParameters(int index, float entryWidth, float entryHeight, float spacing, float extraSpacing, bool isRTL, float controlWidth)
 		{
@@ -708,14 +726,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var otpInput = new SfOtpInput();
 			OTPEntry[]? _otpEntries = (OTPEntry[]?)GetPrivateField(otpInput, "_otpEntries");
 
-			string invalidInput = "12A4";
-			InvokePrivateMethod(otpInput, "UpdateValue", otpInput, invalidInput);
+			string invalidInput = "12A4"; 
+			InvokePrivateMethod(otpInput, "UpdateValue", otpInput, invalidInput); 
 			Assert.Equal("1", _otpEntries?[0].Text);
 			Assert.Equal("2", _otpEntries?[1].Text);
-			Assert.Equal("", _otpEntries?[2].Text);
+			Assert.Equal("", _otpEntries?[2].Text); 
 			Assert.Equal("4", _otpEntries?[3].Text);
 
-			otpInput.Type = OtpInputType.Password;
+			otpInput.Type = OtpInputType.Password; 
 			string passwordInput = "1234";
 			InvokePrivateMethod(otpInput, "UpdateValue", otpInput, passwordInput);
 			if (_otpEntries != null)
@@ -737,7 +755,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			InvokePrivateMethod(otpInput, "UpdateEntriesLength", initialLength, newLength);
 			OTPEntry[]? _otpEntries = (OTPEntry[]?)GetPrivateField(otpInput, "_otpEntries");
 			SetPrivateField(otpInput, "_otpEntries", _otpEntries);
-			Assert.Equal(newLength, _otpEntries?.Length);
+			Assert.Equal(newLength, _otpEntries?.Length); 
 		}
 
 		[Theory]
@@ -794,14 +812,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			int expectedSeparatorCount = newLength - 1;
 			int actualSeparatorCount = layout.Children.OfType<SfLabel>().Count();
 			Assert.Equal(expectedSeparatorCount, actualSeparatorCount);
-			int expectedTotalChildren = newLength + expectedSeparatorCount;
+			int expectedTotalChildren = newLength + expectedSeparatorCount; 
 			Assert.Equal(expectedTotalChildren, layout.Children.Count);
 		}
 
 
 		[Theory]
-		[InlineData(0, 50f, 30f, 5f, 5f)]
-		[InlineData(0, 60f, 40f, 10f, 10f)]
+		[InlineData(0, 50f, 30f, 5f, 5f)]  
+		[InlineData(0, 60f, 40f, 10f, 10f)]  
 		public void SetInputFieldPosition(int index, float entryWidth, float entryHeight, float spacing, float extraSpacing)
 		{
 
@@ -818,22 +836,22 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			InvokePrivateMethod(otpInput, "SetInputFieldPosition", index, otpEntry);
 
 			RectF[]? entryBounds = (RectF[]?)GetPrivateField(otpInput, "_entryBounds");
-			Assert.Equal(index + 1, entryBounds?.Length);
+			Assert.Equal(index + 1, entryBounds?.Length);  
 
 			var layoutBounds = AbsoluteLayout.GetLayoutBounds(otpEntry);
 
 			float expectedX =  (entryWidth + spacing) * index + extraSpacing;
 			float expectedY =  extraSpacing;
 
-			Assert.Equal(expectedX, layoutBounds.X);
+			Assert.Equal(expectedX, layoutBounds.X);  
 			Assert.Equal(expectedY, layoutBounds.Y);
 			Assert.Equal(entryWidth, layoutBounds.Width);
-			Assert.Equal(entryHeight, layoutBounds.Height);
+			Assert.Equal(entryHeight, layoutBounds.Height); 
 		}
 
 		[Theory]
-		[InlineData(0, 50f, 30f, 5f, 5f)]
-		[InlineData(1, 60f, 40f, 10f, 10f)]
+		[InlineData(0, 50f, 30f, 5f, 5f)] 
+		[InlineData(1, 60f, 40f, 10f, 10f)] 
 		public void SetSeparatorPosition(int index, float entryWidth, float entryHeight, float spacing, float separatorWidth)
 		{
 			var otpInput = new SfOtpInput();

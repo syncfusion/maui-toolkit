@@ -11,6 +11,11 @@
         PickerFooterView FooterView { get; }
 
         /// <summary>
+        /// Gets the settings of picker footer template.
+        /// </summary>
+        DataTemplate FooterTemplate { get; }
+
+        /// <summary>
         /// Method to update after the confirm button clicked.
         /// </summary>
         void OnConfirmButtonClicked();

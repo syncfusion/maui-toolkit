@@ -101,5 +101,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// Gets a month view header template.
         /// </summary>
         DataTemplate MonthViewHeaderTemplate { get; }
-    }
+
+		/// <summary>
+		/// Gets a custom template view for single selection.
+		/// </summary>
+		DataTemplate SelectionCellTemplate { get; }
+	}
 }

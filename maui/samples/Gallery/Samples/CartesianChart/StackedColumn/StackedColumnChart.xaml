@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:StackedColumnViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,9 +13,10 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
         <converter:BrushToColorConverter x:Key="brushToColor" />
+        <local:TooltipValuesConverter x:Key="valueConverter"/>
         <DataTemplate x:Key="tooltipTemplate">
-            <HorizontalStackLayout Spacing="10">
-                <Label Text="{Binding Item.Value,StringFormat='{0}B'}" FontSize="14"
+            <HorizontalStackLayout Spacing="10" x:DataType="chart:TooltipInfo">
+                        <Label Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Value',StringFormat='{0}B'}" FontSize="14"
                                TextColor="White"
                                HorizontalOptions="Center"
                                VerticalOptions="Center" />
@@ -26,11 +28,15 @@
                           LineBreakMode="WordWrap" Padding="0,0,0,5"/>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <StackLayout>
-            <StackLayout.BindingContext>
+        <Grid>
+            <Grid.BindingContext>
                 <local:StackedColumnViewModel />
-            </StackLayout.BindingContext>
-            <chart:SfCartesianChart x:Name="chart" Title="{StaticResource title}" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" >
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+        <chart:SfCartesianChart Grid.Row="0" x:Name="chart" Title="{StaticResource title}" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="Fill" >
 
                 <chart:SfCartesianChart.XAxes>
                 <chart:CategoryAxis x:Name="xAxis" LabelPlacement="BetweenTicks" IsVisible="true" ShowMajorGridLines="false">
@@ -76,7 +82,7 @@
                                         TooltipTemplate="{StaticResource tooltipTemplate}"
                                         LegendIcon="SeriesType"/>
         </chart:SfCartesianChart>
-        <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+        <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
             <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" statista.com" VerticalOptions="Center">
                 <Label.GestureRecognizers>
@@ -84,7 +90,7 @@
                 </Label.GestureRecognizers>
             </Label>
         </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
    
 </localCore:SampleView>

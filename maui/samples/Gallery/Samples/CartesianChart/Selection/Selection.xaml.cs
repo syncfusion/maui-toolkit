@@ -27,9 +27,15 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 	{
 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
 		{
-			if (value != null)
+
+			if (value is ChartDataModel model && parameter != null)
 			{
-				return ((DateTime)value).ToString("ddd-hh:mm");
+				string? param = parameter?.ToString();
+
+				if (param == "Date")
+				{
+					return model.Date.ToString("ddd-hh:mm");
+				}
 			}
 			return null;
 		}

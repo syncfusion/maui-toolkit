@@ -915,12 +915,195 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal(expectedValues, actualValue);
         }
 
+		[Theory]
+		[InlineData(CalendarView.Month)]
+		[InlineData(CalendarView.Year)]
+		[InlineData(CalendarView.Decade)]
+		[InlineData(CalendarView.Century)]
+		public void SelectionCellTemplate_GetAndSet_DataTemplate(CalendarView view)
+		{
+			SfCalendar calendar = new SfCalendar() { View = view };
 
-        #endregion
+			// Create the Grid
+			var grid = new Grid
+			{
+				BackgroundColor = Colors.Green
+			};
 
-        #region Events
+			// Create the Label
+			var label = new Label
+			{
+				HorizontalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.Center,
+				TextColor = Colors.Black,
+				Text = "Custom View"
+			};
+			grid.Children.Add(label);
+			DataTemplate expectedValue = new DataTemplate(() => grid);
+			calendar.SelectionCellTemplate = expectedValue;
+			DataTemplate actualValue = calendar.SelectionCellTemplate;
+			Assert.Equal(expectedValue, actualValue);
+		}
 
-        [Fact]
+		[Fact]
+		public void SelectionCellTemplate_CreatesView_WhenCalled()
+		{
+			SfCalendar calendar = new SfCalendar();
+
+			// Create the Grid
+			var grid = new Grid
+			{
+				BackgroundColor = Colors.Green
+			};
+
+			// Create the Label
+			var label = new Label
+			{
+				HorizontalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.Center,
+				TextColor = Colors.Black,
+				Text = "Custom View"
+			};
+			grid.Children.Add(label);
+			calendar.SelectionCellTemplate = new DataTemplate(() => grid);
+
+			List<DateTime> visibleDates = new List<DateTime>();
+			visibleDates.Add(new DateTime(2025, 03, 19));
+			visibleDates.Add(new DateTime(2025, 03, 20));
+
+			List<DateTime> disableDates = new List<DateTime>();
+			disableDates.Add(new DateTime(2025, 03, 19));
+
+			List<CalendarIconDetails> CalendarIconDetail = new List<CalendarIconDetails>();
+			CalendarIconDetail.Add(new CalendarIconDetails() { Fill = Colors.Yellow });
+
+			MonthView monthView = new MonthView(calendar, visibleDates, new DateTime(2025, 03, 20), disableDates, CalendarIconDetail, true);
+			var details = InvokePrivateMethod(monthView, "GetMonthCellDetails", new DateTime(2025, 03, 20).Month, new DateTime(2025, 03, 20));
+			CalendarCellDetails? selectedCellDetail = null;
+			if (details != null)
+			{
+				selectedCellDetail = (CalendarCellDetails)details;
+			}
+			if (selectedCellDetail != null)
+			{
+				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail, new RectF(10, 20, 40, 20));
+				Assert.NotNull(view);
+			}
+		}
+
+		[Fact]
+		public void SelectionCellTemplate_CreatesView_WhenCalled_WithoutSelectionCellTemplate()
+		{
+			SfCalendar calendar = new SfCalendar();
+
+			List<DateTime> visibleDates = new List<DateTime>();
+			visibleDates.Add(new DateTime(2025, 03, 19));
+			visibleDates.Add(new DateTime(2025, 03, 20));
+
+			List<DateTime> disableDates = new List<DateTime>();
+			disableDates.Add(new DateTime(2025, 03, 19));
+
+			List<CalendarIconDetails> CalendarIconDetail = new List<CalendarIconDetails>();
+			CalendarIconDetail.Add(new CalendarIconDetails() { Fill = Colors.Yellow });
+
+			MonthView monthView = new MonthView(calendar, visibleDates, new DateTime(2025, 03, 20), disableDates, CalendarIconDetail, true);
+			var details = InvokePrivateMethod(monthView, "GetMonthCellDetails", new DateTime(2025, 03, 20).Month, new DateTime(2025, 03, 20));
+
+			CalendarCellDetails? selectedCellDetail = null;
+			if (details != null)
+			{
+				selectedCellDetail = (CalendarCellDetails)details;
+			}
+			if (selectedCellDetail != null)
+			{
+				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail, new RectF(10, 20, 40, 20));
+				Assert.Null(view);
+			}
+		}
+
+		[Theory]
+		[InlineData(CalendarView.Year)]
+		[InlineData(CalendarView.Decade)]
+		[InlineData(CalendarView.Century)]
+		public void SelectionCellTemplate_CreatesView_WhenCalled_YearView(CalendarView viewOfYear)
+		{
+			SfCalendar calendar = new SfCalendar() { View = viewOfYear };
+
+			// Create the Grid
+			var grid = new Grid
+			{
+				BackgroundColor = Colors.Green
+			};
+
+			// Create the Label
+			var label = new Label
+			{
+				HorizontalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.Center,
+				TextColor = Colors.Black,
+				Text = "Custom View"
+			};
+			grid.Children.Add(label);
+			calendar.SelectionCellTemplate = new DataTemplate(() => grid);
+
+			List<DateTime> visibleDates = new List<DateTime>();
+			visibleDates.Add(new DateTime(2025, 03, 01));
+			visibleDates.Add(new DateTime(2025, 04, 01));
+			visibleDates.Add(new DateTime(2025, 05, 01));
+
+			List<DateTime> disableDates = new List<DateTime>();
+			disableDates.Add(new DateTime(2025, 03, 01));
+
+			YearView yearView = new YearView(calendar, visibleDates, disableDates, true);
+			var details = InvokePrivateMethod(yearView, "GetYearCellDetails", new DateTime(2025, 04, 01), visibleDates[0]);
+			CalendarCellDetails? selectedCellDetail = null;
+			if (details != null)
+			{
+				selectedCellDetail = (CalendarCellDetails)details;
+			}
+			if (selectedCellDetail != null)
+			{
+				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail, new RectF(10, 20, 40, 20));
+				Assert.NotNull(view);
+			}
+		}
+
+		[Theory]
+		[InlineData(CalendarView.Year)]
+		[InlineData(CalendarView.Decade)]
+		[InlineData(CalendarView.Century)]
+		public void SelectionCellTemplate_CreatesView_WhenCalled_OnYearView_WithoutSelectionCellTemplate(CalendarView viewOfYear)
+		{
+			SfCalendar calendar = new SfCalendar() { View = viewOfYear };
+
+			List<DateTime> visibleDates = new List<DateTime>();
+			visibleDates.Add(new DateTime(2025, 03, 01));
+			visibleDates.Add(new DateTime(2025, 04, 01));
+			visibleDates.Add(new DateTime(2025, 05, 01));
+
+			List<DateTime> disableDates = new List<DateTime>();
+			disableDates.Add(new DateTime(2025, 03, 01));
+
+			YearView yearView = new YearView(calendar, visibleDates, disableDates, true);
+			var details = InvokePrivateMethod(yearView, "GetYearCellDetails", new DateTime(2025, 04, 01), visibleDates[0]);
+			CalendarCellDetails? selectedCellDetail = null;
+			if (details != null)
+			{
+				selectedCellDetail = (CalendarCellDetails)details;
+			}
+			if (selectedCellDetail != null)
+			{
+				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail, new RectF(10, 20, 40, 20));
+				Assert.Null(view);
+			}
+		}
+
+
+		#endregion
+
+		#region Events
+
+		[Fact]
         public void SelectionChangedInvoked()
         {
             SfCalendar calendar = new SfCalendar();

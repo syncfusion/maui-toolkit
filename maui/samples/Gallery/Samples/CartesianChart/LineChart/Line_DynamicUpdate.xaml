@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.Line_DynamicUpdate"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:DynamicAnimationViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,7 +13,7 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <chart:SfCartesianChart x:Name="Chart2"  PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="Fill">
+        <chart:SfCartesianChart x:Name="Chart2" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="Fill">
             <chart:SfCartesianChart.BindingContext>
                 <local:DynamicAnimationViewModel x:Name="viewModel1"/>
             </chart:SfCartesianChart.BindingContext>

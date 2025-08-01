@@ -16,7 +16,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
         /// <summary>
         /// The show header switch
         /// </summary>
-        Switch? _showHeaderSwitch, _showColumnHeaderSwitch, _showFooterSwitch, _clearSelectionSwitch;
+        Switch? _showHeaderSwitch, _showColumnHeaderSwitch, _showFooterSwitch, _clearSelectionSwitch, _showEnableLoopingSwitch;
 
         /// <summary>
         /// The date format combo box.
@@ -102,6 +102,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
             _showColumnHeaderSwitch = sampleView.Content.FindByName<Switch>("showColumnHeaderSwitch");
             _showFooterSwitch = sampleView.Content.FindByName<Switch>("showFooterSwitch");
             _clearSelectionSwitch = sampleView.Content.FindByName<Switch>("clearSelectionSwitch");
+            _showEnableLoopingSwitch = sampleView.Content.FindByName<Switch>("enableLoopingSwitch");
             _dateTimePicker.SelectedTextStyle.TextColor = _isLightTheme ? Color.FromArgb("#FFFFFF") : Color.FromArgb("#381E72");
 
             _dateFormat = new ObservableCollection<object>()
@@ -152,6 +153,11 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
             if (_clearSelectionSwitch != null)
             {
                 _clearSelectionSwitch.Toggled += ClearSelectionSwitch_Toggled;
+            }
+
+            if (_showEnableLoopingSwitch != null)
+            {
+                _showEnableLoopingSwitch.Toggled += EnableLoopingSwitch_Toggled;
             }
         }
 
@@ -231,6 +237,26 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
                 else if (e.Value == false)
                 {
                     _dateTimePicker.SelectedDate = _previousDate;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Method for enable looping switch toggle changed.
+        /// </summary>
+        /// <param name="sender">Return the object.</param>
+        /// <param name="e">The Event Arguments.</param>
+        void EnableLoopingSwitch_Toggled(object? sender, ToggledEventArgs e)
+        {
+            if (_dateTimePicker != null)
+            {
+                if (e.Value == true)
+                {
+                    _dateTimePicker.EnableLooping = true;
+                }
+                else if (e.Value == false)
+                {
+                    _dateTimePicker.EnableLooping = false;
                 }
             }
         }
@@ -415,6 +441,12 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
             {
                 _clearSelectionSwitch.Toggled -= ClearSelectionSwitch_Toggled;
                 _clearSelectionSwitch = null;
+            }
+
+            if (_showEnableLoopingSwitch != null)
+            {
+                _showEnableLoopingSwitch.Toggled -= EnableLoopingSwitch_Toggled;
+                _showEnableLoopingSwitch = null;
             }
         }
 

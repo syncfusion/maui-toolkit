@@ -4,14 +4,18 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.StackedBar100Chart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:StackedColumn100ViewModel">
     <localCore:SampleView.Content>
-        <StackLayout>
-            <StackLayout.BindingContext>
+        <Grid>
+            <Grid.BindingContext>
                 <local:StackedColumn100ViewModel/>
-            </StackLayout.BindingContext>
-            
-            <chart:SfCartesianChart x:Name="Chart2" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" PaletteBrushes="{Binding CustomColor4}" IsTransposed="True">
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+        <chart:SfCartesianChart Grid.Row="0" x:Name="Chart2" HorizontalOptions="Fill" VerticalOptions="Fill" PaletteBrushes="{Binding CustomColor4}" IsTransposed="True">
                 
                 <chart:SfCartesianChart.Title>
                     <Label Text="Worldwide Delivery of Tesla Cars, by Quarter" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
@@ -67,8 +71,8 @@
                                                    LegendIcon="Rectangle"/>
                 </chart:SfCartesianChart.Series>
             </chart:SfCartesianChart>
-            
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"/>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" ir.tesla.com" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -77,6 +81,6 @@
                 </Label>
             </HorizontalStackLayout>
             
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 </localCore:SampleView>
