@@ -684,16 +684,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (e.NewItems[0] is ChartAxisLabel item)
 				{
-					var currentLabelCoeffientValue = ValueToCoefficient(item.Position);
+					var currentLabelCoefficientValue = ValueToCoefficient(item.Position);
 
 					//Checking the position of the current label already has a label or not.
-					if (double.Equals(Math.Round(_previousLabelCoefficientValue, 3), Math.Round(currentLabelCoeffientValue, 3)))
+					if (double.Equals(Math.Round(_previousLabelCoefficientValue, 3), Math.Round(currentLabelCoefficientValue, 3)))
 					{
 						VisibleLabels?.Remove(item);
 					}
 					else
 					{
-						_previousLabelCoefficientValue = currentLabelCoeffientValue;
+						_previousLabelCoefficientValue = currentLabelCoefficientValue;
 					}
 
 					InvokeLabelCreated(item);

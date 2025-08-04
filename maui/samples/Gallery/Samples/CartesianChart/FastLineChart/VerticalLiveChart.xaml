@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.VerticalLiveChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:RealTimeVerticalChartViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -13,8 +14,8 @@
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
         <chart:SfCartesianChart IsTransposed="True" HorizontalOptions="Fill" 
-                                                x:Name="verticalLiveChart"
-                                                PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" VerticalOptions="Fill">
+                                x:Name="verticalLiveChart"
+                                PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" VerticalOptions="Fill">
 
             <chart:SfCartesianChart.BindingContext>
                 <local:RealTimeVerticalChartViewModel x:Name="realTimeVerticalChartViewModel"/>
@@ -42,8 +43,8 @@
             </chart:SfCartesianChart.YAxes>
             <chart:SfCartesianChart.Series>
                 <chart:FastLineSeries ItemsSource="{Binding VerticalLiveChartData}" 
-                                                      EnableAntiAliasing="True"
-                                                      XBindingPath="Value" YBindingPath="Size"/>
+                                      EnableAntiAliasing="True"
+                                      XBindingPath="Value" YBindingPath="Size"/>
             </chart:SfCartesianChart.Series>
         </chart:SfCartesianChart>
     </localCore:SampleView.Content>

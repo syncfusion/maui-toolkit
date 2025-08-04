@@ -379,6 +379,124 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         }
 
         [Fact]
+        public void HeaderTemplate_GetAndSet_UsingDataTemplate()
+        {
+            SfTimePicker picker = new SfTimePicker();
+
+            picker.HeaderView.Height = 50;
+            picker.HeaderTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Header Content" };
+            });
+
+            Assert.NotNull(picker.HeaderTemplate);
+        }
+
+        [Fact]
+        public void HeaderTemplate_GetAndSet_UsingDataTemplate_WhenaCalledDynamic()
+        {
+            SfTimePicker picker = new SfTimePicker();
+
+            Assert.Null(picker.HeaderTemplate);
+
+            picker.HeaderView.Height = 50;
+            picker.HeaderTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Header Content" };
+            });
+
+            Assert.NotNull(picker.HeaderTemplate);
+        }
+
+        [Fact]
+        public void ColumnHeaderTemplate_GetAndSet_UsingDataTemplate()
+        {
+            SfTimePicker picker = new SfTimePicker();
+
+            picker.ColumnHeaderView.Height = 50;
+            picker.ColumnHeaderTemplate = new DataTemplate(() =>
+            {
+                var grid = new Grid
+                {
+                    BackgroundColor = Colors.LightGray,
+                    Padding = 5
+                };
+
+                var label = new Label
+                {
+                    Text = "Column Header Content",
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+
+                grid.Add(label);
+                return grid;
+            });
+
+            Assert.NotNull(picker.ColumnHeaderTemplate);
+        }
+
+        [Fact]
+        public void ColumnHeaderTemplate_GetAndSet_UsingDataTemplate_WhenCalledDynamic()
+        {
+            SfTimePicker picker = new SfTimePicker();
+
+            Assert.Null(picker.ColumnHeaderTemplate);
+
+            picker.ColumnHeaderView.Height = 50;
+            picker.ColumnHeaderTemplate = new DataTemplate(() =>
+            {
+                var grid = new Grid
+                {
+                    BackgroundColor = Colors.LightGray,
+                    Padding = 5
+                };
+
+                var label = new Label
+                {
+                    Text = "Column Header Content",
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
+                };
+
+                grid.Add(label);
+                return grid;
+            });
+
+            Assert.NotNull(picker.ColumnHeaderTemplate);
+        }
+
+        [Fact]
+        public void FooterTemplate_GetAndSet_UsingDataTemplate()
+        {
+            SfTimePicker picker = new SfTimePicker();
+
+            picker.FooterView.Height = 50;
+            picker.FooterTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Footer Content" };
+            });
+
+            Assert.NotNull(picker.FooterTemplate);
+        }
+
+        [Fact]
+        public void FooterTemplate_GetAndSet_UsingDataTemplate_WhenCalledDynamic()
+        {
+            SfTimePicker picker = new SfTimePicker();
+
+            Assert.Null(picker.FooterTemplate);
+
+            picker.FooterView.Height = 50;
+            picker.FooterTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Footer Content" };
+            });
+
+            Assert.NotNull(picker.FooterTemplate);
+        }
+
+        [Fact]
         public void SelectionChangedCommand_Execute_ReturnsTrue()
         {
             SfTimePicker picker = new SfTimePicker();
@@ -2651,6 +2769,293 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             Assert.Single(((ObservableCollection<string>)updatedColumns[2].ItemsSource));
             Assert.Equal("PM", ((ObservableCollection<string>)updatedColumns[2].ItemsSource)[0]);
+        }
+
+        #endregion
+
+        #region PopupSizeFeature
+
+        [Fact]
+        public void DatePicker_PopupSize1()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            double expectedWidth = 100;
+            double expectedHeight = 200;
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenPopupSizeIsNotSet()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            double expectedWidth = 300;
+            double expectedHeight = 240;
+
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenPopupSizeOnPropertyChange()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            double expectedWidth = 50;
+            double expectedHeight = 20;
+
+            sfTimePicker.PopupWidth = 100;
+            sfTimePicker.PopupHeight = 200;
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenHeaderHeightProvided_PopupSizeProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            PickerHeaderView headerView = new PickerHeaderView();
+            headerView.Height = 50;
+            sfTimePicker.HeaderView = headerView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 400;
+
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenHeaderHeightProvided_PopupSizeNotProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            PickerHeaderView headerView = new PickerHeaderView();
+            headerView.Height = 50;
+            sfTimePicker.HeaderView = headerView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 290;
+
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenColumnHeaderProvided_PopupSizeProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            TimePickerColumnHeaderView columnHeaderView = new TimePickerColumnHeaderView();
+            columnHeaderView.Height = 50;
+            sfTimePicker.ColumnHeaderView = columnHeaderView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 400;
+
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenColumnHeaderProvided_PopupSizeNotProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            TimePickerColumnHeaderView columnHeaderView = new TimePickerColumnHeaderView();
+            columnHeaderView.Height = 50;
+            sfTimePicker.ColumnHeaderView = columnHeaderView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 290;
+
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenItemHeightProvided_PopupSizeProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            sfTimePicker.ItemHeight = 10;
+
+            double expectedWidth = 200;
+            double expectedHeight = 640;
+
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+        }
+
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenItemHeightProvided_PopupSizeNotProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            sfTimePicker.ItemHeight = 10;
+            double expectedWidth = 300;
+            double expectedHeight = 90;
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenItemHeightProvided_ItemsLessThanFive()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            sfTimePicker.ItemHeight = 10;
+            double expectedWidth = 200;
+            double expectedHeight = 290 + 30;
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenItemHeightProvided_ItemsGreaterThanFive()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            sfTimePicker.ItemHeight = 10;
+            double expectedWidth = 200;
+            double expectedHeight = 290 + 50;
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenFooterHeightProvided_PopupSizeProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            PickerFooterView pickerFooterView = new PickerFooterView();
+            pickerFooterView.Height = 50;
+            sfTimePicker.FooterView = pickerFooterView;
+            double expectedWidth = 200;
+            double expectedHeight = 290 + 50;
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenFooterHeightProvided_PopupSizeNotProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            PickerFooterView pickerFooterView = new PickerFooterView();
+            pickerFooterView.Height = 50;
+            sfTimePicker.FooterView = pickerFooterView;
+            double expectedWidth = 200;
+            double expectedHeight = 290;
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenAllHeaderHeightProvided_PopupSizeProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            PickerHeaderView headerView = new PickerHeaderView();
+            TimePickerColumnHeaderView pickerColumnHeaderView = new TimePickerColumnHeaderView();
+            PickerFooterView footerView = new PickerFooterView();
+            sfTimePicker.ItemHeight = 10;
+            headerView.Height = 50;
+            pickerColumnHeaderView.Height = 50;
+            footerView.Height = 50;
+            sfTimePicker.HeaderView = headerView;
+            sfTimePicker.ColumnHeaderView = pickerColumnHeaderView;
+            sfTimePicker.FooterView = footerView;
+            double expectedWidth = 200;
+            double expectedHeight = 290 + 50 + 50 + 50 + 50;
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void DatePicker_PopupSize_WhenAllHeaderHeightProvided_PopupSizeNotProvided()
+        {
+            SfTimePicker sfTimePicker = new SfTimePicker();
+            PickerHeaderView headerView = new PickerHeaderView();
+            TimePickerColumnHeaderView pickerColumnHeaderView = new TimePickerColumnHeaderView();
+            PickerFooterView footerView = new PickerFooterView();
+            headerView.Height = 50;
+            pickerColumnHeaderView.Height = 50;
+            footerView.Height = 50;
+            sfTimePicker.HeaderView = headerView;
+            sfTimePicker.ColumnHeaderView = pickerColumnHeaderView;
+            sfTimePicker.FooterView = footerView;
+            double expectedWidth = 200;
+            double expectedHeight = 50 + 50 + 50;
+            sfTimePicker.PopupWidth = expectedWidth;
+            sfTimePicker.PopupHeight = expectedHeight;
+            double actualWidth = sfTimePicker.PopupWidth;
+            double actualHeight = sfTimePicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
         }
 
         #endregion

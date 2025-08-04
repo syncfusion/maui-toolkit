@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.RealTimeChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:RealTimeChartViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -14,7 +15,7 @@
     
     <localCore:SampleView.Content>
         <chart:SfCartesianChart x:Name="realTimeChart" HorizontalOptions="Fill" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" 
-                                                VerticalOptions="Fill">
+                                VerticalOptions="Fill">
             <chart:SfCartesianChart.BindingContext>
                 <local:RealTimeChartViewModel x:Name="realTimeChartViewModel"/>
             </chart:SfCartesianChart.BindingContext>
@@ -44,8 +45,8 @@
 
             <chart:SfCartesianChart.Series>
                 <chart:FastLineSeries ItemsSource="{Binding LiveData}" 
-                                                      EnableAntiAliasing="True"
-                                                      XBindingPath="Value" YBindingPath="Size">
+                                      EnableAntiAliasing="True"
+                                      XBindingPath="Value" YBindingPath="Size">
                 </chart:FastLineSeries>
             </chart:SfCartesianChart.Series>
         </chart:SfCartesianChart>

@@ -2203,8 +2203,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 #elif MACCATALYST
 				minOpacity  = 0.011;
 #endif
-
-                double targetOpacity = value ? 1 : minOpacity;
+				
+				double targetOpacity = value ? 1 : minOpacity;
 
                 if (inputLayout.Content is InputView || inputLayout.Content is Microsoft.Maui.Controls.Picker)
                 {
@@ -2394,7 +2394,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			if (bindable is SfTextInputLayout inputLayout && inputLayout._initialLoaded)
 			{
 				inputLayout.UpdateViewBounds();
-				// Update assistive labels when relevant properties change
 				inputLayout.UpdateAssistiveLabels();
 				inputLayout.ResetSemantics();
 			}

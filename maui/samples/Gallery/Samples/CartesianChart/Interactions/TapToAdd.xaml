@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.TapToAdd"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:TapToAddViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,7 +26,7 @@
                     <chart:NumericalAxis ShowMajorGridLines="False" RangePadding="Additional"/>
                 </chart:SfCartesianChart.YAxes>
                 <chart:SfCartesianChart.Series>
-                    <chart:LineSeries x:Name="lineSeries"  ItemsSource="{Binding LiveChartData}" XBindingPath="Value" ShowMarkers="True" YBindingPath="Size">
+                    <chart:LineSeries x:Name="lineSeries" ItemsSource="{Binding LiveChartData}" XBindingPath="Value" ShowMarkers="True" YBindingPath="Size">
                         <chart:LineSeries.MarkerSettings>
                             <chart:ChartMarkerSettings  Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="1"/>
                         </chart:LineSeries.MarkerSettings>

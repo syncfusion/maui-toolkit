@@ -904,8 +904,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 if (DeviceInfo.Platform != DevicePlatform.WinUI)
                 {
 					picker.Opacity = IsHintFloated ? 1 : minOpacity;
-				}
-			}
+                }
+            }
 
             base.OnContentChanged(oldValue, newValue);
 

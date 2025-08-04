@@ -371,7 +371,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			var doughnutSeries = new DoughnutSeries();
 
 			Assert.Equal(0.4d, doughnutSeries.InnerRadius);
-
+			Assert.Equal(0d, doughnutSeries.GapRatio);
+			Assert.Equal(CapStyle.BothFlat, doughnutSeries.CapStyle);
 			Assert.Null(doughnutSeries.CenterView);
 		}
 
@@ -387,6 +388,36 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			};
 
 			Assert.Equal(expected, doughnutSeries.InnerRadius);
+		}
+
+		[Theory]
+		[InlineData(0.0)]
+		[InlineData(0.5)]
+		[InlineData(0.75)]
+		[InlineData(1.0)]
+		public void DoughnutSeries_Spacing_SetAndGet_ReturnsExpectedValue(double expected)
+		{
+			var doughnutSeries = new DoughnutSeries
+			{
+				GapRatio = expected
+			};
+
+			Assert.Equal(expected, doughnutSeries.GapRatio);
+		}
+
+		[Theory]
+		[InlineData(CapStyle.BothFlat)]
+		[InlineData(CapStyle.BothCurve)]
+		[InlineData(CapStyle.EndCurve)]
+		[InlineData(CapStyle.StartCurve)]
+		public void DoughnutSeries_CapStyle_SetAndGet_ReturnsExpectedValue(CapStyle expected)
+		{
+			var doughnutSeries = new DoughnutSeries
+			{
+				CapStyle = expected
+			};
+
+			Assert.Equal(expected, doughnutSeries.CapStyle);
 		}
 
 		[Fact]

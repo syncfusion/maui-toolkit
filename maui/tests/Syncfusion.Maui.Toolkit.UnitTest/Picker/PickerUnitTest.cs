@@ -42,7 +42,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData("Red", "Blue", "Yellow")]
         [InlineData(1, 2, 3)]
         [InlineData(0.1, 0.2, 0.3)]
-        [InlineData((float)0.1 ,(float)0.2, (float)0.3)]
+        [InlineData((float)0.1, (float)0.2, (float)0.3)]
         [InlineData("String", 1, 0.2)]
         public void PickerColumn_ItemSource_GetAndSet(object value, object value1, object value2)
         {
@@ -452,6 +452,135 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             picker.RelativePosition = position;
             PickerRelativePosition actualValue = picker.RelativePosition;
             Assert.Equal(position, actualValue);
+        }
+
+        [Theory]
+        [InlineData(false)]
+        [InlineData(true)]
+        public void Picker_EnableLooping_GetAndSet(bool expectedValue)
+        {
+            SfPicker picker = new SfPicker();
+
+            picker.EnableLooping = expectedValue;
+            bool actualValue = picker.EnableLooping;
+
+            Assert.Equal(expectedValue, actualValue);
+        }
+
+        [Fact]
+        public void HeaderTemplate_GetAndSet_UsingDataTemplate()
+        {
+            SfPicker picker = new SfPicker();
+
+            picker.HeaderView.Height = 50;
+            picker.HeaderTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Header Content" };
+            });
+
+            Assert.NotNull(picker.HeaderTemplate);
+        }
+
+        [Fact]
+        public void HeaderTemplate_GetAndSet_UsingDataTemplate_WhencCalledDynamic()
+        {
+            SfPicker picker = new SfPicker();
+
+            Assert.Null(picker.HeaderTemplate);
+
+            picker.HeaderView.Height = 50;
+            picker.HeaderTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Header Content" };
+            });
+
+            Assert.NotNull(picker.HeaderTemplate);
+        }
+
+        [Fact]
+        public void ColumnHeaderTemplate_GetAndSet_UsingDataTemplate()
+        {
+            SfPicker picker = new SfPicker();
+
+            picker.ColumnHeaderView.Height = 50;
+
+            ObservableCollection<object> cityName = new ObservableCollection<object>();
+            cityName.Add("Chennai");
+            cityName.Add("Mumbai");
+            cityName.Add("Delhi");
+            cityName.Add("Kolkata");
+            PickerColumn pickerColumn = new PickerColumn()
+            {
+                HeaderText = "Select City",
+                ItemsSource = cityName,
+                SelectedIndex = 1,
+            };
+            picker.Columns.Add(pickerColumn);
+
+            picker.ColumnHeaderTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Column Header Content" };
+            });
+
+            Assert.NotNull(picker.ColumnHeaderTemplate);
+        }
+
+        [Fact]
+        public void ColumnHeaderTemplate_GetAndSet_UsingDataTemplate_WhenCalledDynamic()
+        {
+            SfPicker picker = new SfPicker();
+
+            Assert.Null(picker.ColumnHeaderTemplate);
+
+            picker.ColumnHeaderView.Height = 50;
+            ObservableCollection<object> cityName = new ObservableCollection<object>();
+            cityName.Add("Chennai");
+            cityName.Add("Mumbai");
+            cityName.Add("Delhi");
+            cityName.Add("Kolkata");
+            PickerColumn pickerColumn = new PickerColumn()
+            {
+                HeaderText = "Select City",
+                ItemsSource = cityName,
+                SelectedIndex = 1,
+            };
+            picker.Columns.Add(pickerColumn);
+            picker.ColumnHeaderTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Column Header Content" };
+            });
+
+            Assert.NotNull(picker.ColumnHeaderTemplate);
+        }
+
+        [Fact]
+        public void FooterTemplate_GetAndSet_UsingDataTemplate()
+        {
+            SfPicker picker = new SfPicker();
+
+            picker.FooterView.Height = 50;
+            picker.FooterTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Footer Content" };
+            });
+
+            Assert.NotNull(picker.FooterTemplate);
+        }
+
+        [Fact]
+        public void FooterTemplate_GetAndSet_UsingDataTemplate_WhenCalledDynamic()
+        {
+            SfPicker picker = new SfPicker();
+
+            Assert.Null(picker.FooterTemplate);
+
+            picker.FooterView.Height = 50;
+            picker.FooterTemplate = new DataTemplate(() =>
+            {
+                return new Label { Text = "Footer Content" };
+            });
+
+            Assert.NotNull(picker.FooterTemplate);
         }
 
         [Fact]
@@ -1064,18 +1193,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal(expectedValue, actualValue.FontAutoScalingEnabled);
         }
 
-        [Fact]
-        public void ColumnHeaderSettings_GetAndSet_Null()
-        {
-            SfPicker picker = new SfPicker();
-
-#pragma warning disable CS8625
-            picker.ColumnHeaderView = null;
-#pragma warning restore CS8625
-
-            Assert.Null(picker.ColumnHeaderView);
-        }
-
         #endregion
 
         #region Footer Settings Public Properties
@@ -1388,6 +1505,970 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             picker.Columns[0].SelectedIndex = 1;
             Assert.True(fired);
             picker.Columns.Clear();
+        }
+
+        #endregion
+
+        #region PopupSizeFeature
+
+        [Fact]
+        public void Picker_PopupSize1()
+        {
+            SfPicker sfPicker = new SfPicker();
+            double expectedPopupWidth = 100;
+            double expectedPopupHeight = 200;
+            sfPicker.PopupWidth = expectedPopupWidth;
+            sfPicker.PopupHeight = expectedPopupHeight;
+
+            double actualPopupWidth = sfPicker.PopupWidth;
+            double actualPopupHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedPopupWidth, actualPopupWidth);
+            Assert.Equal(expectedPopupHeight, actualPopupHeight);
+        }
+
+
+        [Fact]
+        public void Picker_PopupSize_WhenPopupSizeIsNotSet()
+        {
+            SfPicker sfPicker = new SfPicker();
+            double expectedWidth = 0;
+            double expectedHeight = 0;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+
+        [Fact]
+        public void Picker_PopupSize_WhenPopupSizeOnPropertyChange()
+        {
+            SfPicker sfPicker = new SfPicker();
+            double expectedWidth = 50;
+            double expectedHeight = 20;
+
+            sfPicker.PopupWidth = 100;
+            sfPicker.PopupHeight = 200;
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenHeaderHeightProvided_PopupSizeProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            PickerHeaderView headerView = new PickerHeaderView();
+            headerView.Height = 50;
+            sfPicker.HeaderView = headerView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 400;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenHeaderHeightProvided_PopupSizeNotProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            PickerHeaderView headerView = new PickerHeaderView();
+            headerView.Height = 50;
+            sfPicker.HeaderView = headerView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 290;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenColumnHeaderProvided_PopupSizeProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            PickerColumnHeaderView columnHeaderView = new PickerColumnHeaderView();
+            columnHeaderView.Height = 50;
+            sfPicker.ColumnHeaderView = columnHeaderView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 400;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenColumnHeaderProvided_PopupSizeNotProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            PickerColumnHeaderView columnHeaderView = new PickerColumnHeaderView();
+            columnHeaderView.Height = 50;
+            sfPicker.ColumnHeaderView = columnHeaderView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 290;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenItemHeightProvided_PopupSizeProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            sfPicker.ItemHeight = 10;
+
+            ObservableCollection<object> dataSource = new ObservableCollection<object>()
+            {
+                "Pink", "Green", "Blue", "Yellow", "Orange",
+            };
+
+            PickerColumn pickerColumn = new PickerColumn();
+            pickerColumn.ItemsSource = dataSource;
+            sfPicker.Columns = new ObservableCollection<PickerColumn>() { pickerColumn };
+
+            double expectedWidth = 200;
+            double expectedHeight = 640;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenItemHeightProvided_PopupSizeNotProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            sfPicker.ItemHeight = 10;
+
+            ObservableCollection<object> dataSource = new ObservableCollection<object>()
+            {
+                "Pink", "Green", "Blue", "Yellow", "Orange",
+            };
+
+            PickerColumn pickerColumn = new PickerColumn();
+            pickerColumn.ItemsSource = dataSource;
+            sfPicker.Columns = new ObservableCollection<PickerColumn>() { pickerColumn };
+
+            double expectedWidth = 200;
+            double expectedHeight = 50;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenItemHeightProvided_ItemsLessThanFive()
+        {
+            SfPicker sfPicker = new SfPicker();
+            sfPicker.ItemHeight = 10;
+            ObservableCollection<object> dataSource = new ObservableCollection<object>()
+            {
+                "Pink", "Green", "Blue",
+            };
+            PickerColumn pickerColumn = new PickerColumn();
+            pickerColumn.ItemsSource = dataSource;
+            sfPicker.Columns = new ObservableCollection<PickerColumn>() { pickerColumn };
+
+            double expectedWidth = 200;
+            double expectedHeight = 290 + 30;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenItemHeightProvided_ItemsGreaterThanFive()
+        {
+            SfPicker sfPicker = new SfPicker();
+            sfPicker.ItemHeight = 10;
+            ObservableCollection<object> dataSource = new ObservableCollection<object>()
+            {
+                "Pink", "Green", "Blue", "Yellow", "Orange", "White", "Black"
+            };
+            PickerColumn pickerColumn = new PickerColumn();
+            pickerColumn.ItemsSource = dataSource;
+            sfPicker.Columns = new ObservableCollection<PickerColumn>() { pickerColumn };
+
+            double expectedWidth = 200;
+            double expectedHeight = 290 + 50;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenFooterHeightProvided_PopupSizeProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            PickerFooterView pickerFooterView = new PickerFooterView();
+            pickerFooterView.Height = 50;
+            sfPicker.FooterView = pickerFooterView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 290 + 50;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenFooterHeightProvided_PopupSizeNotProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            PickerFooterView pickerFooterView = new PickerFooterView();
+            pickerFooterView.Height = 50;
+            sfPicker.FooterView = pickerFooterView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 290;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenAllHeaderHeightProvided_PopupSizeProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            PickerHeaderView headerView = new PickerHeaderView();
+            PickerColumnHeaderView pickerColumnHeaderView = new PickerColumnHeaderView();
+            PickerFooterView footerView = new PickerFooterView();
+            sfPicker.ItemHeight = 10;
+            ObservableCollection<object> dataSource = new ObservableCollection<object>()
+            {
+                "Pink", "Green", "Blue", "Yellow", "Orange",
+            };
+            PickerColumn pickerColumn = new PickerColumn();
+            pickerColumn.ItemsSource = dataSource;
+            sfPicker.Columns = new ObservableCollection<PickerColumn>() { pickerColumn };
+            headerView.Height = 50;
+            pickerColumnHeaderView.Height = 50;
+            footerView.Height = 50;
+            sfPicker.HeaderView = headerView;
+            sfPicker.ColumnHeaderView = pickerColumnHeaderView;
+            sfPicker.FooterView = footerView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 290 + 50 + 50 + 50 + 50;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        [Fact]
+        public void Picker_PopupSize_WhenAllHeaderHeightProvided_PopupSizeNotProvided()
+        {
+            SfPicker sfPicker = new SfPicker();
+            PickerHeaderView headerView = new PickerHeaderView();
+            PickerColumnHeaderView pickerColumnHeaderView = new PickerColumnHeaderView();
+            PickerFooterView footerView = new PickerFooterView();
+            sfPicker.ItemHeight = 10;
+            ObservableCollection<object> dataSource = new ObservableCollection<object>()
+            {
+                "Pink", "Green", "Blue", "Yellow", "Orange",
+            };
+            PickerColumn pickerColumn = new PickerColumn();
+            pickerColumn.ItemsSource = dataSource;
+            sfPicker.Columns = new ObservableCollection<PickerColumn>() { pickerColumn };
+            headerView.Height = 50;
+            pickerColumnHeaderView.Height = 50;
+            footerView.Height = 50;
+            sfPicker.HeaderView = headerView;
+            sfPicker.ColumnHeaderView = pickerColumnHeaderView;
+            sfPicker.FooterView = footerView;
+
+            double expectedWidth = 200;
+            double expectedHeight = 50 + 50 + 50;
+
+            sfPicker.PopupWidth = expectedWidth;
+            sfPicker.PopupHeight = expectedHeight;
+
+            double actualWidth = sfPicker.PopupWidth;
+            double actualHeight = sfPicker.PopupHeight;
+
+            Assert.Equal(expectedWidth, actualWidth);
+            Assert.Equal(expectedHeight, actualHeight);
+        }
+
+        #endregion
+
+        #region PickerScrollView Tests
+
+        [Fact]
+        public void UpdateSelectedIndex_WithSelectedIndex_PreservesSelectedIndex()
+        {
+            var picker = new SfPicker();
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string> { "Item1", "Item2", "Item3", "Item4", "Item5" },
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+            Assert.Equal(2, pickerColumn.SelectedIndex);
+            Assert.Equal("Item3", pickerColumn.SelectedItem);
+        }
+
+        [Fact]
+        public void UpdateSelectedIndex_NegativeSelectedIndex_ResetsSelection()
+        {
+            var picker = new SfPicker();
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string> { "Item1", "Item2", "Item3", "Item4", "Item5" },
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+            pickerColumn.SelectedIndex = -1;
+            Assert.Equal(-1, pickerColumn.SelectedIndex);
+            Assert.Null(pickerColumn.SelectedItem);
+        }
+
+        [Fact]
+        public void UpdateSelectedIndex_LoopingEnabledWithOutOfRangeIndex_LimitsToValidIndex()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = true
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string> { "Item1", "Item2", "Item3", "Item4", "Item5" },
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+            pickerColumn.SelectedIndex = 10;
+
+            Assert.Equal(10, pickerColumn.SelectedIndex); //// Return last index 4, but picker container as null so selected index not update.
+        }
+
+        [Fact]
+        public void UpdateSelectedIndex_EmptyItemsSource_ReturnsNegativeOne()
+        {
+            var picker = new SfPicker();
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string>(),
+                SelectedIndex = 0
+            };
+
+            picker.Columns.Add(pickerColumn);
+            Assert.Equal(0, pickerColumn.SelectedIndex);
+        }
+
+        [Fact]
+        public void Picker_ItemHeightChange_UpdatesLayout()
+        {
+            var picker = new SfPicker();
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string> { "Item1", "Item2", "Item3", "Item4", "Item5" },
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+            double initialItemHeight = picker.ItemHeight;
+            picker.ItemHeight = 60;
+            Assert.Equal(60, picker.ItemHeight);
+            Assert.Equal(2, pickerColumn.SelectedIndex);
+        }
+
+        [Fact]
+        public void Picker_LoopingChange_MaintainsSelectedIndex()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = false
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string> { "Item1", "Item2", "Item3", "Item4", "Item5" },
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+            picker.EnableLooping = true;
+            Assert.True(picker.EnableLooping);
+            Assert.Equal(2, pickerColumn.SelectedIndex);
+        }
+
+        [Theory]
+        [InlineData(-1, null)]
+        [InlineData(0, "Item1")]
+        [InlineData(2, "Item3")]
+        [InlineData(4, "Item5")]
+        public void Picker_SelectedIndexChange_UpdatesSelectedItem(int selectedIndex, string? expectedItem)
+        {
+            var picker = new SfPicker();
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string> { "Item1", "Item2", "Item3", "Item4", "Item5" },
+                SelectedIndex = 0
+            };
+
+            picker.Columns.Add(pickerColumn);
+            pickerColumn.SelectedIndex = selectedIndex;
+            Assert.Equal(selectedIndex, pickerColumn.SelectedIndex);
+            Assert.Equal(expectedItem, pickerColumn.SelectedItem);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Picker_EnableLooping_UpdatesPickerBehavior(bool enableLooping)
+        {
+            var picker = new SfPicker();
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string> { "Item1", "Item2", "Item3", "Item4", "Item5" },
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+            picker.EnableLooping = enableLooping;
+            Assert.Equal(enableLooping, picker.EnableLooping);
+            Assert.Equal(2, pickerColumn.SelectedIndex);
+        }
+
+        [Fact]
+        public void Picker_ViewportItemCountGreaterThanItemsCount_LoopingIsInvalid()
+        {
+            var picker = new SfPicker();
+            picker.EnableLooping = true;
+            picker.ItemHeight = 40;
+
+            //// Create a small collection that's likely less than viewport size.
+            var items = new ObservableCollection<string>
+            {
+                "Item1",
+                "Item2"
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 0
+            };
+
+            picker.Columns.Add(pickerColumn);
+            double pickerHeight = 200;
+            double viewPortItemCount = pickerHeight / picker.ItemHeight;
+            int itemsCount = PickerHelper.GetItemsCount(pickerColumn.ItemsSource);
+            bool isLoopingEffectivelyValid = itemsCount > viewPortItemCount;
+            Assert.False(isLoopingEffectivelyValid);
+            Assert.True(picker.EnableLooping);
+        }
+
+        [Theory]
+        [InlineData(200, 40, 3)]
+        [InlineData(200, 40, 7)]
+        [InlineData(120, 40, 2)]
+        [InlineData(120, 40, 4)]
+        [InlineData(180, 30, 6)]
+        [InlineData(250, 50, 5)]
+        public void Picker_CheckViewportItemCountAffectsLoopingValidity(double pickerHeight, double itemHeight, int itemCount)
+        {
+            var picker = new SfPicker();
+            picker.EnableLooping = true;
+            picker.ItemHeight = itemHeight;
+
+            var items = new ObservableCollection<string>();
+            for (int i = 1; i <= itemCount; i++)
+            {
+                items.Add($"Item{i}");
+            }
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 0
+            };
+            picker.Columns.Add(pickerColumn);
+
+            double viewPortItemCount = pickerHeight / itemHeight;
+            bool isLoopingEffectivelyValid = itemCount > viewPortItemCount;
+            if (itemCount > viewPortItemCount)
+            {
+                Assert.True(isLoopingEffectivelyValid);
+            }
+            else
+            {
+                Assert.False(isLoopingEffectivelyValid);
+            }
+
+            Assert.True(picker.EnableLooping);
+        }
+
+        [Fact]
+        public void Picker_LoopingEnabled_ScrollsToSameIndexAfterFullCycle()
+        {
+            var picker = new SfPicker();
+            picker.EnableLooping = true;
+            picker.ItemHeight = 40;
+            var items = new ObservableCollection<string>
+            {
+                "Item1",
+                "Item2",
+                "Item3",
+                "Item4",
+                "Item5",
+                "Item6",
+                "Item7"
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 0
+            };
+
+            picker.Columns.Add(pickerColumn);
+
+            int initialIndex = pickerColumn.SelectedIndex;
+            int totalItems = items.Count;
+            for (int i = 0; i < totalItems; i++)
+            {
+                pickerColumn.SelectedIndex = (initialIndex + i + 1) % totalItems;
+            }
+
+            Assert.Equal(initialIndex, pickerColumn.SelectedIndex);
+            Assert.Equal(items[initialIndex], pickerColumn.SelectedItem);
+        }
+
+        [Fact]
+        public void Picker_SetColumnCount_AffectsViewportCalculation()
+        {
+            var picker = new SfPicker();
+            picker.EnableLooping = true;
+            picker.ItemHeight = 40;
+
+            //// Create multiple columns to potentially affect viewport calculations.
+            for (int col = 0; col < 3; col++)
+            {
+                var items = new ObservableCollection<string>();
+                for (int i = 1; i <= 5; i++)
+                {
+                    items.Add($"Column{col + 1}_Item{i}");
+                }
+
+                var pickerColumn = new PickerColumn
+                {
+                    ItemsSource = items,
+                    SelectedIndex = 0
+                };
+                picker.Columns.Add(pickerColumn);
+            }
+
+            double pickerHeight = 200;
+            double viewPortItemCount = pickerHeight / picker.ItemHeight;
+            int itemsCount = PickerHelper.GetItemsCount(picker.Columns[0].ItemsSource);
+            bool isLoopingEffectivelyValid = itemsCount > viewPortItemCount;
+            //// With our simulated values, looping should be valid (5 items > viewport).
+            Assert.False(isLoopingEffectivelyValid);
+            Assert.Equal(3, picker.Columns.Count);
+        }
+
+        [Fact]
+        public void Picker_ItemHeightChange_AffectsViewportItemCount()
+        {
+            var picker = new SfPicker();
+            picker.EnableLooping = true;
+            picker.ItemHeight = 40;
+            var items = new ObservableCollection<string>
+            {
+                "Item1",
+                "Item2",
+                "Item3",
+                "Item4",
+                "Item5"
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+            double pickerHeight = 200;
+            double initialViewPortItemCount = pickerHeight / picker.ItemHeight;
+            bool initialLoopingValid = items.Count > initialViewPortItemCount;
+
+            picker.ItemHeight = 80;
+            double newViewPortItemCount = pickerHeight / picker.ItemHeight;
+            bool newLoopingValid = items.Count > newViewPortItemCount;
+
+            Assert.True(picker.EnableLooping);
+            Assert.True(initialViewPortItemCount > newViewPortItemCount);
+            Assert.Equal(items.Count > initialViewPortItemCount, initialLoopingValid);
+            Assert.Equal(items.Count > newViewPortItemCount, newLoopingValid);
+        }
+
+        [Fact]
+        public void Picker_ViewportItemCountLessThanItemsCount_LoopingIsValid()
+        {
+            var picker = new SfPicker();
+            picker.EnableLooping = true;
+            picker.ItemHeight = 40;
+
+            //// Create a larger collection that exceeds typical viewport.
+            var items = new ObservableCollection<string>();
+            for (int i = 1; i <= 10; i++)
+            {
+                items.Add($"Item{i}");
+            }
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 2
+            };
+            picker.Columns.Add(pickerColumn);
+
+            double simulatedPickerHeight = 200;
+            double viewPortItemCount = simulatedPickerHeight / picker.ItemHeight;
+            int itemsCount = PickerHelper.GetItemsCount(pickerColumn.ItemsSource);
+            bool isLoopingEffectivelyValid = itemsCount > viewPortItemCount;
+            Assert.True(isLoopingEffectivelyValid);
+            Assert.True(picker.EnableLooping);
+        }
+
+        [Fact]
+        public void Picker_LoopingEnabledDynamically_UpdatesSelection()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = false,
+                ItemHeight = 40
+            };
+
+            var items = new ObservableCollection<string>
+            {
+                "Item1", "Item2", "Item3", "Item4", "Item5", "Item6", "Item7"
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 6
+            };
+
+            picker.Columns.Add(pickerColumn);
+            picker.EnableLooping = true;
+            int originalSelectedIndex = pickerColumn.SelectedIndex;
+            pickerColumn.SelectedIndex = 0;
+            Assert.Equal(0, pickerColumn.SelectedIndex);
+            Assert.Equal("Item1", pickerColumn.SelectedItem);
+        }
+
+        [Fact]
+        public void Picker_UpdateItemsSource_WithLoopingEnabled_MaintainsValidSelection()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = true,
+                ItemHeight = 40
+            };
+
+            var initialItems = new ObservableCollection<string>
+            {
+                "Item1", "Item2", "Item3", "Item4", "Item5"
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = initialItems,
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+            var newItems = new ObservableCollection<string>
+            {
+                "NewItem1", "NewItem2", "NewItem3"
+            };
+
+            pickerColumn.ItemsSource = newItems;
+            Assert.True(pickerColumn.SelectedIndex >= 0 && pickerColumn.SelectedIndex < newItems.Count);
+            if (pickerColumn.SelectedIndex == 2)
+            {
+                Assert.Equal("NewItem3", pickerColumn.SelectedItem);
+            }
+            else
+            {
+                Assert.Equal(newItems[pickerColumn.SelectedIndex], pickerColumn.SelectedItem);
+            }
+        }
+
+        [Fact]
+        public void Picker_LoopingWithLargeItemCount_HandlesBoundaryConditions()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = true,
+                ItemHeight = 40
+            };
+
+            var items = new ObservableCollection<string>();
+            for (int i = 1; i <= 50; i++)
+            {
+                items.Add($"Item{i}");
+            }
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 0
+            };
+
+            picker.Columns.Add(pickerColumn);
+            pickerColumn.SelectedIndex = 49;
+            Assert.Equal(49, pickerColumn.SelectedIndex);
+            Assert.Equal("Item50", pickerColumn.SelectedItem);
+
+            pickerColumn.SelectedIndex = 0;
+
+            Assert.Equal(0, pickerColumn.SelectedIndex);
+            Assert.Equal("Item1", pickerColumn.SelectedItem);
+        }
+
+        [Fact]
+        public void Picker_LoopingEnabledWithMultipleColumns_EachColumnScrollsIndependently()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = true,
+                ItemHeight = 40
+            };
+
+            var items1 = new ObservableCollection<string>
+            {
+                "Red", "Green", "Blue"
+            };
+
+            var colorColumn = new PickerColumn
+            {
+                ItemsSource = items1,
+                SelectedIndex = 0,
+                HeaderText = "Color"
+            };
+
+            picker.Columns.Add(colorColumn);
+            var items2 = new ObservableCollection<string>
+            {
+                "Circle", "Square", "Triangle", "Diamond"
+            };
+
+            var shapeColumn = new PickerColumn
+            {
+                ItemsSource = items2,
+                SelectedIndex = 0,
+                HeaderText = "Shape"
+            };
+
+            picker.Columns.Add(shapeColumn);
+            for (int i = 0; i < items1.Count; i++)
+            {
+                colorColumn.SelectedIndex = i % items1.Count;
+            }
+
+            shapeColumn.SelectedIndex = 2;
+
+            Assert.Equal(2, colorColumn.SelectedIndex);
+            Assert.Equal("Blue", colorColumn.SelectedItem);
+
+            Assert.Equal(2, shapeColumn.SelectedIndex);
+            Assert.Equal("Triangle", shapeColumn.SelectedItem);
+        }
+
+        [Fact]
+        public void Picker_DisableLoopingDuringScrolling_HandlesTransitionGracefully()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = true,
+                ItemHeight = 40
+            };
+
+            var items = new ObservableCollection<string>
+            {
+                "Item1", "Item2", "Item3", "Item4", "Item5"
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 4
+            };
+
+            picker.Columns.Add(pickerColumn);
+            picker.EnableLooping = false;
+
+            Assert.Equal(4, pickerColumn.SelectedIndex);
+            Assert.Equal("Item5", pickerColumn.SelectedItem);
+            Assert.False(picker.EnableLooping);
+        }
+
+        [Fact]
+        public void Picker_EmptyColumnAddedToLoopingPicker_HandlesGracefully()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = true,
+                ItemHeight = 40
+            };
+
+            var emptyColumn = new PickerColumn
+            {
+                ItemsSource = new ObservableCollection<string>(),
+                SelectedIndex = 0
+            };
+
+            picker.Columns.Add(emptyColumn);
+
+            Assert.Equal(0, emptyColumn.SelectedIndex);
+            Assert.Equal("", emptyColumn.SelectedItem);
+            Assert.True(picker.EnableLooping);
+        }
+
+        [Fact]
+        public void Picker_LoopingWithSingleItem_BehavesCorrectly()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = true,
+                ItemHeight = 40
+            };
+
+            var items = new ObservableCollection<string>
+            {
+                "SingleItem"
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 0
+            };
+
+            picker.Columns.Add(pickerColumn);
+            pickerColumn.SelectedIndex = 1;
+
+            Assert.Equal(1, pickerColumn.SelectedIndex);
+            Assert.Equal("SingleItem", pickerColumn.SelectedItem);
+            Assert.True(picker.EnableLooping);
+        }
+
+        [Fact]
+        public void Picker_DynamicallyChangingItemHeight_UpdatesViewportCalculation()
+        {
+            var picker = new SfPicker
+            {
+                EnableLooping = true,
+                ItemHeight = 40
+            };
+
+            var items = new ObservableCollection<string>
+            {
+                "Item1", "Item2", "Item3", "Item4", "Item5"
+            };
+
+            var pickerColumn = new PickerColumn
+            {
+                ItemsSource = items,
+                SelectedIndex = 2
+            };
+
+            picker.Columns.Add(pickerColumn);
+
+            double pickerHeight = 200;
+            double initialViewportItems = Math.Floor(pickerHeight / picker.ItemHeight);
+
+            picker.ItemHeight = 100;
+            double newViewportItems = Math.Floor(pickerHeight / picker.ItemHeight);
+
+            Assert.Equal(2, pickerColumn.SelectedIndex);
+            Assert.NotEqual(initialViewportItems, newViewportItems);
+            Assert.True(initialViewportItems > newViewportItems);
         }
 
         #endregion

@@ -628,6 +628,7 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 			}
 			else
 			{
+
 				width = Math.Abs((float)(width - _textAreaPadding - Padding.Left - Padding.Right - _textAreaPadding - StrokeThickness));
 			}
 			return width;
@@ -870,9 +871,9 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 #if ANDROID || IOS
             else if (e.Action == PointerActions.Cancelled)
             {
-				_isPressed = false;
-				RemoveEffects();
-				ChangeVisualState();
+                _isPressed = false;
+                RemoveEffects();
+                ChangeVisualState();
             }
 #endif
 			else if (e.Action == PointerActions.Exited)

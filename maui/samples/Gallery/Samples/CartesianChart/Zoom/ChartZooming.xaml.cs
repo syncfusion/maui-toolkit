@@ -33,5 +33,15 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 				zoomingBehavior.ZoomMode = ZoomMode.XY;
 			}
 		}
+
+		private void checkbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		{
+			var checkBox = (CheckBox)sender;
+			if (ViewModel != null && (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.Android))
+			{
+				zoomingBehavior.EnableDirectionalZooming = checkBox.IsChecked;
+			}
+		}
+
 	}
 }

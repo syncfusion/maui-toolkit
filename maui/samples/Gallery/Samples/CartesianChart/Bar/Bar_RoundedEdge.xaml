@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.BarChart_RoundedEdge"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:BarSeriesViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,7 +13,7 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     
-    <localCore:SampleView.Content>       
+    <localCore:SampleView.Content>
                 <chart:SfCartesianChart x:Name="Chart2" IsTransposed="True" HorizontalOptions="Fill" VerticalOptions="Fill">
                     <chart:SfCartesianChart.Title>
                         <Label Text="Transportation Method (by Miles)" Margin="0,0,0,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
