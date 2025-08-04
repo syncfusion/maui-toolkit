@@ -879,13 +879,13 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 UpdateContentMargin(view);
             }
-			double minOpacity = DeviceInfo.Platform.ToString() switch
-			{
-				nameof(DevicePlatform.MacCatalyst) => 0.011,
-				nameof(DevicePlatform.iOS) => 0.00001,
-				nameof(DevicePlatform.Android) => 0.00001,
-				_ => 0
-			};
+
+			double minOpacity = 0;
+#if ANDROID || IOS
+			minOpacity  = 0.00001;
+#elif MACCATALYST
+			minOpacity  = 0.011;
+#endif
 
 			//For placeholder overlap issue here handled the opacity value for controls.
 			if (newValue is InputView entryEditorContent)

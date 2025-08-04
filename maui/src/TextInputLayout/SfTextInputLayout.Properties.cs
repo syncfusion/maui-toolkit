@@ -2197,15 +2197,14 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         {
             if (bindable is SfTextInputLayout inputLayout && newValue is bool value)
             {
-                double minOpacity = DeviceInfo.Platform.ToString() switch
-                {
-                    nameof(DevicePlatform.MacCatalyst) => 0.011,
-                    nameof(DevicePlatform.iOS) => 0.00001,
-                    nameof(DevicePlatform.Android) => 0.00001,
-                    _ => 0 
-                };
-
-                double targetOpacity = value ? 1 : minOpacity;
+				double minOpacity = 0;
+#if ANDROID || IOS
+				minOpacity  = 0.00001;
+#elif MACCATALYST
+				minOpacity  = 0.011;
+#endif
+				
+				double targetOpacity = value ? 1 : minOpacity;
 
                 if (inputLayout.Content is InputView || inputLayout.Content is Microsoft.Maui.Controls.Picker)
                 {
