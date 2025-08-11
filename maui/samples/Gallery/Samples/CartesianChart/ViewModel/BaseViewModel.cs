@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows.Input;
+using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
@@ -85,8 +87,92 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 		}
 	}
 
-	public partial class ChartColorModel : ObservableCollection<Brush>
+	public class TooltipValuesConverter : IValueConverter
 	{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			if (value is ChartDataModel model)
+			{
+				switch (parameter?.ToString())
+				{
+					case "Name":
+						return model.Name;
+					case "Value":
+						return model.Value;
+					case "High":
+						return model.High;
+					case "Low":
+						return model.Low;
+					case "Size":
+						return model.Size;
+					case "Label":
+						return model.Label;
+					case "Data":
+						return model.Data;
+					case "Date":
+						return model.Date;
+					case "Year":
+						return model.Year;
+					case "Organic":
+						return model.Organic;
+					case "FairTrade":
+						return model.FairTrade;
+					case "VegAlternatives":
+						return model.VegAlternatives;
+					case "Others":
+						return model.Others;
+					case "Value1":
+						return model.Value1;
+					case "GrossLastYearDelta":
+						return model.GrossLastYearDelta;
+					case "Peru":
+						return model.Peru;
+					case "Ethiopia":
+						return model.Ethiopia;
+					case "Mali":
+						return model.Mali;
+					case "Canada":
+						return model.Canada;
+					case "Energy":
+						return model.Energy;
+					case "Department":
+						return model.Department;
+					case "TopMovie":
+						return model.TopMovie;
+					case "TotalGrossInBillion":
+						return model.TotalGrossInBillion;
+
+				}
+			}
+			else if (value is LineSeries series)
+			{
+				switch (parameter?.ToString())
+				{
+					case "Label":
+						return series.Label;
+					case "MarkerSettings.Stroke":
+						return series.MarkerSettings.Stroke;
+
+				}
+				var line = value as LineSeriesExt;
+				switch (parameter?.ToString())
+				{
+					case "PathData":
+						return line?.PathData;				
+				}
+			}
+
+			return value;
+		}
+
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			return value;
+		}
+	}
+	
+	public class ChartColorModel : ObservableCollection<Brush>
+    {
 
 	}
 }

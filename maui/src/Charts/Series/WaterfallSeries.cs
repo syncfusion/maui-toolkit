@@ -653,43 +653,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				double.IsNaN(xAxis.ActualCrossingValue) ? 0 : xAxis.ActualCrossingValue;
 			}
 
-			if (IsGrouped && (IsIndexed || xValues == null))
+			if (xValues != null)
 			{
 				for (var i = 0; i < PointsCount; i++)
 				{
-					if (xValues != null)
-					{
-						OnCalculateSegmentValues(out x1, out x2, out y1, out y2, i, _bottomValue, xValues[i]);
+					var x = xValues[i];
 
-						if (i < _segments.Count && _segments[i] is WaterfallSegment segment)
-						{
-							segment.SetData([x1, x2, y1, y2, i, YValues[i]]);
-						}
-						else
-						{
-							CreateSegment(seriesView, [x1, x2, y1, y2, i, YValues[i]], i);
-						}
+					OnCalculateSegmentValues(out x1, out x2, out y1, out y2, i, _bottomValue, xValues[i]);
+
+					if (i < _segments.Count && _segments[i] is WaterfallSegment segment)
+					{
+						segment.SetData([x1, x2, y1, y2, x, YValues[i]]);
 					}
-				}
-			}
-			else
-			{
-				if (xValues != null)
-				{
-					for (var i = 0; i < PointsCount; i++)
+					else
 					{
-						var x = xValues[i];
-
-						OnCalculateSegmentValues(out x1, out x2, out y1, out y2, i, _bottomValue, xValues[i]);
-
-						if (i < _segments.Count && _segments[i] is WaterfallSegment segment)
-						{
-							segment.SetData([x1, x2, y1, y2, x, YValues[i]]);
-						}
-						else
-						{
-							CreateSegment(seriesView, [x1, x2, y1, y2, x, YValues[i]], i);
-						}
+						CreateSegment(seriesView, [x1, x2, y1, y2, x, YValues[i]], i);
 					}
 				}
 			}

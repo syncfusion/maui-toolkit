@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.SeriesSelection"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:SeriesSelectionViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,13 +13,13 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <Grid HorizontalOptions="Fill" VerticalOptions="FillAndExpand" RowDefinitions="*,Auto">
+        <Grid HorizontalOptions="Fill" VerticalOptions="Fill" RowDefinitions="*,Auto">
 
             <Grid.BindingContext>
                 <local:SeriesSelectionViewModel x:Name="dataViewModel"/>
             </Grid.BindingContext>
 
-            <chart:SfCartesianChart Margin="0,0,0,5" x:Name="chart" PaletteBrushes="{Binding Brushes}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+            <chart:SfCartesianChart Margin="0,0,0,5" x:Name="chart" PaletteBrushes="{Binding Brushes}" HorizontalOptions="Fill" VerticalOptions="Fill">
 
                 <chart:SfCartesianChart.Title>
                     <VerticalStackLayout  Margin="0,0,0,20" >
@@ -82,7 +83,7 @@
                 </HorizontalStackLayout>
             </AbsoluteLayout>
 
-                <HorizontalStackLayout x:Name="hyperLinkLayout" HorizontalOptions="Start" Grid.Row="1">
+      <HorizontalStackLayout x:Name="hyperLinkLayout" HorizontalOptions="Start" Grid.Row="1">
                     <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                     <Label TextColor="#3E8EED" FontAttributes="Italic" FontSize="12" Text=" Wikipedia" VerticalOptions="Center">
                         <Label.GestureRecognizers>

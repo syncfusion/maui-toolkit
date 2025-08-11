@@ -3,20 +3,26 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.StackedBar"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:StackedColumnViewModel">
 
     <localCore:SampleView.Content>
-        <StackLayout x:Name="layout">
-            <StackLayout.Resources>
+        <Grid x:Name="layout">
+            <Grid.Resources>
                 <Label x:Key="title" x:Name="titleName" Text="Sales of Cosmetics Products by Region"
                            FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
                           LineBreakMode="WordWrap" Padding="0,0,0,5"/>
-            </StackLayout.Resources>
-            <StackLayout.BindingContext>
+            </Grid.Resources>
+            <Grid.BindingContext>
                 <local:StackedColumnViewModel></local:StackedColumnViewModel>
-            </StackLayout.BindingContext>
+            </Grid.BindingContext>
+          
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
 
-            <chart:SfCartesianChart x:Name="chart" PaletteBrushes="{Binding CustomColor4}" Title="{StaticResource title}" IsTransposed="True" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+      <chart:SfCartesianChart Grid.Row="0" x:Name="chart" PaletteBrushes="{Binding CustomColor4}" Title="{StaticResource title}" IsTransposed="True" HorizontalOptions="Fill" VerticalOptions="Fill">
                 <chart:SfCartesianChart.XAxes>
                     <chart:CategoryAxis x:Name="xAxis" LabelPlacement="BetweenTicks" IsVisible="true" ShowMajorGridLines="false">
                     </chart:CategoryAxis>
@@ -67,7 +73,7 @@
                                             LegendIcon="SeriesType"/>
             </chart:SfCartesianChart>
 
-            <HorizontalStackLayout x:Name="hyperLinkLayout" IsVisible="false" Margin="5,5,0,0">
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" IsVisible="false" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text="statista.com" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -75,6 +81,6 @@
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 </localCore:SampleView>

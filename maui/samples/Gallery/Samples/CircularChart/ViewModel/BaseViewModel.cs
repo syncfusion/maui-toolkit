@@ -1,8 +1,9 @@
-﻿using Syncfusion.Maui.Toolkit.Charts;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Input;
+using Syncfusion.Maui.Toolkit;
+using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 {
@@ -114,7 +115,6 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 		}
 	}
 
-
 	public class CornerRadiusConverter : IValueConverter
 	{
 		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -136,5 +136,50 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 	public partial class ChartColorModel : ObservableCollection<Brush>
 	{
 
+	}
+
+	public class TooltipValueConverter : IValueConverter
+	{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			if (value is ChartDataModel model)
+			{
+				switch (parameter?.ToString())
+				{
+					case "Name":
+						return model.Name;
+					case "Value":
+						return model.Value;
+					case "Percentage":
+						return model.Percentage;
+				}
+			}
+
+			return value;
+		}
+
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			return value;
+		}
+	}
+
+	public class ImageValueConverter : IValueConverter
+	{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			if (value is LegendItem legendItem)
+			{
+				var image = (legendItem.Item as ChartDataModel)?.Image;
+				return image;
+			}
+
+			return value;
+		}
+
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			return value;
+		}
 	}
 }

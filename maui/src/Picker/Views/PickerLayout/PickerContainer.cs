@@ -34,6 +34,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             DrawingOrder = DrawingOrder.BelowContent;
             _pickerInfo = pickerInfo;
+#if IOS
+            IgnoreSafeArea = true;
+#endif
         }
 
         #endregion
@@ -368,6 +371,17 @@ namespace Syncfusion.Maui.Toolkit.Picker
             UpdatePickerSelectionViewDraw();
         }
 
+        /// <summary>
+        /// Method to update the enable looping.
+        /// </summary>
+        internal void UpdateEnableLooping()
+        {
+            foreach (PickerLayout pickerLayout in this.Children)
+            {
+                pickerLayout.UpdateEnableLooping();
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -460,7 +474,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double columnHeaderHeight = _pickerInfo.ColumnHeaderView.Height;
             //// The view port item count is calculated based on the view port height.
             //// Assume the view port height is 100 and item height is 50, then the view port item count is 2.
-            double viewPortItemCount = Math.Round((dirtyRectangle.Height - columnHeaderHeight) / itemHeight);
+            //// Update the viewPort ItemCount based on whether the column header template is applied.
+            //// If the template is not null, the column header layout is added as a child of the StackLayout, so adjust the viewPortItemCount position accordingly.
+            double viewPortItemCount = _pickerInfo.ColumnHeaderTemplate != null ? Math.Round(dirtyRectangle.Height / itemHeight) : Math.Round((dirtyRectangle.Height - columnHeaderHeight) / itemHeight);
             //// The selectionIndex count is calculated based on the view port item count.
             //// Assume the view port item count is 2, then the top count is 0.
             int selectionIndex = (int)Math.Ceiling(viewPortItemCount / 2) - 1;
@@ -473,7 +489,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             //// The top padding is calculated based on the top count and item height.
             //// Assume the selectionIndex is 0 and item height is 50, then the top padding is 0.
-            double yPosition = (selectionIndex * itemHeight) + columnHeaderHeight;
+            //// Update the Y position based on whether the column header template is applied.
+            //// If the template is not null, the column header layout is added as a child of the StackLayout, so adjust the Y position accordingly.
+            double yPosition = _pickerInfo.ColumnHeaderTemplate != null ? (selectionIndex * itemHeight) : (selectionIndex * itemHeight) + columnHeaderHeight;
             float xPosition = dirtyRectangle.Left;
             float width = dirtyRectangle.Width;
             float totalColumnWidth = (float)GetDefaultColumnWidth(width).X;

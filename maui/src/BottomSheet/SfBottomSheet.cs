@@ -1,4 +1,4 @@
-﻿using Microsoft.Maui.Controls.Shapes;
+using Microsoft.Maui.Controls.Shapes;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
 using Syncfusion.Maui.Toolkit.Helper;
@@ -74,11 +74,16 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
     	/// </summary>
     	bool _isPointerPressed;
 
-    	// Touch tracking
-    	/// <summary>
-    	/// The initial Y-coordinate of a touch event on the bottom sheet.
-    	/// </summary>
-    	double _initialTouchY;
+		/// <summary>
+		/// Indicates whether the overlay grid is currently added to the view hierarchy.
+		/// </summary>
+		bool _isOverlayAdded;
+
+		// Touch tracking
+		/// <summary>
+		/// The initial Y-coordinate of a touch event on the bottom sheet.
+		/// </summary>
+		double _initialTouchY;
 
     	/// <summary>
     	/// The starting Y-coordinate of a swipe gesture on the bottom sheet.
@@ -1242,7 +1247,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// </exception>
 		public void Show()
 		{
-			if (_bottomSheet is null || _overlayGrid is null)
+			if (_bottomSheet is null)
 			{
 				return;
 			}
@@ -1267,7 +1272,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// </exception>
 		public void Close()
 		{
-		    if(_bottomSheet is null || _overlayGrid is null)
+		    if(_bottomSheet is null)
 			{
 				return;
 			}
@@ -1275,7 +1280,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    AnimateBottomSheet(Height, onFinish: () =>
 		    {
 		        _bottomSheet.IsVisible = false;
-		        _overlayGrid.IsVisible = false;
+				RemoveOverlayFromView();
 			});
 
 			if (_isSheetOpen)
@@ -1356,9 +1361,8 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    InitializeBottomSheetBorder();
 		    InitializeContentBorder();
 
-		    if (_bottomSheet is not null && _overlayGrid is not null)
+		    if (_bottomSheet is not null)
 		    {
-				Children.Add(_overlayGrid);
 				Children.Add(_bottomSheet);
 				_bottomSheet.IsVisible = false;
 			}
@@ -1370,6 +1374,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		void UpdateContentView()
 		{
 			Children.Clear();
+			_isOverlayAdded = false; // Reset overlay state
 			UpdateAllChild();
 		}
 
@@ -1379,7 +1384,6 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		void UpdateAllChild()
 		{
 			AddChild(Content);
-			AddChild(_overlayGrid);
 			AddChild(_bottomSheet);
 		}
 
@@ -1404,7 +1408,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    {
 		        BackgroundColor = OverlayBackgroundColor,
 		        Opacity = DefaultOverlayOpacity,
-		        IsVisible = false
+		        IsVisible = true
 		    };
 
 		    var tapGestureRecognizer = new TapGestureRecognizer();
@@ -1483,6 +1487,36 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        Content = _bottomSheetContent ?? throw new InvalidOperationException("Bottom sheet content is not initialized."),
 				Padding = ContentPadding
 		    };
+		}
+
+		/// <summary>
+		/// Adds the overlay grid to the view hierarchy if it's not already added and modal is enabled.
+		/// </summary>
+		void AddOverlayToView()
+		{
+			if (_overlayGrid is not null && IsModal && !_isOverlayAdded)
+			{
+				if (!Children.Contains(_overlayGrid))
+				{
+					Children.Insert(Children.Count - 1, _overlayGrid); // Insert before bottom sheet
+				}
+				_isOverlayAdded = true;
+			}
+		}
+
+		/// <summary>
+		/// Removes the overlay grid from the view hierarchy.
+		/// </summary>
+		void RemoveOverlayFromView()
+		{
+			if (_overlayGrid is not null && _isOverlayAdded)
+			{
+				if (Children.Contains(_overlayGrid))
+				{
+					Children.Remove(_overlayGrid);
+				}
+				_isOverlayAdded = false;
+			}
 		}
 
 		/// <summary>
@@ -2040,7 +2074,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// </summary>
 		void SetupBottomSheetForShow()
 		{
-		    if (_isSheetOpen || _bottomSheet is null || _overlayGrid is null)
+		    if (_isSheetOpen || _bottomSheet is null)
 		    {
 		        return;
 		    }
@@ -2048,8 +2082,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    // Position the bottom sheet just below the visible area
 		    _bottomSheet.TranslationY = Height;
 		    _bottomSheet.IsVisible = true;
-		    _overlayGrid.IsVisible = IsModal;
-		    _overlayGrid.Opacity = 0;
+
+			// Add overlay to view if modal
+			if (IsModal)
+			{
+				AddOverlayToView();
+			}
 		}
 
 
@@ -2059,7 +2097,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <returns>The target Y position for the bottom sheet.</returns>
 		double GetTargetPosition()
 		{
-		    if (State is BottomSheetState.FullExpanded || !_isHalfExpanded)
+		    if ((State is BottomSheetState.FullExpanded || !_isHalfExpanded) && State is not BottomSheetState.Collapsed && AllowedState is not BottomSheetAllowedState.HalfExpanded)
 		    {
 		        return GetFullExpandedPosition();
 		    }
@@ -2078,7 +2116,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <returns>The calculated position for the fully expanded state. Currently, it always returns 0.</returns>
 		double GetFullExpandedPosition()
 		{
-		    if (State is BottomSheetState.Hidden)
+		    if (State is BottomSheetState.Hidden || State is not BottomSheetState.FullExpanded)
 		    {
 		        State = BottomSheetState.FullExpanded;
 		    }
@@ -2133,18 +2171,13 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				_bottomSheet.AbortAnimation("bottomSheetAnimation");
 			}
 
-			if (_overlayGrid.AnimationIsRunning("overlayGridAnimation"))
-			{
-				_overlayGrid.AbortAnimation("overlayGridAnimation");
-			}
-
 			int animationDuration = this.GetClampedAnimationDuration();
-			const int topPadding = 2;
+		    const int topPadding = 2;
 			_isSheetOpen = true;
 			if (_bottomSheet is not null)
 			{
 				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition + topPadding);
-				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) => 
+				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) =>
 				{
 					UpdateBottomSheetHeight();
 					onFinish?.Invoke();
@@ -2159,46 +2192,45 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// </summary>
 		void AnimateOverlay(int animationDuration)
 		{
-			if (_overlayGrid is not null)
+			if (_overlayGrid is null || !IsModal)
 			{
-				double startValue = 0;
-				double endValue = 0;
-				_overlayGrid.IsVisible = IsModal;
-
-				if (IsModal)
-				{
-					if (State is BottomSheetState.Collapsed || State is BottomSheetState.Hidden)
-					{
-						startValue = _overlayGrid.Opacity;
-						endValue = 0;
-					}
-					else
-					{
-						startValue = _overlayGrid.Opacity;
-						endValue = DefaultOverlayOpacity;
-					}
-
-					var overlayGridAnimation = new Animation(d =>
-					{
-						// Ensure the opacity is only updated with valid numeric values to avoid rendering issues.
-						if (!double.IsNaN(d))
-						{
-							_overlayGrid.Opacity = d;
-						}
-					}
-					, startValue, endValue);
-					_overlayGrid.Animate("overlayGridAnimation", overlayGridAnimation,
-						length: (uint)animationDuration,
-						easing: Easing.Linear,
-						finished: (e, v) =>
-						{
-							if (State is BottomSheetState.Collapsed || State is BottomSheetState.Hidden)
-							{
-								_overlayGrid.IsVisible = false;
-							}
-						});
-				}
+				return;
 			}
+
+			// Ensure overlay is added to view when needed
+			bool shouldShowOverlay = State is not (BottomSheetState.Collapsed or BottomSheetState.Hidden);
+
+			if (shouldShowOverlay)
+			{
+				AddOverlayToView();
+			}
+
+			if (_overlayGrid.AnimationIsRunning("overlayGridAnimation"))
+			{
+				_overlayGrid.AbortAnimation("overlayGridAnimation");
+			}
+
+			double startValue = _overlayGrid.Opacity;
+			double endValue = shouldShowOverlay ? DefaultOverlayOpacity : 0;
+
+			var overlayGridAnimation = new Animation(d =>
+			{
+				if (!double.IsNaN(d))
+				{
+					_overlayGrid.Opacity = d;
+				}
+			}, startValue, endValue);
+
+			_overlayGrid.Animate("overlayGridAnimation", overlayGridAnimation,
+				length: (uint)animationDuration,
+				easing: Easing.Linear,
+				finished: (v, c) =>
+				{
+					if (!shouldShowOverlay)
+					{
+						RemoveOverlayFromView();
+					}
+				});
 		}
 
 		/// <summary>
@@ -2342,7 +2374,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <param name="touchY">The current Y coordinate of the touch point.</param>
 		void UpdateBottomSheetPosition(double newTranslationY, double touchY)
 		{
-		    if (_bottomSheet is null || _overlayGrid is null)
+		    if (_bottomSheet is null)
 		    {
 		        return;
 		    }
@@ -2350,8 +2382,21 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    _bottomSheet.TranslationY = newTranslationY;
 		    _initialTouchY = touchY;
 		    _bottomSheet.HeightRequest = Height - newTranslationY;
-			_overlayGrid.IsVisible = IsModal && (_bottomSheet.HeightRequest > CollapsedHeight);
-			_overlayGrid.Opacity = CalculateOverlayOpacity(_bottomSheet.HeightRequest);
+			// Manage overlay visibility during touch
+			bool shouldShowOverlay = IsModal && (_bottomSheet.HeightRequest > CollapsedHeight);
+
+			if (shouldShowOverlay)
+			{
+				AddOverlayToView();
+				if (_overlayGrid is not null)
+				{
+					_overlayGrid.Opacity = CalculateOverlayOpacity(_bottomSheet.HeightRequest);
+				}
+			}
+			else
+			{
+				RemoveOverlayFromView();
+			}
 		}
 
 		/// <summary>
@@ -2517,12 +2562,18 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 		    if (bindable is SfBottomSheet sheet)
 		    {
-		        if (sheet._overlayGrid is not null && (sheet.State is BottomSheetState.FullExpanded || sheet.State is BottomSheetState.HalfExpanded))
-		        {
-		            sheet._overlayGrid.IsVisible = sheet.IsModal;
+				bool isModal = (bool)newValue;
+
+				if (isModal && (sheet.State is BottomSheetState.FullExpanded or BottomSheetState.HalfExpanded))
+				{
+					sheet.AddOverlayToView();
 					sheet.AnimateOverlay(150);
-		        }
-		    }
+				}
+				else if (!isModal)
+				{
+					sheet.RemoveOverlayFromView();
+				}
+			}
 		}
 
 

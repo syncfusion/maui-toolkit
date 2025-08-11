@@ -39,6 +39,11 @@ namespace Syncfusion.Maui.Toolkit
         readonly SfIconView? _iconView;
 
         /// <summary>
+        /// Holds the view which is used to clip.
+        /// </summary>
+        Grid clipView;
+
+        /// <summary>
         /// Used to identify the button need to hover while released the press.
         /// </summary>
         readonly bool _isHoveringOnReleased;
@@ -66,11 +71,15 @@ namespace Syncfusion.Maui.Toolkit
             _showTouchEffect = showTouchEffect;
             _isSquareSelection = isSquareSelection;
             _isHoveringOnReleased = isHoveringOnReleased;
+            clipView = new Grid();
             EffectsView = new SfEffectsView();
 #if __IOS__
             IgnoreSafeArea = true;
+            clipView.IgnoreSafeArea = true;
             EffectsView.IgnoreSafeArea = true;
 #endif
+            //// - TODO directly clip the parent view cause the crash in the view. So, we add the grid view for the clip purpose.
+            clipView.Add(this.EffectsView);
             Add(EffectsView);
             EffectsView.Content = child;
             EffectsView.ShouldIgnoreTouches = true;
@@ -200,14 +209,13 @@ namespace Syncfusion.Maui.Toolkit
         {
             if (_isSquareSelection || width < 0 || height < 0)
             {
-                EffectsView.Clip = null;
                 return;
             }
 
             double centerX = Math.Min(width, height) / 2;
             EllipseGeometry currentClip = new EllipseGeometry() { Center = new Point(width / 2, height / 2), RadiusX = centerX, RadiusY = centerX };
             EllipseGeometry? previousClip = null;
-            if (EffectsView.Clip != null && EffectsView.Clip is EllipseGeometry)
+            if (clipView.Clip != null && clipView.Clip is EllipseGeometry)
             {
                 previousClip = (EllipseGeometry)EffectsView.Clip;
             }
@@ -218,7 +226,7 @@ namespace Syncfusion.Maui.Toolkit
                 return;
             }
 
-            EffectsView.Clip = currentClip;
+            clipView.Clip = currentClip;
         }
 
 #if __MACCATALYST__ || (!__ANDROID__ && !__IOS__)
@@ -237,7 +245,7 @@ namespace Syncfusion.Maui.Toolkit
                 };
 
                 RoundRectangleGeometry? previousClip = null;
-                if (EffectsView.Clip != null && EffectsView.Clip is RoundRectangleGeometry previous)
+                if (clipView.Clip != null && clipView.Clip is RoundRectangleGeometry previous)
                 {
                     previousClip = previous;
                 }
@@ -248,7 +256,7 @@ namespace Syncfusion.Maui.Toolkit
                     return;
                 }
 
-                EffectsView.Clip = currentClip;
+                clipView.Clip = currentClip;
             }
         }
 #endif
@@ -272,6 +280,20 @@ namespace Syncfusion.Maui.Toolkit
             UpdateClip(widthConstraint, heightConstraint);
 #endif
             return size;
+        }
+
+        /// <summary>
+        /// Called when the size of the element is allocated.
+        /// Updates the corner clip for Mac Catalyst and non-Android/iOS platforms.
+        /// </summary>
+        /// <param name="width">The width allocated to the element.</param>
+        /// <param name="height">The height allocated to the element.</param>
+		protected override void OnSizeAllocated(double width, double height)
+		{
+			base.OnSizeAllocated(width, height);
+#if __MACCATALYST__ || (!__ANDROID__ && !__IOS__)
+			this.ApplyCornerClip();
+#endif
         }
 
         #endregion

@@ -31,12 +31,11 @@
                    Grid.Column="{OnPlatform Default=0, WinUI=1, MacCatalyst=1}" 
                    VerticalOptions="{OnPlatform Default=Center, WinUI=Center, MacCatalyst=Center}"
                    WidthRequest="{OnPlatform WinUI=400, MacCatalyst=450, Default=350}"
-                   HeightRequest="{OnPlatform MacCatalyst=700}"
                    HorizontalOptions="{OnPlatform WinUI=Center, MacCatalyst=Center, Default=Fill}">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10" />
                 </Border.StrokeShape>
-                <ScrollView Grid.Row="1" Orientation="Vertical" Padding="0,0,0,10" VerticalScrollBarVisibility="Never" >
+                <ScrollView Grid.Row="1" Orientation="Vertical" HeightRequest="{OnPlatform MacCatalyst=700}" Padding="0,0,0,10" VerticalScrollBarVisibility="Never" >
                     <VerticalStackLayout>
                         <cards:SfCardView x:Name="firstCard" WidthRequest="{OnPlatform Android=330, iOS=330, MacCatalyst=430, Default=380}" HeightRequest="220" Margin="0,10,0,0">
                             <Grid>

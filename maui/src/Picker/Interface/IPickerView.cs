@@ -39,5 +39,10 @@
         /// Gets a value indicating whether the parent value have valid value because dynamic scrolling on dialog opening does not scroll because the picker stack layout does not have a parent value.
         /// </summary>
         bool IsValidParent { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the looping is enabled or not.
+        /// </summary>
+        bool EnableLooping { get; }
     }
 }

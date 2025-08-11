@@ -38,7 +38,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(4d, _bottomSheet.GrabberHeight);
 			Assert.Equal(32d, _bottomSheet.GrabberWidth);
 			Assert.Equal(12d, _bottomSheet.GrabberCornerRadius);
-			Assert.Equal(150d, _bottomSheet.AnimationDuration);
+			Assert.Equal(150d,_bottomSheet.AnimationDuration);
 			if (_bottomSheet.GrabberBackground is SolidColorBrush grabberBrush)
 			{
 				var grabberColor = grabberBrush.Color;
@@ -564,7 +564,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var bottomSheet = GetPrivateField(_bottomSheet, "_bottomSheet");
 			var overlayGrid = GetPrivateField(_bottomSheet, "_overlayGrid");
 			Assert.True(_bottomSheet.Children?.Contains(bottomSheet));
-			Assert.True(_bottomSheet.Children?.Contains(overlayGrid));
+			Assert.False(_bottomSheet.Children?.Contains(overlayGrid));
 		}
 
 		[Fact]
@@ -592,7 +592,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Grid? overlayGrid = (Grid?)GetPrivateField(_bottomSheet, "_overlayGrid");
 			Assert.Equal(overlayGrid?.BackgroundColor, Color.FromArgb("#80000000"));
 			Assert.Equal(overlayGrid?.Opacity, 0.5);
-			Assert.Equal(overlayGrid?.IsVisible, false);
+			Assert.Equal(overlayGrid?.IsVisible, true);
 		}
 
 		[Fact]
@@ -852,7 +852,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		[Theory]
 		[InlineData(true, true)]
-		[InlineData(false, false)]
+		[InlineData(false, true)]
 		public void SetupBottomSheetForShow(bool input, bool expected)
 		{
 			_bottomSheet.IsModal = input;
@@ -860,7 +860,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfGrid? overlay = (SfGrid?)GetPrivateField(_bottomSheet, "_overlayGrid");
 			SfBorder? bottomsheet = (SfBorder?)GetPrivateField(_bottomSheet, "_bottomSheet");
 			Assert.True(bottomsheet?.IsVisible);
-			Assert.Equal(0, overlay?.Opacity);
+			Assert.Equal(0.5, overlay?.Opacity);
 			Assert.Equal(expected, overlay?.IsVisible);
 		}
 
@@ -868,8 +868,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void GetCollapsedPosition()
 		{
 			InvokePrivateMethod(_bottomSheet, "GetCollapsedPosition");
-			SfGrid? overlay = (SfGrid?)GetPrivateField(_bottomSheet, "_overlayGrid");
-			Assert.False(overlay?.IsVisible);
+			var overlay = GetPrivateField(_bottomSheet, "_overlayGrid");
+			Assert.False(_bottomSheet.Children?.Contains(overlay));
 		}
 
 		[Fact]

@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using Microsoft.Maui.Controls.Shapes;
 
 namespace Syncfusion.Maui.Toolkit.Calendar
 {
@@ -563,13 +564,26 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 defaultValueCreator: bindable => null,
                 propertyChanged: OnMonthViewHeaderTemplateChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="IsOpen"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="IsOpen"/> dependency property.
-        /// </value>
-        public static readonly BindableProperty IsOpenProperty =
+		/// <summary>
+		/// Identifies the <see cref="SelectionCellTemplate"/> dependency propert.
+		/// </summary>
+		/// <Value>
+		/// The identifier for <see cref="SelectionCellTemplate"/> dependency property.
+		/// </Value>
+		public static readonly BindableProperty SelectionCellTemplateProperty =
+			BindableProperty.Create(
+				nameof(SelectionCellTemplate), 
+				typeof(DataTemplate), 
+				typeof(SfCalendar), 
+				null);
+
+		/// <summary>
+		/// Identifies the <see cref="IsOpen"/> dependency property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="IsOpen"/> dependency property.
+		/// </value>
+		public static readonly BindableProperty IsOpenProperty =
             BindableProperty.Create(
                 nameof(IsOpen),
                 typeof(bool),
@@ -2174,56 +2188,156 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             get { return (DataTemplate)GetValue(MonthViewHeaderTemplateProperty); }
             set { SetValue(MonthViewHeaderTemplateProperty, value); }
-        }
+		}
 
-        /// <summary>
-        /// Gets or sets a value indicating whether the calendar popup is open or not.
-        /// </summary>
-        /// <value>The default value of <see cref="SfCalendar.IsOpen"/> is "False".</value>
-        /// <remarks>
-        /// It will be applicable to set the <see cref="CalendarMode.Dialog"/> or <see cref="CalendarMode.RelativeDialog"/>.
-        /// </remarks>
-        /// <example>
-        /// <para>The following code example demonstrates, how to set IsOpen property for the <see cref="SfCalendar"/> control.</para>
-        /// # [C#](#tab/tabid-2)
-        /// <code lang="C#"><![CDATA[
-        /// using System.ComponentModel;
-        ///
-        /// namespace CalendarMAUI
-        /// {
-        ///     public partial class MainPage : ContentPage
-        ///     {
-        ///         public MainPage()
-        ///         {
-        ///            InitializeComponent();
-        ///         }
-        ///         void clickToShowPopup_Clicked(object sender, EventArgs e)
-        ///         {
-        ///             Calendar.IsOpen = true;
-        ///         }
-        ///      }
-        /// }
-        /// ]]>
-        /// </code>
-        /// # [XAML](#tab/tabid-1)
-        /// <code lang="XAML"><![CDATA[
-        /// <?xml version = "1.0" encoding="utf-8" ?>
-        /// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
-        ///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-        ///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
-        ///     xmlns:local="clr-namespace:CalendarMAUI"
-        ///     x:Class="CalendarMAUI.MainPage">
-        /// <ContentPage.Content>
-        ///    <StackLayout WidthRequest = "500" >
-        ///        <syncfusion:SfCalendar x:Name="Calendar" Mode="Dialog"/>
-        ///        <Button x:Name="clickToShowCalendar" Text="Click To Show Calendar" Clicked="clickToShowPopup_Clicked"/>
-        ///    </StackLayout>
-        /// </ContentPage.Content>
-        /// </ContentPage>
-        /// ]]>
-        /// </code>
-        /// </example>
-        public bool IsOpen
+		/// <summary>
+		/// Gets or sets the Selection cell template
+		/// </summary>
+		/// <example>
+		/// <para>The following code used to configure the month view header using the <see cref="DataTemplate"/>.</para>
+		/// # [XAML](#tab/tabid-11)
+		/// <code Lang="XAML">
+		/// <![CDATA[
+		/// <calendar:SfCalendar View = "Month" WidthRequest="350" HeightRequest="400" 
+		///						SelectionCellTemplate="{Binding Template}">
+		///	  <calendar:SfCalendar.BindingContext>
+		///		 <local:SelectionCellTemplateView/>
+		///	  </calendar:SfCalendar.BindingContext>
+		/// </calendar:SfCalendar>
+		/// ]]>
+		/// </code>
+		/// <para>The following code used to configure the month view header using the <see cref="DataTemplateSelector"/>.</para>
+		/// # [DataTemplateSelector](#tab/tabid-12)
+		/// <code Lang="C#">
+		/// <![CDATA[
+		///internal class SelectionCellTemplateView
+		///{
+		///	private DataTemplate template;
+		/// public DataTemplate Template
+		///	{
+		///		get
+		///		{
+		///			return template;
+		///		}
+		///		set
+		///		{
+		///			template = value;
+		///		}
+		///	}
+		///	public SelectionCellTemplateView()
+		///	{
+		///		this.template = new DataTemplate(() =>
+		///		{
+		///			// Create a Grid with two columns
+		///			Grid grid = new Grid
+		///			{
+		///				RowDefinitions =
+		///	{
+		///		new RowDefinition { Height = GridLength.Star },
+		///		new RowDefinition { Height = GridLength.Star }
+		///	},
+		///				Padding = new Thickness(1),
+		///				VerticalOptions = LayoutOptions.Center,
+		///				HeightRequest = 40
+		///			};
+		///			// Create a Border with rounded corners
+		///			Border border = new Border
+		///			{
+		///				BackgroundColor = Color.FromArgb("#4285F4"),
+		///				Stroke = Colors.Transparent,
+		///				StrokeShape = new RoundRectangle
+		///				{
+		///					CornerRadius = new CornerRadius(10)
+		///				}
+		///			};
+		///			// Create Label and bind to Date.Year
+		///			Label label = new Label
+		///			{
+		///				TextColor = Colors.White,
+		///				HorizontalTextAlignment = TextAlignment.Center,
+		///				VerticalTextAlignment = TextAlignment.Center,
+		///				HorizontalOptions = LayoutOptions.Center,
+		///				VerticalOptions = LayoutOptions.Center
+		///			};
+		///			label.SetBinding(Label.TextProperty, "Date.Day");
+		///			// Create Image
+		///			Image image = new Image
+		///			{
+		///				Source = "tick_image2.png",
+		///				HeightRequest = 17,
+		///				WidthRequest = 17,
+		///				HorizontalOptions = LayoutOptions.Center,
+		///				VerticalOptions = LayoutOptions.Center
+		///			};
+		///			// Add label and image to inner grid
+		///			grid.Add(label, 0, 0);
+		///			grid.Add(image, 0, 1);
+		///			// Set content of border
+		///			border.Content = grid;
+		///			// Add border to outer grid
+		///			//grid.Add(border);
+		///			return border;
+		///		});
+		///	}
+		///}
+		///
+		/// ]]>
+		/// </code>
+		/// </example>
+		public DataTemplate SelectionCellTemplate
+		{
+			get { return (DataTemplate)this.GetValue(SelectionCellTemplateProperty); }
+			set { this.SetValue(SelectionCellTemplateProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the calendar popup is open or not.
+		/// </summary>
+		/// <value>The default value of <see cref="SfCalendar.IsOpen"/> is "False".</value>
+		/// <remarks>
+		/// It will be applicable to set the <see cref="CalendarMode.Dialog"/> or <see cref="CalendarMode.RelativeDialog"/>.
+		/// </remarks>
+		/// <example>
+		/// <para>The following code example demonstrates, how to set IsOpen property for the <see cref="SfCalendar"/> control.</para>
+		/// # [C#](#tab/tabid-2)
+		/// <code lang="C#"><![CDATA[
+		/// using System.ComponentModel;
+		///
+		/// namespace CalendarMAUI
+		/// {
+		///     public partial class MainPage : ContentPage
+		///     {
+		///         public MainPage()
+		///         {
+		///            InitializeComponent();
+		///         }
+		///         void clickToShowPopup_Clicked(object sender, EventArgs e)
+		///         {
+		///             Calendar.IsOpen = true;
+		///         }
+		///      }
+		/// }
+		/// ]]>
+		/// </code>
+		/// # [XAML](#tab/tabid-1)
+		/// <code lang="XAML"><![CDATA[
+		/// <?xml version = "1.0" encoding="utf-8" ?>
+		/// <ContentPage xmlns = "http://schemas.microsoft.com/dotnet/2021/maui"
+		///     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+		///     xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
+		///     xmlns:local="clr-namespace:CalendarMAUI"
+		///     x:Class="CalendarMAUI.MainPage">
+		/// <ContentPage.Content>
+		///    <StackLayout WidthRequest = "500" >
+		///        <syncfusion:SfCalendar x:Name="Calendar" Mode="Dialog"/>
+		///        <Button x:Name="clickToShowCalendar" Text="Click To Show Calendar" Clicked="clickToShowPopup_Clicked"/>
+		///    </StackLayout>
+		/// </ContentPage.Content>
+		/// </ContentPage>
+		/// ]]>
+		/// </code>
+		/// </example>
+		public bool IsOpen
         {
             get { return (bool)GetValue(IsOpenProperty); }
             set { SetValue(IsOpenProperty, value); }

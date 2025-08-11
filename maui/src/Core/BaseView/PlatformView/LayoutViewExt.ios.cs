@@ -86,7 +86,7 @@ namespace Syncfusion.Maui.Toolkit.Platform
 			set => _mauiView = value == null ? null : new(value);
 		}
 
-		IDrawable? Drawable
+		internal IDrawable? Drawable
 		{
 			get => _drawable != null && _drawable.TryGetTarget(out var v) ? v : null;
 			set
@@ -193,7 +193,6 @@ namespace Syncfusion.Maui.Toolkit.Platform
 		public override void LayoutSubviews()
 		{
 			base.LayoutSubviews();
-
 			if (View is not ILayout layout)
 			{
 				return;
@@ -201,12 +200,26 @@ namespace Syncfusion.Maui.Toolkit.Platform
 
 			var bounds = AdjustForSafeArea(Bounds).ToRectangle();
 			var widthConstraint = bounds.Width;
-			var heightConstraint = bounds.Height;			
-
-			if (!IsMeasureValid(widthConstraint, heightConstraint) && Superview is not Microsoft.Maui.Platform.MauiView && View is SfView sfView && !sfView.IsLayoutControl)
+			var heightConstraint = bounds.Height;
+			if (View is SfView sfview && !sfview.IsLayoutControl)
 			{
-				layout.CrossPlatformMeasure(bounds.Width, bounds.Height);
-				CacheMeasureConstraints(widthConstraint, heightConstraint);
+				layout.CrossPlatformMeasure(widthConstraint, heightConstraint);
+			}
+			else
+			{
+				// If the SuperView is a MauiView (backing a cross-platform ContentView or Layout), then measurement
+				// has already happened via SizeThatFits and doesn't need to be repeated in LayoutSubviews. But we
+				// _do_ need LayoutSubviews to make a measurement pass if the parent is something else (for example,
+				// the window); there's no guarantee that SizeThatFits has been called in that case.
+#if NET8_0_OR_GREATER
+				if (!IsMeasureValid(widthConstraint, heightConstraint) && Superview is not Microsoft.Maui.Platform.MauiView)
+				{
+					layout.CrossPlatformMeasure(widthConstraint, heightConstraint);
+					CacheMeasureConstraints(widthConstraint, heightConstraint);
+				}
+#else
+                layout.CrossPlatformMeasure(widthConstraint, heightConstraint);
+#endif
 			}
 
 			layout.CrossPlatformArrange(bounds);

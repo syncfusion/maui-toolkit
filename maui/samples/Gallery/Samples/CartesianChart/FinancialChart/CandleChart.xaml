@@ -4,16 +4,21 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.CandleChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:FinancialViewModel">
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill" x:Name="layout">
-            <StackLayout.Resources>
+        <Grid HorizontalOptions="Fill" x:Name="layout">
+            <Grid.Resources>
                 <Label x:Key="title" Text="Stock Data of AEIS" FontSize="16" HorizontalTextAlignment="Center" Padding="0,5,0,5"  LineBreakMode="WordWrap"></Label>
-            </StackLayout.Resources>
-            <StackLayout.BindingContext>
+            </Grid.Resources>
+            <Grid.BindingContext>
                 <local:FinancialViewModel x:Name="ViewModel"/>
-            </StackLayout.BindingContext>
-            <chart:SfCartesianChart x:Name="Chart" Title="{StaticResource title}" HorizontalOptions="Fill" VerticalOptions="FillAndExpand">
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" Title="{StaticResource title}" HorizontalOptions="Fill" VerticalOptions="Fill">
                 <chart:SfCartesianChart.XAxes>
                     <chart:DateTimeAxis x:Name="xAxis" AutoScrollingDelta="{OnPlatform Android='2', iOS='2', Default='3'}" AutoScrollingMode="End" AutoScrollingDeltaType="Months" LabelCreated="Primary_LabelCreated" ShowMajorGridLines="False" >
                         <chart:DateTimeAxis.LabelStyle>
@@ -38,7 +43,6 @@
                                     Low="Low"
                                     Close="Size"
                                     EnableTooltip="True"
-                                    EnableSolidCandle="{Binding Source={x:Reference checkBox},Path=IsChecked}"
                                     EnableAnimation="True">
                     
                 </chart:CandleSeries>
@@ -46,7 +50,7 @@
                     <chart:ChartZoomPanBehavior x:Name="ZoomPan" ZoomMode="X" EnableDoubleTap="False" EnablePanning="True" EnablePinchZooming="True"></chart:ChartZoomPanBehavior>
                 </chart:SfCartesianChart.ZoomPanBehavior>
             </chart:SfCartesianChart>
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" Text=" marketwatch.com" FontAttributes="Italic">
                     <Label.GestureRecognizers>
@@ -54,13 +58,13 @@
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
     <localCore:SampleView.OptionView>
         <Grid>
             <HorizontalStackLayout>
-        <Label Text="Enable Solid Candles" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"></Label>
-                <CheckBox x:Name="checkBox" IsChecked="False" VerticalOptions="Start" Margin="30,0,0,0" ></CheckBox>
+              <Label Text="Enable Solid Candles" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"></Label>
+              <CheckBox x:Name="checkBox" IsChecked="False" CheckedChanged="checkBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0" ></CheckBox>
             </HorizontalStackLayout>
         </Grid>
     </localCore:SampleView.OptionView>

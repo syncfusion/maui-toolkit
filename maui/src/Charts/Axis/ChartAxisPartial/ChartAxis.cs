@@ -479,7 +479,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <remarks>
 		/// Determines the maximum number of labels displayed per 100 pixels.
 		/// </remarks>
-		internal static readonly BindableProperty MaximumLabelsProperty = BindableProperty.Create(
+		public static readonly BindableProperty MaximumLabelsProperty = BindableProperty.Create(
 			nameof(MaximumLabels),
 			typeof(int),
 			typeof(ChartAxis),
@@ -1871,6 +1871,46 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		/// <summary>
+		/// Gets or sets the value that determines the number of labels to be displayed per 100 pixels. 
+		/// </summary>
+		/// <value>This property takes the integer value.</value>
+		/// <remarks>This property used to give constrain over the auto generated labels, which reduces the number elements rendering in view.
+		/// Intended for use with Cartesian axes in SfCartesianChart to control label density; not recommended for Polar charts.
+		/// </remarks>
+		/// /// <example>
+		/// # [MainPage.xaml](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <chart:SfCartesianChart>
+		///
+		///     <chart:SfCartesianChart.YAxes>
+		///         <chart:NumericalAxis MaximumLabels="1" />
+		///     </chart:SfCartesianChart.YAxes>
+		/// 
+		/// </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// SfCartesianChart chart = new SfCartesianChart();
+		/// 
+		/// NumericalAxis axis = new()
+		/// {
+		///    MaximumLabels = 1
+		/// };
+		///
+		/// chart.YAxes.Add(axis);
+		/// 
+		/// ]]>
+		/// </code>
+		/// *** 
+		/// </example>
+		public int MaximumLabels
+		{
+			get { return (int)GetValue(MaximumLabelsProperty); }
+			set { SetValue(MaximumLabelsProperty, value); }
+		}
+
+		/// <summary>
 		/// Gets the axis labels visible
 		/// </summary>
 		public ObservableCollection<ChartAxisLabel> VisibleLabels { get; internal set; }
@@ -1909,18 +1949,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			set { SetValue(RangeStylesProperty, value); }
 		}
 
-		/// <summary>
-		/// Gets or sets the value that determines the number of labels to be displayed per 100 pixels. 
-		/// </summary>
-		/// <value>This property takes the integer value.</value>
-		/// <remarks>This property used to give constrain over the auto generated labels, which reduces the number elements rendering in view.</remarks>
-		///TODO: Provide alter way for this support. 
-		internal int MaximumLabels
-		{
-			get { return (int)GetValue(MaximumLabelsProperty); }
-			set { SetValue(MaximumLabelsProperty, value); }
-		}
-
 		internal static readonly BindableProperty TrackballAxisBackgroundProperty = BindableProperty.Create(nameof(TrackballAxisBackground), typeof(Brush), typeof(ChartAxis), SolidColorBrush.Black, BindingMode.Default, null, null);
 
 		internal Brush TrackballAxisBackground
@@ -1943,6 +1971,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			get { return (Brush)GetValue(MajorGridLineStrokeProperty); }
 			set { SetValue(MajorGridLineStrokeProperty, value); }
+		}
+
+		internal static readonly BindableProperty MajorTickLineStrokeProperty = BindableProperty.Create(nameof(MajorTickLineStroke), typeof(Brush), typeof(ChartAxis), new SolidColorBrush(Color.FromArgb("#CAC4D0")), BindingMode.Default, null, null);
+
+		internal Brush MajorTickLineStroke
+		{
+			get { return (Brush)GetValue(MajorTickLineStrokeProperty); }
+			set { SetValue(MajorTickLineStrokeProperty, value); }
+		}
+
+		internal static readonly BindableProperty AxisLineStrokeProperty = BindableProperty.Create(nameof(AxisLineStroke), typeof(Brush), typeof(ChartAxis), new SolidColorBrush(Color.FromArgb("#CAC4D0")), BindingMode.Default, null, null);
+
+		internal Brush AxisLineStroke
+		{
+			get { return (Brush)GetValue(AxisLineStrokeProperty); }
+			set { SetValue(AxisLineStrokeProperty, value); }
 		}
 
 		#region is Polar
@@ -2447,12 +2491,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			SetDynamicResource(TrackballAxisBackgroundProperty, "SfCartesianChartTrackballAxisLabelBackground");
 			SetDynamicResource(TrackballAxisFontSizeProperty, "SfCartesianChartTrackballAxisLabelTextFontSize");
 			SetDynamicResource(MajorGridLineStrokeProperty, "SfCartesianChartMajorGridLineStroke");
+			SetDynamicResource(MajorTickLineStrokeProperty, "SfCartesianChartMajorTickLineStroke");
+			SetDynamicResource(AxisLineStrokeProperty, "SfCartesianChartAxisLineStroke");
 			//Todo: Remove this code, After ClipsToBounds works in iOS and Windows.
 			EdgeLabelsDrawingMode = EdgeLabelsDrawingMode.Shift;
-			AxisLineStyle = new ChartLineStyle();
+			AxisLineStyle = new ChartLineStyle() { Stroke = AxisLineStroke };
 			LabelStyle = new ChartAxisLabelStyle();
 			MajorGridLineStyle = new ChartLineStyle() { Stroke = MajorGridLineStroke };
-			MajorTickStyle = new ChartAxisTickStyle();
+			MajorTickStyle = new ChartAxisTickStyle() { Stroke = MajorTickLineStroke };
 			TrackballLabelStyle = new ChartLabelStyle() { FontSize = TrackballAxisFontSize, Background = TrackballAxisBackground };
 		}
 
@@ -2604,7 +2650,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (newValue is ChartAxisTickStyle tickStyle)
 				{
 					SetInheritedBindingContext(tickStyle, axis.BindingContext);
-					axis.MajorTickStyle.InitializeDynamicResource("MajorTickStyle");
 					tickStyle.PropertyChanged += axis.Style_PropertyChanged;
 				}
 
@@ -2712,7 +2757,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (newValue is ChartLineStyle lineStyle)
 				{
 					SetInheritedBindingContext(lineStyle, axis.BindingContext);
-					lineStyle.SetDynamicResource(ChartLineStyle.StrokeProperty, "SfCartesianChartAxisLineStroke");
 					lineStyle.PropertyChanged += axis.Style_PropertyChanged;
 				}
 

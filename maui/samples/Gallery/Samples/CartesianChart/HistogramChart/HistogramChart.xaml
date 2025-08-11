@@ -3,7 +3,8 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.HistogramChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:HistogramSeriesViewModel">
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -12,30 +13,33 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill" x:Name="layout">
-            <StackLayout.Resources>
+        <Grid HorizontalOptions="Fill" x:Name="layout">
+            <Grid.Resources>
                 <Label x:Key="title" x:Name="titleName" Text="Examination Result"
                    FontSize="16" HorizontalOptions="Fill" VerticalOptions="Center" HorizontalTextAlignment="Center"
                   LineBreakMode="WordWrap" Padding="0,0,0,15"/>
-            </StackLayout.Resources>
-            
-            <chart:SfCartesianChart x:Name="Chart" VerticalOptions="FillAndExpand">
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" VerticalOptions="Fill">
                 
                 <chart:SfCartesianChart.BindingContext>
-                    <local:HistogramSeriesViewModel/>
+                <local:HistogramSeriesViewModel x:Name="viewModel"/>
                 </chart:SfCartesianChart.BindingContext>
                 
                 <chart:SfCartesianChart.Resources>
-                    <local:TooltipValueConverter x:Key="ValueConverter"/>
+                    <local:TooltipValueConverter x:Key="valueConverter"/>
                     <local:TooltipLabelConverter x:Key="labelConverter"/>
                     <DataTemplate x:Key="tooltipTemplate">
                         <VerticalStackLayout Spacing="2">
                             <Label Text="Score" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" HorizontalOptions="Center" FontAttributes="Bold" FontSize="14"/>
-                            <BoxView HeightRequest="1.5" HorizontalOptions="FillAndExpand" Color="{AppThemeBinding Default={StaticResource ContentBackground}}" Margin="0,1.5,0,3"/>
-                            <HorizontalStackLayout>
+                            <BoxView HeightRequest="1.5" HorizontalOptions="Fill" Color="{AppThemeBinding Default={StaticResource ContentBackground}}" Margin="0,1.5,0,3"/>
+                            <HorizontalStackLayout x:DataType="chart:TooltipInfo">
                                 <Ellipse WidthRequest="13.5" HeightRequest="13.5" Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}" StrokeThickness="2" Background="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" HorizontalOptions="Start"/>
                                 <Label Text="{Binding Item,Converter={StaticResource labelConverter},ConverterParameter = 20}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" Margin="4,0,0,0" FontSize="13"/>
-                                <Label Text="{Binding Item,Converter={StaticResource ValueConverter}}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13"/>
+                                <Label Text="{Binding Item,Converter={StaticResource valueConverter}}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13"/>
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </DataTemplate>
@@ -50,11 +54,10 @@
                     <chart:NumericalAxis x:Name="yAxis">
                     </chart:NumericalAxis>
                 </chart:SfCartesianChart.YAxes>
-                
-                <chart:HistogramSeries ItemsSource="{Binding HistogramData}"
+
+                <chart:HistogramSeries ItemsSource="{Binding HistogramData}" x:Name="series"
                                    XBindingPath="Value"
                                    YBindingPath="Size"
-                                   ShowNormalDistributionCurve="{Binding Source={x:Reference checkBox},Path=IsChecked}"
                                    HistogramInterval="20"
                                    Stroke="{AppThemeBinding Default={StaticResource ContentBackground}}"
                                    StrokeWidth="1.5"
@@ -78,13 +81,13 @@
                 </chart:HistogramSeries>
                 
             </chart:SfCartesianChart>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
     <localCore:SampleView.OptionView>
         <Grid>
             <HorizontalStackLayout>
                 <Label Text="Show distribution line" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"></Label>
-                <CheckBox x:Name="checkBox" IsChecked="True" VerticalOptions="Start" Margin="30,0,0,0"></CheckBox>
+                <CheckBox x:Name="checkBox" IsChecked="True" CheckedChanged="checkBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0"></CheckBox>
             </HorizontalStackLayout>
         </Grid>
     </localCore:SampleView.OptionView>

@@ -111,6 +111,47 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 					}
 			}
 		}
+
+		private void slider_ValueChanged(object sender, ValueChangedEventArgs e)
+		{
+			var slider = (Slider)sender;
+			if (viewModel != null)
+			{
+				var value = slider.StyleId;
+				switch (value)
+				{
+					case "endAngle":
+						radialBarSeries.EndAngle = slider.Value;
+						break;
+					case "startAngle":
+						radialBarSeries.StartAngle = slider.Value;
+						break;
+					case "trackStrokeWidth":
+						radialBarSeries.TrackStrokeWidth = slider.Value;
+						break;
+				}
+			}
+		}
+
+		private void capStyle_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var value = capStyle.SelectedIndex;
+			switch (value)
+			{
+				case 0:
+					radialBarSeries.CapStyle = Syncfusion.Maui.Toolkit.Charts.CapStyle.BothFlat;
+					break;
+				case 1:
+					radialBarSeries.CapStyle = Syncfusion.Maui.Toolkit.Charts.CapStyle.BothCurve;
+					break;
+				case 2:
+					radialBarSeries.CapStyle = Syncfusion.Maui.Toolkit.Charts.CapStyle.StartCurve;
+					break;
+				case 3:
+					radialBarSeries.CapStyle = Syncfusion.Maui.Toolkit.Charts.CapStyle.EndCurve;
+					break;
+			}
+		}
 	}
 }
 

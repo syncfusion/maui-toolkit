@@ -2,8 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart.GroupToDoughnutChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart"
-              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                       xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
 
     <localCore:SampleView.Resources>
         <ResourceDictionary>
@@ -14,29 +14,33 @@
     </localCore:SampleView.Resources>
     
     <localCore:SampleView.Content>
-        <StackLayout HorizontalOptions="Fill" Padding="20" x:Name="layout">
-            <StackLayout.BindingContext>
+      <Grid HorizontalOptions="Fill" Padding="20" x:Name="layout" x:DataType="local:DoughnutSeriesViewModel">
+            <Grid.BindingContext>
                 <local:DoughnutSeriesViewModel/>
-            </StackLayout.BindingContext>
-			<StackLayout.Resources>
+            </Grid.BindingContext>
+            <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+			<Grid.Resources>
 				<ResourceDictionary>
 					<local:ItemsSourceConverter x:Key="valueConvert"/>
 					<local:StringFormatConverter x:Key="StingConvert"/>
                     <DataTemplate x:Key="tooltipTemplate">
-                        <VerticalStackLayout Spacing="2" BindableLayout.ItemsSource="{Binding Item, Converter={StaticResource valueConvert}}">
+                        <VerticalStackLayout x:DataType="chart:TooltipInfo" Spacing="2" BindableLayout.ItemsSource="{Binding Item, Converter={StaticResource valueConvert}}">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid ColumnSpacing="10" ColumnDefinitions="*,Auto">
+                                    <Grid ColumnSpacing="10" ColumnDefinitions="*,Auto" x:DataType="local:ChartDataModel">
                                         <Label Text="{Binding Name}"
-                                                   TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" Grid.Column="0"
-                                                   HorizontalOptions="Start" HorizontalTextAlignment="Start"
-                                                   FontSize="Caption"
-                                                   VerticalOptions="Center"/>
+                                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" Grid.Column="0"
+                                               HorizontalOptions="Start" HorizontalTextAlignment="Start"
+                                               FontSize="Caption"
+                                               VerticalOptions="Center"/>
                                         <Label Text="{Binding Converter={StaticResource StingConvert}, ConverterParameter={x:Reference doughnutSeries1}}"
-                                                   FontSize="Caption" Grid.Column="2"
-                                                   TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold"
-                                                   HorizontalOptions="End" HorizontalTextAlignment="End"
-                                                   VerticalOptions="Center"/>
+                                               FontSize="Caption" Grid.Column="2"
+                                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold"
+                                               HorizontalOptions="End" HorizontalTextAlignment="End"
+                                               VerticalOptions="Center"/>
                                     </Grid>
                                 </DataTemplate>
                             </BindableLayout.ItemTemplate>
@@ -44,13 +48,13 @@
                         </VerticalStackLayout>
                     </DataTemplate>
                 </ResourceDictionary>
-			</StackLayout.Resources>
-            <chart:SfCircularChart x:Name="Chart1" VerticalOptions="FillAndExpand">
+			</Grid.Resources>
+            <chart:SfCircularChart Grid.Row="0" x:Name="Chart1" VerticalOptions="Fill">
                 <chart:SfCircularChart.Legend>
                     <chart:ChartLegend/>
                 </chart:SfCircularChart.Legend>
                 <chart:SfCircularChart.Title>
-                    <Label Text="The Global Bond Market" Margin="0"  HorizontalTextAlignment="Center" VerticalOptions="FillAndExpand" FontSize="16" />
+                    <Label Text="The Global Bond Market" Margin="0"  HorizontalTextAlignment="Center" VerticalOptions="Fill" FontSize="16" />
                 </chart:SfCircularChart.Title>
 
                 <chart:SfCircularChart.TooltipBehavior>
@@ -72,7 +76,7 @@
                     </chart:DoughnutSeries>
                 </chart:SfCircularChart.Series>
             </chart:SfCircularChart>
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" largest-bond-markets.com" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -80,7 +84,7 @@
                     </Label.GestureRecognizers>
                 </Label>
             </HorizontalStackLayout>
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
     <localCore:SampleView.OptionView>
         <ContentView>
@@ -95,10 +99,10 @@
                             <Grid.BindingContext>
                                 <local:BaseViewModel x:Name="viewModel"/>
                             </Grid.BindingContext>
-                            <Label Text="GroupMode" VerticalOptions="CenterAndExpand"  
+                            <Label Text="GroupMode" VerticalOptions="Center"  
                                    Margin="0,13,0,0" Grid.Column="0" />
-                            <Picker x:Name="groupTo"   Grid.Column="1" SelectedIndex="0"
-                                    VerticalOptions="CenterAndExpand"
+                            <Picker x:Name="groupTo" x:DataType="local:BaseViewModel" Grid.Column="1" SelectedIndex="0"
+                                    VerticalOptions="Center"
                                     WidthRequest="130"  Margin="0,13,0,0"
                                     ItemsSource="{Binding PieGroupMode}" SelectedIndexChanged="groupTo_SelectedIndexChanged"
                                     Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"

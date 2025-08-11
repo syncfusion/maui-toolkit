@@ -3,10 +3,11 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.FastLineChart"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:FastLineSeriesViewModel">
     <localCore:SampleView.Content>
         <chart:SfCartesianChart x:Name="fastLineChart" HorizontalOptions="Fill" PaletteBrushes="{Binding PaletteBrushes}"
-                                                VerticalOptions="Fill">
+                                VerticalOptions="Fill">
             <chart:SfCartesianChart.BindingContext>
                 <local:FastLineSeriesViewModel/>
             </chart:SfCartesianChart.BindingContext>
@@ -39,13 +40,13 @@
 
             <chart:SfCartesianChart.ZoomPanBehavior>
                 <chart:ChartZoomPanBehavior EnablePinchZooming="True" EnableDoubleTap="True" 
-                                                            EnablePanning="True"/>
+                                            EnablePanning="True"/>
             </chart:SfCartesianChart.ZoomPanBehavior>
 
             <chart:SfCartesianChart.Series>
                 <chart:FastLineSeries ItemsSource="{Binding Data}"
-                                                      EnableAntiAliasing="True"
-                                                      XBindingPath="Date" YBindingPath="Value"/>
+                                      EnableAntiAliasing="True"
+                                      XBindingPath="Date" YBindingPath="Value"/>
             </chart:SfCartesianChart.Series>
         </chart:SfCartesianChart>
     </localCore:SampleView.Content>

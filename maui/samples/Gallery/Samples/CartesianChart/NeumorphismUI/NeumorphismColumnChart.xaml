@@ -6,7 +6,8 @@
              xmlns:control="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery" Margin="-10" BackgroundColor="#F5F5F5"
-                        xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:NeumorphismViewModel">
     <localCore:SampleView.Resources>
         <control:SfNeumorphismDrawer BackgroundColor="#F5F5F5" Padding="20" LightOpacity="0.8" CornerRadius="20" x:Key="outerViewDrawable">
         </control:SfNeumorphismDrawer>

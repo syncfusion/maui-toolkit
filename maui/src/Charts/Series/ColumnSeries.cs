@@ -380,37 +380,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				double.IsNaN(axis.ActualCrossingValue) ? 0 : axis.ActualCrossingValue;
 			}
 
-			if (IsGrouped && (IsIndexed || xValues == null))
+			for (var i = 0; i < PointsCount; i++)
 			{
-				for (var i = 0; i < PointsCount; i++)
+				if (xValues != null)
 				{
+					var x = xValues[i];
+
 					if (i < _segments.Count && _segments[i] is ColumnSegment segment)
 					{
-						segment.SetData([i + SbsInfo.Start, i + SbsInfo.End, YValues[i], bottomValue, i, YValues[i]]);
+						segment.SetData([x + SbsInfo.Start, x + SbsInfo.End, YValues[i], bottomValue, x, YValues[i]]);
 					}
 					else
 					{
-						CreateSegment(seriesView, [i + SbsInfo.Start, i + SbsInfo.End, YValues[i], bottomValue, i, YValues[i]], i);
-					}
-				}
-			}
-			else
-			{
-				for (var i = 0; i < PointsCount; i++)
-				{
-					if (xValues != null)
-
-					{
-						var x = xValues[i];
-
-						if (i < _segments.Count && _segments[i] is ColumnSegment segment)
-						{
-							segment.SetData([x + SbsInfo.Start, x + SbsInfo.End, YValues[i], bottomValue, x, YValues[i]]);
-						}
-						else
-						{
-							CreateSegment(seriesView, [x + SbsInfo.Start, x + SbsInfo.End, YValues[i], bottomValue, x, YValues[i]], i);
-						}
+						CreateSegment(seriesView, [x + SbsInfo.Start, x + SbsInfo.End, YValues[i], bottomValue, x, YValues[i]], i);
 					}
 				}
 			}

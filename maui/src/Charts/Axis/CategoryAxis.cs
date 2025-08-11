@@ -21,7 +21,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		/// <inheritdoc/>
-		protected override DoubleRange ApplyRangePadding(DoubleRange range, double interval)
+		protected sealed override DoubleRange ApplyRangePadding(DoubleRange range, double interval)
 		{
 			return LabelPlacement == LabelPlacement.BetweenTicks ? new DoubleRange(-0.5, (int)range.End + 0.5) : range;
 		}

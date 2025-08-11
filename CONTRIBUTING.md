@@ -22,7 +22,7 @@ Follow the coding style guidelines set by the [.NET Foundation](https://github.c
 
 ### Pull Request Requirements
 
-Please refer to our [pull request template](PULL_REQUEST_TEMPLATE.md) for details on how to format your submissions.
+Please refer to our [pull request template](.github/PULL_REQUEST_TEMPLATE.md) for details on how to format your submissions.
 
 * **Allow Edits from Maintainers:** Ensure you check the "Allow edits from maintainers" checkbox on your pull request. This permission allows us to make minor fixes and resolve conflicts quickly.
 

@@ -153,21 +153,17 @@ public partial class SeriesDefaultTests
 	public void AreaSeries_InitializeInternalsSettingsCorrectly()
 	{
 		var series = new AreaSeries();
+		series.ActualXAxis = new CategoryAxis();
 		Assert.False(series.IsSideBySide);
 		Assert.True(series.YValues.Count == 0);
 		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
 		Assert.Null(series.ChartArea);
 		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-		Assert.Equal(series.ActualXAxis is CategoryAxis categoryAxis, series.IsGrouped);
 		if (series.ActualXAxis is CategoryAxis category)
 		{
-			Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
+			Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
 		}
-		else
-		{
-			Assert.False(series.IsGrouped);
-		}
-
+		
 		Assert.Equal(0, series.SideBySideIndex);
 		Assert.False(series.IsSbsValueCalculated);
 	}
@@ -318,19 +314,16 @@ public partial class SeriesDefaultTests
 	public void BoxAndWhiskerSeries_InitializeInternalsSettingsCorrectly()
 	{
 		var series = new BoxAndWhiskerSeries();
+		series.ActualXAxis = new CategoryAxis();
 		Assert.True(series.IsSideBySide);
 		Assert.True(series.YValues.Count == 0);
 		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
 		Assert.Null(series.ChartArea);
 		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-		Assert.Equal(series.ActualXAxis is CategoryAxis categoryAxis, series.IsGrouped);
+
 		if (series.ActualXAxis is CategoryAxis category)
 		{
-			Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-		}
-		else
-		{
-			Assert.False(series.IsGrouped);
+			Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
 		}
 
 		Assert.Equal(0, series.SideBySideIndex);
@@ -469,20 +462,17 @@ public partial class SeriesDefaultTests
 	public void BubbleSeries_InitializeInternalsSettingsCorrectly()
 	{
 		var series = new BubbleSeries();
+		series.ActualXAxis = new CategoryAxis();
 		Assert.False(series.IsSideBySide);
 		Assert.False(series.IsStacking);
 		Assert.True(series.YValues.Count == 0);
 		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
 		Assert.Null(series.ChartArea);
 		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-		Assert.Equal(series.ActualXAxis is CategoryAxis categoryAxis, series.IsGrouped);
+
 		if (series.ActualXAxis is CategoryAxis category)
 		{
-			Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-		}
-		else
-		{
-			Assert.False(series.IsGrouped);
+			Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
 		}
 
 		Assert.Equal(0, series.SideBySideIndex);
@@ -635,7 +625,6 @@ public partial class SeriesDefaultTests
 	public void CandleSeriesDefaultTests_Part17()
 	{
 		var series = new CandleSeries();
-		Assert.False(series.IsGrouped);
 		Assert.NotNull(series.HighValues);
 		Assert.NotNull(series.LowValues);
 		Assert.NotNull(series.OpenValues);
@@ -723,19 +712,15 @@ public partial class SeriesDefaultTests
     public void WaterfallSeriesDefaultTests_Part5()
     {
         var series = new WaterfallSeries();
-        Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
         Assert.True(series.SbsInfo.IsEmpty);
         Assert.Null(series.ChartArea);
         Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
 
         Assert.Equal(0, series.SideBySideIndex);
@@ -891,19 +876,15 @@ public partial class SeriesDefaultTests
     public void StepLineSeriesDefaultTests_Part5()
     {
         var series = new StepLineSeries();
-        Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
         Assert.True(series.SbsInfo.IsEmpty);
         Assert.Null(series.ChartArea);
         Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
     }
 
@@ -1059,19 +1040,15 @@ public partial class SeriesDefaultTests
     public void StepAreaSeriesDefaultTests_Part5()
     {
         var series = new StepAreaSeries();
-        Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
         Assert.True(series.SbsInfo.IsEmpty);
         Assert.Null(series.ChartArea);
         Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
     }
 
@@ -1240,16 +1217,12 @@ public partial class SeriesDefaultTests
     public void StackingLineSeriesDefaultTests_Part6()
     {
         var series = new StackingLineSeries();
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
 
         Assert.Equal(0, series.SideBySideIndex);
@@ -1419,16 +1392,12 @@ public partial class SeriesDefaultTests
     public void StackingLine100SeriesDefaultTests_Part6()
     {
         var series = new StackingLine100Series();
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
 
         Assert.Equal(0, series.SideBySideIndex);
@@ -1598,16 +1567,12 @@ public partial class SeriesDefaultTests
     public void StackingColumnSeriesDefaultTests_Part6()
     {
         var series = new StackingColumnSeries();
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
 
         Assert.Equal(0, series.SideBySideIndex);
@@ -1777,16 +1742,12 @@ public partial class SeriesDefaultTests
     public void StackingColumn100SeriesDefaultTests_Part6()
     {
         var series = new StackingColumn100Series();
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
 
         Assert.Equal(0, series.SideBySideIndex);
@@ -1956,16 +1917,12 @@ public partial class SeriesDefaultTests
     public void StackingAreaSeriesDefaultTests_Part6()
     {
         var series = new StackingAreaSeries();
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
 
         Assert.Equal(0, series.SideBySideIndex);
@@ -2135,16 +2092,12 @@ public partial class SeriesDefaultTests
     public void StackingArea100SeriesDefaultTests_Part6()
     {
         var series = new StackingArea100Series();
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-        Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
+		series.ActualXAxis = new CategoryAxis();
+		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
         
         if (series.ActualXAxis is CategoryAxis category)
         {
-            Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-        }
-        else
-        {
-            Assert.False(series.IsGrouped);
+            Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
         }
 
         Assert.Equal(0, series.SideBySideIndex);
@@ -2310,20 +2263,15 @@ public partial class SeriesDefaultTests
 	public void SplineSeriesDefaultTests_Part5()
 	{
 		var series = new SplineSeries();
-
+		series.ActualXAxis = new CategoryAxis();
 		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
 		Assert.True(series.SbsInfo.IsEmpty);
 		Assert.Null(series.ChartArea);
 		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
 
 		if (series.ActualXAxis is CategoryAxis category)
 		{
-			Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-		}
-		else
-		{
-			Assert.False(series.IsGrouped);
+			Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
 		}
 
 		Assert.Equal(0, series.SideBySideIndex);
@@ -2496,20 +2444,15 @@ public partial class SeriesDefaultTests
 	public void SplineRangeAreaSeriesDefaultTests_Part5()
 	{
 		var series = new SplineRangeAreaSeries();
-
+		series.ActualXAxis = new CategoryAxis();
 		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
 		Assert.True(series.SbsInfo.IsEmpty);
 		Assert.Null(series.ChartArea);
 		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
 
 		if (series.ActualXAxis is CategoryAxis category)
 		{
-			Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-		}
-		else
-		{
-			Assert.False(series.IsGrouped);
+			Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
 		}
 
 		Assert.Equal(0, series.SideBySideIndex);
@@ -2682,20 +2625,15 @@ public partial class SeriesDefaultTests
 	public void SplineAreaSeriesDefaultTests_Part5()
 	{
 		var series = new SplineAreaSeries();
-
+		series.ActualXAxis = new CategoryAxis();
 		Assert.Equal(series.DataLabelSettings, series.ChartDataLabelSettings);
 		Assert.True(series.SbsInfo.IsEmpty);
 		Assert.Null(series.ChartArea);
 		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsIndexed);
-		Assert.Equal(series.ActualXAxis is CategoryAxis, series.IsGrouped);
 
 		if (series.ActualXAxis is CategoryAxis category)
 		{
-			Assert.Equal(category.ArrangeByIndex, series.IsGrouped);
-		}
-		else
-		{
-			Assert.False(series.IsGrouped);
+			Assert.Equal(category.ArrangeByIndex, series.IsIndexed);
 		}
 
 		Assert.Equal(0, series.SideBySideIndex);

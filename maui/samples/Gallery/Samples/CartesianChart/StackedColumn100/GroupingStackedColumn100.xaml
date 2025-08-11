@@ -4,20 +4,26 @@
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.GroupingStackedColumn100"
              xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
-              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             x:DataType="local:StackedColumn100ViewModel">
 
     <localCore:SampleView.Content>
-        <StackLayout>
-            <StackLayout.BindingContext>
+        <Grid>
+            <Grid.BindingContext>
                 <local:StackedColumn100ViewModel/>
-            </StackLayout.BindingContext>
-            
-            <chart:SfCartesianChart x:Name="Chart1" HorizontalOptions="Fill" VerticalOptions="FillAndExpand" PaletteBrushes="{Binding PaletteBrushes}">
+            </Grid.BindingContext>
+
+             <Grid.RowDefinitions>
+              <RowDefinition Height="*"></RowDefinition>
+              <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart1" HorizontalOptions="Fill" VerticalOptions="Fill" PaletteBrushes="{Binding PaletteBrushes}">
                 
                 <chart:SfCartesianChart.Title>
                     <StackLayout>
                         <Label Text="Electricity Consumption from Various Sources" Margin="3" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
-                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="6">
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="6">
                             <BoxView Color="#6EDE8A" WidthRequest="20" HeightRequest="10" CornerRadius="4"/>
                             <Label Text="United States" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="13"/>
                             <BoxView Color="#DE896E" WidthRequest="20" HeightRequest="10" CornerRadius="4"/>
@@ -111,8 +117,8 @@
                     
                 </chart:SfCartesianChart.Series>
             </chart:SfCartesianChart>
-            
-            <HorizontalStackLayout x:Name="hyperLinkLayout" Margin="5,5,0,0">
+
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
                 <Label Text="Source: " FontSize="12" VerticalOptions="Center"/>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" ourworldindata.org" VerticalOptions="Center">
                     <Label.GestureRecognizers>
@@ -121,6 +127,6 @@
                 </Label>
             </HorizontalStackLayout>
             
-        </StackLayout>
+        </Grid>
     </localCore:SampleView.Content>
 </localCore:SampleView>
