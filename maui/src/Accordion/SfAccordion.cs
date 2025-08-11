@@ -992,8 +992,8 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		{
 			if (!IsViewLoaded)
 			{
-				AddAccordionItemsIntoView();
 				IsViewLoaded = true;
+				AddAccordionItemsIntoView();
 			}
 		}
 
