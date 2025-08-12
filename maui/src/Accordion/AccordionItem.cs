@@ -317,10 +317,6 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// </summary>
 		internal int _itemIndex { get; set; }
 
-		#endregion
-
-		#region Private Properties
-
 		/// <summary>
 		/// Gets or sets the instance of the accordion.
 		/// </summary>
