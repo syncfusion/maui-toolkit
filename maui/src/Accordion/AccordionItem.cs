@@ -324,7 +324,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <summary>
 		/// Gets or sets the instance of the accordion.
 		/// </summary>
-		public SfAccordion? _accordion { get; set; }
+		internal SfAccordion? _accordion { get; set; }
 
 		#endregion
 

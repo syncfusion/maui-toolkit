@@ -1266,7 +1266,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var accordionItem = new AccordionItem();
 			var accordion = new SfAccordion();
-			accordion.IsViewLoaded = true;
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
 			var newBrush = new SolidColorBrush(Color.FromArgb(brushColor));
