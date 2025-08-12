@@ -317,14 +317,10 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// </summary>
 		internal int _itemIndex { get; set; }
 
-		#endregion
-
-		#region Private Properties
-
 		/// <summary>
 		/// Gets or sets the instance of the accordion.
 		/// </summary>
-		SfAccordion? _accordion { get; set; }
+		internal SfAccordion? _accordion { get; set; }
 
 		#endregion
 
@@ -462,7 +458,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 			// Content does not get collapsed when item is being collapsed in PCL view.
 			if (bindable is AccordionItem accordionItem)
 			{
-				if (accordionItem._accordion != null && accordionItem._accordionItemView != null && accordionItem._accordionItemView.IsExpanded != accordionItem.IsExpanded)
+				if (accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded && accordionItem._accordionItemView != null && accordionItem._accordionItemView.IsExpanded != accordionItem.IsExpanded)
 				{
 					accordionItem.OnIsExpandedChanging((bool)newValue);
 				}
@@ -479,7 +475,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of header property. </param>
 		static void OnHeaderPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is AccordionItem accordionItem && accordionItem._accordionItemView != null)
+			if (bindable is AccordionItem accordionItem && accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded && accordionItem._accordionItemView != null)
 			{
 				accordionItem._accordionItemView.Header = (View)newValue;
 			}
@@ -494,18 +490,14 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		static void OnContentPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			// When the Content is changed at runtime, need to update its visibility based on IsExpanded property.
-			var content = newValue as View;
-			if (bindable is AccordionItem accordionItem)
+			if (bindable is AccordionItem accordionItem && newValue is View content && accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded)
 			{
-				if (content != null)
-				{
-					content.IsVisible = accordionItem.IsExpanded;
-				}
-
+				content.IsVisible = accordionItem.IsExpanded;
 				if (accordionItem._accordionItemView != null)
 				{
 					accordionItem._accordionItemView.Content = content;
 				}
+				
 			}
 		}
 
@@ -517,7 +509,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of header background property. </param>
 		static void OnHeaderBackgroundPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is AccordionItem accordionItem && accordionItem._accordionItemView != null)
+			if (bindable is AccordionItem accordionItem && accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded && accordionItem._accordionItemView != null)
 			{
 				accordionItem._accordionItemView.HeaderBackground = (Brush)newValue;
 			}
@@ -531,7 +523,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="newValue">The new value of header icon color property. </param>
 		static void OnHeaderIconColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is AccordionItem accordionItem && accordionItem._accordionItemView != null)
+			if (bindable is AccordionItem accordionItem && accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded && accordionItem._accordionItemView != null)
 			{
 				accordionItem._accordionItemView.HeaderIconColor = (Color)newValue;
 			}

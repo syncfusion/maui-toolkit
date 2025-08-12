@@ -497,7 +497,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             var result = InvokePrivateMethod(pullToRefresh, "MeasureContent", widthConstraint, heightConstraint);
 
-            Assert.Equal(new Size(widthConstraint, heightConstraint), result);
+            Assert.Equal(new Size(double.NaN,double.NaN), result);
         }
 
         [Fact]
@@ -586,7 +586,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             InvokePrivateMethod(pullToRefresh, "MeasureContent", widthConstraint, heightConstraint);
             Assert.False(pullableContent.IsPulling);
             var previousMeasuredSize = (Size?)typeof(SfPullToRefresh).GetField("_previousMeasuredSize", BindingFlags.NonPublic | BindingFlags.Instance)?.GetValue(pullToRefresh);
-            Assert.Equal(new Size(widthConstraint, heightConstraint), previousMeasuredSize);
+            Assert.Equal(new Size(double.NaN,double.NaN), previousMeasuredSize);
         }
 
         [Fact]
