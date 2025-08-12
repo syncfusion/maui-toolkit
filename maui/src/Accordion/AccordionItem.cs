@@ -324,7 +324,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <summary>
 		/// Gets or sets the instance of the accordion.
 		/// </summary>
-		SfAccordion? _accordion { get; set; }
+		public SfAccordion? _accordion { get; set; }
 
 		#endregion
 
@@ -462,11 +462,6 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 			// Content does not get collapsed when item is being collapsed in PCL view.
 			if (bindable is AccordionItem accordionItem)
 			{
-				if (accordionItem.Content != null && (bool)newValue && accordionItem.Content.IsVisible)
-				{
-					accordionItem.Content.IsVisible = true;
-				}
-
 				if (accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded && accordionItem._accordionItemView != null && accordionItem._accordionItemView.IsExpanded != accordionItem.IsExpanded)
 				{
 					accordionItem.OnIsExpandedChanging((bool)newValue);
@@ -499,21 +494,14 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		static void OnContentPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			// When the Content is changed at runtime, need to update its visibility based on IsExpanded property.
-			var content = newValue as View;
-			if (bindable is AccordionItem accordionItem)
+			if (bindable is AccordionItem accordionItem && newValue is View content && accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded)
 			{
-				if (accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded)
+				content.IsVisible = accordionItem.IsExpanded;
+				if (accordionItem._accordionItemView != null)
 				{
-					if (content != null)
-					{
-						content.IsVisible = accordionItem.IsExpanded;
-					}
-
-					if (accordionItem._accordionItemView != null)
-					{
-						accordionItem._accordionItemView.Content = content;
-					}
+					accordionItem._accordionItemView.Content = content;
 				}
+				
 			}
 		}
 

@@ -843,7 +843,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				ExpandMode = AccordionExpandMode.Single
 			};
 
-			var accordionItem = new AccordionItem();
 			accordion.IsViewLoaded = true;
 			accordion.UpdateAccordionItemsBasedOnExpandModes(false);
 			Assert.Equal(expectedState, accordion.Items[0]._accordionItemView?.IsExpanded);
@@ -1188,7 +1187,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var accordionItem = new AccordionItem();
 			var accordion = new SfAccordion();
-			accordion.IsViewLoaded = true;
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			var contentView = new ContentView();
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
@@ -1214,7 +1214,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				IsExpanded = true
 			};
 			var accordion = new SfAccordion();
-			accordion.IsViewLoaded = true;
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			var contentView = new ContentView();
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
@@ -1233,7 +1234,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 
 			var accordion = new SfAccordion();
-			accordion.IsViewLoaded = true;
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			// Create a new AccordionItemView and set it to _accordionItemView
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
@@ -1280,7 +1282,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var accordionItem = new AccordionItem();
 			var accordion = new SfAccordion();
-			accordion.IsViewLoaded = true;
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
 			var newColor = Color.FromArgb(colorHex);

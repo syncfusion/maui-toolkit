@@ -1777,7 +1777,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 		private static void OnAnimationDurationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			var expander = bindable as SfExpander;
-   			if (expander != null && (double)newValue == 0 && expander._expanderAnimation != null)
+   			if (expander != null && (double)newValue == 0 && expander._expanderAnimation != null && expander.IsViewLoaded)
 			{
 				var animation = expander._expanderAnimation;
 				if (animation.AnimationManager != null)
