@@ -825,6 +825,212 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 		}
 
+		[Fact]
+		public void AnimationDuration_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var expander = new SfExpander { AnimationDuration = 200 };
+			Assert.Equal(200, expander.AnimationDuration);
+			expander.AnimationDuration = 500;
+			Assert.Equal(500, expander.AnimationDuration);
+		}
+
+		[Fact]
+		public void AnimationEasing_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var expander = new SfExpander { AnimationEasing = ExpanderAnimationEasing.SinIn };
+			Assert.Equal(ExpanderAnimationEasing.SinIn, expander.AnimationEasing);
+			expander.AnimationEasing = ExpanderAnimationEasing.Linear;
+			Assert.Equal(ExpanderAnimationEasing.Linear, expander.AnimationEasing);
+		}
+
+		[Fact]
+		public void HeaderIconPosition_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var expander = new SfExpander { HeaderIconPosition = ExpanderIconPosition.Start };
+			Assert.Equal(ExpanderIconPosition.Start, expander.HeaderIconPosition);
+			expander.HeaderIconPosition = ExpanderIconPosition.End;
+			Assert.Equal(ExpanderIconPosition.End, expander.HeaderIconPosition);
+		}
+
+		[Fact]
+		public void HeaderBackground_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var expander = new SfExpander { HeaderBackground = Colors.Green };
+			Assert.Equal(Colors.Green, expander.HeaderBackground);
+			expander.HeaderBackground = Colors.Blue;
+			Assert.Equal(Colors.Blue, expander.HeaderBackground);
+		}
+
+		[Fact]
+		public void HeaderIconColor_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var expander = new SfExpander { HeaderIconColor = Colors.Green };
+			Assert.Equal(Colors.Green, expander.HeaderIconColor);
+			expander.HeaderIconColor = Colors.Blue;
+			Assert.Equal(Colors.Blue, expander.HeaderIconColor);
+		}
+
+		[Fact]
+		public void IsExpanded_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var expander = new SfExpander { IsExpanded = true };
+			Assert.True(expander.IsExpanded);
+			expander.IsExpanded = false;
+			Assert.False(expander.IsExpanded);
+		}
+
+		[Fact]
+		public void ExpanderStyle_WhenApplied_SetsCorrectProperties()
+		{
+			// Arrange
+			var animationDuration = 100;
+			ExpanderAnimationEasing easing = new ExpanderAnimationEasing();
+			easing = ExpanderAnimationEasing.SinInOut;
+			ExpanderIconPosition expanderIconPosition = new ExpanderIconPosition();
+			expanderIconPosition = ExpanderIconPosition.Start;
+			Color color = new Color();
+			color = Colors.Aquamarine;
+			Color color2 = new Color();
+			color2 = Colors.GreenYellow;
+			var style = new Style(typeof(Syncfusion.Maui.Toolkit.Expander.SfExpander));
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Expander.SfExpander.AnimationDurationProperty,
+				Value = animationDuration
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Expander.SfExpander.HeaderIconPositionProperty,
+				Value = expanderIconPosition
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Expander.SfExpander.AnimationEasingProperty,
+				Value = easing
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Expander.SfExpander.HeaderBackgroundProperty,
+				Value = color
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Expander.SfExpander.IsExpandedProperty,
+				Value = true
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Expander.SfExpander.HeaderIconColorProperty,
+				Value = color2
+			});
+			var resources = new ResourceDictionary();
+			resources.Add("ExpanderStyle", style);
+			Application.Current = new Application();
+			Application.Current.Resources = resources;
+			var expander = new Syncfusion.Maui.Toolkit.Expander.SfExpander();
+			// Act
+			expander.Style = (Style)Application.Current.Resources["ExpanderStyle"];
+			// Assert
+			Assert.Equal(animationDuration, expander.AnimationDuration);
+			Assert.Equal(expanderIconPosition, expander.HeaderIconPosition);
+			Assert.Equal(easing, expander.AnimationEasing);
+			Assert.Equal(color, expander.HeaderBackground);
+			Assert.Equal(color2, expander.HeaderIconColor);
+			Assert.True(expander.IsExpanded);
+		}
+
+		[Fact]
+		public void SfExpander_ShouldBeAddedToStackLayout()
+		{
+			// Arrange
+			var stackLayout = new StackLayout();
+			var label = new Label { Text = "Expander Content", };
+			var expander = new SfExpander
+			{
+				Header = new Label { Text = "Tap to Expand" },
+				Content = label,
+				AutomationId = "myExpander"
+			};
+
+			// Act
+			stackLayout.Children.Add(expander);
+
+			// Assert
+			Assert.Contains(expander, stackLayout.Children);
+		}
+
+		[Fact]
+		public void SfExpander_ShouldBeAddedToAbsoluteLayout()
+		{
+			// Arrange
+			var absoluteLayout = new AbsoluteLayout();
+			var label = new Label { Text = "Expander Content", };
+			var expander = new SfExpander
+			{
+				Header = new Label { Text = "Tap to Expand" },
+				Content = label,
+				AutomationId = "myExpander"
+			};
+			// Act
+			absoluteLayout.Children.Add(expander);
+			// Assert
+			Assert.Contains(expander, absoluteLayout.Children);
+		}
+
+		[Fact]
+		public void SfExpander_ShouldBeAddedToHorizontalStackLayout()
+		{
+			// Arrange
+			var stackLayout = new HorizontalStackLayout();
+			var label = new Label { Text = "Expander Content", };
+			var expander = new SfExpander
+			{
+				Header = new Label { Text = "Tap to Expand" },
+				Content = label,
+				AutomationId = "myExpander"
+			};
+			// Act
+			stackLayout.Children.Add(expander);
+			// Assert
+			Assert.Contains(expander, stackLayout.Children);
+		}
+
+		[Fact]
+		public void SfExpander_ShouldBeAddedToFlexLayout()
+		{
+			// Arrange
+			var flexLayout = new FlexLayout();
+			var label = new Label { Text = "Expander Content", };
+			var expander = new SfExpander
+			{
+				Header = new Label { Text = "Tap to Expand" },
+				Content = label,
+				AutomationId = "myExpander"
+			};
+			// Act
+			flexLayout.Children.Add(expander);
+			// Assert
+			Assert.Contains(expander, flexLayout.Children);
+		}
+
+		[Fact]
+		public void SfExpander_ShouldBeAddedToGrid()
+		{
+			// Arrange
+			var grid = new Grid();
+			var label = new Label { Text = "Expander Content", };
+			var expander = new SfExpander
+			{
+				Header = new Label { Text = "Tap to Expand" },
+				Content = label,
+				AutomationId = "myExpander"
+			};
+			// Act
+			grid.Children.Add(expander);
+			// Assert
+			Assert.Contains(expander, grid.Children);
+		}
+
 		#endregion
 
 		#region Methods
