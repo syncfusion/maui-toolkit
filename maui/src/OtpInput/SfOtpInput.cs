@@ -937,27 +937,16 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 
 				string newValueStr = newValue?.ToString() ?? string.Empty;
 				string oldValueStr = oldValue?.ToString() ?? string.Empty;
-
-				if (otpInput.Type == OtpInputType.Number)
-				{
-					newValueStr = new string(newValueStr.Where(c => !char.IsControl(c)).ToArray());
-					oldValueStr = new string(oldValueStr.Where(c => !char.IsControl(c)).ToArray());
-				}
+				newValueStr = new string(newValueStr.Where(c => !char.IsControl(c)).ToArray());
+				oldValueStr = new string(oldValueStr.Where(c => !char.IsControl(c)).ToArray());
 
 				if (otpInput.ValueChanged != null)
-                {
-					if (otpInput.Type == OtpInputType.Number)
-					{
-						RaiseValueChangedEvent(otpInput, oldValueStr, newValueStr);
-					}
-					else
-					{
-						RaiseValueChangedEvent(otpInput, oldValue?.ToString() ?? string.Empty, newValue?.ToString() ?? string.Empty);
-					}
+				{
+					RaiseValueChangedEvent(otpInput, oldValueStr, newValueStr);
 				}
-                
-                otpInput.UpdateValue(bindable, newValue?? string.Empty);
-            }
+
+				otpInput.UpdateValue(bindable, newValue ?? string.Empty);
+			}
         }
 
         /// <summary>
