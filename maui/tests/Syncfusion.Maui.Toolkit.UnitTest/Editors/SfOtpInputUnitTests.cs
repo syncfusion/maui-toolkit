@@ -474,6 +474,37 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.True(eventTriggered);
 		}
 
+		[Theory]
+		[InlineData(OtpInputType.Number, "12", "12")]
+		[InlineData(OtpInputType.Text, "ab", "ab")]
+		[InlineData(OtpInputType.Password, "xy", "xy")]
+		public void ValueChangedEvent_WithPartialInput_DoesNotContainNullCharacters(OtpInputType type, string input, string expected)
+		{
+			// Arrange
+			var otpInput = new SfOtpInput
+			{
+				Length = 4,
+				Type = type
+			};
+			string? newValueFromEvent = null;
+			string? oldValueFromEvent = null;
+			otpInput.ValueChanged += (sender, e) =>
+			{
+				newValueFromEvent = e.NewValue;
+				oldValueFromEvent = e.OldValue;
+			};
+			// Act
+			otpInput.Value = input;
+			// Assert
+			Assert.Equal(expected, newValueFromEvent);
+			Assert.Equal(string.Empty, oldValueFromEvent);
+			if (newValueFromEvent != null)
+			{
+				Assert.DoesNotContain('\0', newValueFromEvent!);
+			}
+		}
+
+
 		#endregion
 
 		#region Public Methods
