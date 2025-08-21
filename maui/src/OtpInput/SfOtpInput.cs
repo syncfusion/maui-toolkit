@@ -939,12 +939,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				string oldValueStr = oldValue?.ToString() ?? string.Empty;
 				newValueStr = new string(newValueStr.Where(c => !char.IsControl(c)).ToArray());
 				oldValueStr = new string(oldValueStr.Where(c => !char.IsControl(c)).ToArray());
-
-				if (otpInput.ValueChanged != null)
-				{
-					RaiseValueChangedEvent(otpInput, oldValueStr, newValueStr);
-				}
-
+				RaiseValueChangedEvent(otpInput, oldValueStr, newValueStr);
 				otpInput.UpdateValue(bindable, newValue ?? string.Empty);
 			}
         }
@@ -959,7 +954,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         {
             if (bindable is SfOtpInput otpInput && newValue is double newLength && oldValue is double oldLength)
             {
-
 				if (newLength <= 0)
 				{
 					newLength = oldLength;
