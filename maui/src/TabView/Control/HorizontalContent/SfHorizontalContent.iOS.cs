@@ -69,8 +69,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					{
 						this._canProcessTouch = false;
 					}
-				}
-                else if (view is UIKit.UITouch uiTouch)
+					else if (view is UIKit.UITouch uiTouch)
                 {
 				// For SfTextInputLayout or similar views that require precise touch interactions.
                     var touchLocation = uiTouch.LocationInView(uiTouch.View?.Superview);
@@ -104,6 +103,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				        }
                     }
 				}
+				}
+                
 			}
 #endif
 		}
