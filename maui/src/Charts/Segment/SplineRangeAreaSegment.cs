@@ -266,8 +266,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				_min = HighVal.Min();
 				_min = double.IsNaN(_min) ? HighVal.Length > 0 ? HighVal.Where(e => !double.IsNaN(e)).DefaultIfEmpty().Min() : 0 : _min;
-				var start = series.ActualYAxis.VisibleRange.Start;
-				_min = _min == 0 ? (double.IsNaN(start) ? _min : start) : _min;
 				_max = HighVal.Max();
 
 				if (HighControlStartY != null && HighControlEndY != null)

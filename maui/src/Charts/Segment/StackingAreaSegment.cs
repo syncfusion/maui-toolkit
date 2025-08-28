@@ -44,8 +44,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				var yMin = TopValues.Min();
 				yMin = double.IsNaN(yMin) ? TopValues.Length > 0 ? TopValues.Where(e => !double.IsNaN(e)).DefaultIfEmpty().Min() : 0 : yMin;
-				var start = series.ActualYAxis.VisibleRange.Start;
-				yMin = yMin == 0 ? (double.IsNaN(start) ? yMin : start) : yMin;
 
 				Series.XRange += new DoubleRange(XValues.Min(), XValues.Max());
 				Series.YRange += new DoubleRange(yMin, TopValues.Max());
