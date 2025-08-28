@@ -75,8 +75,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				yDatas.CopyTo(_yValues, 0);
 				var yMin = _yValues.Min();
 				yMin = double.IsNaN(yMin) ? _yValues.Length > 0 ? _yValues.Where(e => !double.IsNaN(e)).DefaultIfEmpty().Min() : 0 : yMin;
-				var start = series.ActualYAxis.VisibleRange.Start;
-				yMin = yMin == 0 ? (double.IsNaN(start) ? yMin : start) : yMin;
 				series.XRange += new DoubleRange(_xValues.Min(), _xValues.Max());
 				series.YRange += new DoubleRange(yMin, _yValues.Max());
 			}
