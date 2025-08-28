@@ -360,6 +360,13 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			Children.Add(_progressCircleView);
 			ClipToBounds = true;
 			ThemeElement.InitializeThemeResources(this, "SfPullToRefreshTheme");
+
+			// Ensures the refreshing animation starts if IsRefreshing was set via global styles.
+			if (this.IsRefreshing && !this.ActualIsRefreshing)
+			{
+				this.StartRefreshing();
+			}
+
 			this.IsLayoutControl = true;
 		}
 
@@ -1869,8 +1876,27 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 					(PullableContent as IView).Measure(widthConstraint, heightConstraint);
 				}
 
-				MeasureSfProgressCircleView(widthConstraint, heightConstraint);
-				_previousMeasuredSize = new Size(widthConstraint, heightConstraint);
+				double width = double.IsFinite(widthConstraint) ? widthConstraint : 0;
+				double height = double.IsFinite(heightConstraint) ? heightConstraint : 0;
+				double screenWidth = 300;
+				double screenHeight = 300;
+#if !WINDOWS
+				screenWidth = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+				screenHeight = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+				width = screenWidth;
+				height = screenHeight;
+#else
+                if (width == 0)
+                {
+                    width = screenWidth;
+                }
+                if (height == 0)
+                {
+                    height = screenHeight;
+                }
+#endif
+				MeasureSfProgressCircleView(width, height);
+				_previousMeasuredSize = new Size(width, height);
 			}
 
 			return _previousMeasuredSize;
@@ -2057,7 +2083,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnRefreshViewHeightChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh is not null)
+			if (pullToRefresh is not null && pullToRefresh.ProgressCircleView is not null)
 			{
 				pullToRefresh.ProgressCircleView.UpdateDrawProperties();
 				if ((pullToRefresh.IsPulling || pullToRefresh.ActualIsRefreshing) && pullToRefresh.ProgressCircleView.Content is null)
@@ -2078,7 +2104,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static void OnRefreshViewWidthChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfPullToRefresh? pullToRefresh = bindable as SfPullToRefresh;
-			if (pullToRefresh is not null)
+			if (pullToRefresh is not null && pullToRefresh.ProgressCircleView is not null)
 			{
 				pullToRefresh.ProgressCircleView.UpdateDrawProperties();
 				if ((pullToRefresh.IsPulling || pullToRefresh.ActualIsRefreshing) && pullToRefresh.ProgressCircleView.Content is null)
