@@ -1521,10 +1521,11 @@ namespace Syncfusion.Maui.Toolkit.Expander
 			// To update width when loaded expander inside HorizontalStackLayout and AbsoluteLayout.
 			if (width == 0)
 			{
-#if !WINDOWS
-				var scaledScreenSize = new Size(DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density, DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density);
+				var scaledScreenSize =
+#if WINDOWS
+				new Size(300, 300);
 #else
-                var scaledScreenSize = new Size(300, 300);
+				new Size(DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density, DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density);              
 #endif
 				double scaledWidth = Math.Min(scaledScreenSize.Width, scaledScreenSize.Height);
 				width = scaledWidth;
