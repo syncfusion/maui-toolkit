@@ -1517,8 +1517,22 @@ namespace Syncfusion.Maui.Toolkit.Expander
 				}
 			}
 
+			double width = double.IsFinite(widthConstraint) ? widthConstraint : 0;
+			// To update width when loaded expander inside HorizontalStackLayout and AbsoluteLayout.
+			if (width == 0)
+			{
+				var scaledScreenSize =
+#if WINDOWS
+				new Size(300, 300);
+#else
+				new Size(DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density, DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density);              
+#endif
+				double scaledWidth = Math.Min(scaledScreenSize.Width, scaledScreenSize.Height);
+				width = scaledWidth;
+			}
+
 			_expanderHeight = _headerMeasuredSize.Height + _contentMeasuredSize.Height + (_headerMeasuredSize.Height > 0 ? Padding.Bottom : 0);
-			return new Size(widthConstraint, _expanderHeight);
+			return new Size(width, _expanderHeight);
 		}
 
 
@@ -1679,7 +1693,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 			var oldHeader = oldValue as View;
 
 			// When the Content is changed at runtime, need to update its visibility based on IsExpanded property.
-			if (bindable is SfExpander expander)
+			if (bindable is SfExpander expander && expander.IsViewLoaded)
 			{
 				expander.OnHeaderChanged(newHeader, oldHeader);
 			}
@@ -1694,7 +1708,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 		static void OnHeaderIconPositionPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
 			// When the Content is changed at runtime, need to update its visibility based on IsExpanded property.
-			if (bindable is SfExpander expander)
+			if (bindable is SfExpander expander && expander.IsViewLoaded)
 			{
 				expander.OnHeaderIconPositionChanged((ExpanderIconPosition)newValue, (ExpanderIconPosition)oldValue);
 			}
@@ -1749,7 +1763,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 		static void OnHeaderIconColorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			// When the Content is changed at runtime, need to update its visibility based on IsExpanded property.
-			if (bindable is SfExpander expander)
+			if (bindable is SfExpander expander && expander.IsViewLoaded)
 			{
 				expander.OnIconColorChanged((Color)oldValue, (Color)newValue);
 			}
@@ -1764,15 +1778,17 @@ namespace Syncfusion.Maui.Toolkit.Expander
 		private static void OnAnimationDurationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			var expander = bindable as SfExpander;
-   			if (expander != null && (double)newValue == 0 && expander._expanderAnimation != null)
+   			if (expander != null && (double)newValue == 0 && expander._expanderAnimation != null && expander.IsViewLoaded)
 			{
 				var animation = expander._expanderAnimation;
-				if(animation.AnimationManager != null)
-				// While setting Animation Duration as 0, the animation won't be stopped. So, removing it.
-				// Since we are removing the animation, AnimationCompleted was not getting call. So, manually calling it.
-				animation.AnimationManager.Remove(animation);
-				expander.AnimationCompleted();
-				expander.InvalidateForceLayout();
+				if (animation.AnimationManager != null)
+				{
+					// While setting Animation Duration as 0, the animation won't be stopped. So, removing it.
+					// Since we are removing the animation, AnimationCompleted was not getting call. So, manually calling it.
+					animation.AnimationManager.Remove(animation);
+					expander.AnimationCompleted();
+					expander.InvalidateForceLayout();
+				}
 			}
 		}
 

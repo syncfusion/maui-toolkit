@@ -585,6 +585,244 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(autoScrollPosition, accordion.AutoScrollPosition);
 		}
 
+		[Fact]
+		public void AnimationDuration_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new SfAccordion { AnimationDuration = 200 };
+			Assert.Equal(200, accordion.AnimationDuration);
+			accordion.AnimationDuration = 500;
+			Assert.Equal(500, accordion.AnimationDuration);
+		}
+
+		[Fact]
+		public void AnimationEasing_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new SfAccordion { AnimationEasing = ExpanderAnimationEasing.SinIn };
+			Assert.Equal(ExpanderAnimationEasing.SinIn, accordion.AnimationEasing);
+			accordion.AnimationEasing = ExpanderAnimationEasing.Linear;
+			Assert.Equal(ExpanderAnimationEasing.Linear, accordion.AnimationEasing);
+		}
+
+		[Fact]
+		public void AutoScrollPosition_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new SfAccordion { AutoScrollPosition = AccordionAutoScrollPosition.Top };
+			Assert.Equal(AccordionAutoScrollPosition.Top, accordion.AutoScrollPosition);
+			accordion.AutoScrollPosition = AccordionAutoScrollPosition.None;
+			Assert.Equal(AccordionAutoScrollPosition.None, accordion.AutoScrollPosition);
+		}
+
+		[Fact]
+		public void HeaderIconPosition_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new SfAccordion { HeaderIconPosition = ExpanderIconPosition.Start };
+			Assert.Equal(ExpanderIconPosition.Start, accordion.HeaderIconPosition);
+			accordion.HeaderIconPosition = ExpanderIconPosition.End;
+			Assert.Equal(ExpanderIconPosition.End, accordion.HeaderIconPosition);
+		}
+
+		[Fact]
+		public void ExpandMode_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new SfAccordion { ExpandMode = AccordionExpandMode.Multiple };
+			Assert.Equal(AccordionExpandMode.Multiple, accordion.ExpandMode);
+			accordion.ExpandMode = AccordionExpandMode.SingleOrNone;
+			Assert.Equal(AccordionExpandMode.SingleOrNone, accordion.ExpandMode);
+		}
+
+		[Fact]
+		public void ItemSpacing_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new SfAccordion { ItemSpacing = 100 };
+			Assert.Equal(100, accordion.ItemSpacing);
+			accordion.ItemSpacing = 200;
+			Assert.Equal(200, accordion.ItemSpacing);
+		}
+
+		[Fact]
+		public void HeaderBackground_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new AccordionItem { HeaderBackground = Colors.Green };
+			Assert.Equal(Colors.Green, accordion.HeaderBackground);
+			accordion.HeaderBackground = Colors.Blue;
+			Assert.Equal(Colors.Blue, accordion.HeaderBackground);
+		}
+
+		[Fact]
+		public void HeaderIconColor_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new AccordionItem { HeaderIconColor = Colors.Green };
+			Assert.Equal(Colors.Green, accordion.HeaderIconColor);
+			accordion.HeaderIconColor = Colors.Blue;
+			Assert.Equal(Colors.Blue, accordion.HeaderIconColor);
+		}
+
+		[Fact]
+		public void IsExpanded_SetValue_Runtime_ShouldUpdateProperty()
+		{
+			var accordion = new AccordionItem { IsExpanded = true };
+			Assert.True(accordion.IsExpanded);
+			accordion.IsExpanded = false;
+			Assert.False(accordion.IsExpanded);
+		}
+
+		[Fact]
+		public void AccordionItemStyle_WhenApplied_SetsCorrectProperties()
+		{
+			Color color = new Color();
+			color = Color.FromRgba("#233434");
+			Color color2 = new Color();
+			color2 = Color.FromRgba("#FF0000");
+			var style = new Style(typeof(Syncfusion.Maui.Toolkit.Accordion.AccordionItem));
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Accordion.AccordionItem.HeaderBackgroundProperty,
+				Value = color
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Accordion.AccordionItem.HeaderIconColorProperty,
+				Value = color2
+			});
+			style.Setters.Add(new Setter
+			{
+				Property = Syncfusion.Maui.Toolkit.Accordion.AccordionItem.IsExpandedProperty,
+				Value = true
+			});
+			var resources = new ResourceDictionary();
+			resources.Add("AccordionStyle", style);
+			Application.Current = new Application();
+			Application.Current.Resources = resources;
+			var accordion = new Syncfusion.Maui.Toolkit.Accordion.AccordionItem();
+			// Act
+			accordion.Style = (Style)Application.Current.Resources["AccordionStyle"];
+			Assert.Equal(color, accordion.HeaderBackground);
+			Assert.Equal(color2, accordion.HeaderIconColor);
+			Assert.True(accordion.IsExpanded);
+		}
+
+		[Fact]
+		public void SfAccordion_ShouldBeAddedToStackLayout()
+		{
+			// Arrange
+			var stackLayout = new StackLayout();
+			var accordion = new SfAccordion
+			{
+				ExpandMode = AccordionExpandMode.Single
+			};
+			var label = new Label
+			{
+				Text = "Accordion Content",
+			};
+			var accordionItem = new AccordionItem
+			{
+				Header = new Label { Text = "Accordion Header", AutomationId = "accordionHeader" },
+				Content = label
+			};
+			// Act
+			accordion.Items.Add(accordionItem);
+			stackLayout.Children.Add(accordion);
+			// Assert
+			Assert.Contains(accordion, stackLayout.Children);
+		}
+
+		[Fact]
+		public void SfAccordion_ShouldBeAddedToAbsoluteLayout()
+		{
+			// Arrange
+			var absoluteLayout = new StackLayout();
+			var accordion = new SfAccordion
+			{
+				ExpandMode = AccordionExpandMode.Single
+			};
+			var label = new Label
+			{
+				Text = "Accordion Content",
+			};
+			var accordionItem = new AccordionItem
+			{
+				Header = new Label { Text = "Accordion Header", AutomationId = "accordionHeader" },
+				Content = label
+			};
+			// Act
+			accordion.Items.Add(accordionItem);
+			absoluteLayout.Children.Add(accordion);
+			// Assert
+			Assert.Contains(accordion, absoluteLayout.Children);
+		}
+		[Fact]
+		public void SfAccordion_ShouldBeAddedToHorizontalStackLayout()
+		{
+			// Arrange
+			var stackLayout = new HorizontalStackLayout();
+			var accordion = new SfAccordion
+			{
+				ExpandMode = AccordionExpandMode.Single
+			};
+			var label = new Label
+			{
+				Text = "Accordion Content",
+			};
+			var accordionItem = new AccordionItem
+			{
+				Header = new Label { Text = "Accordion Header", AutomationId = "accordionHeader" },
+				Content = label
+			};
+			// Act
+			accordion.Items.Add(accordionItem);
+			stackLayout.Children.Add(accordion);
+			// Assert
+			Assert.Contains(accordion, stackLayout.Children);
+		}
+		[Fact]
+		public void SfAccordion_ShouldBeAddedToFlexLayout()
+		{
+			// Arrange
+			var flexLayout = new FlexLayout();
+			var accordion = new SfAccordion
+			{
+				ExpandMode = AccordionExpandMode.Single
+			};
+			var label = new Label
+			{
+				Text = "Accordion Content",
+			};
+			var accordionItem = new AccordionItem
+			{
+				Header = new Label { Text = "Accordion Header", AutomationId = "accordionHeader" },
+				Content = label
+			};
+			// Act
+			accordion.Items.Add(accordionItem);
+			flexLayout.Children.Add(accordion);
+			// Assert
+			Assert.Contains(accordion, flexLayout.Children);
+		}
+		[Fact]
+		public void SfAccordion_ShouldBeAddedToGrid()
+		{
+			// Arrange
+			var grid = new Grid();
+			var accordion = new SfAccordion
+			{
+				ExpandMode = AccordionExpandMode.Single
+			};
+			var label = new Label
+			{
+				Text = "Accordion Content",
+			};
+			var accordionItem = new AccordionItem
+			{
+				Header = new Label { Text = "Accordion Header", AutomationId = "accordionHeader" },
+				Content = label
+			};
+			// Act
+			accordion.Items.Add(accordionItem);
+			grid.Children.Add(accordion);
+			// Assert
+			Assert.Contains(accordion, grid.Children);
+		}
+
 		#endregion
 
 		#region Methods
@@ -605,6 +843,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				ExpandMode = AccordionExpandMode.Single
 			};
 
+			accordion.IsViewLoaded = true;
 			accordion.UpdateAccordionItemsBasedOnExpandModes(false);
 			Assert.Equal(expectedState, accordion.Items[0]._accordionItemView?.IsExpanded);
 		}
@@ -631,6 +870,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				ExpandMode = AccordionExpandMode.Single
 			};
 
+			var accordionItem = new AccordionItem();
+			accordion.IsViewLoaded = true;
 			accordion.UpdateAccordionItemsBasedOnExpandModes(false);
 			Assert.Equal(firstItemExpectedState, accordion.Items[0]._accordionItemView?.IsExpanded);
 			Assert.Equal(secondItemExpectedState, accordion.Items[1]._accordionItemView?.IsExpanded);
@@ -945,6 +1186,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void OnHeaderPropertyChanged_SetsAccordionItemViewHeader_WhenHeaderIsNotNull()
 		{
 			var accordionItem = new AccordionItem();
+			var accordion = new SfAccordion();
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			var contentView = new ContentView();
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
@@ -969,7 +1213,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				IsExpanded = true
 			};
-
+			var accordion = new SfAccordion();
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			var contentView = new ContentView();
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
@@ -987,6 +1233,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				IsExpanded = true
 			};
 
+			var accordion = new SfAccordion();
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			// Create a new AccordionItemView and set it to _accordionItemView
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
@@ -1016,6 +1265,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void OnHeaderBackgroundPropertyChanged_UpdatesHeaderBackground(string brushColor)
 		{
 			var accordionItem = new AccordionItem();
+			var accordion = new SfAccordion();
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
 			var newBrush = new SolidColorBrush(Color.FromArgb(brushColor));
@@ -1030,6 +1282,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void OnHeaderIconColorPropertyChanged_UpdatesHeaderIconColor(string colorHex)
 		{
 			var accordionItem = new AccordionItem();
+			var accordion = new SfAccordion();
+			accordionItem._accordion = accordion;
+			accordionItem._accordion.IsViewLoaded = true;
 			var accordionItemView = new AccordionItemView();
 			accordionItem._accordionItemView = accordionItemView;
 			var newColor = Color.FromArgb(colorHex);
