@@ -1126,7 +1126,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// Gets the icon color for close button.
 		/// </summary>
 		/// <returns> icon color for close button.</returns>
-		internal Color GetCloseIconColor() => CloseButtonIconStroke;
+		internal Color GetCloseIconColor() => CloseIconColor;
 
 		/// <summary>
 		/// Gets the icon stroke thickness for close button.
