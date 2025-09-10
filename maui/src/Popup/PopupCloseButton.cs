@@ -229,7 +229,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					_closeButtonImage.IsVisible = false;
 				}
 
-				canvas.StrokeColor = _popupView._popup.PopupStyle.GetCloseButtonIconStroke();
+				canvas.StrokeColor = _popupView._popup.PopupStyle.GetCloseIconColor();
 				canvas.StrokeSize = (float)_popupView._popup.PopupStyle.GetCloseButtonIconStrokeThickness();
 				PointF firstLine = new Point(0, 0);
 				PointF secondLine = new Point(0, 0);
