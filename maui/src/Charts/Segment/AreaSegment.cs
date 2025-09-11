@@ -184,8 +184,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				var yMin = YValues.Min();
 				yMin = double.IsNaN(yMin) ? YValues.Length > 0 ? YValues.Where(e => !double.IsNaN(e)).DefaultIfEmpty().Min() : 0 : yMin;
-				var start = series.ActualYAxis.VisibleRange.Start;
-				yMin = yMin == 0 ? (double.IsNaN(start) ? yMin : start) : yMin;
 
 				Empty = double.IsNaN(yMin);
 
