@@ -239,9 +239,27 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		protected internal double GetActualDesiredIntervalsCount(Size availableSize)
 		{
 			double size = !IsVertical ? availableSize.Width : availableSize.Height;
-			double adjustedDesiredIntervalsCount = size * (!IsVertical ? 0.54 : 1.0) * MaximumLabels;
-			var actualDesiredIntervalsCount = Math.Max(adjustedDesiredIntervalsCount / 100, 1.0);
-			return actualDesiredIntervalsCount;
+
+			double spacingFactor = 1.0; //If the Axis is Vertical
+
+			if (!IsVertical)
+			{
+				// Base factor for horizontal labels
+				double factor = 0.6;
+				// Adjust based on label rotation
+				double rotationRadians = Math.Abs(LabelRotation) * Math.PI / 180;
+
+				if (rotationRadians > 0)
+				{
+					// Rotated labels can be packed more densely
+					factor *= 1.0 + 0.3 * Math.Sin(rotationRadians);
+				}
+
+				spacingFactor = factor;
+			}
+			
+			double adjustedDesiredIntervalsCount = size * spacingFactor * MaximumLabels;
+			return Math.Max(adjustedDesiredIntervalsCount / 100, 1.0);
 		}
 
 		/// <summary>
