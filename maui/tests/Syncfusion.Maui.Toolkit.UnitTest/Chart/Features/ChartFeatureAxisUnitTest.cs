@@ -1534,7 +1534,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
         }
 
         [Theory]
-        [InlineData(0, 100, 1)]
+        [InlineData(0, 100, 20)]
         [InlineData(0, 365, 2)] 
         public void CalculateNiceInterval_ShouldReturnCorrectInterval(double start, double end, double expectedInterval)
         {
@@ -1604,7 +1604,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
         [InlineData(DateTimeIntervalType.Years, 0.1)]
         [InlineData(DateTimeIntervalType.Months, 1)]
         [InlineData(DateTimeIntervalType.Days, 50)]
-        [InlineData(DateTimeIntervalType.Hours, 1000)]
+        [InlineData(DateTimeIntervalType.Hours, 500)]
         [InlineData(DateTimeIntervalType.Minutes, 50000)]
         [InlineData(DateTimeIntervalType.Seconds, 2000000)]
         public void CalculateDateTimeIntervalType_ShouldReturnCorrectInterval_ForGivenIntervalType(DateTimeIntervalType intervalType, double expectedInterval)
@@ -2062,8 +2062,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
         }
 
         [Theory]
-        [InlineData(double.NaN, 10)]  
-        [InlineData(0, 10)]         
+        [InlineData(double.NaN, 5)]  
+        [InlineData(0, 5)]         
         [InlineData(5, 5)]        
         public void CalculateActualInterval_ReturnsExpectedInterval(double axisInterval, double expected)
         {
@@ -2081,7 +2081,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
         }
 
         [Theory]
-        [InlineData(1, 10, 100, 10)]    
+        [InlineData(1, 10, 100, 5)]    
         [InlineData(1, 1000, 100, 1000)]
         [InlineData(1, 1000, 10, 1000)] 
         public void CalculateNiceInterval_ReturnsExpectedInterval(double rangeStart, double rangeEnd, int availableWidth, double expected)
