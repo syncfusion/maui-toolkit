@@ -1139,7 +1139,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 		/// </summary>
 		void UpdateContentViewLayoutAndVisibility()
 		{
-			if ((!IsViewLoaded && !IsExpanded && FlowDirection != FlowDirection.RightToLeft && !Content!.IsVisible) || (Content == null && FlowDirection != FlowDirection.RightToLeft) || ContentView == null)
+			if (!IsViewLoaded || Content == null || ContentView == null)
 			{
 				return;
 			}
@@ -1225,7 +1225,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 		/// <param name="newvalue"></param>
 		void OnContentChanged(View? oldvalue, View? newvalue)
 		{
-			if ((!IsViewLoaded && !IsExpanded && FlowDirection != FlowDirection.RightToLeft && !Content!.IsVisible) || ContentView == null)
+			if (!IsViewLoaded || ContentView == null)
 			{
 				return;
 			}
