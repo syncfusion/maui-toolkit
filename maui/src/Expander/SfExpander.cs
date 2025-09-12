@@ -1225,7 +1225,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 		/// <param name="newvalue"></param>
 		void OnContentChanged(View? oldvalue, View? newvalue)
 		{
-			if (!IsViewLoaded || Content == null || ContentView == null)
+			if (!IsViewLoaded || ContentView == null)
 			{
 				return;
 			}
