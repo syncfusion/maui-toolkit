@@ -1924,6 +1924,112 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.False(expander.IsEnabled);
 		}
 
+		[Fact]
+		public void Constructor_AllowsNullContent_AndRetainsHeader()
+		{
+			var header = new Label { Text = "Header" };
+			var content = new Label { Text = "Content" };
+			var expander = new SfExpander()
+			{
+				Header = header,
+				Content = content,
+				IsExpanded = true,
+				IsViewLoaded = true,
+			};
+
+			var oldValue = expander.Content;
+			expander.Content = null;
+			var newValue = expander.Content;
+			Assert.Null(expander.Content);
+			Assert.NotNull(expander.Header);
+		}
+
+		[Fact]
+		public void SettingHeaderToNull_DoesNotAffectContent()
+		{
+			var content = new Label { Text = "Content" };
+			var expander = new SfExpander()
+			{
+				Header = null!,
+				Content = content,
+				IsExpanded = true,
+				IsViewLoaded = true
+			};
+
+			Assert.Null(expander.Header);
+			Assert.NotNull(expander.Content);
+		}
+
+		[Fact]
+		public void SettingHeaderAndContentToNull_DoesNotThrow()
+		{
+			var expander = new SfExpander()
+			{
+				Header = null!,
+				Content = null,
+				IsExpanded = true,
+				IsViewLoaded = true
+			};
+
+			Assert.Null(expander.Header);
+			Assert.Null(expander.Content);
+		}
+
+		[Fact]
+		public void SettingContentToNull_RetainsHeader_WithRTL()
+		{
+			var header = new Label { Text = "Header" };
+			var content = new Label { Text = "Content" };
+			var expander = new SfExpander()
+			{
+				Header = header,
+				Content = content,
+				IsExpanded = true,
+				IsViewLoaded = true,
+				FlowDirection = FlowDirection.RightToLeft
+			};
+
+			expander.Content = null;
+			Assert.Null(expander.Content);
+			Assert.NotNull(expander.Header);
+			Assert.Equal(FlowDirection.RightToLeft, expander.FlowDirection);
+		}
+
+		[Fact]
+		public void SettingHeaderAndContentToNull_WithRTL()
+		{
+			var expander = new SfExpander()
+			{
+				Header = null!,
+				Content = null,
+				IsExpanded = true,
+				IsViewLoaded = true,
+				FlowDirection = FlowDirection.RightToLeft
+			};
+
+			Assert.Null(expander.Header);
+			Assert.Null(expander.Content);
+			Assert.Equal(FlowDirection.RightToLeft, expander.FlowDirection);
+		}
+
+		[Fact]
+		public void SettingHeaderToNull_RetainsContent_WithRTL()
+		{
+			var content = new Label { Text = "Content" };
+			var expander = new SfExpander()
+			{
+				Header = null!,
+				Content = content,
+				IsExpanded = true,
+				IsViewLoaded = true,
+				FlowDirection = FlowDirection.RightToLeft
+			};
+
+			Assert.Null(expander.Header);
+			Assert.NotNull(expander.Content);
+			Assert.Equal(FlowDirection.RightToLeft, expander.FlowDirection);
+		}
+
 		#endregion
 
 	}
