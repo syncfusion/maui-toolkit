@@ -181,16 +181,9 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		{
 			bool isAnimationOn = true;
 #if ANDROID
-			try
-			{
-				var handler = Application.Current?.Handler;
-				float scale = Settings.Global.GetFloat(handler?.MauiContext?.Context?.ApplicationContext?.ContentResolver, Settings.Global.AnimatorDurationScale);
-				isAnimationOn = scale != 0.0f;
-			}
-			catch
-			{
-				isAnimationOn = false;
-			}
+			var handler = Application.Current?.Handler;
+			float scale = Settings.Global.GetFloat(handler?.MauiContext?.Context?.ApplicationContext?.ContentResolver, Settings.Global.AnimatorDurationScale, 0.0f);
+			isAnimationOn = scale != 0.0f;
 #endif
 			return isAnimationOn;
 		}
