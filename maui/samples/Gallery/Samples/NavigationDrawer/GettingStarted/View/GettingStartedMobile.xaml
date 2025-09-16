@@ -135,15 +135,15 @@
                         <Image Grid.Column="2" Source="person.png" Margin="0,0,5,0"  VerticalOptions="Center" WidthRequest="35" HeightRequest="35"/>
                     </Grid>
 
-                    <ListView BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Grid.Row="1"
-                                         x:Name="listView"
-                              RowHeight="80"
+                    <CollectionView BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Grid.Row="1"
+                                         x:Name="collectionView"
                                          ItemsSource="{Binding MailInfos}">
-                        
-                        <ListView.GroupHeaderTemplate>
+                        <CollectionView.ItemsLayout>
+                          <LinearItemsLayout Orientation="Vertical"
+                                             ItemSpacing="15"/> 
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.GroupHeaderTemplate>
                             <DataTemplate x:Name="GroupHeaderTemplate">
-                                <ViewCell>
-                                    <ViewCell.View>
                                         <Grid HeightRequest="16"
                                               Margin="16, 0, 16, 0">
                                             <Label Text="{Binding Key, Converter={StaticResource groupHeaderTextConverter}}"
@@ -153,17 +153,13 @@
                                                    FontSize="12"
                                                    Grid.Row="1" />
                                         </Grid>
-                                    </ViewCell.View>
-                                </ViewCell>
                             </DataTemplate>
-                        </ListView.GroupHeaderTemplate>
+                        </CollectionView.GroupHeaderTemplate>
 
-                        <ListView.ItemTemplate>
+                        <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <ViewCell>
-                                    <ViewCell.View>
                                         <Grid ColumnSpacing="12"
-                                      Margin="16, 14, 16, 14">
+                                      Margin="16, 14, 16, 14" Padding="{OnPlatform iOS='10,10,10,0'}">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="24" />
                                                 <RowDefinition Height="2" />
@@ -260,11 +256,9 @@
                                            VerticalOptions="Center">
                                             </Label>
                                         </Grid>
-                                    </ViewCell.View>
-                                </ViewCell>
                             </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
 
                     <Border Grid.Row="1"
                            Margin="16,0,16,5"

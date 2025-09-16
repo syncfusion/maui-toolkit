@@ -185,6 +185,13 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (_footerView is not null && _footerView._acceptButton is not null)
 			{
 				_footerView._acceptButton.Text = text;
+				SemanticProperties.SetDescription(_footerView._acceptButton, $"{_footerView._acceptButton.Text}");
+
+				// When the AcceptButtonText is updated, the AcceptButton width needs to be updated.
+				if (IsViewLoaded)
+				{
+					_footerView.UpdateFooterChildProperties();
+				}
 			}
 		}
 
@@ -197,6 +204,13 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (_footerView is not null && _footerView._declineButton is not null)
 			{
 				_footerView._declineButton.Text = text;
+				SemanticProperties.SetDescription(_footerView._declineButton, $"{_footerView._declineButton.Text}");
+
+				// When the DeclineButtonText is updated, the DeclineButton width needs to be updated.
+				if (IsViewLoaded)
+				{
+					_footerView.UpdateFooterChildProperties();
+				}
 			}
 		}
 
@@ -305,7 +319,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		void AddChildViews()
 		{
-			if (_headerView is not null)
+			if (_popup.ShowHeader && _headerView is not null)
 			{
 				Children.Add(_headerView);
 			}
@@ -315,7 +329,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				Children.Add(_popupMessageView);
 			}
 
-			if (_footerView is not null)
+			if (_popup.ShowFooter && _footerView is not null)
 			{
 				Children.Add(_footerView);
 			}
@@ -328,9 +342,16 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			// Considering the borderThickness for child views.
 			var borderThickness = _popup.PopupStyle.GetStrokeThickness();
-			(_headerView as IView)?.Measure(Math.Max(0, _popup._popupViewWidth - borderThickness), Math.Max(0, _popup.AppliedHeaderHeight));
+			if (_popup.ShowHeader)
+			{
+				(_headerView as IView)?.Measure(Math.Max(0, _popup._popupViewWidth - borderThickness), Math.Max(0, _popup.AppliedHeaderHeight));
+			}
+
 			(_popupMessageView as IView)?.Measure(Math.Max(0, _popup._popupViewWidth - borderThickness), Math.Max(0, _popup.AppliedBodyHeight));
-			(_footerView as IView)?.Measure(Math.Max(0, _popup._popupViewWidth - borderThickness), Math.Max(0, _popup.AppliedFooterHeight));
+			if (_popup.ShowFooter)
+			{
+				(_footerView as IView)?.Measure(Math.Max(0, _popup._popupViewWidth - borderThickness), Math.Max(0, _popup.AppliedFooterHeight));
+			}
 		}
 
 		#endregion
@@ -365,9 +386,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			// Considering the borderThickness for child views.
 			var padding = strokeThickness / 2;
-			(_headerView as IView)?.Arrange(new Rect(Math.Max(0, padding), Math.Max(0, padding), Math.Max(0, _popup._popupViewWidth - strokeThickness), Math.Max(0, _popup.AppliedHeaderHeight)));
+			if (_popup.ShowHeader)
+			{
+				(_headerView as IView)?.Arrange(new Rect(Math.Max(0, padding), Math.Max(0, padding), Math.Max(0, _popup._popupViewWidth - strokeThickness), Math.Max(0, _popup.AppliedHeaderHeight)));
+			}
+
 			(_popupMessageView as IView)?.Arrange(new Rect(Math.Max(0, padding), Math.Max(0, padding + _popup.AppliedHeaderHeight), Math.Max(0, _popup._popupViewWidth - strokeThickness), Math.Max(0, _popup.AppliedBodyHeight)));
-			(_footerView as IView)?.Arrange(new Rect(Math.Max(0, padding), Math.Max(0, padding + _popup.AppliedHeaderHeight + _popup.AppliedBodyHeight), Math.Max(0, _popup._popupViewWidth - strokeThickness), Math.Max(0, _popup.AppliedFooterHeight)));
+			if (_popup.ShowFooter)
+			{
+				(_footerView as IView)?.Arrange(new Rect(Math.Max(0, padding), Math.Max(0, padding + _popup.AppliedHeaderHeight + _popup.AppliedBodyHeight), Math.Max(0, _popup._popupViewWidth - strokeThickness), Math.Max(0, _popup.AppliedFooterHeight)));
+			}
+
 			return new Size(Math.Max(0, _popup._popupViewWidth), Math.Max(0, _popup._popupViewHeight));
 		}
 
@@ -406,7 +435,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				canvas.StrokeColor = _popup.PopupStyle.GetStroke();
 				canvas.StrokeSize = (float)strokeThickness;
+#if ANDROID
 				if (OperatingSystem.IsAndroidVersionAtLeast(33))
+#endif
 				{
 					if (!_popup._isRTL || DeviceInfo.Platform == DevicePlatform.iOS)
 					{
@@ -417,11 +448,37 @@ namespace Syncfusion.Maui.Toolkit.Popup
 						canvas.DrawRoundedRectangle(dirtyRect, _popup.PopupStyle.CornerRadius.TopRight, _popup.PopupStyle.CornerRadius.TopLeft, _popup.PopupStyle.CornerRadius.BottomRight, _popup.PopupStyle.CornerRadius.BottomLeft);
 					}
 				}
+#if ANDROID
 				else
 				{
 					canvas.DrawRoundedRectangle(dirtyRect, _popup._radiusValue);
 				}
+#endif
 			}
+		}
+
+		/// <summary>
+		/// Occurs when the PopupView binding context is changed.
+		/// </summary>
+		protected override void OnBindingContextChanged()
+		{
+			// If Template selector along with binding context used, template will not be updated
+			if (_popup is not null && _popup._popupView is PopupView _popupView)
+			{
+				if (_popupView._headerView is not null && _popup.ShowHeader)
+				{
+					_popupView._headerView.RefreshChildViews();
+				}
+
+				_popupView._popupMessageView?.RefreshChildViews();
+
+				if (_popupView._footerView is not null && _popup.ShowFooter)
+				{
+					_popupView._footerView.RefreshChildViews();
+				}
+			}
+
+			base.OnBindingContextChanged();
 		}
 
 		/// <summary>
@@ -442,16 +499,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 #endif
 				}
 
-				// BindingContext is Null in SfPopup When Using DataTemplateSelector. To address this, add the messageView child after the BindingContext is set. By OnHandlerChanged it will invoke OnSelectTemplate.
-				if (!IsViewLoaded)
+				// BindingContext Null in SfPopup When Using DataTemplateSelector.
+				if (Handler is not null && !IsViewLoaded)
 				{
 					IsViewLoaded = true;
-					if (_popup is not null && _popup._popupView is not null)
-					{
-						_popup._popupView._headerView?.AddChildViews();
-						_popup._popupView._popupMessageView?.AddChildViews();
-						_popup._popupView._footerView?.AddChildViews();
-					}
 				}
 			}
 

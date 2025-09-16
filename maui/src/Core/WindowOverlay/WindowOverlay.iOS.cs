@@ -1,4 +1,5 @@
 ﻿using CoreGraphics;
+using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using UIKit;
 using MauiView = Microsoft.Maui.Controls.View;
@@ -11,7 +12,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
 
 		UIView? _rootView;
 		WindowOverlayStack? _overlayStack;
-
+		UIView? _overlayContent;
 		#endregion
 
 		#region Internal Methods
@@ -146,6 +147,169 @@ namespace Syncfusion.Maui.Toolkit.Internals
 				childView.RemoveFromSuperview();
 				_positionDetails.Remove(childView);
 			}
+		}
+
+		/// <summary>
+		/// Removes the overlay from the current view hierarchy and cleans up associated resources.
+		/// </summary>
+		internal void RemoveOverlay()
+		{
+			if (_overlayStack is not null)
+			{
+				_overlayStack.ClearSubviews();
+				_overlayStack.RemoveFromSuperview();
+			}
+		}
+
+		/// <summary>
+		/// Adds a child view to the current window.
+		/// </summary>
+		/// <remarks>This method ensures that the child view is added to the window and converted to its
+		/// platform-specific representation. If the <paramref name="childView"/> is <see langword="null"/> or the
+		/// overlay stack is not initialized, the method exits without performing any action.</remarks>
+		/// <param name="childView">The child view to be added. Must not be <see langword="null"/>.</param>
+		internal bool AddToOverlay(MauiView childView)
+		{
+			_window = WindowOverlayHelper._window;
+			if (_window is not null && _window.Content is not null)
+			{
+				_rootView = WindowOverlayHelper._platformRootView;
+				if (_rootView is not null)
+				{
+					UIWindow? keyWindow = null;
+					try
+					{
+						if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+						{
+							var connectedScenes = UIApplication.SharedApplication.ConnectedScenes;
+							if (connectedScenes is not null)
+							{
+								keyWindow = connectedScenes
+											.ToArray()
+											.OfType<UIWindowScene>()
+											.SelectMany(scene => scene.Windows)
+											.FirstOrDefault(window => window.IsKeyWindow)!;
+							}
+						}
+						else
+						{
+							keyWindow = UIApplication.SharedApplication.KeyWindow!;
+						}
+					}
+					catch
+					{
+						return false;
+					}
+
+					if (keyWindow == null && _rootView is UIWindow)
+					{
+						keyWindow = _rootView as UIWindow;
+					}
+
+					if (keyWindow is not null)
+					{
+						_rootView = keyWindow;
+						_overlayStack ??= CreateStack();
+						if (_overlayStack is not null)
+						{
+							// Need to set the Parent Size for Child.
+							_overlayStack.AutoresizingMask = UIViewAutoresizing.All;
+							if (_window.Handler is not null && _window.Handler is WindowHandler windowHandler && windowHandler.MauiContext is not null)
+							{
+								_overlayContent = childView.ToPlatform(windowHandler.MauiContext);
+								return true;
+							}
+						}
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Positions the popup at the specified coordinates relative to the screen.
+		/// </summary>
+		/// <remarks>The method ensures that the popup is added to the view hierarchy if it is not already
+		/// present.  The coordinates are automatically scaled based on the device's screen density.</remarks>
+		/// <param name="x">The horizontal position, in device-independent units (DIPs), where the popup should be placed. Defaults to
+		/// 0.</param>
+		/// <param name="y">The vertical position, in device-independent units (DIPs), where the popup should be placed. Defaults to 0.</param>
+		internal void PositionOverlayContent(double x = 0, double y = 0)
+		{
+			float posX = (float)x;
+			float posY = (float)y;
+
+			// Refresh KeyWindow since mopup can be added, which will have a new UI window.
+			// We initialized rootView at the start, but mopup could have opened in the middle, requiring a refresh.
+			UIWindow? keyWindow = null;
+			if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+			{
+				var connectedScenes = UIApplication.SharedApplication.ConnectedScenes;
+				if (connectedScenes is not null)
+				{
+					keyWindow = connectedScenes
+								 .ToArray()
+								 .OfType<UIWindowScene>()
+								 .SelectMany(scene => scene.Windows)
+								 .FirstOrDefault(window => window.IsKeyWindow)!;
+				}
+			}
+			else
+			{
+				keyWindow = UIApplication.SharedApplication.KeyWindow!;
+			}
+
+			if (_rootView != keyWindow)
+			{
+				_rootView = keyWindow;
+			}
+
+			if (_overlayStack is not null)
+			{
+				if (_rootView is not null && !_overlayStack.IsDescendantOfView(_rootView))
+				{
+					if (_rootView != _overlayStack.Superview)
+					{
+						_overlayStack.RemoveFromSuperview();
+						_rootView.AddSubview(_overlayStack);
+					}
+
+					_rootView.BringSubviewToFront(_overlayStack);
+					_overlayStack.Frame = _rootView.Frame;
+				}
+
+				if (_overlayContent is not null)
+				{
+					if (!_overlayContent.IsDescendantOfView(_overlayStack))
+					{
+						_overlayStack.AddSubview(_overlayContent);
+					}
+
+					_overlayContent.Frame = _overlayStack.Frame;
+					_overlayContent.SizeToFit();
+
+					if (!_overlayContent.Frame.IsEmpty)
+					{
+						AlignPosition(WindowOverlayHorizontalAlignment.Left, WindowOverlayVerticalAlignment.Top,
+							(float)_overlayContent.Frame.Width, (float)_overlayContent.Frame.Height,
+							ref posX, ref posY);
+						_overlayContent.Frame = new CGRect(posX, posY, _overlayContent.Frame.Width, _overlayContent.Frame.Height);
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Dispose the objects in window overlay.
+		/// </summary>
+		internal void Dispose()
+		{
+			RemoveOverlay();
+			_window = null;
+			_overlayContent = null;
+			_hasOverlayStackInRoot = false;
+			_overlayStack = null;
 		}
 
 		/// <summary>

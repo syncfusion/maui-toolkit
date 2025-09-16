@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
 using Syncfusion.Maui.Toolkit.Themes;
@@ -98,104 +99,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 typeof(SfPicker),
                 defaultValueCreator: bindable => Color.FromArgb("#EEE8F4"),
                 propertyChanged: OnPickerBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="HeaderBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="HeaderBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty HeaderBackgroundProperty =
-            BindableProperty.Create(
-                nameof(HeaderBackground),
-                typeof(Brush),
-                typeof(SfPicker),
-                defaultValueCreator: bindable => new SolidColorBrush(Color.FromArgb("#F7F2FB")),
-                propertyChanged: OnHeaderBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="FooterBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="FooterBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty FooterBackgroundProperty =
-            BindableProperty.Create(
-                nameof(FooterBackground),
-                typeof(Brush),
-                typeof(SfPicker),
-                defaultValueCreator: bindable => Brush.Transparent,
-                propertyChanged: OnFooterBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="SelectionBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty SelectionBackgroundProperty =
-            BindableProperty.Create(
-                nameof(SelectionBackground),
-                typeof(Brush),
-                typeof(SfPicker),
-                defaultValueCreator: bindable => new SolidColorBrush(Color.FromArgb("#6750A4")),
-                propertyChanged: OnSelectionBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionStrokeColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="SelectionStrokeColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty SelectionStrokeColorProperty =
-            BindableProperty.Create(
-                nameof(SelectionStrokeColor),
-                typeof(Color),
-                typeof(SfPicker),
-                defaultValueCreator: bindable => Colors.Transparent,
-                propertyChanged: OnSelectionStrokeColorChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionCornerRadius"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="SelectionCornerRadius"/> dependency property.
-        /// </value>
-        internal static readonly BindableProperty SelectionCornerRadiusProperty =
-            BindableProperty.Create(
-                nameof(SelectionCornerRadius),
-                typeof(CornerRadius),
-                typeof(SfPicker),
-                defaultValueCreator: bindable => new CornerRadius(20),
-                propertyChanged: OnSelectionCornerRadiusChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="HeaderDividerColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="HeaderDividerColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty HeaderDividerColorProperty =
-            BindableProperty.Create(
-                nameof(HeaderDividerColor),
-                typeof(Color),
-                typeof(SfPicker),
-                defaultValueCreator: bindable => Color.FromArgb("#CAC4D0"),
-                propertyChanged: OnHeaderDividerColorChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="FooterDividerColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="FooterDividerColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty FooterDividerColorProperty =
-            BindableProperty.Create(
-                nameof(FooterDividerColor),
-                typeof(Color),
-                typeof(SfPicker),
-                defaultValueCreator: bindable => Color.FromArgb("#CAC4D0"),
-                propertyChanged: OnFooterDividerColorChanged);
 
         /// <summary>
         /// Identifies the <see cref="HeaderTextColor"/> dependency property.
@@ -336,11 +239,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
             Focus();
             ColumnHeaderView.Parent = this;
             BackgroundColor = PickerBackground;
+            InitializePickerStyle();
             Dispatcher.Dispatch(() =>
             {
                 InitializeTheme();
             });
         }
+
+        #endregion
+
+        #region fields
+
+        /// <summary>
+        /// If the selected item null or selected index has -1 then user click the cancel button.
+        /// </summary>
+        bool _showSelectionOnNullItem;
 
         #endregion
 
@@ -552,69 +465,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
-        /// Gets or sets the background of the header view in picker.
-        /// </summary>
-        internal Brush HeaderBackground
-        {
-            get { return (Brush)GetValue(HeaderBackgroundProperty); }
-            set { SetValue(HeaderBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the footer view in SfPicker.
-        /// </summary>
-        internal Brush FooterBackground
-        {
-            get { return (Brush)GetValue(FooterBackgroundProperty); }
-            set { SetValue(FooterBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the selection view in SfPicker.
-        /// </summary>
-        internal Brush SelectionBackground
-        {
-            get { return (Brush)GetValue(SelectionBackgroundProperty); }
-            set { SetValue(SelectionBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the stroke color of the selection view in SfPicker.
-        /// </summary>
-        internal Color SelectionStrokeColor
-        {
-            get { return (Color)GetValue(SelectionStrokeColorProperty); }
-            set { SetValue(SelectionStrokeColorProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the corner radius of the selection view in SfPicker.
-        /// </summary>
-        internal CornerRadius SelectionCornerRadius
-        {
-            get { return (CornerRadius)GetValue(SelectionCornerRadiusProperty); }
-            set { SetValue(SelectionCornerRadiusProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the color of the header separator line in picker.
-        /// </summary>
-        internal Color HeaderDividerColor
-        {
-            get { return (Color)GetValue(HeaderDividerColorProperty); }
-            set { SetValue(HeaderDividerColorProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the footer separator line background in SfPicker.
-        /// </summary>
-        internal Color FooterDividerColor
-        {
-            get { return (Color)GetValue(FooterDividerColorProperty); }
-            set { SetValue(FooterDividerColorProperty, value); }
-        }
-
-        /// <summary>
         /// Gets or sets the header text color of the text style.
         /// </summary>
         internal Color HeaderTextColor
@@ -712,6 +562,23 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">Selection changed event arguments.</param>
         void OnPickerSelectionIndexChanged(object? sender, PickerSelectionChangedEventArgs e)
         {
+            // If the picker is not in Default mode
+            if (IsScrollSelectionAllowed() && BaseColumns.Count == 1)
+            {
+                // If there was no previously selected item (OldValue is -1),
+                // set a flag to indicate that selection started from a null state
+                if ((int)e.OldValue == -1)
+                {
+                    _showSelectionOnNullItem = true;
+                    return;
+                }
+                // If the new selection is invalid (NewValue is -1), do nothing
+                if ((int)e.NewValue == -1)
+                {
+                    return;
+                }
+            }
+
             SelectionChanged?.Invoke(this, e);
             if (SelectionChangedCommand != null && SelectionChangedCommand.CanExecute(e))
             {
@@ -743,21 +610,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void InitializeTheme()
         {
             ThemeElement.InitializeThemeResources(this, "SfPickerTheme");
+
+            this.SetDynamicResource(HeaderTextColorProperty, "SfPickerNormalHeaderTextColor");
+            this.SetDynamicResource(HeaderFontSizeProperty, "SfPickerNormalHeaderFontSize");
+
+            this.SetDynamicResource(FooterTextColorProperty, "SfPickerNormalFooterTextColor");
+            this.SetDynamicResource(FooterFontSizeProperty, "SfPickerNormalFooterFontSize");
+        }
+
+        /// <summary>
+        /// Method to initialize the defult picker style.
+        /// </summary>
+        void InitializePickerStyle()
+        {
             SetDynamicResource(PickerBackgroundProperty, "SfPickerNormalBackground");
 
-            SetDynamicResource(HeaderBackgroundProperty, "SfPickerNormalHeaderBackground");
-            SetDynamicResource(HeaderDividerColorProperty, "SfPickerNormalHeaderDividerColor");
-            SetDynamicResource(HeaderTextColorProperty, "SfPickerNormalHeaderTextColor");
-            SetDynamicResource(HeaderFontSizeProperty, "SfPickerNormalHeaderFontSize");
-
-            SetDynamicResource(FooterBackgroundProperty, "SfPickerNormalFooterBackground");
-            SetDynamicResource(FooterDividerColorProperty, "SfPickerNormalFooterDividerColor");
-            SetDynamicResource(FooterTextColorProperty, "SfPickerNormalFooterTextColor");
-            SetDynamicResource(FooterFontSizeProperty, "SfPickerNormalFooterFontSize");
-
-            SetDynamicResource(SelectionBackgroundProperty, "SfPickerSelectionBackground");
-            SetDynamicResource(SelectionStrokeColorProperty, "SfPickerSelectionStroke");
-            SetDynamicResource(SelectionCornerRadiusProperty, "SfPickerSelectionCornerRadius");
             SetDynamicResource(SelectedTextColorProperty, "SfPickerSelectedTextColor");
             SetDynamicResource(SelectedFontSizeProperty, "SfPickerSelectedFontSize");
             SetDynamicResource(SelectionTextColorProperty, "SfPickerSelectionTextColor");
@@ -853,6 +720,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments.</param>
         protected override void OnPopupClosed(EventArgs e)
         {
+            if (IsScrollSelectionAllowed() && BaseColumns.Count == 1)
+            {
+                if (_showSelectionOnNullItem)
+                {
+                    foreach (var column in this.Columns)
+                    {
+                        column.SelectedItem = null;
+                        _showSelectionOnNullItem = false;
+                    }
+                }
+            }
+
             InvokeClosedEvent(this, e);
         }
 
@@ -880,6 +759,33 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments.</param>
         protected override void OnOkButtonClicked(EventArgs e)
         {
+            // If the picker is not in Default mode
+            if (IsScrollSelectionAllowed() && BaseColumns.Count == 1)
+            {
+                // Iterate through each column in the picker
+                foreach (PickerColumn column in this.Columns)
+                {
+                    // Skip columns that have no internal selection
+                    if (column._internalSelectedIndex == -1)
+                    {
+                        continue;
+                    }
+                    // If the column has a valid item source and it's a list
+                    if (column.ItemsSource != null && column.ItemsSource is IList pickerCollection)
+                    {
+                        // Check if the selected index is within the valid range of the collection
+                        if (column.SelectedIndex >= 0 && column.SelectedIndex < pickerCollection.Count)
+                        {
+                            // Apply the internal selected index to the actual selected index
+                            int selectedIndex = column._internalSelectedIndex;
+                            column._internalSelectedIndex = -1;
+                            // Apply selection
+                            column.SelectedIndex = selectedIndex;
+                        }
+                    }
+                }
+            }
+
             InvokeOkButtonClickedEvent(this, e);
             if (AcceptCommand != null && AcceptCommand.CanExecute(e))
             {
@@ -893,6 +799,36 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments.</param>
         protected override void OnCancelButtonClicked(EventArgs e)
         {
+            // If the picker is not in Default mode
+            if (IsScrollSelectionAllowed() && BaseColumns.Count == 1)
+            {
+                // Get the picker container instance to perform scroll operations
+                PickerContainer? pickerContainer = this.GetPickerContainerValue();
+                // Iterate through each column in the picker
+                foreach (PickerColumn column in this.Columns)
+                {
+                    // Check if the column has a valid item source and it's a list
+                    if (column.ItemsSource != null && column.ItemsSource is IList pickerCollection)
+                    {
+                        // Ensure the selected index is within the valid range of the collection
+                        if (column.SelectedIndex >= 0 && column.SelectedIndex < pickerCollection.Count)
+                        {
+                            // If selection started from a null item, clear the selection
+                            if (this._showSelectionOnNullItem)
+                            {
+                                column.SelectedItem = null;
+                                this._showSelectionOnNullItem = false;
+                            }
+                            else
+                            {
+                                // Otherwise, scroll to the currently selected index to restore selection
+                                pickerContainer?.ScrollToSelectedIndex(column._columnIndex, column.SelectedIndex);
+                            }
+                        }
+                    }
+                }
+            }
+
             InvokeCancelButtonClickedEvent(this, e);
             if (DeclineCommand != null && DeclineCommand.CanExecute(e))
             {
@@ -996,125 +932,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             picker.BackgroundColor = picker.PickerBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker header background changed.
-        /// </summary>
-        /// <param name="bindable">The header settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnHeaderBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfPicker? picker = bindable as SfPicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.HeaderView.Background = picker.HeaderBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker footer background changed.
-        /// </summary>
-        /// <param name="bindable">The footer settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnFooterBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfPicker? picker = bindable as SfPicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.FooterView.Background = picker.FooterBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection background changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfPicker? picker = bindable as SfPicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.Background = picker.SelectionBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection stroke color changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionStrokeColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfPicker? picker = bindable as SfPicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.Stroke = picker.SelectionStrokeColor;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection corner radius changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionCornerRadiusChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfPicker? picker = bindable as SfPicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.CornerRadius = picker.SelectionCornerRadius;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker header separator line background changed.
-        /// </summary>
-        /// <param name="bindable">The header settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnHeaderDividerColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfPicker? picker = bindable as SfPicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.HeaderView.DividerColor = picker.HeaderDividerColor;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker footer separator line background changed.
-        /// </summary>
-        /// <param name="bindable">The footer settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnFooterDividerColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfPicker? picker = bindable as SfPicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.FooterView.DividerColor = picker.FooterDividerColor;
         }
 
         /// <summary>

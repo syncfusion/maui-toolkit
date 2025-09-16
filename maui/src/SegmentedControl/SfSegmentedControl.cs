@@ -100,9 +100,16 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 #if __IOS__
 			this.IgnoreSafeArea = true;
 #endif
+
+#if WINDOWS
+			// In Windows, the clip might throw an exception when setting the clip bounds on dispatcher.
+            // Therefore, initializing the clip in initial loading to avoid the exception.
+			Clip = new RoundRectangleGeometry();
+#endif
+
 		}
 
-		#endregion
+#endregion
 
 		#region Properties
 
@@ -393,18 +400,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// <param name="bounds">The bounds.</param>
 		void SetClipBounds(Rect bounds)
 		{
-#if WINDOWS
-			// In Windows, the clip might throw an exception when setting the clip bounds on initial loading.
-			// Therefore, update the clip using the dispatcher.
-			Dispatcher.Dispatch(() =>
-			{
-				Clip ??= new RoundRectangleGeometry();
-
-				UpdateClip(bounds);
-			});
-#else
 			UpdateClip(bounds);
-#endif
 		}
 
 		/// <summary>
@@ -1184,6 +1180,15 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		{
 			_isAutoScrollToSelectedIndex = true;
 			SelectionChanged?.Invoke(this, eventArgs);
+		}
+
+		/// <summary>
+		/// Triggers the tapped event for the segment item.
+		/// </summary>
+		/// <param name="eventArgs">The <see cref="SegmentTappedEventArgs"/> containing the containing the tapped item.</param>
+		void ISegmentItemInfo.TriggerTappedEvent(SegmentTappedEventArgs eventArgs)
+		{
+			this.Tapped?.Invoke(this, eventArgs);
 		}
 
 		/// <summary>

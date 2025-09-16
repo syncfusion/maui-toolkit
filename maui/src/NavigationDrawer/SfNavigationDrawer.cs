@@ -2435,6 +2435,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					if (!_cancelOpenEventArgs.Cancel)
 					{
 						double currentDuration;
+						var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 						if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
 						{
 							currentDuration = (Math.Abs(_drawerLayout.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
@@ -2450,22 +2451,22 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 						Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
 						if (DrawerSettings.Transition == Transition.SlideOnTop)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 							{
 								OnDrawerOpenedToggledEvent();
 							});
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing, finished: (v, e) =>
 							{
-								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
 							});
 						}
 						else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && _mainContentGrid != null)
 						{
 							Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, DrawerSettings.DrawerWidth);
 							Animation contentViewTranslatePushAnimation = new Animation(d => _mainContentGrid.TranslationX = d, _mainContentGrid.TranslationX, DrawerSettings.DrawerWidth);
-							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear);
-							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
-							_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+							_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 							{
 								OnDrawerOpenedToggledEvent();
 							});
@@ -2504,6 +2505,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				if (!_cancelCloseEventArgs.Cancel)
 				{
 					double currentDuration;
+					var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 					if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
 					{
 						currentDuration = (Math.Abs(DrawerSettings.DrawerWidth + _drawerLayout.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
@@ -2519,7 +2521,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
 					if (DrawerSettings.Transition == Transition.SlideOnTop)
 					{
-						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (_drawerLayout.TranslationX == -DrawerSettings.DrawerWidth)
@@ -2528,21 +2530,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 								OnDrawerClosedToggledEvent();
 							}
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
 						});
 					}
 					else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && _mainContentGrid != null)
 					{
 						Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
 						Animation contentViewTranslatePushAnimation = new Animation(d => _mainContentGrid.TranslationX = d, _mainContentGrid.TranslationX, 0);
-						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
-						_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+						_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (_mainContentGrid.TranslationX == 0)
@@ -2590,6 +2592,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					if (!_cancelOpenEventArgs.Cancel)
 					{
 						double currentDuration;
+						var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 						if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
 						{
 							currentDuration = (Math.Abs((ScreenWidth - DrawerSettings.DrawerWidth) - _drawerLayout.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
@@ -2605,22 +2608,22 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 						Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
 						if (DrawerSettings.Transition == Transition.SlideOnTop)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: Easing.Linear, finished: (v, e) =>
+							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: animationEasing, finished: (v, e) =>
 							{
 								OnDrawerOpenedToggledEvent();
 							});
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing, finished: (v, e) =>
 							{
-								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: Easing.Linear);
+								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: animationEasing);
 							});
 						}
 						else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && _mainContentGrid != null)
 						{
 							Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, -DrawerSettings.DrawerWidth);
 							Animation contentViewTranslatePushAnimation = new Animation(d => _mainContentGrid.TranslationX = d, _mainContentGrid.TranslationX, -DrawerSettings.DrawerWidth);
-							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear);
-							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: Easing.Linear);
-							_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: animationEasing);
+							_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 							{
 								OnDrawerOpenedToggledEvent();
 							});
@@ -2660,6 +2663,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				if (!_cancelCloseEventArgs.Cancel)
 				{
 					double currentDuration;
+					var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 					if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
 					{
 						currentDuration = (Math.Abs(ScreenWidth - _drawerLayout.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
@@ -2675,7 +2679,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
 					if (DrawerSettings.Transition == Transition.SlideOnTop)
 					{
-						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: Easing.Linear, finished: (v, e) =>
+						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: animationEasing, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (_drawerLayout.TranslationX == ScreenWidth)
@@ -2684,21 +2688,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 								OnDrawerClosedToggledEvent();
 							}
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: animationEasing, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
 						});
 					}
 					else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && _mainContentGrid != null)
 					{
 						Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
 						Animation contentViewTranslatePushAnimation = new Animation(d => _mainContentGrid.TranslationX = d, _mainContentGrid.TranslationX, 0);
-						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
-						_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+						_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (_mainContentGrid.TranslationX == 0)
@@ -2739,6 +2743,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						double currentDuration = 0;
 						double pushDuration = 0;
+						var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 						if (DrawerSettings.Transition != Transition.Reveal)
 						{
 							currentDuration = Math.Abs(-((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
@@ -2758,28 +2763,28 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 						Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
 						if (DrawerSettings.Transition == Transition.SlideOnTop)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 							{
 								OnDrawerOpenedToggledEvent();
 							});
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing, finished: (v, e) =>
 							{
-								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
 							});
 						}
 						else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && _mainContentGrid != null)
 						{
 							Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, DrawerSettings.DrawerHeight);
 							Animation contentViewTranslatePushAnimation = new Animation(d => _mainContentGrid.TranslationY = d, _mainContentGrid.TranslationY, DrawerSettings.DrawerHeight);
-							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear);
-							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
-							_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+							_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 							{
 								OnDrawerOpenedToggledEvent();
 							});
 							if (DrawerSettings.Transition == Transition.Push)
 							{
-								_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)pushDuration, easing: Easing.Linear);
+								_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)pushDuration, easing: animationEasing);
 							}
 						}
 
@@ -2817,6 +2822,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					double currentDuration;
 					double pushDuration = 0;
+					var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 					if (DrawerSettings.Transition != Transition.Reveal)
 					{
 						currentDuration = (Math.Abs(((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2)) + _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight) * DrawerSettings.Duration;
@@ -2836,7 +2842,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
 					if (DrawerSettings.Transition == Transition.SlideOnTop)
 					{
-						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: Easing.Linear, finished: (v, e) =>
+						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: animationEasing, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (_drawerLayout.TranslationY == -((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) + _toolBarHeight))
@@ -2845,21 +2851,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 								OnDrawerClosedToggledEvent();
 							}
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: animationEasing, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
 						});
 					}
 					else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && _mainContentGrid != null)
 					{
 						Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, 0);
 						Animation contentViewTranslatePushAnimation = new Animation(d => _mainContentGrid.TranslationY = d, _mainContentGrid.TranslationY, 0);
-						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
-						_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+						_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (_mainContentGrid.TranslationY == 0)
@@ -2870,7 +2876,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 						});
 						if (DrawerSettings.Transition == Transition.Push)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)pushDuration, easing: Easing.Linear);
+							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)pushDuration, easing: animationEasing);
 						}
 					}
 
@@ -2898,6 +2904,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					if (!_cancelOpenEventArgs.Cancel)
 					{
 						double currentDuration = 0;
+						var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 						if (DrawerSettings.Transition != Transition.Reveal)
 						{
 							currentDuration = Math.Abs((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2) - _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
@@ -2913,22 +2920,22 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 						Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
 						if (DrawerSettings.Transition == Transition.SlideOnTop)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 							{
 								OnDrawerOpenedToggledEvent();
 							});
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing, finished: (v, e) =>
 							{
-								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
 							});
 						}
 						else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && _mainContentGrid != null)
 						{
 							Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, -DrawerSettings.DrawerHeight);
 							Animation contentViewTranslatePushAnimation = new Animation(d => _mainContentGrid.TranslationY = d, _mainContentGrid.TranslationY, -DrawerSettings.DrawerHeight);
-							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear);
-							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
-							_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+							_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 							{
 								OnDrawerOpenedToggledEvent();
 							});
@@ -2968,6 +2975,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				if (!_cancelCloseEventArgs.Cancel)
 				{
 					double currentDuration;
+					var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 					if (DrawerSettings.Transition != Transition.Reveal)
 					{
 						currentDuration = Math.Abs((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) - _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
@@ -2983,7 +2991,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
 					if (DrawerSettings.Transition == Transition.SlideOnTop)
 					{
-						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (_drawerLayout.TranslationY == (ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2))
@@ -2992,21 +3000,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 								OnDrawerClosedToggledEvent();
 							}
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
 						});
 					}
 					else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && _mainContentGrid != null)
 					{
 						Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, 0);
 						Animation contentViewTranslatePushAnimation = new Animation(d => _mainContentGrid.TranslationY = d, _mainContentGrid.TranslationY, 0);
-						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
-						_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+						_mainContentGrid.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (_mainContentGrid.TranslationY == 0)
@@ -3142,9 +3150,10 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 		void DrawerPushAnimation(double currentDuration, Animation drawerAnimation)
 		{
+			var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
 			if (DrawerSettings.Transition == Transition.Push)
 			{
-				_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear);
+				_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing);
 			}
 		}
 
@@ -3288,7 +3297,8 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 		static void OnDrawerSettingsChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (bindable is SfNavigationDrawer drawer)
+			var drawer = bindable as SfNavigationDrawer;
+			if (drawer != null)
 			{
 				drawer.OnDefaultDrawerSettingsChanged();
 				drawer.DrawerSettings.PropertyChanged -= drawer.OnDefaultDrawerSettings_PropertyChanged;
@@ -3299,6 +3309,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			{
 				if (oldValue is DrawerSettings previousSetting)
 				{
+					previousSetting.PropertyChanged -= drawer!.OnDefaultDrawerSettings_PropertyChanged;
 					previousSetting.BindingContext = null;
 					previousSetting.Parent = null;
 				}

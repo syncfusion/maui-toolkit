@@ -19,10 +19,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 	{
 		#region Fields
 
-		Canvas? shadowCanvas;
-		SpriteVisual? shadowVisual;
-		Rectangle? shadowHost;
-		DropShadow? dropShadow;
+		Canvas? _shadowCanvas;
+		SpriteVisual? _shadowVisual;
+		Rectangle? _shadowHost;
+		DropShadow? _dropShadow;
 
 		#endregion
 
@@ -71,6 +71,20 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
+		/// Used to wire root view loaded events.
+		/// </summary>
+		internal void WirePlatformViewLoaded()
+		{
+			if (WindowOverlayHelper._platformRootView is not null && WindowOverlayHelper._platformRootView is FrameworkElement frameworkElement)
+			{
+				if (!frameworkElement.IsLoaded)
+				{
+					frameworkElement.Loaded += FrameworkElement_Loaded;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Method updates the mask for the shadow.
 		/// </summary>
 		internal async void UpdateNativePopupViewShadowMask()
@@ -78,10 +92,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (_popupView is not null && _popupView.Handler is not null && _popupView.Handler.PlatformView is not null &&
 					_popupView.Handler.PlatformView is LayoutPanelExt popupNativeView && popupNativeView is not null)
 			{
-				if (dropShadow is not null)
+				if (_dropShadow is not null)
 				{
 					// The Popup shadow is updated with _popupViewWidth and _popupViewHeight.
-					dropShadow.Mask = await popupNativeView.GetAlphaMaskAsync((int)_popupViewWidth, (int)_popupViewHeight);
+					_dropShadow.Mask = await popupNativeView.GetAlphaMaskAsync((int)_popupViewWidth, (int)_popupViewHeight);
 				}
 			}
 		}
@@ -93,7 +107,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			if (PopupStyle.HasShadow)
 			{
-				if (shadowCanvas is not null)
+				if (_shadowCanvas is not null)
 				{
 					return;
 				}
@@ -108,24 +122,24 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 					if (_popupView.Handler.ContainerView is WrapperView containerView && containerView is not null && _popupView.Handler.PlatformView is LayoutPanelExt popupNativeView && popupNativeView is not null)
 					{
-						shadowCanvas = new Canvas();
-						containerView.Children.Insert(0, shadowCanvas);
-						var compositor = ElementCompositionPreview.GetElementVisual(shadowCanvas).Compositor;
-						shadowHost = new Rectangle() { Fill = new SolidColorBrush(Colors.Transparent).ToBrush(), Width = _popupViewWidth, Height = _popupViewHeight };
-						Canvas.SetLeft(shadowHost, 0);
-						Canvas.SetTop(shadowHost, 0);
-						shadowCanvas.Children.Insert(0, shadowHost);
-						dropShadow = compositor.CreateDropShadow();
-						dropShadow.BlurRadius = 20f;
-						dropShadow.Color = Color.FromRgba(0, 0, 0, 0.3).ToWindowsColor();
+						_shadowCanvas = new Canvas();
+						containerView.Children.Insert(0, _shadowCanvas);
+						var compositor = ElementCompositionPreview.GetElementVisual(_shadowCanvas).Compositor;
+						_shadowHost = new Rectangle() { Fill = new SolidColorBrush(Colors.Transparent).ToBrush(), Width = _popupViewWidth, Height = _popupViewHeight };
+						Canvas.SetLeft(_shadowHost, 0);
+						Canvas.SetTop(_shadowHost, 0);
+						_shadowCanvas.Children.Insert(0, _shadowHost);
+						_dropShadow = compositor.CreateDropShadow();
+						_dropShadow.BlurRadius = 20f;
+						_dropShadow.Color = Color.FromRgba(0, 0, 0, 0.3).ToWindowsColor();
 
 						// The Popup shadow is updated with _popupViewWidth and _popupViewHeight.
-						dropShadow.Mask = await popupNativeView.GetAlphaMaskAsync((int)_popupViewWidth, (int)_popupViewHeight);
-						dropShadow.Offset = new Vector3(0, 0, 0);
-						shadowVisual = compositor.CreateSpriteVisual();
-						shadowVisual.Shadow = dropShadow;
-						shadowVisual.Size = new Vector2((float)_popupViewWidth, (float)_popupViewHeight);
-						ElementCompositionPreview.SetElementChildVisual(shadowHost, shadowVisual);
+						_dropShadow.Mask = await popupNativeView.GetAlphaMaskAsync((int)_popupViewWidth, (int)_popupViewHeight);
+						_dropShadow.Offset = new Vector3(0, 0, 0);
+						_shadowVisual = compositor.CreateSpriteVisual();
+						_shadowVisual.Shadow = _dropShadow;
+						_shadowVisual.Size = new Vector2((float)_popupViewWidth, (float)_popupViewHeight);
+						ElementCompositionPreview.SetElementChildVisual(_shadowHost, _shadowVisual);
 					}
 				}
 			}
@@ -150,33 +164,48 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 		#region Private Methods
 		/// <summary>
+		/// Occurs when platformview got loaded.
+		/// </summary>
+		/// <param name="sender">The platform root view.</param>
+		/// <param name="e">The event arguments.</param>
+		private void FrameworkElement_Loaded(object sender, RoutedEventArgs e)
+		{
+			InitializeOverlay();
+			CheckAndOpenDeferredPopup();
+			if (WindowOverlayHelper._platformRootView is not null && WindowOverlayHelper._platformRootView is FrameworkElement frameworkElement)
+			{
+				frameworkElement.Loaded -= FrameworkElement_Loaded;
+			}
+		}
+
+		/// <summary>
 		/// Method disposes shadow related fields.
 		/// </summary>
 		void DisposeShadow()
 		{
-			if (shadowCanvas is not null)
+			if (_shadowCanvas is not null)
 			{
-				shadowCanvas.Children.Clear();
-				shadowCanvas = null;
+				_shadowCanvas.Children.Clear();
+				_shadowCanvas = null;
 			}
 
-			if (shadowHost is not null)
+			if (_shadowHost is not null)
 			{
-				ElementCompositionPreview.SetElementChildVisual(shadowHost, null);
-				shadowHost = null;
+				ElementCompositionPreview.SetElementChildVisual(_shadowHost, null);
+				_shadowHost = null;
 			}
 
-			if (shadowVisual is not null)
+			if (_shadowVisual is not null)
 			{
-				shadowVisual.Dispose();
-				shadowVisual = null;
+				_shadowVisual.Dispose();
+				_shadowVisual = null;
 			}
 
-			if (dropShadow is not null)
+			if (_dropShadow is not null)
 			{
-				dropShadow.Mask?.Dispose();
-				dropShadow.Dispose();
-				dropShadow = null;
+				_dropShadow.Mask?.Dispose();
+				_dropShadow.Dispose();
+				_dropShadow = null;
 			}
 		}
 
@@ -199,8 +228,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					// Abort the PopupView animation when the window size changes.
 					AbortPopupViewAnimation();
 					ResetAnimatedProperties();
-					ReAssignPopupViewWidthAndHeight();
 					ResetPopupWidthHeight();
+
+					SyncPopupDimensionFields();
 
 					// Need to update the effect visual size, when the window is resized or the orientation changes.
 					if (IsOpen && ShowOverlayAlways && OverlayMode is PopupOverlayMode.Blur)
@@ -221,14 +251,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="e">The size changed event arguments.</param>
 		void OnNativePopupViewSizeChanged(object? sender, Microsoft.UI.Xaml.SizeChangedEventArgs e)
 		{
-			if (shadowVisual is not null && shadowHost is not null)
+			if (_shadowVisual is not null && _shadowHost is not null)
 			{
-				if (shadowVisual.Size != new Vector2((float)_popupViewWidth, (float)_popupViewHeight))
+				if (_shadowVisual.Size != new Vector2((float)_popupViewWidth, (float)_popupViewHeight))
 				{
-					shadowVisual.Size = new Vector2((float)_popupViewWidth, (float)_popupViewHeight);
+					_shadowVisual.Size = new Vector2((float)_popupViewWidth, (float)_popupViewHeight);
 
-					shadowHost.Width = _popupViewWidth;
-					shadowHost.Height = _popupViewHeight;
+					_shadowHost.Width = _popupViewWidth;
+					_shadowHost.Height = _popupViewHeight;
 
 					// The PopupView shadow was not updated properly, So updating the native PopupView mask for shadow.
 					UpdateNativePopupViewShadowMask();

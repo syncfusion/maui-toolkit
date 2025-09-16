@@ -360,7 +360,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			Children.Add(_progressCircleView);
 			ClipToBounds = true;
 			ThemeElement.InitializeThemeResources(this, "SfPullToRefreshTheme");
-
+		
 			// Ensures the refreshing animation starts if IsRefreshing was set via global styles.
 			if (this.IsRefreshing && !this.ActualIsRefreshing)
 			{

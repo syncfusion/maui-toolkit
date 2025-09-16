@@ -87,6 +87,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 #endif
 			_popupView = popupView;
 			Initialize();
+			AddChildViews();
 		}
 
 		#endregion
@@ -129,9 +130,60 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
+		/// Updates the child views if a DataTemplateSelector is applied to the footer template.
+		/// </summary>
+		internal void RefreshChildViews()
+		{
+			if (_popupView is not null && _popupView._popup is not null && _popupView._popup.FooterTemplate is DataTemplateSelector)
+			{
+				UpdateChildViews();
+			}
+		}
+
+		/// <summary>
+		/// Updates the width and height of the child views.
+		/// </summary>
+		internal void UpdateFooterChildProperties()
+		{
+			if (_acceptButton is null || _declineButton is null)
+			{
+				return;
+			}
+
+			if (_popupView is not null && _popupView._popup is not null)
+			{
+				if (_popupView._popup.AppearanceMode is PopupButtonAppearanceMode.OneButton)
+				{
+					_acceptButton.HorizontalOptions = LayoutOptions.End;
+					_acceptButtonWidth = GetFooterButtonWidth(_acceptButton);
+					_acceptButton.WidthRequest = Math.Max(0, _acceptButtonWidth);
+					_acceptButton.HeightRequest = Math.Max(0, _footerButtonHeight);
+				}
+				else if (_popupView._popup.AppearanceMode is PopupButtonAppearanceMode.TwoButton)
+				{
+					_acceptButtonWidth = GetFooterButtonWidth(_acceptButton);
+					_acceptButton.WidthRequest = Math.Max(0, _acceptButtonWidth);
+					_acceptButton.HeightRequest = Math.Max(0, _footerButtonHeight);
+
+					_declineButtonWidth = GetFooterButtonWidth(_declineButton);
+					_declineButton.WidthRequest = Math.Max(0, _declineButtonWidth);
+					_declineButton.HeightRequest = Math.Max(0, _footerButtonHeight);
+
+					_declineButton.IsVisible = _popupView._popup.ShowFooter;
+				}
+
+				_acceptButton.IsVisible = _popupView._popup.ShowFooter;
+			}
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
 		/// Add the child views of the footer.
 		/// </summary>
-		internal void AddChildViews()
+		void AddChildViews()
 		{
 			if (_footerView is null || _popupView is null || _popupView._popup is null)
 			{
@@ -165,11 +217,16 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 				else
 				{
-					footerView.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
-					var view = (View)_popupView._popup.GetTemplate(_popupView._popup.FooterTemplate).CreateContent();
-					footerView.HorizontalOptions = LayoutOptions.Fill;
-					footerView.Children.Add(view);
-					Grid.SetColumn(view, 0);
+					// If Template Selector is used and they have returned template using binding context means, value can be null.
+					var template = _popupView._popup.GetTemplate(_popupView._popup.FooterTemplate);
+					if (template is not null)
+					{
+						var view = (View)template.CreateContent();
+						footerView.ColumnDefinitions.Add(new ColumnDefinition() { Width = GridLength.Star });
+						footerView.HorizontalOptions = LayoutOptions.Fill;
+						footerView.Children.Add(view);
+						Grid.SetColumn(view, 0);
+					}
 				}
 
 				footerView.Padding = _popupView is not null && _popupView._popup.FooterTemplate is null ? new Thickness(_footerPadding) : new Thickness(0);
@@ -177,10 +234,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			Children.Add(_footerView);
 		}
-
-		#endregion
-
-		#region Private Methods
 
 		/// <summary>
 		/// Updates the width and height of the child views.
@@ -236,6 +289,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		double GetFooterButtonWidth(SfButton button)
 		{
 			button.IsVisible = true;
+			button.WidthRequest = -1;
 			Size viewSize = new Size(double.PositiveInfinity, _popupView is not null ? _popupView._popup.FooterHeight : 0);
 			Size measuredSize = button.Measure(viewSize.Width, viewSize.Height);
 #if !WINDOWS
@@ -288,11 +342,13 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			_acceptButton.AutomationId = "PopupAcceptButton";
 			_acceptButton.Style = new Style(typeof(SfButton));
 			_acceptButton.Text = SfPopupResources.GetLocalizedString("AcceptButtonText");
+			SemanticProperties.SetDescription(_acceptButton, $"{_acceptButton.Text}");
 			_acceptButton.Clicked += OnAcceptButtonClicked;
 			_declineButton = new SfButton() { IsVisible = false };
 			_declineButton.AutomationId = "PopupDeclineButton";
 			_declineButton.Style = new Style(typeof(SfButton));
 			_declineButton.Text = SfPopupResources.GetLocalizedString("DeclineButtonText");
+			SemanticProperties.SetDescription(_declineButton, $"{_declineButton.Text}");
 			_declineButton.Clicked += OnDeclineButtonClicked;
 		}
 

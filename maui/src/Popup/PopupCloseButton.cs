@@ -81,22 +81,22 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			if (_popupView._popup.PopupStyle.CloseButtonIcon is null)
 			{
-				if (e.Action == PointerActions.Entered)
+				if (e.Action is PointerActions.Entered)
 				{
 					_isHover = true;
 					InvalidateDrawable();
 				}
-				else if (e.Action == PointerActions.Exited)
+				else if (e.Action is PointerActions.Exited)
 				{
 					_isHover = false;
 					InvalidateDrawable();
 				}
-				else if (e.Action == PointerActions.Pressed)
+				else if (e.Action is PointerActions.Pressed)
 				{
 					_isPressed = true;
 					InvalidateDrawable();
 				}
-				else if (e.Action == PointerActions.Released)
+				else if (e.Action is PointerActions.Released)
 				{
 					_isPressed = false;
 					_isHover = false;

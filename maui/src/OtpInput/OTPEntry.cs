@@ -24,7 +24,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
         /// <summary>
         /// A reference to the associated SfOtpInput control.
         /// </summary>
-        OtpInputStyle _styleMode;
+        OtpInputStyle _styleMode = OtpInputStyle.Outlined;
 
         /// <summary>
         /// Defines the corner radius for drawing rounded rectangles, affecting all style modes.
@@ -273,7 +273,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
 #if WINDOWS
                 case Microsoft.UI.Xaml.Controls.TextBox textbox:
                     OptimizeWindowsTextBox(textbox);
-                    textbox.CornerRadius = new Microsoft.UI.Xaml.CornerRadius(4, 4, 0, 0);
+					textbox.CornerRadius = new Microsoft.UI.Xaml.CornerRadius(4, 4, 0, 0);
                     break;
 #elif ANDROID
                 case AndroidX.AppCompat.Widget.AppCompatEditText textbox:
@@ -321,6 +321,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput;
         }
 #endif
 
-        #endregion
+	#endregion
 }
 

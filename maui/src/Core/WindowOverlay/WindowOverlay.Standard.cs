@@ -72,6 +72,46 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		}
 
 		/// <summary>
+		/// Removes the currently active overlay from the display.
+		/// </summary>
+		/// <remarks>This method deactivates and removes any overlay that is currently being displayed. 
+		/// If no overlay is active, the method performs no action.</remarks>
+		internal void RemoveOverlay()
+		{
+		}
+
+		/// <summary>
+		/// Adds a child view to the current window.
+		/// </summary>
+		/// <remarks>This method ensures that the child view is added to the window and converted to its
+		/// platform-specific representation. If the <paramref name="childView"/> is <see langword="null"/> or the
+		/// overlay stack is not initialized, the method exits without performing any action.</remarks>
+		/// <param name="childView">The child view to be added. Must not be <see langword="null"/>.</param>
+		internal bool AddToOverlay(MauiView childView)
+		{
+			return false;
+		}
+
+		/// <summary>
+		/// Positions the popup at the specified coordinates relative to the screen.
+		/// </summary>
+		/// <remarks>The method ensures that the popup is added to the view hierarchy if it is not already
+		/// present.  The coordinates are automatically scaled based on the device's screen density.</remarks>
+		/// <param name="x">The horizontal position, in device-independent units (DIPs), where the popup should be placed. Defaults to
+		/// 0.</param>
+		/// <param name="y">The vertical position, in device-independent units (DIPs), where the popup should be placed. Defaults to 0.</param>
+		internal void PositionOverlayContent(double x = 0, double y = 0)
+		{
+		}
+
+		/// <summary>
+		/// Dispose the objects in window overlay.
+		/// </summary>
+		internal void Dispose()
+		{
+		}
+
+		/// <summary>
 		/// Removes the current overlay window from root view with all its children.
 		/// </summary>
 		internal void RemoveFromWindow()

@@ -32,10 +32,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
         double _availableHeight = 0;
 
 #if WINDOWS || MACCATALYST
-        /// <summary>
-        /// Check whether the looping is enabled or not.
-        /// </summary>
-        bool _isLoopingEnabled = false;
+		/// <summary>
+		/// The last index position.
+		/// </summary>
+		private double _lastIndexPosition = 0;
+
+		/// <summary>
+		/// Check whether the looping is enabled or not.
+		/// </summary>
+		bool _isLoopingEnabled = false;
 
         /// <summary>
         /// The new scroll position value.
@@ -186,6 +191,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (enableLooping)
             {
                 _isLoopingEnabled = false;
+                _lastIndexPosition = 0;
             }
 #endif
             UpdateSelectedIndexPosition();
@@ -247,11 +253,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 //// When scrolling upward, update the scroll position based on the total content height.
                 if (e.ScrollY < (viewPortItemCount * itemHeight))
                 {
+                    //// Need to update the scroll position to avoid the flickering issue while scrolling upward.
+                    _pickerView.TriggerPickerViewMeasure();
                     ScrollToAsync(0, e.ScrollY + totalContentHeight, false);
                 }
                 //// When scrolling downward, update the scroll position based on the total content height.
                 else if (e.ScrollY > totalContentHeight + (viewPortItemCount * itemHeight))
                 {
+                    //// Need to update the scroll position to avoid the flickering issue while scrolling downward.
+                    _pickerView.TriggerPickerViewMeasure();
                     ScrollToAsync(0, e.ScrollY - totalContentHeight, false);
                 }
             }
@@ -261,7 +271,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int selectionIndex = (int)Math.Round(e.ScrollY / itemHeight);
 #if WINDOWS || MACCATALYST
             //// While looping change dynamically, update the selected index based on new position.
-            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - e.ScrollY) > 0 && e.ScrollY != (itemsCount * itemHeight) - itemHeight)
+            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - e.ScrollY) > 0 && _lastIndexPosition != (itemsCount * itemHeight) - itemHeight)
             {
                 selectionIndex = (int)Math.Round(_newScrollPosition / itemHeight);
                 _isLoopingEnabled = true;
@@ -350,7 +360,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
                     void Finished(double value, bool isFinished)
                     {
-                        _pickerLayoutInfo.UpdateSelectedIndexValue((int)selectionIndex);
+                        _pickerLayoutInfo.UpdateSelectedIndexValue((int)selectionIndex, false);
                     }
 
                     if (_pickerLayoutInfo.PickerInfo.IsValidParent)
@@ -362,7 +372,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     {
                         ScrollToAsync(0, currentItemPosition, false);
                         RequestLayout();
-                        _pickerLayoutInfo.UpdateSelectedIndexValue((int)selectionIndex);
+                        _pickerLayoutInfo.UpdateSelectedIndexValue((int)selectionIndex, false);
                     }
 
                     _timer.Stop();
@@ -772,14 +782,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
             bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
 #if WINDOWS || MACCATALYST
-            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - scrollEndPosition) > 0 && scrollEndPosition != (itemsCount * itemHeight) - itemHeight)
+            scrollEndPosition = Math.Ceiling(scrollEndPosition);
+            //// Check if looping is enabled, this is the first loop, and the new scroll position is greater than the scroll end position.
+            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - scrollEndPosition) > 0 && _lastIndexPosition != (itemsCount * itemHeight) - itemHeight)
             {
                 //// Set the scroll end position to the new scroll position to continue the looping behavior.
                 scrollEndPosition = _newScrollPosition;
             }
 #endif
-            //// If the selected index is less than 0, then set the scroll end position to -40 to avoid selected index rendering in center position.
-            if (!enableLooping && _pickerLayoutInfo.Column.SelectedIndex <= -1)
+			//// If the selected index is less than 0, then set the scroll end position to -40 to avoid selected index rendering in center position.
+			if (!enableLooping && _pickerLayoutInfo.Column.SelectedIndex <= -1)
             {
                 scrollEndPosition = -40;
             }
@@ -817,8 +829,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
             }
 
-            //// From above example the scrollEndPosition is 109. So that the positionDifference is 109 - 100 = 9.
-            double positionDifference = scrollEndPosition - currentItemPosition;
+#if WINDOWS || MACCATALYST
+			if (selectionIndex == itemsCount - 1)
+			{
+				_lastIndexPosition = scrollEndPosition;
+			}
+#endif
+
+			//// From above example the scrollEndPosition is 109. So that the positionDifference is 109 - 100 = 9.
+			double positionDifference = scrollEndPosition - currentItemPosition;
             //// While scroll view fast scrolling and we started new scrolling before end of the previous scrolling then the scroll view is not scrolled to the exact position.
             //// Method to update the position based on animation value.
             void UpdateProperty(double value)
@@ -833,7 +852,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             void Finished(double value, bool isFinished)
             {
-                _pickerLayoutInfo.UpdateSelectedIndexValue((int)selectionIndex);
+                _pickerLayoutInfo.UpdateSelectedIndexValue((int)selectionIndex, false);
                 _pickerView.UpdateSelectedIndexOnAnimationEnd((int)selectionIndex);
             }
 

@@ -37,26 +37,4 @@
         <Setter Property="FontSize" Value="{DynamicResource SfCartesianChartAnnotationFontSize}"/>
     </Style>
 
-    <Style TargetType="chart:EllipseAnnotation">
-        <Setter Property="Stroke" Value="{DynamicResource SfCartesianChartShapeAnnotationStroke}"/>
-        <Setter Property="Fill" Value="{DynamicResource SfCartesianChartShapeAnnotationFill}"/>
-    </Style>
-  
-    <Style TargetType="chart:RectangleAnnotation">
-        <Setter Property="Stroke" Value="{DynamicResource SfCartesianChartShapeAnnotationStroke}"/>
-        <Setter Property="Fill" Value="{DynamicResource SfCartesianChartShapeAnnotationFill}"/>
-    </Style>
-  
-    <Style TargetType="chart:LineAnnotation">
-        <Setter Property="Stroke" Value="{DynamicResource SfCartesianChartLineAnnotationStroke}"/>
-    </Style>
-  
-    <Style TargetType="chart:HorizontalLineAnnotation">
-        <Setter Property="Stroke" Value="{DynamicResource SfCartesianChartLineAnnotationStroke}"/>
-    </Style>
-  
-    <Style TargetType="chart:VerticalLineAnnotation">
-        <Setter Property="Stroke" Value="{DynamicResource SfCartesianChartLineAnnotationStroke}"/>
-    </Style>
-
 </ResourceDictionary> 

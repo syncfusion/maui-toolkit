@@ -1,6 +1,7 @@
 using Syncfusion.Maui.Toolkit.Carousel;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
+using Syncfusion.Maui.Toolkit.OtpInput;
 
 #if WINDOWS
 using System;
@@ -35,6 +36,10 @@ namespace Syncfusion.Maui.Toolkit.Hosting
                 handlers.AddHandler(typeof(SfPickerView), typeof(SfPickerScrollViewHandler));
 #if __ANDROID__
                 handlers.AddHandler(typeof(SnapLayout), typeof(SnapLayoutHandler));
+#endif
+#if IOS || MACCATALYST
+                // Register custom handler for OTPEntry to enable enhanced backspace detection
+                handlers.AddHandler(typeof(OTPEntry), typeof(OTPEntryiOSHandler));
 #endif
 			});
 

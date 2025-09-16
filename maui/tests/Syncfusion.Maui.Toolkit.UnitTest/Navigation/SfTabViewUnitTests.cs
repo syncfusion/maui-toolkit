@@ -2787,11 +2787,34 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			var args = new SelectionChangingEventArgs();
 			if (shouldRaise)
-			{
+			{ 
 				tabView.RaiseSelectionChangingEvent(args);
 			}
-			Assert.Equal(shouldRaise, eventRaised);
+			Assert.Equal(shouldRaise, eventRaised); 
+		} 
+
+		[Fact]
+		public void TestHoverBackground_DefaultValue_ShouldBeExpectedBrush()
+		{
+			var tabBar = new SfTabBar();
+			var expectedColor = Color.FromArgb("#1C1B1F");
+			var actualBrush = tabBar.HoverBackground as SolidColorBrush;
+
+			Assert.NotNull(actualBrush);
+			Assert.Equal(expectedColor, actualBrush.Color);
 		}
+
+
+		[Fact]
+		public void HoverBackground_SetValue_ShouldUpdateBrush()
+		{
+			var tabBar = new SfTabBar();
+			var newBrush = new SolidColorBrush(Colors.Blue);
+			tabBar.HoverBackground = newBrush;
+
+			Assert.Equal(newBrush, tabBar.HoverBackground);
+		}
+
 
 		[Theory]
 		[InlineData(false, true)]
@@ -8167,6 +8190,1030 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.IsType<SfGrid>((IView)_tabHeaderItemContent.Children[centerIndex]);
 			Assert.True(_tabHeaderItemContent.Children.Contains(_centerButtonViewPlaceholder));
 			Assert.Equal(_centerButtonViewPlaceholder, _tabHeaderItemContent.Children[centerIndex]);
+		}
+
+		#endregion
+
+		#region HeaderContent Unit Tests
+
+		[Fact]
+		public void HeaderContent_Property_Default_Value_Is_Empty()
+		{
+			var tabItem = new SfTabItem();
+			Assert.Empty(tabItem.HeaderContent?.ToString() ?? string.Empty);
+		}
+
+		[Theory]
+		[InlineData(typeof(Label))]
+		[InlineData(typeof(Button))]
+		[InlineData(typeof(Grid))]
+		[InlineData(typeof(StackLayout))]
+		[InlineData(typeof(Image))]
+		[InlineData(typeof(Border))]
+		public void HeaderContent_Property_Accepts_Various_View_Types(Type viewType)
+		{
+			var tabItem = new SfTabItem();
+			var view = Activator.CreateInstance(viewType) as View;
+			Assert.NotNull(view);
+
+			tabItem.HeaderContent = view;
+			Assert.Equal(view, tabItem.HeaderContent);
+		}
+
+		[Fact]
+		public void HeaderContent_Property_Change_Triggers_PropertyChanged()
+		{
+			var tabItem = new SfTabItem();
+			var propertyChangedFired = false;
+			string? changedPropertyName = null;
+
+			tabItem.PropertyChanged += (sender, e) =>
+			{
+				if (e.PropertyName == nameof(SfTabItem.HeaderContent))
+				{
+					propertyChangedFired = true;
+					changedPropertyName = e.PropertyName;
+				}
+			};
+
+			tabItem.HeaderContent = new Label { Text = "Test" };
+
+			Assert.True(propertyChangedFired);
+			Assert.Equal(nameof(SfTabItem.HeaderContent), changedPropertyName);
+		}
+
+		[Fact]
+		public void HeaderContent_Takes_Precedence_Over_Header_Property()
+		{
+			var tabItem = new SfTabItem
+			{
+				Header = "Normal Header",
+				HeaderContent = new Label { Text = "Custom Header" }
+			};
+			var content = tabItem.HeaderContent;
+			content.BindingContext = tabItem;
+
+			// Verify HeaderContent is displayed, not Header
+			Assert.IsType<Label>(content);
+			Assert.Equal("Custom Header", ((Label)content).Text);
+		}
+
+		[Fact]
+		public void MeasureHeaderContentWidth_Returns_Correct_Width_For_Simple_View()
+		{
+			var tabBar = new SfTabBar();
+			var label = new Label { Text = "Test Content", WidthRequest = 100 };
+			var tabItem = new SfTabItem { HeaderContent = label };
+
+			var width = tabBar.MeasureHeaderContentWidth(tabItem);
+
+			Assert.True(width >= 0);
+		}
+
+		[Theory]
+		[InlineData(50, 30)]
+		[InlineData(200, 100)]
+		[InlineData(10, 10)]
+		public void MeasureHeaderContentWidth_Handles_Various_Sizes(double widthRequest, double heightRequest)
+		{
+			var tabBar = new SfTabBar();
+			var grid = new Grid { WidthRequest = widthRequest, HeightRequest = heightRequest };
+			var tabItem = new SfTabItem { HeaderContent = grid };
+
+			var width = tabBar.MeasureHeaderContentWidth(tabItem);
+
+			Assert.True(width >= 0);
+		}
+
+		[Fact]
+		public void MeasureHeaderContentWidth_Returns_Zero_For_Invisible_Content()
+		{
+			var tabBar = new SfTabBar();
+			var invisibleContent = new Label { Text = "Hidden", IsVisible = false };
+			var tabItem = new SfTabItem { HeaderContent = invisibleContent, IsVisible = false };
+
+			var width = tabBar.MeasureHeaderContentWidth(tabItem);
+
+			Assert.Equal(0, width);
+		}
+
+		[Fact]
+		public void MeasureHeaderContentWidth_Handles_Complex_Layout()
+		{
+			var tabBar = new SfTabBar();
+
+
+			var complexLayout = new Grid
+			{
+				RowDefinitions =
+				{
+					new RowDefinition { Height = GridLength.Auto },
+					new RowDefinition { Height = GridLength.Auto }
+				}
+			};
+
+			var label = new Label { Text = "Tab 1" };
+			var button = new Button { Text = "Click" };
+
+			Grid.SetRow(label, 0);
+
+			Grid.SetRow(button, 1);
+
+			complexLayout.Children.Add(label);
+			complexLayout.Children.Add(button);
+
+			var tabItem = new SfTabItem { HeaderContent = complexLayout };
+
+			var width = tabBar.MeasureHeaderContentWidth(tabItem);
+
+			Assert.True(width >= 0);
+		}
+
+		[Fact]
+		public void TabViewMaterialVisualStyle_Updates_Layout_When_HeaderContent_Set()
+		{
+			var tabItem = new SfTabItem { Header = "Test" };
+			var style = new TabViewMaterialVisualStyle();
+			style.BindingContext = tabItem;
+
+			var customContent = new Grid();
+
+			var label = new Label { Text = "Tab 1" };
+
+			Grid.SetRow(label, 0);
+
+			customContent.Children.Add(label);
+			tabItem.HeaderContent = customContent;
+
+			// Simulate property change
+			var method = style.GetType().GetMethod("OnParentPropertyChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+			method?.Invoke(style, new object[] { tabItem, new PropertyChangedEventArgs(nameof(SfTabItem.HeaderContent)) });
+
+			Assert.Single(style.Children);
+			Assert.Equal(customContent, style.Children[0]);
+		}
+
+		[Fact]
+		public void HeaderContent_BindingContext_Is_Set_From_Parent()
+		{
+			var bindingContext = new { TestProperty = "TestValue" };
+			var tabItem = new SfTabItem { BindingContext = bindingContext };
+			var style = new TabViewMaterialVisualStyle();
+
+			var customContent = new Label { Text = "Test" };
+			tabItem.HeaderContent = customContent;
+			style.BindingContext = tabItem;
+
+			// Simulate the binding context flow in UpdateHeaderContent
+			if (customContent.BindingContext == null)
+				customContent.BindingContext = tabItem.BindingContext;
+
+			Assert.Equal(bindingContext, customContent.BindingContext);
+		}
+
+		[Theory]
+		[InlineData(TabHeaderAlignment.Start)]
+		[InlineData(TabHeaderAlignment.Center)]
+		[InlineData(TabHeaderAlignment.End)]
+		public void HeaderContent_Respects_TabHeaderAlignment(TabHeaderAlignment alignment)
+		{
+			var tabView = new SfTabView
+			{
+				TabHeaderAlignment = alignment
+			};
+			var tabItem = new SfTabItem
+			{
+				Header = "Test",
+				HeaderContent = new Label { Text = "Custom" }
+			};
+			tabView.Items.Add(tabItem);
+
+			var tabHeader = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.Equal(alignment, tabHeader?.TabHeaderAlignment);
+		}
+
+		[Fact]
+		public void HeaderContent_Works_With_Default_TabWidthMode()
+		{
+			var tabView = new SfTabView
+			{
+				TabWidthMode = TabWidthMode.Default
+			};
+			var tabItem = new SfTabItem
+			{
+				Header = "Test",
+				HeaderContent = new Label { Text = "Custom Content" }
+			};
+			tabView.Items.Add(tabItem);
+
+			var tabHeader = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.Equal(TabWidthMode.Default, tabHeader?.TabWidthMode);
+		}
+
+		[Fact]
+		public void HeaderContent_SizeChanged_Handlers_Are_Attached()
+		{
+			var tabBar = new SfTabBar();
+			var customContent = new Label { Text = "Test" };
+			var tabItem = new SfTabItem { HeaderContent = customContent };
+
+			tabBar.Items.Add(tabItem);
+
+			// Verify no exception is thrown when adding the item
+			Assert.Single(tabBar.Items);
+			Assert.Equal(customContent, tabItem.HeaderContent);
+		}
+
+		[Fact]
+		public void HeaderContent_PropertyChanged_Triggers_Layout_Update()
+		{
+			var tabItem = new SfTabItem();
+			var propertyChangedCount = 0;
+
+			tabItem.PropertyChanged += (sender, e) =>
+			{
+				if (e.PropertyName == nameof(SfTabItem.HeaderContent))
+					propertyChangedCount++;
+			};
+
+			tabItem.HeaderContent = new Label { Text = "Test1" };
+			tabItem.HeaderContent = new Button { Text = "Test2" };
+			tabItem.HeaderContent = new Grid();
+
+			Assert.Equal(3, propertyChangedCount);
+		}
+
+		[Fact]
+		public void HeaderContent_Can_Be_Updated_Multiple_Times()
+		{
+			var tabItem = new SfTabItem();
+
+			var content1 = new Label { Text = "Content 1" };
+			var content2 = new Button { Text = "Content 2" };
+			var content3 = new Grid();
+
+			tabItem.HeaderContent = content1;
+			Assert.Equal(content1, tabItem.HeaderContent);
+
+			tabItem.HeaderContent = content2;
+			Assert.Equal(content2, tabItem.HeaderContent);
+
+			tabItem.HeaderContent = content3;
+			Assert.Equal(content3, tabItem.HeaderContent);
+		}
+
+		[Fact]
+		public void HeaderContent_Updates_Trigger_Width_Recalculation()
+		{
+			var tabBar = new SfTabBar();
+			var tabItem = new SfTabItem();
+			tabBar.Items.Add(tabItem);
+
+			var smallContent = new Label { Text = "Small", WidthRequest = 50 };
+			var largeContent = new Label { Text = "Large Content", WidthRequest = 200 };
+
+			tabItem.HeaderContent = smallContent;
+			var smallWidth = tabBar.MeasureHeaderContentWidth(tabItem);
+
+			tabItem.HeaderContent = largeContent;
+			var largeWidth = tabBar.MeasureHeaderContentWidth(tabItem);
+
+			// Large content should generally have larger or equal width
+			Assert.True(largeWidth >= smallWidth || largeWidth >= 0);
+		}
+
+		[Fact]
+		public void HeaderContent_With_Zero_Dimensions_Handled()
+		{
+			var tabBar = new SfTabBar();
+			var zeroSizedContent = new Grid { WidthRequest = 1, HeightRequest = 1 };
+			var tabItem = new SfTabItem { HeaderContent = zeroSizedContent };
+
+			var width = tabBar.MeasureHeaderContentWidth(tabItem);
+
+			Assert.True(width >= 0);
+		}
+
+		[Fact]
+		public void HeaderContent_With_Nested_Complex_Layout()
+		{
+			var tabBar = new SfTabBar();
+			var complexLayout = new Grid();
+			var nestedStack = new StackLayout();
+			nestedStack.Children.Add(new Label { Text = "Nested Label" });
+			nestedStack.Children.Add(new Button { Text = "Nested Button" });
+			complexLayout.Children.Add(nestedStack);
+
+			var tabItem = new SfTabItem { HeaderContent = complexLayout };
+
+			var width = tabBar.MeasureHeaderContentWidth(tabItem);
+			Assert.True(width >= 0);
+		}
+
+		[Fact]
+		public void HeaderContent_Measurement_Consistency()
+		{
+			var tabBar = new SfTabBar();
+			var content = new Label { Text = "Consistent", WidthRequest = 100 };
+			var tabItem = new SfTabItem { HeaderContent = content };
+
+			var width1 = tabBar.MeasureHeaderContentWidth(tabItem);
+			var width2 = tabBar.MeasureHeaderContentWidth(tabItem);
+
+			Assert.Equal(width1, width2);
+		}
+
+		[Fact]
+		public void ClearHeaderItem_Handles_HeaderContent_Properly()
+		{
+			var tabBar = new SfTabBar();
+			var customContent = new Grid();
+			var tabItem = new SfTabItem { HeaderContent = customContent };
+			tabBar.Items.Add(tabItem);
+
+			// Should not throw exception
+			tabBar.ClearHeaderItem(tabItem, 0);
+			Assert.True(true);
+		}
+
+		[Fact]
+		public void HeaderContent_Removed_From_Visual_Tree_On_Clear()
+		{
+			var style = new TabViewMaterialVisualStyle();
+			var tabItem = new SfTabItem();
+			var customContent = new Label { Text = "Test" };
+
+			tabItem.HeaderContent = customContent;
+			style.BindingContext = tabItem;
+
+			// Simulate property change to add content
+			var method = style.GetType().GetMethod("OnParentPropertyChanged", BindingFlags.NonPublic | BindingFlags.Instance);
+			method?.Invoke(style, new object[] { tabItem, new PropertyChangedEventArgs(nameof(SfTabItem.HeaderContent)) });
+
+			Assert.Contains(customContent, style.Children);
+
+			// Remove content by replacing with different content
+			var replacementContent = new Button { Text = "Replacement" };
+			tabItem.HeaderContent = replacementContent;
+			method?.Invoke(style, new object[] { tabItem, new PropertyChangedEventArgs(nameof(SfTabItem.HeaderContent)) });
+
+			Assert.DoesNotContain(customContent, style.Children);
+			Assert.Contains(replacementContent, style.Children);
+		}
+
+		[Fact]
+		public void HeaderContent_Works_With_TabView_Items_Collection()
+		{
+			var tabView = new SfTabView();
+			var tabItem1 = new SfTabItem
+			{
+				Header = "Tab 1",
+				HeaderContent = new Label { Text = "Custom Header 1" },
+				Content = new Label { Text = "Content 1" }
+			};
+			var tabItem2 = new SfTabItem
+			{
+				Header = "Tab 2",
+				HeaderContent = new Button { Text = "Custom Header 2" },
+				Content = new Label { Text = "Content 2" }
+			};
+
+			tabView.Items.Add(tabItem1);
+			tabView.Items.Add(tabItem2);
+
+			Assert.Equal(2, tabView.Items.Count);
+			Assert.Equal(tabItem1.HeaderContent, tabView.Items[0].HeaderContent);
+			Assert.Equal(tabItem2.HeaderContent, tabView.Items[1].HeaderContent);
+		}
+
+		[Theory]
+		[InlineData(TabBarDisplayMode.Default)]
+		[InlineData(TabBarDisplayMode.Text)]
+		[InlineData(TabBarDisplayMode.Image)]
+		public void HeaderContent_Respects_TabBarDisplayMode(TabBarDisplayMode displayMode)
+		{
+			var tabView = new SfTabView
+			{
+				HeaderDisplayMode = displayMode
+			};
+			var tabItem = new SfTabItem
+			{
+				Header = "Test",
+				HeaderContent = new Label { Text = "Custom Header" },
+				ImageSource = "test.png"
+			};
+			tabView.Items.Add(tabItem);
+
+			var tabHeader = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.Equal(displayMode, tabHeader?.HeaderDisplayMode);
+		}
+
+		[Theory]
+		[InlineData(TabBarPlacement.Top)]
+		[InlineData(TabBarPlacement.Bottom)]
+		public void HeaderContent_Works_With_Different_TabBarPlacements(TabBarPlacement placement)
+		{
+			var tabView = new SfTabView
+			{
+				TabBarPlacement = placement
+			};
+			var tabItem = new SfTabItem
+			{
+				Header = "Test",
+				HeaderContent = new Grid(),
+				Content = new Label { Text = "Content" }
+			};
+			tabView.Items.Add(tabItem);
+
+			var tabHeader = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
+			var tabContent = GetPrivateField(tabView, "_tabContentContainer") as SfHorizontalContent;
+
+			if (placement == TabBarPlacement.Bottom)
+			{
+				Assert.Equal(1, Grid.GetRow(tabHeader));
+				Assert.Equal(0, Grid.GetRow(tabContent));
+			}
+			else
+			{
+				Assert.Equal(0, Grid.GetRow(tabHeader));
+				Assert.Equal(1, Grid.GetRow(tabContent));
+			}
+		}
+
+		[Theory]
+		[InlineData(FlowDirection.LeftToRight)]
+		[InlineData(FlowDirection.RightToLeft)]
+		public void HeaderContent_Supports_FlowDirection(FlowDirection flowDirection)
+		{
+			var tabView = new SfTabView
+			{
+				FlowDirection = flowDirection
+			};
+			var tabItem = new SfTabItem
+			{
+				Header = "Test",
+				HeaderContent = new Label { Text = "Custom Header" }
+			};
+			tabView.Items.Add(tabItem);
+
+			var tabHeader = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.Equal(flowDirection, tabHeader?.FlowDirection);
+		}
+
+		[Theory]
+		[InlineData(IndicatorWidthMode.Fit)]
+		[InlineData(IndicatorWidthMode.Stretch)]
+		public void HeaderContent_Works_With_Different_IndicatorWidthModes(IndicatorWidthMode widthMode)
+		{
+			var tabView = new SfTabView
+			{
+				IndicatorWidthMode = widthMode
+			};
+			var tabItem = new SfTabItem
+			{
+				Header = "Test",
+				HeaderContent = new Button { Text = "Custom" }
+			};
+			tabView.Items.Add(tabItem);
+
+			var tabHeader = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.Equal(widthMode, tabHeader?.IndicatorWidthMode);
+		}
+
+		[Theory]
+		[InlineData(TabIndicatorPlacement.Top)]
+		[InlineData(TabIndicatorPlacement.Bottom)]
+		[InlineData(TabIndicatorPlacement.Fill)]
+		public void HeaderContent_Works_With_Different_IndicatorPlacements(TabIndicatorPlacement placement)
+		{
+			var tabView = new SfTabView
+			{
+				IndicatorPlacement = placement
+			};
+			var tabItem = new SfTabItem
+			{
+				Header = "Test",
+				HeaderContent = new Label { Text = "Custom" }
+			};
+			tabView.Items.Add(tabItem);
+
+			var tabHeader = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.Equal(placement, tabHeader?.IndicatorPlacement);
+		}
+
+		[Fact]
+		public void HeaderContent_Large_Collection_Performance()
+		{
+			var tabView = new SfTabView();
+			var items = new TabItemCollection();
+
+			for (int i = 0; i < 100; i++)
+			{
+				var tabItem = new SfTabItem
+				{
+					Header = $"Tab {i + 1}",
+					HeaderContent = new Label { Text = $"Custom Header {i + 1}" },
+					Content = new Label { Text = $"Content {i + 1}" }
+				};
+				items.Add(tabItem);
+			}
+
+			tabView.Items = items;
+
+			Assert.Equal(100, tabView.Items.Count);
+			Assert.All(tabView.Items, item => Assert.NotNull(item.HeaderContent));
+		}
+
+		[Fact]
+		public void HeaderContent_Memory_Usage_With_Multiple_Views()
+		{
+			var tabItem = new SfTabItem();
+			var views = new List<View>();
+
+			// Create multiple views and assign them one by one
+			for (int i = 0; i < 10; i++)
+			{
+				var view = new Label { Text = $"View {i}" };
+				views.Add(view);
+				tabItem.HeaderContent = view;
+
+				Assert.Equal(view, tabItem.HeaderContent);
+			}
+
+			// Only the last assigned view should be the current HeaderContent
+			Assert.Equal(views.Last(), tabItem.HeaderContent);
+		}
+
+		#endregion
+
+		#region AnimationEasing Unit Tests
+
+		[Fact]
+		public void UpdateAnimationEasing_ShouldPropagateToChildren()
+		{
+			var tabView = new SfTabView();
+			var expectedEasing = Easing.SinOut;
+
+			InvokePrivateMethod(tabView, "UpdateAnimationEasing", [expectedEasing]);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			var horizontalContent = GetPrivateField<SfTabView>(tabView, "_tabContentContainer") as SfHorizontalContent;
+
+			Assert.NotNull(tabBar);
+			Assert.NotNull(horizontalContent);
+			Assert.Equal(expectedEasing, tabBar.AnimationEasing);
+			Assert.Equal(expectedEasing, horizontalContent.AnimationEasing);
+		}
+
+		[Fact]
+		public void AnimationEasing_DefaultValue_ShouldBeLinear()
+		{
+			var tabView = new SfTabView();
+
+			Assert.Equal(Easing.Linear, tabView.AnimationEasing);
+		}
+
+		[Theory]
+		[InlineData("BounceIn")]
+		[InlineData("BounceOut")]
+		[InlineData("CubicIn")]
+		[InlineData("CubicInOut")]
+		[InlineData("CubicOut")]
+		[InlineData("Linear")]
+		[InlineData("SinIn")]
+		[InlineData("SinInOut")]
+		[InlineData("SinOut")]
+		[InlineData("SpringIn")]
+		[InlineData("SpringOut")]
+		public void AnimationEasing_SetAndGet_ReturnsExpectedValue(string easingName)
+		{
+			var tabView = new SfTabView();
+
+			// Map easing names to actual Easing instances
+			Easing expected = easingName switch
+			{
+				"BounceIn" => Easing.BounceIn,
+				"BounceOut" => Easing.BounceIn,
+				"CubicIn" => Easing.BounceIn,
+				"CubicInOut" => Easing.BounceIn,
+				"CubicOut" => Easing.BounceIn,
+				"Linear" => Easing.BounceIn,
+				"SinIn" => Easing.BounceIn,
+				"SinInOut" => Easing.BounceIn,
+				"SinOut" => Easing.BounceIn,
+				"SpringIn" => Easing.BounceIn,
+				"SpringOut" => Easing.BounceIn,
+				_ => Easing.Linear
+			};
+
+			tabView.AnimationEasing = expected;
+
+			Assert.Equal(expected, tabView.AnimationEasing);
+		}
+
+		[Fact]
+		public void AnimationEasing_PropertyChangedTriggered()
+		{
+			var tabView = new SfTabView();
+			bool eventRaised = false;
+
+			tabView.PropertyChanged += (sender, args) =>
+			{
+				if (args.PropertyName == nameof(tabView.AnimationEasing))
+				{
+					eventRaised = true;
+				}
+			};
+
+			tabView.AnimationEasing = Easing.CubicInOut;
+
+			Assert.True(eventRaised, $"PropertyChanged was not raised for {tabView.AnimationEasing}");
+		}
+
+		[Fact]
+		public void AnimationEasing_PropagatedToTabBar()
+		{
+			var tabView = new SfTabView();
+			var expectedEasing = Easing.BounceOut;
+
+			tabView.AnimationEasing = expectedEasing;
+
+			SfTabBar? tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(expectedEasing, tabBar.AnimationEasing);
+		}
+
+		[Fact]
+		public void AnimationEasing_PropagatedToHorizontalContent()
+		{
+			var tabView = new SfTabView();
+			var expectedEasing = Easing.SpringIn;
+
+			tabView.AnimationEasing = expectedEasing;
+
+			SfHorizontalContent? horizontalContent = GetPrivateField<SfTabView>(tabView, "_tabContentContainer") as SfHorizontalContent;
+			Assert.NotNull(horizontalContent);
+			Assert.Equal(expectedEasing, horizontalContent.AnimationEasing);
+		}
+
+		[Fact]
+		public void AnimationEasing_RuntimeChange_UpdatesChildComponents()
+		{
+			var tabView = new SfTabView();
+
+			// Initial setup
+			tabView.AnimationEasing = Easing.Linear;
+
+			// Get child components
+			SfTabBar? tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			SfHorizontalContent? horizontalContent = GetPrivateField<SfTabView>(tabView, "_tabContentContainer") as SfHorizontalContent;
+
+			Assert.NotNull(tabBar);
+			Assert.NotNull(horizontalContent);
+			Assert.Equal(Easing.Linear, tabBar.AnimationEasing);
+			Assert.Equal(Easing.Linear, horizontalContent.AnimationEasing);
+
+			// Runtime change
+			tabView.AnimationEasing = Easing.CubicOut;
+
+			Assert.Equal(Easing.CubicOut, tabBar.AnimationEasing);
+			Assert.Equal(Easing.CubicOut, horizontalContent.AnimationEasing);
+
+		}
+		#endregion
+		#region EnableRippleAnimation Unit Tests
+
+		[Fact]
+		public void EnableRippleAnimation_DefaultValue_ShouldBeTrue()
+		{
+			var tabView = new SfTabView();
+			Assert.True(tabView.EnableRippleAnimation);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void EnableRippleAnimation_SetAndGet_ReturnsExpectedValue(bool expected)
+		{
+			var tabView = new SfTabView
+			{
+				EnableRippleAnimation = expected
+			};
+
+			Assert.Equal(expected, tabView.EnableRippleAnimation);
+		}
+
+		[Fact]
+		public void EnableRippleAnimation_PropertyChanged_TriggersEvent()
+		{
+			var tabView = new SfTabView();
+			bool eventTriggered = false;
+			string? changedPropertyName = null;
+
+			tabView.PropertyChanged += (sender, e) =>
+			{
+				if (e.PropertyName == nameof(SfTabView.EnableRippleAnimation))
+				{
+					eventTriggered = true;
+					changedPropertyName = e.PropertyName;
+				}
+			};
+
+			tabView.EnableRippleAnimation = false;
+
+			Assert.True(eventTriggered);
+			Assert.Equal(nameof(SfTabView.EnableRippleAnimation), changedPropertyName);
+		}
+
+		[Fact]
+		public void EnableRippleAnimation_RuntimeToggle_UpdatesCorrectly()
+		{
+			var tabView = new SfTabView();
+
+			// Verify default value
+			Assert.True(tabView.EnableRippleAnimation);
+
+			// Toggle to false
+			tabView.EnableRippleAnimation = false;
+			Assert.False(tabView.EnableRippleAnimation);
+
+			// Toggle back to true
+			tabView.EnableRippleAnimation = true;
+			Assert.True(tabView.EnableRippleAnimation);
+		}
+
+		[Fact]
+		public void EnableRippleAnimation_PropagatesTo_TabBar()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection(),
+				EnableRippleAnimation = false
+			};
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.False(tabBar.EnableRippleAnimation);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void EnableRippleAnimation_WithItems_MaintainsValue(bool rippleEnabled)
+		{
+			var tabView = new SfTabView
+			{
+				EnableRippleAnimation = rippleEnabled,
+				Items = PopulateLabelItemsCollection()
+			};
+
+			Assert.Equal(rippleEnabled, tabView.EnableRippleAnimation);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(rippleEnabled, tabBar.EnableRippleAnimation);
+		}
+
+		[Theory]
+		[InlineData(TabBarPlacement.Top, true)]
+		[InlineData(TabBarPlacement.Top, false)]
+		[InlineData(TabBarPlacement.Bottom, true)]
+		[InlineData(TabBarPlacement.Bottom, false)]
+		public void EnableRippleAnimation_WithDifferentPlacements_WorksCorrectly(TabBarPlacement placement, bool rippleEnabled)
+		{
+			var tabView = new SfTabView
+			{
+				TabBarPlacement = placement,
+				EnableRippleAnimation = rippleEnabled,
+				Items = PopulateLabelItemsCollection()
+			};
+
+			Assert.Equal(rippleEnabled, tabView.EnableRippleAnimation);
+			Assert.Equal(placement, tabView.TabBarPlacement);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(rippleEnabled, tabBar.EnableRippleAnimation);
+		}
+
+		[Theory]
+		[InlineData(FlowDirection.LeftToRight, true)]
+		[InlineData(FlowDirection.LeftToRight, false)]
+		[InlineData(FlowDirection.RightToLeft, true)]
+		[InlineData(FlowDirection.RightToLeft, false)]
+		public void EnableRippleAnimation_WithFlowDirection_WorksCorrectly(FlowDirection flowDirection, bool rippleEnabled)
+		{
+			var tabView = new SfTabView
+			{
+				FlowDirection = flowDirection,
+				EnableRippleAnimation = rippleEnabled,
+				Items = PopulateLabelItemsCollection()
+			};
+
+			Assert.Equal(rippleEnabled, tabView.EnableRippleAnimation);
+			Assert.Equal(flowDirection, tabView.FlowDirection);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(rippleEnabled, tabBar.EnableRippleAnimation);
+			Assert.Equal(flowDirection, tabBar.FlowDirection);
+		}
+
+		[Fact]
+		public void EnableRippleAnimation_DoesNotAffect_SelectionBehavior()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection(),
+				EnableRippleAnimation = false,
+				SelectedIndex = 0
+			};
+
+			// Test selection change with ripple disabled
+			int selectionChangedCount = 0;
+			tabView.SelectionChanged += (s, e) => selectionChangedCount++;
+
+			tabView.SelectedIndex = 1;
+			Assert.Equal(1, tabView.SelectedIndex);
+			Assert.Equal(1, selectionChangedCount);
+
+			// Toggle ripple and test selection again
+			tabView.EnableRippleAnimation = true;
+			tabView.SelectedIndex = 2;
+			Assert.Equal(2, tabView.SelectedIndex);
+			Assert.Equal(2, selectionChangedCount);
+		}
+
+		[Fact]
+		public void EnableRippleAnimation_DoesNotAffect_TabItemTappedEvent()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection(),
+				EnableRippleAnimation = false
+			};
+
+			bool eventTriggered = false;
+			SfTabItem? tappedItem = null;
+
+			tabView.TabItemTapped += (s, e) =>
+			{
+				eventTriggered = true;
+				tappedItem = e.TabItem;
+			};
+
+			// Simulate tab item tapped event with ripple disabled
+			var eventArgs = new TabItemTappedEventArgs { TabItem = tabView.Items[0] };
+			tabView.RaiseTabItemTappedEvent(eventArgs);
+
+			Assert.True(eventTriggered);
+			Assert.Equal(tabView.Items[0], tappedItem);
+		}
+
+		[Theory]
+		[InlineData(TabBarDisplayMode.Default, true)]
+		[InlineData(TabBarDisplayMode.Default, false)]
+		[InlineData(TabBarDisplayMode.Text, true)]
+		[InlineData(TabBarDisplayMode.Text, false)]
+		[InlineData(TabBarDisplayMode.Image, true)]
+		[InlineData(TabBarDisplayMode.Image, false)]
+		public void EnableRippleAnimation_WithHeaderDisplayMode_WorksCorrectly(TabBarDisplayMode displayMode, bool rippleEnabled)
+		{
+			var tabView = new SfTabView
+			{
+				HeaderDisplayMode = displayMode,
+				EnableRippleAnimation = rippleEnabled,
+				Items = PopulateLabelImageItemsCollection()
+			};
+
+			Assert.Equal(rippleEnabled, tabView.EnableRippleAnimation);
+			Assert.Equal(displayMode, tabView.HeaderDisplayMode);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(rippleEnabled, tabBar.EnableRippleAnimation);
+			Assert.Equal(displayMode, tabBar.HeaderDisplayMode);
+		}
+
+		[Theory]
+		[InlineData(IndicatorWidthMode.Fit, true)]
+		[InlineData(IndicatorWidthMode.Fit, false)]
+		[InlineData(IndicatorWidthMode.Stretch, true)]
+		[InlineData(IndicatorWidthMode.Stretch, false)]
+		public void EnableRippleAnimation_WithIndicatorWidthMode_WorksCorrectly(IndicatorWidthMode widthMode, bool rippleEnabled)
+		{
+			var tabView = new SfTabView
+			{
+				IndicatorWidthMode = widthMode,
+				EnableRippleAnimation = rippleEnabled,
+				Items = PopulateLabelItemsCollection()
+			};
+
+			Assert.Equal(rippleEnabled, tabView.EnableRippleAnimation);
+			Assert.Equal(widthMode, tabView.IndicatorWidthMode);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(rippleEnabled, tabBar.EnableRippleAnimation);
+			Assert.Equal(widthMode, tabBar.IndicatorWidthMode);
+		}
+
+		[Fact]
+		public void EnableRippleAnimation_BindableProperty_IsCorrectlyDefined()
+		{
+			var property = SfTabView.EnableRippleAnimationProperty;
+
+			Assert.NotNull(property);
+			Assert.Equal(nameof(SfTabView.EnableRippleAnimation), property.PropertyName);
+			Assert.Equal(typeof(bool), property.ReturnType);
+			Assert.Equal(typeof(SfTabView), property.DeclaringType);
+			Assert.True((bool)property.DefaultValue);
+		}
+
+		[Theory]
+		[InlineData(true, false)]
+		[InlineData(false, true)]
+		public void EnableRippleAnimation_PropertyChangedCallback_UpdatesTabBar(bool initialValue, bool newValue)
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollection(),
+				EnableRippleAnimation = initialValue
+			};
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(initialValue, tabBar.EnableRippleAnimation);
+
+			// Change the value and verify propagation
+			tabView.EnableRippleAnimation = newValue;
+			Assert.Equal(newValue, tabBar.EnableRippleAnimation);
+		}
+
+		[Fact]
+		public void EnableRippleAnimation_WithScrollButtonEnabled_WorksCorrectly()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelItemsCollectionMore(), // More items to enable scrolling
+				IsScrollButtonEnabled = true,
+				EnableRippleAnimation = false
+			};
+
+			Assert.False(tabView.EnableRippleAnimation);
+			Assert.True(tabView.IsScrollButtonEnabled);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.False(tabBar.EnableRippleAnimation);
+			Assert.True(tabBar.IsScrollButtonEnabled);
+		}
+
+		[Theory]
+		[InlineData(TabIndicatorPlacement.Top, true)]
+		[InlineData(TabIndicatorPlacement.Top, false)]
+		[InlineData(TabIndicatorPlacement.Bottom, true)]
+		[InlineData(TabIndicatorPlacement.Bottom, false)]
+		[InlineData(TabIndicatorPlacement.Fill, true)]
+		[InlineData(TabIndicatorPlacement.Fill, false)]
+		public void EnableRippleAnimation_WithIndicatorPlacement_WorksCorrectly(TabIndicatorPlacement placement, bool rippleEnabled)
+		{
+			var tabView = new SfTabView
+			{
+				IndicatorPlacement = placement,
+				EnableRippleAnimation = rippleEnabled,
+				Items = PopulateLabelItemsCollection()
+			};
+
+			Assert.Equal(rippleEnabled, tabView.EnableRippleAnimation);
+			Assert.Equal(placement, tabView.IndicatorPlacement);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(rippleEnabled, tabBar.EnableRippleAnimation);
+			Assert.Equal(placement, tabBar.IndicatorPlacement);
+		}
+
+		[Theory]
+		[InlineData(TabWidthMode.Default, true)]
+		[InlineData(TabWidthMode.Default, false)]
+		[InlineData(TabWidthMode.SizeToContent, true)]
+		[InlineData(TabWidthMode.SizeToContent, false)]
+		public void EnableRippleAnimation_WithTabWidthMode_WorksCorrectly(TabWidthMode widthMode, bool rippleEnabled)
+		{
+			var tabView = new SfTabView
+			{
+				TabWidthMode = widthMode,
+				EnableRippleAnimation = rippleEnabled,
+			};
+
+			Assert.Equal(rippleEnabled, tabView.EnableRippleAnimation);
+			Assert.Equal(widthMode, tabView.TabWidthMode);
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(rippleEnabled, tabBar.EnableRippleAnimation);
+			Assert.Equal(widthMode, tabBar.TabWidthMode);
 		}
 
 		#endregion

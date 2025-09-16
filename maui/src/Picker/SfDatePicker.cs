@@ -14,6 +14,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         #region Fields
 
         /// <summary>
+        /// Holds the selected date in dialog mode.
+        /// </summary>
+        internal DateTime? _internalSelectedDate;
+
+        /// <summary>
         /// Holds the day column information.
         /// </summary>
         PickerColumn _dayColumn;
@@ -209,104 +214,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 propertyChanged: OnDatePickerBackgroundChanged);
 
         /// <summary>
-        /// Identifies the <see cref="HeaderBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="HeaderBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty HeaderBackgroundProperty =
-            BindableProperty.Create(
-                nameof(HeaderBackground),
-                typeof(Brush),
-                typeof(SfDatePicker),
-                defaultValueCreator: bindable => new SolidColorBrush(Color.FromArgb("#F7F2FB")),
-                propertyChanged: OnHeaderBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="FooterBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="FooterBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty FooterBackgroundProperty =
-            BindableProperty.Create(
-                nameof(FooterBackground),
-                typeof(Brush),
-                typeof(SfDatePicker),
-                defaultValueCreator: bindable => Brush.Transparent,
-                propertyChanged: OnFooterBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="SelectionBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty SelectionBackgroundProperty =
-            BindableProperty.Create(
-                nameof(SelectionBackground),
-                typeof(Brush),
-                typeof(SfDatePicker),
-                defaultValueCreator: bindable => new SolidColorBrush(Color.FromArgb("#6750A4")),
-                propertyChanged: OnSelectionBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionStrokeColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="SelectionStrokeColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty SelectionStrokeColorProperty =
-            BindableProperty.Create(
-                nameof(SelectionStrokeColor),
-                typeof(Color),
-                typeof(SfDatePicker),
-                defaultValueCreator: bindable => Colors.Transparent,
-                propertyChanged: OnSelectionStrokeColorChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionCornerRadius"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="SelectionCornerRadius"/> dependency property.
-        /// </value>
-        internal static readonly BindableProperty SelectionCornerRadiusProperty =
-            BindableProperty.Create(
-                nameof(SelectionCornerRadius),
-                typeof(CornerRadius),
-                typeof(SfDatePicker),
-                defaultValueCreator: bindable => new CornerRadius(20),
-                propertyChanged: OnSelectionCornerRadiusChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="HeaderDividerColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="HeaderDividerColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty HeaderDividerColorProperty =
-            BindableProperty.Create(
-                nameof(HeaderDividerColor),
-                typeof(Color),
-                typeof(SfDatePicker),
-                defaultValueCreator: bindable => Color.FromArgb("#CAC4D0"),
-                propertyChanged: OnHeaderDividerColorChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="FooterDividerColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="FooterDividerColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty FooterDividerColorProperty =
-            BindableProperty.Create(
-                nameof(FooterDividerColor),
-                typeof(Color),
-                typeof(SfDatePicker),
-                defaultValueCreator: bindable => Color.FromArgb("#CAC4D0"),
-                propertyChanged: OnFooterDividerColorChanged);
-
-        /// <summary>
         /// Identifies the <see cref="HeaderTextColor"/> dependency property.
         /// </summary>
         /// <value>
@@ -465,6 +372,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SelectionIndexChanged += OnPickerSelectionIndexChanged;
             BlackoutDates.CollectionChanged += OnBlackoutDates_CollectionChanged;
             BackgroundColor = DatePickerBackground;
+            InitializePickerStyle();
             Dispatcher.Dispatch(() =>
             {
                 InitializeTheme();
@@ -812,69 +720,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
-        /// Gets or sets the background of the header view in date picker.
-        /// </summary>
-        internal Brush HeaderBackground
-        {
-            get { return (Brush)GetValue(HeaderBackgroundProperty); }
-            set { SetValue(HeaderBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the footer view in SfDatePicker.
-        /// </summary>
-        internal Brush FooterBackground
-        {
-            get { return (Brush)GetValue(FooterBackgroundProperty); }
-            set { SetValue(FooterBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the selection view in SfDatePicker.
-        /// </summary>
-        internal Brush SelectionBackground
-        {
-            get { return (Brush)GetValue(SelectionBackgroundProperty); }
-            set { SetValue(SelectionBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the stroke color of the selection view in SfDatePicker.
-        /// </summary>
-        internal Color SelectionStrokeColor
-        {
-            get { return (Color)GetValue(SelectionStrokeColorProperty); }
-            set { SetValue(SelectionStrokeColorProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the corner radius of the selection view in SfDatePicker.
-        /// </summary>
-        internal CornerRadius SelectionCornerRadius
-        {
-            get { return (CornerRadius)GetValue(SelectionCornerRadiusProperty); }
-            set { SetValue(SelectionCornerRadiusProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the color of the header separator line in date picker.
-        /// </summary>
-        internal Color HeaderDividerColor
-        {
-            get { return (Color)GetValue(HeaderDividerColorProperty); }
-            set { SetValue(HeaderDividerColorProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the footer separator line background in SfDatePicker.
-        /// </summary>
-        internal Color FooterDividerColor
-        {
-            get { return (Color)GetValue(FooterDividerColorProperty); }
-            set { SetValue(FooterDividerColorProperty, value); }
-        }
-
-        /// <summary>
         /// Gets or sets the header text color of the text style.
         /// </summary>
         internal Color HeaderTextColor
@@ -1002,12 +847,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
             List<int> formatStringOrder = DatePickerHelper.GetFormatStringOrder(out dayFormat, out monthFormat, Format);
             int changedColumnValue = formatStringOrder[e.ColumnIndex];
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(MinimumDate, MaximumDate);
-            DateTime date = SelectedDate ?? _previousSelectedDateTime.Date;
+
+            // Determine the date to use based on the current mode and available date values:
+            // - If not in Default mode and InternalSelectedDate has a value, use it.
+            // - Otherwise, use SelectedDate if available.
+            // - If neither is available, fall back to PreviousSelectedDateTime's date part.
+            DateTime date = IsScrollSelectionAllowed() && _internalSelectedDate.HasValue ? _internalSelectedDate.Value : SelectedDate ?? _previousSelectedDateTime.Date;
             DateTime? previousSelectedDate = DatePickerHelper.GetValidDate(date, MinimumDate, maxDate);
             if (previousSelectedDate == null)
             {
                 return;
             }
+
+            DateTime selectedDate = DateTime.Now;
 
             switch (changedColumnValue)
             {
@@ -1015,11 +867,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 0:
                     {
                         int day = GetDayFromCollection(e);
-                        DateTime selectedDate = new DateTime(previousSelectedDate.Value.Year, previousSelectedDate.Value.Month, day);
-                        if (!DatePickerHelper.IsSameDate(selectedDate, SelectedDate))
-                        {
-                            SelectedDate = selectedDate.Date;
-                        }
+                        selectedDate = new DateTime(previousSelectedDate.Value.Year, previousSelectedDate.Value.Month, day);
                     }
 
                     break;
@@ -1028,11 +876,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     {
                         int month, day;
                         GetMonthFromCollection(e, dayFormat, monthFormat, maxDate, previousSelectedDate, out month, out day);
-                        DateTime selectedDate = new DateTime(previousSelectedDate.Value.Year, month, day);
-                        if (!DatePickerHelper.IsSameDate(selectedDate, SelectedDate))
-                        {
-                            SelectedDate = selectedDate.Date;
-                        }
+                        selectedDate = new DateTime(previousSelectedDate.Value.Year, month, day);
                     }
 
                     break;
@@ -1041,14 +885,38 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     {
                         int year, month, day;
                         GetYearFromCollection(e, dayFormat, monthFormat, maxDate, previousSelectedDate, out year, out month, out day);
-                        DateTime selectedDate = new DateTime(year, month, day);
-                        if (!DatePickerHelper.IsSameDate(selectedDate, SelectedDate))
-                        {
-                            SelectedDate = selectedDate.Date;
-                        }
+                        selectedDate = new DateTime(year, month, day);
                     }
 
                     break;
+            }
+
+            // Check if the current mode is not the default picker mode
+            if (IsScrollSelectionAllowed())
+            {
+                // Check if the selected date falls within any blackout dates
+                if (BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, selectedDate)))
+                {
+                    // If the selected date is a blackout date, revert the selection to the previous value
+                    _dayColumn.SelectedIndex = e.OldValue;
+                }
+                // Set the internal selected date to the selected date (without time component)
+                _internalSelectedDate = selectedDate.Date;
+                // Update the selected item in the column based on the new internal selected date
+                UpdateSelectedItemInColumn();
+                // Ensure the internal selected date is within the allowed minimum and maximum date range
+                _internalSelectedDate = DatePickerHelper.GetValidDate(_internalSelectedDate, MinimumDate, MaximumDate);
+                // Update the selected index in the UI to reflect the validated internal selected date
+                UpdateSelectedIndex(_internalSelectedDate);
+            }
+            else
+            {
+                // If in default mode, update the selected date only if it has changed
+                if (!DatePickerHelper.IsSameDate(selectedDate, SelectedDate))
+                {
+                    // Set the selected date to the new date (without time component)
+                    SelectedDate = selectedDate.Date;
+                }
             }
         }
 
@@ -1197,6 +1065,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (yearIndex != -1 && oldDate.Year != newDate.Year)
             {
                 _yearColumn = GenerateYearColumn(validSelectedDate);
+                _yearColumn.Parent = this;
                 _columns[yearIndex] = _yearColumn;
             }
 
@@ -1286,6 +1155,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     _dayColumn.SelectedIndex = index;
                 }
             }
+
+            if (IsScrollSelectionAllowed() && SelectedDate == null)
+            {
+                UpdateSelectedItemInColumn();
+            }
         }
 
         /// <summary>
@@ -1360,6 +1234,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             _columns = pickerColumns;
+        }
+
+        /// <summary>
+        /// Need to update the each column selected item in a datepicker.
+        /// </summary>
+        void UpdateSelectedItemInColumn()
+        {
+            _dayColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_dayColumn);
+            _yearColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_yearColumn);
+            _monthColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_monthColumn);
         }
 
         /// <summary>
@@ -1502,23 +1386,23 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void InitializeTheme()
         {
             ThemeElement.InitializeThemeResources(this, "SfDatePickerTheme");
-            SetDynamicResource(DatePickerBackgroundProperty, "SfDatePickerNormalBackground");
 
-            SetDynamicResource(HeaderBackgroundProperty, "SfDatePickerNormalHeaderBackground");
-            SetDynamicResource(HeaderDividerColorProperty, "SfDatePickerNormalHeaderDividerColor");
             SetDynamicResource(HeaderTextColorProperty, "SfDatePickerNormalHeaderTextColor");
             SetDynamicResource(HeaderFontSizeProperty, "SfDatePickerNormalHeaderFontSize");
 
-            SetDynamicResource(FooterBackgroundProperty, "SfDatePickerNormalFooterBackground");
-            SetDynamicResource(FooterDividerColorProperty, "SfDatePickerNormalFooterDividerColor");
             SetDynamicResource(FooterTextColorProperty, "SfDatePickerNormalFooterTextColor");
             SetDynamicResource(FooterFontSizeProperty, "SfDatePickerNormalFooterFontSize");
+        }
 
-            SetDynamicResource(SelectionBackgroundProperty, "SfDatePickerSelectionBackground");
-            SetDynamicResource(SelectionStrokeColorProperty, "SfDatePickerSelectionStroke");
-            SetDynamicResource(SelectionCornerRadiusProperty, "SfDatePickerSelectionCornerRadius");
+        /// <summary>
+        /// Method to initialize the defult picker style.
+        /// </summary>
+        void InitializePickerStyle()
+        {
+            SetDynamicResource(DatePickerBackgroundProperty, "SfDatePickerNormalBackground");
+
             SetDynamicResource(SelectedTextColorProperty, "SfDatePickerSelectedTextColor");
-            SetDynamicResource(SelectionTextColorProperty, "SfPickerSelectionTextColor");
+            SetDynamicResource(SelectionTextColorProperty, "SfDatePickerSelectionTextColor");
             SetDynamicResource(SelectedFontSizeProperty, "SfDatePickerSelectedFontSize");
 
             SetDynamicResource(NormalTextColorProperty, "SfDatePickerNormalTextColor");
@@ -1613,6 +1497,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments.</param>
         protected override void OnPopupClosed(EventArgs e)
         {
+            if (IsScrollSelectionAllowed())
+            {
+                if (_internalSelectedDate != null)
+                {
+                    _internalSelectedDate = null;
+                    UpdateSelectedIndex(SelectedDate);
+                }
+            }
+
             InvokeClosedEvent(this, e);
         }
 
@@ -1640,6 +1533,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments</param>
         protected override void OnOkButtonClicked(EventArgs e)
         {
+            // If the picker is not in Default mode and an internal selected date exists
+            if (IsScrollSelectionAllowed() && _internalSelectedDate != null)
+            {
+                // If the internal selected date is different from the currently selected date
+                if (!DatePickerHelper.IsSameDate(_internalSelectedDate, SelectedDate))
+                {
+                    // Update the selected date with the internal selected date
+                    SelectedDate = _internalSelectedDate.Value;
+                    // Clear the internal selected date after applying it
+                    _internalSelectedDate = null;
+                }
+            }
+
             InvokeOkButtonClickedEvent(this, e);
             if (AcceptCommand != null && AcceptCommand.CanExecute(e))
             {
@@ -1653,6 +1559,29 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments.</param>
         protected override void OnCancelButtonClicked(EventArgs e)
         {
+            // If the picker is not in Default mode
+            if (IsScrollSelectionAllowed())
+            {
+                // If a date is currently selected
+                if (SelectedDate != null)
+                {
+                    // Update the selected index in the UI to reflect the selected date
+                    UpdateSelectedIndex(SelectedDate);
+                }
+                else
+                {
+                    // If no date is selected, clear all column selections
+                    _yearColumn.SelectedItem = null;
+                    _monthColumn.SelectedItem = null;
+                    _dayColumn.SelectedItem = null;
+                }
+                // Clear the internal selected date if it exists
+                if (_internalSelectedDate != null)
+                {
+                    _internalSelectedDate = null;
+                }
+            }
+
             InvokeCancelButtonClickedEvent(this, e);
             if (DeclineCommand != null && DeclineCommand.CanExecute(e))
             {
@@ -1801,9 +1730,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else
             {
-                datepicker._dayColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(datepicker._dayColumn);
-                datepicker._yearColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(datepicker._yearColumn);
-                datepicker._monthColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(datepicker._monthColumn);
+                datepicker.UpdateSelectedItemInColumn();
                 PickerContainer? pickerContainer = datepicker.GetPickerContainerValue();
                 pickerContainer?.UpdateScrollViewDraw();
                 pickerContainer?.InvalidateDrawable();
@@ -2027,125 +1954,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             picker.BackgroundColor = picker.DatePickerBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker header background changed.
-        /// </summary>
-        /// <param name="bindable">The header settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnHeaderBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfDatePicker? picker = bindable as SfDatePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.HeaderView.Background = picker.HeaderBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker footer background changed.
-        /// </summary>
-        /// <param name="bindable">The footer settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnFooterBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfDatePicker? picker = bindable as SfDatePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.FooterView.Background = picker.FooterBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection background changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfDatePicker? picker = bindable as SfDatePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.Background = picker.SelectionBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection stroke color changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionStrokeColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfDatePicker? picker = bindable as SfDatePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.Stroke = picker.SelectionStrokeColor;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection corner radius changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionCornerRadiusChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfDatePicker? picker = bindable as SfDatePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.CornerRadius = picker.SelectionCornerRadius;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker header separator line background changed.
-        /// </summary>
-        /// <param name="bindable">The header settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnHeaderDividerColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfDatePicker? picker = bindable as SfDatePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.HeaderView.DividerColor = picker.HeaderDividerColor;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker footer separator line background changed.
-        /// </summary>
-        /// <param name="bindable">The footer settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnFooterDividerColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfDatePicker? picker = bindable as SfDatePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.FooterView.DividerColor = picker.FooterDividerColor;
         }
 
         /// <summary>

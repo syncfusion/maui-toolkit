@@ -5,6 +5,8 @@ using Microsoft.Maui.Platform;
 using Syncfusion.Maui.Toolkit.Internals;
 using MauiView = Microsoft.Maui.Controls.View;
 using PlatformView = Android.Views.View;
+using View = Android.Views.View;
+using Rect = Microsoft.Maui.Graphics.Rect;
 
 namespace Syncfusion.Maui.Toolkit.Popup
 {
@@ -13,42 +15,24 @@ namespace Syncfusion.Maui.Toolkit.Popup
 	/// </summary>
 	internal static partial class PopupExtension
 	{
+		/// <summary>
+		/// True if the WindowFlagHasNoLimits flag is set.
+		/// </summary>
+		internal static bool WindowFlagHasNoLimits;
+
+		/// <summary>
+		/// True if the WindowFlagHasFullScreen flag is set.
+		/// </summary>
+		internal static bool WindowFlagHasFullScreen;
+
 		#region Internal methods
 
 		/// <summary>
 		/// Gets the status bar height.
 		/// </summary>
 		/// <returns>Returns the status bar height.</returns>
-		internal static int GetStatusBarHeight()
+		internal static double GetStatusBarHeight()
 		{
-			if (PopupExtension.CheckWindowFlagsHasLayoutNoLimits() && !PopupExtension.CheckWindowFlagsHasFullScreen())
-			{
-				int[] activityCoordinates = new int[2] { 0, 0 };
-
-				// Popup not positioned properly when show the popup relative to view in shell page.
-				var mainPage = GetMainPage();
-				if (mainPage is not null && mainPage.Handler is not null)
-				{
-					var nativeView = mainPage.Handler.PlatformView as ViewGroup;
-
-					// When show is called from OnAppearing method, the GetLocationOnScreen not returned property Y coordinate.
-					if (nativeView is null || (nativeView is not null && nativeView.Height == 0))
-					{
-						return 0;
-					}
-
-					nativeView?.GetLocationInWindow(activityCoordinates);
-
-					if (GetAttributes() is WindowManagerLayoutParams attributes && (attributes.Flags & WindowManagerFlags.Fullscreen) == WindowManagerFlags.Fullscreen)
-					{
-						return (int)Math.Round(activityCoordinates[1] / WindowOverlayHelper._density);
-					}
-				}
-
-				return (int)(activityCoordinates[1] / WindowOverlayHelper._density);
-			}
-
-			// To-do : Overlay not applied above status bar properly in android physical device.
 			return 0;
 		}
 
@@ -56,41 +40,16 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// Gets action bar height.
 		/// </summary>
 		/// <returns>Returns the Y coordinates of the page.</returns>
-		internal static double GetActionBarHeight(bool ignoreActionBar)
+		internal static int GetActionBarHeight()
 		{
-			int[] activityCoordinates = new int[2] { 0, 0 };
-
-			// The popup is not positioned correctly when displayed relative to the view within a Shell page.
+			// Popup not positioned properly when show the popup relative to view in shell page.
 			var mainPage = GetMainPage();
-			if (mainPage is not null && mainPage.Handler is not null)
+			if (mainPage is not null)
 			{
-				var nativeView = mainPage.Handler.PlatformView as ViewGroup;
-
-				// When Show is called from the OnAppearing method, the GetLocationOnScreen method does not return the correct Y coordinate.
-				if (nativeView is null || (nativeView is not null && nativeView.Height == 0))
-				{
-					return 0;
-				}
-
-				nativeView?.GetLocationInWindow(activityCoordinates);
+				return GetLocationInApp(mainPage);
 			}
 
-			if (ignoreActionBar)
-			{
-				return 0;
-			}
-
-			if (GetAttributes() is WindowManagerLayoutParams attributes && (attributes.Flags & WindowManagerFlags.Fullscreen) == WindowManagerFlags.Fullscreen)
-			{
-				return (int)Math.Round(activityCoordinates[1] / WindowOverlayHelper._density);
-			}
-
-			if (PopupExtension.CheckWindowFlagsHasLayoutNoLimits())
-			{
-				return 0;
-			}
-
-			return Math.Round((activityCoordinates[1] - (WindowOverlayHelper._decorViewFrame?.Top ?? 0f)) / WindowOverlayHelper._density);
+			return 0;
 		}
 
 		/// <summary>
@@ -98,7 +57,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		/// <param name="view">The view.</param>
 		/// <returns>Returns the X coordinate of the view.</returns>
-		internal static double GetX(this MauiView view)
+		internal static int GetX(this MauiView view)
 		{
 			if (view.Handler is not null)
 			{
@@ -109,7 +68,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					if (nativeView is not null)
 					{
 						var xPos = nativeView.GetX();
-						return Math.Round(xPos / WindowOverlayHelper._density);
+						return (int)Math.Round(xPos / WindowOverlayHelper._density);
 					}
 				}
 			}
@@ -122,7 +81,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		/// <param name="view">The view.</param>
 		/// <returns>Returns the Y coordinate of the view.</returns>
-		internal static double GetY(this MauiView view)
+		internal static int GetY(this MauiView view)
 		{
 			if (view.Handler is not null)
 			{
@@ -133,8 +92,40 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					if (nativeView is not null)
 					{
 						var yPos = nativeView.GetY();
-						return Math.Round(yPos / WindowOverlayHelper._density);
+						return (int)Math.Round(yPos / WindowOverlayHelper._density);
 					}
+				}
+			}
+
+			return 0;
+		}
+
+		/// <summary>
+		/// Returns the Y location of the view relative to the app's rectangle.
+		/// </summary>
+		/// <param name="virtualView">Instance of maui view.</param>
+		/// <returns>The Y location of the view relative to the app's rectangle.</returns>
+		internal static int GetLocationInApp(VisualElement virtualView)
+		{
+			PlatformView? decorView = WindowOverlayHelper._decorViewContent;
+			if (virtualView is not null && virtualView.Handler is not null && virtualView.Handler.PlatformView is View nativeView)
+			{
+				int[] viewCoordinates = new int[2] { 0, 0 };
+				nativeView.GetLocationInWindow(viewCoordinates);
+
+				// In Android 30, decorview location returning without status bar height.
+				if ((int)Android.OS.Build.VERSION.SdkInt is not 30 && (WindowFlagHasFullScreen || WindowFlagHasNoLimits))
+				{
+					if (decorView is not null)
+					{
+						int[] decorCoordinates = new int[2] { 0, 0 };
+						decorView.GetLocationInWindow(decorCoordinates);
+						return (int)Math.Round((viewCoordinates[1] - decorCoordinates[1]) / WindowOverlayHelper._density);
+					}
+				}
+				else
+				{
+					return (int)Math.Round((viewCoordinates[1] - GetWindowInsets("Top")) / WindowOverlayHelper._density);
 				}
 			}
 
@@ -149,45 +140,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			var platformRootView = WindowOverlayHelper._platformRootView;
 
-			// The PlatformRootView will be null when Show(0, 0) is called from the constructor of MainPage, NavigationPage, TabbedPage, or FlyoutPage.
-			if (platformRootView is null || (platformRootView is not null && platformRootView.Width == 0))
+			// Maui:826232 Referred xamarin popupLayout to take widthPixels.
+			// PlatfromRootView will be null, when calling the show(0,0) from MainPage, NavigationPage, Tabbed and flyoutPage Constructor.
+			if ((platformRootView is null || (platformRootView is not null && platformRootView.Width is 0)) && Android.Content.Res.Resources.System is not null && Android.Content.Res.Resources.System.DisplayMetrics is not null)
 			{
-				var widthPixel = 0;
-				if (Android.Content.Res.Resources.System is not null && Android.Content.Res.Resources.System.DisplayMetrics is not null)
-				{
-					widthPixel = (int)(Android.Content.Res.Resources.System.DisplayMetrics.WidthPixels / WindowOverlayHelper._density);
-				}
-
+				var widthPixel = (int)(Android.Content.Res.Resources.System.DisplayMetrics.WidthPixels / WindowOverlayHelper._density);
 				return widthPixel;
 			}
 
-			if (platformRootView is not null)
-			{
-				if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
-				{
-					if (platformRootView.Width < platformRootView.Height)
-					{
-						return (int)Math.Round(platformRootView.Height / WindowOverlayHelper._density);
-					}
-					else
-					{
-						return (int)Math.Round(platformRootView.Width / WindowOverlayHelper._density);
-					}
-				}
-				else
-				{
-					if (platformRootView.Width < platformRootView.Height)
-					{
-						return (int)Math.Round(platformRootView.Width / WindowOverlayHelper._density);
-					}
-					else
-					{
-						return (int)Math.Round(platformRootView.Height / WindowOverlayHelper._density);
-					}
-				}
-			}
-
-			return 0;
+			return (int)Math.Round(platformRootView!.Width / WindowOverlayHelper._density);
 		}
 
 		/// <summary>
@@ -197,56 +158,27 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static int GetScreenHeight()
 		{
 			var platformRootView = WindowOverlayHelper._platformRootView;
+			double platformRootViewHeight = 0;
 
-			// The PlatformRootView will be null when Show(0, 0) is called from the constructor of MainPage, NavigationPage, TabbedPage, or FlyoutPage.
-			if (platformRootView is null || (platformRootView is not null && platformRootView.Height == 0))
+			// Maui:826232 Referred xamarin popupLayout to take withPixels.
+			// PlatfromRootView will be null, when calling the show(0,0) from MainPage, NavigationPage, Tabbed and flyoutPage Constructor.
+			if ((platformRootView is null || (platformRootView is not null && platformRootView.Height is 0)) && Android.Content.Res.Resources.System is not null && Android.Content.Res.Resources.System.DisplayMetrics is not null)
 			{
-				var heightPixel = 0;
-				if (Android.Content.Res.Resources.System is not null && Android.Content.Res.Resources.System.DisplayMetrics is not null)
-				{
-					heightPixel = (int)(Android.Content.Res.Resources.System.DisplayMetrics.HeightPixels / WindowOverlayHelper._density);
-				}
-
+				var heightPixel = (int)(Android.Content.Res.Resources.System.DisplayMetrics.HeightPixels / WindowOverlayHelper._density);
 				return heightPixel;
 			}
-
-			// When Window Flags has LayoutNoLimits need to return height without bottom navigation bar to calculate full screen.
-			if (CheckWindowFlagsHasLayoutNoLimits() && WindowOverlayHelper._decorViewContent is not null)
+			else if (platformRootView is not null)
 			{
-				return (int)((WindowOverlayHelper._decorViewContent.Height - GetWindowInsets("Bottom")) / WindowOverlayHelper._density);
-			}
-
-			if (platformRootView is not null)
-			{
-				double platformRootViewHeight = platformRootView.Height;
-				if (WindowOverlayHelper._decorViewContent is not null && WindowOverlayHelper._decorViewFrame is not null && IsResizeMode())
+				if (IsResizeMode() && !WindowFlagHasNoLimits)
 				{
-					var keyboardHeight = GetKeyboardHeight();
-					platformRootViewHeight = platformRootView.Height + (keyboardHeight > 0 ? keyboardHeight : 0);
-				}
-
-				if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
-				{
-					if (platformRootView.Width < platformRootViewHeight)
-					{
-						return (int)Math.Round(platformRootView.Width / WindowOverlayHelper._density);
-					}
-					else
-					{
-						return (int)Math.Round(platformRootViewHeight / WindowOverlayHelper._density);
-					}
+					platformRootViewHeight = platformRootView.Height + (GetKeyboardHeight() * WindowOverlayHelper._density);
 				}
 				else
 				{
-					if (platformRootView.Width < platformRootViewHeight)
-					{
-						return (int)Math.Round(platformRootViewHeight / WindowOverlayHelper._density);
-					}
-					else
-					{
-						return (int)Math.Round(platformRootView.Width / WindowOverlayHelper._density);
-					}
+					platformRootViewHeight = platformRootView.Height;
 				}
+
+				return (int)Math.Round(platformRootViewHeight / WindowOverlayHelper._density);
 			}
 
 			return 0;
@@ -276,51 +208,23 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Checks whether window flags has LayoutNoLimits.
 		/// </summary>
-		/// <returns>returns whether window flags has LayoutNoLimits or not.</returns>
-		internal static bool CheckWindowFlagsHasLayoutNoLimits()
+		/// <param name="popup">The SfPopup instance to apply flags to.</param>
+		internal static void SetFlags(SfPopup popup)
 		{
 			var platformWindow = WindowOverlayHelper.GetPlatformWindow();
 			if (platformWindow is not null && platformWindow.Attributes is not null)
 			{
 				var windowFlags = platformWindow.Attributes.Flags;
-				return windowFlags.HasFlag(WindowManagerFlags.LayoutNoLimits);
+
+				// For android 30 LayoutNoLimits has no effect on main window, so should not process LayoutNoLimits flags for it.
+				WindowFlagHasNoLimits = (int)Android.OS.Build.VERSION.SdkInt is not 30 && windowFlags.HasFlag(WindowManagerFlags.LayoutNoLimits);
+				WindowFlagHasFullScreen = windowFlags.HasFlag(WindowManagerFlags.Fullscreen);
 			}
-
-			return false;
-		}
-
-		/// <summary>
-		/// Checks whether window flags has FullScreen.
-		/// </summary>
-		/// <returns>returns whether window flags has FullScreen or not.</returns>
-		internal static bool CheckWindowFlagsHasFullScreen()
-		{
-			var platformWindow = WindowOverlayHelper.GetPlatformWindow();
-			if (platformWindow is not null && platformWindow.Attributes is not null)
+			else
 			{
-				var windowFlags = platformWindow.Attributes.Flags;
-				return windowFlags.HasFlag(WindowManagerFlags.Fullscreen);
+				WindowFlagHasNoLimits = false;
+				WindowFlagHasFullScreen = false;
 			}
-
-			return false;
-		}
-
-		/// <summary>
-		/// Checks whether navigation bar is visible.
-		/// </summary>
-		/// <returns>returns whether whether navigation bar is visible or not.</returns>
-		internal static bool CheckNavigationbarIsVisible()
-		{
-			if (WindowOverlayHelper._decorViewContent is not null)
-			{
-				var windowInsets = ViewCompat.GetRootWindowInsets(WindowOverlayHelper._decorViewContent);
-				if (windowInsets is not null)
-				{
-					return windowInsets.IsVisible(WindowInsetsCompat.Type.NavigationBars());
-				}
-			}
-
-			return false;
 		}
 
 		/// <summary>
@@ -346,6 +250,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							return insets.Left;
 						case "Right":
 							return insets.Right;
+						case "Keyboard":
+							return windowInsets.GetInsets(WindowInsetsCompat.Type.Ime()).Bottom;
+						case "LeftGesture":
+							return windowInsets.GetInsets(WindowInsetsCompat.Type.SystemGestures()).Left;
+						case "RightGesture":
+							return windowInsets.GetInsets(WindowInsetsCompat.Type.SystemGestures()).Right;
 						default:
 							return 0;
 					}
@@ -365,9 +275,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			ClearBlurViews(popup);
 
-			if (OperatingSystem.IsAndroidVersionAtLeast(31) && Shader.TileMode.Clamp is not null && popup.GetBlurRadius() > 0 && SfWindowOverlay.ViewList is not null)
+			// SetRenderEffect will not affect the background; it only applies the blur to the view on which the renderer is called. i.e it will take effect within its canvas, blurring the descendants.
+			if (OperatingSystem.IsAndroidVersionAtLeast(31) && Shader.TileMode.Clamp is not null && popup.GetBlurRadius() > 0 && SfWindowOverlay._stackList is not null)
 			{
-				popup._blurredViews = new List<PlatformView>();
+				popup._blurredViews = new System.Collections.Generic.List<PlatformView>();
 				bool hasModalPage = false;
 				if (IPlatformApplication.Current is not null && IPlatformApplication.Current.Application is Microsoft.Maui.Controls.Application application &&
 					application.Windows is not null && application.Windows.Count > 0)
@@ -375,54 +286,53 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					Microsoft.Maui.Controls.Window window = application.Windows[0];
 					hasModalPage = window is not null && window.Page is not null && window.Page.Navigation is not null
 						&& window.Page.Navigation.ModalStack is not null && window.Navigation.ModalStack.Count > 0;
+				}
 
-					// In the case of multiple popups, if none of the popups in the view list have a blur effect, we need to apply the blur to the main view.
-					if (!SfWindowOverlay.ViewList.Any(view => view.HasBlurMode))
+				// In the case of multiple popups, if none of the popups in the view list have a blur effect, we need to apply the blur to the main view.
+				if (!SfWindowOverlay._stackList.Any(view => view.HasBlurMode))
+				{
+					if (hasModalPage)
 					{
-						// Applies blur effect to the top page in modal stack when the modal page is displayed.
-						if (hasModalPage)
+						Microsoft.Maui.Controls.Page? mainPage = PopupExtension.GetMainPage();
+						if (mainPage is not null && mainPage.Handler is not null && mainPage.Handler.PlatformView is PlatformView pageView)
 						{
-							Page? mainPage = PopupExtension.GetMainPage();
-							if (mainPage is not null && mainPage.Handler is not null && mainPage.Handler.PlatformView is PlatformView pageView)
-							{
-								popup._blurredViews.Add(pageView);
-								pageView.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
-							}
-						}
-						else
-						{
-							ViewGroup? platformRootview = WindowOverlayHelper._platformRootView;
-							if (platformRootview is not null && platformRootview.GetChildAt(0) is PlatformView blurTarget)
-							{
-								// Applies blur effect to target view.
-								popup._blurredViews.Add(blurTarget);
-								blurTarget.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
-							}
+							popup._blurredViews.Add(pageView);
+							pageView.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
 						}
 					}
-
-					// Applying Blur for nested popup.
-					foreach (WindowOverlayStack windowOverlay in SfWindowOverlay.ViewList.SkipLast(1).Reverse())
+					else
 					{
-						if (windowOverlay is not null)
+						ViewGroup? platformRootview = WindowOverlayHelper._platformRootView;
+						if (platformRootview is not null && platformRootview.GetChildAt(0) is PlatformView blurTarget)
 						{
-							windowOverlay.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
-							popup._blurredViews.Add(windowOverlay);
-							if (windowOverlay.HasBlurMode)
-							{
-								break; // If the HasBlurMode is enabled, the blurring of previous views will be handled.
-							}
-						}
-						else
-						{
-							continue;
+							// Applies blur effect to target view.
+							popup._blurredViews.Add(blurTarget);
+							blurTarget.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
 						}
 					}
+				}
 
-					if (popup._popupOverlay is not null && popup._popupOverlay._overlayStack is not null)
+				// Applying Blur for nested popup.
+				foreach (WindowOverlayStack windowOverlay in SfWindowOverlay._stackList.SkipLast(1).Reverse())
+				{
+					if (windowOverlay is not null)
 					{
-						popup._popupOverlay._overlayStack.HasBlurMode = true;
+						windowOverlay.SetRenderEffect(RenderEffect.CreateBlurEffect(popup.GetBlurRadius(), popup.GetBlurRadius(), Shader.TileMode.Clamp));
+						popup._blurredViews.Add(windowOverlay);
+						if (windowOverlay.HasBlurMode)
+						{
+							break; // If the HasBlurMode is enabled, the blurring of previous views will be handled.
+						}
 					}
+					else
+					{
+						continue;
+					}
+				}
+
+				if (popup._popupOverlay is not null && popup._popupOverlay._overlayStack is not null)
+				{
+					popup._popupOverlay._overlayStack.HasBlurMode = true;
 				}
 			}
 		}
@@ -455,91 +365,23 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Calculates the X and Y point of the popup, relative to the given view.
-		/// </summary>
-		/// <param name="popupView">popup view to display in the view.</param>
-		/// <param name="relative">Positions the popup view relatively to the relative view.</param>
-		/// <param name="position">The relative position from the view.</param>
-		/// <param name="absoluteX">Absolute X Point where the popup should be positioned from the relative view.</param>
-		/// <param name="absoluteY">Absolute Y-Point where the popup should be positioned from the relative view.</param>
-		/// <param name="relativeX">References the X position of popup relative to view.</param>
-		/// <param name="relativeY">References the Y position of popup relative to view.</param>
-		internal static void CalculateRelativePoint(PopupView popupView, MauiView relative, PopupRelativePosition position, double absoluteX, double absoluteY, ref double relativeX, ref double relativeY)
-		{
-			var decorViewFrame = WindowOverlayHelper._decorViewFrame;
-			if (relative is null || relative.Handler is null || relative.Handler.MauiContext is null)
-			{
-				return;
-			}
-
-			PlatformView relativeView = relative.ToPlatform(relative.Handler.MauiContext);
-
-			absoluteX *= WindowOverlayHelper._density;
-			absoluteY *= WindowOverlayHelper._density;
-
-			var popupViewWidth = popupView._popup._popupViewWidth * WindowOverlayHelper._density;
-			var popupViewHeight = popupView._popup._popupViewHeight * WindowOverlayHelper._density;
-
-			var heightOfRelativeView = relativeView.Height;
-			var widthOfRelativeView = relativeView.Width;
-
-			int[] location = new int[2];
-			relativeView.GetLocationInWindow(location);
-			var top = decorViewFrame is not null && decorViewFrame.Top > 0 ? decorViewFrame.Top : 0;
-			var left = decorViewFrame is not null && decorViewFrame.Left > 0 ? decorViewFrame.Left : 0;
-
-			// Adding the absolute points to the Relative View's location, if Flow direction is RTL means we need to move in opposite direction.
-			location[0] += (popupView._popup._isRTL ? -(int)absoluteX : (int)absoluteX) - left;
-			if (GetAttributes() is WindowManagerLayoutParams attributes && (attributes.Flags & WindowManagerFlags.Fullscreen) is WindowManagerFlags.Fullscreen)
-			{
-				location[1] += (int)absoluteY;
-			}
-			else
-			{
-				location[1] += (int)(absoluteY - (decorViewFrame?.Top ?? 0));
-			}
-
-			var screenHeight = GetScreenHeight() * WindowOverlayHelper._density;
-			var screenWidth = GetScreenWidth() * WindowOverlayHelper._density;
-			var statusBarHeight = GetStatusBarHeight() * WindowOverlayHelper._density;
-			var actionBarHeight = GetActionBarHeight(popupView._popup.IgnoreActionBar) * WindowOverlayHelper._density;
-
-			// Calculates the X-position relative to the specified view.
-			CalculateXPosition(popupView, position, ref relativeX, absoluteX, popupViewWidth, location, widthOfRelativeView, screenWidth);
-
-			// Calculates the Y-position relative to the specified view.
-			CalculateYPosition(popupView, position, ref relativeY, absoluteY, popupViewHeight, location, heightOfRelativeView, screenHeight, statusBarHeight, actionBarHeight);
-
-			relativeX = relativeX / WindowOverlayHelper._density;
-			relativeY = relativeY / WindowOverlayHelper._density;
-		}
-
-		/// <summary>
-		/// Gets the radius to determine blur intensity.
+		/// Determines the bounds of a relative view in screen coordinates.
 		/// </summary>
 		/// <param name="popup">The instance of the SfPopup.</param>
-		/// <returns>Return radius value based on the defined blur intensity value.</returns>
-		internal static float GetBlurRadius(this SfPopup popup)
+		/// <param name="relativeView">The view for which to calculate the screen bounds.</param>
+		/// <returns>Returns a <see cref="Rect"/> that represents the bounds of the view in screen coordinates.</returns>
+		internal static Rect GetRelativeViewBounds(this SfPopup popup, MauiView relativeView)
 		{
-			if (popup.PopupStyle.BlurIntensity == PopupBlurIntensity.Light)
+			if (relativeView.Handler is not null && relativeView.Handler.PlatformView is not null && relativeView.Handler.PlatformView is PlatformView nativeRelativeView)
 			{
-				return 11;
-			}
-			else if (popup.PopupStyle.BlurIntensity == PopupBlurIntensity.ExtraDark)
-			{
-				return 21;
-			}
-			else if (popup.PopupStyle.BlurIntensity == PopupBlurIntensity.ExtraLight)
-			{
-				return 4;
-			}
-			else if (popup.PopupStyle.BlurIntensity == PopupBlurIntensity.Custom)
-			{
-				return popup.PopupStyle.BlurRadius;
+				int[] relativeViewOrigin = new int[2];
+				nativeRelativeView.GetLocationInWindow(relativeViewOrigin);
+				relativeViewOrigin[1] = PopupExtension.GetLocationInApp(relativeView);
+				return new Rect(relativeViewOrigin[0] / WindowOverlayHelper._density, relativeViewOrigin[1], nativeRelativeView.Width / WindowOverlayHelper._density, nativeRelativeView.Height / WindowOverlayHelper._density);
 			}
 			else
 			{
-				return 16;
+				return Rect.Zero;
 			}
 		}
 
@@ -549,7 +391,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <returns>returns whether the softinputMode is resize or not.</returns>
 		internal static bool IsResizeMode()
 		{
-			if (GetAttributes() is WindowManagerLayoutParams attributes && attributes.SoftInputMode == SoftInput.AdjustResize)
+			if (GetAttributes() is WindowManagerLayoutParams attributes && attributes.SoftInputMode is SoftInput.AdjustResize)
 			{
 				return true;
 			}
@@ -563,23 +405,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <returns>The height of the keyboard in pixels. Returns 0 if the view references are null.</returns>
 		internal static int GetKeyboardHeight()
 		{
-			if (WindowOverlayHelper._decorViewContent is null || WindowOverlayHelper._decorViewFrame is null)
-			{
-				return 0;
-			}
-
-			var keyboardHeight = WindowOverlayHelper._decorViewContent.Height -
-								 WindowOverlayHelper._decorViewFrame.Bottom -
-								 GetBottomNavigationBarHeight();
-
-			if (IsResizeMode() &&
-				GetAttributes() is WindowManagerLayoutParams attributes &&
-				(attributes.Flags & WindowManagerFlags.Fullscreen) is WindowManagerFlags.Fullscreen)
-			{
-				keyboardHeight += WindowOverlayHelper._decorViewFrame.Top;
-			}
-
-			return keyboardHeight;
+			// When gesture navigation bar is used its seen in the view when the keyboard is open in landscape mode so the naviagation bar height should be reduced from keyboard height in landscape mode.
+			// When left and right swipe insets are greater than 0 means the gesture navigation bar is used.
+			bool isGestureNavigation = (GetWindowInsets("LeftGesture") > 0 && GetWindowInsets("RightGesture") > 0) ? true : false;
+			var keyboardHeight = (GetWindowInsets("Keyboard") > 0) ? ((WindowFlagHasNoLimits || (DeviceDisplay.MainDisplayInfo.Orientation is DisplayOrientation.Landscape && !isGestureNavigation)) ? GetWindowInsets("Keyboard") : (GetWindowInsets("Keyboard") - GetBottomNavigationBarHeight())) : 0;
+			var actualKeyboardHeight = (double)keyboardHeight / WindowOverlayHelper._density;
+			return (int)actualKeyboardHeight;
 		}
 
 		/// <summary>
@@ -609,149 +440,31 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		#region Private Methods
 
 		/// <summary>
-		/// Calculates the X position for the Popup.
+		/// Gets the radius to determine blur intensity.
 		/// </summary>
-		/// <param name="popupView"></param>
-		/// <param name="position"></param>
-		/// <param name="relativeX"></param>
-		/// <param name="absoluteX"></param>
-		/// <param name="popupViewWidth"></param>
-		/// <param name="location"></param>
-		/// <param name="widthOfRelativeView"></param>
-		/// <param name="screenWidth"></param>
-		static void CalculateXPosition(PopupView popupView, PopupRelativePosition position, ref double relativeX, double absoluteX, double popupViewWidth, int[] location, int widthOfRelativeView, float screenWidth)
+		/// <param name="popup">The instance of the SfPopup.</param>
+		/// <returns>Return radius value based on the defined blur intensity value.</returns>
+		static float GetBlurRadius(this SfPopup popup)
 		{
-			if (position == PopupRelativePosition.AlignToLeftOf || position == PopupRelativePosition.AlignTopLeft || position == PopupRelativePosition.AlignBottomLeft)
+			if (popup.PopupStyle.BlurIntensity is PopupBlurIntensity.Light)
 			{
-				if (popupView._popup._isRTL)
-				{
-					relativeX = location[0] + widthOfRelativeView;
-				}
-				else
-				{
-					relativeX = location[0] - popupViewWidth;
-				}
+				return 11;
 			}
-			else if (position == PopupRelativePosition.AlignToRightOf || position == PopupRelativePosition.AlignTopRight || position == PopupRelativePosition.AlignBottomRight)
+			else if (popup.PopupStyle.BlurIntensity is PopupBlurIntensity.ExtraDark)
 			{
-				if (popupView._popup._isRTL)
-				{
-					relativeX = location[0] - popupViewWidth;
-
-					// In the RTL case, if the button's width request exceeds the screen size, the popup is not displayed correctly within the view.
-					relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
-				}
-				else
-				{
-					relativeX = location[0] + widthOfRelativeView;
-				}
+				return 21;
+			}
+			else if (popup.PopupStyle.BlurIntensity is PopupBlurIntensity.ExtraLight)
+			{
+				return 4;
+			}
+			else if (popup.PopupStyle.BlurIntensity is PopupBlurIntensity.Custom)
+			{
+				return popup.PopupStyle.BlurRadius;
 			}
 			else
 			{
-				if (popupView._popup._isRTL)
-				{
-					relativeX = location[0] + widthOfRelativeView - popupViewWidth;
-					relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
-				}
-				else
-				{
-					relativeX = location[0];
-				}
-			}
-
-			relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
-		}
-
-		/// <summary>
-		/// Calculates the Y position for the popup.
-		/// </summary>
-		/// <param name="popupView"></param>
-		/// <param name="position"></param>
-		/// <param name="relativeY"></param>
-		/// <param name="absoluteY"></param>
-		/// <param name="popupViewHeight"></param>
-		/// <param name="location"></param>
-		/// <param name="heightOfRelativeView"></param>
-		/// <param name="screenHeight"></param>
-		/// <param name="statusBarHeight"></param>
-		/// <param name="actionBarHeight"></param>
-		static void CalculateYPosition(PopupView popupView, PopupRelativePosition position, ref double relativeY, double absoluteY, double popupViewHeight, int[] location, int heightOfRelativeView, float screenHeight, float statusBarHeight, double actionBarHeight)
-		{
-			if (position == PopupRelativePosition.AlignTop || position == PopupRelativePosition.AlignTopLeft || position == PopupRelativePosition.AlignTopRight)
-			{
-				relativeY = location[1] - popupViewHeight;
-			}
-			else if (position == PopupRelativePosition.AlignBottom || position == PopupRelativePosition.AlignBottomLeft || position == PopupRelativePosition.AlignBottomRight)
-			{
-				relativeY = location[1] + heightOfRelativeView;
-			}
-			else
-			{
-				// When the button's height exceeds the screen size, the popup is not displayed correctly within the view.
-				relativeY = location[1];
-			}
-
-			relativeY = popupView._popup.ValidatePopupPosition(relativeY, popupViewHeight, screenHeight, statusBarHeight + (!popupView._popup.IgnoreActionBar ? actionBarHeight : 0));
-		}
-
-		/// <summary>
-		/// Gets the Width of the screen based on the Orientation.
-		/// </summary>
-		/// <returns></returns>
-		static int GetWidth(ViewGroup platformRootView)
-		{
-			if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
-			{
-				if (platformRootView.Width < platformRootView.Height)
-				{
-					return (int)Math.Round(platformRootView.Height / WindowOverlayHelper._density);
-				}
-				else
-				{
-					return (int)Math.Round(platformRootView.Width / WindowOverlayHelper._density);
-				}
-			}
-			else
-			{
-				if (platformRootView.Width < platformRootView.Height)
-				{
-					return (int)Math.Round(platformRootView.Width / WindowOverlayHelper._density);
-				}
-				else
-				{
-					return (int)Math.Round(platformRootView.Height / WindowOverlayHelper._density);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets the height of the screen based on the Orientation.
-		/// </summary>
-		/// <returns></returns>
-		static int GetHeight(ViewGroup platformRootView)
-		{
-			if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape)
-			{
-				if (platformRootView.Width < platformRootView.Height)
-				{
-					return (int)Math.Round(platformRootView.Width / WindowOverlayHelper._density);
-				}
-				else
-				{
-					return (int)Math.Round(platformRootView.Height / WindowOverlayHelper._density);
-				}
-			}
-			else
-			{
-				if (platformRootView.Width < platformRootView.Height)
-				{
-					// We require the screen height excluding the status bar. therefore, the top value is considered.
-					return (int)Math.Round(platformRootView.Height / WindowOverlayHelper._density);
-				}
-				else
-				{
-					return (int)Math.Round(platformRootView.Width / WindowOverlayHelper._density);
-				}
+				return 16;
 			}
 		}
 

@@ -477,7 +477,28 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					return false;
 				}
 
-				return IsSegmentContainsWithPoints(point, TooltipDataPointIndex);
+				LineSegment? endSegment = null;
+				var seriesClipRect = AreaBounds;
+				point.X -= ((float)seriesClipRect.Left);
+				point.Y -= ((float)seriesClipRect.Top);
+
+
+				LineSegment? startSegment;
+				if (TooltipDataPointIndex == 0)
+				{
+					startSegment = _segments[TooltipDataPointIndex] as LineSegment;
+				}
+				else if (TooltipDataPointIndex == PointsCount - 1)
+				{
+					startSegment = _segments[TooltipDataPointIndex - 1] as LineSegment;
+				}
+				else
+				{
+					startSegment = _segments[TooltipDataPointIndex - 1] as LineSegment;
+					endSegment = _segments[TooltipDataPointIndex] as LineSegment;
+				}
+
+				return SegmentContains(startSegment, endSegment, point, this);
 			}
 
 			return false;
@@ -496,51 +517,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return false;
-		}
-
-		internal virtual bool IsSegmentContainsWithPoints(PointF point, int index)
-		{
-			LineSegment? endSegment = null;
-			var seriesClipRect = AreaBounds;
-			point.X -= ((float)seriesClipRect.Left);
-			point.Y -= ((float)seriesClipRect.Top);
-
-
-			LineSegment? startSegment;
-			if (index == 0)
-			{
-				startSegment = _segments[index] as LineSegment;
-			}
-			else if (index == PointsCount - 1)
-			{
-				startSegment = _segments[index - 1] as LineSegment;
-			}
-			else
-			{
-				startSegment = _segments[index - 1] as LineSegment;
-				endSegment = _segments[index] as LineSegment;
-			}
-
-			return SegmentContains(startSegment, endSegment, point, this);
-		}
-
-		internal override bool UpdateDataPointSelection(float pointX, float pointY, out int index)
-		{
-			index = -1;
-			foreach (var segment in _segments)
-			{
-				if (IsSegmentContainsWithPoints(new PointF(pointX, pointY), segment.Index))
-				{
-					index = segment.Index;
-					return true;
-				}
-			}
-			return false;
-		}
-
-		internal override bool UpdateSeriesSelection(float pointX, float pointY)
-		{
-			return SeriesContainsPoint(new PointF(pointX, pointY));
 		}
 
 		internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior tooltipBehavior, float tooltipX, float tooltipY)

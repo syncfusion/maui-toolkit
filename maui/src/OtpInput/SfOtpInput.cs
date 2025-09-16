@@ -1,11 +1,11 @@
-﻿using Syncfusion.Maui.Toolkit.Internals;
+﻿using System.Globalization;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using Rect = Microsoft.Maui.Graphics.Rect; // Alias for Maui's Rect
-using TextAlignment = Microsoft.Maui.TextAlignment; // Alias for Maui's TextAlignment
-using ResourceDictionary = Microsoft.Maui.Controls.ResourceDictionary; // Alias for Maui's ResourceDictionary
 using Syncfusion.Maui.Toolkit.Helper;
+using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
-using System.Globalization;
+using Rect = Microsoft.Maui.Graphics.Rect;
+using ResourceDictionary = Microsoft.Maui.Controls.ResourceDictionary;
+using TextAlignment = Microsoft.Maui.TextAlignment;
 #if WINDOWS
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Input;
@@ -156,11 +156,12 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// </summary>
 		bool _isPasteHandled = false;
 #endif
+
 		#endregion
 		#region BindableProperties
 
 		/// <summary>
-		/// Identifies the <see cref="Value"/> bindable property. 
+		/// Identifies the <see cref="Value"/> bindable property.
 		/// </summary>
 		public static readonly BindableProperty ValueProperty =
            BindableProperty.Create(nameof(Value), typeof(string), typeof(SfOtpInput), null, BindingMode.TwoWay, propertyChanged: OnValuePropertyChanged);
@@ -940,8 +941,8 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				newValueStr = new string(newValueStr.Where(c => !char.IsControl(c)).ToArray());
 				oldValueStr = new string(oldValueStr.Where(c => !char.IsControl(c)).ToArray());
 				RaiseValueChangedEvent(otpInput, oldValueStr, newValueStr);
-				otpInput.UpdateValue(bindable, newValue ?? string.Empty);
-			}
+                otpInput.UpdateValue(bindable, newValue?? string.Empty);
+            }
         }
 
         /// <summary>
@@ -954,6 +955,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         {
             if (bindable is SfOtpInput otpInput && newValue is double newLength && oldValue is double oldLength)
             {
+
 				if (newLength <= 0)
 				{
 					newLength = oldLength;
@@ -1231,9 +1233,9 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
             {
                 for (int i = 0; i < Length; i++)
                 {
-                    UpdateDrawingParameters(i);
-                    canvas.StrokeSize = GetStrokeThickness(i);
-                    _otpEntries[i].UpdateParameters(StylingMode, _cornerRadius, _startPoint, _endPoint, this, IsEnabled, InputState,Stroke,InputBackground ,TextColor, DisabledTextColor);
+					UpdateDrawingParameters(i);
+					canvas.StrokeSize = GetStrokeThickness(i);
+                    _otpEntries[i].UpdateParameters(StylingMode, _cornerRadius, _startPoint, _endPoint, this, IsEnabled, InputState, Stroke, InputBackground, TextColor, DisabledTextColor);
                     _otpEntries[i].Draw(canvas, _outlineRectF);
 
                 }
@@ -1247,7 +1249,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         /// <summary>
         /// This method handles navigation and focus changes based on keyboard input.
         /// </summary>
-        void HandleKeyPress(string key)
+        internal void HandleKeyPress(string key)
         {
             if (_otpEntries is null)
             {
@@ -1684,15 +1686,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 						_otpEntries[index].Unfocus();
                     }
                 }
-#if IOS || MACCATALYST
-				else
-				{
-					if (index <= Length - 1 && index != 0 && !string.IsNullOrEmpty(_oldText))
-					{
-						_otpEntries[index - 1].Focus();
-					}
-				}
-#endif
 			}
 		}
 
@@ -1734,7 +1727,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
             _startPoint = new PointF(xPos, _entryHeight + _extraSpacing + yPadding);
             _endPoint = new PointF(xPos + _entryWidth, _entryHeight + _extraSpacing + yPadding);
 			_outlineRectF = new RectF(xPos, _extraSpacing + yPadding, _entryWidth, _entryHeight);
-
 		}
 
 		/// <summary>
@@ -1968,7 +1960,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
             if (_otpEntries is not null)
             {
 				char input = key[key.Length - 1];
-#if WINDOWS 
+#if WINDOWS
 				if (_isCapsOn || _isShiftOn)
 				{
 					_otpEntries[_focusedIndex].Text = input.ToString().ToUpper(CultureInfo.CurrentCulture);
@@ -2258,7 +2250,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 
             if (string.IsNullOrEmpty(inputText))
             {
-                HandleKeyPress("Back");
                 return true;
             }
 
@@ -2512,9 +2503,9 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
                 }
             }
         }
-		#endregion
+#endregion
 
-    	#region Override methods
+		#region Override methods
 
 		/// <summary>
 		/// Arranges the layout and positions of OTP input fields and separators within the specified bounds, dynamically calculating positions to ensure proper alignment and spacing.

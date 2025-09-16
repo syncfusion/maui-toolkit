@@ -312,6 +312,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 propertyChanged: OnScrollButtonDisabledForegroundColorChanged);
 
 		/// <summary>
+		/// Identifies the <see cref="HoverBackground"/> bindable property.
+		/// </summary>
+		/// <remarks>This bindable property is read-only.</remarks>
+		internal static readonly BindableProperty HoverBackgroundProperty = BindableProperty.Create(
+		nameof(HoverBackground),
+		typeof(Brush),
+		typeof(SfTabBar),
+		new SolidColorBrush(Color.FromArgb("#1C1B1F")),
+		BindingMode.Default);
+
+		/// <summary>
 		/// Identifies the <see cref="TabHeaderAlignment"/> bindable property.
 		/// </summary>
 		public static readonly BindableProperty TabHeaderAlignmentProperty =
@@ -321,7 +332,26 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				typeof(SfTabBar),
 				TabHeaderAlignment.Start,
 				propertyChanged: OnTabHeaderAlignmentPropertyChanged);
+		
+		/// <summary>
+		/// Identifies the <see cref="AnimationEasing"/> bindable property.
+		/// </summary>
+		internal static readonly BindableProperty AnimationEasingProperty =
+			BindableProperty.Create(
+				nameof(AnimationEasing),
+				typeof(Easing),
+				typeof(SfTabBar),
+				Easing.Linear);
 
+		/// <summary>
+		/// Identifies the <see cref="EnableRippleAnimation"/> bindable property.
+		/// </summary>
+		internal static readonly BindableProperty EnableRippleAnimationProperty =
+			BindableProperty.Create(
+				nameof(EnableRippleAnimation),
+				typeof(bool),
+				typeof(SfTabBar),
+				true);
 		#endregion
 
 		#region Constructor
@@ -582,16 +612,50 @@ namespace Syncfusion.Maui.Toolkit.TabView
             set => SetValue(ScrollButtonDisabledIconColorProperty, value);
         }
 
-        #endregion
+		/// <summary>
+		/// Gets or sets the hover color for the tab items.
+		/// <remarks>The default color is Color.FromRgba("#1C1B1F").</remarks>
+		/// </summary>
+		internal Brush HoverBackground
+		{
+			get { return (Brush)this.GetValue(HoverBackgroundProperty); }
+			set { this.SetValue(HoverBackgroundProperty, value); }
+		}
 
-        #region Public Methods
+		/// <summary>
+		/// Gets or sets the easing function used for the tab selection indicator animation.
+		/// </summary>
+		/// <value>
+		/// An <see cref="Easing"/> function that controls the indicator animation transition. The default value is <see cref="Easing.Linear"/>.
+		/// </value>
+		internal Easing AnimationEasing
+		{
+			get => (Easing)GetValue(AnimationEasingProperty);
+			set => SetValue(AnimationEasingProperty, value);
+		}
 
-        /// <summary>
-        /// To get the effects view for the tab item.
-        /// </summary>
-        /// <param name="tabItem">The tab item for which the effects view is to be retrieved.</param>
-        /// <returns>It returns the effectsView.</returns>
-        public SfEffectsView? GetEffectsView(SfTabItem tabItem)
+		/// <summary>
+		/// Gets or sets a value indicating whether the animation is enabled or not when tab is selected in SfTabView.
+		/// </summary>
+		/// <value>
+		/// It accepts the bool values. 
+		/// </value>
+		internal bool EnableRippleAnimation
+		{
+			get => (bool)GetValue(EnableRippleAnimationProperty);
+			set => SetValue(EnableRippleAnimationProperty, value);
+		}
+
+		#endregion
+
+		#region Public Methods
+
+		/// <summary>
+		/// To get the effects view for the tab item.
+		/// </summary>
+		/// <param name="tabItem">The tab item for which the effects view is to be retrieved.</param>
+		/// <returns>It returns the effectsView.</returns>
+		public SfEffectsView? GetEffectsView(SfTabItem tabItem)
         {
             if (tabItem != null && _tabHeaderItemContent != null)
             {
@@ -797,6 +861,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (tabItem != null)
             {
+				if (tabItem.HeaderContent != null)
+				{
+					DetachHeaderContentSizeChangeHandlers(tabItem.HeaderContent);
+				}
 				int removeItemIndex = index;
 				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
 				{
@@ -1077,7 +1145,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
             InsertHeaderItemToContent(touchEffectGrid, index);
 
-            if (IsScrollButtonEnabled)
+			if (item is SfTabItem tabItem && tabItem.HeaderContent != null)
+			{
+				AttachHeaderContentSizeChangeHandlers(tabItem.HeaderContent);
+			}
+
+			if (IsScrollButtonEnabled)
             {
                 UpdateScrollButtonState();
             }
@@ -1092,23 +1165,31 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (item != null)
             {
-                Size desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
                 var width = 0d;
-				_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
 				if (item.IsVisible)
                 {
-                    if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
-                    {
-                        width = CalculateWidthWithImageAndText(item, desiredSize);
-                    }
-                    else if (item.ImageSource != null)
-                    {
-                        width = _tabHeaderImageSize;
-                    }
-                    else
-                    {
-                        width = desiredSize.Width;
-                    }
+					if (item.HeaderContent != null)
+					{
+						Size headerContentSize = item.HeaderContent.Measure(double.PositiveInfinity, double.PositiveInfinity);
+						width = headerContentSize.Width;
+					}
+					else
+					{
+						Size desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
+						_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
+						if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
+						{
+							width = CalculateWidthWithImageAndText(item, desiredSize);
+						}
+						else if (item.ImageSource != null)
+						{
+							width = _tabHeaderImageSize;
+						}
+						else
+						{
+							width = desiredSize.Width;
+						}
+					}
                 }
 
                 return width;
@@ -1304,6 +1385,86 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		#region Private Methods
 
+		/// <summary>
+		/// Attaches size change handlers to HeaderContent recursively.
+		/// </summary>
+		void AttachHeaderContentSizeChangeHandlers(View content)
+		{
+			if (content == null)
+				return;
+
+			content.SizeChanged -= OnHeaderContentSizeChanged;
+			content.SizeChanged += OnHeaderContentSizeChanged;
+
+			content.PropertyChanged -= OnHeaderContentChildrenPropertyChanged;
+			content.PropertyChanged += OnHeaderContentChildrenPropertyChanged;
+
+			if (content is Layout layout)
+			{
+				foreach (var child in layout.Children)
+				{
+					if (child is View childView)
+						AttachHeaderContentSizeChangeHandlers(childView);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Detaches size change handlers from HeaderContent recursively.
+		/// </summary>
+		void DetachHeaderContentSizeChangeHandlers(View content)
+		{
+			if (content == null)
+				return;
+
+			content.SizeChanged -= OnHeaderContentSizeChanged;
+			content.PropertyChanged -= OnHeaderContentChildrenPropertyChanged;
+
+			if (content is Layout layout)
+			{
+				foreach (var child in layout.Children)
+				{
+					if (child is View childView)
+						DetachHeaderContentSizeChangeHandlers(childView);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Handles HeaderContent size changes.
+		/// </summary>
+		void OnHeaderContentSizeChanged(object? sender, EventArgs e)
+		{
+			if (Dispatcher != null)
+			{
+				Dispatcher.Dispatch(() =>
+				{
+					CalculateTabItemWidth();
+					UpdateTabIndicatorWidth();
+				});
+			}
+			else
+			{
+				CalculateTabItemWidth();
+				UpdateTabIndicatorWidth();
+			}
+		}
+
+		/// <summary>
+		/// Handles property changes in HeaderContent children that affect layout.
+		/// </summary>
+		void OnHeaderContentChildrenPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e.PropertyName == "Width" || e.PropertyName == "Height" ||
+				e.PropertyName == "WidthRequest" || e.PropertyName == "HeightRequest" ||
+				e.PropertyName == "Margin" || e.PropertyName == "Padding" ||
+				e.PropertyName == "HorizontalOptions" || e.PropertyName == "VerticalOptions")
+			{
+				CalculateTabItemWidth();
+				UpdateTabIndicatorWidth();
+			}
+		}
+
 		void UpdateTabHeaderPadding()
         {
             UpdateTabPadding();
@@ -1459,6 +1620,20 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					}
 				}
 
+				if (e.PropertyName.Equals(nameof(SfTabItem.HeaderContent), StringComparison.Ordinal))
+				{
+					if (sender is SfTabItem tabItem)
+					{
+						if (tabItem.HeaderContent != null)
+						{
+							AttachHeaderContentSizeChangeHandlers(tabItem.HeaderContent);
+						}
+
+						CalculateTabItemWidth();
+						UpdateTabIndicatorWidth();
+					}
+				}
+
 				if (e.PropertyName.Equals(nameof(SfTabItem.IsVisible), StringComparison.Ordinal))
                 {
                     if (sender is SfTabItem item && item != null)
@@ -1548,7 +1723,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if WINDOWS || MACCATALYST
                 else if (e.Action == PointerActions.Entered)
                 {
-                    effectsView?.ApplyEffects(SfEffects.Highlight);
+                    if(effectsView != null)
+                    {
+                        effectsView.HighlightBackground = HoverBackground;
+                        effectsView.ApplyEffects(SfEffects.Highlight);
+                    }
                 }
                 else if (e.Action == PointerActions.Exited)
                 {
@@ -1591,8 +1770,15 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 }
             }
 
-            effectsView?.ApplyEffects();
-        }
+			if (EnableRippleAnimation)
+			{
+				effectsView?.ApplyEffects();
+			}
+			else
+			{
+				effectsView?.ApplyEffects(SfEffects.None);
+			}
+		}
 
         void HandlePressedPlatformSpecific(SfTabItem tabItem, TouchEventArgs e)
         {
@@ -1692,6 +1878,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if WINDOWS || MACCATALYST
 			if (tabItem.Bounds.Contains(e.TouchPoint))
 			{
+				effectsView.HighlightBackground = HoverBackground;
 				effectsView.ApplyEffects(SfEffects.Highlight);
 			}
 #endif
@@ -1972,7 +2159,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			if (item.IsVisible)
             {
                 double width;
-                if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
+
+				if (item.HeaderContent != null)
+				{
+					Size headerContentSize = item.HeaderContent.Measure(double.PositiveInfinity, double.PositiveInfinity);
+					width = headerContentSize.Width + _defaultTextPadding;
+				}
+				else if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
                 {
                     width = GetWidthForSizeToContentWithImageAndText(item, desiredSize);
                 }
@@ -2259,19 +2452,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
-        /// <summary>
-        /// Add the effects layout to the grid.
-        /// </summary>
-        /// <param name="touchEffectGrid">Grid.</param>
-        static void AddTouchEffects(SfGrid touchEffectGrid)
-        {
-            SfEffectsView effectsView = new SfEffectsView
-            {
-                RippleAnimationDuration = 150,
-                InitialRippleFactor = 0.75
-            };
-            touchEffectGrid.Children.Add(effectsView);
-        }
+		/// <summary>
+		/// Add the effects layout to the grid.
+		/// </summary>
+		/// <param name="touchEffectGrid">Grid.</param>
+		static void AddTouchEffects(SfGrid touchEffectGrid)
+		{
+			SfEffectsView effectsView = new SfEffectsView
+			{
+				RippleAnimationDuration = 150,
+				InitialRippleFactor = 0.75
+			};
+			touchEffectGrid.Children.Add(effectsView);
+		}
 
         void InitializeControl()
         {
@@ -2306,14 +2499,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
             _tabHeaderItemContent = new SfHorizontalStackLayout()
             {
                 HorizontalOptions = LayoutOptions.Fill,
-            };
+				Spacing = 0,
+			};
 
             // Create a grid to hold the tab items and indicator
             _tabHeaderContentContainer = new SfGrid()
             {
                 HorizontalOptions = LayoutOptions.Fill,
                 Children = { _tabHeaderItemContent, _tabSelectionIndicator },
-            };
+				ColumnSpacing = 0,
+				RowSpacing = 0,
+			};
 
 			InitializeCenterButtonViewPlaceholder();
 			InitializeTabHeaderScrollView();
@@ -2342,7 +2538,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 {
                     new ColumnDefinition(),
                 },
-            };
+				ColumnSpacing = 0,
+				RowSpacing = 0,
+			};
             _backwardArrow = new ArrowIcon
             {
                 ButtonArrowType = ArrowType.Backward
@@ -2706,11 +2904,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					adjustedIndex = GetAdjustedIndexForCenterButton(SelectedIndex);
 				}
 
-				if (item.HeaderHorizontalTextAlignment == TextAlignment.Start)
+				if (item.HeaderHorizontalTextAlignment == TextAlignment.Start && item.HeaderContent is null)
                 {
                     _selectedTabX = (_tabHeaderItemContent.Children[adjustedIndex].Frame.Left);
                 }
-                else if (item.HeaderHorizontalTextAlignment == TextAlignment.End)
+                else if (item.HeaderHorizontalTextAlignment == TextAlignment.End && item.HeaderContent is null)
                 {
                     _selectedTabX = (_tabHeaderItemContent.Children[adjustedIndex].Frame.Right) - _currentIndicatorWidth;
                 }
@@ -2829,7 +3027,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 if (ShouldPerformAction())
                 {
-                    parentAnimation.Commit(this, "SelectionIndicatorAnimation", 16, animationDuration, Easing.Linear, finished: (v, e) =>
+                    parentAnimation.Commit(this, "SelectionIndicatorAnimation", 16, animationDuration, AnimationEasing, finished: (v, e) =>
                     {
 #if WINDOWS || ANDROID
                         if (_tabSelectionIndicator.TranslationX == targetX)
@@ -3221,14 +3419,62 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					foreach (var item in Items)
 					{
 						item.Touched -= OnTabItemTouched;
+						item.PropertyChanged -= OnTabItemPropertyChanged;
+						if (item is SfTabItem tabItem && tabItem is not null && tabItem.HeaderContent is not null)
+						{
+							tabItem.HeaderContent.BindingContext = null;
+							tabItem.ControlTemplate = null;
+						}
+
+						item.Content = null;
 					}
+
+					Items.CollectionChanged -= Items_CollectionChanged;
+					if(ItemsSource is INotifyCollectionChanged itemsSource)
+					{
+						itemsSource.CollectionChanged -= OnCollectionChanged;
+					}
+
+					if(_tabHeaderScrollView != null)
+					{
+						_tabHeaderScrollView.Scrolled -= TabHeaderScrollView_Scrolled;
+					}
+
+					if(_backwardArrow != null)
+					{
+						_backwardArrow.ScrollButtonClicked -= OnScrollBackwardClicked;
+					}
+
+					if(_forwardArrow != null)
+					{
+						_forwardArrow.ScrollButtonClicked -= OnScrollForwardClicked;
+					}
+
+					_tabHeaderContentContainer?.Children.Clear();
+					_tabHeaderParentContainer?.Children.Clear();
+					_tabHeaderItemContent?.Children.Clear();
 				}
 			}
 
 			base.OnHandlerChanged();
 		}
 
-        #endregion
+		protected override void OnBindingContextChanged()
+		{
+			base.OnBindingContextChanged();
+			if (Items is not null)
+			{
+				foreach (var item in Items)
+				{
+					if (item is SfTabItem tabItem && tabItem is not null && tabItem.HeaderContent is not null)
+					{
+						tabItem.HeaderContent.BindingContext = tabItem.BindingContext;
+					}
+				}
+			}
+		}
+
+		#endregion
 
         #region Property Changed Methods
 
@@ -3271,10 +3517,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
         static void OnScrollButtonColorChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonColor();
 
         static void OnScrollButtonDisabledForegroundColorChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonColor();
+		
+		#endregion
 
-        #endregion
-
-        #region Interface Implementation
+		#region Interface Implementation
 
         void ITapGestureListener.OnTap(TapEventArgs e)
         {

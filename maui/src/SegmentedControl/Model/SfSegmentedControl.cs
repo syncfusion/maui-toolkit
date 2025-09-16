@@ -291,6 +291,19 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				true);
 
 		/// <summary>
+		/// Identifies the <see cref="SelectionMode"/> dependency property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="SelectionMode"/> dependency property.
+		/// </value>
+		public static readonly BindableProperty SelectionModeProperty =
+			BindableProperty.Create(
+				nameof(SelectionMode), 
+				typeof(SegmentSelectionMode), 
+				typeof(SfSegmentedControl),
+				defaultValueCreator: bindable => SegmentSelectionMode.Single);
+
+		/// <summary>
 		/// Identifies the <see cref="HoveredBackground"/> dependency property.
 		/// </summary>
 		/// <value>
@@ -1044,6 +1057,39 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		}
 
 		/// <summary>
+		/// Gets or sets the selection behavior of segment items, allowing either single selection or single deselection.
+		/// </summary>
+		/// <value>
+		/// The default value of <see cref="SegmentSelectionMode"/> is <see cref="SegmentSelectionMode.Single"/>.
+		/// </value>
+		/// <example>
+		/// The below examples shows, how to use the <see cref="SelectionMode"/> property in the <see cref="SfSegmentedControl"/>.
+		/// # [XAML](#tab/tabid-37)
+		/// <code Lang="XAML"><![CDATA[
+		/// <button:SfSegmentedControl x:Name="segmentedControl"
+		///                            SelectionMode="Single">
+		///    <button:SfSegmentedControl.ItemsSource>
+		///        <x:Array Type="{x:Type x:String}">
+		///            <x:String>Day</x:String>
+		///            <x:String>Week</x:String>
+		///            <x:String>Month</x:String>
+		///            <x:String>Year</x:String>
+		///        </x:Array>
+		///    </button:SfSegmentedControl.ItemsSource>
+		/// </button:SfSegmentedControl>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-38)
+		/// <code Lang="C#"><![CDATA[
+		/// this.segmentedControl.SelectionMode = SegmentSelectionMode.Single;
+		/// ]]></code>
+		/// </example>
+		public SegmentSelectionMode SelectionMode
+		{
+			get { return (SegmentSelectionMode)this.GetValue(SelectionModeProperty); }
+			set { this.SetValue(SelectionModeProperty, value); }
+		}
+
+		/// <summary>
 		/// Gets or sets the hovered selected background brush for the segment.
 		/// </summary>
 		internal Brush HoveredBackground
@@ -1425,6 +1471,21 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// ]]></code>
 		/// </example>
 		public event EventHandler<SelectionChangedEventArgs> SelectionChanged;
+
+		/// <summary>
+		/// Occurs when tapped on a segment item.
+		/// </summary>
+		/// <example>
+		/// The following code demonstrates, how to use the SfSegmentedControl's tapped event.
+		/// <code Lang="C#"><![CDATA[
+		/// this.segmentedControl.Tapped += SegmentedControl_Tapped;
+		/// private void SegmentedControl_Tapped(object sender, Syncfusion.Maui.Tolkit.SegmentTappedEventArgs e)
+		/// {
+		///    var tappedItem = e.TappedItem;
+		/// }
+		/// ]]></code>
+		/// </example>
+		public event EventHandler<SegmentTappedEventArgs> Tapped;
 #nullable enable
 		#endregion
 	}

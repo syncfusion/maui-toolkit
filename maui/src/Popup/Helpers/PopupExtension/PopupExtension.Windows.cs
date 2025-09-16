@@ -64,20 +64,26 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// Gets the status bar height.
 		/// </summary>
 		/// <returns>Returns the status bar height.</returns>
-		internal static int GetStatusBarHeight()
+		internal static double GetStatusBarHeight()
 		{
-			// The overlay extends into the title bar even when ExtendsContentIntoTitleBar is set to false.
-#if !NET8_0_OR_GREATER
-            if (WindowOverlayHelper.PlatformWindow is Microsoft.UI.Xaml.Window platformWindow)
-            {
-                if (platformWindow is not null && !platformWindow.ExtendsContentIntoTitleBar)
-                {
-                    return 0;
-                }
-            }
-#endif
+			// Overlay extends to the title bar even ExtendsContentIntoTitleBar set to false.
+			if (WindowOverlayHelper._platformWindow is Microsoft.UI.Xaml.Window platformWindow && platformWindow is not null && platformWindow.AppWindow is not null)
+			{
+				if (platformWindow.AppWindow.Presenter is not null && platformWindow.AppWindow.Presenter.Kind is Microsoft.UI.Windowing.AppWindowPresenterKind.FullScreen)
+				{
+					return 0;
+				}
+				else if (platformWindow.AppWindow.TitleBar is not null)
+				{
+					var titleBarHeight = Math.Max(0, platformWindow.AppWindow.TitleBar.Height);
+					var displayDensity = platformWindow.GetDisplayDensity();
+					return titleBarHeight / displayDensity;
+				}
+			}
 
 			// TODO: Ensure StatusBarHeight in 4K resolution screen.
+			// The TitleBar is null in Windows 10. In Windows 11, we can get the TitleBar but the height is 0.
+			// Hence, calculated the TitleBar height from the Y position of the window from screen.
 			return 30;
 		}
 
@@ -104,15 +110,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
 		/// Gets action bar height.
 		/// </summary>
-		/// <param name="ignoreActionBar">Specifies whether the popup should consider action bar or not.</param>
 		/// <returns>Returns action bar height.</returns>
-		internal static int GetActionBarHeight(bool ignoreActionBar)
+		internal static int GetActionBarHeight()
 		{
-			if (ignoreActionBar)
-			{
-				return 0;
-			}
-
 			var mainPage = GetMainPage();
 			var mainWindowPage = PopupExtension.GetMainWindowPage();
 
@@ -124,9 +124,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				if (hasNavBar)
 				{
 					var topHeight = nativeViewMainPage.TransformToVisual(null).TransformPoint(new Windows.Foundation.Point(0, 0));
-					var titleBarHeight = platformWindow.AppWindow.TitleBar.Height;
-					var displayDensity = platformWindow.GetDisplayDensity();
-					return (int)(topHeight.Y - (titleBarHeight / displayDensity));
+					return (int)(topHeight.Y - GetStatusBarHeight());
 				}
 			}
 
@@ -151,7 +149,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				var popupList = VisualTreeHelper.GetOpenPopupsForXamlRoot(WindowOverlayHelper._platformRootView.XamlRoot);
 				UIElement? blurElement = null;
 
-				if (popupList is not null)
+				if (popupList is not null && popupList.Count > 0)
 				{
 					// The blur effect is applied to the root view for a single popup and to the previous popup's overlay when multiple popups are open.
 					if (popupList.Count == 1)
@@ -208,111 +206,32 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-		/// Calculates the X and Y point of the popup, relative to the given view.
+		/// Determines the bounds of a relative view in screen coordinates.
 		/// </summary>
-		/// <param name="popupView">popup view to display in the view.</param>
-		/// <param name="relative">Positions the popup view relatively to the relative view.</param>
-		/// <param name="position">The relative position from the view.</param>
-		/// <param name="absoluteX">Absolute X Point where the popup should be positioned from the relative view.</param>
-		/// <param name="absoluteY">Absolute Y-Point where the popup should be positioned from the relative view.</param>
-		/// <param name="relativeX">References the X position of popup relative to view.</param>
-		/// <param name="relativeY">References the Y position of popup relative to view.</param>
-		internal static void CalculateRelativePoint(PopupView popupView, MauiView relative, PopupRelativePosition position, double absoluteX, double absoluteY, ref double relativeX, ref double relativeY)
+		/// <param name="popup">The instance of the SfPopup.</param>
+		/// <param name="relativeView">The view for which to calculate the screen bounds.</param>
+		/// <returns>Returns a <see cref="Rect"/> that represents the bounds of the view in screen coordinates.</returns>
+		internal static Rect GetRelativeViewBounds(this SfPopup popup, MauiView relativeView)
 		{
-			var isRelativeViewRTL = false;
-
-			var rootView = WindowOverlayHelper._platformRootView;
-			if (rootView is null || relative.Handler is null || relative.Handler.MauiContext is null)
+			if (relativeView.Handler is not null && relativeView.Handler.PlatformView is not null && relativeView.Handler.PlatformView is PlatformView nativeRelativeView && WindowOverlayHelper._platformRootView is not null)
 			{
-				return;
+				UIElement rootView = WindowOverlayHelper._platformRootView;
+				double[] relativeViewOrigin = new double[2] { 0, 0 };
+				GeneralTransform transform = nativeRelativeView.TransformToVisual(rootView);
+				relativeViewOrigin[0] = transform.TransformPoint(new PlatformPoint(0, 0)).X;
+				relativeViewOrigin[1] = transform.TransformPoint(new PlatformPoint(0, 0)).Y;
+
+				return new Rect(relativeViewOrigin[0], relativeViewOrigin[1], nativeRelativeView.ActualSize.X, nativeRelativeView.ActualSize.Y);
 			}
-			PlatformView relativeView = relative.ToPlatform(relative.Handler.MauiContext);
-
-			var popupViewWidth = popupView._popup._popupViewWidth;
-			var popupViewHeight = popupView._popup._popupViewHeight;
-
-			var heightOfRelativeView = relativeView.ActualSize.Y;
-			var widthOfRelativeView = relativeView.ActualSize.X;
-
-			double[] location = new double[2] { 0, 0 };
-			GeneralTransform transform = relativeView.TransformToVisual(rootView);
-			location[0] = transform.TransformPoint(new PlatformPoint(0, 0)).X;
-			location[1] = transform.TransformPoint(new PlatformPoint(0, 0)).Y;
-
-			// Adds absolute points to the location of the relative view.
-			location[0] = location[0] + (popupView._popup._isRTL ? -absoluteX : absoluteX);
-			location[1] = location[1] + absoluteY;
-
-			var screenHeight = GetScreenHeight();
-			var screenWidth = GetScreenWidth();
-
-			// Calculates the X-position relative to the specified view.
-			CalculateXPosition(popupView, position, ref relativeX, absoluteX, popupViewWidth, location, widthOfRelativeView, screenWidth, isRelativeViewRTL);
-
-			// Calculates the Y-position relative to the specified view.
-			CalculateYPosition(popupView, position, ref relativeY, popupViewHeight, location, heightOfRelativeView, screenHeight);
+			else
+			{
+				return Rect.Zero;
+			}
 		}
 
 		#endregion
 
 		#region Private Methods
-
-		static void CalculateXPosition(PopupView popupView, PopupRelativePosition position, ref double relativeX, double absoluteX, double popupViewWidth, double[] location, float widthOfRelativeView, float screenWidth, bool isRelativeViewRTL)
-		{
-			if (position == PopupRelativePosition.AlignToLeftOf || position == PopupRelativePosition.AlignTopLeft || position == PopupRelativePosition.AlignBottomLeft)
-			{
-				if (popupView._popup._isRTL)
-				{
-					relativeX = location[0] + widthOfRelativeView;
-				}
-				else
-				{
-					relativeX = location[0] - popupViewWidth;
-				}
-			}
-			else if (position == PopupRelativePosition.AlignToRightOf || position == PopupRelativePosition.AlignTopRight || position == PopupRelativePosition.AlignBottomRight)
-			{
-				if (popupView._popup._isRTL)
-				{
-					relativeX = location[0] - popupViewWidth;
-				}
-				else
-				{
-					relativeX = location[0] + widthOfRelativeView;
-				}
-			}
-			else
-			{
-				if (popupView._popup._isRTL)
-				{
-					relativeX = location[0] + widthOfRelativeView - popupViewWidth;
-				}
-				else
-				{
-					relativeX = location[0];
-				}
-			}
-
-			relativeX = popupView._popup.ValidatePopupPosition(relativeX, popupViewWidth, screenWidth);
-		}
-
-		static void CalculateYPosition(PopupView popupView, PopupRelativePosition position, ref double relativeY, double popupViewHeight, double[] location, float heightOfRelativeView, float screenHeight)
-		{
-			if (position == PopupRelativePosition.AlignTop || position == PopupRelativePosition.AlignTopLeft || position == PopupRelativePosition.AlignTopRight)
-			{
-				relativeY = location[1] - popupViewHeight;
-			}
-			else if (position == PopupRelativePosition.AlignBottom || position == PopupRelativePosition.AlignBottomLeft || position == PopupRelativePosition.AlignBottomRight)
-			{
-				relativeY = location[1] + heightOfRelativeView;
-			}
-			else
-			{
-				relativeY = location[1];
-			}
-
-			relativeY = popupView._popup.ValidatePopupPosition(relativeY, popupViewHeight, screenHeight, GetStatusBarHeight() + (!popupView._popup.IgnoreActionBar ? GetActionBarHeight(popupView._popup.IgnoreActionBar) : 0));
-		}
 
 		static void BlurEffect(UIElement blurElement, SfPopup popup, IReadOnlyList<Microsoft.UI.Xaml.Controls.Primitives.Popup>? popupList)
 		{
@@ -349,19 +268,19 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <returns>Return radius value based on the defined blur intensity value.</returns>
 		static float GetBlurRadius(this SfPopup popup)
 		{
-			if (popup.PopupStyle.BlurIntensity == PopupBlurIntensity.Light)
+			if (popup.PopupStyle.BlurIntensity is PopupBlurIntensity.Light)
 			{
 				return 5;
 			}
-			else if (popup.PopupStyle.BlurIntensity == PopupBlurIntensity.ExtraDark)
+			else if (popup.PopupStyle.BlurIntensity is PopupBlurIntensity.ExtraDark)
 			{
 				return 10;
 			}
-			else if (popup.PopupStyle.BlurIntensity == PopupBlurIntensity.ExtraLight)
+			else if (popup.PopupStyle.BlurIntensity is PopupBlurIntensity.ExtraLight)
 			{
 				return 2.5f;
 			}
-			else if (popup.PopupStyle.BlurIntensity == PopupBlurIntensity.Custom)
+			else if (popup.PopupStyle.BlurIntensity is PopupBlurIntensity.Custom)
 			{
 				return popup.PopupStyle.BlurRadius;
 			}

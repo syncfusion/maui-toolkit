@@ -82,6 +82,15 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			BindableProperty.Create(nameof(IsEnabled), typeof(bool), typeof(SfSegmentItem), defaultValueCreator: bindable => true);
 
 		/// <summary>
+		/// Identifies the <see cref="IsSelected"/> dependency property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="IsSelected"/> dependency property.
+		/// </value>
+		public static readonly BindableProperty IsSelectedProperty =
+			BindableProperty.Create(nameof(IsSelected), typeof(bool), typeof(SfSegmentItem), false);
+
+		/// <summary>
 		/// Identifies the <see cref="Text"/> dependency property.
 		/// </summary>
 		/// <value>
@@ -300,6 +309,15 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		{
 			get { return (bool)GetValue(IsEnabledProperty); }
 			set { SetValue(IsEnabledProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets the value indicating whether the segment item is selected.
+		/// </summary>
+		public bool IsSelected
+		{
+			get { return (bool)this.GetValue(IsSelectedProperty); }
+			internal set { this.SetValue(IsSelectedProperty, value); }
 		}
 
 		/// <summary>

@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <SyncfusionControls>
   <ControlCategory Name="Editors">
-    <Control Title="Otp Input" ControlName="OtpInput" Image="otpinput.png" Description="Allows users to enter one-time passwords (OTP) securely and efficiently." StatusTag="New">
-      <Sample Title="Sign Up" SampleName="SignUpPage" StatusTag="New" SearchTags="otpinput,entry,textbox,signup"/>
-      <Sample Title="Customization" SampleName="Customization" StatusTag="New" SearchTags="otpinput,entry,textbox"  Description="This sample demonstrates how to customize OTP" />
+    <Control Title="Otp Input" ControlName="OtpInput" Image="otpinput.png" Description="Allows users to enter one-time passwords (OTP) securely and efficiently.">
+      <Sample Title="Sign Up" SampleName="SignUpPage" SearchTags="otpinput,entry,textbox,signup"/>
+      <Sample Title="Customization" SampleName="Customization" SearchTags="otpinput,entry,textbox"  Description="This sample demonstrates how to customize OTP" />
       
     </Control>
   </ControlCategory>

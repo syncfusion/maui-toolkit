@@ -246,6 +246,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				// Base factor for horizontal labels
 				double factor = 0.6;
+
 				// Adjust based on label rotation
 				double rotationRadians = Math.Abs(LabelRotation) * Math.PI / 180;
 
@@ -257,7 +258,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				spacingFactor = factor;
 			}
-			
+
 			double adjustedDesiredIntervalsCount = size * spacingFactor * MaximumLabels;
 			return Math.Max(adjustedDesiredIntervalsCount / 100, 1.0);
 		}

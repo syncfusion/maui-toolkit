@@ -26,3 +26,4 @@ using System.Resources;
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.TabView")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.TextInputLayout")]
 [assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.Themes")]
+[assembly: XmlnsDefinition("http://schemas.syncfusion.com/maui/toolkit", "Syncfusion.Maui.Toolkit.SunburstChart")]

@@ -33,7 +33,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle  CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="alexandar.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="alexandar.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -58,7 +58,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="gabriella.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="gabriella.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -84,7 +84,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="clara.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="clara.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -109,7 +109,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="tye.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="tye.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -133,7 +133,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="nora.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="nora.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -157,7 +157,7 @@
                                                     <Border.StrokeShape>
                                                       <RoundRectangle CornerRadius="50" />
                                                     </Border.StrokeShape>
-                                                  <Image Source="sebastian.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                  <Image Source="sebastian.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -181,7 +181,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="lita.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="lita.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -205,7 +205,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="jackson.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="jackson.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -229,7 +229,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="liam.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="liam.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>
@@ -253,7 +253,7 @@
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="50" />
                                                   </Border.StrokeShape>
-                                                    <Image Source="washington.png" WidthRequest="100" HeightRequest="100" HorizontalOptions="Center" />
+                                                    <Image Source="washington.png" WidthRequest="98" HeightRequest="98" HorizontalOptions="Center" />
                                                 </Border>
                                                 <Label Grid.Row="1" HorizontalOptions="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" FontAttributes="Bold" VerticalOptions="Center" Text="Author" FontSize="16" FontFamily="Roboto-Regular"/>
                                             </Grid>

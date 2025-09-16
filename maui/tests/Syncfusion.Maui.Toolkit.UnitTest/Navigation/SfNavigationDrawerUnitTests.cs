@@ -8,6 +8,28 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 {
 	public class SfNavigationDrawerUnitTests : BaseUnitTest
 	{
+		#region fields
+
+		/// <summary>
+		/// Provides a collection of Easing functions for parameterized tests.
+		/// </summary>
+		public static IEnumerable<object[]> EasingFunctions()
+		{
+			yield return new object[] { Easing.Linear };
+			yield return new object[] { Easing.SinIn };
+			yield return new object[] { Easing.SinOut };
+			yield return new object[] { Easing.SinInOut };
+			yield return new object[] { Easing.CubicIn };
+			yield return new object[] { Easing.CubicOut };
+			yield return new object[] { Easing.CubicInOut };
+			yield return new object[] { Easing.BounceIn };
+			yield return new object[] { Easing.BounceOut };
+			yield return new object[] { Easing.SpringIn };
+			yield return new object[] { Easing.SpringOut };
+		}
+
+		#endregion
+
 		#region constructor
 
 		[Fact]
@@ -40,6 +62,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(120d, drawerSetting.TouchThreshold);
 			Assert.Equal(Color.FromArgb("F7F2FB"), drawerSetting.ContentBackground);
 			Assert.Equal(Transition.SlideOnTop, drawerSetting.Transition);
+			Assert.Equal(Easing.Linear, drawerSetting.AnimationEasing);
 		}
 
 		#endregion
@@ -673,6 +696,22 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal("New Footer", ((Button)navigationDrawer.DrawerSettings.DrawerFooterView).Text);
 		}
 
+		[Fact]
+		public void TestAnimationEasing_DefaultValue_IsSinOut()
+		{
+			var drawerSetting = new DrawerSettings();
+			Assert.Equal(Easing.Linear, drawerSetting.AnimationEasing);
+		}
+
+		[Theory]
+		[MemberData(nameof(EasingFunctions))]
+		public void TestAnimationEasing_ReturnsExpectedValue(Easing easing)
+		{
+			var drawerSetting = new DrawerSettings();
+			drawerSetting.AnimationEasing = easing;
+			Assert.Equal(easing, drawerSetting.AnimationEasing);
+		}
+
 		#endregion
 
 		#region internal properties
@@ -724,6 +763,69 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#endregion
 
 		#region private methods
+
+		[Fact]
+		public void TestAnimationEasing_PropertyChanged_NotRaised()
+		{
+			var drawerSettings = new DrawerSettings { AnimationEasing = Easing.BounceIn };
+			var count = 0;
+			drawerSettings.PropertyChanged += (s, e) => {
+				if (e.PropertyName == nameof(DrawerSettings.AnimationEasing))
+					count++;
+			};
+			drawerSettings.AnimationEasing = Easing.BounceIn;
+			Assert.True(count <= 1); 
+		}
+
+		[Fact]
+		public void TestAnimationEasing_WhileOpen()
+		{
+			var navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.ScreenWidth = 800;
+			navigationDrawer.ScreenHeight = 600;
+			navigationDrawer.ContentView = new Grid();
+			navigationDrawer.DrawerSettings.DrawerContentView = new Grid();
+			navigationDrawer.IsOpen = true;
+
+			var ex = Record.Exception(() => navigationDrawer.DrawerSettings.AnimationEasing = Easing.BounceOut);
+			Assert.Null(ex);
+		}
+
+		[Fact]
+		public void TestAnimationEasing_Updates_DrawerSettings()
+		{
+			var navigationDrawer = new SfNavigationDrawer();
+			var easing = Easing.SpringIn;
+			navigationDrawer.DrawerSettings.AnimationEasing = easing;
+			Assert.Equal(easing, navigationDrawer.DrawerSettings.AnimationEasing);
+		}
+
+		[Fact]
+		public void TestReplace_DrawerSettings_Resets_AnimationEasing()
+		{
+			var navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.DrawerSettings.AnimationEasing = Easing.BounceIn;
+			navigationDrawer.DrawerSettings = new DrawerSettings();
+			Assert.Equal(Easing.Linear, navigationDrawer.DrawerSettings.AnimationEasing);
+		}
+
+		[Fact]
+		public void TestNewDrawerSettings_WithEasing()
+		{
+			var navigationDrawer = new SfNavigationDrawer();
+			var customEasing = Easing.CubicOut;
+			navigationDrawer.DrawerSettings = new DrawerSettings { AnimationEasing = customEasing };
+			Assert.Equal(customEasing, navigationDrawer.DrawerSettings.AnimationEasing); 
+		}
+
+		[Fact]
+		public void AnimationEasing_RespectsBinding()
+		{
+			var source = new DrawerSettings { AnimationEasing = Easing.Linear };
+			var target = new DrawerSettings();
+			target.SetBinding(DrawerSettings.AnimationEasingProperty, new Binding(nameof(DrawerSettings.AnimationEasing), source: source));
+			Assert.Equal(Easing.Linear, target.AnimationEasing);
+		}
 
 		[Fact]
 		public void TestFirstMoveActionStarted()
@@ -2056,6 +2158,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.FlowDirection = FlowDirection.LeftToRight;
 			Assert.Equal(FlowDirection.LeftToRight, drawerLayout?.FlowDirection);
 		}
+		
 
 		[Fact]
 		public void Test_ParentFlowDirection3()
@@ -2259,6 +2362,24 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var currentDuration = InvokePrivateMethod(navigationDrawer, "ValidateCurrentDuration", 0);
 			Assert.Equal(1.0, currentDuration);
 		}
+
+
+		[Fact]
+		public void TestAnimationEasing_PropertyChanged()
+		{
+			var drawerSetting = new DrawerSettings { AnimationEasing = Easing.BounceIn};
+			var fired = false;
+			drawerSetting.PropertyChanged += (sender, args) =>
+			{
+				if (args.PropertyName == nameof(DrawerSettings.AnimationEasing))
+				{
+					fired = true;
+				}
+			};
+
+			Assert.False(fired);
+		}
+
 
 		#endregion
 	}

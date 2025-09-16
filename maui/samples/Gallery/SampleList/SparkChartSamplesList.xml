@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+  <ControlCategory Name="Data Visualization">
+      <Control Title="Spark Charts" StatusTag="New" ControlName="SfSparkChart" Description="Visualize data in a lightweight view." Image="sparklinechart.png">
+        <Sample Title="Getting started" SampleName="ChartTypes" SearchTags="spark, sparkline ,sparkline chart, charts, sparkarea, sparkcolumn, sparkwinloss"/>
+        <Sample Title="Sales Report" SampleName="SalesReport" SearchTags="spark, sparkline ,sparkline chart, charts, sparkarea, sparkcolumn, sales report, sparkwinloss"/>
+      </Control>
+  </ControlCategory>
+</SyncfusionControls>

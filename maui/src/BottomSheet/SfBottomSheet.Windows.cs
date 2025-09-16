@@ -81,19 +81,15 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// </summary>
 		void UnWireEvents()
 		{
-			if (Handler is not null && Handler.PlatformView is not null)
+			if (Handler is null && _bottomSheetNativeView is not null)
 			{
-				_bottomSheetNativeView = Handler.PlatformView as FrameworkElement;
-				if (_bottomSheetNativeView is not null)
-				{
-					_bottomSheetNativeView.ManipulationMode = ManipulationModes.All;
-					_bottomSheetNativeView.ManipulationStarted -= OnManipulationStarted;
-					_bottomSheetNativeView.PointerPressed -= OnPointerPressed;
-					_bottomSheetNativeView.ManipulationDelta -= OnManipulationDelta;
-					_bottomSheetNativeView.ManipulationCompleted -= OnManipulationCompleted;
-					_bottomSheetNativeView.PointerReleased -= OnPointerReleased;
-					_bottomSheetNativeView.PointerMoved -= OnPointerMoved;
-				}
+				_bottomSheetNativeView.ManipulationMode = ManipulationModes.All;
+				_bottomSheetNativeView.ManipulationStarted -= OnManipulationStarted;
+				_bottomSheetNativeView.PointerPressed -= OnPointerPressed;
+				_bottomSheetNativeView.ManipulationDelta -= OnManipulationDelta;
+				_bottomSheetNativeView.ManipulationCompleted -= OnManipulationCompleted;
+				_bottomSheetNativeView.PointerReleased -= OnPointerReleased;
+				_bottomSheetNativeView.PointerMoved -= OnPointerMoved;
 			}
 		}
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Maui.Graphics;
+using Microsoft.Maui.Handlers;
 using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -16,6 +17,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		UIElement? _rootView;
 		WindowOverlayStack? _overlayStack;
 		PrimitivePopup? _primitivePopup;
+		FrameworkElement? _overlayContent;
 
 		#endregion
 
@@ -147,6 +149,92 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		}
 
 		/// <summary>
+		/// Removes the overlay from the current view hierarchy and cleans up associated resources.
+		/// </summary>
+		internal void RemoveOverlay()
+		{
+			if (_primitivePopup is not null)
+			{
+				_primitivePopup.IsOpen = false;
+				_primitivePopup.Child = null;
+			}
+
+			if (_overlayStack is not null && _overlayStack.Children is not null)
+			{
+				_overlayStack.Children.Clear();
+			}
+		}
+
+		/// <summary>
+		/// Adds a child view to the current window.
+		/// </summary>
+		/// <remarks>This method ensures that the child view is added to the window and converted to its
+		/// platform-specific representation. If the <paramref name="childView"/> is <see langword="null"/> or the
+		/// overlay stack is not initialized, the method exits without performing any action.</remarks>
+		/// <param name="childView">The child view to be added. Must not be <see langword="null"/>.</param>
+		internal bool AddToOverlay(MauiView childView)
+		{
+			_window = WindowOverlayHelper._window;
+			if (_window is not null && _window.Content is not null)
+			{
+				_rootView = WindowOverlayHelper._platformRootView;
+				if (_rootView is not null && _window.Handler is not null && _window.Handler is WindowHandler windowHandler && windowHandler.MauiContext is not null
+						 && windowHandler.MauiContext is not null && _rootView.XamlRoot is not null)
+				{
+					_primitivePopup = new PrimitivePopup();
+					_overlayStack ??= CreateStack();
+					_primitivePopup.XamlRoot = _rootView.XamlRoot;
+					_overlayContent = childView.ToPlatform(windowHandler.MauiContext);
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Positions the popup at the specified coordinates relative to the screen.
+		/// </summary>
+		/// <remarks>The method ensures that the popup is added to the view hierarchy if it is not already
+		/// present.  The coordinates are automatically scaled based on the device's screen density.</remarks>
+		/// <param name="x">The horizontal position, in device-independent units (DIPs), where the popup should be placed. Defaults to
+		/// 0.</param>
+		/// <param name="y">The vertical position, in device-independent units (DIPs), where the popup should be placed. Defaults to 0.</param>
+		internal void PositionOverlayContent(double x = 0, double y = 0)
+		{
+			float posX = (float)x;
+			float posY = (float)y;
+
+			if (_overlayStack is not null)
+			{
+				if (_overlayStack.Parent is null && _primitivePopup is not null)
+				{
+					if (_rootView is not null && _rootView.XamlRoot is not null && _primitivePopup.XamlRoot is null)
+					{
+						_primitivePopup.XamlRoot = _rootView.XamlRoot;
+					}
+
+					_primitivePopup.Child = _overlayStack;
+					_primitivePopup.IsOpen = true;
+				}
+
+				UpdateOverlaySize();
+				_overlayStack.SetValue(Canvas.ZIndexProperty, 99);
+
+				if (_overlayContent is not null)
+				{
+					if (_overlayContent.Parent is null)
+					{
+						_overlayStack.Children.Add(_overlayContent);
+					}
+
+					Canvas.SetLeft(_overlayContent, posX);
+					Canvas.SetTop(_overlayContent, posY);
+				}
+			}
+		}
+
+		/// <summary>
 		/// Removes the current overlay window from root view with all its children.
 		/// </summary>
 		internal void RemoveFromWindow()
@@ -164,6 +252,18 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			}
 
 			_hasOverlayStackInRoot = false;
+		}
+
+		/// <summary>
+		/// Dispose the objects in window overlay.
+		/// </summary>
+		internal void Dispose()
+		{
+			RemoveOverlay();
+			_window = null;
+			_overlayContent = null;
+			_primitivePopup = null;
+			_overlayStack = null;
 		}
 
 		/// <summary>

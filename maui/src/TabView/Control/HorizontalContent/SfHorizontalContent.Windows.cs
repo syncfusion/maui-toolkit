@@ -61,20 +61,16 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		void UnWireEvents()
 		{
-			if (Handler != null && Handler.PlatformView != null)
+			if (Handler == null && _horizontalContentNativeView != null)
 			{
-				_horizontalContentNativeView = Handler.PlatformView as FrameworkElement;
-				if (_horizontalContentNativeView != null)
-				{
-					_horizontalContentNativeView.ManipulationMode = ManipulationModes.All;
-					_horizontalContentNativeView.ManipulationStarted -= OnManipulationStarted;
-					_horizontalContentNativeView.PointerPressed -= OnPointerPressed;
-					_horizontalContentNativeView.ManipulationDelta -= OnManipulationDelta;
-					_horizontalContentNativeView.ManipulationCompleted -= OnManipulationCompleted;
-					_horizontalContentNativeView.PointerReleased -= OnPointerReleased;
-					_horizontalContentNativeView.PointerMoved -= OnPointerMoved;
-					_horizontalContentNativeView.PointerCaptureLost -= OnPointerCaptureLost;
-				}
+				_horizontalContentNativeView.ManipulationMode = ManipulationModes.All;
+				_horizontalContentNativeView.ManipulationStarted -= OnManipulationStarted;
+				_horizontalContentNativeView.PointerPressed -= OnPointerPressed;
+				_horizontalContentNativeView.ManipulationDelta -= OnManipulationDelta;
+				_horizontalContentNativeView.ManipulationCompleted -= OnManipulationCompleted;
+				_horizontalContentNativeView.PointerReleased -= OnPointerReleased;
+				_horizontalContentNativeView.PointerMoved -= OnPointerMoved;
+				_horizontalContentNativeView.PointerCaptureLost -= OnPointerCaptureLost;
 			}
 		}
 

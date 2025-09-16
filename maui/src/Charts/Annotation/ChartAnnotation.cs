@@ -471,6 +471,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (bindable is ChartAnnotation annotation)
 			{
+				if (annotation is ShapeAnnotation shapeAnnotation)
+				{
+					shapeAnnotation.InitializeDynamicResource(shapeAnnotation);
+				}
+
 				annotation.Invalidate();
 			}
 		}

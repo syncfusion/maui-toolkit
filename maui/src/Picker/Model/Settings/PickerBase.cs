@@ -262,7 +262,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 nameof(PopupWidth),
                 typeof(double),
                 typeof(PickerBase),
-                defaultValueCreator: bindable => GetDefaultPopupWidth(bindable),
+                -1.0,
                 propertyChanged: OnPopupWidthPropertyChanged);
 
         /// <summary>
@@ -276,7 +276,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 nameof(PopupHeight),
                 typeof(double),
                 typeof(PickerBase),
-                defaultValueCreator: bindable => GetDefaultPopupHeight(bindable),
+                -1.0,
                 propertyChanged: OnPopupHeightPropertyChanged);
 
         #endregion
@@ -1117,6 +1117,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             PickerHeaderView? newStyle = newValue as PickerHeaderView;
             if (newStyle != null)
             {
+                PickerHelper.SetHeaderDynamicResource(newStyle, picker);
                 SetInheritedBindingContext(newStyle, picker.BindingContext);
                 newStyle.PickerPropertyChanged += picker.OnHeaderSettingsPropertyChanged;
                 if (newStyle.TextStyle != null)
@@ -1187,6 +1188,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (newStyle != null)
             {
                 newStyle.Parent = picker;
+                PickerHelper.SetFooterDynamicResource(newStyle, picker);
                 SetInheritedBindingContext(newStyle, picker.BindingContext);
                 newStyle.PickerPropertyChanged += picker.OnFooterSettingsPropertyChanged;
                 if (newStyle.TextStyle != null)
@@ -1495,7 +1497,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 //// While adding the picker item height, the picker selected item not updated properly in android and ios. So, we have updated that.
                 picker._pickerContainer?.UpdateItemHeight();
 #endif
-			}
+            }
         }
 
         /// <summary>
@@ -1886,9 +1888,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
                 //// The old index changed from 9 to 10 then the actual new index value is 9.
                 int newIndex = PickerHelper.GetValidSelectedIndex(column.SelectedIndex, itemsCount);
-                SelectionIndexChanged?.Invoke(this, new PickerSelectionChangedEventArgs { NewValue = column.SelectedIndex, OldValue = oldIndex, ColumnIndex = column._columnIndex });
                 column._isSelectedItemChanged = false;
                 column.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(column);
+                SelectionIndexChanged?.Invoke(this, new PickerSelectionChangedEventArgs { NewValue = column.SelectedIndex, OldValue = oldIndex, ColumnIndex = column._columnIndex });
                 if (EnableLooping && newIndex <= -1)
                 {
                     return;

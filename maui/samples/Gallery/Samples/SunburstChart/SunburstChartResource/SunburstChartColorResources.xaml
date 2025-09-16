@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart"
+             x:Class="Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart.SunburstChartColorResources">
+
+    <local:ChartColorModel x:Key="PaletteBrushesLight1" >
+        <SolidColorBrush>#0B77E3</SolidColorBrush>
+        <SolidColorBrush>#1D5B6F</SolidColorBrush>
+        <SolidColorBrush>#DE7207</SolidColorBrush>
+        <SolidColorBrush>#BD34B7</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesDark1">
+        <SolidColorBrush>#2989F9</SolidColorBrush>
+        <SolidColorBrush>#0DAA97</SolidColorBrush>
+        <SolidColorBrush>#EA8D03</SolidColorBrush>
+        <SolidColorBrush>#9455FC</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesLight2" >
+        <SolidColorBrush>#3068F7</SolidColorBrush>
+        <SolidColorBrush>#DE7207</SolidColorBrush>
+        <SolidColorBrush>#1D5B6F</SolidColorBrush>
+        <SolidColorBrush>#8E4AFC</SolidColorBrush>
+        <SolidColorBrush>#4A9608</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesLight4" >
+        <SolidColorBrush>#8E4AFC</SolidColorBrush>
+        <SolidColorBrush>#4A9608</SolidColorBrush>
+        <SolidColorBrush>#3068F7</SolidColorBrush>
+        <SolidColorBrush>#DE7207</SolidColorBrush>
+        <SolidColorBrush>#1D5B6F</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesDark2" >
+        <SolidColorBrush>#2989F9</SolidColorBrush>
+        <SolidColorBrush>#EA8D03</SolidColorBrush>
+        <SolidColorBrush>#0DAA97</SolidColorBrush>
+        <SolidColorBrush>#9455FC</SolidColorBrush>
+        <SolidColorBrush>#10AD4F</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesLight3" >
+        <SolidColorBrush>#3068F7</SolidColorBrush>
+        <SolidColorBrush>#1D5B6F</SolidColorBrush>
+        <SolidColorBrush>#8E4AFC</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesDark3" >
+        <SolidColorBrush>#2989F9</SolidColorBrush>
+        <SolidColorBrush>#0DAA97</SolidColorBrush>
+        <SolidColorBrush>#9455FC</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesDark4" >
+        <SolidColorBrush>#10AD4F</SolidColorBrush>
+        <SolidColorBrush>#9730E7</SolidColorBrush>
+        <SolidColorBrush>#0DAA97</SolidColorBrush>
+        <SolidColorBrush>#4A7BF8</SolidColorBrush>
+        <SolidColorBrush>#EA8D03</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesLight5" >
+        <SolidColorBrush>#3068F7</SolidColorBrush>
+        <SolidColorBrush>#DE7207</SolidColorBrush>
+        <SolidColorBrush>#0DAA97</SolidColorBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="PaletteBrushesDark5" >
+        <SolidColorBrush>#9730E7</SolidColorBrush>
+        <SolidColorBrush>#10AD4F</SolidColorBrush>
+        <SolidColorBrush>#EA8D03</SolidColorBrush>
+    </local:ChartColorModel>
+    
+</ResourceDictionary>

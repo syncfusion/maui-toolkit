@@ -9,6 +9,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 	/// </summary>
 	public partial class TouchDetector
 	{
+		#region Fields
+
+		UIElement? _nativeView;
+
+		#endregion
 
 		#region Internal Methods
 
@@ -20,16 +25,16 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			if (mauiView != null)
 			{
 				var handler = mauiView.Handler;
-				UIElement? nativeView = handler?.PlatformView as UIElement;
-				if (nativeView != null)
+				_nativeView = handler?.PlatformView as UIElement;
+				if (_nativeView != null)
 				{
-					nativeView.PointerPressed += PlatformView_PointerPressed;
-					nativeView.PointerMoved += PlatformView_PointerMoved;
-					nativeView.PointerReleased += PlatformView_PointerReleased;
-					nativeView.PointerCanceled += PlatformView_PointerCanceled;
-					nativeView.PointerWheelChanged += PlatformView_PointerWheelChanged;
-					nativeView.PointerEntered += PlatformView_PointerEntered;
-					nativeView.PointerExited += PlatformView_PointerExited;
+					_nativeView.PointerPressed += PlatformView_PointerPressed;
+					_nativeView.PointerMoved += PlatformView_PointerMoved;
+					_nativeView.PointerReleased += PlatformView_PointerReleased;
+					_nativeView.PointerCanceled += PlatformView_PointerCanceled;
+					_nativeView.PointerWheelChanged += PlatformView_PointerWheelChanged;
+					_nativeView.PointerEntered += PlatformView_PointerEntered;
+					_nativeView.PointerExited += PlatformView_PointerExited;
 				}
 			}
 		}
@@ -74,16 +79,16 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		{
 			if (handler != null)
 			{
-				UIElement? nativeView = handler.PlatformView as UIElement;
-				if (nativeView != null)
+				if (_nativeView != null)
 				{
-					nativeView.PointerPressed -= PlatformView_PointerPressed;
-					nativeView.PointerMoved -= PlatformView_PointerMoved;
-					nativeView.PointerReleased -= PlatformView_PointerReleased;
-					nativeView.PointerCanceled -= PlatformView_PointerCanceled;
-					nativeView.PointerWheelChanged -= PlatformView_PointerWheelChanged;
-					nativeView.PointerEntered -= PlatformView_PointerEntered;
-					nativeView.PointerExited -= PlatformView_PointerExited;
+					_nativeView.PointerPressed -= PlatformView_PointerPressed;
+					_nativeView.PointerMoved -= PlatformView_PointerMoved;
+					_nativeView.PointerReleased -= PlatformView_PointerReleased;
+					_nativeView.PointerCanceled -= PlatformView_PointerCanceled;
+					_nativeView.PointerWheelChanged -= PlatformView_PointerWheelChanged;
+					_nativeView.PointerEntered -= PlatformView_PointerEntered;
+					_nativeView.PointerExited -= PlatformView_PointerExited;
+					_nativeView = null;
 				}
 			}
 		}

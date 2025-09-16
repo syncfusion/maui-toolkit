@@ -26,5 +26,7 @@
 	 <Assembly Name="OtpInput" />
 	 <Assembly Name="ProgressBar" />
 	 <Assembly Name="Picker" />
+    <Assembly Name="SunburstChart" />
+    <Assembly Name="SparkChart" />
 	</Assemblies>
 </SampleBrowser>

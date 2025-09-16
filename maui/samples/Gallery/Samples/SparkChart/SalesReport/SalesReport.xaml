@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SparkChart.SfSparkChart.SalesReport"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SparkCharts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SparkChart">
+
+  <localCore:SampleView.BindingContext>
+    <local:SalesReportViewModel/>
+  </localCore:SampleView.BindingContext>
+
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <local:SparkChartColorResources/>
+      </ResourceDictionary.MergedDictionaries>
+      
+      <Style TargetType="Label">
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White}"/>
+      </Style>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+
+  <localCore:SampleView.Content>
+
+    <Grid x:Name="MainGrid" 
+          VerticalOptions="Fill" 
+          HorizontalOptions="Fill"
+          WidthRequest="{OnPlatform Android=600,iOS=600}">
+
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <Grid ColumnDefinitions="1*,1.2*,1.2*,2.2*,2.2*,2.2*"
+                BackgroundColor="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}"
+                ColumnSpacing="8" 
+                Padding="4"
+                HeightRequest="50">
+          <Label Text="ID" Grid.Column="0"/>
+          <Label Text="Name" Grid.Column="1" />
+          <Label Text="Country" Grid.Column="2"/>
+          <Label Text="Annual Tax" Grid.Column="3" />
+          <Label Text="Weekly Index" Grid.Column="4"/>
+          <Label Text="Year GR" Grid.Column="5"/>
+          <BoxView  VerticalOptions="End" Grid.ColumnSpan="6" HeightRequest="1" 
+                 Color="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}"/>
+      </Grid>
+
+      <ListView ItemsSource="{Binding OrderInfoCollection}"
+                Margin="4"
+                Grid.Row="1"
+                VerticalOptions="Fill"
+                VerticalScrollBarVisibility="Never"
+                RowHeight="60"
+                SelectionMode="None" 
+                SeparatorVisibility="None">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+              <ViewCell>
+                <Grid ColumnDefinitions="1*,1.2*,1.2*,2.2*,2.2*,2.2*" 
+                      ColumnSpacing="8" 
+                      HeightRequest="60">
+
+                  <Label Text="{Binding OrderID}" Grid.Column="0"/>
+                  <Label Text="{Binding Customer}" Grid.Column="1"/>
+                  <Label Text="{Binding ShipCountry}" Grid.Column="2"/>
+
+                  <Grid Padding="4" Grid.Column="3">
+                    <chart:SfSparkAreaChart ItemsSource="{Binding TaxPerAnnum}" YBindingPath="Performance" StrokeWidth="1.5"
+                             Stroke="{AppThemeBinding Light={StaticResource series5Light}, Dark={StaticResource series5Dark}}"
+                             Fill="{AppThemeBinding Light={StaticResource series8Light}, Dark={StaticResource series8Dark}}"/>
+                  </Grid>
+
+                  <Grid Padding="4" Grid.Column="4">
+                    <chart:SfSparkColumnChart ItemsSource="{Binding OneDayIndex}" YBindingPath="Performance" 
+                       Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"/>
+                  </Grid>
+
+                  <Grid Padding="4" Grid.Column="5">
+                    <chart:SfSparkWinLossChart ItemsSource="{Binding YearGR}" YBindingPath="Performance"
+                   PositivePointsFill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"
+                   NegativePointsFill="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" 
+                   NeutralPointFill="{AppThemeBinding Light={StaticResource series5Light}, Dark={StaticResource series5Dark}}"/>
+                  </Grid>
+
+                  <BoxView Grid.ColumnSpan="6" VerticalOptions="End" HeightRequest="1" 
+                 Color="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}"/>
+                  
+                </Grid>
+              </ViewCell>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
+
+  </localCore:SampleView.Content>
+</localCore:SampleView>

@@ -1,0 +1,52 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart.ToolTip"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SunburstChart;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart"
+             x:DataType="local:ViewModel">
+
+  <localCore:SampleView.BindingContext>
+    <local:ViewModel/>
+  </localCore:SampleView.BindingContext>
+  <localCore:SampleView.Resources>
+        <local:SunburstItemIndexConverter x:Key="IndexConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:SunburstChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate x:Key="template1" x:DataType="chart:SunburstSegment">
+                <StackLayout Orientation="Horizontal" Margin="2">
+                    <Rectangle HeightRequest="30" WidthRequest="8" Fill="{Binding Fill}"/>
+                    <StackLayout Orientation="Vertical" Spacing="2">
+                        <Label Text="{Binding Item, Converter={StaticResource IndexConverter}, ConverterParameter=0}" FontFamily="Helvetica" FontSize="12.5" Padding="5,0,0,0" FontAttributes="Bold" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/>
+                        <Label Text="{Binding Item, Converter={StaticResource IndexConverter}, ConverterParameter=1, StringFormat='Count : {0}M'}" FontFamily="Helvetica" FontSize="12" Padding="5,0,0,0" Margin="0,2,0,0" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"/> 
+                    </StackLayout>
+                </StackLayout>
+            </DataTemplate>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    <localCore:SampleView.Content>
+        <chart:SfSunburstChart x:Name="sunburstChart" ItemsSource="{Binding DataSource1}" 
+                               ValueMemberPath="Population" TooltipTemplate="{StaticResource template1}"
+                               PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight2}, Dark={StaticResource PaletteBrushesDark2}}" 
+                               EnableTooltip="True" ShowLabels="True" InnerRadius="0.2"
+                               Stroke="{AppThemeBinding Dark=Black,Light=White}">
+            
+            <chart:SfSunburstChart.Title>
+                <Label Text="Product Manufacturing: A Global Perspective" FontAttributes="Bold" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="18"/>
+            </chart:SfSunburstChart.Title>
+            
+            <chart:SfSunburstChart.Legend>
+                <chart:SunburstLegend/>
+            </chart:SfSunburstChart.Legend>
+            
+            <chart:SfSunburstChart.Levels>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Continent"/>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Country" />
+                <chart:SunburstHierarchicalLevel GroupMemberPath="State"/>
+            </chart:SfSunburstChart.Levels>
+        </chart:SfSunburstChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

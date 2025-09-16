@@ -427,6 +427,40 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				null,
 				propertyChanged: OnScrollButtonDisabledIconColorChanged);
 
+		/// <summary>
+		/// Identifies the <see cref="HoverBackground"/> bindable property.
+		/// </summary>
+		/// <remarks>This bindable property is read-only.</remarks>
+		internal static readonly BindableProperty HoverBackgroundProperty = BindableProperty.Create(
+		nameof(HoverBackground),
+		typeof(Brush),
+		typeof(SfTabView),
+		new SolidColorBrush(Color.FromArgb("#1C1B1F")),
+		BindingMode.Default,
+		propertyChanged: OnHoverBackgroundChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="AnimationEasing"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty AnimationEasingProperty =
+			BindableProperty.Create(
+				nameof(AnimationEasing),
+				typeof(Easing),
+				typeof(SfTabView),
+				Easing.Linear,
+				propertyChanged: OnAnimationEasingChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="EnableRippleAnimation"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty EnableRippleAnimationProperty =
+			BindableProperty.Create(
+				nameof(EnableRippleAnimation),
+				typeof(bool),
+				typeof(SfTabView),
+				true,
+				propertyChanged: OnEnableRippleAnimationChanged);
+
 		#endregion
 
 		#region Properties
@@ -1556,10 +1590,110 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			set { SetValue(ScrollButtonDisabledIconColorProperty, value); }
 		}
 
+		/// <summary>
+		/// Gets or sets the hover color for the tab items.
+		/// <remarks>The default color is Color.FromRgba("#1C1B1F").</remarks>
+		/// </summary>
+		internal Brush HoverBackground
+		{
+			get { return (Brush)this.GetValue(HoverBackgroundProperty); }
+			set { this.SetValue(HoverBackgroundProperty, value); }
+		}
+
 		bool IsContentLoopingEnabled
 		{
 			get => (bool)GetValue(IsContentLoopingEnabledProperty);
 			set => SetValue(IsContentLoopingEnabledProperty, value);
+		}
+		
+		/// <summary>
+		/// Gets or sets the easing function used for tab transition animations.
+		/// </summary>
+		/// <value>
+		/// An <see cref="Easing"/> function that controls the animation transitions between tabs. 
+		/// This affects both the selection indicator animation and the content transition animation.
+		/// The default value is <see cref="Easing.Linear"/>.
+		/// </value>
+		/// <example>
+		/// Here is an example of how to set the <see cref="AnimationEasing"/> property.
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView AnimationEasing="{x:Static Easing.CubicInOut}">
+		///     <tabView:SfTabItem Header="TAB 1">
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		/// </tabView:SfTabView>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// var tabView = new SfTabView();
+		/// tabView.AnimationEasing = Easing.CubicInOut;
+		/// var tabItems = new TabItemCollection
+		/// {
+		///     new SfTabItem
+		///     {
+		///         Header = "TAB 1",
+		///         Content = new Label { Text = "Content" }
+		///     }
+		/// };
+		///
+		/// tabView.Items = tabItems;
+		/// Content = tabView;
+		/// ]]></code>
+		/// </example>
+		public Easing AnimationEasing
+		{
+			get => (Easing)GetValue(AnimationEasingProperty);
+			set => SetValue(AnimationEasingProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether ripple animation should be enabled on the Tab View.
+		/// </summary>
+		/// <value>
+		/// The default value is <c>true</c>.
+		/// </value>
+		/// <example>
+		/// Here is an example of how to set the <see cref="EnableRippleAnimation"/> property.
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView EnableRippleAnimation="False">
+		///     <tabView:SfTabItem Header="TAB 1">
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		/// </tabView:SfTabView>
+		/// ]]>
+		/// </code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// var tabView = new SfTabView();
+		/// tabView.EnableRippleAnimation = false;
+		/// var tabItems = new TabItemCollection
+		/// {
+		///     new SfTabItem
+		///     {
+		///         Header = "TAB 1",
+		///         Content = new Label { Text = "Content" }
+		///     }
+		/// };
+		///
+		/// tabView.Items = tabItems;
+		/// Content = tabView;
+		/// ]]>
+		/// </code>
+		/// </example>
+		public bool EnableRippleAnimation
+		{
+			get => (bool)GetValue(EnableRippleAnimationProperty);
+			set => SetValue(EnableRippleAnimationProperty, value);
 		}
 
 		#endregion
@@ -1702,6 +1836,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			{
 				SfTabView.SetInheritedBindingContext(CenterButtonSettings, BindingContext);
 			}
+		}
+
+		/// <summary>
+		/// Handler changed method.
+		/// </summary>
+		protected override void OnHandlerChanged()
+		{
+			if(Handler == null)
+			{
+				_selectionChangedEventArgs = null;
+			}
+
+			base.OnHandlerChanged();
 		}
 
 		#endregion
@@ -1914,6 +2061,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>		
 
 		static void OnTabHeaderAlignmentPropertyChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateTabHeaderAlignment((TabHeaderAlignment)newValue);
+		
+		/// <summary>
+		/// Handles changes to the <see cref="AnimationEasing"/> property.
+		/// </summary>
+		/// <param name="bindable">The bindable object.</param>
+		/// <param name="oldValue">The old value of the property.</param>
+		/// <param name="newValue">The new value of the property.</param>
+		static void OnAnimationEasingChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateAnimationEasing((Easing)newValue);
+
+		/// <summary>
+		/// Handles changes to the <see cref="EnableRippleAnimation"/> property.
+		/// </summary>
+		static void OnEnableRippleAnimationChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateEnableRippleAnimation((bool)newValue);
 
 		#endregion
 
@@ -1979,7 +2139,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			{
 				HorizontalOptions = LayoutOptions.Fill,
 				VerticalOptions = LayoutOptions.Fill,
-				RowSpacing = 0
+				RowSpacing = 0,
+				ColumnSpacing = 0,
 			};
 
 			InitializeHeaderContainer();
@@ -2002,6 +2163,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			SetDynamicResource(ScrollButtonBackgroundProperty, "SfTabViewScrollButtonBackground");
 			SetDynamicResource(ScrollButtonColorProperty, "SfTabViewScrollButtonIconColor");
 			SetDynamicResource(ScrollButtonDisabledIconColorProperty, "SfTabViewScrollButtonDisabledIconColor");
+			this.SetDynamicResource(HoverBackgroundProperty, "SfTabViewHoverBackground");
 		}
 
 		/// <summary>
@@ -2038,6 +2200,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			_tabHeaderContainer.ScrollButtonBackground = ScrollButtonBackground;
 			_tabHeaderContainer.ScrollButtonColor = ScrollButtonColor;
 			_tabHeaderContainer.ScrollButtonDisabledIconColor = ScrollButtonDisabledIconColor;
+			_tabHeaderContainer.EnableRippleAnimation = EnableRippleAnimation;
 		}
 
 		/// <summary>
@@ -2550,6 +2713,23 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					break;
 			}
 		}
+		
+		/// <summary>
+		/// Updates the animation easing for both tab header and content containers.
+		/// </summary>
+		/// <param name="animationEasing">The new animation easing to apply.</param>
+		void UpdateAnimationEasing(Easing animationEasing)
+		{
+			if (_tabHeaderContainer != null)
+			{
+				_tabHeaderContainer.AnimationEasing = animationEasing;
+			}
+
+			if (_tabContentContainer != null)
+			{
+				_tabContentContainer.AnimationEasing = animationEasing;
+			}
+		}
 
 		/// <summary>
 		/// Gets the theme dictionary for the tab view.
@@ -2618,6 +2798,33 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			if (bindable is SfTabView tabView && tabView != null && tabView._tabHeaderContainer != null)
 			{
 				tabView._tabHeaderContainer.ScrollButtonDisabledIconColor = (Color)newValue;
+			}
+		}
+
+		/// <summary>
+		/// This method is called when the <see cref="SfTabBar.HoverBackground"/> property value changes.
+		/// It updates the <see cref="SfTabBar.HoverBackground"/> accordingly.
+		/// </summary>
+		/// <param name="bindable">The bindable object.</param>
+		/// <param name="oldValue">The old value of the property.</param>
+		/// <param name="newValue">The new value of the property.</param>
+		static void OnHoverBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfTabView tabView && tabView != null && tabView._tabHeaderContainer != null)
+			{
+				tabView._tabHeaderContainer.HoverBackground = (Brush)newValue;
+			}
+		}
+
+		/// <summary>
+		/// Updates whether ripple animation is enabled in the tab view.
+		/// </summary>
+		/// <param name="enableRippleAnimation">The new value for EnableRippleAnimation.</param>
+		void UpdateEnableRippleAnimation(bool enableRippleAnimation)
+		{
+			if (_tabHeaderContainer != null)
+			{
+				_tabHeaderContainer.EnableRippleAnimation = enableRippleAnimation;
 			}
 		}
 		#endregion

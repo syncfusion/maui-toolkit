@@ -5,7 +5,7 @@
 			<Sample Title="Getting Started" SampleName="TabViewGettingStarted" Description="This sample shows a simple use case of the Tab View." SearchTags="tabs, tab view, tabbed view, navigation"/>
 			<Sample Title="Fit To Content" SampleName="SizeToContent" Description="This sample shows how to display the tabs based on the each tabs text size."  SearchTags="tabs, tab view, tabbed view, autofit, auto, sizetofit, tab width"/>
 			<Sample Title="Customization" SampleName="Customization" SearchTags="tabs, tab view, tabbed view, customization"/>
-			<Sample Title="Center Button" SampleName="CenterButton"  SearchTags="tabs, tab view, tabbed view, center button" StatusTag="New"/>
+			<Sample Title="Center Button" SampleName="CenterButton"  SearchTags="tabs, tab view, tabbed view, center button" />
 		</Control>
 	</ControlCategory>
 </SyncfusionControls>

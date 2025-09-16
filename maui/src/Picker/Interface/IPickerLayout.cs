@@ -20,11 +20,12 @@
         /// </summary>
         double ScrollOffset { get; }
 
-        /// <summary>
-        /// Method to update the picker tapped item index.
-        /// </summary>
-        /// <param name="tappedIndex">The tapped index.</param>
-        /// <param name="isInitialLoading">Check whether is initial loading.</param>
-        void UpdateSelectedIndexValue(int tappedIndex, bool isInitialLoading = false);
+		/// <summary>
+		/// Method to update the picker tapped item index.
+		/// </summary>
+		/// <param name="tappedIndex">The tapped index.</param>
+		/// <param name="isTapped">Is tap gesture used</param>
+		/// <param name="isInitialLoading">Check whether is initial loading.</param>
+		void UpdateSelectedIndexValue(int tappedIndex, bool isTapped, bool isInitialLoading = false);
     }
 }

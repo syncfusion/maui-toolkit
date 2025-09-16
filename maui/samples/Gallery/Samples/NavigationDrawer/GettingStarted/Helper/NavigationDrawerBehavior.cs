@@ -8,7 +8,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 	/// </summary>
 	public partial class NavigationDrawerBehavior : Behavior<SampleView>
 	{
-		Microsoft.Maui.Controls.ListView? _listView;
+		Microsoft.Maui.Controls.CollectionView? _collectionView;
 		MailInfoViewModel? _viewModel;
 		Microsoft.Maui.Controls.Picker? _positionType;
 		SfEffectsView? _inboxeffectsView;
@@ -30,8 +30,8 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			_viewModel = new MailInfoViewModel();
 			bindable.BindingContext = _viewModel;
-			_listView = bindable.FindByName<Microsoft.Maui.Controls.ListView>("listView");
-			_listView.ItemsSource = _viewModel.MailInfos;
+			_collectionView = bindable.FindByName<Microsoft.Maui.Controls.CollectionView>("collectionView");
+			_collectionView.ItemsSource = _viewModel.MailInfos;
 			_navigationdrawer = bindable.FindByName<SfNavigationDrawer>("navigationDrawer");
 			_navigationdrawer.BindingContext = _viewModel;
 			_positionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("positioncomboBox");
@@ -90,12 +90,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private void InboxTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
 			ResetSelection();
-			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _inboxeffectsView != null)
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _collectionView != null && _inboxeffectsView != null)
 			{
 				_inboxeffectsView.IsSelected = true;
 				_title.Text = "Inbox";
 				_viewModel.AddItemsRefresh(1);
-				_listView.ItemsSource = _viewModel.MailInfos;
+				_collectionView.ItemsSource = _viewModel.MailInfos;
 				_navigationdrawer.ToggleDrawer();
 			}
 		}
@@ -103,12 +103,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private void StarredTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
 			ResetSelection();
-			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _starredeffectsView != null)
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _collectionView != null && _starredeffectsView != null)
 			{
 				_starredeffectsView.IsSelected = true;
 				_title.Text = "Starred";
 				_viewModel.AddItemsRefresh(2);
-				_listView.ItemsSource = _viewModel.MailInfos;
+				_collectionView.ItemsSource = _viewModel.MailInfos;
 				_navigationdrawer.ToggleDrawer();
 			}
 		}
@@ -116,12 +116,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private void SentTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
 			ResetSelection();
-			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _senteffectsView != null)
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _collectionView != null && _senteffectsView != null)
 			{
 				_senteffectsView.IsSelected = true;
 				_title.Text = "Sent";
 				_viewModel.AddItemsRefresh(3);
-				_listView.ItemsSource = _viewModel.MailInfos;
+				_collectionView.ItemsSource = _viewModel.MailInfos;
 				_navigationdrawer.ToggleDrawer();
 			}
 		}
@@ -129,12 +129,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private void DraftTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
 			ResetSelection();
-			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _draftseffectsView != null)
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _collectionView != null && _draftseffectsView != null)
 			{
 				_draftseffectsView.IsSelected = true;
 				_title.Text = "Draft";
 				_viewModel.AddItemsRefresh(4);
-				_listView.ItemsSource = _viewModel.MailInfos;
+				_collectionView.ItemsSource = _viewModel.MailInfos;
 				_navigationdrawer.ToggleDrawer();
 			}
 		}
@@ -142,12 +142,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private void AllMailsTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
 			ResetSelection();
-			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _allmailseffectsView != null)
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _collectionView != null && _allmailseffectsView != null)
 			{
 				_allmailseffectsView.IsSelected = true;
 				_title.Text = "All Mails";
 				_viewModel.AddItemsRefresh(1);
-				_listView.ItemsSource = _viewModel.MailInfos;
+				_collectionView.ItemsSource = _viewModel.MailInfos;
 				_navigationdrawer.ToggleDrawer();
 			}
 		}
@@ -155,12 +155,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private void TrashTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
 			ResetSelection();
-			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _trasheffectsView != null)
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _collectionView != null && _trasheffectsView != null)
 			{
 				_trasheffectsView.IsSelected = true;
 				_title.Text = "Trash";
 				_viewModel.AddItemsRefresh(2);
-				_listView.ItemsSource = _viewModel.MailInfos;
+				_collectionView.ItemsSource = _viewModel.MailInfos;
 				_navigationdrawer.ToggleDrawer();
 			}
 		}
@@ -168,12 +168,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private void SpamTapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 		{
 			ResetSelection();
-			if (_navigationdrawer != null && _title != null && _viewModel != null && _listView != null && _spameffectsView != null)
+			if (_navigationdrawer != null && _title != null && _viewModel != null && _collectionView != null && _spameffectsView != null)
 			{
 				_spameffectsView.IsSelected = true;
 				_title.Text = "Spam";
 				_viewModel.AddItemsRefresh(1);
-				_listView.ItemsSource = _viewModel.MailInfos;
+				_collectionView.ItemsSource = _viewModel.MailInfos;
 				_navigationdrawer.ToggleDrawer();
 			}
 		}
@@ -219,7 +219,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		protected override void OnDetachingFrom(SampleView bindable)
 		{
 
-			_listView = null;
+			_collectionView = null;
 			_viewModel = null;
 			base.OnDetachingFrom(bindable);
 		}

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <SyncfusionControls>
   <ControlCategory Name="Data Visualization">
-	  <Control Title="Cartesian Charts" ControlName="SfCartesianChart" StatusTag="Updated" Image="cartesianchart.png" Description="Plot over 20+ chart types with extensive features like data label, trackball and zooming.">
+	  <Control Title="Cartesian Charts" ControlName="SfCartesianChart" Image="cartesianchart.png" Description="Plot over 20+ chart types with extensive features like data label, trackball and zooming.">
       <Category Title="Chart Types">
         <SubCategory Title="Column">
           <CardLayout>
@@ -167,7 +167,7 @@
 			  <Sample Title="Numerical" SampleName="NumericalAxisChart" SearchTags="numeric, axis"/>
 			  <Sample Title="Logarithm" SampleName="LogarithmicAxisChart" SearchTags="logarithmic, axis"/>
         <Sample Title="Date Time" SampleName="DateTimeAxisChart" SearchTags="date, axis"/>
-        <Sample Title="Date time category" SampleName="DateTimeCategoryAxis" SearchTags="date, category, axis" StatusTag="New" Description="This sample demonstrates a comparison of sales revenue using a date-time category axis."/>
+        <Sample Title="Date time category" SampleName="DateTimeCategoryAxis" SearchTags="date, category, axis" Description="This sample demonstrates a comparison of sales revenue using a date-time category axis."/>
 			  <Sample Title="Axis crossing" SampleName="AxisCrossing" SearchTags="axis, crossing" />
 		  </Category>
 

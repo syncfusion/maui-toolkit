@@ -183,6 +183,23 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 			}
 		}
 
+		/// <summary>
+		/// Disposes Element of Drawable View
+		/// </summary>
+		internal void Dispose()
+		{
+			if (_path != null)
+			{
+				_path.Dispose();
+				_path = null;
+			}
+
+			if (Shimmer != null)
+			{
+				Shimmer = null;
+			}
+		}
+
 		#endregion
 
 		#region Private Methods

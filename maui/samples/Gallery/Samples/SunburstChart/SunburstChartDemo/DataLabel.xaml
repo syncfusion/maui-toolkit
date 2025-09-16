@@ -1,0 +1,65 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart.DataLabel"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SunburstChart;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart"
+             x:DataType="local:ViewModel">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:SunburstChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel x:Name="datalabelViewModel"/>
+    </localCore:SampleView.BindingContext>
+    <localCore:SampleView.Content>
+        <chart:SfSunburstChart x:Name="sunburstChart" ItemsSource="{Binding DataSource}"
+                                ValueMemberPath="EmployeesCount" VerticalOptions="FillAndExpand" EnableTooltip="True"
+                                PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}" 
+                                ShowLabels="True" InnerRadius="0.2" Stroke="{AppThemeBinding Dark=Black,Light=White}">
+            
+            <chart:SfSunburstChart.Title>
+                <Label Text="Employee Count by Country: A Comprehensive Overview" FontAttributes="Bold" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="18"/>
+            </chart:SfSunburstChart.Title>
+            
+            <chart:SfSunburstChart.Legend>
+                <chart:SunburstLegend/>
+            </chart:SfSunburstChart.Legend>
+            
+            <chart:SfSunburstChart.DataLabelSettings>
+                <chart:SunburstDataLabelSettings x:Name="dataLabel"/>
+            </chart:SfSunburstChart.DataLabelSettings>
+            
+            <chart:SfSunburstChart.Levels>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Country"/>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="JobDescription"/>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="JobGroup"/>
+            </chart:SfSunburstChart.Levels>
+            
+        </chart:SfSunburstChart>
+    </localCore:SampleView.Content>
+    
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <VerticalStackLayout Spacing="5">
+                <HorizontalStackLayout>
+                    <Label Text="Rotation Mode   :" HorizontalOptions="Center" VerticalOptions="Center" FontFamily="Helvetica" Padding="5" FontSize="14" Margin="0,0,4,0"/>
+                    <Picker x:Name="rotationMode" ItemsSource="{Binding Source={x:Reference datalabelViewModel},Path=DataLabelOption}"
+                            SelectedItem="{Binding Source={x:Reference datalabelViewModel},Path=DataLabelOption,Mode=TwoWay}"
+                            HorizontalOptions="Fill" VerticalOptions="Start" SelectedIndex="0" SelectedIndexChanged="ModePicker_SelectedIndexChanged"></Picker>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Label Text="Overflow Mode  :" HorizontalOptions="Center" VerticalOptions="Center" FontFamily="Helvetica" Padding="5" FontSize="14" Margin="0,0,4,0"/>
+                    <Picker x:Name="overflowMode" ItemsSource="{Binding Source={x:Reference datalabelViewModel},Path=DataLabelOption1}"
+                            SelectedItem="{Binding Source={x:Reference datalabelViewModel},Path=DataLabelOption1,Mode=TwoWay}"
+                            HorizontalOptions="Fill" VerticalOptions="Start"  SelectedIndex="0" SelectedIndexChanged="Picker_SelectedIndexChanged"></Picker>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

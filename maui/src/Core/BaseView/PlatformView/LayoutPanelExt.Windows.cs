@@ -186,6 +186,7 @@ namespace Syncfusion.Maui.Toolkit.Platform
 
 		internal void Dispose()
 		{
+			SizeChanged -= ContentPanelExt_SizeChanged;
 			if (_nativeGraphicsView != null)
 			{
 				_nativeGraphicsView = null;

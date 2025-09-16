@@ -1,0 +1,75 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart.CenterView"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SunburstChart;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart"
+             x:DataType="local:ViewModel">
+
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel/>
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:SunburstChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <x:String x:Key="PathData">
+                M5.557049,14.272044C5.0380371,14.272044,4.6170475,14.691034,4.6170475,15.210044L4.6170475,20.957016C4.6170475,21.476012,5.0380371,21.897015,5.557049,21.897015L10.451026,21.897015C10.970039,21.897015,11.391028,21.476012,11.391028,20.957016L11.391028,15.210044C11.391028,14.691034,10.970039,14.272044,10.451026,14.272044z M22.172023,2.2340798L22.172023,4.1120786C20.217008,4.4590773 19.05603,5.7560696 19.05603,7.4210715 19.05603,9.2010636 20.391019,10.149058 22.404018,10.884057 23.854028,11.406058 24.53103,11.948047 24.53103,12.840043 24.53103,13.750042 23.700008,14.34904 22.461025,14.34904 21.28201,14.34904 20.217008,13.962047 19.443023,13.496046L18.919036,15.335043C19.617034,15.780034,20.837034,16.129031,22.056026,16.167025L22.056026,18.044033 23.66003,18.044033 23.66003,16.052037C25.769004,15.70403 26.913017,14.271037 26.913017,12.626054 26.913017,10.884057 25.963004,9.8410611 23.797021,9.0260615 22.132015,8.3880629 21.436033,7.9230685 21.436033,7.1300726 21.436033,6.4720702 21.919032,5.7760734 23.27502,5.7760734 24.59002,5.7760734 25.44201,6.2210641 25.907005,6.453073L26.428001,4.6720738C25.81002,4.3630848,24.978021,4.05408,23.75802,4.0150785L23.75802,2.2340798z M22.917018,1.0570969C27.931997,1.0570972 31.999986,5.1220693 31.999986,10.139049 31.999986,15.156044 27.931997,19.223013 22.917018,19.223013 17.900024,19.223013 13.833042,15.156044 13.833042,10.139049 13.833042,5.1220693 17.900024,1.0570972 22.917018,1.0570969z M12.990026,9.439986E-05C13.313023,-0.0039034581,13.638035,0.11909718,13.885014,0.36609012L15.990023,2.4730773C13.898014,4.3670821 12.580022,7.1010656 12.580022,10.139049 12.580022,15.839039 17.217012,20.477023 22.917018,20.477023 23.489009,20.477023 24.049005,20.42702 24.595025,20.339022L24.595025,23.92101C24.595025,24.613009,24.034021,25.175003,23.341029,25.175003L12.990026,25.175003 2.6370385,25.175003C1.944046,25.175003,1.383042,24.613009,1.3830422,23.92101L1.3830422,14.281046C0.77604788,14.22404,0.44404744,13.992046,0.26603874,13.786038L0.26503166,13.786038C0.0410327,13.479047,-0.23396094,12.77504,0.34703236,12.113056L12.094031,0.36609012C12.341039,0.11909718,12.666021,-0.0039034581,12.990026,9.439986E-05z
+            </x:String>
+
+            <local:CornerRadiusConverter x:Key="cornerRadius"/>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <chart:SfSunburstChart x:Name="sunburstChart" ItemsSource="{Binding DataSource2}" 
+                              ValueMemberPath="Percentage" InnerRadius="{OnPlatform Default='0.4',Android='0.36',WinUI='0.3',iOS='0.3'}"
+                              PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight3}, Dark={StaticResource PaletteBrushesDark3}}"
+                              ShowLabels="True" EnableTooltip="True"
+                              Stroke="{AppThemeBinding Dark=Black,Light=White}">
+          
+            <chart:SfSunburstChart.Title>
+                <Label Text="Real Estate Industry Chain" FontAttributes="Bold" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="18"/>
+            </chart:SfSunburstChart.Title>
+            
+            <chart:SfSunburstChart.Legend>
+                <chart:SunburstLegend/>
+            </chart:SfSunburstChart.Legend>
+
+            <chart:SfSunburstChart.CenterView>
+                <Border x:Name="border" x:DataType="chart:SfSunburstChart" HeightRequest="{Binding CenterHoleSize}" Stroke="Transparent" StrokeThickness="0"
+                        WidthRequest="{Binding CenterHoleSize}"  BackgroundColor="{AppThemeBinding Default={StaticResource ContentBackground}}">
+                    <Border.StrokeShape>
+                        <RoundRectangle Stroke="Transparent" StrokeThickness="0" CornerRadius="{Binding CenterHoleSize,Converter={StaticResource cornerRadius}}"/>
+                    </Border.StrokeShape>
+                    <Border.Shadow>
+                        <Shadow Brush="{AppThemeBinding Default={StaticResource ContentForeground}}"  Opacity="0.5" 
+                                Radius="{OnPlatform Android='70',iOS='70',WinUI='50',MacCatalyst='50'}"/>
+                    </Border.Shadow>
+                    <StackLayout Orientation="Vertical" 
+                        HeightRequest="{Binding CenterHoleSize,Converter={StaticResource cornerRadius}}"
+                        HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+
+                        <Grid HorizontalOptions="Center">
+                            <Path Data="{StaticResource PathData}" Fill="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+                        </Grid>
+
+                        <Label LineBreakMode="WordWrap" WidthRequest="{Binding CenterHoleSize,Converter={StaticResource cornerRadius}}" 
+                               Text="Behind the Bricks" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}" FontSize="12" Padding="0,5,0,0"
+                               VerticalTextAlignment="Start"  HorizontalTextAlignment="Center" FontFamily="Verdana"
+                               HorizontalOptions="CenterAndExpand" HeightRequest="{OnPlatform iOS={Binding CenterHoleSize,Converter={StaticResource cornerRadius}}}"/>
+                    </StackLayout>
+                </Border>
+            </chart:SfSunburstChart.CenterView>
+
+            <chart:SfSunburstChart.Levels>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Continent"/>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Country"/>
+            </chart:SfSunburstChart.Levels>
+            
+        </chart:SfSunburstChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

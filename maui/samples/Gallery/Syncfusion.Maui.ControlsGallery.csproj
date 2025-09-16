@@ -131,6 +131,8 @@
 	  <EmbeddedResource Include="SampleList\NumericEntrySamplesList.xml" />
     <EmbeddedResource Include="SampleList\OtpInputSamplesList.xml" />
     <EmbeddedResource Include="SampleList\ProgressBarSamplesList.xml" />
+    <EmbeddedResource Include="SampleList\SunburstChartSamplesList.xml" />
+    <EmbeddedResource Include="SampleList\SparkChartSamplesList.xml" />
 	  <EmbeddedResource Include="ControlList.xml" />
 	</ItemGroup>
 

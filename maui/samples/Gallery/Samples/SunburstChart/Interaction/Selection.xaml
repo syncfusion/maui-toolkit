@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart.Selection"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SunburstChart;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart"
+             x:DataType="local:ViewModel">
+
+  <localCore:SampleView.BindingContext>
+    <local:ViewModel/>
+  </localCore:SampleView.BindingContext>
+
+  <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:SunburstChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.Content>
+
+        <Grid RowDefinitions="{OnPlatform Android='9*,1*',iOS='9*,1*'}">
+            
+            <chart:SfSunburstChart x:Name="sunburstChart" ItemsSource="{Binding DataSource1}" 
+                            ValueMemberPath="Population" Radius="0.8"
+                            PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight4}, Dark={StaticResource PaletteBrushesDark4}}" 
+                            ShowLabels="True" InnerRadius="0.2">
+            <chart:SfSunburstChart.Title>
+                <Label Text="Product Manufacturing in a Globalized Economy" FontAttributes="Bold" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="18" LineBreakMode="WordWrap" />
+            </chart:SfSunburstChart.Title>
+
+            <chart:SfSunburstChart.SelectionSettings>
+                <chart:SunburstSelectionSettings x:Name="selection"/>
+            </chart:SfSunburstChart.SelectionSettings>
+
+            <chart:SfSunburstChart.Levels>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Continent"/>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Country" />
+                <chart:SunburstHierarchicalLevel GroupMemberPath="State"/>
+            </chart:SfSunburstChart.Levels>
+        </chart:SfSunburstChart>
+
+            <Label Grid.Row="1" HorizontalTextAlignment="Center" IsVisible="{OnPlatform Android=True,iOS=True,Default=False}"
+           VerticalTextAlignment="Center"  LineBreakMode="WordWrap"
+           Text="On mobile, tap the segment, and on desktop, click the segment to select or deselect them.">
+            </Label>
+        </Grid>
+
+    </localCore:SampleView.Content>
+    <localCore:SampleView.OptionView>
+        <ContentView>
+            <ScrollView >
+                <Grid>
+                    <Grid.BindingContext>
+                        <local:ViewModel x:Name="selectionViewModel"/>
+                    </Grid.BindingContext>
+                  
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="5*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    
+                            <Label Text="Type" VerticalOptions="Center"  
+                                   Margin="0,13,0,0" Grid.Column="0" />
+                            <Picker x:Name="selectionType" Grid.Column="1"
+                                    ItemsSource="{Binding Source={x:Reference selectionViewModel},Path=SelectionType}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="{OnPlatform Default=130, WinUI=138}"  Margin="0,13,0,0"
+                                    SelectedIndexChanged="selectionType_SelectedIndexChanged">
+                            </Picker>
+                            <Label Text="DisplayMode" VerticalOptions="Center"  
+                                   Margin="0,13,0,0" Grid.Column="0" Grid.Row="1"/>
+                            <Picker x:Name="selectionDisplayMode" Grid.Row="1"
+                                    ItemsSource="{Binding Source={x:Reference selectionViewModel},Path=SelectionDisplayMode}" 
+                                    Margin="0,13,0,0" Grid.Column="1" VerticalOptions="Center"
+                                    WidthRequest="{OnPlatform Default=130, WinUI=138}"
+                                    SelectedIndexChanged="selectionDisplayMode_SelectedIndexChanged">
+                            </Picker>
+
+                            <Label Text="Fill" VerticalOptions="Center"  Grid.Row="2"
+                                   Margin="0,13,0,0" Grid.Column="0"/>
+                            <Picker Margin="0,13,0,0" x:Name="selectionFill" Grid.Column="1" 
+                                    ItemsSource="{Binding Source={x:Reference selectionViewModel},Path=SelectionFill}" 
+                                    VerticalOptions="Center" Grid.Row="2"
+                                    WidthRequest="{OnPlatform Default=130, WinUI=138}"
+                                    SelectedIndexChanged="selectionFill_SelectedIndexChanged">
+                            </Picker>
+
+                            <Label Text="Stroke" VerticalOptions="Center" Grid.Row="3"
+                                   Margin="0,13,0,0" Grid.Column="0"/>
+                            <Picker Margin="0,13,0,0" x:Name="selectionStroke" Grid.Column="1" 
+                                    ItemsSource="{Binding Source={x:Reference selectionViewModel},Path=SelectionStroke}" 
+                                    VerticalOptions="Center" Grid.Row="3"
+                                    WidthRequest="{OnPlatform Default=130, WinUI=138}"
+                                    SelectedIndexChanged="selectionStroke_SelectedIndexChanged">
+                            </Picker>
+
+                            <Label Text="Stroke Width" Grid.Row="4"
+                                   VerticalOptions="Center" Grid.Column="0"/>
+                            <Slider x:Name="strokeWidth" Grid.Column="1"  Margin="0,5,2,0" Grid.Row="4"
+                                    VerticalOptions="Center" ValueChanged="selection_ValueChanged"
+                                    Minimum="1" Maximum="5">
+                            </Slider>
+
+                            <Label Text="Opacity" Grid.Column="0"  
+                                   VerticalOptions="Center" Grid.Row="5" />
+                            <Slider x:Name="opacity" Margin="0,5,2,0" Grid.Row="5"
+                                    VerticalOptions="Center"  ValueChanged="selection_ValueChanged"
+                                    Grid.Column="1"  Minimum="0.1" Maximum="1">
+                            </Slider>
+                </Grid>
+            </ScrollView>
+        </ContentView>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

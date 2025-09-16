@@ -1,0 +1,90 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SparkChart.SfSparkChart.ChartTypes"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SparkCharts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SparkChart">
+
+  <localCore:SampleView.BindingContext>
+    <local:ChartTypeViewModel/>
+  </localCore:SampleView.BindingContext>
+
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <local:SparkChartColorResources/>
+      </ResourceDictionary.MergedDictionaries>
+
+      <Color x:Key="PrimaryBlueLight">#2196F3</Color>
+      <Color x:Key="PrimaryBlueDark">#0D71C1</Color>
+      <Color x:Key="SecondaryBlueLight">#bcddfb</Color>
+      <Color x:Key="SecondaryBlueDark">#bcddfb</Color>
+      <Style TargetType="Label">
+        <Setter Property="HorizontalOptions" Value="Start"/>
+        <Setter Property="Padding" Value="4"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White}"/>
+      </Style>
+
+      <Style TargetType="Border">
+        <Setter Property="StrokeThickness" Value="1"/>
+        <Setter Property="HeightRequest" Value="{OnPlatform WinUI=200, MacCatalyst=200}"/>
+        <Setter Property="Padding" Value="6"/>
+        <Setter Property="StrokeShape">
+          <Setter.Value>
+            <RoundRectangle CornerRadius="5"/>
+          </Setter.Value>
+        </Setter>
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}"/>
+      </Style>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+
+  <localCore:SampleView.Content>
+    <Grid x:Name="MainGrid" HorizontalOptions="Fill" ColumnSpacing="15" RowSpacing="10"
+                    Padding="{OnPlatform Default=6, Android='20, 6', iOS='20, 6'}">
+
+      <Border>
+        <Grid RowDefinitions="Auto,*" RowSpacing="8">
+          <chart:SfSparkLineChart Grid.Row="1" x:Name="sparkLine" ItemsSource="{Binding LineData}" YBindingPath="Performance" ShowMarkers="True"
+                                  Padding="2" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" >
+            <chart:SfSparkLineChart.MarkerSettings>
+              <chart:SparkChartMarkerSettings Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" 
+                           Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="2"/>
+            </chart:SfSparkLineChart.MarkerSettings>
+          </chart:SfSparkLineChart>
+          <Label Text="Spark Line Chart"/>
+        </Grid>
+      </Border>
+
+      <Border Grid.Row="1" Grid.Column="1">
+        <Grid RowDefinitions="Auto,*" RowSpacing="8">
+          <chart:SfSparkColumnChart Grid.Row="1" x:Name="sparkColumn" ItemsSource="{Binding ColumnData}" YBindingPath="Performance"
+                     Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"
+                     HighPointFill="{AppThemeBinding Light={StaticResource series3Light}, Dark={StaticResource series3Dark}}" />
+          <Label Text="Spark Column Chart" />
+        </Grid>
+      </Border>
+
+      <Border Grid.Row="2" Grid.Column="2">
+        <Grid RowDefinitions="Auto,*"  RowSpacing="8">
+          <chart:SfSparkAreaChart Grid.Row="1" x:Name="sparkArea" ItemsSource="{Binding AreaData}" YBindingPath="Performance"
+                   Stroke="{AppThemeBinding Light={StaticResource series4Light}, Dark={StaticResource series4Dark}}"
+                    Fill="{AppThemeBinding Light={StaticResource series7Light}, Dark={StaticResource series7Dark}}" />
+          <Label Text="Spark Area Chart"/>
+        </Grid>
+      </Border>
+
+      <Border Grid.Row="3" Grid.Column="3">
+        <Grid RowDefinitions="Auto,*" RowSpacing="8">
+          <chart:SfSparkWinLossChart  Grid.Row="1" x:Name="sparkWinLoss" ItemsSource="{Binding WinLossData}" YBindingPath="Performance" 
+                          NegativePointsFill="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}"
+                          NeutralPointFill="{AppThemeBinding Light={StaticResource series5Light}, Dark={StaticResource series5Dark}}"
+                          PositivePointsFill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"/>
+          <Label Text="Spark Win/Loss Chart"/>
+        </Grid>
+      </Border>
+    </Grid>
+
+  </localCore:SampleView.Content>
+
+</localCore:SampleView>

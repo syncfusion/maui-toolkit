@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+	<ControlCategory Name="Data Visualization">
+		<Control Title="Sunburst Chart" StatusTag="New" Image="sunburstchart.png" ControlName="SfSunburstChart" Description="Visualize hierarchical data using concentric circles with interactive features.">
+			<Sample SearchTags="sunburst" Name="SunburstChart" SampleName="DefaultSunburstChart" Title="Getting started" />
+			<Sample SearchTags="datalabel" Name="Datalabel" SampleName="DataLabel" Title="Data label" />
+			<Sample SearchTags="tooltip" Name="Tooltip" SampleName="ToolTip" Title="Tooltip" />
+	<!--<Sample SearchTags="centerview" Platforms="Windows,Android,iOS," Name="Centerview" SampleName="CenterView" Title="Center elevation"/>-->
+			<Sample SearchTags="selection" Name="Selection" SampleName="Selection" Title="Selection"   
+                    Description="This sample depicts the selection feature in the chart. On mobile, tap the segment, and on desktop, click the segment to select or deselect them." />
+		</Control>
+	</ControlCategory>
+</SyncfusionControls>
+
