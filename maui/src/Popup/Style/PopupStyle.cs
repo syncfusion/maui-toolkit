@@ -190,10 +190,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			BindableProperty.Create(nameof(CloseButtonIcon), typeof(ImageSource), typeof(PopupStyle), null);
 
 		/// <summary>
-		/// Identifies the <see cref="CloseButtonIconStroke"/> <see cref="BindableProperty"/>.
+		/// Identifies the <see cref="CloseIconColor"/> <see cref="BindableProperty"/>.
 		/// </summary>
-		internal static BindableProperty CloseButtonIconStrokeProperty =
-			BindableProperty.Create(nameof(CloseButtonIconStroke), typeof(Color), typeof(PopupStyle), defaultValue: Color.FromArgb("#49454F"));
+		public static BindableProperty CloseIconColorProperty =
+			BindableProperty.Create(nameof(CloseIconColor), typeof(Color), typeof(PopupStyle), defaultValue: Color.FromArgb("#49454F"));
 
 		/// <summary>
 		/// Identifies the <see cref="CloseButtonIconStrokeThickness"/> <see cref="BindableProperty"/>.
@@ -924,18 +924,31 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			set => SetValue(CloseButtonIconProperty, value);
 		}
 
+		/// <summary>
+		/// Gets or sets the color of the close icon displayed in the <see cref="SfPopup"/>.
+		/// </summary>
+		/// <example>
+		/// <para>The following code example demonstrates how to set <see cref="CloseIconColor"/> for the <see cref="SfPopup"/> control.</para>
+		/// <code lang="XAML">
+		/// <![CDATA[
+		/// <popup:SfPopup x:Name="popup">
+		///     <popup:SfPopup.PopupStyle>
+		///         <popup:PopupStyle CloseIconColor="Red" />
+		///     </popup:SfPopup.PopupStyle>
+		/// </popup:SfPopup>
+		/// ]]>
+		/// </code>
+		/// </example>
+		/// <seealso cref="SfPopup.ShowCloseButton"/>
+		public Color CloseIconColor
+		{
+			get => (Color)GetValue(CloseIconColorProperty);
+			set => SetValue(CloseIconColorProperty, value);
+		}
+
 		#endregion
 
 		#region Internal Properties
-
-		/// <summary>
-		/// Gets or sets the icon color for close button.
-		/// </summary>
-		internal Color CloseButtonIconStroke
-		{
-			get => (Color)GetValue(CloseButtonIconStrokeProperty);
-			set => SetValue(CloseButtonIconStrokeProperty, value);
-		}
 
 		/// <summary>
 		/// Gets or sets the icon stroke thickness for close button.
@@ -1113,7 +1126,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// Gets the icon color for close button.
 		/// </summary>
 		/// <returns> icon color for close button.</returns>
-		internal Color GetCloseButtonIconStroke() => CloseButtonIconStroke;
+		internal Color GetCloseIconColor() => CloseIconColor;
 
 		/// <summary>
 		/// Gets the icon stroke thickness for close button.
@@ -1160,7 +1173,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			ApplyDynamicResource(HeaderFontSizeProperty, "SfPopupNormalHeaderFontSize");
 			ApplyDynamicResource(MessageFontSizeProperty, "SfPopupNormalMessageFontSize");
 			ApplyDynamicResource(FooterFontSizeProperty, "SfPopupNormalFooterFontSize");
-			ApplyDynamicResource(CloseButtonIconStrokeProperty, "SfPopupNormalCloseButtonIconStroke");
+			ApplyDynamicResource(CloseIconColorProperty, "SfPopupNormalCloseButtonIconStroke");
 			ApplyDynamicResource(CloseButtonIconStrokeThicknessProperty, "SfPopupNormalCloseButtonIconStrokeThickness");
 			ApplyDynamicResource(HoveredCloseButtonIconBackgroundProperty, "SfPopupHoverCloseButtonIconBackground");
 			ApplyDynamicResource(PressedCloseButtonIconBackgroundProperty, "SfPopupPressedCloseButtonIconBackground");
