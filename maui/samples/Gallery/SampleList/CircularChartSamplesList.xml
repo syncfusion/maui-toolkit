@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <SyncfusionControls>
   <ControlCategory Name="Data Visualization">
-	  <Control Title="Circular Charts" ControlName="SfCircularChart" StatusTag="Updated" Image="circularchart.png" Description="Visualize the data using pie, doughnut and radial bar series.">
+	  <Control Title="Circular Charts" ControlName="SfCircularChart" Image="circularchart.png" Description="Visualize the data using pie, doughnut and radial bar series.">
 		  <Category Title="Type">
 			  
 			  <SubCategory Title="Pie">
@@ -12,13 +12,13 @@
 					  <Sample SearchTags="smart datalabels" Name="SmartDataLabelsChart" Platforms="Windows,Android,iOS"  SampleName="SmartDataLabels" Title="Smart data labels"/>
 				  </CardLayout>
 			  </SubCategory>
-			  <SubCategory Title="Doughnut" StatusTag="New">
+			  <SubCategory Title="Doughnut">
 				  <CardLayout>
 					  <Sample SearchTags="Doughnut" Name="DoughnutChart" SampleName="DoughnutChart" Title="Default doughnut"/>
 					  <Sample SearchTags="SemiDoughnut" Name="SemiDoughnutChart" SampleName="SemiDoughnutChart" Title="Semi-doughnut chart" Description="This sample shows how to create a semi-doughnut using start and end angles."/>
 					  <Sample SearchTags="GroupToDoughnt" Name="GroupToDoughnt" SampleName="GroupToDoughnutChart" Title="Grouping"/>
 					  <!--<Sample SearchTags="CenterElevation" Name="CenterElevation" SampleName="CenterElevation" Title="Center elevation"/>-->
-					  <Sample SearchTags="CapStyle, Curved Edge, GapRatio, Spacing" StatusTag="New"
+					  <Sample SearchTags="CapStyle, Curved Edge, GapRatio, Spacing"
 							  Name="DoughnutChartWithCurvedEdge"
 							  SampleName="DoughnutChartWithCurvedEdge"
 							  Title="Curved edge and spacing"

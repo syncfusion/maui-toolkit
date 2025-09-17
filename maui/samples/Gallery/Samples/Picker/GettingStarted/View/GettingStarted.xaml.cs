@@ -156,7 +156,7 @@ public partial class GettingStarted : SampleView
 #else
         if (labelStack1.Children.Count > 0)
         {
-            var view = labelStack1.Children[labelStack.Children.Count - 1];
+            var view = labelStack1.Children[labelStack1.Children.Count - 1];
             if (view is Label label && label.Text == labelText)
             {
                 isNeedToAdd = false;

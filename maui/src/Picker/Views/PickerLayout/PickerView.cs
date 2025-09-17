@@ -606,8 +606,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 {
                     if (enableLooping)
                     {
-                        _initialNodeTopPosition = _pickerLayoutInfo.ScrollOffset;
-                        child.Arrange(new Rect(0, _pickerLayoutInfo.ScrollOffset, bounds.Width, lastIndex != 0 ? pickerHeight : _itemsSource.Count * itemHeight));
+                        double scrollPosition = _selectedIndex * itemHeight;
+                        if (scrollPosition < (viewPortItemCount * itemHeight) + itemHeight && scrollPosition >= 0)
+                        {
+                            //// Adjust the scroll end position by adding the total height of all items to the current scroll end position.
+                            scrollPosition = (_itemsSource.Count * itemHeight) + scrollPosition;
+                        }
+
+                        //// Adjust the scroll position based on the current scroll offset.
+                        double difference = Math.Abs(scrollPosition - _pickerLayoutInfo.ScrollOffset);
+                        if (difference > itemHeight)
+                        {
+                            scrollPosition = _selectedIndex * itemHeight;
+                        }
+
+                        _initialNodeTopPosition = scrollPosition;
+                        child.Arrange(new Rect(0, scrollPosition, bounds.Width, lastIndex != 0 ? pickerHeight : _itemsSource.Count * itemHeight));
                     }
                     else
                     {
@@ -865,7 +879,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 selectedIndex = _pickerLayoutInfo.Column.SelectedIndex < 0 ? selectedIndex - 1 : selectedIndex;
             }
 
-            _pickerLayoutInfo.UpdateSelectedIndexValue(selectedIndex);
+            _pickerLayoutInfo.UpdateSelectedIndexValue(selectedIndex, true);
         }
 
         /// <summary>
@@ -880,11 +894,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else if (args.Key == KeyboardKey.Up)
             {
-                _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex - 1);
+                if (_selectedIndex > 0)
+                {
+                    _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex - 1, false);
+                }
             }
             else if (args.Key == KeyboardKey.Down)
             {
-                _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex + 1);
+                _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex + 1, false);
             }
             else if (args.Key == KeyboardKey.Right || args.Key == KeyboardKey.Left)
             {

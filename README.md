@@ -35,6 +35,8 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 |                      | Funnel Charts         | Represent processes and data flow, often used in sales and analytics.                                    |
 |                      | Polar Charts          | Showcase categories in a circular format, ideal for unordered data.                                      |
 |                      | Pyramid Charts        | Visualize hierarchical data, perfect for business and analytics applications.                            |
+|                      | Spark Charts          | Display trends using micro charts like line, column, area, and win-loss. Ideal for compact data summaries. |
+|                      | Sunburst Charts       | Visualize hierarchical data using concentric circles, ideal for multi-level category data.               |
 | Calendars            | Calendar              | The calendar supports month, year, decade, and century views, multiple selection modes, and customizable appearance.      |
 | Editors              | Date Picker           | User interface element for selecting specific dates.                                                     |
 |                      | Date Time Picker      | Combined interface to select dates and times.                                                            |
@@ -64,7 +66,7 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 
 ## Installation
 
-You can install the [Syncfusion Toolkit for .NET MAUI](https://www.nuget.org/packages/Syncfusion.Maui.Toolkit) via NuGet: 
+You can install the [Syncfusion® Toolkit for .NET MAUI](https://www.nuget.org/packages/Syncfusion.Maui.Toolkit) via NuGet: 
 
 ```
 dotnet add package Syncfusion.Maui.Toolkit

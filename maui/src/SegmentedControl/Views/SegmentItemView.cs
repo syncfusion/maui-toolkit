@@ -113,6 +113,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		internal void UpdateSelection()
 		{
 			_isSelected = true;
+			_segmentItem.IsSelected = true;
 			_selectionView?.UpdateVisualState(true);
 			InvalidateDrawable();
 			UpdateSemantics();
@@ -130,6 +131,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 
 			RemoveEffects();
 			_isSelected = false;
+			_segmentItem.IsSelected = false;
 			_selectionView.UpdateVisualState(_isSelected, false);
 			InvalidateDrawable();
 			UpdateSemantics();
@@ -536,6 +538,10 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			{
 				itemInfo.UpdateSelectedIndex(index);
 			}
+			else if (this.itemInfo.SelectionMode == SegmentSelectionMode.SingleDeselect)
+			{
+				this.itemInfo.UpdateSelectedIndex(-1);
+			}
 		}
 
 		/// <summary>
@@ -597,6 +603,14 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				// Remove the effects when touch is released on Android and iOS platforms, while on other platforms, it handles mouse hovering effects on touch enter and exit.
 				RemoveEffects();
 #endif
+			}
+			else
+			{
+				bool isSelected = this.itemInfo?.SelectedIndex == this.itemInfo?.Items?.IndexOf(this._segmentItem);
+				if (isSelected && this.itemInfo?.SelectionMode == SegmentSelectionMode.SingleDeselect)
+				{
+					this.itemInfo.UpdateSelectedIndex(-1);
+				}
 			}
 
 			_canUpdateSelection = false;
@@ -747,6 +761,20 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				_itemTemplateView.IsEnabled = SegmentViewHelper.GetItemEnabled(itemInfo, _segmentItem);
 				Children.Add(_itemTemplateView);
 			}
+		}
+
+		/// <summary>
+		/// Method to trigger the tapped event for the segment item.
+		/// </summary>
+		private void TriggerTappedEvent()
+		{
+			if (this.itemInfo == null || this._segmentItem == null)
+			{
+				return;
+			}
+
+			SegmentTappedEventArgs eventArgs = new SegmentTappedEventArgs() { SegmentItem = this._segmentItem };
+			this.itemInfo.TriggerTappedEvent(eventArgs);
 		}
 
 		#endregion
@@ -920,6 +948,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// <param name="e">The tap event args.</param>
 		void ITapGestureListener.OnTap(Syncfusion.Maui.Toolkit.Internals.TapEventArgs e)
 		{
+			this.TriggerTappedEvent();
 			if (_effectsView.AnimationIsRunning("RippleAnimator"))
 			{
 				_canUpdateSelection = true;

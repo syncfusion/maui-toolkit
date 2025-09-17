@@ -38,21 +38,21 @@ namespace Syncfusion.Maui.Toolkit
         /// </summary>
         readonly SfIconView? _iconView;
 
-        /// <summary>
-        /// Holds the view which is used to clip.
-        /// </summary>
-        Grid clipView;
+		/// <summary>
+		/// Used to identify the button need to hover while released the press.
+		/// </summary>
+		readonly bool _isHoveringOnReleased;
 
-        /// <summary>
-        /// Used to identify the button need to hover while released the press.
-        /// </summary>
-        readonly bool _isHoveringOnReleased;
+		/// <summary>
+		/// Holds the view which is used to clip.
+		/// </summary>
+		Grid clipView;
 
 #if __MACCATALYST__ || (!__ANDROID__ && !__IOS__)
-        /// <summary>
-        /// Holds the value to denotes the mouse cursor exited.
-        /// </summary>
-        bool _isExited = false;
+		/// <summary>
+		/// Holds the value to denotes the mouse cursor exited.
+		/// </summary>
+		bool _isExited = false;
 
 #endif
         #endregion
@@ -71,16 +71,16 @@ namespace Syncfusion.Maui.Toolkit
             _showTouchEffect = showTouchEffect;
             _isSquareSelection = isSquareSelection;
             _isHoveringOnReleased = isHoveringOnReleased;
-            clipView = new Grid();
-            EffectsView = new SfEffectsView();
+			clipView = new Grid();
+			EffectsView = new SfEffectsView();
 #if __IOS__
             IgnoreSafeArea = true;
-            clipView.IgnoreSafeArea = true;
+			clipView.IgnoreSafeArea = true;
             EffectsView.IgnoreSafeArea = true;
 #endif
-            //// - TODO directly clip the parent view cause the crash in the view. So, we add the grid view for the clip purpose.
-            clipView.Add(this.EffectsView);
-            Add(EffectsView);
+			//// - TODO directly clip the parent view cause the crash in the view. So, we add the grid view for the clip purpose.
+			clipView.Add(this.EffectsView);
+			Add(EffectsView);
             EffectsView.Content = child;
             EffectsView.ShouldIgnoreTouches = true;
             this.AddTouchListener(this);
@@ -217,7 +217,7 @@ namespace Syncfusion.Maui.Toolkit
             EllipseGeometry? previousClip = null;
             if (clipView.Clip != null && clipView.Clip is EllipseGeometry)
             {
-                previousClip = (EllipseGeometry)EffectsView.Clip;
+                previousClip = (EllipseGeometry)clipView.Clip;
             }
 
             //// If the previous and current clip values are same, then no need to update the effects view clip.
@@ -256,7 +256,7 @@ namespace Syncfusion.Maui.Toolkit
                     return;
                 }
 
-                clipView.Clip = currentClip;
+                EffectsView.Clip = currentClip;
             }
         }
 #endif
@@ -282,29 +282,29 @@ namespace Syncfusion.Maui.Toolkit
             return size;
         }
 
-        /// <summary>
-        /// Called when the size of the element is allocated.
-        /// Updates the corner clip for Mac Catalyst and non-Android/iOS platforms.
-        /// </summary>
-        /// <param name="width">The width allocated to the element.</param>
-        /// <param name="height">The height allocated to the element.</param>
+		/// <summary>
+		/// Called when the size of the element is allocated.
+		/// Updates the corner clip for Mac Catalyst and non-Android/iOS platforms.
+		/// </summary>
+		/// <param name="width">The width allocated to the element.</param>
+		/// <param name="height">The height allocated to the element.</param>
 		protected override void OnSizeAllocated(double width, double height)
 		{
 			base.OnSizeAllocated(width, height);
 #if __MACCATALYST__ || (!__ANDROID__ && !__IOS__)
 			this.ApplyCornerClip();
 #endif
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Interface Implementation
+		#region Interface Implementation
 
-        /// <summary>
-        /// Method invokes on touch interaction.
-        /// </summary>
-        /// <param name="e">The touch event args.</param>
-        void ITouchListener.OnTouch(PointerEventArgs e)
+		/// <summary>
+		/// Method invokes on touch interaction.
+		/// </summary>
+		/// <param name="e">The touch event args.</param>
+		void ITouchListener.OnTouch(PointerEventArgs e)
         {
             if (!_showTouchEffect)
             {

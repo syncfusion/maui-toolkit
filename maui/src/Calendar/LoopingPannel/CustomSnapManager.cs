@@ -1362,7 +1362,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 return;
             }
-
+            
             List<DateTime>? disabledDates = UpdateDisabledDates(visibleDates);
             List<CalendarIconDetails>? specialDates = UpdateSpecialDates(visibleDates);
             //// Disable dates null means the disabled dates are already updated for current visible dates.

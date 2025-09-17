@@ -28,6 +28,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		bool EnableRippleEffect { get; }
 
 		/// <summary>
+		/// Gets or sets the selection behavior of segment items, allowing either single selection or single deselection.
+		/// </summary>
+		SegmentSelectionMode SelectionMode { get; }
+
+		/// <summary>
 		/// Gets a value indicating whether the layout is in Right-to-Left (RTL) direction.
 		/// </summary>
 		bool IsRTL { get; }
@@ -128,6 +133,12 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// </summary>
 		/// <param name="eventArgs">The <see cref="SelectionChangedEventArgs"/> containing the old and new index and values.</param>
 		void TriggerSelectionChangedEvent(SelectionChangedEventArgs eventArgs);
+
+		/// <summary>
+		/// Triggers the tapped event for the segment item.
+		/// </summary>
+		/// <param name="eventArgs">The <see cref="SegmentTappedEventArgs"/> containing the tapped item.</param>
+		void TriggerTappedEvent(SegmentTappedEventArgs eventArgs);
 
 		/// <summary>
 		/// Updates the selected index for the segment item.

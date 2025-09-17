@@ -78,6 +78,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
                 {
                     if (window is not null)
                     {
+						if (window.Handler is not null && window.Handler.GetType().Name.Contains("EmbeddedWindowHandler", StringComparison.Ordinal))
+                        {
+                            return window;
+                        }
+
                         var propertyInfo = window.GetType().GetProperty("IsActivated", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
                         if (propertyInfo is not null)
                         {
@@ -91,7 +96,9 @@ namespace Syncfusion.Maui.Toolkit.Internals
                 }
             }
 
-			return windowCollection != null && windowCollection.Count > 0 ? windowCollection[0] : new Microsoft.Maui.Controls.Window();
+#pragma warning disable CS0618 // Type or member is obsolete
+			return IPlatformApplication.Current is { Application: Microsoft.Maui.Controls.Application { MainPage: { Window: var currentWindow } } } ? currentWindow : null;
+#pragma warning restore CS0618 // Type or member is obsolete
 		}
 
 		/// <summary>
@@ -105,7 +112,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			if (_window is not null)
 			{
 #if ANDROID
-				rootView = _window.Content?.ToPlatform() as ViewGroup;
+				if (_window.Content is not null && _window.Content.Handler is not null)
+				{
+					rootView = _window.Content.ToPlatform() as ViewGroup;
+				}
+
 #pragma warning disable XAOBS001 // Type or member is obsolete
                 while (rootView != null && rootView is not ContentFrameLayout)
 				{
@@ -113,14 +124,34 @@ namespace Syncfusion.Maui.Toolkit.Internals
 					{
 						rootView = rootView.Parent as ViewGroup;
 					}
+					else
+					{
+						if(rootView is ContentFrameLayout)
+                        {
+                            rootView = null;
+                        }
+
+                        break;
+					}
 				}
 #pragma warning restore XAOBS001 // Type or member is obsolete
 #elif IOS
-				rootView = _window.ToPlatform();
+				if (_window.Handler is not null)
+				{
+					rootView = _window.ToPlatform();
+				}
 #elif WINDOWS
                 if (_window.Handler is not null && _window.Handler.PlatformView is Microsoft.UI.Xaml.Window platformWindow)
                 {
-                    rootView = platformWindow.Content as UIElement;
+					try
+					{
+                    	rootView = platformWindow.Content as UIElement;
+						return rootView;
+					}
+					catch
+					{
+						return null;
+					}
                 }
 #endif
 			}

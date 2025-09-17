@@ -1623,7 +1623,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
                 // The current date is today date and not a range then need to considered the today text style.
                 bool isTodayDate = todayDate.Date.Equals(dateTime.Date);
-                //// Stores the special dates icon details for drawing.
+                 //// Stores the special dates icon details for drawing.
                 CalendarIconDetails? calendarSpecialDayIconDetails = _specialDates.FirstOrDefault(details => CalendarViewHelper.IsSameDate(_calendarViewInfo.View, details.Date, dateTime, _calendarViewInfo.Identifier));
                 CalendarTextStyle textStyle = GetMonthCellStyle(dateTime, isTodayDate, isLeadingAndTrailingDates, isBlackoutDate, isDisabledDate, _calendarViewInfo.ShowOutOfRangeDates, calendarSpecialDayIconDetails != null, ref fillColor, cellBackground, trailingLeadingDateBackground, weekendsBackground, todayBackground, disabledDatesBackground, specialDatesBackground, cultureCalendar);
                 //// If background color is not transparent then the background color for month cell is applied.

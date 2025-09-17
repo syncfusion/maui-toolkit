@@ -29,13 +29,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal View? _decorViewContent = null;
 
 		/// <summary>
-		/// Backing field to store the keyboard height when device orientation changes.
-		/// </summary>
-		int _previousKeyboardHeight = 0;
-
-		bool _hasShrunk = false;
-
-		/// <summary>
 		/// Backing field to store the decorView content height before decorView layout was changed.
 		/// </summary>
 		int _oldDecorViewHeight = -1;
@@ -61,10 +54,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			if (PopupExtension.GetMainPage() is Page mainPage && mainPage is not null && mainPage.Handler is not null && mainPage.Handler.MauiContext is not null)
 			{
-				PlatformView nativeView = mainPage.ToPlatform(mainPage.Handler.MauiContext);
-				if (nativeView is not null && nativeView.ViewTreeObserver is not null)
+				IMauiContext context = mainPage.Handler.MauiContext;
+				if (context is not null)
 				{
-					nativeView.ViewTreeObserver.GlobalLayout += OnViewTreeObserverGlobalLayout;
+					PlatformView nativeView = mainPage.ToPlatform(context);
+					if (nativeView is not null && nativeView.ViewTreeObserver is not null)
+					{
+						nativeView.ViewTreeObserver.GlobalLayout += OnViewTreeObserverGlobalLayout;
+					}
 				}
 			}
 		}
@@ -76,10 +73,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			if (PopupExtension.GetMainPage() is Page mainPage && mainPage is not null && mainPage.Handler is not null && mainPage.Handler.MauiContext is not null)
 			{
-				PlatformView nativeView = mainPage.ToPlatform(mainPage.Handler.MauiContext);
-				if (nativeView is not null && nativeView.ViewTreeObserver is not null)
+				IMauiContext context = mainPage.Handler.MauiContext;
+				if (context is not null)
 				{
-					nativeView.ViewTreeObserver.GlobalLayout -= OnViewTreeObserverGlobalLayout;
+					PlatformView nativeView = mainPage.ToPlatform(context);
+					if (nativeView is not null && nativeView.ViewTreeObserver is not null)
+					{
+						nativeView.ViewTreeObserver.GlobalLayout -= OnViewTreeObserverGlobalLayout;
+					}
 				}
 			}
 		}
@@ -127,7 +128,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				{
 					// The corner radius is set using the average of the calculated radii. If avgRadius is non-zero, it's applied to mauiDrawable.SetCornerRadius, and RadiusValue is set to avgRadius / DeviceDisplay.MainDisplayInfo.Density. If avgRadius is zero, RadiusValue is set to zero, and the corner radius is not applied.
 					var avgRadius = radii.Average();
-					if (avgRadius != 0)
+					if (avgRadius is not 0)
 					{
 						mauiDrawable.SetCornerRadius(avgRadius);
 						_radiusValue = avgRadius / DeviceDisplay.MainDisplayInfo.Density;
@@ -198,104 +199,66 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			}
 
 			var platformRootView = WindowOverlayHelper._platformRootView;
-			var decorViewFrameBottom = WindowOverlayHelper._decorViewFrame.Bottom;
 
 			if (platformRootView is not null)
 			{
-				bool viewHeightChanged = PopupExtension.IsResizeMode() ? _oldRootViewHeight != platformRootView.Height : _oldDecorViewWidth != -1 && (_oldDecorViewHeight != _decorViewContent.Height || _oldDecorViewWidth != _decorViewContent.Width);
+				bool viewHeightChanged = PopupExtension.IsResizeMode() ? _oldRootViewHeight != platformRootView.Height : _oldDecorViewHeight is not -1 && _oldDecorViewWidth is not -1 && (_oldDecorViewHeight != _decorViewContent.Height || _oldDecorViewWidth != _decorViewContent.Width);
+				SyncPopupDimensionFields();
+				_keyboardHeight = PopupExtension.GetKeyboardHeight();
 				if (viewHeightChanged)
 				{
-					// Abort the _popupView animation when the size changes. Resetting TranslationX and TranslationY to 0 in ResetAnimatedProperties won't cause issues, as _popupView will be repositioned in ResetPopupWidthHeight.
+					// Have to abort the PopupView animation when size changes.
+					// There won't be any issue when TranslationX and TranslationY are reset to 0 in ResetAnimatedProperties, because PopupView will get Repositioned again in ResetPopupWidthHeight.
 					AbortPopupViewAnimation();
 					ResetAnimatedProperties();
-					if (IsOpen && _popupOverlay is not null && _popupView is not null)
-					{
-						// limitation : When change orientation from landscape to landscape, x position of window manger params will not update.
-						if (PopupExtension.CheckWindowFlagsHasLayoutNoLimits())
-						{
-							var windowManagerLayoutParams = _popupOverlay.GetWindowManagerLayoutParams();
-							SetXPositionForWindowManagerLayoutParams(windowManagerLayoutParams);
-						}
-
-						// Updates the size of WindowManagerLayoutParams when the device orientation changes.
-						_popupOverlay.UpdateWindowManagerLayoutParamsSize();
-						ResetPopupWidthHeight();
-
-						// Reset values during device orientation change with the keyboard open, as the popup view's height and position are re-evaluated after the keyboard closes.
-						_popupYPositionBeforeKeyboardInView = _popupYPosition;
-						_popupViewHeightBeforeKeyboardInView = _popupViewHeight;
-						_popupView.InvalidateForceLayout();
-					}
 				}
-			}
 
-			if (_decorViewContent is not null && _decorViewContent.Context is not null)
-			{
-				var inputService = _decorViewContent.Context.GetSystemService(Activity.InputMethodService);
-				PlatformRect? visibleBounds = new PlatformRect();
-				_decorViewContent.GetWindowVisibleDisplayFrame(visibleBounds);
-				int keyboardHeight = 0;
-				if (inputService is InputMethodManager inputMethodManager && inputMethodManager is not null)
+				if (IsOpen && _popupView is not null)
 				{
-					if (IsOpen)
-					{
-						// The keyboard size is inaccurate when the system navigation mode is set to 'Buttons' in Android settings.
-						keyboardHeight = PopupExtension.GetKeyboardHeight();
-						if (keyboardHeight > 0 && inputMethodManager.IsAcceptingText && (!_hasShrunk || (_decorViewContent.Height == _oldDecorViewHeight && _previousKeyboardHeight != keyboardHeight)))
-						{
-							// If the popup is positioned with the wrong keyboard height, reset its position and size to accommodate the correct keyboard height.
-							if (_hasShrunk && _previousKeyboardHeight != keyboardHeight)
-							{
-								UnshrinkPoupViewOnKeyboardCollapse();
-							}
-
-							_hasShrunk = true;
-
-							// Adjust the popup's position as the keyboard appears.
-							PositionPoupViewBasedOnKeyboard((visibleBounds.Bottom - WindowOverlayHelper._decorViewFrame.Top) / WindowOverlayHelper._density);
-						}
-						else if ((!inputMethodManager.IsAcceptingText && keyboardHeight <= 0 && _hasShrunk) || (keyboardHeight <= 0 && _hasShrunk))
-						{
-							// Restore the popup to its original Y position and height as the keyboard collapses and goes out of view.
-							UnshrinkPoupViewOnKeyboardCollapse();
-							_hasShrunk = false;
-						}
-					}
-					else if (!inputMethodManager.IsAcceptingText && _hasShrunk)
-					{
-						// Hide the keyboard before unfocusing the edit element when the popup is closed.
-						inputMethodManager.HideSoftInputFromWindow(_decorViewContent.WindowToken, HideSoftInputFlags.None);
-						UnshrinkPoupViewOnKeyboardCollapse();
-						_hasShrunk = false;
-					}
+					ResetPopupWidthHeight();
+					_popupView.InvalidateForceLayout();
 				}
 
 				_oldDecorViewHeight = _decorViewContent.Height;
 				_oldDecorViewWidth = _decorViewContent.Width;
-				if (platformRootView is not null)
-				{
-					_oldRootViewHeight = platformRootView.Height;
-				}
-
-				_previousKeyboardHeight = keyboardHeight;
-				inputService = null;
-				visibleBounds = null;
+				_oldRootViewHeight = platformRootView.Height;
+				platformRootView = null;
 			}
 		}
 
 		/// <summary>
-		/// Set LayoutNoLimits flag for windowManager params when Window Flags has LayoutNoLimits.
+		/// Set flag for windowManager params when Window Flags has LayoutNoLimits or Fullscreen.
 		/// </summary>
-		void SetWindowFlagsForLayoutNoLimits()
+		void SetWindowFlags()
 		{
-			if (PopupExtension.CheckWindowFlagsHasLayoutNoLimits() && _popupOverlay is not null)
+			if (_popupOverlay is not null)
 			{
 				var windowManagerLayoutParams = _popupOverlay.GetWindowManagerLayoutParams();
-				windowManagerLayoutParams.Flags = (PopupExtension.CheckWindowFlagsHasFullScreen() && !PopupExtension.CheckNavigationbarIsVisible()) ? WindowManagerFlags.Fullscreen : WindowManagerFlags.LayoutNoLimits | WindowManagerFlags.LayoutInScreen;
- 
-				// To Layout overlay at top left corner.
-				windowManagerLayoutParams.Gravity = GravityFlags.Start | GravityFlags.Top;
-				SetXPositionForWindowManagerLayoutParams(windowManagerLayoutParams);
+				PopupExtension.SetFlags(this);
+				if (PopupExtension.WindowFlagHasNoLimits)
+				{
+					var attributes = PopupExtension.GetAttributes();
+					if (attributes is not null && !OperatingSystem.IsAndroidVersionAtLeast(30))
+					{
+						windowManagerLayoutParams.Flags = attributes.Flags;
+					}
+					else if (PopupExtension.WindowFlagHasFullScreen)
+					{
+						windowManagerLayoutParams.Flags = WindowManagerFlags.LayoutNoLimits | WindowManagerFlags.Fullscreen;
+					}
+					else
+					{
+						windowManagerLayoutParams.Flags = WindowManagerFlags.LayoutNoLimits | WindowManagerFlags.LayoutInScreen;
+					}
+
+					// To Layout overlay at top left corner.
+					windowManagerLayoutParams.Gravity = GravityFlags.Start | GravityFlags.Top;
+					SetXPositionForWindowManagerLayoutParams(windowManagerLayoutParams);
+				}
+				else if (PopupExtension.WindowFlagHasFullScreen)
+				{
+					windowManagerLayoutParams.Flags = WindowManagerFlags.Fullscreen;
+				}
 			}
 		}
 
@@ -304,11 +267,35 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		void HideNavigationBar()
 		{
-			if (OperatingSystem.IsAndroidVersionAtLeast(30) && PopupExtension.CheckWindowFlagsHasFullScreen() && !PopupExtension.CheckNavigationbarIsVisible())
+			bool hasNavigationBar = true;
+			if (WindowOverlayHelper._decorViewContent is not null)
 			{
-				if (_popupOverlayContainer is not null && _popupOverlayContainer.Handler is not null && _popupOverlayContainer.Handler.PlatformView is WindowOverlayStack overlayStack && overlayStack is not null && overlayStack.WindowInsetsController is not null)
+				var windowInsets = ViewCompat.GetRootWindowInsets(WindowOverlayHelper._decorViewContent);
+				if (windowInsets is not null)
 				{
-					overlayStack.WindowInsetsController.Hide(WindowInsetsCompat.Type.NavigationBars());
+					hasNavigationBar = windowInsets.IsVisible(WindowInsetsCompat.Type.NavigationBars());
+				}
+			}
+
+			if (!hasNavigationBar)
+			{
+				if (_popupOverlayContainer is not null && _popupOverlayContainer.Handler is not null && _popupOverlayContainer.Handler.PlatformView is WindowOverlayStack overlayStack && overlayStack is not null)
+				{
+					if (!OperatingSystem.IsAndroidVersionAtLeast(30))
+					{
+						var decorView = WindowOverlayHelper._decorViewContent;
+						if (decorView is not null)
+						{
+							// Hide the navigation bar when the popup is opened.
+#pragma warning disable CS0618 // Type or member is obsolete
+							overlayStack.SystemUiVisibility = decorView.SystemUiVisibility;
+#pragma warning restore CS0618 // Type or member is obsolete
+						}
+					}
+					else
+					{
+						overlayStack.WindowInsetsController?.Hide(WindowInsetsCompat.Type.NavigationBars());
+					}
 				}
 			}
 		}
@@ -319,18 +306,18 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		void SetXPositionForWindowManagerLayoutParams(WindowManagerLayoutParams windowManagerLayoutParams)
 		{
 			// In Landscape mode, when the Window Flags include LayoutNoLimits, the windowManager X position is not set correctly, causing it to overlap with the dark system bar.
-			if (DeviceDisplay.MainDisplayInfo.Orientation == DisplayOrientation.Landscape && WindowOverlayHelper._decorViewContent is not null)
+			if (DeviceDisplay.MainDisplayInfo.Orientation is DisplayOrientation.Landscape && WindowOverlayHelper._decorViewContent is not null)
 			{
 				int[] decorViewContentCoordinates = new int[2] { 0, 0 };
 				WindowOverlayHelper._decorViewContent.GetLocationOnScreen(decorViewContentCoordinates);
 				var systemBarHeight = decorViewContentCoordinates[0];
 				var leftInset = PopupExtension.GetWindowInsets("Left");
 
-				if (systemBarHeight != 0)
+				if (systemBarHeight is not 0 && !PopupExtension.WindowFlagHasFullScreen)
 				{
 					windowManagerLayoutParams.X = (int)systemBarHeight;
 				}
-				else if (leftInset != 0)
+				else if (leftInset is not 0)
 				{
 					windowManagerLayoutParams.X = -(int)leftInset;
 				}

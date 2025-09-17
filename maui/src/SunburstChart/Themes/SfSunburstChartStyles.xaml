@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit.Themes;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SunburstChart"
+             x:Class="Syncfusion.Maui.Toolkit.SunburstChart.SfSunburstChartStyles">
+
+    <Style TargetType="chart:ChartLegendLabelStyle">
+        <Setter Property="TextColor" Value="{DynamicResource SfSunburstChartLegendTextColor}"/>
+        <Setter Property="FontSize" Value="{DynamicResource SfSunburstChartLegendFontSize}"/>
+    </Style>
+
+    <Style TargetType="chart:SfSunburstChart">
+        <Setter Property="Background" Value="{DynamicResource SfSunburstChartBackground}"/>
+        <Setter Property="TooltipSettings">
+            <Setter.Value>
+                <chart:SunburstTooltipSettings Background="{DynamicResource SfSunburstChartTooltipBackground}"
+                                               TextColor="{DynamicResource SfSunburstChartTooltipTextColor}"
+                                               FontSize="{DynamicResource SfSunburstChartTooltipTextFontSize}">
+                </chart:SunburstTooltipSettings>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

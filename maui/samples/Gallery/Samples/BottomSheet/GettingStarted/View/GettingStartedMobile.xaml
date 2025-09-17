@@ -20,11 +20,10 @@
 
       <BottomSheet:SfBottomSheet.Content>
         <Grid>
-          <ListView x:Name="ListView"  BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" ItemsSource="{Binding Items}" RowHeight="105" Grid.Row="1" SeparatorVisibility="None" >
-            <ListView.ItemTemplate>
+          <CollectionView x:Name="CollectionView"  BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" ItemsSource="{Binding Items}" Grid.Row="1" SelectionMode="Single" >
+            <CollectionView.ItemTemplate>
               <DataTemplate>
-                <ViewCell>
-                  <Grid ColumnDefinitions="auto, *, 50"  ColumnSpacing="0" Padding="16">
+                <Grid ColumnDefinitions="auto, *, 50"  ColumnSpacing="0" Padding="16" HeightRequest="105">
                     <Border StrokeThickness="0">
                       <Border.StrokeShape>
                         <RoundRectangle CornerRadius="10" />
@@ -38,10 +37,9 @@
                     </VerticalStackLayout>
                     <Label Text="{Binding Price, StringFormat='${0}'}" FontAttributes="Bold" FontSize="20" FontFamily="Roboto" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2" />
                   </Grid>
-                </ViewCell>
               </DataTemplate>
-            </ListView.ItemTemplate>
-          </ListView>
+            </CollectionView.ItemTemplate>
+          </CollectionView>
         </Grid>
       </BottomSheet:SfBottomSheet.Content>
       

@@ -1665,37 +1665,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 		}
 
-		internal virtual bool UpdateDataPointSelection(float pointX, float pointY, out int index)
-		{
-			RectF bounds = AreaBounds;
-			index = -1;
-
-			foreach (var segment in _segments)
-			{
-				if (segment.HitTest(pointX - bounds.Left, pointY - bounds.Top))
-				{
-					index = segment.Index;
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		internal virtual bool UpdateSeriesSelection(float pointX, float pointY)
-		{
-			RectF bounds = AreaBounds;
-			foreach (var segment in _segments)
-			{
-				if (segment.HitTest(pointX - bounds.Left, pointY - bounds.Top))
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
 		internal virtual void UpdateLegendIconColor(ChartSelectionBehavior sender, int index)
 		{
 		}

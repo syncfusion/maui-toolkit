@@ -879,7 +879,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
             {
                 UpdateContentMargin(view);
             }
-
+			
 			double minOpacity = 0;
 #if ANDROID || IOS
 			minOpacity  = 0.00001;

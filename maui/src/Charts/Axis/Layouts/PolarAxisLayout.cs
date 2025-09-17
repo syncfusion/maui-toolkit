@@ -86,7 +86,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			verticalAxisSize = new SizeF((float)(availableSize.Width - (2 * maximumLabelSize.Width)), (float)(availableSize.Height - (2 * maximumLabelSize.Height)));
 			MeasureVerticalAxis(verticalAxisSize);
 
-			_left -= (float)_yAxis.InsidePadding;
+			if(_yAxis != null)
+				_left -= (float)_yAxis.InsidePadding;
 
 			_chartArea.PlotAreaMargin = new Thickness(_left, Top, _right, Bottom);
 			UpdateArrangeRect(availableSize);

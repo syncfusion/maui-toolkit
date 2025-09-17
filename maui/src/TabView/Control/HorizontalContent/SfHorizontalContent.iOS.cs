@@ -91,7 +91,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     }
 					else
                     {
-					    if (uiTouch.GestureRecognizers != null)
+                        if (uiTouch.GestureRecognizers != null)
 						{
 							foreach (var gesture in uiTouch.GestureRecognizers)
 							{
@@ -100,10 +100,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 									this._canProcessTouch = false;
 								}
 							}
-				        }
+						}
                     }
 				}
-				}
+			  }
                 
 			}
 #endif

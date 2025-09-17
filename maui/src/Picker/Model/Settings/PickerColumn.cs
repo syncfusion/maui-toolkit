@@ -21,17 +21,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal bool _isSelectedItemChanged = true;
 
-        #endregion
+		/// <summary>
+		/// Holds selected index on without default mode.
+		/// </summary>
+		internal int _internalSelectedIndex = -1;
 
-        #region Bindable Properties
+		#endregion
 
-        /// <summary>
-        /// Identifies the <see cref="Width"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="Width"/> dependency property.
-        /// </value>
-        public static readonly BindableProperty WidthProperty =
+		#region Bindable Properties
+
+		/// <summary>
+		/// Identifies the <see cref="Width"/> dependency property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="Width"/> dependency property.
+		/// </value>
+		public static readonly BindableProperty WidthProperty =
             BindableProperty.Create(
                 nameof(Width),
                 typeof(double),

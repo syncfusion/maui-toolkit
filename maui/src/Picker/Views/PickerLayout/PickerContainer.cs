@@ -382,14 +382,31 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
         }
 
-        #endregion
+		/// <summary>
+		/// Scrolls the specified column to the given index visually without updating SelectedIndex.
+		/// </summary>
+		/// <param name="columnIndex">The index of the column to scroll.</param>
+		/// <param name="targetIndex">The index to scroll to.</param>
+		internal void ScrollToSelectedIndex(int columnIndex, int targetIndex)
+		{
+			if (columnIndex >= Children.Count)
+			{
+				return;
+			}
+			if (Children[columnIndex] is PickerLayout pickerLayout)
+			{
+				pickerLayout.ScrollToSelectedIndex(targetIndex);
+			}
+		}
 
-        #region Private Methods
+		#endregion
 
-        /// <summary>
-        /// Method to update the picker selection view draw.
-        /// </summary>
-        void UpdatePickerSelectionViewDraw()
+		#region Private Methods
+
+		/// <summary>
+		/// Method to update the picker selection view draw.
+		/// </summary>
+		void UpdatePickerSelectionViewDraw()
         {
             InvalidateDrawable();
         }

@@ -1973,22 +1973,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			set { SetValue(MajorGridLineStrokeProperty, value); }
 		}
 
-		internal static readonly BindableProperty MajorTickLineStrokeProperty = BindableProperty.Create(nameof(MajorTickLineStroke), typeof(Brush), typeof(ChartAxis), new SolidColorBrush(Color.FromArgb("#CAC4D0")), BindingMode.Default, null, null);
-
-		internal Brush MajorTickLineStroke
-		{
-			get { return (Brush)GetValue(MajorTickLineStrokeProperty); }
-			set { SetValue(MajorTickLineStrokeProperty, value); }
-		}
-
-		internal static readonly BindableProperty AxisLineStrokeProperty = BindableProperty.Create(nameof(AxisLineStroke), typeof(Brush), typeof(ChartAxis), new SolidColorBrush(Color.FromArgb("#CAC4D0")), BindingMode.Default, null, null);
-
-		internal Brush AxisLineStroke
-		{
-			get { return (Brush)GetValue(AxisLineStrokeProperty); }
-			set { SetValue(AxisLineStrokeProperty, value); }
-		}
-
 		#region is Polar
 		internal PolarChartArea? PolarArea { get; set; }
 
@@ -2491,14 +2475,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			SetDynamicResource(TrackballAxisBackgroundProperty, "SfCartesianChartTrackballAxisLabelBackground");
 			SetDynamicResource(TrackballAxisFontSizeProperty, "SfCartesianChartTrackballAxisLabelTextFontSize");
 			SetDynamicResource(MajorGridLineStrokeProperty, "SfCartesianChartMajorGridLineStroke");
-			SetDynamicResource(MajorTickLineStrokeProperty, "SfCartesianChartMajorTickLineStroke");
-			SetDynamicResource(AxisLineStrokeProperty, "SfCartesianChartAxisLineStroke");
 			//Todo: Remove this code, After ClipsToBounds works in iOS and Windows.
 			EdgeLabelsDrawingMode = EdgeLabelsDrawingMode.Shift;
-			AxisLineStyle = new ChartLineStyle() { Stroke = AxisLineStroke };
+			AxisLineStyle = new ChartLineStyle();
 			LabelStyle = new ChartAxisLabelStyle();
 			MajorGridLineStyle = new ChartLineStyle() { Stroke = MajorGridLineStroke };
-			MajorTickStyle = new ChartAxisTickStyle() { Stroke = MajorTickLineStroke };
+			MajorTickStyle = new ChartAxisTickStyle();
 			TrackballLabelStyle = new ChartLabelStyle() { FontSize = TrackballAxisFontSize, Background = TrackballAxisBackground };
 		}
 
@@ -2650,6 +2632,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (newValue is ChartAxisTickStyle tickStyle)
 				{
 					SetInheritedBindingContext(tickStyle, axis.BindingContext);
+					axis.MajorTickStyle.InitializeDynamicResource("MajorTickStyle");
 					tickStyle.PropertyChanged += axis.Style_PropertyChanged;
 				}
 
@@ -2757,6 +2740,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (newValue is ChartLineStyle lineStyle)
 				{
 					SetInheritedBindingContext(lineStyle, axis.BindingContext);
+					lineStyle.SetDynamicResource(ChartLineStyle.StrokeProperty, "SfCartesianChartAxisLineStroke");
 					lineStyle.PropertyChanged += axis.Style_PropertyChanged;
 				}
 

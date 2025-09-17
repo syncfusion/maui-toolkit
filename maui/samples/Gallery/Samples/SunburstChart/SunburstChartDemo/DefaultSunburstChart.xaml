@@ -1,0 +1,42 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart.DefaultSunburstChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SunburstChart;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart"
+             x:DataType="local:ViewModel">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:SunburstChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel/>
+    </localCore:SampleView.BindingContext>
+    <localCore:SampleView.Content>
+        <chart:SfSunburstChart x:Name="sunburstChart" ItemsSource="{Binding DataSource3}" 
+                            ValueMemberPath="Sales" ShowLabels="True"
+                            PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight1}, Dark={StaticResource PaletteBrushesDark1}}" 
+                            EnableAnimation="True" InnerRadius="0.2" EnableTooltip="True"
+                            Stroke="{AppThemeBinding Dark=Black,Light=White}">
+            
+            <chart:SfSunburstChart.Title>
+                <Label Text="Visual Perspective of Sales Performance" FontAttributes="Bold" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="18"/>
+            </chart:SfSunburstChart.Title>
+            
+            <chart:SfSunburstChart.Legend>
+                <chart:SunburstLegend/>
+            </chart:SfSunburstChart.Legend>
+            
+            <chart:SfSunburstChart.Levels>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Quarter"/>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Month"/>
+                <chart:SunburstHierarchicalLevel GroupMemberPath="Week"/>
+            </chart:SfSunburstChart.Levels>
+        </chart:SfSunburstChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

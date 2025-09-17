@@ -21,31 +21,29 @@
         <local:ItemViewModel />
       </Grid.BindingContext>
 
-      <BottomSheet:SfBottomSheet x:Name="BottomSheet" BottomSheetContentWidth="450" ContentWidthMode="Custom" HalfExpandedRatio="{OnPlatform WinUI=0.5, MacCatalyst=0.43}" FullExpandedRatio="0.9" CollapsedHeight="180" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" CornerRadius="10, 10, 0, 0" ContentPadding="16,16,16,0">
+      <BottomSheet:SfBottomSheet x:Name="BottomSheet" BottomSheetContentWidth="450" ContentWidthMode="Custom" HalfExpandedRatio="{OnPlatform WinUI=0.5, MacCatalyst=0.43}" FullExpandedRatio="0.9" CollapsedHeight="180" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" CornerRadius="10, 10, 0, 0" ContentPadding="16,16,16,0" >
         <BottomSheet:SfBottomSheet.Content>
           <Grid>
-            <ListView x:Name="ListView" ItemsSource="{Binding Items}" RowHeight="120" Grid.Row="1" SeparatorVisibility="None" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
-              <ListView.ItemTemplate>
+            <CollectionView x:Name="CollectionView" ItemsSource="{Binding Items}" Grid.Row="1" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" SelectionMode="Single">
+              <CollectionView.ItemTemplate>
                 <DataTemplate>
-                  <ViewCell>
-                    <Grid ColumnDefinitions="auto, *, 50" ColumnSpacing="0" Padding="16">
-                      <Border StrokeThickness="0">
-                        <Border.StrokeShape>
-                          <RoundRectangle CornerRadius="10" />
-                        </Border.StrokeShape>
-                        <Image Source="{Binding ImageName}" />
-                      </Border>
-                      <VerticalStackLayout Grid.Column="1" Spacing="2" Padding="16,0,0,0">
-                        <Label Text="{Binding FoodName}" FontSize="20" FontAttributes="Bold" FontFamily="Roboto"/>
-                        <Label Text="{Binding SubName}" FontSize="16" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}"/>
-                        <Label Text="{Binding Description}" FontSize="12" LineBreakMode="TailTruncation" MaxLines="2" Opacity="0.5" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light},Dark={StaticResource TextColourAlt1Dark}}"/>
-                      </VerticalStackLayout>
-                      <Label Text="{Binding Price, StringFormat='${0}'}" FontAttributes="Bold" FontSize="20" FontFamily="Roboto" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2" />
-                    </Grid>
-                  </ViewCell>
+                  <Grid ColumnDefinitions="auto, *, 50" ColumnSpacing="0" Padding="16" HeightRequest="120">
+                    <Border StrokeThickness="0">
+                      <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10" />
+                      </Border.StrokeShape>
+                      <Image Source="{Binding ImageName}" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="2" Padding="16,0,0,0">
+                      <Label Text="{Binding FoodName}" FontSize="20" FontAttributes="Bold" FontFamily="Roboto"/>
+                      <Label Text="{Binding SubName}" FontSize="16" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}"/>
+                      <Label Text="{Binding Description}" FontSize="12" LineBreakMode="TailTruncation" MaxLines="2" Opacity="0.5" FontFamily="Roboto" TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light},Dark={StaticResource TextColourAlt1Dark}}"/>
+                    </VerticalStackLayout>
+                    <Label Text="{Binding Price, StringFormat='${0}'}" FontAttributes="Bold" FontSize="20" FontFamily="Roboto" VerticalOptions="Center" HorizontalOptions="Center" Grid.Column="2" />
+                  </Grid>
                 </DataTemplate>
-              </ListView.ItemTemplate>
-            </ListView>
+              </CollectionView.ItemTemplate>
+            </CollectionView>
           </Grid>
         </BottomSheet:SfBottomSheet.Content>
         

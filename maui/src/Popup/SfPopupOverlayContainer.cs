@@ -2,7 +2,11 @@
 
 namespace Syncfusion.Maui.Toolkit.Popup
 {
+#if !ANDROID
+    internal class SfPopupOverlayContainer : WindowOverlayContainer
+#else
 	internal class SfPopupOverlayContainer : WindowOverlayContainer, ITouchListener
+#endif
 	{
 		#region Fields
 
@@ -27,7 +31,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		#endregion
 
 		#region ITouchListener Callback
-
+#if ANDROID
 		/// <summary>
 		/// This method will be called based on the view touch.
 		/// </summary>
@@ -39,7 +43,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				ClosePopupIfRequired(e.TouchPoint);
 			}
 		}
-
+#endif
 		#endregion
 
 		#region Internal Methods

@@ -64,6 +64,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 #endif
 			_popupView = popupView;
 			Initialize();
+			AddChildViews();
 		}
 
 		#endregion
@@ -150,9 +151,24 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
+		/// Updates the child views if a DataTemplateSelector is applied to the content template.
+		/// </summary>
+		internal void RefreshChildViews()
+		{
+			if (_popupView is not null && _popupView._popup is not null && _popupView._popup.ContentTemplate is DataTemplateSelector)
+			{
+				UpdateChildViews();
+			}
+		}
+
+		#endregion
+
+		#region Private methods
+
+		/// <summary>
 		/// Add the child views of the message view.
 		/// </summary>
-		internal void AddChildViews()
+		void AddChildViews()
 		{
 			if (Content is null && _popupView is not null)
 			{
@@ -167,8 +183,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				{
 					if (_popupView._popup.ContentTemplate is not null)
 					{
-						View? view = (View)_popupView._popup.GetTemplate(_popupView._popup.ContentTemplate).CreateContent();
-						Content = view;
+						var template = _popupView._popup.GetTemplate(_popupView._popup.ContentTemplate);
+						if (template is not null)
+						{
+							View? view = (View)template.CreateContent();
+							Content = view;
+						}
 					}
 
 					// Added event handlers to update the popup height dynamically when the content changes.
@@ -178,10 +198,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 			}
 		}
-
-		#endregion
-
-		#region Private methods
 
 		/// <summary>
 		/// Used to initialize the popup message view.

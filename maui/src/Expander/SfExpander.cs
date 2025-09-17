@@ -1525,7 +1525,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 #if WINDOWS
 				new Size(300, 300);
 #else
-				new Size(DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density, DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density);              
+				new Size(DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density, DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density);
 #endif
 				double scaledWidth = Math.Min(scaledScreenSize.Width, scaledScreenSize.Height);
 				width = scaledWidth;

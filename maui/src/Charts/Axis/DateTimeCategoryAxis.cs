@@ -405,7 +405,6 @@ public partial class DateTimeCategoryAxis : ChartAxis
 		// If none meet the condition interval >= 1, it remains as it is the last item.
 		ActualIntervalType = intervalTypes.Last().IntervalType;
 
-
 		foreach (var (rangeDivision, intervalType) in intervalTypes)
 		{
 			interval = base.CalculateNiceInterval(new DoubleRange(0, rangeDivision), availableSize);

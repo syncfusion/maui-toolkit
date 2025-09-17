@@ -16,12 +16,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		Command? _undoCommand;
 		Command? _deleteCommand;
 		bool? _isDeleted;
-		MailInfo? _listViewItem;
+		MailInfo? _collectionViewItem;
 		Command? _archiveCommand;
 		string? _popUpText;
-		int _listViewItemIndex;
+		int _collectionViewItemIndex;
 		readonly Random _random;
-		readonly MailInfoRepository? _listViewRepository;
+		readonly MailInfoRepository? _collectionViewRepository;
 
 		#endregion
 
@@ -52,7 +52,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			_random = new Random();
 			GenerateSource();
-			_listViewRepository = new MailInfoRepository();
+			_collectionViewRepository = new MailInfoRepository();
 		}
 
 		#endregion
@@ -135,19 +135,19 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 					k = 0;
 				}
 
-				if (_listViewRepository != null)
+				if (_collectionViewRepository != null)
 				{
 					var record = new MailInfo()
 					{
-						ProfileName = _listViewRepository._profileList[i],
-						Name = _listViewRepository._nameList[i],
-						Subject = _listViewRepository._subject[i],
+						ProfileName = _collectionViewRepository._profileList[i],
+						Name = _collectionViewRepository._nameList[i],
+						Subject = _collectionViewRepository._subject[i],
 						Date = DateTime.Now.AddMinutes((i * -3)),
-						Description = _listViewRepository._descriptions[i],
-						Image = _listViewRepository._images[k],
-						IsAttached = _listViewRepository._attachments[i],
-						IsImportant = _listViewRepository._importants[i],
-						IsOpened = _listViewRepository._opens[i],
+						Description = _collectionViewRepository._descriptions[i],
+						Image = _collectionViewRepository._images[k],
+						IsAttached = _collectionViewRepository._attachments[i],
+						IsImportant = _collectionViewRepository._importants[i],
+						IsOpened = _collectionViewRepository._opens[i],
 					};
 					empInfo.Add(record);
 					k++;
@@ -180,11 +180,11 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private async void OnDelete(object item)
 		{
 			PopUpText = "Deleted";
-			_listViewItem = (MailInfo)item;
+			_collectionViewItem = (MailInfo)item;
 			if (_mailInfos != null)
 			{
-				_listViewItemIndex = _mailInfos.IndexOf(_listViewItem);
-				_mailInfos.Remove(_listViewItem);
+				_collectionViewItemIndex = _mailInfos.IndexOf(_collectionViewItem);
+				_mailInfos.Remove(_collectionViewItem);
 			}
 
 			IsDeleted = true;
@@ -201,12 +201,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		private async void OnArchive(object item)
 		{
 			PopUpText = "Archived";
-			_listViewItem = (MailInfo)item;
+			_collectionViewItem = (MailInfo)item;
 			if (_mailInfos != null && _archivedMessages != null)
 			{
-				_listViewItemIndex = _mailInfos.IndexOf(_listViewItem);
-				_mailInfos.Remove(_listViewItem);
-				_archivedMessages.Add(_listViewItem);
+				_collectionViewItemIndex = _mailInfos.IndexOf(_collectionViewItem);
+				_mailInfos.Remove(_collectionViewItem);
+				_archivedMessages.Add(_collectionViewItem);
 			}
 
 			IsDeleted = true;
@@ -223,24 +223,24 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			IsDeleted = false;
 
-			if (_listViewItem != null && _mailInfos != null && _archivedMessages != null)
+			if (_collectionViewItem != null && _mailInfos != null && _archivedMessages != null)
 			{
-				_mailInfos.Insert(_listViewItemIndex, _listViewItem);
+				_mailInfos.Insert(_collectionViewItemIndex, _collectionViewItem);
 
-				var archivedItem = _archivedMessages.Where(x => x.Name != null && x.Name.Equals(_listViewItem.Name, StringComparison.Ordinal));
+				var archivedItem = _archivedMessages.Where(x => x.Name != null && x.Name.Equals(_collectionViewItem.Name, StringComparison.Ordinal));
 
 				if (archivedItem != null)
 				{
 					foreach (var item in archivedItem)
 					{
-						_archivedMessages.Remove(_listViewItem);
+						_archivedMessages.Remove(_collectionViewItem);
 						break;
 					}
 				}
 			}
 
-			_listViewItemIndex = 0;
-			_listViewItem = null;
+			_collectionViewItemIndex = 0;
+			_collectionViewItem = null;
 		}
 
 		/// <summary>

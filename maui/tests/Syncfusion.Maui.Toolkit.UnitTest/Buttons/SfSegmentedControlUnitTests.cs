@@ -1,5 +1,6 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Reflection;
+using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.SegmentedControl;
 using Color = Microsoft.Maui.Graphics.Color;
 using Size = Microsoft.Maui.Graphics.Size;
@@ -29,8 +30,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.True(segmentedControl.ShowSeparator);
 			Assert.Equal(1, segmentedControl.StrokeThickness);
 			Assert.Equal(-1, segmentedControl.VisibleSegmentsCount);
+			Assert.Equal(SegmentSelectionMode.Single, segmentedControl.SelectionMode);
 		}
 		#endregion
+
 		#region Public properties
 		[Fact]
 		public void ItemsSource_SetValue_ReturnsExpectedValue()
@@ -900,7 +903,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 194.0)]
 		[InlineData(100.0, 50.0, 100.0, LayoutAlignment.Start, 94.0)]
 		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Start, 50.0)]
-		
+
 		public void GetActualSegmentWidth_ReturnsExpectedWidth_WithStrokethicknessZero(double widthRequest, double minWidth, double maxWidth, LayoutAlignment alignment, double expectedResult)
 		{
 			var segmentInfo = new SfSegmentedControl
@@ -1493,7 +1496,39 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 #pragma warning restore CS8604 // Suppress warning for possible null reference argument
 
 		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void IsSelected_ShouldReflectAssignedValue(bool isSelected)
+		{
+			var item = new SfSegmentItem() { IsSelected = isSelected };
+			Assert.Equal(isSelected, item.IsSelected);
+		}
+
+		[Fact]
+		public void UpdateSelection_ShouldSetIsSelectedTrue()
+		{
+			var itemInfo = new SfSegmentedControl();
+			var segmentItem = new SfSegmentItem { Text = "Item 1" };
+			var segmentItemView = new SegmentItemView(itemInfo, segmentItem);
+			Assert.False(segmentItem.IsSelected);
+			segmentItemView.UpdateSelection();
+			Assert.True(segmentItem.IsSelected);
+		}
+
+		[Fact]
+		public void ClearSelection_ShouldSetIsSelectedFalse()
+		{
+			var itemInfo = new SfSegmentedControl();
+			var segmentItem = new SfSegmentItem { Text = "Item 1", IsSelected = true };
+			var segmentItemView = new SegmentItemView(itemInfo, segmentItem);
+			Assert.True(segmentItem.IsSelected);
+			segmentItemView.ClearSelection();
+			Assert.False(segmentItem.IsSelected);
+		}
 		#endregion
+
 		#region Private Methods
 		[Fact]
 		public void GetOutlinedBorderRect_ShouldReturnCorrectRect()
@@ -2324,7 +2359,111 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Throws<TargetInvocationException>(() => InvokeStaticPrivateMethodClass(typeof(SegmentViewHelper), "GetTotalSegmentWidth", itemInfo, visibleSegmentCount));
 
 		}
-		#endregion
 
+		[Fact]
+		public void UpdateSelectedIndex_ShouldReturnsExpectedValue()
+		{
+			var segmentItem = new SfSegmentItem() { Text = "Gabriella", Background = Colors.Blue };
+			var itemsSource = new ObservableCollection<SfSegmentItem>
+				{
+					 new SfSegmentItem() { Text = "Jackson", Background = Colors.Red },
+					 segmentItem,
+					 new SfSegmentItem() { Text = "Liam", Background = Colors.Green },
+				}
+			;
+			var itemInfo = new SfSegmentedControl() { _items = itemsSource };
+
+			var segment = new SegmentItemView(itemInfo, null!);
+			InvokePrivateMethod(segment, "UpdateSelectedIndex");
+			Assert.Null(itemInfo.SelectedIndex);
+
+			var segmentView = new SegmentItemView(itemInfo, segmentItem);
+			InvokePrivateMethod(segmentView, "UpdateSelectedIndex");
+			Assert.NotNull(itemInfo.SelectedIndex);
+			Assert.Equal(segmentItem, itemsSource[itemInfo.SelectedIndex.Value]);
+		}
+
+		[Theory]
+		[InlineData("Alice")]
+		[InlineData("Jackson")]
+		[InlineData("Mei")]
+		[InlineData("Carlos")]
+		[InlineData("Fatima")]
+
+		public void SelectedAndDeSelectedIndex_SetValue_ReturnsExpectedValue(string text)
+		{
+			var segmentItem = new SfSegmentItem() { Text = text, Background = Colors.Blue };
+			var itemsSource = new ObservableCollection<SfSegmentItem>
+				{
+					 new SfSegmentItem() { Text = "Jackson", Background = Colors.Red },
+					 segmentItem,
+					 new SfSegmentItem() { Text = "Liam", Background = Colors.Green },
+				}
+			;
+			var itemInfo = new SfSegmentedControl() { _items = itemsSource };
+
+			var segment = new SegmentItemView(itemInfo, segmentItem);
+			InvokePrivateMethod(segment, "UpdateSelectedIndex");
+			Assert.NotNull(itemInfo.SelectedIndex);
+			Assert.Equal(segmentItem, itemsSource[itemInfo.SelectedIndex.Value]);
+			SfSegmentedControl segmentControl = itemInfo;
+			segmentControl.SelectionMode = SegmentSelectionMode.SingleDeselect;
+			InvokePrivateMethod(segment, "UpdateSelectedIndex");
+			Assert.Throws<ArgumentOutOfRangeException>(() => itemsSource[itemInfo.SelectedIndex.Value]);
+		}
+		#endregion
+		#region Events
+		[Fact]
+		public void TappedInvoked_WhenTrigger()
+		{
+			SfSegmentedControl segmentedControl = new SfSegmentedControl();
+
+			var fired = false;
+			segmentedControl.Tapped += (sender, e) => fired = true;
+			ISegmentItemInfo segmentItemInfo = segmentedControl;
+			segmentItemInfo.TriggerTappedEvent(new SegmentTappedEventArgs());
+			Assert.True(fired);
+		}
+
+		[Fact]
+		public void ItemTapped_SelectsExpectedItem()
+		{
+			SfSegmentedControl segmentedControl = new SfSegmentedControl();
+
+			var tappedItem = new SfSegmentItem();
+			var segmentItem = new SfSegmentItem() { Text = "Jackson", Background = Colors.Red };
+			segmentedControl.Tapped += (sender, e) => tappedItem = e.SegmentItem;
+			ISegmentItemInfo segmentItemInfo = segmentedControl;
+			SegmentTappedEventArgs segmentTapped = new SegmentTappedEventArgs() { SegmentItem = segmentItem };
+			segmentItemInfo.TriggerTappedEvent(segmentTapped);
+			Assert.Equal(segmentItem, tappedItem);
+			Assert.Equal(segmentItem.Text, tappedItem.Text);
+		}
+
+		[Fact]
+		public void TappedInvoked_WhenTap()
+		{
+			var fired = false;
+			var segmentedControl = new SfSegmentedControl();
+			segmentedControl.Tapped += (sender, e) => fired = true;
+			var segmentView = new SegmentItemView(segmentedControl, null!);
+			((ITapGestureListener)segmentView).OnTap(new TapEventArgs(new Point(30, 30), 1));
+			Assert.False(fired);
+		}
+
+		[Fact]
+		public void TappedItem_EqualsExpectedItem()
+		{
+			var tappedItem = new SfSegmentItem();
+			var segmentItem = new SfSegmentItem() { Text = "Gabriella", Background = Colors.Blue };
+			var segmentedControl = new SfSegmentedControl();
+			segmentedControl.Tapped += (sender, e) => tappedItem = e.SegmentItem;
+			var eventArgs = new TapEventArgs(new Point(30, 30), 1);
+			var segmentView = new SegmentItemView(segmentedControl, segmentItem);
+			((ITapGestureListener)segmentView).OnTap(eventArgs);
+			Assert.Equal(segmentItem, tappedItem);
+			Assert.Equal(segmentItem.Text, tappedItem.Text);
+		}
+		#endregion
 	}
 }

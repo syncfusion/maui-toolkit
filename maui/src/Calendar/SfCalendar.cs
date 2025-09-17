@@ -916,8 +916,31 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         DateTime ConvertToCurrentCulture(DateTime date, bool adjustDay = false)
         {
             Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(Identifier.ToString());
-            int day = adjustDay ? (cultureCalendar.GetMonth(date) == 2 ? 1 : cultureCalendar.GetDayOfMonth(date)) : cultureCalendar.GetDayOfMonth(date);
-            return new DateTime(cultureCalendar.GetYear(date), cultureCalendar.GetMonth(date), day, cultureCalendar);
+            int day = 0;
+            if (adjustDay)
+            {
+                day = cultureCalendar.GetMonth(date) == 2 ? 1 : cultureCalendar.GetDayOfMonth(date);
+
+                //// Converts the tapped day into 1st day of the month since date time does not have 31 day on certain months.
+                if (Identifier == CalendarIdentifier.Persian)
+                {
+                    day = day == 31 ? 1 : day;
+                }
+            }
+            else
+            {
+                //// Need to Convert if it exceeds 28 since Hijri and UmAlQura calendars does not have 29 days in
+                if (Identifier == CalendarIdentifier.Hijri || Identifier == CalendarIdentifier.UmAlQura)
+                {
+                    day = cultureCalendar.GetMonth(date) == 2 && cultureCalendar.GetDayOfMonth(date) >= 29 ? 28 : cultureCalendar.GetDayOfMonth(date);
+                }
+                else
+                {
+                    day = cultureCalendar.GetDayOfMonth(date);
+                }
+            }
+
+            return new DateTime(cultureCalendar.GetYear(date), cultureCalendar.GetMonth(date), day);
         }
 
         /// <summary>

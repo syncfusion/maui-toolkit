@@ -5,7 +5,7 @@ namespace Syncfusion.Maui.ControlsGallery.BottomSheet.BottomSheet
 {
     public class BottomSheetBehavior : Behavior<SampleView>
     {
-		ListView? _listView;
+		CollectionView? _collectionView;
 		ItemViewModel? _itemViewModel;
 		SfBottomSheet? _bottomSheet;
 		SfEffectsViewAdv? _decreaseQuantity;
@@ -21,8 +21,8 @@ namespace Syncfusion.Maui.ControlsGallery.BottomSheet.BottomSheet
 		/// <param name="bindable">SampleView type parameter named as bindable.</param>
 		protected override void OnAttachedTo(SampleView bindable)
 		{
-			_listView = bindable.FindByName<ListView>("ListView");
-			_listView.ItemTapped += ListView_ItemTapped;
+			_collectionView = bindable.FindByName<CollectionView>("CollectionView");
+			_collectionView.SelectionChanged += _collectionView_SelectionChanged; 
 			_itemViewModel = new ItemViewModel();
 			bindable.BindingContext = _itemViewModel;
 			_bottomSheet = bindable.FindByName<SfBottomSheet>("BottomSheet");
@@ -50,6 +50,23 @@ namespace Syncfusion.Maui.ControlsGallery.BottomSheet.BottomSheet
 			_extraTwo.CheckedChanged += ExtraTwo_CheckedChanged;
 
 			base.OnAttachedTo(bindable);
+		}
+
+		private void _collectionView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+		{
+			if (e.CurrentSelection.FirstOrDefault() is Item selectedItem)
+			{
+				if (_bottomSheet is not null && grid is not null)
+				{
+					grid.BindingContext = selectedItem;
+					if (_bottomSheet.IsOpen)
+					{
+						_bottomSheet.State = BottomSheetState.HalfExpanded;
+					}
+
+					_bottomSheet.Show();
+				}
+			}
 		}
 
 		private void ExtraTwo_CheckedChanged(object? sender, CheckedChangedEventArgs e)
@@ -96,21 +113,6 @@ namespace Syncfusion.Maui.ControlsGallery.BottomSheet.BottomSheet
 			}
 		}
 
-		private void ListView_ItemTapped(object? sender, ItemTappedEventArgs e)
-		{
-			var selectedItem = (Item)e.Item;
-			if (_bottomSheet is not null && grid is not null)
-			{
-				grid.BindingContext = selectedItem;
-				if (_bottomSheet.IsOpen)
-				{
-					_bottomSheet.State = BottomSheetState.HalfExpanded;
-				}
-
-				_bottomSheet.Show();
-			}
-		}
-
 		private void OnDecreaseTapped(object? sender, TappedEventArgs e)
 		{
 			if (_bottomSheet is not null && grid is not null)
@@ -146,7 +148,7 @@ namespace Syncfusion.Maui.ControlsGallery.BottomSheet.BottomSheet
 		/// <param name="bindable">SampleView type parameter named as bindable</param>
 		protected override void OnDetachingFrom(SampleView bindable)
 		{
-			_listView = null;
+			_collectionView = null;
 			_itemViewModel = null;
 			base.OnDetachingFrom(bindable);
 		}

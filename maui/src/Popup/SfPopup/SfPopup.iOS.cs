@@ -13,11 +13,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 	public partial class SfPopup
 	{
 		#region Fields
-
-		/// <summary>
-		/// Used to store keyboard height.
-		/// </summary>
-		double _keyboardHeight = 0;
 		NSObject? _keyboardShow;
 		NSObject? _keyboardHide;
 
@@ -25,6 +20,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// This field stores the blur effect view added by this popup.
 		/// </summary>
 		internal UIVisualEffectView? _blurView;
+		internal UIView? _customBlurView;
 
 		#endregion
 
@@ -70,7 +66,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 			}
 
-			PopupPositionBasedOnKeyboard();
+			WireKeyboardNotification();
 		}
 
 		/// <summary>
@@ -94,45 +90,32 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			_keyboardHide?.Dispose();
 			_keyboardShow?.Dispose();
-
-			// When closing the popup with the keyboard open, reset the BeforeKeyboardInView and YPositionBeforeKeyboardInView values.
-			// This ensures the values are updated, as dismissing the popup with the keyboard open disposes of the keyboardHide object,
-			// preventing the event from being invoked and leaving the values unset.
-			if (_popupViewHeightBeforeKeyboardInView != 0)
-			{
-				_popupViewHeightBeforeKeyboardInView = 0;
-			}
-
-			if (_popupYPositionBeforeKeyboardInView != -1)
-			{
-				_popupYPositionBeforeKeyboardInView = -1;
-			}
 		}
 
 		/// <summary>
-		/// Reposition and Resize the _popupView based on Keyboard.
+		/// Reposition and Resize the PopupView based on Keyboard.
 		/// </summary>
-		internal void PopupPositionBasedOnKeyboard()
+		internal void WireKeyboardNotification()
 		{
-			// When keyboard comes to the view, notifications can be received from the ObserveWillShow delegates.
-			_keyboardShow = UIKeyboard.Notifications.ObserveWillShow((sender, args) =>
+			var popupView = _popupView;
+			if (popupView is not null)
 			{
-				if (_popupView is not null)
+				// When keyboard comes to the view, can get the notification from ObserveWillShow delegates.
+				_keyboardShow = UIKeyboard.Notifications.ObserveWillShow((sender, args) =>
 				{
-					_keyboardHeight = args.FrameEnd.Height;
-					PositionPoupViewBasedOnKeyboard(args.FrameEnd.Y);
-				}
-			});
+					_keyboardHeight = args.FrameEnd.Height - PopupExtension.GetSafeAreaHeight("Bottom");
+					CalculatePopupSizeAndPosition();
+					popupView.InvalidateForceLayout();
+				});
 
-			// When keyboard hides from the view, notifications can be received from the ObserveWillHide delegates.
-			_keyboardHide = UIKeyboard.Notifications.ObserveWillHide((sender, args) =>
-			{
-				if (_popupView is not null)
+				// When keyboard hides from the view, can get the notification from ObserveWillHide delegates.
+				_keyboardHide = UIKeyboard.Notifications.ObserveWillHide((sender, args) =>
 				{
 					_keyboardHeight = 0;
-					UnshrinkPoupViewOnKeyboardCollapse();
-				}
-			});
+					CalculatePopupSizeAndPosition();
+					popupView.InvalidateForceLayout();
+				});
+			}
 		}
 
 		/// <summary>
@@ -210,6 +193,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				AbortPopupViewAnimation();
 				ResetAnimatedProperties();
 
+				SyncPopupDimensionFields();
+
 				// While show the popup using ShowRelativeToView, Popup is not positioned properly when resize the window in MAC and Split the screen in iOS.
 				if (_relativeView is not null)
 				{
@@ -227,14 +212,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 
 				_popupView.InvalidateForceLayout();
-
-				// When the device orientation changes with the keyboard open,
-				// reset the values as the popup view height and position will be re-evaluated after the keyboard closes.
-				if (_keyboardHeight > 0)
-				{
-					_popupViewHeightBeforeKeyboardInView = _popupViewHeight;
-					_popupYPositionBeforeKeyboardInView = _popupYPosition;
-				}
 			}
 		}
 	}

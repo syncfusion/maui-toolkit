@@ -535,6 +535,58 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 			}
 		}
 
+		/// <summary>
+		/// Method to clean up resources when the handler is changed.
+		/// </summary>
+		protected override void OnHandlerChanged()
+		{
+			base.OnHandlerChanged();
+			if (Handler == null)
+			{
+				if (ShimmerDrawable != null)
+				{
+					if (AnimationExtensions.AnimationIsRunning(ShimmerDrawable, "ShimmerAnimation"))
+					{
+						ShimmerDrawable.AbortAnimation("ShimmerAnimation");
+					}
+					ShimmerDrawable.Dispose();
+					if (ShimmerDrawable.Handler != null && ShimmerDrawable.Handler.PlatformView != null)
+					{
+						ShimmerDrawable.Handler.DisconnectHandler();
+					}
+					if (Children.Contains(ShimmerDrawable))
+					{
+						Remove(ShimmerDrawable);
+					}
+					ShimmerDrawable = null;
+				}
+
+				if (CustomView != null)
+				{
+					if (CustomView.Handler != null && CustomView.Handler.PlatformView != null)
+					{
+						CustomView.Handler.DisconnectHandler();
+					}
+					if (Children.Contains(CustomView))
+					{
+						Remove(CustomView);
+					}
+					// Clear parent relationship explicitly (Mac/iOS specific)
+					if (CustomView.Parent == this)
+					{
+						CustomView.Parent = null;
+					}
+					// Dispose if disposable
+					if (CustomView is IDisposable disposableView)
+					{
+						disposableView.Dispose();
+					}
+				}
+
+				Children.Clear();
+			}
+		}
+
 		#endregion
 
 		#region Property Changed Methods

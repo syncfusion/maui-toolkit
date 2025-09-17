@@ -183,6 +183,7 @@
     <local:StaticThemeResource x:Key="SfTabViewScrollButtonBackground" ResourceKey="ContentBackgroundAlt1" />
     <local:StaticThemeResource x:Key="SfTabViewScrollButtonIconColor" ResourceKey="IconColor" />
     <local:StaticThemeResource x:Key="SfTabViewScrollButtonDisabledIconColor" ResourceKey="IconColorDisabled" />
+    <local:StaticThemeResource x:Key="SfTabViewHoverBackground" ResourceKey="ContentForeground" />
     <sys:Double x:Key="SfTabViewNormalFontSize">14</sys:Double>
     <local:StaticThemeResource x:Key="SfTabViewCenterButtonBackground" ResourceKey="Transparent" />
     <local:StaticThemeResource x:Key="SfTabViewCenterButtonTextColor" ResourceKey="ContentForegroundAlt1" />
@@ -365,6 +366,20 @@
     <local:StaticThemeResource x:Key="SfPyramidChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
     <sys:Double x:Key="SfPyramidChartLegendFontSize">12</sys:Double>
     <local:StaticThemeResource x:Key="SfPyramidChartLegendDisableBrush" ResourceKey="ForegroundDisabled" />
+
+  <!--SfSunburstChart-->
+  <x:String x:Key="SfSunburstChartTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfSunburstChartBackground" ResourceKey="Transparent" />
+  <local:StaticThemeResource x:Key="SfSunburstChartDataLabelBackground" ResourceKey="SeriesColor3" />
+  <local:StaticThemeResource x:Key="SfSunburstChartDataLabelStroke" ResourceKey="SeriesColor3" />
+  <local:StaticThemeResource x:Key="SfSunburstChartDataLabelTextColor" ResourceKey="SeriesColorWhite" />
+  <sys:Double x:Key="SfSunburstChartDataLabelCornerRadius">8</sys:Double>
+  <sys:Double x:Key="SfSunburstChartDataLabelTextFontSize">14</sys:Double>
+  <local:StaticThemeResource x:Key="SfSunburstChartTooltipBackground" ResourceKey="TooltipBackground" />
+  <local:StaticThemeResource x:Key="SfSunburstChartTooltipTextColor" ResourceKey="TooltipForeground" />
+  <sys:Double x:Key="SfSunburstChartTooltipTextFontSize">12</sys:Double>
+  <local:StaticThemeResource x:Key="SfSunburstChartLegendTextColor" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfSunburstChartLegendFontSize">12</sys:Double>
 
   <!--SfNumericEntryTheme-->
   <x:String x:Key="SfNumericEntryTheme">CommonTheme</x:String>
@@ -595,6 +610,7 @@
   <local:StaticThemeResource x:Key="SfDatePickerNormalHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
   <local:StaticThemeResource x:Key="SfDatePickerNormalHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
   <local:StaticThemeResource x:Key="SfDatePickerNormalHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDatePickerSelectionTextColor" ResourceKey="PrimaryBackground"/>
   <local:StaticThemeResource x:Key="SfDatePickerNormalFooterTextColor" ResourceKey="PrimaryBackground" />
   <local:StaticThemeResource x:Key="SfDatePickerNormalFooterBackground" ResourceKey="Transparent" />
   <local:StaticThemeResource x:Key="SfDatePickerNormalFooterDividerColor" ResourceKey="Border" />
@@ -620,6 +636,7 @@
   <local:StaticThemeResource x:Key="SfTimePickerNormalHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
   <local:StaticThemeResource x:Key="SfTimePickerNormalHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
   <local:StaticThemeResource x:Key="SfTimePickerNormalHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfTimePickerSelectionTextColor" ResourceKey="PrimaryBackground"/>
   <local:StaticThemeResource x:Key="SfTimePickerNormalFooterTextColor" ResourceKey="PrimaryBackground" />
   <local:StaticThemeResource x:Key="SfTimePickerNormalFooterBackground" ResourceKey="Transparent" />
   <local:StaticThemeResource x:Key="SfTimePickerNormalFooterDividerColor" ResourceKey="Border" />
@@ -645,6 +662,7 @@
   <local:StaticThemeResource x:Key="SfDateTimePickerNormalHeaderTextColor" ResourceKey="ContentForegroundAlt1" />
   <local:StaticThemeResource x:Key="SfDateTimePickerNormalHeaderBackground" ResourceKey="ContentBackgroundAlt1" />
   <local:StaticThemeResource x:Key="SfDateTimePickerNormalHeaderDividerColor" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerSelectionTextColor" ResourceKey="PrimaryBackground"/>
   <local:StaticThemeResource x:Key="SfDateTimePickerHeaderSelectionTextColor" ResourceKey="PrimaryBackground" />
   <local:StaticThemeResource x:Key="SfDateTimePickerNormalFooterTextColor" ResourceKey="PrimaryBackground" />
   <local:StaticThemeResource x:Key="SfDateTimePickerNormalFooterBackground" ResourceKey="Transparent" />

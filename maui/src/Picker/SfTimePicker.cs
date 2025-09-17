@@ -13,6 +13,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         #region Fields
 
         /// <summary>
+        /// Holds the selected time on dialog mode.
+        /// </summary>
+        internal TimeSpan? _internalSelectedTime;
+
+        /// <summary>
         /// Holds the hour column information.
         /// </summary>
         PickerColumn _hourColumn;
@@ -213,104 +218,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 propertyChanged: OnTimePickerBackgroundChanged);
 
         /// <summary>
-        /// Identifies the <see cref="HeaderBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="HeaderBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty HeaderBackgroundProperty =
-            BindableProperty.Create(
-                nameof(HeaderBackground),
-                typeof(Brush),
-                typeof(SfTimePicker),
-                defaultValueCreator: bindable => new SolidColorBrush(Color.FromArgb("#F7F2FB")),
-                propertyChanged: OnHeaderBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="FooterBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="FooterBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty FooterBackgroundProperty =
-            BindableProperty.Create(
-                nameof(FooterBackground),
-                typeof(Brush),
-                typeof(SfTimePicker),
-                defaultValueCreator: bindable => Brush.Transparent,
-                propertyChanged: OnFooterBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionBackground"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="SelectionBackground"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty SelectionBackgroundProperty =
-            BindableProperty.Create(
-                nameof(SelectionBackground),
-                typeof(Brush),
-                typeof(SfTimePicker),
-                defaultValueCreator: bindable => new SolidColorBrush(Color.FromArgb("#6750A4")),
-                propertyChanged: OnSelectionBackgroundChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionStrokeColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="SelectionStrokeColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty SelectionStrokeColorProperty =
-            BindableProperty.Create(
-                nameof(SelectionStrokeColor),
-                typeof(Color),
-                typeof(SfTimePicker),
-                defaultValueCreator: bindable => Colors.Transparent,
-                propertyChanged: OnSelectionStrokeColorChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="SelectionCornerRadius"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// The identifier for <see cref="SelectionCornerRadius"/> dependency property.
-        /// </value>
-        internal static readonly BindableProperty SelectionCornerRadiusProperty =
-            BindableProperty.Create(
-                nameof(SelectionCornerRadius),
-                typeof(CornerRadius),
-                typeof(SfTimePicker),
-                defaultValueCreator: bindable => new CornerRadius(20),
-                propertyChanged: OnSelectionCornerRadiusChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="HeaderDividerColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="HeaderDividerColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty HeaderDividerColorProperty =
-            BindableProperty.Create(
-                nameof(HeaderDividerColor),
-                typeof(Color),
-                typeof(SfTimePicker),
-                defaultValueCreator: bindable => Color.FromArgb("#CAC4D0"),
-                propertyChanged: OnHeaderDividerColorChanged);
-
-        /// <summary>
-        /// Identifies the <see cref="FooterDividerColor"/> dependency property.
-        /// </summary>
-        /// <value>
-        /// Identifies the <see cref="FooterDividerColor"/> bindable property.
-        /// </value>
-        internal static readonly BindableProperty FooterDividerColorProperty =
-            BindableProperty.Create(
-                nameof(FooterDividerColor),
-                typeof(Color),
-                typeof(SfTimePicker),
-                defaultValueCreator: bindable => Color.FromArgb("#CAC4D0"),
-                propertyChanged: OnFooterDividerColorChanged);
-
-        /// <summary>
         /// Identifies the <see cref="HeaderTextColor"/> dependency property.
         /// </summary>
         /// <value>
@@ -470,6 +377,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SelectionIndexChanged += OnPickerSelectionIndexChanged;
             BlackoutTimes.CollectionChanged += OnBlackoutTimes_CollectionChanged;
             BackgroundColor = TimePickerBackground;
+            InitializePickerStyle();
             Dispatcher.Dispatch(() =>
             {
                 InitializeTheme();
@@ -822,69 +730,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
-        /// Gets or sets the background of the header view in time picker.
-        /// </summary>
-        internal Brush HeaderBackground
-        {
-            get { return (Brush)GetValue(HeaderBackgroundProperty); }
-            set { SetValue(HeaderBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the footer view in SfTimePicker.
-        /// </summary>
-        internal Brush FooterBackground
-        {
-            get { return (Brush)GetValue(FooterBackgroundProperty); }
-            set { SetValue(FooterBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the selection view in SfTimePicker.
-        /// </summary>
-        internal Brush SelectionBackground
-        {
-            get { return (Brush)GetValue(SelectionBackgroundProperty); }
-            set { SetValue(SelectionBackgroundProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the stroke color of the selection view in SfTimePicker.
-        /// </summary>
-        internal Color SelectionStrokeColor
-        {
-            get { return (Color)GetValue(SelectionStrokeColorProperty); }
-            set { SetValue(SelectionStrokeColorProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the corner radius of the selection view in SfTimePicker.
-        /// </summary>
-        internal CornerRadius SelectionCornerRadius
-        {
-            get { return (CornerRadius)GetValue(SelectionCornerRadiusProperty); }
-            set { SetValue(SelectionCornerRadiusProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the color of the header separator line in time picker.
-        /// </summary>
-        internal Color HeaderDividerColor
-        {
-            get { return (Color)GetValue(HeaderDividerColorProperty); }
-            set { SetValue(HeaderDividerColorProperty, value); }
-        }
-
-        /// <summary>
-        /// Gets or sets the background of the footer separator line background in SfTimePicker.
-        /// </summary>
-        internal Color FooterDividerColor
-        {
-            get { return (Color)GetValue(FooterDividerColorProperty); }
-            set { SetValue(FooterDividerColorProperty, value); }
-        }
-
-        /// <summary>
         /// Gets or sets the header text color of the text style.
         /// </summary>
         internal Color HeaderTextColor
@@ -1013,7 +858,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int changedColumnValue = formatStringOrder[e.ColumnIndex];
             TimeSpan maxTime = TimePickerHelper.GetValidMaxTime(MinimumTime, MaximumTime);
             TimeSpan previousTime = new TimeSpan(_previousSelectedDateTime.Hour, _previousSelectedDateTime.Minute, _previousSelectedDateTime.Second);
-            TimeSpan currentTime = SelectedTime ?? previousTime;
+
+            // Determine the current time to use based on the picker mode and available time values:
+            // - If not in Default mode and InternalSelectedTime has a value, use it.
+            // - Otherwise, use SelectedTime if available.
+            // - If neither is available, fall back to previousTime.
+            TimeSpan currentTime = IsScrollSelectionAllowed() && _internalSelectedTime.HasValue ? _internalSelectedTime.Value : SelectedTime ?? previousTime;
             TimeSpan? previousSelectedTime = TimePickerHelper.GetValidSelectedTime(currentTime, MinimumTime, maxTime);
             DateTime minimumTime = Convert.ToDateTime(MinimumTime.ToString());
             DateTime maximumTime = Convert.ToDateTime(maxTime.ToString());
@@ -1040,7 +890,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                             minutes = int.Parse(minuteCollection[e.NewValue]);
                         }
 
-                        SetSelectedTime(new TimeSpan(previousSelectedTime.Value.Hours, minutes, previousSelectedTime.Value.Seconds));
+                        SetSelectedTime(new TimeSpan(previousSelectedTime.Value.Hours, minutes, previousSelectedTime.Value.Seconds), e.OldValue);
                     }
 
                     break;
@@ -1053,7 +903,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                             seconds = int.Parse(secondCollection[e.NewValue]);
                         }
 
-                        SetSelectedTime(new TimeSpan(previousSelectedTime.Value.Hours, previousSelectedTime.Value.Minutes, seconds));
+                        SetSelectedTime(new TimeSpan(previousSelectedTime.Value.Hours, previousSelectedTime.Value.Minutes, seconds), e.OldValue);
                     }
 
                     break;
@@ -1109,7 +959,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             //// Get the minute value based on the selected index changes value.
             int minute = int.Parse(minutes[minuteIndex]);
 
-            SetSelectedTime(new TimeSpan(hour, minute, previousSelectedTime.Value.Seconds));
+            SetSelectedTime(new TimeSpan(hour, minute, previousSelectedTime.Value.Seconds), e.OldValue);
         }
 
         /// <summary>
@@ -1169,7 +1019,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 //// Get the minute value based on the selected index changes value.
                 int minute = int.Parse(minutes[minuteIndex]);
 
-                SetSelectedTime(new TimeSpan(hour, minute, previousSelectedTime.Value.Seconds));
+                SetSelectedTime(new TimeSpan(hour, minute, previousSelectedTime.Value.Seconds), e.OldValue);
             }
         }
 
@@ -1177,11 +1027,29 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// Method to set the Selected Time value.
         /// </summary>
         /// <param name="selectedTime">The selected time.</param>
-        void SetSelectedTime(TimeSpan selectedTime)
+        /// <param name="oldValue">Selection changed event argument of oldvalue</param>
+        void SetSelectedTime(TimeSpan selectedTime, int oldValue)
         {
-            if (!TimePickerHelper.IsSameTimeSpan(selectedTime, SelectedTime))
+            // If the picker is not in Default mode
+            if (IsScrollSelectionAllowed())
             {
-                SelectedTime = selectedTime;
+                // Check if the selected time falls within any blackout times
+                if (BlackoutTimes.Any(blackOutTime => TimePickerHelper.IsBlackoutTime(blackOutTime, selectedTime)))
+                {
+                    // If it's a blackout time, revert the minute column selection to the previous value
+                    _minuteColumn.SelectedIndex = oldValue;
+                }
+                // Set the internal selected time to the new selected time
+                _internalSelectedTime = selectedTime;
+                // Update the selected index in the UI to reflect the new time
+                UpdateSelectedIndex(selectedTime);
+            }
+            else
+            {
+                if (!TimePickerHelper.IsSameTimeSpan(selectedTime, SelectedTime))
+                {
+                    SelectedTime = selectedTime;
+                }
             }
         }
 
@@ -1359,9 +1227,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <summary>
         /// Method to update the selected index value for all the picker column based on the selected time value.
         /// </summary>
-        void UpdateSelectedIndex()
+        /// <param name="currentSelectedTime">The selected time value.</param>
+        void UpdateSelectedIndex(TimeSpan? currentSelectedTime)
         {
-            if (SelectedTime == null)
+            if (currentSelectedTime == null)
             {
                 return;
             }
@@ -1370,7 +1239,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             TimePickerHelper.GetFormatStringOrder(out hourFormat, Format);
             if (_hourColumn.ItemsSource != null && _hourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > 0)
             {
-                int? index = TimePickerHelper.GetHourIndex(hourFormat, hourCollection, SelectedTime.Value.Hours);
+                int? index = TimePickerHelper.GetHourIndex(hourFormat, hourCollection, currentSelectedTime.Value.Hours);
                 if (index == null)
                 {
                     return;
@@ -1384,7 +1253,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > 0)
             {
-                int index = TimePickerHelper.GetMinuteOrSecondIndex(minuteCollection, SelectedTime.Value.Minutes);
+                int index = TimePickerHelper.GetMinuteOrSecondIndex(minuteCollection, currentSelectedTime.Value.Minutes);
                 if (_minuteColumn.SelectedIndex != index)
                 {
                     _minuteColumn.SelectedIndex = index;
@@ -1393,7 +1262,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > 0)
             {
-                int index = TimePickerHelper.GetMinuteOrSecondIndex(secondCollection, SelectedTime.Value.Seconds);
+                int index = TimePickerHelper.GetMinuteOrSecondIndex(secondCollection, currentSelectedTime.Value.Seconds);
                 if (_secondColumn.SelectedIndex != index)
                 {
                     _secondColumn.SelectedIndex = index;
@@ -1402,11 +1271,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (_meridiemColumn.ItemsSource != null && _meridiemColumn.ItemsSource is ObservableCollection<string> meridiemCollection && meridiemCollection.Count > 0)
             {
-                int index = SelectedTime.Value.Hours >= 12 ? 1 : 0;
+                int index = currentSelectedTime.Value.Hours >= 12 ? 1 : 0;
                 if (_meridiemColumn.SelectedIndex != index)
                 {
                     _meridiemColumn.SelectedIndex = index;
                 }
+            }
+
+            if (IsScrollSelectionAllowed() && SelectedTime == null)
+            {
+                _hourColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_hourColumn);
+                _minuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_minuteColumn);
+                _secondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_secondColumn);
+                _meridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_meridiemColumn);
             }
         }
 
@@ -1430,6 +1307,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 _hourColumn = GenerateHourColumn(hourFormat, SelectedTime, currentSelectedTime);
                 int hourIndex = index;
+                _hourColumn.Parent = this;
                 _columns[hourIndex] = _hourColumn;
             }
 
@@ -1531,23 +1409,23 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void InitializeTheme()
         {
             ThemeElement.InitializeThemeResources(this, "SfTimePickerTheme");
-            SetDynamicResource(TimePickerBackgroundProperty, "SfTimePickerNormalBackground");
 
-            SetDynamicResource(HeaderBackgroundProperty, "SfTimePickerNormalHeaderBackground");
-            SetDynamicResource(HeaderDividerColorProperty, "SfTimePickerNormalHeaderDividerColor");
             SetDynamicResource(HeaderTextColorProperty, "SfTimePickerNormalHeaderTextColor");
             SetDynamicResource(HeaderFontSizeProperty, "SfTimePickerNormalHeaderFontSize");
 
-            SetDynamicResource(FooterBackgroundProperty, "SfTimePickerNormalFooterBackground");
-            SetDynamicResource(FooterDividerColorProperty, "SfTimePickerNormalFooterDividerColor");
             SetDynamicResource(FooterTextColorProperty, "SfTimePickerNormalFooterTextColor");
             SetDynamicResource(FooterFontSizeProperty, "SfTimePickerNormalFooterFontSize");
+        }
 
-            SetDynamicResource(SelectionBackgroundProperty, "SfTimePickerSelectionBackground");
-            SetDynamicResource(SelectionStrokeColorProperty, "SfTimePickerSelectionStroke");
-            SetDynamicResource(SelectionCornerRadiusProperty, "SfTimePickerSelectionCornerRadius");
+        /// <summary>
+        /// Method to initialize the defult picker style.
+        /// </summary>
+        void InitializePickerStyle()
+        {
+            SetDynamicResource(TimePickerBackgroundProperty, "SfTimePickerNormalBackground");
+
             SetDynamicResource(SelectedTextColorProperty, "SfTimePickerSelectedTextColor");
-            SetDynamicResource(SelectionTextColorProperty, "SfPickerSelectionTextColor");
+            SetDynamicResource(SelectionTextColorProperty, "SfTimePickerSelectionTextColor");
             SetDynamicResource(SelectedFontSizeProperty, "SfTimePickerSelectedFontSize");
 
             SetDynamicResource(NormalTextColorProperty, "SfTimePickerNormalTextColor");
@@ -1642,6 +1520,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments</param>
         protected override void OnPopupClosed(EventArgs e)
         {
+            if (IsScrollSelectionAllowed())
+            {
+                if (_internalSelectedTime != null)
+                {
+                    _internalSelectedTime = null;
+                    UpdateSelectedIndex(SelectedTime);
+                }
+            }
+
             InvokeClosedEvent(this, e);
         }
 
@@ -1669,6 +1556,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments</param>
         protected override void OnOkButtonClicked(EventArgs e)
         {
+            // If the picker is not in Default mode and an internal selected time exists
+            if (IsScrollSelectionAllowed() && _internalSelectedTime != null)
+            {
+                // If the internal selected time is different from the currently selected time
+                if (!TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
+                {
+                    // Update the selected time with the internal selected time
+                    this.SelectedTime = _internalSelectedTime.Value;
+                    // Clear the internal selected time after applying it
+                    _internalSelectedTime = null;
+                }
+            }
+
             InvokeOkButtonClickedEvent(this, e);
             if (AcceptCommand != null && AcceptCommand.CanExecute(e))
             {
@@ -1682,6 +1582,30 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments</param>
         protected override void OnCancelButtonClicked(EventArgs e)
         {
+            // If the picker is not in Default mode
+            if (IsScrollSelectionAllowed())
+            {
+                // If a time is currently selected
+                if (SelectedTime != null)
+                {
+                    // Update the selected index in the UI to reflect the selected time
+                    UpdateSelectedIndex(SelectedTime);
+                }
+                else
+                {
+                    // If no time is selected, clear all column selections
+                    _hourColumn.SelectedItem = null;
+                    _minuteColumn.SelectedItem = null;
+                    _secondColumn.SelectedItem = null;
+                    _meridiemColumn.SelectedItem = null;
+                }
+                // Clear the internal selected time if it exists
+                if (_internalSelectedTime != null)
+                {
+                    _internalSelectedTime = null;
+                }
+            }
+
             InvokeCancelButtonClickedEvent(this, e);
             if (DeclineCommand != null && DeclineCommand.CanExecute(e))
             {
@@ -1780,7 +1704,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 {
                     PickerContainer? pickerContainer = picker.GetPickerContainerValue();
                     pickerContainer?.UpdateScrollViewDraw();
-                    picker.UpdateSelectedIndex();
+                    picker.UpdateSelectedIndex((TimeSpan)newValue);
                     //// Skip the update and event call by checking if the time is blackout value and within current hour.
                     if (oldSelectedTime.Hours == picker._previousSelectedDateTime.Hour)
                     {
@@ -1841,7 +1765,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 picker.SelectionChangedCommand.Execute(timePickerSelectionChangedEventArgs);
             }
 
-            picker.UpdateSelectedIndex();
+            picker.UpdateSelectedIndex(currentSelectedTime);
         }
 
         /// <summary>
@@ -1975,7 +1899,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             timepicker.UpdateMinimumMaximumTime(oldValue, newValue);
-            timepicker.UpdateSelectedIndex();
+            TimeSpan? currentSelectedTime = TimePickerHelper.GetValidSelectedTime(timepicker.SelectedTime, timepicker.MinimumTime, timepicker.MaximumTime);
+            timepicker.UpdateSelectedIndex(currentSelectedTime);
         }
 
         /// <summary>
@@ -2000,7 +1925,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             timepicker.UpdateMinimumMaximumTime(oldValue, newValue);
-            timepicker.UpdateSelectedIndex();
+            TimeSpan? currentSelectedTime = TimePickerHelper.GetValidSelectedTime(timepicker.SelectedTime, timepicker.MinimumTime, timepicker.MaximumTime);
+            timepicker.UpdateSelectedIndex(currentSelectedTime);
         }
 
         /// <summary>
@@ -2061,125 +1987,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             picker.BackgroundColor = picker.TimePickerBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker header background changed.
-        /// </summary>
-        /// <param name="bindable">The header settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnHeaderBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.HeaderView.Background = picker.HeaderBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker footer background changed.
-        /// </summary>
-        /// <param name="bindable">The footer settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnFooterBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.FooterView.Background = picker.FooterBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection background changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionBackgroundChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.Background = picker.SelectionBackground;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection stroke color changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionStrokeColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.Stroke = picker.SelectionStrokeColor;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker selection corner radius changed.
-        /// </summary>
-        /// <param name="bindable">The selection settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnSelectionCornerRadiusChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.SelectionView.CornerRadius = picker.SelectionCornerRadius;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker header separator line background changed.
-        /// </summary>
-        /// <param name="bindable">The header settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnHeaderDividerColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.HeaderView.DividerColor = picker.HeaderDividerColor;
-        }
-
-        /// <summary>
-        /// Method invokes on the picker footer separator line background changed.
-        /// </summary>
-        /// <param name="bindable">The footer settings object.</param>
-        /// <param name="oldValue">Property old value.</param>
-        /// <param name="newValue">Property new value.</param>
-        static void OnFooterDividerColorChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            SfTimePicker? picker = bindable as SfTimePicker;
-            if (picker == null)
-            {
-                return;
-            }
-
-            picker.FooterView.DividerColor = picker.FooterDividerColor;
         }
 
         /// <summary>

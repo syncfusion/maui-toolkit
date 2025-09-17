@@ -13,6 +13,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         SfLabel? _header;
         SfHorizontalStackLayout? _horizontalLayout;
         SfVerticalStackLayout? _verticalLayout;
+		View? _headerContent;
 
         #endregion
 
@@ -101,20 +102,39 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
             base.OnParentSet();
             SetBinding();
+			SetHeaderContent();
 
             if (Parent != null)
             {
                 Parent.PropertyChanged += OnParentPropertyChanged;
             }
         }
-        #endregion
 
-        #region Property Changed Implementation
+		/// <summary>
+		/// Handler changed method.
+		/// </summary>
+		protected override void OnHandlerChanged()
+		{
+			if (Handler == null)
+			{
+				_image = null;
+				_header = null;
+				if (Parent != null)
+				{
+					Parent.PropertyChanged -= OnParentPropertyChanged;
+				}
+			}
 
-        /// <summary>
-        /// Handles property changes of the parent control, updating the current control accordingly.
-        /// </summary>
-        void OnParentPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+			base.OnHandlerChanged();
+		}
+		#endregion
+
+		#region Property Changed Implementation
+
+		/// <summary>
+		/// Handles property changes of the parent control, updating the current control accordingly.
+		/// </summary>
+		void OnParentPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             if (sender is SfTabItem item && item != null)
             {
@@ -131,7 +151,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     UpdateHorizontalOptions(item);
                     UpdateHeaderHorizontalOptions(item);
                 }
-            }
+				if (e.PropertyName == nameof(SfTabItem.HeaderContent))
+				{
+					UpdateHeaderContent(item);
+				}
+			}
         }
 
         static void OnHeaderDisplayModePropertyChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as TabViewMaterialVisualStyle)?.UpdateHeaderDisplayMode();
@@ -179,13 +203,15 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Fill,
-            };
+				Spacing = 0,
+			};
 
             _verticalLayout = new SfVerticalStackLayout()
             {
                 HorizontalOptions = LayoutOptions.Fill,
                 VerticalOptions = LayoutOptions.Center,
-            };
+				Spacing = 0,
+			};
 
             Children.Add(_verticalLayout);
         }
@@ -230,7 +256,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             ClearAllChildren();
 
-            if (HeaderDisplayMode == TabBarDisplayMode.Text)
+			if (_headerContent != null)
+			{
+				Children.Add(_headerContent);
+				return;
+			}
+
+			if (HeaderDisplayMode == TabBarDisplayMode.Text)
             {
                 if (_header != null)
                 {
@@ -343,10 +375,46 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
-        /// <summary>
-        /// Updates the layout in response to a change in the image position.
-        /// </summary>
-        void UpdateImagePosition()
+		/// <summary>
+		/// Sets up for HeaderContent property.
+		/// </summary>
+		void SetHeaderContent()
+		{
+			if (Parent is SfTabItem tabItem)
+			{
+				UpdateHeaderContent(tabItem);
+			}
+		}
+
+		/// <summary>
+		/// Updates the HeaderContent display.
+		/// </summary>
+		void UpdateHeaderContent(SfTabItem tabItem)
+		{
+			if (tabItem is not null)
+			{
+				if (tabItem.HeaderContent is not null)
+				{
+					if (tabItem.HeaderContent.BindingContext is null)
+					{
+						tabItem.HeaderContent.BindingContext = tabItem.BindingContext;
+					}
+					_headerContent = tabItem.HeaderContent;
+				}
+				else
+				{
+					Children.Remove(_headerContent);
+					_headerContent = null;
+				}
+
+				UpdateLayout();
+			}
+		}
+
+		/// <summary>
+		/// Updates the layout in response to a change in the image position.
+		/// </summary>
+		void UpdateImagePosition()
         {
             UpdateLayout();
         }

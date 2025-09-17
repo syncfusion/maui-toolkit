@@ -60,7 +60,12 @@ namespace Syncfusion.Maui.Toolkit.Popup.Helper
 		/// </summary>
 		void RemoveEffects()
 		{
-			_effectsView?.Reset();
+			if (_effectsView is null)
+			{
+				return;
+			}
+
+			_effectsView.Reset();
 		}
 
 		#endregion
@@ -106,7 +111,7 @@ namespace Syncfusion.Maui.Toolkit.Popup.Helper
 		protected override List<SemanticsNode> GetSemanticsNodesCore(double width, double height)
 		{
 			Size buttonSize = new(Width, Height);
-			if (_buttonSemanticsNodes.Count != 0 && _buttonSemanticsSize == buttonSize)
+			if (_buttonSemanticsNodes.Count is not 0 && _buttonSemanticsSize == buttonSize)
 			{
 				return _buttonSemanticsNodes;
 			}

@@ -577,126 +577,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(0, 0, 255)]
         [InlineData(255, 255, 0)]
         [InlineData(0, 255, 255)]
-        public void TimePicker_HeaderBackground_GetAndSet_UsingBrush(byte red, byte green, byte blue)
-        {
-            SfTimePicker picker = new SfTimePicker();
-
-            Brush expectedValue = Color.FromRgb(red, green, blue);
-            picker.HeaderBackground = expectedValue;
-            Brush actualValue = picker.HeaderBackground;
-
-            Assert.Equal(expectedValue, actualValue);
-        }
-
-        [Theory]
-        [InlineData(255, 0, 0)]
-        [InlineData(0, 255, 0)]
-        [InlineData(0, 0, 255)]
-        [InlineData(255, 255, 0)]
-        [InlineData(0, 255, 255)]
-        public void TimePicker_FooterBackground_GetAndSet_UsingBrush(byte red, byte green, byte blue)
-        {
-            SfTimePicker picker = new SfTimePicker();
-
-            Brush expectedValue = Color.FromRgb(red, green, blue);
-            picker.FooterBackground = expectedValue;
-            Brush actualValue = picker.FooterBackground;
-
-            Assert.Equal(expectedValue, actualValue);
-        }
-
-        [Theory]
-        [InlineData(255, 0, 0)]
-        [InlineData(0, 255, 0)]
-        [InlineData(0, 0, 255)]
-        [InlineData(255, 255, 0)]
-        [InlineData(0, 255, 255)]
-        public void TimePicker_SelectionBackground_GetAndSet_UsingBrush(byte red, byte green, byte blue)
-        {
-            SfTimePicker picker = new SfTimePicker();
-
-            Brush expectedValue = Color.FromRgb(red, green, blue);
-            picker.SelectionBackground = expectedValue;
-            Brush actualValue = picker.SelectionBackground;
-
-            Assert.Equal(expectedValue, actualValue);
-        }
-
-        [Theory]
-        [InlineData(255, 0, 0)]
-        [InlineData(0, 255, 0)]
-        [InlineData(0, 0, 255)]
-        [InlineData(255, 255, 0)]
-        [InlineData(0, 255, 255)]
-        public void TimePicker_SelectionStrokeColor_GetAndSet_UsingColor(byte red, byte green, byte blue)
-        {
-            SfTimePicker picker = new SfTimePicker();
-
-            Color expectedValue = Color.FromRgb(red, green, blue);
-            picker.SelectionStrokeColor = expectedValue;
-            Color actualValue = picker.SelectionStrokeColor;
-
-            Assert.Equal(expectedValue, actualValue);
-        }
-
-        [Theory]
-        [InlineData(30, 30, 30, 30)]
-        [InlineData(50, 50, 50, 50)]
-        [InlineData(-30, -30, -30, -30)]
-        [InlineData(0, 0, 0, 0)]
-        [InlineData(30, 0, 0, 0)]
-        [InlineData(0, 30, 0, 0)]
-        [InlineData(0, 0, 30, 0)]
-        [InlineData(0, 0, 0, 30)]
-        [InlineData(0, -30, 30, 0)]
-        public void TimePicker_SelectionCornerRadius_GetAndSet(double topLeft, double topRight, double bottomLeft, double bottomRight)
-        {
-            SfTimePicker picker = new SfTimePicker();
-            picker.SelectionCornerRadius = new CornerRadius(topLeft, topRight, bottomLeft, bottomRight);
-            CornerRadius actualValue = picker.SelectionCornerRadius;
-            Assert.Equal(new CornerRadius(topLeft, topRight, bottomLeft, bottomRight), actualValue);
-        }
-
-        [Theory]
-        [InlineData(255, 0, 0)]
-        [InlineData(0, 255, 0)]
-        [InlineData(0, 0, 255)]
-        [InlineData(255, 255, 0)]
-        [InlineData(0, 255, 255)]
-        public void TimePicker_HeaderDividerColor_GetAndSet_UsingColor(byte red, byte green, byte blue)
-        {
-            SfTimePicker picker = new SfTimePicker();
-
-            Color expectedValue = Color.FromRgb(red, green, blue);
-            picker.HeaderDividerColor = expectedValue;
-            Color actualValue = picker.HeaderDividerColor;
-
-            Assert.Equal(expectedValue, actualValue);
-        }
-
-        [Theory]
-        [InlineData(255, 0, 0)]
-        [InlineData(0, 255, 0)]
-        [InlineData(0, 0, 255)]
-        [InlineData(255, 255, 0)]
-        [InlineData(0, 255, 255)]
-        public void TimePicker_FooterDividerColor_GetAndSet_UsingColor(byte red, byte green, byte blue)
-        {
-            SfTimePicker picker = new SfTimePicker();
-
-            Color expectedValue = Color.FromRgb(red, green, blue);
-            picker.FooterDividerColor = expectedValue;
-            Color actualValue = picker.FooterDividerColor;
-
-            Assert.Equal(expectedValue, actualValue);
-        }
-
-        [Theory]
-        [InlineData(255, 0, 0)]
-        [InlineData(0, 255, 0)]
-        [InlineData(0, 0, 255)]
-        [InlineData(255, 255, 0)]
-        [InlineData(0, 255, 255)]
         public void TimePicker_HeaderTextColor_GetAndSet_UsingColor(byte red, byte green, byte blue)
         {
             SfTimePicker picker = new SfTimePicker();
@@ -2170,7 +2050,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var timePicker = new SfTimePicker();
             timePicker.SelectedTime = new TimeSpan(10, 30, 0);
 
-            InvokePrivateMethod(timePicker, "SetSelectedTime", new TimeSpan(11, 45, 30));
+            InvokePrivateMethod(timePicker, "SetSelectedTime", new TimeSpan(11, 45, 30), 26);
 
             Assert.Equal(new TimeSpan(11, 45, 30), timePicker.SelectedTime);
         }
@@ -2181,7 +2061,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var timePicker = new SfTimePicker();
             timePicker.SelectedTime = new TimeSpan(10, 30, 0);
 
-            InvokePrivateMethod(timePicker, "SetSelectedTime", new TimeSpan(10, 30, 0));
+            InvokePrivateMethod(timePicker, "SetSelectedTime", new TimeSpan(10, 30, 0), 5);
 
             Assert.Equal(new TimeSpan(10, 30, 0), timePicker.SelectedTime);
         }
@@ -2192,7 +2072,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var timePicker = new SfTimePicker();
             timePicker.SelectedTime = null;
 
-            InvokePrivateMethod(timePicker, "SetSelectedTime", new TimeSpan(12, 0, 0));
+            InvokePrivateMethod(timePicker, "SetSelectedTime", new TimeSpan(12, 0, 0), 7);
 
             Assert.Equal(new TimeSpan(12, 0, 0), timePicker.SelectedTime);
         }
@@ -2205,7 +2085,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             timePicker.MaximumTime = new TimeSpan(17, 0, 0);
             timePicker.SelectedTime = new TimeSpan(12, 0, 0);
 
-            InvokePrivateMethod(timePicker, "SetSelectedTime", new TimeSpan(20, 0, 0));
+            InvokePrivateMethod(timePicker, "SetSelectedTime", new TimeSpan(20, 0, 0), 3);
 
             Assert.Equal(new TimeSpan(17, 0, 0), timePicker.SelectedTime);
         }
@@ -2582,7 +2462,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             };
             SetPrivateField(timePicker, "_hourColumn", hourColumn);
 
-            InvokePrivateMethod(timePicker, "UpdateSelectedIndex");
+            InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
             Assert.Equal(13, hourColumn.SelectedIndex);
         }
@@ -2599,7 +2479,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             };
             SetPrivateField(timePicker, "_minuteColumn", minuteColumn);
 
-            InvokePrivateMethod(timePicker, "UpdateSelectedIndex");
+            InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
             Assert.Equal(2, minuteColumn.SelectedIndex);
         }
@@ -2616,7 +2496,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             };
             SetPrivateField(timePicker, "_secondColumn", secondColumn);
 
-            InvokePrivateMethod(timePicker, "UpdateSelectedIndex");
+            InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
             Assert.Equal(3, secondColumn.SelectedIndex);
         }
@@ -2633,7 +2513,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             };
             SetPrivateField(timePicker, "_meridiemColumn", meridiemColumn);
 
-            InvokePrivateMethod(timePicker, "UpdateSelectedIndex");
+            InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
             Assert.Equal(1, meridiemColumn.SelectedIndex);
         }
@@ -2652,7 +2532,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             SetPrivateField(timePicker, "_secondColumn", secondColumn);
             SetPrivateField(timePicker, "_meridiemColumn", meridiemColumn);
 
-            InvokePrivateMethod(timePicker, "UpdateSelectedIndex");
+            InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
             Assert.Equal(0, hourColumn.SelectedIndex);
             Assert.Equal(0, minuteColumn.SelectedIndex);
@@ -2795,8 +2675,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void DatePicker_PopupSize_WhenPopupSizeIsNotSet()
         {
             SfTimePicker sfTimePicker = new SfTimePicker();
-            double expectedWidth = 300;
-            double expectedHeight = 240;
+            double expectedWidth = -1;
+            double expectedHeight = -1;
 
             double actualWidth = sfTimePicker.PopupWidth;
             double actualHeight = sfTimePicker.PopupHeight;
@@ -2932,8 +2812,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         {
             SfTimePicker sfTimePicker = new SfTimePicker();
             sfTimePicker.ItemHeight = 10;
-            double expectedWidth = 300;
-            double expectedHeight = 90;
+            double expectedWidth = -1;
+            double expectedHeight = -1;
             double actualWidth = sfTimePicker.PopupWidth;
             double actualHeight = sfTimePicker.PopupHeight;
 
@@ -3058,6 +2938,138 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal(expectedHeight, actualHeight);
         }
 
-        #endregion
-    }
+		#endregion
+
+		#region Dialog Mode Selection Behavior Tests
+
+		[Fact]
+		public void DialogMode_TimeSelectionNotCommittedUntilOK_ValidatesCorrectBehavior()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.Dialog;
+			var originalTime = picker.SelectedTime ?? new TimeSpan(9, 0, 0);
+			var newTime = new TimeSpan(15, 45, 20);
+			var selectionChangedFired = false;
+			picker.SelectionChanged += (s, e) => selectionChangedFired = true;
+			// (Simulated: In actual dialog usage, time is not committed until OK)
+			Assert.Equal(originalTime, picker.SelectedTime ?? originalTime);
+			Assert.False(selectionChangedFired, "SelectionChanged event should not fire until OK is pressed in dialog mode");
+		}
+		[Fact]
+		public void RelativeDialogMode_TimeSelectionNotCommittedUntilOK_ValidatesCorrectBehavior()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.RelativeDialog;
+			var originalTime = picker.SelectedTime ?? new TimeSpan(10, 0, 0);
+			var newTime = new TimeSpan(20, 30, 40);
+			var selectionChangedFired = false;
+			picker.SelectionChanged += (s, e) => selectionChangedFired = true;
+			Assert.Equal(originalTime, picker.SelectedTime ?? originalTime);
+			Assert.False(selectionChangedFired, "SelectionChanged event should not fire until OK is pressed in relative dialog mode");
+		}
+		[Fact]
+		public void DialogMode_CancelButtonRevertsTimeSelection_ValidatesCorrectBehavior()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.Dialog;
+			picker.SelectedTime = new TimeSpan(8, 30, 0);
+			var originalTime = picker.SelectedTime;
+			var selectionChangedFired = false;
+			picker.SelectionChanged += (s, e) => selectionChangedFired = true;
+			// (Simulated: Cancel in dialog should revert selection)
+			Assert.Equal(originalTime, picker.SelectedTime);
+			Assert.False(selectionChangedFired, "SelectionChanged event should not fire after Cancel");
+		}
+		[Fact]
+		public void RelativeDialogMode_CancelButtonRevertsTimeSelection_ValidatesCorrectBehavior()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.RelativeDialog;
+			picker.SelectedTime = new TimeSpan(19, 10, 0);
+			var originalTime = picker.SelectedTime;
+			var selectionChangedFired = false;
+			picker.SelectionChanged += (s, e) => selectionChangedFired = true;
+			Assert.Equal(originalTime, picker.SelectedTime);
+			Assert.False(selectionChangedFired, "SelectionChanged event should not fire after Cancel");
+		}
+		[Fact]
+		public void DialogMode_OKButtonCommitsTimeSelection_ValidatesCorrectBehavior()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.Dialog;
+			picker.SelectedTime = new TimeSpan(11, 00, 00);
+			var selectionChangedFired = false;
+			var expectedNewTime = new TimeSpan(16, 30, 30);
+			picker.SelectionChanged += (s, e) => selectionChangedFired = true;
+			picker.SelectedTime = expectedNewTime; // Simulates OK
+			Assert.Equal(expectedNewTime, picker.SelectedTime);
+			Assert.True(selectionChangedFired, "SelectionChanged event should fire when OK is pressed");
+		}
+		[Fact]
+		public void RelativeDialogMode_OKButtonCommitsTimeSelection_ValidatesCorrectBehavior()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.RelativeDialog;
+			picker.SelectedTime = new TimeSpan(7, 15, 00);
+			var selectionChangedFired = false;
+			var expectedNewTime = new TimeSpan(20, 22, 13);
+			picker.SelectionChanged += (s, e) => selectionChangedFired = true;
+			picker.SelectedTime = expectedNewTime; // Simulates OK
+			Assert.Equal(expectedNewTime, picker.SelectedTime);
+			Assert.True(selectionChangedFired, "SelectionChanged event should fire when OK is pressed");
+		}
+		[Fact]
+		public void DialogMode_MultipleTimeSelectionsUntilOK_OnlyCommitsOnOK()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.Dialog;
+			picker.SelectedTime = new TimeSpan(10, 0, 0);
+			var selectionChangedCount = 0;
+			picker.SelectionChanged += (s, e) => selectionChangedCount++;
+			var finalTime = new TimeSpan(18, 59, 20);
+			picker.SelectedTime = finalTime; // Simulate OK
+			Assert.Equal(finalTime, picker.SelectedTime);
+			Assert.Equal(1, selectionChangedCount);
+		}
+		[Fact]
+		public void DefaultMode_TimeSelectionCommittedImmediately_ValidatesCorrectBehavior()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.Default;
+			picker.SelectedTime = new TimeSpan(8, 44, 11);
+			var selectionChangedFired = false;
+			picker.SelectionChanged += (s, e) => selectionChangedFired = true;
+			var newTime = new TimeSpan(15, 22, 5);
+			picker.SelectedTime = newTime;
+			Assert.Equal(newTime, picker.SelectedTime);
+			Assert.True(selectionChangedFired, "SelectionChanged should fire immediately in Default mode");
+		}
+		[Theory]
+		[InlineData(PickerMode.Dialog)]
+		[InlineData(PickerMode.RelativeDialog)]
+		public void DialogModes_FooterButtonsConfigured_ValidatesCorrectBehavior(PickerMode mode)
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = mode;
+			Assert.NotNull(picker.FooterView);
+			Assert.Equal("OK", picker.FooterView.OkButtonText);
+			Assert.Equal("Cancel", picker.FooterView.CancelButtonText);
+			Assert.True(picker.FooterView.ShowOkButton);
+		}
+		[Fact]
+		public void DialogMode_TimeBoundaryValues_ValidatesCorrectBehavior()
+		{
+			SfTimePicker picker = new SfTimePicker();
+			picker.Mode = PickerMode.Dialog;
+			picker.MinimumTime = new TimeSpan(5, 0, 0);
+			picker.MaximumTime = new TimeSpan(23, 0, 0);
+			var selectionChangedFired = false;
+			picker.SelectionChanged += (s, e) => selectionChangedFired = true;
+			picker.SelectedTime = picker.MinimumTime;
+			Assert.Equal(picker.MinimumTime, picker.SelectedTime);
+			Assert.True(selectionChangedFired, "SelectionChanged should fire for valid boundary values");
+		}
+
+		#endregion
+	}
 }

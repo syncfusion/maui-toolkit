@@ -22,7 +22,7 @@
                             <ColumnDefinition Width="0.3*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label FontFamily="MauiSampleFontIcon" TextColor="{Binding Date, Converter={StaticResource ColorConverter}}" FontSize="15" HorizontalOptions="Center" VerticalOptions="Center" Text="&#xe72e;" />
+                        <Label FontFamily="MauiSampleFontIcon" TextColor="{Binding Date, Converter={StaticResource ColorConverter}}" FontSize="15" HorizontalOptions="Center" VerticalOptions="Center" Text="&#xe7bf;" />
 
                         <Label Grid.Column="1" Text="{Binding Subject}" Margin="0, 0, 5, 0" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="13" VerticalOptions="Center" LineBreakMode="WordWrap"/>
 
@@ -46,7 +46,7 @@
                             <ColumnDefinition Width="0.3*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label FontFamily="MauiSampleFontIcon" TextColor="{Binding Date, Converter={StaticResource ColorConverter}}" FontSize="15" HorizontalOptions="Center" VerticalOptions="Center" Text="&#xe72e;" />
+                        <Label FontFamily="MauiSampleFontIcon" TextColor="{Binding Date, Converter={StaticResource ColorConverter}}" FontSize="15" HorizontalOptions="Center" VerticalOptions="Center" Text="&#xe7bf;" />
 
                         <Label Grid.Column="1" Text="{Binding Subject}" Margin="0, 0, 5, 0" TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}" FontSize="13" VerticalOptions="Center" LineBreakMode="WordWrap"/>
 

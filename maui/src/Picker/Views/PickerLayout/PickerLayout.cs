@@ -310,14 +310,29 @@ internal class PickerLayout : SfView, IPickerLayout
         }
     }
 
-    #endregion
+	/// <summary>
+	/// Scrolls the picker scroll view to the specified index visually.
+	/// </summary>
+	/// <param name="index">The index to scroll to.</param>
+	internal void ScrollToSelectedIndex(int index)
+	{
+		if (_pickerScrollView == null || index < 0 || index >= _itemsSource.Count)
+		{
+			return;
+		}
+		double itemHeight = _pickerViewInfo.ItemHeight;
+		double scrollOffset = index * itemHeight;
+		_pickerScrollView.ScrollToAsync(0, scrollOffset, false);
+	}
 
-    #region Private Methods
+	#endregion
 
-    /// <summary>
-    /// Method to update the picker layout draw.
-    /// </summary>
-    void TriggerPickerLayoutDraw()
+	#region Private Methods
+
+	/// <summary>
+	/// Method to update the picker layout draw.
+	/// </summary>
+	void TriggerPickerLayoutDraw()
     {
         InvalidateDrawable();
     }
@@ -458,16 +473,17 @@ internal class PickerLayout : SfView, IPickerLayout
         canvas.RestoreState();
     }
 
-    #endregion
+	#endregion
 
-    #region Interface Implementation
+	#region Interface Implementation
 
-    /// <summary>
-    /// Method to update the selected index.
-    /// </summary>
-    /// <param name="tappedIndex">The tapped index.</param>
-    /// <param name="isInitialLoading">Check whether is initial loading or not.</param>
-    void IPickerLayout.UpdateSelectedIndexValue(int tappedIndex, bool isInitialLoading)
+	/// <summary>
+	/// Method to update the selected index.
+	/// </summary>
+	/// <param name="tappedIndex">The tapped index.</param>
+	/// <param name="isTapped">Is tap gesture used</param>
+	/// <param name="isInitialLoading">Check whether is initial loading or not.</param>
+	void IPickerLayout.UpdateSelectedIndexValue(int tappedIndex, bool isTapped, bool isInitialLoading)
     {
         if (tappedIndex >= _itemsSource.Count)
         {
@@ -478,7 +494,7 @@ internal class PickerLayout : SfView, IPickerLayout
             tappedIndex = -1;
         }
 
-        _pickerViewInfo.UpdateSelectedIndexValue(tappedIndex, _column._columnIndex, isInitialLoading);
+        _pickerViewInfo.UpdateSelectedIndexValue(tappedIndex, _column._columnIndex, isTapped, isInitialLoading);
     }
 
     #endregion

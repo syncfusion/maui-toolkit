@@ -210,6 +210,16 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			   typeof(SfTabItem),
 			   TextAlignment.Center);
 
+		/// <summary>
+		/// Identifies the <see cref="HeaderContent"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty HeaderContentProperty =
+			BindableProperty.Create(
+				nameof(HeaderContent),
+				typeof(View),
+				typeof(SfTabItem),
+				null);
+
 		#endregion
 
 		#region Constructor
@@ -695,6 +705,54 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			get => (TextAlignment)GetValue(HeaderHorizontalTextAlignmentProperty);
 			set => SetValue(HeaderHorizontalTextAlignmentProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the custom view content for the tab header.
+		/// </summary>
+		/// <value>
+		/// Specifies the custom view content for the tab header. When set, this takes precedence over the Header property. The default value is null.
+		/// </value>
+		/// <example>
+		/// Here is an example of how to set custom header content for a tab item.
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView>
+		///     <tabView:SfTabItem>
+		///         <tabView:SfTabItem.HeaderContent>
+		///             <Grid BackgroundColor="LightBlue">
+		///                 <Label Text="TAB 1" FontSize="16" />
+		///             </Grid>
+		///         </tabView:SfTabItem.HeaderContent>
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		/// </tabView:SfTabView>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// var tabView = new SfTabView();
+		/// var customHeader = new Grid { BackgroundColor = Colors.LightBlue };
+		/// customHeader.Children.Add(new Label { Text = "TAB 1", FontSize = 16 });
+		/// 
+		/// var tabItems = new TabItemCollection
+		/// {
+		///     new SfTabItem
+		///     {
+		///         HeaderContent = customHeader,
+		///         Content = new Label { Text = "Content" }
+		///     }
+		/// };
+		///
+		/// tabView.Items = tabItems;
+		/// Content = tabView;
+		/// ]]></code>
+		/// </example>
+		public View HeaderContent
+		{
+			get => (View)GetValue(HeaderContentProperty);
+			set => SetValue(HeaderContentProperty, value);
 		}
 
 		/// <summary>

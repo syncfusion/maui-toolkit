@@ -605,6 +605,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return new SolidColorBrush(Color.FromArgb("#6750A4"));
 		}
 
+		internal void InitializeDynamicResource(ShapeAnnotation annotation)
+		{
+			if (annotation is LineAnnotation)
+			{
+				SetDynamicResource(StrokeProperty, "SfCartesianChartLineAnnotationStroke");
+			}
+			else
+			{
+				SetDynamicResource(FillProperty, "SfCartesianChartShapeAnnotationFill");
+				SetDynamicResource(StrokeProperty, "SfCartesianChartShapeAnnotationStroke");
+			}
+		}
+
 		#endregion
 
 		#region Private Methods

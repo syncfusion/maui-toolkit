@@ -244,8 +244,20 @@ internal class PickerDrawableView : SfDrawableView
             //// Used to check the given time is black out time or not.
             if (_pickerLayoutInfo.Column.HeaderText == SfPickerResources.GetLocalizedString(timePicker.ColumnHeaderView.MinuteHeaderText))
             {
-                TimeSpan selectedTime = timePicker.SelectedTime ?? timePicker._previousSelectedDateTime.TimeOfDay;
-                return timePicker.BlackoutTimes.Any(blackOutTime => blackOutTime.Hours == selectedTime.Hours && blackOutTime.Minutes == int.Parse(currentValue));
+				TimeSpan selectedTime = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+				if (!timePicker.IsScrollSelectionAllowed())
+				{
+					selectedTime = timePicker.SelectedTime ?? timePicker._previousSelectedDateTime.TimeOfDay;
+				}
+				else
+				{
+					if (timePicker._internalSelectedTime != null)
+					{
+						selectedTime = timePicker._internalSelectedTime.Value;
+					}
+				}
+
+				return timePicker.BlackoutTimes.Any(blackOutTime => blackOutTime.Hours == selectedTime.Hours && blackOutTime.Minutes == int.Parse(currentValue));
             }
         }
 
@@ -254,17 +266,39 @@ internal class PickerDrawableView : SfDrawableView
             //// Used to check the given date is black out date or not.
             if (_pickerLayoutInfo.Column.HeaderText == SfPickerResources.GetLocalizedString(datePicker.ColumnHeaderView.DayHeaderText))
             {
-                DateTime selectedDate = datePicker.SelectedDate ?? datePicker._previousSelectedDateTime;
-                return datePicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(false, currentValue, blackOutDate, selectedDate));
+				DateTime selectedDate = DateTime.Now;
+				if (!datePicker.IsScrollSelectionAllowed())
+				{
+					selectedDate = datePicker.SelectedDate ?? datePicker._previousSelectedDateTime;
+				}
+				else
+				{
+					if (datePicker._internalSelectedDate != null)
+					{
+						selectedDate = datePicker._internalSelectedDate.Value;
+					}
+				}
+				return datePicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(false, currentValue, blackOutDate, selectedDate));
             }
         }
 
         if (_pickerLayoutInfo.PickerInfo is SfDateTimePicker dateTimePicker)
         {
-            DateTime selectedDateTime = dateTimePicker.SelectedDate ?? dateTimePicker._previousSelectedDateTime;
+			DateTime selectedDateTime = DateTime.Now;
+			if (!dateTimePicker.IsScrollSelectionAllowed())
+			{
+				selectedDateTime = dateTimePicker.SelectedDate ?? dateTimePicker._previousSelectedDateTime;
+			}
+			else
+			{
+				if (dateTimePicker._internalSelectedDateTime != null)
+				{
+					selectedDateTime = dateTimePicker._internalSelectedDateTime.Value;
+				}
+			}
 
-            //// Used to check the given date time is black out date time or not.
-            if (_pickerLayoutInfo.Column.HeaderText == SfPickerResources.GetLocalizedString(dateTimePicker.ColumnHeaderView.DayHeaderText))
+			//// Used to check the given date time is black out date time or not.
+			if (_pickerLayoutInfo.Column.HeaderText == SfPickerResources.GetLocalizedString(dateTimePicker.ColumnHeaderView.DayHeaderText))
             {
                 return dateTimePicker.BlackoutDateTimes.Any(blackOutDateTime => DatePickerHelper.IsBlackoutDate(false, currentValue, blackOutDateTime, selectedDateTime) && blackOutDateTime.TimeOfDay == TimeSpan.Zero);
             }

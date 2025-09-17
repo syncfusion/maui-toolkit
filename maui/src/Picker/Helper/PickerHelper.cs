@@ -309,6 +309,111 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return name;
         }
 
+        /// <summary>
+        /// Method to set the footer property dynamic resources.
+        /// </summary>
+        /// <param name="footerView">The footer view.</param>
+        /// <param name="pickerBase">Used to Detect parent</param>
+        internal static void SetFooterDynamicResource(PickerFooterView footerView, PickerBase pickerBase)
+        {
+            PickerBase parent = footerView.Parent as PickerBase ?? pickerBase;
+
+            switch (parent)
+            {
+                case SfPicker:
+                    footerView.SetDynamicResource(PickerFooterView.BackgroundProperty, "SfPickerNormalFooterBackground");
+                    footerView.SetDynamicResource(PickerFooterView.DividerColorProperty, "SfPickerNormalFooterDividerColor");
+
+                    break;
+                case SfTimePicker:
+                    footerView.SetDynamicResource(PickerFooterView.BackgroundProperty, "SfTimePickerNormalFooterBackground");
+                    footerView.SetDynamicResource(PickerFooterView.DividerColorProperty, "SfTimePickerNormalFooterDividerColor");
+
+                    break;
+                case SfDatePicker:
+                    footerView.SetDynamicResource(PickerFooterView.BackgroundProperty, "SfDatePickerNormalFooterBackground");
+                    footerView.SetDynamicResource(PickerFooterView.DividerColorProperty, "SfDatePickerNormalFooterDividerColor");
+
+                    break;
+                case SfDateTimePicker:
+                    footerView.SetDynamicResource(PickerFooterView.BackgroundProperty, "SfDateTimePickerNormalFooterBackground");
+                    footerView.SetDynamicResource(PickerFooterView.DividerColorProperty, "SfDateTimePickerNormalFooterDividerColor");
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Method to set the Header property dynamic resources.
+        /// </summary>
+        /// <param name="headerView">The header view.</param>
+        /// <param name="pickerBase">Used to Detect parent</param>
+        internal static void SetHeaderDynamicResource(PickerHeaderView headerView, PickerBase pickerBase)
+        {
+            PickerBase parent = headerView.Parent as PickerBase ?? pickerBase;
+
+            switch (parent)
+            {
+                case SfPicker:
+                    headerView.SetDynamicResource(PickerHeaderView.BackgroundProperty, "SfPickerNormalHeaderBackground");
+                    headerView.SetDynamicResource(PickerHeaderView.DividerColorProperty, "SfPickerNormalHeaderDividerColor");
+
+                    break;
+                case SfTimePicker:
+                    headerView.SetDynamicResource(PickerHeaderView.BackgroundProperty, "SfTimePickerNormalHeaderBackground");
+                    headerView.SetDynamicResource(PickerHeaderView.DividerColorProperty, "SfTimePickerNormalHeaderDividerColor");
+
+                    break;
+                case SfDatePicker:
+                    headerView.SetDynamicResource(PickerHeaderView.BackgroundProperty, "SfDatePickerNormalHeaderBackground");
+                    headerView.SetDynamicResource(PickerHeaderView.DividerColorProperty, "SfDatePickerNormalHeaderDividerColor");
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Method to set the selection property dynamic resources.
+        /// </summary>
+        /// <param name="selectionView">The selection view.</param>
+        /// <param name="pickerBase">Used to Detect parent.</param>
+        internal static void SetSelectionViewDynamicResource(PickerSelectionView selectionView, PickerBase pickerBase)
+        {
+            switch (pickerBase)
+            {
+                case SfPicker:
+                    selectionView.SetDynamicResource(PickerSelectionView.BackgroundProperty, "SfPickerSelectionBackground");
+                    selectionView.SetDynamicResource(PickerSelectionView.StrokeProperty, "SfPickerSelectionStroke");
+                    selectionView.SetDynamicResource(PickerSelectionView.CornerRadiusProperty, "SfPickerSelectionCornerRadius");
+
+                    break;
+                case SfTimePicker:
+                    selectionView.SetDynamicResource(PickerSelectionView.BackgroundProperty, "SfTimePickerSelectionBackground");
+                    selectionView.SetDynamicResource(PickerSelectionView.StrokeProperty, "SfTimePickerSelectionStroke");
+                    selectionView.SetDynamicResource(PickerSelectionView.CornerRadiusProperty, "SfTimePickerSelectionCornerRadius");
+
+                    break;
+                case SfDatePicker:
+                    selectionView.SetDynamicResource(PickerSelectionView.BackgroundProperty, "SfDatePickerSelectionBackground");
+                    selectionView.SetDynamicResource(PickerSelectionView.StrokeProperty, "SfDatePickerSelectionStroke");
+                    selectionView.SetDynamicResource(PickerSelectionView.CornerRadiusProperty, "SfDatePickerSelectionCornerRadius");
+
+                    break;
+                case SfDateTimePicker:
+                    selectionView.SetDynamicResource(PickerSelectionView.BackgroundProperty, "SfDateTimePickerSelectionBackground");
+                    selectionView.SetDynamicResource(PickerSelectionView.StrokeProperty, "SfDateTimePickerSelectionStroke");
+                    selectionView.SetDynamicResource(PickerSelectionView.CornerRadiusProperty, "SfDateTimePickerSelectionCornerRadius");
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
         #endregion
     }
 }

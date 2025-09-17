@@ -58,7 +58,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		public PopupHeader()
 		{
 			Initialize();
-			AddChildViews();
 		}
 
 		/// <summary>
@@ -73,6 +72,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 #endif
 			_popupView = popup;
 			Initialize();
+			AddChildViews();
 		}
 
 		#endregion
@@ -124,9 +124,24 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
+		/// Updates the child views if a DataTemplateSelector is applied to the header template.
+		/// </summary>
+		internal void RefreshChildViews()
+		{
+			if (_popupView is not null && _popupView._popup is not null && _popupView._popup.HeaderTemplate is DataTemplateSelector)
+			{
+				UpdateChildViews();
+			}
+		}
+
+		#endregion
+
+		#region Private methods
+
+		/// <summary>
 		/// Add the child views of the header.
 		/// </summary>
-		internal void AddChildViews()
+		void AddChildViews()
 		{
 			if (_popupView is not null && _headerView is not null)
 			{
@@ -183,9 +198,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							return;
 						}
 
-						View? view = (View)_popupView._popup.GetTemplate(_popupView._popup.HeaderTemplate).CreateContent();
-						headerView.Children.Add(view);
-						Grid.SetColumn(view, (_popupView._popup.ShowCloseButton && isFullScreen) ? 1 : 0);
+						// If Template Selector is used and they have returned template using binding context means, value can be null.
+						var template = _popupView._popup.GetTemplate(_popupView._popup.HeaderTemplate);
+						if (template is not null)
+						{
+							View? view = (View)template.CreateContent();
+							headerView.Children.Add(view);
+							Grid.SetColumn(view, (_popupView._popup.ShowCloseButton && isFullScreen) ? 1 : 0);
+						}
 					}
 
 					if (_popupView._popup.ShowCloseButton)
@@ -212,10 +232,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				Children.Add(_headerView);
 			}
 		}
-
-		#endregion
-
-		#region Private methods
 
 		/// <summary>
 		/// Updates width and height of the child view.

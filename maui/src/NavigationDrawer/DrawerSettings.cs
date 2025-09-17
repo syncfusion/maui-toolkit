@@ -193,6 +193,12 @@
 				null,
 				propertyChanged: OnTouchThresholdPropertyChanged);
 
+		/// <summary>
+		/// Identifies the <see cref="AnimationEasing"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty AnimationEasingProperty = BindableProperty.Create(nameof(AnimationEasing), typeof(Easing), typeof(DrawerSettings), Easing.Linear);
+
+
 		#endregion
 
 		#region Constructor
@@ -433,6 +439,26 @@
 		{
 			get { return (bool)GetValue(EnableSwipeGestureProperty); }
 			set { SetValue(EnableSwipeGestureProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the easing function that controls the acceleration and deceleration of the drawer's open and close animations.
+		/// </summary>
+		/// <value>
+		/// It accepts <see cref="Easing"/> values and the default value is Easing.Linear.
+		/// </value>
+		/// <example>
+		/// <code><![CDATA[
+		/// var drawerSettings = new DrawerSettings
+		/// {
+		///     AnimationEasing = Easing.SpringIn
+		/// };
+		/// ]]></code>
+		/// </example>
+		public Easing AnimationEasing
+		{
+			get => (Easing)GetValue(AnimationEasingProperty); 
+			set => SetValue(AnimationEasingProperty, value);
 		}
 
 		/// <summary>

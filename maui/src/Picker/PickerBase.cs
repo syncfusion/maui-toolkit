@@ -201,6 +201,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
             CancelButtonClicked?.Invoke(sender, eventArgs);
         }
 
+        /// <summary>
+        /// To check the internal selection need
+        /// </summary>
+        /// <returns>Returns the internal selection or not</returns>
+        internal bool IsScrollSelectionAllowed()
+        {
+            if (Mode != PickerMode.Default && FooterView.Height != 0 && FooterView.ShowOkButton)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -566,8 +582,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            _popup.WidthRequest = PopupWidth == 0 ? GetDefaultPopupWidth(this) : PopupWidth;
-            _popup.HeightRequest = PopupHeight == 0 ? GetDefaultPopupHeight(this) : PopupHeight;
+            _popup.WidthRequest = PopupWidth <= 0 ? GetDefaultPopupWidth(this) : PopupWidth;
+            _popup.HeightRequest = PopupHeight <= 0 ? GetDefaultPopupHeight(this) : PopupHeight;
         }
 
         /// <summary>
@@ -658,10 +674,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 _isPickerViewLoaded = true;
             }
 #endif
+
+#if WINDOWS || ANDROID
             if (double.IsInfinity(heightConstraint) && HeightRequest == -1 && Mode == PickerMode.Default)
             {
                 HeightRequest = height;
             }
+#endif
 
 #if IOS
             if (DesiredSize.Width == width && DesiredSize.Height == height && EnableLooping)
@@ -751,6 +770,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     SetInheritedBindingContext(BaseHeaderView.SelectionTextStyle, BindingContext);
                     BaseHeaderView.SelectionTextStyle.PropertyChanged += OnHeaderSelectionTextStylePropertyChanged;
                 }
+
+                PickerHelper.SetHeaderDynamicResource(this.BaseHeaderView, this);
             }
 
             // Wire events for footer view properties.
@@ -763,6 +784,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     SetInheritedBindingContext(FooterView.TextStyle, BindingContext);
                     FooterView.TextStyle.PropertyChanged += OnFooterTextStylePropertyChanged;
                 }
+
+                PickerHelper.SetFooterDynamicResource(this.FooterView, this);
             }
 
             if (SelectedTextStyle != null)
@@ -790,6 +813,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (SelectionView != null)
             {
+                PickerHelper.SetSelectionViewDynamicResource(this.SelectionView, this);
                 SelectionView.PropertyChanged += OnSelectionViewPropertyChanged;
             }
 
@@ -872,8 +896,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         /// <param name="tappedIndex">The tapped index.</param>
         /// <param name="childIndex">The column child index.</param>
+        /// <param name="isTapped">Is tap gesture used</param>
         /// <param name="isInitialLoading">Check whether is initial loading or not.</param>
-        void IPicker.UpdateSelectedIndexValue(int tappedIndex, int childIndex, bool isInitialLoading)
+        void IPicker.UpdateSelectedIndexValue(int tappedIndex, int childIndex, bool isTapped, bool isInitialLoading)
         {
             if (BaseColumns.Count <= childIndex)
             {
@@ -890,15 +915,24 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 if (pickerColumn.Parent is SfDatePicker datePicker)
                 {
-                    datePicker.SelectedDate = _previousSelectedDateTime.Date;
+                    if (Mode == PickerMode.Default)
+                    {
+                        datePicker.SelectedDate = _previousSelectedDateTime.Date;
+                    }
                 }
                 else if (pickerColumn.Parent is SfTimePicker timePicker)
                 {
-                    timePicker.SelectedTime = _previousSelectedDateTime.TimeOfDay;
+                    if (Mode == PickerMode.Default)
+                    {
+                        timePicker.SelectedTime = _previousSelectedDateTime.TimeOfDay;
+                    }
                 }
                 else if (pickerColumn.Parent is SfDateTimePicker dateTimePicker)
                 {
-                    dateTimePicker.SelectedDate = _previousSelectedDateTime;
+                    if (Mode == PickerMode.Default)
+                    {
+                        dateTimePicker.SelectedDate = _previousSelectedDateTime;
+                    }
                 }
 
                 return;
@@ -906,10 +940,37 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (pickerColumn.SelectedIndex == tappedIndex)
             {
+                if ((IsScrollSelectionAllowed() && BaseColumns.Count == 1) && (pickerColumn.Parent is null || pickerColumn.Parent is SfPicker))
+                {
+                    if (pickerColumn._internalSelectedIndex != -1)
+                    {
+                        pickerColumn._internalSelectedIndex = -1;
+                    }
+                }
+
                 return;
             }
 
-            pickerColumn.SelectedIndex = tappedIndex;
+            if ((IsScrollSelectionAllowed() && BaseColumns.Count == 1) && (pickerColumn.Parent == null || pickerColumn.Parent is SfPicker))
+            {
+                if (pickerColumn.SelectedIndex == -1)
+                {
+                    pickerColumn.SelectedIndex = tappedIndex;
+                }
+                else
+                {
+                    pickerColumn._internalSelectedIndex = tappedIndex;
+                    if (isTapped)
+                    {
+                        _pickerContainer?.ScrollToSelectedIndex(pickerColumn._columnIndex, tappedIndex);
+                    }
+                }
+            }
+            else
+            {
+                pickerColumn.SelectedIndex = tappedIndex;
+            }
+
             //// Call the template view for when selected value changed based on scroll the selected value.
             if (_headerLayout != null && BaseHeaderView.Height > 0 && HeaderTemplate != null)
             {

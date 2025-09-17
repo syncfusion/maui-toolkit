@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class=" Syncfusion.Maui.ControlsGallery.SparkChart.SparkChartColorResources">
+
+  <SolidColorBrush x:Key="series1Light">#2196F3</SolidColorBrush>
+  <SolidColorBrush x:Key="series2Light">#FF4E4E</SolidColorBrush>
+  <SolidColorBrush x:Key="series3Light">#25E739</SolidColorBrush>
+  <SolidColorBrush x:Key="series4Light">#F4890B</SolidColorBrush>
+  <SolidColorBrush x:Key="series5Light">#E2227E</SolidColorBrush>
+  <SolidColorBrush x:Key="series6Light">#4D2196F3</SolidColorBrush>
+  <SolidColorBrush x:Key="series7Light">#4DF4890B</SolidColorBrush>
+  <SolidColorBrush x:Key="series8Light">#4DE2227E</SolidColorBrush>
+
+  <SolidColorBrush x:Key="series1Dark">#0D71C1</SolidColorBrush>
+  <SolidColorBrush x:Key="series2Dark">#9B4848</SolidColorBrush>
+  <SolidColorBrush x:Key="series3Dark">#33B677</SolidColorBrush>
+  <SolidColorBrush x:Key="series4Dark">#F4890B</SolidColorBrush>
+  <SolidColorBrush x:Key="series5Dark">#C9588E</SolidColorBrush>
+  <SolidColorBrush x:Key="series6Dark">#4D0D71C1</SolidColorBrush>
+  <SolidColorBrush x:Key="series7Dark">#4DF4890B</SolidColorBrush>
+  <SolidColorBrush x:Key="series8Dark">#4DC9588E</SolidColorBrush>
+
+</ResourceDictionary>
