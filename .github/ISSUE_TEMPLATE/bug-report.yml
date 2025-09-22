@@ -38,6 +38,18 @@ body:
         Actual outcome: a ladybug appeared
     validations:
       required: false
+   - type: dropdown
+  id: dotnet-version-with-bug
+  attributes:
+  label: .NET Version 
+  description: In which .NET version are you encountering this issue?
+  options:
+    - .NET 8.0
+    - .NET 9.0
+    - .NET 10.0
+  validations:
+  required: true
+
   - type: dropdown
     id: version-with-bug
     attributes:
