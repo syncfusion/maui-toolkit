@@ -42,7 +42,12 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		/// <param name="itemInfo">The <see cref="ISegmentItemInfo"/> providing information about the segment items.</param>
 		internal SegmentLayout(ISegmentItemInfo itemInfo)
 		{
-#if __IOS__
+#if __IOS__ || MACCATALYST
+			// Ignore the safe area on iOS and Mac Catalyst so the control is laid out using the
+			// full bounds provided by its parent. Without this on Mac Catalyst, the initial window
+			// (non–fullscreen) can report a smaller client area and the segmented control may appear
+			// shifted upward / clipped beneath the title bar until a subsequent resize or fullscreen
+			// transition triggers a proper re-measure. (See GitHub issue: SegmentedControl TitleBar layout on macOS.)
 			this.IgnoreSafeArea = true;
 #endif
 			FlowDirection = Microsoft.Maui.FlowDirection.LeftToRight;
