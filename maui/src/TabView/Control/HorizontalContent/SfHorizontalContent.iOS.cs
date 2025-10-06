@@ -75,6 +75,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     var touchLocation = uiTouch.LocationInView(uiTouch.View?.Superview);
 					var textInputView = FindSfTextInputLayout(uiTouch.View?.Superview);
                     this._canProcessTouch = true;
+
+					var touchViewType = touchView?.GetType().FullName;
+                    if (touchViewType != null && touchViewType.Contains("CommunityToolkit.Maui.Core.Views.MauiDrawingView", StringComparison.Ordinal))
+                    {
+                         this._canProcessTouch = false;
+                         return;
+                    }
+
                     if (textInputView != null)
                     {
                         if (uiTouch.GestureRecognizers != null)
