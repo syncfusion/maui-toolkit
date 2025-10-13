@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:sf="https://schemas.syncfusion.com/maui/toolkit"
+    x:Class="Syncfusion.Maui.Samples.Sandbox.AppWindow">
+    <Window.TitleBar>
+        <TitleBar Title="Sandbox"
+                  BackgroundColor="#512BD4"
+                  ForegroundColor="White"                  
+                  HeightRequest="50">
+                  <TitleBar.LeadingContent>
+                    <Grid>
+                    </Grid>
+                  </TitleBar.LeadingContent>
+            <TitleBar.Content>
+                <HorizontalStackLayout HorizontalOptions="Center">
+                    <SearchBar Placeholder="Search"
+                           PlaceholderColor="White"
+                           Background="#512BD4"
+                           MaximumWidthRequest="400"
+                           HorizontalOptions="Fill"
+                           VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+            </TitleBar.Content>            
+            <TitleBar.TrailingContent>
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Fill">
+                    
+
+                    <sf:SfSegmentedControl 
+                        x:Name="ThemeSegmentedControl"
+                        SelectionChanged="SfSegmentedControl_SelectionChanged" 
+                        SegmentWidth="36" SegmentHeight="36">
+                        <sf:SfSegmentedControl.ItemsSource>
+                            <x:Array Type="{x:Type sf:SfSegmentItem}">
+                                <sf:SfSegmentItem ImageSource="{StaticResource IconLight}"/>
+                                <sf:SfSegmentItem ImageSource="{StaticResource IconDark}"/>
+                            </x:Array>
+                        </sf:SfSegmentedControl.ItemsSource>
+                    </sf:SfSegmentedControl>
+                </HorizontalStackLayout>
+            </TitleBar.TrailingContent>
+        </TitleBar>
+    </Window.TitleBar>
+</Window>
