@@ -19,7 +19,7 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 
 ![NET_MAUI_Toolkit_product](https://cdn.syncfusion.com/content/images/maui/maui-toolkit--controls.png)
 
-## Getting Started ##
+## Getting Started ## 
 
 * [Install .NET MAUI](https://dot.net/maui)
 * [Syncfusion .NET MAUI Toolkit Documentation](https://help.syncfusion.com/maui-toolkit/introduction/overview)
