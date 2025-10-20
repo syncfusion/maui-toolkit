@@ -63,11 +63,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         int _selectedIndex;
 
-        /// <summary>
-        /// Holds the header changed or not
-        /// </summary>
-        bool _isCurrentPickerViewChanged = false;
-
         #endregion
 
         #region Bindable Properties
@@ -1048,20 +1043,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             if (_selectedIndex == 0)
             {
-                if (IsScrollSelectionAllowed())
-                {
-                    ResetDateTimeOnViewChange();
-                }
-
                 OnDatePickerSelectionIndexChanged(e);
             }
             else
             {
-                if (IsScrollSelectionAllowed())
-                {
-                    ResetDateTimeOnViewChange();
-                }
-
                 OnTimePickerSelectionIndexChanged(e);
             }
         }
@@ -1869,18 +1854,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
-        /// Need to reset the current selected date or time value without okay button click.
-        /// </summary>
-        void ResetDateTimeOnViewChange()
-        {
-            if (_internalSelectedDateTime != null && _isCurrentPickerViewChanged)
-            {
-                _internalSelectedDateTime = null;
-                _isCurrentPickerViewChanged = false;
-            }
-        }
-
-        /// <summary>
         /// Method to generate the day column with items source and selected index based on format.
         /// </summary>
         /// <param name="format">The day format.</param>
@@ -2293,7 +2266,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             _selectedIndex = index;
-            _isCurrentPickerViewChanged = true;
             if (_selectedIndex == 0)
             {
                 ResetDateColumns();
@@ -2425,6 +2397,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 if (SelectedDate != null)
                 {
                     // Update the selected index in the UI to reflect the selected date
+                    if (_internalSelectedDateTime != null)
+                    {
+                        _internalSelectedDateTime = null;
+                    }
+
                     UpdateSelectedIndex(SelectedDate);
                 }
                 else
