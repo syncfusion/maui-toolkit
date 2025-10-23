@@ -11,7 +11,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
     /// <summary>
     /// Represents the <see cref="BottomSheetBorder"/> that defines the layout of bottom sheet.
     /// </summary>
-    internal class BottomSheetBorder : SfBorder, ITouchListener
+    internal partial class BottomSheetBorder : SfBorder, ITouchListener
     {
 		#region Fields
 
@@ -26,14 +26,34 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		UIView? _scrollableView;
 
 		/// <summary>
-		/// Indicates whether pressed occurs inside a scrollable view.
-		/// </summary>
-		bool _isPressed = false;
-
-		/// <summary>
 		/// Determines whether the touch should be processed.
 		/// </summary>
 		bool _canProcessTouch = true;
+
+		/// <summary>
+		/// Represents a scrollable view under the finger (UIScrollView/UICollectionView).
+		/// </summary>
+		UIScrollView? _iosScrollView;
+
+		/// <summary>
+		/// Determines whether the touch started in a scrollable view.
+		/// </summary>
+		bool _iosInsideScrollable;
+
+		/// <summary>
+		/// Determines whether we have handed off touch to the bottom sheet.
+		/// </summary>
+		bool _iosHandoff;
+
+		/// <summary>
+		/// Stores the last Y position.
+		/// </summary>
+		double _iosLastY;
+
+		/// <summary>
+		/// A small epsilon value to avoid jitter at scroll edges.
+		/// </summary>
+		nfloat _epsilon = 1.0f;
 
 #endif
 
@@ -94,6 +114,47 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			return false;
 		}
 
+		/// <summary>
+		/// Determines if the inner UIScrollView can scroll in the direction of the finger movement.
+		/// </summary>
+		/// <param name="sv">The scrollable view to check.</param>
+		/// <param name="dy">The scroll direction.</param>
+		/// <returns>True if inner view is scrollable, otherwise false.</returns>
+		bool CanInnerScroll(UIScrollView sv, double dy)
+		{
+			if (sv is not null)
+			{
+				// Insets (AdjustedContentInset is correct with safe area / content inset)
+				nfloat topInset = sv.AdjustedContentInset.Top;
+				nfloat bottomInset = sv.AdjustedContentInset.Bottom;
+
+				// Effective scrollable range
+				nfloat visibleHeight = sv.Bounds.Height;
+				nfloat contentHeight = sv.ContentSize.Height;
+				// If content is shorter than the viewport, there's nothing to scroll.
+				if (contentHeight <= visibleHeight - (topInset + bottomInset))
+				{
+					return false;
+				}
+
+				nfloat minOffsetY = -topInset;
+				nfloat maxOffsetY = (nfloat)Math.Max(0, contentHeight - visibleHeight + bottomInset);
+				nfloat y = sv.ContentOffset.Y;
+
+				if (dy < 0) // finger up => scroll down
+				{
+					return y < (maxOffsetY - _epsilon);
+				}
+
+				if (dy > 0) // finger down => scroll up
+				{
+					return y > (minOffsetY + _epsilon);
+				}
+			}
+
+			return false;
+		}
+
 #endif
 
 		#endregion
@@ -125,35 +186,77 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 					if (IsScrollableView(hitView))
 					{
-						_canProcessTouch = false; // Only disable bottom sheet swipe if touch is inside scrollable view
-						_isPressed = true;
-						return;
-					}
-					else
-					{
-						_canProcessTouch = true; // Allow bottom sheet swipe
+						_iosScrollView = _scrollableView as UIScrollView;
+						_iosInsideScrollable = _iosScrollView is not null;
+						_iosHandoff = false;
+						_iosLastY = e.TouchPoint.Y;
+
+						if (_iosInsideScrollable)
+						{
+							// Start inside a scrollable: let it consume initially.
+							// DO NOT forward Pressed to the sheet yet.
+							return;
+						}
 					}
 				}
-
 			}
 			else if (e.Action == PointerActions.Moved)
 			{
-				// When moved is called multiple times, this flag helps us prevent the bottom sheet scrolling	
-				if(_isPressed)
-				{
-					return;
-				}
+				if (_iosInsideScrollable && _iosScrollView is not null)
+                {
+                    double dy = e.TouchPoint.Y - _iosLastY;
+
+                    // While inner can scroll in this direction, don't route to sheet.
+                    if (CanInnerScroll(_iosScrollView, dy))
+                    {
+                        _iosLastY = e.TouchPoint.Y;
+                        return; // list keeps consuming
+                    }
+
+                    // Edge reached => hand off to sheet once
+                    if (!_iosHandoff && _bottomSheetRef?.TryGetTarget(out var bottomSheetPressed) == true)
+                    {
+						bottomSheetPressed.OnHandleTouch(PointerActions.Pressed, e.TouchPoint);
+                        _iosHandoff = true;
+
+						// Route this first move to the sheet as well
+						bottomSheetPressed.OnHandleTouch(PointerActions.Moved, e.TouchPoint);
+                        _iosLastY = e.TouchPoint.Y;
+                        return;
+                    }
+
+                    // Already handed off => keep sending moves to sheet here; skip common forward
+                    if (_iosHandoff && _bottomSheetRef?.TryGetTarget(out var bottomSheetMoved) == true)
+                    {
+						bottomSheetMoved.OnHandleTouch(PointerActions.Moved, e.TouchPoint);
+                        _iosLastY = e.TouchPoint.Y;
+                        return;
+                    }
+
+                    _iosLastY = e.TouchPoint.Y;
+                    return;
+                }
 			}
 			else if (e.Action == PointerActions.Released || e.Action == PointerActions.Exited || e.Action == PointerActions.Cancelled)
 			{
-				_canProcessTouch = true;
+				// If we started in a scrollable and never handed off, do not forward release to sheet
+                if (_iosInsideScrollable && !_iosHandoff)
+                {
+                    _iosInsideScrollable = false;
+                    _iosScrollView = null;
+                    _iosHandoff = false;
+                    return;
+                }
 
-				// Early return to avoid bottom sheet position update after the scroll occured in a scrollable view
-				if(_isPressed)
-				{
-					_isPressed = false;
-					return;
-				}
+                // If we did hand off, forward release here and reset; skip common forward
+                if (_iosHandoff && _bottomSheetRef?.TryGetTarget(out var bottomSheetReleased) == true)
+                {
+					bottomSheetReleased.OnHandleTouch(PointerActions.Released, e.TouchPoint);
+                    _iosInsideScrollable = false;
+                    _iosScrollView = null;
+                    _iosHandoff = false;
+                    return;
+                }
 			}
 #endif
 
