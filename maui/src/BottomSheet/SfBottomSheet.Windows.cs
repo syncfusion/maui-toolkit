@@ -1,6 +1,8 @@
 ﻿using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml;
 using Syncfusion.Maui.Toolkit.Internals;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Media;
 
 namespace Syncfusion.Maui.Toolkit.BottomSheet
 {
@@ -22,6 +24,31 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// A flag that tracks whether the touch event has been handled, specifically for touch devices.
 		/// </summary>
 		bool _isTouchHandled;
+
+		/// <summary>
+		/// The ScrollViewer currently under the pointer, if any, used to detect scrollability and edge handoff.
+		/// </summary>
+		ScrollViewer? _activeScrollViewer;
+
+		/// <summary>
+		/// Indicates whether the pointer is within a scrollable region (i.e., over a ScrollViewer).
+		/// </summary>
+		bool _isPointerInsideScrollable;
+
+		/// <summary>
+		/// Becomes true once the inner ScrollViewer hits an edge and control is handed off to the bottom sheet.
+		/// </summary>
+		bool _handoffToSheet;
+
+		/// <summary>
+		/// The last observed pointer Y position, used to compute movement deltas during drag.
+		/// </summary>
+		double _lastPointerY;
+
+		/// <summary>
+		/// Indicates whether the bottom sheet has been dragged during the current gesture.
+		/// </summary>
+		bool _sheetWasDragged;
 
 		#endregion
 
@@ -107,9 +134,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					return;
 				}
 
-				// Handle the start of the manipulation
-				OnHandleTouch(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
-				_isManipulationStarted = true;
+				// Only arm the sheet manipulation immediately if not over a scrollable
+				if (!_isPointerInsideScrollable)
+				{
+					OnHandleTouch(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+					_isManipulationStarted = true;
+				}
 			}
 		}
 
@@ -122,24 +152,35 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			if (_bottomSheetNativeView is not null && _bottomSheet is not null)
 			{
-				// Get the pointer position relative to the view
 				var point = e.GetCurrentPoint(_bottomSheetNativeView).Position;
+
+				// Identify if press is within a ScrollViewer
+				var source = e.OriginalSource as DependencyObject;
+				_activeScrollViewer = TryGetAncestorScrollViewer(source);
+				_isPointerInsideScrollable = _activeScrollViewer is not null;
+				_handoffToSheet = false;
+				_lastPointerY = point.Y;
+
+				// If pressed above the sheet, ignore (existing check)
 				if (point.Y < _bottomSheet.TranslationY)
 				{
 					return;
 				}
 
-				// Handle the pointer press action
-				OnHandleTouch(PointerActions.Pressed, new Point(point.X, point.Y));
-			}
+				// If NOT inside a scrollable, start sheet gesture now
+				if (!_isPointerInsideScrollable)
+				{
+					OnHandleTouch(PointerActions.Pressed, new Point(point.X, point.Y));
+				}
 
-			if (e.Pointer.PointerDeviceType == Microsoft.UI.Input.PointerDeviceType.Touch)
-			{
-				_isTouchHandled = true;
-			}
-			else
-			{
-				_isTouchHandled = false;
+				if (e.Pointer.PointerDeviceType == Microsoft.UI.Input.PointerDeviceType.Touch)
+				{
+					_isTouchHandled = true;
+				}
+				else
+				{
+					_isTouchHandled = false;
+				}
 			}
 		}
 
@@ -155,12 +196,60 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				return;
 			}
 
-			if (_isPointerPressed && _bottomSheetNativeView is not null)
+			if (_bottomSheetNativeView is not null)
 			{
-				// Get the pointer position relative to the view
+
+				var pp = e.GetCurrentPoint(_bottomSheetNativeView);
+				var props = pp.Properties;
+
+				bool isPressedOrInContact = e.Pointer.PointerDeviceType switch
+				{
+					Microsoft.UI.Input.PointerDeviceType.Mouse => props.IsLeftButtonPressed,
+					Microsoft.UI.Input.PointerDeviceType.Touch => pp.IsInContact,
+					_ => false
+				};
+
+				if (!isPressedOrInContact)
+				{
+					return;
+				}
+
 				var point = e.GetCurrentPoint(_bottomSheetNativeView).Position;
-				// Handle the pointer move action
-				OnHandleTouch(PointerActions.Moved, new Point(point.X, point.Y));
+				double dy = point.Y - _lastPointerY;
+
+				if (_isPointerInsideScrollable && _activeScrollViewer is not null)
+				{
+					// While inner can scroll in this direction, do NOT route to sheet
+					if (CanInnerScroll(_activeScrollViewer, dy))
+					{
+						_lastPointerY = point.Y;
+						return; // inner ScrollViewer consumes it naturally
+					}
+
+					// Inner cannot scroll further -> handoff to sheet
+					if (!_handoffToSheet)
+					{
+						// Synthesize a 'Pressed' at the current pointer location before we send Moved
+						OnHandleTouch(PointerActions.Pressed, new Point(point.X, point.Y));
+						_handoffToSheet = true;
+
+						// Optional: capture pointer so we keep getting move events even if the finger drifts
+						_bottomSheetNativeView.CapturePointer(e.Pointer);
+					}
+
+					e.Handled = true; // we are now routing to the bottom sheet
+				}
+
+				// Route movement to the sheet if:
+				//  - we are not inside a scrollable, or
+				//  - a handoff has happened.
+				if (!_isPointerInsideScrollable || _handoffToSheet)
+				{
+					OnHandleTouch(PointerActions.Moved, new Point(point.X, point.Y));
+					_sheetWasDragged = true;
+				}
+
+				_lastPointerY = point.Y;
 			}
 		}
 
@@ -174,11 +263,25 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			if (_bottomSheetNativeView is not null)
 			{
 				var point = e.GetCurrentPoint(_bottomSheetNativeView).Position;
-				OnHandleTouch(PointerActions.Released, new Point(point.X, point.Y));
+
+				if (!_isPointerInsideScrollable || _handoffToSheet)
+				{
+					OnHandleTouch(PointerActions.Released, new Point(point.X, point.Y));
+				}
+
+				try
+				{ 
+					_bottomSheetNativeView.ReleasePointerCaptures();
+				}
+				catch { }
 			}
 
 			_isManipulationStarted = false;
 			_isTouchHandled = false;
+			_activeScrollViewer = null;
+			_isPointerInsideScrollable = false;
+			_handoffToSheet = false;
+			_sheetWasDragged = false;
 		}
 
 		/// <summary>
@@ -188,12 +291,15 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <param name="e">Manipulation completed event arguments containing details about the gesture.</param>
 		void OnManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
 		{
-			if (_isPointerPressed && _isManipulationStarted)
+			if ((_isPointerPressed && _isManipulationStarted) || _sheetWasDragged)
 			{
-				// Handle the release action at the end of manipulation.
-				OnHandleTouch(PointerActions.Released, new Point(e.Position.X, e.Position.Y));
-				// Reset the manipulation state
-				_isManipulationStarted = false;
+				// Only release if the sheet gesture was active
+				if (!_isPointerInsideScrollable || _handoffToSheet)
+				{
+					OnHandleTouch(PointerActions.Released, new Point(e.Position.X, e.Position.Y));
+					_isManipulationStarted = false;
+					_sheetWasDragged = false;
+				}
 			}
 		}
 
@@ -206,16 +312,60 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			if (_isPointerPressed && _isManipulationStarted)
 			{
-				// Handle the intermediate manipulation action
-				OnHandleTouch(PointerActions.Moved, new Point(e.Position.X, e.Position.Y));
-
-				// Check for boundary conditions
-				if (e.Position.Y < 0 || e.Position.Y > Height)
+				// Only forward deltas if we are not over a scrollable OR we have handed off
+				if (!_isPointerInsideScrollable || _handoffToSheet)
 				{
-					// Handle the release action if outside of content width
-					OnHandleTouch(PointerActions.Released, new Point(e.Position.X, e.Position.Y));
+					OnHandleTouch(PointerActions.Moved, new Point(e.Position.X, e.Position.Y));
+					_sheetWasDragged = true;
+
+					// Boundary check remains as-is
+					if (e.Position.Y < 0 || e.Position.Y > Height)
+					{
+						OnHandleTouch(PointerActions.Released, new Point(e.Position.X, e.Position.Y));
+					}
 				}
 			}
+		}
+
+		/// <summary>
+		/// Finds the closest ancestor <see cref="ScrollViewer"/> in the visual tree starting from the specified element.
+		/// </summary>
+		/// <param name="start">The element from which to begin the ancestor search.</param>
+		/// <returns>The nearest <see cref="ScrollViewer"/> ancestor if found; otherwise, null.</returns>
+		ScrollViewer? TryGetAncestorScrollViewer(DependencyObject? start)
+		{
+			var current = start;
+			while (current is not null)
+			{
+				if (current is ScrollViewer sv)
+					return sv;
+				current = VisualTreeHelper.GetParent(current);
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Determines whether the specified <see cref="ScrollViewer"/> can continue scrolling vertically
+		/// in the direction indicated by the pointer's Y delta.
+		/// </summary>
+		/// <param name="sv">The scrollable view to check.</param>
+		/// <param name="dy">The scroll direction.</param>
+		/// <returns>True if scroll can occur further in that direction; otherwise, false.</returns>
+		bool CanInnerScroll(ScrollViewer sv, double dy)
+		{
+			// can go downwards
+			if (dy < 0)
+			{
+				return sv.VerticalOffset < sv.ScrollableHeight - 0.5;
+			}
+
+			// can go upwards
+			if (dy > 0)
+			{
+				return sv.VerticalOffset > 0.5;
+			}
+
+			return false;
 		}
 
 		#endregion
