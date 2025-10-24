@@ -76,12 +76,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					var textInputView = FindSfTextInputLayout(uiTouch.View?.Superview);
                     this._canProcessTouch = true;
 
-					var touchViewType = touchView?.GetType().FullName;
-                    if (touchViewType != null && touchViewType.Contains("CommunityToolkit.Maui.Core.Views.MauiDrawingView", StringComparison.Ordinal))
-                    {
-                         this._canProcessTouch = false;
-                         return;
-                    }
+					const string MauiDrawingViewTypeName = "CommunityToolkit.Maui.Core.Views.MauiDrawingView"; 
+					var touchViewType = touchView?.GetType().FullName; 
+					if (touchViewType is not null && touchViewType.Contains(MauiDrawingViewTypeName, StringComparison.Ordinal)) 
+					{ 
+						this._canProcessTouch = false; 
+						return; 
+					}
 
                     if (textInputView != null)
                     {
