@@ -36,6 +36,12 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			// Calculate visible segment counts.
 			int actualSegmentsCount = GetVisibleSegmentsCount(segmentInfo);
 
+			// To avoid cropping in the keyboard navigation view, when visible segments are there and the alignment is set to fill, we adjust the width by subtracting the padding multiplied by the total number of segments.
+			if (visibleSegmentsCount != -1 && isAlignmentFill)
+			{
+				actualWidth -= keyFocusedViewPadding + ((actualSegmentsCount + 1) * strokeThickness);
+			}
+
 			// If there are no items in the segment, return the maximum of widthRequest (if non-negative) and minWidth.
 			if (items == null || items.Count == 0)
 			{
