@@ -150,7 +150,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			int leftInsets = 0;
 #if NET10_0
-            // In .NET 10, the root view’s width in landscape includes the navidation bar, so subtract the left window inset from the root view width to get the usable content width.
+            // In .NET 10, the root view’s width in landscape includes the navigation bar, so subtract the left window inset from the root view width to get the usable content width.
             leftInsets = PopupExtension.GetWindowInsets("Left");
 #endif
 			return (int)Math.Round((platformRootView!.Width - leftInsets) / WindowOverlayHelper._density);
@@ -265,7 +265,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							{
 #if NET10_0
                             // In .NET 10 case, fall back to decorViewFrame when Top inset is 0.
-                            return insets.Top == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Top ?? 0f / WindowOverlayHelper._density) : insets.Top;
+                            return insets.Top == 0 ? (int)Math.Round((WindowOverlayHelper._decorViewFrame?.Top ?? 0f) / WindowOverlayHelper._density) : insets.Top;
 #else
 								return insets.Top;
 #endif
@@ -274,7 +274,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							{
 #if NET10_0
                             // In .NET 10 case, fall back to decorViewFrame when Left inset is 0.
-                            return insets.Left == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Left ?? 0f / WindowOverlayHelper._density) : insets.Left;
+                            return insets.Left == 0 ? (int)Math.Round((WindowOverlayHelper._decorViewFrame?.Left ?? 0f) / WindowOverlayHelper._density) : insets.Left;
 #else
 								return insets.Left;
 #endif
