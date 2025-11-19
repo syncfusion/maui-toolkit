@@ -229,6 +229,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				propertyChanged: OnHeaderItemTemplateChanged);
 
 		/// <summary>
+		/// Identifies the <see cref="HeaderItemSpacing"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty HeaderItemSpacingProperty =
+			BindableProperty.Create(
+				nameof(HeaderItemSpacing),
+				typeof(int),
+				typeof(SfTabView),
+				36,
+				propertyChanged: OnHeaderItemSpacingChanged);
+
+		/// <summary>
 		/// Identifies the <see cref="ContentItemTemplate"/> bindable property.
 		/// </summary>
 		public static readonly BindableProperty ContentItemTemplateProperty =
@@ -1032,6 +1043,33 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			get => (DataTemplate?)GetValue(HeaderItemTemplateProperty);
 			set => SetValue(HeaderItemTemplateProperty, value);
+		}
+		
+		/// <summary>
+		/// Gets or sets the value that defines the spacing between header items.
+		/// </summary>
+		/// <value>
+		/// It accepts int values and the default value is 36.
+		/// </value>
+		/// <example>
+		/// Here is an example of how to set the <see cref="HeaderItemSpacing"/> property.
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView HeaderItemSpacing="32" />
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// SfTabView tabView = new SfTabView();
+		/// tabView.HeaderItemSpacing = 32;
+		/// Content = tabView;
+		/// ]]></code>
+		/// </example>
+		public int HeaderItemSpacing
+		{
+			get => (int)GetValue(HeaderItemSpacingProperty);
+			set => SetValue(HeaderItemSpacingProperty, value);
 		}
 
 		/// <summary>
@@ -1962,6 +2000,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		static void OnHeaderItemTemplateChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateHeaderItemTemplate();
 
 		/// <summary>
+		/// Handles changes to the <see cref="HeaderItemSpacing"/> property.
+		/// </summary>
+		static void OnHeaderItemSpacingChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateHeaderSpacing();
+
+		/// <summary>
 		/// Handles changes to the <see cref="ContentItemTemplate"/> property.
 		/// </summary>
 		static void OnContentItemTemplateChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateContentItemTemplate();
@@ -2093,6 +2136,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			{
 				_tabHeaderContainer.ItemsSource = ItemsSource;
 				_tabHeaderContainer.HeaderItemTemplate = HeaderItemTemplate;
+			}
+		}
+
+		/// <summary>
+		/// Updates the header item spacing of the tab bar.
+		/// </summary>
+		void UpdateHeaderSpacing()
+		{
+			if (_tabHeaderContainer != null)
+			{
+				_tabHeaderContainer.HeaderItemSpacing = HeaderItemSpacing;
 			}
 		}
 
