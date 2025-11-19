@@ -120,10 +120,28 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static int GetSafeAreaHeight(string position)
 		{
 			// The popup is drawn within the safe area when shown relative to a view. Safe area calculations apply only to the iOS X simulator on iOS.
+#pragma warning disable CS0618 // Suppressing CS0618 warning because Page.GetUseSafeArea is marked obsolete in .NET 10.
 			if (Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(GetMainPage()))
+#pragma warning restore CS0618
 			{
 				var platformWindow = WindowOverlayHelper._window?.ToPlatform() as UIWindow;
-				var statusBarOrientation = platformWindow?.WindowScene?.InterfaceOrientation;
+				UIInterfaceOrientation? statusBarOrientation = null;
+				var scene = platformWindow?.WindowScene;
+				if (scene != null)
+				{
+#if IOS || MACCATALYST
+					if (OperatingSystem.IsIOSVersionAtLeast(16, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(16, 0))
+					{
+						statusBarOrientation = scene.EffectiveGeometry.InterfaceOrientation;
+					}
+					else
+					{
+#pragma warning disable CA1422 // InterfaceOrientation is obsoleted on newer SDKs; guarded by OS version checks
+						statusBarOrientation = scene.InterfaceOrientation;
+#pragma warning restore CA1422
+					}
+#endif
+				}
 
 				// Since StatusBarHeight is already calculated, the top safe area does not need to be computed.
 				if (position == "Top")

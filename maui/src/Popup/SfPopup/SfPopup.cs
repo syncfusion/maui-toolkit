@@ -347,7 +347,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <summary>
         /// Identifies the Padding bindable property.
         /// </summary>
-        public static readonly BindableProperty PaddingProperty =
+        public static new readonly BindableProperty PaddingProperty =
             BindableProperty.Create("Padding", typeof(Thickness), typeof(SfPopup), new Thickness(0.0), BindingMode.Default, propertyChanged: OnPaddingPropertyChanged);
 
 		/// <summary>
@@ -1734,7 +1734,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </example>
 		public void Dismiss()
 		{
-			if (IsOpen && !StaysOpen)
+			// Maui:990257 When Dismiss() is called, the popup should close regardless of whether the StaysOpen property is set to true.
+			if (IsOpen)
 			{
 				OpenOrClosePopup(false);
 			}
@@ -2102,8 +2103,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		void DisplayPopup()
 		{
-			if (_popupView is null)
+			// 989436 : [Android] Popup is not shown when IsOpen is set in XAML or constructor at loading with a Shell page.
+			// In Android, the Shell page is not loaded initially, so the popup is displayed only after the Shell page has loaded.
+			if (_popupView == null || (PopupExtension.GetMainWindowPage() is Shell shellPage && !shellPage.IsLoaded))
 			{
+				_isOpenDeferred = true;
+				WireEvents();
 				return;
 			}
 #if ANDROID
@@ -2775,8 +2780,13 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				if (windowPage.Navigation.ModalStack.LastOrDefault() is not null)
 				{
 					// LayoutChanged only wired for Modal page. Since when Popup is opened OnAppearing of Modal page height and width is not update in native level.
-					page.LayoutChanged -= OnPageLayoutChanged;
-					page.LayoutChanged += OnPageLayoutChanged;
+#if NET10_0
+					page.SizeChanged -= this.OnPageSizeChanged;
+					page.SizeChanged += this.OnPageSizeChanged;
+#else
+					page.SizeChanged -= this.OnPageLayoutChanged;
+					page.SizeChanged += this.OnPageLayoutChanged;
+#endif
 				}
 #else
 				// while calling show() from onAppearing, page.window is not null. So fails the first condition and hook the onMainPageLoaded.
@@ -2837,6 +2847,23 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
+		/// Raise when the current page size has changed.
+		/// </summary>
+		/// <param name="sender">Represents current Page.</param>
+		/// <param name="e">Corresponding property changed event args.</param>
+		private void OnPageSizeChanged(object? sender, EventArgs e)
+		{
+			this.InitializeOverlay();
+			this.CheckAndOpenDeferredPopup();
+
+			// Here need to unwire the LayoutChanged. If not, this will cause issue when resizing the windows with Popup.IsOpen false.
+			if (sender is Page page)
+			{
+				page.SizeChanged -= this.OnPageSizeChanged;
+			}
+		}
+
+		/// <summary>
 		/// Raise when the current page layout has changed.
 		/// </summary>
 		/// <param name="sender">Represents current Page.</param>
@@ -2849,7 +2876,11 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			// Unwire the LayoutChanged to avoid issues when resizing the window with Popup.IsOpen set to false.
 			if (sender is Page page)
 			{
-				page.LayoutChanged -= OnPageLayoutChanged;
+#if NET10_0
+				page.SizeChanged -= this.OnPageSizeChanged;
+#else
+				page.LayoutChanged -= this.OnPageLayoutChanged;
+#endif
 			}
 		}
 
@@ -3485,12 +3516,19 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (Handler is null && _popupOverlay is not null)
 			{
 				_popupOverlay.Dispose();
+				_popupOverlay = null;
 			}
 
 			if (!_isOverlayAdded && Handler != null)
             {
 				InitializeOverlay();
-            }
+
+				// 989436: Popup is not shown when IsOpen is set in XAML or in the constructor during loading with a direct page. So, the popup needs to be displayed when it is still not shown from OnIsOpenChanged.
+				if (_isOverlayAdded)
+				{
+					CheckAndOpenDeferredPopup();
+				}
+			}
 
 			base.OnHandlerChanged();
 		}
@@ -3771,6 +3809,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							if (popup._popupView.Contains(popup._popupView._headerView))
 							{
 								popup._popupView.Remove(popup._popupView._headerView);
+								if (popup._popupView._headerView.Handler is not null)
+								{
+									popup._popupView._headerView.Handler.DisconnectHandler();
+								}
 							}
 						}
 					}
