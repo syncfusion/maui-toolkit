@@ -1277,9 +1277,9 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		/// <param name="dirtyRect">The area that needs to be redrawn.</param>
 		/// <exclude/>
 		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
-        {
-            base.OnDraw(canvas, dirtyRect);
-            canvas.CanvasSaveState();
+		{
+			base.OnDraw(canvas, dirtyRect);
+			canvas.CanvasSaveState();
             canvas.Antialias = true;
             UpdateIconRectF();
             DrawBorder(canvas, dirtyRect);
@@ -1419,15 +1419,6 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				ConfigureAccessibilityForAssistiveLabels();
 #endif
 			}
-			else
-			{
-				if (HintLabelStyle != null && HelperLabelStyle != null && ErrorLabelStyle != null)
-				{
-					HintLabelStyle = null;
-					ErrorLabelStyle = null;
-					HelperLabelStyle = null;
-				}
-			}
 		}
 
         #endregion
@@ -1454,7 +1445,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 {
                     case PointerActions.Entered:
                         {
-                            if (!IsFocused)
+                            if (!IsLayoutFocused)
                             {
                                 VisualStateManager.GoToState(this, "Hover");
                             }
@@ -1462,7 +1453,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                         }
                     case PointerActions.Exited:
                         {
-                            if (IsFocused)
+                            if (IsLayoutFocused)
                             {
                                 VisualStateManager.GoToState(this, "Focused");
                             }
@@ -1485,7 +1476,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 {
                     case PointerActions.Entered:
                         {
-                            if (!IsFocused)
+                            if (!IsLayoutFocused)
                             {
                                 VisualStateManager.GoToState(this, "OutlinedHover");
                             }
@@ -1493,7 +1484,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                         }
                     case PointerActions.Exited:
                         {
-                            if (IsFocused)
+                            if (IsLayoutFocused)
                             {
                                 VisualStateManager.GoToState(this, "OutlinedFocused");
                             }
@@ -1516,7 +1507,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
                 {
                     case PointerActions.Entered:
                         {
-                            if (!IsFocused)
+                            if (!IsLayoutFocused)
                             {
                                 VisualStateManager.GoToState(this, "LineHover");
                             }
@@ -1525,7 +1516,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
                     case PointerActions.Exited:
                         {
-                            if (IsFocused)
+                            if (IsLayoutFocused)
                             {
                                 VisualStateManager.GoToState(this, "LineFocused");
                             }

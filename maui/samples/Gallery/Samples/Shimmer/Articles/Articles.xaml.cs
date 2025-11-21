@@ -13,7 +13,6 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 			_timer.Interval = TimeSpan.FromMilliseconds(3000);
 			_timer.Tick += Timer_Tick;
 			_timer.Start();
-			Dispatcher.Dispatch(() => listView.ItemTemplate = (DataTemplate)Resources["articleTemplate"]);
 		}
 
 		protected override void OnSizeAllocated(double width, double height)
@@ -29,7 +28,6 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 				height = 600;
 			}
 
-			listView.RowHeight = (int)(height / 6);
 		}
 
 		private void Timer_Tick(object? sender, EventArgs e)

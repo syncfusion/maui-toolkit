@@ -1,4 +1,4 @@
-﻿using System.Windows.Input;
+using System.Windows.Input;
 using Microsoft.Maui.Controls.Shapes;
 using Syncfusion.Maui.Toolkit.Chips;
 using Syncfusion.Maui.Toolkit.EffectsView;
@@ -14,6 +14,7 @@ using VisualStateManager = Microsoft.Maui.Controls.VisualStateManager;
 using Thickness = Microsoft.Maui.Thickness;
 using VerticalAlignment = Microsoft.Maui.Graphics.VerticalAlignment;
 using Application = Microsoft.Maui.Controls.Application;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 #if WINDOWS
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml;
@@ -141,7 +142,7 @@ namespace Syncfusion.Maui.Toolkit
 		/// Identifies the Padding property. This property can be used to set padding to the sides of ButtonBase.
 		/// </summary>
 		/// <remarks>This <see cref="BindableProperty"/> is read-only.</remarks>
-		public static readonly BindableProperty PaddingProperty =
+		public static new readonly BindableProperty PaddingProperty =
 			BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(ButtonBase), DeviceInfo.Platform == DevicePlatform.Android ? new Thickness(2) : new Thickness(0), BindingMode.Default, null, OnPaddingPropertyChanged);
 
 		/// <summary>

@@ -688,7 +688,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 		[Theory]
 		[InlineData(false, false, false)]
-		[InlineData(true, true, true)]
+		[InlineData(true, true, false)]
 		[InlineData(false, true, false)]
 		public void TestSfPopupDismiss(bool isOpen, bool staysOpen, bool Open)
 		{

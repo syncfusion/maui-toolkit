@@ -3,6 +3,7 @@ using Syncfusion.Maui.Toolkit.EffectsView;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit
 {
@@ -74,13 +75,20 @@ namespace Syncfusion.Maui.Toolkit
 			clipView = new Grid();
 			EffectsView = new SfEffectsView();
 #if __IOS__
-            IgnoreSafeArea = true;
-			clipView.IgnoreSafeArea = true;
-            EffectsView.IgnoreSafeArea = true;
+#if NET9_0
+            this.IgnoreSafeArea = true;
+            this.clipView.IgnoreSafeArea = true;
+            this.EffectsView.IgnoreSafeArea = true;
+#else
+            this.SafeAreaEdges = SafeAreaEdges.None;
+            this.clipView.SafeAreaEdges = SafeAreaEdges.None;
+            this.EffectsView.IgnoreSafeArea = true;
 #endif
-			//// - TODO directly clip the parent view cause the crash in the view. So, we add the grid view for the clip purpose.
-			clipView.Add(this.EffectsView);
-			Add(EffectsView);
+
+#endif
+            //// - TODO directly clip the parent view cause the crash in the view. So, we add the grid view for the clip purpose.
+            clipView.Add(this.EffectsView);
+            Add(EffectsView);
             EffectsView.Content = child;
             EffectsView.ShouldIgnoreTouches = true;
             this.AddTouchListener(this);

@@ -8,7 +8,7 @@
                       xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
                       xmlns:ios="clr-namespace:Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific;assembly=Microsoft.Maui.Controls"
                       x:DataType="local:PullToRefreshViewModel"
-                      ios:Page.UseSafeArea="True"
+                      SafeAreaEdges="All"
                       Padding="0"
                       Margin="0">
 
@@ -109,7 +109,7 @@
                                     <Grid Grid.Row="1"
                                           RowSpacing="0"
                                           VerticalOptions="Center"
-                                          HorizontalOptions="CenterAndExpand"
+                                          HorizontalOptions="Center"
                                           ColumnDefinitions="18, *">
                                         <Label x:Name="locationPin"
                                                Text="&#xe76E;"
@@ -387,7 +387,7 @@
                 <Picker  x:Name="comboBox"
                                      Grid.Row="0"
                                      Grid.Column="1"
-                                     HorizontalOptions="StartAndExpand">
+                                     HorizontalOptions="Start">
 
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">

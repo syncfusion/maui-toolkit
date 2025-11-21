@@ -5,7 +5,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// <summary>
 	/// A class used to assign collection values for a Model properties
 	/// </summary>
-	public class ListViewInboxInfoRepository
+	public class CollectionViewInboxInfoRepository
 	{
 		#region Fields
 

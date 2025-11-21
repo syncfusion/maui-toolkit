@@ -36,13 +36,13 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			_listView.BindingContext = _viewModel;
 			_listView.ItemsSource = _viewModel.SelectedData;
 			_listView.SelectedItem = (_listView.BindingContext as PullToRefreshViewModel)?.SelectedData![0];
-			_listView.SelectionChanged += ListView_SelectionChanged;
+			_listView.SelectionChanged += CollectionView_SelectionChanged;
 			_pullToRefresh.Refreshing += PullToRefresh_Refreshing;
 			_transitionType.SelectedIndexChanged += OnSelectionChanged;
 			base.OnAttachedTo(bindable);
 		}
 
-		private void ListView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+		private void CollectionView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
 		{
 			if (e.CurrentSelection.Count > 0)
 			{
@@ -71,7 +71,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 
 			if (_listView != null)
 			{
-				_listView.SelectionChanged -= ListView_SelectionChanged;
+				_listView.SelectionChanged -= CollectionView_SelectionChanged;
 			}
 
 			_pullToRefresh = null;

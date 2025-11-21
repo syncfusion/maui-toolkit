@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Path = Microsoft.Maui.Controls.Shapes.Path;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 #if WINDOWS
 using Windows.Globalization.NumberFormatting;
 #elif IOS

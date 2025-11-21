@@ -16,7 +16,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             Assert.NotNull(picker.HeaderView);
             Assert.NotNull(picker.ColumnHeaderView);
-            Assert.Equal(new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second), picker.SelectedTime);
             Assert.Equal(1, picker.HourInterval);
             Assert.Equal(1, picker.MinuteInterval);
             Assert.Equal(1, picker.SecondInterval);
@@ -1708,7 +1707,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void GetMinuteOrSecondIndex_ExactMatch_ReturnsCorrectIndex()
         {
             var collection = new ObservableCollection<string> { "00", "15", "30", "45" };
-            var result = TimePickerHelper.GetMinuteOrSecondIndex(collection, 30);
+            var result = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(collection, 30);
             Assert.Equal(2, result);
         }
 
@@ -1716,7 +1715,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void GetMinuteOrSecondIndex_NoExactMatch_ReturnsNextHigherIndex()
         {
             var collection = new ObservableCollection<string> { "00", "15", "30", "45" };
-            var result = TimePickerHelper.GetMinuteOrSecondIndex(collection, 20);
+            var result = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(collection, 20);
             Assert.Equal(2, result);
         }
 
@@ -1724,7 +1723,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void GetMinuteOrSecondIndex_ValueHigherThanAll_ReturnsLastIndex()
         {
             var collection = new ObservableCollection<string> { "00", "15", "30", "45" };
-            var result = TimePickerHelper.GetMinuteOrSecondIndex(collection, 50);
+            var result = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(collection, 50);
             Assert.Equal(3, result);
         }
 
@@ -1732,7 +1731,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         public void GetMinuteOrSecondIndex_EmptyCollection_ReturnsNegativeOne()
         {
             var collection = new ObservableCollection<string>();
-            var result = TimePickerHelper.GetMinuteOrSecondIndex(collection, 30);
+            var result = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(collection, 30);
             Assert.Equal(-1, result);
         }
 

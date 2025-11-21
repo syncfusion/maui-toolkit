@@ -4,6 +4,7 @@ using Syncfusion.Maui.Toolkit.Localization;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 using Globalization = System.Globalization;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.Calendar
 {
@@ -113,7 +114,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 AddOrRemoveNavigationArrows();
             }
 #if IOS
-			IgnoreSafeArea = true;
+
+#if NET10_0
+            this.SafeAreaEdges = SafeAreaEdges.None;
+#else
+            this.IgnoreSafeArea = true;
+#endif
+
 #endif
 		}
 
@@ -674,8 +681,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         CalendarHeaderDetails GetHeaderViewInfo()
         {
             List<DateTime> visibleDates = _headerInfo.VisibleDates;
-            DateTime dateTime = CalendarViewHelper.GetWeekStartDate(visibleDates, _headerInfo.Identifier);
-            int weekNumber = CalendarViewHelper.GetWeekNumber(_headerInfo.Identifier, dateTime);
+            DateTime dateTime = CalendarViewHelper.GetWeekStartDate(visibleDates, _headerInfo.Identifier, _headerInfo.FirstDayOfWeek);
+            int weekNumber = CalendarViewHelper.GetWeekNumber(_headerInfo.Identifier, dateTime, _headerInfo.FirstDayOfWeek);
             CalendarHeaderDetails? headerViewInfo = new CalendarHeaderDetails();
             if (_headerInfo.View == CalendarView.Month)
             {

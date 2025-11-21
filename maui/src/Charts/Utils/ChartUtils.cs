@@ -6,6 +6,7 @@ using Core = Syncfusion.Maui.Toolkit;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Reflection;
 using System.Diagnostics.CodeAnalysis;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -472,7 +473,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				label.SetBinding(Label.FontAttributesProperty,
 					BindingHelper.CreateBinding(nameof(TooltipInfo.FontAttributes), getter: static (TooltipInfo tooltipInfo) => tooltipInfo.FontAttributes));
 
+#if NET10_0_OR_GREATER
+                return label;
+#else
 				return new ViewCell { View = label };
+#endif
 			});
 
 			return template;

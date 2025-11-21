@@ -3,6 +3,7 @@ using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System;
 using Font = Microsoft.Maui.Font;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.SunburstChart
 {

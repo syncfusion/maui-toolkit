@@ -717,25 +717,38 @@ namespace Syncfusion.Maui.Toolkit.Charts
             if (tooltipInfo.Source is ITooltipDependent tooltip && tooltip.TooltipTemplate != null)
             {
                 var layout = tooltip.TooltipTemplate.CreateContent();
-                view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
-            }
+#if NET10_0_OR_GREATER
+				view = layout as View;
+#else
+				view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
+#endif
+			}
             else
             {
                 var layout = tooltipInfo.Source is ITooltipDependent source ? source.GetDefaultTooltipTemplate(tooltipInfo)?.CreateContent() : null;
-                view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
-            }
+#if NET10_0_OR_GREATER
+				view = layout as View;
+#else
+				view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
+#endif
+			}
 
-            if (view != null)
+			if (view != null)
             {
 #if NET9_0_OR_GREATER
                 var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity);
 #else
 				var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
 #endif
+#if NET10_0_OR_GREATER
+				view.Frame = new Rect(0, 0, size.Width, size.Height);
+				view.InvalidateMeasure();
+#else
 				view.Layout(new Rect(0, 0, size.Width, size.Height));
-            }
+#endif
+			}
 
-            return view;
+			return view;
         }
 
         #endregion

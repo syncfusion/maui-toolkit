@@ -131,7 +131,9 @@ namespace Syncfusion.Maui.Toolkit.Carousel.Platform
 			return templateInstance switch
 			{
 				View view => view,
+#if NET9_0
 				ViewCell viewCell => viewCell.View,
+#endif
 				_ => null
 			};
 		}
@@ -172,6 +174,6 @@ namespace Syncfusion.Maui.Toolkit.Carousel.Platform
 
 			return null;
 		}
-		#endregion
+#endregion
 	}
 }

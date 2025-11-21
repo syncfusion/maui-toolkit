@@ -2500,16 +2500,25 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 layout = GetDefaultTooltipTemplate(tooltipSettings, sunburstSegment).CreateContent();
             }
 
-            view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
-            if (view != null)
+#if NET10_0_OR_GREATER
+			view = layout as View;
+#else
+			view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
+#endif
+			if (view != null)
             {
 #if NET9_0_OR_GREATER
                 var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity);
 #else
                 var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
 #endif
-                view.Layout(new Rect(0, 0, size.Width, size.Height));
-            }
+#if NET10_0_OR_GREATER
+				view.Frame = new Rect(0, 0, size.Width, size.Height);
+				view.InvalidateMeasure();
+#else
+				view.Layout(new Rect(0, 0, size.Width, size.Height));
+#endif
+			}
 
             return view;
         }
@@ -2521,7 +2530,10 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             category.HorizontalOptions = LayoutOptions.Fill;
             category.VerticalTextAlignment = TextAlignment.Center;
             category.HorizontalTextAlignment = TextAlignment.Start;
-            category.SetBinding(Label.TextProperty, BindingHelper.CreateBinding("Item[0]", getter: static (SunburstSegment segment) => ((List<object>)segment.Item!)[0], source: segment));
+#if WINDOWS
+			category.LineBreakMode = LineBreakMode.NoWrap;
+# endif
+			category.SetBinding(Label.TextProperty, BindingHelper.CreateBinding("Item[0]", getter: static (SunburstSegment segment) => ((List<object>)segment.Item!)[0], source: segment));
             category.SetBinding(Label.TextColorProperty, BindingHelper.CreateBinding(nameof(SunburstTooltipSettings.TextColor), getter: static (SunburstTooltipSettings settings) => settings.TextColor, source: settings));
             category.SetBinding(Label.FontSizeProperty, BindingHelper.CreateBinding(nameof(SunburstTooltipSettings.FontSize), getter: static (SunburstTooltipSettings settings) => settings.FontSize, source: settings));
             category.SetBinding(Label.FontFamilyProperty, BindingHelper.CreateBinding(nameof(SunburstTooltipSettings.FontFamily), getter: static (SunburstTooltipSettings settings) => settings.FontFamily, source: settings));
@@ -2532,7 +2544,10 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             value.HorizontalOptions = LayoutOptions.Fill;
             value.VerticalTextAlignment = TextAlignment.Center;
             value.HorizontalTextAlignment = TextAlignment.Start;
-            value.SetBinding(Label.TextProperty, BindingHelper.CreateBinding("Item[1]", getter: static (SunburstSegment segment) => ((List<object>)segment.Item!)[1], source: segment));
+#if WINDOWS
+			value.LineBreakMode = LineBreakMode.NoWrap;
+#endif
+			value.SetBinding(Label.TextProperty, BindingHelper.CreateBinding("Item[1]", getter: static (SunburstSegment segment) => ((List<object>)segment.Item!)[1], source: segment));
             value.SetBinding(Label.TextColorProperty, BindingHelper.CreateBinding(nameof(SunburstTooltipSettings.TextColor), getter: static (SunburstTooltipSettings settings) => settings.TextColor, source: settings));
             value.SetBinding(Label.FontSizeProperty, BindingHelper.CreateBinding(nameof(SunburstTooltipSettings.FontSize), getter: static (SunburstTooltipSettings settings) => settings.FontSize, source: settings));
             value.SetBinding(Label.FontFamilyProperty, BindingHelper.CreateBinding(nameof(SunburstTooltipSettings.FontFamily), getter: static (SunburstTooltipSettings settings) => settings.FontFamily, source: settings));
@@ -2545,8 +2560,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                     Margin = settings.Margin
                 };
 
-                return new ViewCell { View = stackLayout };
-            });
+#if NET10_0_OR_GREATER
+				return stackLayout;
+#else
+				return new ViewCell { View = stackLayout };
+#endif
+			});
 
             return template;
         }
@@ -2576,6 +2595,6 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             area.UpdateLegendItemAttributes();
         }
 
-        #endregion
+#endregion
     }
 }

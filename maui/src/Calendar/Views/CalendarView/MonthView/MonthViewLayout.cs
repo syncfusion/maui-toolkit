@@ -51,7 +51,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             Add(_monthView);
             AddOrRemoveViewHeader(isCurrentView);
 #if IOS
-			IgnoreSafeArea = true;
+
+#if NET10_0
+            this.SafeAreaEdges = SafeAreaEdges.None;
+#else
+            IgnoreSafeArea = true;
+#endif
+
 #endif
 		}
 

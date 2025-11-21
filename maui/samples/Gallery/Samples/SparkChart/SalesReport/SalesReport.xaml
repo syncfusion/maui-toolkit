@@ -37,7 +37,7 @@
       </Grid.RowDefinitions>
 
       <Grid ColumnDefinitions="1*,1.2*,1.2*,2.2*,2.2*,2.2*"
-                BackgroundColor="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}"
+                BackgroundColor="{StaticResource ContentBackgroundAlt1}"
                 ColumnSpacing="8" 
                 Padding="4"
                 HeightRequest="50">

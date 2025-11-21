@@ -145,7 +145,13 @@ namespace Syncfusion.Maui.Toolkit.Cards
             IsClippedToBounds = true;
             this.AddGestureListener(this);
 #if IOS
-			IgnoreSafeArea = true;
+
+#if NET10_0
+            this.SafeAreaEdges = SafeAreaEdges.None;
+#else
+            IgnoreSafeArea = true;
+#endif
+
 #endif
 		}
 

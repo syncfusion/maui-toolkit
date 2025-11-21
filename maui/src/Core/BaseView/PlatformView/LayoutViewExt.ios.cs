@@ -211,15 +211,15 @@ namespace Syncfusion.Maui.Toolkit.Platform
 				// has already happened via SizeThatFits and doesn't need to be repeated in LayoutSubviews. But we
 				// _do_ need LayoutSubviews to make a measurement pass if the parent is something else (for example,
 				// the window); there's no guarantee that SizeThatFits has been called in that case.
-#if NET8_0_OR_GREATER
 				if (!IsMeasureValid(widthConstraint, heightConstraint) && Superview is not Microsoft.Maui.Platform.MauiView)
 				{
+#if NET9_0
 					layout.CrossPlatformMeasure(widthConstraint, heightConstraint);
 					CacheMeasureConstraints(widthConstraint, heightConstraint);
-				}
 #else
-                layout.CrossPlatformMeasure(widthConstraint, heightConstraint);
+					CacheMeasureConstraints(widthConstraint, heightConstraint, layout.CrossPlatformMeasure(widthConstraint, heightConstraint));
 #endif
+				}
 			}
 
 			layout.CrossPlatformArrange(bounds);

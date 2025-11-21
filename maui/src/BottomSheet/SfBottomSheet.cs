@@ -1451,7 +1451,11 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    };
 
 #if IOS
+#if NET9_0
 			_bottomSheetContent.IgnoreSafeArea = true;
+#else
+			_bottomSheetContent.SafeAreaEdges = SafeAreaEdges.None;
+#endif
 #endif
 
 			_grabberGrid = new SfGrid()
@@ -2518,7 +2522,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 #endif
 		}
 
-		#endregion
+#endregion
 
 		#region Override Methods
 

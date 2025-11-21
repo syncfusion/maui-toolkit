@@ -6,11 +6,11 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 	/// <summary>
 	/// Base generic class for user-defined behaviors that can respond to conditions and events.
 	/// </summary>
-	public partial class ListViewPullToRefreshBehavior : Behavior<SampleView>
+	public partial class CollectionViewPullToRefreshBehavior : Behavior<SampleView>
 	{
 		Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh? _pullToRefresh;
-		ListView? _listView;
-		ListViewInboxInfoViewModel? _viewModel;
+		CollectionView? _collectionView;
+		CollectionViewInboxInfoViewModel? _viewModel;
 		Microsoft.Maui.Controls.Picker? _transitionType;
 
 		/// <summary>
@@ -19,30 +19,29 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="bindable">SampleView type parameter named as bindable.</param>
 		protected override void OnAttachedTo(SampleView bindable)
 		{
-			_viewModel = new ListViewInboxInfoViewModel();
+			_viewModel = new CollectionViewInboxInfoViewModel();
 			bindable.BindingContext = _viewModel;
 			_pullToRefresh = bindable.FindByName<Syncfusion.Maui.Toolkit.PullToRefresh.SfPullToRefresh>("pullToRefresh");
-			_listView = bindable.FindByName<ListView>("listView");
+			_collectionView = bindable.FindByName<CollectionView>("listView");
 			_transitionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("comboBox");
 			_transitionType.SelectedIndexChanged += OnSelectionChanged;
 			_pullToRefresh.Refreshing += PullToRefresh_Refreshing;
 			_pullToRefresh.Refreshed += PullToRefresh_Refreshed;
-			_listView.Loaded += ListView_Loaded;
+			_collectionView.Loaded += CollectionView_Loaded;
 			base.OnAttachedTo(bindable);
 		}
 
 		/// <summary>
-		/// Fired when listView is loaded.
+		/// Fired when collectionview is loaded.
 		/// </summary>
-		/// <param name="sender">ListView_Loaded event sender</param>
-		/// <param name="e">ListView_Loaded event args</param>
-		private void ListView_Loaded(object? sender, EventArgs e)
+		/// <param name="sender">CollectionView_Loaded event sender</param>
+		/// <param name="e">CollectionView_Loaded event args</param>
+		private void CollectionView_Loaded(object? sender, EventArgs e)
 		{
 #if WINDOWS
-			if (_listView != null && _listView.Handler != null)
+			if (_collectionView != null && _collectionView.Handler != null)
 			{
-				var platformView = _listView.Handler.PlatformView as Microsoft.UI.Xaml.Controls.ListView;
-				if (platformView != null)
+				if (_collectionView.Handler.PlatformView is Microsoft.UI.Xaml.Controls.ListViewBase platformView)
 				{
 					platformView.ItemContainerTransitions = null;
 				}
@@ -58,10 +57,10 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		private void PullToRefresh_Refreshed(object? sender, EventArgs e)
 		{
 #if ANDROID
-			if (_listView != null && _listView.Handler != null)
+			if (_collectionView != null && _collectionView.Handler != null)
 			{
-				var platformView = _listView.Handler.PlatformView as Android.Views.View;
-				platformView?.InvalidateMeasure(_listView as IView);
+				var platformView = _collectionView.Handler.PlatformView as Android.Views.View;
+				platformView?.InvalidateMeasure(_collectionView as IView);
 			}
 #endif
 		}
@@ -101,14 +100,14 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="bindable">SampleView type parameter named as bindable</param>
 		protected override void OnDetachingFrom(SampleView bindable)
 		{
-			if (_pullToRefresh != null && _transitionType != null && _listView != null)
+			if (_pullToRefresh != null && _transitionType != null && _collectionView != null)
 			{
 				_pullToRefresh.Refreshing -= PullToRefresh_Refreshing;
 				_pullToRefresh.Refreshed -= PullToRefresh_Refreshed;
 				_transitionType.SelectedIndexChanged -= OnSelectionChanged;
-				_listView.Loaded -= ListView_Loaded;
+				_collectionView.Loaded -= CollectionView_Loaded;
 				_pullToRefresh = null;
-				_listView = null;
+				_collectionView = null;
 				_viewModel = null;
 				_transitionType = null;
 				base.OnDetachingFrom(bindable);
@@ -132,19 +131,19 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 			{
 				return GroupName.Yesterday;
 			}
-			else if (ListViewPullToRefreshBehavior.IsLastWeek(groupName))
+			else if (CollectionViewPullToRefreshBehavior.IsLastWeek(groupName))
 			{
 				return GroupName.LastWeek;
 			}
-			else if (ListViewPullToRefreshBehavior.IsThisWeek(groupName))
+			else if (CollectionViewPullToRefreshBehavior.IsThisWeek(groupName))
 			{
 				return GroupName.ThisWeek;
 			}
-			else if (ListViewPullToRefreshBehavior.IsThisMonth(groupName))
+			else if (CollectionViewPullToRefreshBehavior.IsThisMonth(groupName))
 			{
 				return GroupName.ThisMonth;
 			}
-			else if (ListViewPullToRefreshBehavior.IsLastMonth(groupName))
+			else if (CollectionViewPullToRefreshBehavior.IsLastMonth(groupName))
 			{
 				return GroupName.LastMonth;
 			}

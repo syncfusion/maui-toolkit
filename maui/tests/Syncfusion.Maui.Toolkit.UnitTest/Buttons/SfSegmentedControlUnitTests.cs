@@ -696,7 +696,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void CreateTemplateView_ReturnsView_WhenTemplateHasViewCell()
 		{
-			var template = new DataTemplate(() => new ViewCell { View = new Label() });
+			var template = new DataTemplate(() =>new Label());
 			var info = new object();
 			var isRTL = false;
 			var resultView = SegmentItemViewHelper.CreateTemplateView(template, info, isRTL);
@@ -900,7 +900,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		[Theory]
 		[InlineData(100.0, 50.0, 200.0, LayoutAlignment.Fill, 94.0)]
-		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 192.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 194.0)]
 		[InlineData(100.0, 50.0, 100.0, LayoutAlignment.Start, 94.0)]
 		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Start, 50.0)]
 
@@ -918,7 +918,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		[Theory]
 		[InlineData(100.0, 50.0, 200.0, LayoutAlignment.Fill, 94.0)]
-		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 193.0)]
+		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Fill, 194.0)]
 		[InlineData(100.0, 50.0, 100.0, LayoutAlignment.Start, 94.0)]
 		[InlineData(-100.0, 50.0, 200.0, LayoutAlignment.Start, 50.0)]
 

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System;
 using Point = Microsoft.Maui.Graphics.Point;
 using Color = Microsoft.Maui.Graphics.Color;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.SunburstChart
 {

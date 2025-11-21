@@ -482,7 +482,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
                    date.Value.Day == otherDate.Value.Day &&
                    date.Value.Hour == otherDate.Value.Hour &&
                    date.Value.Minute == otherDate.Value.Minute &&
-                   date.Value.Second == otherDate.Value.Second;
+                   date.Value.Second == otherDate.Value.Second &&
+                   date.Value.Millisecond == otherDate.Value.Millisecond;
         }
 
         /// <summary>

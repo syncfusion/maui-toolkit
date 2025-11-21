@@ -1,7 +1,8 @@
-﻿using Microsoft.Maui.Animations;
+using Microsoft.Maui.Animations;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Animation = Microsoft.Maui.Animations.Animation;
 using Font = Microsoft.Maui.Font;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit
 {

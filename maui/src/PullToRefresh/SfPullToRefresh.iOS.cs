@@ -362,7 +362,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 						gesture2.State == UIGestureRecognizerState.Ended ||
 						gesture2.State == UIGestureRecognizerState.Cancelled)
 					{
-						if (SfPullToRefresh.PanGesture is not null)
+						if (SfPullToRefresh !=  null && SfPullToRefresh.PanGesture != null)
 						{
 							SfPullToRefresh.PanGesture.Enabled = true;
 						}

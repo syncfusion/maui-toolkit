@@ -10,7 +10,7 @@
 
     <localCore:SampleView.Content>
 
-        <Grid WidthRequest="300" HeightRequest="375" HorizontalOptions="Center" VerticalOptions="Center">
+        <Grid WidthRequest="365" HeightRequest="375" HorizontalOptions="Center" VerticalOptions="Center">
             <Border x:Name="frame" IsVisible="{OnPlatform WinUI=True, Android=True, Default=False}" BackgroundColor="Transparent" StrokeShape="RoundRectangle 5,5,5,5" StrokeThickness="1" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
                 <timePicker:SfTimePicker x:Name="TimePicker" HeightRequest="370" MinimumTime="09:00" MaximumTime="18:00" />
             </Border>

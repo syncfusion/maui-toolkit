@@ -1838,19 +1838,6 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 		}
 
-		/// <summary>
-		/// Handler changed method.
-		/// </summary>
-		protected override void OnHandlerChanged()
-		{
-			if(Handler == null)
-			{
-				_selectionChangedEventArgs = null;
-			}
-
-			base.OnHandlerChanged();
-		}
-
 		#endregion
 
 		#region Internal Methods

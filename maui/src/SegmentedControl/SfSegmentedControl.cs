@@ -333,7 +333,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 
 			RemoveOutlinedBorderView();
 			_grid = [];
-#if __IOS__
+#if (IOS || MACCATALYST || ANDROID) && NET10_0_OR_GREATER
+			this._grid.SafeAreaEdges = SafeAreaEdges.None;
+#elif IOS
 			_grid.IgnoreSafeArea = true;
 #endif
 			_grid.SizeChanged += GridSizeChanged;
@@ -349,6 +351,9 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 				VerticalScrollBarVisibility = ScrollBarVisibility.Never,
 			};
 
+#if (IOS || MACCATALYST || ANDROID) && NET10_0_OR_GREATER
+			_scrollView.SafeAreaEdges = SafeAreaEdges.None;
+#endif
 			_grid.Children.Add(_scrollView);
 			_segmentLayout = new SegmentLayout(this);
 			_scrollView.Content = _segmentLayout;

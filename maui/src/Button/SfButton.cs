@@ -1,5 +1,6 @@
 ﻿using Syncfusion.Maui.Toolkit.EffectsView;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 using Syncfusion.Maui.Toolkit.Themes;
 
 namespace Syncfusion.Maui.Toolkit.Buttons

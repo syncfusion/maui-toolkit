@@ -37,7 +37,7 @@ namespace Syncfusion.Maui.Toolkit.Hosting
                 handlers.AddHandler(typeof(SfPickerView), typeof(SfPickerScrollViewHandler));
 #if __ANDROID__
                 handlers.AddHandler(typeof(SnapLayout), typeof(SnapLayoutHandler));
-                handlers.AddHandler(typeof(BottomSheetBorder), typeof(BottomSheetBorderHandler));
+				handlers.AddHandler(typeof(BottomSheetBorder), typeof(BottomSheetBorderHandler));
 #endif
 #if IOS || MACCATALYST
                 // Register custom handler for OTPEntry to enable enhanced backspace detection

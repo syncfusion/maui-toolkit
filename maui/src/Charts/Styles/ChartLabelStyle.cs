@@ -2,6 +2,7 @@
 using Syncfusion.Maui.Toolkit.Themes;
 using Font = Microsoft.Maui.Font;
 using Rect = Microsoft.Maui.Graphics.RectF;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {

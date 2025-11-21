@@ -15,9 +15,7 @@ namespace Syncfusion.Maui.Toolkit.Themes
 
 	[ContentProperty(nameof(ResourceKey))]
 
-#if NET9_0
 	[RequireService([typeof(IProvideValueTarget)])]
-#endif
 	public class StaticThemeResourceExtension : IMarkupExtension
 	{
 		/// <summary>

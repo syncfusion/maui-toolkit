@@ -4,6 +4,7 @@ using GestureStatus = Microsoft.Maui.GestureStatus;
 using Microsoft.Maui.Platform;
 using MauiView = Microsoft.Maui.Controls.View;
 using View = Android.Views.View;
+using Android.Runtime;
 
 namespace Syncfusion.Maui.Toolkit.Internals
 {
@@ -360,6 +361,18 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			public ScrollListener(GestureDetector gestureDetector)
 			{
 				GestureDetector = gestureDetector;
+			}
+
+			/// <summary>
+			/// Initializes a new <see cref="ScrollListener"/> bound to an existing JNI peer,
+			/// specifying how the native handle ownership is managed.
+			/// </summary>
+			/// <param name="handle">A pointer to the native JNI object.</param>
+			/// <param name="transfer">
+			/// The ownership semantics for <paramref name="handle"/> (e.g., transfer or retain).
+			/// </param>
+			protected ScrollListener(IntPtr handle, JniHandleOwnership transfer) : base(handle, transfer)
+			{
 			}
 
 			#endregion

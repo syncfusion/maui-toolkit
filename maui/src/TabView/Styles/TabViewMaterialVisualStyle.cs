@@ -110,23 +110,6 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
-		/// <summary>
-		/// Handler changed method.
-		/// </summary>
-		protected override void OnHandlerChanged()
-		{
-			if (Handler == null)
-			{
-				_image = null;
-				_header = null;
-				if (Parent != null)
-				{
-					Parent.PropertyChanged -= OnParentPropertyChanged;
-				}
-			}
-
-			base.OnHandlerChanged();
-		}
 		#endregion
 
 		#region Property Changed Implementation

@@ -131,7 +131,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             BackgroundColor = CalendarBackground;
             _layout = new CalendarVerticalStackLayout(HeaderView.Height, FooterView.ShowActionButtons || FooterView.ShowTodayButton, FooterView.Height);
 #if IOS
-			_layout.IgnoreSafeArea = true;
+
+#if NET10_0
+            this._layout.SafeAreaEdges = SafeAreaEdges.None;
+#else
+            _layout.IgnoreSafeArea = true;
+#endif
+
 #endif
 			Add(_layout);
             _displayDate = DisplayDate;
@@ -148,6 +154,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// Gets the number of week in calendar month view.
         /// </summary>
         int IHeader.NumberOfVisibleWeeks => MonthView.GetNumberOfWeeks();
+
+        /// <summary>
+        /// Gets the first day of the week used in the calendar month view.
+        /// </summary>
+        DayOfWeek IHeader.FirstDayOfWeek => this.MonthView.FirstDayOfWeek;
 
         /// <summary>
         /// Gets the visible Appointments that will render based on view date ranges.
@@ -350,7 +361,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     daysToAdd = ((int)DayOfWeek.Monday - (int)tappedDate.DayOfWeek + 7) % 7;
                 }
 
-                weekNumber = CalendarViewHelper.GetWeekNumber(Identifier, tappedDate.AddDays(daysToAdd));
+                weekNumber = CalendarViewHelper.GetWeekNumber(Identifier, tappedDate.AddDays(daysToAdd), MonthView.FirstDayOfWeek);
             }
 
             if (isTapped)
@@ -1027,7 +1038,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 //// Initially the visible dates collection is null while the navigation direction is vertical. So need to calculate visible dates collection in temporary.
                 List<DateTime> visibleDates = new List<DateTime>();
-                if (visibleDates.Count == 0)
+                if (_visibleDates.Count == 0)
                 {
                     DateTime firstDisplayDate = CalendarViewHelper.GetFirstDayOfWeek(7, DisplayDate, MonthView.FirstDayOfWeek, Identifier);
                     for (int i = 0; i < 7; i++)

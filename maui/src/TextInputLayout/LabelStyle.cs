@@ -1,5 +1,5 @@
 ﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
-
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 namespace Syncfusion.Maui.Toolkit.TextInputLayout
 {
 	/// <summary>

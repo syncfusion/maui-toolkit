@@ -229,7 +229,11 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
 				return;
 			}
 
-			_calendar.DisplayDate = e.NewDate;
+			if (_calendar != null && e.NewDate != null)
+			{
+				_calendar!.DisplayDate = e.NewDate.Value;
+			}
+
 			_datePicker.Date = e.NewDate;
 		}
 

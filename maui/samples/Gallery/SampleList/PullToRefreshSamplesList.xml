@@ -3,7 +3,7 @@
 	<ControlCategory Name="Notification">
 		<Control Title="Pull to Refresh" ControlName="SfPullToRefresh" Image="pulltorefresh.png" Description="Allows the users to update the view by performing the pull-to-refresh action.">
 			<Sample SearchTags="data, weather, list, pull, refresh, slide on top, push, transition, update" SampleName="PullToRefreshView" Title="Getting Started"/>
-			<Sample SearchTags="list, listview, refresh, slide on top, push, transition, refresh list, data, pull" SampleName="ListViewPullToRefresh" Title="Refreshable List"/>
+			<Sample SearchTags="collection, collectionView, list, listview, refresh, slide on top, push, transition, refresh list, data, pull" SampleName="CollectionViewPullToRefresh" Title="Refreshable List"/>
 		</Control>
 	</ControlCategory>
 </SyncfusionControls>
