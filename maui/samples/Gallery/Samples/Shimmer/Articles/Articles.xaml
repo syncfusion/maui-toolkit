@@ -13,28 +13,24 @@
   <localCore:SampleView.Resources>
     <ResourceDictionary>
       <DataTemplate x:Key="articleTemplate">
-        <ViewCell>
-          <Grid Padding="10">
-            <Grid.ColumnDefinitions>
-              <ColumnDefinition Width="0.25*"/>
-              <ColumnDefinition Width="0.75*"/>
-            </Grid.ColumnDefinitions>
-
-            <Image x:DataType="local:BookInfo" Source="{Binding BookImage}"/>
-            <Grid Grid.Column="1" Padding="10,0,0,0">
-              <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-              </Grid.RowDefinitions>
-              <Label x:DataType="local:BookInfo" Text="{Binding BookName}" FontAttributes="Bold" FontSize="16"/>
-              <Label x:DataType="local:BookInfo" Text="{Binding Author}" Grid.Row="1"  FontSize="16"/>
-              <Label x:DataType="local:BookInfo" Text="{Binding Summary}" FontSize="10" VerticalOptions="Center" Grid.Row="3" MaxLines="2" LineBreakMode="WordWrap"/>
-            </Grid>
-
+        <Grid Padding="10">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.25*"/>
+            <ColumnDefinition Width="0.75*"/>
+          </Grid.ColumnDefinitions>
+          <Image x:DataType="local:BookInfo" Source="{Binding BookImage}"/>
+          <Grid Grid.Column="1" Padding="10,0,0,0">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Label x:DataType="local:BookInfo" Text="{Binding BookName}" FontAttributes="Bold" FontSize="16"/>
+            <Label x:DataType="local:BookInfo" Text="{Binding Author}" Grid.Row="1"  FontSize="16"/>
+            <Label x:DataType="local:BookInfo" Text="{Binding Summary}" FontSize="10" VerticalOptions="Center" Grid.Row="3" MaxLines="2" LineBreakMode="WordWrap"/>
           </Grid>
-        </ViewCell>
+        </Grid>
       </DataTemplate>
     </ResourceDictionary>
   </localCore:SampleView.Resources>
@@ -51,12 +47,12 @@
                            WaveDirection="LeftToRight">
                 <shimmer:SfShimmer.Content>
                     <StackLayout>
-            <ListView ItemsSource="{Binding Info1}" x:Name="listView" x:DataType="local:BookViewModel"
-                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                                  SeparatorVisibility="None"
-                                  RowHeight="125"
-                                  VerticalScrollBarVisibility="Never">
-            </ListView>
+                        <CollectionView ItemsSource="{Binding Info1}" x:Name="listView" x:DataType="local:BookViewModel"
+                                        ItemTemplate="{StaticResource articleTemplate}"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                        VerticalScrollBarVisibility="Never"
+                                        HeightRequest="750"
+                                        />
                     </StackLayout>
                 </shimmer:SfShimmer.Content>
             </shimmer:SfShimmer>

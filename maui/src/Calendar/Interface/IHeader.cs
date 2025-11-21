@@ -26,6 +26,11 @@
         DataTemplate HeaderTemplate { get; }
 
         /// <summary>
+        /// Gets the first day of the week for the calendar view.
+        /// </summary>
+        DayOfWeek FirstDayOfWeek { get; }
+
+        /// <summary>
         /// Triggers the animation to move next view of the calendar view.
         /// </summary>
         void AnimateMoveToNextView();

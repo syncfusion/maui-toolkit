@@ -1834,10 +1834,15 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				catch
 				{
 #if WINDOWS
+#if NET10_0_OR_GREATER
+                    await PullableContent.TranslateToAsync(0, RefreshViewHeight * 2, 300);
+                    await ProgressCircleView.TranslateToAsync((Width / 2) - (RefreshViewWidth / 2), RefreshViewHeight / 1.5, 250);
+#else
 					const int contentLength = 300;
 					const int circleViewLength = 250;
 					await PullableContent.LayoutTo(new Rect(0, RefreshViewHeight * 2, Width, Height - (RefreshViewHeight * 2)), contentLength).ConfigureAwait(true);
 					await ProgressCircleView.LayoutTo(new Rect((Width / 2) - (RefreshViewWidth / 2), RefreshViewHeight / 1.5, RefreshViewWidth, RefreshViewHeight), circleViewLength).ConfigureAwait(true);
+#endif
 					HideSfProgressCircleView();
 #endif
 				}

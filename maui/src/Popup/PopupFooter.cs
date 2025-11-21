@@ -83,7 +83,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 #if IOS
 			// The value for the IgnoreSafeArea property is being set by retrieving the safe area value from the main page.
+#pragma warning disable CS0618 // Suppressing CS0618 warning because Page.GetUseSafeArea is marked obsolete in .NET 10.
 			IgnoreSafeArea = !Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(PopupExtension.GetMainPage());
+#pragma warning restore CS0618
 #endif
 			_popupView = popupView;
 			Initialize();
@@ -194,7 +196,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (footerView is not null)
 			{
 				// The value for the IgnoreSafeArea property is being set by retrieving the safe area value from the main page.
+#pragma warning disable CS0618 // Suppressing CS0618 warning because Layout.IgnoreSafeArea is marked obsolete in .NET 10.
 				footerView.IgnoreSafeArea = IgnoreSafeArea;
+#pragma warning restore CS0618
 				if (_popupView._popup.FooterTemplate is null)
 				{
 					if (_popupView._popup.AppearanceMode == PopupButtonAppearanceMode.OneButton)

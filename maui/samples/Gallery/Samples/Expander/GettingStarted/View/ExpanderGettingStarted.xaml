@@ -43,7 +43,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
               </Grid.RowDefinitions>
-              <Label Grid.Row="0" Text="Invoice: #FRU037020142097" Margin="{OnPlatform Default='8,0,8,8',WinUI='8,0,6,8',MacCatalyst='8,0,6,8'}" HeightRequest="40" FontSize="16" FontFamily="Roboto-Regular"  Opacity="1.0" VerticalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="CenterAndExpand"/>
+              <Label Grid.Row="0" Text="Invoice: #FRU037020142097" Margin="{OnPlatform Default='8,0,8,8',WinUI='8,0,6,8',MacCatalyst='8,0,6,8'}" HeightRequest="40" FontSize="16" FontFamily="Roboto-Regular"  Opacity="1.0" VerticalTextAlignment="Center" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"/>
               <Border Grid.Row="1" StrokeShape="RoundRectangle 8,8,8,8" Margin="{OnPlatform Default='8,0,8,8',WinUI='8,0,8,8',MacCatalyst='8,0,8,8'}" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource Border}}" StrokeThickness="{OnPlatform MacCatalyst=2,Default=1}" WidthRequest="{OnPlatform MacCatalyst=460,WinUI=330}">
                 <syncfusion:SfExpander AnimationDuration="200" IsExpanded="True" >
                   <syncfusion:SfExpander.Header>
@@ -58,12 +58,12 @@
                       <Label Text="&#xe757;" FontSize="16" Margin="14,2,2,2"
                                                FontFamily="MauiSampleFontIcon"
                                                VerticalOptions="Center" VerticalTextAlignment="Center"/>
-                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular"  Text="Invoice Date" FontSize="14" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
+                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular"  Text="Invoice Date" FontSize="14" Grid.Column="1" VerticalOptions="Center"/>
                     </Grid>
                   </syncfusion:SfExpander.Header>
                   <syncfusion:SfExpander.Content>
                     <Grid Padding="18,8,0,18" >
-                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular"  Text="11:03 AM, 15 January 2019" FontSize="14" VerticalOptions="CenterAndExpand"/>
+                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular"  Text="11:03 AM, 15 January 2019" FontSize="14" VerticalOptions="Center"/>
                     </Grid>
                   </syncfusion:SfExpander.Content>
                 </syncfusion:SfExpander>
@@ -82,7 +82,7 @@
                       <Label Text="&#xe74E;" FontSize="16" Margin="14,2,2,2"
                                                FontFamily="MauiSampleFontIcon"
                                                VerticalOptions="Center" VerticalTextAlignment="Center"/>
-                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular"  Text="Item(s)" FontSize="14" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
+                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular"  Text="Item(s)" FontSize="14" Grid.Column="1" VerticalOptions="Center"/>
                     </Grid>
                   </syncfusion:SfExpander.Header>
                   <syncfusion:SfExpander.Content>
@@ -142,7 +142,7 @@
                       <Label Text="&#xe786;" FontSize="16" Margin="14,2,2,2"
                                                FontFamily="MauiSampleFontIcon"
                                                VerticalOptions="Center" VerticalTextAlignment="Center"/>
-                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular"  Text="Payment Details" FontSize="14" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
+                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular"  Text="Payment Details" FontSize="14" Grid.Column="1" VerticalOptions="Center"/>
                     </Grid>
                   </syncfusion:SfExpander.Header>
                   <syncfusion:SfExpander.Content>
@@ -180,7 +180,7 @@
                       <Label Text="&#xe76E;" FontSize="16" Margin="14,2,2,2"
                                                FontFamily="MauiSampleFontIcon"
                                                VerticalOptions="Center" VerticalTextAlignment="Center"/>
-                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular" FontSize="14" Text="Address" Grid.Column="1" VerticalOptions="CenterAndExpand"/>
+                      <Label CharacterSpacing="0.25" FontFamily="Roboto-Regular" FontSize="14" Text="Address" Grid.Column="1" VerticalOptions="Center"/>
                     </Grid>
                   </syncfusion:SfExpander.Header>
                   <syncfusion:SfExpander.Content>

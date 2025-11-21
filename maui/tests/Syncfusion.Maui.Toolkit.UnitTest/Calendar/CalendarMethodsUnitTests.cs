@@ -620,24 +620,24 @@ public class CalendarMethodsUnitTests : BaseUnitTest
 	}
 
 	[Theory]
-	[InlineData(CalendarIdentifier.Gregorian)]
-	[InlineData(CalendarIdentifier.Korean)]
-	[InlineData(CalendarIdentifier.Taiwan)]
-	[InlineData(CalendarIdentifier.ThaiBuddhist)]
-	public void GetWeekNumber_LTR_Returns_Weekumber_WhenCalled(CalendarIdentifier calendarIdentifier)
+	[InlineData(CalendarIdentifier.Gregorian, 31)]
+	[InlineData(CalendarIdentifier.Korean, 32)]
+	[InlineData(CalendarIdentifier.Taiwan, 32)]
+	[InlineData(CalendarIdentifier.ThaiBuddhist, 32)]
+	public void GetWeekNumber_LTR_Returns_Weekumber_WhenCalled(CalendarIdentifier calendarIdentifier, int expectedValue)
 	{
-		int actualValue = CalendarViewHelper.GetWeekNumber(calendarIdentifier, new DateTime(2001, 08, 04));
-		Assert.Equal(31, actualValue);
+		int actualValue = CalendarViewHelper.GetWeekNumber(calendarIdentifier, new DateTime(2001, 08, 04), new DateTime(2001, 08, 04).DayOfWeek);
+		Assert.Equal(expectedValue, actualValue);
 	}
 
 	[Theory]
-	[InlineData(CalendarIdentifier.Hijri)]
-	[InlineData(CalendarIdentifier.Persian)]
-	[InlineData(CalendarIdentifier.UmAlQura)]
-	public void GetWeekNumber_RTL_Returns_Weekumber_WhenCalled(CalendarIdentifier calendarIdentifier)
+	[InlineData(CalendarIdentifier.Hijri, 20)]
+	[InlineData(CalendarIdentifier.Persian, 21)]
+	[InlineData(CalendarIdentifier.UmAlQura, 20)]
+	public void GetWeekNumber_RTL_Returns_Weekumber_WhenCalled(CalendarIdentifier calendarIdentifier, int expectedValue)
 	{
-		int actualValue = CalendarViewHelper.GetWeekNumber(calendarIdentifier, new DateTime(2001, 08, 04));
-		Assert.Equal(19, actualValue);
+		int actualValue = CalendarViewHelper.GetWeekNumber(calendarIdentifier, new DateTime(2001, 08, 04), new DateTime(2001, 08, 04).DayOfWeek);
+		Assert.Equal(expectedValue, actualValue);
 	}
 
 	[Theory]

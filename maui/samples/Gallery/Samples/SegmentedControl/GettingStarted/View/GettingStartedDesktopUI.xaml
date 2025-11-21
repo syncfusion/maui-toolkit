@@ -59,7 +59,7 @@
                 <ScrollView Orientation="Vertical">
                     <StackLayout Orientation="Vertical"
                                  IsClippedToBounds="True"
-                                 VerticalOptions="StartAndExpand"
+                                 VerticalOptions="Start"
                                  Margin="0,20,0,15">
                         <Label Text="Electric Voice Speaker, the ultimate audio companion for all your entertainment needs! This sleek and powerful device was carefully designed to deliver a healthy immersive experience like never before. The speaker's modern design effortlessly complements any interior decor. Its compact size makes it easy to place on a shelf, countertop, or desk. "
                                FontSize="16" 
@@ -106,7 +106,7 @@
                             </HorizontalStackLayout>
                             <segmentedControl:SfSegmentedControl x:Name="segmentedControlWarrantyOption"
                                                         SegmentHeight="38" 
-                                                        VerticalOptions="FillAndExpand"
+                                                        VerticalOptions="Fill"
                                                         Margin="2,5,0,0"
                                                         HorizontalOptions="Start"
                                                         SegmentWidth="103"
@@ -168,13 +168,13 @@
 
 
                 <segmentedControl:SfSegmentedControl  x:Name="segmentedControlResultsOption"
-                                             HorizontalOptions="FillAndExpand"
-                                             Grid.Row="1"
-                                             VerticalOptions="{OnPlatform WinUI=Fill,MacCatalyst=Start}"
-                                             VisibleSegmentsCount="1"
-                                             HeightRequest="40"
-                                             SelectedIndex="0"
-                                             ItemsSource="{Binding SpeakerResultsOptionInfo}">
+                                     HorizontalOptions="Fill"
+                                     Grid.Row="1"
+                                     VerticalOptions="{OnPlatform WinUI=Fill,MacCatalyst=Start}"
+                                     VisibleSegmentsCount="1"
+                                     HeightRequest="40"
+                                     SelectedIndex="0"
+                                     ItemsSource="{Binding SpeakerResultsOptionInfo}">
                     <segmentedControl:SfSegmentedControl.TextStyle>
                         <segmentedControl:SegmentTextStyle FontSize="14" 
                                                   FontFamily="Roboto" />

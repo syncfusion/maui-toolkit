@@ -32,7 +32,11 @@ public partial class CenterButton : SampleView
 		ComposeDialog.Opacity = 0;
 		boxView.BackgroundColor = Color.FromArgb("#1E90FF");
 		ComposeDialog.IsVisible = true;
+#if NET10_0
+		ComposeDialog.FadeToAsync(1, 600, Easing.Linear);
+#else
 		ComposeDialog.FadeTo(1, 600, Easing.Linear);
+#endif
 
 	}
 	void Button_Clicked(object sender, System.EventArgs e)
@@ -42,7 +46,11 @@ public partial class CenterButton : SampleView
 
 	public void CloseDialog()
 	{
+#if NET10_0
+		ComposeDialog.FadeToAsync(0, 600, Easing.Linear);
+#else
 		ComposeDialog.FadeTo(0, 600, Easing.Linear);
+#endif
 		ComposeDialog.IsVisible = false;
 		TabView.SelectedIndex = 0;
 	}

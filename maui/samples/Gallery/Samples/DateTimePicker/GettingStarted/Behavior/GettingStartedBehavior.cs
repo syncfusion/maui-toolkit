@@ -112,7 +112,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
 
             _timeFormat = new ObservableCollection<object>()
             {
-                "H mm", "H mm ss", "h mm ss tt", "h mm tt", "HH mm", "HH mm ss", "hh mm ss tt", "hh mm tt", "hh tt", "Default"
+                "H mm", "H mm ss", "h mm ss tt", "h mm tt", "HH mm", "HH mm ss", "HH mm ss fff", "hh mm ss tt", "hh mm ss fff tt", "hh mm tt", "hh tt", "ss fff", "mm ss", "mm ss fff", "Default"
             };
 
             _dateFormatComboBox = sampleView.Content.FindByName<Microsoft.Maui.Controls.Picker>("dateFormatComboBox");
@@ -357,9 +357,16 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
                     case "HH mm ss":
                         _dateTimePicker.TimeFormat = PickerTimeFormat.HH_mm_ss;
                         break;
+                    case "HH mm ss fff":
+                        _dateTimePicker.TimeFormat = PickerTimeFormat.HH_mm_ss_fff;
+                        break;
 
                     case "hh mm ss tt":
                         _dateTimePicker.TimeFormat = PickerTimeFormat.hh_mm_ss_tt;
+                        break;
+
+                    case "hh mm ss fff tt":
+                        _dateTimePicker.TimeFormat = PickerTimeFormat.hh_mm_ss_fff_tt;
                         break;
 
                     case "hh mm tt":
@@ -369,6 +376,19 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
                     case "hh tt":
                         _dateTimePicker.TimeFormat = PickerTimeFormat.hh_tt;
                         break;
+
+                    case "ss fff":
+                        _dateTimePicker.TimeFormat = PickerTimeFormat.ss_fff;
+                        break;
+
+                    case "mm ss":
+                        _dateTimePicker.TimeFormat = PickerTimeFormat.mm_ss;
+                        break;
+
+                    case "mm ss fff":
+                        _dateTimePicker.TimeFormat = PickerTimeFormat.mm_ss_fff;
+                        break;
+
                     case "Default":
                         _dateTimePicker.TimeFormat = PickerTimeFormat.Default;
                         break;

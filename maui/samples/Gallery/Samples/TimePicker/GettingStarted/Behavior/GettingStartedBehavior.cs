@@ -142,7 +142,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
 
             _formats = new ObservableCollection<object>()
             {
-                "H mm", "H mm ss", "h mm ss tt", "h mm tt", "HH mm", "HH mm ss", "hh mm ss tt", "hh mm tt", "hh tt", "Default"
+                "H mm", "H mm ss", "h mm ss tt", "h mm tt", "HH mm", "HH mm ss", "HH mm ss fff", "hh mm ss tt", "hh mm ss fff tt", "hh mm tt", "hh tt", "ss fff", "mm ss", "mm ss fff", "Default"
             };
 
             _formatComboBox = bindable.Content.FindByName<Microsoft.Maui.Controls.Picker>("formatComboBox");
@@ -171,7 +171,10 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         {
             if (_timePicker != null && _maximumTimePicker != null && e.PropertyName == "Time")
             {
-                _timePicker.MaximumTime = _maximumTimePicker.Time;
+                if (_maximumTimePicker.Time.HasValue)
+                {
+                    _timePicker.MaximumTime = _maximumTimePicker.Time.Value;
+                }
             }
         }
 
@@ -184,8 +187,11 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         {
             if (_timePicker != null && _minimumTimePicker != null && e.PropertyName == "Time")
             {
-                _timePicker.MinimumTime = _minimumTimePicker.Time;
-            }
+                if (_minimumTimePicker.Time.HasValue)
+                {
+                    _timePicker.MinimumTime = _minimumTimePicker.Time.Value;
+                }
+			}
         }
 
         /// <summary>
@@ -350,8 +356,17 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
                         _timePicker.Format = PickerTimeFormat.HH_mm_ss;
                         break;
 
+                    case "HH mm ss fff":
+                        _timePicker.Format = PickerTimeFormat.HH_mm_ss_fff;
+                        break;
+
                     case "hh mm ss tt":
                         _timePicker.Format = PickerTimeFormat.hh_mm_ss_tt;
+                        break;
+
+
+                    case "hh mm ss fff tt":
+                        _timePicker.Format = PickerTimeFormat.hh_mm_ss_fff_tt;
                         break;
 
                     case "hh mm tt":
@@ -361,6 +376,19 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
                     case "hh tt":
                         _timePicker.Format = PickerTimeFormat.hh_tt;
                         break;
+
+                    case "ss fff":
+                        _timePicker.Format = PickerTimeFormat.ss_fff;
+                        break;
+
+                    case "mm ss":
+                        _timePicker.Format = PickerTimeFormat.mm_ss;
+                        break;
+
+                    case "mm ss fff":
+                        _timePicker.Format = PickerTimeFormat.mm_ss_fff;
+                        break;
+
                     case "Default":
                         _timePicker.Format = PickerTimeFormat.Default;
                         break;

@@ -1,6 +1,7 @@
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
 using TouchEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.TabView
 {

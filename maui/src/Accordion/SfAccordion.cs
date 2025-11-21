@@ -858,7 +858,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="accordionItem">The <see cref="AccordionItem"/> whose padding is to be reset.</param>
 		static void ResetAccordionItemPadding(AccordionItem accordionItem)
 		{
-			if (accordionItem._accordionItemView != null)
+			if (accordionItem != null && accordionItem._accordionItemView != null)
 			{
 				accordionItem._accordionItemView.Padding = new Thickness(0, 0, 0, 0);
 			}
@@ -1131,7 +1131,11 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 				}
 			}
 
-			if (accordionItem != null)
+			if (accordionItem == null)
+			{
+				return;
+			}
+			else
 			{
 				accordionItem._itemIndex = e.NewStartingIndex;
 			}

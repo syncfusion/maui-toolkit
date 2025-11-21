@@ -55,7 +55,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 		#endregion
 
-		#region Constructor
+		#region Contructor
 		public BottomSheetBorderPlatformView(Context context, BottomSheetBorder border) : base(context)
 		{
 			_borderRef = new(border);

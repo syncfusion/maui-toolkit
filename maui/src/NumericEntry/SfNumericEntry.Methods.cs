@@ -792,6 +792,21 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 #if MACCATALYST || IOS
 
 		/// <summary>
+		/// Determines whether the specified text field should allow the proposed character changes across multiple ranges.
+		/// </summary>
+		/// <remarks>This method is typically used to validate complex text changes, such as those resulting from
+		/// multi-range edits or input methods. It merges the provided ranges before validation to ensure consistent
+		/// behavior.</remarks>
+		/// <param name="textField">The text field whose contents are being modified.</param>
+		/// <param name="ranges">An array of ranges, each represented by an NSValue, indicating the portions of text to be replaced.</param>
+		/// <param name="replacementString">The string to replace the text in the specified ranges.</param>
+		/// <returns>true if the character changes are valid and should be allowed; otherwise, false.</returns>
+		private bool Handle_ShouldChangeCharactersInRanges(UITextField textField, NSValue[] ranges, string replacementString)
+		{
+			return ValidateTextChanged(textField, MergeRanges(ranges), replacementString);
+		}
+
+		/// <summary>
 		/// Validates and handles text changes in the UITextField.
 		/// </summary>
 		/// <param name="textField">The UITextField being modified.</param>
@@ -857,6 +872,25 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				OnTextBoxPaste(textField, caretPosition);
 			}
 			return false;
+		}
+
+		/// <summary>
+		/// Combines multiple NSRange values into a single range that encompasses all specified ranges.
+		/// </summary>
+		/// <remarks>If only one range is provided, that range is returned unchanged. The merged range may not be
+		/// contiguous if the input ranges are disjoint.</remarks>
+		/// <param name="ranges">An array of NSValue objects representing the ranges to merge. Must contain at least one element.</param>
+		/// <returns>An NSRange that starts at the minimum location of the input ranges and has a length equal to the sum of their
+		/// lengths.</returns>
+		private static NSRange MergeRanges(NSValue[] ranges)
+		{
+			var combinedRange = ranges.Length == 1
+				? ranges[0].RangeValue
+				: new Foundation.NSRange(
+					ranges.Min(r => r.RangeValue.Location),
+					(nint)ranges.Sum(r => r.RangeValue.Length)
+				);
+			return combinedRange;
 		}
 
 		/// <summary>
@@ -1167,6 +1201,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			{
 				_isClearButtonVisible = false;
 			}
+
 			UpdateElementsBounds(_previousRectBounds);
 		}
 
@@ -2082,9 +2117,13 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 					// Appends zero when the negative key is pressed and the text is empty or selected all.
 					displayText = displayText.Remove(caretPosition, selectionLength);
 					displayText = displayText.Insert(0, GetNegativeSign(GetNumberFormat()));
-					PrefixZeroIfNeeded(ref displayText, isNegative: true, GetNumberFormat());
+					bool negativeZero = PrefixZeroIfNeeded(ref displayText, isNegative: true, GetNumberFormat());
 					_textBox.Text = displayText;
 					_textBox.CursorPosition = caretPosition + 2;
+					if(negativeZero && IsTextInputLayout)
+					{
+						_textInputLayout?.InvalidateDrawable();
+					}
 #if ANDROID
                     _cursorPosition = caretPosition + 2;
 #endif
@@ -2795,7 +2834,18 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			if (textBox.Handler != null && textBox.Handler.PlatformView is UIKit.UITextField macEntry)
 			{
 				_uiEntry = macEntry;
-				macEntry.ShouldChangeCharacters += ValidateTextChanged;
+				if (OperatingSystem.IsIOSVersionAtLeast(26,0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
+				{
+#if NET10_0_OR_GREATER
+					macEntry.ShouldChangeCharactersInRanges += Handle_ShouldChangeCharactersInRanges;
+#else
+					macEntry.ShouldChangeCharacters += ValidateTextChanged;
+#endif
+				}
+				else
+				{
+					macEntry.ShouldChangeCharacters += ValidateTextChanged;
+				}
 				macEntry.BorderStyle = UITextBorderStyle.None;
 				macEntry.KeyboardType = UIKeyboardType.DecimalPad;
 			}
@@ -2811,7 +2861,19 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 #endif
 			if (textBox.Handler == null && _uiEntry != null)
 			{
-				_uiEntry.ShouldChangeCharacters -= ValidateTextChanged;
+				if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
+				{
+#if NET10_0_OR_GREATER
+					_uiEntry.ShouldChangeCharactersInRanges -= Handle_ShouldChangeCharactersInRanges;
+#else
+					_uiEntry.ShouldChangeCharacters -= ValidateTextChanged;
+#endif
+				}
+				else
+				{
+					_uiEntry.ShouldChangeCharacters -= ValidateTextChanged;
+				}
+
 				_uiEntry = null;
 			}
 #endif
@@ -2973,6 +3035,14 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				{
 					ConfigureClearButton(bounds);
 				}
+				else
+				{
+					if (_isClearButtonVisible)
+					{
+						_buttonSpace = ButtonSize;
+					}
+				}
+
 				SetTextBoxMargin();
 			}
 			_numericEntrySemanticsNodes.Clear();

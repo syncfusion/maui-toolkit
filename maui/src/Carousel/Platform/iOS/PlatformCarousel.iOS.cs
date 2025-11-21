@@ -4045,7 +4045,11 @@ After:
             {
                 return view;
             }
+#if NET10_0_OR_GREATER
+            return templateInstance as View;
+#else
             return (templateInstance as ViewCell)?.View;
+#endif
         }
 
 		static View? CreateTemplatedView(ICarousel formsCarousel, int index)

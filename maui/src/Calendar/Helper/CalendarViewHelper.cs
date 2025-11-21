@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Localization;
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Globalization = System.Globalization;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.Calendar
 {
@@ -392,13 +394,16 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         /// <param name="visibleDates">The visible dates collection.</param>
         /// <param name="calendarIdentifier">The calendar identifier.</param>
+        /// <param name="dayOfWeek">The first day of week</param>
         /// <returns>The week start date.</returns>
-        internal static DateTime GetWeekStartDate(List<DateTime> visibleDates, CalendarIdentifier calendarIdentifier)
+        internal static DateTime GetWeekStartDate(List<DateTime> visibleDates, CalendarIdentifier calendarIdentifier, DayOfWeek dayOfWeek)
         {
             Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
             foreach (DateTime dateTime in visibleDates)
             {
-                if (cultureCalendar.GetDayOfWeek(dateTime) == DayOfWeek.Monday)
+                //// We have adjust mid day of week based on first day of week.
+                //// Passing mid day instead of start day returns the correct week number.
+                if (cultureCalendar.GetDayOfWeek(dateTime) == GetMidDayOfWeek(dayOfWeek))
                 {
                     return dateTime;
                 }
@@ -412,15 +417,16 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         /// <param name="calendarIdentifier">The Calendar identifier.</param>
         /// <param name="dateTime">The date time</param>
+        /// <param name="dayOfWeek">The first day of week</param>
         /// <returns>Returns the week number.</returns>
-        internal static int GetWeekNumber(CalendarIdentifier calendarIdentifier, DateTime dateTime)
+        internal static int GetWeekNumber(CalendarIdentifier calendarIdentifier, DateTime dateTime, DayOfWeek dayOfWeek)
         {
             int weekNumber;
 
             // If the type is not gregorian, need to get the week number based on the specified calendar identifier.
             if (!IsGregorianCalendar(calendarIdentifier))
             {
-                weekNumber = GetCalendar(calendarIdentifier.ToString()).GetWeekOfYear(dateTime, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+                weekNumber = GetCalendar(calendarIdentifier.ToString()).GetWeekOfYear(dateTime, CalendarWeekRule.FirstDay, dayOfWeek);
             }
             else
             {
@@ -437,12 +443,16 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>The week number.</returns>
         internal static int GetWeekNumberOfYear(DateTime date)
         {
-            //// Here we are using InvariantCulture to perform week number calculation independent of the region or language settings.
-            Globalization.Calendar calendar = CultureInfo.InvariantCulture.Calendar;
-            //// When we use the rules other than FirstFullWeek the first week number of the year doesn't rendered properly,
-            //// it starts from 2 and considering the week that contains full of January dates as 52 or 53rd week.
-            //// Here DayOfWeek.Monday is specifies that the first day of the week is Monday.
-            return calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+            int weekNumber = (date.DayOfYear - GetWeekday(date.DayOfWeek) + 10) / 7;
+            if (weekNumber < 1)
+            {
+                //// If the week number is equals 0, it means that the given date belongs to the preceding (week-based) year.
+                return GetWeeksInYear(date.Year - 1);
+            }
+            else
+            {
+                return weekNumber;
+            }
         }
 
         /// <summary>
@@ -1512,6 +1522,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             //// If the template has view cell as it direct content then we cannot cast it to view.
             //// All layouts, controls and views are base type of view but ViewCell is not type of view,
             //// hence we need to get the view from view cell.
+#if NET9_0
             if (content is ViewCell)
             {
                 view = ((ViewCell)content).View;
@@ -1520,6 +1531,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 view = (View)content;
             }
+#elif NET10_0
+            view = (View)content;
+#endif
 
             if (view.BindingContext == null && details != null)
             {
@@ -1574,8 +1588,12 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 return CultureInfo.CurrentUICulture;
             }
-#if NET9_0 && (MACCATALYST || IOS)
+#if NET9_0_OR_GREATER && (MACCATALYST || IOS)
             CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture(language);
+            if (calendarIdentifier == "Hijri")
+            {
+                cultureInfo.DateTimeFormat.Calendar = GetCalendar(calendarIdentifier);
+            }
 #else
             CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture(language);
             cultureInfo.DateTimeFormat.Calendar = GetCalendar(calendarIdentifier);
@@ -2475,7 +2493,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 			return viewResult;
 		}
 
-		#endregion
+#endregion
 
 		#region Private Method
 
@@ -2492,6 +2510,64 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             DateTime? newDate = CalendarViewHelper.GeKeyNavigationDate(calendarViewInfo, args, oldSelectedDate);
             ValidateDateOnKeyNavigation(args, oldSelectedDate, newDate, calendarViewInfo, visibleDates, disabledDates);
         }
+
+
+        /// <summary>
+        /// Get the week number based on leap year.
+        /// </summary>
+        /// <param name="year">The year value.</param>
+        /// <returns>The week number.</returns>
+        static int GetWeeksInYear(int year)
+        {
+            //// The extra days occur in each year which is an integer multiple of 4(except for years evenly divisible by 100, but not by 400)
+            if (((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0))
+            {
+                //// If the year is leap year it has 53 weeks.
+                return 53;
+            }
+            //// If the year is not leap year it has 52 weeks.
+            return 52;
+        }
+        /// <summary>
+        /// Day of week in ISO is represented by an integer from 1 through 7, beginning with Monday and ending with sunday. This matches the underlying values of the DayOfWeek enum, except for Sunday, which needs to be converted.
+        /// </summary>
+        /// <param name="dayOfWeek">The day Of Week.</param>
+        /// <returns>The day of week.</returns>
+        static int GetWeekday(DayOfWeek dayOfWeek)
+        {
+            return dayOfWeek == DayOfWeek.Sunday ? 7 : (int)dayOfWeek;
+        }
+
+        /// <summary>
+        /// Method to get mid day of week
+        /// </summary>
+        /// <param name="dayOfWeek">The first day of week</param>
+        /// <returns>Returns the mid day of the week based on the first day of week.</returns>
+        static DayOfWeek GetMidDayOfWeek(DayOfWeek dayOfWeek)
+        {
+            // (int)firstDayOfWeek + 3 gets the mid-day, taking modulo 7 for wrap-around
+            int midDay = ((int)dayOfWeek + 3) % 7;
+            switch (midDay)
+            {
+                case 0:
+                    return DayOfWeek.Sunday;
+                case 1:
+                    return DayOfWeek.Monday;
+                case 2:
+                    return DayOfWeek.Tuesday;
+                case 3:
+                    return DayOfWeek.Wednesday;
+                case 4:
+                    return DayOfWeek.Thursday;
+                case 5:
+                    return DayOfWeek.Friday;
+                case 6:
+                    return DayOfWeek.Saturday;
+                default:
+                    return DayOfWeek.Sunday;
+            }
+        }
+
 
         #endregion
     }

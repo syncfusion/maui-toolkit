@@ -85,7 +85,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         bool _isInternalPropertyChange = false;
 
-#if MACCATALYST || IOS
+#if MACCATALYST || IOS || (ANDROID && NET10_0_OR_GREATER)
 
         /// <summary>
         /// Holds the value of picker view loaded or not.
@@ -676,7 +676,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 #endif
 
 #if WINDOWS || ANDROID
-            if (double.IsInfinity(heightConstraint) && HeightRequest == -1 && Mode == PickerMode.Default)
+            if (this.Parent is ScrollView && double.IsInfinity(heightConstraint) && HeightRequest == -1 && Mode == PickerMode.Default)
             {
                 HeightRequest = height;
             }
@@ -704,6 +704,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 return Size.Zero;
             }
+
+#if ANDROID && NET10_0_OR_GREATER
+            if (this.Mode == PickerMode.Default && !_isPickerViewLoaded)
+            {
+                _isPickerViewLoaded = true;
+                _pickerContainer?.UpdateItemHeight();
+            }
+#endif
 
             return measuredSize;
         }

@@ -328,6 +328,7 @@ internal class PickerDrawableView : SfDrawableView
             return;
         }
 
+        dirtyRect.Height = (float)Math.Round(dirtyRect.Height);
         int padding = 5;
         if (_drawnWidth != dirtyRect.Width || _sizeBasedItemsSource.Count == 0)
         {

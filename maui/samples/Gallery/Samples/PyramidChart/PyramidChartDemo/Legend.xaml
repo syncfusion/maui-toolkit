@@ -1,7 +1,7 @@
 <localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class=" Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart.Legend"
-             xmlns:local="clr-namespace: Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart"
               xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
              xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery">

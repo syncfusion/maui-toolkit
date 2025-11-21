@@ -406,6 +406,21 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 			}
 		}
 
+		/// <summary>
+		///  Checks if the provided view object is null.
+		/// </summary>
+		/// <param name="view"></param>
+		private bool ReturnIfNull(object view)
+		{
+			if (view == null)
+			{
+				base.OnBindingContextChanged();
+				return true;
+			}
+
+			return false;
+		}
+
 		#endregion
 
 		#region Override Methods
@@ -429,19 +444,19 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// This method updates the binding context of the Header and Content properties to match the new binding context of this object.
 		/// </remarks>
 		protected override void OnBindingContextChanged()
-        {
-            if (Header != null)
-            {
-                Header.BindingContext = BindingContext;
-            }
-
-            if (Content != null)
-            {
-                Content.BindingContext = BindingContext;
-            }
-
-            base.OnBindingContextChanged();
-        }
+		{
+			if (!ReturnIfNull(Header))
+			{
+				Header.BindingContext = BindingContext;
+			}
+			
+			if (!ReturnIfNull(Content))
+			{
+				Content.BindingContext = BindingContext;
+			}
+				
+			base.OnBindingContextChanged();
+		}
 
 		#endregion
 
@@ -493,7 +508,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 			if (bindable is AccordionItem accordionItem && newValue is View content && accordionItem._accordion != null && accordionItem._accordion.IsViewLoaded)
 			{
 				content.IsVisible = accordionItem.IsExpanded;
-				if (accordionItem._accordionItemView != null)
+				if (accordionItem != null && accordionItem._accordionItemView != null)
 				{
 					accordionItem._accordionItemView.Content = content;
 				}
