@@ -80,7 +80,7 @@ Patterns & Principles:
 ---
 ## 7. Platform-Specific Implementation
 Guidelines:
-- Prefer suffixed files (`*.Android.cs`, `*.iOS.cs`, `*.MaciOS.cs`, `*.Mac.cs`, `*.Windows.cs`) over coarse `#if` regions in shared code.
+- Prefer suffixed files (`*.Android.cs`, `*.iOS.cs`, `*.MaciOS.cs`, `*.Mac.cs`, `*.Windows.cs`) over coarse `#if` regions in shared code. **Important:** The casing of these suffixes (e.g., `.iOS.cs`) must match exactly as shown—`MultiTargeting.targets` only excludes files with the exact casing. Do not use lowercase variants like `.ios.cs`, or the file will not be excluded from non-iOS builds.
 - Public API surface must remain uniform; platform differences implemented internally.
 - Use `DefineConstants` (`MONOANDROID`, `IOS`, `MACCATALYST`) exclusively for micro-conditions; if logic grows, refactor to a dedicated file.
 - Add stub or no-op implementations for unsupported platforms to retain consistent behavior & avoid runtime null references.
