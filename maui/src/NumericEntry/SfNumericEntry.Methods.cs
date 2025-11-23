@@ -2766,6 +2766,19 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 #if ANDROID
             if (sender is SfEntryView textBox)
             {
+                // Clean up existing event handlers if we have a previous Android entry
+                if (_androidEntry != null)
+                {
+                    _androidEntry.EditorAction -= AndroidEntry_EditorAction;
+                    _androidEntry.TextChanged -= OnTextBoxTextChanged;
+                    _androidEntry.BeforeTextChanged -= AndroidEntry_BeforeTextChanged;
+                    _androidEntry.AfterTextChanged -= AndroidEntry_AfterTextChanged;
+                    _androidEntry.Click -= AndroidEntry_Click;
+                    _androidEntry.FocusChange -= AndroidEntry_FocusChange;
+                    _androidEntry = null;
+                }
+
+                // Subscribe to new handler's platform view if available
                 if (textBox.Handler != null && textBox.Handler.PlatformView is AndroidX.AppCompat.Widget.AppCompatEditText androidEntry)
                 {
                     // Store reference to the Android entry for cleanup
@@ -2780,17 +2793,6 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                     androidEntry.FocusChange += AndroidEntry_FocusChange;
                     // Disable EmojiCompat to prevent the IllegalArgumentException crash on Android when start typing text.
                     androidEntry.EmojiCompatEnabled = false;
-                }
-                else if (textBox.Handler == null && _androidEntry != null)
-                {
-                    // Clean up event handlers when handler is removed
-                    _androidEntry.EditorAction -= AndroidEntry_EditorAction;
-                    _androidEntry.TextChanged -= OnTextBoxTextChanged;
-                    _androidEntry.BeforeTextChanged -= AndroidEntry_BeforeTextChanged;
-                    _androidEntry.AfterTextChanged -= AndroidEntry_AfterTextChanged;
-                    _androidEntry.Click -= AndroidEntry_Click;
-                    _androidEntry.FocusChange -= AndroidEntry_FocusChange;
-                    _androidEntry = null;
                 }
             }
 #endif
@@ -2909,13 +2911,15 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
             // When focus is lost (HasFocus is false), ensure the MAUI layer is notified
             // This is crucial for Android where tapping outside (e.g., on a button) 
             // doesn't always properly sync the native focus state with MAUI's focus state
-            if (!e.HasFocus && _textBox != null)
+            if (!e.HasFocus)
             {
                 // The native Android entry has lost focus
                 // Check if MAUI's Entry is still reporting as focused
                 // If so, we need to trigger the unfocus to ensure proper event handling
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
+                    // Re-check _textBox for null inside MainThread callback
+                    // as it could be set to null on another thread
                     if (_textBox != null && _textBox.IsFocused)
                     {
                         // MAUI still thinks the entry is focused, but the native control has lost focus
