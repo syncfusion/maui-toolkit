@@ -11,7 +11,7 @@ This repo contains the Syncfusion .NET MAUI Toolkit (multi-targeted library) plu
 - `maui/samples/Sandbox/` — Minimal app for fast reproduction cases.
 - `targets/` — Build customization (`MultiTargeting.targets`) controlling inclusion/exclusion of platform-specific files.
 - Root build infra: `Directory.Build.props`, `Directory.Build.targets`, `.editorconfig`.
-- CI pipeline: `pipelines/build.yml` (manual trigger on PRs).
+- CI pipeline: `pipelines/build.yml` (automatic trigger on PRs).
 
 The toolkit targets cross-platform frameworks: `net8.0`, `net9.0`, Android, iOS, MacCatalyst, Windows (conditional), plus packaging metadata and XML docs.
 
