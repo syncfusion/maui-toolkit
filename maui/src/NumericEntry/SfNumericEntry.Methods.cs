@@ -2757,6 +2757,25 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		}
 
 		/// <summary>
+		/// Cleans up Android entry event handlers to prevent memory leaks.
+		/// </summary>
+		void CleanupAndroidEntryEvents()
+		{
+#if ANDROID
+            if (_androidEntry != null)
+            {
+                _androidEntry.EditorAction -= AndroidEntry_EditorAction;
+                _androidEntry.TextChanged -= OnTextBoxTextChanged;
+                _androidEntry.BeforeTextChanged -= AndroidEntry_BeforeTextChanged;
+                _androidEntry.AfterTextChanged -= AndroidEntry_AfterTextChanged;
+                _androidEntry.Click -= AndroidEntry_Click;
+                _androidEntry.FocusChange -= AndroidEntry_FocusChange;
+                _androidEntry = null;
+            }
+#endif
+		}
+
+		/// <summary>
 		/// Configures platform-specific behavior for Android Entry controls.
 		/// This method is called when the Entry's handler changes.
 		/// </summary>
@@ -2767,16 +2786,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
             if (sender is SfEntryView textBox)
             {
                 // Clean up existing event handlers if we have a previous Android entry
-                if (_androidEntry != null)
-                {
-                    _androidEntry.EditorAction -= AndroidEntry_EditorAction;
-                    _androidEntry.TextChanged -= OnTextBoxTextChanged;
-                    _androidEntry.BeforeTextChanged -= AndroidEntry_BeforeTextChanged;
-                    _androidEntry.AfterTextChanged -= AndroidEntry_AfterTextChanged;
-                    _androidEntry.Click -= AndroidEntry_Click;
-                    _androidEntry.FocusChange -= AndroidEntry_FocusChange;
-                    _androidEntry = null;
-                }
+                CleanupAndroidEntryEvents();
 
                 // Subscribe to new handler's platform view if available
                 if (textBox.Handler != null && textBox.Handler.PlatformView is AndroidX.AppCompat.Widget.AppCompatEditText androidEntry)
@@ -2908,8 +2918,13 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// <param name="e">The focus change event arguments.</param>
 		void AndroidEntry_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
         {
-            // Verify sender is valid before processing
-            if (sender == null || _androidEntry == null)
+            // Capture local references to avoid race conditions
+            // The _androidEntry and _textBox could be set to null on another thread
+            var androidEntry = _androidEntry;
+            var textBox = _textBox;
+
+            // Verify references are valid before processing
+            if (sender == null || androidEntry == null || textBox == null)
             {
                 return;
             }
@@ -2924,14 +2939,14 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                 // If so, we need to trigger the unfocus to ensure proper event handling
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    // Re-check all references for null inside MainThread callback
-                    // as they could be set to null on another thread during cleanup
-                    if (_textBox != null && _androidEntry != null && _textBox.IsFocused)
+                    // Use the local captured references to avoid race conditions
+                    // Only proceed if the textBox is still focused
+                    if (textBox.IsFocused)
                     {
                         // MAUI still thinks the entry is focused, but the native control has lost focus
                         // This can happen when clicking outside (e.g., on a button)
                         // Calling Unfocus() will trigger TextBoxOnLostFocus -> OnLostFocus() -> UpdateValue() -> FormatValue()
-                        _textBox.Unfocus();
+                        textBox.Unfocus();
                     }
                 });
             }
@@ -2955,19 +2970,8 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 
 			}
 
-#if ANDROID
 			// Clean up Android-specific event handlers
-			if (_androidEntry != null)
-			{
-				_androidEntry.EditorAction -= AndroidEntry_EditorAction;
-				_androidEntry.TextChanged -= OnTextBoxTextChanged;
-				_androidEntry.BeforeTextChanged -= AndroidEntry_BeforeTextChanged;
-				_androidEntry.AfterTextChanged -= AndroidEntry_AfterTextChanged;
-				_androidEntry.Click -= AndroidEntry_Click;
-				_androidEntry.FocusChange -= AndroidEntry_FocusChange;
-				_androidEntry = null;
-			}
-#endif
+			CleanupAndroidEntryEvents();
 		}
 		#endregion
 
