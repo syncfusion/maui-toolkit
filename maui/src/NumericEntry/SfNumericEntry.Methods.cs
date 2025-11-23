@@ -2939,14 +2939,22 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                 // If so, we need to trigger the unfocus to ensure proper event handling
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    // Use the local captured references to avoid race conditions
-                    // Only proceed if the textBox is still focused
-                    if (textBox.IsFocused)
+                    try
                     {
-                        // MAUI still thinks the entry is focused, but the native control has lost focus
-                        // This can happen when clicking outside (e.g., on a button)
-                        // Calling Unfocus() will trigger TextBoxOnLostFocus -> OnLostFocus() -> UpdateValue() -> FormatValue()
-                        textBox.Unfocus();
+                        // Use the local captured references to avoid race conditions
+                        // Only proceed if the textBox is still focused
+                        if (textBox.IsFocused)
+                        {
+                            // MAUI still thinks the entry is focused, but the native control has lost focus
+                            // This can happen when clicking outside (e.g., on a button)
+                            // Calling Unfocus() will trigger TextBoxOnLostFocus -> OnLostFocus() -> UpdateValue() -> FormatValue()
+                            textBox.Unfocus();
+                        }
+                    }
+                    catch (ObjectDisposedException)
+                    {
+                        // The control was disposed between capturing the reference and using it
+                        // This is safe to ignore as the control no longer needs to be unfocused
                     }
                 });
             }
