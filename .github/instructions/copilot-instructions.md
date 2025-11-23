@@ -18,10 +18,12 @@ The toolkit targets cross-platform frameworks: `net8.0`, `net9.0`, Android, iOS,
 ---
 ## 2. Technology & Targeting
 - Multi-target frameworks declared in `maui/src/Syncfusion.Maui.Toolkit.csproj`.
-- Platform-specific source segregation via filename suffixes: `.Android.cs`, `.iOS.cs` (preferred; note: some files use `.ios.cs`—please use `.iOS.cs` for new files), `.MaciOS.cs`, `.Mac.cs`, `.Windows.cs`, `.Standard.cs`.
+- Platform-specific source segregation via filename suffixes: `.Android.cs`, `.iOS.cs` (**standard**; note: some legacy files use `.ios.cs`—these should be renamed to `.iOS.cs` as part of ongoing migration; all new files **must** use `.iOS.cs`), `.MaciOS.cs`, `.Mac.cs`, `.Windows.cs`, `.Standard.cs`.
 - `MultiTargeting.targets` removes non-applicable files from compilation per target at build time and sets `DefineConstants` (`MONOANDROID`, `IOS`, `MACCATALYST`).
 - Release build variant `Release-Xml` enforces warnings-as-errors + optimization.
 
+> **Migration Note:**  
+> The build system (`MultiTargeting.targets`) requires filename casing to match exactly for correct platform exclusion. If you encounter `.ios.cs` files, treat them as legacy and rename to `.iOS.cs`. A migration is in progress to standardize all iOS-specific files to `.iOS.cs`. If you find a `.ios.cs` file, please submit a PR to rename it.
 ---
 ## 3. Local Development Setup
 Prerequisites:
