@@ -2772,6 +2772,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                 androidEntry.AfterTextChanged += AndroidEntry_AfterTextChanged;
                 androidEntry.KeyListener = global::Android.Text.Method.DigitsKeyListener.GetInstance(KEYS);
                 androidEntry.Click += AndroidEntry_Click;
+                androidEntry.FocusChange += AndroidEntry_FocusChange;
                 // Disable EmojiCompat to prevent the IllegalArgumentException crash on Android when start typing text.
                 androidEntry.EmojiCompatEnabled = false;
             }
@@ -2875,6 +2876,41 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                         _textBox.CursorPosition = 1;
                     }
                 }
+            }
+        }
+
+		/// <summary>
+		/// Handles the focus change event for an Android Entry control.
+		/// Ensures proper value update and formatting when focus is lost.
+		/// This fixes the issue where clicking a button doesn't update the value
+		/// or dismiss the keyboard because the entry doesn't properly lose focus.
+		/// </summary>
+		/// <param name="sender">The object that triggered the event, typically an Android Entry component.</param>
+		/// <param name="e">The focus change event arguments.</param>
+		void AndroidEntry_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
+        {
+            // When focus is lost (HasFocus is false), ensure proper cleanup
+            // This is crucial for Android where tapping outside (e.g., on a button) 
+            // doesn't always trigger the proper unfocus sequence in MAUI
+            if (!e.HasFocus && _textBox != null)
+            {
+                // The native Android entry has lost focus
+                // Ensure the value is updated if ValueChangeMode is OnLostFocus (default)
+                // or if there are pending changes that need to be committed
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    // Only process if the text box still exists and lost focus
+                    if (_textBox != null)
+                    {
+                        // Update the value to ensure it's synchronized with the bound property
+                        // This handles the case where a button is clicked before the value was updated
+                        if (ValueChangeMode == ValueChangeMode.OnLostFocus)
+                        {
+                            UpdateValue();
+                            FormatValue();
+                        }
+                    }
+                });
             }
         }
 #endif
