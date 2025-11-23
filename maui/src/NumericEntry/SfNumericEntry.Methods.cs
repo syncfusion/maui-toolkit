@@ -2908,6 +2908,12 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// <param name="e">The focus change event arguments.</param>
 		void AndroidEntry_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
         {
+            // Verify sender is valid before processing
+            if (sender == null || _androidEntry == null)
+            {
+                return;
+            }
+
             // When focus is lost (HasFocus is false), ensure the MAUI layer is notified
             // This is crucial for Android where tapping outside (e.g., on a button) 
             // doesn't always properly sync the native focus state with MAUI's focus state
@@ -2918,9 +2924,9 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                 // If so, we need to trigger the unfocus to ensure proper event handling
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    // Re-check _textBox for null inside MainThread callback
-                    // as it could be set to null on another thread
-                    if (_textBox != null && _textBox.IsFocused)
+                    // Re-check all references for null inside MainThread callback
+                    // as they could be set to null on another thread during cleanup
+                    if (_textBox != null && _androidEntry != null && _textBox.IsFocused)
                     {
                         // MAUI still thinks the entry is focused, but the native control has lost focus
                         // This can happen when clicking outside (e.g., on a button)
@@ -2948,6 +2954,20 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				_textBox.Unfocused -= TextBoxOnLostFocus;
 
 			}
+
+#if ANDROID
+			// Clean up Android-specific event handlers
+			if (_androidEntry != null)
+			{
+				_androidEntry.EditorAction -= AndroidEntry_EditorAction;
+				_androidEntry.TextChanged -= OnTextBoxTextChanged;
+				_androidEntry.BeforeTextChanged -= AndroidEntry_BeforeTextChanged;
+				_androidEntry.AfterTextChanged -= AndroidEntry_AfterTextChanged;
+				_androidEntry.Click -= AndroidEntry_Click;
+				_androidEntry.FocusChange -= AndroidEntry_FocusChange;
+				_androidEntry = null;
+			}
+#endif
 		}
 		#endregion
 
