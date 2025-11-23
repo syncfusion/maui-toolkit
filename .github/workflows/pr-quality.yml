@@ -1,0 +1,57 @@
+name: PR Quality
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install MAUI Workload
+        run: |
+          dotnet workload install maui
+
+      - name: Build (Release-Xml) - Fail on warnings
+        run: |
+          dotnet build Syncfusion.Maui.Toolkit.sln -c Release-Xml --nologo
+
+      - name: Run Unit Tests (with coverage)
+        run: |
+          dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/Syncfusion.Maui.Toolkit.UnitTest.csproj --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=tests.trx"
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            **/TestResults/*.trx
+            **/TestResults/**/coverage.cobertura.xml
+
+  guidance-comment:
+    if: github.event.action == 'opened'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post QA Guidance Comment
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Thanks for opening this PR! Please ensure the checklist in Section 13 of `copilot-instructions.md` is fully addressed:
+            - Multi-target build (`Release-Xml`) success
+            - Analyzer warnings resolved
+            - Tests added/updated and passing
+            - XML docs for public API changes
+            - Platform parity & accessibility
+            - Performance & memory considerations
+            If any item is not applicable, clarify reasoning in the PR description.
