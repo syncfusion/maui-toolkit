@@ -2889,26 +2889,22 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// <param name="e">The focus change event arguments.</param>
 		void AndroidEntry_FocusChange(object? sender, Android.Views.View.FocusChangeEventArgs e)
         {
-            // When focus is lost (HasFocus is false), ensure proper cleanup
+            // When focus is lost (HasFocus is false), ensure the MAUI layer is notified
             // This is crucial for Android where tapping outside (e.g., on a button) 
-            // doesn't always trigger the proper unfocus sequence in MAUI
+            // doesn't always properly sync the native focus state with MAUI's focus state
             if (!e.HasFocus && _textBox != null)
             {
                 // The native Android entry has lost focus
-                // Ensure the value is updated if ValueChangeMode is OnLostFocus (default)
-                // or if there are pending changes that need to be committed
+                // Check if MAUI's Entry is still reporting as focused
+                // If so, we need to trigger the unfocus to ensure proper event handling
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    // Only process if the text box still exists and lost focus
-                    if (_textBox != null)
+                    if (_textBox != null && _textBox.IsFocused)
                     {
-                        // Update the value to ensure it's synchronized with the bound property
-                        // This handles the case where a button is clicked before the value was updated
-                        if (ValueChangeMode == ValueChangeMode.OnLostFocus)
-                        {
-                            UpdateValue();
-                            FormatValue();
-                        }
+                        // MAUI still thinks the entry is focused, but the native control has lost focus
+                        // This can happen when clicking outside (e.g., on a button)
+                        // Calling Unfocus() will trigger TextBoxOnLostFocus -> OnLostFocus() -> UpdateValue() -> FormatValue()
+                        _textBox.Unfocus();
                     }
                 });
             }
