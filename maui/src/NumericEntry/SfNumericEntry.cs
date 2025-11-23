@@ -300,6 +300,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         /// </summary>
         bool _isFirstFocus = true;
 
+        /// <summary>
+        /// Represents the underlying Android AppCompatEditText used in the control.
+        /// </summary>
+        AndroidX.AppCompat.Widget.AppCompatEditText? _androidEntry;
+
 #endif
 
 #if !WINDOWS

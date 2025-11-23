@@ -2764,17 +2764,34 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		void AndroidEntryHandler(object? sender)
 		{
 #if ANDROID
-            if ((sender is SfEntryView textBox) && textBox.Handler != null && textBox.Handler.PlatformView is AndroidX.AppCompat.Widget.AppCompatEditText androidEntry)
+            if (sender is SfEntryView textBox)
             {
-                androidEntry.EditorAction += AndroidEntry_EditorAction;
-                androidEntry.TextChanged += OnTextBoxTextChanged;
-                androidEntry.BeforeTextChanged += AndroidEntry_BeforeTextChanged;
-                androidEntry.AfterTextChanged += AndroidEntry_AfterTextChanged;
-                androidEntry.KeyListener = global::Android.Text.Method.DigitsKeyListener.GetInstance(KEYS);
-                androidEntry.Click += AndroidEntry_Click;
-                androidEntry.FocusChange += AndroidEntry_FocusChange;
-                // Disable EmojiCompat to prevent the IllegalArgumentException crash on Android when start typing text.
-                androidEntry.EmojiCompatEnabled = false;
+                if (textBox.Handler != null && textBox.Handler.PlatformView is AndroidX.AppCompat.Widget.AppCompatEditText androidEntry)
+                {
+                    // Store reference to the Android entry for cleanup
+                    _androidEntry = androidEntry;
+                    
+                    androidEntry.EditorAction += AndroidEntry_EditorAction;
+                    androidEntry.TextChanged += OnTextBoxTextChanged;
+                    androidEntry.BeforeTextChanged += AndroidEntry_BeforeTextChanged;
+                    androidEntry.AfterTextChanged += AndroidEntry_AfterTextChanged;
+                    androidEntry.KeyListener = global::Android.Text.Method.DigitsKeyListener.GetInstance(KEYS);
+                    androidEntry.Click += AndroidEntry_Click;
+                    androidEntry.FocusChange += AndroidEntry_FocusChange;
+                    // Disable EmojiCompat to prevent the IllegalArgumentException crash on Android when start typing text.
+                    androidEntry.EmojiCompatEnabled = false;
+                }
+                else if (textBox.Handler == null && _androidEntry != null)
+                {
+                    // Clean up event handlers when handler is removed
+                    _androidEntry.EditorAction -= AndroidEntry_EditorAction;
+                    _androidEntry.TextChanged -= OnTextBoxTextChanged;
+                    _androidEntry.BeforeTextChanged -= AndroidEntry_BeforeTextChanged;
+                    _androidEntry.AfterTextChanged -= AndroidEntry_AfterTextChanged;
+                    _androidEntry.Click -= AndroidEntry_Click;
+                    _androidEntry.FocusChange -= AndroidEntry_FocusChange;
+                    _androidEntry = null;
+                }
             }
 #endif
 		}
