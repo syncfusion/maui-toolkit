@@ -50,7 +50,7 @@ Use an IDE (VS / VS Code + MAUI Dev Kit) to deploy and interact with UI.
 - Central analyzer settings: `Directory.Build.props` (enables nullable, analyzers, code style enforcement).
 - Launch profile support: `Directory.Build.targets` sets single-project Maui capabilities.
 - Warning thresholds tightened in `Release-Xml` configuration; treat them early to avoid PR build failures.
-- CI (`pipelines/build.yml`) builds Release and runs unit tests with HTML logger artifact.
+- CI (`pipelines/build.yml`) builds using the standard `Release` configuration (not the stricter `Release-Xml`), and runs unit tests with HTML logger artifact. The `Release-Xml` configuration, which enforces warnings-as-errors, is used for packaging and should be tested locally before submitting PRs.
 
 ---
 ## 5. Code Style & Conventions
