@@ -1,7 +1,7 @@
 
 ### Summary
-<!-- Concise one-line summary of the change. -->
 
+_One-line summary of the change (replace this line):_
 ### Root Cause (for bug fixes)
 <!-- Describe underlying cause, not just symptoms. Reference lifecycle/events if relevant. -->
 
