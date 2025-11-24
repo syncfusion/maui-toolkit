@@ -23,7 +23,8 @@ jobs:
 
       - name: Build (Release-Xml) - Fail on warnings
         run: |
-          dotnet build Syncfusion.Maui.Toolkit.sln -c Release-Xml --nologo
+          dotnet build maui/src/Syncfusion.Maui.Toolkit.csproj -c Release-Xml --nologo
+          dotnet build maui/tests/Syncfusion.Maui.Toolkit.UnitTest/Syncfusion.Maui.Toolkit.UnitTest.csproj -c Release-Xml --nologo
 
       - name: Run Unit Tests (with coverage)
         run: |
