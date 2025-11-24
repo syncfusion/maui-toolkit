@@ -48,7 +48,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
-            Thanks for opening this PR! Please ensure the [Quality Assurance Checklist](copilot-instructions.md#quality-assurance-checklist) in `copilot-instructions.md` is fully addressed:
+            Thanks for opening this PR! Please ensure the [Quality Assurance Checklist](.github/instructions/copilot-instructions.md#quality-assurance-checklist) in `.github/instructions/copilot-instructions.md` is fully addressed:
             - Multi-target build (`Release-Xml`) success
             - Analyzer warnings resolved
             - Tests added/updated and passing
