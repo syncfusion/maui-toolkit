@@ -69,7 +69,8 @@ Derived from `.editorconfig` and CONTRIBUTING:
 Patterns & Principles:
 - Partial classes: Split logically (core API, methods, properties) to reduce merge churn. Avoid scattering unrelated functionality across many partials.
 - Event Args & Models: Place dedicated `EventArgs` or model classes in `EventArgs/` or `Model/` folders where present; reuse existing types when semantics match.
-- Styling & Themes: XAML resources under `Themes/` or control-specific resource dictionaries. Note: Style file naming in `maui/src/Themes/` uses both `Sf<ControlName>Styles.xaml` and `Sf<ControlName>Style.xaml` patterns; both exist in the codebase. Prefer explicit keys for each major visual state.
+- Styling & Themes: XAML resources under `Themes/` or control-specific resource dictionaries. 
+  **Style file naming:** The codebase contains both `Sf<ControlName>Styles.xaml` (plural) and `Sf<ControlName>Style.xaml` (singular) patterns. **For new controls, use the plural form `Sf<ControlName>Styles.xaml`** to align with current best practices and to indicate the file may contain multiple style resources. The singular form exists for legacy reasons; only use it when updating or maintaining existing files that already use that pattern. Prefer explicit keys for each major visual state.
 - Windows / Platform Resources: If a XAML file is excluded (`<MauiXaml Remove>`), verify add-back via `<Page Include>` or `<MauiXaml Update>` when reintroducing. Keep platform styling minimal and consistent.
 - Initialization: Keep constructors lightweight; defer heavy setup until handler attachment (`HandlerChanged`) or `Loaded` event.
 - Bindable Properties: Provide clear defaults; document side-effects (e.g., layout invalidation) in XML remarks.
