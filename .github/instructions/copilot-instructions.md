@@ -195,13 +195,20 @@ Localization:
 
 ---
 ## 16. CI Integration Notes
-Pipeline Steps:
+Pipeline Steps (pipelines/build.yml):
 1. Install .NET SDK & workloads.
-2. Build solution (Release-Xml).
-3. Run unit tests with TRX output.
+2. Build solution (Release).
+3. Run unit tests with HTML output.
 4. Publish test artifacts.
-Best Practice: Replicate CI locally using same commands (Release-Xml, TRX output) before pushing to reduce iteration cycles.
 
+PR Quality Workflow (.github/workflows/pr-quality.yml):
+1. Install .NET SDK & workloads.
+2. Build solution and tests (Release-Xml with warnings-as-errors).
+3. Run unit tests with coverage and TRX output.
+4. Publish test artifacts.
+5. Post guidance comment on first PR open.
+
+Best Practice: Replicate the stricter Release-Xml build locally before pushing to reduce PR iteration cycles.
 ---
 ## 17. Release & Versioning
 - Semantic versioning recommended (Major.Minor.Patch). Current placeholder `1.0.0`.
