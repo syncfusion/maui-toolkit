@@ -85,7 +85,7 @@ Guidelines:
 - Use `DefineConstants` (`MONOANDROID`, `IOS`, `MACCATALYST`) exclusively for micro-conditions; if logic grows, refactor to a dedicated file.
 - Add stub or no-op implementations for unsupported platforms to retain consistent behavior & avoid runtime null references.
 - Observe OS version constraints (`SupportedOSPlatformVersion`); if using APIs newer than minimum, guard with `OperatingSystem.IsXXXVersionAtLeast`.
-- AOT Considerations: `IsAotCompatible` is set for net9 targets; avoid runtime code generation, reflection emit, or dynamic IL.
+- AOT Considerations: `IsAotCompatible` should be set for net9 targets (future constraint); avoid runtime code generation, reflection emit, or dynamic IL.
 - Unsafe Code: Project allows `<AllowUnsafeBlocks>true>`; only use unsafe constructs for measurable performance gains and document rationale in comments adjacent to usage (avoid broad unsafe blocks).
 
 ---
