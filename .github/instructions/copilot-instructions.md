@@ -50,7 +50,7 @@ Use an IDE (VS / VS Code + MAUI Dev Kit) to deploy and interact with UI.
 - Central analyzer settings: `Directory.Build.props` (enables nullable, analyzers, code style enforcement).
 - Launch profile support: `Directory.Build.targets` sets single-project Maui capabilities.
 - Warning thresholds tightened in `Release-Xml` configuration; treat them early to avoid PR build failures.
-- CI (`pipelines/build.yml`) builds using the standard `Release` configuration and runs unit tests with HTML logger artifact. However, the PR quality workflow (`.github/workflows/pr-quality.yml`) builds using the stricter `Release-Xml` configuration to enforce warnings-as-errors on pull requests. The `Release-Xml` configuration is also used for packaging and should be tested locally before submitting PRs.
+- CI (`pipelines/build.yml`) builds using the standard `Release` configuration and runs unit tests with HTML logger artifact. The `Release-Xml` configuration is used for packaging and enforces warnings-as-errors; test it locally before submitting PRs.
 
 ---
 ## 5. Code Style & Conventions
@@ -201,14 +201,7 @@ Pipeline Steps (pipelines/build.yml):
 3. Run unit tests with HTML output.
 4. Publish test artifacts.
 
-PR Quality Workflow (.github/workflows/pr-quality.yml):
-1. Install .NET SDK & workloads.
-2. Build solution and tests (Release-Xml with warnings-as-errors).
-3. Run unit tests with coverage and TRX output.
-4. Publish test artifacts.
-5. Post guidance comment on first PR open.
-
-Best Practice: Replicate the stricter Release-Xml build locally before pushing to reduce PR iteration cycles.
+Best Practice: Replicate CI locally using same commands (Release configuration) before pushing to reduce iteration cycles.
 ---
 ## 17. Release & Versioning
 - Semantic versioning recommended (Major.Minor.Patch). Current placeholder `1.0.0`.
