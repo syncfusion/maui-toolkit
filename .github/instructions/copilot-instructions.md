@@ -197,10 +197,10 @@ Localization:
 ## 16. CI Integration Notes
 Pipeline Steps:
 1. Install .NET SDK & workloads.
-2. Build solution (Release).
-3. Run unit tests with HTML output.
+2. Build solution (Release-Xml).
+3. Run unit tests with TRX output.
 4. Publish test artifacts.
-Best Practice: Replicate CI locally using same commands before pushing to reduce iteration cycles.
+Best Practice: Replicate CI locally using same commands (Release-Xml, TRX output) before pushing to reduce iteration cycles.
 
 ---
 ## 17. Release & Versioning
