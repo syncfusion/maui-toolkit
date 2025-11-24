@@ -42,6 +42,8 @@ jobs:
   guidance-comment:
     if: github.event.action == 'opened'
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - name: Post QA Guidance Comment
         uses: peter-evans/create-or-update-comment@v3
