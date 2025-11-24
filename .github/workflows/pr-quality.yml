@@ -27,7 +27,7 @@ jobs:
 
       - name: Run Unit Tests (with coverage)
         run: |
-          dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/Syncfusion.Maui.Toolkit.UnitTest.csproj --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=tests.trx"
+          dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/Syncfusion.Maui.Toolkit.UnitTest.csproj -c Release-Xml --collect:"XPlat Code Coverage" --logger:"trx;LogFileName=tests.trx"
 
       - name: Upload Test Results
         if: always()
