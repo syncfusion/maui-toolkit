@@ -975,7 +975,11 @@ namespace Syncfusion.Maui.ControlsGallery
 		{
 			NavigationDrawerGrid.IsVisible = true;
 			NavigationDrawerGrid.ZIndex = 1;
+#if NET10_0
+			await NavigationDrawerGrid.TranslateToAsync(0, 0, 250, Easing.CubicIn);
+#else
 			await NavigationDrawerGrid.TranslateTo(0, 0, 250, Easing.CubicIn);
+#endif
 			Graylayout.IsVisible = true;
 		}
 
@@ -1007,7 +1011,11 @@ namespace Syncfusion.Maui.ControlsGallery
 			themePopup.IsVisible = false;
 			_isThemePopupOpen = false;
 			Graylayout.IsVisible = false;
+#if NET10_0
+			await NavigationDrawerGrid.TranslateToAsync(-345, 0, 250, Easing.CubicIn);
+#else
 			await NavigationDrawerGrid.TranslateTo(-345, 0, 250, Easing.CubicIn);
+#endif
 			NavigationDrawerGrid.IsVisible = false;
 		}
 

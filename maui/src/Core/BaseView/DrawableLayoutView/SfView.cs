@@ -30,15 +30,25 @@ namespace Syncfusion.Maui.Toolkit
 		/// </summary>
 		private bool isLayoutControl = false;
 
-        private Thickness padding = new(0);
-
         readonly List<IView> children = [];
 
-        #endregion
+		#endregion
 
-        #region properties
+		#region Bindable Properties
+		
+		/// <summary>
+		/// Identifies the <see cref="Padding"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="Padding"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty PaddingProperty = BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(SfView), new Thickness(0), propertyChanged: OnPaddingPropertyChanged);
+		
+		#endregion
 
-        private SfViewHandler? LayoutHandler => Handler as SfViewHandler;
+		#region properties
+
+		private SfViewHandler? LayoutHandler => Handler as SfViewHandler;
 
 
         internal DrawingOrder DrawingOrder
@@ -122,17 +132,9 @@ namespace Syncfusion.Maui.Toolkit
         /// </summary>
         public Thickness Padding
         {
-            get
-            {
-                return padding;
-            }
-            set
-            {
-                padding = value;
-                MeasureContent(Width, Height);
-                ArrangeContent(Bounds);
-            }
-        }
+			get => (Thickness)GetValue(PaddingProperty);
+			set => SetValue(PaddingProperty, value);
+		}
 
 		/// <exclude/>
 		IReadOnlyList<IVisualTreeElement> IVisualTreeElement.GetVisualChildren() => Children.Cast<IVisualTreeElement>().ToList().AsReadOnly();
@@ -170,6 +172,26 @@ namespace Syncfusion.Maui.Toolkit
             layoutManager = new DrawableLayoutManager(this);
         }
 
+		#endregion
+
+		#region OnPropertyChanged Methods
+		
+		/// <summary>
+		/// Invoked whenever the <see cref="PaddingProperty"/> is set.
+		/// </summary>
+		/// <param name="bindable">The bindable.</param>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		private static void OnPaddingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfView view)
+			{
+				view.MeasureContent(view.Width, view.Height);
+				view.ArrangeContent(view.Bounds);
+				view.InvalidateMeasure();
+			}
+		}
+		
 		#endregion
 
 		#region virtual methods

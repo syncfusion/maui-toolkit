@@ -46,7 +46,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		#region Constructor
 
 		/// <summary>
-		/// Initiates new intance of ListViewInboxInfoViewModel class.
+		/// Initiates new intance of CollectionViewInboxInfoViewModel class.
 		/// </summary>
 		public MailInfoViewModel()
 		{

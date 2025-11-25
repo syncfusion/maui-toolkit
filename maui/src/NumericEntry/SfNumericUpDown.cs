@@ -1954,11 +1954,16 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <returns>The extracted View, or null if the content is not a view.</returns>
 		static View? ExtractViewFromLayout(object layout)
 		{
+#if NET9_0
 			if (layout is ViewCell viewCell)
 			{
 				return viewCell.View;
 			}
+
 			return layout as View;
+#else
+			return layout as View;
+#endif
 		}
 
 		/// <summary>
@@ -2113,7 +2118,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			}
 		}
 
-		#endregion
+#endregion
 
 	}
 }

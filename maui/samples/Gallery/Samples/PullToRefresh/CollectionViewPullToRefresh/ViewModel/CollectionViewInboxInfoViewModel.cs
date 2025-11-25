@@ -5,9 +5,9 @@ using System.ComponentModel;
 namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 {
 	/// <summary>
-	/// ViewModel class of ListViewPullToRefresh.
+	/// ViewModel class of CollectionViewPullToRefresh.
 	/// </summary>
-	public partial class ListViewInboxInfoViewModel : INotifyPropertyChanged
+	public partial class CollectionViewInboxInfoViewModel : INotifyPropertyChanged
 	{
 		#region Fields
 
@@ -37,9 +37,9 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		#region Constructor
 
 		/// <summary>
-		/// Initiates new intance of ListViewInboxInfoViewModel class.
+		/// Initiates new intance of CollectionViewInboxInfoViewModel class.
 		/// </summary>
-		public ListViewInboxInfoViewModel()
+		public CollectionViewInboxInfoViewModel()
 		{
 			_random = new Random();
 			GenerateSource();
@@ -67,7 +67,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// </summary>
 		private void GenerateSource()
 		{
-			ListViewInboxInfoRepository inboxinfo = new ListViewInboxInfoRepository();
+			CollectionViewInboxInfoRepository inboxinfo = new CollectionViewInboxInfoRepository();
 			_inboxInfos = inboxinfo.GetInboxInfo();
 		}
 
@@ -77,7 +77,7 @@ namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 		/// <param name="count">Represent number of messages to be added.</param>
 		public void AddItemsRefresh(int count)
 		{
-			ListViewInboxInfoRepository inboxinfo = new ListViewInboxInfoRepository();
+			CollectionViewInboxInfoRepository inboxinfo = new CollectionViewInboxInfoRepository();
 
 			foreach (var i in inboxinfo.AddRefreshItems(count))
 			{

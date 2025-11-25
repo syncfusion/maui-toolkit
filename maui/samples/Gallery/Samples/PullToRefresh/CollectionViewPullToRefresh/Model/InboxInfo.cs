@@ -3,7 +3,7 @@
 namespace Syncfusion.Maui.ControlsGallery.PullToRefresh
 {
 	/// <summary>
-	/// Class contains property and fields for ListViewPullToRefresh.
+	/// Class contains property and fields for CollectionViewPullToRefresh.
 	/// </summary>
 	public partial class InboxInfo : INotifyPropertyChanged
 	{

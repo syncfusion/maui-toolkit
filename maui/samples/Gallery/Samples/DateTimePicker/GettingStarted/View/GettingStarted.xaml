@@ -9,7 +9,7 @@
 
     <localCore:SampleView.Content>
 
-        <Grid WidthRequest="300" HeightRequest="375" HorizontalOptions="Center" VerticalOptions="Center">
+        <Grid WidthRequest="365" HeightRequest="375" HorizontalOptions="Center" VerticalOptions="Center">
             <Border x:Name="frame" IsVisible="{OnPlatform WinUI=True, Android=True, Default=False}" StrokeThickness="1" BackgroundColor="White" StrokeShape="RoundRectangle 5,5,5,5" HorizontalOptions="Center" VerticalOptions="Center" Margin="0" Padding="0">
                 <dateTimePicker:SfDateTimePicker HeightRequest="370" x:Name="DateTimePicker"/>
             </Border>

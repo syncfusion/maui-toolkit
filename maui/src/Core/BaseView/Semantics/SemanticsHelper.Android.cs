@@ -16,7 +16,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         {
             _accessibilityNodeProvider = new CustomAccessibilityProvider(host, virtualView, isChildrenImportant);
         }
-        public override AccessibilityNodeProviderCompat GetAccessibilityNodeProvider(Android.Views.View host)
+        public override AccessibilityNodeProviderCompat GetAccessibilityNodeProvider(Android.Views.View? host)
         {
             return _accessibilityNodeProvider;
         }
@@ -53,8 +53,13 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
         /// <summary>
         /// Dispatch the accessibility event to process its children for adding their text for the event.
         /// </summary>
-        public override bool DispatchPopulateAccessibilityEvent(Android.Views.View host, AccessibilityEvent e)
+        public override bool DispatchPopulateAccessibilityEvent(Android.Views.View? host, AccessibilityEvent? e)
         {
+            if (host is null || e is null)
+            {
+                return false;
+            }
+
             //// Check the host view have accessibility.
             if (host.IsImportantForAccessibility)
             {
@@ -681,7 +686,16 @@ After:
                 accessibilityEvent = CustomAccessibilityProvider.GetAccessibilityEvent(eventType);
                 if (accessibilityEvent != null)
                 {
+#if NET10_0
+                    if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
+                    {
+#pragma warning disable CA1416 // Validate platform compatibility
+                        accessibilityEvent.Enabled = true;
+#pragma warning restore CA1416 // Validate platform compatibility
+                    }
+#else
                     accessibilityEvent.Enabled = true;
+#endif
                     accessibilityEvent.ClassName = _host.Class.Name;
                     accessibilityEvent.ContentDescription = semanticsNode.Text;
                     accessibilityEvent.PackageName = _host.Context?.PackageName;

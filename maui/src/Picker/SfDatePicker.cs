@@ -1551,6 +1551,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 AcceptCommand.Execute(e);
             }
+
+            IsOpen = false;
         }
 
         /// <summary>
@@ -1587,6 +1589,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 DeclineCommand.Execute(e);
             }
+
+            IsOpen = false;
         }
 
         #endregion

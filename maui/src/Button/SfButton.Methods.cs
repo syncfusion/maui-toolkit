@@ -348,7 +348,11 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		void InsertCustomViewInChildren(DataTemplate dataTemplate)
 		{			
 			var layout = dataTemplate.CreateContent();
+#if NET10_0_OR_GREATER
+			_customView = layout as View;
+#else
 			_customView = layout is ViewCell cell ? cell.View : (View)layout;
+#endif
 			if (_customView != null)
 			{
 				if (_effectsView != null && Children.Contains(_effectsView))
@@ -722,7 +726,7 @@ namespace Syncfusion.Maui.Toolkit.Buttons
                 _isPressInvoked = false;
 #endif
 		}
-		#endregion
+#endregion
 
 		#region Override Methods
 

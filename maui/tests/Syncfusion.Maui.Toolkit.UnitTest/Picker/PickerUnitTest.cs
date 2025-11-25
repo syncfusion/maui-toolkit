@@ -131,7 +131,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             picker.Columns[0].SelectedIndex = 2;
 
-            Assert.Equal(-1, picker.Columns[0].SelectedIndex);
+            Assert.Equal(2, picker.Columns[0].SelectedIndex);
         }
 
         [Theory]

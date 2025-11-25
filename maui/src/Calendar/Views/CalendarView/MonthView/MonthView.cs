@@ -1980,7 +1980,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             CalendarTextStyle weekNumberTextStyle = _calendarViewInfo.MonthView.WeekNumberStyle.TextStyle;
-            DateTime monthWeekStartDate = CalendarViewHelper.GetWeekStartDate(_visibleDates, _calendarViewInfo.Identifier);
+            DateTime monthWeekStartDate = CalendarViewHelper.GetWeekStartDate(_visibleDates, _calendarViewInfo.Identifier, _calendarViewInfo.MonthView.FirstDayOfWeek);
             Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier.ToString());
             //// The starting date of the calendar.
             DateTime minDate = cultureCalendar.MinSupportedDateTime;
@@ -2018,7 +2018,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                         continue;
                     }
 
-                    string weekNumber = CalendarViewHelper.GetWeekNumber(_calendarViewInfo.Identifier, monthWeekStartDate).ToString();
+                    string weekNumber = CalendarViewHelper.GetWeekNumber(_calendarViewInfo.Identifier, monthWeekStartDate, _calendarViewInfo.MonthView.FirstDayOfWeek).ToString();
                     CalendarViewHelper.DrawText(canvas, weekNumber, weekNumberTextStyle, new RectF(xPosition, yPosition, weekNumberWidth, monthCellHeight), HorizontalAlignment.Center, VerticalAlignment.Center);
                 }
 
@@ -2881,7 +2881,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             double visibleWeeks = Math.Ceiling(visibleDateCount / DaysPerWeek);
             if (_calendarViewInfo.MonthView.ShowWeekNumber)
             {
-                DateTime monthWeekStartDate = CalendarViewHelper.GetWeekStartDate(_visibleDates, _calendarViewInfo.Identifier);
+                DateTime monthWeekStartDate = CalendarViewHelper.GetWeekStartDate(_visibleDates, _calendarViewInfo.Identifier, _calendarViewInfo.MonthView.FirstDayOfWeek);
                 Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier.ToString());
                 //// The starting date of the calendar.
                 DateTime minDate = cultureCalendar.MinSupportedDateTime;
@@ -2917,7 +2917,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                             continue;
                         }
 
-                        weekNumber = CalendarViewHelper.GetWeekNumber(_calendarViewInfo.Identifier, monthWeekStartDate).ToString();
+                        weekNumber = CalendarViewHelper.GetWeekNumber(_calendarViewInfo.Identifier, monthWeekStartDate, _calendarViewInfo.MonthView.FirstDayOfWeek).ToString();
                     }
 
                     //// Getting week number by adding days based on number of weeks in view and days per week from the month's start date of the week.

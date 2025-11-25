@@ -733,7 +733,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				Items = PopulateLabelItemsCollection()
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(3, tabBar.Items.Count);
 				Assert.NotEmpty(tabBar.Items);
@@ -756,7 +756,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				Items = PopulateLabelItemsCollection()
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal("TAB 1", tabBar.Items[0].Header);
 				Assert.NotEqual("TAB 2", tabBar.Items[0].Header);
@@ -1480,7 +1480,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				IndicatorPlacement = expected
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(expected, tabBar.IndicatorPlacement);
 				tabBar.HeightRequest = 60;
@@ -1512,7 +1512,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				Items = PopulateLabelItemsCollection(),
 				IndicatorCornerRadius = new CornerRadius(6)
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				tabBar.UpdateCornerRadius();
 				var roundRectangle = GetPrivateField<SfTabBar>(tabBar, "_roundRectangle");
@@ -1756,7 +1756,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				HeaderHorizontalTextAlignment = expected
 			};
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			SfTabBar? tabBar = ((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
 			Assert.Equal(expected, tabBar?.HeaderHorizontalTextAlignment);
 		}
 
@@ -1769,7 +1769,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				IndicatorWidthMode = expected
 			};
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			SfTabBar? tabBar = ((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
 			Assert.Equal(expected, tabBar?.IndicatorWidthMode);
 		}
 
@@ -1782,7 +1782,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				TabWidthMode = expected
 			};
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			SfTabBar? tabBar = ((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
 			Assert.Equal(expected, tabBar?.TabWidthMode);
 		}
 
@@ -1793,7 +1793,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				TabHeaderPadding = new Thickness(-5)
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(new Thickness(-5), tabBar.TabHeaderPadding);
 				Assert.NotEqual(new Thickness(0), tabBar.TabHeaderPadding);
@@ -1814,7 +1814,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				IndicatorBackground = Colors.Maroon
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(Colors.Maroon, tabBar.IndicatorBackground);
 				tabView.IndicatorBackground = Colors.Red;
@@ -1833,7 +1833,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				IndicatorCornerRadius = new CornerRadius(0)
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(new CornerRadius(0), tabBar.IndicatorCornerRadius);
 				tabView.IndicatorCornerRadius = new CornerRadius(-5);
@@ -1855,7 +1855,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestSfTabBarHeaderDisplayMode(TabBarDisplayMode expected)
 		{
 			SfTabView tabView = new SfTabView();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			SfTabBar? tabBar = ((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
 			tabView.HeaderDisplayMode = expected;
 			Assert.Equal(expected, tabBar?.HeaderDisplayMode);
 		}
@@ -1867,7 +1867,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestSfTabBarTabHeaderAlignment(TabHeaderAlignment expected)
 		{
 			SfTabView tabView = new SfTabView();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			SfTabBar? tabBar = ((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
 			tabView.TabHeaderAlignment = expected;
 			Assert.Equal(expected, tabBar?.TabHeaderAlignment);
 		}
@@ -1881,7 +1881,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestSfTabBarContentTransitionDuration(double expected)
 		{
 			SfTabView tabView = new SfTabView();
-			SfTabBar? tabBar = (tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
+			SfTabBar? tabBar = ((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() as SfTabBar;
 			tabView.ContentTransitionDuration = expected;
 			if (expected > 100)
 			{
@@ -1900,7 +1900,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				FontAutoScalingEnabled = true
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.True(tabBar.FontAutoScalingEnabled);
 				tabView.FontAutoScalingEnabled = false;
@@ -1917,7 +1917,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				ScrollButtonColor = Colors.Green
 			};
 			tabView.ScrollButtonBackground = Colors.Green;
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				Assert.Equal(Colors.Green, tabBar.ScrollButtonBackground);
 				Assert.Equal(Colors.Green, tabBar.ScrollButtonColor);
@@ -1942,7 +1942,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				Items = PopulateLabelItemsCollection()
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				var effectsView = tabBar.GetEffectsView(tabBar.Items[0]);
 				Assert.NotNull(effectsView);
@@ -2560,7 +2560,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				Items = PopulateLabelItemsCollection()
 			};
-			if ((tabView.Children.FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
+			if (((tabView as IVisualTreeElement)?.GetVisualChildren().FirstOrDefault() as SfGrid)?.Children.FirstOrDefault() is SfTabBar tabBar)
 			{
 				_ = tabBar.GetEffectsView(tabBar.Items[0]);
 
@@ -2619,7 +2619,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var tabItems = PopulateMixedObjectItemsSource();
 			if (tabBar != null)
 			{
-				tabBar.ItemsSource = tabItems;
+				tabBar?.ItemsSource = tabItems;
 			}
 
 			InvokePrivateMethod(tabBar, "UpdateItemsSource");
@@ -2687,7 +2687,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			tabBar.ScrollButtonDisabledIconColor = Colors.Red;
 			if (forwardArrow != null)
 			{
-				forwardArrow.IsEnabled = false;
+				forwardArrow?.IsEnabled = false;
 			}
 
 			InvokePrivateMethod(tabBar, "UpdateScrollButtonColor", []);
@@ -3586,7 +3586,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var eventArgs = new SelectionChangingEventArgs();
 			if (eventArgs != null)
 			{
-				eventArgs.Index = index;
+				eventArgs?.Index = index;
 			}
 
 			Assert.NotNull(eventArgs);

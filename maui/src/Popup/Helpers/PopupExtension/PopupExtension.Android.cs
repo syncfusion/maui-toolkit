@@ -120,12 +120,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					{
 						int[] decorCoordinates = new int[2] { 0, 0 };
 						decorView.GetLocationInWindow(decorCoordinates);
-						return (int)Math.Round((viewCoordinates[1] - decorCoordinates[1]) / WindowOverlayHelper._density);
+						return Math.Max((int)Math.Round((viewCoordinates[1] - decorCoordinates[1]) / WindowOverlayHelper._density), 0);
 					}
 				}
 				else
 				{
-					return (int)Math.Round((viewCoordinates[1] - GetWindowInsets("Top")) / WindowOverlayHelper._density);
+					return Math.Max((int)Math.Round((viewCoordinates[1] - GetWindowInsets("Top")) / WindowOverlayHelper._density), 0);
 				}
 			}
 
@@ -148,7 +148,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				return widthPixel;
 			}
 
-			return (int)Math.Round(platformRootView!.Width / WindowOverlayHelper._density);
+			int leftInsets = 0;
+#if NET10_0
+            // In .NET 10, the root view’s width in landscape includes the navigation bar, so subtract the left window inset from the root view width to get the usable content width.
+            leftInsets = PopupExtension.GetWindowInsets("Left");
+#endif
+			return (int)Math.Round((platformRootView!.Width - leftInsets) / WindowOverlayHelper._density);
 		}
 
 		/// <summary>
@@ -169,13 +174,24 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			}
 			else if (platformRootView is not null)
 			{
+				int topInsets = 0;
+				int bottomInsets = 0;
+#if NET10_0
+                // In .NET 10, the root view’s height includes the navigation bar, so subtract the bottom window inset from the root view height to get the usable content height.
+                bottomInsets = PopupExtension.GetWindowInsets("Bottom");
+                if (!WindowFlagHasFullScreen)
+                {
+                    topInsets = PopupExtension.GetWindowInsets("Top");
+                }
+#endif
+
 				if (IsResizeMode() && !WindowFlagHasNoLimits)
 				{
 					platformRootViewHeight = platformRootView.Height + (GetKeyboardHeight() * WindowOverlayHelper._density);
 				}
 				else
 				{
-					platformRootViewHeight = platformRootView.Height;
+					platformRootViewHeight = platformRootView.Height - topInsets - bottomInsets;
 				}
 
 				return (int)Math.Round(platformRootViewHeight / WindowOverlayHelper._density);
@@ -239,15 +255,30 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				var windowInsets = ViewCompat.GetRootWindowInsets(WindowOverlayHelper._decorViewContent);
 				if (windowInsets is not null)
 				{
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
 					var insets = windowInsets.GetInsets(WindowInsetsCompat.Type.SystemBars());
 					switch (position)
 					{
 						case "Bottom":
 							return insets.Bottom;
 						case "Top":
-							return insets.Top;
+							{
+#if NET10_0
+                            // In .NET 10 case, fall back to decorViewFrame when Top inset is 0.
+                            return insets.Top == 0 ? (int)Math.Round((WindowOverlayHelper._decorViewFrame?.Top ?? 0f) / WindowOverlayHelper._density) : insets.Top;
+#else
+								return insets.Top;
+#endif
+							}
 						case "Left":
-							return insets.Left;
+							{
+#if NET10_0
+                            // In .NET 10 case, fall back to decorViewFrame when Left inset is 0.
+                            return insets.Left == 0 ? (int)Math.Round((WindowOverlayHelper._decorViewFrame?.Left ?? 0f) / WindowOverlayHelper._density) : insets.Left;
+#else
+								return insets.Left;
+#endif
+							}
 						case "Right":
 							return insets.Right;
 						case "Keyboard":
@@ -259,6 +290,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 						default:
 							return 0;
 					}
+#pragma warning restore CS8602
+
 				}
 			}
 

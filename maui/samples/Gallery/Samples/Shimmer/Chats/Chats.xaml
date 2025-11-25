@@ -11,25 +11,22 @@
     <localCore:SampleView.Resources>
         <ResourceDictionary>
             <DataTemplate x:Key="personTemplate">
-                <ViewCell>
-                    <Grid Padding="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="0.2*"/>
-                            <ColumnDefinition Width="0.8*"/>
-                        </Grid.ColumnDefinitions>
+                <Grid Padding="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.8*"/>
+                    </Grid.ColumnDefinitions>
 
-                        <Image x:DataType="local:ContactInfo" Source="{Binding ContactImage}" Grid.RowSpan="2"/>
-                        <Grid Grid.Column="1" Padding="10,0,0,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Label x:DataType="local:ContactInfo" Text="{Binding ContactName}" VerticalTextAlignment="Center" Grid.Column="1" FontAttributes="Bold" FontSize="17"/>
-                            <Label x:DataType="local:ContactInfo" Text="{Binding Message}" VerticalTextAlignment="Center" Grid.Column="1" Grid.Row="1"/>
-                        </Grid>
-
+                    <Image x:DataType="local:ContactInfo" Source="{Binding ContactImage}" Grid.RowSpan="2"/>
+                    <Grid Grid.Column="1" Padding="10,0,0,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Label x:DataType="local:ContactInfo" Text="{Binding ContactName}" VerticalTextAlignment="Center" Grid.Column="1" FontAttributes="Bold" FontSize="17"/>
+                        <Label x:DataType="local:ContactInfo" Text="{Binding Message}" VerticalTextAlignment="Center" Grid.Column="1" Grid.Row="1"/>
                     </Grid>
-                </ViewCell>
+                </Grid>
             </DataTemplate>
         </ResourceDictionary>
     </localCore:SampleView.Resources>
@@ -47,17 +44,18 @@
             </Grid.RowDefinitions>
             <shimmer:SfShimmer x:Name="shimmer"
                                RepeatCount="8"
-                               
                                WaveDirection="LeftToRight">
                 <shimmer:SfShimmer.Content>
                     <StackLayout>
-                        <ListView x:DataType="local:ViewModel" ItemsSource="{Binding Info}" x:Name="listView"
-                                  SeparatorVisibility="None"
-                                  RowHeight="90"
-                                  VerticalScrollBarVisibility="Never"
-                                   BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                                  >
-                        </ListView>
+                        <CollectionView x:DataType="local:ViewModel"
+                                        ItemsSource="{Binding Info}"
+                                        x:Name="listView"
+                                        ItemTemplate="{StaticResource personTemplate}"
+                                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                        VerticalScrollBarVisibility="Never"
+                                        HeightRequest="570"
+                                        >
+                        </CollectionView>
                     </StackLayout>
                 </shimmer:SfShimmer.Content>
             </shimmer:SfShimmer>

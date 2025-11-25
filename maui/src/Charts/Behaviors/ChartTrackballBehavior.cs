@@ -7,6 +7,7 @@ using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Themes;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {

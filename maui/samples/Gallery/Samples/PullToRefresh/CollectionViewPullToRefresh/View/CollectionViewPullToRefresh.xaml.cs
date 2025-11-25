@@ -1,8 +1,8 @@
 namespace Syncfusion.Maui.ControlsGallery.PullToRefresh.SfPullToRefresh
 {
-	public partial class ListViewPullToRefresh : SampleView
+	public partial class CollectionViewPullToRefresh : SampleView
 	{
-		public ListViewPullToRefresh()
+		public CollectionViewPullToRefresh()
 		{
 			InitializeComponent();
 		}

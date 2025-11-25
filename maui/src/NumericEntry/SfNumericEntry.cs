@@ -6,6 +6,7 @@ using Syncfusion.Maui.Toolkit.EntryRenderer;
 using System.Runtime.CompilerServices;
 using Syncfusion.Maui.Toolkit.TextInputLayout;
 using Syncfusion.Maui.Toolkit.EntryView;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 #if ANDROID
 using Android.Text;
 using Android.Provider;
@@ -448,7 +449,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// </param>
 		protected override void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
-            if (propertyName == null)
+            if (propertyName == null || _textBox == null)
             {
                 return;
             }
@@ -456,11 +457,8 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
             switch (propertyName)
             {
                 case nameof(IsEnabled):
-                    if (_textBox != null)
-                    {
-                        _textBox.IsEnabled = IsEnabled;
-                    }
-                    break;
+					_textBox.IsEnabled = IsEnabled;
+					break;
 
         #if WINDOWS
                 case nameof(FlowDirection):
@@ -468,10 +466,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
                     break;
 		#endif
 				case nameof(IsVisible):
-					if (_textBox != null)
-					{
-						_textBox.IsVisible = IsVisible;
-					}
+					_textBox.IsVisible = IsVisible;
 					break;
 			}
 
@@ -960,14 +955,14 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
         /// <param name="extraAdjustment">Additional adjustment for the separator button width.</param>
         void SetButtonFrames(nfloat adjustment, nfloat extraAdjustment)
 		{
-			if (_minusButton != null)
+			if (_minusButton is UIButton minusButton)
 			{
-				_minusButton.Frame = new CGRect(0, 0, _buttonWidth - adjustment, 50);
+				minusButton.Frame = new CGRect(0, 0, _buttonWidth - adjustment, 50);
 			}
 
-			if (_separatorButton != null)
+			if (_separatorButton is UIButton seperateButton)
 			{
-				_separatorButton.Frame = new CGRect(_buttonWidth - adjustment, 0, _buttonWidth + extraAdjustment, 50);
+				seperateButton.Frame = new CGRect(_buttonWidth - adjustment, 0, _buttonWidth + extraAdjustment, 50);
 			}
 
 			if (_returnButton != null && _toolbarView != null)

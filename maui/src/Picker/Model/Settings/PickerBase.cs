@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Input;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.Picker
 {
@@ -111,6 +112,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 typeof(bool),
                 typeof(PickerBase),
                 false,
+                BindingMode.TwoWay,
                 propertyChanged: OnIsOpenChanged);
 
         /// <summary>
@@ -1103,6 +1105,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 {
                     oldStyle.TextStyle.PropertyChanged -= picker.OnHeaderTextStylePropertyChanged;
                     oldStyle.TextStyle.BindingContext = null;
+                    oldStyle.TextStyle.Parent = null;
                 }
 
                 if (oldStyle.SelectionTextStyle != null)
@@ -1122,6 +1125,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 newStyle.PickerPropertyChanged += picker.OnHeaderSettingsPropertyChanged;
                 if (newStyle.TextStyle != null)
                 {
+                    newStyle.TextStyle.Parent = newStyle;
                     SetInheritedBindingContext(newStyle.TextStyle, picker.BindingContext);
                     newStyle.TextStyle.PropertyChanged += picker.OnHeaderTextStylePropertyChanged;
                 }
@@ -1178,6 +1182,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 {
                     oldStyle.TextStyle.PropertyChanged -= picker.OnFooterTextStylePropertyChanged;
                     oldStyle.TextStyle.BindingContext = null;
+                    oldStyle.TextStyle.Parent = null;
                 }
 
                 oldStyle.Parent = null;
@@ -1193,6 +1198,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 newStyle.PickerPropertyChanged += picker.OnFooterSettingsPropertyChanged;
                 if (newStyle.TextStyle != null)
                 {
+                    newStyle.TextStyle.Parent = newStyle;
                     SetInheritedBindingContext(newStyle.TextStyle, picker.BindingContext);
                     newStyle.TextStyle.PropertyChanged += picker.OnFooterTextStylePropertyChanged;
                 }
@@ -1881,6 +1887,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 //// Here old index = 9.
                 int oldIndex = -1;
                 int itemsCount = PickerHelper.GetItemsCount(column.ItemsSource);
+                if (itemsCount == 0)
+                {
+                    return;
+                }
                 if (e.OldValue != null)
                 {
                     oldIndex = PickerHelper.GetValidSelectedIndex((int)e.OldValue, itemsCount);

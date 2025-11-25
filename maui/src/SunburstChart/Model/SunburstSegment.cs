@@ -4,6 +4,7 @@ using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
 using System;
 using System.Collections.Generic;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.SunburstChart
 {
@@ -331,34 +332,54 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         {
             double segmentWidth = _segmentBounds.Width;
 
-            if (Chart != null)
-            {
-                var textWidth = text.Measure(element).Width + (HasStroke ? _strokeWidth * 2 : 4);
+			if (Chart != null)
+			{
+				var textWidth = text.Measure(element).Width + (HasStroke ? _strokeWidth * 2 : 4);
 
-                var r = (OuterRadius + InnerRadius) / 2;
-                var center = Chart.Center;
-                double radian = (ArcStartAngle + ArcEndAngle) / 2;
+				var r = (OuterRadius + InnerRadius) / 2;
+				var center = Chart.Center;
+				double radian = (ArcStartAngle + ArcEndAngle) / 2;
 
-                var x = (float)(center.X + r * Math.Cos(radian));
-                var y = (float)(center.Y + r * Math.Sin(radian));
+				var x = (float)(center.X + r * Math.Cos(radian));
+				var y = (float)(center.Y + r * Math.Sin(radian));
 
-                var h_left = x - (textWidth / 2);
-                var h_right = x + (textWidth / 2);
+				var h_left = x - (textWidth / 2);
+				var h_right = x + (textWidth / 2);
 
-                while (!IsPointInSunburstSegment(h_right, y))
-                {
-                    h_right -= 1;
-                }
+				// Walk towards the slice until both points are inside, but prevent endless looping
+				int maxIteration = (int)textWidth; 
 
-                while (!IsPointInSunburstSegment(h_left, y))
-                {
-                    h_left += 1;
-                }
+				// --- Right side scan (move left) ---
+				int rightIteration = 0;
+				while (!IsPointInSunburstSegment(h_right, y) && rightIteration < maxIteration)
+				{
+					h_right -= 1;
+					rightIteration++;
+				}
+				bool rightConverged = rightIteration < maxIteration;
 
-                segmentWidth = (h_right - h_left) - (HasStroke ? _strokeWidth * 2 : 4);
-            }
+				// --- Left side scan (move right) ---
+				int leftIteration = 0;
+				while (!IsPointInSunburstSegment(h_left, y) && leftIteration < maxIteration)
+				{
+					h_left += 1;
+					leftIteration++;
+				}
+				bool leftConverged = leftIteration < maxIteration;
 
-            return segmentWidth;
+				// If either side failed to converge, fall back to chord length approximation
+				if (!leftConverged || !rightConverged)
+				{
+					double chord = 2 * r * Math.Sin(Math.Abs(ArcEndAngle - ArcStartAngle) / 2);
+					return Math.Max(0, chord - (HasStroke ? _strokeWidth * 2 : 4));
+				}
+
+				// Otherwise compute the usable width
+				segmentWidth = Math.Max(0, (h_right - h_left) - (HasStroke ? _strokeWidth * 2 : 4));
+
+			}
+			
+			return segmentWidth;
         }
 
         #endregion

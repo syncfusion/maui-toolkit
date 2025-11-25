@@ -38,6 +38,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         PickerColumn _meridiemColumn;
 
         /// <summary>
+        /// Holds the millisecond column information.
+        /// </summary>
+        PickerColumn _millisecondColumn;
+
+        /// <summary>
         /// Holds the picker column collection.
         /// </summary>
         ObservableCollection<PickerColumn> _columns;
@@ -129,6 +134,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 typeof(SfTimePicker),
                 1,
                 propertyChanged: OnSecondIntervalPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MilliSecondInterval"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MilliSecondInterval"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MilliSecondIntervalProperty =
+            BindableProperty.Create(
+                nameof(MilliSecondInterval),
+                typeof(int),
+                typeof(SfTimePicker),
+                1,
+                propertyChanged: OnMilliSecondIntervalPropertyChanged);
 
         /// <summary>
         /// Identifies the <see cref="Format"/> dependency property.
@@ -370,6 +389,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             _minuteColumn = new PickerColumn();
             _secondColumn = new PickerColumn();
             _meridiemColumn = new PickerColumn();
+            _millisecondColumn = new PickerColumn();
             _columns = new ObservableCollection<PickerColumn>();
             Initialize();
             GeneratePickerColumns();
@@ -547,6 +567,31 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             get { return (int)GetValue(SecondIntervalProperty); }
             set { SetValue(SecondIntervalProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the millisecond interval in SfTimePicker.
+        /// </summary>
+        /// <value>The default value of <see cref="SfTimePicker.MilliSecondInterval"/> is 1.</value>
+        /// <example>
+        /// The following examples demonstrate how to set the second interval in SfTimePicker.
+        /// # [XAML](#tab/tabid-7)
+        /// <code language="xaml">
+        /// <![CDATA[
+        /// <Picker:SfTimePicker x:Name="TimePicker"
+        ///                       MilliSecondInterval="2" />
+        /// ]]>
+        /// </code>
+        /// # [C#](#tab/tabid-8)
+        /// <code language="C#">
+        /// SfTimePicker timePicker = new SfTimePicker();
+        /// timePicker.MilliSecondInterval = 2;
+        /// </code>
+        /// </example>
+        public int MilliSecondInterval
+        {
+            get { return (int)GetValue(MilliSecondIntervalProperty); }
+            set { SetValue (MilliSecondIntervalProperty, value); }
         }
 
         /// <summary>
@@ -838,7 +883,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             _minuteColumn = new PickerColumn();
             _secondColumn = new PickerColumn();
             _meridiemColumn = new PickerColumn();
+            _millisecondColumn = new PickerColumn();
             GeneratePickerColumns();
+            BaseColumns.Clear();
             BaseColumns = _columns;
         }
 
@@ -857,7 +904,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             List<int> formatStringOrder = TimePickerHelper.GetFormatStringOrder(out hourFormat, Format);
             int changedColumnValue = formatStringOrder[e.ColumnIndex];
             TimeSpan maxTime = TimePickerHelper.GetValidMaxTime(MinimumTime, MaximumTime);
-            TimeSpan previousTime = new TimeSpan(_previousSelectedDateTime.Hour, _previousSelectedDateTime.Minute, _previousSelectedDateTime.Second);
+            TimeSpan previousTime = new TimeSpan(0, _previousSelectedDateTime.Hour, _previousSelectedDateTime.Minute, _previousSelectedDateTime.Second, _previousSelectedDateTime.Millisecond);
 
             // Determine the current time to use based on the picker mode and available time values:
             // - If not in Default mode and InternalSelectedTime has a value, use it.
@@ -890,7 +937,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                             minutes = int.Parse(minuteCollection[e.NewValue]);
                         }
 
-                        SetSelectedTime(new TimeSpan(previousSelectedTime.Value.Hours, minutes, previousSelectedTime.Value.Seconds), e.OldValue);
+                        SetSelectedTime(new TimeSpan(0, previousSelectedTime.Value.Hours, minutes, previousSelectedTime.Value.Seconds, previousSelectedTime.Value.Milliseconds), e.OldValue);
                     }
 
                     break;
@@ -903,13 +950,26 @@ namespace Syncfusion.Maui.Toolkit.Picker
                             seconds = int.Parse(secondCollection[e.NewValue]);
                         }
 
-                        SetSelectedTime(new TimeSpan(previousSelectedTime.Value.Hours, previousSelectedTime.Value.Minutes, seconds), e.OldValue);
+                        SetSelectedTime(new TimeSpan(0, previousSelectedTime.Value.Hours, previousSelectedTime.Value.Minutes, seconds, previousSelectedTime.Value.Milliseconds), e.OldValue);
                     }
 
                     break;
                 case 3:
                     {
                         UpdateMeridiemColumn(e, hourFormat, previousSelectedTime, selectedTime, minimumTime, maximumTime);
+                    }
+
+                    break;
+                case 4:
+                    {
+                        int millisecond = 0;
+                        if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > e.NewValue)
+                        {
+                            //// Get the millisecond value based on the selected index changes value.
+                            millisecond = int.Parse(millisecondCollection[e.NewValue]);
+                        }
+
+                        this.SetSelectedTime(new TimeSpan(0, previousSelectedTime.Value.Hours, previousSelectedTime.Value.Minutes, previousSelectedTime.Value.Seconds, millisecond), e.OldValue);
                     }
 
                     break;
@@ -955,11 +1015,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 _minuteColumn.ItemsSource = minutes;
             }
 
-            int minuteIndex = TimePickerHelper.GetMinuteOrSecondIndex(minutes, previousSelectedTime.Value.Minutes);
+            int minuteIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, previousSelectedTime.Value.Minutes);
             //// Get the minute value based on the selected index changes value.
             int minute = int.Parse(minutes[minuteIndex]);
 
-            SetSelectedTime(new TimeSpan(hour, minute, previousSelectedTime.Value.Seconds), e.OldValue);
+            SetSelectedTime(new TimeSpan(0, hour, minute, previousSelectedTime.Value.Seconds, previousSelectedTime.Value.Milliseconds), e.OldValue);
         }
 
         /// <summary>
@@ -992,7 +1052,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             bool isAMSelected = TimePickerHelper.IsAMText(meridiemCollection, e.NewValue);
             int neededHour = isAMSelected ? 0 : 12;
 
-            TimeSpan selectedDate = new TimeSpan((previousSelectedTime.Value.Hours % 12) + neededHour, previousSelectedTime.Value.Minutes, previousSelectedTime.Value.Seconds);
+            TimeSpan selectedDate = new TimeSpan(0, (previousSelectedTime.Value.Hours % 12) + neededHour, previousSelectedTime.Value.Minutes, previousSelectedTime.Value.Seconds, previousSelectedTime.Value.Milliseconds);
             DateTime selectedDates = Convert.ToDateTime(selectedDate.ToString());
 
             ObservableCollection<string> hours = TimePickerHelper.GetHours(hourFormat, HourInterval, selectedDates, minimumTime, maximumTime);
@@ -1015,11 +1075,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     _minuteColumn.ItemsSource = minutes;
                 }
 
-                int minuteIndex = TimePickerHelper.GetMinuteOrSecondIndex(minutes, previousSelectedTime.Value.Minutes);
+                int minuteIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, previousSelectedTime.Value.Minutes);
                 //// Get the minute value based on the selected index changes value.
                 int minute = int.Parse(minutes[minuteIndex]);
 
-                SetSelectedTime(new TimeSpan(hour, minute, previousSelectedTime.Value.Seconds), e.OldValue);
+                SetSelectedTime(new TimeSpan(0, hour, minute, previousSelectedTime.Value.Seconds, previousSelectedTime.Value.Milliseconds), e.OldValue);
             }
         }
 
@@ -1093,6 +1153,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 _meridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MeridiemHeaderText);
             }
+            else if (e.PropertyName == nameof(TimePickerColumnHeaderView.MilliSecondHeaderText))
+            {
+                _millisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MilliSecondHeaderText);
+            }
         }
 
         /// <summary>
@@ -1129,6 +1193,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         _meridiemColumn = GenerateMeridiemColumn(validSelectedTime, currentSelectedTime);
                         _meridiemColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(_meridiemColumn) : null;
                         pickerColumns.Add(_meridiemColumn);
+                        break;
+                    case 4:
+                        _millisecondColumn = GenerateMillisecondColumn();
+                        _millisecondColumn.SelectedItem = this.SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(_millisecondColumn) : null;
+                        pickerColumns.Add(_millisecondColumn);
                         break;
                 }
             }
@@ -1179,7 +1248,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return new PickerColumn
             {
                 ItemsSource = minutes,
-                SelectedIndex = TimePickerHelper.GetMinuteOrSecondIndex(minutes, selectedMinute),
+                SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, selectedMinute),
                 HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MinuteHeaderText),
             };
         }
@@ -1198,8 +1267,28 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return new PickerColumn()
             {
                 ItemsSource = seconds,
-                SelectedIndex = TimePickerHelper.GetMinuteOrSecondIndex(seconds, selectedSecond),
+                SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(seconds, selectedSecond),
                 HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.SecondHeaderText),
+            };
+        }
+
+        /// <summary>
+        /// Method to generate the millisecond column with items source and selected index based on format.
+        /// </summary>
+        /// <returns>Returns millisecond column details.</returns>
+        PickerColumn GenerateMillisecondColumn()
+        {
+            int selectedHour = SelectedTime?.Hours ?? _previousSelectedDateTime.Hour;
+            int selectedMinute = SelectedTime?.Minutes ?? _previousSelectedDateTime.Minute;
+            int selectedSecond = SelectedTime?.Seconds ?? _previousSelectedDateTime.Second;
+            int selectedMillisecond = SelectedTime?.Milliseconds ?? _previousSelectedDateTime.Millisecond;
+
+            ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, selectedHour, selectedMinute, selectedSecond, null, null, null);
+            return new PickerColumn()
+            {
+                ItemsSource = milliseconds,
+                SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(milliseconds, selectedMillisecond),
+                HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MilliSecondHeaderText),
             };
         }
 
@@ -1253,7 +1342,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > 0)
             {
-                int index = TimePickerHelper.GetMinuteOrSecondIndex(minuteCollection, currentSelectedTime.Value.Minutes);
+                int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minuteCollection, currentSelectedTime.Value.Minutes);
                 if (_minuteColumn.SelectedIndex != index)
                 {
                     _minuteColumn.SelectedIndex = index;
@@ -1262,7 +1351,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > 0)
             {
-                int index = TimePickerHelper.GetMinuteOrSecondIndex(secondCollection, currentSelectedTime.Value.Seconds);
+                int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(secondCollection, currentSelectedTime.Value.Seconds);
                 if (_secondColumn.SelectedIndex != index)
                 {
                     _secondColumn.SelectedIndex = index;
@@ -1278,12 +1367,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
             }
 
+            if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > 0)
+            {
+                int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(millisecondCollection, currentSelectedTime.Value.Milliseconds);
+                if (_millisecondColumn.SelectedIndex != index)
+                {
+                    _millisecondColumn.SelectedIndex = index;
+                }
+            }
+
             if (IsScrollSelectionAllowed() && SelectedTime == null)
             {
                 _hourColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_hourColumn);
                 _minuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_minuteColumn);
                 _secondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_secondColumn);
                 _meridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_meridiemColumn);
+                _millisecondColumn.SelectedIndex = PickerHelper.GetSelectedItemIndex(_millisecondColumn);
             }
         }
 
@@ -1321,7 +1420,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     _minuteColumn = new PickerColumn()
                     {
                         ItemsSource = minutes,
-                        SelectedIndex = TimePickerHelper.GetMinuteOrSecondIndex(minutes, currentSelectedTime.Minute),
+                        SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, currentSelectedTime.Minute),
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MinuteHeaderText),
                     };
                     _columns[index] = _minuteColumn;
@@ -1338,7 +1437,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     _secondColumn = new PickerColumn()
                     {
                         ItemsSource = seconds,
-                        SelectedIndex = TimePickerHelper.GetMinuteOrSecondIndex(seconds, currentSelectedTime.Second),
+                        SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(seconds, currentSelectedTime.Second),
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.SecondHeaderText),
                     };
                     _columns[index] = _secondColumn;
@@ -1574,6 +1673,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 AcceptCommand.Execute(e);
             }
+
+            IsOpen = false;
         }
 
         /// <summary>
@@ -1598,6 +1699,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     _minuteColumn.SelectedItem = null;
                     _secondColumn.SelectedItem = null;
                     _meridiemColumn.SelectedItem = null;
+                    _millisecondColumn.SelectedItem = null;
                 }
                 // Clear the internal selected time if it exists
                 if (_internalSelectedTime != null)
@@ -1611,6 +1713,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 DeclineCommand.Execute(e);
             }
+
+            IsOpen = false;
         }
 
         #endregion
@@ -1677,6 +1781,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 picker._minuteColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MinuteHeaderText);
                 picker._secondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.SecondHeaderText);
                 picker._meridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MeridiemHeaderText);
+                picker._millisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MilliSecondHeaderText);
             }
         }
 
@@ -1740,6 +1845,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 picker._minuteColumn.SelectedItem = null;
                 picker._secondColumn.SelectedItem = null;
                 picker._meridiemColumn.SelectedItem = null;
+                picker._millisecondColumn.SelectedItem = null;
                 picker.SelectionChanged?.Invoke(picker, new TimePickerSelectionChangedEventArgs() { OldValue = previousSelectedTime, NewValue = currentSelectedTime });
                 return;
             }
@@ -1749,6 +1855,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 picker._minuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._minuteColumn);
                 picker._secondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._secondColumn);
                 picker._meridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._meridiemColumn);
+                picker._millisecondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._millisecondColumn);
                 PickerContainer? pickerContainer = picker.GetPickerContainerValue();
                 pickerContainer?.UpdateScrollViewDraw();
                 pickerContainer?.InvalidateDrawable();
@@ -1868,13 +1975,40 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
+        /// Method invokes on millisecond interval property changed.
+        /// </summary>
+        /// <param name="bindable">The SfTimePicker object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMilliSecondIntervalPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null || (int)newValue <= 0)
+            {
+                return;
+            }
+
+            //// Get the format string order and check the index.
+            List<int> formatStringOrder = TimePickerHelper.GetFormatStringOrder(out _, picker.Format);
+            int millisecondIndex = formatStringOrder.IndexOf(4);
+            if (millisecondIndex == -1)
+            {
+                return;
+            }
+
+            picker._millisecondColumn = picker.GenerateMillisecondColumn();
+            //// Replace the millisecond column with millisecond interval.
+            picker._columns[millisecondIndex] = picker._millisecondColumn;
+        }
+
+        /// <summary>
         /// Method to get the default selected time span value for SfTimePicker.
         /// </summary>
         /// <returns>Returns the default selected time.</returns>
         static TimeSpan GetDefaultTimeSpan()
         {
             DateTime today = DateTime.Now;
-            return new TimeSpan(today.Hour, today.Minute, today.Second);
+            return new TimeSpan(0, today.Hour, today.Minute, today.Second, today.Millisecond);
         }
 
         /// <summary>

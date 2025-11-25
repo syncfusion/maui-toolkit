@@ -1,4 +1,5 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using ITextElement = Syncfusion.Maui.Toolkit.Graphics.Internals.ITextElement;
 
 namespace Syncfusion.Maui.Toolkit.SegmentedControl
 {
@@ -115,14 +116,18 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			// Inside a DataTemplate, we can have View, Layout, and ViewCell directly. If the template has ViewCell as its direct content,
 			// we cannot cast it to View. All layouts, controls, and views are base types of View, but ViewCell is not a type of View.
 			// Hence, we need to get the View from the ViewCell.
-			if (content is ViewCell cell)
+#if !NET10_0_OR_GREATER
+			if (content is ViewCell)
 			{
-				view = cell.View;
+				view = ((ViewCell)content).View;
 			}
 			else
 			{
 				view = (View)content;
 			}
+#else
+			view = (View)content;
+#endif
 
 			// Set the binding context if it's not already set.
 			view.BindingContext ??= info;
@@ -170,6 +175,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			focusedIndex = isRTL ? (focusedIndex + 1) % itemCount : (focusedIndex - 1 + itemCount) % itemCount;
 		}
 
-		#endregion
+#endregion
 	}
 }

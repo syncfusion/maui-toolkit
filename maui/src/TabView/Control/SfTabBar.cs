@@ -3419,40 +3419,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					foreach (var item in Items)
 					{
 						item.Touched -= OnTabItemTouched;
-						item.PropertyChanged -= OnTabItemPropertyChanged;
-						if (item is SfTabItem tabItem && tabItem is not null && tabItem.HeaderContent is not null)
-						{
-							tabItem.HeaderContent.BindingContext = null;
-							tabItem.ControlTemplate = null;
-						}
-
-						item.Content = null;
 					}
-
-					Items.CollectionChanged -= Items_CollectionChanged;
-					if(ItemsSource is INotifyCollectionChanged itemsSource)
-					{
-						itemsSource.CollectionChanged -= OnCollectionChanged;
-					}
-
-					if(_tabHeaderScrollView != null)
-					{
-						_tabHeaderScrollView.Scrolled -= TabHeaderScrollView_Scrolled;
-					}
-
-					if(_backwardArrow != null)
-					{
-						_backwardArrow.ScrollButtonClicked -= OnScrollBackwardClicked;
-					}
-
-					if(_forwardArrow != null)
-					{
-						_forwardArrow.ScrollButtonClicked -= OnScrollForwardClicked;
-					}
-
-					_tabHeaderContentContainer?.Children.Clear();
-					_tabHeaderParentContainer?.Children.Clear();
-					_tabHeaderItemContent?.Children.Clear();
 				}
 			}
 

@@ -370,16 +370,19 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 		static View CreateTemplateContent(DataTemplate dataTemplate)
         {
             var templateView = dataTemplate.CreateContent();
-            var viewCell = templateView as ViewCell;
-            if (viewCell is not null)
-            {
-                return viewCell.View;
-            }
-            else
+#if NET10_0
+            return (View)templateView;
+#else
+			if (templateView is ViewCell viewCell)
+			{
+				return viewCell.View;
+			}
+			else
             {
                 return (View)templateView;
             }
-        }
+#endif
+		}
 
 		#endregion
 
@@ -396,7 +399,11 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			// In WinUI, we will do clipping while pulling, which triggers the WrapperView procedure at runtime.
 			// which causes to removing and adding circle view to wrapper view. So, canvasControl will get loaded and unloaded at runtime
 			// causes a blank issue for first time pulling in WInUI.
-			if (Handler is not null)
+			if (Handler == null)
+			{
+			   return;
+			}
+			else
 			{
 				Handler.HasContainer = true;
 			}

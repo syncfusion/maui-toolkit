@@ -92,11 +92,17 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             // Layout should clip its children to its bounds when the value is true.
             IsClippedToBounds = true;
 #if IOS
-			IgnoreSafeArea = true;
+
+#if NET10_0
+            this.SafeAreaEdges = SafeAreaEdges.None;
+#else
+            IgnoreSafeArea = true;
+#endif
+
 #endif
 		}
 
-        #endregion
+#endregion
 
         #region Internal Methods
 

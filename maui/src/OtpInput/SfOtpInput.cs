@@ -1384,7 +1384,12 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 
             var layout = new AbsoluteLayout();
 #if IOS
+#if NET10_0_OR_GREATER
+            layout.SafeAreaEdges = SafeAreaEdges.None;
+#else
             layout.IgnoreSafeArea = true;
+#endif
+
 #endif
 			layout.BindingContext = this;
 #if WINDOWS || ANDROID
@@ -2232,16 +2237,48 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         }
 
 #if MACCATALYST || IOS
-        /// <summary>
-        /// Validates the input text for the OTP entry field, handling backspace and alphanumeric input.
-        /// </summary>
-        /// <param name="textField">The UITextField where the input is occurring.</param>
-        /// <param name="range">The range of the text to be replaced.</param>
-        /// <param name="inputText">The new string being entered.</param>
-        /// <returns>
-        /// Returns <c>true</c> if the input should proceed; otherwise, <c>false</c> to prevent input.
-        /// </returns>
-        bool ValidateText(UITextField textField, NSRange range, string inputText)
+
+		/// <summary>
+		/// Determines whether the specified text field should allow changes to the characters in the given ranges with the
+		/// provided replacement string.
+		/// </summary>
+		/// <param name="textField">The text field whose content is being modified.</param>
+		/// <param name="ranges">An array of ranges indicating the portions of the text field's content to be replaced.</param>
+		/// <param name="replacementString">The string to replace the characters in the specified ranges.</param>
+		/// <returns>true if the change is permitted; otherwise, false.</returns>
+		private bool Handle_ShouldChangeCharactersInRanges(UITextField textField, NSValue[] ranges, string replacementString)
+		{
+			return ValidateText(textField, MergeRanges(ranges), replacementString);
+		}
+
+		/// <summary>
+		/// Combines multiple NSRange values into a single range that encompasses all provided ranges.
+		/// </summary>
+		/// <remarks>If only one range is provided, that range is returned unchanged. The merged range starts at the
+		/// minimum location of all input ranges and has a length equal to the sum of their lengths.</remarks>
+		/// <param name="ranges">An array of NSValue objects, each containing an NSRange to be merged. Must contain at least one element.</param>
+		/// <returns>An NSRange representing the merged range that covers all input ranges.</returns>
+		private static NSRange MergeRanges(NSValue[] ranges)
+		{
+			var combinedRange = ranges.Length == 1
+				? ranges[0].RangeValue
+				: new Foundation.NSRange(
+					ranges.Min(r => r.RangeValue.Location),
+					(nint)ranges.Sum(r => r.RangeValue.Length)
+				);
+			return combinedRange;
+		}
+
+		/// <summary>
+		/// Validates the input text for the OTP entry field, handling backspace and alphanumeric input.
+		/// </summary>
+		/// <param name="textField">The UITextField where the input is occurring.</param>
+		/// <param name="range">The range of the text to be replaced.</param>
+		/// <param name="inputText">The new string being entered.</param>
+		/// <returns>
+		/// Returns <c>true</c> if the input should proceed; otherwise, <c>false</c> to prevent input.
+		/// </returns>
+		bool ValidateText(UITextField textField, NSRange range, string inputText)
         {
             if (_otpEntries is null)
             {
@@ -2367,7 +2404,19 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				// Unhook from previous handler specific to this OTPEntry
 				if (_platformViews.TryGetValue(textBox, out var previousPlatformView))
 				{
-					previousPlatformView.ShouldChangeCharacters -= ValidateText;
+					if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26,0))
+					{
+#if NET10_0_OR_GREATER
+						previousPlatformView.ShouldChangeCharactersInRanges -= Handle_ShouldChangeCharactersInRanges;
+#else
+						previousPlatformView.ShouldChangeCharacters -= ValidateText;
+#endif
+					}
+					else
+					{
+						previousPlatformView.ShouldChangeCharacters -= ValidateText;
+					}
+
 					_platformViews.Remove(textBox);
 				}
 #endif
@@ -2387,13 +2436,24 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
                 }
 
 #elif MACCATALYST || IOS
-				if (textBox.Handler?.PlatformView is UIKit.UITextField platformView)
+						if (textBox.Handler?.PlatformView is UIKit.UITextField platformView)
 				{
-					platformView.ShouldChangeCharacters += ValidateText;
+					if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
+					{
+#if NET10_0_OR_GREATER
+						platformView.ShouldChangeCharactersInRanges += Handle_ShouldChangeCharactersInRanges;
+#else
+						platformView.ShouldChangeCharacters += ValidateText;
+#endif
+					}
+					else
+					{
+						platformView.ShouldChangeCharacters += ValidateText;
+					}
 					_platformViews[textBox] = platformView;
 				}
 #endif
-			}
+					}
 		}
 
 

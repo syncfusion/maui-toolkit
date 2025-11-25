@@ -217,6 +217,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             View view;
             var content = template.CreateContent();
+#if NET9_0
             if (content is ViewCell)
             {
                 view = ((ViewCell)content).View;
@@ -225,6 +226,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 view = (View)content;
             }
+#elif NET10_0
+            view = (View)content;
+#endif
 
             if (view.BindingContext == null)
             {
@@ -244,6 +248,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             View view;
             var content = template.CreateContent();
+#if NET9_0
             if (content is ViewCell)
             {
                 view = ((ViewCell)content).View;
@@ -252,6 +257,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 view = (View)content;
             }
+#elif NET10_0
+            view = (View)content;
+#endif
 
             if (view.BindingContext == null && info != null)
             {
@@ -414,6 +422,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
         }
 
-        #endregion
+#endregion
     }
 }

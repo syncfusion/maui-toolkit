@@ -30,7 +30,9 @@ namespace Syncfusion.Maui.ControlsGallery
 		public MainPageiOS()
 		{
 			InitializeComponent();
+#pragma warning disable CS0618 // Type or member is obsolete
 			On<iOS>().SetUseSafeArea(true);
+#pragma warning restore CS0618 // Type or member is obsolete
 
 			if (Application.Current != null)
 			{
@@ -772,7 +774,11 @@ namespace Syncfusion.Maui.ControlsGallery
 		{
 			NavigationDrawerGrid.IsVisible = true;
 			NavigationDrawerGrid.ZIndex = 1;
+#if NET10_0
+			await NavigationDrawerGrid.TranslateToAsync(0, 0, 250, Easing.SinIn);
+#else
 			await NavigationDrawerGrid.TranslateTo(0, 0, 250, Easing.SinIn);
+#endif
 			Graylayout.IsVisible = true;
 		}
 
@@ -784,7 +790,11 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="e">The event arguments.</param>
 		void Graylayout_Tapped(object sender, EventArgs e)
 		{
+#if NET10_0
+			NavigationDrawerGrid.TranslateToAsync(-500, 0, 250, Easing.SinIn);
+#else
 			NavigationDrawerGrid.TranslateTo(-500, 0, 250, Easing.SinIn);
+#endif
 			Graylayout.IsVisible = false;
 			NavigationDrawerGrid.IsVisible = false;
 

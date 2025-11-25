@@ -228,9 +228,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					// Abort the PopupView animation when the window size changes.
 					AbortPopupViewAnimation();
 					ResetAnimatedProperties();
-					ResetPopupWidthHeight();
-
 					SyncPopupDimensionFields();
+					ResetPopupWidthHeight();
 
 					// Need to update the effect visual size, when the window is resized or the orientation changes.
 					if (IsOpen && ShowOverlayAlways && OverlayMode is PopupOverlayMode.Blur)

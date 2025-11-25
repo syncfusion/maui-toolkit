@@ -1372,10 +1372,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				Header = new Label { Text = "Header Content" }
 			};
 
-			if (expander.HeaderView != null)
-			{
-				expander.HeaderView.IconView = new ExpandCollapseButton(expander);
-			}
+			expander.HeaderView?.IconView = new ExpandCollapseButton(expander);
 
 			var method = typeof(SfExpander).GetMethod("CalculateHeaderAutoHeight", BindingFlags.NonPublic | BindingFlags.Instance);
 			method?.Invoke(expander, [300]);
@@ -1396,10 +1393,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				Header = new Label { Text = "Header Content" }
 			};
 
-			if (expander.HeaderView != null)
-			{
-				expander.HeaderView.IconView = new ExpandCollapseButton(expander);
-			}
+			expander.HeaderView?.IconView = new ExpandCollapseButton(expander);
 
 			var method = typeof(SfExpander).GetMethod("CalculateHeaderAutoHeight", BindingFlags.NonPublic | BindingFlags.Instance);
 			method?.Invoke(expander, [300]);
