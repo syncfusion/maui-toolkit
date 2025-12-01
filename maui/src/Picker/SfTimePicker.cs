@@ -1533,6 +1533,26 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SetDynamicResource(DisabledTextColorProperty, "SfTimePickerDisabledTextColor");
         }
 
+        /// <summary>
+        /// Method to update Selected Time based on confirmation.
+        /// </summary>
+        /// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
+        void UpdateInternalValueToSelection(bool shouldUpdateSelection)
+        {
+            // If the picker is not in Default mode and an internal selected time exists
+            if (shouldUpdateSelection && _internalSelectedTime != null)
+            {
+                // If the internal selected time is different from the currently selected time
+                if (!TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
+                {
+                    // Update the selected time with the internal selected time
+                    this.SelectedTime = _internalSelectedTime.Value;
+                    // Clear the internal selected time after applying it
+                    _internalSelectedTime = null;
+                }
+            }
+        }
+
         #endregion
 
         #region Override Methods
