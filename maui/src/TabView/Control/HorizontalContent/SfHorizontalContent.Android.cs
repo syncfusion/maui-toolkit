@@ -19,6 +19,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		double _moveX;
 		double _moveY;
 
+		// Flag set to true when horizontal movement exceeds threshold and is greater than vertical movement,
+		// indicating this should be processed as a swipe gesture rather than a tap
+		bool _shouldProcessTouchForSwipe;
+
 		// Constants for touch movement thresholds
 		const double VerticalScrollThreshold = 5;
 		const double HorizontalScrollThreshold = 15;
@@ -47,11 +51,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 							_downX = motionEvent.GetX();
 							_downY = motionEvent.GetY();
 							_initialPoint = currenTouchPoint;
+							_shouldProcessTouchForSwipe = false;
 							return false;
 						}
 					case MotionEventActions.Up:
 						{
 							_initialPoint = new Point(0, 0);
+							_shouldProcessTouchForSwipe = false;
 							break;
 						}
 					case MotionEventActions.Move:
@@ -59,15 +65,20 @@ namespace Syncfusion.Maui.Toolkit.TabView
 							_moveX = motionEvent.GetX();
 							_moveY = motionEvent.GetY();
 
-							// Check for vertical scrolling threshold
-							if (Math.Abs(_downY - _moveY) > VerticalScrollThreshold && Math.Abs(_downX - _moveX) < HorizontalScrollThreshold)
+							double horizontalDelta = Math.Abs(_downX - _moveX);
+							double verticalDelta = Math.Abs(_downY - _moveY);
+
+							// Check for vertical scrolling threshold - don't intercept vertical scrolls
+							if (verticalDelta > VerticalScrollThreshold && horizontalDelta < HorizontalScrollThreshold)
 							{
 								return false;
 							}
 
-							// Handle initial touch interaction
-							if (!_isPressed && Math.Abs(_downY - _moveY) != 0 && Math.Abs(_downX - _moveX) != 0)
+							// Only intercept if horizontal movement exceeds threshold and is greater than vertical movement
+							// This ensures taps with slight finger movement are not treated as swipes
+							if (!_isPressed && horizontalDelta > HorizontalScrollThreshold && horizontalDelta > verticalDelta)
 							{
+								_shouldProcessTouchForSwipe = true;
 								OnHandleTouchInteraction(PointerActions.Pressed, _initialPoint);
 								return true;
 							}
@@ -85,6 +96,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <param name="e">Pointer event arguments containing touch action and point.</param>
 		void ITouchListener.OnTouch(PointerEventArgs e)
 		{
+			if (!_shouldProcessTouchForSwipe)
+			{
+				return;
+			}
+
 			switch (e.Action)
 			{
 				case PointerActions.Pressed:
@@ -105,6 +121,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					{
 						// Handle the release action
 						OnHandleTouchInteraction(PointerActions.Released, e.TouchPoint);
+						_shouldProcessTouchForSwipe = false;
 						break;
 					}
 			}
