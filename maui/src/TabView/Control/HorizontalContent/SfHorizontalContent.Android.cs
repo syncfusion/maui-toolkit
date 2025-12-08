@@ -82,8 +82,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 								OnHandleTouchInteraction(PointerActions.Pressed, _initialPoint);
 								return true;
 							}
+							break;
 						}
+					case MotionEventActions.Cancel:
+					{
+						_shouldProcessTouchForSwipe = false;
 						break;
+					}
 				}
 			}
 
