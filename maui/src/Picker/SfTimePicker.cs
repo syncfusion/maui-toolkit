@@ -1540,17 +1540,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void UpdateInternalValueToSelection(bool shouldUpdateSelection)
         {
             // If the picker is not in Default mode and an internal selected time exists
-            if (shouldUpdateSelection && _internalSelectedTime != null)
+            if (shouldUpdateSelection && _internalSelectedTime != null && !TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
             {
-                // If the internal selected time is different from the currently selected time
-                if (!TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
-                {
-                    // Update the selected time with the internal selected time
-                    this.SelectedTime = _internalSelectedTime.Value;
-                    // Clear the internal selected time after applying it
-                    _internalSelectedTime = null;
-                }
-            }
+				// Update the selected time with the internal selected time
+				this.SelectedTime = _internalSelectedTime.Value;
+				// Clear the internal selected time after applying it
+				_internalSelectedTime = null;
+			}
         }
 
         #endregion
@@ -1675,19 +1671,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments</param>
         protected override void OnOkButtonClicked(EventArgs e)
         {
-            // If the picker is not in Default mode and an internal selected time exists
-            if (IsScrollSelectionAllowed() && _internalSelectedTime != null)
-            {
-                // If the internal selected time is different from the currently selected time
-                if (!TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
-                {
-                    // Update the selected time with the internal selected time
-                    this.SelectedTime = _internalSelectedTime.Value;
-                    // Clear the internal selected time after applying it
-                    _internalSelectedTime = null;
-                }
-            }
-
+			UpdateInternalValueToSelection(IsScrollSelectionAllowed());
             InvokeOkButtonClickedEvent(this, e);
             if (AcceptCommand != null && AcceptCommand.CanExecute(e))
             {

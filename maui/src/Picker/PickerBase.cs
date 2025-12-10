@@ -207,7 +207,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <returns>Returns the internal selection or not</returns>
         internal bool IsScrollSelectionAllowed()
         {
-            if (Mode != PickerMode.Default && FooterView.Height != 0 && FooterView.ShowOkButton && FooterTemplate == null)
+            if (Mode != PickerMode.Default && (int)FooterView.Height != 0 && FooterView.ShowOkButton && FooterTemplate == null)
             {
                 return true;
             }

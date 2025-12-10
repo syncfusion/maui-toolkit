@@ -639,7 +639,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
         void UpdateInternalValueToSelection(bool shouldUpdateSelection)
         {
-            // If the picker is not in Default mode
+            // If the picker is not in Default mode and has a single column
             if (shouldUpdateSelection && BaseColumns.Count == 1)
             {
                 // Iterate through each column in the picker
@@ -651,18 +651,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         continue;
                     }
                     // If the column has a valid item source and it's a list
-                    if (column.ItemsSource != null && column.ItemsSource is IList pickerCollection)
+                    if (column.ItemsSource != null && column.ItemsSource is IList pickerCollection && column.SelectedIndex >= 0 && column.SelectedIndex < pickerCollection.Count)
                     {
-                        // Check if the selected index is within the valid range of the collection
-                        if (column.SelectedIndex >= 0 && column.SelectedIndex < pickerCollection.Count)
-                        {
-                            // Apply the internal selected index to the actual selected index
-                            int selectedIndex = column._internalSelectedIndex;
-                            column._internalSelectedIndex = -1;
-                            // Apply selection
-                            column.SelectedIndex = selectedIndex;
-                        }
-                    }
+						// Apply the internal selected index to the actual selected index
+						int selectedIndex = column._internalSelectedIndex;
+						column._internalSelectedIndex = -1;
+						// Apply selection
+						column.SelectedIndex = selectedIndex;
+					}
                 }
             }
         }

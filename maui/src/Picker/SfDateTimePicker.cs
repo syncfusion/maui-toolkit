@@ -2329,24 +2329,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void UpdateInternalValueToSelection(bool shouldUpdateSelection)
         {
             // If the picker is not in Default mode and an internal selected date-time exists
-            if (shouldUpdateSelection && _internalSelectedDateTime != null)
+            if (shouldUpdateSelection && _internalSelectedDateTime != null && !DatePickerHelper.IsSameDateTime(_internalSelectedDateTime, SelectedDate))
             {
-                // If the internal selected date-time is different from the currently selected date
-                if (!DatePickerHelper.IsSameDateTime(_internalSelectedDateTime, SelectedDate))
-                {
-                    // Update the selected date with the internal selected date-time
-                    SelectedDate = _internalSelectedDateTime.Value;
-                    // Clear the internal selected date-time after applying it
-                    _internalSelectedDateTime = null;
-                }
-            }
+				// Update the selected date with the internal selected date-time
+				SelectedDate = _internalSelectedDateTime.Value;
+				// Clear the internal selected date-time after applying it
+				_internalSelectedDateTime = null;
+			}
         }
 
         /// <summary>
         /// Gets the internally selected date and time when scroll selection is allowed.
         /// </summary>
         /// <returns>
-        /// The <see cref="DateTime"/> value if scroll selection is enabled and an internal selection exists; otherwise, <c>null</c>.
+        /// The <see cref="DateTime"/> value if scroll selection is enabled and an internal selection exists; otherwise, the provided <paramref name="dateTime"/> parameter.
         /// </returns>
         DateTime GetScrollSelectedDateTime(DateTime dateTime)
         {
