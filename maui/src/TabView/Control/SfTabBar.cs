@@ -30,7 +30,6 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		// Dimension and positioning fields
 
-		readonly int _defaultTextPadding = 36;
         double _previousTabX = 0d;
         double _selectedTabX = 0d;
         double _currentIndicatorWidth = 0d;
@@ -214,6 +213,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 typeof(DataTemplate),
                 typeof(SfTabBar),
                 propertyChanged: OnHeaderTemplateChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="HeaderItemSpacing"/> bindable property.
+		/// </summary>
+		internal static readonly BindableProperty HeaderItemSpacingProperty =
+			BindableProperty.Create(
+				nameof(HeaderItemSpacing),
+				typeof(int),
+				typeof(SfTabBar),
+				36,
+				propertyChanged: OnHeaderItemSpacingChanged);
 
         /// <summary>
         /// Identifies the <see cref="HeaderDisplayMode"/> bindable property.
@@ -511,6 +521,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             get => (DataTemplate?)GetValue(HeaderItemTemplateProperty);
             set => SetValue(HeaderItemTemplateProperty, value);
+        }
+
+        /// <summary>
+        /// Gets or sets the value that defines the spacing between header items.
+        /// </summary>
+        /// <value>
+        /// It accepts int values and the default value is 36.
+        /// </value>
+        internal int HeaderItemSpacing
+        {
+	        get => (int)GetValue(HeaderItemSpacingProperty);
+	        set => SetValue(HeaderItemSpacingProperty, value);
         }
 
         /// <summary>
@@ -1481,6 +1503,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			CalculateTabItemsSourceWidth();
 		}
 
+        void UpdateTabHeaderItemSpacing()
+        {
+	        CalculateTabItemWidth();
+        }
+
         void AddTabViewItemFromTemplate(object? item)
         {
             var view = item as View;
@@ -2125,8 +2152,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     if (item.Header != null)
                     {
                         Size desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
-                        double width = desiredSize.Width + _defaultTextPadding;
-                        UpdateTabItemWidth(item, item.IsSelected ? width : _tabHeaderImageSize + _defaultTextPadding);
+                        double width = desiredSize.Width + HeaderItemSpacing;
+                        UpdateTabItemWidth(item, item.IsSelected ? width : _tabHeaderImageSize + HeaderItemSpacing);
                     }
                 }
             }
@@ -2163,7 +2190,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				if (item.HeaderContent != null)
 				{
 					Size headerContentSize = item.HeaderContent.Measure(double.PositiveInfinity, double.PositiveInfinity);
-					width = headerContentSize.Width + _defaultTextPadding;
+					width = headerContentSize.Width + HeaderItemSpacing;
 				}
 				else if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
                 {
@@ -2172,12 +2199,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 else if (item.ImageSource != null)
                 {
                     item.HeaderDisplayMode = TabBarDisplayMode.Image;
-                    width = _tabHeaderImageSize + _defaultTextPadding;
+                    width = _tabHeaderImageSize + HeaderItemSpacing;
                 }
                 else
                 {
                     item.HeaderDisplayMode = TabBarDisplayMode.Text;
-                    width = desiredSize.Width + _defaultTextPadding;
+                    width = desiredSize.Width + HeaderItemSpacing;
                 }
                 UpdateTabItemWidth(item, width);
             }
@@ -2189,22 +2216,22 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			if (HeaderDisplayMode == TabBarDisplayMode.Image)
             {
                 item.HeaderDisplayMode = TabBarDisplayMode.Image;
-                return _tabHeaderImageSize + _defaultTextPadding;
+                return _tabHeaderImageSize + HeaderItemSpacing;
             }
             else if (HeaderDisplayMode == TabBarDisplayMode.Text)
             {
                 item.HeaderDisplayMode = TabBarDisplayMode.Text;
-                return desiredSize.Width + _defaultTextPadding;
+                return desiredSize.Width + HeaderItemSpacing;
             }
             else
             {
                 if (item.ImagePosition == TabImagePosition.Left || item.ImagePosition == TabImagePosition.Right)
                 {
-                    return desiredSize.Width + _defaultTextPadding + _tabHeaderImageSize + item.ImageTextSpacing;
+                    return desiredSize.Width + HeaderItemSpacing + _tabHeaderImageSize + item.ImageTextSpacing;
                 }
                 else
                 {
-                    return desiredSize.Width + _defaultTextPadding;
+                    return desiredSize.Width + HeaderItemSpacing;
                 }
             }
         }
@@ -3462,6 +3489,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
         static void OnItemsChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateItems();
 
         static void OnHeaderTemplateChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateItemsSource();
+
+        static void OnHeaderItemSpacingChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateTabHeaderItemSpacing();
 
         static void OnItemsSourceChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateItemsSource();
 

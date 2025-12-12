@@ -1307,23 +1307,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
-		public void TestGetPrivateFieldShouldReturnExpectedValue()
-		{
-			// Assuming there's a private field named '_defaultTextPadding'
-			var value = GetPrivateField(tabBar, "_defaultTextPadding");
-			Assert.Equal(36, value);
-		}
-
-		[Fact]
-		public void SetPrivateFieldShouldUpdateValue()
-		{
-			// Assuming there's a private field named '_defaultTextPadding'
-			SetPrivateField(tabBar, "_defaultTextPadding", 50);
-			var value = GetPrivateField(tabBar, "_defaultTextPadding");
-			Assert.Equal(50, value);
-		}
-
-		[Fact]
 		public void TestItemsPropertyShouldUpdateValue()
 		{
 			var items = new TabItemCollection();
@@ -8881,6 +8864,65 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		}
 		#endregion
+		#region HeaderItemSpacing
+
+		[Fact]
+		public void HeaderItemSpacing_DefaultValue_ShouldBeZero()
+		{
+			var tabView = new SfTabView();
+
+			Assert.Equal(36, tabView.HeaderItemSpacing);
+		}
+
+		[Theory]
+		[InlineData(10)]
+		[InlineData(0)]
+		[InlineData(-5)]
+		public void HeaderItemSpacing_SetAndGet_ReturnsExpectedValue(int expected)
+		{
+			var tabView = new SfTabView
+			{
+				HeaderItemSpacing = expected
+			};
+
+			Assert.Equal(expected, tabView.HeaderItemSpacing);
+		}
+
+		[Fact]
+		public void HeaderItemSpacing_PropertyChanged_TriggersEvent_AndUpdatesTabBar()
+		{
+			var tabView = new SfTabView();
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+
+			bool eventTriggered = false;
+			string? changedPropertyName = null;
+
+			tabView.PropertyChanged += (sender, e) =>
+			{
+				if (e.PropertyName == nameof(SfTabView.HeaderItemSpacing))
+				{
+					eventTriggered = true;
+					changedPropertyName = e.PropertyName;
+				}
+			};
+
+			int newValue = 20;
+			tabView.HeaderItemSpacing = newValue;
+
+			Assert.True(eventTriggered);
+			Assert.Equal(nameof(SfTabView.HeaderItemSpacing), changedPropertyName);
+			Assert.NotNull(tabBar);
+			Assert.Equal(newValue, tabBar.HeaderItemSpacing);
+
+			// Test with another value
+			newValue = -10;
+			tabView.HeaderItemSpacing = newValue;
+
+			Assert.Equal(newValue, tabBar.HeaderItemSpacing);
+		}
+
+		#endregion
+
 		#region EnableRippleAnimation Unit Tests
 
 		[Fact]
