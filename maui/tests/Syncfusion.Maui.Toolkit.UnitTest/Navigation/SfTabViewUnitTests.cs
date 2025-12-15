@@ -8867,7 +8867,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		#region HeaderItemSpacing
 
 		[Fact]
-		public void HeaderItemSpacing_DefaultValue_ShouldBeZero()
+		public void HeaderItemSpacing_DefaultValue_ShouldBe36()
 		{
 			var tabView = new SfTabView();
 
