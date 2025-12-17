@@ -988,7 +988,6 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			// It is required by the ITextElement interface.
 		}
 
-
 		/// <summary>
 		/// Invoked when the FontAutoScalingEnabled property changes.
 		/// </summary>
