@@ -4,7 +4,7 @@
 
 The [Syncfusion® Toolkit for .NET MAUI](https://www.syncfusion.com/net-maui-toolkit?utm_source=msftdotnet&utm_medium=banner&utm_campaign=mauipremium_sep25) is a high-performance collection of UI controls designed to streamline cross-platform app development across Android, iOS, macOS, and Windows. With this toolkit, developers can deliver beautiful, feature-rich applications with minimal effort, cutting down development time while ensuring a seamless and engaging user experience across platforms.
 
-The Syncfusion® Toolkit is built with community collaboration in mind, aiming to incorporate user feedback and contributions. It is the perfect companion for developers looking to build engaging cross-platform applications faster and more efficiently using the Syncfusion® ecosystem.
+The Syncfusion® Toolkit is built with community collaboration in mind, aiming to incorporate user feedback and contributions. It is the perfect companion for developers looking to build engaging cross-platform applications faster and more efficiently using the Syncfusion® ecosystems.
 
 [![NuGet version](https://img.shields.io/nuget/v/Syncfusion.Maui.Toolkit)](https://www.nuget.org/packages/Syncfusion.Maui.Toolkit)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Syncfusion.Maui.Toolkit)](https://www.nuget.org/stats/packages/Syncfusion.Maui.Toolkit?groupby=Version)
