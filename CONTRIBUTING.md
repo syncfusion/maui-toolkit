@@ -8,7 +8,7 @@ Important: If you are considering a significant change or feature, please open a
 
 We are in the early stages of building the Syncfusion Toolkit for .NET MAUI, and we're excited for you to join us during this journey!
 
-Please refer to our [Development Guide](DEVELOPMENT.md) for instructions on setting up your development environment.
+Please refer to our [Development Guide](DEVELOPMENT.md) for instructions on setting up your development environment. 
 
 ### What to Work On
 
