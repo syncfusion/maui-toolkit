@@ -1549,6 +1549,8 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		void ApplyThemeResources()
 		{
 		   SetDynamicResource(OverlayBackgroundColorProperty, "SfBottomSheetOverlayBackgroundColor");
+		   SetDynamicResource(BackgroundProperty, "SfBottomSheetBackground");
+		   SetDynamicResource(GrabberBackgroundProperty, "SfBottomSheetGrabberBackground");
 		}
 
 		/// <summary>
