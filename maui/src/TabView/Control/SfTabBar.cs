@@ -3449,6 +3449,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					}
 				}
 			}
+			else
+			{
+				if (Items != null)
+				{
+					foreach (var item in Items)
+					{
+						item.Touched -= OnTabItemTouched;
+						item.Touched += OnTabItemTouched;
+					}
+				}
+			}
 
 			base.OnHandlerChanged();
 		}
