@@ -20,11 +20,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		double _moveY;
 
 		// Constants for touch movement thresholds
-		const double VerticalScrollThreshold = 2;
-		const double HorizontalScrollThreshold = 6;
 		double _density = Android.App.Application.Context.Resources.DisplayMetrics.Density;
-		double _horizontalScrollThreshold => HorizontalScrollThreshold * _density;
-		double _verticalScrollThreshold => VerticalScrollThreshold * _density;
+		double _swipeThreshold => 5 * _density;
+
 
 		#endregion
 
@@ -63,13 +61,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 							_moveY = motionEvent.GetY();
 
 							// Check for vertical scrolling threshold
-							if (Math.Abs(_downY - _moveY) > _verticalScrollThreshold  && Math.Abs(_downX - _moveX) < _horizontalScrollThreshold)
+							if (Math.Abs(_downY - _moveY) > _swipeThreshold && Math.Abs(_downX - _moveX) < _swipeThreshold)
 							{
 								return false;
 							}
 
 							// Handle initial touch interaction
-							if (!_isPressed && Math.Abs(_downY - _moveY) > _verticalScrollThreshold && Math.Abs(_downX - _moveX)  > _horizontalScrollThreshold)
+							if (!_isPressed && Math.Abs(_downY - _moveY) > _swipeThreshold && Math.Abs(_downX - _moveX)  > _swipeThreshold)
 							{
 								OnHandleTouchInteraction(PointerActions.Pressed, _initialPoint);
 								return true;
