@@ -67,6 +67,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                 _isChildScrolledVertically = IsChildElementScrolled(PullableContent.GetVisualTreeDescendants().FirstOrDefault(), new Point(ev.RawX / _density, ev.RawY / _density));
             }
 
+            // 998288 - A slight downward movement during a tap is treated as a pull gesture, So add 10px vertical threshold before treating as pull gesture.
             if ((currenTouchPoint.Y - this._downY) >= 10 && _downY < currenTouchPoint.Y && !_isChildScrolledVertically)
             {
                 return true;
@@ -134,10 +135,10 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
         {
             if (Handler is not null && Handler.PlatformView is not null)
             {
-				// When the handler is changed without creating a new virtual view, adding a touch listener will skip attaching touch wiring to the native view.
-				// This is because the TouchDetector will still remain in the VirtualView and will be wired with the old handler and old native view.
-				this.RemoveTouchListener(this);
-				this.AddTouchListener(this);
+                // When the handler is changed without creating a new virtual view, adding a touch listener will skip attaching touch wiring to the native view.
+                // This is because the TouchDetector will still remain in the VirtualView and will be wired with the old handler and old native view.
+                this.RemoveTouchListener(this);
+                this.AddTouchListener(this);
                 _nativeView = Handler.PlatformView as LayoutViewGroupExt;
 
                 if (_nativeView is not null && _nativeView.Resources is not null && _nativeView.Resources.DisplayMetrics is not null)
