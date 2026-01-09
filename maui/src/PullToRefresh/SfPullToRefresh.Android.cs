@@ -67,8 +67,8 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                 _isChildScrolledVertically = IsChildElementScrolled(PullableContent.GetVisualTreeDescendants().FirstOrDefault(), new Point(ev.RawX / _density, ev.RawY / _density));
             }
 
-            // 998288 - A slight downward movement during a tap is treated as a pull gesture, So add 10px vertical threshold before treating as pull gesture.
-            if ((currenTouchPoint.Y - this._downY) >= 10 && _downY < currenTouchPoint.Y && !_isChildScrolledVertically)
+            // 998288 - A slight downward movement during a tap is treated as a pull gesture, so add a 10-unit vertical threshold (device-independent units) before treating it as a pull gesture.
+            if ((currenTouchPoint.Y - this._downY) >= 10 && !_isChildScrolledVertically)
             {
                 return true;
             }
