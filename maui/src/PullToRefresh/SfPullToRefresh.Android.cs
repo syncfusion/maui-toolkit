@@ -67,7 +67,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                 _isChildScrolledVertically = IsChildElementScrolled(PullableContent.GetVisualTreeDescendants().FirstOrDefault(), new Point(ev.RawX / _density, ev.RawY / _density));
             }
 
-            if (_downY < currenTouchPoint.Y && !_isChildScrolledVertically)
+            if ((currenTouchPoint.Y - this._downY) >= 10 && _downY < currenTouchPoint.Y && !_isChildScrolledVertically)
             {
                 return true;
             }
