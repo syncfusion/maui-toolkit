@@ -8,11 +8,11 @@ pool:
   vmImage: 'windows-2022'
 
 steps:
-# Step 1: Install .NET 9.0 SDK
+# Step 1: Install .NET 10.0 SDK
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '9.0.x' # Use the latest .NET 9.0 SDK version
+    version: '10.0.x' # Use the latest .NET 9.0 SDK version
     installationPath: $(Agent.ToolsDirectory)/dotnet
 
 # Step 2: Verify .NET SDK Installation
