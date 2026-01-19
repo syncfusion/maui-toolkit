@@ -150,7 +150,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			int leftInsets = 0;
 #if NET10_0
-            // In .NET 10, the root view’s width in landscape includes the navidation bar, so subtract the left window inset from the root view width to get the usable content width.
+            // In .NET 10, the root view’s width in landscape includes the navigation bar, so subtract the left window inset from the root view width to get the usable content width.
             leftInsets = PopupExtension.GetWindowInsets("Left");
 #endif
 			return (int)Math.Round((platformRootView!.Width - leftInsets) / WindowOverlayHelper._density);
