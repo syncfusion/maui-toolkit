@@ -150,7 +150,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			int leftInsets = 0;
 #if NET10_0
-            // In .NET 10, the root view’s width in landscape includes the navigation bar, so subtract the left window inset from the root view width to get the usable content width.
+            // In .NET 10, the root view’s width in landscape includes the navidation bar, so subtract the left window inset from the root view width to get the usable content width.
             leftInsets = PopupExtension.GetWindowInsets("Left");
 #endif
 			return (int)Math.Round((platformRootView!.Width - leftInsets) / WindowOverlayHelper._density);
@@ -174,16 +174,20 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			}
 			else if (platformRootView is not null)
 			{
-				int topInsets = 0;
-				int bottomInsets = 0;
 #if NET10_0
+                int topInsets = 0;
+                int bottomInsets = 0;
+
                 // In .NET 10, the root view’s height includes the navigation bar, so subtract the bottom window inset from the root view height to get the usable content height.
                 bottomInsets = PopupExtension.GetWindowInsets("Bottom");
                 if (!WindowFlagHasFullScreen)
                 {
                     topInsets = PopupExtension.GetWindowInsets("Top");
                 }
-#endif
+
+               // 994925: In resize mode, skip adding keyboard height in .NET 10 because the root view already includes it.
+                platformRootViewHeight = platformRootView.Height - topInsets - bottomInsets;
+#else
 
 				if (IsResizeMode() && !WindowFlagHasNoLimits)
 				{
@@ -191,8 +195,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 				else
 				{
-					platformRootViewHeight = platformRootView.Height - topInsets - bottomInsets;
+					platformRootViewHeight = platformRootView.Height;
 				}
+#endif
 
 				return (int)Math.Round(platformRootViewHeight / WindowOverlayHelper._density);
 			}
@@ -265,7 +270,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							{
 #if NET10_0
                             // In .NET 10 case, fall back to decorViewFrame when Top inset is 0.
-                            return insets.Top == 0 ? (int)Math.Round((WindowOverlayHelper._decorViewFrame?.Top ?? 0f) / WindowOverlayHelper._density) : insets.Top;
+                            return insets.Top == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Top ?? 0f / WindowOverlayHelper._density) : insets.Top;
 #else
 								return insets.Top;
 #endif
@@ -274,7 +279,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							{
 #if NET10_0
                             // In .NET 10 case, fall back to decorViewFrame when Left inset is 0.
-                            return insets.Left == 0 ? (int)Math.Round((WindowOverlayHelper._decorViewFrame?.Left ?? 0f) / WindowOverlayHelper._density) : insets.Left;
+                            return insets.Left == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Left ?? 0f / WindowOverlayHelper._density) : insets.Left;
 #else
 								return insets.Left;
 #endif

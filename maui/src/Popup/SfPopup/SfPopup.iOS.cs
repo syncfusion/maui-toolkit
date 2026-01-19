@@ -58,16 +58,16 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				if (ModalPage is not null)
 				{
 					// Wired the size change event for the Modal page when a popup is opened from it.
-					ModalPage.SizeChanged += this.OnMainPageSizeChanged;
+					ModalPage.SizeChanged += OnMainPageSizeChanged;
 				}
 				else if (windowPage is Shell shellPage && shellPage.CurrentPage != null)
 				{
 					// Maui:990575-TODO : Shell page size changed event not triggered after .NET 10 update, so wire the size changed event for the current page of the Shell page.
-					shellPage.CurrentPage.SizeChanged += this.OnMainPageSizeChanged;
+					shellPage.CurrentPage.SizeChanged += OnMainPageSizeChanged;
 				}
 				else
 				{
-					windowPage.SizeChanged += this.OnMainPageSizeChanged;
+					windowPage.SizeChanged += OnMainPageSizeChanged;
 				}
 			}
 
