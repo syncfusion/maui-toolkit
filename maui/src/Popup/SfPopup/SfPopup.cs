@@ -1828,16 +1828,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					_showYPosition = -1;
 					_keyboardHeight = 0;
 					SetPopupViewDefaultHeight();
-
-					if (_popupOverlayContainer is not null)
-					{
-						_popupOverlayContainer.Parent = null;
-					}
-
-					if (_popupView is not null)
-					{
-						_popupView.Parent = null;
-					}
 				}
 
 				if (_popupView is not null && _popupView._popup._taskCompletionSource is not null)
@@ -2105,7 +2095,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			// 989436 : [Android] Popup is not shown when IsOpen is set in XAML or constructor at loading with a Shell page.
 			// In Android, the Shell page is not loaded initially, so the popup is displayed only after the Shell page has loaded.
-			if (_popupView == null || (PopupExtension.GetMainWindowPage() is Shell shellPage && !shellPage.IsLoaded))
+			if (_popupView == null || (PopupExtension.GetMainWindowPage() is Shell shellPage && shellPage.CurrentPage == null && !shellPage.IsLoaded))
 			{
 				_isOpenDeferred = true;
 				WireEvents();
@@ -3360,6 +3350,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				ResetAnimatedProperties();
 				RemovePopupViewAndResetValues();
+
+				// 991903: Fixed issue where Popup closing animation was not working on iOS and macOS.
+				if (_popupOverlayContainer is not null)
+				{
+					_popupOverlayContainer.Parent = null;
+				}
+
+				if (_popupView is not null)
+				{
+					_popupView.Parent = null;
+				}
 			}
 
 			RaisePopupEvent();
@@ -3713,7 +3714,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		static void OnAppearanceModePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			var popup = (SfPopup)bindable;
-			if (popup is not null && popup._popupView is not null && popup._popupView._footerView is not null && popup._popupView.IsViewLoaded)
+			if (popup is not null && popup._popupView is not null && popup._popupView._footerView is not null)
 			{
 				popup._popupView._footerView.UpdateFooterChild();
 				if (popup.IsOpen)

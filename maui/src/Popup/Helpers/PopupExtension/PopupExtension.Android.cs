@@ -1,4 +1,5 @@
-﻿using Android.Graphics;
+﻿using System;
+using Android.Graphics;
 using Android.Views;
 using AndroidX.Core.View;
 using Microsoft.Maui.Platform;
@@ -139,6 +140,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static int GetScreenWidth()
 		{
 			var platformRootView = WindowOverlayHelper._platformRootView;
+			var decorViewFrame = WindowOverlayHelper._decorViewFrame;
 
 			// Maui:826232 Referred xamarin popupLayout to take widthPixels.
 			// PlatfromRootView will be null, when calling the show(0,0) from MainPage, NavigationPage, Tabbed and flyoutPage Constructor.
@@ -147,13 +149,54 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				var widthPixel = (int)(Android.Content.Res.Resources.System.DisplayMetrics.WidthPixels / WindowOverlayHelper._density);
 				return widthPixel;
 			}
-
-			int leftInsets = 0;
+			else if (decorViewFrame is not null)
+			{
+				double decorViewFrameLeft;
+				int rightPx = 0;
 #if NET10_0
-            // In .NET 10, the root view’s width in landscape includes the navigation bar, so subtract the left window inset from the root view width to get the usable content width.
-            leftInsets = PopupExtension.GetWindowInsets("Left");
+				// 997668: Popup renders outside the visible bounds on Android when the system bars (status bar and navigation bar) are hidden.
+				if ((int)Android.OS.Build.VERSION.SdkInt >= 35 && DeviceDisplay.MainDisplayInfo.Orientation is DisplayOrientation.Landscape)
+				{
+					int leftPx = 0;
+
+					// On Android 15/16 with edge-to-edge, DecorViewFrame.Left can be 0 in landscape.
+					var windowInsets = ViewCompat.GetRootWindowInsets(WindowOverlayHelper._decorViewContent);
+					if (windowInsets is not null && windowInsets.DisplayCutout is not null)
+					{
+						// Prefer the system bars left and right insets even if hidden/overlayed.
+						leftPx = windowInsets.DisplayCutout.SafeInsetLeft;
+						rightPx = windowInsets.DisplayCutout.SafeInsetRight;
+					}
+
+					decorViewFrameLeft = leftPx / WindowOverlayHelper._density;
+				}
+				else
+				{
+					decorViewFrameLeft = decorViewFrame.Left / WindowOverlayHelper._density;
+				}
+#else
+                decorViewFrameLeft = decorViewFrame.Left / WindowOverlayHelper._density;
 #endif
-			return (int)Math.Round((platformRootView!.Width - leftInsets) / WindowOverlayHelper._density);
+				var decorViewFrameRight = (decorViewFrame.Right - rightPx) / WindowOverlayHelper._density;
+
+				if (WindowFlagHasNoLimits && platformRootView is not null)
+				{
+					var platformRootViewWidth = platformRootView.Width;
+#if NET10_0
+					if (WindowFlagHasFullScreen && (int)Android.OS.Build.VERSION.SdkInt >= 35 && DeviceDisplay.MainDisplayInfo.Orientation is DisplayOrientation.Landscape)
+					{
+						// In .NET 10, the root view<65>s width includes the decorViewFrameLeft and decorViewFrameRight, so subtract the decorViewFrameLeft and decorViewFrameRight.
+						decorViewFrameRight = rightPx / WindowOverlayHelper._density;
+						platformRootViewWidth = (int)(platformRootViewWidth - ((decorViewFrameLeft + decorViewFrameRight) * WindowOverlayHelper._density));
+					}
+#endif
+					return (int)Math.Round(platformRootViewWidth / WindowOverlayHelper._density);
+				}
+
+				return (int)Math.Round(decorViewFrameRight - decorViewFrameLeft);
+			}
+
+			return 0;
 		}
 
 		/// <summary>
@@ -163,7 +206,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static int GetScreenHeight()
 		{
 			var platformRootView = WindowOverlayHelper._platformRootView;
-			double platformRootViewHeight = 0;
+			var decorViewFrame = WindowOverlayHelper._decorViewFrame;
 
 			// Maui:826232 Referred xamarin popupLayout to take withPixels.
 			// PlatfromRootView will be null, when calling the show(0,0) from MainPage, NavigationPage, Tabbed and flyoutPage Constructor.
@@ -172,29 +215,51 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				var heightPixel = (int)(Android.Content.Res.Resources.System.DisplayMetrics.HeightPixels / WindowOverlayHelper._density);
 				return heightPixel;
 			}
-			else if (platformRootView is not null)
+			else if (decorViewFrame is not null)
 			{
-				int topInsets = 0;
-				int bottomInsets = 0;
+				double decorViewFrameTop;
 #if NET10_0
-                // In .NET 10, the root view’s height includes the navigation bar, so subtract the bottom window inset from the root view height to get the usable content height.
-                bottomInsets = PopupExtension.GetWindowInsets("Bottom");
-                if (!WindowFlagHasFullScreen)
-                {
-                    topInsets = PopupExtension.GetWindowInsets("Top");
-                }
-#endif
-
-				if (IsResizeMode() && !WindowFlagHasNoLimits)
+				// 997668: Popup renders outside the visible bounds on Android when the system bars (status bar and navigation bar) are hidden.
+				if ((int)Android.OS.Build.VERSION.SdkInt >= 35 && DeviceDisplay.MainDisplayInfo.Orientation is not DisplayOrientation.Landscape)
 				{
-					platformRootViewHeight = platformRootView.Height + (GetKeyboardHeight() * WindowOverlayHelper._density);
+					// On Android 15/16 with edge-to-edge, DecorViewFrame.Top can be 0.
+					int topPx = 0;
+					var windowInsets = ViewCompat.GetRootWindowInsets(WindowOverlayHelper._decorViewContent);
+					if (windowInsets is not null)
+					{
+						// status bar height even if hidden/overlayed.
+						var statusBarInsets = windowInsets.GetInsetsIgnoringVisibility(WindowInsetsCompat.Type.StatusBars());
+						if (statusBarInsets is not null)
+						{
+							topPx = statusBarInsets.Top;
+						}
+					}
+
+					decorViewFrameTop = topPx / WindowOverlayHelper._density;
 				}
 				else
 				{
-					platformRootViewHeight = platformRootView.Height - topInsets - bottomInsets;
+					decorViewFrameTop = decorViewFrame.Top / WindowOverlayHelper._density;
+				}
+#else
+                decorViewFrameTop = decorViewFrame.Top / WindowOverlayHelper._density;
+#endif
+				var decorViewFrameBottom = (decorViewFrame.Bottom + (PopupExtension.GetKeyboardHeight() * WindowOverlayHelper._density)) / WindowOverlayHelper._density;
+
+				if (WindowFlagHasNoLimits && platformRootView is not null)
+				{
+					var platformRootViewHeight = platformRootView.Height;
+#if NET10_0
+					if (WindowFlagHasFullScreen && (int)Android.OS.Build.VERSION.SdkInt >= 35 && DeviceDisplay.MainDisplayInfo.Orientation is not DisplayOrientation.Landscape)
+					{
+						// In .NET 10, the root view<65>s height includes the decorViewFrameTop, so subtract the decorViewFrameTop.
+						platformRootViewHeight = (int)(platformRootViewHeight - (decorViewFrameTop * WindowOverlayHelper._density));
+					}
+#endif
+					return (int)Math.Round(platformRootViewHeight / WindowOverlayHelper._density);
 				}
 
-				return (int)Math.Round(platformRootViewHeight / WindowOverlayHelper._density);
+				return (int)Math.Round(decorViewFrameBottom - decorViewFrameTop);
 			}
 
 			return 0;
@@ -265,7 +330,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							{
 #if NET10_0
                             // In .NET 10 case, fall back to decorViewFrame when Top inset is 0.
-                            return insets.Top == 0 ? (int)Math.Round((WindowOverlayHelper._decorViewFrame?.Top ?? 0f) / WindowOverlayHelper._density) : insets.Top;
+                            return insets.Top == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Top ?? 0f / WindowOverlayHelper._density) : insets.Top;
 #else
 								return insets.Top;
 #endif
@@ -274,7 +339,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 							{
 #if NET10_0
                             // In .NET 10 case, fall back to decorViewFrame when Left inset is 0.
-                            return insets.Left == 0 ? (int)Math.Round((WindowOverlayHelper._decorViewFrame?.Left ?? 0f) / WindowOverlayHelper._density) : insets.Left;
+                            return insets.Left == 0 ? (int)Math.Round(WindowOverlayHelper._decorViewFrame?.Left ?? 0f / WindowOverlayHelper._density) : insets.Left;
 #else
 								return insets.Left;
 #endif
