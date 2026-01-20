@@ -1052,7 +1052,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 			int minute = 0;
 			if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > e.NewValue)
 			{
-				//// Get the hour value based on the selected index changes value.
+				// Get the hour value based on the selected index changes value.
 				minute = int.Parse(minuteCollection[e.NewValue]);
 			}
 
