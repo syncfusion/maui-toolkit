@@ -4,6 +4,7 @@ using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 using UIKit;
 using Syncfusion.Maui.Toolkit.Platform;
 using Syncfusion.Maui.Toolkit.TextInputLayout;
+using Microsoft.Maui.Graphics;
 
 namespace Syncfusion.Maui.Toolkit.TabView
 {
@@ -75,6 +76,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     var touchLocation = uiTouch.LocationInView(uiTouch.View?.Superview);
 					var textInputView = FindSfTextInputLayout(uiTouch.View?.Superview);
                     this._canProcessTouch = true;
+
+                    var touchViewType = touchView?.GetType();
+                    if (touchViewType is not null)
+                    {
+						var hasDrawAction = touchViewType.GetProperties().Any(p => p.PropertyType == typeof(Action<ICanvas, RectF>));
+                        if (hasDrawAction)
+                        {
+                            this._canProcessTouch = false;
+                            return;
+                        }
+					}
+
                     if (textInputView != null)
                     {
                         if (uiTouch.GestureRecognizers != null)

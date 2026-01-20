@@ -128,7 +128,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			// Accept and Decline button text in SfPopup is cropped initially when FooterFontSize is set.
 			UpdateFooterStyle();
-			UpdateFooterChildView();
+			UpdateFooterChildProperties();
 		}
 
 		/// <summary>
@@ -238,52 +238,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			Children.Add(_footerView);
 		}
-
-		/// <summary>
-		/// Updates the width and height of the child views.
-		/// </summary>
-		void UpdateFooterChildView()
-		{
-			if (_popupView is not null && _popupView._popup is not null)
-			{
-				if (_popupView._popup.AppearanceMode == PopupButtonAppearanceMode.OneButton)
-				{
-					// Need to measure the button, only when the button is not visible(On Initial loading), remeasuring multiple times will cause the improper size for the button(Run time scenario).
-					if (_acceptButton is not null && !_acceptButton.IsVisible)
-					{
-						_acceptButton.HorizontalOptions = LayoutOptions.End;
-						_acceptButtonWidth = GetFooterButtonWidth(_acceptButton);
-						_acceptButton.WidthRequest = Math.Max(0, _acceptButtonWidth);
-						_acceptButton.HeightRequest = Math.Max(0, _footerButtonHeight);
-					}
-				}
-				else if (_popupView._popup.AppearanceMode == PopupButtonAppearanceMode.TwoButton)
-				{
-					if (_acceptButton is not null && !_acceptButton.IsVisible)
-					{
-						_acceptButtonWidth = GetFooterButtonWidth(_acceptButton);
-						_acceptButton.WidthRequest = Math.Max(0, _acceptButtonWidth);
-						_acceptButton.HeightRequest = Math.Max(0, _footerButtonHeight);
-					}
-
-					if (_declineButton is not null && !_declineButton.IsVisible)
-					{
-						_declineButtonWidth = GetFooterButtonWidth(_declineButton);
-						_declineButton.WidthRequest = Math.Max(0, _declineButtonWidth);
-						_declineButton.HeightRequest = Math.Max(0, _footerButtonHeight);
-					}
-					if (_declineButton is not null)
-					{
-						_declineButton.IsVisible = _popupView._popup.ShowFooter;
-					}
-				}
-				if (_acceptButton is not null)
-				{
-					_acceptButton.IsVisible = _popupView._popup.ShowFooter;
-				}
-			}
-		}
-
 
 		/// <summary>
 		/// Gets the footer button width based on text size.
