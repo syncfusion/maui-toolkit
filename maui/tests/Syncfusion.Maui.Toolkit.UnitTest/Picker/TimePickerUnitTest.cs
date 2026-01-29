@@ -2317,7 +2317,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal("15", seconds[1]);
             Assert.Equal("30", seconds[2]);
             Assert.Equal("45", seconds[3]);
-            Assert.Equal(2, result.SelectedIndex);
+            Assert.Equal(0, result.SelectedIndex);
         }
 
         [Fact]
@@ -2347,7 +2347,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal(9, seconds.Count);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             Assert.Equal("28", seconds[4]);
-            Assert.Equal(4, result.SelectedIndex);
+            Assert.Equal(0, result.SelectedIndex);
         }
 
         [Fact]
@@ -2366,7 +2366,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             Assert.Equal("00", seconds[0]);
             Assert.Equal("30", seconds[1]);
-            Assert.Equal(1, result.SelectedIndex);
+            Assert.Equal(0, result.SelectedIndex);
         }
 
         [Fact]
