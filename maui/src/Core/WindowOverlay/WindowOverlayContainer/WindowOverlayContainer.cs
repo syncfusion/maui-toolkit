@@ -7,5 +7,8 @@
             get { return false; }
         }
         internal virtual void ProcessTouchInteraction(float x, float y) { }
-    }
+
+		// Handles Back button interactions for overlays
+		internal virtual void ProcessBackButtonPressed() { }
+	}
 }

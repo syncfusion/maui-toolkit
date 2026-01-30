@@ -10,7 +10,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
       
         protected override WindowOverlayStack CreatePlatformView()
         {
-            return new WindowOverlayStack(Context);
-        }
+			// Creates the platform WindowOverlayStack that hosts overlay elements.
+			// Assigns the cross platform VirtualView so platform events can be routed back.
+			var windowOverlayStack = new WindowOverlayStack(Context);
+			windowOverlayStack.OverlayContanier = VirtualView as WindowOverlayContainer;
+			return windowOverlayStack;
+		}
     }
 }
