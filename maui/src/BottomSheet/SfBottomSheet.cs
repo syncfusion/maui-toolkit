@@ -2179,10 +2179,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			if (_bottomSheet is not null)
 			{
 				var bottomSheetAnimation = new Animation(d => 
-			{
-				_bottomSheet.TranslationY = d;
-				_bottomSheet.Margin = new Thickness(0, d, 0, 0);
-			}, _bottomSheet.TranslationY, targetPosition + topPadding);
+				{
+					_bottomSheet.TranslationY = d;
+					_bottomSheet.Margin = new Thickness(0, d, 0, 0);
+				}, _bottomSheet.TranslationY, targetPosition + topPadding);
 				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) =>
 				{
 					UpdateBottomSheetHeight();
