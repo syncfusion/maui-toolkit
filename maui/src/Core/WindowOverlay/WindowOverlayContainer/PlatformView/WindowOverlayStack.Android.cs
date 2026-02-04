@@ -1,6 +1,7 @@
 ﻿using Android.Content;
 using Android.Runtime;
 using Android.Util;
+using Android.Views;
 using Android.Widget;
 
 namespace Syncfusion.Maui.Toolkit.Internals
@@ -10,7 +11,10 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		// To check whether the popup has Overlay Mode blur.
 		internal bool HasBlurMode { get; set; }
 
-        public WindowOverlayStack(Context context)
+		// Represents the cross platform overlay view used for event delegation.
+		internal WindowOverlayContainer? OverlayContanier { get; set; }
+
+		public WindowOverlayStack(Context context)
             : base(context)
         {
         }
@@ -33,7 +37,23 @@ namespace Syncfusion.Maui.Toolkit.Internals
         protected WindowOverlayStack(IntPtr javaReference, JniHandleOwnership transfer)
             : base(javaReference, transfer)
         {
-        }
-    }
+		}
+
+		/// <summary>
+		/// Handles key events dispatched to the current view.
+		/// </summary>
+		/// <param name="e">The key event for this action, or null.</param>
+		/// <returns>True if handled by the view hierarchy; otherwise, false.</returns>
+		public override bool DispatchKeyEvent(KeyEvent? e)
+		{
+			// Forwards the Back key press to the OverlayContanier for handling overlay actions.
+			if (e != null && e.KeyCode == Keycode.Back && OverlayContanier != null)
+			{
+				OverlayContanier.ProcessBackButtonPressed();
+			}
+
+			return base.DispatchKeyEvent(e);
+		}
+	}
 
 }

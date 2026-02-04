@@ -67,6 +67,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			Background = overlayColor;
 		}
 
+		/// <summary>
+		/// Attempts to close the popup; the Closing event may cancel the action.
+		/// </summary>
+		internal override void ProcessBackButtonPressed()
+		{
+			if (_popup.IsOpen)
+			{
+				_popup.IsOpen = false;
+			}
+		}
+
 		#endregion
 
 		#region Private Methods
