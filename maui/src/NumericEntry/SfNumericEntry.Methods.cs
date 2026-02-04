@@ -1904,7 +1904,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 #elif ANDROID
 			return _previousText != null ? _previousText.Substring(caretPosition, _selectionLength) : string.Empty;
 #elif MACCATALYST || IOS
-			return _textBox != null && _previousText != null ? _previousText.Substring(caretPosition, _textBox.SelectionLength) : string.Empty;
+			return _textBox != null && _previousText != null && _textBox.SelectionLength + caretPosition <= _previousText.Length ? _previousText.Substring(caretPosition, _textBox.SelectionLength) : string.Empty;
 #else
 			return string.Empty;
 #endif
