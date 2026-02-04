@@ -1483,9 +1483,9 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    {
 		        Background = Background,
 		        StrokeThickness = 0,
-		        VerticalOptions = LayoutOptions.Start,
+		        VerticalOptions = LayoutOptions.Fill,
 				HorizontalOptions = LayoutOptions.Fill,
-		        HeightRequest = CalculateInitialHeight(),
+		        Margin = new Thickness(0, Height, 0, 0),
 				IsVisible = false,
 		        StrokeShape = _bottomSheetStrokeShape,
 		        Content = _bottomSheetContent ?? throw new InvalidOperationException("Bottom sheet content is not initialized."),
@@ -2087,6 +2087,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 		    // Position the bottom sheet just below the visible area
 		    _bottomSheet.TranslationY = Height;
+			_bottomSheet.Margin = new Thickness(0, Height, 0, 0);
 		    _bottomSheet.IsVisible = true;
 
 			// Add overlay to view if modal
@@ -2128,10 +2129,6 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    }
 
 			double targetPosition = Math.Abs(Height * (1 - FullExpandedRatio));
-			if (_bottomSheet is not null)
-			{
-				_bottomSheet.HeightRequest = Height * FullExpandedRatio;
-			}
 
 		    return targetPosition;
 		}
@@ -2158,7 +2155,6 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				if (!_isSheetOpen || _bottomSheet.TranslationY > targetPosition)
 				{
 					State = BottomSheetState.HalfExpanded;
-					_bottomSheet.HeightRequest = Height * HalfExpandedRatio;
 				}
 			}
 
@@ -2182,7 +2178,11 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			_isSheetOpen = true;
 			if (_bottomSheet is not null)
 			{
-				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition + topPadding);
+				var bottomSheetAnimation = new Animation(d => 
+			{
+				_bottomSheet.TranslationY = d;
+				_bottomSheet.Margin = new Thickness(0, d, 0, 0);
+			}, _bottomSheet.TranslationY, targetPosition + topPadding);
 				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) =>
 				{
 					UpdateBottomSheetHeight();
@@ -2266,15 +2266,18 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 		    if (State is BottomSheetState.HalfExpanded)
 		    {
-		        _bottomSheet.HeightRequest = Height * HalfExpandedRatio;
+		        double margin = Height * (1 - HalfExpandedRatio);
+				_bottomSheet.Margin = new Thickness(0, margin, 0, 0);
 		    }
 		    else if (State is BottomSheetState.Collapsed)
 		    {
-		        _bottomSheet.HeightRequest = CollapsedHeight;
+		        double margin = Height - CollapsedHeight;
+				_bottomSheet.Margin = new Thickness(0, margin, 0, 0);
 		    }
 			else if(State is BottomSheetState.FullExpanded)
 			{
-				_bottomSheet.HeightRequest = Height * FullExpandedRatio;
+				double margin = Math.Abs(Height * (1 - FullExpandedRatio));
+				_bottomSheet.Margin = new Thickness(0, margin, 0, 0);
 			}
 		}
 
@@ -2386,17 +2389,21 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    }
 
 		    _bottomSheet.TranslationY = newTranslationY;
+			_bottomSheet.Margin = new Thickness(0, newTranslationY, 0, 0);
 		    _initialTouchY = touchY;
-		    _bottomSheet.HeightRequest = Height - newTranslationY;
+		    
+			// Calculate effective height for overlay logic
+			double effectiveHeight = Height - newTranslationY;
+			
 			// Manage overlay visibility during touch
-			bool shouldShowOverlay = IsModal && (_bottomSheet.HeightRequest > CollapsedHeight);
+			bool shouldShowOverlay = IsModal && (effectiveHeight > CollapsedHeight);
 
 			if (shouldShowOverlay)
 			{
 				AddOverlayToView();
 				if (_overlayGrid is not null)
 				{
-					_overlayGrid.Opacity = CalculateOverlayOpacity(_bottomSheet.HeightRequest);
+					_overlayGrid.Opacity = CalculateOverlayOpacity(effectiveHeight);
 				}
 			}
 			else
@@ -2450,7 +2457,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    if (_bottomSheet is { } sheet)
 		    {
 		        sheet.TranslationY = height * (1 - HalfExpandedRatio);
-		        sheet.HeightRequest = height * HalfExpandedRatio;
+				sheet.Margin = new Thickness(0, height * (1 - HalfExpandedRatio), 0, 0);
 		    }
 		}
 
@@ -2463,7 +2470,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			if (_bottomSheet is not null)
 			{
 				_bottomSheet.TranslationY = height - CollapsedHeight;
-				_bottomSheet.HeightRequest = CollapsedHeight;
+				_bottomSheet.Margin = new Thickness(0, height - CollapsedHeight, 0, 0);
 			}
 		}
 
@@ -2497,7 +2504,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			if (_bottomSheet is not null)
 			{
-				_bottomSheet.HeightRequest = 0;
+				_bottomSheet.Margin = new Thickness(0, Height, 0, 0);
 			}
 		}
 
@@ -2510,7 +2517,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			if (_bottomSheet is not null)
 			{
 				_bottomSheet.TranslationY = Math.Abs(height * (1 - FullExpandedRatio));
-				_bottomSheet.HeightRequest = height * FullExpandedRatio;
+				_bottomSheet.Margin = new Thickness(0, Math.Abs(height * (1 - FullExpandedRatio)), 0, 0);
 			}
 		}
 
