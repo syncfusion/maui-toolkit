@@ -1362,7 +1362,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 return;
             }
-            
+
             List<DateTime>? disabledDates = UpdateDisabledDates(visibleDates);
             List<CalendarIconDetails>? specialDates = UpdateSpecialDates(visibleDates);
             //// Disable dates null means the disabled dates are already updated for current visible dates.
@@ -1402,9 +1402,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             List<DateTime> disabledDates = new List<DateTime>();
             DateTime currentViewDate = _calendarInfo.View == CalendarView.Month ? visibleDates[visibleDates.Count / 2] : visibleDates[0];
-            int numberOfWeeks = _calendarInfo.MonthView.GetNumberOfWeeks();
+            int numberOfWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarInfo, _visibleDates);
+            bool isAutoFitEnabled = CalendarViewHelper.IsAutoFitEnabled(_calendarInfo.View, _calendarInfo.Mode, _calendarInfo.ShowTrailingAndLeadingDates, _calendarInfo.NumberOfVisibleWeeks);
             //// Boolean to check whether the views are having leading and trailing dates.
-            bool isViewWithLeadingAndTrailingDates = (_calendarInfo.View == CalendarView.Month && numberOfWeeks == 6) || _calendarInfo.View == CalendarView.Decade || _calendarInfo.View == CalendarView.Century;
+            bool isViewWithLeadingAndTrailingDates = (_calendarInfo.View == CalendarView.Month && (numberOfWeeks == 6 || isAutoFitEnabled)) || _calendarInfo.View == CalendarView.Decade || _calendarInfo.View == CalendarView.Century;
             //// Boolean to check whether the leading and trailing dates for the views are disabled.
             bool isLeadingAndTrailingDatesDisabled = isViewWithLeadingAndTrailingDates && !_calendarInfo.ShowTrailingAndLeadingDates;
             for (int i = 0; i < visibleDates.Count; i++)
@@ -1446,9 +1447,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             List<CalendarIconDetails> specialDates = new List<CalendarIconDetails>();
             DateTime currentViewDate = visibleDates[visibleDates.Count / 2];
-            int numberOfWeeks = _calendarInfo.MonthView.GetNumberOfWeeks();
-            //// Boolean to check whether the leading and trailing dates for the views are disabled.
-            bool isLeadingAndTrailingDatesDisabled = numberOfWeeks == 6 && !_calendarInfo.ShowTrailingAndLeadingDates;
+            int numberOfWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarInfo, _visibleDates);
+            bool isAutoFitEnabled = CalendarViewHelper.IsAutoFitEnabled(_calendarInfo.View, _calendarInfo.Mode, _calendarInfo.ShowTrailingAndLeadingDates, _calendarInfo.NumberOfVisibleWeeks);
+            //// Boolean to check whether the leading and trailing dates for the views are disabled or autofit is enabled when mode is not default and showleadingandtrailingdates set to false.
+            bool isLeadingAndTrailingDatesDisabled = numberOfWeeks == 6 || isAutoFitEnabled;
             for (int i = 0; i < visibleDates.Count; i++)
             {
                 DateTime date = visibleDates[i];

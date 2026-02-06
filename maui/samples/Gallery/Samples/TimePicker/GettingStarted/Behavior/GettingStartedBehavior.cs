@@ -171,10 +171,10 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         {
             if (_timePicker != null && _maximumTimePicker != null && e.PropertyName == "Time")
             {
-                if (_maximumTimePicker.Time.HasValue)
-                {
-                    _timePicker.MaximumTime = _maximumTimePicker.Time.Value;
-                }
+				if (_maximumTimePicker.Time.HasValue)
+				{
+					_timePicker.MaximumTime = _maximumTimePicker.Time.Value;
+				}
             }
         }
 
@@ -187,11 +187,11 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         {
             if (_timePicker != null && _minimumTimePicker != null && e.PropertyName == "Time")
             {
-                if (_minimumTimePicker.Time.HasValue)
-                {
-                    _timePicker.MinimumTime = _minimumTimePicker.Time.Value;
-                }
-			}
+				if (_minimumTimePicker.Time.HasValue)
+				{
+					_timePicker.MinimumTime = _minimumTimePicker.Time.Value;
+				}
+            }
         }
 
         /// <summary>

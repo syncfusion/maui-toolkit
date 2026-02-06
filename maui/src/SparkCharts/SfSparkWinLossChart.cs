@@ -113,7 +113,9 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			canvas.SaveState();
 			rect = GetTranslatedRect(rect);
 			canvas.Translate((float)rect.X, (float)rect.Y);
-
+			rect = new Rect(0, 0, rect.Width, rect.Height);
+			// Draw plot band behind the series
+			DrawRangeBand(canvas, rect);
 			float _slotWidth = (float)(rect.Width / DataCount);
 			float _drawingTop = (float)rect.Top;
 			float _drawingHeight = (float)rect.Height;
@@ -160,7 +162,6 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				}
 
 				canvas.StrokeSize = (float)StrokeWidth;
-
 				if (StrokeWidth > 0 && Stroke != null)
 				{
 					canvas.StrokeColor = Stroke.ToColor();
@@ -168,15 +169,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				}
 			}
 
-			base.OnDraw(canvas, rect);
-
 			canvas.RestoreState();
-		}
-
-		internal override void GetAxisPosition(ref PointF point1, ref PointF point2, Rect rect)
-		{
-			point1 = new PointF(0, (float)rect.Height / 2);
-			point2 = new PointF((float)rect.Width, (float)rect.Height / 2);
 		}
 
 		#endregion

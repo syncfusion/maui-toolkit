@@ -633,44 +633,48 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SetDynamicResource(NormalFontSizeProperty, "SfPickerNormalFontSize");
         }
 
-        /// <summary>
-        /// Method to update Selected Index based on confirmation.
-        /// </summary>
-        /// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
-        void UpdateInternalValueToSelection(bool shouldUpdateSelection)
-        {
-            // If the picker is not in Default mode and has a single column
-            if (shouldUpdateSelection && BaseColumns.Count == 1)
-            {
-                // Iterate through each column in the picker
-                foreach (PickerColumn column in this.Columns)
-                {
-                    // Skip columns that have no internal selection
-                    if (column._internalSelectedIndex == -1)
-                    {
-                        continue;
-                    }
-                    // If the column has a valid item source and it's a list
-                    if (column.ItemsSource != null && column.ItemsSource is IList pickerCollection && column.SelectedIndex >= 0 && column.SelectedIndex < pickerCollection.Count)
-                    {
-						// Apply the internal selected index to the actual selected index
-						int selectedIndex = column._internalSelectedIndex;
-						column._internalSelectedIndex = -1;
-						// Apply selection
-						column.SelectedIndex = selectedIndex;
+		/// <summary>
+		/// Method to update Selected Index based on confirmation.
+		/// </summary>
+		/// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
+		void UpdateInternalValueToSelection(bool shouldUpdateSelection)
+		{
+			// If the picker is not in Default mode
+			if (shouldUpdateSelection && BaseColumns.Count == 1)
+			{
+				// Iterate through each column in the picker
+				foreach (PickerColumn column in this.Columns)
+				{
+					// Skip columns that have no internal selection
+					if (column._internalSelectedIndex == -1)
+					{
+						continue;
 					}
-                }
-            }
-        }
+					// If the column has a valid item source and it's a list
+					if (column.ItemsSource != null && column.ItemsSource is IList pickerCollection)
+					{
+						// Check if the selected index is within the valid range of the collection
+						if (column.SelectedIndex >= 0 && column.SelectedIndex < pickerCollection.Count)
+						{
+							// Apply the internal selected index to the actual selected index
+							int selectedIndex = column._internalSelectedIndex;
+							column._internalSelectedIndex = -1;
+							// Apply selection
+							column.SelectedIndex = selectedIndex;
+						}
+					}
+				}
+			}
+		}
 
-        #endregion
+		#endregion
 
-        #region Override Methods
+			#region Override Methods
 
-        /// <summary>
-        /// Method to wire the events.
-        /// </summary>
-        protected override void Initialize()
+			/// <summary>
+			/// Method to wire the events.
+			/// </summary>
+		protected override void Initialize()
         {
             base.Initialize();
             BaseColumnHeaderView = ColumnHeaderView;
@@ -789,7 +793,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments.</param>
         protected override void OnOkButtonClicked(EventArgs e)
         {
-            UpdateInternalValueToSelection(IsScrollSelectionAllowed());
+			UpdateInternalValueToSelection(IsScrollSelectionAllowed());
             InvokeOkButtonClickedEvent(this, e);
             if (AcceptCommand != null && AcceptCommand.CanExecute(e))
             {

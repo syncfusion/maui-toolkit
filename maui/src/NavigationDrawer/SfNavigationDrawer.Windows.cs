@@ -109,6 +109,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			{
 				_isPressedState = true;
 			}
+			_navigationDrawerNativeView?.ReleasePointerCapture(e.Pointer);
 		}
 
 		/// <summary>

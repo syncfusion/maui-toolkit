@@ -98,7 +98,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             _hoverPosition = hoverPosition;
             DateTime? hoveredDate = _hoverPosition == null ? null : CalendarViewHelper.GetMonthDateFromPosition(_hoverPosition.Value, Width, Height, _calendarViewInfo, _visibleDates);
-            int numberOfWeeks = _calendarViewInfo.MonthView.GetNumberOfWeeks();
+            int numberOfWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarViewInfo, _visibleDates);
             //// Condition to check whether the interaction is enabled for hovered date.
             if (hoveredDate != null && !CalendarViewHelper.IsInteractableDate(hoveredDate.Value, _disabledDates, _visibleDates, _calendarViewInfo, numberOfWeeks))
             {
@@ -622,7 +622,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return;
             }
 
-            int numberOfWeeks = _calendarViewInfo.MonthView.GetNumberOfWeeks();
+            int numberOfWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarViewInfo, _visibleDates);
             _previousHoveredDate = CalendarViewHelper.GetMonthDateFromPosition(_hoverPosition.Value, dirtyRect.Width, dirtyRect.Height, _calendarViewInfo, _visibleDates);
             //// Condition to check whether the interaction is enabled for hovered date.
             if (_previousHoveredDate == null || !CalendarViewHelper.IsInteractableDate(_previousHoveredDate.Value, _disabledDates, _visibleDates, _calendarViewInfo, numberOfWeeks))

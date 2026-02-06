@@ -36,7 +36,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			canvas.CanvasSaveState();
 			canvas.ClipRectangle(dirtyRect);
 
-			_series?.DrawSeries(canvas, new ReadOnlyObservableCollection<ChartSegment>(_series._segments), dirtyRect);
+			_series?.DrawSeries(canvas, _series._readOnlySegments, dirtyRect);
 
 			canvas.CanvasRestoreState();
 
@@ -45,7 +45,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				canvas.CanvasSaveState();
 				canvas.ClipRectangle(dirtyRect);
 				canvas.Alpha = _series.AnimationValue;
-				series.OnDrawMarker(canvas, new ReadOnlyObservableCollection<ChartSegment>(_series._segments), dirtyRect);
+				series.OnDrawMarker(canvas, _series._readOnlySegments, dirtyRect);
 				canvas.CanvasRestoreState();
 			}
 		}

@@ -112,6 +112,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         bool _isCalendarPreviouslyOpened = false;
 
+        /// <summary>
+        /// Adjusted popupheight in Autofit support.
+        /// </summary>
+        double _adjustedPoupHeight;
+
         #endregion
 
         #region Constructor
@@ -130,14 +135,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             DrawingOrder = DrawingOrder.AboveContent;
             BackgroundColor = CalendarBackground;
             _layout = new CalendarVerticalStackLayout(HeaderView.Height, FooterView.ShowActionButtons || FooterView.ShowTodayButton, FooterView.Height);
-#if IOS
-
-#if NET10_0
+#if (IOS || ANDROID) && NET10_0
             this._layout.SafeAreaEdges = SafeAreaEdges.None;
-#else
+#elif IOS
             _layout.IgnoreSafeArea = true;
-#endif
-
 #endif
 			Add(_layout);
             _displayDate = DisplayDate;
@@ -170,9 +171,27 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         bool IHeaderCommon.IsRTLLayout => _isRTLLayout;
 
+        /// <summary>
+        /// Gets the number of weeks in calendar month view.
+        /// </summary>
+        int ICalendarCommon.NumberOfVisibleWeeks => this.MonthView.GetNumberOfWeeks();
+
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Method used to refresh the special dates on demand.
+        /// </summary>
+        public void UpdateSpecialDayPredicate()
+        {
+            if (this.View != CalendarView.Month)
+            {
+                return;
+            }
+
+            this._customScrollLayout?.CreateOrResetSpecialDates();
+        }
 
         /// <summary>
         /// Move to previous view which displays previous view dates.
@@ -289,6 +308,37 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         #region Private Methods
 
         /// <summary>
+        /// Get autofit monthview height for calendar
+        /// </summary>
+        /// <param name="baseHeight">The calendar base height.</param>
+        /// <returns>Calculated Height</returns>
+        double GetAutoFittedMonthViewHeight(double baseHeight)
+        {
+            if (CalendarViewHelper.IsAutoFitEnabled(View, Mode, ShowTrailingAndLeadingDates, MonthView.NumberOfVisibleWeeks))
+            {
+                //// Calculate the dynamic height based on the number of weeks needed
+                int numberOfWeeks = MonthView.GetNumberOfWeeks();
+                //// Get the actual weeks needed for the current month based on the leading and trailing dates.
+                int currentMonthWeeks = CalendarViewHelper.GetCurrentMonthsWeeks(MonthView, _visibleDates, Identifier, ShowTrailingAndLeadingDates);
+                if (numberOfWeeks == currentMonthWeeks)
+                {
+                    return baseHeight;
+                }
+
+                if (currentMonthWeeks < numberOfWeeks && currentMonthWeeks > 0)
+                {
+                    double weekHeight = baseHeight / numberOfWeeks;
+                    //// Calculate the extra height based by one week height * (number of weeks - actual weeks needed). Eg: 10 * (6 - 5) = 10 or 10 * (6 - 4) = 20.
+                    double extraHeight = weekHeight * (numberOfWeeks - currentMonthWeeks);
+                    //// Reduce the calendar height based from extra weeks height. Eg: 100 - 10 = 90 or 100 - 20 = 80.
+                    baseHeight = baseHeight - extraHeight;
+                }
+            }
+
+            return baseHeight;
+        }
+
+        /// <summary>
         /// Update Visible dates for the calendar Header views.
         /// </summary>
         /// <param name="visibleDates">The current view visible dates.</param>
@@ -309,6 +359,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             _headerLayout?.UpdateVisibleDates();
             _monthViewHeader?.UpdateVisibleDatesChange(visibleDates);
             OnCalendarViewChanged(previousVisibleDates, previousCalendarView, ShowTrailingAndLeadingDates);
+            //// Invoke InvaldiateMeasure when autofit is enabled need to recalculate calendar height.
+            if (CalendarViewHelper.IsAutoFitEnabled(View, Mode, ShowTrailingAndLeadingDates, MonthView.NumberOfVisibleWeeks))
+            {
+                this.InvalidateMeasure();
+            }
         }
 
         /// <summary>
@@ -1052,16 +1107,20 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     visibleDates = _visibleDates;
                 }
 
-                if (MonthView.HeaderView.Height > 0 && _monthViewHeader == null)
+                if (MonthView.HeaderView.Height > 0)
                 {
-                    _monthViewHeader = new MonthViewHeader(this, visibleDates, true);
-                    _layout.Add(_monthViewHeader);
+                    if (_monthViewHeader == null)
+                    {
+                        _monthViewHeader = new MonthViewHeader(this, visibleDates, true);
+                        _layout.Add(_monthViewHeader);
+                    }
+
+                    _monthViewHeader.IsVisible = true;
                     _layout.UpdateViewHeaderHeight(MonthView.HeaderView.GetViewHeaderHeight());
                 }
                 else if (_monthViewHeader != null && MonthView.HeaderView.Height <= 0)
                 {
-                    _layout.Remove(_monthViewHeader);
-                    _monthViewHeader = null;
+                    _monthViewHeader.IsVisible = false;
                     _layout.UpdateViewHeaderHeight(MonthView.HeaderView.GetViewHeaderHeight());
                 }
             }
@@ -1072,8 +1131,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     return;
                 }
 
-                _layout.Remove(_monthViewHeader);
-                _monthViewHeader = null;
+                _monthViewHeader.IsVisible = false;
 
                 //// To update the view header height as 0, while navigation direction is Horizontal and the view is other than month view.
                 _layout.UpdateViewHeaderHeight(0);
@@ -2040,27 +2098,15 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return;
             }
 
-            // Static values used from design specifications provided by the UX team in Figma.
-            _popup.WidthRequest = 300;
-#if WINDOWS || MACCATALYST
-            if (View == CalendarView.Month)
+            _popup.WidthRequest = PopupWidth;
+            if (_adjustedPoupHeight > 0 && CalendarViewHelper.IsAutoFitEnabled(View, Mode, ShowTrailingAndLeadingDates, MonthView.NumberOfVisibleWeeks))
             {
-                _popup.HeightRequest = 350 + HeaderView.Height + MonthView.HeaderView.Height + FooterView.Height;
+                _popup.HeightRequest = _adjustedPoupHeight;
             }
             else
             {
-                _popup.HeightRequest = 350 + HeaderView.Height + FooterView.Height;
+                _popup.HeightRequest = PopupHeight;
             }
-#elif ANDROID || IOS
-            if (View == CalendarView.Month)
-            {
-                _popup.HeightRequest = 250 + HeaderView.Height + MonthView.HeaderView.Height + FooterView.Height;
-            }
-            else
-            {
-                _popup.HeightRequest = 250 + HeaderView.Height + FooterView.Height;
-            }
-#endif
         }
 
         /// <summary>
@@ -2238,11 +2284,22 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             double width = double.IsFinite(widthConstraint) ? widthConstraint : _minWidth;
             double height = double.IsFinite(heightConstraint) ? heightConstraint : _minHeight;
+            double adjustedHeight = height;
 #if __ANDROID__ || __IOS__ || __MACCATALYST__
             //// Restrict the repeated layout update while the
             //// available size and new measured size is same.
             if (_availableSize.Width == width && _availableSize.Height == height)
             {
+				if (Mode != CalendarMode.Default)
+                {
+                    if (CalendarViewHelper.IsAutoFitEnabled(View, Mode, ShowTrailingAndLeadingDates, MonthView.NumberOfVisibleWeeks))
+                    {
+                        //// Need to adjusted the popup height when showleadingandtrailingdates is false and number of weeks is 6.
+                        _adjustedPoupHeight = GetAutoFittedMonthViewHeight(PopupHeight);
+                        UpdatePopUpSize();
+                    }
+                }
+
                 return _availableSize;
             }
 #else
@@ -2263,6 +2320,20 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             if (Mode != CalendarMode.Default)
             {
+                if (CalendarViewHelper.IsAutoFitEnabled(View, Mode, ShowTrailingAndLeadingDates, MonthView.NumberOfVisibleWeeks))
+                {
+                    //// Restrict the repeated layout update while the new measured height is zero.
+#if __IOS__ || __MACCATALYST__
+                    if (heightConstraint == 0)
+                    {
+                        return Size.Zero;
+                    }
+#endif
+                    //// Need to adjusted the popup height when showleadingandtrailingdates is false and number of weeks is 6.
+                    _adjustedPoupHeight = GetAutoFittedMonthViewHeight(PopupHeight);
+                    UpdatePopUpSize();
+                }
+
                 return Size.Zero;
             }
 

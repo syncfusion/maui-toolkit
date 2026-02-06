@@ -975,5 +975,36 @@ public class CalendarMethodsUnitTests : BaseUnitTest
         Assert.Equal(expectedValue,actualValue);
     }
 
+	[Theory]
+	[InlineData(CalendarMode.Default)]
+	[InlineData(CalendarMode.Dialog)]
+	public void GetMeasurecontent_ReturnsSize_WhenCalled(CalendarMode setMode)
+	{
+		SfCalendar calendar = new SfCalendar();
+		double height = 100;
+		double width = 100;
+		calendar.Mode = setMode;
+		calendar.ShowTrailingAndLeadingDates = false;
+		calendar.PopupHeight = 100;
+		calendar.MonthView.NumberOfVisibleWeeks = 6;
+		if (calendar.Mode == CalendarMode.Dialog)
+		{
+			calendar.IsOpen = true;
+		}
+		Size? actualValue = (Size?)InvokePrivateMethod(calendar, "MeasureContent", width, height);
+		var value = GetPrivateField(calendar, "_adjustedPoupHeight");
+		double resultValue = 0;
+		if (value != null)
+		{
+			resultValue = (double)value;
+		}
+		Assert.Equal(new Size(0, 0), actualValue);
+		Assert.Equal(100, calendar.PopupHeight);
+		if (calendar.Mode == CalendarMode.Dialog)
+		{
+			Assert.Equal(67, Math.Round(resultValue));
+		}
+	}
+
 	#endregion
 }

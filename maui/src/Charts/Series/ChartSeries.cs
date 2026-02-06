@@ -1205,6 +1205,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		public ChartSeries()
 		{
 			_segments = [];
+			_readOnlySegments = new ReadOnlyObservableCollection<ChartSegment>(_segments);
 			_segments.CollectionChanged += Segments_CollectionChanged;
 			_dataLabels = [];
 			LabelTemplateView = new DataLabelLayout(this);

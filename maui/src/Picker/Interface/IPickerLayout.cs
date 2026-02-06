@@ -26,6 +26,7 @@
 		/// <param name="tappedIndex">The tapped index.</param>
 		/// <param name="isTapped">Is tap gesture used</param>
 		/// <param name="isInitialLoading">Check whether is initial loading.</param>
-		void UpdateSelectedIndexValue(int tappedIndex, bool isTapped, bool isInitialLoading = false);
+		/// <param name="isKeyboardInteraction">Indicates whether the method is called from ScrollView keyboard event.</param>
+		void UpdateSelectedIndexValue(int tappedIndex, bool isTapped, bool isInitialLoading = false, bool isKeyboardInteraction = false);
     }
 }

@@ -102,9 +102,18 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         DataTemplate MonthViewHeaderTemplate { get; }
 
-		/// <summary>
-		/// Gets a custom template view for single selection.
-		/// </summary>
-		DataTemplate SelectionCellTemplate { get; }
-	}
+        /// <summary>
+        /// Gets a custom template view for single selection.
+        /// </summary>
+        DataTemplate SelectionCellTemplate { get; }
+
+        /// <summary>
+        /// Gets a value to display the number of weeks in calendar month view.
+        /// </summary>
+        int NumberOfVisibleWeeks { get; }
+        /// <summary>
+        /// Gets a calendar mode.
+        /// </summary>
+        CalendarMode Mode { get; }
+    }
 }

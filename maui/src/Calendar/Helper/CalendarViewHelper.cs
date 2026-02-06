@@ -437,6 +437,37 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         }
 
         /// <summary>
+        /// Method to get the current month number of weeks by removing unnecessary rows when ShowTrailingAndLeadingDates is false.
+        /// </summary>
+        /// <param name="monthView">The month view settings.</param>
+        /// <param name="visibleDates">The visible dates collection.</param>
+        /// <param name="identifier">The calendar identifier.</param>
+        /// <param name="showTrailingAndLeadingDates">Whether trailing and leading dates are shown.</param>
+        /// <returns>Returns the optimized number of weeks with autofit support.</returns>
+        internal static int GetCurrentMonthsWeeks(CalendarMonthView monthView, List<DateTime> visibleDates, CalendarIdentifier identifier, bool showTrailingAndLeadingDates)
+        {
+            //// If ShowTrailingAndLeadingDates is true or NumberOfVisibleWeeks is not 6, return the NumberOfVisibleWeeks value.
+            if (showTrailingAndLeadingDates || monthView.NumberOfVisibleWeeks < 6)
+            {
+                return GetNumberOfWeeks(monthView);
+            }
+
+            const int daysPerWeek = 7;
+            Globalization.Calendar calendar = GetCalendar(identifier.ToString());
+            //// Use the middle item in the visible range to discover which year/month is currently in view.
+            DateTime date = visibleDates[visibleDates.Count / 2];
+            int year = calendar.GetYear(date);
+            int month = calendar.GetMonth(date);
+            //// Align the start of the month to the configured first day of week so the occupied rows can be counted accurately.
+            DateTime firstDay = new DateTime(year, month, 1, calendar);
+            DateTime alignedStartDay = GetFirstDayOfWeek(daysPerWeek, firstDay, monthView.FirstDayOfWeek, identifier);
+            //// Measure the span from the aligned start through the last day of the month to compute the required week rows.
+            DateTime lastDay = new DateTime(year, month, calendar.GetDaysInMonth(year, month), calendar);
+            int weeks = ((lastDay - alignedStartDay).Days / daysPerWeek) + 1;
+            return Math.Max(1, Math.Min(6, weeks));
+        }
+
+        /// <summary>
         /// Get the week number based on the given date.
         /// </summary>
         /// <param name="date">The date value.</param>
@@ -972,7 +1003,18 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return null;
             }
 
-            int numberOfWeeks = calendar.MonthView.GetNumberOfWeeks();
+            int numberOfWeeks;
+            if (IsAutoFitEnabled(calendar.View, calendar.Mode, calendar.ShowTrailingAndLeadingDates, calendar.NumberOfVisibleWeeks))
+            {
+                //// Calculate weeks dynamically based on current month view and visible dates
+                numberOfWeeks = GetCurrentMonthsWeeks(calendar.MonthView, visibleDates, calendar.Identifier, calendar.ShowTrailingAndLeadingDates);
+            }
+            else
+            {
+                //// Use default number of weeks from MonthView
+                numberOfWeeks = calendar.MonthView.GetNumberOfWeeks();
+            }
+
             int row = (int)(yPosition / (monthViewHeight / numberOfWeeks));
             int column = (int)(xPosition / (monthViewWidth / daysPerWeek));
             if (row >= numberOfWeeks || column >= daysPerWeek)
@@ -1060,8 +1102,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             DateTime currentViewDate = calendar.View == CalendarView.Month ? visibleDates[visibleDates.Count / 2] : visibleDates[0];
             if (calendar.View == CalendarView.Month)
             {
-                //// If number of weeks is equal to 6 and if tapped date is leading or trailing date and show leading and trailing dates is false then the date must be non interactable.
-                if (numberOfWeeks == 6 && !calendar.ShowTrailingAndLeadingDates && IsLeadingAndTrailingDate(date, currentViewDate, calendar.View, calendar.Identifier))
+                bool isAutoFitEnabled = IsAutoFitEnabled(calendar.View, calendar.Mode, calendar.ShowTrailingAndLeadingDates, calendar.NumberOfVisibleWeeks);
+                //// If number of weeks is less than or equal to 6 and if tapped date is leading or trailing date and show leading and trailing dates is false then the date must be non interactable.
+                if (((numberOfWeeks == 6 && !calendar.ShowTrailingAndLeadingDates) || (isAutoFitEnabled && numberOfWeeks <= 6)) && IsLeadingAndTrailingDate(date, currentViewDate, calendar.View, calendar.Identifier))
                 {
                     return false;
                 }
@@ -1630,52 +1673,34 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             return string.Empty;
         }
 
-		/// <summary>
-		/// Get calendar instance using its calendar identifier.
-		/// </summary>
-		/// <param name="calendarIdentifier">The name of the calendar.</param>
-		/// <returns>A calendar instance.</returns>
-		internal static Globalization.Calendar GetCalendar(string calendarIdentifier)
-		{
-			switch (calendarIdentifier)
-			{
-
-				case "Gregorian":
-
-					return new GregorianCalendar();
-
-				case "Hijri":
-
-					return new HijriCalendar();
-
-				case "Persian":
-
-					return new PersianCalendar();
-
-				case "ThaiBuddhist":
-
-					return new ThaiBuddhistCalendar();
-
-				case "Taiwan":
-
-					return new TaiwanCalendar();
-
-				case "UmAlQura":
-
-					return new UmAlQuraCalendar();
-
-				case "Korean":
-
-					return new KoreanCalendar();
-
-				default:
-
-					// If calendar identifier is specified wrongly, then default calendar will be used.
-
-					return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
-
-			}
-		}
+        /// <summary>
+        /// Get calendar instance using its calendar identifier.
+        /// </summary>
+        /// <param name="calendarIdentifier">The name of the calendar.</param>
+        /// <returns>A calendar instance.</returns>
+        internal static Globalization.Calendar GetCalendar(string calendarIdentifier)
+        {
+            switch (calendarIdentifier)
+            {
+                case "Gregorian":
+                    return new GregorianCalendar();
+                case "Hijri":
+                    return new HijriCalendar();
+                case "Persian":
+                    return new PersianCalendar();
+                case "ThaiBuddhist":
+                    return new ThaiBuddhistCalendar();
+                case "Taiwan":
+                    return new TaiwanCalendar();
+                case "UmAlQura":
+                    return new UmAlQuraCalendar();
+                case "Korean":
+                    return new KoreanCalendar();
+                default:
+                    // If calendar identifier is specified wrongly, then default calendar will be used.
+                    return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
+            }
+        }
 
         /// <summary>
         /// Method to get the non valid week(first row without monday) while reaching the min date of the month.
@@ -2463,49 +2488,89 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             return visibleDates[0].Month != currentMonth && numberOfVisibleWeeks == 6 ? visibleDates[0].Date.AddDays(7) : visibleDates[0];
         }
 
-		/// <summary>
-		/// Creates a selection cell template for a calendar view based on the provided date and template information.
-		/// </summary>
-		/// <param name="selectedDate">The selected date for the cell template creation.</param>
-		/// <param name="selectionCellTemplate">The template for the selection cell, can be a custom DataTemplate or a DataTemplateSelector.</param>
-		/// <param name="templateSelectorContext">The context used for template selection (if a DataTemplateSelector is used).</param>
-		/// <param name="details">A function to get the details for a specific date.</param>
-		/// <param name="rect">The rectangle defining the bounds and position for the view.</param>
-		/// <returns>A view representing the selection cell template, or null if the template cannot be created.</returns>
-		internal static View? CreateSelectionCellTemplate(DateTime? selectedDate, DataTemplate selectionCellTemplate, BindableObject templateSelectorContext, CalendarCellDetails details, RectF rect)
-		{
-			// Early exit on nulls
-			if (selectedDate == null || details == null || selectionCellTemplate == null)
-			{
-				return null;
-			}
+        /// <summary>
+        /// Creates a selection cell template for a calendar view based on the provided date and template information.
+        /// </summary>
+        /// <param name="selectedDate">The selected date for the cell template creation.</param>
+        /// <param name="selectionCellTemplate">The template for the selection cell, can be a custom DataTemplate or a DataTemplateSelector.</param>
+        /// <param name="templateSelectorContext">The context used for template selection (if a DataTemplateSelector is used).</param>
+        /// <param name="details">A function to get the details for a specific date.</param>
+        /// <param name="rect">The rectangle defining the bounds and position for the view.</param>
+        /// <returns>A view representing the selection cell template, or null if the template cannot be created.</returns>
+        internal static View? CreateSelectionCellTemplate(DateTime? selectedDate, DataTemplate selectionCellTemplate, BindableObject templateSelectorContext, CalendarCellDetails details, RectF rect)
+        {
+            // Early exit on nulls
+            if (selectedDate == null || details == null || selectionCellTemplate == null)
+            {
+                return null;
+            }
 
-			var template = selectionCellTemplate is DataTemplateSelector selector ? selector.SelectTemplate(details, templateSelectorContext) : selectionCellTemplate;
-			var selectionView = CalendarViewHelper.CreateTemplateView(template, details);
-			if (selectionView is not View viewResult)
-			{
-				return null;
-			}
+            var template = selectionCellTemplate is DataTemplateSelector selector ? selector.SelectTemplate(details, templateSelectorContext) : selectionCellTemplate;
+            var selectionView = CalendarViewHelper.CreateTemplateView(template, details);
+            if (selectionView is not View viewResult)
+            {
+                return null;
+            }
 
-			viewResult.WidthRequest = rect.Width;
-			viewResult.HeightRequest = rect.Height;
+            viewResult.WidthRequest = rect.Width;
+            viewResult.HeightRequest = rect.Height;
 
-			return viewResult;
-		}
+            return viewResult;
+        }
 
-#endregion
+        /// <summary>
+        /// Check for autofit enable in popup
+        /// </summary>
+        /// <param name="view">The calendar view</param>
+        /// <param name="mode">The calendar mode.</param>
+        /// <param name="showleadingandtrialingDates">The calendar ShowleadingAndTrailingDates.</param>
+        /// <param name="numberOfWeeks">The Number of weeks in a calendar.</param>
+        /// <returns>Returns the autofit enabled or not.</returns>
+        internal static bool IsAutoFitEnabled(CalendarView view, CalendarMode mode, bool showleadingandtrialingDates, int numberOfWeeks)
+        {
+            if (view == CalendarView.Month && mode != CalendarMode.Default && showleadingandtrialingDates == false && numberOfWeeks >= 6)
+            {
+                return true;
+            }
 
-		#region Private Method
+            return false;
+        }
 
-		/// <summary>
-		/// Method to update selected date on key navigation.
-		/// </summary>
-		/// <param name="args">The keyboard event args.</param>
-		/// <param name="oldSelectedDate">The old selected date.</param>
-		/// <param name="calendarViewInfo">The calendar instance.</param>
-		/// <param name="visibleDates">The visible dates collections.</param>
-		/// <param name="disabledDates">The disabled dates collections.</param>
-		static void UpdateSelectionOnKeyNavigation(KeyEventArgs args, DateTime oldSelectedDate, ICalendar calendarViewInfo, List<DateTime> visibleDates, List<DateTime> disabledDates)
+        /// <summary>
+        /// Gets the number of weeks to display in the calendar based on the current mode and settings.
+        /// </summary>
+        /// <param name="calendar">The calendar info.</param>
+        /// <param name="visibleDates">The visibleDates</param>
+        /// <returns>The week number.</returns>
+        internal static int GetActualNumberOfWeeks(ICalendar calendar, List<DateTime> visibleDates)
+        {
+            int numberOfWeeks;
+            if (IsAutoFitEnabled(calendar.View, calendar.Mode, calendar.ShowTrailingAndLeadingDates, calendar.NumberOfVisibleWeeks))
+            {
+                //// Calculate weeks dynamically based on current month view and visible dates
+                numberOfWeeks = GetCurrentMonthsWeeks(calendar.MonthView, visibleDates, calendar.Identifier, calendar.ShowTrailingAndLeadingDates);
+            }
+            else
+            {
+                //// Use default number of weeks from MonthView
+                numberOfWeeks = calendar.MonthView.GetNumberOfWeeks();
+            }
+
+            return numberOfWeeks;
+        }
+
+        #endregion
+
+        #region Private Method
+        /// <summary>
+        /// Method to update selected date on key navigation.
+        /// </summary>
+        /// <param name="args">The keyboard event args.</param>
+        /// <param name="oldSelectedDate">The old selected date.</param>
+        /// <param name="calendarViewInfo">The calendar instance.</param>
+        /// <param name="visibleDates">The visible dates collections.</param>
+        /// <param name="disabledDates">The disabled dates collections.</param>
+        static void UpdateSelectionOnKeyNavigation(KeyEventArgs args, DateTime oldSelectedDate, ICalendar calendarViewInfo, List<DateTime> visibleDates, List<DateTime> disabledDates)
         {
             DateTime? newDate = CalendarViewHelper.GeKeyNavigationDate(calendarViewInfo, args, oldSelectedDate);
             ValidateDateOnKeyNavigation(args, oldSelectedDate, newDate, calendarViewInfo, visibleDates, disabledDates);

@@ -277,9 +277,9 @@
 		{
 		}
 
-		static object StrokeDefaultValueCreator(BindableObject bindable)
+		static object? StrokeDefaultValueCreator(BindableObject bindable)
 		{
-			return new SolidColorBrush(Colors.Transparent);
+			return null;
 		}
 		static object FillDefaultValueCreator(BindableObject bindable)
 		{

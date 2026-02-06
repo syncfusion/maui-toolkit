@@ -13,6 +13,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal delegate object? GetReflectedProperty(object obj, string[] paths);
 		internal float _sumOfYValues = float.NaN;
 		internal readonly ObservableCollection<ChartSegment> _segments;
+		internal readonly ReadOnlyObservableCollection<ChartSegment> _readOnlySegments;
 
 		#endregion
 

@@ -398,20 +398,25 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     int index = ActualData.IndexOf(point);
                     var xValue = xValues[index];
-                    double yValue = yValues[index];
-                    double yValue1 = yValues1[index];
-                    string label = string.Format("{0} : {1:#.##}\n{2} : {3:#.##}", SfCartesianChartResources.High, yValue, SfCartesianChartResources.Low, yValue1);
-					if (yValue == 0 || yValue1 == 0)
+                    double highValue = yValues[index];
+                    double lowValue = yValues1[index];
+
+					if (double.IsNaN(lowValue) || double.IsNaN(highValue))
+						continue;
+
+					string label = string.Format("{0} : {1:#.##}\n{2} : {3:#.##}", SfCartesianChartResources.High, highValue, SfCartesianChartResources.Low, lowValue);
+
+					if (highValue == 0 || lowValue == 0)
 					{
-						label = string.Format("{0} : {1:0.##}\n{2} : {3:0.##}", SfCartesianChartResources.High, yValue, SfCartesianChartResources.Low, yValue1);
+						label = string.Format("{0} : {1:0.##}\n{2} : {3:0.##}", SfCartesianChartResources.High, highValue, SfCartesianChartResources.Low, lowValue);
 					}
 
                     if (IsSideBySide)
                     {
                         isSideBySide = true;
                         double xMidVal = xValue + SbsInfo.Start + ((SbsInfo.End - SbsInfo.Start) / 2);
-                        xPosition = TransformToVisibleX(xMidVal, yValue);
-                        yPosition = TransformToVisibleY(xMidVal, yValue);
+                        xPosition = TransformToVisibleX(xMidVal, highValue);
+                        yPosition = TransformToVisibleY(xMidVal, highValue);
                     }
 
                     TrackballPointInfo? chartPointInfo = CreateTrackballPointInfo(xPosition, yPosition, label, point);
@@ -423,7 +428,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                             chartPointInfo.GroupLabelSize = contentSize;
 #endif
                         chartPointInfo.XValue = xValue;
-                        chartPointInfo.YValues = [yValue, yValue1];
+                        chartPointInfo.YValues = [highValue, lowValue];
                         PointInfos.Add(chartPointInfo);
                     }
                 }

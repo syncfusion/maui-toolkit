@@ -1888,7 +1888,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             List<int> formatStringOrder = DatePickerHelper.GetFormatStringOrder(out dayFormat, out monthFormat, DateFormat);
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(MinimumDate, MaximumDate);
             DateTime date = SelectedDate ?? _previousSelectedDateTime;
-            date = GetScrollSelectedDateTime(date);
+			date = GetScrollSelectedDateTime(date);
             DateTime selectedDate = DatePickerHelper.GetValidDateTime(date, MinimumDate, maxDate);
             ObservableCollection<PickerColumn> pickerColumns = new ObservableCollection<PickerColumn>();
             foreach (int index in formatStringOrder)
@@ -2035,7 +2035,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             List<int> formatStringOrder = TimePickerHelper.GetFormatStringOrder(out hourFormat, TimeFormat);
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(MinimumDate, MaximumDate);
             DateTime date = SelectedDate ?? _previousSelectedDateTime;
-            date = GetScrollSelectedDateTime(date);
+			date = GetScrollSelectedDateTime(date);
             DateTime selectedDate = DatePickerHelper.GetValidDateTime(date, MinimumDate, maxDate);
             TimeSpan selectedTime = new TimeSpan(0, selectedDate.Hour, selectedDate.Minute, selectedDate.Second, selectedDate.Millisecond);
             ObservableCollection<PickerColumn> pickerColumns = new ObservableCollection<PickerColumn>();
@@ -2322,43 +2322,46 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SetDynamicResource(DisabledTextColorProperty, "SfDateTimePickerDisabledTextColor");
         }
 
-        /// <summary>
-        /// Method to update Selected Date and Time based on confirmation.
-        /// </summary>
-        /// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
-        void UpdateInternalValueToSelection(bool shouldUpdateSelection)
-        {
-            // If the picker is not in Default mode and an internal selected date-time exists
-            if (shouldUpdateSelection && _internalSelectedDateTime != null && !DatePickerHelper.IsSameDateTime(_internalSelectedDateTime, SelectedDate))
-            {
-				// Update the selected date with the internal selected date-time
-				SelectedDate = _internalSelectedDateTime.Value;
-				// Clear the internal selected date-time after applying it
-				_internalSelectedDateTime = null;
+		/// <summary>
+		/// Method to update Selected Date and Time based on confirmation.
+		/// </summary>
+		/// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
+		void UpdateInternalValueToSelection(bool shouldUpdateSelection)
+		{
+			// If the picker is not in Default mode and an internal selected date-time exists
+			if (shouldUpdateSelection && _internalSelectedDateTime != null)
+			{
+				// If the internal selected date-time is different from the currently selected date
+				if (!DatePickerHelper.IsSameDateTime(_internalSelectedDateTime, SelectedDate))
+				{
+					// Update the selected date with the internal selected date-time
+					SelectedDate = _internalSelectedDateTime.Value;
+					// Clear the internal selected date-time after applying it
+					_internalSelectedDateTime = null;
+				}
 			}
-        }
+		}
+		/// <summary>
+		/// Gets the internally selected date and time when scroll selection is allowed.
+		/// </summary>
+		/// <returns>
+		/// The <see cref="DateTime"/> value if scroll selection is enabled and an internal selection exists; otherwise, <c>null</c>.
+		/// </returns>
+		DateTime GetScrollSelectedDateTime(DateTime dateTime)
+		{
+			return IsScrollSelectionAllowed() && _internalSelectedDateTime.HasValue
+				? _internalSelectedDateTime.Value
+				: dateTime;
+		}
 
-        /// <summary>
-        /// Gets the internally selected date and time when scroll selection is allowed.
-        /// </summary>
-        /// <returns>
-        /// The <see cref="DateTime"/> value if scroll selection is enabled and an internal selection exists; otherwise, the provided <paramref name="dateTime"/> parameter.
-        /// </returns>
-        DateTime GetScrollSelectedDateTime(DateTime dateTime)
-        {
-            return IsScrollSelectionAllowed() && _internalSelectedDateTime.HasValue
-                ? _internalSelectedDateTime.Value
-                : dateTime;
-        }
+		#endregion
 
-        #endregion
+		#region Override Methods
 
-        #region Override Methods
-
-        /// <summary>
-        /// Method to wire the events.
-        /// </summary>
-        protected override void Initialize()
+		/// <summary>
+		/// Method to wire the events.
+		/// </summary>
+		protected override void Initialize()
         {
             base.Initialize();
             BaseColumns = _columns;
@@ -2569,7 +2572,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments.</param>
         protected override void OnOkButtonClicked(EventArgs e)
         {
-            UpdateInternalValueToSelection(IsScrollSelectionAllowed());
+			UpdateInternalValueToSelection(IsScrollSelectionAllowed());
             InvokeOkButtonClickedEvent(this, e);
             if (AcceptCommand != null && AcceptCommand.CanExecute(e))
             {

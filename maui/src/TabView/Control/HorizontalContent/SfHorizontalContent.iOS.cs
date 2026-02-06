@@ -77,7 +77,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					var textInputView = FindSfTextInputLayout(uiTouch.View?.Superview);
                     this._canProcessTouch = true;
 
-                    var touchViewType = touchView?.GetType();
+					var touchViewType = touchView?.GetType();
                     if (touchViewType is not null)
                     {
 						var hasDrawAction = touchViewType.GetProperties().Any(p => p.PropertyType == typeof(Action<ICanvas, RectF>));

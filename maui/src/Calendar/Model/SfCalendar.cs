@@ -633,6 +633,24 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 null,
                 propertyChanged: OnRelativeViewChanged);
 
+        /// <summary>
+        /// Identifies the <see cref="PopupWidthProperty"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="PopupWidthProperty"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty PopupWidthProperty =
+            BindableProperty.Create(nameof(PopupWidth), typeof(double), typeof(SfCalendar), 300d, propertyChanged: OnPopupWidthPropertyChanged);
+        
+        /// <summary>
+        /// Identifies the <see cref="PopupHeightProperty"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="PopupHeightProperty"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty PopupHeightProperty =
+            BindableProperty.Create(nameof(PopupHeight), typeof(double), typeof(SfCalendar), defaultValueCreator: bindable => GetDefaultPopupHeight(bindable), propertyChanged: OnPopupHeightPropertyChanged);
+
 #if WINDOWS
         /// <summary>
         /// Identifies the <see cref="FlowDirectionProperty"/> dependency property.
@@ -2436,6 +2454,27 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             set { SetValue(RelativeViewProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the width of the popup in the Calendar.
+        /// </summary>
+        public double PopupWidth
+        {
+            get { return (double)this.GetValue(PopupWidthProperty); }
+            set { this.SetValue(PopupWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the height of the popup in the Calendar.
+        /// </summary>
+        /// <remarks>
+        /// The default height of the popup will be the addition of header height, monthview headerheight and footer height.
+        /// </remarks>
+        public double PopupHeight
+        {
+            get { return (double)this.GetValue(PopupHeightProperty); }
+            set { this.SetValue(PopupHeightProperty, value); }
+        }
+
         //// TODO: Workaround for RTL (Right-to-Left) layout issue - The coordinate points are not calculated correctly in RTL layouts,
         //// causing incorrect positioning. This flag helps to apply RTL-specific adjustments.
 #if WINDOWS
@@ -2711,7 +2750,17 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             calendar.AddOrRemoveMonthHeaderView();
+            //// In autofit for android behave like view changed from year to month in 6 weeks(same height for year view and month view with 6weeks) height reduced then increase.
+            //// Because we set previous 5 weeks popup height update in UpdatePopupSize method. Again in measure height updated from 5 to 6 weeks height.
+            //// To prevent restrict previous height update in android.
+#if !ANDROID
             calendar.UpdatePopUpSize();
+#else
+            if (!CalendarViewHelper.IsAutoFitEnabled(calendar.View, calendar.Mode, calendar.ShowTrailingAndLeadingDates, calendar.MonthView.NumberOfVisibleWeeks))
+            {
+                calendar.UpdatePopUpSize();
+            }
+#endif
             calendar._customScrollLayout.UpdateViewChange((CalendarView)oldValue, (CalendarView)newValue);
             if (calendar._customScrollLayout != null)
             {
@@ -3431,13 +3480,18 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             //// Here year view does not contains leading and trailing dates and leading and trailing dates can be enabled or disabled
             //// only when the number of visible weeks is 6, so we are restricted the view update for these cases.
-            if (calendar.View == CalendarView.Year || (calendar.View == CalendarView.Month && calendar.MonthView.GetNumberOfWeeks() != 6))
+            if (calendar.View == CalendarView.Year || (calendar.View == CalendarView.Month && calendar.MonthView.GetNumberOfWeeks() != 6) || (calendar.View == CalendarView.Month && calendar.MonthView.GetNumberOfWeeks() < 6 && calendar.ShowTrailingAndLeadingDates == false))
             {
                 return;
             }
 
             calendar.OnCalendarViewChanged(calendar._visibleDates, calendar.View, (bool)oldValue);
             calendar._customScrollLayout.UpdateShowLeadingDates();
+            //// Invoke InvaldiateMeasure when autofit is enabled need to recalculate calendar height.
+            if (CalendarViewHelper.IsAutoFitEnabled(calendar.View, calendar.Mode, calendar.ShowTrailingAndLeadingDates, calendar.MonthView.NumberOfVisibleWeeks))
+            {
+                calendar.InvalidateMeasure();
+            }
         }
 
         /// <summary>
@@ -3583,6 +3637,50 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         }
 
         /// <summary>
+        /// Update the Popup width.
+        /// </summary>
+        /// <param name="bindable">the Picker settings object</param>
+        /// <param name="oldValue">Property old value</param>
+        /// <param name="newValue">Property new value</param>
+        static void OnPopupWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfCalendar? calendar = bindable as SfCalendar;
+            if (calendar == null)
+            {
+                return;
+            }
+
+            calendar.UpdatePopUpSize();
+        }
+
+        /// <summary>
+        /// Update the Popup Height.
+        /// </summary>
+        /// <param name="bindable">the Picker settings object</param>
+        /// <param name="oldValue">Property old value</param>
+        /// <param name="newValue">Property new value</param>
+        static void OnPopupHeightPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfCalendar? calendar = bindable as SfCalendar;
+            if (calendar == null)
+            {
+                return;
+            }
+
+            //// Update adjustedPopupHeight when popupheight is set because in autofit used adjustedPoupHeight for acutal PopupHeight. Due to PopupHeight need to update once set in initial or dynamic time only.
+            if ((double)newValue <= 0)
+            {
+                calendar._adjustedPoupHeight = GetDefaultPopupHeight(calendar);
+            }
+            else
+            {
+                calendar._adjustedPoupHeight = (double)newValue;
+            }
+
+            calendar.UpdatePopUpSize();
+        }
+
+        /// <summary>
         /// Called when <see cref="IsOpen"/> property changed.
         /// </summary>
         /// <param name="bindable">The bindable.</param>
@@ -3708,6 +3806,42 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 calendar.ShowPopup();
             }
+        }
+
+        /// <summary>
+        /// Method to set the default height of the popup.
+        /// </summary>
+        /// <param name="bindable">the Picker settings object</param>
+        /// <returns>Returns the default value of the PopupHeight</returns>
+        static double GetDefaultPopupHeight(BindableObject bindable)
+        {
+            SfCalendar? calendar = bindable as SfCalendar;
+            double popupHeight = 0;
+            if (calendar == null)
+            {
+                return 0;
+            }
+
+#if WINDOWS || MACCATALYST
+            if (calendar.View == CalendarView.Month)
+            {
+                popupHeight = 350 + calendar.HeaderView.Height + calendar.MonthView.HeaderView.Height + calendar.FooterView.Height;
+            }
+            else
+            {
+                 popupHeight = 350 + calendar.HeaderView.Height + calendar.FooterView.Height;
+            }
+#elif ANDROID || IOS
+            if (calendar.View == CalendarView.Month)
+            {
+                popupHeight = 250 + calendar.HeaderView.Height + calendar.MonthView.HeaderView.Height + calendar.FooterView.Height;
+            }
+            else
+            {
+                popupHeight = 250 + calendar.HeaderView.Height + calendar.FooterView.Height;
+            }
+#endif
+            return popupHeight;
         }
 
 #if WINDOWS

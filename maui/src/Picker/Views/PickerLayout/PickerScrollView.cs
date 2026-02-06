@@ -7,7 +7,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
     /// <summary>
     /// This represents a class that contains information about the picker scroll view.
     /// </summary>
+#if ANDROID
+    internal class PickerScrollView : SfPickerView, IKeyboardListener
+#else
     internal class PickerScrollView : SfPickerView
+#endif
     {
         #region Fields
 
@@ -73,6 +77,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="itemsSource">The items source.</param>
         internal PickerScrollView(IPickerLayout pickerLayoutInfo, IPicker pickerViewInfo, ObservableCollection<string> itemsSource)
         {
+#if ANDROID
+            this.AddKeyboardListener(this);
+#endif
             _pickerInfo = pickerViewInfo;
             _pickerLayoutInfo = pickerLayoutInfo;
             //// No need to show the scroll bar in picker control so that the scroll bar visibility set to be as never.
@@ -83,6 +90,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             Scrolled += OnViewScrolling;
             Content = _pickerView;
             PropertyChanged += OnScrollPropertyChanged;
+#if (IOS || ANDROID) && NET10_0
+            SafeAreaEdges = SafeAreaEdges.None;
+#endif
         }
 
         #endregion
@@ -753,6 +763,37 @@ namespace Syncfusion.Maui.Toolkit.Picker
             InvalidateMeasure();
         }
 
+        #endregion
+
+        #region Interface methods
+#if ANDROID
+        /// <summary>
+        /// Method to handle the keyboard interaction.
+        /// </summary>
+        /// <param name="args">The keyboard event args.</param>
+        void IKeyboardListener.OnKeyDown(KeyEventArgs args)
+        {
+            //// Handle only Up and Down arrow keys to prevent framework's automatic scroll behavior
+            if (args.Key == KeyboardKey.Up || args.Key == KeyboardKey.Down)
+            {
+                //// Handle the keyboard navigation in picker view
+                _pickerView.HandleKeyboardAccessiblity(args, true);
+                args.Handled = true;
+            }
+            else
+            {
+                //// For other keys (Tab, Enter, Escape, etc.), let the picker view handle it
+                _pickerView.HandleKeyboardAccessiblity(args, true);
+            }
+        }
+        /// <summary>
+        /// The keyboard interaction override method.
+        /// </summary>
+        /// <param name="args">The keyboard event args.</param>
+        void IKeyboardListener.OnKeyUp(KeyEventArgs args)
+        {
+        }
+#endif
         #endregion
 
         #region Internal Override Methods

@@ -159,6 +159,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         internal void InvokeClosedEvent(object sender, EventArgs eventArgs)
         {
             Closed?.Invoke(sender, eventArgs);
+            ResetPopup();
         }
 
         /// <summary>
@@ -207,7 +208,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <returns>Returns the internal selection or not</returns>
         internal bool IsScrollSelectionAllowed()
         {
-            if (Mode != PickerMode.Default && (int)FooterView.Height != 0 && FooterView.ShowOkButton && FooterTemplate == null)
+            if (Mode != PickerMode.Default && FooterView.Height != 0 && FooterView.ShowOkButton && FooterTemplate == null)
             {
                 return true;
             }
@@ -458,13 +459,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            _popup.IsOpen = false;
             _popup.ContentTemplate = new DataTemplate(() =>
             {
                 return null;
             });
-
-            ResetPopup();
+            _popup.IsOpen = false;
         }
 
         /// <summary>
@@ -676,7 +675,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 #endif
 
 #if WINDOWS || ANDROID
-            if (this.Parent is ScrollView && double.IsInfinity(heightConstraint) && HeightRequest == -1 && Mode == PickerMode.Default)
+            if (Parent is ScrollView && double.IsInfinity(heightConstraint) && HeightRequest == -1 && Mode == PickerMode.Default)
             {
                 HeightRequest = height;
             }
@@ -706,7 +705,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
 #if ANDROID && NET10_0_OR_GREATER
-            if (this.Mode == PickerMode.Default && !_isPickerViewLoaded)
+            if (Mode == PickerMode.Default && !_isPickerViewLoaded)
             {
                 _isPickerViewLoaded = true;
                 _pickerContainer?.UpdateItemHeight();
@@ -906,7 +905,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="childIndex">The column child index.</param>
         /// <param name="isTapped">Is tap gesture used</param>
         /// <param name="isInitialLoading">Check whether is initial loading or not.</param>
-        void IPicker.UpdateSelectedIndexValue(int tappedIndex, int childIndex, bool isTapped, bool isInitialLoading)
+        /// <param name="isKeyboardInteraction">Indicates whether the method is called from ScrollView keyboard event.</param>
+        void IPicker.UpdateSelectedIndexValue(int tappedIndex, int childIndex, bool isTapped, bool isInitialLoading, bool isKeyboardInteraction)
         {
             if (BaseColumns.Count <= childIndex)
             {
@@ -953,6 +953,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     if (pickerColumn._internalSelectedIndex != -1)
                     {
                         pickerColumn._internalSelectedIndex = -1;
+#if ANDROID
+                        if (isKeyboardInteraction)
+                        {
+                            _pickerContainer?.ScrollToSelectedIndex(pickerColumn._columnIndex, tappedIndex);
+                        }
+#endif
                     }
                 }
 
@@ -968,7 +974,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 else
                 {
                     pickerColumn._internalSelectedIndex = tappedIndex;
-                    if (isTapped)
+                    if (isTapped || isKeyboardInteraction)
                     {
                         _pickerContainer?.ScrollToSelectedIndex(pickerColumn._columnIndex, tappedIndex);
                     }

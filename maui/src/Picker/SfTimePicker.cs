@@ -1013,19 +1013,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 _secondColumn.ItemsSource = seconds;
             }
+
             int second = 0;
             if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > previousSelectedTime.Value.Seconds)
             {
                 second = previousSelectedTime.Value.Seconds;
             }
+
             ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, hour, minute, second, selectedTime, minimumTime, maximumTime);
             ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
             {
                 _millisecondColumn.ItemsSource = milliseconds;
             }
-
-            SetSelectedTime(new TimeSpan(0, hour, minute, second, previousSelectedTime.Value.Milliseconds), e.OldValue);
+			
+			SetSelectedTime(new TimeSpan(0, hour, minute, second, previousSelectedTime.Value.Milliseconds), e.OldValue);
         }
 
         /// <summary>
@@ -1042,36 +1044,44 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 return;
             }
+
             int hour = 0;
+
             hour = previousSelectedTime.Value.Hours;
+
             int minute = 0;
             if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > e.NewValue)
             {
                 //// Get the hour value based on the selected index changes value.
                 minute = int.Parse(minuteCollection[e.NewValue]);
             }
+
             ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, hour, minute, selectedTime, minimumTime, maximumTime);
             ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
             {
                 _secondColumn.ItemsSource = seconds;
             }
+
             int second = 0;
             if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > previousSelectedTime.Value.Seconds)
             {
                 second = previousSelectedTime.Value.Seconds;
             }
+
             ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(this.MilliSecondInterval, hour, minute, second, selectedTime, minimumTime, maximumTime);
             ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
             {
                 _millisecondColumn.ItemsSource = milliseconds;
             }
+
             int millisecond = 0;
             if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > (previousSelectedTime.Value.Milliseconds / this.MilliSecondInterval))
             {
                 millisecond = previousSelectedTime.Value.Milliseconds;
             }
+
             SetSelectedTime(new TimeSpan(0, hour, minute, second, millisecond), e.OldValue);
         }
 
@@ -1089,27 +1099,35 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 return;
             }
+
             int hour = 0;
+
             hour = previousSelectedTime.Value.Hours;
+
             int minute = 0;
+
             minute = previousSelectedTime.Value.Minutes;
+
             int second = 0;
             if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > e.NewValue)
             {
                 //// Get the hour value based on the selected index changes value.
                 second = int.Parse(secondCollection[e.NewValue]);
             }
+
             ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, hour, minute, second, selectedTime, minimumTime, maximumTime);
             ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
             {
                 _millisecondColumn.ItemsSource = milliseconds;
             }
+
             int millisecond = 0;
             if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > (previousSelectedTime.Value.Milliseconds / this.MilliSecondInterval))
             {
                 millisecond = previousSelectedTime.Value.Milliseconds;
             }
+
             SetSelectedTime(new TimeSpan(0, hour, minute, second, millisecond), e.OldValue);
         }
 
@@ -1582,7 +1600,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="newValue">The new value.</param>
         void SetParent(Element? oldValue, Element? newValue)
         {
-            if (oldValue != null)
+			if (oldValue != null)
             {
                 oldValue.Parent = null;
             }
@@ -1624,30 +1642,35 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SetDynamicResource(DisabledTextColorProperty, "SfTimePickerDisabledTextColor");
         }
 
-        /// <summary>
-        /// Method to update Selected Time based on confirmation.
-        /// </summary>
-        /// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
-        void UpdateInternalValueToSelection(bool shouldUpdateSelection)
-        {
-            // If the picker is not in Default mode and an internal selected time exists
-            if (shouldUpdateSelection && _internalSelectedTime != null && !TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
-            {
-				// Update the selected time with the internal selected time
-				this.SelectedTime = _internalSelectedTime.Value;
-				// Clear the internal selected time after applying it
-				_internalSelectedTime = null;
+		/// <summary>
+		/// Method to update Selected Time based on confirmation.
+		/// </summary>
+		/// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
+		void UpdateInternalValueToSelection(bool shouldUpdateSelection)
+		{
+			// If the picker is not in Default mode and an internal selected time exists
+			if (shouldUpdateSelection && _internalSelectedTime != null)
+			{
+				// If the internal selected time is different from the currently selected time
+				if (!TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
+				{
+					// Update the selected time with the internal selected time
+					this.SelectedTime = _internalSelectedTime.Value;
+					// Clear the internal selected time after applying it
+					_internalSelectedTime = null;
+				}
 			}
-        }
+		}
 
-        #endregion
 
-        #region Override Methods
+		#endregion
 
-        /// <summary>
-        /// Method to wire the events.
-        /// </summary>
-        protected override void Initialize()
+		#region Override Methods
+
+		/// <summary>
+		/// Method to wire the events.
+		/// </summary>
+		protected override void Initialize()
         {
             base.Initialize();
             BaseColumns = _columns;

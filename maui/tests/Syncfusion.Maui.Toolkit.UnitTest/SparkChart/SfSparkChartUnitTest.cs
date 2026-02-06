@@ -194,50 +194,151 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.SparkCharts
 
         #region Empty Point Tests
 
-        // [Fact]
-        // public void EmptyPointValue_Zero_ReplacesNaNWithZero()
-        // {
-        //     // Arrange
-        //     var chart = new TestSparkChart
-        //     {
-        //         ItemsSource = new List<double> { 10, double.NaN, 30 },
-        //         EmptyPointValue = EmptyPointValues.Zero
-        //     };
+        #endregion
 
-        //     // Assert
-        //     Assert.Equal(new List<double> { 10, 0, 30 }, chart.yValues);
-        // }
+        #region
 
-        // [Theory]
-        // [InlineData(new double[] { double.NaN, 20, 30 }, new double[] { 10, 20, 30 })]       // NaN at start
-        // [InlineData(new double[] { 10, double.NaN, 30 }, new double[] { 10, 20, 30 })]       // NaN in middle
-        // [InlineData(new double[] { 10, 20, double.NaN }, new double[] { 10, 20, 10 })]       // NaN at end
-        // public void EmptyPointValue_Average_ReplacesNaNWithCorrectAverage(IEnumerable<double> inputData, IEnumerable<double> expectedData)
-        // {
-        //     // Arrange
-        //     var chart = new TestSparkChart
-        //     {
-        //         ItemsSource = inputData,
-        //         EmptyPointValue = EmptyPointValues.Average
-        //     };
+        private class AxisData
+        {
+            public string Category { get; set; } = string.Empty;
+            public double NumericData { get; set; }
+            public DateTime DateTimeData { get; set; }
+            public double Y { get; set; }
+        }
 
-        //     // Assert
-        //     Assert.Equal(expectedData, chart.yValues);
-        // }
+        [Fact]
+        public void CategoryAxis_NoSorting_NoGaps()
+        {
+            var chart = new TestSparkChart();
+            var src = new List<AxisData>
+            {
+                new() { Category="B", Y=20 },
+                new() { Category="A", Y=10 },
+                new() { Category="C", Y=30 },
+            };
 
-        // [Fact]
-        // public void EmptyPointValue_None_KeepsNaNInData()
-        // {
-        //     // Arrange
-        //     var chart = new TestSparkChart
-        //     {
-        //         ItemsSource = new List<double> { 10, double.NaN, 30 },
-        //         EmptyPointValue = EmptyPointValues.None
-        //     };
+            chart.ItemsSource = src;
+            chart.YBindingPath = nameof(AxisData.Y);
+            chart.XBindingPath = nameof(AxisData.Category);
+            chart.AxisType = SparkChartAxisType.Category;
 
-        //     // Assert
-        //     Assert.Equal(new List<double> { 10, double.NaN, 30 }, chart.yValues);
-        // }
+            Assert.Equal(3, chart.DataCount);
+            Assert.Equal([0, 1, 2], chart.xValues);
+            Assert.DoesNotContain(double.NaN, chart.yValues.Where((v, i) => true));
+        }
+
+        [Fact]
+        public void AxisLineStyle_Settable_And_ShowAxis_Toggle()
+        {
+            var chart = new TestSparkChart
+            {
+                ShowAxis = true
+            };
+            Assert.True(chart.ShowAxis);
+
+            chart.AxisLineStyle = new SparkChartLineStyle
+            {
+                Stroke = new SolidColorBrush(Colors.Orange),
+                StrokeWidth = 2d,
+                StrokeDashArray = new DoubleCollection { 2, 2 }
+            };
+
+            Assert.NotNull(chart.AxisLineStyle);
+            Assert.Equal(2d, chart.AxisLineStyle.StrokeWidth);
+            Assert.Equal(2, chart.AxisLineStyle.StrokeDashArray.Count);
+        }
+
+        #endregion
+
+        [Fact]
+        public void CategoryAxis_WithXBindingPath_StillUsesIndices_NoGaps_NoSorting()
+        {
+            var chart = new SfSparkChartUnitTest.TestSparkChart();
+            var src = new[]
+            {
+                new SparkChartTestData { Value = 10, OtherValue = 1 },
+                new SparkChartTestData { Value = 30, OtherValue = 3 },
+                new SparkChartTestData { Value = 20, OtherValue = 2 }
+            };
+
+            chart.YBindingPath = nameof(SparkChartTestData.Value);
+            chart.XBindingPath = nameof(SparkChartTestData.OtherValue);
+            chart.AxisType = SparkChartAxisType.Category;
+
+            chart.ItemsSource = src;
+
+            Assert.Equal(3, chart.DataCount);
+            Assert.True(chart.xValues.SequenceEqual(new List<double> { 0, 1, 2 }));
+            Assert.True(chart.yValues.SequenceEqual(new List<double> { 10, 30, 20 }));
+        }
+
+        #region Range Band Tests
+
+        [Fact]
+        public void RangeBand_Defaults_AreCorrect()
+        {
+            // Arrange
+            var chart = new TestSparkChart();
+
+            // Assert
+            Assert.True(double.IsNaN(chart.RangeBandStart));
+            Assert.True(double.IsNaN(chart.RangeBandEnd));
+			Assert.NotNull(chart.RangeBandFill);
+			Assert.Equal(Color.FromArgb("#E7E0EC"), (chart.RangeBandFill as SolidColorBrush)?.Color);
+        }
+
+        [Fact]
+        public void RangeBand_SetValues_Persists()
+        {
+			// Arrange
+			var chart = new TestSparkChart
+			{
+				// Act
+				RangeBandStart = 10,
+				RangeBandEnd = 20
+			};
+
+			// Assert
+			Assert.Equal(10, chart.RangeBandStart);
+            Assert.Equal(20, chart.RangeBandEnd);
+        }
+
+        [Fact]
+        public void RangeBandFill_SetBrush_Persists()
+        {
+            // Arrange
+            var chart = new TestSparkChart();
+            var brush = new SolidColorBrush(Color.FromArgb("#80FF00"));
+
+            // Act
+            chart.RangeBandFill = brush;
+
+            // Assert
+            Assert.Same(brush, chart.RangeBandFill);
+            Assert.Equal(Color.FromArgb("#80FF00"), (chart.RangeBandFill as SolidColorBrush)!.Color);
+        }
+
+        [Theory]
+        [InlineData(-50, -10)]  // negative range
+        [InlineData(0, 0)]      // zero range
+        [InlineData(0, 25)]     // zero to positive
+        [InlineData(-10, 30)]   // negative to positive
+        [InlineData(10, 0)]     // positive to zero (reversed)
+        [InlineData(15, -5)]    // positive to negative (reversed)
+        public void RangeBand_SetValues_NegativeZeroPositive_Persist(double start, double end)
+        {
+			// Arrange
+			var chart = new TestSparkChart
+			{
+				// Act
+				RangeBandStart = start,
+				RangeBandEnd = end
+			};
+
+			// Assert
+			Assert.Equal(start, chart.RangeBandStart);
+            Assert.Equal(end, chart.RangeBandEnd);
+        }
 
         #endregion
     }

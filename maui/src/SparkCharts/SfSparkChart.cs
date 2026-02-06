@@ -1,6 +1,7 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Reflection;
 using Microsoft.Maui.Layouts;
 using Syncfusion.Maui.Toolkit.Charts;
@@ -13,9 +14,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 	/// </summary>
 	public abstract class SfSparkChart : View, IContentView
 	{
-
 		readonly SparkChartView seriesView;
-
 
 		#region Constructor
 
@@ -139,7 +138,6 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				BindingMode.Default,
 				propertyChanged: OnSparkChartPropertyChanged);
 
-
 		/// <summary>
 		/// Identifies the Padding bindable property.
 		/// </summary>
@@ -151,6 +149,78 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				Thickness.Zero,
 				BindingMode.Default,
 				propertyChanged: OnSparkChartPropertyChanged);
+
+		/// <summary>
+		/// Identifies the XBindingPath bindable property.
+		/// </summary>
+		public static readonly BindableProperty XBindingPathProperty =
+			BindableProperty.Create(
+				nameof(XBindingPath),
+				typeof(string),
+				typeof(SfSparkChart),
+				string.Empty,
+				BindingMode.Default,
+				propertyChanged: OnSparkChartSourcePropertyChanged);
+
+		/// <summary>
+		/// Identifies the AxisType bindable property.
+		/// </summary>
+		public static readonly BindableProperty AxisTypeProperty =
+			BindableProperty.Create(
+				nameof(AxisType),
+				typeof(SparkChartAxisType),
+				typeof(SfSparkChart),
+				SparkChartAxisType.Numeric,
+				BindingMode.Default,
+				propertyChanged: OnSparkChartSourcePropertyChanged);
+		/// <summary>
+		/// Identifies the RangeBandStart bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The identifier for the <see cref="RangeBandStart"/> bindable property determines 
+		/// the start value of the range band in y-axis.
+		/// </remarks>
+		public static readonly BindableProperty RangeBandStartProperty =
+			BindableProperty.Create(
+				nameof(RangeBandStart),
+				typeof(double),
+				typeof(SfSparkChart),
+				double.NaN,
+				BindingMode.Default,
+				propertyChanged: OnSparkChartPropertyChanged);
+
+		/// <summary>
+		/// Identifies the RangeBandEnd bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The identifier for the <see cref="RangeBandEnd"/> bindable property determines 
+		/// the end value of the range band in y-axis.
+		/// </remarks>
+		public static readonly BindableProperty RangeBandEndProperty =
+			BindableProperty.Create(
+				nameof(RangeBandEnd),
+				typeof(double),
+				typeof(SfSparkChart),
+				double.NaN,
+				BindingMode.Default,
+				propertyChanged: OnSparkChartPropertyChanged);
+
+		/// <summary>
+		/// Identifies the RangeBandFill bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The identifier for the <see cref="RangeBandFill"/> bindable property specifies 
+		/// the range band color applied to the sparkchart.
+		/// </remarks>
+		public static readonly BindableProperty RangeBandFillProperty =
+			BindableProperty.Create(
+				nameof(RangeBandFill),
+				typeof(Brush),
+				typeof(SfSparkChart),
+				new SolidColorBrush(Color.FromArgb("#E7E0EC")),
+				BindingMode.Default,
+				propertyChanged: OnSparkChartPropertyChanged);
+
 		#endregion
 
 		#region Public Properties
@@ -208,6 +278,54 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			get => (Thickness)GetValue(PaddingProperty);
 			set => SetValue(PaddingProperty, value);
 		}
+
+		/// <summary>
+		/// Gets or sets the path to the property used for X-axis values.
+		/// </summary>
+		public string XBindingPath
+		{
+			get => (string)GetValue(XBindingPathProperty);
+			set => SetValue(XBindingPathProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets how the spark chart interprets X-axis values.
+		/// </summary>
+		public SparkChartAxisType AxisType
+		{
+			get => (SparkChartAxisType)GetValue(AxisTypeProperty);
+			set => SetValue(AxisTypeProperty, value);
+		}
+		/// <summary>
+		/// Gets or sets the start Y value of the highlighted range band.
+		/// </summary>
+		/// <value>It accepts <see cref="double"/> values and the default value is <c>double.NaN</c>.</value>
+		public double RangeBandStart
+		{
+			get => (double)GetValue(RangeBandStartProperty);
+			set => SetValue(RangeBandStartProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the end Y value of the highlighted range band.
+		/// </summary>
+		/// <value>It accepts <see cref="double"/> values and the default value is <c>double.NaN</c>.</value>
+		public double RangeBandEnd
+		{
+			get => (double)GetValue(RangeBandEndProperty);
+			set => SetValue(RangeBandEndProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the fill brush used to render the range band.
+		/// </summary>
+		/// <value> This property takes <see cref= "Brush"/> values and the default value is <c>#E7E0EC"</c>.</value>
+		public Brush RangeBandFill
+		{
+			get => (Brush)GetValue(RangeBandFillProperty);
+			set => SetValue(RangeBandFillProperty, value);
+		}
+
 		#endregion
 
 		#region Internal Properties
@@ -226,6 +344,9 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		internal int DataCount { get; private set; }
 
 		internal List<int> EmptyPointIndexes { get; private set; } = [];
+
+		// Tracks the positions of intentional "gaps" inserted for missing X in numeric/datetime axes.
+		internal HashSet<int> GapIndexes { get; private set; } = new();
 
 		internal SparkChartEmptyPointMode EmptyPointMode
 		{
@@ -266,12 +387,13 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		protected override void OnBindingContextChanged()
 		{
 			base.OnBindingContextChanged();
-
 			if (AxisLineStyle != null)
 			{
 				SetInheritedBindingContext(AxisLineStyle, BindingContext);
+				AxisLineStyle.Parent = this;
 			}
 		}
+
 		#endregion
 
 		#region Methods
@@ -331,6 +453,46 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			return rect;
 		}
 
+		/// <summary>
+		/// Draw the range band (plot band). Call this method before drawing series.
+		/// </summary>
+		internal void DrawRangeBand(ICanvas canvas, Rect rect)
+		{
+			if (double.IsNaN(RangeBandStart) || double.IsNaN(RangeBandEnd))
+			{
+				return;
+			}
+
+			var start = RangeBandStart;
+			var end = RangeBandEnd;
+			if (start > end)
+			{
+				(start, end) = (end, start);
+			}
+
+			var pStart = TransformToVisible(0, start, rect);
+			var pEnd = TransformToVisible(0, end, rect);
+
+			float yTop = MathF.Min(pStart.Y, pEnd.Y);
+			float yBottom = MathF.Max(pStart.Y, pEnd.Y);
+
+			float top = MathF.Max(0, yTop);
+			float bottom = MathF.Min((float)rect.Height, yBottom);
+
+			if (bottom <= top)
+			{
+				return;
+			}
+
+			var width = (float)rect.Width;
+			var height = bottom - top;
+			var drawRect = new Rect(0f, top, width, height);
+
+			canvas.SaveState();
+			canvas.SetFillPaint(RangeBandFill, drawRect);
+			canvas.FillRectangle(drawRect);
+			canvas.RestoreState();
+		}
 		#endregion
 
 		#region Property Callback Methods
@@ -358,12 +520,14 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				{
 					SetInheritedBindingContext(oldStyle, null);
 					oldStyle.PropertyChanged -= AxisLineStyle_PropertyChanged;
+					oldStyle.Parent = null;
 				}
 
 				if (newValue is SparkChartLineStyle newStyle)
 				{
 					SetInheritedBindingContext(newStyle, _chart.BindingContext);
 					newStyle.PropertyChanged += AxisLineStyle_PropertyChanged;
+					newStyle.Parent = _chart;
 				}
 
 				_chart.ScheduleUpdateArea();
@@ -372,7 +536,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 
 		static void AxisLineStyle_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-			if (sender is SfSparkLineChart _chart)
+			if (sender is SparkChartLineStyle style && style.Parent is SfSparkChart _chart)
 			{
 				_chart.ScheduleUpdateArea();
 			}
@@ -433,58 +597,220 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			GeneratePoints();
 			ScheduleUpdateArea();
 		}
+		private static double NormalizeNumericKey(double x)
+		{
+			// Round to a stable precision so 1 and 1.0000001 are treated the same
+			return Math.Round(x, 6, MidpointRounding.AwayFromZero);
+		}
+
+		private static DateTime NormalizeDateKey(double oaDate)
+		{
+			// Bucket by day for spark charts
+			return DateTime.FromOADate(oaDate).Date;
+		}
 
 		/// <summary>
 		/// Generates the data points for the Spark Chart from the ItemsSource.
+		/// Axis types support is applied only for X (XBindingPath) to avoid affecting previous functionalities.
+		/// For Numeric and DateTime:
+		/// - SparkLineChart and SparkAreaChart: sort the given data by X only (no gap insertion).
+		/// - SparkColumnChart and SparkWinLossChart: sort and generate a dense sequence (unit=1 or 1 day) inserting NaN for each missing unit.
 		/// </summary>
 		internal void GeneratePoints()
 		{
-			// Always clear previous data before generating new points.
 			yValues.Clear();
 			xValues.Clear();
 			EmptyPointIndexes.Clear();
+			GapIndexes.Clear();
 			DataCount = 0;
-
-			// Exit if the source is null or not a valid collection.
-			if (ItemsSource is not IEnumerable enumerable)
+			if (ItemsSource is not IEnumerable items)
 			{
 				UpdateMinMaxValues();
 				return;
 			}
 
-			var enumerator = enumerable.GetEnumerator();
-
-			// Exit for empty collections.
+			var enumerator = items.GetEnumerator();
 			if (!enumerator.MoveNext())
 			{
 				UpdateMinMaxValues();
 				return;
 			}
 
-			var type = enumerator.Current?.GetType();
-			Func<object, object?>? yValueAccessor = string.IsNullOrEmpty(YBindingPath) ? null : GetMethod(type, YBindingPath);
-			double i = 0;
-
+			var itemRuntimeType = enumerator.Current?.GetType();
+			Func<object, object?>? getY = string.IsNullOrEmpty(YBindingPath) ? null : GetMethod(itemRuntimeType, YBindingPath);
+			Func<object, object?>? getX = string.IsNullOrEmpty(XBindingPath) ? null : GetMethod(itemRuntimeType, XBindingPath);
+			var sourceYValues = new List<double>();
+			var sourceXValuesRaw = new List<object?>();
+			int categoryIndex = 0;
 			do
 			{
 				var item = enumerator.Current;
 				if (item == null)
 				{
-					yValues.Add(double.NaN);
+					sourceYValues.Add(double.NaN);
 				}
-				else if (yValueAccessor != null)
+				else if (getY != null)
 				{
-					var yVal = yValueAccessor(item);
-					yValues.Add(yVal == null ? double.NaN : Convert.ToDouble(yVal));
+					var yObj = getY(item);
+					sourceYValues.Add(yObj == null ? double.NaN : Convert.ToDouble(yObj, CultureInfo.InvariantCulture));
 				}
 				else if (item is double or int or float or decimal)
 				{
-					yValues.Add(Convert.ToDouble(item));
+					sourceYValues.Add(Convert.ToDouble(item, CultureInfo.InvariantCulture));
+				}
+				else
+				{
+					sourceYValues.Add(double.NaN);
 				}
 
-				xValues.Add(i++);
+				if (getX != null && item != null)
+				{
+					sourceXValuesRaw.Add(getX(item));
+				}
+				else
+				{
+					sourceXValuesRaw.Add(categoryIndex);
+				}
 
-			} while (enumerator.MoveNext());
+				categoryIndex++;
+			}
+			while (enumerator.MoveNext());
+
+			bool useCategoryAxis = string.IsNullOrEmpty(XBindingPath) || AxisType == SparkChartAxisType.Category;
+			if (useCategoryAxis)
+			{
+				for (int i = 0; i < sourceYValues.Count; i++)
+				{
+					xValues.Add(i);
+					yValues.Add(sourceYValues[i]);
+				}
+
+				DataCount = xValues.Count;
+				FindEmptyPoints();
+				ValidateEmptyPoints(yValues);
+				UpdateMinMaxValues();
+				return;
+			}
+
+			bool isLineOrAreaChart = this is SfSparkLineChart || this is SfSparkAreaChart;
+			if (isLineOrAreaChart)
+			{
+				if (AxisType == SparkChartAxisType.Numeric)
+				{
+					var pairs = new List<(double x, double y)>();
+					for (int i = 0; i < sourceYValues.Count; i++)
+					{
+						var x = ConvertToDouble(sourceXValuesRaw[i]);
+						if (!double.IsNaN(x))
+						{
+							var normalizedX = NormalizeNumericKey(x);
+							pairs.Add((normalizedX, sourceYValues[i]));
+						}
+					}
+
+					foreach (var value in pairs.OrderBy(value => value.x))
+					{
+						xValues.Add(value.x);
+						yValues.Add(value.y);
+					}
+				}
+				else // DateTime axis
+				{
+					var pairs = new List<(double x, double y)>();
+					for (int i = 0; i < sourceYValues.Count; i++)
+					{
+						var oa = ConvertToDouble(sourceXValuesRaw[i]);
+						if (!double.IsNaN(oa))
+						{
+							var day = NormalizeDateKey(oa);
+							pairs.Add((day.ToOADate(), sourceYValues[i]));
+						}
+					}
+
+					foreach (var value in pairs.OrderBy(value => value.x))
+					{
+						xValues.Add(value.x);
+						yValues.Add(value.y);
+					}
+				}
+
+				DataCount = xValues.Count;
+				FindEmptyPoints();
+				ValidateEmptyPoints(yValues);
+				UpdateMinMaxValues();
+				return;
+			}
+
+			if (AxisType == SparkChartAxisType.Numeric)
+			{
+				var lastYAtIndex = new Dictionary<long, double>();
+				for (int i = 0; i < sourceYValues.Count; i++)
+				{
+					var x = ConvertToDouble(sourceXValuesRaw[i]);
+					if (!double.IsNaN(x))
+					{
+						long bucket = (long)Math.Round(x, MidpointRounding.AwayFromZero);
+						lastYAtIndex[bucket] = sourceYValues[i];
+					}
+				}
+
+				if (lastYAtIndex.Count == 0)
+				{
+					UpdateMinMaxValues();
+					return;
+				}
+
+				long minBucket = lastYAtIndex.Keys.Min();
+				long maxBucket = lastYAtIndex.Keys.Max();
+				for (long bucket = minBucket; bucket <= maxBucket; bucket++)
+				{
+					xValues.Add(bucket);
+					if (lastYAtIndex.TryGetValue(bucket, out var y))
+					{
+						yValues.Add(y);
+					}
+					else
+					{
+						yValues.Add(double.NaN);
+						GapIndexes.Add(yValues.Count - 1);
+					}
+				}
+			}
+			else // DateTime axis
+			{
+				var lastYAtDay = new Dictionary<DateTime, double>();
+				for (int i = 0; i < sourceYValues.Count; i++)
+				{
+					var oa = ConvertToDouble(sourceXValuesRaw[i]);
+					if (!double.IsNaN(oa))
+					{
+						var day = NormalizeDateKey(oa);
+						lastYAtDay[day] = sourceYValues[i];
+					}
+				}
+
+				if (lastYAtDay.Count == 0)
+				{
+					UpdateMinMaxValues();
+					return;
+				}
+
+				var minDay = lastYAtDay.Keys.Min();
+				var maxDay = lastYAtDay.Keys.Max();
+				for (var day = minDay; day <= maxDay; day = day.AddDays(1))
+				{
+					xValues.Add(day.ToOADate());
+					if (lastYAtDay.TryGetValue(day, out var y))
+					{
+						yValues.Add(y);
+					}
+					else
+					{
+						yValues.Add(double.NaN);
+						GapIndexes.Add(yValues.Count - 1);
+					}
+				}
+			}
 
 			DataCount = xValues.Count;
 			FindEmptyPoints();
@@ -514,9 +840,41 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		private Func<object, object?> GetMethod(Type? type, string propName)
 		{
 			if (type == null)
+			{
 				return (obj) => null;
+			}
+
 			var propInfo = type.GetProperty(propName, BindingFlags.Public | BindingFlags.Instance);
 			return (obj) => propInfo?.GetValue(obj);
+		}
+
+		internal static double ConvertToDouble(object? val)
+		{
+			if (val == null)
+			{
+				return double.NaN;
+			}
+
+			if (double.TryParse(val.ToString(), out double doubleVal))
+			{
+				return doubleVal;
+			}
+
+			if (DateTime.TryParse(val.ToString(), out DateTime date))
+			{
+				if (date == DateTime.MaxValue)
+				{
+					return double.MaxValue;
+				}
+				else if (date == DateTime.MinValue)
+				{
+					return double.MinValue;
+				}
+
+				return date.ToOADate();
+			}
+
+			return double.NaN;
 		}
 
 		#endregion
@@ -554,6 +912,11 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 					{
 						foreach (int index in EmptyPointIndexes)
 						{
+							if (GapIndexes.Contains(index))
+							{
+								continue;
+							}
+
 							if (index == 0)
 							{
 								var nextIndex = index + 1;
@@ -578,6 +941,11 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 					{
 						foreach (int index in EmptyPointIndexes)
 						{
+							if (GapIndexes.Contains(index))
+							{
+								continue;
+							}
+
 							yValues[index] = 0;
 						}
 						break;
