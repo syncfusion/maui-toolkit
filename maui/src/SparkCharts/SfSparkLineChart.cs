@@ -217,7 +217,6 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		protected override void OnBindingContextChanged()
 		{
 			base.OnBindingContextChanged();
-
 			if (MarkerSettings != null)
 			{
 				SetInheritedBindingContext(MarkerSettings, BindingContext);
@@ -234,7 +233,8 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			canvas.SaveState();
 			rect = GetTranslatedRect(rect);
 			canvas.Translate((float)rect.X, (float)rect.Y);
-
+			// Draw plot band behind the series
+			DrawRangeBand(canvas, rect);
 			if (yValues.Count == 0)
 			{
 				return;
@@ -307,7 +307,6 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			for (int i = 0; i < DataCount; i++)
 			{
 				var yvalue = yValues[i];
-
 				if (double.IsNaN(yvalue))
 				{
 					continue;
@@ -315,7 +314,6 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 
 				PointF point = TransformToVisible(xValues[i], yvalue, rect);
 				Brush fill = GetMarkerFill(i, yvalue);
-
 				if (fill != null)
 				{
 					canvas.FillColor = fill.ToColor();
@@ -335,15 +333,29 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		Brush GetMarkerFill(int index, double yValue)
 		{
 			if (yValue == maxYValue && HighPointFill != null)
+			{
 				return HighPointFill;
+			}
+
 			if (yValue == minYValue && LowPointFill != null)
+			{
 				return LowPointFill;
+			}
+
 			if (index == 0 && FirstPointFill != null)
+			{
 				return FirstPointFill;
+			}
+
 			if (index == DataCount - 1 && LastPointFill != null)
+			{
 				return LastPointFill;
+			}
+
 			if (yValue < 0 && NegativePointsFill != null)
+			{
 				return NegativePointsFill;
+			}
 
 			return MarkerSettings?.Fill ?? this.Stroke;
 		}

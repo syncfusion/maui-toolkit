@@ -1262,7 +1262,687 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Same(expectedValue, actualValue);
         }
 
-        #endregion
+		#endregion
 
-    }
+		#region PopupSize Feature
+
+		[Fact]
+		public void SfCalendar_SfPopupSize()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 200;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+		}
+
+		[Fact]
+		public void SfCalendar_OnPropertyChangedSfPopupWidthAndHeight()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			calendar.PopupWidth = 100;
+			calendar.PopupHeight = 500;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+		}
+
+		[Fact]
+		public void SfCalendar_SfPopupWidthAndHeight_UsingHeaderHeight()
+		{
+			SfCalendar calendar = new SfCalendar();
+			CalendarHeaderView headerView = calendar.HeaderView;
+			double expectedHeight = 50;
+			headerView.Height = expectedHeight;
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.HeaderView = headerView;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			double actualHeight = calendar.HeaderView.Height;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedHeight, actualHeight);
+		}
+
+		[Fact]
+		public void SfCalendar_DialogMode()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.Dialog;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+		}
+
+		[Fact]
+		public void SfCalendar_AlignTop()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.RelativeDialog;
+			CalendarRelativePosition expectedRelativePosition = CalendarRelativePosition.AlignTop;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			calendar.RelativePosition = expectedRelativePosition;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			CalendarRelativePosition actualRelativePosition = calendar.RelativePosition;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+			Assert.Equal(expectedRelativePosition, actualRelativePosition);
+		}
+
+		[Fact]
+		public void SfCalendar_AlignToLeftOf()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.RelativeDialog;
+			CalendarRelativePosition expectedRelativePosition = CalendarRelativePosition.AlignToLeftOf;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			calendar.RelativePosition = expectedRelativePosition;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			CalendarRelativePosition actualRelativePosition = calendar.RelativePosition;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+			Assert.Equal(expectedRelativePosition, actualRelativePosition);
+		}
+
+		[Fact]
+		public void SfCalendar_AlignToRightOf()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.RelativeDialog;
+			CalendarRelativePosition expectedRelativePosition = CalendarRelativePosition.AlignToRightOf;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			calendar.RelativePosition = expectedRelativePosition;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			CalendarRelativePosition actualRelativePosition = calendar.RelativePosition;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+			Assert.Equal(expectedRelativePosition, actualRelativePosition);
+		}
+
+		[Fact]
+		public void SfCalendar_AlignBottom()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.RelativeDialog;
+			CalendarRelativePosition expectedRelativePosition = CalendarRelativePosition.AlignBottom;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			calendar.RelativePosition = expectedRelativePosition;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			CalendarRelativePosition actualRelativePosition = calendar.RelativePosition;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+			Assert.Equal(expectedRelativePosition, actualRelativePosition);
+		}
+
+		[Fact]
+		public void SfCalendar_AlignTopLeft()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.RelativeDialog;
+			CalendarRelativePosition expectedRelativePosition = CalendarRelativePosition.AlignTopLeft;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			calendar.RelativePosition = expectedRelativePosition;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			CalendarRelativePosition actualRelativePosition = calendar.RelativePosition;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+			Assert.Equal(expectedRelativePosition, actualRelativePosition);
+		}
+
+		[Fact]
+		public void SfCalendar_AlignTopRight()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.RelativeDialog;
+			CalendarRelativePosition expectedRelativePosition = CalendarRelativePosition.AlignTopRight;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			calendar.RelativePosition = expectedRelativePosition;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			CalendarRelativePosition actualRelativePosition = calendar.RelativePosition;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+			Assert.Equal(expectedRelativePosition, actualRelativePosition);
+		}
+
+		[Fact]
+		public void SfCalendar_AlignBottomLeft()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.RelativeDialog;
+			CalendarRelativePosition expectedRelativePosition = CalendarRelativePosition.AlignBottomLeft;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			calendar.RelativePosition = expectedRelativePosition;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			CalendarRelativePosition actualRelativePosition = calendar.RelativePosition;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+			Assert.Equal(expectedRelativePosition, actualRelativePosition);
+		}
+
+		[Fact]
+		public void SfCalendar_AlignBottomRight()
+		{
+			SfCalendar calendar = new SfCalendar();
+			double expectedPopupWidth = 200;
+			double expectedPopupHeight = 400;
+			CalendarMode expectedMode = CalendarMode.RelativeDialog;
+			CalendarRelativePosition expectedRelativePosition = CalendarRelativePosition.AlignBottomRight;
+			calendar.PopupWidth = expectedPopupWidth;
+			calendar.PopupHeight = expectedPopupHeight;
+			calendar.Mode = expectedMode;
+			calendar.RelativePosition = expectedRelativePosition;
+			double actualPopupWidth = calendar.PopupWidth;
+			double actualPopupHeight = calendar.PopupHeight;
+			CalendarMode actualMode = calendar.Mode;
+			CalendarRelativePosition actualRelativePosition = calendar.RelativePosition;
+			Assert.Equal(expectedPopupWidth, actualPopupWidth);
+			Assert.Equal(expectedPopupHeight, actualPopupHeight);
+			Assert.Equal(expectedMode, actualMode);
+			Assert.Equal(expectedRelativePosition, actualRelativePosition);
+		}
+
+		#endregion
+
+		#region Autofit Scenario's
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void ShowTrailingAndLeadingDates_GetAndSet(bool expected)
+		{
+			var calendar = new SfCalendar();
+			calendar.Mode = CalendarMode.Dialog;
+			calendar.ShowTrailingAndLeadingDates = expected;
+			Assert.Equal(expected, calendar.ShowTrailingAndLeadingDates);
+		}
+
+		[Theory]
+		[InlineData(1)]
+		[InlineData(2)]
+		[InlineData(3)]
+		[InlineData(4)]
+		[InlineData(5)]
+		[InlineData(6)]
+		public void Autofit_WithNumberOfVisibleWeeks(int weeks)
+		{
+			var calendar = new SfCalendar();
+			calendar.MonthView.NumberOfVisibleWeeks = weeks;
+			calendar.Mode = CalendarMode.Dialog;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.Equal(weeks, calendar.MonthView.NumberOfVisibleWeeks);
+			calendar.ShowTrailingAndLeadingDates = true;
+			Assert.Equal(weeks, calendar.MonthView.NumberOfVisibleWeeks);
+		}
+
+		[Theory]
+		[InlineData(CalendarMode.Default, 200)]
+		[InlineData(CalendarMode.Dialog, 320)]
+		[InlineData(CalendarMode.RelativeDialog, 420)]
+		public void Autofit_WithPopupMode_And_PopupHeight(CalendarMode mode, double popupHeight)
+		{
+			var calendar = new SfCalendar();
+			calendar.Mode = mode;
+			calendar.PopupHeight = popupHeight;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.Equal(mode, calendar.Mode);
+			Assert.Equal(popupHeight, calendar.PopupHeight);
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			calendar.ShowTrailingAndLeadingDates = true;
+			Assert.Equal(mode, calendar.Mode);
+			Assert.Equal(popupHeight, calendar.PopupHeight);
+			Assert.True(calendar.ShowTrailingAndLeadingDates);
+		}
+
+		[Theory]
+		[InlineData(DayOfWeek.Sunday)]
+		[InlineData(DayOfWeek.Monday)]
+		[InlineData(DayOfWeek.Tuesday)]
+		[InlineData(DayOfWeek.Wednesday)]
+		[InlineData(DayOfWeek.Thursday)]
+		[InlineData(DayOfWeek.Friday)]
+		[InlineData(DayOfWeek.Saturday)]
+		public void Autofit_WithFirstDayOfWeek(DayOfWeek firstDay)
+		{
+			var calendar = new SfCalendar();
+			calendar.MonthView.FirstDayOfWeek = firstDay;
+			calendar.Mode = CalendarMode.Dialog;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.Equal(firstDay, calendar.MonthView.FirstDayOfWeek);
+			calendar.ShowTrailingAndLeadingDates = true;
+			Assert.Equal(firstDay, calendar.MonthView.FirstDayOfWeek);
+		}
+
+		[Theory]
+		[InlineData("2001-01-01", "2099-12-31", "2025-06-15")]
+		[InlineData("1990-05-05", "2030-08-08", "2000-01-01")]
+		public void Autofit_WithDisplay_AndMinimumn_AndMaximum(string min, string max, string display)
+		{
+			var calendar = new SfCalendar();
+			calendar.MinimumDate = DateTime.Parse(min);
+			calendar.MaximumDate = DateTime.Parse(max);
+			calendar.DisplayDate = DateTime.Parse(display);
+			calendar.Mode = CalendarMode.Dialog;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.Equal(DateTime.Parse(min), calendar.MinimumDate);
+			Assert.Equal(DateTime.Parse(max), calendar.MaximumDate);
+			Assert.Equal(DateTime.Parse(display), calendar.DisplayDate);
+			calendar.ShowTrailingAndLeadingDates = true;
+			Assert.Equal(DateTime.Parse(min), calendar.MinimumDate);
+			Assert.Equal(DateTime.Parse(max), calendar.MaximumDate);
+			Assert.Equal(DateTime.Parse(display), calendar.DisplayDate);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void Autofit_WithShowWeekNumber(bool showWeekNumber)
+		{
+			var calendar = new SfCalendar();
+			calendar.MonthView.ShowWeekNumber = showWeekNumber;
+			calendar.Mode = CalendarMode.Dialog;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.Equal(showWeekNumber, calendar.MonthView.ShowWeekNumber);
+			calendar.ShowTrailingAndLeadingDates = true;
+			Assert.Equal(showWeekNumber, calendar.MonthView.ShowWeekNumber);
+		}
+
+		[Theory]
+		[InlineData(CalendarView.Decade)]
+		[InlineData(CalendarView.Year)]
+		[InlineData(CalendarView.Month)]
+		[InlineData(CalendarView.Century)]
+		public void Autofit_WithView(CalendarView view)
+		{
+			var calendar = new SfCalendar();
+			calendar.View = view;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.Dialog;
+			Assert.Equal(view, calendar.View);
+		}
+
+		[Theory]
+		[InlineData(CalendarIdentifier.Hijri)]
+		[InlineData(CalendarIdentifier.Persian)]
+		[InlineData(CalendarIdentifier.Korean)]
+		[InlineData(CalendarIdentifier.ThaiBuddhist)]
+		[InlineData(CalendarIdentifier.Gregorian)]
+		[InlineData(CalendarIdentifier.UmAlQura)]
+		[InlineData(CalendarIdentifier.Taiwan)]
+		public void Autofit_WithIdentifier(CalendarIdentifier identifier)
+		{
+			var calendar = new SfCalendar();
+			calendar.Identifier = identifier;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.Dialog;
+			Assert.Equal(identifier, calendar.Identifier);
+		}
+
+		#endregion
+
+		#region Additional Public Property Tests (Autofit-related and Navigation)
+
+		[Fact]
+		public void Autofit_WithMonthView_CellTemplate()
+		{
+			var calendar = new SfCalendar();
+			var grid = new Grid { BackgroundColor = Color.FromArgb("#123456") };
+			var label = new Label { TextColor = Colors.White, FontSize = 12, HorizontalOptions = LayoutOptions.Center, VerticalOptions = LayoutOptions.Center };
+			label.SetBinding(Label.TextProperty, new Binding { StringFormat = "{0:dd}" });
+			grid.Children.Add(label);
+			var template = new DataTemplate(() => grid);
+			calendar.MonthView.CellTemplate = template;
+			calendar.Mode = CalendarMode.Dialog;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(template, calendar.MonthView.CellTemplate);
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+			calendar.MonthView.CellTemplate = null;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Null(calendar.MonthView.CellTemplate);
+		}
+
+		[Theory]
+		[InlineData(CalendarSelectionMode.Single)]
+		[InlineData(CalendarSelectionMode.Multiple)]
+		[InlineData(CalendarSelectionMode.Range)]
+		[InlineData(CalendarSelectionMode.MultiRange)]
+		public void Autofit_WithSelectionMode(CalendarSelectionMode mode)
+		{
+			var calendar = new SfCalendar();
+			calendar.SelectionMode = mode;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.Dialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(mode, calendar.SelectionMode);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void Autofit_WithNavigateToAdjacentMonth(bool expected)
+		{
+			var calendar = new SfCalendar();
+			calendar.NavigateToAdjacentMonth = expected;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.Dialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(expected, calendar.NavigateToAdjacentMonth);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void Autofit_WithAllowViewNavigation(bool expected)
+		{
+			var calendar = new SfCalendar();
+			calendar.AllowViewNavigation = expected;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(expected, calendar.AllowViewNavigation);
+		}
+
+		[Theory]
+		[InlineData(CalendarNavigationDirection.Horizontal)]
+		[InlineData(CalendarNavigationDirection.Vertical)]
+		public void Autofit_WithNavigationDirection(CalendarNavigationDirection direction)
+		{
+			var calendar = new SfCalendar();
+			calendar.NavigationDirection = direction;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(direction, calendar.NavigationDirection);
+		}
+
+		[Theory]
+		[InlineData(CalendarRangeSelectionDirection.Default)]
+		[InlineData(CalendarRangeSelectionDirection.Forward)]
+		[InlineData(CalendarRangeSelectionDirection.Backward)]
+		[InlineData(CalendarRangeSelectionDirection.Both)]
+		[InlineData(CalendarRangeSelectionDirection.None)]
+		public void Autofit_WithRangeSelectionDirection(CalendarRangeSelectionDirection direction)
+		{
+			var calendar = new SfCalendar();
+			calendar.RangeSelectionDirection = direction;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(direction, calendar.RangeSelectionDirection);
+		}
+
+		[Fact]
+		public void Autofit_WithSelectableDayPredicate()
+		{
+			var calendar = new SfCalendar();
+			Func<DateTime, bool> predicate = d => d.Day % 2 == 0; // even days selectable
+			calendar.SelectableDayPredicate = predicate;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(predicate, calendar.SelectableDayPredicate);
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.True(calendar.SelectableDayPredicate(DateTime.Parse("2025-01-02")));
+			Assert.False(calendar.SelectableDayPredicate(DateTime.Parse("2025-01-03")));
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void Autofit_WithMonthView_ShowWeekNumber(bool expected)
+		{
+			var calendar = new SfCalendar();
+			calendar.MonthView.ShowWeekNumber = expected;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.Equal(expected, calendar.MonthView.ShowWeekNumber);
+		}
+
+		[Theory]
+		[InlineData(10)]
+		[InlineData(0)]
+		[InlineData(-10)]
+		[InlineData(85)]
+		public void Autofit_WithHeaderView_Height(double height)
+		{
+			var calendar = new SfCalendar();
+			calendar.HeaderView.Height = height;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.Equal(height, calendar.HeaderView.Height);
+		}
+
+		[Theory]
+		[InlineData(20)]
+		[InlineData(0)]
+		[InlineData(-10)]
+		[InlineData(85)]
+		public void Autofit_WithMonthHeaderView_Height(double height)
+		{
+			var calendar = new SfCalendar();
+			calendar.MonthView.HeaderView.Height = height;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(height, calendar.MonthView.HeaderView.Height);
+		}
+
+		[Theory]
+		[InlineData(20)]
+		[InlineData(0)]
+		[InlineData(-10)]
+		[InlineData(85)]
+		public void Autofit_WithFooterView_Height(double height)
+		{
+			var calendar = new SfCalendar();
+			calendar.FooterView.Height = height;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(height, calendar.FooterView.Height);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void Autofit_WithEnableSwipeSelection(bool expected)
+		{
+			var calendar = new SfCalendar();
+			calendar.EnableSwipeSelection = expected;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(expected, calendar.EnableSwipeSelection);
+		}
+
+		[Theory]
+		[InlineData(CalendarSelectionShape.Circle)]
+		[InlineData(CalendarSelectionShape.Rectangle)]
+		public void Autofit_WithSelectionShape(CalendarSelectionShape expected)
+		{
+			var calendar = new SfCalendar();
+			calendar.SelectionShape = expected;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(expected, calendar.SelectionShape);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void Autofit_WithCanToggleDaySelection(bool expected)
+		{
+			var calendar = new SfCalendar();
+			calendar.CanToggleDaySelection = expected;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(expected, calendar.CanToggleDaySelection);
+		}
+		[Theory]
+		[InlineData(CalendarRelativePosition.AlignTop)]
+		[InlineData(CalendarRelativePosition.AlignBottom)]
+		[InlineData(CalendarRelativePosition.AlignToLeftOf)]
+		[InlineData(CalendarRelativePosition.AlignToRightOf)]
+		[InlineData(CalendarRelativePosition.AlignTopLeft)]
+		[InlineData(CalendarRelativePosition.AlignTopRight)]
+		[InlineData(CalendarRelativePosition.AlignBottomLeft)]
+		[InlineData(CalendarRelativePosition.AlignBottomRight)]
+		public void Autofit_WithRelativePosition(CalendarRelativePosition position)
+		{
+			var calendar = new SfCalendar();
+			calendar.View = CalendarView.Month;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			calendar.RelativePosition = position;
+			calendar.PopupHeight = 300;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.Equal(CalendarMode.RelativeDialog, calendar.Mode);
+			Assert.Equal(position, calendar.RelativePosition);
+			calendar.RelativePosition = CalendarRelativePosition.AlignTop;
+			Assert.Equal(CalendarMode.RelativeDialog, calendar.Mode);
+			Assert.Equal(CalendarRelativePosition.AlignTop, calendar.RelativePosition);
+		}
+
+		#endregion
+
+		#region Autofit + Identifier Combination Properties
+
+		[Theory]
+		[InlineData(CalendarIdentifier.Gregorian, true, 6)]
+		[InlineData(CalendarIdentifier.Gregorian, false, 6)]
+		[InlineData(CalendarIdentifier.Hijri, true, 6)]
+		[InlineData(CalendarIdentifier.Hijri, false, 6)]
+		[InlineData(CalendarIdentifier.Persian, true, 6)]
+		[InlineData(CalendarIdentifier.Persian, false, 6)]
+		[InlineData(CalendarIdentifier.Korean, true, 5)]
+		[InlineData(CalendarIdentifier.Korean, false, 5)]
+		[InlineData(CalendarIdentifier.Taiwan, true, 4)]
+		[InlineData(CalendarIdentifier.Taiwan, false, 4)]
+		[InlineData(CalendarIdentifier.ThaiBuddhist, true, 6)]
+		[InlineData(CalendarIdentifier.UmAlQura, false, 6)]
+		public void Autofit_PropertyConsistency_WithIdentifier(CalendarIdentifier identifier, bool showTrailing, int weeks)
+		{
+			var calendar = new SfCalendar();
+			calendar.View = CalendarView.Month;
+			calendar.Identifier = identifier;
+			calendar.ShowTrailingAndLeadingDates = showTrailing;
+			calendar.MonthView.NumberOfVisibleWeeks = weeks;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			Assert.Equal(identifier, calendar.Identifier);
+			Assert.Equal(showTrailing, calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(weeks, calendar.MonthView.NumberOfVisibleWeeks);
+			Assert.Equal(CalendarView.Month, calendar.View);
+		}
+
+		[Theory]
+		[InlineData(CalendarIdentifier.Hijri)]
+		[InlineData(CalendarIdentifier.UmAlQura)]
+		[InlineData(CalendarIdentifier.Gregorian)]
+		[InlineData(CalendarIdentifier.Persian)]
+		public void Trailing_Toggle_DoesNotChange_Identifier(CalendarIdentifier identifier)
+		{
+			var calendar = new SfCalendar();
+			calendar.Identifier = identifier;
+			calendar.View = CalendarView.Month;
+			calendar.MonthView.NumberOfVisibleWeeks = 6;
+			calendar.Mode = CalendarMode.RelativeDialog;
+			calendar.ShowTrailingAndLeadingDates = false;
+			Assert.Equal(identifier, calendar.Identifier);
+			calendar.ShowTrailingAndLeadingDates = true;
+			Assert.Equal(identifier, calendar.Identifier);
+		}
+
+		[Theory]
+		[InlineData(CalendarMode.Default, CalendarIdentifier.Gregorian, 300)]
+		[InlineData(CalendarMode.Dialog, CalendarIdentifier.Hijri, 280)]
+		[InlineData(CalendarMode.RelativeDialog, CalendarIdentifier.Persian, 420)]
+		public void PopupMode_WithIdentifier_PropertyConsistency(CalendarMode mode, CalendarIdentifier identifier, double popupHeight)
+		{
+			var calendar = new SfCalendar();
+			calendar.View = CalendarView.Month;
+			calendar.Mode = mode;
+			calendar.Identifier = identifier;
+			calendar.PopupHeight = popupHeight;
+			calendar.ShowTrailingAndLeadingDates = false;
+			calendar.MonthView.NumberOfVisibleWeeks = 6;
+			Assert.Equal(mode, calendar.Mode);
+			Assert.Equal(identifier, calendar.Identifier);
+			Assert.Equal(popupHeight, calendar.PopupHeight);
+			Assert.False(calendar.ShowTrailingAndLeadingDates);
+			Assert.Equal(6, calendar.MonthView.NumberOfVisibleWeeks);
+		}
+
+		#endregion
+	}
 }

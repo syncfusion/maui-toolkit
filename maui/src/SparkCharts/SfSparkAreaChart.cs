@@ -237,7 +237,8 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			canvas.SaveState();
 			rect = GetTranslatedRect(rect);
 			canvas.Translate((float)rect.X, (float)rect.Y);
-
+			// Draw plot band behind the series
+			DrawRangeBand(canvas, rect);
 			// Determine the baseline for the area, clamped within the visible Y-range.
 			var _baseline = Math.Max(minYValue, Math.Min(maxYValue, 0d));
 			var _baselineY = TransformToVisible(0, _baseline, rect).Y;
@@ -336,11 +337,12 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			for (int i = 0; i < DataCount; i++)
 			{
 				if (double.IsNaN(yValues[i]))
+				{
 					continue;
+				}
 
 				PointF point = TransformToVisible(xValues[i], yValues[i], rect);
 				Brush fill = GetMarkerFill(i);
-
 				if (fill != null)
 				{
 					canvas.FillColor = fill.ToColor();
@@ -363,15 +365,29 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			double yValue = yValues[index];
 
 			if (yValue == maxYValue && HighPointFill != null)
+			{
 				return HighPointFill;
+			}
+
 			if (yValue == minYValue && LowPointFill != null)
+			{
 				return LowPointFill;
+			}
+
 			if (index == 0 && FirstPointFill != null)
+			{
 				return FirstPointFill;
+			}
+
 			if (index == DataCount - 1 && LastPointFill != null)
+			{
 				return LastPointFill;
+			}
+
 			if (yValue < 0 && NegativePointsFill != null)
+			{
 				return NegativePointsFill;
+			}
 
 			return MarkerSettings?.Fill ?? Stroke;
 		}
@@ -416,12 +432,11 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		{
 			var segments = new List<List<PointF>>();
 			var currentSegment = new List<PointF>();
-
 			for (int i = 0; i < DataCount; i++)
 			{
 				if (double.IsNaN(yValues[i]))
 				{
-					if (currentSegment.Any())
+					if (currentSegment.Count != 0)
 					{
 						segments.Add(currentSegment);
 						currentSegment = new List<PointF>();
@@ -433,7 +448,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				}
 			}
 
-			if (currentSegment.Any())
+			if (currentSegment.Count != 0)
 			{
 				segments.Add(currentSegment);
 			}

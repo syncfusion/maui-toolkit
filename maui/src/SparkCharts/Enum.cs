@@ -69,4 +69,25 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		/// </summary>
 		VerticalLine
 	}
+
+	/// <summary>
+	/// Defines the axis value type semantics for spark charts.
+	/// </summary>
+	public enum SparkChartAxisType
+	{
+		/// <summary>
+		/// Treat axis values as discrete categories.
+		/// </summary>
+		Category,
+
+		/// <summary>
+		/// Treat axis values as date-time instances.
+		/// </summary>
+		DateTime,
+
+		/// <summary>
+		/// Treat axis values as numeric.
+		/// </summary>
+		Numeric
+	}
 }

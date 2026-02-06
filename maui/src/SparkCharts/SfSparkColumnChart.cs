@@ -180,10 +180,11 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			rect = GetTranslatedRect(rect);
 			canvas.Translate((float)rect.X, (float)rect.Y);
 
+			// Draw plot band behind the series
+			DrawRangeBand(canvas, rect);
 			// Ensure valid Y range
 			double _yMin = minYValue;
 			double _yMax = maxYValue;
-
 			if (_yMin == _yMax)
 			{
 				_yMin = _yMin > 0 ? 0 : _yMin;

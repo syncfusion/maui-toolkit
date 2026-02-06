@@ -1455,8 +1455,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
 			SetPrivateField(navigationDrawer, "_isRTL", true);
 			InvokePrivateMethod(navigationDrawer, "UpdateDrawerFlowDirection");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(FlowDirection.RightToLeft, _mainContentGrid?.FlowDirection);
+			Assert.Equal(FlowDirection.RightToLeft, navigationDrawer.ContentView?.FlowDirection);
 		}
 
 		[Fact]
@@ -1479,8 +1478,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Right;
 			navigationDrawer.DrawerSettings.Transition = transition;
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(0, _mainContentGrid?.TranslationX);
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationX);
 
 		}
 
@@ -1514,8 +1512,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Left;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(0, _mainContentGrid?.TranslationX);
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationX);
 		}
 
 		[Theory]
@@ -1528,8 +1525,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Transition = transition;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(navigationDrawer.DrawerSettings.DrawerWidth, _mainContentGrid?.TranslationX);
+			Assert.Equal(navigationDrawer.DrawerSettings.DrawerWidth, navigationDrawer.ContentView?.TranslationX);
 		}
 
 		[Fact]
@@ -1539,8 +1535,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(0, _mainContentGrid?.TranslationY);
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
 		}
 
 		[Fact]
@@ -1550,8 +1545,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			navigationDrawer.DrawerSettings.Transition = Transition.Push;
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(0, _mainContentGrid?.TranslationY);
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
 		}
 
 		[Fact]
@@ -1561,8 +1555,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(0, _mainContentGrid?.TranslationY);
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
 		}
 
 		[Theory]
@@ -1575,8 +1568,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Transition = transition;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(navigationDrawer.DrawerSettings.DrawerHeight, _mainContentGrid?.TranslationY);
+			Assert.Equal(navigationDrawer.DrawerSettings.DrawerHeight, navigationDrawer.ContentView?.TranslationY);
 		}
 
 		[Fact]
@@ -1586,8 +1578,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(0, _mainContentGrid?.TranslationY);
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
 		}
 
 		[Theory]
@@ -1600,8 +1591,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Transition = transition;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(-navigationDrawer.DrawerSettings.DrawerHeight, _mainContentGrid?.TranslationY);
+			Assert.Equal(-navigationDrawer.DrawerSettings.DrawerHeight, navigationDrawer.ContentView?.TranslationY);
 		}
 
 		[Theory]
@@ -1613,8 +1603,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			navigationDrawer.DrawerSettings.Transition = transition;
 			InvokePrivateMethod(navigationDrawer, "PositionUpdate");
-			var _mainContentGrid = GetPrivateField(navigationDrawer, "_mainContentGrid") as SfGrid;
-			Assert.Equal(0, _mainContentGrid?.TranslationY);
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
 		}
 
 		[Fact]
@@ -1683,8 +1672,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerWidth = 200 };
 			var greyOverlayGrid = new SfGrid();
 			var drawerLayout = new SfGrid();
-			var mainContentGrid = new SfGrid() { TranslationX = navigationDrawer.DrawerSettings.DrawerWidth };
-			SetPrivateField(navigationDrawer, "_mainContentGrid", mainContentGrid);
+			navigationDrawer.ContentView = new SfGrid { TranslationX = navigationDrawer.DrawerSettings.DrawerWidth };
 			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
 			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
@@ -1709,9 +1697,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerWidth = 200 };
 			var greyOverlayGrid = new SfGrid();
 			var drawerLayout = new SfGrid();
-			var mainContentGrid = new SfGrid();
-			mainContentGrid.TranslationX = 0;
-			SetPrivateField(navigationDrawer, "_mainContentGrid", mainContentGrid);
+			navigationDrawer.ContentView = new SfGrid { TranslationX = 0 };
 			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
 			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
@@ -1763,8 +1749,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerWidth = 200 };
 			var greyOverlayGrid = new SfGrid();
 			var drawerLayout = new SfGrid();
-			var mainGrid = new SfGrid { TranslationX = -navigationDrawer.DrawerSettings.DrawerWidth };
-			SetPrivateField(navigationDrawer, "_mainContentGrid", mainGrid);
+			navigationDrawer.ContentView = new SfGrid { TranslationX = -navigationDrawer.DrawerSettings.DrawerWidth };
 			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
 			SetPrivateField(navigationDrawer, "_drawerLayout", drawerLayout);
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
@@ -1794,8 +1779,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			nav.ScreenWidth = 1200;
 
-			var mainContentGrid = new SfGrid { TranslationX = 0 };
-			SetPrivateField(nav, "_mainContentGrid", mainContentGrid);
+			nav.ContentView = new SfGrid { TranslationX = 0 };
 			SetPrivateField(nav, "_drawerLayout", new SfGrid());
 			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 0 });
 
@@ -1820,7 +1804,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			nav.ScreenWidth = 1200;
 
 			var drawerLayout = new SfGrid { TranslationX = 1200 };
-			SetPrivateField(nav, "_mainContentGrid", new SfGrid());
+			nav.ContentView = new SfGrid();
 			SetPrivateField(nav, "_drawerLayout", drawerLayout);
 			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 0 });
 
@@ -1858,7 +1842,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			nav.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerWidth = 200 };
 			nav.ScreenWidth = 1080;
 
-			SetPrivateField(nav, "_mainContentGrid", new SfGrid { TranslationX = -200 });
+			nav.ContentView = new SfGrid { TranslationX = -200 };
 			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 100 });
 
 			SetPrivateField(nav, "_drawerLayout", new SfGrid());
@@ -1883,11 +1867,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			var drawerLayout = new SfGrid();
 			var greyOverlay = new SfGrid();
-			var mainGrid = new SfGrid { TranslationY = -300 };
+			nav.ContentView = new SfGrid{ TranslationY=-300};
 
 			SetPrivateField(nav, "_drawerLayout", drawerLayout);
 			SetPrivateField(nav, "_greyOverlayGrid", greyOverlay);
-			SetPrivateField(nav, "_mainContentGrid", mainGrid);
 			SetPrivateField(nav, "_isDrawerOpen", false);
 			SetPrivateField(nav, "_isTransitionDifference", false);
 
@@ -1912,11 +1895,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			var drawerLayout = new SfGrid { TranslationY = expectedY };
 			var greyOverlay = new SfGrid();
-			var mainGrid = new SfGrid();
-
+			nav.ContentView = new SfGrid { };
 			SetPrivateField(nav, "_drawerLayout", drawerLayout);
 			SetPrivateField(nav, "_greyOverlayGrid", greyOverlay);
-			SetPrivateField(nav, "_mainContentGrid", mainGrid);
 			SetPrivateField(nav, "_isDrawerOpen", false);
 			SetPrivateField(nav, "_isTransitionDifference", false);
 
@@ -1936,8 +1917,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				DrawerHeight = 300
 			};
 
-			var mainContent = new SfGrid { TranslationY = 300 };
-			SetPrivateField(nav, "_mainContentGrid", mainContent);
+			nav.ContentView = new SfGrid { TranslationY = 300 };
 			SetPrivateField(nav, "_drawerLayout", new SfGrid());
 			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid());
 
@@ -1963,7 +1943,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			double expectedTranslationY = -((1200 / 2.0) - (300 / 2.0)) - 0; // Assuming _drawerMoveTop = 0
 			var drawerLayout = new SfGrid { TranslationY = expectedTranslationY };
 
-			SetPrivateField(nav, "_mainContentGrid", new SfGrid());
+			nav.ContentView = new SfGrid();
 			SetPrivateField(nav, "_drawerLayout", drawerLayout);
 			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid());
 
@@ -2017,7 +1997,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			SetPrivateField(nav, "_drawerLayout", drawerLayout);
 			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid());
-			SetPrivateField(nav, "_mainContentGrid", new SfGrid());
+			nav.ContentView = new SfGrid();
 
 			SetPrivateField(nav, "_remainDrawerHeight", -(300 / 2.0)); // -150
 			SetPrivateField(nav, "_isDrawerOpen", false);
@@ -2035,7 +2015,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			nav.DrawerSettings = new DrawerSettings { Transition = Transition.Reveal, DrawerHeight = 300 };
 			nav.ScreenHeight = 1200;
 
-			SetPrivateField(nav, "_mainContentGrid", new SfGrid { TranslationY = 300 });
+			nav.ContentView = new SfGrid { TranslationY = 300 };
 			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 100 });
 			SetPrivateField(nav, "_drawerLayout", new SfGrid());
 
@@ -2112,7 +2092,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			nav.ScreenHeight = 1200;
 
 			SetPrivateField(nav, "_drawerLayout", new SfGrid());
-			SetPrivateField(nav, "_mainContentGrid", new SfGrid { TranslationY = -300 });
+			nav.ContentView = new SfGrid { TranslationY = -300 };
 			SetPrivateField(nav, "_greyOverlayGrid", new SfGrid { TranslationX = 20 }); // < ScreenWidth
 
 			SetPrivateField(nav, "_remainDrawerHeight", -200);

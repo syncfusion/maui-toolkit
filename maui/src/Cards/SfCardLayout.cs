@@ -144,16 +144,12 @@ namespace Syncfusion.Maui.Toolkit.Cards
             Padding = new Thickness(10, 5);
             IsClippedToBounds = true;
             this.AddGestureListener(this);
-#if IOS
-
-#if NET10_0
+#if (IOS || ANDROID) && NET10_0
             this.SafeAreaEdges = SafeAreaEdges.None;
-#else
+#elif IOS
             IgnoreSafeArea = true;
 #endif
-
-#endif
-		}
+        }
 
         #endregion
 

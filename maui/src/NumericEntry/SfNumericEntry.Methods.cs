@@ -807,6 +807,25 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		}
 
 		/// <summary>
+		/// Combines multiple NSRange values into a single range that encompasses all specified ranges.
+		/// </summary>
+		/// <remarks>If only one range is provided, that range is returned unchanged. The merged range may not be
+		/// contiguous if the input ranges are disjoint.</remarks>
+		/// <param name="ranges">An array of NSValue objects representing the ranges to merge. Must contain at least one element.</param>
+		/// <returns>An NSRange that starts at the minimum location of the input ranges and has a length equal to the sum of their
+		/// lengths.</returns>
+		private static NSRange MergeRanges(NSValue[] ranges)
+		{
+			var combinedRange = ranges.Length == 1
+				? ranges[0].RangeValue
+				: new Foundation.NSRange(
+					ranges.Min(r => r.RangeValue.Location),
+					(nint)ranges.Sum(r => r.RangeValue.Length)
+				);
+			return combinedRange;
+		}
+
+		/// <summary>
 		/// Validates and handles text changes in the UITextField.
 		/// </summary>
 		/// <param name="textField">The UITextField being modified.</param>
@@ -872,25 +891,6 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				OnTextBoxPaste(textField, caretPosition);
 			}
 			return false;
-		}
-
-		/// <summary>
-		/// Combines multiple NSRange values into a single range that encompasses all specified ranges.
-		/// </summary>
-		/// <remarks>If only one range is provided, that range is returned unchanged. The merged range may not be
-		/// contiguous if the input ranges are disjoint.</remarks>
-		/// <param name="ranges">An array of NSValue objects representing the ranges to merge. Must contain at least one element.</param>
-		/// <returns>An NSRange that starts at the minimum location of the input ranges and has a length equal to the sum of their
-		/// lengths.</returns>
-		private static NSRange MergeRanges(NSValue[] ranges)
-		{
-			var combinedRange = ranges.Length == 1
-				? ranges[0].RangeValue
-				: new Foundation.NSRange(
-					ranges.Min(r => r.RangeValue.Location),
-					(nint)ranges.Sum(r => r.RangeValue.Length)
-				);
-			return combinedRange;
 		}
 
 		/// <summary>
@@ -2834,7 +2834,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			if (textBox.Handler != null && textBox.Handler.PlatformView is UIKit.UITextField macEntry)
 			{
 				_uiEntry = macEntry;
-				if (OperatingSystem.IsIOSVersionAtLeast(26,0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
+				if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
 				{
 #if NET10_0_OR_GREATER
 					macEntry.ShouldChangeCharactersInRanges += Handle_ShouldChangeCharactersInRanges;
@@ -2846,6 +2846,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				{
 					macEntry.ShouldChangeCharacters += ValidateTextChanged;
 				}
+
 				macEntry.BorderStyle = UITextBorderStyle.None;
 				macEntry.KeyboardType = UIKeyboardType.DecimalPad;
 			}

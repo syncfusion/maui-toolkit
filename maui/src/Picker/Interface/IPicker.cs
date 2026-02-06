@@ -29,6 +29,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 		/// <param name="childIndex">The column child index.</param>
 		/// <param name="isTapped">Is tap gesture used</param>
 		/// <param name="isInitialLoading">Check whether is initial loading.</param>
-		void UpdateSelectedIndexValue(int tappedIndex, int childIndex, bool isTapped, bool isInitialLoading = false);
+		/// <param name="isKeyboardInteraction">Indicates whether the update is triggered from scroll view keyboard interaction.</param>
+		void UpdateSelectedIndexValue(int tappedIndex, int childIndex, bool isTapped, bool isInitialLoading = false, bool isKeyboardInteraction = false);
     }
 }

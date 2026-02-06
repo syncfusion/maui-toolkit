@@ -244,10 +244,13 @@
 
 		internal override void CreateSegment(SeriesView seriesView, double[] values, bool isFill, bool isBull, int index)
 		{
+			bool hasNaN = double.IsNaN(values[3]) || double.IsNaN(values[4]) || double.IsNaN(values[5]) || double.IsNaN(values[6]);
+
 			if (CreateSegment() is CandleSegment segment && ActualData != null)
 			{
 				segment.Series = this;
 				segment.Index = index;
+				segment.IsZero = hasNaN;
 				segment.SeriesView = seriesView;
 				segment.Item = ActualData[index];
 				segment.SetData(values, isFill, isBull);

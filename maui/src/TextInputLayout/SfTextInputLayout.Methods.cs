@@ -1420,13 +1420,16 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 			if (ShowUpDownButton && (IsUpDownAlignmentLeft || IsUpDownAlignmentBoth) && ((IsUpDownVerticalAlignment && !IsUpDownAlignmentBoth) || !IsUpDownVerticalAlignment))
 			{
-				if ((IsUpDownAlignmentBoth && !IsUpDownVerticalAlignment) || (IsUpDownVerticalAlignment && !IsUpDownAlignmentBoth))
+				if(!IsNone)
 				{
-					_hintRect.X += _upIconRectF.Width ;
-				}
-				else
-				{
-					_hintRect.X += _upIconRectF.Width * 2;
+					if ((IsUpDownAlignmentBoth && !IsUpDownVerticalAlignment) || (IsUpDownVerticalAlignment && !IsUpDownAlignmentBoth))
+					{
+						_hintRect.X += _upIconRectF.Width ;
+					}
+					else
+					{
+						_hintRect.X += _upIconRectF.Width * 2;
+					}
 				}
 				if (IsNone)
 				{

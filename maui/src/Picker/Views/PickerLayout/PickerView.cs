@@ -110,6 +110,51 @@ namespace Syncfusion.Maui.Toolkit.Picker
         #region Internal Methods
 
         /// <summary>
+        /// Method to handle the keyboard interaction for both Scrollview and PickerView.
+        /// </summary>
+        /// <param name="args">The keyboard event args.</param>
+        /// <param name="isFromScrollVew">Used to denote whether it is from picker scroll View</param>
+        internal void HandleKeyboardAccessiblity(KeyEventArgs args, bool isFromScrollVew = false)
+        {
+            if (args.Key == KeyboardKey.Tab)
+            {
+                this.Focus();
+            }
+            else if (args.Key == KeyboardKey.Up)
+            {
+                if (_selectedIndex > 0)
+                {
+                    _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex - 1, false, isKeyboardInteraction: isFromScrollVew);
+                }
+                else if (isFromScrollVew && _pickerViewInfo.EnableLooping)
+                {
+                    _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex - 1, false, isKeyboardInteraction: isFromScrollVew);
+                }
+            }
+            else if (args.Key == KeyboardKey.Down)
+            {
+                _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex + 1, false, isKeyboardInteraction: isFromScrollVew);
+            }
+            else if (args.Key == KeyboardKey.Right || args.Key == KeyboardKey.Left)
+            {
+                this.Unfocus();
+                PickerContainer? pickerContainer = this.Parent.Parent.Parent as PickerContainer;
+                pickerContainer?.PickerRightLeftKeys(args, _pickerLayoutInfo.Column._columnIndex);
+            }
+            else if (args.Key == KeyboardKey.Enter)
+            {
+                if (_pickerViewInfo.IsOpen == true)
+                {
+                    _pickerViewInfo.IsOpen = false;
+                }
+            }
+            else if (args.Key == KeyboardKey.Escape)
+            {
+                _pickerViewInfo.IsOpen = false;
+            }
+        }
+
+        /// <summary>
         /// Method to update the view port height while scroll view height is changed.
         /// </summary>
         /// <param name="viewPortHeight">The view port height.</param>
@@ -520,6 +565,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double viewPortHeight = GetViewPortHeight();
             //// Total height of the layout based on top and bottom empty space.
             double totalHeight = totalPickerHeight + viewPortHeight - itemHeight;
+            totalHeight = Math.Max(totalHeight, 0);
 
             //// The view port item count is calculated based on the view port height and item height.
             double viewPortItemCount = Math.Round(viewPortHeight / itemHeight);
@@ -888,38 +934,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="args">The keyboard event args.</param>
         void IKeyboardListener.OnKeyDown(KeyEventArgs args)
         {
-            if (args.Key == KeyboardKey.Tab)
-            {
-                Focus();
-            }
-            else if (args.Key == KeyboardKey.Up)
-            {
-                if (_selectedIndex > 0)
-                {
-                    _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex - 1, false);
-                }
-            }
-            else if (args.Key == KeyboardKey.Down)
-            {
-                _pickerLayoutInfo.UpdateSelectedIndexValue(_selectedIndex + 1, false);
-            }
-            else if (args.Key == KeyboardKey.Right || args.Key == KeyboardKey.Left)
-            {
-                Unfocus();
-                PickerContainer? pickerContainer = Parent.Parent.Parent as PickerContainer;
-                pickerContainer?.PickerRightLeftKeys(args, _pickerLayoutInfo.Column._columnIndex);
-            }
-            else if (args.Key == KeyboardKey.Enter)
-            {
-                if (_pickerViewInfo.IsOpen == true)
-                {
-                    _pickerViewInfo.IsOpen = false;
-                }
-            }
-            else if (args.Key == KeyboardKey.Escape)
-            {
-                _pickerViewInfo.IsOpen = false;
-            }
+            HandleKeyboardAccessiblity(args);
         }
 
         /// <summary>

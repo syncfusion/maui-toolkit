@@ -79,7 +79,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						foreach (var gesture in uiTouch.GestureRecognizers)
 						{
-							if (gesture is UILongPressGestureRecognizer)
+							if (gesture is UILongPressGestureRecognizer || gesture is UIPanGestureRecognizer)
 							{
 								this.RemoveGestureListener(this);
 								_isTapGestureRemoved = true;

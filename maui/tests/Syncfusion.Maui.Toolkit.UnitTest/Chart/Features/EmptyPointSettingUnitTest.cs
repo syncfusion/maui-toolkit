@@ -180,12 +180,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 		}
 
 		[Fact]
-		public void StrokeProperty_DefaultValue_ShouldBeTransparent()
+		public void StrokeProperty_DefaultValue_ShouldBeNull()
 		{
 			var emptyPointSettings = new EmptyPointSettings();
-			var defaultStroke = new SolidColorBrush(Colors.Transparent);
-			var defaultStrokeValue = emptyPointSettings.Stroke;
-			Assert.Equal(defaultStroke.Color, ((SolidColorBrush)defaultStrokeValue).Color);
+			Assert.Null(emptyPointSettings.Stroke);
 		}
 
 		[Fact]

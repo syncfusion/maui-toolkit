@@ -483,18 +483,19 @@ internal class PickerLayout : SfView, IPickerLayout
 	/// <param name="tappedIndex">The tapped index.</param>
 	/// <param name="isTapped">Is tap gesture used</param>
 	/// <param name="isInitialLoading">Check whether is initial loading or not.</param>
-	void IPickerLayout.UpdateSelectedIndexValue(int tappedIndex, bool isTapped, bool isInitialLoading)
+	/// <param name="isKeyboardInteraction">Indicates whether the method is called from ScrollView keyboard event.</param>
+	void IPickerLayout.UpdateSelectedIndexValue(int tappedIndex, bool isTapped, bool isInitialLoading, bool isKeyboardInteraction)
     {
         if (tappedIndex >= _itemsSource.Count)
         {
-            tappedIndex = _itemsSource.Count - 1;
+            tappedIndex = isKeyboardInteraction && _pickerViewInfo.EnableLooping ? 0 : _itemsSource.Count - 1;
         }
         else if (tappedIndex <= -1)
         {
-            tappedIndex = -1;
+            tappedIndex = isKeyboardInteraction && _pickerViewInfo.EnableLooping ? _itemsSource.Count - 1 : -1;
         }
 
-        _pickerViewInfo.UpdateSelectedIndexValue(tappedIndex, _column._columnIndex, isTapped, isInitialLoading);
+        _pickerViewInfo.UpdateSelectedIndexValue(tappedIndex, _column._columnIndex, isTapped, isInitialLoading, isKeyboardInteraction);
     }
 
     #endregion

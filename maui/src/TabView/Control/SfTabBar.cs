@@ -3449,6 +3449,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					}
 				}
 			}
+
 			else
 			{
 				if (Items != null)
@@ -3460,7 +3461,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					}
 				}
 			}
-
+			
 			base.OnHandlerChanged();
 		}
 

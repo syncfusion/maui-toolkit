@@ -50,14 +50,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             _monthView = new MonthView(_calendarViewInfo, visibleDates, selectedDate, disabledDates, specialDates, isCurrentView);
             Add(_monthView);
             AddOrRemoveViewHeader(isCurrentView);
-#if IOS
-
-#if NET10_0
+#if (IOS || ANDROID) && NET10_0
             this.SafeAreaEdges = SafeAreaEdges.None;
-#else
+#elif IOS
             IgnoreSafeArea = true;
-#endif
-
 #endif
 		}
 

@@ -2250,7 +2250,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		{
 			return ValidateText(textField, MergeRanges(ranges), replacementString);
 		}
-
 		/// <summary>
 		/// Combines multiple NSRange values into a single range that encompasses all provided ranges.
 		/// </summary>
@@ -2404,7 +2403,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				// Unhook from previous handler specific to this OTPEntry
 				if (_platformViews.TryGetValue(textBox, out var previousPlatformView))
 				{
-					if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26,0))
+					if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
 					{
 #if NET10_0_OR_GREATER
 						previousPlatformView.ShouldChangeCharactersInRanges -= Handle_ShouldChangeCharactersInRanges;
@@ -2436,7 +2435,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
                 }
 
 #elif MACCATALYST || IOS
-						if (textBox.Handler?.PlatformView is UIKit.UITextField platformView)
+				if (textBox.Handler?.PlatformView is UIKit.UITextField platformView)
 				{
 					if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
 					{
@@ -2450,10 +2449,11 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 					{
 						platformView.ShouldChangeCharacters += ValidateText;
 					}
+
 					_platformViews[textBox] = platformView;
 				}
 #endif
-					}
+			}
 		}
 
 

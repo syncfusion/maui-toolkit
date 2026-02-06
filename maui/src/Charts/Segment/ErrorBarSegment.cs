@@ -83,10 +83,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						break;
 				}
 
-				double xMin = xValues.Min();
-				double xMax = xValues.Max();
-				double yMin = yValues.Min();
-				double yMax = yValues.Max();
+				double xMin = xValues.Where(v => !double.IsNaN(v)).DefaultIfEmpty(0).Min();
+				double xMax = xValues.Where(v => !double.IsNaN(v)).DefaultIfEmpty(0).Max();
+				double yMin = yValues.Where(v => !double.IsNaN(v)).DefaultIfEmpty(0).Min();
+				double yMax = yValues.Where(v => !double.IsNaN(v)).DefaultIfEmpty(0).Max();
+
 				double leftPointMin = xMin - _horizontalErrorValue;
 				double leftPointMax = xMax - _horizontalErrorValue;
 				double rightPointMin = xMin + _horizontalErrorValue;
@@ -191,11 +192,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (errorBarSeries.Type == ErrorBarType.Percentage)
 				{
-					double topVerticalPointMinY = _topPointCollection.Select(p => p.Y).Min();
-					double topVerticalPointMaxY = _topPointCollection.Select(p => p.Y).Max();
-					double bottomVerticalPointMinY = _bottomPointCollection.Select(p => p.Y).Min();
-					double bottomVerticalPointMaxY = _bottomPointCollection.Select(p => p.Y).Max();
-					YRange = new DoubleRange(Math.Min(bottomVerticalPointMinY, topVerticalPointMinY), Math.Max(bottomVerticalPointMaxY, topVerticalPointMaxY));
+					var validTopPoints = _topPointCollection.Where(p => !double.IsNaN(p.Y)).Select(p => p.Y);
+					var validBottomPoints = _bottomPointCollection.Where(p => !double.IsNaN(p.Y)).Select(p => p.Y);
+
+					if (validTopPoints.Any() && validBottomPoints.Any())
+					{
+						YRange = new DoubleRange(Math.Min(validBottomPoints.Min(), validTopPoints.Min()), Math.Max(validBottomPoints.Max(), validTopPoints.Max()));
+					}
 				}
 				else
 				{
@@ -223,6 +226,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						? (float)errorBarSeries.HorizontalCapLineStyle.CapLineSize : 10;
 					float verLineCapSize = errorBarSeries.VerticalCapLineStyle != null
 						? (float)errorBarSeries.VerticalCapLineStyle.CapLineSize : 10;
+
 					ErrorSegmentPoint[] errorSegment = new ErrorSegmentPoint[2];
 
 					if (!(double.IsNaN(_leftPointCollection[i].Y) || double.IsNaN(_rightPointCollection[i].Y)))
@@ -231,6 +235,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						float horRightPoint2 = errorBarSeries.TransformToVisibleY(_rightPointCollection[i].X, _rightPointCollection[i].Y);
 						float horLeftPoint3 = errorBarSeries.TransformToVisibleX(_leftPointCollection[i].X, _leftPointCollection[i].Y);
 						float horLeftPoint4 = errorBarSeries.TransformToVisibleY(_leftPointCollection[i].X, _leftPointCollection[i].Y);
+
 						errorSegment[0] = new ErrorSegmentPoint
 						{
 							X1 = horRightPoint1,
@@ -305,10 +310,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void DrawErrorBar(ICanvas canvas, int index, bool isVertical, ErrorBarLineStyle? lineStyle, ErrorBarCapLineStyle? capStyle, bool isTransposed)
 		{
+			int vertical = isVertical ? 1 : 0;
+
+			if (index >= ErrorSegmentPoints.Count || ErrorSegmentPoints[index][vertical] == null)
+			{
+				return;
+			}
+
 			_strokeColor = lineStyle != null ? lineStyle.Stroke.ToColor() : Fill.ToColor();
 			_strokeWidth = lineStyle != null ? (float)lineStyle.StrokeWidth : (float)StrokeWidth;
-
-			int vertical = isVertical ? 1 : 0;
 
 			DrawLine(canvas, index, vertical, _strokeColor, _strokeWidth);
 
@@ -373,21 +383,29 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return valueDoubles;
 			}
 
-			var sum = values.Sum();
-			var mean = sum / values.Count;
+			var validValues = values.Where(v => !double.IsNaN(v)).ToList();
+
+			if (validValues.Count <= 1)
+			{
+				return valueDoubles;
+			}
+
+			var sum = validValues.Sum();
+			var mean = sum / validValues.Count;
 			var dev = new List<double>();
 			var sQDev = new List<double>();
 
-			for (var i = 0; i < values.Count; i++)
+			for (var i = 0; i < validValues.Count; i++)
 			{
-				dev.Add(values[i] - mean);
+				dev.Add(validValues[i] - mean);
 				sQDev.Add(dev[i] * dev[i]);
 			}
 
 			var sumSqDev = sQDev.Sum(x => x);
 
-			var sDValue = Math.Sqrt(sumSqDev / (values.Count - 1));
-			var sDErrorValue = sDValue / Math.Sqrt(values.Count);
+			var sDValue = Math.Sqrt(sumSqDev / (validValues.Count - 1));
+			var sDErrorValue = sDValue / Math.Sqrt(validValues.Count);
+
 			valueDoubles[0] = mean;
 			valueDoubles[1] = errorBarSeries.Type == ErrorBarType.StandardDeviation ? sDValue : sDErrorValue;
 			return valueDoubles;

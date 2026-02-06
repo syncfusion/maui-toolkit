@@ -72,6 +72,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
     /// </code>
     /// # [SunburstViewModel.cs](#tab/tabid-4)
     /// <code><![CDATA[
+    /// 
     /// public ObservableCollection<SunburstModel> DataSource { get; set; }
     /// 
     /// public SunburstViewModel()
@@ -267,9 +268,10 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
     /// 
     /// <para><b>CenterView</b></para>
     /// 
-    /// <para>Center is used to share additional information about the sunburst chart. The binding context of the Centerview will be the respective sunburst. To display the center view on the sunburst chart, you need to set the<see cref="CenterView"/> property in <see cref="SfSunburstChart"/>. </para>
+    /// <para>CenterView is used to share additional information about the sunburst chart. The binding context of the CenterView will be the respective sunburst. To display the center view on the sunburst chart, you need to set the<see cref="CenterView"/> property in <see cref="SfSunburstChart"/>. </para>
     /// 
-    ///  <para>CenterHoleSize is used to prevent overlapping with segments in the sunburst center view.</para>
+    /// <para>CenterHoleSize is used to prevent overlapping with segments in the sunburst center view.</para>
+    /// 
     /// # [MainPage.xaml](#tab/tabid-11)
     /// <code><![CDATA[
     /// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" 
@@ -969,6 +971,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 		/// An instance of <see cref="SelectionSettings"/> class.
 		/// </value>
 		/// <example>
+        /// # [MainPage.xaml](#tab/tabid-13)
 		/// <code>
 		/// <![CDATA[
 		/// <sunburst:SfSunburstChart>
@@ -981,7 +984,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 		/// </sunburst:SfSunburstChart>
 		/// ]]>
 		/// </code>
-		/// # [MainPage.xaml.cs](#tab/tabid-4)
+		/// # [MainPage.xaml.cs](#tab/tabid-14)
 		/// <code><![CDATA[
 		/// SfSunburstChart sunburstChart = new SfSunburstChart();
 		/// 
@@ -2503,7 +2506,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 #if NET10_0_OR_GREATER
 			view = layout as View;
 #else
-			view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
+            view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
 #endif
 			if (view != null)
             {
@@ -2516,11 +2519,11 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 				view.Frame = new Rect(0, 0, size.Width, size.Height);
 				view.InvalidateMeasure();
 #else
-				view.Layout(new Rect(0, 0, size.Width, size.Height));
+                view.Layout(new Rect(0, 0, size.Width, size.Height));
 #endif
 			}
 
-            return view;
+			return view;
         }
 
         private DataTemplate GetDefaultTooltipTemplate(SunburstTooltipSettings settings, SunburstSegment? segment)
@@ -2563,7 +2566,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 #if NET10_0_OR_GREATER
 				return stackLayout;
 #else
-				return new ViewCell { View = stackLayout };
+                return new ViewCell { View = stackLayout };
 #endif
 			});
 
