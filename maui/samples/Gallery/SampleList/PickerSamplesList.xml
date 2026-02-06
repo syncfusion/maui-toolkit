@@ -5,36 +5,32 @@
 	  <Control Title="Picker"
              Image="picker.png"
              ControlName="SfPicker"
-             StatusTag="Updated"
              Description="A versatile UI element designed for making selections from a set of options.">
-		  <Sample Title="Getting Started" SampleName="GettingStarted" StatusTag="Updated" WhatsNew="Provided looping support for .NET MAUI Picker control"/>
+		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
 		  <Sample Title="Flight booking" SampleName="FlightBooking"/>
 	  </Control>
 
 	  <Control Title="Date Picker"
              Image="datepicker.png"
              ControlName="SfDatePicker"
-             StatusTag="Updated"
              Description="A user interface element for selecting specific dates.">
-		  <Sample Title="Getting Started" SampleName="GettingStarted" StatusTag="Updated" WhatsNew="Provided looping support for .NET MAUI Date picker control."/>
+		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
 		  <Sample Title="To-Do" SampleName="Customization"/>
 	  </Control>
 
 	  <Control Title="Time Picker"
              Image="timepicker.png"
              ControlName="SfTimePicker"
-             StatusTag="Updated"
              Description="An interface for choosing specific times of day.">
-		  <Sample Title="Getting Started" SampleName="GettingStarted" StatusTag="Updated" WhatsNew="Provided looping support for .NET MAUI Time picker control."/>
+		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
 		  <Sample Title="Alarm" SampleName="Customization"/>
 	  </Control>
 
 	  <Control Title="Date Time Picker"
              Image="datetimepicker.png"
              ControlName="SfDateTimePicker"
-             StatusTag="Updated"
              Description="A combined interface to select dates and times.">
-		  <Sample Title="Getting Started" SampleName="GettingStarted" StatusTag="Updated" WhatsNew="Provided looping support for .NET MAUI Date Time picker control."/>
+		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
 	  </Control>
 	  
   </ControlCategory>
