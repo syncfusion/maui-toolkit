@@ -1411,30 +1411,34 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SetDynamicResource(DisabledTextColorProperty, "SfDatePickerDisabledTextColor");
         }
 
-        /// <summary>
-        /// Method to update Selected Date based on confirmation.
-        /// </summary>
-        /// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
-        void UpdateInternalValueToSelection(bool shouldUpdateSelection)
-        {
-            // If the picker is not in Default mode and an internal selected date exists
-            if (shouldUpdateSelection && _internalSelectedDate != null && !DatePickerHelper.IsSameDate(_internalSelectedDate, SelectedDate))
-            {
-				// Update the selected date with the internal selected date
-				SelectedDate = _internalSelectedDate.Value;
-				// Clear the internal selected date after applying it
-				_internalSelectedDate = null;
+		/// <summary>
+		/// Method to Selected Date based on confirmation.
+		/// </summary>
+		/// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
+		private void UpdateInternalValueToSelection(bool shouldUpdateSelection)
+		{
+			// If the picker is not in Default mode and an internal selected date exists
+			if (shouldUpdateSelection && _internalSelectedDate != null)
+			{
+				// If the internal selected date is different from the currently selected date
+				if (!DatePickerHelper.IsSameDate(_internalSelectedDate, SelectedDate))
+				{
+					// Update the selected date with the internal selected date
+					SelectedDate = _internalSelectedDate.Value;
+					// Clear the internal selected date after applying it
+					_internalSelectedDate = null;
+				}
 			}
-        }
+		}
 
-        #endregion
+		#endregion
 
-        #region Override Methods
+		#region Override Methods
 
-        /// <summary>
-        /// Method to wire the events.
-        /// </summary>
-        protected override void Initialize()
+		/// <summary>
+		/// Method to wire the events.
+		/// </summary>
+		protected override void Initialize()
         {
             base.Initialize();
             BaseColumns = _columns;
@@ -1549,7 +1553,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments</param>
         protected override void OnOkButtonClicked(EventArgs e)
         {
-            UpdateInternalValueToSelection(IsScrollSelectionAllowed());
+			UpdateInternalValueToSelection(IsScrollSelectionAllowed());
             InvokeOkButtonClickedEvent(this, e);
             if (AcceptCommand != null && AcceptCommand.CanExecute(e))
             {

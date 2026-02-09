@@ -46,17 +46,18 @@
                                RepeatCount="8"
                                WaveDirection="LeftToRight">
                 <shimmer:SfShimmer.Content>
-                    <StackLayout>
-                        <CollectionView x:DataType="local:ViewModel"
-                                        ItemsSource="{Binding Info}"
-                                        x:Name="listView"
-                                        ItemTemplate="{StaticResource personTemplate}"
-                                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                                        VerticalScrollBarVisibility="Never"
-                                        HeightRequest="570"
-                                        >
-                        </CollectionView>
-                    </StackLayout>
+                    <ScrollView VerticalScrollBarVisibility="Never">
+                          <StackLayout>
+                                <CollectionView x:DataType="local:ViewModel"
+                                                ItemsSource="{Binding Info}"
+                                                x:Name="listView"
+                                                SelectionMode="Single"
+                                                ItemTemplate="{StaticResource personTemplate}"
+                                                BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                                VerticalScrollBarVisibility="Never">
+                                </CollectionView>
+                          </StackLayout>
+                      </ScrollView>
                 </shimmer:SfShimmer.Content>
             </shimmer:SfShimmer>
         </Grid>

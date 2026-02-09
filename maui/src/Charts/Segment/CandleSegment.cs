@@ -73,7 +73,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <inheritdoc/>
 		protected internal override void Draw(ICanvas canvas)
 		{
-			if (Series is not CandleSeries series)
+			if (Series is not CandleSeries series || IsZero)
 			{
 				return;
 			}
@@ -92,7 +92,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 			else
 			{
-				if (IsBull)
+				if (IsEmpty)
+				{
+					canvas.StrokeColor = Fill.ToColor();
+				}
+				else if (IsBull)
 				{
 					canvas.StrokeColor = series.BullishFill.ToColor();
 				}

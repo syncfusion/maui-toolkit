@@ -165,7 +165,6 @@
 
 		void CalculateDataLabelPositions(double xValue, double high, double low, double open, double close, FinancialSeriesBase series)
 		{
-			IsZero = double.IsNaN(high) && double.IsNaN(low);
 			InVisibleRange = series.IsDataInVisibleRange(xValue, high) && series.IsDataInVisibleRange(xValue, low);
 			PointF highPoint = GetDataLabelPosition(xValue, high, series);
 			PointF lowPoint = GetDataLabelPosition(xValue, low, series);
@@ -207,7 +206,7 @@
 		/// <inheritdoc/>
 		protected internal override void Draw(ICanvas canvas)
 		{
-			if (Series is not HiLoOpenCloseSeries series || double.IsNaN(Left))
+			if (Series is not HiLoOpenCloseSeries series || double.IsNaN(Left) || IsZero)
 			{
 				return;
 			}

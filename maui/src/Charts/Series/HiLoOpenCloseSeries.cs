@@ -265,10 +265,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal virtual void CreateSegment(SeriesView seriesView, double[] values, bool isFill, bool isBull, int index)
 		{
+			bool hasNaN = double.IsNaN(values[3]) || double.IsNaN(values[4]) || double.IsNaN(values[5]) || double.IsNaN(values[6]);
+
 			if (CreateSegment() is HiLoOpenCloseSegment segment)
 			{
 				segment.Series = this;
 				segment.Index = index;
+				segment.IsZero = hasNaN;
 				segment.SeriesView = seriesView;
 				segment.SetData(values, isFill, isBull);
 				segment.Item = ActualData?[index];
@@ -304,7 +307,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			float xPosition = TransformToVisibleX(xValue, yValue);
 
-			if (!double.IsNaN(xPosition) && !double.IsNaN(yValue))
+			bool hasNaN = double.IsNaN(highValue) || double.IsNaN(lowValue) || double.IsNaN(openValue) || double.IsNaN(closeValue);
+
+			if (!double.IsNaN(xPosition) && !double.IsNaN(yValue) && !hasNaN)
 			{
 				float yPosition = TransformToVisibleY(xValue, yValue);
 
@@ -410,6 +415,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					double lowValue = LowValues[index];
 					double openValue = OpenValues[index];
 					double closeValue = CloseValues[index];
+
+					if (double.IsNaN(highValue) || double.IsNaN(lowValue) || double.IsNaN(openValue) || double.IsNaN(closeValue))
+						continue;
+
 					string label = $"{SfCartesianChartResources.High} : {highValue}\n" +
 								   $"{SfCartesianChartResources.Low} : {lowValue}\n" +
 								   $"{SfCartesianChartResources.Open} : {openValue}\n" +

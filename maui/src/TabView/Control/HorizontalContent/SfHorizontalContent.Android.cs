@@ -20,7 +20,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		double _moveY;
 
 		// Constants for touch movement thresholds
+
+#pragma warning disable CS8602
 		double _density = Android.App.Application.Context.Resources.DisplayMetrics.Density;
+#pragma warning restore CS8602
+
 		double _swipeThreshold => 5 * _density;
 
 
@@ -67,7 +71,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 							}
 
 							// Handle initial touch interaction
-							if (!_isPressed && Math.Abs(_downY - _moveY) > _swipeThreshold && Math.Abs(_downX - _moveX)  > _swipeThreshold)
+							if (!_isPressed && Math.Abs(_downY - _moveY) > _swipeThreshold && Math.Abs(_downX - _moveX) > _swipeThreshold)
 							{
 								OnHandleTouchInteraction(PointerActions.Pressed, _initialPoint);
 								return true;

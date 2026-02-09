@@ -1419,6 +1419,15 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				ConfigureAccessibilityForAssistiveLabels();
 #endif
 			}
+			else
+			{
+				if (HintLabelStyle != null && HelperLabelStyle != null && ErrorLabelStyle != null)
+				{
+					HintLabelStyle = null;
+					ErrorLabelStyle = null;
+					HelperLabelStyle = null;
+				}
+			}
 		}
 
         #endregion

@@ -144,6 +144,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 		/// </summary>
 		View? _previousMonthCellTemplateView;
 
+		/// <summary>
+		/// To check whether the autofit enabled or not.
+		/// </summary>
+		bool _isAutoFitEnabled;
+
 		#endregion
 
 		#region Constructor
@@ -165,7 +170,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             _selectedDate = selectedDate;
             _disabledDates = disabledDates;
             _specialDates = specialDatesDetails;
-            _numberOfWeeks = CalendarViewHelper.GetNumberOfWeeks(_calendarViewInfo.MonthView);
+            _numberOfWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarViewInfo, _visibleDates);
             UpdateSelectedRangeValue(_calendarViewInfo.SelectedDateRange);
             UpdateSelectedDateRangesValue(_calendarViewInfo.SelectedDateRanges);
             _selectedDates = new ObservableCollection<DateTime>(_calendarViewInfo.SelectedDates);
@@ -187,7 +192,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 #endif
             this.AddKeyboardListener(this);
             this.AddGestureListener(this);
-        }
+			_isAutoFitEnabled = CalendarViewHelper.IsAutoFitEnabled(_calendarViewInfo.View,_calendarViewInfo.Mode, _calendarViewInfo.ShowTrailingAndLeadingDates, _calendarViewInfo.NumberOfVisibleWeeks);
+		}
 
         #endregion
 
@@ -265,7 +271,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 		/// <param name="customSnapLayout">Gets the month view instance for current canvas.</param>
 		internal void UpdateVisibleDatesChange(List<DateTime> visibleDates, bool isCurrentView, CustomSnapLayout customSnapLayout)
         {
-            int numberOfVisibleWeeks = CalendarViewHelper.GetNumberOfWeeks(_calendarViewInfo.MonthView);
+			int numberOfVisibleWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarViewInfo, _visibleDates);
             bool isNumberOfWeeksChanged = _numberOfWeeks != numberOfVisibleWeeks;
             _numberOfWeeks = numberOfVisibleWeeks;
             int previousVisibleDatesCount = _visibleDates.Count;
@@ -354,10 +360,13 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 							// Check if the selected date is allowed via the selection predicate
 							bool isSelectable = _calendarViewInfo.IsSelectableDayPredicate(selectedDate);
 
+							DateTime currenthMonth = month!._visibleDates![month._visibleDates!.Count / 2];
+							_isAutoFitEnabled = CalendarViewHelper.IsAutoFitEnabled(_calendarViewInfo.View, _calendarViewInfo.Mode, _calendarViewInfo.ShowTrailingAndLeadingDates, _calendarViewInfo.NumberOfVisibleWeeks);
+
 							// Validate the selected date against calendar rules and settings
 							if (selectedDate >= _calendarViewInfo.MinimumDate && selectedDate <= _calendarViewInfo.MaximumDate &&
-								(!isInVisibleDates || _calendarViewInfo.EnablePastDates) && (isInVisibleDates && isSelectable) &&
-								(_calendarViewInfo.ShowTrailingAndLeadingDates || selectedDate.Month == _calendarViewInfo.DisplayDate.Month))
+	(!isInVisibleDates || _calendarViewInfo.EnablePastDates) && (isInVisibleDates && isSelectable) &&
+	((_isAutoFitEnabled && isInVisibleDates && selectedDate.Month == currenthMonth.Month) || _calendarViewInfo.ShowTrailingAndLeadingDates || selectedDate.Month == _calendarViewInfo.DisplayDate.Month))
 							{
 								// Mark that visibility check is needed
 								checkVisibility = true;
@@ -373,7 +382,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 								}
 								else
 								{
-									isVisible = isInVisibleDates;
+									child.IsVisible = isInVisibleDates;
 								}
 							}
 						}
@@ -411,9 +420,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return;
             }
 
-            //// If previous and current month visible dates count are not equal we have to remove all the cells and generate the month cells again,
-            //// else we just update the views like just adding and removing the needed cells.
-            if (isNumberOfWeeksChanged)
+			//// If previous and current month visible dates count are not equal or in autofit currentmonthweeks and Numberofvisibleweeks are same we have to remove all the cells and generate the month cells again,
+			//// else we just update the views like just adding and removing the needed cells.
+			if (isNumberOfWeeksChanged || (_monthCells != null && _isAutoFitEnabled))
             {
                 RemoveMonthCellsHandler();
                 _monthCells = new List<View>();
@@ -425,7 +434,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier.ToString());
                 int visibleDatesCount = _visibleDates.Count;
-                int currentMonth = _numberOfWeeks == 6 ? cultureCalendar.GetMonth(_visibleDates[visibleDatesCount / 2]) : cultureCalendar.GetMonth(_visibleDates[0]);
+				bool isMonthView = _numberOfWeeks == 6 || _isAutoFitEnabled;
+				int currentMonth = isMonthView ? cultureCalendar.GetMonth(_visibleDates[visibleDatesCount / 2]) : cultureCalendar.GetMonth(_visibleDates[0]);
                 //// If the ShowTrailingLeadingDates are set to false and previous or current visible dates are not equal then we have to invalidate the measure.
                 //// Because the child position change on every views when ShowTrailingLeadingDates set to false in the month view.
                 //// Need to update the children visibility and measure while the view reaches min date and max date.
@@ -702,9 +712,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 			{
 				bool isInVisibleDates = _visibleDates?.Contains(_selectedDate.Value) ?? false;
 				bool isTemplateView = false;
+				DateTime currenthMonth = _visibleDates![_visibleDates!.Count / 2];
 				if (_selectedDate >= _calendarViewInfo.MinimumDate && _selectedDate <= _calendarViewInfo.MaximumDate &&
 					(_calendarViewInfo.ShowTrailingAndLeadingDates || _selectedDate.Value.Month == _calendarViewInfo.DisplayDate.Month) &&
-					(!isInVisibleDates || _calendarViewInfo.EnablePastDates))
+					(!isInVisibleDates || _calendarViewInfo.EnablePastDates) && (isInVisibleDates && _isAutoFitEnabled && _selectedDate.Value.Month == currenthMonth.Month))
 				{
 					isTemplateView = isInVisibleDates;
 				}
@@ -1548,10 +1559,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             //// LTR - xPosition = 0
             //// xPosition = 0 + 10 = 10
             float cellWidthOffset = isRTL ? -monthCellWidth : monthCellWidth;
-            //// Boolean to check whether the view is month view or not.
-            //// If the number of weeks is less than 6 then the view is not considered as a month view.
-            //// Leading and trailing dates can't be hide when the view is not month view.
-            bool isMonthView = _numberOfWeeks == 6;
+			//// Boolean to check whether the view is month view or not.
+			//// If the number of weeks is less than 6 or autofit for popup is not enabled then the view is not considered as a month view.
+			//// Leading and trailing dates can't be hide when the view is not month view.
+			bool isMonthView = _numberOfWeeks == 6 || _isAutoFitEnabled;
             DateTime todayDate = DateTime.Now.Date;
             float cornerRadius = (float)(monthCellHeight * 0.1);
             cornerRadius = cornerRadius > 2 ? 2 : cornerRadius;
@@ -1829,10 +1840,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             //// LTR - xPosition = 0
             //// xPosition = 0 + 10 = 10
             float cellWidthOffset = isRTL ? -monthCellWidth : monthCellWidth;
-            //// Boolean to check whether the view is month view or not.
-            //// If the number of weeks is less than 6 then the view is not considered as a month view.
-            //// Leading and trailing dates can't be hide when the view is not month view.
-            bool isMonthView = _numberOfWeeks == 6;
+			//// Boolean to check whether the view is month view or not.
+			//// If the number of weeks is less than 6 or autofit for popup is not enabled then the view is not considered as a month view.
+			//// Leading and trailing dates can't be hide when the view is not month view.
+			bool isMonthView = _numberOfWeeks == 6 || _isAutoFitEnabled;
             float cornerRadius = (float)(monthCellHeight * 0.1);
             cornerRadius = cornerRadius > 2 ? 2 : cornerRadius;
             //// The HighlightPadding is used for the space around the circle from the cell.
@@ -2434,10 +2445,12 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier.ToString());
             int month = cultureCalendar.GetMonth(dateTime);
-            return new CalendarCellDetails
+			//// If numberofweeks is 6 or autofit is enabled consider monthview.
+			bool isMonthView = _numberOfWeeks == 6 || _isAutoFitEnabled;
+			return new CalendarCellDetails
             {
                 Date = dateTime,
-                IsTrailingOrLeadingDate = _numberOfWeeks == 6 && currentMonth != month,
+                IsTrailingOrLeadingDate = isMonthView && currentMonth != month,
             };
         }
 
@@ -2493,7 +2506,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     index++;
                 }
 
-                int maximumCellCount = _numberOfWeeks == 6 && hideLeadingTrailingDates ? MaxCellCount : _numberOfWeeks * DaysPerWeek;
+				//// If numberofweeks is 6 or autofit is enabled consider monthview.
+				bool isMonthView = _numberOfWeeks == 6 || _isAutoFitEnabled;
+				int maximumCellCount = isMonthView && hideLeadingTrailingDates ? MaxCellCount : _numberOfWeeks * DaysPerWeek;
                 if (index != maximumCellCount)
                 {
                     int neededViewCount = maximumCellCount - index;
@@ -2692,7 +2707,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             float monthViewWidth = dirtyRect.Width - weekNumberWidth;
             float monthViewHeight = dirtyRect.Height;
             float monthCellWidth = monthViewWidth / DaysPerWeek;
-            float monthCellHeight = monthViewHeight / _numberOfWeeks;
+			_numberOfWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarViewInfo, _visibleDates);
+			//// Check autofit is enabled or not when monthview changed.
+			_isAutoFitEnabled = CalendarViewHelper.IsAutoFitEnabled(_calendarViewInfo.View, _calendarViewInfo.Mode, _calendarViewInfo.ShowTrailingAndLeadingDates, _calendarViewInfo.NumberOfVisibleWeeks);
+			float monthCellHeight = monthViewHeight / _numberOfWeeks;
             DateTime currentMonth = _visibleDates[_visibleDates.Count / 2];
             if (_calendarViewInfo.MonthView.ShowWeekNumber)
             {
@@ -2720,13 +2738,31 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>The actual size.</returns>
         protected override Size MeasureContent(double widthConstraint, double heightConstraint)
         {
-            if (_calendarViewInfo.MonthView.CellTemplate == null || _monthCells == null)
+			_numberOfWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarViewInfo, _visibleDates);
+			double width = double.IsFinite(widthConstraint) ? widthConstraint : 0;
+			double height = double.IsFinite(heightConstraint) ? heightConstraint : 0;
+			if (_calendarViewInfo.MonthView.CellTemplate == null || _monthCells == null)
             {
-                return base.MeasureContent(widthConstraint, heightConstraint);
+#if MACCATALYST || (!ANDROID && !IOS)
+				//// This loop is added in the common layout logic instead of applying autofit explicitly for Popup mode.
+				//// Reason:
+				//// Autofit is not set here because the measurement needs to remain consistent across both Default and Popup modes.
+				//// If autofit were applied only for Popup mode, switching modes would cause incorrect height calculations during OnDraw,
+				//// as the previous mode's height would persist. By measuring child views (e.g., MonthHoverView) in common,
+				//// we ensure dynamic sizing works correctly regardless of mode changes.
+				foreach (View child in Children)
+				{
+					if (child is MonthHoverView)
+					{
+						child.Measure(width, height);
+						continue;
+					}
+				}
+#endif
+
+				return base.MeasureContent(widthConstraint, heightConstraint);
             }
 
-            double width = double.IsFinite(widthConstraint) ? widthConstraint : 0;
-            double height = double.IsFinite(heightConstraint) ? heightConstraint : 0;
             double weekNumberWidth = CalendarViewHelper.GetWeekNumberWidth(_calendarViewInfo.MonthView, (float)width);
             double monthCellWidth = (width - weekNumberWidth) / DaysPerWeek;
             double monthCellHeight = height / _numberOfWeeks;
@@ -2755,7 +2791,21 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             if (_calendarViewInfo.MonthView.CellTemplate == null || _monthCells == null)
             {
-                return base.ArrangeContent(bounds);
+#if MACCATALYST || (!ANDROID && !IOS)
+				//// Added in common layout logic instead of special autofit handling.
+				//// Reason: When autofit is applied only for Popup mode, HoverView arrangement does not update correctly.
+				//// This ensures both measurement and arrangement are consistent across mode changes, avoiding stale size or position.
+				foreach (View child in Children)
+				{
+					if (child is MonthHoverView)
+					{
+						AbsoluteLayout.SetLayoutBounds(child, new Rect(0, 0, bounds.Width, bounds.Height));
+						continue;
+					}
+				}
+#endif
+
+				return base.ArrangeContent(bounds);
             }
 
             double weekNumberWidth = CalendarViewHelper.GetWeekNumberWidth(_calendarViewInfo.MonthView, (float)bounds.Width);
@@ -2968,10 +3018,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             //// LTR - monthXPosition = 0
             //// monthXPosition = 0 + 10 = 10
             float cellWidthOffset = isRTL ? -monthCellWidth : monthCellWidth;
-            //// Boolean to check whether the view is month view or not.
-            //// If the number of weeks is less than 6 then the view is not considered as a month view.
-            //// Leading and trailing dates can't be hide when the view is not month view.
-            bool isMonthView = _numberOfWeeks == 6;
+			//// Boolean to check whether the view is month view or not.
+			//// If the number of weeks is less than 6 or autofit for popup is not enabled, then the view is not considered as a month view.
+			//// Leading and trailing dates can't be hide when the view is not month view.
+			bool isMonthView = _numberOfWeeks == 6 ||_isAutoFitEnabled;
             //// This is the valid start index for to fetch the visible date from the visible date collection.
             int startIndex = 0;
             //// Get the culture info based on the calendar identifier.
