@@ -236,6 +236,27 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <summary>
 		/// Provides semantic nodes for screen reader accessibility support.
 		/// Creates a semantic node for each chart segment with descriptive information.
+		/// 
+		/// <para>
+		/// This implementation enables:
+		/// - Touch/fling navigation: Users can swipe through chart segments with screen readers
+		/// - Keyboard navigation: Users can tab through segments using keyboard shortcuts
+		/// - Each segment announces its label, value, and percentage (for circular charts)
+		/// </para>
+		/// 
+		/// <para>
+		/// Platform Support:
+		/// - Windows: Accessible via Narrator using Tab/Arrow keys and touch
+		/// - Android: Accessible via TalkBack using swipe gestures and keyboard
+		/// - iOS/macOS: Accessible via VoiceOver using swipe gestures
+		/// </para>
+		/// 
+		/// <para>
+		/// Testing:
+		/// - Windows: Enable Narrator (Win+Ctrl+Enter), navigate to chart, use Tab or arrow keys
+		/// - Android: Enable TalkBack in Settings > Accessibility, swipe to navigate segments
+		/// - iOS: Enable VoiceOver in Settings > Accessibility, swipe to navigate segments
+		/// </para>
 		/// </summary>
 		/// <param name="width">The width of the view</param>
 		/// <param name="height">The height of the view</param>
