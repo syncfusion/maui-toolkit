@@ -13,6 +13,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		readonly IChartPlotArea _chartPlotArea;
 
+		// Cache for reflection-based property access to improve performance
+		FastReflection? _propertyAccessCache;
+
 		#endregion
 
 		#region Constructor
@@ -319,9 +322,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						textParts.Add(labelValue.ToString()!);
 					}
 				}
-				catch
+				catch (Exception ex) when (ex is ArgumentException || ex is System.Reflection.TargetException)
 				{
-					// Ignore if unable to get label
+					// Ignore property access failures - they indicate invalid binding path or incompatible data
+					// The segment will still be announced with its index and value
 				}
 			}
 
@@ -348,11 +352,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		/// <summary>
 		/// Gets a property value from an object using the property path.
+		/// Uses cached reflection for improved performance.
 		/// </summary>
 		/// <param name="obj">The source object</param>
 		/// <param name="propertyPath">The property path</param>
 		/// <returns>The property value or null if not found</returns>
-		static object? GetPropertyValue(object obj, string propertyPath)
+		object? GetPropertyValue(object obj, string propertyPath)
 		{
 			if (obj == null || string.IsNullOrEmpty(propertyPath))
 			{
@@ -361,15 +366,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			try
 			{
-				var fastReflection = new FastReflection();
-				if (fastReflection.SetPropertyName(propertyPath, obj))
+				// Reuse cached instance if available for performance
+				_propertyAccessCache ??= new FastReflection();
+				
+				if (_propertyAccessCache.SetPropertyName(propertyPath, obj))
 				{
-					return fastReflection.GetValue(obj);
+					return _propertyAccessCache.GetValue(obj);
 				}
 			}
-			catch
+			catch (Exception ex) when (ex is ArgumentException || 
+			                           ex is System.Reflection.TargetException ||
+			                           ex is System.Reflection.TargetInvocationException)
 			{
-				// Return null if reflection fails
+				// Property access failed - return null
+				// This can happen with invalid binding paths or incompatible property types
 			}
 
 			return null;
