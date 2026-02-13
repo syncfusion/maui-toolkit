@@ -62,6 +62,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (!_series.NeedToAnimateSeries)
 			{
 				InvalidateDrawable();
+				InvalidateSemantics(); // Update accessibility when series is updated
 			}
 		}
 
@@ -191,6 +192,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					series.NeedToAnimateMarker = true;
 					_series.SeriesAnimation?.Commit(this, AnimationName, 16, 1000, null, OnAnimationFinished, () => false);
 				}
+
+				// Update accessibility after animation completes
+				InvalidateSemantics();
 			}
 			else
 			{
