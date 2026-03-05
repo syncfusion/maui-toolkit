@@ -104,7 +104,7 @@ For each impossible scenario, add a row to `## Skipped Tests` in the caller's st
 
 ## Step 5: Build and Run Tests
 
-> ⚠️ The unit test project references `Microsoft.Maui.Controls` via `$(MauiVersion)`. Check `global.json` or `Directory.Build.props` for the version in use and pass it via `-p:MauiVersion=<value>` if the build fails to resolve it.
+> ⚠️ The unit test project references `Microsoft.Maui.Controls` via `$(MauiVersion)`. This value is not defined in this repo and must be supplied externally when building or testing (for example: `-p:MauiVersion=<value>`).
 
 ```bash
 # Build first to catch compile errors
