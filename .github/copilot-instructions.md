@@ -205,11 +205,6 @@ dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/
 
 # Run tests for a specific control
 dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/ --filter "FullyQualifiedName~Chart"
-
-# Note: The projects in this repo reference $(MauiVersion) and do not define a default value.
-# You must provide MauiVersion when building or testing locally, for example:
-# dotnet build ./Syncfusion.Maui.Toolkit.sln -p:MauiVersion=<maui-sdk-version>
-# dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/ -p:MauiVersion=<maui-sdk-version>
 ```
 
 ### Code Style
