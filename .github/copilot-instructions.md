@@ -42,8 +42,8 @@ When performing a code review on PRs that change functional code, verify that th
 ### Initial Setup
 
 ```bash
-# Restore tools and build
-dotnet tool restore
+# Restore NuGet packages and build the solution
+dotnet restore ./Syncfusion.Maui.Toolkit.sln
 dotnet build ./Syncfusion.Maui.Toolkit.sln
 ```
 
