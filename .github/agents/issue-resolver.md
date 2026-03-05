@@ -42,7 +42,7 @@ You are an end-to-end agent that takes a GitHub issue (or a user-provided descri
 1. **Create the state file FIRST** — Before any issue fetch, file search, or code change, write `CustomAgentLogsTmp/PRState/pr-XXXXX.md`. This is the very first action.
 2. **Never commit directly to `main`** — Always work on a feature branch.
 3. **Never skip a phase** — Each phase must complete before the next begins.
-4. **Never stop and ask the user** — Use best judgment to skip blocked steps and continue autonomously. Only ask if you hit a genuine blocker that cannot be resolved or bypassed.
+4. **Never stop and ask the user mid-phase** — Use best judgment to skip blocked steps and continue autonomously through all phases. The only exception is the explicit commit/push approval gate required by Rule #13 — asking for that approval is not a violation of this rule.
 5. **Never run `git checkout`, `git switch`, `git stash`, `git reset`** — Create a new branch or use `gh pr checkout`. The agent is always on the correct branch.
 6. **Never mark a phase ✅ COMPLETE with `(fill after…)` or `[PENDING]` fields remaining** — All fields in the state file must be filled before marking a phase complete.
 7. **Stop on environment blockers** — Retry once. If it still fails, skip that step, document the blocker in `## Blocker Log`, and continue autonomously.
