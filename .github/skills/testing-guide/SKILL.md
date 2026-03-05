@@ -104,8 +104,6 @@ For each impossible scenario, add a row to `## Skipped Tests` in the caller's st
 
 ## Step 5: Build and Run Tests
 
-> ⚠️ The unit test project references `Microsoft.Maui.Controls` via `$(MauiVersion)`. This value is not defined in this repo and must be supplied externally when building or testing (for example: `-p:MauiVersion=<value>`).
-
 ```bash
 # Build first to catch compile errors
 dotnet build ./Syncfusion.Maui.Toolkit.sln
@@ -115,10 +113,6 @@ dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/
 
 # Run tests filtered to this control area
 dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/ --filter "FullyQualifiedName~{ControlArea}"
-
-# If MauiVersion is required, pass it explicitly:
-# dotnet build ./Syncfusion.Maui.Toolkit.sln -p:MauiVersion=<value>
-# dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/ -p:MauiVersion=<value>
 ```
 
 Report results to the caller or user: tests passed ✅, failed ❌, or skipped with reason.
