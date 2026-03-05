@@ -21,7 +21,7 @@ The caller (agent or user) must provide:
 
 | Input | Description |
 |-------|-------------|
-| **Control area** | e.g., `Charts`, `Calendar`, `Popup` |
+| **Control area** | e.g., `Chart`, `Calendar`, `Popup` |
 | **What changed** | A summary of the fix or feature that was implemented |
 | **Affected files** | Source files that were modified |
 

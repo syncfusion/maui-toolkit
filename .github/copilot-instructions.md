@@ -194,7 +194,7 @@ dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/
 dotnet build ./Syncfusion.Maui.Toolkit.sln
 
 # Build specific control project
-dotnet build maui/src/Charts/
+dotnet build maui/src/Syncfusion.Maui.Toolkit.csproj
 ```
 
 ### Running Tests
