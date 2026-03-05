@@ -29,9 +29,9 @@ You are an end-to-end agent that takes a GitHub issue (or a user-provided descri
 │  Phase 1             │     │  Phase 2             │     │  Phase 3             │
 │  🔍 PRE-FLIGHT       │ ──► │  🔧 FIX              │ ──► │  📋 REPORT           │
 │                      │     │                      │     │                      │
-│  Gather context,     │     │  Implement the fix   │     │  Summarize changes,  │
-│  understand scope,   │     │  or feature, run     │     │  open/update PR,     │
-│  locate source files │     │  tests, iterate      │     │  request review      │
+│  Gather context,     │     │  Implement the fix   │     │  Write final report  │
+│  comments, and       │     │  or feature, run     │     │  to the state file   │
+│  classify files      │     │  tests, iterate      │     │                      │
 └──────────────────────┘     └──────────────────────┘     └──────────────────────┘
 ```
 
@@ -42,12 +42,16 @@ You are an end-to-end agent that takes a GitHub issue (or a user-provided descri
 1. **Create the state file FIRST** — Before any issue fetch, file search, or code change, write `CustomAgentLogsTmp/PRState/pr-XXXXX.md`. This is the very first action.
 2. **Never commit directly to `main`** — Always work on a feature branch.
 3. **Never skip a phase** — Each phase must complete before the next begins.
-4. **Never stop and ask the user mid-phase** unless you hit a genuine blocker that cannot be resolved autonomously.
-5. **Never run `git checkout`, `git switch`, `git stash`, `git reset`** — Create a new branch or use `gh pr checkout`.
-6. **Always reference the issue number** in commit messages (`Fixes #XXXXX`).
-7. **Use hard tabs** for indentation (project style).
-8. **Do NOT use the `private` keyword** — It is the default accessibility in C#.
-9. **Write tests only for possible scenarios** — Skip tests for scenarios that are architecturally impossible (e.g., testing a code path that can never be reached, null-checking a non-nullable value, or validating state that the type system prevents). Document skipped scenarios in the state file under `## Skipped Tests`.
+4. **Never stop and ask the user** — Use best judgment to skip blocked steps and continue autonomously. Only ask if you hit a genuine blocker that cannot be resolved or bypassed.
+5. **Never run `git checkout`, `git switch`, `git stash`, `git reset`** — Create a new branch or use `gh pr checkout`. The agent is always on the correct branch.
+6. **Never mark a phase ✅ COMPLETE with `(fill after…)` or `[PENDING]` fields remaining** — All fields in the state file must be filled before marking a phase complete.
+7. **Stop on environment blockers** — Retry once. If it still fails, skip that step, document the blocker in `## Blocker Log`, and continue autonomously.
+8. **Always reference the issue number** in commit messages (`Fixes #XXXXX`).
+9. **Use hard tabs** for indentation (project style).
+10. **Do NOT use the `private` keyword** — It is the default accessibility in C#.
+11. **Do NOT add tests** — Tests are not part of this workflow unless explicitly requested by the user. Only verify that existing tests still pass after the fix.
+12. **Pre-Flight scope is context only** — Do NOT research git history, look at implementation code, design fixes, or form any opinion on the correct approach during Phase 1. All analysis belongs in Phase 2.
+13. **Never commit, push, or create/update a PR without explicit user approval** — After completing Phase 2, present a summary of the changes and ask the user: "Shall I commit and push these changes?" Only proceed with `git commit`, `git push`, or `gh pr create` / `gh pr edit` after the user explicitly says yes.
 
 ---
 
@@ -85,13 +89,38 @@ mkdir -p CustomAgentLogsTmp/PRState
 - **Title**: (fill after fetch)
 - **URL**: https://github.com/syncfusion/maui-toolkit/issues/XXXXX
 - **Labels**: (fill after fetch)
+- **Platforms Affected**: (fill after fetch)
+
+## Pre-Flight Findings
+### Reviewer Feedback
+| File:Line | Reviewer Says | Author Says | Status |
+|-----------|--------------|-------------|--------|
+| (fill if PR exists) | | | |
+
+### Edge Cases from Comments
+- (fill after reading comments)
+
+### Files Changed (if PR exists)
+| File | Type | Platform |
+|------|------|----------|
+| (fill if PR exists) | Fix / Test | All / Android / iOS / Windows |
 
 ## Plan
-- **Control**: (fill after analysis)
-- **Root Cause**: (fill after analysis)
+- **Control**: (fill after Phase 2 analysis)
+- **Root Cause**: (fill after Phase 2 analysis)
 - **Branch**: (fill after branch creation)
-- **Files to Change**: (fill after analysis)
-- **Test Files**: (fill after analysis)
+- **Files to Change**: (fill after Phase 2 analysis)
+- **Test Files**: (fill after Phase 2 analysis)
+
+## Multi-Model Analysis
+| Model | Approach Summary | Selected? |
+|-------|-----------------|-----------|
+| Default model | (fill after analysis) | |
+| claude-sonnet-4.6 | (fill after analysis) | |
+| gpt-5.1 | (fill after analysis) | |
+| gemini-3-pro-preview | (fill after analysis) | |
+
+**Selected Approach**: (fill after analysis or "Default model — user declined multi-model review")
 
 ## Fix Attempts
 | # | Approach | Build | Tests | Result |
@@ -111,56 +140,112 @@ Update this file at the **end of each phase** to reflect current status.
 
 ## Phase 1: 🔍 PRE-FLIGHT — Context Gathering
 
-> **Scope**: Understand the issue. Locate relevant source files. Plan the approach. No code changes yet.
+> **⚠️ SCOPE**: Document and gather context only. No code analysis. No fix opinions. No root cause research. No running tests.
 
-### Step 1: Gather Issue Context
+### ❌ Pre-Flight Boundaries (What NOT To Do)
 
-**If given a GitHub issue number:**
+| ❌ Do NOT | Why | When to do it |
+|-----------|-----|---------------|
+| Research git history | That's root cause analysis | Phase 2: 🔧 Fix |
+| Look at implementation code | That's understanding the bug | Phase 2: 🔧 Fix |
+| Design or propose fixes | That's solution design | Phase 2: 🔧 Fix |
+| Form opinions on the correct approach | That's analysis | Phase 2: 🔧 Fix |
+| Run tests | That's verification | Phase 2: 🔧 Fix |
+
+### ✅ What TO Do in Pre-Flight
+
+- Read issue description and all comments
+- Note platforms affected (from issue labels)
+- Identify files changed (if a PR already exists for this issue)
+- Document disagreements and edge cases raised in comments
+
+---
+
+### Step 1: Gather Context
+
+**If starting from a GitHub issue number:**
 ```bash
 gh issue view XXXXX --json title,body,comments,labels --repo syncfusion/maui-toolkit
 ```
 
-**If given a user-described prompt:**
-- Document the problem statement and expected behavior as provided.
-
-### Step 2: Identify the Affected Control and Files
-
-Based on the issue description:
-
-1. **Identify the control** (e.g., Charts, Calendar, Popup, TabView, etc.)
-2. **Locate the source directory**: `maui/src/{ControlName}/`
-3. **Locate related test directory**: `maui/tests/Syncfusion.Maui.Toolkit.UnitTest/{ControlArea}/`
-
-Search for relevant code:
+**If a linked PR already exists for this issue:**
 ```bash
-# Find source files related to the issue keyword
-grep -r "KEYWORD" maui/src/{ControlName}/ --include="*.cs" -l
+# Fetch PR metadata
+gh pr view XXXXX --json title,body,url,author,labels,files --repo syncfusion/maui-toolkit
 
-# Find existing tests for the control
-find maui/tests/Syncfusion.Maui.Toolkit.UnitTest/ -name "*.cs" | xargs grep -l "KEYWORD" 2>/dev/null
+# Find linked issue number from PR body
+gh pr view XXXXX --json body --jq '.body' --repo syncfusion/maui-toolkit | grep -oE "(Fixes|Closes|Resolves) #[0-9]+" | head -1
+
+# Fetch the linked issue
+gh issue view ISSUE_NUMBER --json title,body,comments,labels --repo syncfusion/maui-toolkit
 ```
 
-### Step 3: Understand Root Cause
+**If given a user-described prompt (no issue number):**
+- Document the problem statement and expected behavior exactly as described by the user.
 
-Analyze the relevant source files to understand:
-- What the current behavior is
-- What the expected behavior should be
-- Which class, method, or property is responsible
-- Whether platform-specific code is involved
+---
 
-### Step 4: Plan the Fix or Feature
+### Step 2: Fetch Comments
 
-Document your plan:
+**If a PR exists** — Fetch all PR discussion:
+```bash
+# PR-level comments
+gh pr view XXXXX --json comments --jq '.comments[] | "Author: \(.author.login)\n\(.body)\n---"' --repo syncfusion/maui-toolkit
 
-| Item | Details |
-|------|---------|
-| **Issue** | #XXXXX — Short description |
-| **Control** | e.g., SfCartesianChart |
-| **Root Cause** | e.g., Property X is not updating Y when Z changes |
-| **Files to Change** | `maui/src/.../File.cs` |
-| **Test Files** | `maui/tests/.../TestFile.cs` |
-| **Branch Name** | `fix/issue-XXXXX-short-description` or `feature/issue-XXXXX-short-description` |
-| **Approach** | Brief description of the fix strategy |
+# Review summaries
+gh pr view XXXXX --json reviews --jq '.reviews[] | "Reviewer: \(.author.login) [\(.state)]\n\(.body)\n---"' --repo syncfusion/maui-toolkit
+
+# Inline code review comments (CRITICAL — often contains key technical feedback)
+gh api "repos/syncfusion/maui-toolkit/pulls/XXXXX/comments" --jq '.[] | "File: \(.path):\(.line // .original_line)\nAuthor: \(.user.login)\n\(.body)\n---"'
+```
+
+**Check for a prior agent review in comments:**
+
+Signs a prior agent review exists:
+- Contains a phase status table (`| Phase | Status |`)
+- Contains structured sections (Root Cause, Files to Change, Fix Attempts)
+
+**If a prior agent review is found:**
+1. Parse phase statuses to determine what is already done
+2. Import all findings (root cause, files, fix attempts)
+3. Resume from the first incomplete phase — do NOT restart from scratch
+
+**If issue only** — Comments are already fetched in Step 1.
+
+---
+
+### Step 3: Document Key Findings
+
+Record reviewer feedback and disagreements in the state file:
+
+| File:Line | Reviewer Says | Author Says | Status |
+|-----------|--------------|-------------|--------|
+| Example.cs:95 | "Remove this call" | "Required for fix" | ⚠️ INVESTIGATE |
+
+**Edge Cases to Check** (from comments mentioning "what about…", "does this work with…"):
+- Edge case 1 from discussion
+- Edge case 2 from discussion
+
+---
+
+### Step 4: Classify Files (if a PR exists)
+
+```bash
+gh pr view XXXXX --json files --jq '.files[].path' --repo syncfusion/maui-toolkit
+```
+
+Classify each changed file into:
+- **Fix files**: Source code under `maui/src/`
+- **Test files**: Tests under `maui/tests/`
+
+Note the **affected platforms** based on file extensions and subfolder names:
+- `.android.cs` / `Android/` → Android
+- `.ios.cs` / `iOS/` → iOS and MacCatalyst
+- `.maccatalyst.cs` / `MacCatalyst/` → MacCatalyst only
+- `.windows.cs` / `Windows/` → Windows
+- No platform suffix → All platforms
+
+---
 
 ### Step 5: Create a Feature Branch
 
@@ -170,22 +255,33 @@ git checkout -b fix/issue-XXXXX-short-description
 
 > For features: use `feature/` prefix. For bug fixes: use `fix/` prefix.
 
+---
+
 ### Step 6: Update the State File
 
-Update `CustomAgentLogsTmp/PRState/pr-XXXXX.md`:
-- Fill in **Issue** title and labels
-- Fill in **Plan** (Control, Root Cause, Branch, Files to Change, Test Files)
+Update `CustomAgentLogsTmp/PRState/pr-XXXXX.md` with everything gathered:
+- Fill in **Issue** title, URL, and labels
+- Fill in **Platforms Affected**
+- Fill in **Reviewer Feedback** table and **Edge Cases** (if a PR exists)
+- Fill in **Files Changed** classification (if a PR exists)
+- Fill in **Branch**
 - Set Phase 1 status to `✅ COMPLETE`
 - Set Phase 2 status to `⏳ IN PROGRESS`
 
+> 🚨 Do NOT mark Phase 1 `✅ COMPLETE` if any field still reads `(fill after…)`.
+
+---
+
 ### ✅ Pre-Flight Complete Checklist
 
-- [ ] State file exists and updated with issue details and plan
-- [ ] Issue fully understood (title, description, comments reviewed)
-- [ ] Affected control and source files identified
-- [ ] Root cause or feature scope understood
-- [ ] Fix/implementation plan documented
+- [ ] State file updated — no `(fill after…)` fields remaining for Phase 1
+- [ ] Issue title, body, and all comments fully read
+- [ ] Platforms affected noted (from labels or file extensions)
+- [ ] Prior agent review checked — resumed if found
+- [ ] Reviewer feedback and edge cases documented (if PR exists)
+- [ ] Files classified into fix files and test files (if PR exists)
 - [ ] Feature branch created
+- [ ] Phase 1 status set to `✅ COMPLETE` in state file
 
 ---
 
@@ -193,141 +289,102 @@ Update `CustomAgentLogsTmp/PRState/pr-XXXXX.md`:
 
 > **Scope**: Implement the fix or feature. Write or update tests. Verify tests pass. Iterate if needed.
 
+---
+
+### Step 0: Fix Analysis
+
+This step runs in two sub-steps: **default model analysis first**, then an optional **multi-model review**.
+
+---
+
+#### Step 0a: Default Model Analysis
+
+Now that Phase 1 context is gathered, perform deep analysis of the source code to identify the root cause and propose a concrete fix approach.
+
+**1. Identify the Affected Control and Files**
+
+Based on the issue description and labels:
+1. **Identify the control** (e.g., Charts, Calendar, Popup, TabView, etc.)
+2. **Locate the source directory**: `maui/src/{ControlName}/`
+3. **Locate related test directory**: `maui/tests/Syncfusion.Maui.Toolkit.UnitTest/{ControlArea}/`
+
+```bash
+# Find source files related to the issue keyword
+grep -r "KEYWORD" maui/src/{ControlName}/ --include="*.cs" -l
+
+# Find existing tests for the control
+find maui/tests/Syncfusion.Maui.Toolkit.UnitTest/ -name "*.cs" | xargs grep -l "KEYWORD" 2>/dev/null
+```
+
+**2. Understand the Root Cause**
+
+Analyze the relevant source files to understand:
+- What the current behavior is
+- What the expected behavior should be
+- Which class, method, or property is responsible
+- Whether platform-specific code is involved
+
+**3. Propose a Fix Approach**
+
+Document this analysis in the state file under `## Plan` and `## Default Model Analysis` before proceeding:
+
+**Analysis output to record:**
+
+```markdown
+## Default Model Analysis
+- **Approach**: [brief description of the fix strategy]
+- **Files to Change**: [list of files and methods]
+- **Code Change Summary**: [before/after pseudocode or description]
+- **Risks / Edge Cases**: [any concerns]
+```
+
+---
+
+#### Step 0b: Multi-Model Fix Review (Optional)
+
+> 🤖 Read **`.github/skills/multi-model-analysis/SKILL.md`** for the full skill.
+
+**Inputs to pass to the skill:**
+- **Subject**: "proposed fix for issue #XXXXX"
+- **Context**: issue description, root cause, affected files, source snippets
+- **Primary approach**: the default model's analysis from Step 0a
+
+The skill asks the user for permission, runs 3 parallel agents, and returns a `## Multi-Model Analysis Result` table. Record this table in the state file and use the selected approach in Step 1.
+
+---
+
 ### Step 1: Implement the Fix or Feature
 
 Apply the planned changes to the identified source files.
 
-**Guidelines:**
 - Follow existing code style (hard tabs, no `private` keyword, nullable enabled)
 - Update XML documentation for any public API changes
-- For platform-specific changes, apply to the correct platform file (`.android.cs`, `.ios.cs`, `.windows.cs`, etc.)
+- For platform-specific changes, use the correct platform file (`.android.cs`, `.ios.cs`, `.windows.cs`, etc.)
 - For shared logic changes, update the shared `.cs` file
-
-**Example: Fixing a property binding issue**
-```csharp
-// Before: property not triggering update
-public SomeType SomeProperty
-{
-    get => (SomeType)GetValue(SomePropertyProperty);
-    set => SetValue(SomePropertyProperty, value);
-}
-
-// After: ensure handler is triggered
-static void OnSomePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-{
-    if (bindable is SomeControl control)
-    {
-        control.UpdateSomeBehavior();
-    }
-}
-```
 
 ### Step 2: Write or Update Tests
 
-Locate the test file for the affected control under:
-```
-maui/tests/Syncfusion.Maui.Toolkit.UnitTest/{ControlArea}/
-```
+> ⚠️ **Tests are NOT added as part of this workflow.** Skip this step.
 
-#### What to Test
+If tests are explicitly requested by the user, read **`.github/skills/testing-guide/SKILL.md`** for guidance.
 
-Add tests for **all scenarios that are possible** given the control's design and constraints:
+### Step 3: Build and Verify
 
-- **For bug fixes**: Reproduce the bug (verify it fails without fix, passes with fix)
-- **For features**: Validate the new behavior end-to-end
-- **Edge cases**: Boundary values, null inputs where nullable is allowed, default state, repeated calls
-
-**Test naming convention**: `MethodOrProperty_Scenario_ExpectedBehavior`
-
-```csharp
-[Fact]
-public void SomeProperty_WhenSetToValue_ShouldUpdateBehavior()
-{
-    // Arrange
-    var control = new SomeControl();
-
-    // Act
-    control.SomeProperty = expectedValue;
-
-    // Assert
-    Assert.Equal(expectedValue, control.InternalState);
-}
-```
-
-#### What NOT to Test (Impossible Scenarios)
-
-**Do NOT write tests for scenarios that are architecturally impossible.** Instead, document them in the state file under `## Skipped Tests`.
-
-A scenario is **impossible** if:
-
-| Reason | Example |
-|--------|---------|
-| The type system prevents the state | Testing `null` on a non-nullable `required` property |
-| The constructor guarantees initialization | Testing "uninitialized" state on a property set in the constructor |
-| The code path can never be reached | A branch guarded by a condition that is always true/false by design |
-| Platform API is unavailable in unit test context | Testing a renderer or native handler that requires a live platform runtime |
-| The scenario contradicts the control's invariants | Setting an index out of range when the setter clamps to valid range |
-
-**Example of correctly skipping an impossible test:**
-
-```csharp
-// DO NOT write this — SomeControl.Items is initialized in the constructor,
-// so it can never be null. Testing null.Count would be testing impossible state.
-// Skipped: Items_WhenNull_ShouldNotThrow → logged in state file.
-```
-
-**Documenting a skipped scenario** in `CustomAgentLogsTmp/PRState/pr-XXXXX.md`:
-
-```markdown
-## Skipped Tests
-| Scenario | Reason Impossible |
-|----------|-------------------|
-| `Items_WhenNull_ShouldNotThrow` | `Items` is initialized in constructor; can never be null |
-| `OnPlatformRenderer_WhenDetached` | Requires native platform runtime; not testable in xUnit |
-```
-
-### Step 3: Build and Run Tests
-
-```bash
-# Build to catch compile errors
-dotnet build ./Syncfusion.Maui.Toolkit.sln
-
-# Run all unit tests
-dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/
-
-# Run tests filtered to this control area
-dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/ --filter "FullyQualifiedName~{ControlArea}"
-```
+> 📖 Handled by **`.github/skills/testing-guide/SKILL.md`** Step 5 — the skill builds the solution and runs existing tests to confirm nothing is broken, then reports pass ✅ / fail ❌ back to the agent.
 
 ### Step 4: Iterate on Failures
 
-If tests fail:
+If the skill reports test failures:
 1. Analyze the failure output
-2. Revise the implementation or test
-3. Rebuild and re-run tests
+2. Revise the implementation or the test
+3. Re-invoke the testing skill (Step 2 + Step 3)
 4. Repeat until all tests pass
 
 **Record each attempt** in the state file under `## Fix Attempts`.
 
 **Maximum attempts**: 5 iterations before stopping and documenting the blocker in `## Blocker Log`.
 
-### Step 5: Commit the Changes
-
-```bash
-git add .
-git commit -m "Fix: Short description of the change
-
-Fixes #XXXXX"
-```
-
-For features:
-```bash
-git commit -m "Feature: Short description of the new feature
-
-Closes #XXXXX"
-```
-
-### Step 6: Update the State File
+### Step 5: Update the State File
 
 Update `CustomAgentLogsTmp/PRState/pr-XXXXX.md`:
 - Add final row to `## Fix Attempts` with build/test results
@@ -337,104 +394,66 @@ Update `CustomAgentLogsTmp/PRState/pr-XXXXX.md`:
 
 ### ✅ Fix Phase Complete Checklist
 
+- [ ] Default model analysis complete and documented in state file (Step 0a)
+- [ ] Multi-model review permission asked; result documented in state file — either multi-model ran and best approach selected, or default model approach confirmed (Step 0b)
 - [ ] Fix or feature implemented in source files
-- [ ] Tests written for **all possible scenarios**
-- [ ] Impossible scenarios documented in state file under `## Skipped Tests`
 - [ ] Solution builds without errors
-- [ ] All unit tests pass
-- [ ] Changes committed to feature branch
+- [ ] Existing tests pass (no regressions)
 - [ ] State file updated
 
 ---
 
-## Phase 3: 📋 REPORT — Summary and PR
+## Phase 3: 📋 REPORT — Final Summary
 
-> **Scope**: Open or update a pull request. Provide a clear summary of changes. Request review.
+> **Scope**: Write the final report to the state file. No commits, no pushes, no PR creation.
 
-### Step 1: Push the Branch
+### Step 1: Write the Final Report to the State File
 
-```bash
-git push -u origin fix/issue-XXXXX-short-description
-```
+Append a `## Final Report` section to `CustomAgentLogsTmp/PRState/pr-XXXXX.md`:
 
-### Step 2: Open a Pull Request
+```markdown
+## Final Report
 
-```bash
-gh pr create \
-  --repo syncfusion/maui-toolkit \
-  --base main \
-  --title "Fix: Short description of the change" \
-  --body "$(cat <<'EOF'
-### Root Cause of the Issue
-<!-- Describe the root cause -->
-
-### Description of Change
-<!-- Describe what was changed and why -->
-
-### Issues Fixed
-Fixes #XXXXX
-
-### Screenshots
-#### Before:
-
-#### After:
-
-EOF
-)"
-```
-
-> Fill in the PR body with the actual root cause, description, and screenshots (if applicable).
-
-### Step 3: Generate the Final Report
-
-Print a structured summary:
-
-```
 ╔══════════════════════════════════════════════════════════════╗
 ║              ISSUE RESOLVER — FINAL REPORT                   ║
 ╠══════════════════════════════════════════════════════════════╣
 ║  Issue:     #XXXXX — [Issue Title]                           ║
 ║  Control:   [Control Name]                                   ║
 ║  Branch:    fix/issue-XXXXX-short-description                ║
-║  PR:        #YYYYY — [PR Title]                              ║
 ╠══════════════════════════════════════════════════════════════╣
 ║  PHASE 1 — PRE-FLIGHT     ✅ COMPLETE                       ║
 ║  PHASE 2 — FIX            ✅ COMPLETE                       ║
 ║  PHASE 3 — REPORT         ✅ COMPLETE                       ║
 ╚══════════════════════════════════════════════════════════════╝
 
-## Root Cause
+### Root Cause
 [Summary of what was causing the issue]
 
-## Changes Made
+### Changes Made
 | File | Change Description |
 |------|--------------------|
 | `maui/src/.../File.cs` | [What changed] |
 | `maui/tests/.../TestFile.cs` | [Test added/updated] |
 
-## Test Results
+### Test Results
 - Build: ✅ PASSED
 - Unit Tests: ✅ PASSED (N tests)
-- Skipped (impossible scenarios): N (see state file)
+- Skipped (impossible scenarios): N (see ## Skipped Tests above)
 
-## Notes
+### Notes
 [Any edge cases, follow-up items, or known limitations]
 ```
 
-### Step 4: Finalize the State File
+### Step 2: Finalize Phase Statuses
 
-Update `CustomAgentLogsTmp/PRState/pr-XXXXX.md` with:
-- PR number and URL
-- All phase statuses set to `✅ COMPLETE`
-- Final test results and skipped-test list confirmed
+Update the `## Status` table in the state file:
+- Set all phases to `✅ COMPLETE`
 
 ### ✅ Report Phase Complete Checklist
 
-- [ ] Branch pushed to remote
-- [ ] PR created with correct title, body, and `Fixes #` reference
-- [ ] Final report printed with phase statuses
-- [ ] State file finalized with all phases `✅ COMPLETE`
-- [ ] All phases marked ✅ COMPLETE
+- [ ] `## Final Report` section written in state file with all fields filled
+- [ ] All phase statuses set to `✅ COMPLETE` in state file
+- [ ] No `(fill after…)` fields remaining anywhere in the state file
 
 ---
 
@@ -442,28 +461,14 @@ Update `CustomAgentLogsTmp/PRState/pr-XXXXX.md` with:
 
 | ❌ Mistake | ✅ Correct Approach |
 |-----------|---------------------|
-| Not creating the state file first | **Always** create `CustomAgentLogsTmp/PRState/pr-XXXXX.md` as the very first action |
-| Committing directly to `main` | Always create a `fix/` or `feature/` branch |
-| Using `private` keyword | Omit it — `private` is the C# default |
-| Using spaces for indentation | Use **hard tabs** |
-| Writing tests for impossible scenarios | Identify and skip them; document in state file under `## Skipped Tests` |
-| Skipping tests for real edge cases | All **possible** scenarios must be tested |
-| Skipping the `Fixes #` in commit/PR | Always link to the issue |
-| Creating a new branch off a PR branch | Use `gh pr checkout XXXXX` instead |
-| Marking a phase complete with unresolved items | Fill ALL checklist items before marking ✅ |
-| Not updating the state file after each phase | Update status table in state file at end of every phase |
-
----
-
-## Platform Testing Notes
-
-| Host OS | Testable Platforms |
-|---------|-------------------|
-| Windows | Android, Windows |
-| macOS | Android, iOS, MacCatalyst |
-
-For platform-specific issues:
-- If the affected platform is NOT available on the current host, document this in the report and note which platform needs manual testing.
+| Not creating the state file first | Create `CustomAgentLogsTmp/PRState/pr-XXXXX.md` as the very first action |
+| Doing root cause analysis in Pre-Flight | Phase 1 is context-gathering only; analysis belongs in Phase 2 |
+| Marking a phase ✅ with `(fill after…)` fields remaining | Fill ALL fields before marking complete |
+| Stopping to ask the user mid-phase | Use best judgment, skip blocked steps, continue autonomously |
+| Using `private` keyword or spaces for indentation | `private` is the C# default; use hard tabs |
+| Writing tests for impossible scenarios | Document in `## Skipped Tests`; see `testing-guide.md` |
+| Not updating the state file after each phase | Update status table at the end of every phase |
+| Committing, pushing, or creating a PR without asking | Always ask the user for approval before any `git commit`, `git push`, or PR action |
 
 ---
 
