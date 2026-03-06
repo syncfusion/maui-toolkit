@@ -1413,6 +1413,25 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
             if (Handler != null)
             {
+				// Reinitialize label styles that were cleared when the handler was detached
+				// (e.g., when a modal page was dismissed and the page became visible again).
+				// Use explicit assignment instead of ClearValue, because ClearValue may reset
+				// to the static defaultValue (null) rather than invoking defaultValueCreator.
+				if (HintLabelStyle == null)
+				{
+					HintLabelStyle = GetHintLabelStyleDefaultValue();
+				}
+
+				if (HelperLabelStyle == null)
+				{
+					HelperLabelStyle = GetHelperLabelStyleDefaultValue();
+				}
+
+				if (ErrorLabelStyle == null)
+				{
+					ErrorLabelStyle = GetErrorLabelStyleDefaultValue();
+				}
+
                 WireEvents();
                 OnTextInputViewHandlerChanged(this.Content, new EventArgs());
 #if ANDROID
