@@ -1810,6 +1810,25 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(originalDateTime, picker.SelectedDate ?? originalDateTime);
 			Assert.False(selectionChangedFired, "SelectionChanged event should not fire until OK is pressed in dialog mode");
 		}
+
+		[Fact]
+		public void OnPopupOpened_ShouldUpdateHeaderTexts_WhenSelectedDateChanged()
+		{
+			// Arrange
+			var control = new SfDateTimePicker();
+			control.SelectedDate = DateTime.Now;
+			control._internalSelectedDateTime = DateTime.Now.AddDays(-1);
+
+			// Act
+			InvokePrivateMethod(control, "OnPopupOpened", new EventArgs());
+
+			// Assert
+			Assert.Equal(control.GetDateHeaderText(), control.BaseHeaderView.DateText);
+			Assert.Equal(control.GetTimeHeaderText(), control.BaseHeaderView.TimeText);
+		}
+
+
+
 		[Fact]
 		public void RelativeDialogMode_DateTimeSelectionNotCommittedUntilOK_ValidatesCorrectBehavior()
 		{
