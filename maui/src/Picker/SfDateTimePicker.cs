@@ -2564,6 +2564,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
         protected override void OnPopupOpened(EventArgs e)
         {
             InvokeOpenedEvent(this, e);
+            if (_internalSelectedDateTime != null && _internalSelectedDateTime != SelectedDate)
+            {
+                _internalSelectedDateTime = SelectedDate.HasValue ? SelectedDate : null;
+                BaseHeaderView.DateText = GetDateHeaderText();
+                BaseHeaderView.TimeText = GetTimeHeaderText();
+            }
         }
 
         /// <summary>
