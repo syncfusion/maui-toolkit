@@ -1002,7 +1002,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             int minute = 0;
-            if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > previousSelectedTime.Value.Minutes)
+            if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Contains(previousSelectedTime.Value.Minutes.ToString()))
             {
                 minute = previousSelectedTime.Value.Minutes;
             }
@@ -1015,7 +1015,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             int second = 0;
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > previousSelectedTime.Value.Seconds)
+            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Contains(previousSelectedTime.Value.Seconds.ToString()))
             {
                 second = previousSelectedTime.Value.Seconds;
             }
@@ -1064,7 +1064,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             int second = 0;
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > previousSelectedTime.Value.Seconds)
+            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Contains(previousSelectedTime.Value.Seconds.ToString()))
             {
                 second = previousSelectedTime.Value.Seconds;
             }
