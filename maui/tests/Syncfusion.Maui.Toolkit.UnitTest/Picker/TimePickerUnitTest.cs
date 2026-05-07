@@ -3070,5 +3070,60 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		#endregion
+
+		#region Bug Fix Tests - Hour Change with Interval Preservation
+
+		[Fact]
+		public void GenerateSecondColumn_CustomInterval15Seconds_CorrectlySelectsMatchingValue()
+		{
+			var timePicker = new SfTimePicker();
+			timePicker.SecondInterval = 15;
+			timePicker.SelectedTime = new TimeSpan(10, 30, 30);
+			var result = InvokePrivateMethod(timePicker, "GenerateSecondColumn") as PickerColumn;
+			Assert.NotNull(result);
+			var seconds = result.ItemsSource as ObservableCollection<string>;
+			Assert.Equal("00", seconds?[0]);
+			Assert.Equal("15", seconds?[1]);
+			Assert.Equal("30", seconds?[2]);
+			Assert.Equal("45", seconds?[3]);
+			Assert.Equal(2, result.SelectedIndex);
+		}
+
+		[Fact]
+		public void GenerateSecondColumn_Interval7Seconds_CorrectlySelectsMatchingValue()
+		{
+			var timePicker = new SfTimePicker();
+			timePicker.SecondInterval = 7;
+			timePicker.SelectedTime = new TimeSpan(10, 30, 28);
+
+			var result = InvokePrivateMethod(timePicker, "GenerateSecondColumn") as PickerColumn;
+
+			Assert.NotNull(result);
+			var seconds = result.ItemsSource as ObservableCollection<string>;
+			// 28 should be in the collection at some index
+			var containsValue = seconds?.Any(s => s == "28");
+			Assert.True(containsValue, "Collection should contain '28'");
+			// The selected index should point to 28
+			Assert.Equal(4, result.SelectedIndex);
+		}
+
+		[Fact]
+		public void GenerateSecondColumn_Interval30Seconds_CorrectlySelectsMatchingValue()
+		{
+			var timePicker = new SfTimePicker();
+			timePicker.SecondInterval = 30;
+			timePicker.SelectedTime = new TimeSpan(10, 30, 30);
+
+			var result = InvokePrivateMethod(timePicker, "GenerateSecondColumn") as PickerColumn;
+
+			Assert.NotNull(result);
+			var seconds = result.ItemsSource as ObservableCollection<string>;
+			Assert.Equal("00", seconds?[0]);
+			Assert.Equal("30", seconds?[1]);
+			// The selected index should be 1 because 30 is at index 1
+			Assert.Equal(1, result.SelectedIndex);
+		}
+
+		#endregion
 	}
 }
