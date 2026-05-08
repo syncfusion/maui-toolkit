@@ -3095,15 +3095,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var timePicker = new SfTimePicker();
 			timePicker.SecondInterval = 7;
 			timePicker.SelectedTime = new TimeSpan(10, 30, 28);
-
 			var result = InvokePrivateMethod(timePicker, "GenerateSecondColumn") as PickerColumn;
-
 			Assert.NotNull(result);
 			var seconds = result.ItemsSource as ObservableCollection<string>;
-			// 28 should be in the collection at some index
 			var containsValue = seconds?.Any(s => s == "28");
 			Assert.True(containsValue, "Collection should contain '28'");
-			// The selected index should point to 28
 			Assert.Equal(4, result.SelectedIndex);
 		}
 
@@ -3113,14 +3109,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var timePicker = new SfTimePicker();
 			timePicker.SecondInterval = 30;
 			timePicker.SelectedTime = new TimeSpan(10, 30, 30);
-
 			var result = InvokePrivateMethod(timePicker, "GenerateSecondColumn") as PickerColumn;
-
 			Assert.NotNull(result);
 			var seconds = result.ItemsSource as ObservableCollection<string>;
 			Assert.Equal("00", seconds?[0]);
 			Assert.Equal("30", seconds?[1]);
-			// The selected index should be 1 because 30 is at index 1
 			Assert.Equal(1, result.SelectedIndex);
 		}
 
@@ -3148,15 +3141,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			timePicker.MinuteInterval = 20;
 			timePicker.SelectedTime = new TimeSpan(10, 40, 30);
 			var selectedDate = Convert.ToDateTime(timePicker.SelectedTime.ToString());
-
 			var result = InvokePrivateMethod(timePicker, "GenerateMinuteColumn", timePicker.SelectedTime, selectedDate) as PickerColumn;
-
 			Assert.NotNull(result);
 			var minutes = result.ItemsSource as ObservableCollection<string>;
 			Assert.Equal("00", minutes?[0]);
 			Assert.Equal("20", minutes?[1]);
 			Assert.Equal("40", minutes?[2]);
-			// The selected index should be 2 because 40 is at index 2
 			Assert.Equal(2, result.SelectedIndex);
 		}
 
