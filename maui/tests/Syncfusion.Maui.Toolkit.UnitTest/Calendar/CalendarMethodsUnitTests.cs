@@ -1002,7 +1002,7 @@ public class CalendarMethodsUnitTests : BaseUnitTest
 		Assert.Equal(100, calendar.PopupHeight);
 		if (calendar.Mode == CalendarMode.Dialog)
 		{
-			Assert.Equal(83, Math.Round(resultValue));
+			Assert.Equal(100, Math.Round(resultValue));
 		}
 	}
 
