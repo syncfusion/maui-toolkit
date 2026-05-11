@@ -2317,7 +2317,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal("15", seconds[1]);
             Assert.Equal("30", seconds[2]);
             Assert.Equal("45", seconds[3]);
-            Assert.Equal(0, result.SelectedIndex);
+            Assert.Equal(2, result.SelectedIndex);
         }
 
         [Fact]
@@ -2347,7 +2347,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Equal(9, seconds.Count);
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             Assert.Equal("28", seconds[4]);
-            Assert.Equal(0, result.SelectedIndex);
+            Assert.Equal(4, result.SelectedIndex);
         }
 
         [Fact]
@@ -2366,7 +2366,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
             Assert.Equal("00", seconds[0]);
             Assert.Equal("30", seconds[1]);
-            Assert.Equal(0, result.SelectedIndex);
+            Assert.Equal(1, result.SelectedIndex);
         }
 
         [Fact]
@@ -3067,6 +3067,87 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			picker.SelectedTime = picker.MinimumTime;
 			Assert.Equal(picker.MinimumTime, picker.SelectedTime);
 			Assert.True(selectionChangedFired, "SelectionChanged should fire for valid boundary values");
+		}
+
+		#endregion
+
+		#region Bug Fix Tests - Hour Change with Interval Preservation
+
+		[Fact]
+		public void GenerateSecondColumn_CustomInterval15Seconds_CorrectlySelectsMatchingValue()
+		{
+			var timePicker = new SfTimePicker();
+			timePicker.SecondInterval = 15;
+			timePicker.SelectedTime = new TimeSpan(10, 30, 30);
+			var result = InvokePrivateMethod(timePicker, "GenerateSecondColumn") as PickerColumn;
+			Assert.NotNull(result);
+			var seconds = result.ItemsSource as ObservableCollection<string>;
+			Assert.Equal("00", seconds?[0]);
+			Assert.Equal("15", seconds?[1]);
+			Assert.Equal("30", seconds?[2]);
+			Assert.Equal("45", seconds?[3]);
+			Assert.Equal(2, result.SelectedIndex);
+		}
+
+		[Fact]
+		public void GenerateSecondColumn_Interval7Seconds_CorrectlySelectsMatchingValue()
+		{
+			var timePicker = new SfTimePicker();
+			timePicker.SecondInterval = 7;
+			timePicker.SelectedTime = new TimeSpan(10, 30, 28);
+			var result = InvokePrivateMethod(timePicker, "GenerateSecondColumn") as PickerColumn;
+			Assert.NotNull(result);
+			var seconds = result.ItemsSource as ObservableCollection<string>;
+			var containsValue = seconds?.Any(s => s == "28");
+			Assert.True(containsValue, "Collection should contain '28'");
+			Assert.Equal(4, result.SelectedIndex);
+		}
+
+		[Fact]
+		public void GenerateSecondColumn_Interval30Seconds_CorrectlySelectsMatchingValue()
+		{
+			var timePicker = new SfTimePicker();
+			timePicker.SecondInterval = 30;
+			timePicker.SelectedTime = new TimeSpan(10, 30, 30);
+			var result = InvokePrivateMethod(timePicker, "GenerateSecondColumn") as PickerColumn;
+			Assert.NotNull(result);
+			var seconds = result.ItemsSource as ObservableCollection<string>;
+			Assert.Equal("00", seconds?[0]);
+			Assert.Equal("30", seconds?[1]);
+			Assert.Equal(1, result.SelectedIndex);
+		}
+
+		[Fact]
+		public void GenerateMinuteColumn_CustomInterval15Minutes_CorrectlySelectsMatchingValue()
+		{
+			var timePicker = new SfTimePicker();
+			timePicker.MinuteInterval = 15;
+			timePicker.SelectedTime = new TimeSpan(10, 30, 45);
+			var selectedDate = Convert.ToDateTime(timePicker.SelectedTime.ToString());
+			var result = InvokePrivateMethod(timePicker, "GenerateMinuteColumn", timePicker.SelectedTime, selectedDate) as PickerColumn;
+			Assert.NotNull(result);
+			var minutes = result.ItemsSource as ObservableCollection<string>;
+			Assert.Equal("00", minutes?[0]);
+			Assert.Equal("15", minutes?[1]);
+			Assert.Equal("30", minutes?[2]);
+			Assert.Equal("45", minutes?[3]);
+			Assert.Equal(2, result.SelectedIndex);
+		}
+
+		[Fact]
+		public void GenerateMinuteColumn_Interval20Minutes_CorrectlySelectsMatchingValue()
+		{
+			var timePicker = new SfTimePicker();
+			timePicker.MinuteInterval = 20;
+			timePicker.SelectedTime = new TimeSpan(10, 40, 30);
+			var selectedDate = Convert.ToDateTime(timePicker.SelectedTime.ToString());
+			var result = InvokePrivateMethod(timePicker, "GenerateMinuteColumn", timePicker.SelectedTime, selectedDate) as PickerColumn;
+			Assert.NotNull(result);
+			var minutes = result.ItemsSource as ObservableCollection<string>;
+			Assert.Equal("00", minutes?[0]);
+			Assert.Equal("20", minutes?[1]);
+			Assert.Equal("40", minutes?[2]);
+			Assert.Equal(2, result.SelectedIndex);
 		}
 
 		#endregion
