@@ -45,6 +45,26 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 		#endregion
 
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SfPopup"/> class for native Android embedding scenarios where a MAUI Window is not available.
+		/// </summary>
+		/// <param name="activity">The host <see cref="Android.App.Activity"/> that provides the necessary Android context when embedding the popup in a native application.</param>
+		/// <param name="mauiContext">The host <see cref="IMauiContext"/> that provides access to MAUI-specific services when embedding the SfPopup in a native Android scenario.</param>
+		public SfPopup(Activity activity, IMauiContext mauiContext)
+			: this()
+		{
+			// Register the host Activity and optional IMauiContext for native embedding.
+			Syncfusion.Maui.Toolkit.Internals.WindowOverlayHelper.HostActivity = activity;
+			if (mauiContext != null)
+			{
+				Syncfusion.Maui.Toolkit.Internals.WindowOverlayHelper.HostMauiContext = mauiContext;
+			}
+		}
+
+		#endregion
+
 		#region Internal Methods
 
 		/// <summary>
@@ -63,6 +83,21 @@ namespace Syncfusion.Maui.Toolkit.Popup
 						nativeView.ViewTreeObserver.GlobalLayout += OnViewTreeObserverGlobalLayout;
 					}
 				}
+			}
+			else if (WindowOverlayHelper._window == null)
+			{
+				// Native Embedding: MainPage is null. Use the platform root or decor view to wire GlobalLayout.
+				// WindowOverlayHelper is initialized via SfPopup(Activity, IMauiContext) constructor in embedding scenarios.
+				var nativeView = WindowOverlayHelper._platformRootView as PlatformView
+								  ?? WindowOverlayHelper._decorViewContent as PlatformView;
+
+				if (nativeView != null && nativeView.ViewTreeObserver != null)
+				{
+					nativeView.ViewTreeObserver.GlobalLayout += this.OnViewTreeObserverGlobalLayout;
+				}
+
+				// In native embedding, handle orientation and display changes by listening to <see cref="Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfoChanged"/>.
+				DeviceDisplay.MainDisplayInfoChanged += this.OnViewTreeObserverGlobalLayout;
 			}
 		}
 
@@ -83,6 +118,19 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					}
 				}
 			}
+			else if (WindowOverlayHelper._window == null)
+			{
+				var nativeView = WindowOverlayHelper._platformRootView as PlatformView
+								  ?? WindowOverlayHelper._decorViewContent as PlatformView;
+
+				if (nativeView != null && nativeView.ViewTreeObserver != null)
+				{
+					nativeView.ViewTreeObserver.GlobalLayout -= this.OnViewTreeObserverGlobalLayout;
+				}
+
+				// Unwire orientation/display change handler.
+				DeviceDisplay.MainDisplayInfoChanged -= this.OnViewTreeObserverGlobalLayout;
+			}
 		}
 
 		/// <summary>
@@ -90,7 +138,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		internal void PopupPositionBasedOnKeyboard()
 		{
-			if (_popupView is not null)
+			if (this._popupView is not null)
 			{
 				_popupView.HandlerChanged += OnPopupViewHandlerChanged;
 			}

@@ -10,6 +10,10 @@ namespace Syncfusion.Maui.Toolkit.Internals
 	{
 		#region Fields
 
+		internal static IMauiContext? MauiContext { get; set; }
+
+		internal static UIWindow? Window { get; set; }
+
 		UIView? _rootView;
 		WindowOverlayStack? _overlayStack;
 		UIView? _overlayContent;
@@ -25,7 +29,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			WindowOverlayStack? windowOverlayStack = null;
 			if (_window is not null && _window.Handler is not null)
 			{
-				IMauiContext? context = _window.Handler.MauiContext;
+				IMauiContext? context = _window?.Handler?.MauiContext ?? SfWindowOverlay.MauiContext;
 				if (context is not null)
 				{
 					windowOverlayStack = (WindowOverlayStack?)_overlayStackView?.ToPlatform(context);
@@ -33,11 +37,26 @@ namespace Syncfusion.Maui.Toolkit.Internals
 					if (windowOverlayStack is not null && _overlayStackView is not null)
 					{
 						windowOverlayStack._canHandleTouch = !_overlayStackView.canHandleTouch;
+						// If the handler didn't run ConnectHandler for some embedding scenarios,
+						// ensure the platform view is connected to the virtual view so touches are routed.
+						windowOverlayStack.Connect(_overlayStackView);
 					}
 				}
 			}
 
-			return windowOverlayStack is not null ? windowOverlayStack : new WindowOverlayStack();
+			if (windowOverlayStack is not null)
+			{
+				return windowOverlayStack;
+			}
+
+			var _windowOverlayStack = new WindowOverlayStack();
+			if (_overlayStackView is not null)
+			{
+				_windowOverlayStack._canHandleTouch = !_overlayStackView.canHandleTouch;
+				_windowOverlayStack.Connect(_overlayStackView);
+			}
+
+			return _windowOverlayStack;
 		}
 
 		/// <summary>
@@ -156,6 +175,8 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		{
 			if (_overlayStack is not null)
 			{
+				// Ensure any manual Connect() is cleaned up when removing the platform view.
+				_overlayStack.DisConnect();
 				_overlayStack.ClearSubviews();
 				_overlayStack.RemoveFromSuperview();
 			}
@@ -171,6 +192,22 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		internal bool AddToOverlay(MauiView childView)
 		{
 			_window = WindowOverlayHelper._window;
+
+			// Native embedding path when MAUI Window is not yet available.
+			if ((_window == null || _window.Content == null) && SfWindowOverlay.MauiContext != null && SfWindowOverlay.Window != null)
+			{
+				_rootView = SfWindowOverlay.Window;
+				_overlayStack ??= CreateStack();
+				if (_overlayStack != null)
+				{
+					_overlayStack.AutoresizingMask = UIViewAutoresizing.All;
+					_overlayContent = childView.ToPlatform(SfWindowOverlay.MauiContext);
+					return true;
+				}
+
+				return false;
+			}
+
 			if (_window is not null && _window.Content is not null)
 			{
 				_rootView = WindowOverlayHelper._platformRootView;
@@ -260,7 +297,9 @@ namespace Syncfusion.Maui.Toolkit.Internals
 				keyWindow = UIApplication.SharedApplication.KeyWindow!;
 			}
 
-			if (_rootView != keyWindow)
+			// Only switch to the keyWindow if we actually found one. For native embedding scenarios.
+			// the initial rootView may be provided via SfWindowOverlay.Window and keyWindow can be null.
+			if (keyWindow != null && _rootView != keyWindow)
 			{
 				_rootView = keyWindow;
 			}
@@ -305,6 +344,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// </summary>
 		internal void Dispose()
 		{
+			// Ensure disconnect and removal happen deterministically.
+			if (this._overlayStack is not null)
+			{
+				_overlayStack.DisConnect();
+			}
 			RemoveOverlay();
 			_window = null;
 			_overlayContent = null;
@@ -319,6 +363,8 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		{
 			if (_overlayStack is not null)
 			{
+				// Ensure disconnect before removing the platform view from the hierarchy.
+				_overlayStack.DisConnect();
 				ClearChildren();
 				_overlayStack.RemoveFromSuperview();
 				_overlayStack = null;

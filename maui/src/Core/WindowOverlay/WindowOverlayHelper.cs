@@ -39,7 +39,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <summary>
 		/// Gets the device density.
 		/// </summary>
-		internal static float _density => _window is not null ? _window.RequestDisplayDensity() : 1f;
+#if ANDROID
+		internal static float _density => _window != null ? _window.RequestDisplayDensity() : (HostActivity != null ? HostActivity.Resources?.DisplayMetrics?.Density ?? 1f : 1f);
+#else
+		internal static float _density => _window != null ? _window.RequestDisplayDensity() : 1f;
+#endif
 
 		/// <summary>
 		/// Gets the root view of the device.
@@ -47,6 +51,16 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		internal static PlatformRootView? _platformRootView => GetPlatformRootView();
 
 #if ANDROID
+
+		/// <summary>
+		/// Optional host Activity for embedding scenarios where MAUI Window is not available.
+		/// </summary>
+		internal static Activity? HostActivity;
+
+		/// <summary>
+		/// Optional host IMauiContext for embedding scenarios when converting views without a Window.
+		/// </summary>
+		internal static IMauiContext? HostMauiContext;
 
 		/// <summary>
 		/// Gets the decor view frame.
@@ -155,6 +169,20 @@ namespace Syncfusion.Maui.Toolkit.Internals
                 }
 #endif
 			}
+#if ANDROID
+			// Fallback for native embedding: derive root from host Activity when MAUI Window is unavailable.
+			else if (rootView == null && HostActivity != null)
+			{
+				try
+				{
+					rootView = HostActivity.FindViewById(Android.Resource.Id.Content) as ViewGroup;
+				}
+				catch
+				{
+					rootView = null;
+				}
+			}
+#endif
 
 			return rootView;
 		}
@@ -176,6 +204,17 @@ namespace Syncfusion.Maui.Toolkit.Internals
 				}
 
 				return platformActivity.Window;
+			}
+
+			// Fallback for native embedding: use HostActivity if available.
+			else if (HostActivity != null)
+			{
+				if (HostActivity.WindowManager != null && HostActivity.WindowManager.DefaultDisplay != null)
+				{
+					return HostActivity.Window;
+				}
+
+				return null;
 			}
 
 			return null;

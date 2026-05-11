@@ -73,6 +73,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		public PopupFooter()
 		{
+#if IOS
+			// 916944 : When setting SafeArea for a page, the value does not update within the popup content due to a framework issue.
+#if NET10_0
+			this.IgnoreSafeArea = !PopupExtension.GetSafeAreaEdges();
+#else
+			this.IgnoreSafeArea = !Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(PopupExtension.GetMainPage());
+#endif
+#endif
 		}
 
 		/// <summary>

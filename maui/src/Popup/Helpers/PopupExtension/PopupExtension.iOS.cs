@@ -22,7 +22,21 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static int GetScreenWidth()
 		{
 			var rootView = WindowOverlayHelper._platformRootView;
-			return rootView is not null ? (int)rootView.Frame.Width : 0;
+			if (rootView is not null)
+			{
+				return (int)rootView.Frame.Width;
+			}
+
+			// Native embedding: Get width from the underlying UIWindow.
+			var window = (WindowOverlayHelper._window?.ToPlatform() as UIWindow) ?? GetActiveWindow();
+			if (window is not null)
+			{
+				return (int)window.Bounds.Width;
+			}
+
+			// use UIScreen.MainScreen width (iOS-specific).
+			var screen = UIScreen.MainScreen;
+			return screen is not null ? (int)screen.Bounds.Width : 0;
 		}
 
 		/// <summary>
@@ -32,7 +46,21 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static int GetScreenHeight()
 		{
 			var rootView = WindowOverlayHelper._platformRootView;
-			return rootView is not null ? (int)rootView.Frame.Height : 0;
+			if (rootView is not null)
+			{
+				return (int)rootView.Frame.Height;
+			}
+
+			// Native embedding: Get height from the underlying UIWindow.
+			var window = (WindowOverlayHelper._window?.ToPlatform() as UIWindow) ?? GetActiveWindow();
+			if (window is not null)
+			{
+				return (int)window.Bounds.Height;
+			}
+
+			// use UIScreen.MainScreen height (iOS-specific).
+			var screen = UIScreen.MainScreen;
+			return screen is not null ? (int)screen.Bounds.Height : 0;
 		}
 
 		/// <summary>
@@ -81,6 +109,43 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <returns>Returns the status bar height.</returns>
 		internal static double GetStatusBarHeight()
 		{
+			// Try to obtain the active platform window (supports native embedding scenarios).
+			var platformWindow = (WindowOverlayHelper._window?.ToPlatform() as UIWindow) ?? GetActiveWindow();
+
+			if (platformWindow is not null && WindowOverlayHelper._window is null)
+			{
+				try
+				{
+					// For iOS 13+ with scenes, use the StatusBarManager when available.
+					if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+					{
+						var scene = platformWindow.WindowScene;
+						if (scene is not null)
+						{
+#if IOS || MACCATALYST
+							var statusBarManager = scene.StatusBarManager;
+							if (statusBarManager is not null)
+							{
+								return statusBarManager.StatusBarFrame.Height;
+							}
+#endif
+						}
+					}
+
+					// Fallback to the top safe area inset if present.
+					if (platformWindow.SafeAreaInsets.Top > 0)
+					{
+						return platformWindow.SafeAreaInsets.Top;
+					}
+				}
+				catch
+				{
+					// ignore and return 0 as final fallback.
+				}
+
+				return 0;
+			}
+
 			return 0;
 		}
 
@@ -90,7 +155,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <returns>Returns action bar height.</returns>
 		internal static int GetActionBarHeight()
 		{
-			var platformWindow = WindowOverlayHelper._window?.ToPlatform() as UIWindow;
+			var platformWindow = (WindowOverlayHelper._window?.ToPlatform() as UIWindow) ?? GetActiveWindow();
 
 			// To calculate the navigationBar height with the page Y position.
 			if (GetMainPage() is Page page && page.Handler is not null && page.Handler.PlatformView is UIView pageNativeView && platformWindow is not null)
@@ -120,53 +185,138 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		internal static int GetSafeAreaHeight(string position)
 		{
 			// The popup is drawn within the safe area when shown relative to a view. Safe area calculations apply only to the iOS X simulator on iOS.
-#pragma warning disable CS0618 // Suppressing CS0618 warning because Page.GetUseSafeArea is marked obsolete in .NET 10.
-			if (Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(GetMainPage()))
-#pragma warning restore CS0618
+			if (WindowOverlayHelper._window != null)
 			{
-				var platformWindow = WindowOverlayHelper._window?.ToPlatform() as UIWindow;
-				UIInterfaceOrientation? statusBarOrientation = null;
-				var scene = platformWindow?.WindowScene;
-				if (scene != null)
-				{
-#if IOS || MACCATALYST
-					if (OperatingSystem.IsIOSVersionAtLeast(16, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(16, 0))
-					{
-						statusBarOrientation = scene.EffectiveGeometry.InterfaceOrientation;
-					}
-					else
-					{
-#pragma warning disable CA1422 // InterfaceOrientation is obsoleted on newer SDKs; guarded by OS version checks
-						statusBarOrientation = scene.InterfaceOrientation;
-#pragma warning restore CA1422
-					}
+				// PopUp is drawn in safe area also crap when it is shown based on relative to view point.
+				// Fix Details: SafeArea is calculated only for iOS X simulator in iOS.
+#if NET10_0
+				if (GetSafeAreaEdges())
+#else
+				if (Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(GetMainPage()))
 #endif
-				}
+				{
+					var platformWindow = WindowOverlayHelper._window?.ToPlatform() as UIWindow;
+					UIInterfaceOrientation? statusBarOrientation = null;
+					var scene = platformWindow?.WindowScene;
+					if (scene != null)
+					{
+#if IOS || MACCATALYST
+						if (OperatingSystem.IsIOSVersionAtLeast(16, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(16, 0))
+						{
+							statusBarOrientation = scene.EffectiveGeometry.InterfaceOrientation;
+						}
+						else
+						{
+#pragma warning disable CA1422 // InterfaceOrientation is obsoleted on newer SDKs; guarded by OS version checks
+							statusBarOrientation = scene.InterfaceOrientation;
+#pragma warning restore CA1422
+						}
+#endif
+					}
 
-				// Since StatusBarHeight is already calculated, the top safe area does not need to be computed.
-				if (position == "Top")
-				{
-					return platformWindow is not null ? (int)platformWindow.SafeAreaInsets.Top : 0;
+					// Since StatusBarHeight is already calculated, the top safe area does not need to be computed.
+					if (position == "Top")
+					{
+						return platformWindow is not null ? (int)platformWindow.SafeAreaInsets.Top : 0;
+					}
+					else if ((statusBarOrientation == UIInterfaceOrientation.Portrait || statusBarOrientation == UIInterfaceOrientation.PortraitUpsideDown || statusBarOrientation == UIInterfaceOrientation.LandscapeLeft || statusBarOrientation == UIInterfaceOrientation.LandscapeRight || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceUp || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceDown) && position == "Bottom")
+					{
+						return platformWindow?.SafeAreaInsets.Bottom > 0 ? (int)platformWindow.SafeAreaInsets.Bottom : 0;
+					}
+					else if ((UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceUp || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceDown) && position == "Right" && GetScreenWidth() > GetScreenHeight())
+					{
+						return platformWindow?.SafeAreaInsets.Right > 0 ? (int)platformWindow.SafeAreaInsets.Right : 0;
+					}
+					else if ((UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceUp || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceDown) && (position == "Left") && GetScreenWidth() > GetScreenHeight())
+					{
+						return platformWindow?.SafeAreaInsets.Left > 0 ? (int)platformWindow.SafeAreaInsets.Left : 0;
+					}
+					else if (statusBarOrientation == UIInterfaceOrientation.LandscapeLeft)
+					{
+						return platformWindow?.SafeAreaInsets.Left > 0 ? (int)platformWindow.SafeAreaInsets.Left : 0;
+					}
+					else if (statusBarOrientation == UIInterfaceOrientation.LandscapeRight)
+					{
+						return platformWindow?.SafeAreaInsets.Right > 0 ? (int)platformWindow.SafeAreaInsets.Right : 0;
+					}
 				}
-				else if ((statusBarOrientation == UIInterfaceOrientation.Portrait || statusBarOrientation == UIInterfaceOrientation.PortraitUpsideDown || statusBarOrientation == UIInterfaceOrientation.LandscapeLeft || statusBarOrientation == UIInterfaceOrientation.LandscapeRight || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceUp || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceDown) && position == "Bottom")
+			}
+			else
+			{
+				if (GetSafeAreaEdges())
 				{
-					return platformWindow?.SafeAreaInsets.Bottom > 0 ? (int)platformWindow.SafeAreaInsets.Bottom : 0;
-				}
-				else if ((UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceUp || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceDown) && position == "Right" && GetScreenWidth() > GetScreenHeight())
-				{
-					return platformWindow?.SafeAreaInsets.Right > 0 ? (int)platformWindow.SafeAreaInsets.Right : 0;
-				}
-				else if ((UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceUp || UIDevice.CurrentDevice.Orientation == UIDeviceOrientation.FaceDown) && (position == "Left") && GetScreenWidth() > GetScreenHeight())
-				{
-					return platformWindow?.SafeAreaInsets.Left > 0 ? (int)platformWindow.SafeAreaInsets.Left : 0;
-				}
-				else if (statusBarOrientation == UIInterfaceOrientation.LandscapeLeft)
-				{
-					return platformWindow?.SafeAreaInsets.Left > 0 ? (int)platformWindow.SafeAreaInsets.Left : 0;
-				}
-				else if (statusBarOrientation == UIInterfaceOrientation.LandscapeRight)
-				{
-					return platformWindow?.SafeAreaInsets.Right > 0 ? (int)platformWindow.SafeAreaInsets.Right : 0;
+					// Prefer the platform root view's safe area in native embedding, then the platform window.
+					var rootView = WindowOverlayHelper._platformRootView as UIView
+					   ?? WindowOverlayHelper._window?.ToPlatform() as UIView
+					   ?? PopupExtension.GetActiveWindow() as UIView;
+
+					var platformWindow = (WindowOverlayHelper._window?.ToPlatform() as UIWindow) ?? GetActiveWindow();
+
+					UIInterfaceOrientation? statusBarOrientation = null;
+					var scene = platformWindow?.WindowScene;
+					if (scene != null)
+					{
+#if IOS || MACCATALYST
+						if (OperatingSystem.IsIOSVersionAtLeast(16, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(16, 0))
+						{
+							statusBarOrientation = scene.EffectiveGeometry.InterfaceOrientation;
+						}
+						else
+						{
+#pragma warning disable CA1422 // InterfaceOrientation is obsoleted on newer SDKs; guarded by OS version checks.
+							statusBarOrientation = scene.InterfaceOrientation;
+#pragma warning restore CA1422
+						}
+#endif
+					}
+
+					// Top: prefer rootView inset, then window inset, then status bar height fallback.
+					if (position == "Top")
+					{
+						if (rootView != null && rootView.SafeAreaInsets.Top > 0)
+						{
+							return (int)rootView.SafeAreaInsets.Top;
+						}
+
+						if (platformWindow != null && platformWindow.SafeAreaInsets.Top > 0)
+						{
+							return (int)platformWindow.SafeAreaInsets.Top;
+						}
+
+						return (int)GetStatusBarHeight();
+					}
+
+					// Bottom: prefer rootView inset then window inset.
+					if (position == "Bottom")
+					{
+						if (rootView != null && rootView.SafeAreaInsets.Bottom > 0)
+						{
+							return (int)rootView.SafeAreaInsets.Bottom;
+						}
+
+						return platformWindow?.SafeAreaInsets.Bottom > 0 ? (int)platformWindow.SafeAreaInsets.Bottom : 0;
+					}
+
+					// Left/Right: consider device orientation and prefer rootView then window.
+					if (position == "Left")
+					{
+						if (rootView != null && rootView.SafeAreaInsets.Left > 0)
+						{
+							return (int)rootView.SafeAreaInsets.Left;
+						}
+
+						return platformWindow?.SafeAreaInsets.Left > 0 ? (int)platformWindow.SafeAreaInsets.Left : 0;
+					}
+
+					if (position == "Right")
+					{
+						if (rootView != null && rootView.SafeAreaInsets.Right > 0)
+						{
+							return (int)rootView.SafeAreaInsets.Right;
+						}
+
+						return platformWindow?.SafeAreaInsets.Right > 0 ? (int)platformWindow.SafeAreaInsets.Right : 0;
+					}
 				}
 			}
 
@@ -250,14 +400,99 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (relativeView.Handler != null && relativeView.Handler.PlatformView != null && relativeView.Handler.PlatformView is PlatformView nativeRelativeView
 				&& WindowOverlayHelper._platformRootView != null)
 			{
-				PlatformView rootView = WindowOverlayHelper._platformRootView;
-				nfloat[] location = new nfloat[2];
-				CGPoint relativeViewOrigin = nativeRelativeView.ConvertPointToView(new CGPoint(0, 0), rootView);
+				PlatformView? rootView = WindowOverlayHelper._platformRootView as UIView
+					   ?? WindowOverlayHelper._window?.ToPlatform() as UIView
+					   ?? PopupExtension.GetActiveWindow() as UIView;
+				CGPoint relativeViewOrigin = rootView != null
+					? nativeRelativeView.ConvertPointToView(new CGPoint(0, 0), rootView)
+					: nativeRelativeView.ConvertPointToView(new CGPoint(0, 0), null);
 				return new Rect(relativeViewOrigin.X, relativeViewOrigin.Y, nativeRelativeView.Frame.Width, nativeRelativeView.Frame.Height);
 			}
 			else
 			{
 				return Rect.Zero;
+			}
+		}
+
+		/// <summary>
+		/// This method will returns the SafeAreEdges of the Content page.
+		/// </summary>
+		/// <returns>Returns the whether the SafeAreaEdges is set for the page.</returns>
+		internal static bool GetSafeAreaEdges()
+		{
+			if (WindowOverlayHelper._window != null)
+			{
+#if NET10_0
+				if (GetMainPage() != null && GetMainPage() is ContentPage page && page.SafeAreaEdges != SafeAreaEdges.None)
+				{
+					return true;
+				}
+#endif
+			}
+			else
+			{
+				var rootView = WindowOverlayHelper._platformRootView;
+				if (rootView != null)
+				{
+					if (rootView.SafeAreaInsets.Top > 0 || rootView.SafeAreaInsets.Bottom > 0 || rootView.SafeAreaInsets.Left > 0 || rootView.SafeAreaInsets.Right > 0)
+					{
+						return true;
+					}
+				}
+
+				var platformWindow = (WindowOverlayHelper._window?.ToPlatform() as UIWindow) ?? GetActiveWindow();
+				if (platformWindow != null)
+				{
+					if (platformWindow.SafeAreaInsets.Top > 0 || platformWindow.SafeAreaInsets.Bottom > 0 || platformWindow.SafeAreaInsets.Left > 0 || platformWindow.SafeAreaInsets.Right > 0)
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Attempts to get the active UIWindow for the application, including iOS 13+ multi-scene setups.
+		/// </summary>
+		/// <returns>The active UIWindow if available; otherwise null.</returns>
+		internal static UIWindow? GetActiveWindow()
+		{
+			try
+			{
+				if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
+				{
+					var app = UIApplication.SharedApplication;
+					foreach (var scene in app.ConnectedScenes)
+					{
+						UIWindow? keyWindow = null;
+						if (scene is UIWindowScene windowScene)
+						{
+							keyWindow = windowScene.Windows?.FirstOrDefault(w => w.IsKeyWindow);
+							if (keyWindow is not null)
+							{
+								return keyWindow;
+							}
+
+							keyWindow = windowScene.Windows?.FirstOrDefault();
+							if (keyWindow is not null)
+							{
+								return keyWindow;
+							}
+						}
+					}
+				}
+
+#pragma warning disable CA1422 // Fallback for pre-iOS 13 or if scenes are not available.
+				return UIApplication.SharedApplication?.KeyWindow
+					?? UIApplication.SharedApplication?.Windows?.FirstOrDefault(w => w.IsKeyWindow)
+					?? UIApplication.SharedApplication?.Windows?.FirstOrDefault();
+#pragma warning disable
+			}
+			catch
+			{
+				return null;
 			}
 		}
 
