@@ -176,6 +176,16 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// </summary>
 		const double DefaultFullExpandedRatio = 1;
 
+		/// <summary>
+		/// Stores original accessibility Description and Hint for each VisualElement.
+		/// Key: VisualElement, Value: Tuple of (Description, Hint)
+		/// </summary>
+		Dictionary<VisualElement, (string? Description, string? Hint)> _originalAccessibilityProperties = new Dictionary<VisualElement, (string?, string?)>();
+		
+		#if ANDROID
+		Dictionary<VisualElement, string?> _androidContentDescriptions  = new Dictionary<VisualElement, string?>();
+		#endif
+
 		#endregion
 
 		#region Bindable Properties
@@ -1262,6 +1272,11 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			SetupBottomSheetForShow();
 			AnimateBottomSheet(GetTargetPosition());
 			IsOpen = true;
+
+#if !MACCATALYST && IOS
+			UpdateAccessibilityiOS();
+#endif
+
 		}
 
 		/// <summary>
@@ -1281,6 +1296,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    {
 		        _bottomSheet.IsVisible = false;
 				RemoveOverlayFromView();
+				
+				// ACCESSIBILITY FIX: Restore accessibility after close
+#if !MACCATALYST && IOS
+				UpdateAccessibilityiOS();
+#endif
+
 			});
 
 			if (_isSheetOpen)
@@ -1301,6 +1322,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			return (int)Math.Max(0, AnimationDuration);
 		}
+		
+#if !MACCATALYST && IOS
+		/// <summary>
+		/// Platform-specific: iOS/macOS accessibility updates.
+		/// Implementation is in SfBottomSheet.iOS.cs
+		/// </summary>
+		partial void UpdateAccessibilityiOS();
+#endif
 
 		#endregion
 
@@ -1375,6 +1404,15 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			Children.Clear();
 			_isOverlayAdded = false; // Reset overlay state
+			if (IsOpen && IsModal)
+			{
+				UpdateContentAccessibility(Content, true);
+			}
+			else
+			{
+				UpdateContentAccessibility(Content, false);
+			}
+
 			UpdateAllChild();
 		}
 
@@ -1385,6 +1423,125 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		{
 			AddChild(Content);
 			AddChild(_bottomSheet);
+		}
+
+		/// <summary>
+		/// Recursively updates the SemanticProperties.ExcludeFromAccessibility for a given VisualElement and its descendants.
+		/// </summary>
+		/// <param name="element">The VisualElement to update.</param>
+		/// <param name="exclude">True to exclude from accessibility, false to include.</param>
+		void UpdateContentAccessibility(VisualElement element, bool exclude)
+		{
+			if (element == null)
+			{
+				return;
+			}
+
+			// If it's a layout, iterate through its children
+			if (element is Layout layout)
+			{
+				foreach (var child in layout.Children)
+				{
+					if (child is VisualElement visualChild)
+					{
+						UpdateSingleElement(visualChild,exclude);
+					}
+				}
+			}
+			// If it's a ContentView, recurse into its Content
+			else if (element is IContentView contentView && contentView.Content is Layout contentLayout)
+			{
+				foreach (var child in contentLayout.Children)
+				{
+					if (child is VisualElement visualChild)
+					{
+						UpdateSingleElement(visualChild,exclude);
+					}
+				}
+			}
+			else
+			{
+				// For any other VisualElement, update it directly
+				UpdateSingleElement(element,exclude);
+			}
+		}
+
+		/// <summary>
+        /// Updates the accessibility properties (Description and Hint) of a single VisualElement based on exclusion state.
+        /// </summary>
+        /// <param name="visualChild">The VisualElement to update.</param>
+        /// <param name="exclude">True to exclude from accessibility, false to include.</param>
+		void UpdateSingleElement(VisualElement visualChild,bool exclude)
+		{
+			if (!_originalAccessibilityProperties.ContainsKey(visualChild))
+			{
+				// Store original values only if not already stored
+				_originalAccessibilityProperties[visualChild] = (
+					SemanticProperties.GetDescription(visualChild),
+					SemanticProperties.GetHint(visualChild)
+				);
+			}
+
+			if (exclude)
+			{
+				// Exclude: Set to null to blank for screen readers
+				SemanticProperties.SetDescription(visualChild, null);
+				SemanticProperties.SetHint(visualChild, null);
+			}
+			else
+			{
+				// Reset: Restore original values
+				var (originalDesc, originalHint) = _originalAccessibilityProperties[visualChild];
+				SemanticProperties.SetDescription(visualChild, originalDesc);
+				SemanticProperties.SetHint(visualChild, originalHint);
+			}
+
+			// Update accessibility flags
+			AutomationProperties.SetIsInAccessibleTree(visualChild, !exclude);
+			AutomationProperties.SetExcludedWithChildren(visualChild, exclude);
+
+			#if IOS || MACCATALYST
+			if (visualChild.Handler?.PlatformView is UIKit.UIView nativeView)
+			{
+				nativeView.UserInteractionEnabled = !exclude;
+			}
+
+			#endif
+			#if WINDOWS
+			if (visualChild.Handler?.PlatformView is Microsoft.UI.Xaml.UIElement ui)
+			{
+				ui.IsTabStop = !exclude;  // Removes/adds from tab order
+			}
+			#endif
+
+			#if ANDROID
+			var nativeContent = Content?.Handler?.PlatformView as Android.Views.View;
+			if (nativeContent is Android.Views.View rootView)
+			{
+					if (Content != null && !_androidContentDescriptions.ContainsKey(Content))
+					{
+						_androidContentDescriptions[Content] =
+							rootView.ContentDescription;
+					}
+
+				if (exclude) // when you want to hide content
+				{
+					rootView.ImportantForAccessibility =
+						Android.Views.ImportantForAccessibility.NoHideDescendants;
+
+					rootView.ContentDescription = null; // extra safety
+				}
+				else
+				{
+					rootView.ImportantForAccessibility =
+						Android.Views.ImportantForAccessibility.Auto;
+					if (Content != null && _androidContentDescriptions.TryGetValue(Content, out var originalDesc))
+					{
+						rootView.ContentDescription = originalDesc;
+					}
+				}
+			}
+			#endif
 		}
 
 		/// <summary>
@@ -1505,6 +1662,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					Children.Insert(Children.Count - 1, _overlayGrid); // Insert before bottom sheet
 				}
 				_isOverlayAdded = true;
+				UpdateContentAccessibility(Content, true);
 			}
 		}
 
@@ -1520,6 +1678,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					Children.Remove(_overlayGrid);
 				}
 				_isOverlayAdded = false;
+				UpdateContentAccessibility(Content, false);
 			}
 		}
 
