@@ -1586,7 +1586,18 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 
 						if (isValidText)
 						{
-							Value = new string(valueArray);
+
+#if IOS
+							if (index == Length - 1 && hasText)
+							{
+								Value = string.Concat(_otpEntries
+									.Where(e => !string.IsNullOrEmpty(e.Text))
+									.Select(e => e.Text));
+							}
+
+#else
+							Value = new string(valueArray); 
+#endif
 						}
 						_oldText = e.OldTextValue;
 						HandleFocus(index, hasText);
@@ -1977,6 +1988,12 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 #else
 				_otpEntries[_focusedIndex].Text = input.ToString();
 #endif
+
+#if IOS
+ 				bool hasText = !string.IsNullOrEmpty(_otpEntries[_focusedIndex].Text) && _otpEntries[_focusedIndex].Text is not "\0";
+                HandleFocus(_focusedIndex, hasText);
+#endif
+
 			}
         }
 
