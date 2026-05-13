@@ -8,7 +8,6 @@ namespace Syncfusion.Maui.Toolkit.Internals
     {
         internal bool _canHandleTouch = false;
         WindowOverlayContainer? _virtualView;
-        bool _isConnected = false;
 
         public override UIView HitTest(CGPoint point, UIEvent? uievent)
         {
@@ -21,24 +20,12 @@ namespace Syncfusion.Maui.Toolkit.Internals
 
         internal void Connect(WindowOverlayContainer mauiView)
         {
-            if (_isConnected && ReferenceEquals(_virtualView, mauiView))
-            {
-                return;
-            }
-
             _virtualView = mauiView;
-            _isConnected = true;
         }
 
         internal void DisConnect()
         {
-            if (!_isConnected)
-            {
-                return;
-            }
-
             _virtualView = null;
-            _isConnected = false;
         }
 
         public override void TouchesBegan(NSSet touches, UIEvent? evt)

@@ -27,37 +27,20 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		internal virtual WindowOverlayStack CreateStack()
 		{
 			WindowOverlayStack? windowOverlayStack = null;
-			if (_window is not null && _window.Handler is not null)
+			IMauiContext? context = _window?.Handler?.MauiContext ?? SfWindowOverlay.MauiContext;
+			if (context is not null)
 			{
-				IMauiContext? context = _window?.Handler?.MauiContext ?? SfWindowOverlay.MauiContext;
-				if (context is not null)
-				{
-					windowOverlayStack = (WindowOverlayStack?)_overlayStackView?.ToPlatform(context);
+				windowOverlayStack = (WindowOverlayStack?)_overlayStackView?.ToPlatform(context);
 
-					if (windowOverlayStack is not null && _overlayStackView is not null)
-					{
-						windowOverlayStack._canHandleTouch = !_overlayStackView.canHandleTouch;
-						// If the handler didn't run ConnectHandler for some embedding scenarios,
-						// ensure the platform view is connected to the virtual view so touches are routed.
-						windowOverlayStack.Connect(_overlayStackView);
-					}
+				if (windowOverlayStack is not null && _overlayStackView is not null)
+				{
+					windowOverlayStack._canHandleTouch = !_overlayStackView.canHandleTouch;
 				}
 			}
 
-			if (windowOverlayStack is not null)
-			{
-				return windowOverlayStack;
-			}
-
-			var _windowOverlayStack = new WindowOverlayStack();
-			if (_overlayStackView is not null)
-			{
-				_windowOverlayStack._canHandleTouch = !_overlayStackView.canHandleTouch;
-				_windowOverlayStack.Connect(_overlayStackView);
-			}
-
-			return _windowOverlayStack;
+            return windowOverlayStack is not null ? windowOverlayStack : new WindowOverlayStack();
 		}
+
 
 		/// <summary>
 		/// Adds or updates the child layout absolutely to the overlay stack.
@@ -175,8 +158,6 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		{
 			if (_overlayStack is not null)
 			{
-				// Ensure any manual Connect() is cleaned up when removing the platform view.
-				_overlayStack.DisConnect();
 				_overlayStack.ClearSubviews();
 				_overlayStack.RemoveFromSuperview();
 			}
@@ -344,11 +325,6 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// </summary>
 		internal void Dispose()
 		{
-			// Ensure disconnect and removal happen deterministically.
-			if (this._overlayStack is not null)
-			{
-				_overlayStack.DisConnect();
-			}
 			RemoveOverlay();
 			_window = null;
 			_overlayContent = null;
@@ -363,8 +339,6 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		{
 			if (_overlayStack is not null)
 			{
-				// Ensure disconnect before removing the platform view from the hierarchy.
-				_overlayStack.DisConnect();
 				ClearChildren();
 				_overlayStack.RemoveFromSuperview();
 				_overlayStack = null;
