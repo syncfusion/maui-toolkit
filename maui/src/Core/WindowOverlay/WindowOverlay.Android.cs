@@ -278,7 +278,7 @@ namespace Syncfusion.Maui.Toolkit.Internals
 
 			if (_overlayStack is not null && _overlayStackView is not null)
 			{
-				if (_overlayStack is not null && _overlayStackView is not null)
+				if (_windowManager is not null && !_overlayStackView.canHandleTouch)
 				{
 					if (_windowManagerLayoutParams is null)
 					{
