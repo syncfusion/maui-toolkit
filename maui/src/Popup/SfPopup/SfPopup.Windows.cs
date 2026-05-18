@@ -4,6 +4,7 @@ using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Hosting;
+using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Shapes;
 using Syncfusion.Maui.Toolkit.Internals;
 using Syncfusion.Maui.Toolkit.Platform;
@@ -23,6 +24,11 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		SpriteVisual? _shadowVisual;
 		Rectangle? _shadowHost;
 		DropShadow? _dropShadow;
+
+		/// <summary>
+		/// Stores the pointer event handler instance to ensure proper add/remove handler operations.
+		/// </summary>
+		private PointerEventHandler? rootPointerHandler;
 
 		#endregion
 
@@ -51,6 +57,9 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				popupNativeView.SizeChanged += OnNativePopupViewSizeChanged;
 			}
+
+			// Add root pointer handler for pass-through touch when ShowOverlayAlways is false
+			this.AddRootPointerHandler();
 		}
 
 		/// <summary>
@@ -68,6 +77,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				popupNativeView.SizeChanged -= OnNativePopupViewSizeChanged;
 			}
+
+			this.RemoveRootPointerHandler();
 		}
 
 		/// <summary>
@@ -157,6 +168,33 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (_popupView is not null && _popupView.Handler is not null && _popupView.Handler.ContainerView is not null && _popupView.Handler.ContainerView is WrapperView wrapperView)
 			{
 				wrapperView.FlowDirection = _isRTL ? Microsoft.UI.Xaml.FlowDirection.RightToLeft : Microsoft.UI.Xaml.FlowDirection.LeftToRight;
+			}
+		}
+
+		/// <summary>
+		/// Adds a root-level pointer handler to detect taps outside the popup when ShowOverlayAlways is false.
+		/// </summary>
+		internal void AddRootPointerHandler()
+		{
+			if (!this.ShowOverlayAlways && WindowOverlayHelper._platformRootView is FrameworkElement root)
+			{
+				// Create and store the handler instance for proper removal later
+				this.rootPointerHandler = new PointerEventHandler(this.OnRootPointerPressed);
+
+				// Listen globally with handledEventsToo = true so we see events even if other elements handle them
+				root.AddHandler(UIElement.PointerPressedEvent, this.rootPointerHandler, true);
+			}
+		}
+
+		/// <summary>
+		/// Removes the root-level pointer handler.
+		/// </summary>
+		internal void RemoveRootPointerHandler()
+		{
+			if (WindowOverlayHelper._platformRootView is FrameworkElement root && this.rootPointerHandler != null)
+			{
+				root.RemoveHandler(UIElement.PointerPressedEvent, this.rootPointerHandler);
+				this.rootPointerHandler = null;
 			}
 		}
 
@@ -265,6 +303,19 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			}
 		}
 
+		/// <summary>
+		/// Handles pointer pressed events on the root view to detect taps outside the popup.
+		/// </summary>
+		/// <param name="sender">The root view.</param>
+		/// <param name="e">The pointer event arguments.</param>
+		private void OnRootPointerPressed(object sender, PointerRoutedEventArgs e)
+		{
+			// Only the topmost popup should react to outside-clicks.
+			if (this.IsOpen && PopupExtension.TopMostOpenPopup == this && !this.RaisePopupClosingEvent() && !this.StaysOpen)
+			{
+				this.IsOpen = false;
+			}
+		}
 		#endregion
 	}
 }

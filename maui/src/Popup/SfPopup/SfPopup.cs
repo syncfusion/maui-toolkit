@@ -264,7 +264,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// Identifies the ShowOverlay bindable property.
 		/// </summary>
 		public static readonly BindableProperty ShowOverlayAlwaysProperty =
-			BindableProperty.Create(nameof(ShowOverlayAlways), typeof(bool), typeof(SfPopup), true, BindingMode.Default, null, null);
+			BindableProperty.Create(nameof(ShowOverlayAlways), typeof(bool), typeof(SfPopup), true, BindingMode.Default, null, OnShowOverlayAlwaysChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="SfPopup.OverlayMode"/> <see cref="BindableProperty"/>.
@@ -2130,6 +2130,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 				// position the popup when window size and orientation changed.
 				WirePlatformSpecificEvents();
+
+				// Track this popup as open/topmost.
+				if (!PopupExtension.OpenPopups.Contains(this))
+				{
+					PopupExtension.OpenPopups.Add(this);
+				}
 			}
 			else
 			{
@@ -2213,7 +2219,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 				else
 				{
+#if WINDOWS
+                    // When ShowOverlay is set to false, the popup’s background is set to null, allowing touch to pass through to the underlying controls.
+                    this._popupOverlayContainer.Background = null;
+#else
 					_popupOverlayContainer.ApplyBackgroundColor(Colors.Transparent);
+#endif
 				}
 			}
 		}
@@ -2659,6 +2670,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 		void RemovePopupViewAndResetValues()
 		{
+			// Remove from open popups stack.
+			if (PopupExtension.OpenPopups.Contains(this))
+			{
+				PopupExtension.OpenPopups.Remove(this);
+			}
+
 			if (_popupView is not null && _popupOverlay is not null)
 			{
 				if (_popupOverlayContainer is not null)
@@ -3614,6 +3631,50 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			if (popup is not null && popup.IsOpen)
 			{
 				popup.ApplyOverlayBackground();
+			}
+		}
+
+		/// <summary>
+		/// Called when ShowOverlayAlways property changes to refresh native overlay touch handling.
+		/// </summary>
+		private static void OnShowOverlayAlwaysChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			var popup = bindable as SfPopup;
+			if (popup != null)
+			{
+				bool showOverlayAlways = (bool)newValue;
+				popup.ApplyOverlayBackground();
+				if (popup._popupOverlayContainer is SfPopupOverlayContainer overlayContainer)
+				{
+					if (showOverlayAlways)
+					{
+#if ANDROID
+                        overlayContainer.AddTouchListener(overlayContainer);
+#elif WINDOWS
+                        popup.RemoveRootPointerHandler();
+#elif MACCATALYST || IOS
+                        popup.RemoveRootTapRecognizer();
+#endif
+					}
+					else
+					{
+#if ANDROID
+                        overlayContainer.RemoveTouchListener(overlayContainer);
+#elif WINDOWS
+                        popup.AddRootPointerHandler();
+#elif MACCATALYST || IOS
+                        popup.AddRootTapRecognizer();
+#endif
+					}
+				}
+
+				// If overlay exists, refresh native touch handling so canHandleTouch reflects the new value.
+#if IOS || MACCATALYST
+                if (popup._popupOverlay != null)
+                {
+                    popup._popupOverlay.RefreshTouchHandling();
+                }
+#endif
 			}
 		}
 
