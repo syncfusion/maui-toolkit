@@ -5,6 +5,22 @@
 	/// </summary>
 	internal static partial class PopupExtension
 	{
+		/// <summary>
+		/// Tracks open popups in Z-order (the last element is the topmost popup).
+		/// </summary>
+		internal static System.Collections.Generic.List<SfPopup> OpenPopups = new System.Collections.Generic.List<SfPopup>();
+
+		/// <summary>
+		/// Gets the top-most open popup, or null if none.
+		/// </summary>
+		internal static SfPopup? TopMostOpenPopup
+		{
+			get
+			{
+				return OpenPopups.Count > 0 ? OpenPopups[OpenPopups.Count - 1] : null;
+			}
+		}
+
 		#region Internal Methods
 
 		/// <summary>

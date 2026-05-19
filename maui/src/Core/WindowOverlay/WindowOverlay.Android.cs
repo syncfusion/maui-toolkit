@@ -198,9 +198,16 @@ namespace Syncfusion.Maui.Toolkit.Internals
 				_overlayStack.LayoutChange -= OnOverlayStackLayoutChange;
 
 				//Checking whether OverlayStack Parent is null or not.
-				if (_overlayStack.Parent is not null && _windowManager is not null)
+				if (_overlayStack.Parent is not null)
 				{
-					_windowManager.RemoveView(_overlayStack);
+					if (_overlayStack.Parent == WindowOverlayHelper._platformRootView)
+					{
+						_overlayStack.RemoveFromParent();
+					}
+					else if (this._windowManager != null)
+					{
+						this._windowManager.RemoveView(_overlayStack);
+					}
 				}
 
 				if (_stackList is not null && _stackList.Contains(_overlayStack))
@@ -302,10 +309,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		{
 			float posX = (float)x * _density;
 			float posY = (float)y * _density;
+			var platformWindow = WindowOverlayHelper.GetPlatformWindow();
 
-			if (_overlayStack is not null)
+			if (_overlayStack is not null && _overlayStackView is not null)
 			{
-				if (_windowManager is not null)
+				if (_windowManager is not null && !_overlayStackView.canHandleTouch)
 				{
 					if (_windowManagerLayoutParams is null)
 					{
@@ -321,15 +329,39 @@ namespace Syncfusion.Maui.Toolkit.Internals
 						}
 					}
 
+					// If the overlay stack is currently attached to the application's root view,
+					// remove it first before attaching to the WindowManager. Calling
+					// UpdateViewLayout when the view is attached to the PlatformRootView
+					// results in an IllegalArgumentException (not attached to window manager).
 					if (_overlayStack.Parent is null)
 					{
 						_windowManager.AddView(_overlayStack, _windowManagerLayoutParams);
 					}
+					else if (_overlayStack.Parent == WindowOverlayHelper._platformRootView)
+					{
+						// Detach from the root view and add to the WindowManager
+						_overlayStack.RemoveFromParent();
+						_windowManager.AddView(_overlayStack, _windowManagerLayoutParams);
+					}
 					else
 					{
+						// Already attached to a WindowManager-backed parent, update layout.
 						_windowManager.UpdateViewLayout(_overlayStack, _windowManagerLayoutParams);
 					}
 				}
+				else if (_overlayStackView.canHandleTouch && WindowOverlayHelper._platformRootView is ViewGroup platformRootView && _overlayContent != null)
+				{
+					if (_overlayStack.Parent == null)
+					{
+						// When ShowOverlayAlways is set to false, the PopupView must be added as part of the root view. We cannot attach it to the WindowManager because doing so prevents touch from being properly passed through.
+						platformRootView.AddView(_overlayStack, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent));
+						_overlayContent.Clickable = true;
+						_overlayContent.Focusable = true;
+					}
+				}
+
+				// refresh decor frame before positioning to ensure correct conversion from screen coordinates
+				_decorViewFrame = WindowOverlayHelper._decorViewFrame;
 
 				if (_overlayContent is not null)
 				{
@@ -349,8 +381,35 @@ namespace Syncfusion.Maui.Toolkit.Internals
 							new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WrapContent, ViewGroup.LayoutParams.WrapContent));
 					}
 
-					_overlayContent.SetX(posX);
-					_overlayContent.SetY(posY);
+					// When the overlay stack is hosted in the PlatformRootView, convert screen coordinates to
+					// the overlay stack's local coordinate space by adding the decor view origin. This
+					// aligns popup placement with the application's visual origin (below system bars).
+					// Check window flags once to avoid redundant null checks
+					var isFullScreen = false;
+					var hasLayoutNoLimits = false;
+
+					if (platformWindow != null && platformWindow.Attributes != null)
+					{
+						isFullScreen = platformWindow.Attributes.Flags.HasFlag(WindowManagerFlags.Fullscreen);
+						hasLayoutNoLimits = platformWindow.Attributes.Flags.HasFlag(WindowManagerFlags.LayoutNoLimits);
+					}
+
+					// Determine if we need to apply decor offsets
+					var shouldApplyDecorOffset = _overlayStack.Parent == WindowOverlayHelper._platformRootView
+												&& !(hasLayoutNoLimits || isFullScreen) && WindowOverlayHelper._window != null;
+
+					if (shouldApplyDecorOffset)
+					{
+						var decorLeft = _decorViewFrame != null ? _decorViewFrame.Left : 0f;
+						var decorTop = isFullScreen ? 0f : (_decorViewFrame != null ? _decorViewFrame.Top : 0f);
+						_overlayContent.SetX(posX + decorLeft);
+						_overlayContent.SetY(posY + decorTop);
+					}
+					else
+					{
+						_overlayContent.SetX(posX);
+						_overlayContent.SetY(posY);
+					}
 				}
 			}
 		}
@@ -364,9 +423,16 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			{
 				ClearChildren();
 				_overlayStack.LayoutChange -= OnOverlayStackLayoutChange;
-				if (_overlayStack.Parent is not null && _windowManager is not null)
+				if (_overlayStack.Parent is not null)
 				{
-					_windowManager.RemoveView(_overlayStack);
+					if (_overlayStack.Parent == WindowOverlayHelper._platformRootView)
+					{
+						_overlayStack.RemoveFromParent();
+					}
+					else if (this._windowManager != null)
+					{
+						this._windowManager.RemoveView(_overlayStack);
+					}
 				}
 
 				_windowManagerLayoutParams = null;

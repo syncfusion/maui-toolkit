@@ -333,6 +333,18 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		}
 
 		/// <summary>
+		/// Refreshes the touch handling flags based on the current canHandleTouch value of the overlay container.
+		/// Call this when ShowOverlayAlways property changes after the overlay is already initialized.
+		/// </summary>
+		internal void RefreshTouchHandling()
+		{
+			if (_overlayStack != null && _overlayStackView != null)
+			{
+				_overlayStack._canHandleTouch = !_overlayStackView.canHandleTouch;
+			}
+		}
+
+		/// <summary>
 		/// Removes the current overlay window from root view with all its children.
 		/// </summary>
 		internal void RemoveFromWindow()

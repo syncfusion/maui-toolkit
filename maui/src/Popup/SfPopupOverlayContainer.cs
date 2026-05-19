@@ -24,11 +24,33 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			_popup = sfpopup;
 #if ANDROID
-			this.AddTouchListener(this);
+			if (this._popup.ShowOverlayAlways)
+			{
+				// The touch listener is added only when ShowOverlayAlways is true.
+				// When ShowOverlayAlways is false, touch must pass through to the controls behind.
+				// If we handle the touch here, it would prevent the touch from reaching the underlying controls.
+				this.AddTouchListener(this);
+			}
 #endif
 		}
 
 		#endregion
+
+		/// <summary>
+		/// Gets a value indicating whether the native overlay container should handle touch
+		/// interactions itself or allow touches to pass through to underlying views.
+		/// </summary>
+		/// <remarks>
+		/// When this property returns <c>true</c>, the overlay will capture touch events
+		/// (for example to detect taps on the overlay to close the popup). When it
+		/// returns <c>false</c>, the overlay will allow touches to pass through so
+		/// underlying controls can receive them. The value is driven by
+		/// <see cref="SfPopup.ShowOverlayAlways"/> on the associated popup instance.
+		/// </remarks>
+		internal override bool canHandleTouch
+		{
+			get { return !this._popup.ShowOverlayAlways; }
+		}
 
 		#region ITouchListener Callback
 #if ANDROID
@@ -47,7 +69,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		#endregion
 
 		#region Internal Methods
-#if !ANDROID
+
 		/// <summary>
 		/// This method will be invoked when the touch interaction is made on the container.
 		/// </summary>
@@ -57,7 +79,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			ClosePopupIfRequired(new Point(x, y));
 		}
-#endif
+
 		/// <summary>
 		/// Used to set background color for the container.
 		/// </summary>
@@ -88,6 +110,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="touchPoint">The touch point of the container view.</param>
 		void ClosePopupIfRequired(Point touchPoint)
 		{
+#if ANDROID
+            // Only the topmost popup should respond to outside-touch events.
+            if (!this._popup.ShowOverlayAlways && PopupExtension.TopMostOpenPopup != this._popup)
+            {
+                return;
+            }
+#endif
+
 			if (_popup.IsOpen && !_popup._isPopupAnimationInProgress && !_popup._isContainerAnimationInProgress)
 			{
 				// TODO: CanLayoutForGivenSizeAndPosition
