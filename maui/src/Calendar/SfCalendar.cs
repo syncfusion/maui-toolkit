@@ -2350,6 +2350,12 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             if (CornerRadius == 0)
             {
+                if (Clip != null)
+                {
+                    //// We need to null the clip if CornerRadius == 0.To Avoid incorrect clipping.
+                    Clip = null;
+                }
+                
                 return;
             }
 

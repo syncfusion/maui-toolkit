@@ -1,8 +1,9 @@
 ﻿using System.Collections;
-using System.Runtime.CompilerServices;
-using Syncfusion.Maui.Toolkit.Themes;
-using Syncfusion.Maui.Toolkit.Helper;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Microsoft.Maui.Controls.Shapes;
+using Syncfusion.Maui.Toolkit.Helper;
+using Syncfusion.Maui.Toolkit.Themes;
 
 namespace Syncfusion.Maui.Toolkit.TabView
 {
@@ -78,6 +79,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		CenterButtonView? _centerButtonView;
 		SfGrid? _parentGrid;
 		TabSelectionChangedEventArgs? _selectionChangedEventArgs;
+		TabBarBorder? _tabBarBorder;
 
 		#endregion
 
@@ -354,6 +356,42 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				typeof(SfTabView),
 				false,
 				propertyChanged: OnEnableVirtualizationChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="TabBarBorderColor "/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="TabBarBorderColor "/> bindable property.
+		/// </value>
+		public static readonly BindableProperty TabBarBorderColorProperty =
+			BindableProperty.Create(nameof(TabBarBorderColor), typeof(Color), typeof(SfTabView), null, propertyChanged: TabBarBorderColorChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="TabBarBorderThickness"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="TabBarBorderThickness"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty TabBarBorderThicknessProperty =
+			BindableProperty.Create(nameof(TabBarBorderThickness), typeof(Thickness), typeof(SfTabView), new Thickness(0), propertyChanged: TabBarBorderThicknessChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="ShowTabBarBorder "/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="ShowTabBarBorder "/> bindable property.
+		/// </value>
+		internal static readonly BindableProperty ShowTabBarBorderProperty =
+			BindableProperty.Create(nameof(ShowTabBarBorder), typeof(bool), typeof(SfTabView), false, propertyChanged: ShowTabBarBorderChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="TabBarCornerRadius "/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="TabBarCornerRadius "/> bindable property.
+		/// </value>
+		public static readonly BindableProperty TabBarCornerRadiusProperty =
+			BindableProperty.Create(nameof(TabBarCornerRadius), typeof(CornerRadius), typeof(SfTabView), new CornerRadius(0), propertyChanged: TabBarCornerRadiusChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="IsCenterButtonEnabled"/> bindable property.
@@ -1617,6 +1655,174 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		}
 
 		/// <summary>
+		/// Gets or sets the color used to paint the border around the TabBar in SfTabView.
+		/// </summary>
+		/// <value>
+		/// The color applied to the TabBar border. The default value is <c>null</c>
+		/// (no explicit border color).
+		/// </value>                                                                                      
+		/// <remarks>
+		/// The border is rendered only when the thickness is greater than zero. You can specify a uniform thickness (e.g., "2")
+		/// or per-side values (e.g., "1,2,1,2") in XAML.
+		/// </remarks>
+		/// <example>
+		/// The below example shows how to set the border color for the TabBar.
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView TabBarBorderColor="Red" TabBarBorderThickness="2">
+		///     <tabView:SfTabItem Header="TAB 1">
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		/// </tabView:SfTabView>
+		/// ]]>
+		/// </code>
+		///
+		/// C#:
+		/// <code>
+		/// <![CDATA[
+		/// var tabView = new SfTabView
+		/// {
+		///     TabBarBorderColor = Colors.Red,
+		///     TabBarBorderThickness = new Thickness(2),
+		/// };
+		///
+		/// tabView.Items = new TabItemCollection
+		/// {
+		///     new SfTabItem
+		///     {
+		///         Header = "TAB 1",
+		///         Content = new Label { Text = "Content" }
+		///     }
+		/// };
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public Color? TabBarBorderColor
+		{
+			get => (Color?)this.GetValue(TabBarBorderColorProperty);
+			set => this.SetValue(TabBarBorderColorProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the thickness of the border around the TabBar in SfTabView.
+		/// </summary>
+		/// <value>
+		/// A <see cref="Thickness"/> that specifies the border width for each side of the TabBar.
+		/// The default value is <c>new Thickness(0)</c>, which results in no visible border.
+		/// </value>
+		/// <remarks>
+		/// The border is rendered only when the thickness is greater than zero. You can specify a uniform thickness (e.g., "2")
+		/// or per-side values (e.g., "1,2,1,2") in XAML.
+		/// </remarks>
+		/// <example>
+		/// The below example shows how to set the border thickness for the TabBar.
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView TabBarBorderThickness="2" >
+		///     <tabView:SfTabItem Header="TAB 1">
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		/// </tabView:SfTabView>
+		/// ]]>
+		/// </code>
+		///
+		/// C#:
+		/// <code>
+		/// <![CDATA[
+		/// var tabView = new SfTabView
+		/// {
+		///     TabBarBorderThickness = new Thickness(2),
+		/// };
+		///
+		/// tabView.Items = new TabItemCollection
+		/// {
+		///     new SfTabItem
+		///     {
+		///         Header = "TAB 1",
+		///         Content = new Label { Text = "Content" }
+		///     }
+		/// };
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public Thickness TabBarBorderThickness
+		{
+			get => (Thickness)this.GetValue(TabBarBorderThicknessProperty);
+			set => this.SetValue(TabBarBorderThicknessProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the TabBar border is visible.
+		/// </summary>
+		internal bool ShowTabBarBorder
+		{
+			get => (bool)this.GetValue(ShowTabBarBorderProperty);
+			set => this.SetValue(ShowTabBarBorderProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the corner radius of the TabBar border in SfTabView.
+		/// </summary>
+		/// <value>
+		/// A <see cref="CornerRadius"/> that specifies the radius of the TabBar border's corners.
+		/// The default value is <c>new CornerRadius(0)</c>.
+		/// </value>
+		/// <remarks>
+		/// The border is visible only when  
+		///   <see cref="TabBarBorderThickness"/> is greater than zero.
+		/// In XAML, you can specify a uniform radius (e.g., "10") or per-corner values
+		///   (e.g., "10,0,10,0") in the order: TopLeft, TopRight, BottomLeft, BottomRight.
+		/// You can also customize the color using <see cref="TabBarBorderColor"/>.
+		/// </remarks>
+		/// <example>
+		/// The below example shows how to make the TabBar border visible.
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView TabBarBorderThickness="2"
+		///                    TabBarBorderColor="Red"
+		///                    TabBarCornerRadius="10">
+		///     <tabView:SfTabItem Header="TAB 1">
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		/// </tabView:SfTabView>
+		/// ]]>
+		/// </code>
+		///
+		/// C#:
+		/// <code>
+		/// <![CDATA[
+		/// var tabView = new SfTabView
+		/// {
+		///     TabBarBorderThickness = new Thickness(2),
+		///     TabBarBorderColor = Colors.Red,
+		///     TabBarCornerRadius = new CornerRadius(10)
+		/// };
+		///
+		/// tabView.Items = new TabItemCollection
+		/// {
+		///     new SfTabItem
+		///     {
+		///         Header = "TAB 1",
+		///         Content = new Label { Text = "Content" }
+		///     }
+		/// };
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public CornerRadius TabBarCornerRadius
+		{
+			get => (CornerRadius)this.GetValue(TabBarCornerRadiusProperty);
+			set => this.SetValue(TabBarCornerRadiusProperty, value);
+		}
+
+
+		/// <summary>
 		/// Gets or sets the color of the scroll button icon when it is disabled.
 		/// </summary>
 		/// <value>
@@ -2078,6 +2284,71 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		}
 
 		/// <summary>
+		/// This method is called when the TabBarBorderColor property value changes. It updates the border color for the TabBar.
+		/// </summary>
+		/// <param name="bindable">The bindable object <see cref="SfTabView"/> whose TabBarBorderColor property has changed.</param>
+		/// <param name="oldValue">The old value of the TabBarBorderColor property.</param>
+		/// <param name="newValue">The new value of the TabBarBorderColor property.</param>
+		static void TabBarBorderColorChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfTabView tabView && tabView is not null && tabView._tabBarBorder is not null)
+			{
+				tabView._tabBarBorder.TabBarBorderColor = (Color?)newValue;
+			}
+		}
+
+		/// <summary>
+		/// This method is called when the TabBarBorderThickness property value changes. It updates the border thickness for the TabBar.
+		/// </summary>
+		/// <param name="bindable">The bindable object <see cref="SfTabView"/> whose TabBarBorderThickness  property has changed.</param>
+		/// <param name="oldValue">The old value of the TabBarBorderThickness property.</param>
+		/// <param name="newValue">The new value of the TabBarBorderThickness property.</param>
+		static void TabBarBorderThicknessChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfTabView tabView && tabView._tabBarBorder is not null)
+			{
+				var thickness = (Thickness)newValue;
+				tabView._tabBarBorder.TabBarBorderThickness = thickness;
+				tabView.ShowTabBarBorder = HasBorder(thickness);
+			}
+		}
+
+		/// <summary>
+		/// This method is called when the ShowTabBarBorder property value changes. It updates the visibility of the TabBar border.
+		/// </summary>
+		/// <param name="bindable">The bindable object <see cref="SfTabView"/> whose ShowTabBarBorder property has changed.</param>
+		/// <param name="oldValue">The old value of the ShowTabBarBorder property.</param>
+		/// <param name="newValue">The new value of the ShowTabBarBorder property.</param>
+		static void ShowTabBarBorderChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfTabView tabView && tabView._tabBarBorder is not null)
+			{
+				tabView._tabBarBorder.ShowTabBarBorder = (bool)newValue;
+			}
+		}
+
+		/// <summary>
+		/// This method is called when the TabBarCornerRadius property value changes. It updates the visibility of the TabBar border.
+		/// </summary>
+		/// <param name="bindable">The bindable object <see cref="SfTabView"/> whose TabBarCornerRadius property has changed.</param>
+		/// <param name="oldValue">The old value of the TabBarCornerRadius property.</param>
+		/// <param name="newValue">The new value of the TabBarCornerRadius property.</param>
+		static void TabBarCornerRadiusChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfTabView tabView && tabView._tabBarBorder is not null)
+			{
+				tabView._tabBarBorder.TabBarCornerRadius = (CornerRadius)newValue;
+				if (tabView._tabHeaderContainer != null && tabView._tabHeaderContainer._tabHeaderParentBorder != null)
+				{
+					tabView._tabHeaderContainer._tabHeaderParentBorder.StrokeShape = new RoundRectangle
+					{
+						CornerRadius = (CornerRadius)newValue
+					};
+				}
+			}
+		}
+
+		/// <summary>
 		/// Initialize CenterButtonSettings.
 		/// </summary>
 		/// <returns>The default value of BadgeSettings.</returns>
@@ -2187,9 +2458,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			InitializeHeaderContainer();
 			InitializeTabContentContainer();
 			InitializeCenterButton();
+			this.InitializeTabBarBorder();
 
 			_parentGrid.Children.Add(_tabHeaderContainer);
 			_parentGrid.Children.Add(_tabContentContainer);
+			_parentGrid.Children.Add(_tabBarBorder);
 			_parentGrid.Style = new Style(typeof(SfGrid));
 			UpdateRowDefinitions();
 			Content = _parentGrid;
@@ -2231,7 +2504,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			UpdateIndicatorWidthMode(IndicatorWidthMode);
 			UpdateIndicatorBackground(IndicatorBackground);
 			UpdateIndicatorPlacement(IndicatorPlacement);
-
+			UpdateCornerRadius(this.IndicatorCornerRadius);
 			UpdateHeaderHorizontalTextAlignment(HeaderHorizontalTextAlignment);
 			UpdateTabWidthMode(TabWidthMode);
 
@@ -2242,6 +2515,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			_tabHeaderContainer.ScrollButtonColor = ScrollButtonColor;
 			_tabHeaderContainer.ScrollButtonDisabledIconColor = ScrollButtonDisabledIconColor;
 			_tabHeaderContainer.EnableRippleAnimation = EnableRippleAnimation;
+			if (this._tabHeaderContainer._tabHeaderParentBorder != null)
+			{
+				this._tabHeaderContainer._tabHeaderParentBorder.StrokeShape = new RoundRectangle
+				{
+					CornerRadius = this.TabBarCornerRadius
+				};
+			}
 		}
 
 		/// <summary>
@@ -2256,6 +2536,22 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			};
 
 			_centerButtonView.CenterButtonTapped += OnCenterButtonTapped;
+		}
+
+		static bool HasBorder(Thickness thickness)
+		{
+			return thickness.Left > 0 || thickness.Top > 0 || thickness.Right > 0 || thickness.Bottom > 0;
+		}
+
+		void InitializeTabBarBorder()
+		{
+			_tabBarBorder = new TabBarBorder
+			{
+				ShowTabBarBorder = ShowTabBarBorder,
+				TabBarBorderThickness = TabBarBorderThickness,
+				TabBarBorderColor = TabBarBorderColor,
+				TabBarCornerRadius = TabBarCornerRadius
+			};
 		}
 
 		/// <summary>
@@ -2413,6 +2709,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 				Grid.SetRow(_tabContentContainer, tabContentContainerIndex);
 				Grid.SetRow(_tabHeaderContainer, tabHeaderContainerIndex);
+
+				if (_tabBarBorder != null)
+				{
+					Grid.SetRow(_tabBarBorder, tabHeaderContainerIndex);
+				}
 
 				if (_parentGrid != null)
 				{

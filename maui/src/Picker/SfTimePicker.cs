@@ -1835,6 +1835,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
             IsOpen = false;
         }
 
+        /// <summary>
+        /// Method to dispose items.
+        /// </summary>
+        protected override void OnHandlerChanged()
+        {
+            if (Handler == null)
+            {
+                if (ColumnHeaderView != null)
+                {
+                    ColumnHeaderView.PickerPropertyChanged -= OnColumnHeaderPropertyChanged;
+                }
+
+                DisposeBaseItems();
+            }
+        }
+
         #endregion
 
         #region Property Changed Methods

@@ -208,15 +208,80 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <returns>Returns the internal selection or not</returns>
         internal bool IsScrollSelectionAllowed()
         {
-            if (Mode != PickerMode.Default && FooterView.Height != 0 && FooterView.ShowOkButton && FooterTemplate == null)
+            if (Mode != PickerMode.Default && FooterView.Height > 0 && FooterView.ShowOkButton && FooterTemplate == null && IsSelectionImmediate == false)
             {
                 return true;
             }
-            else
+
+            return false;
+        }
+
+        /// <summary>
+        /// Method to Dispose the events and clear the resources while the handler changed.
+        /// </summary>
+        internal void DisposeBaseItems()
+        {
+            if (Handler == null)
             {
-                return false;
+                if (BaseHeaderView != null)
+                {
+                    BaseHeaderView.PickerPropertyChanged -= OnHeaderSettingsPropertyChanged;
+                    if (BaseHeaderView.TextStyle != null)
+                    {
+                        BaseHeaderView.TextStyle.PropertyChanged -= OnHeaderTextStylePropertyChanged;
+                    }
+
+                    if (BaseHeaderView.SelectionTextStyle != null)
+                    {
+                        BaseHeaderView.SelectionTextStyle.PropertyChanged -= OnHeaderSelectionTextStylePropertyChanged;
+                    }
+                }
+
+                if (BaseColumnHeaderView != null)
+                {
+                    BaseColumnHeaderView.PickerPropertyChanged -= OnColumnHeaderViewPropertyChanged;
+                    if (BaseColumnHeaderView.TextStyle != null)
+                    {
+                        BaseColumnHeaderView.TextStyle.PropertyChanged -= OnColumnHeaderTextStylePropertyChanged;
+                    }
+                }
+
+                if (FooterView != null)
+                {
+                    FooterView.PickerPropertyChanged -= OnFooterSettingsPropertyChanged;
+                    if (FooterView.TextStyle != null)
+                    {
+                        FooterView.TextStyle.PropertyChanged -= OnFooterTextStylePropertyChanged;
+                    }
+                }
+
+                if (SelectedTextStyle != null)
+                {
+                    SelectedTextStyle.PropertyChanged -= OnSelectedTextStylePropertyChanged;
+                }
+
+                if (TextStyle != null)
+                {
+                    TextStyle.PropertyChanged -= OnUnSelectedTextStylePropertyChanged;
+                }
+
+                if (DisabledTextStyle != null)
+                {
+                    DisabledTextStyle.PropertyChanged -= OnDisabledTextStylePropertyChanged;
+                }
+
+                if (BaseColumns != null)
+                {
+                    BaseColumns.CollectionChanged -= OnColumnsCollectionChanged;
+                }
+
+                if (SelectionView != null)
+                {
+                    SelectionView.PropertyChanged -= OnSelectionViewPropertyChanged;
+                }
             }
         }
+
 
         #endregion
 
@@ -715,6 +780,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return measuredSize;
         }
 
+#if !WINDOWS && NET10_0_OR_GREATER
+        /// <summary>
+        /// Handles the allocation of size for the current view and updates the item height of the picker container when the size changes.
+        /// </summary>
+        /// <param name="width">The allocated width of the view.</param>
+        /// <param name="height">The allocated height of the view.</param>
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            if (Mode == PickerMode.Default)
+            {
+                _pickerContainer?.UpdateItemHeight();
+            }
+        }
+#endif
+
         /// <summary>
         /// Method triggers when the time picker property changed
         /// </summary>
@@ -983,22 +1063,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
             else
             {
                 pickerColumn.SelectedIndex = tappedIndex;
-            }
-
-            //// Call the template view for when selected value changed based on scroll the selected value.
-            if (_headerLayout != null && BaseHeaderView.Height > 0 && HeaderTemplate != null)
-            {
-                _headerLayout?.InitializeTemplateView();
-            }
-
-            if (_columnHeaderLayout != null && BaseColumnHeaderView.Height > 0 && ColumnHeaderTemplate != null)
-            {
-                _columnHeaderLayout?.InitializeTemplateView();
-            }
-
-            if (_footerLayout != null && FooterView.Height > 0 && FooterTemplate != null)
-            {
-                _footerLayout?.InitializeTemplateView();
             }
         }
 

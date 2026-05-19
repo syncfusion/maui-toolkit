@@ -156,13 +156,15 @@ internal class PickerDrawableView : SfDrawableView
                 distance = _sizeBasedItemsSource.Count - distance;
             }
 
+            //// Prepare the value for blackout checks by using the base column ItemsSource (day column at baseColumns[0]) when available, ensuring formats like "ddd, 01" are preserved.
+            string currentValue = DatePickerHelper.GetCurrentValueForDay(this._pickerLayoutInfo.PickerInfo, this._pickerLayoutInfo.Column, index, this._sizeBasedItemsSource[index]);
             if (distance <= maxDistance || _pickerLayoutInfo.PickerInfo.EnableLooping)
             {
                 switch (_pickerLayoutInfo.PickerInfo.TextDisplayMode)
                 {
                     case PickerTextDisplayMode.Default:
                         PickerTextStyle textStyle = unselectedTextStyle;
-                        canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[index], false) ? blackoutStyle : textStyle);
+                        canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(currentValue, false, index) ? blackoutStyle : textStyle);
                         break;
 
                     case PickerTextDisplayMode.Fade:
@@ -178,7 +180,7 @@ internal class PickerDrawableView : SfDrawableView
 
                             float opacity = 1.0f - (distance / (float)maxDistance);
                             fadeStyle.TextColor = fadeStyle.TextColor.WithAlpha(opacity);
-                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[index], false) ? blackoutStyle : fadeStyle);
+                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(currentValue, false) ? blackoutStyle : fadeStyle);
                         }
 
                         break;
@@ -196,7 +198,7 @@ internal class PickerDrawableView : SfDrawableView
 
                             float size = (float)(shrinkStyle.FontSize - (distance / (float)maxDistance * (shrinkStyle.FontSize - minimumThresholdFontSize)));
                             shrinkStyle.FontSize = Math.Max(minimumThresholdFontSize, size);
-                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[index], false) ? blackoutStyle : shrinkStyle);
+                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(currentValue, false) ? blackoutStyle : shrinkStyle);
                         }
 
                         break;
@@ -216,7 +218,7 @@ internal class PickerDrawableView : SfDrawableView
                             float size = (float)(fadeandShrinkStyle.FontSize - (distance / (float)maxDistance * (fadeandShrinkStyle.FontSize - minimumThresholdFontSize)));
                             fadeandShrinkStyle.FontSize = Math.Max(minimumThresholdFontSize, size);
                             fadeandShrinkStyle.TextColor = fadeandShrinkStyle.TextColor.WithAlpha(opacity);
-                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(_sizeBasedItemsSource[index], false) ? blackoutStyle : fadeandShrinkStyle);
+                            canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, UpdateBlackoutStyle(currentValue, false) ? blackoutStyle : fadeandShrinkStyle);
                         }
 
                         break;
@@ -225,13 +227,14 @@ internal class PickerDrawableView : SfDrawableView
         }
     }
 
-    /// <summary>
-    /// Used for checking whether value is disabled or not.
-    /// </summary>
-    /// <param name="currentValue">Current value of picker column.</param>
-    /// <param name="isSelected">Current value is selected or not.</param>
-    /// <returns>Returns true or false based on disabled values.</returns>
-    bool UpdateBlackoutStyle(string currentValue, bool isSelected)
+	/// <summary>
+	/// Used for checking whether value is disabled or not.
+	/// </summary>
+	/// <param name="currentValue">Current value of picker column.</param>
+	/// <param name="isSelected">Current value is selected or not.</param>
+	/// <param name="index">The column collection index value</param>
+	/// <returns>Returns true or false based on disabled values.</returns>
+	bool UpdateBlackoutStyle(string currentValue, bool isSelected, int? index = null)
     {
         //// Since black out selection not applicable.
         if (_pickerLayoutInfo.PickerInfo is SfPicker)
@@ -244,20 +247,20 @@ internal class PickerDrawableView : SfDrawableView
             //// Used to check the given time is black out time or not.
             if (_pickerLayoutInfo.Column.HeaderText == SfPickerResources.GetLocalizedString(timePicker.ColumnHeaderView.MinuteHeaderText))
             {
-				TimeSpan selectedTime = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
-				if (!timePicker.IsScrollSelectionAllowed())
-				{
-					selectedTime = timePicker.SelectedTime ?? timePicker._previousSelectedDateTime.TimeOfDay;
-				}
-				else
-				{
-					if (timePicker._internalSelectedTime != null)
-					{
-						selectedTime = timePicker._internalSelectedTime.Value;
-					}
-				}
+                TimeSpan selectedTime = new TimeSpan(DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+                if (!timePicker.IsScrollSelectionAllowed())
+                {
+                    selectedTime = timePicker.SelectedTime ?? timePicker._previousSelectedDateTime.TimeOfDay;
+                }
+                else
+                {
+                    if (timePicker._internalSelectedTime != null)
+                    {
+                        selectedTime = timePicker._internalSelectedTime.Value;
+                    }
+                }
 
-				return timePicker.BlackoutTimes.Any(blackOutTime => blackOutTime.Hours == selectedTime.Hours && blackOutTime.Minutes == int.Parse(currentValue));
+                return timePicker.BlackoutTimes.Any(blackOutTime => blackOutTime.Hours == selectedTime.Hours && blackOutTime.Minutes == int.Parse(currentValue));
             }
         }
 
@@ -266,39 +269,39 @@ internal class PickerDrawableView : SfDrawableView
             //// Used to check the given date is black out date or not.
             if (_pickerLayoutInfo.Column.HeaderText == SfPickerResources.GetLocalizedString(datePicker.ColumnHeaderView.DayHeaderText))
             {
-				DateTime selectedDate = DateTime.Now;
-				if (!datePicker.IsScrollSelectionAllowed())
-				{
-					selectedDate = datePicker.SelectedDate ?? datePicker._previousSelectedDateTime;
-				}
-				else
-				{
-					if (datePicker._internalSelectedDate != null)
-					{
-						selectedDate = datePicker._internalSelectedDate.Value;
-					}
-				}
-				return datePicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(false, currentValue, blackOutDate, selectedDate));
+                DateTime selectedDate = DateTime.Now;
+                if (!datePicker.IsScrollSelectionAllowed())
+                {
+                    selectedDate = datePicker.SelectedDate ?? datePicker._previousSelectedDateTime;
+                }
+                else
+                {
+                    if (datePicker._internalSelectedDate != null)
+                    {
+                        selectedDate = datePicker._internalSelectedDate.Value;
+                    }
+                }
+                return datePicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(false, currentValue, blackOutDate, selectedDate, datePicker.Format, index, datePicker.DayInterval));
             }
         }
 
         if (_pickerLayoutInfo.PickerInfo is SfDateTimePicker dateTimePicker)
         {
-			DateTime selectedDateTime = DateTime.Now;
-			if (!dateTimePicker.IsScrollSelectionAllowed())
-			{
-				selectedDateTime = dateTimePicker.SelectedDate ?? dateTimePicker._previousSelectedDateTime;
-			}
-			else
-			{
-				if (dateTimePicker._internalSelectedDateTime != null)
-				{
-					selectedDateTime = dateTimePicker._internalSelectedDateTime.Value;
-				}
-			}
+            DateTime selectedDateTime = DateTime.Now;
+            if (!dateTimePicker.IsScrollSelectionAllowed())
+            {
+                selectedDateTime = dateTimePicker.SelectedDate ?? dateTimePicker._previousSelectedDateTime;
+            }
+            else
+            {
+                if (dateTimePicker._internalSelectedDateTime != null)
+                {
+                    selectedDateTime = dateTimePicker._internalSelectedDateTime.Value;
+                }
+            }
 
-			//// Used to check the given date time is black out date time or not.
-			if (_pickerLayoutInfo.Column.HeaderText == SfPickerResources.GetLocalizedString(dateTimePicker.ColumnHeaderView.DayHeaderText))
+            //// Used to check the given date time is black out date time or not.
+            if (_pickerLayoutInfo.Column.HeaderText == SfPickerResources.GetLocalizedString(dateTimePicker.ColumnHeaderView.DayHeaderText))
             {
                 return dateTimePicker.BlackoutDateTimes.Any(blackOutDateTime => DatePickerHelper.IsBlackoutDate(false, currentValue, blackOutDateTime, selectedDateTime) && blackOutDateTime.TimeOfDay == TimeSpan.Zero);
             }

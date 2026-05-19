@@ -529,7 +529,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// Content = tabView;
 		/// ]]></code>
 		/// </example>
-		public ImageSource ImageSource
+		public ImageSource? ImageSource
 		{
 			get => (ImageSource)GetValue(ImageSourceProperty);
 			set => SetValue(ImageSourceProperty, value);

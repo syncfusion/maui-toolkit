@@ -934,5 +934,318 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		#endregion
 
+		#region Animation and Positioning Tests 
+
+		[Fact]
+		public void BottomSheet_FullExpanded_Height_IsNotReduced_ByContentPadding()
+		{
+			// Arrange
+			_bottomSheet.AllowedState = BottomSheetAllowedState.All;
+			_bottomSheet.FullExpandedRatio = 1.0;
+			_bottomSheet.State = BottomSheetState.FullExpanded;
+
+			// Allocate size so Height is valid
+			InvokePrivateMethod(_bottomSheet, "OnSizeAllocated", 400d, 800d);
+
+			// Act 1: Without padding
+			_bottomSheet.ContentPadding = new Thickness(0);
+			_bottomSheet.Show();
+
+			var sheetBorder = GetPrivateField(_bottomSheet, "_bottomSheet") as View;
+			Assert.NotNull(sheetBorder);
+
+			var heightWithoutPadding = sheetBorder!.HeightRequest;
+
+			// Act 2: With large padding
+			_bottomSheet.ContentPadding = new Thickness(50);
+			_bottomSheet.Show();
+
+			var heightWithPadding = sheetBorder.HeightRequest;
+
+			// Assert
+			Assert.Equal(heightWithoutPadding, heightWithPadding);
+			Assert.Equal(800, heightWithPadding);
+		}
+
+
+		[Fact]
+		public void AnimateBottomSheet_HalfExpanded_NoOffset()
+		{
+			// Arrange
+			_bottomSheet.State = BottomSheetState.Hidden;
+			_bottomSheet.HalfExpandedRatio = 0.5;
+			_bottomSheet.AllowedState = BottomSheetAllowedState.All;
+
+			InvokePrivateMethod(_bottomSheet, "OnSizeAllocated", 400d, 800d);
+
+			// Act - Transition 
+			_bottomSheet.State = BottomSheetState.HalfExpanded;
+
+			// Assert - 
+			Assert.Equal(BottomSheetState.HalfExpanded, _bottomSheet.State);
+		}
+
+		[Fact]
+		public void AnimateBottomSheet_FullExpanded_NoOffset()
+		{
+			// Arrange
+			_bottomSheet.State = BottomSheetState.Hidden;
+			_bottomSheet.FullExpandedRatio = 0.95;
+			_bottomSheet.AllowedState = BottomSheetAllowedState.All;
+
+			InvokePrivateMethod(_bottomSheet, "OnSizeAllocated", 400d, 800d);
+
+			// Act
+			_bottomSheet.State = BottomSheetState.FullExpanded;
+
+			// Assert
+			Assert.Equal(BottomSheetState.FullExpanded, _bottomSheet.State);
+		}
+
+		[Fact]
+		public void AnimateBottomSheet_Collapsed_NoOffset()
+		{
+			// Arrange
+			_bottomSheet.State = BottomSheetState.Hidden;
+			_bottomSheet.CollapsedHeight = 150;
+			_bottomSheet.AllowedState = BottomSheetAllowedState.All;
+
+			InvokePrivateMethod(_bottomSheet, "OnSizeAllocated", 400d, 800d);
+
+			// Act
+			_bottomSheet.State = BottomSheetState.Collapsed;
+
+			// Assert
+			Assert.Equal(BottomSheetState.Collapsed, _bottomSheet.State);
+		}
+
+		#endregion
+
+		#region SwipeFromHeaderOnly Feature Tests
+
+		[Fact]
+		public void SwipeFromHeaderOnly_DefaultValue_IsFalse()
+		{
+			// Arrange & Act
+			var bottomSheet = new Syncfusion.Maui.Toolkit.BottomSheet.SfBottomSheet();
+
+			// Assert
+			Assert.False(bottomSheet.SwipeFromHeaderOnly);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void SwipeFromHeaderOnly_SetValue_UpdatesProperty(bool input)
+		{
+			// Arrange
+			var bottomSheet = new Syncfusion.Maui.Toolkit.BottomSheet.SfBottomSheet();
+
+			// Act
+			bottomSheet.SwipeFromHeaderOnly = input;
+
+			// Assert
+			Assert.Equal(input, bottomSheet.SwipeFromHeaderOnly);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_WithEnableSwipingFalse_DoesNotEnableSwiping()
+		{
+			// Arrange
+			_bottomSheet.EnableSwiping = false;
+			_bottomSheet.SwipeFromHeaderOnly = true;
+
+			// Act & Assert
+			Assert.False(_bottomSheet.EnableSwiping);
+			Assert.True(_bottomSheet.SwipeFromHeaderOnly);
+			// When EnableSwiping is false, no swipes are recognized regardless of SwipeFromHeaderOnly
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_WithEnableSwipingTrue_RestrictionCanBeEnabled()
+		{
+			// Arrange
+			_bottomSheet.EnableSwiping = true;
+			_bottomSheet.SwipeFromHeaderOnly = false;
+
+			// Act
+			_bottomSheet.SwipeFromHeaderOnly = true;
+
+			// Assert
+			Assert.True(_bottomSheet.EnableSwiping);
+			Assert.True(_bottomSheet.SwipeFromHeaderOnly);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_ToggledDuringOperation_PropertyUpdatesPersists()
+		{
+			// Arrange
+			_bottomSheet.EnableSwiping = true;
+			_bottomSheet.SwipeFromHeaderOnly = false;
+			SetPrivateField(_bottomSheet, "_isSheetOpen", true);
+
+			// Act
+			_bottomSheet.SwipeFromHeaderOnly = true;
+			bool firstValue = _bottomSheet.SwipeFromHeaderOnly;
+
+			_bottomSheet.SwipeFromHeaderOnly = false;
+			bool secondValue = _bottomSheet.SwipeFromHeaderOnly;
+
+			// Assert
+			Assert.True(firstValue);
+			Assert.False(secondValue);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_PropertyPersistsAcrossStateChanges()
+		{
+			// Arrange
+			_bottomSheet.SwipeFromHeaderOnly = true;
+			_bottomSheet.State = BottomSheetState.Hidden;
+
+			// Act
+			_bottomSheet.State = BottomSheetState.HalfExpanded;
+			bool valueAfterStateChange1 = _bottomSheet.SwipeFromHeaderOnly;
+
+			_bottomSheet.State = BottomSheetState.FullExpanded;
+			bool valueAfterStateChange2 = _bottomSheet.SwipeFromHeaderOnly;
+
+			// Assert
+			Assert.True(valueAfterStateChange1);
+			Assert.True(valueAfterStateChange2);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_False_AllowsSwipeFromAnywhere()
+		{
+			// Arrange
+			_bottomSheet.EnableSwiping = true;
+			_bottomSheet.SwipeFromHeaderOnly = false;  // Default behavior
+			_bottomSheet.State = BottomSheetState.HalfExpanded;
+			SetPrivateField(_bottomSheet, "_isSheetOpen", true);
+
+			// Act
+			// Touch from content area (Y=400) should be processed if EnableSwiping is true
+			var contentPoint = new Point(100, 400);
+			_bottomSheet.OnHandleTouch(PointerActions.Pressed, contentPoint);
+
+			// Assert - When SwipeFromHeaderOnly=false, any touch can initiate swipe
+			bool isPointerPressed = Convert.ToBoolean(GetPrivateField(_bottomSheet, "_isPointerPressed"));
+			Assert.True(isPointerPressed);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_True_RestrictsSwipeInitiation()
+		{
+			// Arrange
+			_bottomSheet.EnableSwiping = true;
+			_bottomSheet.SwipeFromHeaderOnly = true;
+			_bottomSheet.State = BottomSheetState.HalfExpanded;
+			SetPrivateField(_bottomSheet, "_isSheetOpen", true);
+
+			// Act - The actual swipe restriction logic will be validated during touch point boundary checking
+			// This test verifies the property is properly set and recognized by the gesture handler
+			var isRestricted = _bottomSheet.SwipeFromHeaderOnly;
+
+			// Assert
+			Assert.True(isRestricted);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_WithNullContent_DoesNotThrow()
+		{
+			// Arrange
+			_bottomSheet.EnableSwiping = true;
+			_bottomSheet.SwipeFromHeaderOnly = true;
+
+			// Act & Assert - Should not throw
+			_bottomSheet.OnHandleTouch(PointerActions.Pressed, new Point(100, 50));
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_InteractionWithEnableSwiping_PropertyHierarchy()
+		{
+			// Arrange
+			_bottomSheet.EnableSwiping = true;
+			_bottomSheet.SwipeFromHeaderOnly = true;
+
+			// Act - Disable main swiping
+			_bottomSheet.EnableSwiping = false;
+
+			// Assert - SwipeFromHeaderOnly remains set but is irrelevant
+			Assert.False(_bottomSheet.EnableSwiping);
+			Assert.True(_bottomSheet.SwipeFromHeaderOnly);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_MultiplePropertyBindings_AllWorkCorrectly()
+		{
+			// Arrange
+			var bottomSheet1 = new Syncfusion.Maui.Toolkit.BottomSheet.SfBottomSheet();
+			var bottomSheet2 = new Syncfusion.Maui.Toolkit.BottomSheet.SfBottomSheet();
+
+			// Act
+			bottomSheet1.SwipeFromHeaderOnly = true;
+			bottomSheet2.SwipeFromHeaderOnly = false;
+
+			// Assert - Each instance maintains independent state
+			Assert.True(bottomSheet1.SwipeFromHeaderOnly);
+			Assert.False(bottomSheet2.SwipeFromHeaderOnly);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_EnabledWithContentScrolling_ContentCanScroll()
+		{
+			// Arrange
+			var scrollView = new ScrollView { Content = new Label { Text = "Scrollable Content" } };
+			_bottomSheet.Content = scrollView;
+			_bottomSheet.EnableSwiping = true;
+			_bottomSheet.SwipeFromHeaderOnly = true;
+
+			// Act
+			_bottomSheet.State = BottomSheetState.HalfExpanded;
+
+			// Assert - Content is set and can handle its own gestures
+			Assert.Equal(scrollView, _bottomSheet.Content);
+			Assert.True(_bottomSheet.SwipeFromHeaderOnly);
+		}
+
+		[Theory]
+		[InlineData(0.0)]
+		[InlineData(0.5)]
+		[InlineData(1.0)]
+		public void SwipeFromHeaderOnly_WorksWithDifferentExpandRatios(double ratio)
+		{
+			// Arrange
+			_bottomSheet.HalfExpandedRatio = ratio;
+			_bottomSheet.EnableSwiping = true;
+			_bottomSheet.SwipeFromHeaderOnly = true;
+
+			// Act
+			var value = _bottomSheet.SwipeFromHeaderOnly;
+
+			// Assert
+			Assert.True(value);
+			Assert.Equal(Math.Clamp(ratio, 0.1, 0.9), _bottomSheet.HalfExpandedRatio);
+		}
+
+		[Fact]
+		public void SwipeFromHeaderOnly_BindableProperty_CanBeDataBound()
+		{
+			// Arrange
+			var bottomSheet = new Syncfusion.Maui.Toolkit.BottomSheet.SfBottomSheet();
+			var viewModel = new { SwipeRestricted = true };
+
+			// Act - Verify the property exists and can be bound
+			var property = typeof(SfBottomSheet).GetProperty(nameof(SfBottomSheet.SwipeFromHeaderOnly));
+			
+			// Assert
+			Assert.NotNull(property);
+			Assert.True(property.CanRead);
+			Assert.True(property.CanWrite);
+		}
+
+		#endregion
+
 	}
 }

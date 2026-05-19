@@ -824,6 +824,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void UpdateFormat()
         {
+            BaseColumns.Clear();
             _dayColumn = new PickerColumn();
             _monthColumn = new PickerColumn();
             _yearColumn = new PickerColumn();
@@ -895,7 +896,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (IsScrollSelectionAllowed())
             {
                 // Check if the selected date falls within any blackout dates
-                if (BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, selectedDate)))
+                if (BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, selectedDate, Format)))
                 {
                     // If the selected date is a blackout date, revert the selection to the previous value
                     _dayColumn.SelectedIndex = e.OldValue;
@@ -969,6 +970,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 //// Get the month value based on the selected index changes value.
                 month = monthStrings.IndexOf(months[monthIndex]) + 1;
             }
+            else if (monthFormat == "MMMM")
+            {
+                List<string> monthStrings = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
+                month = monthStrings.IndexOf(months[monthIndex]) + 1;
+            }
 
             ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, year, MinimumDate, maxDate, DayInterval);
             ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
@@ -979,8 +985,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             //// Check the day collection have selected day value, if not then update the nearby value.
-            int index = DatePickerHelper.GetDayIndex(dayFormat, days, previousSelectedDate.Value.Day);
-            day = index == -1 ? 1 : int.Parse(days[index]);
+            int index = DatePickerHelper.GetDayIndex(dayFormat, days, previousSelectedDate.Value.Day, DayInterval);
+            day = index == -1 ? 1 : days[index].Length <= 2 ? int.Parse(days[index]) : int.Parse(days[index].Substring(days[index].Length - 2));
         }
 
         /// <summary>
@@ -1015,6 +1021,17 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     //// Get the month value based on the selected index changes value.
                     month = months.IndexOf(monthCollection[e.NewValue]) + 1;
                 }
+                else if (monthFormat == "MMMM")
+                {
+                    List<string> monthStrings = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
+                    //// Get the month value based on the selected index changes value.
+                    month = monthStrings.IndexOf(monthCollection[e.NewValue]) + 1;
+                }
+                else if (monthFormat == "MM_ddd")
+                {
+                    string value = monthCollection[e.NewValue];
+                    month = int.Parse(value.Substring(0, 2));
+                }
             }
 
             ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, previousSelectedDate.Value.Year, MinimumDate, maxDate, DayInterval);
@@ -1026,8 +1043,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             //// Check the new days collection have a selected day value, if not then update the nearby value.
-            int index = DatePickerHelper.GetDayIndex(dayFormat, days, previousSelectedDate.Value.Day);
-            day = index == -1 ? 1 : int.Parse(days[index]);
+            int index = DatePickerHelper.GetDayIndex(dayFormat, days, previousSelectedDate.Value.Day, DayInterval);
+            if (monthFormat.Contains("MM_ddd", StringComparison.OrdinalIgnoreCase) && SelectedDate == null)
+            {
+                day = DateTime.Now.Day;
+            }
+            else if (monthFormat.Contains("MM_ddd", StringComparison.OrdinalIgnoreCase) && SelectedDate != null)
+            {
+                day = SelectedDate.Value.Day;
+            }
+            else
+            {
+                day = index == -1 ? 1 : days[index].Length <= 2 ? int.Parse(days[index]) : int.Parse(days[index].Substring(days[index].Length - 2));
+            }
         }
 
         /// <summary>
@@ -1038,10 +1066,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
         int GetDayFromCollection(PickerSelectionChangedEventArgs e)
         {
             int day = 1;
-            if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && dayCollection.Count > e.NewValue)
+            string dayFormat;
+            string monthFormat;
+            DatePickerHelper.GetFormatStringOrder(out dayFormat, out monthFormat, Format);
+            if (dayFormat.Contains("ddd_yyyy", StringComparison.OrdinalIgnoreCase) && SelectedDate == null)
+            {
+                day = DateTime.Now.Day;   
+            }
+            else if (dayFormat.Contains("ddd_yyyy", StringComparison.OrdinalIgnoreCase) && SelectedDate != null)
+            {
+                day = (e.NewValue * DayInterval) + 1;
+            }
+            else if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && dayCollection.Count > e.NewValue)
             {
                 //// Get the day value based on the selected index changes value.
-                day = int.Parse(dayCollection[e.NewValue]);
+                day = dayCollection[e.NewValue].Length <= 2 ? int.Parse(dayCollection[e.NewValue]) : int.Parse(dayCollection[e.NewValue].Substring(dayCollection[e.NewValue].Length - 2));
             }
 
             return day;
@@ -1102,7 +1141,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         _dayColumn = new PickerColumn()
                         {
                             ItemsSource = days,
-                            SelectedIndex = DatePickerHelper.GetDayIndex(dayFormat, days, validSelectedDate.Value.Day),
+                            SelectedIndex = DatePickerHelper.GetDayIndex(dayFormat, days, validSelectedDate.Value.Day, DayInterval),
                             HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.DayHeaderText),
                         };
                         int dayIndex = formatString.IndexOf(0);
@@ -1149,7 +1188,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && !string.IsNullOrEmpty(dayFormat))
             {
-                int index = DatePickerHelper.GetDayIndex(dayFormat, dayCollection, date.Value.Day);
+                int index = DatePickerHelper.GetDayIndex(dayFormat, dayCollection, date.Value.Day, DayInterval);
                 if (_dayColumn.SelectedIndex != index)
                 {
                     _dayColumn.SelectedIndex = index;
@@ -1270,7 +1309,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int selectedIndex = DatePickerHelper.GetDayIndex(
                 format,
                 days,
-                referenceDate.Day);
+                referenceDate.Day,
+                DayInterval);
 
             return new PickerColumn
             {
@@ -1350,7 +1390,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (SelectedDate != null)
             {
                 DateTime currentDate = SelectedDate.Value;
-                while (BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, currentDate)))
+                while (BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, currentDate, Format, null, DayInterval)))
                 {
                     currentDate = currentDate.AddDays(1);
                 }
@@ -1601,6 +1641,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
             IsOpen = false;
         }
 
+        /// <summary>
+        /// Method to dispose items.
+        /// </summary>
+        protected override void OnHandlerChanged()
+        {
+            if (Handler == null)
+            {
+                if (ColumnHeaderView != null)
+                {
+                    ColumnHeaderView.PickerPropertyChanged -= OnColumnHeaderPropertyChanged;
+                }
+
+                DisposeBaseItems();
+            }
+        }
+
         #endregion
 
         #region Property Changed Methods
@@ -1698,7 +1754,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 previousSelectedDate = oldSelectedDate;
                 //// Prevents Selection changed event from triggering if old value is black out date.
-                if (datepicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, previousSelectedDate.Value)))
+                if (datepicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, previousSelectedDate.Value, datepicker.Format)))
                 {
                     datepicker.UpdateSelectedIndex((DateTime)newValue);
                     //// Skip the update and event call by checking if the date is blackout value and within current month.
@@ -1716,7 +1772,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (newValue is DateTime newSelectedDate)
             {
                 //// Prevents Selection changed event from triggering if new value is black out date.
-                if (datepicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, newSelectedDate)))
+                if (datepicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, newSelectedDate, datepicker.Format)))
                 {
                     return;
                 }
@@ -1929,7 +1985,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (datepicker.SelectedDate != null)
             {
                 DateTime currentDate = datepicker.SelectedDate.Value;
-                while (datepicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, currentDate)))
+                while (datepicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, currentDate, datepicker.Format)))
                 {
                     currentDate = currentDate.AddDays(1);
                 }

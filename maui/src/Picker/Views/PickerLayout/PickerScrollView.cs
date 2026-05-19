@@ -185,6 +185,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
 #endif
             }
 
+#if WINDOWS || MACCATALYST
+            if (!_isLoopingEnabled && enableLooping && _pickerView._IsPanScrolling)
+            {
+                _newScrollPosition = scrollPosition;
+            }
+#endif
             ScrollToAsync(0, enableLooping ? scrollPosition : selectedIndex * itemHeight, false);
         }
 
@@ -257,7 +263,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
             double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
             bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
-            if (enableLooping)
+            if (enableLooping && !_pickerView._IsPanScrolling)
             {
                 double totalContentHeight = itemsCount * itemHeight;
                 //// When scrolling upward, update the scroll position based on the total content height.
@@ -281,7 +287,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int selectionIndex = (int)Math.Round(e.ScrollY / itemHeight);
 #if WINDOWS || MACCATALYST
             //// While looping change dynamically, update the selected index based on new position.
-            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - e.ScrollY) > 0 && _lastIndexPosition != (itemsCount * itemHeight) - itemHeight)
+            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - e.ScrollY) > 0 && _lastIndexPosition != (itemsCount * itemHeight) - itemHeight && _pickerView._IsPanScrolling)
             {
                 selectionIndex = (int)Math.Round(_newScrollPosition / itemHeight);
                 _isLoopingEnabled = true;
@@ -306,14 +312,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             _pickerView.UpdateSelectedIndexValue(selectionIndex);
+#if WINDOWS
+            if (enableLooping && _pickerLayoutInfo.PickerInfo.ItemTemplate != null && !_pickerView._IsPanScrolling)
+#else
             if (enableLooping && _pickerLayoutInfo.PickerInfo.ItemTemplate != null)
+#endif
             {
                 _pickerView.UpdateItemTemplate();
             }
 
 #if !WINDOWS
+#if MACCATALYST
             //// Need to trigger the measure to update the height.
+            if (enableLooping && !_pickerView._IsPanScrolling)
+#else
             if (enableLooping)
+#endif
             {
                 _pickerView.UpdateItemHeight();
             }
@@ -451,6 +465,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
 #endif
             }
 
+#if WINDOWS || MACCATALYST
+            if (!_isLoopingEnabled && enableLooping && _pickerView._IsPanScrolling)
+            {
+                _newScrollPosition = scrollPosition;
+            }
+#endif
+
 #if MACCATALYST
             if (!_isLoopingEnabled && enableLooping)
             {
@@ -570,6 +591,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 if (datePicker.SelectedDate != null && datePicker.BlackoutDates.Any(blackOutDate => blackOutDate.Date == datePicker.SelectedDate.Value.Date))
                 {
+                    if (DatePickerHelper.IsDayColumnMissing(datePicker.Format))
+                    {
+                        return false;
+                    }
+
                     //// If the selected date is blackout date and is within the current month it reverts to previous selected date.
                     //// In else case, it will increment the selected date by one day until it finds a non-blackout date.
                     //// also if it reaches the end of the month it will get reset to the start of the month.
@@ -667,6 +693,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 bool isTimeSpanAtZero = false;
                 if (dateTimePicker.SelectedDate != null && dateTimePicker.BlackoutDateTimes.Any(blackOutDateTime => DatePickerHelper.IsBlackoutDateTime(blackOutDateTime, dateTimePicker.SelectedDate, out isTimeSpanAtZero)))
                 {
+                    if (DatePickerHelper.IsDayColumnMissing(dateTimePicker.DateFormat))
+                    {
+                        return false;
+                    }
+
                     //// For calculating the blackout date time, if the whole date is black out value the if case will get executed.
                     //// If only the time is black out value the else case will get executed
                     if (isTimeSpanAtZero)
@@ -818,6 +849,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="scrollEndPosition">The scroll end position.</param>
         internal override void OnPickerViewScrollEnd(double scrollEndPosition)
         {
+            if (_pickerView._IsPanScrolling)
+            {
+                //// Skip center position update during pan gesture.
+                return;
+            }
+
             double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
             int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
             double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
@@ -825,7 +862,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 #if WINDOWS || MACCATALYST
             scrollEndPosition = Math.Ceiling(scrollEndPosition);
             //// Check if looping is enabled, this is the first loop, and the new scroll position is greater than the scroll end position.
-            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - scrollEndPosition) > 0 && _lastIndexPosition != (itemsCount * itemHeight) - itemHeight)
+            if (enableLooping && _isLoopingEnabled == false && (_newScrollPosition - scrollEndPosition) > 0 && _lastIndexPosition != (itemsCount * itemHeight) - itemHeight && _pickerView._IsPanScrolling)
             {
                 //// Set the scroll end position to the new scroll position to continue the looping behavior.
                 scrollEndPosition = _newScrollPosition;

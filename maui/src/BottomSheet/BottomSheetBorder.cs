@@ -178,7 +178,17 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 			// Track touch points for translation calculation
 			if (e.Action == PointerActions.Pressed)
-			{				
+			{
+				// Check if SwipeFromHeaderOnly is enabled and touch is not in grabber area
+				if (_bottomSheetRef?.TryGetTarget(out var bottomSheet) == true)
+				{
+					if (bottomSheet.SwipeFromHeaderOnly && !bottomSheet.IsTouchInGrabberArea(e.TouchPoint))
+					{
+						// Touch is not in grabber area, skip processing
+						return;
+					}
+				}
+				
 				if (Handler?.PlatformView is UIView platformView)
 				{
 					var nativePoint = new CGPoint(e.TouchPoint.X, e.TouchPoint.Y);

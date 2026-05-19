@@ -181,6 +181,37 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
         #endregion
 
+        #region Internal Bindable properties
+
+        /// <summary>
+        /// Identifies the <see cref="HeaderTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="HeaderTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty HeaderTextColorProperty =
+            BindableProperty.Create(
+                nameof(HeaderTextColor),
+                typeof(Color), typeof(DateTimePickerColumnHeaderView),
+                defaultValueCreator: bindable => Color.FromArgb("#49454F"),
+                propertyChanged: OnHeaderTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="HeaderFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="HeaderFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty HeaderFontSizeProperty =
+            BindableProperty.Create(
+                nameof(HeaderFontSize),
+                typeof(double),
+                typeof(DateTimePickerColumnHeaderView),
+                defaultValueCreator: bindable => 14d,
+                propertyChanged: OnHeaderFontSizeChanged);
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -189,6 +220,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
         public DateTimePickerColumnHeaderView()
         {
             ThemeElement.InitializeThemeResources(this, "SfDateTimePickerTheme");
+            SetDynamicResource(BackgroundProperty, "SfDateTimePickerNormalColumnHeaderBackground");
+            SetDynamicResource(DividerColorProperty, "SfDateTimePickerNormalColumnHeaderDividerColor");
+            SetDynamicResource(HeaderTextColorProperty, "SfDateTimePickerNormalColumnHeaderTextColor");
+            SetDynamicResource(HeaderFontSizeProperty, "SfDateTimePickerNormalColumnHeaderFontSize");
         }
 
         #endregion
@@ -572,6 +607,66 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             get { return (string)GetValue(MeridiemHeaderTextProperty); }
             set { SetValue(MeridiemHeaderTextProperty, value); }
+        }
+
+        #endregion
+
+        #region Internal properties
+
+        /// <summary>
+        /// Gets or sets the header text color of the text style.
+        /// </summary>
+        internal Color HeaderTextColor
+        {
+            get { return (Color)GetValue(HeaderTextColorProperty); }
+            set { SetValue(HeaderTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the header font size of the text style.
+        /// </summary>
+        internal double HeaderFontSize
+        {
+            get { return (double)GetValue(HeaderFontSizeProperty); }
+            set { SetValue(HeaderFontSizeProperty, value); }
+        }
+
+        #endregion
+
+        #region Internal Property changed
+
+        /// <summary>
+        /// Method invokes on the picker header text color changed.
+        /// </summary>
+        /// <param name="bindable">The header text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnHeaderTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            DateTimePickerColumnHeaderView? picker = bindable as DateTimePickerColumnHeaderView;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.TextStyle.TextColor = picker.HeaderTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker header font size changed.
+        /// </summary>
+        /// <param name="bindable">The header text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnHeaderFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            DateTimePickerColumnHeaderView? picker = bindable as DateTimePickerColumnHeaderView;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.TextStyle.FontSize = picker.HeaderFontSize;
         }
 
         #endregion

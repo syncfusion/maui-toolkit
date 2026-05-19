@@ -13,8 +13,9 @@
 	  <Control Title="Date Picker"
              Image="datepicker.png"
              ControlName="SfDatePicker"
+             StatusTag="Updated"
              Description="A user interface element for selecting specific dates.">
-		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
+		  <Sample Title="Getting Started" SampleName="GettingStarted" StatusTag="Updated" WhatsNew="Date format support has been provided."/>
 		  <Sample Title="To-Do" SampleName="Customization"/>
 	  </Control>
 
@@ -22,15 +23,16 @@
              Image="timepicker.png"
              ControlName="SfTimePicker"
              Description="An interface for choosing specific times of day.">
-		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
+		  <Sample Title="Getting Started" SampleName="GettingStarted" />
 		  <Sample Title="Alarm" SampleName="Customization"/>
 	  </Control>
 
 	  <Control Title="Date Time Picker"
              Image="datetimepicker.png"
              ControlName="SfDateTimePicker"
+             StatusTag="Updated"
              Description="A combined interface to select dates and times.">
-		  <Sample Title="Getting Started" SampleName="GettingStarted"/>
+		  <Sample Title="Getting Started" SampleName="GettingStarted" StatusTag="Updated" WhatsNew="Date format and Active View support has been provided."/>
 	  </Control>
 	  
   </ControlCategory>

@@ -7,9 +7,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
     /// <summary>
     /// This represents a class that contains information about the picker view.
     /// </summary>
+#if WINDOWS || MACCATALYST
+    internal class PickerView : SfView, ITapGestureListener, IKeyboardListener, IPanGestureListener
+#else
     internal class PickerView : SfView, ITapGestureListener, IKeyboardListener
-    {
+#endif
+{
         #region Fields
+
+        /// <summary>
+        /// Holds is scrolling using pan gesture.
+        /// </summary>
+        internal bool _IsPanScrolling = false;
 
         /// <summary>
         /// The picker view info.
@@ -57,6 +66,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// Gets or sets the size of the semantic.
         /// </summary>
         Size _semanticsSize = Size.Zero;
+
+#if WINDOWS || MACCATALYST
+        /// <summary>
+        /// Gets the pan scrolling difference.
+        /// </summary>
+        double _deltaY = 0;
+
+        /// <summary>
+        /// Gets or sets the pan gesture touch point.
+        /// </summary>
+        Point? _panTouchPoint;
+#endif
 
         #endregion
 
@@ -437,6 +458,32 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return maximumViewPortCount;
         }
 
+#if WINDOWS || MACCATALYST
+        /// <summary>
+        /// Method to calculate the selected index.
+        /// </summary>
+        /// <returns>Return the selected index.</returns>
+        private int GetCenterItemIndex()
+        {
+            double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
+            double currentScrollOffset = _pickerLayoutInfo.ScrollOffset;
+            int itemCount = _itemsSource.Count;
+            double viewPortItemCount = Math.Round(GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemCount > viewPortItemCount;
+            int centerItemIndex = (int)Math.Round(currentScrollOffset / itemHeight);
+            if (enableLooping)
+            {
+                centerItemIndex = centerItemIndex % itemCount;
+                if (centerItemIndex < 0)
+                {
+                    centerItemIndex += itemCount;
+                }
+            }
+
+            return Math.Max(0, Math.Min(centerItemIndex, itemCount - 1));
+        }
+#endif
+
         /// <summary>
         /// Method to generate the picker items template.
         /// </summary>
@@ -652,18 +699,37 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 {
                     if (enableLooping)
                     {
-                        double scrollPosition = _selectedIndex * itemHeight;
-                        if (scrollPosition < (viewPortItemCount * itemHeight) + itemHeight && scrollPosition >= 0)
+                        double scrollPosition = 0;
+                        if (_IsPanScrolling)
                         {
-                            //// Adjust the scroll end position by adding the total height of all items to the current scroll end position.
-                            scrollPosition = (_itemsSource.Count * itemHeight) + scrollPosition;
+#if WINDOWS || MACCATALYST
+                            if (_deltaY > 0)
+                            {
+                                //// Pan swiping moved downward, content should move down, so use lower boundary.
+                                scrollPosition = Math.Floor(_pickerLayoutInfo.ScrollOffset / itemHeight) * itemHeight;
+                            }
+                            else
+                            {
+                                //// Pan swiping moved upward, content should move up, use upper boundary.
+                                scrollPosition = Math.Ceiling(_pickerLayoutInfo.ScrollOffset / itemHeight) * itemHeight;
+                            }
+#endif
                         }
-
-                        //// Adjust the scroll position based on the current scroll offset.
-                        double difference = Math.Abs(scrollPosition - _pickerLayoutInfo.ScrollOffset);
-                        if (difference > itemHeight)
+                        else
                         {
                             scrollPosition = _selectedIndex * itemHeight;
+                            if (scrollPosition < (viewPortItemCount * itemHeight) + itemHeight && scrollPosition >= 0)
+                            {
+                                //// Adjust the scroll end position by adding the total height of all items to the current scroll end position.
+                                scrollPosition = (_itemsSource.Count * itemHeight) + scrollPosition;
+                            }
+
+                            //// Adjust the scroll position based on the current scroll offset.
+                            double difference = Math.Abs(scrollPosition - _pickerLayoutInfo.ScrollOffset);
+                            if (difference > itemHeight)
+                            {
+                                scrollPosition = _selectedIndex * itemHeight;
+                            }
                         }
 
                         _initialNodeTopPosition = scrollPosition;
@@ -928,6 +994,101 @@ namespace Syncfusion.Maui.Toolkit.Picker
             _pickerLayoutInfo.UpdateSelectedIndexValue(selectedIndex, true);
         }
 
+#if WINDOWS || MACCATALYST
+        /// <summary>
+        /// Method to handle the pan gesture event.
+        /// </summary>
+        /// <param name="e">The pan event arguments.</param>
+        void IPanGestureListener.OnPan(PanEventArgs e)
+        {
+            double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
+            int itemCount = _itemsSource.Count;
+            double viewPortItemCount = Math.Round(GetViewPortHeight() / itemHeight);
+            bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemCount > viewPortItemCount;
+
+            switch (e.Status)
+            {
+                case Microsoft.Maui.GestureStatus.Started:
+                    _IsPanScrolling = true;
+                    _panTouchPoint = e.TouchPoint;
+                    break;
+
+                case Microsoft.Maui.GestureStatus.Running:
+                    if (_panTouchPoint.HasValue)
+                    {
+                        _deltaY = e.TouchPoint.Y - _panTouchPoint.Value.Y;
+                        double newScrollPosition = _pickerLayoutInfo.ScrollOffset - _deltaY;
+#if MACCATALYST
+                        double viewportTop = _pickerLayoutInfo.ScrollOffset;
+                        double viewportBottom = viewportTop + GetViewPortHeight();
+                        //// Calculate the view port top and bottom item positions. And check whether the touch point is within the top and bottom item positions.
+                        if (e.TouchPoint.Y < viewportTop || e.TouchPoint.Y > viewportBottom)
+                        {
+                            int selectedIndex = GetCenterItemIndex();
+                            if (selectedIndex == _pickerLayoutInfo.Column.SelectedIndex)
+                            {
+                                _IsPanScrolling = false;
+                                _panTouchPoint = null;
+                                if (Parent is PickerScrollView scroll)
+                                {
+                                    scroll.ScrollToAsync(0, selectedIndex * itemHeight, false);
+                                }
+                            }
+                            else
+                            {
+                                _pickerLayoutInfo.UpdateSelectedIndexValue(selectedIndex, false);
+                                _IsPanScrolling = false;
+                                _panTouchPoint = null;
+                            }
+
+                            break;
+                        }
+
+                        double selectedItem = _pickerLayoutInfo.ScrollOffset * itemHeight;
+                        //// On macOS (Catalyst) with non-looping enabled: if the first item is already
+                        //// selected and the user tries to pan further *downward* (deltaY > 0),
+                        //// ignore the movement so the gesture appears to stop at the top boundary.
+                        if (!enableLooping && _deltaY > 0 && selectedItem <= 0)
+                        {
+                            //// Simply break without updating the scroll position to break the gesture.
+                            return;
+                        }
+#endif
+                        if (Parent is PickerScrollView scrollView)
+                        {
+                            scrollView.ScrollToAsync(0, newScrollPosition, false);
+                        }
+                    }
+
+                    break;
+
+                case Microsoft.Maui.GestureStatus.Completed:
+                case Microsoft.Maui.GestureStatus.Canceled:
+
+                    if (_panTouchPoint.HasValue)
+                    {
+                        int selectedIndex = GetCenterItemIndex();
+                        if (selectedIndex == _pickerLayoutInfo.Column.SelectedIndex)
+                        {
+                            _IsPanScrolling = false;
+                            _panTouchPoint = null;
+                            if (Parent is PickerScrollView scrollView)
+                            {
+                                scrollView.ScrollToAsync(0, selectedIndex * itemHeight, false);
+                            }
+                        }
+                        else
+                        {
+                            _pickerLayoutInfo.UpdateSelectedIndexValue(selectedIndex, false);
+                            _IsPanScrolling = false;
+                            _panTouchPoint = null;
+                        }
+                    }
+
+                    break;
+            }
+        }
+#endif
         /// <summary>
         /// Method to handle the keyboard interaction.
         /// </summary>

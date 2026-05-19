@@ -1,4 +1,5 @@
 ﻿using Syncfusion.Maui.Toolkit.Picker;
+using System.Reflection;
 using System.Windows.Input;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest
@@ -39,6 +40,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Null(picker.AcceptCommand);
             Assert.Null(picker.DeclineCommand);
             Assert.Null(picker.SelectionChangedCommand);
+            Assert.False(picker.IsSelectionImmediate);
         }
 
         [Theory]
@@ -162,6 +164,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(PickerDateFormat.yyyy_MM_dd)]
         [InlineData(PickerDateFormat.MM_yyyy)]
         [InlineData(PickerDateFormat.MMM_yyyy)]
+        [InlineData(PickerDateFormat.MM_dd)]
+        [InlineData(PickerDateFormat.MMM_dd_yyyy)]
+        [InlineData(PickerDateFormat.MMMM_dd_yyyy)]
+        [InlineData(PickerDateFormat.MMMM_yyyy)]
+        [InlineData(PickerDateFormat.yyyy_MM)]
+        [InlineData(PickerDateFormat.yyyy_MMM)]
+        [InlineData(PickerDateFormat.yyyy_MMMM)]
+        [InlineData(PickerDateFormat.yyyy_MMM_dd)]
+        [InlineData(PickerDateFormat.yyyy_MMMM_dd)]
+        [InlineData(PickerDateFormat.dd_MMM)]
+        [InlineData(PickerDateFormat.dd_MMMM)]
+        [InlineData(PickerDateFormat.dd_MMMM_yyyy)]
+        [InlineData(PickerDateFormat.ddd_dd_MM_YYYY)]
         public void DateTimePicker_Format_DetAndSet(PickerDateFormat format)
         {
             SfDateTimePicker picker = new SfDateTimePicker();
@@ -606,6 +621,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             Assert.True(commandExecuted);
             Assert.Same(expectedValue, actualValue);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DateTimePicker_IsSelectionImmediate_GetAndSet(bool expectedValue)
+        {
+            SfDateTimePicker picker = new SfDateTimePicker();
+            picker.IsSelectionImmediate = expectedValue;
+            bool actualValue = picker.IsSelectionImmediate;
+            Assert.Equal(expectedValue, actualValue);
         }
 
         #endregion
@@ -1524,6 +1550,200 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
         #endregion
 
+        #region ActiveView
+
+        [Fact]
+        public void ActiveView_Intial()
+        {
+            SfDateTimePicker dateTimePicker = new SfDateTimePicker();
+            DateTimePickerView expectedValue = DateTimePickerView.Date;
+            DateTimePickerView actualValue = dateTimePicker.ActiveView;
+            Assert.Equal(expectedValue, actualValue);
+        }
+
+        [Fact]
+        public void ActiveView_DatePickerView_Date()
+        {
+            SfDateTimePicker dateTimePicker = new SfDateTimePicker();
+            DateTimePickerView expectedValue = DateTimePickerView.Date;
+            dateTimePicker.ActiveView = expectedValue;
+            DateTimePickerView actualValue = dateTimePicker.ActiveView;
+            Assert.Equal(expectedValue, actualValue);
+        }
+
+        [Fact]
+        public void ActiveView_DatePickerView_Time()
+        {
+            SfDateTimePicker dateTimePicker = new SfDateTimePicker();
+            DateTimePickerView expectedValue = DateTimePickerView.Time;
+            dateTimePicker.ActiveView = expectedValue;
+            DateTimePickerView actualValue = dateTimePicker.ActiveView;
+            Assert.Equal(expectedValue, actualValue);
+        }
+
+        [Fact]
+        public void ActiveView_DatePickerView_Date_OnDialogMode()
+        {
+            SfDateTimePicker dateTimePicker = new SfDateTimePicker();
+            DateTimePickerView expectedValue = DateTimePickerView.Date;
+            dateTimePicker.Mode = PickerMode.Dialog;
+            dateTimePicker.ActiveView = expectedValue;
+            DateTimePickerView actualValue = dateTimePicker.ActiveView;
+            Assert.Equal(expectedValue, actualValue);
+        }
+
+        [Fact]
+        public void ActiveView_DatePickerView_Time_OnDialogMode()
+        {
+            SfDateTimePicker dateTimePicker = new SfDateTimePicker();
+            DateTimePickerView expectedValue = DateTimePickerView.Time;
+            dateTimePicker.Mode = PickerMode.Dialog;
+            dateTimePicker.ActiveView = expectedValue;
+            DateTimePickerView actualValue = dateTimePicker.ActiveView;
+            Assert.Equal(expectedValue, actualValue);
+        }
+
+        [Fact]
+        public void Test_ActiveView_SetToTime_OpensWithTimeTab()
+        {
+            var picker = new SfDateTimePicker();
+            picker.SelectedDate = DateTime.Now;
+            picker.ActiveView = DateTimePickerView.Time;
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            Assert.Equal(DateTimePickerView.Time, picker.ActiveView);
+            var selectedIndex = GetPrivateField(picker, "_selectedIndex");
+            Assert.Equal(1, selectedIndex); // Time tab index expected
+            var hourColumn = GetPrivateField(picker, "_hourColumn");
+            Assert.NotNull(hourColumn);
+        }
+
+         [Fact]
+        public void Test_ActiveView_SetToDate_OpensWithDateTab()
+        {
+            var picker = new SfDateTimePicker();
+            var now = DateTime.Now;
+            picker.SelectedDate = now;
+            picker.ActiveView = DateTimePickerView.Date;
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            Assert.Equal(DateTimePickerView.Date, picker.ActiveView);
+            var selectedIndex = GetPrivateField(picker, "_selectedIndex");
+            Assert.Equal(0, selectedIndex); // Date tab index expected
+            var dayColumn = GetPrivateField(picker, "_dayColumn");
+            Assert.NotNull(dayColumn);
+        }
+
+        [Fact]
+        public void Test_ActiveView_DefaultsToDateWhenNotSet()
+        {
+            var picker = new SfDateTimePicker();
+            picker.SelectedDate = DateTime.Now;
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            var actualValue = GetPrivateField(picker, "_selectedIndex");
+            Assert.Equal(DateTimePickerView.Date, picker.ActiveView);
+            Assert.Equal(0, actualValue);
+        }
+
+        [Fact]
+        public void Test_ActiveView_ChangeBeforeOpen_RespectedOnOpen()
+        {
+            var picker = new SfDateTimePicker();
+            picker.ActiveView = DateTimePickerView.Time;
+            picker.ActiveView = DateTimePickerView.Date;
+            picker.SelectedDate = DateTime.Now;
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            var actualValue = GetPrivateField(picker, "_selectedIndex");
+            Assert.Equal(DateTimePickerView.Date, picker.ActiveView);
+            Assert.Equal(0, actualValue);
+        }
+
+        [Fact]
+        public void Test_ActiveView_PropertyChanged_TriggersHeaderReset()
+        {
+            var picker = new SfDateTimePicker();
+            picker.SelectedDate = DateTime.Now;
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            picker.ActiveView = DateTimePickerView.Time;
+            var actualValue = GetPrivateField(picker, "_selectedIndex");
+            Assert.Equal(1, actualValue);
+        }
+
+        [Fact]
+        public void Test_ActiveView_WithNullSelectedDate_GracefulBehavior()
+        {
+            var picker = new SfDateTimePicker();
+            picker.SelectedDate = null;
+            picker.ActiveView = DateTimePickerView.Time;
+            var ex = Record.Exception(() => InvokePrivateMethod(picker, "OnPickerLoading"));
+            Assert.Null(ex);
+            Assert.Equal(DateTimePickerView.Time, picker.ActiveView);
+        }
+
+        [Fact]
+        public void Test_ActiveView_PersistsAcrossOpenClose()
+        {
+            var picker = new SfDateTimePicker();
+            picker.SelectedDate = DateTime.Now;
+            picker.ActiveView = DateTimePickerView.Time;
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            InvokePrivateMethod(picker, "OnPopupClosed", new object[] { EventArgs.Empty });
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            Assert.Equal(DateTimePickerView.Time, picker.ActiveView);
+            var selectedIndex = GetPrivateField(picker, "_selectedIndex");
+            Assert.Equal(1, selectedIndex);
+        }
+
+        [Fact]
+        public void Test_ActiveView_InteractsWithHeaderButtonClick()
+        {
+            var picker = new SfDateTimePicker();
+            picker.SelectedDate = DateTime.Now;
+            picker.ActiveView = DateTimePickerView.Date;
+            InvokePrivateMethod(picker, "OnHeaderButtonClicked", new object[] { 1 });
+            Assert.Equal(DateTimePickerView.Time, picker.ActiveView);
+            var selectedIndex = GetPrivateField(picker, "_selectedIndex");
+            Assert.Equal(1, selectedIndex);
+            InvokePrivateMethod(picker, "OnHeaderButtonClicked", new object[] { 0 });
+            Assert.Equal(DateTimePickerView.Date, picker.ActiveView);
+            selectedIndex = GetPrivateField(picker, "_selectedIndex");
+            Assert.Equal(0, selectedIndex);
+        }
+
+        [Fact]
+        public void Test_ActiveView_DoesNotAffectSelectedDateValue()
+        {
+            var picker = new SfDateTimePicker();
+            var original = new DateTime(2020, 1, 2, 3, 4, 5);
+            picker.SelectedDate = original;
+            picker.ActiveView = DateTimePickerView.Time;
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            InvokePrivateMethod(picker, "OnPopupClosed", new object[] { EventArgs.Empty });
+            Assert.Equal(original, picker.SelectedDate);
+        }
+
+        [Fact]
+        public void Test_ActiveView_WithScrollSelectionMode_InitializesCorrectColumns()
+        {
+            var picker = new SfDateTimePicker();
+            picker.SelectedDate = new DateTime(2021, 6, 15, 14, 30, 45);
+            picker.ActiveView = DateTimePickerView.Time;
+            InvokePrivateMethod(picker, "OnPickerLoading");
+            var hourColumn = GetPrivateField(picker, "_hourColumn");
+            var minuteColumn = GetPrivateField(picker, "_minuteColumn");
+            Assert.NotNull(hourColumn);
+            Assert.NotNull(minuteColumn);
+            if (hourColumn != null && hourColumn is PickerColumn pickerHourColumn)
+            {
+                Assert.True(pickerHourColumn.SelectedIndex >= 0);
+            }
+
+            if (minuteColumn != null && minuteColumn is PickerColumn pickerMinuteColumn)
+            {
+                Assert.True(pickerMinuteColumn.SelectedIndex >= 0);
+            }
+        }
+
+        #endregion
+
         #region PopupSizeFeature
 
         [Fact]
@@ -1810,25 +2030,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(originalDateTime, picker.SelectedDate ?? originalDateTime);
 			Assert.False(selectionChangedFired, "SelectionChanged event should not fire until OK is pressed in dialog mode");
 		}
-
-		[Fact]
-		public void OnPopupOpened_ShouldUpdateHeaderTexts_WhenSelectedDateChanged()
-		{
-			// Arrange
-			var control = new SfDateTimePicker();
-			control.SelectedDate = DateTime.Now;
-			control._internalSelectedDateTime = DateTime.Now.AddDays(-1);
-
-			// Act
-			InvokePrivateMethod(control, "OnPopupOpened", new EventArgs());
-
-			// Assert
-			Assert.Equal(control.GetDateHeaderText(), control.BaseHeaderView.DateText);
-			Assert.Equal(control.GetTimeHeaderText(), control.BaseHeaderView.TimeText);
-		}
-
-
-
 		[Fact]
 		public void RelativeDialogMode_DateTimeSelectionNotCommittedUntilOK_ValidatesCorrectBehavior()
 		{

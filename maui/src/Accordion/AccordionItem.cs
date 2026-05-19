@@ -442,7 +442,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// </summary>
 		/// <remarks>
 		/// This method updates the binding context of the Header and Content properties to match the new binding context of this object.
-		/// </remarks>
+		/// </remarks>	
 		protected override void OnBindingContextChanged()
 		{
 			if (!ReturnIfNull(Header))

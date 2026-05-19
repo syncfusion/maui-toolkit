@@ -360,7 +360,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			}
 		}
 
-		Brush GetMarkerFill(int index)
+		internal Brush GetMarkerFill(int index)
 		{
 			double yValue = yValues[index];
 

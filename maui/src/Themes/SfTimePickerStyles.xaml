@@ -8,15 +8,4 @@
         <Setter Property="ColumnDividerColor" Value="{DynamicResource SfTimePickerNormalColumnDividerColor}" />
     </Style>
 
-    <Style TargetType="picker:TimePickerColumnHeaderView">
-        <Setter Property="Background"  Value="{DynamicResource SfTimePickerNormalColumnHeaderBackground}"/>
-        <Setter Property="DividerColor"  Value="{DynamicResource SfTimePickerNormalColumnHeaderDividerColor}"/>
-
-        <Setter Property="TextStyle">
-            <Setter.Value>
-                <picker:PickerTextStyle TextColor="{DynamicResource SfTimePickerNormalColumnHeaderTextColor}" FontSize="{DynamicResource SfTimePickerNormalColumnHeaderFontSize}" />
-            </Setter.Value>
-        </Setter>
-    </Style>
-
 </ResourceDictionary>

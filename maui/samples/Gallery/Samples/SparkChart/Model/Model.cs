@@ -60,4 +60,12 @@
 			YearGR = yearList;
 		}
 	}
+
+	public class ProductInfo
+	{
+		public string Name { get; set; } = string.Empty;
+		public List<double>? SalesData2023 { get; set; }
+		public List<double>? SalesData2024 { get; set; }
+		public List<double>? SalesData2025 { get; set; }
+	}
 }

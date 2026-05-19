@@ -69,6 +69,36 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
         #endregion
 
+        #region Internal Bindable properties
+
+        /// <summary>
+        /// Identifies the <see cref="HeaderTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="HeaderTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty HeaderTextColorProperty =
+            BindableProperty.Create(
+                nameof(HeaderTextColor),
+                typeof(Color), typeof(PickerColumnHeaderView),
+                defaultValueCreator: bindable => Color.FromArgb("#49454F"),
+                propertyChanged: OnHeaderTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="HeaderFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="HeaderFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty HeaderFontSizeProperty =
+            BindableProperty.Create(
+                nameof(HeaderFontSize),
+                typeof(double), typeof(PickerColumnHeaderView),
+                defaultValueCreator: bindable => 14d,
+                propertyChanged: OnHeaderFontSizeChanged);
+
+        #endregion
+
         #region Constructor
 
         /// <summary>
@@ -77,6 +107,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
         public PickerColumnHeaderView()
         {
             ThemeElement.InitializeThemeResources(this, "SfPickerTheme");
+            SetDynamicResource(BackgroundProperty, "SfPickerNormalColumnHeaderBackground");
+            SetDynamicResource(DividerColorProperty, "SfPickerNormalColumnHeaderDividerColor");
+            SetDynamicResource(HeaderTextColorProperty, "SfPickerNormalColumnHeaderTextColor");
+            SetDynamicResource(HeaderFontSizeProperty, "SfPickerNormalColumnHeaderFontSize");
         }
 
         #endregion
@@ -216,6 +250,28 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
         #endregion
 
+        #region Internal properties
+
+        /// <summary>
+        /// Gets or sets the header text color of the text style.
+        /// </summary>
+        internal Color HeaderTextColor
+        {
+            get { return (Color)GetValue(HeaderTextColorProperty); }
+            set { this.SetValue(HeaderTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the header font size of the text style.
+        /// </summary>
+        internal double HeaderFontSize
+        {
+            get { return (double)GetValue(HeaderFontSizeProperty); }
+            set { SetValue(HeaderFontSizeProperty, value); }
+        }
+
+        #endregion
+
         #region Private Methods
 
         /// <summary>
@@ -234,6 +290,44 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 newValue.Parent = this;
             }
+        }
+
+        #endregion
+
+        #region Internal Property changed
+
+        /// <summary>
+        /// Method invokes on the picker header text color changed.
+        /// </summary>
+        /// <param name="bindable">The header text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnHeaderTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerColumnHeaderView? picker = bindable as PickerColumnHeaderView;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.TextStyle.TextColor = picker.HeaderTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker header font size changed.
+        /// </summary>
+        /// <param name="bindable">The header text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnHeaderFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerColumnHeaderView? picker = bindable as PickerColumnHeaderView;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.TextStyle.FontSize = picker.HeaderFontSize;
         }
 
         #endregion

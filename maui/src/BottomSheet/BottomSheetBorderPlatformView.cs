@@ -55,7 +55,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 		#endregion
 
-		#region Constructor
+		#region Contructor
 		public BottomSheetBorderPlatformView(Context context, BottomSheetBorder border) : base(context)
 		{
 			_borderRef = new(border);
@@ -67,6 +67,39 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 			Clickable = true; // needed to get touch events
 			Focusable = true;
+		}
+
+		#endregion
+
+	#region 
+		/// <summary>
+		/// Determines if the touch should be processed based on SwipeFromHeaderOnly setting.
+		/// Only checks the Y coordinate since grabber spans full width.
+		/// </summary>
+		/// <param name="x">X coordinate in pixels.</param>
+		/// <param name="y">Y coordinate in pixels (relative to this view's top).</param>
+		/// <returns>True if the touch should be processed; false if it should be ignored.</returns>
+		private bool ShouldProcessTouch(int x, int y)
+		{
+			if (_borderRef.TryGetTarget(out var border))
+			{
+				var parent = border.Parent;
+				if (parent is SfBottomSheet bottomSheet && bottomSheet.SwipeFromHeaderOnly)
+				{
+					// Convert pixel Y to density-independent points
+					float density = Resources?.DisplayMetrics?.Density ?? 1f;
+					double yInPoints = y / density;
+
+					// Grabber area height + 3 margin
+					double grabberHeight = bottomSheet.GrabberAreaHeight + 3;
+
+					// Check if Y coordinate is within grabber area (top of the view)
+					return yInPoints >= 0 && yInPoints <= grabberHeight;
+				}
+			}
+
+			// Default: allow touch processing
+			return true;
 		}
 
 		#endregion
@@ -88,6 +121,15 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 						_downTime = ev.DownTime;
 						_lastX = ev.GetX();
 						_lastY = ev.GetY();
+						
+						// Check if touch should be restricted to grabber area
+						if (!ShouldProcessTouch((int)ev.GetX(), (int)ev.GetY()))
+						{
+							// Touch is not in grabber area when SwipeFromHeaderOnly is enabled
+							// Don't intercept - let child views handle it
+							return false;
+						}
+						
 						_scrollableUnderFinger = FindScrollableUnder(this, (int)ev.GetX(), (int)ev.GetY());
 						_insideScrollable = _scrollableUnderFinger is not null;
 						// Let the child try first.
@@ -131,6 +173,16 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 							}
 
 							// === EDGE REACHED ===
+							// Check if SwipeFromHeaderOnly is enabled - if so, only allow if touch is in grabber area
+							if (!ShouldProcessTouch((int)curX, (int)curY))
+							{
+								// Touch is not in grabber area when SwipeFromHeaderOnly is enabled
+								// Don't intercept - let child handle edge scrolling
+								_lastX = curX;
+								_lastY = curY;
+								return false;
+							}
+							
 							// We take over; keep ancestors from intercepting
 							DisallowParentIntercept(true);
 

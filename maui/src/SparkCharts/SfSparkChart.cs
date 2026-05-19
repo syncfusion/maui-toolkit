@@ -6,15 +6,20 @@ using System.Reflection;
 using Microsoft.Maui.Layouts;
 using Syncfusion.Maui.Toolkit.Charts;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Helper;
+using Syncfusion.Maui.Toolkit.Internals;
+using GestureStatus = Microsoft.Maui.GestureStatus;
 
 namespace Syncfusion.Maui.Toolkit.SparkCharts
 {
 	/// <summary>
 	/// Represents the base class for all Spark Charts and provides common behaviors and control flow.
 	/// </summary>
-	public abstract class SfSparkChart : View, IContentView
+	public abstract class SfSparkChart : View, IContentView, ITouchListener, ILongPressGestureListener
 	{
 		readonly SparkChartView seriesView;
+		internal SparkChartTrackballView? _trackballView;
+		internal SfAbsoluteLayout _templateContainer;
 
 		#region Constructor
 
@@ -24,8 +29,16 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		public SfSparkChart()
 		{
 			seriesView = new SparkChartView(this);
+			_trackballView = new SparkChartTrackballView(this);
+			_templateContainer = new SfAbsoluteLayout();
 			AxisLineStyle = new SparkChartLineStyle();
-			_content = seriesView;
+			
+			// Use AbsoluteLayout as content to support both drawable view and template views
+			_content = CreateContentLayout();
+
+			// Register touch and gesture listeners
+			this.AddTouchListener(this);
+			this.AddGestureListener(this);
 		}
 
 		#endregion
@@ -221,6 +234,33 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				BindingMode.Default,
 				propertyChanged: OnSparkChartPropertyChanged);
 
+		/// <summary>
+		/// Identifies the TrackballBehavior bindable property.
+		/// </summary>
+		public static readonly BindableProperty TrackballBehaviorProperty =
+			BindableProperty.Create(
+				nameof(TrackballBehavior),
+				typeof(SparkChartTrackballBehavior),
+				typeof(SfSparkChart),
+				null,
+				BindingMode.Default,
+				propertyChanged: OnTrackballBehaviorPropertyChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="TrackballLabelTemplate"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// Provides a template for customizing the trackball label display in the spark chart.
+		/// </remarks>
+		internal static readonly BindableProperty TrackballLabelTemplateProperty =
+			BindableProperty.Create(
+				nameof(TrackballLabelTemplate),
+				typeof(DataTemplate),
+				typeof(SfSparkChart),
+				null,
+				BindingMode.Default,
+				null);
+
 		#endregion
 
 		#region Public Properties
@@ -326,6 +366,106 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			set => SetValue(RangeBandFillProperty, value);
 		}
 
+		/// <summary>
+		/// Gets or sets the trackball behavior for the spark chart.
+		/// </summary>
+		/// <value>
+		/// The <see cref="SparkChartTrackballBehavior"/> instance that enables trackball functionality.
+		/// </value>
+		/// <remarks>
+		/// The trackball allows users to view data point information by touching or hovering over the chart.
+		/// </remarks>
+		public SparkChartTrackballBehavior? TrackballBehavior
+		{
+			get => (SparkChartTrackballBehavior?)GetValue(TrackballBehaviorProperty);
+			set => SetValue(TrackballBehaviorProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the DataTemplate to customize the appearance of the trackball label.
+		/// </summary>
+		/// <value>
+		/// It accepts the <see cref="DataTemplate"/> value and its default value is null.
+		/// </value>
+		/// <example>
+		/// # [MainWindow.xaml](#tab/tabid-1)
+		/// <code><![CDATA[
+		///     <sparkcharts:SfSparkLineChart>
+		///     
+		///           <sparkcharts:SfSparkLineChart.TrackballBehavior>
+		///                <sparkcharts:SparkChartTrackballBehavior />
+		///           </sparkcharts:SfSparkLineChart.TrackballBehavior>
+		///
+		///           <sparkcharts:SfSparkLineChart.Resources>
+		///               <DataTemplate x:Key="TrackballTemplate">
+		///                  <HorizontalStackLayout>
+		///                     <Image Source="image.png" 
+		///                            WidthRequest="20" 
+		///                            HeightRequest="20"/>
+		///                     <Label Text="{Binding Label}" 
+		///                            TextColor="Black"
+		///                            FontAttributes="Bold"
+		///                            FontSize="12"/>
+		///                  </HorizontalStackLayout>
+		///               </DataTemplate>
+		///           </sparkcharts:SfSparkLineChart.Resources>
+		/// 
+		///           <sparkcharts:SfSparkLineChart.TrackballLabelTemplate>
+		///               {StaticResource TrackballTemplate}
+		///           </sparkcharts:SfSparkLineChart.TrackballLabelTemplate>
+		///           
+		///     </sparkcharts:SfSparkLineChart>
+		/// ]]></code>
+		/// # [MainPage.xaml.cs](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// SfSparkLineChart sparkChart = new SfSparkLineChart();
+		/// 
+		/// SparkChartTrackballBehavior trackballBehavior = new SparkChartTrackballBehavior();
+		/// sparkChart.TrackballBehavior = trackballBehavior;
+		/// 
+		/// DataTemplate labelTemplate = new DataTemplate(() =>
+		/// {
+		///     HorizontalStackLayout layout = new HorizontalStackLayout();
+		///     Image image = new Image()
+		///     {
+		///         Source = "image.png",
+		///         WidthRequest = 20,
+		///         HeightRequest = 20
+		///     };
+		///     
+		///     Label label = new Label()
+		///     {
+		///         TextColor = Colors.Black,
+		///         FontAttributes = FontAttributes.Bold,
+		///         FontSize = 12,
+		///     };
+		///     
+		///     label.SetBinding(Label.TextProperty, new Binding("Label"));
+		///     layout.Children.Add(image);
+		///     layout.Children.Add(label);
+		///     return layout;
+		/// });
+		/// 
+		/// sparkChart.TrackballLabelTemplate = labelTemplate;
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		internal DataTemplate TrackballLabelTemplate
+		{
+			get => (DataTemplate)GetValue(TrackballLabelTemplateProperty);
+			set => SetValue(TrackballLabelTemplateProperty, value);
+		}
+
+		#endregion
+
+		#region Event
+
+		/// <summary>
+		/// This event is raised when the trackball is moved from one data point to another. This helps to customize the trackball label and marker based on the condition.
+		/// </summary>
+		internal event EventHandler<SparkChartTrackballEventArgs>? TrackballCreated;
+
 		#endregion
 
 		#region Internal Properties
@@ -340,6 +480,9 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		internal List<double> yValues { get; private set; } = [];
 
 		internal List<double> xValues { get; private set; } = [];
+
+		// Stores the actual X values from the data source for trackball label display
+		internal List<object?> actualXValues { get; private set; } = [];
 
 		internal int DataCount { get; private set; }
 
@@ -392,6 +535,38 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				SetInheritedBindingContext(AxisLineStyle, BindingContext);
 				AxisLineStyle.Parent = this;
 			}
+
+			if (TrackballBehavior != null)
+			{
+				SetInheritedBindingContext(TrackballBehavior, BindingContext);
+			}
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Creates the content layout that contains both the series view and template container.
+		/// </summary>
+		private AbsoluteLayout CreateContentLayout()
+		{
+			var layout = new AbsoluteLayout();
+
+			// Add series view (drawable background)
+			layout.Add(seriesView);
+			AbsoluteLayout.SetLayoutBounds(seriesView, new Rect(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutFlags(seriesView, AbsoluteLayoutFlags.All);
+
+			// Add trackball drawable view
+			if (_trackballView != null)
+			{
+				layout.Add(_trackballView);
+				AbsoluteLayout.SetLayoutBounds(_trackballView, new Rect(0, 0, 1, 1));
+				AbsoluteLayout.SetLayoutFlags(_trackballView, AbsoluteLayoutFlags.All);
+			}
+
+			return layout;
 		}
 
 		#endregion
@@ -429,6 +604,12 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 
 				canvas.DrawLine(point1, point2);
 				canvas.RestoreState();
+			}
+
+			// Draw trackball if visible
+			if (TrackballBehavior != null && TrackballBehavior.IsVisible)
+			{
+				TrackballBehavior.DrawElements(canvas, new RectF((float)rect.X, (float)rect.Y, (float)rect.Width, (float)rect.Height));
 			}
 		}
 
@@ -559,6 +740,26 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			}
 		}
 
+		static void OnTrackballBehaviorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfSparkChart sparkChart)
+			{
+				if (oldValue is SparkChartTrackballBehavior oldBehavior)
+				{
+					SetInheritedBindingContext(oldBehavior, null);
+					oldBehavior.SparkChart = null;
+				}
+
+				if (newValue is SparkChartTrackballBehavior newBehavior)
+				{
+					SetInheritedBindingContext(newBehavior, sparkChart.BindingContext);
+					newBehavior.SparkChart = sparkChart;
+				}
+
+				sparkChart.ScheduleUpdateArea();
+			}
+		}
+
 		#endregion
 
 		#region Private Methods
@@ -620,6 +821,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		{
 			yValues.Clear();
 			xValues.Clear();
+			actualXValues.Clear();
 			EmptyPointIndexes.Clear();
 			GapIndexes.Clear();
 			DataCount = 0;
@@ -683,6 +885,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				{
 					xValues.Add(i);
 					yValues.Add(sourceYValues[i]);
+					actualXValues.Add(sourceXValuesRaw[i]);
 				}
 
 				DataCount = xValues.Count;
@@ -697,14 +900,14 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			{
 				if (AxisType == SparkChartAxisType.Numeric)
 				{
-					var pairs = new List<(double x, double y)>();
+					var pairs = new List<(double x, double y, object? actualX)>();
 					for (int i = 0; i < sourceYValues.Count; i++)
 					{
 						var x = ConvertToDouble(sourceXValuesRaw[i]);
 						if (!double.IsNaN(x))
 						{
 							var normalizedX = NormalizeNumericKey(x);
-							pairs.Add((normalizedX, sourceYValues[i]));
+							pairs.Add((normalizedX, sourceYValues[i], sourceXValuesRaw[i]));
 						}
 					}
 
@@ -712,18 +915,19 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 					{
 						xValues.Add(value.x);
 						yValues.Add(value.y);
+						actualXValues.Add(value.actualX);
 					}
 				}
 				else // DateTime axis
 				{
-					var pairs = new List<(double x, double y)>();
+					var pairs = new List<(double x, double y, object? actualX)>();
 					for (int i = 0; i < sourceYValues.Count; i++)
 					{
 						var oa = ConvertToDouble(sourceXValuesRaw[i]);
 						if (!double.IsNaN(oa))
 						{
 							var day = NormalizeDateKey(oa);
-							pairs.Add((day.ToOADate(), sourceYValues[i]));
+							pairs.Add((day.ToOADate(), sourceYValues[i], sourceXValuesRaw[i]));
 						}
 					}
 
@@ -731,6 +935,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 					{
 						xValues.Add(value.x);
 						yValues.Add(value.y);
+						actualXValues.Add(value.actualX);
 					}
 				}
 
@@ -744,6 +949,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			if (AxisType == SparkChartAxisType.Numeric)
 			{
 				var lastYAtIndex = new Dictionary<long, double>();
+				var actualXAtIndex = new Dictionary<long, object?>();
 				for (int i = 0; i < sourceYValues.Count; i++)
 				{
 					var x = ConvertToDouble(sourceXValuesRaw[i]);
@@ -751,6 +957,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 					{
 						long bucket = (long)Math.Round(x, MidpointRounding.AwayFromZero);
 						lastYAtIndex[bucket] = sourceYValues[i];
+						actualXAtIndex[bucket] = sourceXValuesRaw[i];
 					}
 				}
 
@@ -768,10 +975,12 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 					if (lastYAtIndex.TryGetValue(bucket, out var y))
 					{
 						yValues.Add(y);
+						actualXValues.Add(actualXAtIndex[bucket]);
 					}
 					else
 					{
 						yValues.Add(double.NaN);
+						actualXValues.Add(bucket);
 						GapIndexes.Add(yValues.Count - 1);
 					}
 				}
@@ -779,6 +988,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			else // DateTime axis
 			{
 				var lastYAtDay = new Dictionary<DateTime, double>();
+				var actualXAtDay = new Dictionary<DateTime, object?>();
 				for (int i = 0; i < sourceYValues.Count; i++)
 				{
 					var oa = ConvertToDouble(sourceXValuesRaw[i]);
@@ -786,6 +996,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 					{
 						var day = NormalizeDateKey(oa);
 						lastYAtDay[day] = sourceYValues[i];
+						actualXAtDay[day] = sourceXValuesRaw[i];
 					}
 				}
 
@@ -803,10 +1014,12 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 					if (lastYAtDay.TryGetValue(day, out var y))
 					{
 						yValues.Add(y);
+						actualXValues.Add(actualXAtDay[day]);
 					}
 					else
 					{
 						yValues.Add(double.NaN);
+						actualXValues.Add(day);
 						GapIndexes.Add(yValues.Count - 1);
 					}
 				}
@@ -1020,6 +1233,83 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		internal void ScheduleUpdateArea()
 		{
 			seriesView.InvalidateDrawable();
+		}
+
+		/// <summary>
+		/// Raises the TrackballCreated event with the specified trackball point information.
+		/// </summary>
+		/// <param name="pointInfo">The trackball point information to pass to event handlers.</param>
+		internal void RaiseTrackballCreatedEvent(SparkChartTrackballInfo pointInfo)
+		{
+			if (TrackballCreated != null && pointInfo != null)
+			{
+				SparkChartTrackballEventArgs arg = new(pointInfo);
+				TrackballCreated.Invoke(this, arg);
+			}
+		}
+
+		#endregion
+
+		#region ITouchListener Implementation
+
+		/// <summary>
+		/// Handles touch events and forwards them to the trackball behavior.
+		/// </summary>
+		void ITouchListener.OnTouch(Syncfusion.Maui.Toolkit.Internals.PointerEventArgs e)
+		{
+			if (TrackballBehavior == null || TrackballBehavior.ActivationMode == SparkChartActivationMode.None)
+			{
+				return;
+			}
+
+			TrackballBehavior.UpdateDeviceType(e);
+
+			float pointX = (float)e.TouchPoint.X;
+			float pointY = (float)e.TouchPoint.Y;
+
+			switch (e.Action)
+			{
+				case PointerActions.Pressed:
+					TrackballBehavior.OnTouchDown(this, pointX, pointY);
+					break;
+
+				case PointerActions.Moved:
+					TrackballBehavior.OnTouchMove(this, pointX, pointY);
+					break;
+
+				case PointerActions.Released:
+					TrackballBehavior.OnTouchUp(this, pointX, pointY);
+					break;
+
+				case PointerActions.Cancelled:
+					TrackballBehavior.OnTouchCancel(this, pointX, pointY);
+					break;
+
+				case PointerActions.Exited:
+					TrackballBehavior.OnTouchExit(this, pointX, pointY);
+					break;
+			}
+		}
+
+		#endregion
+
+		#region ILongPressGestureListener Implementation
+
+		/// <summary>
+		/// Handles long press gesture and forwards to trackball behavior.
+		/// </summary>
+		void ILongPressGestureListener.OnLongPress(LongPressEventArgs e)
+		{
+			if (TrackballBehavior != null && TrackballBehavior.ActivationMode == SparkChartActivationMode.LongPress)
+			{
+				float pointX = (float)e.TouchPoint.X;
+				float pointY = (float)e.TouchPoint.Y;
+#if IOS || MACCATALYST
+				TrackballBehavior.OnLongPressActivation(this, pointX, pointY, e.Status);
+#else
+				TrackballBehavior.OnLongPressActivation(this, pointX, pointY, GestureStatus.Started);
+#endif
+			}
 		}
 
 		#endregion

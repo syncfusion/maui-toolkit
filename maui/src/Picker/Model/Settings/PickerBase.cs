@@ -281,6 +281,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 -1.0,
                 propertyChanged: OnPopupHeightPropertyChanged);
 
+        /// <summary>
+        /// Identifies the <see cref="IsSelectionImmediate"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="IsSelectionImmediate"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty IsSelectionImmediateProperty =
+            BindableProperty.Create(
+                nameof(IsSelectionImmediate),
+                typeof(bool), typeof(PickerBase),
+                false);
+
+
         #endregion
 
         #region Internal Bindable Properties
@@ -883,6 +896,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             get { return (double)GetValue(PopupHeightProperty); }
             set { SetValue(PopupHeightProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the user must explicitly confirm
+        /// the selection made in the picker when it is displayed in a dialog or relative dialog mode.
+        /// When this property is set to <c>false</c>, the picker requires an explicit
+        /// confirmation action such as tapping an OK button before the selected value is committed.
+        /// When this property is set to <c>true</c>, the selection is committed
+        /// immediately as the user interacts with the picker (for example, when scrolling or tapping items).
+        /// This property has no effect when the picker is displayed in default mode.
+        /// </summary>
+        public bool IsSelectionImmediate
+        {
+            get { return (bool)GetValue(IsSelectionImmediateProperty); }
+            set { SetValue(IsSelectionImmediateProperty, value); }
         }
 
         #endregion

@@ -294,6 +294,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 typeof(SfDateTimePicker),
                 defaultValueCreator: bindable => new ObservableCollection<DateTime>(),
                 propertyChanged: OnBlackOutDateTimesPropertyChanged);
+        
+        /// <summary>
+        /// Identifies the <see cref="ActiveViewProperty"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="ActiveViewProperty"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty ActiveViewProperty =
+            BindableProperty.Create(
+                nameof(ActiveView),
+                typeof(DateTimePickerView),
+                typeof(SfDateTimePicker),
+                DateTimePickerView.Date, 
+                propertyChanged: OnActiveViewPropertyChanged);
 
         #endregion
 
@@ -908,6 +922,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
             set { SetValue(BlackoutDateTimesProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the currently active tab selection (Date or Time) in the DateTimePicker.
+        /// </summary>
+        public DateTimePickerView ActiveView
+        {
+            get { return (DateTimePickerView)GetValue(ActiveViewProperty); }
+            set { SetValue(ActiveViewProperty, value); }
+        }
+
         #endregion
 
         #region Internal Properties
@@ -1119,7 +1142,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && dayCollection.Count > e.NewValue)
                         {
                             //// Get the day value based on the selected index changes value.
-                            day = int.Parse(dayCollection[e.NewValue]);
+                            day = dayCollection[e.NewValue].Length <= 2 ? int.Parse(dayCollection[e.NewValue]) : int.Parse(dayCollection[e.NewValue].Substring(dayCollection[e.NewValue].Length - 2));
                         }
 
                         selectedDate = new DateTime(previousSelectedDate.Year, previousSelectedDate.Month, day, previousSelectedDate.Hour, previousSelectedDate.Minute, previousSelectedDate.Second, previousSelectedDate.Millisecond);
@@ -1143,6 +1166,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
                                 //// Get the month value based on the selected index changes value.
                                 month = months.IndexOf(monthCollection[e.NewValue]) + 1;
                             }
+                            else if (monthFormat == "MMMM")
+                            {
+                                List<string> monthStrings = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
+                                //// Get the month value based on the selected index changes value.
+                                month = monthStrings.IndexOf(monthCollection[e.NewValue]) + 1;
+                            }
                         }
 
                         ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, previousSelectedDate.Year, MinimumDate, maxDate, DayInterval);
@@ -1154,8 +1183,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         }
 
                         //// Check the new days collection have a selected day value, if not then update the nearby value.
-                        int index = DatePickerHelper.GetDayIndex(dayFormat, days, previousSelectedDate.Day);
-                        int day = index == -1 ? 1 : int.Parse(days[index]);
+                        int index = DatePickerHelper.GetDayIndex(dayFormat, days, previousSelectedDate.Day, DayInterval);
+                        int day = index == -1 ? 1 : days[index].Length <= 2 ? int.Parse(days[index]) : int.Parse(days[index].Substring(days[index].Length - 2));
 
                         selectedDate = new DateTime(previousSelectedDate.Year, month, day, previousSelectedDate.Hour, previousSelectedDate.Minute, previousSelectedDate.Second, previousSelectedDate.Millisecond);
                     }
@@ -1193,6 +1222,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                             //// Get the month value based on the selected index changes value.
                             month = monthStrings.IndexOf(months[monthIndex]) + 1;
                         }
+                        else if (monthFormat == "MMMM")
+                        {
+                            List<string> monthStrings = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
+                            month = monthStrings.IndexOf(months[monthIndex]) + 1;
+                        }
 
                         ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, year, MinimumDate, maxDate, DayInterval);
                         ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
@@ -1203,8 +1237,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         }
 
                         //// Check the day collection have selected day value, if not then update the nearby value.
-                        int index = DatePickerHelper.GetDayIndex(dayFormat, days, previousSelectedDate.Day);
-                        int day = index == -1 ? 1 : int.Parse(days[index]);
+                        int index = DatePickerHelper.GetDayIndex(dayFormat, days, previousSelectedDate.Day, DayInterval);
+                        int day = index == -1 ? 1 : days[index].Length <= 2 ? int.Parse(days[index]) : int.Parse(days[index].Substring(days[index].Length - 2));
 
                         selectedDate = new DateTime(year, month, day, previousSelectedDate.Hour, previousSelectedDate.Minute, previousSelectedDate.Second, previousSelectedDate.Millisecond);
                     }
@@ -1574,7 +1608,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     _dayColumn = new PickerColumn()
                     {
                         ItemsSource = days,
-                        SelectedIndex = DatePickerHelper.GetDayIndex(dayFormat, days, validSelectedDate.Day),
+                        SelectedIndex = DatePickerHelper.GetDayIndex(dayFormat, days, validSelectedDate.Day, DayInterval),
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.DayHeaderText),
                     };
                     int dayIndex = formatString.IndexOf(0);
@@ -1699,7 +1733,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && !string.IsNullOrEmpty(dayFormat))
             {
-                int index = DatePickerHelper.GetDayIndex(dayFormat, dayCollection, date.Value.Day);
+                int index = DatePickerHelper.GetDayIndex(dayFormat, dayCollection, date.Value.Day, DayInterval);
                 if (_dayColumn.SelectedIndex != index)
                 {
                     _dayColumn.SelectedIndex = index;
@@ -1980,12 +2014,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
         PickerColumn GenerateDayColumn(string format, DateTime? selectedDate)
         {
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(MinimumDate, MaximumDate);
-            ObservableCollection<string> days = DatePickerHelper.GetDays(format, DateTime.Now.Month, DateTime.Now.Year, MinimumDate, maxDate, DayInterval);
+            //// Use the selectedDate if provided, otherwise use 'this.previous'
+            DateTime referenceDate = selectedDate ?? _previousSelectedDateTime;
+            ObservableCollection<string> days = DatePickerHelper.GetDays(format, referenceDate.Month, referenceDate.Year, MinimumDate, maxDate, DayInterval);
 
             return new PickerColumn()
             {
                 ItemsSource = days,
-                SelectedIndex = selectedDate != null ? DatePickerHelper.GetDayIndex(format, days, selectedDate.Value.Day) : _previousSelectedDateTime.Day - 1,
+                SelectedIndex = selectedDate != null ? DatePickerHelper.GetDayIndex(format, days, selectedDate.Value.Day, DayInterval) : _previousSelectedDateTime.Day - 1,
                 HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.DayHeaderText),
             };
         }
@@ -2464,10 +2500,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (_selectedIndex == 0)
             {
                 ResetDateColumns();
+                ActiveView = DateTimePickerView.Date;
             }
             else
             {
                 ResetTimeColumns();
+                ActiveView = DateTimePickerView.Time;
             }
         }
 
@@ -2492,7 +2530,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     switch (index)
                     {
                         case 0:
-                            int dayIndex = DatePickerHelper.GetDayIndex(dayFormat, (ObservableCollection<string>)_dayColumn.ItemsSource, selectedDate.Day);
+                            int dayIndex = DatePickerHelper.GetDayIndex(dayFormat, (ObservableCollection<string>)_dayColumn.ItemsSource, selectedDate.Day, DayInterval);
                             if (_dayColumn.SelectedIndex != dayIndex)
                             {
                                 _dayColumn.SelectedIndex = dayIndex;
@@ -2566,7 +2604,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             InvokeOpenedEvent(this, e);
             if (_internalSelectedDateTime != null && _internalSelectedDateTime != SelectedDate)
             {
-                _internalSelectedDateTime = SelectedDate.HasValue ? SelectedDate : null;
+                _internalSelectedDateTime = null;
                 BaseHeaderView.DateText = GetDateHeaderText();
                 BaseHeaderView.TimeText = GetTimeHeaderText();
             }
@@ -2635,6 +2673,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             IsOpen = false;
+        }
+
+        /// <summary>
+        /// Method to dispose items.
+        /// </summary>
+        protected override void OnHandlerChanged()
+        {
+            if (Handler == null)
+            {
+                if (ColumnHeaderView != null)
+                {
+                    ColumnHeaderView.PickerPropertyChanged -= OnColumnHeaderPropertyChanged;
+                }
+
+                DisposeBaseItems();
+            }
         }
 
         #endregion
@@ -3166,6 +3220,23 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             pickerContainer?.UpdateScrollViewDraw();
             pickerContainer?.UpdatePickerSelectionView();
+        }
+
+        /// <summary>
+        /// Method invokes in ActiveView property changed.
+        /// </summary>
+        /// <param name="bindable">The sfdatetimepicker object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnActiveViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? datetimepicker = bindable as SfDateTimePicker;
+            if (datetimepicker == null)
+            {
+                return;
+            }
+
+            datetimepicker.ResetHeaderHighlight();
         }
 
         #endregion

@@ -1450,7 +1450,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             int numberOfWeeks = CalendarViewHelper.GetActualNumberOfWeeks(_calendarInfo, _visibleDates);
             bool isAutoFitEnabled = CalendarViewHelper.IsAutoFitEnabled(_calendarInfo.View, _calendarInfo.Mode, _calendarInfo.ShowTrailingAndLeadingDates, _calendarInfo.NumberOfVisibleWeeks);
             //// Boolean to check whether the leading and trailing dates for the views are disabled or autofit is enabled when mode is not default and showleadingandtrailingdates set to false.
-            bool isLeadingAndTrailingDatesDisabled = numberOfWeeks == 6 || isAutoFitEnabled;
+            bool isLeadingAndTrailingDatesDisabled = (numberOfWeeks == 6 && !_calendarInfo.ShowTrailingAndLeadingDates) || isAutoFitEnabled;
             for (int i = 0; i < visibleDates.Count; i++)
             {
                 DateTime date = visibleDates[i];

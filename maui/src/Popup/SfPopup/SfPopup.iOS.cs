@@ -331,38 +331,38 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 			// Allow recognizing simultaneously so the tap on underlying control still fires
 			this.rootTapRecognizer.ShouldRecognizeSimultaneously += (gesture, other) => true;
-
+			
 			// Reject touches that began inside the popup so the root recognizer does not also treat the same tap as an outside-tap and close the popup.
-			this.rootTapRecognizer.ShouldReceiveTouch += (recognizer, touch) =>
-			{
-				try
-				{
-					var currentRoot = (UIView?)(WindowOverlayHelper._platformRootView ?? keyWindow ?? PopupExtension.GetActiveWindow());
-					if (currentRoot == null)
-					{
-						return true;
-					}
+            this.rootTapRecognizer.ShouldReceiveTouch += (recognizer, touch) =>
+            {
+                try
+                {
+                    var currentRoot = (UIView?)(WindowOverlayHelper._platformRootView ?? keyWindow ?? PopupExtension.GetActiveWindow());
+                    if (currentRoot == null)
+                    {
+                        return true;
+                    }
 
-					if (this._popupView?.Handler?.PlatformView is UIView popupNative)
-					{
-						// Convert popup origin to the root coordinate space and test containment.
-						var origin = popupNative.ConvertPointToView(new CGPoint(0, 0), currentRoot);
-						var rect = new CGRect(origin.X, origin.Y, popupNative.Bounds.Width, popupNative.Bounds.Height);
-						var location = touch.LocationInView(currentRoot);
-						if (rect.Contains(location))
-						{
-							// Touch began inside popup - do not let root recognizer handle it.
-							return false;
-						}
-					}
-				}
-				catch
-				{
-					// If anything goes wrong, fall back to allowing the recognizer to receive the touch.
-				}
+                    if (this._popupView?.Handler?.PlatformView is UIView popupNative)
+                    {
+                        // Convert popup origin to the root coordinate space and test containment.
+                        var origin = popupNative.ConvertPointToView(new CGPoint(0, 0), currentRoot);
+                        var rect = new CGRect(origin.X, origin.Y, popupNative.Bounds.Width, popupNative.Bounds.Height);
+                        var location = touch.LocationInView(currentRoot);
+                        if (rect.Contains(location))
+                        {
+                            // Touch began inside popup - do not let root recognizer handle it.
+                            return false;
+                        }
+                    }
+                }
+                catch
+                {
+                    // If anything goes wrong, fall back to allowing the recognizer to receive the touch.
+                }
 
-				return true;
-			};
+                return true;
+            };
 
 			root.AddGestureRecognizer(this.rootTapRecognizer);
 		}
@@ -375,7 +375,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			// Resolve current key window to remove recognizer from active root
 			UIWindow? keyWindow = PopupExtension.GetActiveWindow();
 			var root = (UIView?)(keyWindow ?? WindowOverlayHelper._platformRootView);
-
+			
 			if (root != null && this.rootTapRecognizer != null)
 			{
 				root.RemoveGestureRecognizer(this.rootTapRecognizer);

@@ -95,6 +95,12 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
     	/// </summary>
     	double _endTouchY;
 
+		/// <summary>
+		/// Indicates whether the current gesture started in the grabber area.
+		/// Used to track if SwipeFromHeaderOnly should process this gesture.
+		/// </summary>
+		bool _gestureStartedInGrabber = true;
+
     	// Event args
     	/// <summary>
     	/// Event arguments used to track state changes in the bottom sheet.
@@ -432,6 +438,19 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		    typeof(SfBottomSheet), 
 		    true,
 		    BindingMode.Default);
+
+		/// <summary>
+		/// Identifies the <see cref="SwipeFromHeaderOnly"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="SwipeFromHeaderOnly"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty SwipeFromHeaderOnlyProperty = BindableProperty.Create(
+			nameof(SwipeFromHeaderOnly),
+			typeof(bool),
+			typeof(SfBottomSheet),
+			false,
+			BindingMode.Default);
 
 		// Grabber customization
 		/// <summary>
@@ -1059,6 +1078,42 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether swipe gestures are restricted to the Header/Grabber area only.
+		/// </summary>
+		/// <value>
+		/// A <see cref="bool"/> value. The default value is <c>false</c>.
+		/// </value>
+		/// <remarks>
+		/// When set to <c>true</c>, swipe gestures are recognized only when initiated from the Header/Grabber area.
+		/// This prevents gesture conflicts with interactive content inside the BottomSheet (e.g., scrolling lists, zooming images).
+		/// When set to <c>false</c> (default), swipe gestures can be initiated from anywhere within the BottomSheet.
+		/// This property only has effect when <see cref="EnableSwiping"/> is <c>true</c>.
+		/// </remarks>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="SwipeFromHeaderOnly"/> property using XAML and C#:
+		/// 
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <bottomSheet:SfBottomSheet x:Name="bottomSheet" EnableSwiping="True" SwipeFromHeaderOnly="True"/>
+		/// ]]></code>
+		/// 
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfBottomSheet bottomSheet = new SfBottomSheet();
+		/// bottomSheet.EnableSwiping = true;
+		/// bottomSheet.SwipeFromHeaderOnly = true;
+		/// Content = bottomSheet;
+		/// ]]></code>
+		/// 
+		/// ***
+		/// </example>
+		public bool SwipeFromHeaderOnly
+		{
+			get => (bool)GetValue(SwipeFromHeaderOnlyProperty);
+			set => SetValue(SwipeFromHeaderOnlyProperty, value);
+		}
+
+		/// <summary>
 		/// Gets or sets the height of the grabber in SfBottomSheet.
 		/// </summary>
 		/// <value>
@@ -1347,8 +1402,27 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		/// <summary>
 		/// Handles touch-related logic for the bottom sheet.
 		/// </summary>
-		/// <param name="action">The pointer action.</param>
 		/// <param name="point">The touch point.</param>
+		/// <summary>
+		/// Determines whether the touch point is within the grabber (header) area.
+		/// </summary>
+		/// <returns>True if the touch is within the grabber area; otherwise, false.</returns>
+		internal bool IsTouchInGrabberArea(Point point)
+		{
+			if (_grabberGrid is null || !_grabberGrid.IsVisible)
+			{
+				// If grabber is not visible, allow touches from anywhere for backward compatibility
+				return true;
+			}
+
+			// The grabber is always at the top of the bottom sheet
+			// Touch point Y should be between 0 and grabber height
+			// Add small margin (3 pixels) to avoid edge ambiguity
+			double grabberHeight = GrabberAreaHeight + 3;
+
+			return point.Y >= 0 && point.Y <= grabberHeight;
+		}
+
 		internal void OnHandleTouch(PointerActions action, Point point)
 		{
 		    if (!EnableSwiping || !_isSheetOpen || _bottomSheet is null)
@@ -1356,21 +1430,48 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		        return;
 		    }
 
-		    double touchY = GetPlatformAdjustedTouchY(point);
-
 		    switch (action)
 		    {
 		        case PointerActions.Pressed:
-		            HandleTouchPressed(touchY);
+		            // Check if gesture starts in grabber area
+		            if (SwipeFromHeaderOnly)
+		            {
+		                _gestureStartedInGrabber = IsTouchInGrabberArea(point);
+		                if (!_gestureStartedInGrabber)
+		                {
+		                    // Gesture started outside grabber - don't process
+		                    return;
+		                }
+		            }
+		            else
+		            {
+		                _gestureStartedInGrabber = true; // If not restricted, always allow
+		            }
+
+		            HandleTouchPressed(GetPlatformAdjustedTouchY(point));
 		            return;
+
 		        case PointerActions.Moved:
-		            HandleTouchMoved(touchY);
+		            // Only process move if gesture started in allowed area
+		            if (!_gestureStartedInGrabber)
+		            {
+		                return;
+		            }
+		            HandleTouchMoved(GetPlatformAdjustedTouchY(point));
 		            return;
+
 		        case PointerActions.Released:
-		            HandleTouchReleased(touchY);
+		            // Only process release if gesture started in allowed area
+		            if (!_gestureStartedInGrabber)
+		            {
+		                _gestureStartedInGrabber = true; // Reset for next gesture
+		                return;
+		            }
+		            HandleTouchReleased(GetPlatformAdjustedTouchY(point));
+		            _gestureStartedInGrabber = true; // Reset for next gesture
 		            return;
+
 		        default:
-		            // Log or handle unexpected action
 		            return;
 		    }
 		}
@@ -2337,11 +2438,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			}
 
 			int animationDuration = this.GetClampedAnimationDuration();
-		    const int topPadding = 2;
 			_isSheetOpen = true;
 			if (_bottomSheet is not null)
 			{
-				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition + topPadding);
+				var bottomSheetAnimation = new Animation(d => _bottomSheet.TranslationY = d, _bottomSheet.TranslationY, targetPosition );
 				_bottomSheet?.Animate("bottomSheetAnimation", bottomSheetAnimation, length: (uint)animationDuration, easing: Easing.Linear, finished: (v, e) =>
 				{
 					UpdateBottomSheetHeight();

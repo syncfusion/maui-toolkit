@@ -1,4 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit.Charts;
+using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.Toolkit.SparkCharts
 {
@@ -330,7 +330,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			}
 		}
 
-		Brush GetMarkerFill(int index, double yValue)
+		internal Brush GetMarkerFill(int index, double yValue)
 		{
 			if (yValue == maxYValue && HighPointFill != null)
 			{
