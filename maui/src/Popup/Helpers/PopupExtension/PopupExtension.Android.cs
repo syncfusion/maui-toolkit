@@ -474,7 +474,17 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				int[] relativeViewOrigin = new int[2];
 				nativeRelativeView.GetLocationInWindow(relativeViewOrigin);
-				relativeViewOrigin[1] = PopupExtension.GetLocationInApp(relativeView);
+
+				if (WindowOverlayHelper._decorViewContent is PlatformView decorView && nativeRelativeView.RootView == decorView)
+				{
+					relativeViewOrigin[1] = PopupExtension.GetLocationInApp(relativeView);
+				}
+				else
+				{
+					// 1008572: Popup relative position is incorrect when opening a popup within another popup on Android.
+					relativeViewOrigin[1] = (int)(relativeViewOrigin[1] / WindowOverlayHelper._density);
+				}
+
 				return new Rect(relativeViewOrigin[0] / WindowOverlayHelper._density, relativeViewOrigin[1], nativeRelativeView.Width / WindowOverlayHelper._density, nativeRelativeView.Height / WindowOverlayHelper._density);
 			}
 			else

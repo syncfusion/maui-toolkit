@@ -10,6 +10,10 @@ namespace Syncfusion.Maui.Toolkit.Internals
 	{
 		#region Fields
 
+		internal static IMauiContext? MauiContext { get; set; }
+
+		internal static UIWindow? Window { get; set; }
+
 		UIView? _rootView;
 		WindowOverlayStack? _overlayStack;
 		UIView? _overlayContent;
@@ -23,22 +27,20 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		internal virtual WindowOverlayStack CreateStack()
 		{
 			WindowOverlayStack? windowOverlayStack = null;
-			if (_window is not null && _window.Handler is not null)
+			IMauiContext? context = _window?.Handler?.MauiContext ?? SfWindowOverlay.MauiContext;
+			if (context is not null)
 			{
-				IMauiContext? context = _window.Handler.MauiContext;
-				if (context is not null)
-				{
-					windowOverlayStack = (WindowOverlayStack?)_overlayStackView?.ToPlatform(context);
+				windowOverlayStack = (WindowOverlayStack?)_overlayStackView?.ToPlatform(context);
 
-					if (windowOverlayStack is not null && _overlayStackView is not null)
-					{
-						windowOverlayStack._canHandleTouch = !_overlayStackView.canHandleTouch;
-					}
+				if (windowOverlayStack is not null && _overlayStackView is not null)
+				{
+					windowOverlayStack._canHandleTouch = !_overlayStackView.canHandleTouch;
 				}
 			}
 
-			return windowOverlayStack is not null ? windowOverlayStack : new WindowOverlayStack();
+            return windowOverlayStack is not null ? windowOverlayStack : new WindowOverlayStack();
 		}
+
 
 		/// <summary>
 		/// Adds or updates the child layout absolutely to the overlay stack.
@@ -171,6 +173,22 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		internal bool AddToOverlay(MauiView childView)
 		{
 			_window = WindowOverlayHelper._window;
+
+			// Native embedding path when MAUI Window is not yet available.
+			if ((_window == null || _window.Content == null) && SfWindowOverlay.MauiContext != null && SfWindowOverlay.Window != null)
+			{
+				_rootView = SfWindowOverlay.Window;
+				_overlayStack ??= CreateStack();
+				if (_overlayStack != null)
+				{
+					_overlayStack.AutoresizingMask = UIViewAutoresizing.All;
+					_overlayContent = childView.ToPlatform(SfWindowOverlay.MauiContext);
+					return true;
+				}
+
+				return false;
+			}
+
 			if (_window is not null && _window.Content is not null)
 			{
 				_rootView = WindowOverlayHelper._platformRootView;
@@ -260,7 +278,9 @@ namespace Syncfusion.Maui.Toolkit.Internals
 				keyWindow = UIApplication.SharedApplication.KeyWindow!;
 			}
 
-			if (_rootView != keyWindow)
+			// Only switch to the keyWindow if we actually found one. For native embedding scenarios.
+			// the initial rootView may be provided via SfWindowOverlay.Window and keyWindow can be null.
+			if (keyWindow != null && _rootView != keyWindow)
 			{
 				_rootView = keyWindow;
 			}

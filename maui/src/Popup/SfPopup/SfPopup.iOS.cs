@@ -3,6 +3,7 @@ using CoreGraphics;
 using Foundation;
 using Microsoft.Maui.Controls.Platform;
 using Microsoft.Maui.Platform;
+using Syncfusion.Maui.Toolkit.Internals;
 using UIKit;
 
 namespace Syncfusion.Maui.Toolkit.Popup
@@ -45,6 +46,24 @@ namespace Syncfusion.Maui.Toolkit.Popup
 
 		#endregion
 
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SfPopup"/> class for native iOS embedding scenarios where a MAUI Window is not available.
+		/// </summary>
+		/// <param name="window">The external <see cref="UIWindow"/> that hosts the popup when no MAUI Window exists.</param>
+		/// <param name="mauiContext">The <see cref="IMauiContext"/> providing access to MAUI services in native iOS embedding.</param>
+		public SfPopup(UIWindow window, IMauiContext mauiContext)
+			: this()
+		{
+			Syncfusion.Maui.Toolkit.Internals.SfWindowOverlay.MauiContext = mauiContext;
+			Syncfusion.Maui.Toolkit.Internals.SfWindowOverlay.Window = window;
+
+			// Try initializing overlay again with external host available.
+			this.InitializeOverlay();
+		}
+		#endregion
+
 		#region Internal Methods
 
 		/// <summary>
@@ -67,7 +86,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 				else
 				{
-					windowPage.SizeChanged += OnMainPageSizeChanged;
+					windowPage.SizeChanged += this.OnMainPageSizeChanged;
+
+					// In native embedding, handle orientation and display changes by listening to <see cref="Microsoft.Maui.Devices.DeviceDisplay.MainDisplayInfoChanged"/>.
+					DeviceDisplay.MainDisplayInfoChanged += this.OnMainPageSizeChanged;
 				}
 			}
 
@@ -94,7 +116,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				}
 				else
 				{
-					windowPage.SizeChanged -= OnMainPageSizeChanged;
+					windowPage.SizeChanged -= this.OnMainPageSizeChanged;
+
+					// Unwire orientation/display change handler.
+					DeviceDisplay.MainDisplayInfoChanged -= this.OnMainPageSizeChanged;
 				}
 			}
 
@@ -206,7 +231,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				SyncPopupDimensionFields();
 
 				// While show the popup using ShowRelativeToView, Popup is not positioned properly when resize the window in MAC and Split the screen in iOS.
-				if (_relativeView is not null)
+				if (_relativeView is not null || this.RelativeView is not null)
 				{
 					Dispatcher.Dispatch(ResetPopupWidthHeight);
 				}

@@ -55,14 +55,22 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// <returns></returns>
 		internal virtual WindowOverlayStack CreateStack(Context context)
 		{
+			// Prefer creating the overlay stack via the MAUI handler so gesture/touch plumbing is wired.
 			WindowOverlayStack? windowOverlayStack = null;
+
 			if (_window is not null && _window.Handler is not null)
 			{
 				IMauiContext? mauiContext = _window.Handler.MauiContext;
 				if (mauiContext is not null)
 				{
-					windowOverlayStack = (WindowOverlayStack?)_overlayStackView?.ToPlatform(mauiContext);
+					windowOverlayStack = _overlayStackView != null ? (WindowOverlayStack?)_overlayStackView.ToPlatform(mauiContext) : null;
 				}
+			}
+
+			// Fallback to HostMauiContext for native embedding (no MAUI Window).
+			if (windowOverlayStack == null && WindowOverlayHelper.HostMauiContext != null)
+			{
+				windowOverlayStack = _overlayStackView != null ? (WindowOverlayStack?)_overlayStackView.ToPlatform(WindowOverlayHelper.HostMauiContext) : null;
 			}
 
 			return windowOverlayStack is not null ? windowOverlayStack : new WindowOverlayStack(context);
@@ -246,6 +254,33 @@ namespace Syncfusion.Maui.Toolkit.Internals
 								_overlayContent = childView.ToPlatform(windowHandler.MauiContext);
 							}
 
+							return true;
+						}
+					}
+				}
+			}
+			else
+			{
+				// Native embedding path: no MAUI Window, use host Activity and IMauiContext set by the embedding app.
+				var activity = WindowOverlayHelper.HostActivity;
+				_density = WindowOverlayHelper._density;
+				_rootView = WindowOverlayHelper._platformRootView;
+				if (_rootView != null && activity != null)
+				{
+					_overlayStack = CreateStack(activity);
+					_windowManager = activity.WindowManager;
+					if (_overlayStack != null)
+					{
+						_overlayStack.LayoutChange += OnOverlayStackLayoutChange;
+						if (this._windowManagerLayoutParams == null)
+						{
+							this.GetWindowManagerLayoutParams();
+						}
+
+						// Prefer an existing native view if handler already realized.
+						if (WindowOverlayHelper.HostMauiContext != null)
+						{
+							_overlayContent = childView.ToPlatform(WindowOverlayHelper.HostMauiContext);
 							return true;
 						}
 					}
