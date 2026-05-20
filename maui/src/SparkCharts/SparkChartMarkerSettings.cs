@@ -88,5 +88,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			get => (SparkChartMarkerShape)GetValue(ShapeTypeProperty);
 			set => SetValue(ShapeTypeProperty, value);
 		}
+
+		internal bool HasBorder { get { return StrokeWidth > 0 && Stroke != default(Brush); } }
 	}
 }

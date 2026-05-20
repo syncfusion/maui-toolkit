@@ -8,15 +8,4 @@
         <Setter Property="ColumnDividerColor" Value="{DynamicResource SfDatePickerNormalColumnDividerColor}" />
     </Style>
 
-    <Style TargetType="picker:DatePickerColumnHeaderView">
-        <Setter Property="Background"  Value="{DynamicResource SfDatePickerNormalColumnHeaderBackground}"/>
-        <Setter Property="DividerColor"  Value="{DynamicResource SfDatePickerNormalColumnHeaderDividerColor}"/>
-
-        <Setter Property="TextStyle">
-            <Setter.Value>
-                <picker:PickerTextStyle TextColor="{DynamicResource SfDatePickerNormalColumnHeaderTextColor}" FontSize="{DynamicResource SfDatePickerNormalColumnHeaderFontSize}"/>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
 </ResourceDictionary>

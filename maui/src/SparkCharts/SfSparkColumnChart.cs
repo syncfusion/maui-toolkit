@@ -257,7 +257,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		/// <summary>
 		/// Determines the appropriate brush for a column based on its value and position.
 		/// </summary>
-		Brush GetFillPaint(int index, double yValue, double baseline)
+		internal Brush GetFillPaint(int index, double yValue, double baseline)
 		{
 			if (HighPointFill != null && yValue == maxYValue && yValue != baseline)
 			{

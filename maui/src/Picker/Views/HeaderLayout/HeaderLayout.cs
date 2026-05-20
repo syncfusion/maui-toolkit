@@ -139,7 +139,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void ResetHeaderHighlight()
         {
-            OnDateButtonClicked("Date");
+            if (_pickerInfo is SfDateTimePicker dateTimePicker)
+            {
+                if (dateTimePicker.ActiveView == DateTimePickerView.Time)
+                {
+                    OnTimeButtonClicked("Time");
+                }
+                else
+                {
+                    OnDateButtonClicked("Date");
+                }
+            }
+            else
+            {
+                OnDateButtonClicked("Date");
+            }
         }
 
         /// <summary>
@@ -213,7 +227,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     OnClick = OnDateNodeButtonClicked,
                 };
 
-                SfIconView buttonView = new SfIconView(SfIcon.TodayButton, _pickerInfo.HeaderView.SelectionTextStyle, _pickerInfo.HeaderView.DateText.ToString(), null, Colors.Transparent, isTabHighlight: true, semanticsNode: buttonViewNode);
+                bool isDateActive = true;
+                if (_pickerInfo is SfDateTimePicker dateTimePicker)
+                {
+                    isDateActive = dateTimePicker.ActiveView == DateTimePickerView.Date;
+                }
+
+                var dateStyle = isDateActive ? _pickerInfo.HeaderView.SelectionTextStyle : _pickerInfo.HeaderView.TextStyle;
+                SfIconView buttonView = new SfIconView(SfIcon.TodayButton, dateStyle, _pickerInfo.HeaderView.DateText.ToString(), null, Colors.Transparent, isTabHighlight: isDateActive, semanticsNode: buttonViewNode);
                 buttonView.DrawingOrder = DrawingOrder.AboveContent;
                 SfIconButton button = new SfIconButton(buttonView);
                 button.AutomationId = $"DateTimePicker DateHeaderView";
@@ -230,13 +251,24 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     IsTouchEnabled = true,
                     OnClick = OnTimeNodeButtonClicked,
                 };
-                SfIconView buttonView = new SfIconView(SfIcon.TodayButton, _pickerInfo.HeaderView.TextStyle, _pickerInfo.HeaderView.TimeText.ToString(), null, Colors.Transparent, semanticsNode: buttonViewNode);
+                
+                bool isTimeActive = false;
+                if (_pickerInfo is SfDateTimePicker dateTimePicker)
+                {
+                    isTimeActive = dateTimePicker.ActiveView == DateTimePickerView.Time;
+                }
+
+                var timeStyle = isTimeActive ? _pickerInfo.HeaderView.SelectionTextStyle : _pickerInfo.HeaderView.TextStyle;
+                SfIconView buttonView = new SfIconView(SfIcon.TodayButton, timeStyle, _pickerInfo.HeaderView.TimeText.ToString(), null, Colors.Transparent, isTabHighlight: isTimeActive, semanticsNode: buttonViewNode);
                 buttonView.DrawingOrder = DrawingOrder.AboveContent;
                 SfIconButton button = new SfIconButton(buttonView);
                 button.AutomationId = $"DateTimePicker TimeHeaderView";
                 Add(button);
                 button.Clicked = OnTimeButtonClicked;
             }
+
+            //// While remove and add header view, need to reset the header highlight and columns based on active view.
+            ResetHeaderHighlight();
         }
 
         /// <summary>
@@ -280,6 +312,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void OnTimeButtonClicked()
         {
+            _pickerInfo.OnTimeButtonClicked();
+
             if (Children.Count != 2 || _pickerInfo.HeaderTemplate != null)
             {
                 return;
@@ -297,7 +331,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 iconView.IsTabHighlight = true;
             }
 
-            _pickerInfo.OnTimeButtonClicked();
         }
 
         /// <summary>
@@ -305,6 +338,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void OnDateButtonClicked()
         {
+            _pickerInfo.OnDateButtonClicked();
+
             if (Children.Count != 2 || _pickerInfo.HeaderTemplate != null)
             {
                 return;
@@ -322,7 +357,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 dateIconView.IsTabHighlight = true;
             }
 
-            _pickerInfo.OnDateButtonClicked();
         }
 
         #endregion

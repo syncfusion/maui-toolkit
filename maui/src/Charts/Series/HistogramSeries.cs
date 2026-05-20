@@ -428,8 +428,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			// Check that HistogramInterval is not zero.
 			if (HistogramInterval != 0 && ShowNormalDistributionCurve)
 			{
+				canvas.SaveState();
 				_distributionSegment.DrawPoints = GetDistributionCurvePoints();
 				_distributionSegment.OnDraw(canvas);
+				canvas.RestoreState();
 			}
 		}
 

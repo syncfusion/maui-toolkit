@@ -27,10 +27,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
         SfBorder? _tabSelectionIndicator;
         SfHorizontalStackLayout? _tabHeaderItemContent;
         RoundRectangle? _roundRectangle;
+		internal SfBorder? _tabHeaderParentBorder;
+		RoundRectangle? _tabHeaderParenRoundRectangle;
 
 		// Dimension and positioning fields
 
-        double _previousTabX = 0d;
+		double _previousTabX = 0d;
         double _selectedTabX = 0d;
         double _currentIndicatorWidth = 0d;
 		double _tabHeaderImageSize = 32d;
@@ -1199,11 +1201,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					{
 						Size desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
 						_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
-						if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
+						var hasImage = HasValidImageSource(item.ImageSource);
+						if (hasImage && !string.IsNullOrEmpty(item.Header))
 						{
 							width = CalculateWidthWithImageAndText(item, desiredSize);
 						}
-						else if (item.ImageSource != null)
+						else if (hasImage)
 						{
 							width = _tabHeaderImageSize;
 						}
@@ -1705,7 +1708,34 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
-        void GetNextVisibleItem()
+		bool HasValidImageSource(ImageSource? source)
+		{
+			if (source is null)
+			{
+				return false;
+			}
+
+			if (source is FileImageSource file)
+			{
+				return !string.IsNullOrWhiteSpace(file.File);
+			}
+			else if (source is UriImageSource uri)
+			{
+				return uri.Uri is not null;
+			}
+			else if (source is FontImageSource font)
+			{
+				return !string.IsNullOrWhiteSpace(font.Glyph);
+			}
+			else if (source is StreamImageSource stream)
+			{
+				return stream.Stream is not null;
+			}
+
+			return true;
+		}
+
+		void GetNextVisibleItem()
         {
             double index = SelectedIndex;
             for (int i = SelectedIndex + 1; i < Items.Count; i++)
@@ -2186,17 +2216,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			if (item.IsVisible)
             {
                 double width;
-
+				var hasImage = HasValidImageSource(item.ImageSource);
 				if (item.HeaderContent != null)
 				{
 					Size headerContentSize = item.HeaderContent.Measure(double.PositiveInfinity, double.PositiveInfinity);
 					width = headerContentSize.Width + HeaderItemSpacing;
 				}
-				else if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
+				else if (hasImage && !string.IsNullOrEmpty(item.Header))
                 {
                     width = GetWidthForSizeToContentWithImageAndText(item, desiredSize);
                 }
-                else if (item.ImageSource != null)
+                else if (hasImage)
                 {
                     item.HeaderDisplayMode = TabBarDisplayMode.Image;
                     width = _tabHeaderImageSize + HeaderItemSpacing;
@@ -2396,11 +2426,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		void SetHeaderDisplayMode(SfTabItem item)
         {
-            if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
+			var hasImage = HasValidImageSource(item.ImageSource);
+
+			if (hasImage && !string.IsNullOrEmpty(item.Header))
             {
                 item.HeaderDisplayMode = HeaderDisplayMode;
             }
-            else if (item.ImageSource != null)
+            else if (hasImage)
             {
                 item.HeaderDisplayMode = TabBarDisplayMode.Image;
             }
@@ -2568,7 +2600,16 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				ColumnSpacing = 0,
 				RowSpacing = 0,
 			};
-            _backwardArrow = new ArrowIcon
+			_tabHeaderParenRoundRectangle = new RoundRectangle();
+			_tabHeaderParentBorder = new SfBorder()
+			{
+				HorizontalOptions = LayoutOptions.Fill,
+				StrokeThickness = 0,
+				Stroke = Colors.Transparent,
+				Content = _tabHeaderParentContainer,
+			};
+			_tabHeaderParentBorder.StrokeShape = _tabHeaderParenRoundRectangle;
+			_backwardArrow = new ArrowIcon
             {
                 ButtonArrowType = ArrowType.Backward
             };
@@ -2582,10 +2623,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
             // Add the scroll view to the parent container
             _tabHeaderParentContainer.Children.Add(_tabHeaderScrollView);
 
-            // Add parent container to the main layout
-            Children.Add(_tabHeaderParentContainer);
+			// Add parent container to the main layout
+			Children.Add(_tabHeaderParentBorder);
 
-        }
+		}
 
 		/// <summary>
 		/// Initialize the center button view placeholder.

@@ -90,4 +90,25 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		/// </summary>
 		Numeric
 	}
+
+	/// <summary>
+	/// Represents the mode of activation for the trackball feature in SparkCharts.
+	/// </summary>
+	internal enum SparkChartActivationMode
+	{
+		/// <summary>
+		/// Activates the trackball only on long press mode.
+		/// </summary>
+		LongPress,
+
+		/// <summary>
+		/// Activates the trackball only on touch move mode.
+		/// </summary>
+		TouchMove,
+
+		/// <summary>
+		/// Disables touch events and trackball activation.
+		/// </summary>
+		None
+	}
 }

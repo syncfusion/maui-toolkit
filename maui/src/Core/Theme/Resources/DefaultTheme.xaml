@@ -684,4 +684,12 @@
   <sys:Double x:Key="SfDateTimePickerNormalFontSize">16</sys:Double>
   <sys:Double x:Key="SfDateTimePickerSelectionCornerRadius">20</sys:Double>
   
+  <!--SfSparkChart-->
+  <local:StaticThemeResource x:Key="SfSparkChartTrackballLineStroke" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfSparkChartTrackballLabelBackground" ResourceKey="TooltipBackground" />
+  <local:StaticThemeResource x:Key="SfSparkChartTrackballLabelStroke" ResourceKey="TooltipBorder" />
+  <local:StaticThemeResource x:Key="SfSparkChartTrackballLabelTextColor" ResourceKey="TooltipForeground" />
+  <local:StaticThemeResource x:Key="SfSparkChartTrackballMarkerFill" ResourceKey="ContentForegroundAlt1" />
+  <sys:Double x:Key="SfSparkChartTrackballLabelTextFontSize">12</sys:Double>
+
 </local:SyncfusionThemeDictionary>

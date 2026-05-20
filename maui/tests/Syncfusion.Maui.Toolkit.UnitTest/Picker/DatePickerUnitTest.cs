@@ -38,6 +38,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Null(picker.AcceptCommand);
             Assert.Null(picker.DeclineCommand);
             Assert.Null(picker.SelectionChangedCommand);
+            Assert.False(picker.IsSelectionImmediate);
         }
 
         [Theory]
@@ -117,6 +118,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(PickerDateFormat.yyyy_MM_dd)]
         [InlineData(PickerDateFormat.MM_yyyy)]
         [InlineData(PickerDateFormat.MMM_yyyy)]
+        [InlineData(PickerDateFormat.MM_dd)]
+        [InlineData(PickerDateFormat.MMM_dd_yyyy)]
+        [InlineData(PickerDateFormat.MMMM_dd_yyyy)]
+        [InlineData(PickerDateFormat.MMMM_yyyy)]
+        [InlineData(PickerDateFormat.yyyy_MM)]
+        [InlineData(PickerDateFormat.yyyy_MMM)]
+        [InlineData(PickerDateFormat.yyyy_MMMM)]
+        [InlineData(PickerDateFormat.yyyy_MMM_dd)]
+        [InlineData(PickerDateFormat.yyyy_MMMM_dd)]
+        [InlineData(PickerDateFormat.dd_MMM)]
+        [InlineData(PickerDateFormat.dd_MMMM)]
+        [InlineData(PickerDateFormat.dd_MMMM_yyyy)]
+        [InlineData(PickerDateFormat.ddd_dd_MM_YYYY)]
         public void DatePicker_Format_DetAndSet(PickerDateFormat format)
         {
             SfDatePicker picker = new SfDatePicker();
@@ -564,6 +578,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             Assert.True(commandExecuted);
             Assert.Same(expectedValue, actualValue);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void DatePicker_IsSelectionImmediate_GetAndSet(bool expectedValue)
+        {
+            SfDatePicker picker = new SfDatePicker();
+            picker.IsSelectionImmediate = expectedValue;
+            bool actualValue = picker.IsSelectionImmediate;
+            Assert.Equal(expectedValue, actualValue);
         }
 
         #endregion
@@ -1685,10 +1710,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
         [InlineData(new string[] { "01", "02", "03", "04", "05" }, "dd", 10, 4)]
         [InlineData(new string[] { }, "dd", 5, -1)]
         [InlineData(new string[] { "1", "2", "3", "4", "5" }, "d", 3, 2)]
-        public void GetDayIndex_ReturnsCorrectIndex(string[] days, string format, int day, int exceptedValue)
+        public void GetDayIndex_ReturnsCorrectIndex(string[] days, string format, int day, int exceptedValue, int dayInterval = -1)
         {
             var observerdDays = new ObservableCollection<string>(days);
-            int index = DatePickerHelper.GetDayIndex(format, observerdDays, day);
+            int index = DatePickerHelper.GetDayIndex(format, observerdDays, day, dayInterval);
             Assert.Equal(exceptedValue, index);
         }
 
@@ -1724,6 +1749,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var months = new ObservableCollection<string> { "Jan", "Feb", "Mar", "Apr", "May" };
             int index = DatePickerHelper.GetMonthIndex("MMM", months, 3);
             Assert.Equal(2, index);
+        }
+
+        [Fact]
+        public void GetMonthIndex_GetFullMonthFormat_ReturnsCorrectIndex()
+        {
+            CultureInfo.CurrentCulture = new CultureInfo("en-US");
+            var months = new ObservableCollection<string> { "January", "February", "March", "April", "May" };
+            int index = DatePickerHelper.GetMonthIndex("MMMM", months, 6);
+            Assert.Equal(4, index);
         }
 
         [Fact]
@@ -2070,7 +2104,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             {
                 MinimumDate = new DateTime(2023, 1, 1),
                 MaximumDate = new DateTime(2023, 12, 31),
-                SelectedDate = new DateTime(2023, 6, 15)
+                SelectedDate = new DateTime(2023, 6, 01)
             };
             SetupPickerColumns(datePicker);
             var e = new PickerSelectionChangedEventArgs
@@ -2081,7 +2115,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             };
 
             InvokePrivateMethod(datePicker, "OnPickerSelectionIndexChanged", null, e);
-            Assert.Equal(new DateTime(2023, 7, 15), datePicker.SelectedDate);
+            Assert.Equal(new DateTime(2023, 7, 01), datePicker.SelectedDate);
         }
 
         [Fact]

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SparkChart.SfSparkChart.SparkChartTrackball"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SparkChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SparkCharts;assembly=Syncfusion.Maui.Toolkit">
+
+  <localCore:SampleView.BindingContext>
+    <local:SparkTrackballViewModel/>
+  </localCore:SampleView.BindingContext>
+
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <local:SparkChartColorResources/>
+      </ResourceDictionary.MergedDictionaries>
+
+      <Style TargetType="Label">
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="TextColor" Value="{AppThemeBinding Light=Black, Dark=White}"/>
+      </Style>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+
+  <localCore:SampleView.Content>
+
+    <Grid Padding="4">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto" />
+      </Grid.RowDefinitions>
+
+      <VerticalStackLayout Grid.Row="0" Spacing="10">
+        <Label Text="Sales growth comparison with various products" FontSize="18" FontAttributes="Bold" />
+
+        <!-- Header -->
+        <Grid BackgroundColor="{StaticResource ContentBackgroundAlt1}"
+              Padding="4"
+              HeightRequest="50">
+
+          <!-- Change column definitions to collapse 2023 on Phone -->
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1.6*" />
+            <!-- 2023 column -->
+            <ColumnDefinition>
+              <ColumnDefinition.Width>
+                <OnIdiom x:TypeArguments="GridLength"
+                 Phone="0"
+                 Desktop="2*" />
+              </ColumnDefinition.Width>
+            </ColumnDefinition>
+            <!-- 2024 -->
+            <ColumnDefinition Width="2*" />
+            <!-- 2025 -->
+            <ColumnDefinition Width="2*" />
+          </Grid.ColumnDefinitions>
+
+          <Label Text="Name" FontAttributes="Bold" Grid.Column="0"/>
+          <Label Text="2023" FontAttributes="Bold" Grid.Column="1" IsVisible="{OnIdiom Phone=false, Desktop=true}"/>
+          <Label Text="2024" FontAttributes="Bold" Grid.Column="2"/>
+          <Label Text="2025" FontAttributes="Bold" Grid.Column="3"/>
+
+          <BoxView Grid.ColumnSpan="4"
+                   VerticalOptions="End"
+                   HeightRequest="1"
+                   Color="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight},
+                                       Dark={StaticResource PreviewAreaBorderDark}}"/>
+        </Grid>
+      </VerticalStackLayout>
+
+      <!-- Data Rows -->
+      <CollectionView Grid.Row="1"
+                ItemsSource="{Binding Products}"
+                SelectionMode="None"
+                VerticalScrollBarVisibility="Never">
+
+        <CollectionView.ItemTemplate>
+          <DataTemplate>
+              <Grid ColumnSpacing="8"
+                    HeightRequest="60">
+              <!-- Change column definitions to collapse 2023 on Phone -->
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.6*" />
+                <!-- 2023 column -->
+                <ColumnDefinition>
+                  <ColumnDefinition.Width>
+                    <OnIdiom x:TypeArguments="GridLength"
+                             Phone="0"
+                             Desktop="2*" />
+                  </ColumnDefinition.Width>
+                </ColumnDefinition>
+                <!-- 2024 -->
+                <ColumnDefinition Width="2*" />
+                <!-- 2025 -->
+                <ColumnDefinition Width="2*" />
+              </Grid.ColumnDefinitions>
+
+              <Label Text="{Binding Name}" Grid.Column="0" HorizontalTextAlignment="Start"/>
+
+              <!-- 2023 -->
+              <Grid Padding="4" Grid.Column="1" IsVisible="{OnIdiom Phone=false, Desktop=true}">
+                <chart:SfSparkLineChart ItemsSource="{Binding SalesData2023}"
+                          StrokeWidth="1.5"
+                          ShowMarkers="False"
+                          Stroke="{AppThemeBinding Light={StaticResource series3Light}, Dark={StaticResource series3Dark}}">
+                  <chart:SfSparkLineChart.TrackballBehavior>
+                    <chart:SparkChartTrackballBehavior ShowLine="True" ShowMarkers="True"/>
+                  </chart:SfSparkLineChart.TrackballBehavior>
+                </chart:SfSparkLineChart>
+              </Grid>
+
+              <!-- 2024 -->
+                <Grid Padding="4" Grid.Column="2">
+                  <chart:SfSparkLineChart ItemsSource="{Binding SalesData2024}"
+                                          StrokeWidth="1.5"
+                                          ShowMarkers="False"
+                                          Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}">
+                    <chart:SfSparkLineChart.TrackballBehavior>
+                      <chart:SparkChartTrackballBehavior ShowLine="True" ShowMarkers="True"/>
+                    </chart:SfSparkLineChart.TrackballBehavior>
+                  </chart:SfSparkLineChart>
+                </Grid>
+
+                <!-- 2025 -->
+                <Grid Padding="4" Grid.Column="3">
+                  <chart:SfSparkLineChart ItemsSource="{Binding SalesData2025}"
+                                          StrokeWidth="1.5"
+                                          ShowMarkers="False"
+                                          Stroke="{AppThemeBinding Light={StaticResource series5Light}, Dark={StaticResource series5Dark}}">
+                    <chart:SfSparkLineChart.TrackballBehavior>
+                      <chart:SparkChartTrackballBehavior ShowLine="True" ShowMarkers="True" />
+                    </chart:SfSparkLineChart.TrackballBehavior>
+                  </chart:SfSparkLineChart>
+                </Grid>
+
+                <BoxView Grid.ColumnSpan="4"
+                         VerticalOptions="End"
+                         HeightRequest="1"
+                         Color="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight},
+                                             Dark={StaticResource PreviewAreaBorderDark}}"/>
+              </Grid>
+          </DataTemplate>
+        </CollectionView.ItemTemplate>
+      </CollectionView>
+
+      <Label Grid.Row="2" Text="Press and hold to enable trackball." HorizontalOptions="Center" FontSize="12" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}" Opacity="0.8" IsVisible="{OnPlatform WinUI='False', MacCatalyst='False', Android='True',iOS='True'}"/>
+    </Grid>
+  </localCore:SampleView.Content>
+</localCore:SampleView>

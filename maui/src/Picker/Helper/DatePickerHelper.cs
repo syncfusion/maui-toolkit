@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit.Picker
 {
@@ -30,8 +31,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
         internal static string GetMonthString(string format, int month)
         {
             bool isAbbreviatedMonth = format == "MMM";
+            bool isFullMonth = format == "MMMM";
             bool isSingleDigitMonth = format == "M";
-            if (isAbbreviatedMonth)
+            bool isMonthDay = format == "MM_ddd";
+            if (isMonthDay)
+            {
+                string weekDay = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month);
+                return $"{month:00}_{weekDay}";
+            }
+            else if (isFullMonth)
+            {
+                return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(month);
+            }
+            else if (isAbbreviatedMonth)
             {
                 return CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(month);
             }
@@ -175,10 +187,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             bool isAbbreviatedMonth = format == "MMM";
+            bool isFullMonth = format == "MMMM";
             bool isSingleDigitMonth = format == "M";
+            bool isMonthDay = format == "MM_ddd";
             for (int i = minimumMonth; i <= maximumMonth; i += monthInterval)
             {
-                if (isAbbreviatedMonth)
+                if (isMonthDay)
+                {
+                    string monthValue = $"{i:00}";
+                    string weekday = new DateTime(year, i, 1).ToString("ddd", CultureInfo.CurrentCulture);
+                    months.Add($"{monthValue}, {weekday}");
+                }
+                else if (isFullMonth)
+                {
+                    months.Add(CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(i));
+                }
+                else if (isAbbreviatedMonth)
                 {
                     months.Add(CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(i));
                 }
@@ -226,8 +250,24 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             bool isSingleDigitDay = format == "d";
+            bool isTripleDigitDay = format == "ddd_dd";
+            bool isDayYear = format == "ddd_yyyy";
             for (int i = minimumDate; i <= maximumDate; i += dayInterval)
             {
+                if (isTripleDigitDay)
+                {
+                    string dayOfWeek = new DateTime(year, month, i).ToString("ddd", CultureInfo.CurrentCulture);
+                    days.Add($"{dayOfWeek}, {i:00}");
+                    continue;
+                }
+
+                if (isDayYear)
+                {
+                    string dayOfWeek = new DateTime(year, month, i).ToString("ddd", CultureInfo.CurrentCulture);
+                    days.Add($"{dayOfWeek}, {year}");
+                    continue;
+                }
+
                 string dayValue = isSingleDigitDay ? $"{i:0}" : $"{i:00}";
                 days.Add(dayValue);
             }
@@ -235,14 +275,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return days;
         }
 
-        /// <summary>
-        /// Method to return the index value for day value inside the days string collection based on format.
-        /// </summary>
-        /// <param name="format">The day format.</param>
-        /// <param name="days">The days collection.</param>
-        /// <param name="day">The day value.</param>
-        /// <returns>Returns index of the day value. if the day value not placed inside the days collection then return the nearby value.</returns>
-        internal static int GetDayIndex(string format, ObservableCollection<string> days, int day)
+		/// <summary>
+		/// Method to return the index value for day value inside the days string collection based on format.
+		/// </summary>
+		/// <param name="format">The day format.</param>
+		/// <param name="days">The days collection.</param>
+		/// <param name="day">The day value.</param>
+		/// <param name="dayInterval">The day interval value.</param>
+		/// <returns>Returns index of the day value. if the day value not placed inside the days collection then return the nearby value.</returns>
+		internal static int GetDayIndex(string format, ObservableCollection<string> days, int day, int dayInterval)
         {
             if (string.IsNullOrEmpty(format))
             {
@@ -250,7 +291,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             string dayString = GetDayString(format, day);
-            int index = days.IndexOf(dayString);
+            int index = -1;
+            if (format == "ddd_yyyy")
+            {
+                index = (day - 1) / dayInterval;
+            }
+            else if (format == "ddd_dd")
+            {
+                index = days.Select((value, idx) => new { value, idx })
+                    .FirstOrDefault(x => x.value.Contains(dayString, StringComparison.OrdinalIgnoreCase))?.idx ?? -1;
+            }
+            else
+            {
+                index = days.IndexOf(dayString);
+            }
+
             if (index != -1)
             {
                 return index;
@@ -258,7 +313,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             for (int i = 0; i < days.Count; i++)
             {
-                string dayItem = days[i];
+                string dayItem = days[i].Length <= 2 ? days[i] : days[i].Substring(days[i].Length - 2);
                 if (int.Parse(dayItem) > day)
                 {
                     index = i;
@@ -330,12 +385,29 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             List<string> monthStrings = new List<string>();
             bool isAbbreviatedMonth = format == "MMM";
-            if (isAbbreviatedMonth)
+            bool isFullMonth = format == "MMMM";
+            bool isMonthDay = format == "MM_ddd";
+            if (isFullMonth)
+            {
+                monthStrings = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
+            }
+            else if (isAbbreviatedMonth || isMonthDay)
             {
                 monthStrings = DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames.ToList();
             }
 
-            if (isAbbreviatedMonth)
+            if (isMonthDay)
+            {
+                for (int i = 0; i < months.Count; i++)
+                {
+                    string numericMonth = months[i].Substring(0, 2);
+                    if (int.Parse(numericMonth) >= month)
+                    {
+                        return i;
+                    }
+                }
+            }
+            else if (isAbbreviatedMonth || isFullMonth)
             {
                 for (int i = 0; i < months.Count; i++)
                 {
@@ -437,6 +509,92 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     dayFormat = "dd";
                     monthFormat = "MM";
                     formatStringOrder = new List<int>() { 2, 1, 0 };
+                    break;
+
+                case "MM_dd":
+                    dayFormat = "dd";
+                    monthFormat = "MM";
+                    formatStringOrder = new List<int>() { 1, 0 };
+                    break;
+
+                case "MMM_dd_yyyy":
+                    dayFormat = "dd";
+                    monthFormat = "MMM";
+                    formatStringOrder = new List<int>() { 1, 0, 2 };
+                    break;
+
+                case "MMMM_dd_yyyy":
+                    dayFormat = "dd";
+                    monthFormat = "MMMM";
+                    formatStringOrder = new List<int>() { 1, 0, 2 };
+                    break;
+
+                case "MMMM_yyyy":
+                    monthFormat = "MMMM";
+                    formatStringOrder = new List<int>() { 1, 2 };
+                    break;
+
+                case "yyyy_MM":
+                    monthFormat = "MM";
+                    formatStringOrder = new List<int>() { 2, 1 };
+                    break;
+
+                case "yyyy_MMM":
+                    monthFormat = "MMM";
+                    formatStringOrder = new List<int>() { 2, 1 };
+                    break;
+
+                case "yyyy_MMMM":
+                    monthFormat = "MMMM";
+                    formatStringOrder = new List<int>() { 2, 1 };
+                    break;
+
+                case "yyyy_MMM_dd":
+                    dayFormat = "dd";
+                    monthFormat = "MMM";
+                    formatStringOrder = new List<int>() { 2, 1, 0 };
+                    break;
+
+                case "yyyy_MMMM_dd":
+                    dayFormat = "dd";
+                    monthFormat = "MMMM";
+                    formatStringOrder = new List<int>() { 2, 1, 0 };
+                    break;
+
+                case "dd_MMM":
+                    dayFormat = "dd";
+                    monthFormat = "MMM";
+                    formatStringOrder = new List<int>() { 0, 1 };
+                    break;
+
+                case "dd_MMMM":
+                    dayFormat = "dd";
+                    monthFormat = "MMMM";
+                    formatStringOrder = new List<int>() { 0, 1 };
+                    break;
+
+                case "dd_MMMM_yyyy":
+                    dayFormat = "dd";
+                    monthFormat = "MMMM";
+                    formatStringOrder = new List<int>() { 0, 1, 2 };
+                    break;
+
+                case "ddd_dd_MM_YYYY":
+                    dayFormat = "ddd_dd";
+                    monthFormat = "MM";
+                    formatStringOrder = new List<int> { 0, 1, 2 };
+                    break;
+
+                case "yyyy_MM_ddd_dd":
+                    dayFormat = "ddd_dd";
+                    monthFormat = "MM";
+                    formatStringOrder = new List<int> { 2, 1, 0 };
+                    break;
+
+                case "MM_ddd_ddd_yyyy":
+                    dayFormat = "ddd_yyyy";
+                    monthFormat = "MM_ddd";
+                    formatStringOrder = new List<int> { 1, 0 };
                     break;
 
                 default:
@@ -579,24 +737,87 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return false;
         }
 
-        /// <summary>
-        /// Method to check the current time is black out date or not.
-        /// </summary>
-        /// <param name="isDateOnlyComparison">Determines calculation compares date only.</param>
-        /// <param name="currentValue">Current selected value.</param>
-        /// <param name="blackOutDate">An black out date.</param>
-        /// <param name="selectedDate">Selected date value.</param>
-        /// <returns>Returns true or false based on blackout date.</returns>
-        internal static bool IsBlackoutDate(bool isDateOnlyComparison, string currentValue, DateTime blackOutDate, DateTime selectedDate)
+		/// <summary>
+		/// Method to check the current time is black out date or not.
+		/// </summary>
+		/// <param name="isDateOnlyComparison">Determines calculation compares date only.</param>
+		/// <param name="currentValue">Current selected value.</param>
+		/// <param name="blackOutDate">An black out date.</param>
+		/// <param name="selectedDate">Selected date value.</param>
+		/// <param name="format">The format value</param>
+		/// <param name="index">The index value.</param>
+		/// <param name="dayInterval">The day interval value.</param>
+		/// <returns>Returns true or false based on blackout date.</returns>
+		internal static bool IsBlackoutDate(bool isDateOnlyComparison, string currentValue, DateTime blackOutDate, DateTime selectedDate, PickerDateFormat? format = null, int? index = null, int? dayInterval = null)
         {
             if (isDateOnlyComparison)
             {
                 return blackOutDate.Date == selectedDate.Date;
             }
+            else if (format == PickerDateFormat.MM_ddd_ddd_yyyy)
+            {
+                return blackOutDate.Day == index * dayInterval + 1 && blackOutDate.Month == selectedDate.Month && blackOutDate.Year == selectedDate.Year;
+            }
             else
             {
-                return blackOutDate.Year == selectedDate.Year && blackOutDate.Month == selectedDate.Month && blackOutDate.Day == int.Parse(currentValue);
+                int value = currentValue.Length <= 2 ? int.Parse(currentValue) : int.Parse(currentValue.Substring(currentValue.Length - 2));
+                return blackOutDate.Year == selectedDate.Year && blackOutDate.Month == selectedDate.Month && blackOutDate.Day == value;
             }
+        }
+
+        /// <summary>
+        /// Determines whether the specified date format excludes the day column.
+        /// When the day column is missing, updating the selected date is restricted
+        /// for blackout conditions based on the day value; otherwise, the selected
+        /// date can be updated.
+        /// </summary>
+        /// <param name="format">The date format to evaluate.</param>
+        /// <returns>
+        /// <c>true</c> if the day column is not present in the specified format; otherwise, <c>false</c>.
+        /// </returns>
+        internal static bool IsDayColumnMissing(PickerDateFormat format)
+        {
+            switch (format)
+            {
+                case PickerDateFormat.yyyy_MM:
+                case PickerDateFormat.yyyy_MMM:
+                case PickerDateFormat.yyyy_MMMM:
+                case PickerDateFormat.MM_yyyy:
+                case PickerDateFormat.MMM_yyyy:
+                case PickerDateFormat.MMMM_yyyy:
+                    return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Get the value for current date based on day format and column index.
+        /// </summary>
+        /// <param name="pickerInfo">The picker info.</param>
+        /// <param name="pickerColumn">The picker column.</param>
+        /// <param name="index">The current index.</param>
+        /// <param name="currentValue">The current value.</param>
+        /// <returns>Returns the current value based on the day format.</returns>
+        internal static string GetCurrentValueForDay(IPickerView pickerInfo, PickerColumn pickerColumn, int index, string currentValue)
+        {
+            if (pickerInfo == null || pickerColumn == null)
+            {
+                return currentValue;
+            }
+
+            //// Only special-case the triple-day format; otherwise use the displayed (possibly trimmed) value.
+            if (pickerInfo is SfDatePicker datePicker && datePicker.Format == PickerDateFormat.ddd_dd_MM_YYYY)
+            {
+                return UpdateCurrentDateValueForDay(datePicker.BaseColumns, pickerColumn, index, datePicker.Format, currentValue);
+            }
+
+            if (pickerInfo is SfDateTimePicker dateTimePicker && dateTimePicker.DateFormat == PickerDateFormat.ddd_dd_MM_YYYY)
+            {
+                return UpdateCurrentDateValueForDay(dateTimePicker.BaseColumns, pickerColumn, index, dateTimePicker.DateFormat, currentValue);
+            }
+
+            return currentValue;
         }
 
         #endregion
@@ -639,6 +860,44 @@ namespace Syncfusion.Maui.Toolkit.Picker
             // Distinct Method is used to store only unique values in the list.
             formatOrder = formatOrder.Distinct().ToList();
             return formatOrder;
+        }
+
+        /// <summary>
+        /// Updates the current date value for the day column when the date format
+        /// includes a day component (for example, when using the "ddd_dd" format).
+        /// If the specified column does not represent the day component or if the
+        /// required data is unavailable, the existing value is returned unchanged.
+        /// </summary>
+        /// <param name="baseColumns">The base columns.</param>
+        /// <param name="pickerColumn">The picker column.</param>
+        /// <param name="index">The current index.</param>
+        /// <param name="format">The date format.</param>
+        /// <param name="value">The current date value.</param>
+        /// <returns>Returns the date value based on the day format. Otherwise current value.</returns>
+        static string UpdateCurrentDateValueForDay(IList baseColumns, PickerColumn pickerColumn, int index, PickerDateFormat format, string value)
+        {
+            List<int> formatString = GetFormatStringOrder(out _, out _, format);
+            if (baseColumns == null || pickerColumn == null || formatString == null || formatString.Count <= pickerColumn._columnIndex)
+            {
+                return value;
+            }
+
+            int formatIndex = formatString[pickerColumn._columnIndex];
+            if (formatIndex == 0)
+            {
+                if (pickerColumn._columnIndex < 0 || pickerColumn._columnIndex >= baseColumns.Count)
+                {
+                    return value;
+                }
+
+                var columns = baseColumns[pickerColumn._columnIndex] as PickerColumn;
+                if (columns?.ItemsSource is ObservableCollection<string> itemsSource && index >= 0 && index < itemsSource.Count)
+                {
+                    return itemsSource[index];
+                }
+            }
+
+            return value;
         }
 
         #endregion

@@ -88,7 +88,7 @@ namespace Syncfusion.Maui.Toolkit
 #endif
             //// - TODO directly clip the parent view cause the crash in the view. So, we add the grid view for the clip purpose.
             clipView.Add(this.EffectsView);
-            Add(EffectsView);
+            Add(clipView);
             EffectsView.Content = child;
             EffectsView.ShouldIgnoreTouches = true;
             this.AddTouchListener(this);

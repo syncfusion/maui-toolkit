@@ -233,6 +233,15 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 #endif
 
 		/// <summary>
+        /// Method to update the selected date based on the semantics node clicked.
+        /// </summary>
+        /// <param name="node">The semantics node.</param>
+        private void OnDateSemanticsNodeClicked(SemanticsNode node)
+        {
+            _calendarViewInfo.UpdateSelectedDate(_visibleDates[node.Id]);
+        }
+
+        /// <summary>
 		/// Method to draw the start range selection highlight
 		/// </summary>
 		/// <param name="canvas">The canvas to draw</param>
@@ -2079,6 +2088,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     Id = i,
                     Text = dateText,
                     Bounds = new Rect(highlightXPosition, highlightYPosition, highlightWidth, highlightHeight),
+                    IsTouchEnabled = true,
+                    OnClick = OnDateSemanticsNodeClicked,
                 };
 
                 _semanticsNodes.Add(node);
@@ -2251,7 +2262,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 			// Check if a SelectionCellTemplate is defined in the calendar configuration
 			if (_calendarViewInfo.SelectionCellTemplate != null && _calendarViewInfo.SelectionMode == CalendarSelectionMode.Single)
 			{
-				// If the custom layout container is null, exit early — nothing to process
+				// If the custom layout container is null, exit early - nothing to process
 				if (customSnapLayout == null)
 				{
 					return;

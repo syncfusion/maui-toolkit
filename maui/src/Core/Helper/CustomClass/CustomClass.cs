@@ -15,5 +15,7 @@
 	internal partial class SfImage : Image { }
 
 	internal partial class SfVerticalStackLayout : VerticalStackLayout { }
+
+	internal partial class SfAbsoluteLayout : AbsoluteLayout { }
 }
 

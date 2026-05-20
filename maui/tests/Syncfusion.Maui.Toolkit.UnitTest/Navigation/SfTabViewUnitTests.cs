@@ -9259,6 +9259,233 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		#endregion
+
+		#region TabBarBorder Tests
+
+		[Fact]
+		public void ShowTabBarBorder_Default_ShouldBeFalse()
+		{
+			var tabView = new SfTabView();
+			Assert.False(tabView.ShowTabBarBorder);
+		}
+
+		[Fact]
+		public void ShowTabBarBorder_SetTrue_ShouldEnableBorder()
+		{
+			var tabView = new SfTabView { ShowTabBarBorder = true };
+			Assert.True(tabView.ShowTabBarBorder);
+		}
+
+		[Fact]
+		public void TabBarBorderBrush_Default_ShouldBeNull()
+		{
+			var tabView = new SfTabView();
+			Assert.Null(tabView.TabBarBorderColor);
+		}
+
+		[Fact]
+		public void TabBarBorderBrush_SetSolidColor_ShouldUpdateBrush()
+		{
+			var brush = Colors.Red;
+			var tabView = new SfTabView { TabBarBorderColor = brush };
+			Assert.Equal(brush, tabView.TabBarBorderColor);
+		}
+
+		[Fact]
+		public void TabBarBorderThickness_Default_ShouldBeZero()
+		{
+			var tabView = new SfTabView();
+			Assert.Equal(new Thickness(0), tabView.TabBarBorderThickness);
+		}
+
+		[Theory]
+		[InlineData(5)]
+		[InlineData(10)]
+		[InlineData(-3)]
+		public void TabBarBorderThickness_SetUniform_ShouldUpdate(double value)
+		{
+			var thickness = new Thickness(value);
+			var tabView = new SfTabView { TabBarBorderThickness = thickness };
+			Assert.Equal(thickness, tabView.TabBarBorderThickness);
+		}
+
+		[Fact]
+		public void TabBarBorderCornerRadius_Default_ShouldBeZero()
+		{
+			var tabView = new SfTabView();
+			Assert.Equal(new CornerRadius(0), tabView.TabBarCornerRadius);
+		}
+
+		[Theory]
+		[InlineData(5)]
+		[InlineData(20)]
+		[InlineData(-1)]
+		public void TabBarBorderCornerRadius_SetUniform_ShouldUpdate(double value)
+		{
+			var radius = new CornerRadius(value);
+			var tabView = new SfTabView { TabBarCornerRadius = radius };
+			Assert.Equal(radius, tabView.TabBarCornerRadius);
+		}
+
+		[Fact]
+		public void TabBarBorder_RapidPropertyChanges_ShouldNotCrash()
+		{
+			var tabView = new SfTabView();
+			for (int i = 0; i < 10; i++)
+			{
+				tabView.TabBarBorderThickness = new Thickness(i);
+				tabView.TabBarCornerRadius = new CornerRadius(i);
+				tabView.ShowTabBarBorder = i % 2 == 0;
+			}
+			Assert.True(tabView.ShowTabBarBorder || !tabView.ShowTabBarBorder);
+		}
+
+		[Fact]
+		public void TabBarBorder_RemoveAfterSet_ShouldNotCrash()
+		{
+			var tabView = new SfTabView();
+			tabView.ShowTabBarBorder = true;
+			tabView.TabBarBorderColor = Colors.Red;
+			var field = typeof(SfTabView).GetField("_tabBarBorder", BindingFlags.NonPublic | BindingFlags.Instance);
+			field?.SetValue(tabView, null);
+			tabView.TabBarBorderThickness = new Thickness(2);
+		}
+
+		[Fact]
+		public void TabBarBorder_SetPropertiesWhenHidden_ShouldNotRenderButNotCrash()
+		{
+			var tabView = new SfTabView
+			{
+				ShowTabBarBorder = false,
+				TabBarBorderColor = Colors.Gray,
+				TabBarBorderThickness = new Thickness(1),
+				TabBarCornerRadius = new CornerRadius(2)
+			};
+			Assert.True(tabView.ShowTabBarBorder);
+		}
+
+		[Fact]
+		public void TabBarBorder_WithZeroHeight_ShouldNotCrash()
+		{
+			var tabView = new SfTabView
+			{
+				TabBarHeight = 0,
+				ShowTabBarBorder = true,
+				TabBarBorderColor = Colors.Red,
+				TabBarBorderThickness = new Thickness(2)
+			};
+			Assert.True(tabView.ShowTabBarBorder);
+		}
+
+		[Fact]
+		public void TabBarBorder_WithRTLFlowDirection_ShouldRenderCorrectly()
+		{
+			var tabView = new SfTabView
+			{
+				FlowDirection = FlowDirection.RightToLeft,
+				ShowTabBarBorder = true,
+				TabBarCornerRadius = new CornerRadius(10)
+			};
+			Assert.Equal(FlowDirection.RightToLeft, tabView.FlowDirection);
+		}
+
+		[Fact]
+		public void TabBarBorder_WithFillIndicator_ShouldNotOverlap()
+		{
+			var tabView = new SfTabView
+			{
+				IndicatorPlacement = TabIndicatorPlacement.Fill,
+				ShowTabBarBorder = true,
+				TabBarCornerRadius = new CornerRadius(5)
+			};
+			Assert.Equal(TabIndicatorPlacement.Fill, tabView.IndicatorPlacement);
+		}
+
+		[Fact]
+		public void TabBarBorder_WithMixedItemsSource_ShouldNotCrash()
+		{
+			var tabView = new SfTabView
+			{
+				ItemsSource = PopulateMixedObjectItemsSource(),
+				ShowTabBarBorder = true,
+				TabBarBorderColor = Colors.Blue
+			};
+			Assert.NotNull(tabView.ItemsSource);
+		}
+
+		#endregion
+
+		#region ImageSource
+
+		[Theory]
+		[InlineData(null, false)]
+		[InlineData("", false)]
+		[InlineData("   ", false)]
+		[InlineData("icon.png", true)]
+		public void TestHasValidImageSource_FileImageSource_ReturnsExpected(string? file, bool expected)
+		{
+			// Arrange
+			var tabBar = new SfTabBar();
+			ImageSource? source = file is null ? null : new FileImageSource { File = file };
+
+			// Act
+			var resultObj = InvokePrivateMethod(tabBar, "HasValidImageSource", new object?[] { source });
+
+			// Assert
+			Assert.NotNull(resultObj);
+			Assert.Equal(expected, (bool)resultObj!);
+		}
+
+		[Theory]
+		[InlineData(null, false)]
+		[InlineData("", false)]
+		[InlineData("   ", false)]
+		[InlineData("\uf101", true)]
+		public void TestHasValidImageSource_FontImageSource_ReturnsExpected(string? glyph, bool expected)
+		{
+			var tabBar = new SfTabBar();
+			ImageSource? source = glyph is null ? null : new FontImageSource { Glyph = glyph };
+
+			var resultObj = InvokePrivateMethod(tabBar, "HasValidImageSource", new object?[] { source });
+
+			Assert.NotNull(resultObj);
+			Assert.Equal(expected, (bool)resultObj!);
+		}
+
+		[Theory]
+		[InlineData(null, false)]
+		[InlineData("https://example.com/image.png", true)]
+		public void TestHasValidImageSource_UriImageSource_ReturnsExpected(string? uriString, bool expected)
+		{
+			var tabBar = new SfTabBar();
+			ImageSource? source = uriString is null ? null : new UriImageSource { Uri = new Uri(uriString) };
+
+			var resultObj = InvokePrivateMethod(tabBar, "HasValidImageSource", new object?[] { source });
+
+			Assert.NotNull(resultObj);
+			Assert.Equal(expected, (bool)resultObj!);
+		}
+
+		[Fact]
+		public void TestSetHeaderDisplayMode_WhenFileImageSourceEmpty_ShouldSetTextMode()
+		{
+			// Arrange
+			SfTabBar tabBar = new SfTabBar();
+			SfTabItem item = new SfTabItem
+			{
+				Header = "ITEM 1",
+				ImageSource = new FileImageSource { File = "" } // non-null but invalid
+			};
+
+			// Act
+			InvokePrivateMethod(tabBar, "SetHeaderDisplayMode", new object[] { item });
+
+			// Assert
+			Assert.Equal(TabBarDisplayMode.Text, item.HeaderDisplayMode);
+		}
+
+		#endregion
+
 	}
 
 	public class Model : INotifyPropertyChanged

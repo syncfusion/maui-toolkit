@@ -20,6 +20,9 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		float _density = 1f;
 		PlatformView? _overlayContent;
 
+		// Flag to prevent scheduling multiple pending reposition attempts.
+		private bool overlayPositionScheduled = false;
+
 		/// <summary>
 		/// WindowManagerLayoutParams for Window overlay.
 		/// </summary>
@@ -407,6 +410,38 @@ namespace Syncfusion.Maui.Toolkit.Internals
 					}
 					else
 					{
+						// 1020224: On devices using an RTL language (such as Arabic), the popup appears
+						// at an incorrect position during the initial display even though the calculated
+						// X and Y coordinates are correct. This issue occurs when the overlay stack is
+						// attached to the WindowManager, as it may not yet be measured during the first
+						// layout pass. To address this, a one-time reposition is scheduled after the
+						// layout completes, and this retry is limited to RTL layouts only.
+
+						var isRtl = (platformWindow != null && platformWindow.DecorView.LayoutDirection == Android.Views.LayoutDirection.Rtl);
+
+						if (isRtl && _overlayStack != null && _overlayStack.Parent != WindowOverlayHelper._platformRootView)
+						{
+							var decorViewContent = WindowOverlayHelper._decorViewContent;
+							bool stackNotReady = _overlayStack.Width == 0 || (decorViewContent != null && _overlayStack.Width != decorViewContent.Width);
+							if (stackNotReady)
+							{
+								if (!overlayPositionScheduled)
+								{
+									overlayPositionScheduled = true;
+									// Post to the view's message queue so this runs after layout.
+									_overlayStack.Post(new Action(() =>
+									{
+										overlayPositionScheduled = false;
+										_overlayContent.SetX(posX);
+										_overlayContent.SetY(posY);
+									}));
+								}
+
+								// Return early; the posted retry will set the coordinates later.
+								return;
+							}
+						}
+
 						_overlayContent.SetX(posX);
 						_overlayContent.SetY(posY);
 					}

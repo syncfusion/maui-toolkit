@@ -4,6 +4,7 @@
       <Control Title="Spark Charts" StatusTag="New" ControlName="SfSparkChart" Description="Visualize data in a lightweight view." Image="sparklinechart.png">
         <Sample Title="Getting started" SampleName="ChartTypes" SearchTags="spark, sparkline ,sparkline chart, charts, sparkarea, sparkcolumn, sparkwinloss"/>
         <Sample Title="Sales Report" SampleName="SalesReport" SearchTags="spark, sparkline ,sparkline chart, charts, sparkarea, sparkcolumn, sales report, sparkwinloss"/>
+        <Sample Title="Trackball" SampleName="SparkChartTrackball" Description="This sample showcases the trackball feature. On mobile phones, long press on the chart to show the trackball, and drag the chart to change the position of the trackball. You can move the cursor over the chart area to display the trackball on the desktop." SearchTags="trackball, crosshair"/>
       </Control>
   </ControlCategory>
 </SyncfusionControls>

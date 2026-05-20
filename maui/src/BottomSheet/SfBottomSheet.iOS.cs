@@ -3,8 +3,8 @@ using Syncfusion.Maui.Toolkit.Platform;
 using UIKit;
 namespace Syncfusion.Maui.Toolkit.BottomSheet
 {
-    public partial class SfBottomSheet
-    {
+	public partial class SfBottomSheet
+	{
 		#region Fields
 
 		/// <summary>
@@ -28,7 +28,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
             }
         }
 
-		void WireEvents()
+        void WireEvents()
 		{
 			if (Handler?.PlatformView is LayoutViewExt nativeView)
 			{

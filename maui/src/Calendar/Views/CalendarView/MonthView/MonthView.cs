@@ -2897,6 +2897,20 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         }
 
         /// <summary>
+        /// Method to get the clicked date from the semantics node and update the selected date in calendar view info.
+        /// </summary>
+        /// <param name="node">The semantics node.</param>
+        private void OnDateSemanticsNodeClicked(SemanticsNode node)
+        {
+            Point centerPoint = new Point(node.Bounds.X + (node.Bounds.Width / 2), node.Bounds.Y + (node.Bounds.Height / 2));
+            DateTime? clickedDate = CalendarViewHelper.GetMonthDateFromPosition(centerPoint, Width, Height, _calendarViewInfo, _visibleDates);
+            if (clickedDate != null)
+            {
+                _calendarViewInfo.UpdateSelectedDate(clickedDate);
+            }
+        }
+
+        /// <summary>
         /// Method to create the semantics node for each virtual view with bounds inside the month view.
         /// </summary>
         /// <param name="width">The width.</param>
@@ -3076,6 +3090,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     Id = j + (int)visibleWeeks,
                     Text = dateText,
                     Bounds = new Rect(monthXPosition, monthYPosition, monthCellWidth, monthCellHeight),
+                    IsTouchEnabled = true,
+                    OnClick = OnDateSemanticsNodeClicked,
                 };
 
                 _semanticsNodes.Add(monthCellsNodes);

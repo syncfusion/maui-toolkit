@@ -216,6 +216,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             Assert.Null(picker.AcceptCommand);
             Assert.Null(picker.DeclineCommand);
             Assert.Null(picker.SelectionChangedCommand);
+            Assert.False(picker.IsSelectionImmediate);
         }
 
         [Theory]
@@ -617,6 +618,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             Assert.True(commandExecuted);
             Assert.Same(expectedValue, actualValue);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Picker_IsSelectionImmediate_GetAndSet(bool expectedValue)
+        {
+            SfPicker picker = new SfPicker();
+            picker.IsSelectionImmediate = expectedValue;
+            bool actualValue = picker.IsSelectionImmediate;
+            Assert.Equal(expectedValue, actualValue);
         }
 
         #endregion

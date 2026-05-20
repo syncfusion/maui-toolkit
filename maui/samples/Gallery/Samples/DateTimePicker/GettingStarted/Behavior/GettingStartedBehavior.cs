@@ -1,5 +1,6 @@
 using Syncfusion.Maui.Toolkit.Picker;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
 {
@@ -22,6 +23,11 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
         /// The date format combo box.
         /// </summary>
         Microsoft.Maui.Controls.Picker? _dateFormatComboBox, _timeFormatComboBox, _textDisplayComboBox;
+
+        /// <summary>
+        /// The active view radio buttons.
+        /// </summary>
+        Microsoft.Maui.Controls.RadioButton? _activeViewDateButton, _activeViewTimeButton;
 
         /// <summary>
         /// The date format to set the combo box item source.
@@ -47,6 +53,11 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
         /// Get the previous selected date and time from date time picker.
         /// </summary>
         DateTime? _previousDate;
+
+        /// <summary>
+        /// Internal flag to avoid event recursion when syncing ActiveView.
+        /// </summary>
+        bool _isInternalActiveViewUpdate;
 
         /// <summary>
         /// Begins when the behavior attached to the view 
@@ -98,6 +109,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
             };
 
             _dateTimePicker.SelectionChanged += DateTimePicker_SelectionChanged;
+            _dateTimePicker.PropertyChanged += DateTimePicker_PropertyChanged;
             _showHeaderSwitch = sampleView.Content.FindByName<Switch>("showHeaderSwitch");
             _showColumnHeaderSwitch = sampleView.Content.FindByName<Switch>("showColumnHeaderSwitch");
             _showFooterSwitch = sampleView.Content.FindByName<Switch>("showFooterSwitch");
@@ -107,7 +119,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
 
             _dateFormat = new ObservableCollection<object>()
             {
-                 "dd MM", "dd MM yyyy", "dd MMM yyyy", "M d yyyy", "MM dd yyyy", "MM yyyy", "MMM yyyy", "yyyy MM dd", "Default"
+                 "dd MM", "dd MM yyyy", "dd MMM yyyy", "M d yyyy", "MM dd yyyy", "MM yyyy", "MMM yyyy", "yyyy MM dd","MM dd", "MMM dd yyyy", "MMMM dd yyyy", "MMMM yyyy", "yyyy MM", "yyyy MMM", "yyyy MMMM", "yyyy MMM dd", "yyyy MMMM dd", "dd MMM", "dd MMMM", "dd MMMM yyyy", "ddd dd MM YYYY", "Default"
             };
 
             _timeFormat = new ObservableCollection<object>()
@@ -135,6 +147,15 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
             _textDisplayComboBox.SelectedIndex = 0;
             _textDisplayComboBox.SelectedIndexChanged += TextdisplayComboBox_SelectionChanged;
 
+            _activeViewDateButton = sampleView.Content.FindByName<Microsoft.Maui.Controls.RadioButton>("activeViewDateButton");
+            _activeViewTimeButton = sampleView.Content.FindByName<Microsoft.Maui.Controls.RadioButton>("activeViewTimeButton");
+            _activeViewDateButton.CheckedChanged += ActiveViewComboBox_SelectionChanged;
+            _activeViewTimeButton.CheckedChanged += ActiveViewComboBox_SelectionChanged; 
+
+
+            // Sync initial state from picker to combo box
+            SyncActiveViewToComboBox();
+
             if (_showHeaderSwitch != null)
             {
                 _showHeaderSwitch.Toggled += ShowHeaderSwitch_Toggled;
@@ -161,12 +182,12 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
             }
         }
 
-        /// <summary>
-        /// Method to handle the selection changed of the date time picker.
-        /// </summary>
-        /// <param name="sender">The sender object.</param>
-        /// <param name="e">The event args.</param>
-        void DateTimePicker_SelectionChanged(object? sender, DateTimePickerSelectionChangedEventArgs e)
+		/// <summary>
+		/// Method to handle the selection changed of the date time picker.
+		/// </summary>
+		/// <param name="sender">The sender object.</param>
+		/// <param name="e">The event args.</param>
+		void DateTimePicker_SelectionChanged(object? sender, DateTimePickerSelectionChangedEventArgs e)
         {
             if (_clearSelectionSwitch != null && e.NewValue != null)
             {
@@ -309,6 +330,59 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
                     case "yyyy MM dd":
                         _dateTimePicker.DateFormat = PickerDateFormat.yyyy_MM_dd;
                         break;
+                        
+                    case "MM dd":
+                        _dateTimePicker.DateFormat = PickerDateFormat.MM_dd;
+                        break;
+
+                    case "MMM dd yyyy":
+                        _dateTimePicker.DateFormat = PickerDateFormat.MMM_dd_yyyy;
+                        break;
+
+                    case "MMMM dd yyyy":
+                        _dateTimePicker.DateFormat = PickerDateFormat.MMMM_dd_yyyy;
+                        break;
+                        
+                    case "MMMM yyyy":
+                        _dateTimePicker.DateFormat = PickerDateFormat.MMMM_yyyy;
+                        break;
+
+                    case "yyyy MM":
+                        _dateTimePicker.DateFormat = PickerDateFormat.yyyy_MM;
+                        break;
+
+                    case "yyyy MMM":
+                        _dateTimePicker.DateFormat = PickerDateFormat.yyyy_MMM;
+                        break;
+
+                    case "yyyy MMMM":
+                        _dateTimePicker.DateFormat = PickerDateFormat.yyyy_MMMM;
+                        break;
+
+                    case "yyyy MMM dd":
+                        _dateTimePicker.DateFormat = PickerDateFormat.yyyy_MMM_dd;
+                        break;
+
+                    case "yyyy MMMM dd":
+                        _dateTimePicker.DateFormat = PickerDateFormat.yyyy_MMMM_dd;
+                        break;
+
+                    case "dd MMM":
+                        _dateTimePicker.DateFormat = PickerDateFormat.dd_MMM;
+                        break;
+
+                    case "dd MMMM":
+                        _dateTimePicker.DateFormat = PickerDateFormat.dd_MMMM;
+                        break;
+
+                    case "dd MMMM yyyy":
+                        _dateTimePicker.DateFormat = PickerDateFormat.dd_MMMM_yyyy;
+                        break;
+
+                    case "ddd dd MM YYYY":
+                        _dateTimePicker.DateFormat = PickerDateFormat.ddd_dd_MM_YYYY;
+                        break;
+
                     case "Default":
                         _dateTimePicker.DateFormat = PickerDateFormat.Default;
                         break;
@@ -433,6 +507,101 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
         }
 
         /// <summary>
+        /// The Active view combo box selection changed event.
+        /// </summary>
+        /// <param name="sender">Return the object.</param>
+        /// <param name="e">The Event Arguments.</param>
+        void ActiveViewComboBox_SelectionChanged(object? sender, EventArgs e)
+		{
+			if (_isInternalActiveViewUpdate)
+            {
+                return;
+            }
+
+            if (_dateTimePicker == null || _activeViewDateButton == null || _activeViewTimeButton == null)
+            {
+                return;
+            }
+
+            if (sender is Microsoft.Maui.Controls.RadioButton radioButton)
+            {
+                string? format = radioButton.Value.ToString();
+                try
+                {
+                    _isInternalActiveViewUpdate = true;
+                    switch (format)
+                    {
+                        case "Date":
+                            _dateTimePicker.ActiveView = DateTimePickerView.Date;
+                            break;
+
+                        case "Time":
+                            _dateTimePicker.ActiveView = DateTimePickerView.Time;
+                            break;
+                    }
+                }
+                finally
+                {
+                    _isInternalActiveViewUpdate = false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles property changes on the <see cref="SfDateTimePicker"/>.
+        /// When activeView changes, this method
+        /// synchronizes the value into the UI combo box unless the change was
+        /// initiated internally by the behavior.
+        /// </summary>
+        /// <param name="sender">The <see cref="SfDateTimePicker"/> raising the event.</param>
+        /// <param name="e">Property change event arguments.</param>
+        void DateTimePicker_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Toolkit.Picker.SfDateTimePicker.ActiveView))
+            {
+                if (_isInternalActiveViewUpdate)
+                {
+                    return;
+                }
+
+                SyncActiveViewToComboBox();
+            }
+        }
+
+        /// <summary>
+        /// Updates the `activeViewComboBox` selection to match
+        /// Uses an internal guard to avoid recursive events when the selection is set programmatically.
+        /// </summary>
+        void SyncActiveViewToComboBox()
+        {
+            if (_dateTimePicker == null)
+            {
+                return;
+            }
+
+            var desired = _dateTimePicker.ActiveView == DateTimePickerView.Date ? "Date" : "Time";
+
+            try
+            {
+                _isInternalActiveViewUpdate = true;
+                switch (desired)
+                {
+                    case "Date":
+                        _activeViewDateButton?.IsChecked = true;
+                        break;
+
+                    case "Time":
+                        _activeViewTimeButton?.IsChecked = true;
+                        break;
+                }
+            }
+            finally
+            {
+                _isInternalActiveViewUpdate = false;
+            }
+        }
+
+        /// <summary>
         /// Begins when the behavior attached to the view 
         /// </summary>
         /// <param name="sampleView">bindable value</param>
@@ -468,12 +637,19 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDateTimePicker
                 _showEnableLoopingSwitch.Toggled -= EnableLoopingSwitch_Toggled;
                 _showEnableLoopingSwitch = null;
             }
+
+            if (_dateTimePicker != null)
+            {
+                _dateTimePicker.SelectionChanged -= DateTimePicker_SelectionChanged;
+                _dateTimePicker.PropertyChanged -= DateTimePicker_PropertyChanged;
+                _dateTimePicker = null;
+            }
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GettingStartedBehavior"/> class.
-        /// </summary>
-        public GettingStartedBehavior()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GettingStartedBehavior"/> class.
+		/// </summary>
+		public GettingStartedBehavior()
         {
         }
     }

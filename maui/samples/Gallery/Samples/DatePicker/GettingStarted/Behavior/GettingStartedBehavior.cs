@@ -95,7 +95,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDatePicker
 
             _formats = new ObservableCollection<object>()
             {
-                 "dd MM", "dd MM yyyy", "dd MMM yyyy", "M d yyyy", "MM dd yyyy", "MM yyyy", "MMM yyyy", "yyyy MM dd", "Default"
+                 "dd MM", "dd MM yyyy", "dd MMM yyyy", "M d yyyy", "MM dd yyyy", "MM yyyy", "MMM yyyy", "yyyy MM dd","MM dd", "MMM dd yyyy", "MMMM dd yyyy", "MMMM yyyy", "yyyy MM", "yyyy MMM", "yyyy MMMM", "yyyy MMM dd", "yyyy MMMM dd", "dd MMM", "dd MMMM", "dd MMMM yyyy", "ddd dd MM YYYY", "Default"
             };
 
             _formatComboBox = sampleView.Content.FindByName<Microsoft.Maui.Controls.Picker>("formatComboBox");
@@ -311,6 +311,59 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfDatePicker
                     case "yyyy MM dd":
                         _datePicker.Format = PickerDateFormat.yyyy_MM_dd;
                         break;
+
+                    case "MM dd":
+                        _datePicker.Format = PickerDateFormat.MM_dd;
+                        break;
+
+                    case "MMM dd yyyy":
+                        _datePicker.Format = PickerDateFormat.MMM_dd_yyyy;
+                        break;
+
+                    case "MMMM dd yyyy":
+                        _datePicker.Format = PickerDateFormat.MMMM_dd_yyyy;
+                        break;
+                        
+                    case "MMMM yyyy":
+                        _datePicker.Format = PickerDateFormat.MMMM_yyyy;
+                        break;
+
+                    case "yyyy MM":
+                        _datePicker.Format = PickerDateFormat.yyyy_MM;
+                        break;
+
+                    case "yyyy MMM":
+                        _datePicker.Format = PickerDateFormat.yyyy_MMM;
+                        break;
+
+                    case "yyyy MMMM":
+                        _datePicker.Format = PickerDateFormat.yyyy_MMMM;
+                        break;
+
+                    case "yyyy MMM dd":
+                        _datePicker.Format = PickerDateFormat.yyyy_MMM_dd;
+                        break;
+
+                    case "yyyy MMMM dd":
+                        _datePicker.Format = PickerDateFormat.yyyy_MMMM_dd;
+                        break;
+
+                    case "dd MMM":
+                        _datePicker.Format = PickerDateFormat.dd_MMM;
+                        break;
+
+                    case "dd MMMM":
+                        _datePicker.Format = PickerDateFormat.dd_MMMM;
+                        break;
+
+                    case "dd MMMM yyyy":
+                        _datePicker.Format = PickerDateFormat.dd_MMMM_yyyy;
+                        break;
+
+                    case "ddd dd MM YYYY":
+                        _datePicker.Format = PickerDateFormat.ddd_dd_MM_YYYY;
+                        break;
+                        
                     case "Default":
                         _datePicker.Format = PickerDateFormat.Default;
                         break;

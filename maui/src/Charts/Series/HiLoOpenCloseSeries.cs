@@ -188,30 +188,27 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (_segments[index] is HiLoOpenCloseSegment segment)
 			{
-				if (segment.IsBull && segment.IsFill)
+				if (this is CandleSeries candleSeries)
 				{
-					fillColor = Fill != null ? fillColor : BullishFill;
-				}
-				else if (!(segment.IsBull) && !(segment.IsFill))
-				{
-					fillColor = Brush.Transparent;
-				}
-				else if (segment.IsBull)
-				{
-					if (this is CandleSeries)
+					if (candleSeries.EnableSolidCandle)
 					{
-						fillColor = Fill != null ? fillColor
-									: (this is CandleSeries series && series.EnableSolidCandle ? BullishFill : Brush.Transparent);
-
+						fillColor = Fill ?? (segment.IsBull ? BullishFill : BearishFill);
 					}
 					else
 					{
-						fillColor = Fill != null ? fillColor : BullishFill;
+						if (!segment.IsFill)
+						{
+							fillColor = Brush.Transparent;
+						}
+						else
+						{
+							fillColor = Fill ?? (segment.IsBull ? BullishFill : BearishFill);
+						}
 					}
 				}
 				else
 				{
-					fillColor = Fill != null ? fillColor : BearishFill;
+					fillColor = Fill ?? (segment.IsBull ? BullishFill : BearishFill);
 				}
 			}
 
@@ -227,8 +224,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return;
 			}
 
-			bool isFill;
-
 			for (int i = 0; i < PointsCount; i++)
 			{
 				if (i > 0)
@@ -236,17 +231,26 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					_ = CloseValues[i - 1];
 				}
 
+				bool isFill;
 				bool isBull;
 
-				if (this is CandleSeries series)
+				if (this is CandleSeries candleSeries)
 				{
-					isFill = series.EnableSolidCandle || !(OpenValues[i] < CloseValues[i]);
-					isBull = series.EnableSolidCandle ? OpenValues[i] < CloseValues[i] : (i == 0 ? OpenValues[i] : CloseValues[i - 1]) <= CloseValues[i];
+					if (candleSeries.EnableSolidCandle)
+					{
+						isFill = true;
+						isBull = CloseValues[i] > OpenValues[i];
+					}
+					else
+					{
+						isFill = CloseValues[i] <= OpenValues[i];
+						isBull = CloseValues[i] >= (i == 0 ? OpenValues[i] : CloseValues[i - 1]);
+					}
 				}
 				else
 				{
-					isBull = OpenValues[i] < CloseValues[i];
-					isFill = OpenValues[i] > CloseValues[i];
+					isFill = true;
+					isBull = CloseValues[i] > OpenValues[i];
 				}
 
 				var x = xValues[i];

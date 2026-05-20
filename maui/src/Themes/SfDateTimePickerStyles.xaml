@@ -27,15 +27,4 @@
 
     </Style>
 
-    <Style TargetType="picker:DateTimePickerColumnHeaderView">
-        <Setter Property="Background"  Value="{DynamicResource SfDateTimePickerNormalColumnHeaderBackground}"/>
-        <Setter Property="DividerColor"  Value="{DynamicResource SfDateTimePickerNormalColumnHeaderDividerColor}"/>
-
-        <Setter Property="TextStyle">
-            <Setter.Value>
-                <picker:PickerTextStyle TextColor="{DynamicResource SfDateTimePickerNormalColumnHeaderTextColor}" FontSize="{DynamicResource SfDateTimePickerNormalColumnHeaderFontSize}"/>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
 </ResourceDictionary>

@@ -134,10 +134,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					return;
 				}
 
+				// Convert screen coordinates to bottom sheet local coordinates
+				double localY = e.Position.Y - _bottomSheet.TranslationY;
+
+				// If SwipeFromHeaderOnly is enabled, only allow gestures starting in grabber area (Y between 0 and ~33)
+				if (SwipeFromHeaderOnly)
+				{
+					double grabberHeight = GrabberAreaHeight + 3; // 30 + 3 margin
+					if (localY < 0 || localY > grabberHeight)
+					{
+						return;
+					}
+				}
+
 				// Only arm the sheet manipulation immediately if not over a scrollable
 				if (!_isPointerInsideScrollable)
 				{
-					OnHandleTouch(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+					OnHandleTouch(PointerActions.Pressed, new Point(e.Position.X, localY));
 					_isManipulationStarted = true;
 				}
 			}
@@ -167,10 +180,23 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					return;
 				}
 
+				// Convert screen coordinates to bottom sheet local coordinates
+				double localY = point.Y - _bottomSheet.TranslationY;
+
+				// If SwipeFromHeaderOnly is enabled, only allow if touch starts in grabber area
+				if (SwipeFromHeaderOnly)
+				{
+					double grabberHeight = GrabberAreaHeight + 3; // GrabberAreaHeight + 3 margin
+					if (localY < 0 || localY > grabberHeight)
+					{
+						return;
+					}
+				}
+
 				// If NOT inside a scrollable, start sheet gesture now
 				if (!_isPointerInsideScrollable)
 				{
-					OnHandleTouch(PointerActions.Pressed, new Point(point.X, point.Y));
+					OnHandleTouch(PointerActions.Pressed, new Point(point.X, localY));
 				}
 
 				if (e.Pointer.PointerDeviceType == Microsoft.UI.Input.PointerDeviceType.Touch)
@@ -215,14 +241,17 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				}
 
 				var point = e.GetCurrentPoint(_bottomSheetNativeView).Position;
-				double dy = point.Y - _lastPointerY;
+				
+				// Convert to local coordinates if we have a bottom sheet
+				double localY = _bottomSheet is not null ? point.Y - _bottomSheet.TranslationY : point.Y;
+				double dy = localY - _lastPointerY;
 
 				if (_isPointerInsideScrollable && _activeScrollViewer is not null)
 				{
 					// While inner can scroll in this direction, do NOT route to sheet
 					if (CanInnerScroll(_activeScrollViewer, dy))
 					{
-						_lastPointerY = point.Y;
+						_lastPointerY = localY;
 						return; // inner ScrollViewer consumes it naturally
 					}
 
@@ -230,7 +259,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					if (!_handoffToSheet)
 					{
 						// Synthesize a 'Pressed' at the current pointer location before we send Moved
-						OnHandleTouch(PointerActions.Pressed, new Point(point.X, point.Y));
+						OnHandleTouch(PointerActions.Pressed, new Point(point.X, localY));
 						_handoffToSheet = true;
 
 						// Optional: capture pointer so we keep getting move events even if the finger drifts
@@ -245,11 +274,11 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				//  - a handoff has happened.
 				if (!_isPointerInsideScrollable || _handoffToSheet)
 				{
-					OnHandleTouch(PointerActions.Moved, new Point(point.X, point.Y));
+					OnHandleTouch(PointerActions.Moved, new Point(point.X, localY));
 					_sheetWasDragged = true;
 				}
 
-				_lastPointerY = point.Y;
+				_lastPointerY = localY;
 			}
 		}
 
@@ -263,10 +292,13 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			if (_bottomSheetNativeView is not null)
 			{
 				var point = e.GetCurrentPoint(_bottomSheetNativeView).Position;
+				
+				// Convert to local coordinates if we have a bottom sheet
+				double localY = _bottomSheet is not null ? point.Y - _bottomSheet.TranslationY : point.Y;
 
 				if (!_isPointerInsideScrollable || _handoffToSheet)
 				{
-					OnHandleTouch(PointerActions.Released, new Point(point.X, point.Y));
+					OnHandleTouch(PointerActions.Released, new Point(point.X, localY));
 				}
 
 				try
@@ -296,7 +328,9 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				// Only release if the sheet gesture was active
 				if (!_isPointerInsideScrollable || _handoffToSheet)
 				{
-					OnHandleTouch(PointerActions.Released, new Point(e.Position.X, e.Position.Y));
+					// Convert to local coordinates if we have a bottom sheet
+					double localY = _bottomSheet is not null ? e.Position.Y - _bottomSheet.TranslationY : e.Position.Y;
+					OnHandleTouch(PointerActions.Released, new Point(e.Position.X, localY));
 					_isManipulationStarted = false;
 					_sheetWasDragged = false;
 				}
@@ -315,13 +349,15 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				// Only forward deltas if we are not over a scrollable OR we have handed off
 				if (!_isPointerInsideScrollable || _handoffToSheet)
 				{
-					OnHandleTouch(PointerActions.Moved, new Point(e.Position.X, e.Position.Y));
+					// Convert to local coordinates if we have a bottom sheet
+					double localY = _bottomSheet is not null ? e.Position.Y - _bottomSheet.TranslationY : e.Position.Y;
+					OnHandleTouch(PointerActions.Moved, new Point(e.Position.X, localY));
 					_sheetWasDragged = true;
 
-					// Boundary check remains as-is
-					if (e.Position.Y < 0 || e.Position.Y > Height)
+					// Boundary check: use local Y coordinate
+					if (localY < 0 || localY > Height)
 					{
-						OnHandleTouch(PointerActions.Released, new Point(e.Position.X, e.Position.Y));
+						OnHandleTouch(PointerActions.Released, new Point(e.Position.X, localY));
 					}
 				}
 			}
