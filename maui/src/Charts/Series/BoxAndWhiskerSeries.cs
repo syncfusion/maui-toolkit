@@ -1040,6 +1040,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (yList.Length > 0)
 				{
+					// The quartile, whisker, and min/max calculations below all rely on ascending values.
 					Array.Sort(yList);
 					average = yList.Average();
 				}
@@ -1086,7 +1087,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 				else
 				{
-					// yList is already sorted, so use direct index access instead of LINQ Min/Max.
+					// yList was sorted above and is not modified afterwards, so first/last entries are the min/max.
 					minimum = yList[0];
 					maximum = yList[^1];
 				}
