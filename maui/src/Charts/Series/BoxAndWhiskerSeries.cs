@@ -1086,8 +1086,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 				else
 				{
-					minimum = yList.Min();
-					maximum = yList.Max();
+					// yList is already sorted, so use direct index access instead of LINQ Min/Max.
+					minimum = yList[0];
+					maximum = yList[^1];
 				}
 
 				double actualMinimum = minimum;
