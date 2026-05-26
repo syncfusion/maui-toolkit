@@ -33,6 +33,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			List<string> groupingValues = [];
 			List<object> groupedDatas = [];
+			var groupingSet = new HashSet<string>(StringComparer.Ordinal);
 
 			foreach (CartesianSeries series in RegisteredSeries.Cast<CartesianSeries>())
 			{
@@ -40,9 +41,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					if (groupedDatas.Count != 0)
 					{
-						for (int j = 0; j <= xValues.Count - 1; j++)
+						for (int j = 0; j < xValues.Count; j++)
 						{
-							if (!groupingValues.Contains(xValues[j]))
+							if (groupingSet.Add(xValues[j]))
 							{
 								groupingValues.Add(xValues[j]);
 							}
@@ -51,11 +52,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					else
 					{
 						groupingValues.AddRange(xValues);
+						foreach (var val in xValues)
+						{
+							groupingSet.Add(val);
+						}
 					}
 				}
-				else if (series.ActualXValues != null)
+				else if (series.ActualXValues is List<double> doubleValues)
 				{
-					groupingValues.AddRange(from val in (series.ActualXValues as List<double>) select val.ToString());
+					foreach (var val in doubleValues)
+					{
+						var strVal = val.ToString();
+						if (groupingSet.Add(strVal))
+						{
+							groupingValues.Add(strVal);
+						}
+					}
 				}
 
 				if (groupingValues.Count != groupedDatas.Count)
@@ -66,15 +78,34 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			var distinctXValues = groupingValues.Distinct().ToList();
 
+			// Build an O(1) lookup dictionary for index resolution instead of O(n) IndexOf calls
+			var indexLookup = new Dictionary<string, int>(distinctXValues.Count, StringComparer.Ordinal);
+			for (int i = 0; i < distinctXValues.Count; i++)
+			{
+				indexLookup[distinctXValues[i]] = i;
+			}
+
 			foreach (CartesianSeries series in RegisteredSeries.Cast<CartesianSeries>())
 			{
 				if (series.ActualXValues is List<string> list)
 				{
-					series.GroupedXValuesIndexes = (from val in list select (double)distinctXValues.IndexOf(val)).ToList();
+					var indexes = new List<double>(list.Count);
+					foreach (var val in list)
+					{
+						indexes.Add(indexLookup.TryGetValue(val, out int idx) ? idx : -1);
+					}
+
+					series.GroupedXValuesIndexes = indexes;
 				}
-				else if (series.ActualXValues != null)
+				else if (series.ActualXValues is List<double> doubleList)
 				{
-					series.GroupedXValuesIndexes = (from val in series.ActualXValues as List<double> select (double)distinctXValues.IndexOf(val.ToString())).ToList();
+					var indexes = new List<double>(doubleList.Count);
+					foreach (var val in doubleList)
+					{
+						indexes.Add(indexLookup.TryGetValue(val.ToString(), out int idx) ? idx : -1);
+					}
+
+					series.GroupedXValuesIndexes = indexes;
 				}
 
 				series.GroupedXValues = distinctXValues;
