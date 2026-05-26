@@ -1,3 +1,5 @@
+using Microsoft.Maui.Graphics;
+using System.Numerics;
 using Syncfusion.Maui.Toolkit.SunburstChart;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
@@ -1778,7 +1780,144 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
 
         #endregion
 
+        #region SeriesView OnDraw Performance Tests
 
+        [Fact]
+        public void SeriesView_OnDraw_WithEmptySegments_DoesNotThrow()
+        {
+            // Arrange
+            SfSunburstChart sunburstChart = new();
+            var seriesView = new SeriesView(sunburstChart);
+
+            // Act & Assert - Should not throw with empty segments
+            var exception = Record.Exception(() =>
+                InvokePrivateMethod(seriesView, "OnDraw", new MockCanvas(), new RectF(0, 0, 100, 100)));
+
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void SeriesView_OnDraw_WithSegments_NoSelection_DoesNotThrow()
+        {
+            // Arrange
+            SfSunburstChart sunburstChart = new();
+            var segment = new SunburstSegment();
+            sunburstChart.Segments.Add(segment);
+            var seriesView = new SeriesView(sunburstChart);
+
+            // Act & Assert - Should not throw when drawing without selection
+            var exception = Record.Exception(() =>
+                InvokePrivateMethod(seriesView, "OnDraw", new MockCanvas(), new RectF(0, 0, 100, 100)));
+
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void SeriesView_OnDraw_WithSegments_WithSelection_DoesNotThrow()
+        {
+            // Arrange
+            SfSunburstChart sunburstChart = new();
+            sunburstChart.SelectionSettings = new SunburstSelectionSettings();
+
+            var selectedSegment = new SunburstSegment();
+            selectedSegment.IsSelected = true;
+            var unselectedSegment = new SunburstSegment();
+            unselectedSegment.IsSelected = false;
+
+            sunburstChart.Segments.Add(unselectedSegment);
+            sunburstChart.Segments.Add(selectedSegment);
+            sunburstChart.SelectedSunburstItems.Add(new SunburstItem());
+
+            var seriesView = new SeriesView(sunburstChart);
+
+            // Act & Assert - Should not throw when drawing with selection active
+            var exception = Record.Exception(() =>
+                InvokePrivateMethod(seriesView, "OnDraw", new MockCanvas(), new RectF(0, 0, 100, 100)));
+
+            Assert.Null(exception);
+        }
+
+        [Fact]
+        public void SeriesView_OnDraw_WithMixedSelection_DrawsAllSegments()
+        {
+            // Arrange
+            SfSunburstChart sunburstChart = new();
+            sunburstChart.SelectionSettings = new SunburstSelectionSettings();
+
+            var segment1 = new SunburstSegment { IsSelected = false };
+            var segment2 = new SunburstSegment { IsSelected = true };
+            var segment3 = new SunburstSegment { IsSelected = false };
+
+            sunburstChart.Segments.Add(segment1);
+            sunburstChart.Segments.Add(segment2);
+            sunburstChart.Segments.Add(segment3);
+            sunburstChart.SelectedSunburstItems.Add(new SunburstItem());
+
+            var seriesView = new SeriesView(sunburstChart);
+
+            // Act & Assert - Verify all segments are handled without error
+            var exception = Record.Exception(() =>
+                InvokePrivateMethod(seriesView, "OnDraw", new MockCanvas(), new RectF(0, 0, 200, 200)));
+
+            Assert.Null(exception);
+        }
+
+        #endregion
+
+
+    }
+
+    /// <summary>
+    /// Minimal mock ICanvas implementation for unit testing draw operations.
+    /// </summary>
+    internal class MockCanvas : ICanvas
+    {
+        public float DisplayScale { get; set; } = 1;
+        public float StrokeSize { get; set; }
+        public float StrokeDashOffset { get; set; }
+        public float MiterLimit { get; set; } = 10;
+        public Color StrokeColor { get; set; } = Colors.Black;
+        public LineCap StrokeLineCap { get; set; }
+        public LineJoin StrokeLineJoin { get; set; }
+        public float[] StrokeDashPattern { get; set; } = [];
+        public Color FillColor { get; set; } = Colors.White;
+        public Color FontColor { get; set; } = Colors.Black;
+        public IFont Font { get; set; } = Microsoft.Maui.Graphics.Font.Default;
+        public float FontSize { get; set; } = 12;
+        public float Alpha { get; set; } = 1;
+        public bool Antialias { get; set; } = true;
+        public BlendMode BlendMode { get; set; }
+
+        public void ClipPath(PathF path, WindingMode windingMode = WindingMode.NonZero) { }
+        public void ClipRectangle(float x, float y, float width, float height) { }
+        public void ConcatenateTransform(Matrix3x2 transform) { }
+        public void DrawArc(float x, float y, float width, float height, float startAngle, float endAngle, bool clockwise, bool closed) { }
+        public void DrawEllipse(float x, float y, float width, float height) { }
+        public void DrawImage(Microsoft.Maui.Graphics.IImage image, float x, float y, float width, float height) { }
+        public void DrawLine(float x1, float y1, float x2, float y2) { }
+        public void DrawPath(PathF path) { }
+        public void DrawRectangle(float x, float y, float width, float height) { }
+        public void DrawRoundedRectangle(float x, float y, float width, float height, float cornerRadius) { }
+        public void DrawString(string value, float x, float y, HorizontalAlignment horizontalAlignment) { }
+        public void DrawString(string value, float x, float y, float width, float height, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment, TextFlow textFlow = TextFlow.ClipBounds, float lineSpacingAdjustment = 0) { }
+        public void DrawText(Microsoft.Maui.Graphics.Text.IAttributedText value, float x, float y, float width, float height) { }
+        public void FillArc(float x, float y, float width, float height, float startAngle, float endAngle, bool clockwise) { }
+        public void FillEllipse(float x, float y, float width, float height) { }
+        public void FillPath(PathF path, WindingMode windingMode = WindingMode.NonZero) { }
+        public void FillRectangle(float x, float y, float width, float height) { }
+        public void FillRoundedRectangle(float x, float y, float width, float height, float cornerRadius) { }
+        public SizeF GetStringSize(string value, IFont font, float fontSize) => new(100, 20);
+        public SizeF GetStringSize(string value, IFont font, float fontSize, HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) => new(100, 20);
+        public void ResetState() { }
+        public bool RestoreState() => true;
+        public void Rotate(float degrees, float x, float y) { }
+        public void Rotate(float degrees) { }
+        public void SaveState() { }
+        public void Scale(float sx, float sy) { }
+        public void SetFillPaint(Paint paint, RectF rectangle) { }
+        public void SetShadow(SizeF offset, float blur, Color color) { }
+        public void SubtractFromClip(float x, float y, float width, float height) { }
+        public void Translate(float tx, float ty) { }
     }
 }
 

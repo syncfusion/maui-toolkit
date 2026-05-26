@@ -1,7 +1,6 @@
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
-using System.Linq;
 
 namespace Syncfusion.Maui.Toolkit.SunburstChart
 {
@@ -42,27 +41,78 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             canvas.SaveState();
             canvas.Translate(0, 0);
 
-            if (_chart.Segments.Count > 0)
+            var segments = _chart.Segments;
+
+            if (segments.Count > 0)
             {
-                // Determine if selection is active
                 var hasSelection = _chart.SelectionSettings != null && _chart.SelectedSunburstItems.Count > 0;
-                var segmentsCollection = hasSelection ? _chart.Segments.OrderBy(s => s.IsSelected ? 1 : 0).ToList() : _chart.Segments.ToList();
 
 #if WINDOWS
-                foreach  (var segment in segmentsCollection)
+                if (hasSelection)
                 {
-                    canvas.SaveState();
-                    segment.Draw(canvas);
-                    canvas.RestoreState();
+                    // Draw unselected segments first, then selected on top (two passes, zero allocation)
+                    for (int i = 0; i < segments.Count; i++)
+                    {
+                        var segment = segments[i];
+                        if (!segment.IsSelected)
+                        {
+                            canvas.SaveState();
+                            segment.Draw(canvas);
+                            canvas.RestoreState();
+                        }
+                    }
+
+                    for (int i = 0; i < segments.Count; i++)
+                    {
+                        var segment = segments[i];
+                        if (segment.IsSelected)
+                        {
+                            canvas.SaveState();
+                            segment.Draw(canvas);
+                            canvas.RestoreState();
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < segments.Count; i++)
+                    {
+                        canvas.SaveState();
+                        segments[i].Draw(canvas);
+                        canvas.RestoreState();
+                    }
                 }
 #else
 				// Other platforms drawing approach
 				canvas.SaveState();
 
-				foreach (var segment in segmentsCollection)
-                {
-                    segment.Draw(canvas);
-                }
+				if (hasSelection)
+				{
+					for (int i = 0; i < segments.Count; i++)
+					{
+						var segment = segments[i];
+						if (!segment.IsSelected)
+						{
+							segment.Draw(canvas);
+						}
+					}
+
+					for (int i = 0; i < segments.Count; i++)
+					{
+						var segment = segments[i];
+						if (segment.IsSelected)
+						{
+							segment.Draw(canvas);
+						}
+					}
+				}
+				else
+				{
+					for (int i = 0; i < segments.Count; i++)
+					{
+						segments[i].Draw(canvas);
+					}
+				}
 
                 canvas.RestoreState();
 #endif
