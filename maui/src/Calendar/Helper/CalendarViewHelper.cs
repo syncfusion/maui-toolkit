@@ -14,6 +14,18 @@ namespace Syncfusion.Maui.Toolkit.Calendar
     /// </summary>
     internal static class CalendarViewHelper
     {
+        #region Fields
+
+        static readonly GregorianCalendar s_gregorianCalendar = new GregorianCalendar();
+        static readonly HijriCalendar s_hijriCalendar = new HijriCalendar();
+        static readonly PersianCalendar s_persianCalendar = new PersianCalendar();
+        static readonly ThaiBuddhistCalendar s_thaiBuddhistCalendar = new ThaiBuddhistCalendar();
+        static readonly TaiwanCalendar s_taiwanCalendar = new TaiwanCalendar();
+        static readonly UmAlQuraCalendar s_umAlQuraCalendar = new UmAlQuraCalendar();
+        static readonly KoreanCalendar s_koreanCalendar = new KoreanCalendar();
+
+        #endregion
+
         #region Internal Methods
 
         /// <summary>
@@ -24,7 +36,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static DateTime GetValidDisplayDate(ICalendar calendarInfo)
         {
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarInfo.Identifier);
             DateTime startDateRange = cultureCalendar.MinSupportedDateTime.Date;
             DateTime endDateRange = cultureCalendar.MaxSupportedDateTime.Date;
             DateTime minDate = startDateRange;
@@ -242,7 +254,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static bool IsValidNextDatesNavigation(List<DateTime> visibleDates, CalendarView view, int numberOfVisibleWeeks, DateTime maxDate, CalendarIdentifier calendarIdentifier)
         {
             // To get the calendar instance based on the calendar Identifier
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
 
             // Convert the maximum date to year, month on culture basis.
             // Need to check the maximum date to present max value, if the max value is given convert that date on culture basis
@@ -322,7 +334,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static bool IsValidPreviousDatesNavigation(List<DateTime> visibleDates, CalendarView view, int numberOfVisibleWeeks, DateTime minDate, CalendarIdentifier calendarIdentifier)
         {
             // To get the calendar instance based on the calendar identifier
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
 
             DateTime startDateRange = cultureCalendar.MinSupportedDateTime.Date;
             DateTime endDateRange = cultureCalendar.MaxSupportedDateTime.Date;
@@ -398,7 +410,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>The week start date.</returns>
         internal static DateTime GetWeekStartDate(List<DateTime> visibleDates, CalendarIdentifier calendarIdentifier, DayOfWeek dayOfWeek)
         {
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
             foreach (DateTime dateTime in visibleDates)
             {
                 //// We have adjust mid day of week based on first day of week.
@@ -426,7 +438,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             // If the type is not gregorian, need to get the week number based on the specified calendar identifier.
             if (!IsGregorianCalendar(calendarIdentifier))
             {
-                weekNumber = GetCalendar(calendarIdentifier.ToString()).GetWeekOfYear(dateTime, CalendarWeekRule.FirstDay, dayOfWeek);
+                weekNumber = GetCalendar(calendarIdentifier).GetWeekOfYear(dateTime, CalendarWeekRule.FirstDay, dayOfWeek);
             }
             else
             {
@@ -453,7 +465,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             const int daysPerWeek = 7;
-            Globalization.Calendar calendar = GetCalendar(identifier.ToString());
+            Globalization.Calendar calendar = GetCalendar(identifier);
             //// Use the middle item in the visible range to discover which year/month is currently in view.
             DateTime date = visibleDates[visibleDates.Count / 2];
             int year = calendar.GetYear(date);
@@ -503,7 +515,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static bool IsDisabledDate(DateTime dateTime, CalendarView view, bool enablePastDate, DateTime minDate, DateTime maxDate, CalendarSelectionMode selectionMode, CalendarRangeSelectionDirection selectionDirection, CalendarDateRange? selectedDateRange, bool allowViewNavigation, CalendarIdentifier calendarIdentifier)
         {
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
 
             DateTime startDateRange = cultureCalendar.MinSupportedDateTime.Date;
             DateTime endDateRange = cultureCalendar.MaxSupportedDateTime.Date;
@@ -636,7 +648,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static bool IsLeadingAndTrailingDate(DateTime dateTime, DateTime currentViewDate, CalendarView view, CalendarIdentifier calendarIdentifier)
         {
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
 
             // Get year and month value for the dateTime corresponding to the specified calendar identifier.
             int year = cultureCalendar.GetYear(dateTime);
@@ -680,7 +692,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
             DateTime minSupportedDate = cultureCalendar.MinSupportedDateTime;
             DateTime maxSupportedDate = cultureCalendar.MaxSupportedDateTime;
 
@@ -804,7 +816,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static bool IsSameDisplayDateView(ICalendar calendar, List<DateTime> visibleDates, DateTime previousDisplayDate, DateTime displayDate)
         {
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendar.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendar.Identifier);
 
             DateTime startDateRange = cultureCalendar.MinSupportedDateTime.Date;
             DateTime endDateRange = cultureCalendar.MaxSupportedDateTime.Date;
@@ -871,7 +883,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             DateTime currentDate = date;
-            Globalization.Calendar calendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar calendar = GetCalendar(calendarIdentifier);
             int currentYear = calendar.GetYear(currentDate);
             int currentMonth = calendar.GetMonth(currentDate);
             DateTime minDate = calendar.MinSupportedDateTime;
@@ -915,7 +927,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static string GetYearCellText(DateTime dateTime, ICalendarYear calendar, bool isAccessibility = false)
         {
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendar.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendar.Identifier);
 
             // Get the year based on the calendar identifier.
             int year = cultureCalendar.GetYear(dateTime);
@@ -1142,7 +1154,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
             DateTime minSupportedDate = cultureCalendar.MinSupportedDateTime;
             DateTime maxSupportedDate = cultureCalendar.MaxSupportedDateTime;
 
@@ -1269,7 +1281,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
 
             DateTime startDateTime = cultureCalendar.MinSupportedDateTime;
             DateTime endDateTime = cultureCalendar.MaxSupportedDateTime;
@@ -1330,7 +1342,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
             DateTime endDateTime = cultureCalendar.MaxSupportedDateTime;
             DateTime startDateTime = cultureCalendar.MinSupportedDateTime.Date;
 
@@ -1394,7 +1406,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static DateTime GetViewLastDate(CalendarView view, DateTime date, CalendarIdentifier calendarIdentifier)
         {
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
 
             // Get the year based on the calendar identifier.
             DateTime maxDate = cultureCalendar.MaxSupportedDateTime;
@@ -1445,7 +1457,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>It returns different between the day of weeks.</returns>
         internal static int GetFirstDayOfWeekDifference(DateTime currentDate, DayOfWeek dayOfWeek, CalendarIdentifier calendarIdentifier)
         {
-            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
 
             // Get difference between currentDate of day of week and day of week.
             // currentDate.DayOfWeek = Monday(1). And first day of Week = Tuesday(2).
@@ -1674,32 +1686,43 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         }
 
         /// <summary>
-        /// Get calendar instance using its calendar identifier.
+        /// Get a cached calendar instance using its calendar identifier enum.
+        /// </summary>
+        /// <param name="calendarIdentifier">The calendar identifier enum value.</param>
+        /// <returns>A cached calendar instance.</returns>
+        internal static Globalization.Calendar GetCalendar(CalendarIdentifier calendarIdentifier)
+        {
+            return calendarIdentifier switch
+            {
+                CalendarIdentifier.Gregorian => s_gregorianCalendar,
+                CalendarIdentifier.Hijri => s_hijriCalendar,
+                CalendarIdentifier.Persian => s_persianCalendar,
+                CalendarIdentifier.ThaiBuddhist => s_thaiBuddhistCalendar,
+                CalendarIdentifier.Taiwan => s_taiwanCalendar,
+                CalendarIdentifier.UmAlQura => s_umAlQuraCalendar,
+                CalendarIdentifier.Korean => s_koreanCalendar,
+                _ => CultureInfo.CurrentUICulture.DateTimeFormat.Calendar,
+            };
+        }
+
+        /// <summary>
+        /// Get a cached calendar instance using its calendar identifier string.
         /// </summary>
         /// <param name="calendarIdentifier">The name of the calendar.</param>
-        /// <returns>A calendar instance.</returns>
+        /// <returns>A cached calendar instance.</returns>
         internal static Globalization.Calendar GetCalendar(string calendarIdentifier)
         {
-            switch (calendarIdentifier)
+            return calendarIdentifier switch
             {
-                case "Gregorian":
-                    return new GregorianCalendar();
-                case "Hijri":
-                    return new HijriCalendar();
-                case "Persian":
-                    return new PersianCalendar();
-                case "ThaiBuddhist":
-                    return new ThaiBuddhistCalendar();
-                case "Taiwan":
-                    return new TaiwanCalendar();
-                case "UmAlQura":
-                    return new UmAlQuraCalendar();
-                case "Korean":
-                    return new KoreanCalendar();
-                default:
-                    // If calendar identifier is specified wrongly, then default calendar will be used.
-                    return CultureInfo.CurrentUICulture.DateTimeFormat.Calendar;
-            }
+                "Gregorian" => s_gregorianCalendar,
+                "Hijri" => s_hijriCalendar,
+                "Persian" => s_persianCalendar,
+                "ThaiBuddhist" => s_thaiBuddhistCalendar,
+                "Taiwan" => s_taiwanCalendar,
+                "UmAlQura" => s_umAlQuraCalendar,
+                "Korean" => s_koreanCalendar,
+                _ => CultureInfo.CurrentUICulture.DateTimeFormat.Calendar,
+            };
         }
 
         /// <summary>
@@ -1926,7 +1949,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static DateTime? GeKeyNavigationDate(ICalendar calendar, KeyEventArgs args, DateTime oldSelectedDate)
         {
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendar.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendar.Identifier);
 
             DateTime startDateRange = cultureCalendar.MinSupportedDateTime.Date;
             DateTime endDateRange = cultureCalendar.MaxSupportedDateTime.Date;
@@ -2333,7 +2356,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static bool IsDateInCurrentVisibleDate(ICalendar calendar, List<DateTime> visibleDates, DateTime selectedDate)
         {
             // To get the calendar instance based on the calendar identifier.
-            Globalization.Calendar cultureCalendar = GetCalendar(calendar.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = GetCalendar(calendar.Identifier);
 
             DateTime startDateRange = cultureCalendar.MinSupportedDateTime.Date;
             DateTime endDateRange = cultureCalendar.MaxSupportedDateTime.Date;

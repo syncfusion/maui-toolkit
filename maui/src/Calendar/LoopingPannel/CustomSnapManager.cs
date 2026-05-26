@@ -308,7 +308,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             DateTime todayDate = date != null ? date.Value : DateTime.Now.Date;
             int numberOfWeeks = _calendarInfo.MonthView.GetNumberOfWeeks();
             bool isMonthView = _calendarInfo.View == CalendarView.Month && numberOfWeeks == 6;
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
             DateTime minDate = cultureCalendar.MinSupportedDateTime;
             int minYear = cultureCalendar.GetYear(minDate);
             int minMonth = cultureCalendar.GetMonth(minDate);
@@ -346,7 +346,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             DateTime todayDate = date != null ? date.Value : DateTime.Now.Date;
             int numberOfWeeks = _calendarInfo.MonthView.GetNumberOfWeeks();
             bool isMonthView = _calendarInfo.View == CalendarView.Month && numberOfWeeks == 6;
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
             DateTime minDate = cultureCalendar.MinSupportedDateTime;
             int minYear = cultureCalendar.GetYear(minDate);
             int minMonth = cultureCalendar.GetMonth(minDate);
@@ -410,7 +410,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             int numberOfWeeks = _calendarInfo.MonthView.GetNumberOfWeeks();
             bool isMonthView = _calendarInfo.View == CalendarView.Month && numberOfWeeks == 6;
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
             DateTime minDate = cultureCalendar.MinSupportedDateTime;
             int minYear = cultureCalendar.GetYear(minDate);
             int minMonth = cultureCalendar.GetMonth(minDate);
@@ -462,7 +462,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
             int numberOfWeeks = _calendarInfo.MonthView.GetNumberOfWeeks();
             bool isMonthView = _calendarInfo.View == CalendarView.Month && numberOfWeeks == 6;
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
             DateTime minDate = cultureCalendar.MinSupportedDateTime;
             int minYear = cultureCalendar.GetYear(minDate);
             int minMonth = cultureCalendar.GetMonth(minDate);
@@ -637,7 +637,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
                 int numberOfWeeks = _calendarInfo.MonthView.GetNumberOfWeeks();
                 bool isMonthView = _calendarInfo.View == CalendarView.Month && numberOfWeeks == 6;
-                Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+                Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
                 DateTime minDate = cultureCalendar.MinSupportedDateTime;
                 int minYear = cultureCalendar.GetYear(minDate);
                 int minMonth = cultureCalendar.GetMonth(minDate);
@@ -1037,7 +1037,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>The visible dates collection based on visible date.</returns>
         List<DateTime> GetVisibleDates(DateTime date)
         {
-            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
             _startYearDateTime = calendar.MinSupportedDateTime.Date;
             _endYearDateTime = calendar.MaxSupportedDateTime.Date;
             int startRangeYear = calendar.GetYear(_startYearDateTime);
@@ -1239,7 +1239,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>The previous view visible start date.</returns>
         DateTime GetPreviousViewStartDate(DateTime date)
         {
-            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
             _startYearDateTime = calendar.MinSupportedDateTime.Date;
             _endYearDateTime = calendar.MaxSupportedDateTime.Date;
             int startRangeYear = calendar.GetYear(_startYearDateTime);
@@ -1300,7 +1300,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>The next view visible start date.</returns>
         DateTime GetNextViewStartDate(DateTime date)
         {
-            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
             _startYearDateTime = calendar.MinSupportedDateTime.Date;
             _endYearDateTime = calendar.MaxSupportedDateTime.Date;
             int endRangeYear = calendar.GetYear(_endYearDateTime);
