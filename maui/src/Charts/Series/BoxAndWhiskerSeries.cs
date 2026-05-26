@@ -1034,14 +1034,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			for (int i = 0; i < PointsCount; i++)
 			{
-				var yList = YDataCollection[i].Where(x => !double.IsNaN(x)).ToArray();
+				var yList = FilterNaNValues(YDataCollection[i]);
 
 				List<double> outliers = [];
 
 				if (yList.Length > 0)
 				{
 					Array.Sort(yList);
-					average = yList.Average();
+					double sum = 0;
+					for (int j = 0; j < yList.Length; j++)
+					{
+						sum += yList[j];
+					}
+
+					average = sum / yList.Length;
 				}
 
 				int yCount = yList.Length;
@@ -1086,8 +1092,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 				else
 				{
-					minimum = yList.Min();
-					maximum = yList.Max();
+					minimum = yList[0];
+					maximum = yList[^1];
 				}
 
 				double actualMinimum = minimum;
@@ -1485,6 +1491,33 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					break;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Filters out NaN values from the source list without LINQ allocations.
+		/// </summary>
+		static double[] FilterNaNValues(IList<double> source)
+		{
+			int count = 0;
+			for (int i = 0; i < source.Count; i++)
+			{
+				if (!double.IsNaN(source[i]))
+				{
+					count++;
+				}
+			}
+
+			var result = new double[count];
+			int index = 0;
+			for (int i = 0; i < source.Count; i++)
+			{
+				if (!double.IsNaN(source[i]))
+				{
+					result[index++] = source[i];
+				}
+			}
+
+			return result;
 		}
 
 		void GetQuartileValues(double[] yList, int len, out double lowerQuartile, out double upperQuartile)
