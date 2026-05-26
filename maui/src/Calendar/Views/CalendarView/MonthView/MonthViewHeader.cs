@@ -487,7 +487,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             CultureInfo cultureInfo = CalendarViewHelper.GetCurrentUICultureInfo(_calendarInfo.Identifier);
-            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier.ToString());
+            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_calendarInfo.Identifier);
             string textFormat = viewHeaderSettings.TextFormat;
             //// Need to show full week day name for all calendars except Gregorian calendar while the text format is "ddddd".
             if (textFormat == "ddddd" && !CalendarViewHelper.IsGregorianCalendar(_calendarInfo.Identifier))
