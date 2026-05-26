@@ -1014,8 +1014,15 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             for (int i = 0; i < ChildCount; i++)
             {
                 List<DateTime> visibleDates = GetVisibleDatesForView(i);
-                List<DateTime> disableDates = _disabledDatesDictionary.ContainsKey(visibleDates) ? _disabledDatesDictionary[visibleDates] : new List<DateTime>();
-                List<CalendarIconDetails> specialDates = _specialDatesDictionary.ContainsKey(visibleDates) ? _specialDatesDictionary[visibleDates] : new List<CalendarIconDetails>();
+                if (!_disabledDatesDictionary.TryGetValue(visibleDates, out List<DateTime>? disableDates))
+                {
+                    disableDates = new List<DateTime>();
+                }
+
+                if (!_specialDatesDictionary.TryGetValue(visibleDates, out List<CalendarIconDetails>? specialDates))
+                {
+                    specialDates = new List<CalendarIconDetails>();
+                }
                 if (_calendarInfo.View == CalendarView.Month)
                 {
                     MonthViewLayout monthViewLayout = new MonthViewLayout(_calendarInfo, visibleDates, _calendarInfo.SelectedDate, disableDates, specialDates, i == _currentChildIndex);
