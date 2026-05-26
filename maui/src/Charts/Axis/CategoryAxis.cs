@@ -40,9 +40,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					if (groupedDatas.Count != 0)
 					{
-						for (int j = 0; j <= xValues.Count - 1; j++)
+						var seen = new HashSet<string>(groupingValues);
+						for (int j = 0; j < xValues.Count; j++)
 						{
-							if (!groupingValues.Contains(xValues[j]))
+							if (seen.Add(xValues[j]))
 							{
 								groupingValues.Add(xValues[j]);
 							}
@@ -65,16 +66,31 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			var distinctXValues = groupingValues.Distinct().ToList();
+			var indexLookup = new Dictionary<string, int>(distinctXValues.Count);
+			for (int i = 0; i < distinctXValues.Count; i++)
+			{
+				indexLookup[distinctXValues[i]] = i;
+			}
 
 			foreach (CartesianSeries series in RegisteredSeries.Cast<CartesianSeries>())
 			{
 				if (series.ActualXValues is List<string> list)
 				{
-					series.GroupedXValuesIndexes = (from val in list select (double)distinctXValues.IndexOf(val)).ToList();
+					var indexes = new List<double>(list.Count);
+					for (int i = 0; i < list.Count; i++)
+					{
+						indexes.Add(indexLookup.TryGetValue(list[i], out int idx) ? idx : -1);
+					}
+					series.GroupedXValuesIndexes = indexes;
 				}
-				else if (series.ActualXValues != null)
+				else if (series.ActualXValues is List<double> doubleValues)
 				{
-					series.GroupedXValuesIndexes = (from val in series.ActualXValues as List<double> select (double)distinctXValues.IndexOf(val.ToString())).ToList();
+					var indexes = new List<double>(doubleValues.Count);
+					for (int i = 0; i < doubleValues.Count; i++)
+					{
+						indexes.Add(indexLookup.TryGetValue(doubleValues[i].ToString(), out int idx) ? idx : -1);
+					}
+					series.GroupedXValuesIndexes = indexes;
 				}
 
 				series.GroupedXValues = distinctXValues;
