@@ -50,6 +50,33 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 
 
 		[Fact]
+		public void UpdateSBS_WithMultipleSeriesGroups_ShouldComputeSbsInfo()
+		{
+			var chart = new SfCartesianChart();
+			var series1 = new ColumnSeries() { Width = 0.8 };
+			var series2 = new ColumnSeries() { Width = 0.8 };
+			var series3 = new ColumnSeries() { Width = 0.6 };
+
+			var area = new CartesianChartArea(chart)
+			{
+				SideBySideSeriesPosition = new Dictionary<object, List<CartesianSeries>>
+				{
+					{ 0, new List<CartesianSeries> { series1, series2 } },
+					{ 1, new List<CartesianSeries> { series3 } }
+				},
+				EnableSideBySideSeriesPlacement = false,
+				SideBySideMinWidth = 1
+			};
+
+			area.UpdateSBS();
+
+			// Verify SbsInfo is set on each series
+			Assert.NotEqual(DoubleRange.Empty, series1.SbsInfo);
+			Assert.NotEqual(DoubleRange.Empty, series2.SbsInfo);
+			Assert.NotEqual(DoubleRange.Empty, series3.SbsInfo);
+		}
+
+		[Fact]
 		public void AddAxes_ShouldSetParentAndArea()
 		{
 			var axisArea = new CartesianChartArea(new SfCartesianChart());
