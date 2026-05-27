@@ -1598,14 +1598,14 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		void IKeyboardListener.OnKeyDown(KeyEventArgs e)
 		{
 			AccordionItem? selectedItem = null;
-		foreach (var item in Items)
-		{
-			if (item._accordionItemView != null && item._accordionItemView.IsSelected)
+			foreach (var item in Items)
 			{
-				selectedItem = item;
-				break;
+				if (item._accordionItemView != null && item._accordionItemView.IsSelected)
+				{
+					selectedItem = item;
+					break;
+				}
 			}
-		}
 			if (e.Key == KeyboardKey.Down || (e.Key == KeyboardKey.Tab && !e.IsShiftKeyPressed))
 			{
 				OnDownKeyPressed(selectedItem);
