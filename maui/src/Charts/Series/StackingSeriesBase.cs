@@ -330,17 +330,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void ResetVisibleSeries()
 		{
-			if (ChartArea != null)
+			if (ChartArea?.VisibleSeries == null)
 			{
-				var visibleSeries = ChartArea.VisibleSeries;
-				var stackingSeries = visibleSeries?.Where(series => series.IsStacking).ToList();
+				return;
+			}
 
-				if (stackingSeries == null)
-				{
-					return;
-				}
-
-				foreach (var chartSeries in stackingSeries)
+			foreach (var chartSeries in ChartArea.VisibleSeries)
+			{
+				if (chartSeries.IsStacking)
 				{
 					chartSeries.SegmentsCreated = false;
 				}
