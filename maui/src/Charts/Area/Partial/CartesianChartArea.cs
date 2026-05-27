@@ -183,9 +183,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				double totalWidth = GetTotalWidth() / SideBySideSeriesPosition.Count;
 				double startPosition = 0, end = 0;
 
-				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
+				var seriesGroups = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < seriesGroups.Count; i++)
 				{
-					var seriesGroup = SideBySideSeriesPosition.Values.ToList()[i];
+					var seriesGroup = seriesGroups[i];
 					double sbsMaxWidth = GetSBSMaxWidth(seriesGroup);
 
 					foreach (ChartSeries chartSeries in seriesGroup)
@@ -370,10 +371,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (SideBySideSeriesPosition != null)
 			{
-				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
+				var valuesList = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < valuesList.Count; i++)
 				{
 					double maxWidth = 0;
-					foreach (ChartSeries sideBySideSeries in SideBySideSeriesPosition.Values.ToList()[i])
+					foreach (ChartSeries sideBySideSeries in valuesList[i])
 					{
 						CartesianSeries cartesianSeries = (CartesianSeries)sideBySideSeries;
 						double width = cartesianSeries.GetActualWidth();
@@ -483,73 +485,88 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 				
 				foreach (var series in seriesList)
+			{
+				var xValues = series.GetXValues();
+				var yValues = series.YValues;
+				var bottomValues = new List<double>();
+				var topValues = new List<double>();
+				var seriesTypeName = series.GetType().Name;
+				bool is100Series = seriesTypeName.Contains("Stacking", StringComparison.Ordinal) && seriesTypeName.Contains("100Series", StringComparison.Ordinal);
+
+				if (xValues != null)
 				{
-					var xValues = series.GetXValues();
-					var yValues = series.YValues;
-					var bottomValues = new List<double>();
-					var topValues = new List<double>();
-
-					if (xValues != null)
+					for (int i = 0; i < xValues.Count; i++)
 					{
-						for (int i = 0; i < xValues.Count; i++)
+						var xValue = xValues[i];
+						var yValue = i < yValues.Count ? yValues[i] : 0;
+						yValue = double.IsNaN(yValue) ? 0 : yValue;
+
+						if (yValue >= 0)
 						{
-							var xValue = xValues[i];
-							var yValue = i < yValues.Count ? yValues[i] : 0;
-							yValue = double.IsNaN(yValue) ? 0 : yValue;
-
-							if (yValue >= 0)
+							if (positiveYValues.TryGetValue(xValue, out double currentValue))
 							{
-								if (positiveYValues.TryGetValue(xValue, out double currentValue))
+								bottomValues.Add((axisCross > currentValue) ? axisCross : currentValue);
+								if (is100Series)
 								{
-									bottomValues.Add((axisCross > currentValue) ? axisCross : currentValue);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
-									{
-										yValue = GetYValue(seriesList, yValue, i);
-									}
-									positiveYValues[xValue] = currentValue + yValue;
+									yValue = GetYValue(seriesList, yValue, i);
 								}
-								else
-								{
-									bottomValues.Add(axisCross);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
-									{
-										yValue = GetYValue(seriesList, yValue, i);
-									}
-									positiveYValues.Add(xValue, yValue);
-								}
-
-								topValues.Add(positiveYValues[xValue]);
+								positiveYValues[xValue] = currentValue + yValue;
 							}
 							else
 							{
-								if (!negativeYValues.TryAdd(xValue, yValue))
+								bottomValues.Add(axisCross);
+								if (is100Series)
 								{
-									bottomValues.Add((axisCross < negativeYValues[xValue]) ? axisCross : negativeYValues[xValue]);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
-									{
-										yValue = GetYValue(seriesList, yValue, i);
-									}
-									negativeYValues[xValue] += yValue;
+									yValue = GetYValue(seriesList, yValue, i);
 								}
-								else
-								{
-									bottomValues.Add(axisCross);
-								}
-
-								topValues.Add(negativeYValues[xValue]);
+								positiveYValues.Add(xValue, yValue);
 							}
-						}
 
-						series.BottomValues = bottomValues;
-						series.TopValues = topValues;
+							topValues.Add(positiveYValues[xValue]);
+						}
+						else
+						{
+							if (!negativeYValues.TryAdd(xValue, yValue))
+							{
+								bottomValues.Add((axisCross < negativeYValues[xValue]) ? axisCross : negativeYValues[xValue]);
+								if (is100Series)
+								{
+									yValue = GetYValue(seriesList, yValue, i);
+								}
+								negativeYValues[xValue] += yValue;
+							}
+							else
+							{
+								bottomValues.Add(axisCross);
+							}
+
+							topValues.Add(negativeYValues[xValue]);
+						}
 					}
+
+					series.BottomValues = bottomValues;
+					series.TopValues = topValues;
 				}
+			}
 			}
 		}
 
 		static double GetYValue(List<StackingSeriesBase> SeriesList, double yValue, int index)
 		{
-			double total = SeriesList.Where(series => series != null && series.YValues.Count > index).Sum(series => double.IsNaN(series.YValues[index]) ? 0 : Math.Abs(series.YValues[index]));
+			double total = 0;
+			for (int i = 0; i < SeriesList.Count; i++)
+			{
+				var series = SeriesList[i];
+				if (series != null && series.YValues.Count > index)
+				{
+					double val = series.YValues[index];
+					if (!double.IsNaN(val))
+					{
+						total += Math.Abs(val);
+					}
+				}
+			}
+
 			if (yValue != 0)
 			{
 				yValue = (yValue / total) * 100;
