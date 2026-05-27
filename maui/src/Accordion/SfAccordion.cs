@@ -540,7 +540,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// </summary>
 		internal void UpdateSelection()
 		{
-			var selectedItems = Items.ToList().FindAll(x => x._accordionItemView != null && x._accordionItemView.IsSelected);
+			var selectedItems = Items.Where(x => x._accordionItemView != null && x._accordionItemView.IsSelected).ToList();
 			if (selectedItems.Count == 1 && Items[selectedItems[0]._itemIndex] is AccordionItem items && items._accordionItemView is AccordionItemView accordionItem)
 			{
 				accordionItem.IsSelected = false;
@@ -560,7 +560,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 				return;
 			}
 
-			var expandedItems = Items.ToList().FindAll(x => x._accordionItemView != null && x._accordionItemView.IsExpanded);
+			var expandedItems = Items.Where(x => x._accordionItemView != null && x._accordionItemView.IsExpanded).ToList();
 			switch (ExpandMode)
 			{
 				case AccordionExpandMode.Single:
@@ -1575,7 +1575,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="e">The <see cref="KeyEventArgs"/> containing the event data for the key that was pressed.</param>
 		void IKeyboardListener.OnKeyDown(KeyEventArgs e)
 		{
-			var selectedItem = Items.ToList().FirstOrDefault(x => x._accordionItemView != null && x._accordionItemView.IsSelected);
+			var selectedItem = Items.FirstOrDefault(x => x._accordionItemView != null && x._accordionItemView.IsSelected);
 			if (e.Key == KeyboardKey.Down || (e.Key == KeyboardKey.Tab && !e.IsShiftKeyPressed))
 			{
 				OnDownKeyPressed(selectedItem);
