@@ -491,6 +491,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (xValues != null)
 					{
+						bool isStacking100Series = series is StackingColumn100Series or StackingLine100Series or StackingArea100Series;
+
 						for (int i = 0; i < xValues.Count; i++)
 						{
 							var xValue = xValues[i];
@@ -502,7 +504,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								if (positiveYValues.TryGetValue(xValue, out double currentValue))
 								{
 									bottomValues.Add((axisCross > currentValue) ? axisCross : currentValue);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
+									if (isStacking100Series)
 									{
 										yValue = GetYValue(seriesList, yValue, i);
 									}
@@ -511,7 +513,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								else
 								{
 									bottomValues.Add(axisCross);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
+									if (isStacking100Series)
 									{
 										yValue = GetYValue(seriesList, yValue, i);
 									}
@@ -525,7 +527,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								if (!negativeYValues.TryAdd(xValue, yValue))
 								{
 									bottomValues.Add((axisCross < negativeYValues[xValue]) ? axisCross : negativeYValues[xValue]);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
+									if (isStacking100Series)
 									{
 										yValue = GetYValue(seriesList, yValue, i);
 									}
@@ -547,9 +549,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		static double GetYValue(List<StackingSeriesBase> SeriesList, double yValue, int index)
+		static double GetYValue(List<StackingSeriesBase> seriesList, double yValue, int index)
 		{
-			double total = SeriesList.Where(series => series != null && series.YValues.Count > index).Sum(series => double.IsNaN(series.YValues[index]) ? 0 : Math.Abs(series.YValues[index]));
+			double total = 0;
+			foreach (var series in seriesList)
+			{
+				if (series != null && series.YValues.Count > index)
+				{
+					double val = series.YValues[index];
+					total += double.IsNaN(val) ? 0 : Math.Abs(val);
+				}
+			}
+
 			if (yValue != 0)
 			{
 				yValue = (yValue / total) * 100;
