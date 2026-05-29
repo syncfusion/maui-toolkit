@@ -102,7 +102,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 									{
 										if (!stackingSeries.IsSbsValueCalculated && _seriesGroup != null)
 										{
-											string groupID = _seriesGroup.FirstOrDefault(x => x.Value.Any(s => s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeries.GetType())).Key;
+											Type stackingType = stackingSeries.GetType();
+											string groupID = _seriesGroup.FirstOrDefault(x => x.Value.Any(s => s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingType)).Key;
 											StackingSeriesBase stackingSeriesBase;
 											int size = SideBySideSeriesPosition.Count > 0 && groupingKeys.Count > 0 && groupingKeys.TryGetValue(groupID, out var groupValue)
 												? SideBySideSeriesPosition[groupValue].Count : 0;
@@ -183,9 +184,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				double totalWidth = GetTotalWidth() / SideBySideSeriesPosition.Count;
 				double startPosition = 0, end = 0;
 
-				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
+				var sideBySideValues = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < sideBySideValues.Count; i++)
 				{
-					var seriesGroup = SideBySideSeriesPosition.Values.ToList()[i];
+					var seriesGroup = sideBySideValues[i];
 					double sbsMaxWidth = GetSBSMaxWidth(seriesGroup);
 
 					foreach (ChartSeries chartSeries in seriesGroup)
@@ -333,7 +335,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							if (xValues != null && xValues.Count > 0)
 							{
 								//DateTimeAxis not rendered properly when series have single datapoint with different x position
-								var actualXValues = xValues.ToList();
+								var actualXValues = xValues as List<double> ?? xValues.ToList();
 								previousXValues.AddRange(actualXValues);
 								UpdateMinWidth(cartesianSeries, ref minWidth, previousXValues);
 								previousXValues = actualXValues;
@@ -370,10 +372,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (SideBySideSeriesPosition != null)
 			{
-				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
+				var sideBySideValues = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < sideBySideValues.Count; i++)
 				{
 					double maxWidth = 0;
-					foreach (ChartSeries sideBySideSeries in SideBySideSeriesPosition.Values.ToList()[i])
+					foreach (ChartSeries sideBySideSeries in sideBySideValues[i])
 					{
 						CartesianSeries cartesianSeries = (CartesianSeries)sideBySideSeries;
 						double width = cartesianSeries.GetActualWidth();
@@ -432,10 +435,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (_seriesGroup.TryGetValue(stackingGroup, out List<StackingSeriesBase>? seriesList))
 					{
-						if (seriesList.Any(x => x.ActualXAxis != stackingXAxis || x.ActualYAxis != stackingYAxis) || (seriesList[0].GetType() != stackingSeries.GetType() && stackingGroup != stackingSeries.GroupingLabel))
+						Type stackingSeriesType = stackingSeries.GetType();
+						if (seriesList.Any(x => x.ActualXAxis != stackingXAxis || x.ActualYAxis != stackingYAxis) || (seriesList[0].GetType() != stackingSeriesType && stackingGroup != stackingSeries.GroupingLabel))
 						{
 							string key = _seriesGroup.FirstOrDefault(x => x.Value.Any(y =>
-											y.GetType().Name == stackingSeries.GetType().Name &&
+											y.GetType().Name == stackingSeriesType.Name &&
 											y.GroupingLabel == "" &&
 											y.ActualYAxis?.RegisteredSeries.Contains(stackingSeries) == true)).Key;
 
@@ -549,7 +553,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		static double GetYValue(List<StackingSeriesBase> SeriesList, double yValue, int index)
 		{
-			double total = SeriesList.Where(series => series != null && series.YValues.Count > index).Sum(series => double.IsNaN(series.YValues[index]) ? 0 : Math.Abs(series.YValues[index]));
+			double total = 0;
+			for (int i = 0; i < SeriesList.Count; i++)
+			{
+				var series = SeriesList[i];
+				if (series != null && series.YValues.Count > index)
+				{
+					double value = series.YValues[index];
+					if (!double.IsNaN(value))
+					{
+						total += Math.Abs(value);
+					}
+				}
+			}
+
 			if (yValue != 0)
 			{
 				yValue = (yValue / total) * 100;

@@ -458,7 +458,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (xValues != null)
 			{
-				xValues = xValues.Where(value => !double.IsNaN(value)).ToList();
+				xValues.RemoveAll(value => double.IsNaN(value));
 				xValues.Sort();
 				_segments.Clear();
 				List<Point> dataPoints = GetDataPoints(xValues);
