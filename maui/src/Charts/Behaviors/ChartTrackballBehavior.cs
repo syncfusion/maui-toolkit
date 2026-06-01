@@ -975,7 +975,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (CartesianChart != null && (CartesianChart is IChart chart))
 			{
-				PreviousPointInfos = new List<TrackballPointInfo>(PointInfos);
+				if (PreviousPointInfos == null)
+					PreviousPointInfos = new List<TrackballPointInfo>(PointInfos.Count);
+				else
+					PreviousPointInfos.Clear();
+				PreviousPointInfos.AddRange(PointInfos);
 				PointInfos.Clear();
 				_isAnySideBySideSeries = false;
 				_isAnyContinuesSeries = false;
@@ -988,8 +992,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				foreach (ChartAxis chartAxis in xAxes)
 				{
-					foreach (CartesianSeries series in chartAxis.RegisteredSeries.Cast<CartesianSeries>())
+					foreach (var axisItem in chartAxis.RegisteredSeries)
 					{
+						if (axisItem is not CartesianSeries series) continue;
 						if (series.IsVisible && series.ShowTrackballLabel && series.PointsCount > 0)
 						{
 							List<object> nearestDataPoints = series.FindNearestChartPoints(pointX, pointY);
@@ -1177,7 +1182,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void GenerateAxisTrackballInfos(float leastX)
 		{
-			_previousAxisPointInfos = new List<TrackballAxisInfo>(_axisPointInfos);
+			_previousAxisPointInfos = new List<TrackballAxisInfo>(_axisPointInfos.Count);
+			_previousAxisPointInfos.AddRange(_axisPointInfos);
 			_axisPointInfos.Clear();
 
 			if (CartesianChart == null)
