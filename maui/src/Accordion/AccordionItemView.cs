@@ -71,9 +71,21 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 				return false;
 			}
 
-			var expandedItems = Accordion.Items.Where(x => x._accordionItemView != null && x._accordionItemView.IsExpanded).ToList();
+			var expandedCount = 0;
+			foreach (var item in Accordion.Items)
+			{
+				if (item._accordionItemView != null && item._accordionItemView.IsExpanded)
+				{
+					expandedCount++;
+					if (expandedCount > 1)
+					{
+						break;
+					}
+				}
+			}
+
 			return (Accordion.ExpandMode == AccordionExpandMode.Single ||
-					Accordion.ExpandMode == AccordionExpandMode.Multiple) && expandedItems.Count == 1;	
+					Accordion.ExpandMode == AccordionExpandMode.Multiple) && expandedCount == 1;	
         }
 
 		#endregion
