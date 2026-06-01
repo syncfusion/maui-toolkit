@@ -23,6 +23,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		/// <returns>Measured size</returns>
 		public Size MeasureText(string text, float textSize, FontAttributes attributes = FontAttributes.None, string? fontFamily = null)
 		{
+			text ??= string.Empty;
 			NSString? nsText = new NSString(text);
 
 			UIFont? font = UIFont.SystemFontOfSize(textSize);
