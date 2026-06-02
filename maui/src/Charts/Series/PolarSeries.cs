@@ -792,18 +792,39 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return null;
 			}
 
-			double xIndexValues = 0d;
 			var xValues = ActualXValues as List<double>;
 
 			if (IsIndexed || xValues == null)
 			{
 				if (ActualXAxis is CategoryAxis categoryAxis && !categoryAxis.ArrangeByIndex || ActualXAxis == null)
 				{
-					xValues = GroupedXValuesIndexes.Count > 0 ? GroupedXValuesIndexes : (from val in (ActualXValues as List<string>) select (xIndexValues++)).ToList();
+					if (GroupedXValuesIndexes.Count > 0)
+					{
+						xValues = GroupedXValuesIndexes;
+					}
+					else
+					{
+						var stringValues = ActualXValues as List<string>;
+						if (stringValues != null)
+						{
+							xValues = new List<double>(stringValues.Count);
+							for (int i = 0; i < stringValues.Count; i++)
+							{
+								xValues.Add(i);
+							}
+						}
+					}
 				}
 				else
 				{
-					xValues = xValues != null ? (from val in xValues select (xIndexValues++)).ToList() : (from val in (ActualXValues as List<string>) select (xIndexValues++)).ToList();
+					int sourceCount = xValues?.Count ?? (ActualXValues as List<string>)?.Count ?? 0;
+					var indexList = new List<double>(sourceCount);
+					for (int i = 0; i < sourceCount; i++)
+					{
+						indexList.Add(i);
+					}
+
+					xValues = indexList;
 				}
 			}
 
