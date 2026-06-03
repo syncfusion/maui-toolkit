@@ -182,10 +182,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				double totalWidth = GetTotalWidth() / SideBySideSeriesPosition.Count;
 				double startPosition = 0, end = 0;
+				var seriesGroupValues = SideBySideSeriesPosition.Values.ToList();
 
 				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
 				{
-					var seriesGroup = SideBySideSeriesPosition.Values.ToList()[i];
+					var seriesGroup = seriesGroupValues[i];
 					double sbsMaxWidth = GetSBSMaxWidth(seriesGroup);
 
 					foreach (ChartSeries chartSeries in seriesGroup)
@@ -351,15 +352,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal void ResetSBSSegments()
 		{
-			var sideBySideSeries = VisibleSeries?.Where(series => series.IsSideBySide).ToList();
-
-			if (sideBySideSeries != null && sideBySideSeries.Count > 0)
+			if (VisibleSeries != null)
 			{
-				SideBySideSeriesPosition = null;
+				bool hasSideBySide = false;
 
-				foreach (var chartSeries in sideBySideSeries)
+				foreach (var series in VisibleSeries)
 				{
-					chartSeries.SegmentsCreated = false;
+					if (series.IsSideBySide)
+					{
+						if (!hasSideBySide)
+						{
+							hasSideBySide = true;
+							SideBySideSeriesPosition = null;
+						}
+
+						series.SegmentsCreated = false;
+					}
 				}
 			}
 		}
@@ -370,10 +378,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (SideBySideSeriesPosition != null)
 			{
-				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
+				var seriesGroupValues = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < seriesGroupValues.Count; i++)
 				{
 					double maxWidth = 0;
-					foreach (ChartSeries sideBySideSeries in SideBySideSeriesPosition.Values.ToList()[i])
+					foreach (ChartSeries sideBySideSeries in seriesGroupValues[i])
 					{
 						CartesianSeries cartesianSeries = (CartesianSeries)sideBySideSeries;
 						double width = cartesianSeries.GetActualWidth();

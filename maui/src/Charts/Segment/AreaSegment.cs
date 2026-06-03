@@ -37,6 +37,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal List<float>? PreviousStrokePoints { get; set; } = null;
 
 		PathF? _path;
+		float[]? _cachedStrokeDashPattern;
+		DoubleCollection? _previousStrokeDashArray;
 
 		#endregion
 
@@ -60,7 +62,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (StrokeDashArray != null)
 			{
-				canvas.StrokeDashPattern = StrokeDashArray.ToFloatArray();
+				if (_cachedStrokeDashPattern == null || _previousStrokeDashArray != StrokeDashArray)
+				{
+					_cachedStrokeDashPattern = StrokeDashArray.ToFloatArray();
+					_previousStrokeDashArray = StrokeDashArray;
+				}
+
+				canvas.StrokeDashPattern = _cachedStrokeDashPattern;
 			}
 
 			DrawPath(canvas, FillPoints, StrokePoints);
@@ -182,13 +190,47 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				xValues.CopyTo(XValues, 0);
 				yValues.CopyTo(YValues, 0);
 
-				var yMin = YValues.Min();
-				yMin = double.IsNaN(yMin) ? YValues.Length > 0 ? YValues.Where(e => !double.IsNaN(e)).DefaultIfEmpty().Min() : 0 : yMin;
+				double yMin = double.MaxValue;
+				double yMax = double.MinValue;
+				double xMin = double.MaxValue;
+				double xMax = double.MinValue;
 
-				Empty = double.IsNaN(yMin);
+				for (int i = 0; i < count; i++)
+				{
+					double yVal = YValues[i];
+					if (!double.IsNaN(yVal))
+					{
+						if (yVal < yMin) yMin = yVal;
+						if (yVal > yMax) yMax = yVal;
+					}
 
-				series.XRange += new DoubleRange(XValues.Min(), XValues.Max());
-				series.YRange += new DoubleRange(yMin, YValues.Max());
+					double xVal = XValues[i];
+					if (!double.IsNaN(xVal))
+					{
+						if (xVal < xMin) xMin = xVal;
+						if (xVal > xMax) xMax = xVal;
+					}
+				}
+
+				if (yMin == double.MaxValue)
+				{
+					Empty = count > 0;
+					yMin = 0;
+					yMax = 0;
+				}
+				else
+				{
+					Empty = false;
+				}
+
+				if (xMin == double.MaxValue)
+				{
+					xMin = 0;
+					xMax = 0;
+				}
+
+				series.XRange += new DoubleRange(xMin, xMax);
+				series.YRange += new DoubleRange(yMin, yMax);
 			}
 		}
 

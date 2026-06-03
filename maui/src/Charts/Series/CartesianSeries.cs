@@ -1027,18 +1027,39 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return null;
 			}
 
-			double xIndexValues = 0d;
 			var xValues = ActualXValues as List<double>;
 
 			if (IsIndexed || xValues == null)
 			{
 				if (ActualXAxis is CategoryAxis categoryAxis && !categoryAxis.ArrangeByIndex || ActualXAxis == null)
 				{
-					xValues = GroupedXValuesIndexes.Count > 0 ? GroupedXValuesIndexes : (from val in (ActualXValues as List<string>) select (xIndexValues++)).ToList();
+					if (GroupedXValuesIndexes.Count > 0)
+					{
+						xValues = GroupedXValuesIndexes;
+					}
+					else
+					{
+						var stringValues = ActualXValues as List<string>;
+						if (stringValues != null)
+						{
+							xValues = new List<double>(stringValues.Count);
+							for (int i = 0; i < stringValues.Count; i++)
+							{
+								xValues.Add(i);
+							}
+						}
+					}
 				}
 				else
 				{
-					xValues = xValues != null ? (from val in xValues select (xIndexValues++)).ToList() : (from val in (ActualXValues as List<string>) select (xIndexValues++)).ToList();
+					int count = xValues != null ? xValues.Count : ((ActualXValues as List<string>)?.Count ?? 0);
+					var indexedValues = new List<double>(count);
+					for (int i = 0; i < count; i++)
+					{
+						indexedValues.Add(i);
+					}
+
+					xValues = indexedValues;
 				}
 			}
 
@@ -1133,13 +1154,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (ChartArea != null)
 			{
-				var sideBySideSeries = ChartArea.VisibleSeries?.Where(series => series.IsSideBySide).ToList();
-
-				if (sideBySideSeries != null && sideBySideSeries.Count > 0)
+				if (ChartArea.VisibleSeries != null)
 				{
-					foreach (var chartSeries in sideBySideSeries)
+					foreach (var series in ChartArea.VisibleSeries)
 					{
-						chartSeries.SegmentsCreated = false;
+						if (series.IsSideBySide)
+						{
+							series.SegmentsCreated = false;
+						}
 					}
 				}
 
