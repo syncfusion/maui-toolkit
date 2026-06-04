@@ -137,7 +137,7 @@ namespace Syncfusion.Maui.Toolkit
 		}
 
 		/// <exclude/>
-		IReadOnlyList<IVisualTreeElement> IVisualTreeElement.GetVisualChildren() => Children.Cast<IVisualTreeElement>().ToList().AsReadOnly();
+		IReadOnlyList<IVisualTreeElement> IVisualTreeElement.GetVisualChildren() => new List<IVisualTreeElement>(Children.Cast<IVisualTreeElement>());
 
 		/// <exclude/>
 		bool Microsoft.Maui.ILayout.ClipsToBounds => ClipToBounds;
