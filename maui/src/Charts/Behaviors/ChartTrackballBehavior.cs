@@ -1182,7 +1182,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void GenerateAxisTrackballInfos(float leastX)
 		{
-			_previousAxisPointInfos = new List<TrackballAxisInfo>(_axisPointInfos.Count);
+			if (_previousAxisPointInfos == null)
+				_previousAxisPointInfos = new List<TrackballAxisInfo>(_axisPointInfos.Count);
+			else
+				_previousAxisPointInfos.Clear();
 			_previousAxisPointInfos.AddRange(_axisPointInfos);
 			_axisPointInfos.Clear();
 
