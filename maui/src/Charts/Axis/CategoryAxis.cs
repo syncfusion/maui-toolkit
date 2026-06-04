@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -31,6 +32,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Internal Methods
 		internal void GroupData()
 		{
+			HashSet<string> groupingSet = new();
 			List<string> groupingValues = [];
 			List<object> groupedDatas = [];
 
@@ -42,7 +44,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						for (int j = 0; j <= xValues.Count - 1; j++)
 						{
-							if (!groupingValues.Contains(xValues[j]))
+							if (groupingSet.Add(xValues[j]))
 							{
 								groupingValues.Add(xValues[j]);
 							}
@@ -50,12 +52,25 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 					else
 					{
-						groupingValues.AddRange(xValues);
+						foreach (var val in xValues)
+						{
+							if (groupingSet.Add(val))
+							{
+								groupingValues.Add(val);
+							}
+						}
 					}
 				}
 				else if (series.ActualXValues != null)
 				{
-					groupingValues.AddRange(from val in (series.ActualXValues as List<double>) select val.ToString());
+					foreach (var val in (series.ActualXValues as List<double>)!)
+					{
+						var str = val.ToString();
+						if (groupingSet.Add(str))
+						{
+							groupingValues.Add(str);
+						}
+					}
 				}
 
 				if (groupingValues.Count != groupedDatas.Count)
@@ -64,7 +79,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			var distinctXValues = groupingValues.Distinct().ToList();
+			var distinctXValues = groupingValues;
 
 			foreach (CartesianSeries series in RegisteredSeries.Cast<CartesianSeries>())
 			{
@@ -160,7 +175,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal string GetLabelContent(ChartSeries? chartSeries, int pos, string labelFormat)
 #pragma warning restore IDE0060 // Remove unused parameter
 		{
-			var labelContent = string.Empty;
+			var labelContentBuilder = new StringBuilder();
 			int count = 0;
 
 			foreach (var series in RegisteredSeries)
@@ -221,9 +236,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							label = GetActualLabelContent(xValue, labelFormat);
 						}
 
-						if (!string.IsNullOrEmpty(label.ToString()) && !labelContent.Equals(label, StringComparison.Ordinal) && ArrangeByIndex)
+						if (!string.IsNullOrEmpty(label.ToString()) && ArrangeByIndex)
 						{
-							labelContent = count > 0 && !string.IsNullOrEmpty(labelContent) ? labelContent + ", " + label : label.ToString();
+							var currentContent = labelContentBuilder.ToString();
+							if (!currentContent.Equals(label, StringComparison.Ordinal))
+							{
+								if (labelContentBuilder.Length > 0)
+								{
+									labelContentBuilder.Append(", ");
+								}
+
+								labelContentBuilder.Append(label);
+							}
 						}
 
 						if (!ArrangeByIndex)
@@ -236,7 +260,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			return labelContent;
+			return labelContentBuilder.ToString();
 		}
 
 		#endregion

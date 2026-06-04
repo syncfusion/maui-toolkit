@@ -1416,7 +1416,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					if (ItemsSource is IEnumerable source)
 					{
-						items = source.Cast<object>().ToList();
+						if (source is ICollection collection)
+						{
+							var list = new List<object>(collection.Count);
+							foreach (object item in source)
+							{
+								list.Add(item);
+							}
+
+							items = list;
+						}
+						else
+						{
+							items = source.Cast<object>().ToList();
+						}
 					}
 				}
 

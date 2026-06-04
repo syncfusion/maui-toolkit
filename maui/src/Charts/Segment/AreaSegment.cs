@@ -93,6 +93,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (HasStroke && strokePoints != null)
 			{
+				_path.Dispose();
 				_path = new PathF();
 				AreaSegment.DrawSegment(canvas, ref _path, strokePoints, animationValue, isDynamicAnimation, PreviousStrokePoints);
 				canvas.DrawPath(_path);
