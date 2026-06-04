@@ -893,6 +893,23 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
         #region Private Methods
 
+		/// <summary>
+		/// Checks if the collection contains a string that parses to the specified integer value,
+		/// avoiding LINQ Select/Contains allocation overhead.
+		/// </summary>
+		static bool ContainsParsedValue(ObservableCollection<string> collection, int value)
+		{
+			for (int i = 0; i < collection.Count; i++)
+			{
+				if (int.TryParse(collection[i], out int parsed) && parsed == value)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
         /// <summary>
         /// Method trigged whenever the base panel selection is changed.
         /// </summary>
@@ -1002,7 +1019,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             int minute = 0;
-            if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Select(m => int.Parse(m)).Contains(previousSelectedTime.Value.Minutes))
+            if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && ContainsParsedValue(minuteCollection, previousSelectedTime.Value.Minutes))
             {
                 minute = previousSelectedTime.Value.Minutes;
             }
@@ -1015,7 +1032,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             int second = 0;
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Select(m => int.Parse(m)).Contains(previousSelectedTime.Value.Seconds))
+            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && ContainsParsedValue(secondCollection, previousSelectedTime.Value.Seconds))
             {
                 second = previousSelectedTime.Value.Seconds;
             }
@@ -1064,7 +1081,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             int second = 0;
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Select(m => int.Parse(m)).Contains(previousSelectedTime.Value.Seconds))
+            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && ContainsParsedValue(secondCollection, previousSelectedTime.Value.Seconds))
             {
                 second = previousSelectedTime.Value.Seconds;
             }
