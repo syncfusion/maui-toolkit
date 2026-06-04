@@ -2483,7 +2483,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static List<DateTime> GetCurrentMonthDates(List<DateTime> visibleDates)
         {
             int currentMonth = visibleDates[visibleDates.Count / 2].Month;
-            List<DateTime> currentMonthDates = new List<DateTime>();
+            List<DateTime> currentMonthDates = new List<DateTime>(visibleDates.Count);
             foreach (DateTime date in visibleDates)
             {
                 if (date.Month != currentMonth)

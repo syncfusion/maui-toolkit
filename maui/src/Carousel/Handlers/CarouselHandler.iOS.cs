@@ -74,9 +74,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 
 			if (virtualView.ItemsSource != null)
 			{
-				if (virtualView.SelectedIndex >= virtualView.ItemsSource.Count() && virtualView.ItemsSource.Any())
+				int itemCount = virtualView.ItemsSource.Count();
+				if (virtualView.SelectedIndex >= itemCount && itemCount > 0)
 				{
-					handler.PlatformView.SelectedIndex = virtualView.ItemsSource.Count() - 1;
+					handler.PlatformView.SelectedIndex = itemCount - 1;
 				}
 				else
 				{
