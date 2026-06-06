@@ -184,7 +184,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				double totalWidth = GetTotalWidth() / SideBySideSeriesPosition.Count;
 				double startPosition = 0, end = 0;
-				var seriesGroups = SideBySideSeriesPosition.Values.ToList();
 
 				var seriesPositionValues = SideBySideSeriesPosition.Values.ToList();
 				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
