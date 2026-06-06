@@ -994,7 +994,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             SfSunburstChart sunburstChart = new();
             Point tapPoint = new(100, 100);
             bool selectionChanged = false;
-
+            
             sunburstChart.SelectionChanged += (s, e) => selectionChanged = true;
 
             InvokePrivateMethod(sunburstChart, "OnTapAction", sunburstChart, tapPoint, 1);
@@ -1010,12 +1010,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
 
             // Use the two-parameter overload by specifying the exact parameter types
             var getSelectedSegmentMethod = typeof(SfSunburstChart).GetMethod(
-                "GetSelectedSegment",
+                "GetSelectedSegment", 
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
                 null,
                 new Type[] { typeof(float), typeof(float) },
                 null);
-
+            
             Assert.NotNull(getSelectedSegmentMethod);
             var result = getSelectedSegmentMethod.Invoke(sunburstChart, new object[] { 100000f, 100000f });
 
@@ -1030,9 +1030,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             // Act
             // Pass a new segment that's not part of the chart
             SunburstSegment emptySegment = new();
-
+            
             var result = InvokePrivateMethod(sunburstChart, "IsSegmentSelected", new object[] { emptySegment });
-
+            
             // Verify result is not null before casting
             Assert.NotNull(result);
             Assert.False(result is bool value && value);
@@ -1063,11 +1063,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             SfSunburstChart sunburstChart = new();
             SunburstSegment segment = new();
             bool selectionChanged = false;
-
+            
             sunburstChart.SelectionChanged += (s, e) => selectionChanged = true;
-
+            
             InvokePrivateMethod(sunburstChart, "SelectSegments", segment);
-
+            
             Assert.Empty(sunburstChart.SelectedSunburstItems);
             Assert.False(selectionChanged);
         }
@@ -1087,7 +1087,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             InvokePrivateMethod(sunburstChart, "SelectSegments", segment);
 
             // Since the SelectSegments method is called without proper setup, no actual changes should occur
-            Assert.False(selectionChanged);
+            Assert.False(selectionChanged); 
         }
 
         [Fact]
@@ -1095,11 +1095,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
         {
             SfSunburstChart sunburstChart = new();
             bool selectionChanged = false;
-
+            
             sunburstChart.SelectionChanged += (s, e) => selectionChanged = true;
-
+            
             InvokePrivateMethod(sunburstChart, "ClearSelection");
-
+            
             Assert.Empty(sunburstChart.SelectedSunburstItems);
             Assert.False(selectionChanged);
         }
@@ -1111,15 +1111,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             SunburstSegment segment = new();
             bool eventRaised = false;
             SunburstSelectionChangedEventArgs? capturedArgs = null;
-
-            sunburstChart.SelectionChanged += (s, e) =>
-            {
+            
+            sunburstChart.SelectionChanged += (s, e) => {
                 eventRaised = true;
                 capturedArgs = e;
             };
-
+            
             InvokePrivateMethod(sunburstChart, "RaiseSelectionChanged", segment, segment, true);
-
+            
             Assert.True(eventRaised);
             Assert.NotNull(capturedArgs);
             Assert.Equal(segment, capturedArgs.NewSegment);
@@ -1170,7 +1169,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             // Arrange
             SfSunburstChart sunburstChart = new();
             sunburstChart.SelectionSettings = new SunburstSelectionSettings { Type = SunburstSelectionType.Single };
-
+            
             SunburstSegment segment = new();
             SunburstItem item = new() { Key = "Test" };
             segment.SunburstItems = item;
@@ -1189,7 +1188,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             // Arrange
             SfSunburstChart sunburstChart = new();
             sunburstChart.SelectionSettings = new SunburstSelectionSettings { Type = SunburstSelectionType.Child };
-
+            
             SunburstSegment segment = new();
             SunburstItem parentItem = new() { Key = "Parent" };
             SunburstItem childItem = new() { Key = "Child" };
@@ -1211,15 +1210,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             // Arrange
             SfSunburstChart sunburstChart = new();
             sunburstChart.SelectionSettings = new SunburstSelectionSettings { Type = SunburstSelectionType.Group };
-
+            
             SunburstSegment segment1 = new() { Index = 1 };
             SunburstSegment segment2 = new() { Index = 1 };
             SunburstSegment segment3 = new() { Index = 2 };
-
+            
             SunburstItem item1 = new() { Key = "Item1" };
             SunburstItem item2 = new() { Key = "Item2" };
             SunburstItem item3 = new() { Key = "Item3" };
-
+            
             segment1.SunburstItems = item1;
             segment2.SunburstItems = item2;
             segment3.SunburstItems = item3;
@@ -1243,19 +1242,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             // Arrange
             SfSunburstChart sunburstChart = new();
             sunburstChart.SelectionSettings = new SunburstSelectionSettings { Type = SunburstSelectionType.Parent };
-
+            
             SunburstSegment grandParent = new();
             SunburstSegment parent = new();
             SunburstSegment child = new();
-
+            
             SunburstItem grandParentItem = new() { Key = "GrandParent" };
             SunburstItem parentItem = new() { Key = "Parent" };
             SunburstItem childItem = new() { Key = "Child" };
-
+            
             grandParent.SunburstItems = grandParentItem;
             parent.SunburstItems = parentItem;
             child.SunburstItems = childItem;
-
+            
             child.Parent = parent;
             parent.Parent = grandParent;
 
@@ -1279,8 +1278,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             bool eventRaised = false;
             SunburstSelectionChangedEventArgs? capturedArgs = null;
 
-            sunburstChart.SelectionChanged += (s, e) =>
-            {
+            sunburstChart.SelectionChanged += (s, e) => {
                 eventRaised = true;
                 capturedArgs = e;
             };
@@ -1320,8 +1318,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             SunburstSegment oldSegment = new();
             SunburstSegment newSegment = new();
 
-            sunburstChart.SelectionChanging += (s, e) =>
-            {
+            sunburstChart.SelectionChanging += (s, e) => {
                 e.Cancel = true;
             };
 
@@ -1343,8 +1340,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             bool eventRaised = false;
             SunburstSelectionChangingEventArgs? capturedArgs = null;
 
-            sunburstChart.SelectionChanging += (s, e) =>
-            {
+            sunburstChart.SelectionChanging += (s, e) => {
                 eventRaised = true;
                 capturedArgs = e;
             };
@@ -1428,12 +1424,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
 
             // Use the one-parameter overload by specifying the exact parameter types
             var getSelectedSegmentMethod = typeof(SfSunburstChart).GetMethod(
-                "GetSelectedSegment",
+                "GetSelectedSegment", 
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance,
                 null,
                 new Type[] { typeof(SunburstItem) },
                 null);
-
+            
             Assert.NotNull(getSelectedSegmentMethod);
 
             // Act
@@ -1471,18 +1467,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
         {
             // Arrange
             SfSunburstChart sunburstChart = new();
-            sunburstChart.SelectionSettings = new SunburstSelectionSettings
-            {
+            sunburstChart.SelectionSettings = new SunburstSelectionSettings 
+            { 
                 DisplayMode = SunburstSelectionDisplayMode.HighlightByOpacity,
                 Opacity = 0.5
             };
 
             SunburstSegment selectedSegment = new() { IsSelected = true };
             SunburstSegment unselectedSegment = new() { IsSelected = false };
-
+            
             sunburstChart.Segments.Add(selectedSegment);
             sunburstChart.Segments.Add(unselectedSegment);
-
+            
             SunburstItem item = new();
             sunburstChart.SelectedSunburstItems.Add(item);
 
@@ -1501,7 +1497,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             SfSunburstChart sunburstChart = new();
             SunburstSegment segment1 = new() { Opacity = 0.5f };
             SunburstSegment segment2 = new() { Opacity = 0.3f };
-
+            
             sunburstChart.Segments.Add(segment1);
             sunburstChart.Segments.Add(segment2);
 
@@ -1518,9 +1514,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
         {
             // Arrange
             SfSunburstChart sunburstChart = new();
-
+            
             // Act - Should not throw exception
-            var exception = Record.Exception(() =>
+            var exception = Record.Exception(() => 
                 InvokePrivateMethod(sunburstChart, "SelectionInvalidate"));
 
             // Assert
@@ -1537,7 +1533,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
                 DisplayMode = SunburstSelectionDisplayMode.HighlightByBrush,
                 Fill = new SolidColorBrush(Colors.Red)
             };
-
+            
             SunburstSegment segment = new() { IsSelected = true, Index = 0 };
 
             // Act
@@ -1557,7 +1553,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
                 DisplayMode = SunburstSelectionDisplayMode.HighlightByOpacity,
                 Opacity = 0.5
             };
-
+            
             SunburstSegment segment = new() { IsSelected = true };
 
             // Act
@@ -1577,7 +1573,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
                 DisplayMode = SunburstSelectionDisplayMode.HighlightByOpacity,
                 Opacity = 0.3
             };
-
+            
             SunburstSegment segment = new() { IsSelected = false };
 
             // Act
@@ -1598,7 +1594,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
                 Stroke = new SolidColorBrush(Colors.Green),
                 StrokeWidth = 3.0
             };
-
+            
             SunburstSegment segment = new() { IsSelected = true };
 
             // Act
@@ -1672,7 +1668,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             SfSunburstChart sunburstChart = new();
             SunburstItem item = new();
             sunburstChart.SelectedSunburstItems.Add(item);
-
+            
             var settings = new SunburstSelectionSettings();
             sunburstChart.SelectionSettings = settings;
 
@@ -1690,7 +1686,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             SfSunburstChart sunburstChart = new();
             SunburstItem item = new();
             sunburstChart.SelectedSunburstItems.Add(item);
-
+            
             var settings = new SunburstSelectionSettings();
             sunburstChart.SelectionSettings = settings;
 
@@ -1709,7 +1705,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
             sunburstChart.SelectionSettings = new SunburstSelectionSettings();
             Point tapPoint = new(100, 100);
             bool selectionEventRaised = false;
-
+            
             sunburstChart.SelectionChanged += (s, e) => selectionEventRaised = true;
 
             // Act
@@ -1781,5 +1777,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
         }
 
         #endregion
+
+
     }
 }
+
