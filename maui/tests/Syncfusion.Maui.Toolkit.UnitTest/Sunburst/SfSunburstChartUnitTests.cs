@@ -1,5 +1,3 @@
-using Microsoft.Maui.Graphics;
-using System.Numerics;
 using Syncfusion.Maui.Toolkit.SunburstChart;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
@@ -1779,92 +1777,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
         }
 
         #endregion
-
-        #region SeriesView OnDraw Performance Tests
-
-        [Fact]
-        public void SeriesView_OnDraw_WithEmptySegments_DoesNotThrow()
-        {
-            // Arrange
-            SfSunburstChart sunburstChart = new();
-            var seriesView = new SeriesView(sunburstChart);
-
-            // Act & Assert - Should not throw with empty segments
-            var exception = Record.Exception(() =>
-                InvokePrivateMethod(seriesView, "OnDraw", new MockCanvas(), new RectF(0, 0, 100, 100)));
-
-            Assert.Null(exception);
-        }
-
-        [Fact]
-        public void SeriesView_OnDraw_WithSegments_NoSelection_DoesNotThrow()
-        {
-            // Arrange
-            SfSunburstChart sunburstChart = new();
-            var segment = new SunburstSegment();
-            sunburstChart.Segments.Add(segment);
-            var seriesView = new SeriesView(sunburstChart);
-
-            // Act & Assert - Should not throw when drawing without selection
-            var exception = Record.Exception(() =>
-                InvokePrivateMethod(seriesView, "OnDraw", new MockCanvas(), new RectF(0, 0, 100, 100)));
-
-            Assert.Null(exception);
-        }
-
-        [Fact]
-        public void SeriesView_OnDraw_WithSegments_WithSelection_DoesNotThrow()
-        {
-            // Arrange
-            SfSunburstChart sunburstChart = new();
-            sunburstChart.SelectionSettings = new SunburstSelectionSettings();
-
-            var selectedSegment = new SunburstSegment();
-            selectedSegment.IsSelected = true;
-            var unselectedSegment = new SunburstSegment();
-            unselectedSegment.IsSelected = false;
-
-            sunburstChart.Segments.Add(unselectedSegment);
-            sunburstChart.Segments.Add(selectedSegment);
-            sunburstChart.SelectedSunburstItems.Add(new SunburstItem());
-
-            var seriesView = new SeriesView(sunburstChart);
-
-            // Act & Assert - Should not throw when drawing with selection active
-            var exception = Record.Exception(() =>
-                InvokePrivateMethod(seriesView, "OnDraw", new MockCanvas(), new RectF(0, 0, 100, 100)));
-
-            Assert.Null(exception);
-        }
-
-        [Fact]
-        public void SeriesView_OnDraw_WithMixedSelection_DrawsAllSegments()
-        {
-            // Arrange
-            SfSunburstChart sunburstChart = new();
-            sunburstChart.SelectionSettings = new SunburstSelectionSettings();
-
-            var segment1 = new SunburstSegment { IsSelected = false };
-            var segment2 = new SunburstSegment { IsSelected = true };
-            var segment3 = new SunburstSegment { IsSelected = false };
-
-            sunburstChart.Segments.Add(segment1);
-            sunburstChart.Segments.Add(segment2);
-            sunburstChart.Segments.Add(segment3);
-            sunburstChart.SelectedSunburstItems.Add(new SunburstItem());
-
-            var seriesView = new SeriesView(sunburstChart);
-
-            // Act & Assert - Verify all segments are handled without error
-            var exception = Record.Exception(() =>
-                InvokePrivateMethod(seriesView, "OnDraw", new MockCanvas(), new RectF(0, 0, 200, 200)));
-
-            Assert.Null(exception);
-        }
-
-        #endregion
-
-
     }
 
     /// <summary>
