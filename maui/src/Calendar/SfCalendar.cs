@@ -981,7 +981,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>The current culture.</returns>
         DateTime ConvertToCurrentCulture(DateTime date, bool adjustDay = false)
         {
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(Identifier);
             int day = 0;
             if (adjustDay)
             {
@@ -1148,7 +1148,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             int numberOfWeeks = MonthView.GetNumberOfWeeks();
             if (View == CalendarView.Month && numberOfWeeks == 6)
             {
-                Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(Identifier.ToString());
+                Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(Identifier);
                 DateTime minDate = cultureCalendar.MinSupportedDateTime;
                 int minYear = cultureCalendar.GetYear(minDate);
                 int minMonth = cultureCalendar.GetMonth(minDate);

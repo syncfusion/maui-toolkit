@@ -164,4 +164,36 @@ public class CalendarSubclassesUnitTests : BaseUnitTest
 	}
 
 	#endregion
+
+	#region CalendarViewChangedEventArgs
+
+	[Fact]
+	public void CalendarViewChangedEventArgs_DefaultProperties_UseSharedEmptyCollection()
+	{
+		var args1 = new CalendarViewChangedEventArgs();
+		var args2 = new CalendarViewChangedEventArgs();
+
+		// Default collections should be empty
+		Assert.Empty(args1.NewVisibleDates);
+		Assert.Empty(args1.OldVisibleDates);
+
+		// Both instances should share the same static empty collection (no per-instance allocation)
+		Assert.Same(args1.NewVisibleDates, args2.NewVisibleDates);
+		Assert.Same(args1.OldVisibleDates, args2.OldVisibleDates);
+	}
+
+	[Fact]
+	public void CalendarViewChangedEventArgs_AssignedDates_ReturnsCorrectValues()
+	{
+		var dates = new List<DateTime> { new DateTime(2025, 1, 1), new DateTime(2025, 1, 2) };
+		var args = new CalendarViewChangedEventArgs
+		{
+			NewVisibleDates = dates.AsReadOnly()
+		};
+
+		Assert.Equal(2, args.NewVisibleDates.Count);
+		Assert.Equal(new DateTime(2025, 1, 1), args.NewVisibleDates[0]);
+	}
+
+	#endregion
 }

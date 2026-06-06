@@ -328,7 +328,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 xPosition += startIndex * cellWidthOffset;
             }
 
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier);
             int currentMonthYear = cultureCalendar.GetMonth(currentMonth);
             for (int i = 0; i < visibleDateCount; i++)
             {
