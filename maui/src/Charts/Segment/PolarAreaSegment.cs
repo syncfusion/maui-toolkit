@@ -212,12 +212,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		List<float> GenerateInteriorPoints(float animationValue)
 		{
-			var fillPoints = new List<float>();
-
 			if (Series is not PolarSeries series)
 			{
-				return fillPoints;
+				return new List<float>();
 			}
+
+			int capacity = (_pointsCount + 2) * 2;
+			var fillPoints = new List<float>(capacity);
 
 			if (series.ActualXAxis != null && series.ActualYAxis != null && _xValues != null && _yValues != null)
 			{
@@ -252,12 +253,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		List<float> GenerateStrokePoints(float animationValue)
 		{
-			var strokePoints = new List<float>();
-
 			if (Series is not PolarSeries series)
 			{
-				return strokePoints;
+				return new List<float>();
 			}
+
+			int capacity = (_pointsCount + 2) * 2;
+			var strokePoints = new List<float>(capacity);
 
 			if (series.ActualXAxis != null && series.ActualYAxis != null && _xValues != null && _yValues != null)
 			{

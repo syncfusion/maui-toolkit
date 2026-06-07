@@ -632,8 +632,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
             }
 
-            // Distinct method is used to store only unique values in the list
-            formatOrder = formatOrder.Distinct().ToList();
+            // Remove duplicates without LINQ allocation by using a seen set.
+            var seen = new HashSet<int>();
+            formatOrder.RemoveAll(x => !seen.Add(x));
             return formatOrder;
         }
 
