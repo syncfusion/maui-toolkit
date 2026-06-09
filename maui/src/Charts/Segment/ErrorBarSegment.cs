@@ -403,28 +403,40 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return valueDoubles;
 			}
 
-			var validValues = values.Where(v => !double.IsNaN(v)).ToList();
+			// Single-pass to compute count and sum of valid (non-NaN) values
+			int validCount = 0;
+			double sum = 0;
+			for (int i = 0; i < values.Count; i++)
+			{
+				double v = values[i];
+				if (!double.IsNaN(v))
+				{
+					sum += v;
+					validCount++;
+				}
+			}
 
-			if (validValues.Count <= 1)
+			if (validCount <= 1)
 			{
 				return valueDoubles;
 			}
 
-			var sum = validValues.Sum();
-			var mean = sum / validValues.Count;
-			var dev = new List<double>();
-			var sQDev = new List<double>();
+			double mean = sum / validCount;
 
-			for (var i = 0; i < validValues.Count; i++)
+			// Single-pass to compute sum of squared deviations
+			double sumSqDev = 0;
+			for (int i = 0; i < values.Count; i++)
 			{
-				dev.Add(validValues[i] - mean);
-				sQDev.Add(dev[i] * dev[i]);
+				double v = values[i];
+				if (!double.IsNaN(v))
+				{
+					double dev = v - mean;
+					sumSqDev += dev * dev;
+				}
 			}
 
-			var sumSqDev = sQDev.Sum(x => x);
-
-			var sDValue = Math.Sqrt(sumSqDev / (validValues.Count - 1));
-			var sDErrorValue = sDValue / Math.Sqrt(validValues.Count);
+			var sDValue = Math.Sqrt(sumSqDev / (validCount - 1));
+			var sDErrorValue = sDValue / Math.Sqrt(validCount);
 
 			valueDoubles[0] = mean;
 			valueDoubles[1] = errorBarSeries.Type == ErrorBarType.StandardDeviation ? sDValue : sDErrorValue;

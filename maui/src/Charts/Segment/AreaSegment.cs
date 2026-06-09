@@ -183,7 +183,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				yValues.CopyTo(YValues, 0);
 
 				var yMin = YValues.Min();
-				yMin = double.IsNaN(yMin) ? YValues.Length > 0 ? YValues.Where(e => !double.IsNaN(e)).DefaultIfEmpty().Min() : 0 : yMin;
+				if (double.IsNaN(yMin))
+				{
+					yMin = 0;
+					if (YValues.Length > 0)
+					{
+						for (int i = 0; i < YValues.Length; i++)
+						{
+							double val = YValues[i];
+							if (!double.IsNaN(val))
+							{
+								yMin = Math.Min(yMin == 0 ? double.MaxValue : yMin, val);
+							}
+						}
+
+						if (yMin == double.MaxValue) yMin = 0;
+					}
+				}
 
 				Empty = double.IsNaN(yMin);
 
