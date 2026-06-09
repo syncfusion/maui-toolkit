@@ -540,8 +540,22 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// </summary>
 		internal void UpdateSelection()
 		{
-			var selectedItems = Items.Where(x => x._accordionItemView != null && x._accordionItemView.IsSelected).ToList();
-			if (selectedItems.Count == 1 && Items[selectedItems[0]._itemIndex] is AccordionItem items && items._accordionItemView is AccordionItemView accordionItem)
+			AccordionItem? selectedItem = null;
+			int selectedCount = 0;
+			foreach (var item in Items)
+			{
+				if (item._accordionItemView != null && item._accordionItemView.IsSelected)
+				{
+					selectedItem ??= item;
+					selectedCount++;
+					if (selectedCount > 1)
+					{
+						break;
+					}
+				}
+			}
+
+			if (selectedCount == 1 && selectedItem != null && Items[selectedItem._itemIndex] is AccordionItem accordionItemEntry && accordionItemEntry._accordionItemView is AccordionItemView accordionItem)
 			{
 				accordionItem.IsSelected = false;
 			}
@@ -560,7 +574,15 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 				return;
 			}
 
-			var expandedItems = Items.Where(x => x._accordionItemView != null && x._accordionItemView.IsExpanded).ToList();
+			var expandedItems = new List<AccordionItem>();
+			foreach (var item in Items)
+			{
+				if (item._accordionItemView != null && item._accordionItemView.IsExpanded)
+				{
+					expandedItems.Add(item);
+				}
+			}
+
 			switch (ExpandMode)
 			{
 				case AccordionExpandMode.Single:
@@ -1575,7 +1597,15 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 		/// <param name="e">The <see cref="KeyEventArgs"/> containing the event data for the key that was pressed.</param>
 		void IKeyboardListener.OnKeyDown(KeyEventArgs e)
 		{
-			var selectedItem = Items.FirstOrDefault(x => x._accordionItemView != null && x._accordionItemView.IsSelected);
+			AccordionItem? selectedItem = null;
+			foreach (var item in Items)
+			{
+				if (item._accordionItemView != null && item._accordionItemView.IsSelected)
+				{
+					selectedItem = item;
+					break;
+				}
+			}
 			if (e.Key == KeyboardKey.Down || (e.Key == KeyboardKey.Tab && !e.IsShiftKeyPressed))
 			{
 				OnDownKeyPressed(selectedItem);

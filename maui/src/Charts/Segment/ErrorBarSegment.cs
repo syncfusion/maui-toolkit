@@ -85,27 +85,24 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				double xMin = double.MaxValue, xMax = double.MinValue;
 				double yMin = double.MaxValue, yMax = double.MinValue;
-
-				for (int i = 0; i < xValues.Count; i++)
+				for (int idx = 0; idx < xValues.Count; idx++)
 				{
-					double xVal = xValues[i];
-					if (!double.IsNaN(xVal))
+					double xv = xValues[idx];
+					if (!double.IsNaN(xv))
 					{
-						if (xVal < xMin) xMin = xVal;
-						if (xVal > xMax) xMax = xVal;
+						if (xv < xMin) xMin = xv;
+						if (xv > xMax) xMax = xv;
 					}
 				}
-
-				for (int i = 0; i < yValues.Count; i++)
+				for (int idx = 0; idx < yValues.Count; idx++)
 				{
-					double yVal = yValues[i];
-					if (!double.IsNaN(yVal))
+					double yv = yValues[idx];
+					if (!double.IsNaN(yv))
 					{
-						if (yVal < yMin) yMin = yVal;
-						if (yVal > yMax) yMax = yVal;
+						if (yv < yMin) yMin = yv;
+						if (yv > yMax) yMax = yv;
 					}
 				}
-
 				if (xMin == double.MaxValue) xMin = 0;
 				if (xMax == double.MinValue) xMax = 0;
 				if (yMin == double.MaxValue) yMin = 0;

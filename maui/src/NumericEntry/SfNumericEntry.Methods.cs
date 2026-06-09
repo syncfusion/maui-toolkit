@@ -2245,25 +2245,14 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 					{
 						if (customFormatFirstChar != 'E')
 						{
-							string maxDigit = string.Empty;
-							foreach (char formatDigit in maxFractionFormat)
+							if (int.TryParse(maxFractionFormat, out int parsedDigit))
 							{
-								if (formatDigit >= '0' && formatDigit <= '9')
-								{
-									maxDigit += formatDigit.ToString();
-								}
-								else
-								{
-									//To get the maximum fraction digit for the normal custom formats.(ex:'C#.0' --> Maximum fraction digits is 1.)
-									maxFractionDigit = GetMaximumFractionDigitFromValidFormat(maxFractionFormat);
-									maxDigit = string.Empty;
-									break;
-								}
+								maxFractionDigit = parsedDigit > 99 ? -1 : parsedDigit;
 							}
-
-							if (!string.IsNullOrEmpty(maxDigit))
+							else
 							{
-								maxFractionDigit = int.Parse(maxDigit) > 99 ? -1 : int.Parse(maxDigit);
+								//To get the maximum fraction digit for the normal custom formats.(ex:'C#.0' --> Maximum fraction digits is 1.)
+								maxFractionDigit = GetMaximumFractionDigitFromValidFormat(maxFractionFormat);
 							}
 						}
 					}

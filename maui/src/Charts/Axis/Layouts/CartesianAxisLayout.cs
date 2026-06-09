@@ -499,10 +499,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		static ChartAxis? GetAxisByName(string name, ObservableCollection<ChartAxis>? axes)
 		{
-			var item = (from x in axes where x.Name == name select x).ToList();
-			if (item != null && item.Count > 0)
+			if (axes == null)
 			{
-				return item[0];
+				return null;
+			}
+
+			foreach (var axis in axes)
+			{
+				if (axis.Name == name)
+				{
+					return axis;
+				}
 			}
 
 			return null;
