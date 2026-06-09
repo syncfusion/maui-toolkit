@@ -270,17 +270,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					_min = 0;
 					if (HighVal.Length > 0)
 					{
-						double foundMin = double.MaxValue;
+						double yMin = double.MaxValue;
 						for (int i = 0; i < HighVal.Length; i++)
 						{
 							double val = HighVal[i];
-							if (!double.IsNaN(val) && val < foundMin)
+							if (!double.IsNaN(val) && val < yMin)
 							{
-								foundMin = val;
+								yMin = val;
 							}
 						}
 
-						if (foundMin != double.MaxValue) _min = foundMin;
+						if (yMin != double.MaxValue) _min = yMin;
 					}
 				}
 				_max = HighVal.Max();

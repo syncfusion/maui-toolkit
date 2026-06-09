@@ -141,17 +141,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					_minY = 0;
 					if (YVal.Length > 0)
 					{
-						double foundMin = double.MaxValue;
+						double yMin = double.MaxValue;
 						for (int i = 0; i < YVal.Length; i++)
 						{
 							double val = YVal[i];
-							if (!double.IsNaN(val) && val < foundMin)
+							if (!double.IsNaN(val) && val < yMin)
 							{
-								foundMin = val;
+								yMin = val;
 							}
 						}
 
-						if (foundMin != double.MaxValue) _minY = foundMin;
+						if (yMin != double.MaxValue) _minY = yMin;
 					}
 				}
 				_maxY = YVal.Max();
