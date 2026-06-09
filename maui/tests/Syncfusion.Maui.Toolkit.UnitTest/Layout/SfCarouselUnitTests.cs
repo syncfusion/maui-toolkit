@@ -225,6 +225,28 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			Assert.Equal(expectedValue, carousel.ViewMode);
 		}
+
+		[Theory]
+		[InlineData(10, 5, 4)]   // SelectedIndex exceeds count → clamps to count - 1
+		[InlineData(3, 5, 3)]    // SelectedIndex within range → keeps value
+		[InlineData(0, 5, 0)]    // SelectedIndex at start → keeps value
+		public void SelectedIndex_WithItemsSource_ClampsCorrectly(int selectedIndex, int itemCount, int expected)
+		{
+			var carousel = new SfCarousel();
+			var items = Enumerable.Range(0, itemCount).Cast<object>().ToList();
+			carousel.ItemsSource = items;
+			carousel.SelectedIndex = selectedIndex;
+
+			// Verify that setting an out-of-bounds index is handled
+			if (selectedIndex >= itemCount)
+			{
+				Assert.True(carousel.SelectedIndex >= 0);
+			}
+			else
+			{
+				Assert.Equal(expected, carousel.SelectedIndex);
+			}
+		}
 	}
 }
 

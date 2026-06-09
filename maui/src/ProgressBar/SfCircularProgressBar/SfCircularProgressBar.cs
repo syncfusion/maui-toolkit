@@ -1012,7 +1012,7 @@ namespace Syncfusion.Maui.Toolkit.ProgressBar
                 if (!isTrack && !IsIndeterminate && GradientStops != null && GradientStops.Count > 0)
                 {
                     ProgressPath = null;
-                    _gradientArcPaths = CreateGradientArcSegments(GradientStops.ToList(), innerRadius,
+                    _gradientArcPaths = CreateGradientArcSegments(new List<ProgressGradientStop>(GradientStops), innerRadius,
                     innerRadius, ActualMinimum, actualEndValue);
                     CreateGradientArc(
                         outerArcTopLeft,

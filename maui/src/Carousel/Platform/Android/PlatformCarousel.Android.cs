@@ -3480,9 +3480,10 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		{
 			if (mauiView.ItemsSource != null)
 			{
-				if (mauiView.SelectedIndex >= mauiView.ItemsSource.Count() && mauiView.ItemsSource.Any())
+				int itemCount = mauiView.ItemsSource.Count();
+				if (mauiView.SelectedIndex >= itemCount && itemCount > 0)
 				{
-					SelectedIndex = mauiView.ItemsSource.Count() - 1;
+					SelectedIndex = itemCount - 1;
 				}
 				else if (mauiView.SelectedIndex < 0)
 				{

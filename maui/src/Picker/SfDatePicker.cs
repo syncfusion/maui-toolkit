@@ -966,16 +966,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else if (monthFormat == "MMM")
             {
-                List<string> monthStrings = DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames.ToList();
                 //// Get the month value based on the selected index changes value.
-                month = monthStrings.IndexOf(months[monthIndex]) + 1;
+                month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames, months[monthIndex]) + 1;
             }
             else if (monthFormat == "MMMM")
             {
-                List<string> monthStrings = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
-                month = monthStrings.IndexOf(months[monthIndex]) + 1;
+                month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.MonthNames, months[monthIndex]) + 1;
             }
-
             ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, year, MinimumDate, maxDate, DayInterval);
             ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
             //// Check the year and month(if month items source updated) changes needed to change the day collection.
@@ -1017,15 +1014,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
                 else if (monthFormat == "MMM")
                 {
-                    List<string> months = DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames.ToList();
                     //// Get the month value based on the selected index changes value.
-                    month = months.IndexOf(monthCollection[e.NewValue]) + 1;
+                    month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames, monthCollection[e.NewValue]) + 1;
                 }
                 else if (monthFormat == "MMMM")
                 {
-                    List<string> monthStrings = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
                     //// Get the month value based on the selected index changes value.
-                    month = monthStrings.IndexOf(monthCollection[e.NewValue]) + 1;
+                    month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.MonthNames, monthCollection[e.NewValue]) + 1;
                 }
                 else if (monthFormat == "MM_ddd")
                 {

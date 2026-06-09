@@ -1582,6 +1582,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (e.PropertyName == nameof(dataLabelSettings.LabelStyle))
 					{
+						dataLabelSettings.LabelStyle.PropertyChanged -= LabelStyle_PropertyChanged;
 						dataLabelSettings.LabelStyle.PropertyChanged += LabelStyle_PropertyChanged;
 						dataLabelSettings.LabelStyle.Parent = Parent;
 					}

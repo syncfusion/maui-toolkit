@@ -77,8 +77,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				var groupingKeys = new Dictionary<string, int>();
 
-				foreach (CartesianSeries xAxisRegSeries in cartesianSeries.ActualXAxis.RegisteredSeries.Cast<CartesianSeries>())
+				foreach (var xAxisRegItem in cartesianSeries.ActualXAxis.RegisteredSeries)
 				{
+					if (xAxisRegItem is not CartesianSeries xAxisRegSeries) continue;
 					if (xAxisRegSeries.IsSideBySide)
 					{
 						if (!xAxisRegSeries.IsSbsValueCalculated && xAxisRegSeries.ActualXAxis != null)
@@ -102,7 +103,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 									{
 										if (!stackingSeries.IsSbsValueCalculated && _seriesGroup != null)
 										{
-											string groupID = _seriesGroup.FirstOrDefault(x => x.Value.Any(s => s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeries.GetType())).Key;
+											var stackingSeriesType = stackingSeries.GetType();
+											string groupID = _seriesGroup.FirstOrDefault(x => x.Value.Any(s => s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeriesType)).Key;
 											StackingSeriesBase stackingSeriesBase;
 											int size = SideBySideSeriesPosition.Count > 0 && groupingKeys.Count > 0 && groupingKeys.TryGetValue(groupID, out var groupValue)
 												? SideBySideSeriesPosition[groupValue].Count : 0;
@@ -184,6 +186,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				double startPosition = 0, end = 0;
 				var seriesGroupValues = SideBySideSeriesPosition.Values.ToList();
 
+				var seriesPositionValues = SideBySideSeriesPosition.Values.ToList();
 				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
 				{
 					var seriesGroup = seriesGroupValues[i];
@@ -441,10 +444,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (_seriesGroup.TryGetValue(stackingGroup, out List<StackingSeriesBase>? seriesList))
 					{
-						if (seriesList.Any(x => x.ActualXAxis != stackingXAxis || x.ActualYAxis != stackingYAxis) || (seriesList[0].GetType() != stackingSeries.GetType() && stackingGroup != stackingSeries.GroupingLabel))
+						var stackingSeriesType = stackingSeries.GetType();
+						var stackingSeriesTypeName = stackingSeriesType.Name;
+						if (seriesList.Any(x => x.ActualXAxis != stackingXAxis || x.ActualYAxis != stackingYAxis) || (seriesList[0].GetType() != stackingSeriesType && stackingGroup != stackingSeries.GroupingLabel))
 						{
 							string key = _seriesGroup.FirstOrDefault(x => x.Value.Any(y =>
-											y.GetType().Name == stackingSeries.GetType().Name &&
+											y.GetType().Name == stackingSeriesTypeName &&
 											y.GroupingLabel == "" &&
 											y.ActualYAxis?.RegisteredSeries.Contains(stackingSeries) == true)).Key;
 
