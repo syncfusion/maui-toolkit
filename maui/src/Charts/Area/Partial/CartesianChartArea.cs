@@ -532,7 +532,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					var yValues = series.YValues;
 					var bottomValues = new List<double>();
 					var topValues = new List<double>();
-					bool is100Series = series is StackingColumn100Series or StackingLine100Series or StackingArea100Series;
 
 					if (xValues != null)
 					{
