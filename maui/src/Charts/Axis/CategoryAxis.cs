@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -32,8 +32,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal void GroupData()
 		{
 			List<string> groupingValues = [];
-			var groupingValuesSet = new HashSet<string>();
 			List<object> groupedDatas = [];
+			var groupingValuesSet = new HashSet<string>(StringComparer.Ordinal);
 
 			foreach (var item in RegisteredSeries)
 			{
@@ -43,7 +43,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					if (groupedDatas.Count != 0)
 					{
-						for (int j = 0; j <= xValues.Count - 1; j++)
+						for (int j = 0; j < xValues.Count; j++)
 						{
 							if (groupingValuesSet.Add(xValues[j]))
 							{
@@ -60,9 +60,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						}
 					}
 				}
-				else if (series.ActualXValues != null)
+				else if (series.ActualXValues is List<double> doubleValues)
 				{
-					foreach (var val in (series.ActualXValues as List<double>)!)
+					foreach (var val in doubleValues)
 					{
 						var str = val.ToString();
 						groupingValues.Add(str);
@@ -77,7 +77,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			var distinctXValues = groupingValues.Distinct().ToList();
-			var indexMap = new Dictionary<string, int>(distinctXValues.Count);
+			var indexMap = new Dictionary<string, int>(distinctXValues.Count, StringComparer.Ordinal);
 			for (int i = 0; i < distinctXValues.Count; i++)
 			{
 				indexMap[distinctXValues[i]] = i;
@@ -89,11 +89,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (series.ActualXValues is List<string> list)
 				{
-					series.GroupedXValuesIndexes = list.Select(val => (double)indexMap[val]).ToList();
+					var indexes = new List<double>(list.Count);
+					foreach (var val in list)
+					{
+						indexes.Add(indexMap.TryGetValue(val, out int idx) ? idx : -1);
+					}
+
+					series.GroupedXValuesIndexes = indexes;
 				}
-				else if (series.ActualXValues != null)
+				else if (series.ActualXValues is List<double> doubleList)
 				{
-					series.GroupedXValuesIndexes = (series.ActualXValues as List<double>)!.Select(val => (double)indexMap[val.ToString()]).ToList();
+					var indexes = new List<double>(doubleList.Count);
+					foreach (var val in doubleList)
+					{
+						indexes.Add(indexMap.TryGetValue(val.ToString(), out int idx) ? idx : -1);
+					}
+
+					series.GroupedXValuesIndexes = indexes;
 				}
 
 				series.GroupedXValues = distinctXValues;
