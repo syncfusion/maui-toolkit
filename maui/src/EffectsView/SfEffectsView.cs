@@ -1512,7 +1512,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 		/// <param name="touchPoint">The touch point.</param>
 		void AddResetEffects(AutoResetEffects effects, Point touchPoint)
 		{
-			foreach (var effect in effects.GetAllAutoResetEffectsItems().Select(v => (AutoResetEffects)v))
+			foreach (AutoResetEffects effect in effects.GetAllAutoResetEffectsItems())
 			{
 				if (effect == AutoResetEffects.None)
 				{
@@ -1544,7 +1544,7 @@ namespace Syncfusion.Maui.Toolkit.EffectsView
 		/// <param name="touchPoint">The touch point.</param>
 		void AddEffects(SfEffects sfEffect, Point touchPoint)
 		{
-			foreach (SfEffects effect in sfEffect.GetAllItems().Select(v => (SfEffects)v))
+			foreach (SfEffects effect in sfEffect.GetAllItems())
 			{
 				if (effect == SfEffects.None)
 				{
