@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -191,8 +192,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal string GetLabelContent(ChartSeries? chartSeries, int pos, string labelFormat)
 #pragma warning restore IDE0060 // Remove unused parameter
 		{
+			var labelBuilder = new StringBuilder();
 			int count = 0;
-			System.Text.StringBuilder? labelBuilder = null;
 
 			foreach (var series in RegisteredSeries)
 			{
@@ -252,16 +253,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							label = GetActualLabelContent(xValue, labelFormat);
 						}
 
-						if (!string.IsNullOrEmpty(label.ToString()) && ArrangeByIndex)
+						if (!string.IsNullOrEmpty(label.ToString()) && !labelBuilder.ToString().Equals(label, StringComparison.Ordinal) && ArrangeByIndex)
 						{
-							if (labelBuilder == null)
+							if (count > 0 && labelBuilder.Length > 0)
 							{
-								labelBuilder = new System.Text.StringBuilder(label);
+								labelBuilder.Append(", ");
 							}
-							else if (count > 0 && !labelBuilder.ToString().Equals(label, StringComparison.Ordinal))
-							{
-								labelBuilder.Append(", ").Append(label);
-							}
+
+							labelBuilder.Append(label);
 						}
 
 						if (!ArrangeByIndex)
@@ -274,7 +273,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			return labelBuilder?.ToString() ?? string.Empty;
+			return labelBuilder.ToString();
 		}
 
 		#endregion

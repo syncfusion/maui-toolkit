@@ -1,4 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -214,14 +214,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (Series is not PolarSeries series)
 			{
-				return new List<float>();
+				return [];
 			}
-
-			int capacity = (_pointsCount + 2) * 2;
-			var fillPoints = new List<float>(capacity);
 
 			if (series.ActualXAxis != null && series.ActualYAxis != null && _xValues != null && _yValues != null)
 			{
+				var fillPoints = new List<float>((_pointsCount + 2) * 2);
 				PointF pointF = series.TransformVisiblePoint(_xValues[0], _yValues[0], animationValue);
 
 				fillPoints.Add(pointF.X);
@@ -246,23 +244,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					fillPoints.Add(endPointF.X);
 					fillPoints.Add(endPointF.Y);
 				}
+
+				return fillPoints;
 			}
 
-			return fillPoints;
+			return [];
 		}
 
 		List<float> GenerateStrokePoints(float animationValue)
 		{
 			if (Series is not PolarSeries series)
 			{
-				return new List<float>();
+				return [];
 			}
-
-			int capacity = (_pointsCount + 2) * 2;
-			var strokePoints = new List<float>(capacity);
 
 			if (series.ActualXAxis != null && series.ActualYAxis != null && _xValues != null && _yValues != null)
 			{
+				var strokePoints = new List<float>((_pointsCount + 1) * 2);
 				PointF startPoint = series.TransformVisiblePoint(_xValues[0], _yValues[0], animationValue);
 
 				strokePoints.Add(startPoint.X);
@@ -287,9 +285,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					strokePoints.Add(pointF.X);
 					strokePoints.Add(pointF.Y);
 				}
+
+				return strokePoints;
 			}
 
-			return strokePoints;
+			return [];
 		}
 
 		static void DrawAreaPath(ref PathF path, List<float> points)
