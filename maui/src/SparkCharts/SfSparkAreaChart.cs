@@ -245,28 +245,32 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			var _segments = CreateSegments(rect, _baselineY);
 			foreach (var segment in _segments)
 			{
-				if (segment.Count < 1)
+				int segmentCount = segment.Count;
+				if (segmentCount < 1)
 				{
 					continue;
 				}
 
+				var firstPoint = segment[0];
+				var lastPoint = segment[segmentCount - 1];
+
 				// Create the filled area path for the segment.
 				var _areaPath = new PathF();
-				_areaPath.MoveTo(segment.First().X, _baselineY);
+				_areaPath.MoveTo(firstPoint.X, _baselineY);
 				foreach (var point in segment)
 				{
 					_areaPath.LineTo(point);
 				}
 
-				_areaPath.LineTo(segment.Last().X, _baselineY);
+				_areaPath.LineTo(lastPoint.X, _baselineY);
 				_areaPath.Close();
 
 				canvas.SetFillPaint(Fill, _areaPath.Bounds);
 				canvas.FillPath(_areaPath);
 
 				// Create and draw the stroke path along the top of the area.
-				var _strokePath = new PathF(segment.First());
-				for (int i = 1; i < segment.Count; i++)
+				var _strokePath = new PathF(firstPoint);
+				for (int i = 1; i < segmentCount; i++)
 				{
 					_strokePath.LineTo(segment[i]);
 				}

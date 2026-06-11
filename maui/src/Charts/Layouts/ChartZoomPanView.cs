@@ -115,14 +115,16 @@ namespace Syncfusion.Maui.Toolkit.Charts.Chart.Layouts
 				{
 					if (axis.IsVertical)
 					{
-						startPoint = new Point(isOpposed ? actualArrangeRect.X : actualArrangeRect.X + actualArrangeRect.Width, selectedRect.Top);
-						endPoint = new Point(isOpposed ? actualArrangeRect.X : actualArrangeRect.X + actualArrangeRect.Width, selectedRect.Bottom);
+						double xCoord = isOpposed ? actualArrangeRect.X : actualArrangeRect.X + actualArrangeRect.Width;
+						startPoint = new Point(xCoord, selectedRect.Top);
+						endPoint = new Point(xCoord, selectedRect.Bottom);
 						tooltipPosition = isOpposed ? TooltipPosition.Right : TooltipPosition.Left;
 					}
 					else
 					{
-						startPoint = new Point(selectedRect.Left, isOpposed ? actualArrangeRect.Y + actualArrangeRect.Height : actualArrangeRect.Y);
-						endPoint = new Point(selectedRect.Right, isOpposed ? actualArrangeRect.Y + actualArrangeRect.Height : actualArrangeRect.Y);
+						double yCoord = isOpposed ? actualArrangeRect.Y + actualArrangeRect.Height : actualArrangeRect.Y;
+						startPoint = new Point(selectedRect.Left, yCoord);
+						endPoint = new Point(selectedRect.Right, yCoord);
 						tooltipPosition = isOpposed ? TooltipPosition.Top : TooltipPosition.Bottom;
 					}
 
@@ -177,7 +179,7 @@ namespace Syncfusion.Maui.Toolkit.Charts.Chart.Layouts
 					ChartZoomPanView.MapChartLabelStyle(chart, axisPointInfo2.Helper, axis.TrackballLabelStyle);
 				}
 
-				Rect actualArrangeRect = new Rect(axis.ArrangeRect.X, axis.ArrangeRect.Y, axis.ArrangeRect.X + axis.ArrangeRect.Width, axis.ArrangeRect.Y + axis.ArrangeRect.Height);
+				Rect actualArrangeRect = new Rect(axisRect.X, axisRect.Y, axisRect.X + axisRect.Width, axisRect.Y + axisRect.Height);
 
 				axisPointInfo1.Helper.Show(actualArrangeRect, new Rect(startPoint.X - 1, startPoint.Y - 1, _dimension, _dimension), false);
 				axisPointInfo2.Helper.Show(actualArrangeRect, new Rect(endPoint.X - 1, endPoint.Y - 1, _dimension, _dimension), false);

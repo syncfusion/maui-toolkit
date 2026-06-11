@@ -2505,5 +2505,157 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 
         #endregion
 
+		#region GroupData Performance Tests
+
+		[Fact]
+		public void GroupData_WithDuplicateValues_ProducesCorrectIndexes()
+		{
+			var axis = new CategoryAxis();
+			var series1 = new LineSeries
+			{
+				ActualXValues = new List<string> { "A", "B", "A", "C", "B" },
+				ActualData = [1, 2, 3, 4, 5]
+			};
+
+			axis.RegisteredSeries = [series1];
+
+			axis.GroupData();
+
+			var expectedDistinctXValues = new List<string> { "A", "B", "C" };
+			var expectedIndexes = new List<double> { 0, 1, 0, 2, 1 };
+
+			Assert.Equal(expectedDistinctXValues, series1.GroupedXValues);
+			Assert.Equal(expectedIndexes, series1.GroupedXValuesIndexes);
+		}
+
+		[Fact]
+		public void GroupData_WithDoubleXValues_ProducesCorrectIndexes()
+		{
+			var axis = new CategoryAxis();
+			var series1 = new LineSeries
+			{
+				ActualXValues = new List<double> { 1.0, 2.0, 3.0 },
+				ActualData = [10, 20, 30]
+			};
+
+			var series2 = new LineSeries
+			{
+				ActualXValues = new List<double> { 2.0, 3.0, 4.0 },
+				ActualData = [40, 50, 60]
+			};
+
+			axis.RegisteredSeries = [series1, series2];
+
+			axis.GroupData();
+
+			var expectedDistinctXValues = new List<string> { "1", "2", "3", "4" };
+			var expectedIndexesSeries1 = new List<double> { 0, 1, 2 };
+			var expectedIndexesSeries2 = new List<double> { 1, 2, 3 };
+
+			Assert.Equal(expectedDistinctXValues, series1.GroupedXValues);
+			Assert.Equal(expectedIndexesSeries1, series1.GroupedXValuesIndexes);
+			Assert.Equal(expectedIndexesSeries2, series2.GroupedXValuesIndexes);
+		}
+
+		[Fact]
+		public void GroupData_WithMultipleSeriesOverlappingValues_DeduplicatesCorrectly()
+		{
+			var axis = new CategoryAxis();
+			var series1 = new LineSeries
+			{
+				ActualXValues = new List<string> { "X", "Y", "Z" },
+				ActualData = [1, 2, 3]
+			};
+
+			var series2 = new LineSeries
+			{
+				ActualXValues = new List<string> { "X", "Y", "Z" },
+				ActualData = [4, 5, 6]
+			};
+
+			axis.RegisteredSeries = [series1, series2];
+
+			axis.GroupData();
+
+			var expectedDistinctXValues = new List<string> { "X", "Y", "Z" };
+			var expectedIndexes = new List<double> { 0, 1, 2 };
+
+			Assert.Equal(expectedDistinctXValues, series1.GroupedXValues);
+			Assert.Equal(expectedIndexes, series1.GroupedXValuesIndexes);
+			Assert.Equal(expectedIndexes, series2.GroupedXValuesIndexes);
+		}
+
+		[Fact]
+		public void GroupData_WithSingleSeries_ProducesCorrectResults()
+		{
+			var axis = new CategoryAxis();
+			var series1 = new LineSeries
+			{
+				ActualXValues = new List<string> { "Mon", "Tue", "Wed", "Thu", "Fri" },
+				ActualData = [10, 20, 30, 40, 50]
+			};
+
+			axis.RegisteredSeries = [series1];
+
+			axis.GroupData();
+
+			var expectedDistinctXValues = new List<string> { "Mon", "Tue", "Wed", "Thu", "Fri" };
+			var expectedIndexes = new List<double> { 0, 1, 2, 3, 4 };
+
+			Assert.Equal(expectedDistinctXValues, series1.GroupedXValues);
+			Assert.Equal(expectedIndexes, series1.GroupedXValuesIndexes);
+		}
+
+		[Fact]
+		public void GroupData_WithLargeDataset_CompletesWithCorrectResults()
+		{
+			var axis = new CategoryAxis();
+			int dataSize = 1000;
+			var xValues1 = new List<string>(dataSize);
+			var xValues2 = new List<string>(dataSize);
+			var data1 = new List<object>(dataSize);
+			var data2 = new List<object>(dataSize);
+
+			for (int i = 0; i < dataSize; i++)
+			{
+				xValues1.Add($"Item_{i}");
+				data1.Add(i);
+			}
+
+			for (int i = 500; i < dataSize + 500; i++)
+			{
+				xValues2.Add($"Item_{i}");
+				data2.Add(i);
+			}
+
+			var series1 = new LineSeries
+			{
+				ActualXValues = xValues1,
+				ActualData = data1
+			};
+
+			var series2 = new LineSeries
+			{
+				ActualXValues = xValues2,
+				ActualData = data2
+			};
+
+			axis.RegisteredSeries = [series1, series2];
+
+			axis.GroupData();
+
+			// Should have 1500 distinct values (0-999 from series1, 1000-1499 from series2)
+			Assert.Equal(1500, series1.GroupedXValues.Count);
+
+			// First series indexes should be 0..999
+			Assert.Equal(0.0, series1.GroupedXValuesIndexes[0]);
+			Assert.Equal(999.0, series1.GroupedXValuesIndexes[999]);
+
+			// Second series: "Item_500" should map to index 500
+			Assert.Equal(500.0, series2.GroupedXValuesIndexes[0]);
+		}
+
+		#endregion
+
     }
 }

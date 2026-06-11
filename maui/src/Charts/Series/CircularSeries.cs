@@ -38,6 +38,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal List<PieSegment>? LeftPoints { get; set; }
 
+		internal HashSet<PieSegment>? LeftPointsLookup { get; set; }
+
 		internal List<PieSegment>? RightPoints { get; set; }
 
 		//TODO: Need to remove by calculate smartLabels without using series. 
@@ -729,6 +731,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (DataLabelSettings.SmartLabelAlignment == SmartLabelAlignment.Shift)
 			{
 				LeftPoints = [];
+				LeftPointsLookup = [];
 				RightPoints = [];
 
 				foreach (PieSegment segment in _segments.Cast<PieSegment>())
@@ -738,6 +741,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						DataLabelSettings.LabelPosition == ChartDataLabelPosition.Outside)
 					{
 						LeftPoints.Add(segment);
+						LeftPointsLookup.Add(segment);
 					}
 					else if (segment.DataLabelRenderingPosition == Position.Right &&
 						DataLabelSettings.LabelPosition == ChartDataLabelPosition.Outside)
@@ -1299,8 +1303,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					ChangeLabelAngle(previousPoint, newAngle);
 
-					if (CircularSeries.IsOverlap(currentPoint.LabelRect, previousPoint.LabelRect) && LeftPoints != null &&
-						LeftPoints.Contains(previousPoint) &&
+					if (CircularSeries.IsOverlap(currentPoint.LabelRect, previousPoint.LabelRect) && LeftPointsLookup != null &&
+						LeftPointsLookup.Contains(previousPoint) &&
 						(newAngle - 1 < 90 && newAngle - 1 > 270))
 					{
 						ChangeLabelAngle(currentPoint, currentPoint.SegmentNewAngle! + 1);

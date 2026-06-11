@@ -1605,7 +1605,61 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			InvokePrivateMethod(accordion, "UpdateSelection");
 			Assert.False(accordion.Items[0]._accordionItemView?.IsSelected);
 		}
-		
+
+		[Fact]
+		public void UpdateSelection_ShouldNotDeselect_WhenNoItemsAreSelected()
+		{
+			var accordion = new SfAccordion();
+			accordion.Items.Add(new AccordionItem { _itemIndex = 0, _accordionItemView = new AccordionItemView() });
+			accordion.Items.Add(new AccordionItem { _itemIndex = 1, _accordionItemView = new AccordionItemView() });
+			accordion.UpdateSelection();
+			// No exception thrown, items remain unselected
+			Assert.False(accordion.Items[0]._accordionItemView!.IsSelected);
+			Assert.False(accordion.Items[1]._accordionItemView!.IsSelected);
+		}
+
+		[Fact]
+		public void UpdateSelection_ShouldNotThrow_WhenItemsHaveNullAccordionItemView()
+		{
+			var accordion = new SfAccordion();
+			accordion.Items.Add(new AccordionItem { _itemIndex = 0 });
+			accordion.Items.Add(new AccordionItem { _itemIndex = 1 });
+			var exception = Record.Exception(() => accordion.UpdateSelection());
+			Assert.Null(exception);
+		}
+
+		[Fact]
+		public void UpdateAccordionItemsBasedOnExpandModes_SingleMode_CollapsesExtraItems_WhenMultipleExpanded()
+		{
+			var accordion = new SfAccordion
+			{
+				ExpandMode = AccordionExpandMode.Single
+			};
+			var item1 = new AccordionItem { _itemIndex = 0, _accordionItemView = new AccordionItemView { IsExpanded = true } };
+			var item2 = new AccordionItem { _itemIndex = 1, _accordionItemView = new AccordionItemView { IsExpanded = true } };
+			var item3 = new AccordionItem { _itemIndex = 2, _accordionItemView = new AccordionItemView { IsExpanded = true } };
+			accordion.Items.Add(item1);
+			accordion.Items.Add(item2);
+			accordion.Items.Add(item3);
+			accordion.IsViewLoaded = true;
+			accordion.UpdateAccordionItemsBasedOnExpandModes(false);
+			// After collapsing extras, items at indices 0 and 1 should be collapsed (IsExpanded set on AccordionItem)
+			Assert.False(item1.IsExpanded);
+			Assert.False(item2.IsExpanded);
+		}
+
+		[Fact]
+		public void UpdateAccordionItemsBasedOnExpandModes_EmptyItems_ShouldNotThrow()
+		{
+			var accordion = new SfAccordion
+			{
+				ExpandMode = AccordionExpandMode.Single
+			};
+			accordion.IsViewLoaded = true;
+			var exception = Record.Exception(() => accordion.UpdateAccordionItemsBasedOnExpandModes(false));
+			Assert.Null(exception);
+		}
+
 		#endregion
 
 	}
