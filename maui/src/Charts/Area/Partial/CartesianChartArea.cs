@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -103,8 +103,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 									{
 										if (!stackingSeries.IsSbsValueCalculated && _seriesGroup != null)
 										{
-											var stackingSeriesType = stackingSeries.GetType();
-											string groupID = _seriesGroup.FirstOrDefault(x => x.Value.Any(s => s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeriesType)).Key;
+											string? groupID = null;
+											foreach (var group in _seriesGroup)
+											{
+												foreach (var s in group.Value)
+												{
+													if (s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeries.GetType())
+													{
+														groupID = group.Key;
+														break;
+													}
+												}
+
+												if (groupID != null)
+												{
+													break;
+												}
+											}
 											StackingSeriesBase stackingSeriesBase;
 											int size = SideBySideSeriesPosition.Count > 0 && groupingKeys.Count > 0 && groupingKeys.TryGetValue(groupID, out var groupValue)
 												? SideBySideSeriesPosition[groupValue].Count : 0;
@@ -354,15 +369,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal void ResetSBSSegments()
 		{
-			var sideBySideSeries = VisibleSeries?.Where(series => series.IsSideBySide).ToList();
-
-			if (sideBySideSeries != null && sideBySideSeries.Count > 0)
+			if (VisibleSeries == null)
 			{
-				SideBySideSeriesPosition = null;
+				return;
+			}
 
-				foreach (var chartSeries in sideBySideSeries)
+			bool hasSbsSeries = false;
+			foreach (var series in VisibleSeries)
+			{
+				if (series.IsSideBySide)
 				{
-					chartSeries.SegmentsCreated = false;
+					if (!hasSbsSeries)
+					{
+						SideBySideSeriesPosition = null;
+						hasSbsSeries = true;
+					}
+
+					series.SegmentsCreated = false;
 				}
 			}
 		}
@@ -407,7 +430,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal void UpdateStackingSeries()
 		{
 			//if visible series count is 0 or not contain any stacking series then return.
-			if (VisibleSeries == null || VisibleSeries.Count == 0 || !VisibleSeries.Any(series => series is StackingSeriesBase && !series.SegmentsCreated))
+			if (VisibleSeries == null || VisibleSeries.Count == 0)
+			{
+				return;
+			}
+
+			bool hasStackingToCreate = false;
+			foreach (var series in VisibleSeries)
+			{
+				if (series is StackingSeriesBase && !series.SegmentsCreated)
+				{
+					hasStackingToCreate = true;
+					break;
+				}
+			}
+
+			if (!hasStackingToCreate)
 			{
 				return;
 			}
