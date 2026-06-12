@@ -1,4 +1,4 @@
-﻿using System.Collections.Specialized;
+using System.Collections.Specialized;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -330,16 +330,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void ResetVisibleSeries()
 		{
-			if (ChartArea?.VisibleSeries == null)
+			if (ChartArea != null)
 			{
-				return;
-			}
+				var visibleSeries = ChartArea.VisibleSeries;
 
-			foreach (var chartSeries in ChartArea.VisibleSeries)
-			{
-				if (chartSeries.IsStacking)
+				if (visibleSeries == null)
 				{
-					chartSeries.SegmentsCreated = false;
+					return;
+				}
+
+				foreach (var chartSeries in visibleSeries)
+				{
+					if (chartSeries.IsStacking)
+					{
+						chartSeries.SegmentsCreated = false;
+					}
 				}
 			}
 		}

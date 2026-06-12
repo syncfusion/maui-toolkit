@@ -200,10 +200,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				double totalWidth = GetTotalWidth() / SideBySideSeriesPosition.Count;
 				double startPosition = 0, end = 0;
 
-				var seriesPositionValues = SideBySideSeriesPosition.Values.ToList();
-				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
+				var sideBySideValues = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < sideBySideValues.Count; i++)
 				{
-					var seriesGroup = seriesPositionValues[i];
+					var seriesGroup = sideBySideValues[i];
 					double sbsMaxWidth = GetSBSMaxWidth(seriesGroup);
 
 					foreach (ChartSeries chartSeries in seriesGroup)
@@ -351,7 +351,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							if (xValues != null && xValues.Count > 0)
 							{
 								//DateTimeAxis not rendered properly when series have single datapoint with different x position
-								var actualXValues = xValues.ToList();
+								var actualXValues = xValues as List<double> ?? xValues.ToList();
 								previousXValues.AddRange(actualXValues);
 								UpdateMinWidth(cartesianSeries, ref minWidth, previousXValues);
 								previousXValues = actualXValues;
@@ -396,11 +396,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (SideBySideSeriesPosition != null)
 			{
-				var positionValues = SideBySideSeriesPosition.Values.ToList();
-				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
+				var sideBySideValues = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < sideBySideValues.Count; i++)
 				{
 					double maxWidth = 0;
-					foreach (ChartSeries sideBySideSeries in positionValues[i])
+					foreach (ChartSeries sideBySideSeries in sideBySideValues[i])
 					{
 						CartesianSeries cartesianSeries = (CartesianSeries)sideBySideSeries;
 						double width = cartesianSeries.GetActualWidth();
@@ -596,12 +596,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		static double GetYValue(List<StackingSeriesBase> seriesList, double yValue, int index)
 		{
 			double total = 0;
-			foreach (var series in seriesList)
+			for (int i = 0; i < seriesList.Count; i++)
 			{
+				var series = seriesList[i];
 				if (series != null && series.YValues.Count > index)
 				{
-					double val = series.YValues[index];
-					total += double.IsNaN(val) ? 0 : Math.Abs(val);
+					double value = series.YValues[index];
+					if (!double.IsNaN(value))
+					{
+						total += Math.Abs(value);
+					}
 				}
 			}
 
@@ -612,6 +616,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			return yValue;
 		}
+		
 		#endregion
 	}
 }

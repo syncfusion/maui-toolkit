@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Maui;
@@ -976,10 +976,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (CartesianChart != null && (CartesianChart is IChart chart))
 			{
 				if (PreviousPointInfos == null)
+				{
 					PreviousPointInfos = new List<TrackballPointInfo>(PointInfos.Count);
+				}
 				else
+				{
 					PreviousPointInfos.Clear();
-				PreviousPointInfos.AddRange(PointInfos);
+					PreviousPointInfos.AddRange(PointInfos);
+				}
+
 				PointInfos.Clear();
 				_isAnySideBySideSeries = false;
 				_isAnyContinuesSeries = false;
@@ -1330,11 +1335,29 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				//{
 				if (CartesianChart.IsTransposed)
 				{
-					PointInfos = [.. PointInfos.Where(item => IsRectContainsPoints(item)).OrderBy(item => item.X)];
+					var filtered = new List<TrackballPointInfo>(PointInfos.Count);
+					for (int i = 0; i < PointInfos.Count; i++)
+					{
+						if (IsRectContainsPoints(PointInfos[i]))
+						{
+							filtered.Add(PointInfos[i]);
+						}
+					}
+					filtered.Sort((a, b) => a.X.CompareTo(b.X));
+					PointInfos = filtered;
 				}
 				else
 				{
-					PointInfos = [.. PointInfos.Where(item => IsRectContainsPoints(item)).OrderBy(item => item.Y)];
+					var filtered = new List<TrackballPointInfo>(PointInfos.Count);
+					for (int i = 0; i < PointInfos.Count; i++)
+					{
+						if (IsRectContainsPoints(PointInfos[i]))
+						{
+							filtered.Add(PointInfos[i]);
+						}
+					}
+					filtered.Sort((a, b) => a.Y.CompareTo(b.Y));
+					PointInfos = filtered;
 				}
 				//}
 			}
@@ -1724,7 +1747,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			List<TrackballPointInfo> tempTrackballPointInfos = new List<TrackballPointInfo>(PointInfos);
 			bool isTransposed = CartesianChart.IsTransposed;
 
-			tempTrackballPointInfos = isTransposed ? [.. tempTrackballPointInfos.OrderBy(a => a.X)] : [.. tempTrackballPointInfos.OrderBy(a => a.Y)];
+			if (isTransposed)
+			{
+				tempTrackballPointInfos.Sort((a, b) => a.X.CompareTo(b.X));
+			}
+			else
+			{
+				tempTrackballPointInfos.Sort((a, b) => a.Y.CompareTo(b.Y));
+			}
 
 			foreach (TrackballPointInfo pointInfo in tempTrackballPointInfos)
 			{
