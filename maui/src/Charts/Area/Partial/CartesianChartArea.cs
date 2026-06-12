@@ -593,12 +593,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		static double GetYValue(List<StackingSeriesBase> SeriesList, double yValue, int index)
+		static double GetYValue(List<StackingSeriesBase> seriesList, double yValue, int index)
 		{
 			double total = 0;
-			for (int i = 0; i < SeriesList.Count; i++)
+			for (int i = 0; i < seriesList.Count; i++)
 			{
-				var series = SeriesList[i];
+				var series = seriesList[i];
 				if (series != null && series.YValues.Count > index)
 				{
 					double value = series.YValues[index];
@@ -616,6 +616,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			return yValue;
 		}
+		
 		#endregion
 	}
 }
