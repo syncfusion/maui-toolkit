@@ -880,6 +880,24 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
         #region Private Methods
 
+		/// <summary>
+		/// Finds the special date icon details for a given date using a loop to avoid delegate allocation.
+		/// </summary>
+		/// <param name="dateTime">The date to look up.</param>
+		/// <returns>The matching CalendarIconDetails or null.</returns>
+		CalendarIconDetails? GetSpecialDateIcon(DateTime dateTime)
+		{
+			for (int i = 0; i < _specialDates.Count; i++)
+			{
+				if (CalendarViewHelper.IsSameDate(_calendarViewInfo.View, _specialDates[i].Date, dateTime, _calendarViewInfo.Identifier))
+				{
+					return _specialDates[i];
+				}
+			}
+
+			return null;
+		}
+
         /// <summary>
         /// Method to find the range is present in current view or not.
         /// </summary>
@@ -1635,7 +1653,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 // The current date is today date and not a range then need to considered the today text style.
                 bool isTodayDate = todayDate.Date.Equals(dateTime.Date);
                  //// Stores the special dates icon details for drawing.
-                CalendarIconDetails? calendarSpecialDayIconDetails = _specialDates.FirstOrDefault(details => CalendarViewHelper.IsSameDate(_calendarViewInfo.View, details.Date, dateTime, _calendarViewInfo.Identifier));
+                CalendarIconDetails? calendarSpecialDayIconDetails = GetSpecialDateIcon(dateTime);
                 CalendarTextStyle textStyle = GetMonthCellStyle(dateTime, isTodayDate, isLeadingAndTrailingDates, isBlackoutDate, isDisabledDate, _calendarViewInfo.ShowOutOfRangeDates, calendarSpecialDayIconDetails != null, ref fillColor, cellBackground, trailingLeadingDateBackground, weekendsBackground, todayBackground, disabledDatesBackground, specialDatesBackground, cultureCalendar);
                 //// If background color is not transparent then the background color for month cell is applied.
                 if (fillColor != Colors.Transparent)
@@ -3080,7 +3098,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
                 string blackOutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates) ? SfCalendarResources.GetLocalizedString("Blackout Date") : string.Empty;
                 string disabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier) ? SfCalendarResources.GetLocalizedString("Disabled Date") : string.Empty;
-                CalendarIconDetails? calendarSpecialDayIconDetails = _specialDates.FirstOrDefault(details => CalendarViewHelper.IsSameDate(_calendarViewInfo.View, details.Date, dateTime, _calendarViewInfo.Identifier));
+                CalendarIconDetails? calendarSpecialDayIconDetails = GetSpecialDateIcon(dateTime);
                 string specialDate = calendarSpecialDayIconDetails == null ? string.Empty : SfCalendarResources.GetLocalizedString("Special Date");
                 string dateType = string.IsNullOrEmpty(specialDate) ? !string.IsNullOrEmpty(blackOutDate) ? blackOutDate : disabledDate : specialDate;
                 string dateText = isGregorianCalendar ? dateTime.ToString("dddd, dd/MMMM/yyyy") + dateType : dateTime.ToString("dddd, dd/MMMM/yyyy", cultureInfo) + dateType;

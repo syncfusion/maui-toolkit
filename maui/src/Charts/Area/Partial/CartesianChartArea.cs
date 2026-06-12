@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -77,8 +77,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				var groupingKeys = new Dictionary<string, int>();
 
-				foreach (CartesianSeries xAxisRegSeries in cartesianSeries.ActualXAxis.RegisteredSeries.Cast<CartesianSeries>())
+				foreach (var xAxisRegItem in cartesianSeries.ActualXAxis.RegisteredSeries)
 				{
+					if (xAxisRegItem is not CartesianSeries xAxisRegSeries) continue;
 					if (xAxisRegSeries.IsSideBySide)
 					{
 						if (!xAxisRegSeries.IsSbsValueCalculated && xAxisRegSeries.ActualXAxis != null)
@@ -102,8 +103,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 									{
 										if (!stackingSeries.IsSbsValueCalculated && _seriesGroup != null)
 										{
-											Type stackingType = stackingSeries.GetType();
-											string groupID = _seriesGroup.FirstOrDefault(x => x.Value.Any(s => s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingType)).Key;
+											string? groupID = null;
+											foreach (var group in _seriesGroup)
+											{
+												foreach (var s in group.Value)
+												{
+													if (s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeries.GetType())
+													{
+														groupID = group.Key;
+														break;
+													}
+												}
+
+												if (groupID != null)
+												{
+													break;
+												}
+											}
 											StackingSeriesBase stackingSeriesBase;
 											int size = SideBySideSeriesPosition.Count > 0 && groupingKeys.Count > 0 && groupingKeys.TryGetValue(groupID, out var groupValue)
 												? SideBySideSeriesPosition[groupValue].Count : 0;
@@ -353,15 +369,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal void ResetSBSSegments()
 		{
-			var sideBySideSeries = VisibleSeries?.Where(series => series.IsSideBySide).ToList();
-
-			if (sideBySideSeries != null && sideBySideSeries.Count > 0)
+			if (VisibleSeries == null)
 			{
-				SideBySideSeriesPosition = null;
+				return;
+			}
 
-				foreach (var chartSeries in sideBySideSeries)
+			bool hasSbsSeries = false;
+			foreach (var series in VisibleSeries)
+			{
+				if (series.IsSideBySide)
 				{
-					chartSeries.SegmentsCreated = false;
+					if (!hasSbsSeries)
+					{
+						SideBySideSeriesPosition = null;
+						hasSbsSeries = true;
+					}
+
+					series.SegmentsCreated = false;
 				}
 			}
 		}
@@ -406,7 +430,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal void UpdateStackingSeries()
 		{
 			//if visible series count is 0 or not contain any stacking series then return.
-			if (VisibleSeries == null || VisibleSeries.Count == 0 || !VisibleSeries.Any(series => series is StackingSeriesBase && !series.SegmentsCreated))
+			if (VisibleSeries == null || VisibleSeries.Count == 0)
+			{
+				return;
+			}
+
+			bool hasStackingToCreate = false;
+			foreach (var series in VisibleSeries)
+			{
+				if (series is StackingSeriesBase && !series.SegmentsCreated)
+				{
+					hasStackingToCreate = true;
+					break;
+				}
+			}
+
+			if (!hasStackingToCreate)
 			{
 				return;
 			}
@@ -435,11 +474,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (_seriesGroup.TryGetValue(stackingGroup, out List<StackingSeriesBase>? seriesList))
 					{
-						Type stackingSeriesType = stackingSeries.GetType();
+						var stackingSeriesType = stackingSeries.GetType();
+						var stackingSeriesTypeName = stackingSeriesType.Name;
 						if (seriesList.Any(x => x.ActualXAxis != stackingXAxis || x.ActualYAxis != stackingYAxis) || (seriesList[0].GetType() != stackingSeriesType && stackingGroup != stackingSeries.GroupingLabel))
 						{
 							string key = _seriesGroup.FirstOrDefault(x => x.Value.Any(y =>
-											y.GetType().Name == stackingSeriesType.Name &&
+											y.GetType().Name == stackingSeriesTypeName &&
 											y.GroupingLabel == "" &&
 											y.ActualYAxis?.RegisteredSeries.Contains(stackingSeries) == true)).Key;
 
@@ -495,6 +535,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (xValues != null)
 					{
+						bool isStacking100Series = series is StackingColumn100Series or StackingLine100Series or StackingArea100Series;
+
 						for (int i = 0; i < xValues.Count; i++)
 						{
 							var xValue = xValues[i];
@@ -506,7 +548,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								if (positiveYValues.TryGetValue(xValue, out double currentValue))
 								{
 									bottomValues.Add((axisCross > currentValue) ? axisCross : currentValue);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
+									if (isStacking100Series)
 									{
 										yValue = GetYValue(seriesList, yValue, i);
 									}
@@ -515,7 +557,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								else
 								{
 									bottomValues.Add(axisCross);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
+									if (isStacking100Series)
 									{
 										yValue = GetYValue(seriesList, yValue, i);
 									}
@@ -529,7 +571,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								if (!negativeYValues.TryAdd(xValue, yValue))
 								{
 									bottomValues.Add((axisCross < negativeYValues[xValue]) ? axisCross : negativeYValues[xValue]);
-									if (series.GetType().Name.Contains("Stacking", StringComparison.Ordinal) && series.GetType().Name.Contains("100Series", StringComparison.Ordinal))
+									if (isStacking100Series)
 									{
 										yValue = GetYValue(seriesList, yValue, i);
 									}

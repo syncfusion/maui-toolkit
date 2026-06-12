@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Maui;
@@ -997,8 +997,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				foreach (ChartAxis chartAxis in xAxes)
 				{
-					foreach (CartesianSeries series in chartAxis.RegisteredSeries.Cast<CartesianSeries>())
+					foreach (var axisItem in chartAxis.RegisteredSeries)
 					{
+						if (axisItem is not CartesianSeries series) continue;
 						if (series.IsVisible && series.ShowTrackballLabel && series.PointsCount > 0)
 						{
 							List<object> nearestDataPoints = series.FindNearestChartPoints(pointX, pointY);
@@ -1186,7 +1187,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void GenerateAxisTrackballInfos(float leastX)
 		{
-			_previousAxisPointInfos = new List<TrackballAxisInfo>(_axisPointInfos);
+			if (_previousAxisPointInfos == null)
+				_previousAxisPointInfos = new List<TrackballAxisInfo>(_axisPointInfos.Count);
+			else
+				_previousAxisPointInfos.Clear();
+			_previousAxisPointInfos.AddRange(_axisPointInfos);
 			_axisPointInfos.Clear();
 
 			if (CartesianChart == null)
