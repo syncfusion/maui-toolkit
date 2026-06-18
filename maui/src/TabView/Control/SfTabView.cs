@@ -157,10 +157,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		public static readonly BindableProperty TabHeaderAlignmentProperty =
 			BindableProperty.Create(
-				nameof(TabHeaderAlignment), 
-				typeof(TabHeaderAlignment), 
-				typeof(SfTabView), 
-				TabHeaderAlignment.Start, 
+				nameof(TabHeaderAlignment),
+				typeof(TabHeaderAlignment),
+				typeof(SfTabView),
+				TabHeaderAlignment.Start,
 				propertyChanged: OnTabHeaderAlignmentPropertyChanged);
 
 		/// <summary>
@@ -1082,7 +1082,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			get => (DataTemplate?)GetValue(HeaderItemTemplateProperty);
 			set => SetValue(HeaderItemTemplateProperty, value);
 		}
-		
+
 		/// <summary>
 		/// Gets or sets the value that defines the spacing between header items.
 		/// </summary>
@@ -1849,7 +1849,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			get => (bool)GetValue(IsContentLoopingEnabledProperty);
 			set => SetValue(IsContentLoopingEnabledProperty, value);
 		}
-		
+
 		/// <summary>
 		/// Gets or sets the easing function used for tab transition animations.
 		/// </summary>
@@ -2362,7 +2362,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>		
 
 		static void OnTabHeaderAlignmentPropertyChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateTabHeaderAlignment((TabHeaderAlignment)newValue);
-		
+
 		/// <summary>
 		/// Handles changes to the <see cref="AnimationEasing"/> property.
 		/// </summary>
@@ -2720,7 +2720,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					if (TabBarHeight >= 0)
 					{
 						_parentGrid.RowDefinitions[tabHeaderContainerIndex].Height = TabBarHeight;
-						
+
 					}
 					_parentGrid.RowDefinitions[tabContentContainerIndex].Height = GridLength.Star;
 				}
@@ -3055,7 +3055,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					break;
 			}
 		}
-		
+
 		/// <summary>
 		/// Updates the animation easing for both tab header and content containers.
 		/// </summary>
@@ -3170,5 +3170,80 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 		}
 		#endregion
+
+		#region Swipe Sensitivity
+
+		/// <summary>
+		/// The default base swipe threshold multiplier (density-independent units).
+		/// Matches the original hard-coded value of 5, preserving backward compatibility.
+		/// </summary>
+		internal const double DefaultSwipeSensitivity = 5.0;
+
+		/// <summary>
+		/// Identifies the <see cref="SwipeSensitivity"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The default value is <c>5.0</c>.
+		/// Higher values require a larger horizontal swipe distance before a tab
+		/// switch is triggered (less sensitive). Lower values make the control
+		/// react to shorter swipes (more sensitive).
+		/// </remarks>
+		public static readonly BindableProperty SwipeSensitivityProperty =
+			BindableProperty.Create(
+				nameof(SwipeSensitivity),
+				typeof(double),
+				typeof(SfTabView),
+				DefaultSwipeSensitivity,
+				validateValue: (_, value) => (double)value > 0);
+
+		/// <summary>
+		/// Gets or sets the base swipe threshold (in density-independent units) that
+		/// determines how far the user must swipe horizontally before a tab switch
+		/// is triggered on Android.
+		/// </summary>
+		/// <value>
+		/// A positive <see cref="double"/> value. Defaults to <c>5.0</c>.
+		/// </value>
+		/// <remarks>
+		/// The actual pixel threshold used internally is <c>SwipeSensitivity × DisplayDensity</c>.
+		/// <list type="bullet">
+		///   <item>
+		///     <description>
+		///       Increase this value (e.g. <c>15</c>–<c>20</c>) when users accidentally
+		///       switch tabs while scrolling vertically through list content inside a tab.
+		///     </description>
+		///   </item>
+		///   <item>
+		///     <description>
+		///       Decrease this value (e.g. <c>2</c>–<c>3</c>) if you want the control to
+		///       respond to very short horizontal swipes.
+		///     </description>
+		///   </item>
+		/// </list>
+		/// This property only affects the Android platform; on other platforms the
+		/// swipe gesture is handled natively and is not configurable through this API.
+		/// </remarks>
+		/// <example>
+		/// XAML:
+		/// <code>
+		/// &lt;toolkit:SfTabView SwipeSensitivity="15"&gt;
+		///     &lt;toolkit:SfTabItem Header="Tab 1"&gt;
+		///         &lt;CollectionView ItemsSource="{Binding Items}" /&gt;
+		///     &lt;/toolkit:SfTabItem&gt;
+		/// &lt;/toolkit:SfTabView&gt;
+		/// </code>
+		/// C#:
+		/// <code>
+		/// var tabView = new SfTabView { SwipeSensitivity = 15 };
+		/// </code>
+		/// </example>
+		public double SwipeSensitivity
+		{
+			get => (double)GetValue(SwipeSensitivityProperty);
+			set => SetValue(SwipeSensitivityProperty, value);
+		}
+
+		#endregion
+
 	}
 }
