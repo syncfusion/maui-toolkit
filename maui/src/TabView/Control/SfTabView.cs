@@ -3194,7 +3194,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				typeof(double),
 				typeof(SfTabView),
 				DefaultSwipeSensitivity,
-				validateValue: (_, value) => (double)value > 0);
+				validateValue: (_, value) => value is double d && double.IsFinite(d) && d > 0);
 
 		/// <summary>
 		/// Gets or sets the base swipe threshold (in density-independent units) that
