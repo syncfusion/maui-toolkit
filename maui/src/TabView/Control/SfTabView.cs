@@ -3174,8 +3174,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		#region Swipe Sensitivity
 
 		/// <summary>
-		/// The default base swipe threshold multiplier (density-independent units).
-		/// Matches the original hard-coded value of 5, preserving backward compatibility.
+		/// The default base swipe threshold (in density-independent units).
+		/// Matches the original hard-coded base value of 5, preserving backward compatibility.
 		/// </summary>
 		internal const double DefaultSwipeSensitivity = 5.0;
 
