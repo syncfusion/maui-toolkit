@@ -2164,7 +2164,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 
 				default:
                     if ((e.Key >= Windows.System.VirtualKey.A && e.Key <= Windows.System.VirtualKey.Z) ||
-                        (e.Key >= Windows.System.VirtualKey.Number0 && e.Key <= Windows.System.VirtualKey.Number9))
+                        (e.Key >= Windows.System.VirtualKey.Number0 && e.Key <= Windows.System.VirtualKey.Number9) || (e.Key >= Windows.System.VirtualKey.NumberPad0 && e.Key <= Windows.System.VirtualKey.NumberPad9))
                     {
                         string text = e.Key.ToString();
                         HandleKeyPress(text);
