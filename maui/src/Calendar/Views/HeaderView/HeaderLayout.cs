@@ -421,7 +421,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             string headerDateString = string.Empty;
             int numberOfWeeks = _headerInfo.NumberOfVisibleWeeks;
             CultureInfo cultureInfo = CalendarViewHelper.GetCurrentUICultureInfo(_headerInfo.Identifier);
-            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_headerInfo.Identifier.ToString());
+            Globalization.Calendar calendar = CalendarViewHelper.GetCalendar(_headerInfo.Identifier);
             switch (_headerInfo.View)
             {
                 case CalendarView.Month:
@@ -592,7 +592,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 //// Set the tapped value as month start date(1) for calendar month view to restrict
                 //// the assignment of trailing dates value.
                 tappedDate = _headerInfo.VisibleDates[_headerInfo.VisibleDates.Count / 2];
-                Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_headerInfo.Identifier.ToString());
+                Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_headerInfo.Identifier);
                 DateTime minDate = cultureCalendar.MinSupportedDateTime;
                 int minDateYear = cultureCalendar.GetYear(minDate);
                 int minDateMonth = cultureCalendar.GetMonth(minDate);

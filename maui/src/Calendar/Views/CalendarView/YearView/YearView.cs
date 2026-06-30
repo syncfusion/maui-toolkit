@@ -1098,7 +1098,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         DateTime GetVisibleEndDate()
         {
             DateTime visibleEndDate = _visibleDates[_visibleDates.Count - 1];
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier);
             DateTime maxDate = cultureCalendar.MaxSupportedDateTime.Date;
             int maxDateYear = cultureCalendar.GetYear(maxDate);
             switch (_calendarViewInfo.View)
@@ -1951,7 +1951,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             int childIndex = 0;
             DateTime currentViewDate = _visibleDates[0];
             int maxCellCount = _visibleDates.Count;
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier);
             int minYear = cultureCalendar.GetYear(cultureCalendar.MinSupportedDateTime);
             if (!_calendarViewInfo.ShowTrailingAndLeadingDates)
             {
@@ -2396,7 +2396,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return;
             }
 
-            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier.ToString());
+            Globalization.Calendar cultureCalendar = CalendarViewHelper.GetCalendar(_calendarViewInfo.Identifier);
             DateTime previousViewStartDate = previousVisibleDates[0];
             DateTime currentViewStartDate = _visibleDates[0];
             int previousYearDifference = cultureCalendar.GetYear(previousVisibleDates[1]) - cultureCalendar.GetYear(previousViewStartDate);

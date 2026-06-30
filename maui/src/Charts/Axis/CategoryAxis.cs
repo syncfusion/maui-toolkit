@@ -1,5 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -33,17 +34,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			List<string> groupingValues = [];
 			List<object> groupedDatas = [];
+			var groupingValuesSet = new HashSet<string>(StringComparer.Ordinal);
 
-			foreach (CartesianSeries series in RegisteredSeries.Cast<CartesianSeries>())
+			foreach (var item in RegisteredSeries)
 			{
+				if (item is not CartesianSeries series) continue;
+
 				if (series.ActualXValues is List<string> xValues)
 				{
 					if (groupedDatas.Count != 0)
 					{
-						var seen = new HashSet<string>(groupingValues);
 						for (int j = 0; j < xValues.Count; j++)
 						{
-							if (seen.Add(xValues[j]))
+							if (groupingValuesSet.Add(xValues[j]))
 							{
 								groupingValues.Add(xValues[j]);
 							}
@@ -52,11 +55,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					else
 					{
 						groupingValues.AddRange(xValues);
+						foreach (var xVal in xValues)
+						{
+							groupingValuesSet.Add(xVal);
+						}
 					}
 				}
-				else if (series.ActualXValues != null)
+				else if (series.ActualXValues is List<double> doubleValues)
 				{
-					groupingValues.AddRange(from val in (series.ActualXValues as List<double>) select val.ToString());
+					foreach (var val in doubleValues)
+					{
+						var str = val.ToString();
+						groupingValues.Add(str);
+						groupingValuesSet.Add(str);
+					}
 				}
 
 				if (groupingValues.Count != groupedDatas.Count)
@@ -66,20 +78,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			var distinctXValues = groupingValues.Distinct().ToList();
-			var indexLookup = new Dictionary<string, int>(distinctXValues.Count);
+			var indexMap = new Dictionary<string, int>(distinctXValues.Count, StringComparer.Ordinal);
 			for (int i = 0; i < distinctXValues.Count; i++)
 			{
-				indexLookup[distinctXValues[i]] = i;
+				indexMap[distinctXValues[i]] = i;
 			}
 
-			foreach (CartesianSeries series in RegisteredSeries.Cast<CartesianSeries>())
+			foreach (var item in RegisteredSeries)
 			{
+				if (item is not CartesianSeries series) continue;
+
 				if (series.ActualXValues is List<string> list)
 				{
 					var indexes = new List<double>(list.Count);
 					for (int i = 0; i < list.Count; i++)
 					{
-						indexes.Add(indexLookup.TryGetValue(list[i], out int idx) ? idx : -1);
+						indexes.Add(indexMap.TryGetValue(list[i], out int idx) ? idx : -1);
 					}
 					series.GroupedXValuesIndexes = indexes;
 				}
@@ -88,7 +102,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					var indexes = new List<double>(doubleValues.Count);
 					for (int i = 0; i < doubleValues.Count; i++)
 					{
-						indexes.Add(indexLookup.TryGetValue(doubleValues[i].ToString(), out int idx) ? idx : -1);
+						indexes.Add(indexMap.TryGetValue(doubleValues[i].ToString(), out int idx) ? idx : -1);
 					}
 					series.GroupedXValuesIndexes = indexes;
 				}
@@ -176,7 +190,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal string GetLabelContent(ChartSeries? chartSeries, int pos, string labelFormat)
 #pragma warning restore IDE0060 // Remove unused parameter
 		{
-			var labelContent = string.Empty;
+			var labelBuilder = new StringBuilder();
 			int count = 0;
 
 			foreach (var series in RegisteredSeries)
@@ -237,9 +251,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							label = GetActualLabelContent(xValue, labelFormat);
 						}
 
-						if (!string.IsNullOrEmpty(label.ToString()) && !labelContent.Equals(label, StringComparison.Ordinal) && ArrangeByIndex)
+						if (!string.IsNullOrEmpty(label.ToString()) && !labelBuilder.ToString().Equals(label, StringComparison.Ordinal) && ArrangeByIndex)
 						{
-							labelContent = count > 0 && !string.IsNullOrEmpty(labelContent) ? labelContent + ", " + label : label.ToString();
+							if (count > 0 && labelBuilder.Length > 0)
+							{
+								labelBuilder.Append(", ");
+							}
+
+							labelBuilder.Append(label);
 						}
 
 						if (!ArrangeByIndex)
@@ -252,7 +271,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			return labelContent;
+			return labelBuilder.ToString();
 		}
 
 		#endregion
@@ -273,9 +292,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (IsPolarArea)
 			{
-				foreach (PolarSeries series in visibleSeries.Cast<PolarSeries>())
+				foreach (var item in visibleSeries)
 				{
-					if (series != null && series.ActualXAxis == this && series.PointsCount > dataCount)
+					if (item is not PolarSeries series) continue;
+					if (series.ActualXAxis == this && series.PointsCount > dataCount)
 					{
 						selectedSeries = series;
 						dataCount = series.PointsCount;
@@ -284,10 +304,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 			else
 			{
-
-				foreach (CartesianSeries series in visibleSeries.Cast<CartesianSeries>())
+				foreach (var item in visibleSeries)
 				{
-					if (series != null && series.ActualXAxis == this && series.PointsCount > dataCount)
+					if (item is not CartesianSeries series) continue;
+					if (series.ActualXAxis == this && series.PointsCount > dataCount)
 					{
 						selectedSeries = series;
 						dataCount = series.PointsCount;

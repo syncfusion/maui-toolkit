@@ -326,7 +326,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				var lastRowOrColumn = RectByRowsAndCols[rowOrColIndex];
 				int lastIndex = lastRowOrColumn.Count - 1;
-				var lastKey = lastRowOrColumn.Keys.ToArray()[lastIndex];
+					var lastKey = lastRowOrColumn.Keys.ElementAt(lastIndex);
 				RectF prevRect = lastRowOrColumn[lastKey];
 
 				if (AxisLabelLayout.IntersectsWith(prevRect, rect, lastIndex, itemIndex))

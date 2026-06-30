@@ -31,6 +31,11 @@
 
         static void OnPositionChanged(BindableObject bindable, object oldValue, object newValue)
         {
+            if (Equals(oldValue, newValue))
+            {
+                return;
+            }
+
             if (bindable is DataLabelItemView view && view.Parent is Microsoft.Maui.ILayout layout)
             {
                 MainThread.BeginInvokeOnMainThread(() =>

@@ -1411,16 +1411,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (ItemsSource != null)
 			{
-				var items = ItemsSource is IList ? ItemsSource as IList : null;
-				if (items == null)
+				bool hasData = false;
+				if (ItemsSource is IList list)
 				{
-					if (ItemsSource is IEnumerable source)
-					{
-						items = source.Cast<object>().ToList();
-					}
+					hasData = list.Count > 0;
+				}
+				else if (ItemsSource is IEnumerable source)
+				{
+					var enumerator = source.GetEnumerator();
+					hasData = enumerator.MoveNext();
+					(enumerator as IDisposable)?.Dispose();
 				}
 
-				if (items != null && items.Count > 0)
+				if (hasData)
 				{
 					GenerateDataPoints();
 				}

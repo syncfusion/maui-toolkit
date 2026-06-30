@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -94,6 +94,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						if (xVal > xMax) xMax = xVal;
 					}
 				}
+
 				for (int i = 0; i < yValues.Count; i++)
 				{
 					double yVal = yValues[i];
@@ -103,6 +104,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						if (yVal > yMax) yMax = yVal;
 					}
 				}
+
 				if (xMin == double.MaxValue) xMin = 0;
 				if (xMax == double.MinValue) xMax = 0;
 				if (yMin == double.MaxValue) yMin = 0;
@@ -426,13 +428,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return valueDoubles;
 			}
 
-			double sum = 0;
+			// Single-pass to compute count and sum of valid (non-NaN) values
 			int validCount = 0;
+			double sum = 0;
 			for (int i = 0; i < values.Count; i++)
 			{
-				if (!double.IsNaN(values[i]))
+				double v = values[i];
+				if (!double.IsNaN(v))
 				{
-					sum += values[i];
+					sum += v;
 					validCount++;
 				}
 			}
@@ -443,13 +447,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			double mean = sum / validCount;
-			double sumSqDev = 0;
 
+			// Single-pass to compute sum of squared deviations
+			double sumSqDev = 0;
 			for (int i = 0; i < values.Count; i++)
 			{
-				if (!double.IsNaN(values[i]))
+				double v = values[i];
+				if (!double.IsNaN(v))
 				{
-					double dev = values[i] - mean;
+					double dev = v - mean;
 					sumSqDev += dev * dev;
 				}
 			}

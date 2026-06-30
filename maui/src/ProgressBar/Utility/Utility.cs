@@ -95,22 +95,24 @@ namespace Syncfusion.Maui.Toolkit.ProgressBar
         /// <returns>Updated gradient stops collection.</returns>
         internal static List<ProgressGradientStop> UpdateGradientStopCollection(List<ProgressGradientStop> gradientStops, double rangeStart, double rangeEnd)
         {
-            gradientStops = gradientStops.OrderBy(x => x.ActualValue).ToList();
+            gradientStops.Sort((a, b) => a.ActualValue.CompareTo(b.ActualValue));
 
-            if (gradientStops.First().ActualValue > rangeStart)
+            var firstStop = gradientStops[0];
+            if (firstStop.ActualValue > rangeStart)
             {
                 gradientStops.Insert(0, new ProgressGradientStop
                 {
-                    Color = gradientStops.First().Color,
+                    Color = firstStop.Color,
                     ActualValue = rangeStart
                 });
             }
 
-            if (gradientStops.Last().ActualValue < rangeEnd)
+            var lastStop = gradientStops[gradientStops.Count - 1];
+            if (lastStop.ActualValue < rangeEnd)
             {
                 gradientStops.Add(new ProgressGradientStop
                 {
-                    Color = gradientStops.Last().Color,
+                    Color = lastStop.Color,
                     ActualValue = rangeEnd
                 });
             }
