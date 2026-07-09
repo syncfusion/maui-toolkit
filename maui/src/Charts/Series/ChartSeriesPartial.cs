@@ -21,6 +21,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		bool _isComplexYProperty;
 
+		bool _isComplexXProperty;
+
 		ChartValueType _xValueType;
 
 		bool _isRepeatPoint;
@@ -234,10 +236,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (categoryAxis.RegisteredSeries.Count > 0)
 					{
-						foreach (CartesianSeries chartSeries in categoryAxis.RegisteredSeries.Cast<CartesianSeries>())
+						for (int i = 0; i < categoryAxis.RegisteredSeries.Count; i++)
 						{
-							chartSeries.SegmentsCreated = false;
-							chartSeries.ChartArea?.UpdateVisibleSeries();
+							if (categoryAxis.RegisteredSeries[i] is CartesianSeries chartSeries)
+							{
+								chartSeries.SegmentsCreated = false;
+								chartSeries.ChartArea?.UpdateVisibleSeries();
+							}
 						}
 					}
 				}
@@ -672,6 +677,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			IList<double>[]? yLists = null;
 			_isComplexYProperty = false;
+			_isComplexXProperty = XBindingPath.Contains('.', StringComparison.Ordinal);
 			bool isArrayProperty = false;
 			YComplexPaths = new string[yPaths.Length][];
 
@@ -709,7 +715,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						GenerateComplexPropertyPoints(yPaths, yLists, GetArrayPropertyValue);
 					}
-					else if (XBindingPath.Contains('.', StringComparison.Ordinal) || _isComplexYProperty)
+					else if (_isComplexXProperty || _isComplexYProperty)
 					{
 						GenerateComplexPropertyPoints(yPaths, yLists, GetPropertyValue);
 					}
@@ -1279,8 +1285,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				var path = paths[i];
 				if (path.Contains('[', StringComparison.Ordinal))
 				{
-					int index = Convert.ToInt32(path.Substring(path.IndexOf('[', StringComparison.Ordinal) + 1, path.IndexOf(']', StringComparison.Ordinal) - path.IndexOf('[', StringComparison.Ordinal) - 1));
-					string actualPath = path.Replace(path[path.IndexOf('[', StringComparison.Ordinal)..], string.Empty, StringComparison.Ordinal);
+					int bracketOpen = path.IndexOf('[', StringComparison.Ordinal);
+					int bracketClose = path.IndexOf(']', StringComparison.Ordinal);
+					int index = Convert.ToInt32(path.Substring(bracketOpen + 1, bracketClose - bracketOpen - 1));
+					string actualPath = path.Replace(path[bracketOpen..], string.Empty, StringComparison.Ordinal);
 					parentObj = ReflectedObject(parentObj, actualPath);
 
 					if (parentObj == null)
@@ -1338,7 +1346,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						if (listenToPropertyChange)
 						{
-							if (_isComplexYProperty || XBindingPath.Contains('.', StringComparison.Ordinal))
+							if (_isComplexYProperty || _isComplexXProperty)
 							{
 								HookComplexProperty(enumerator.Current, XComplexPaths!);
 
@@ -1470,7 +1478,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return;
 			}
 
-			if (_isComplexYProperty || XBindingPath.Contains('.', StringComparison.Ordinal))
+			if (_isComplexYProperty || _isComplexXProperty)
 			{
 				ComplexPropertyChanged(sender, e);
 			}
