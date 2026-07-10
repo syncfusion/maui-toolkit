@@ -1153,13 +1153,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (ChartArea != null)
 			{
-				var sideBySideSeries = ChartArea.VisibleSeries?.Where(series => series.IsSideBySide).ToList();
-
-				if (sideBySideSeries != null && sideBySideSeries.Count > 0)
+				var visibleSeries = ChartArea.VisibleSeries;
+				if (visibleSeries != null)
 				{
-					foreach (var chartSeries in sideBySideSeries)
+					foreach (var series in visibleSeries)
 					{
-						chartSeries.SegmentsCreated = false;
+						if (series.IsSideBySide)
+						{
+							series.SegmentsCreated = false;
+						}
 					}
 				}
 

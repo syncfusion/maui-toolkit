@@ -32,7 +32,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal static List<float> GetMidAngles(PointF center, List<float> midPoint)
 		{
-			List<float> midAngle = [];
+			List<float> midAngle = new(midPoint.Count / 2);
 
 			for (int i = 0; i < midPoint.Count; i++)
 			{
@@ -50,14 +50,50 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return double.NaN;
 			}
 
-			if (double.TryParse(val.ToString(), out double doubleVal))
+			// Fast path: avoid ToString() allocation for common numeric types
+			if (val is double d)
+			{
+				return d;
+			}
+
+			if (val is int intVal)
+			{
+				return intVal;
+			}
+
+			if (val is float f)
+			{
+				return f;
+			}
+
+			if (val is long l)
+			{
+				return l;
+			}
+
+			if (val is DateTime dateVal)
+			{
+				if (dateVal == DateTime.MaxValue)
+				{
+					return double.MaxValue;
+				}
+				else if (dateVal == DateTime.MinValue)
+				{
+					return double.MinValue;
+				}
+
+				return dateVal.ToOADate();
+			}
+
+			var str = val.ToString();
+			if (double.TryParse(str, out double doubleVal))
 			{
 				return doubleVal;
 			}
 
 			//Maui-884 The Following date time formats was acceptable for CrossesAt value. ("MM/dd/yyyy"),("dddd, dd MMMM yyyy"),("dddd, dd MMMM yyyy HH:mm:ss"),("MM/dd/yyyy HH:mm"),("MM/dd/yyyy hh:mm tt"),("MM/dd/yyyy H:mm"),("MM/dd/yyyy h:mm tt"),("MM/dd/yyyy HH:mm:ss"),
-			//("MMMM dd"),("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss.fffffffK"),("ddd, dd MMM yyy HH’:’mm’:’ss ‘GMT’"),("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss"),("HH:mm"),("hh:mm tt"),("H:mm"),("h:mm tt"),("HH:mm:ss"),("yyyy MMMM") .
-			if (DateTime.TryParse(val.ToString(), out DateTime date))
+			//("MMMM dd"),("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffK"),("ddd, dd MMM yyy HH':'mm':'ss 'GMT'"),("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),("HH:mm"),("hh:mm tt"),("H:mm"),("h:mm tt"),("HH:mm:ss"),("yyyy MMMM") .
+			if (DateTime.TryParse(str, out DateTime date))
 			{
 				if (date == DateTime.MaxValue)
 				{

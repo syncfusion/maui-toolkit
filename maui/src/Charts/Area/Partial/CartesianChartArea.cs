@@ -530,8 +530,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					var xValues = series.GetXValues();
 					var yValues = series.YValues;
-					var bottomValues = new List<double>();
-					var topValues = new List<double>();
+					int capacity = xValues?.Count ?? 0;
+					var bottomValues = new List<double>(capacity);
+					var topValues = new List<double>(capacity);
 
 					if (xValues != null)
 					{
