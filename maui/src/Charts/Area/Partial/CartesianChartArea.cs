@@ -121,6 +121,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 													break;
 												}
 											}
+
+											if (string.IsNullOrEmpty(groupID))
+											{
+												continue;
+											}
+
 											StackingSeriesBase stackingSeriesBase;
 											int size = SideBySideSeriesPosition.Count > 0 && groupingKeys.Count > 0 && groupingKeys.TryGetValue(groupID, out var groupValue)
 												? SideBySideSeriesPosition[groupValue].Count : 0;
@@ -526,71 +532,71 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						axisCross = 1;
 					}
 				}
-				
+
 				foreach (var series in seriesList)
-			{
-				var xValues = series.GetXValues();
-				var yValues = series.YValues;
-				var bottomValues = new List<double>();
-				var topValues = new List<double>();
-				var seriesTypeName = series.GetType().Name;
-				bool is100Series = seriesTypeName.Contains("Stacking", StringComparison.Ordinal) && seriesTypeName.Contains("100Series", StringComparison.Ordinal);
-
-				if (xValues != null)
 				{
-					for (int i = 0; i < xValues.Count; i++)
+					var xValues = series.GetXValues();
+					var yValues = series.YValues;
+					var bottomValues = new List<double>();
+					var topValues = new List<double>();
+
+					if (xValues != null)
 					{
-						var xValue = xValues[i];
-						var yValue = i < yValues.Count ? yValues[i] : 0;
-						yValue = double.IsNaN(yValue) ? 0 : yValue;
+						bool isStacking100Series = series is StackingColumn100Series || StackingLine100Series || StackingArea100Series;
 
-						if (yValue >= 0)
+						for (int i = 0; i < xValues.Count; i++)
 						{
-							if (positiveYValues.TryGetValue(xValue, out double currentValue))
+							var xValue = xValues[i];
+							var yValue = i < yValues.Count ? yValues[i] : 0;
+							yValue = double.IsNaN(yValue) ? 0 : yValue;
+
+							if (yValue >= 0)
 							{
-								bottomValues.Add((axisCross > currentValue) ? axisCross : currentValue);
-								if (is100Series)
+								if (positiveYValues.TryGetValue(xValue, out double currentValue))
 								{
-									yValue = GetYValue(seriesList, yValue, i);
+									bottomValues.Add((axisCross > currentValue) ? axisCross : currentValue);
+									if (isStacking100Series)
+									{
+										yValue = GetYValue(seriesList, yValue, i);
+									}
+									positiveYValues[xValue] = currentValue + yValue;
 								}
-								positiveYValues[xValue] = currentValue + yValue;
+								else
+								{
+									bottomValues.Add(axisCross);
+									if (isStacking100Series)
+									{
+										yValue = GetYValue(seriesList, yValue, i);
+									}
+									positiveYValues.Add(xValue, yValue);
+								}
+
+								topValues.Add(positiveYValues[xValue]);
 							}
 							else
 							{
-								bottomValues.Add(axisCross);
-								if (is100Series)
+								if (!negativeYValues.TryAdd(xValue, yValue))
 								{
-									yValue = GetYValue(seriesList, yValue, i);
+									bottomValues.Add((axisCross < negativeYValues[xValue]) ? axisCross : negativeYValues[xValue]);
+									if (isStacking100Series)
+									{
+										yValue = GetYValue(seriesList, yValue, i);
+									}
+									negativeYValues[xValue] += yValue;
 								}
-								positiveYValues.Add(xValue, yValue);
-							}
-
-							topValues.Add(positiveYValues[xValue]);
-						}
-						else
-						{
-							if (!negativeYValues.TryAdd(xValue, yValue))
-							{
-								bottomValues.Add((axisCross < negativeYValues[xValue]) ? axisCross : negativeYValues[xValue]);
-								if (is100Series)
+								else
 								{
-									yValue = GetYValue(seriesList, yValue, i);
+									bottomValues.Add(axisCross);
 								}
-								negativeYValues[xValue] += yValue;
-							}
-							else
-							{
-								bottomValues.Add(axisCross);
-							}
 
-							topValues.Add(negativeYValues[xValue]);
+								topValues.Add(negativeYValues[xValue]);
+							}
 						}
+
+						series.BottomValues = bottomValues;
+						series.TopValues = topValues;
 					}
-
-					series.BottomValues = bottomValues;
-					series.TopValues = topValues;
 				}
-			}
 			}
 		}
 
