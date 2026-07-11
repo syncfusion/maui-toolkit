@@ -700,8 +700,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			ChartDataLabelStyle labelStyle = dataLabelSettings.LabelStyle;
 
-			foreach (HiLoOpenCloseSegment dataLabel in _segments.Cast<HiLoOpenCloseSegment>())
+			foreach (ChartSegment item in _segments)
 			{
+				HiLoOpenCloseSegment dataLabel = (HiLoOpenCloseSegment)item;
 				if (!dataLabel.InVisibleRange || dataLabel.IsZero)
 				{
 					continue;

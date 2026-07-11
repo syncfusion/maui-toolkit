@@ -92,8 +92,9 @@
 
 			List<PointF> segPoints = [];
 
-			foreach (StepAreaSegment segment in _segments.Cast<StepAreaSegment>())
+			foreach (ChartSegment item in _segments)
 			{
+				StepAreaSegment segment = (StepAreaSegment)item;
 				var points = segment.FillPoints;
 				if (points != null)
 				{

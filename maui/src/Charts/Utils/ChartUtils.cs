@@ -50,14 +50,36 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return double.NaN;
 			}
 
-			if (double.TryParse(val.ToString(), out double doubleVal))
+			if (val is double d)
+			{
+				return d;
+			}
+
+			if (val is float f)
+			{
+				return f;
+			}
+
+			if (val is int i)
+			{
+				return i;
+			}
+
+			if (val is long l)
+			{
+				return l;
+			}
+
+			string? strVal = val.ToString();
+
+			if (double.TryParse(strVal, out double doubleVal))
 			{
 				return doubleVal;
 			}
 
 			//Maui-884 The Following date time formats was acceptable for CrossesAt value. ("MM/dd/yyyy"),("dddd, dd MMMM yyyy"),("dddd, dd MMMM yyyy HH:mm:ss"),("MM/dd/yyyy HH:mm"),("MM/dd/yyyy hh:mm tt"),("MM/dd/yyyy H:mm"),("MM/dd/yyyy h:mm tt"),("MM/dd/yyyy HH:mm:ss"),
-			//("MMMM dd"),("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss.fffffffK"),("ddd, dd MMM yyy HH’:’mm’:’ss ‘GMT’"),("yyyy’-‘MM’-‘dd’T’HH’:’mm’:’ss"),("HH:mm"),("hh:mm tt"),("H:mm"),("h:mm tt"),("HH:mm:ss"),("yyyy MMMM") .
-			if (DateTime.TryParse(val.ToString(), out DateTime date))
+			//("MMMM dd"),("yyyy'-'MM'-'dd'T'HH':'mm':'ss.fffffffK"),("ddd, dd MMM yyy HH':'mm':'ss 'GMT'"),("yyyy'-'MM'-'dd'T'HH':'mm':'ss"),("HH:mm"),("hh:mm tt"),("H:mm"),("h:mm tt"),("HH:mm:ss"),("yyyy MMMM") .
+			if (DateTime.TryParse(strVal, out DateTime date))
 			{
 				if (date == DateTime.MaxValue)
 				{

@@ -1153,9 +1153,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (ChartArea != null)
 			{
-				var sideBySideSeries = ChartArea.VisibleSeries?.Where(series => series.IsSideBySide).ToList();
+				var sideBySideSeries = ChartArea.VisibleSeries?.Where(series => series.IsSideBySide);
 
-				if (sideBySideSeries != null && sideBySideSeries.Count > 0)
+				if (sideBySideSeries != null && sideBySideSeries.Any())
 				{
 					foreach (var chartSeries in sideBySideSeries)
 					{

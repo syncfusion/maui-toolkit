@@ -1707,11 +1707,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			}
 
+			var leastXPointsSet = new HashSet<TrackballPointInfo>(leastXPointsInfo);
 			var copyList = PointInfos.ToList();
 
 			foreach (var pointInfo in copyList)
 			{
-				if (!leastXPointsInfo.Contains(pointInfo))
+				if (!leastXPointsSet.Contains(pointInfo))
 				{
 					RemoveTrackballInfo(pointInfo);
 				}
