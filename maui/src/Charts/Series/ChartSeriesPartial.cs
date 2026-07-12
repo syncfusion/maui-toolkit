@@ -185,21 +185,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (oldValue is IEnumerable enumerable)
 			{
-				IEnumerator enumerator = enumerable.GetEnumerator();
-
-				if (!enumerator.MoveNext())
+				foreach (var item in enumerable)
 				{
-					return;
-				}
-
-				do
-				{
-					if (enumerator.Current is INotifyPropertyChanged item)
+					if (item is INotifyPropertyChanged notifyItem)
 					{
-						item.PropertyChanged -= OnItemPropertyChanged;
+						notifyItem.PropertyChanged -= OnItemPropertyChanged;
 					}
 				}
-				while (enumerator.MoveNext());
 			}
 		}
 
@@ -234,10 +226,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (categoryAxis.RegisteredSeries.Count > 0)
 					{
-						foreach (CartesianSeries chartSeries in categoryAxis.RegisteredSeries.Cast<CartesianSeries>())
+						foreach (ChartSeries registeredSeries in categoryAxis.RegisteredSeries)
 						{
-							chartSeries.SegmentsCreated = false;
-							chartSeries.ChartArea?.UpdateVisibleSeries();
+							if (registeredSeries is CartesianSeries chartSeries)
+							{
+								chartSeries.SegmentsCreated = false;
+								chartSeries.ChartArea?.UpdateVisibleSeries();
+							}
 						}
 					}
 				}
