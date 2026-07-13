@@ -558,8 +558,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             ChartDataLabelStyle labelStyle = DataLabelSettings.LabelStyle;
 
-            foreach (RangeAreaSegment dataLabel in _segments.Cast<RangeAreaSegment>())
+            foreach (ChartSegment item in _segments)
             {
+                RangeAreaSegment dataLabel = (RangeAreaSegment)item;
                 if (dataLabel == null || dataLabel.XValues == null || dataLabel.HighValues == null || dataLabel.LowValues == null)
                 {
                     return;

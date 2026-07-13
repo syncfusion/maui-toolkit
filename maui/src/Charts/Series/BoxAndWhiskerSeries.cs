@@ -1103,8 +1103,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (outliers.Count > 0)
 				{
-					actualMinimum = Math.Min(outliers.Min(), actualMinimum);
-					actualMaximum = Math.Max(outliers.Max(), actualMaximum);
+					for (int j = 0; j < outliers.Count; j++)
+					{
+						if (outliers[j] < actualMinimum)
+						{
+							actualMinimum = outliers[j];
+						}
+
+						if (outliers[j] > actualMaximum)
+						{
+							actualMaximum = outliers[j];
+						}
+					}
 				}
 
 				if (xValues != null)
