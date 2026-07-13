@@ -1196,7 +1196,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 					else
 					{
-						tooltipInfo.Text = yValue.ToString("  #.##") + "/" + segment.UpperQuartile.ToString("  #.##") + "/" + segment.Median.ToString("  #.##") + "/" + segment.LowerQuartile.ToString("  #.##") + "/" + segment.Minimum.ToString("  #.##");
+						tooltipInfo.Text = $"{yValue:  #.##}/{segment.UpperQuartile:  #.##}/{segment.Median:  #.##}/{segment.LowerQuartile:  #.##}/{segment.Minimum:  #.##}";
 					}
 
 					return tooltipInfo;

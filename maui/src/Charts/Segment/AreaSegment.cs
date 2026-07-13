@@ -1,4 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Collections;
 using System.Data;
 

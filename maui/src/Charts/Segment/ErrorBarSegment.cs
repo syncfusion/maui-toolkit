@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -85,24 +85,26 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				double xMin = double.MaxValue, xMax = double.MinValue;
 				double yMin = double.MaxValue, yMax = double.MinValue;
-				for (int idx = 0; idx < xValues.Count; idx++)
+				for (int i = 0; i < xValues.Count; i++)
 				{
-					double xv = xValues[idx];
-					if (!double.IsNaN(xv))
+					double xVal = xValues[i];
+					if (!double.IsNaN(xVal))
 					{
-						if (xv < xMin) xMin = xv;
-						if (xv > xMax) xMax = xv;
+						if (xVal < xMin) xMin = xVal;
+						if (xVal > xMax) xMax = xVal;
 					}
 				}
-				for (int idx = 0; idx < yValues.Count; idx++)
+
+				for (int i = 0; i < yValues.Count; i++)
 				{
-					double yv = yValues[idx];
-					if (!double.IsNaN(yv))
+					double yVal = yValues[i];
+					if (!double.IsNaN(yVal))
 					{
-						if (yv < yMin) yMin = yv;
-						if (yv > yMax) yMax = yv;
+						if (yVal < yMin) yMin = yVal;
+						if (yVal > yMax) yMax = yVal;
 					}
 				}
+
 				if (xMin == double.MaxValue) xMin = 0;
 				if (xMax == double.MinValue) xMax = 0;
 				if (yMin == double.MaxValue) yMin = 0;
@@ -212,12 +214,35 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (errorBarSeries.Type == ErrorBarType.Percentage)
 				{
-					var validTopPoints = _topPointCollection.Where(p => !double.IsNaN(p.Y)).Select(p => p.Y);
-					var validBottomPoints = _bottomPointCollection.Where(p => !double.IsNaN(p.Y)).Select(p => p.Y);
+					double rangeMin = double.MaxValue;
+					double rangeMax = double.MinValue;
+					bool hasValid = false;
 
-					if (validTopPoints.Any() && validBottomPoints.Any())
+					for (int i = 0; i < _topPointCollection.Count; i++)
 					{
-						YRange = new DoubleRange(Math.Min(validBottomPoints.Min(), validTopPoints.Min()), Math.Max(validBottomPoints.Max(), validTopPoints.Max()));
+						double y = _topPointCollection[i].Y;
+						if (!double.IsNaN(y))
+						{
+							if (y < rangeMin) rangeMin = y;
+							if (y > rangeMax) rangeMax = y;
+							hasValid = true;
+						}
+					}
+
+					for (int i = 0; i < _bottomPointCollection.Count; i++)
+					{
+						double y = _bottomPointCollection[i].Y;
+						if (!double.IsNaN(y))
+						{
+							if (y < rangeMin) rangeMin = y;
+							if (y > rangeMax) rangeMax = y;
+							hasValid = true;
+						}
+					}
+
+					if (hasValid)
+					{
+						YRange = new DoubleRange(rangeMin, rangeMax);
 					}
 				}
 				else
@@ -403,28 +428,40 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return valueDoubles;
 			}
 
-			var validValues = values.Where(v => !double.IsNaN(v)).ToList();
+			// Single-pass to compute count and sum of valid (non-NaN) values
+			int validCount = 0;
+			double sum = 0;
+			for (int i = 0; i < values.Count; i++)
+			{
+				double v = values[i];
+				if (!double.IsNaN(v))
+				{
+					sum += v;
+					validCount++;
+				}
+			}
 
-			if (validValues.Count <= 1)
+			if (validCount <= 1)
 			{
 				return valueDoubles;
 			}
 
-			var sum = validValues.Sum();
-			var mean = sum / validValues.Count;
-			var dev = new List<double>();
-			var sQDev = new List<double>();
+			double mean = sum / validCount;
 
-			for (var i = 0; i < validValues.Count; i++)
+			// Single-pass to compute sum of squared deviations
+			double sumSqDev = 0;
+			for (int i = 0; i < values.Count; i++)
 			{
-				dev.Add(validValues[i] - mean);
-				sQDev.Add(dev[i] * dev[i]);
+				double v = values[i];
+				if (!double.IsNaN(v))
+				{
+					double dev = v - mean;
+					sumSqDev += dev * dev;
+				}
 			}
 
-			var sumSqDev = sQDev.Sum(x => x);
-
-			var sDValue = Math.Sqrt(sumSqDev / (validValues.Count - 1));
-			var sDErrorValue = sDValue / Math.Sqrt(validValues.Count);
+			var sDValue = Math.Sqrt(sumSqDev / (validCount - 1));
+			var sDErrorValue = sDValue / Math.Sqrt(validCount);
 
 			valueDoubles[0] = mean;
 			valueDoubles[1] = errorBarSeries.Type == ErrorBarType.StandardDeviation ? sDValue : sDErrorValue;

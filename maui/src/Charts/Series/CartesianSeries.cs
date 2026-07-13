@@ -15,6 +15,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		double _xAxisMax = double.MinValue;
 		double _yAxisMin = double.MaxValue;
 		double _yAxisMax = double.MinValue;
+		List<double>? _cachedIndexedXValues;
 
 		#endregion
 
@@ -1033,41 +1034,38 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				if (ActualXAxis is CategoryAxis categoryAxis && !categoryAxis.ArrangeByIndex || ActualXAxis == null)
 				{
-					if (GroupedXValuesIndexes.Count > 0)
-					{
-						xValues = GroupedXValuesIndexes;
-					}
-					else
-					{
-						var stringValues = ActualXValues as List<string>;
-						if (stringValues != null)
-						{
-							xValues = new List<double>(stringValues.Count);
-							for (int i = 0; i < stringValues.Count; i++)
-							{
-								xValues.Add(i);
-							}
-						}
-					}
+					xValues = GroupedXValuesIndexes.Count > 0 ? GroupedXValuesIndexes : GetOrCreateIndexedXValues();
 				}
 				else
 				{
-					int count = xValues != null ? xValues.Count : ((ActualXValues as List<string>)?.Count ?? 0);
-					var indexedValues = new List<double>(count);
-					for (int i = 0; i < count; i++)
-					{
-						indexedValues.Add(i);
-					}
-
-					xValues = indexedValues;
+					xValues = GetOrCreateIndexedXValues();
 				}
 			}
 
 			return xValues;
 		}
 
+		List<double> GetOrCreateIndexedXValues()
+		{
+			int count = ActualXValues is List<double> dList ? dList.Count : (ActualXValues as List<string>)?.Count ?? 0;
+			if (_cachedIndexedXValues != null && _cachedIndexedXValues.Count == count)
+			{
+				return _cachedIndexedXValues;
+			}
+
+			var indexedValues = new List<double>(count);
+			for (int i = 0; i < count; i++)
+			{
+				indexedValues.Add(i);
+			}
+
+			_cachedIndexedXValues = indexedValues;
+			return _cachedIndexedXValues;
+		}
+
 		internal override void OnDataSourceChanged(object oldValue, object newValue)
 		{
+			_cachedIndexedXValues = null;
 			ResetAutoScroll();
 			InvalidateSideBySideSeries();
 			foreach (var item in EmptyPointIndexes)
@@ -1080,6 +1078,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override void OnDataSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 		{
+			_cachedIndexedXValues = null;
 			ResetAutoScroll();
 			base.OnDataSource_CollectionChanged(sender, e);
 		}

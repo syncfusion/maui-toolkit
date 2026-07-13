@@ -265,7 +265,24 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (Series is CartesianSeries series && series.ActualYAxis != null && HighVal != null && XVal != null && LowVal != null)
 			{
 				_min = HighVal.Min();
-				_min = double.IsNaN(_min) ? HighVal.Length > 0 ? HighVal.Where(e => !double.IsNaN(e)).DefaultIfEmpty().Min() : 0 : _min;
+				if (double.IsNaN(_min))
+				{
+					_min = 0;
+					if (HighVal.Length > 0)
+					{
+						double yMin = double.MaxValue;
+						for (int i = 0; i < HighVal.Length; i++)
+						{
+							double val = HighVal[i];
+							if (!double.IsNaN(val) && val < yMin)
+							{
+								yMin = val;
+							}
+						}
+
+						if (yMin != double.MaxValue) _min = yMin;
+					}
+				}
 				_max = HighVal.Max();
 
 				if (HighControlStartY != null && HighControlEndY != null)

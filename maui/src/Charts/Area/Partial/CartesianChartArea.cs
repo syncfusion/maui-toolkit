@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -103,8 +103,30 @@ namespace Syncfusion.Maui.Toolkit.Charts
 									{
 										if (!stackingSeries.IsSbsValueCalculated && _seriesGroup != null)
 										{
-											var stackingSeriesType = stackingSeries.GetType();
-											string groupID = _seriesGroup.FirstOrDefault(x => x.Value.Any(s => s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeriesType)).Key;
+											string? groupID = null;
+                                            var stackingSeriesType = stackingSeries.GetType();
+											foreach (var group in _seriesGroup)
+											{
+												foreach (var s in group.Value)
+												{
+													if (s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeriesType)
+													{
+														groupID = group.Key;
+														break;
+													}
+												}
+
+												if (groupID != null)
+												{
+													break;
+												}
+											}
+
+											if (string.IsNullOrEmpty(groupID))
+											{
+												continue;
+											}
+
 											StackingSeriesBase stackingSeriesBase;
 											int size = SideBySideSeriesPosition.Count > 0 && groupingKeys.Count > 0 && groupingKeys.TryGetValue(groupID, out var groupValue)
 												? SideBySideSeriesPosition[groupValue].Count : 0;
@@ -184,12 +206,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				double totalWidth = GetTotalWidth() / SideBySideSeriesPosition.Count;
 				double startPosition = 0, end = 0;
-				var seriesGroupValues = SideBySideSeriesPosition.Values.ToList();
 
-				var seriesPositionValues = SideBySideSeriesPosition.Values.ToList();
-				for (int i = 0; i < SideBySideSeriesPosition.Count; i++)
+				var sideBySideValues = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < sideBySideValues.Count; i++)
 				{
-					var seriesGroup = seriesGroupValues[i];
+					var seriesGroup = sideBySideValues[i];
 					double sbsMaxWidth = GetSBSMaxWidth(seriesGroup);
 
 					foreach (ChartSeries chartSeries in seriesGroup)
@@ -337,7 +358,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							if (xValues != null && xValues.Count > 0)
 							{
 								//DateTimeAxis not rendered properly when series have single datapoint with different x position
-								var actualXValues = xValues.ToList();
+								var actualXValues = xValues as List<double> ?? xValues.ToList();
 								previousXValues.AddRange(actualXValues);
 								UpdateMinWidth(cartesianSeries, ref minWidth, previousXValues);
 								previousXValues = actualXValues;
@@ -355,22 +376,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal void ResetSBSSegments()
 		{
-			if (VisibleSeries != null)
+			if (VisibleSeries == null)
 			{
-				bool hasSideBySide = false;
+				return;
+			}
 
-				foreach (var series in VisibleSeries)
+			bool hasSbsSeries = false;
+			foreach (var series in VisibleSeries)
+			{
+				if (series.IsSideBySide)
 				{
-					if (series.IsSideBySide)
+					if (!hasSbsSeries)
 					{
-						if (!hasSideBySide)
-						{
-							hasSideBySide = true;
-							SideBySideSeriesPosition = null;
-						}
-
-						series.SegmentsCreated = false;
+						SideBySideSeriesPosition = null;
+						hasSbsSeries = true;
 					}
+
+					series.SegmentsCreated = false;
 				}
 			}
 		}
@@ -381,11 +403,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (SideBySideSeriesPosition != null)
 			{
-				var seriesGroupValues = SideBySideSeriesPosition.Values.ToList();
-				for (int i = 0; i < seriesGroupValues.Count; i++)
+				var sideBySideValues = SideBySideSeriesPosition.Values.ToList();
+				for (int i = 0; i < sideBySideValues.Count; i++)
 				{
 					double maxWidth = 0;
-					foreach (ChartSeries sideBySideSeries in seriesGroupValues[i])
+					foreach (ChartSeries sideBySideSeries in sideBySideValues[i])
 					{
 						CartesianSeries cartesianSeries = (CartesianSeries)sideBySideSeries;
 						double width = cartesianSeries.GetActualWidth();
@@ -415,7 +437,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal void UpdateStackingSeries()
 		{
 			//if visible series count is 0 or not contain any stacking series then return.
-			if (VisibleSeries == null || VisibleSeries.Count == 0 || !VisibleSeries.Any(series => series is StackingSeriesBase && !series.SegmentsCreated))
+			if (VisibleSeries == null || VisibleSeries.Count == 0)
+			{
+				return;
+			}
+
+			bool hasStackingToCreate = false;
+			foreach (var series in VisibleSeries)
+			{
+				if (series is StackingSeriesBase && !series.SegmentsCreated)
+				{
+					hasStackingToCreate = true;
+					break;
+				}
+			}
+
+			if (!hasStackingToCreate)
 			{
 				return;
 			}
@@ -495,7 +532,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						axisCross = 1;
 					}
 				}
-				
+
 				foreach (var series in seriesList)
 				{
 					var xValues = series.GetXValues();
@@ -505,7 +542,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (xValues != null)
 					{
-						bool isStacking100Series = series is StackingColumn100Series or StackingLine100Series or StackingArea100Series;
+						bool isStacking100Series = series is StackingColumn100Series || StackingLine100Series || StackingArea100Series;
 
 						for (int i = 0; i < xValues.Count; i++)
 						{
@@ -566,12 +603,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		static double GetYValue(List<StackingSeriesBase> seriesList, double yValue, int index)
 		{
 			double total = 0;
-			foreach (var series in seriesList)
+			for (int i = 0; i < seriesList.Count; i++)
 			{
+				var series = seriesList[i];
 				if (series != null && series.YValues.Count > index)
 				{
-					double val = series.YValues[index];
-					total += double.IsNaN(val) ? 0 : Math.Abs(val);
+					double value = series.YValues[index];
+					if (!double.IsNaN(value))
+					{
+						total += Math.Abs(value);
+					}
 				}
 			}
 
@@ -582,6 +623,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			return yValue;
 		}
+		
 		#endregion
 	}
 }
