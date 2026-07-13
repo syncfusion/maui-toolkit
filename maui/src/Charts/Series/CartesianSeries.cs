@@ -1153,13 +1153,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (ChartArea != null)
 			{
-				if (ChartArea.VisibleSeries != null)
+				var visibleSeries = ChartArea.VisibleSeries;
+
+				if (visibleSeries != null)
 				{
-					foreach (var series in ChartArea.VisibleSeries)
+					foreach (var chartSeries in visibleSeries)
 					{
-						if (series.IsSideBySide)
+						if (chartSeries.IsSideBySide)
 						{
-							series.SegmentsCreated = false;
+							chartSeries.SegmentsCreated = false;
 						}
 					}
 				}
@@ -1415,9 +1417,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (legend != null && legend.IsVisible && legendItems != null)
 			{
-				foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
+				for (int i = 0; i < legendItems.Count; i++)
 				{
-					if (legendItem != null && legendItem.Item == this)
+					if (legendItems[i] is LegendItem legendItem && legendItem.Item == this)
 					{
 						legendItem.IconBrush = GetFillColor(legendItem, legendItem.Index) ?? new SolidColorBrush(Colors.Transparent);
 						break;
@@ -1433,9 +1435,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (legend != null && legend.IsVisible && legendItems != null)
 			{
-				foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
+				for (int i = 0; i < legendItems.Count; i++)
 				{
-					if (legendItem != null && legendItem.Item == this)
+					if (legendItems[i] is LegendItem legendItem && legendItem.Item == this)
 					{
 						legendItem.IsToggled = !IsVisible;
 						break;
@@ -2115,9 +2117,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (legendItems != null)
 				{
-					foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
+					for (int i = 0; i < legendItems.Count; i++)
 					{
-						if (legendItem != null && legendItem.Item == chartSeries)
+						if (legendItems[i] is LegendItem legendItem && legendItem.Item == chartSeries)
 						{
 							legendItem.Text = chartSeries.Label;
 							break;
