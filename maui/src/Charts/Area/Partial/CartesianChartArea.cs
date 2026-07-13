@@ -104,7 +104,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 										if (!stackingSeries.IsSbsValueCalculated && _seriesGroup != null)
 										{
 											string? groupID = null;
-                                            var stackingSeriesType = stackingSeries.GetType();
+											var stackingSeriesType = stackingSeries.GetType();
 											foreach (var group in _seriesGroup)
 											{
 												foreach (var s in group.Value)
@@ -539,7 +539,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (xValues != null)
 					{
-						bool isStacking100Series = series is StackingColumn100Series || StackingLine100Series || StackingArea100Series;
+						bool isStacking100Series = series is StackingColumn100Series or StackingLine100Series or StackingArea100Series;
 
 						for (int i = 0; i < xValues.Count; i++)
 						{
