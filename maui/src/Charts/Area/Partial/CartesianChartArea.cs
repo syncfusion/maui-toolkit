@@ -104,11 +104,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 										if (!stackingSeries.IsSbsValueCalculated && _seriesGroup != null)
 										{
 											string? groupID = null;
+                                            var stackingSeriesType = stackingSeries.GetType();
 											foreach (var group in _seriesGroup)
 											{
 												foreach (var s in group.Value)
 												{
-													if (s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeries.GetType())
+													if (s.GroupingLabel == stackingSeries.GroupingLabel && s.GetType() == stackingSeriesType)
 													{
 														groupID = group.Key;
 														break;
@@ -120,6 +121,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 													break;
 												}
 											}
+
+											if (string.IsNullOrEmpty(groupID))
+											{
+												continue;
+											}
+
 											StackingSeriesBase stackingSeriesBase;
 											int size = SideBySideSeriesPosition.Count > 0 && groupingKeys.Count > 0 && groupingKeys.TryGetValue(groupID, out var groupValue)
 												? SideBySideSeriesPosition[groupValue].Count : 0;
@@ -525,7 +532,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						axisCross = 1;
 					}
 				}
-				
+
 				foreach (var series in seriesList)
 				{
 					var xValues = series.GetXValues();
@@ -535,7 +542,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (xValues != null)
 					{
-						bool isStacking100Series = series is StackingColumn100Series or StackingLine100Series or StackingArea100Series;
+						bool isStacking100Series = series is StackingColumn100Series || StackingLine100Series || StackingArea100Series;
 
 						for (int i = 0; i < xValues.Count; i++)
 						{
