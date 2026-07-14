@@ -702,10 +702,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			double total = 0;
 			var legendItems = GetLegendItems();
+			int segmentCount = _segments.Count;
 
 			for (int i = 0; i < YValues.Count; i++)
 			{
-				if (!double.IsNaN(YValues[i]) && (_segments.Count == 0 || ((_segments.Count <= i) || (_segments.Count > i && _segments[i].IsVisible))))
+				if (!double.IsNaN(YValues[i]) && (segmentCount == 0 || ((segmentCount <= i) || (segmentCount > i && _segments[i].IsVisible))))
 				{
 					if (legendItems == null || legendItems.Count == 0)
 					{
@@ -734,8 +735,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				LeftPointsLookup = [];
 				RightPoints = [];
 
-				foreach (PieSegment segment in _segments.Cast<PieSegment>())
+				for (int i = 0; i < _segments.Count; i++)
 				{
+					var segment = (PieSegment)_segments[i];
 					segment.IsVisible = true;
 					if (segment.DataLabelRenderingPosition == Position.Left &&
 						DataLabelSettings.LabelPosition == ChartDataLabelPosition.Outside)

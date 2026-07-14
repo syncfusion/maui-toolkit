@@ -1,4 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -187,21 +187,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (oldValue is IEnumerable enumerable)
 			{
-				IEnumerator enumerator = enumerable.GetEnumerator();
-
-				if (!enumerator.MoveNext())
+				foreach (var item in enumerable)
 				{
-					return;
-				}
-
-				do
-				{
-					if (enumerator.Current is INotifyPropertyChanged item)
+					if (item is INotifyPropertyChanged notifyItem)
 					{
-						item.PropertyChanged -= OnItemPropertyChanged;
+						notifyItem.PropertyChanged -= OnItemPropertyChanged;
 					}
 				}
-				while (enumerator.MoveNext());
 			}
 		}
 
@@ -677,7 +669,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			IList<double>[]? yLists = null;
 			_isComplexYProperty = false;
-			_isComplexXProperty = XBindingPath.Contains('.', StringComparison.Ordinal);
+			_isComplexXProperty = !string.IsNullOrEmpty(XBindingPath) && XBindingPath.Contains('.', StringComparison.Ordinal);
 			bool isArrayProperty = false;
 			YComplexPaths = new string[yPaths.Length][];
 
