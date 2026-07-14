@@ -1,4 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -669,7 +669,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			IList<double>[]? yLists = null;
 			_isComplexYProperty = false;
-			_isComplexXProperty = XBindingPath.Contains('.', StringComparison.Ordinal);
+			_isComplexXProperty = !string.IsNullOrEmpty(XBindingPath) && XBindingPath.Contains('.', StringComparison.Ordinal);
 			bool isArrayProperty = false;
 			YComplexPaths = new string[yPaths.Length][];
 
