@@ -54,10 +54,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 					else
 					{
-						groupingValues.AddRange(xValues);
-						foreach (var xVal in xValues)
+						foreach (var val in xValues)
 						{
-							groupingValuesSet.Add(xVal);
+							if (groupingValuesSet.Add(val))
+							{
+								groupingValues.Add(val);
+							}
 						}
 					}
 				}
@@ -66,8 +68,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					foreach (var val in doubleValues)
 					{
 						var str = val.ToString();
-						groupingValues.Add(str);
-						groupingValuesSet.Add(str);
+						if (groupingValuesSet.Add(str))
+						{
+							groupingValues.Add(str);
+						}
 					}
 				}
 
@@ -77,7 +81,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			var distinctXValues = groupingValues.Distinct().ToList();
+			var distinctXValues = groupingValues;
 			var indexMap = new Dictionary<string, int>(distinctXValues.Count, StringComparer.Ordinal);
 			for (int i = 0; i < distinctXValues.Count; i++)
 			{

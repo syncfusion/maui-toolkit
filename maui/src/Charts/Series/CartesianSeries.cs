@@ -1546,16 +1546,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 										dataPointsList.Add(dataPoint);
 									}
 								}
-								else if (Math.Abs(pointX - currX) <= Math.Abs(pointX - nearPointX))
+								else
 								{
-									nearPointX = currX;
-									delta = pointX - currX;
-									dataPointsList.Clear();
-									var dataPoint = ActualData?[i];
-
-									if (dataPoint != null)
+									double currDist = Math.Abs(pointX - currX);
+									double nearDist = Math.Abs(pointX - nearPointX);
+									if (currDist <= nearDist)
 									{
-										dataPointsList.Add(dataPoint);
+										nearPointX = currX;
+										delta = pointX - currX;
+										dataPointsList.Clear();
+										var dataPoint = ActualData?[i];
+
+										if (dataPoint != null)
+										{
+											dataPointsList.Add(dataPoint);
+										}
 									}
 								}
 							}
