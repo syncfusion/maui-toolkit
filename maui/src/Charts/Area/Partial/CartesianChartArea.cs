@@ -539,7 +539,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (xValues != null)
 					{
-						bool isStacking100Series = series is StackingColumn100Series or StackingLine100Series or StackingArea100Series;
+						bool isStacking100Series = series is StackingColumn100Series || series is StackingLine100Series || series is StackingArea100Series;
 
 						for (int i = 0; i < xValues.Count; i++)
 						{

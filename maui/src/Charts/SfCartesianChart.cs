@@ -1551,9 +1551,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     var visibleSeries = _chartArea.VisibleSeries;
                     if (visibleSeries != null)
                     {
-                        foreach (var series in visibleSeries.Reverse())
+                        for (int i = visibleSeries.Count - 1; i >= 0; i--)
                         {
-                            if (series.SelectionHitTest((float)tapPoint.X, (float)tapPoint.Y))
+                            if (visibleSeries[i].SelectionHitTest((float)tapPoint.X, (float)tapPoint.Y))
 							{
 								break;
 							}

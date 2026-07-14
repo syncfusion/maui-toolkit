@@ -1,4 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Collections;
 using System.Data;
 
@@ -37,6 +37,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal List<float>? PreviousStrokePoints { get; set; } = null;
 
 		PathF? _path;
+		float[]? _cachedStrokeDashPattern;
+		DoubleCollection? _previousStrokeDashArray;
 
 		#endregion
 
@@ -60,7 +62,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (StrokeDashArray != null)
 			{
-				canvas.StrokeDashPattern = StrokeDashArray.ToFloatArray();
+				if (_cachedStrokeDashPattern == null || _previousStrokeDashArray != StrokeDashArray)
+				{
+					_cachedStrokeDashPattern = StrokeDashArray.ToFloatArray();
+					_previousStrokeDashArray = StrokeDashArray;
+				}
+
+				canvas.StrokeDashPattern = _cachedStrokeDashPattern;
 			}
 
 			DrawPath(canvas, FillPoints, StrokePoints);
@@ -182,29 +190,47 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				xValues.CopyTo(XValues, 0);
 				yValues.CopyTo(YValues, 0);
 
-				var yMin = YValues.Min();
-				if (double.IsNaN(yMin))
-				{
-					yMin = 0;
-					if (YValues.Length > 0)
-					{
-						for (int i = 0; i < YValues.Length; i++)
-						{
-							double val = YValues[i];
-							if (!double.IsNaN(val))
-							{
-								yMin = Math.Min(yMin == 0 ? double.MaxValue : yMin, val);
-							}
-						}
+				double yMin = double.MaxValue;
+				double yMax = double.MinValue;
+				double xMin = double.MaxValue;
+				double xMax = double.MinValue;
 
-						if (yMin == double.MaxValue) yMin = 0;
+				for (int i = 0; i < count; i++)
+				{
+					double yVal = YValues[i];
+					if (!double.IsNaN(yVal))
+					{
+						if (yVal < yMin) yMin = yVal;
+						if (yVal > yMax) yMax = yVal;
+					}
+
+					double xVal = XValues[i];
+					if (!double.IsNaN(xVal))
+					{
+						if (xVal < xMin) xMin = xVal;
+						if (xVal > xMax) xMax = xVal;
 					}
 				}
 
-				Empty = double.IsNaN(yMin);
+				if (yMin == double.MaxValue)
+				{
+					Empty = count > 0;
+					yMin = 0;
+					yMax = 0;
+				}
+				else
+				{
+					Empty = false;
+				}
 
-				series.XRange += new DoubleRange(XValues.Min(), XValues.Max());
-				series.YRange += new DoubleRange(yMin, YValues.Max());
+				if (xMin == double.MaxValue)
+				{
+					xMin = 0;
+					xMax = 0;
+				}
+
+				series.XRange += new DoubleRange(xMin, xMax);
+				series.YRange += new DoubleRange(yMin, yMax);
 			}
 		}
 

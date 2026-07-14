@@ -822,11 +822,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						if (XValues is List<string> xValue)
 						{
+							int yPathCount = yPropertyAccessor.Count;
 							do
 							{
 								var xVal = xProperty.GetValue(enumerator.Current);
 								xValue.Add(xVal.Tostring());
-								for (int i = 0; i < yPropertyAccessor.Count; i++)
+								for (int i = 0; i < yPathCount; i++)
 								{
 									var yVal = yPropertyAccessor[i].GetValue(enumerator.Current);
 									yLists[i].Add(Convert.ToDouble(yVal ?? double.NaN));
@@ -842,6 +843,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						if (XValues is List<double> xValue)
 						{
+							int yPathCount = yPropertyAccessor.Count;
 							do
 							{
 								var xVal = xProperty.GetValue(enumerator.Current);
@@ -854,7 +856,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								}
 
 								xValue.Add(XData);
-								for (int i = 0; i < yPropertyAccessor.Count; i++)
+								for (int i = 0; i < yPathCount; i++)
 								{
 									var yVal = yPropertyAccessor[i].GetValue(enumerator.Current);
 									yLists[i].Add(Convert.ToDouble(yVal ?? double.NaN));
@@ -870,6 +872,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						if (XValues is List<double> xValue)
 						{
+							int yPathCount = yPropertyAccessor.Count;
 							do
 							{
 								var xVal = xProperty.GetValue(enumerator.Current);
@@ -882,7 +885,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								}
 
 								xValue.Add(XData);
-								for (int i = 0; i < yPropertyAccessor.Count; i++)
+								for (int i = 0; i < yPathCount; i++)
 								{
 									var yVal = yPropertyAccessor[i].GetValue(enumerator.Current);
 									yLists[i].Add(Convert.ToDouble(yVal ?? double.NaN));
