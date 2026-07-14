@@ -10,32 +10,32 @@
 		/// </summary>
 		/// <param name="targetEnum">Target enum.</param>
 		/// <returns>Available enum values.</returns>
-		internal static IEnumerable<Enum> GetAllItems(this SfEffects targetEnum)
+		internal static IEnumerable<SfEffects> GetAllItems(this SfEffects targetEnum)
 		{
-			foreach (Enum value in Enum.GetValues<SfEffects>())
+			foreach (SfEffects value in Enum.GetValues<SfEffects>())
 			{
 				//// If the flag value of the enum is zero, then the HasFlag method always returns true. Hence, the None is returned only if the value and the target enum is equals to None.
-				if (value.ToString() != "None" && targetEnum.HasFlag(value))
+				if (value != SfEffects.None && targetEnum.HasFlag(value))
 				{
 					yield return value;
 				}
-				else if (value.ToString() == "None" && targetEnum.Equals(value))
+				else if (value == SfEffects.None && targetEnum == SfEffects.None)
 				{
 					yield return value;
 				}
 			}
 		}
 
-		internal static IEnumerable<Enum> GetAllAutoResetEffectsItems(this AutoResetEffects targetEnum)
+		internal static IEnumerable<AutoResetEffects> GetAllAutoResetEffectsItems(this AutoResetEffects targetEnum)
 		{
-			foreach (Enum value in Enum.GetValues<AutoResetEffects>())
+			foreach (AutoResetEffects value in Enum.GetValues<AutoResetEffects>())
 			{
 				//// If the flag value of the enum is zero, then the HasFlag method always returns true. Hence, the None is returned only if the value and the target enum is equals to None.
-				if (value.ToString() != "None" && targetEnum.HasFlag(value))
+				if (value != AutoResetEffects.None && targetEnum.HasFlag(value))
 				{
 					yield return value;
 				}
-				else if (value.ToString() == "None" && targetEnum.Equals(value))
+				else if (value == AutoResetEffects.None && targetEnum == AutoResetEffects.None)
 				{
 					yield return value;
 				}

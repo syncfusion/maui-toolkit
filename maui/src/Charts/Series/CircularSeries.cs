@@ -38,6 +38,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal List<PieSegment>? LeftPoints { get; set; }
 
+		internal HashSet<PieSegment>? LeftPointsLookup { get; set; }
+
 		internal List<PieSegment>? RightPoints { get; set; }
 
 		//TODO: Need to remove by calculate smartLabels without using series. 
@@ -700,10 +702,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			double total = 0;
 			var legendItems = GetLegendItems();
+			int segmentCount = _segments.Count;
 
 			for (int i = 0; i < YValues.Count; i++)
 			{
-				if (!double.IsNaN(YValues[i]) && (_segments.Count == 0 || ((_segments.Count <= i) || (_segments.Count > i && _segments[i].IsVisible))))
+				if (!double.IsNaN(YValues[i]) && (segmentCount == 0 || ((segmentCount <= i) || (segmentCount > i && _segments[i].IsVisible))))
 				{
 					if (legendItems == null || legendItems.Count == 0)
 					{
@@ -729,15 +732,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (DataLabelSettings.SmartLabelAlignment == SmartLabelAlignment.Shift)
 			{
 				LeftPoints = [];
+				LeftPointsLookup = [];
 				RightPoints = [];
 
-				foreach (PieSegment segment in _segments.Cast<PieSegment>())
+				for (int i = 0; i < _segments.Count; i++)
 				{
+					var segment = (PieSegment)_segments[i];
 					segment.IsVisible = true;
 					if (segment.DataLabelRenderingPosition == Position.Left &&
 						DataLabelSettings.LabelPosition == ChartDataLabelPosition.Outside)
 					{
 						LeftPoints.Add(segment);
+						LeftPointsLookup.Add(segment);
 					}
 					else if (segment.DataLabelRenderingPosition == Position.Right &&
 						DataLabelSettings.LabelPosition == ChartDataLabelPosition.Outside)
@@ -1299,8 +1305,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					ChangeLabelAngle(previousPoint, newAngle);
 
-					if (CircularSeries.IsOverlap(currentPoint.LabelRect, previousPoint.LabelRect) && LeftPoints != null &&
-						LeftPoints.Contains(previousPoint) &&
+					if (CircularSeries.IsOverlap(currentPoint.LabelRect, previousPoint.LabelRect) && LeftPointsLookup != null &&
+						LeftPointsLookup.Contains(previousPoint) &&
 						(newAngle - 1 < 90 && newAngle - 1 > 270))
 					{
 						ChangeLabelAngle(currentPoint, currentPoint.SegmentNewAngle! + 1);

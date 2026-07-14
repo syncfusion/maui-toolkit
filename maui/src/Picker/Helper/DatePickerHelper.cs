@@ -383,17 +383,17 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return monthIndex;
             }
 
-            List<string> monthStrings = new List<string>();
+            string[]? monthNames = null;
             bool isAbbreviatedMonth = format == "MMM";
             bool isFullMonth = format == "MMMM";
             bool isMonthDay = format == "MM_ddd";
             if (isFullMonth)
             {
-                monthStrings = DateTimeFormatInfo.CurrentInfo.MonthNames.ToList();
+                monthNames = DateTimeFormatInfo.CurrentInfo.MonthNames;
             }
             else if (isAbbreviatedMonth || isMonthDay)
             {
-                monthStrings = DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames.ToList();
+                monthNames = DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames;
             }
 
             if (isMonthDay)
@@ -407,12 +407,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     }
                 }
             }
-            else if (isAbbreviatedMonth || isFullMonth)
+            else if ((isAbbreviatedMonth || isFullMonth) && monthNames is not null)
             {
                 for (int i = 0; i < months.Count; i++)
                 {
                     string monthItem = months[i];
-                    if (monthStrings.IndexOf(monthItem) + 1 > month)
+                    if (Array.IndexOf(monthNames, monthItem) + 1 > month)
                     {
                         monthIndex = i;
                         break;
@@ -857,8 +857,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
             }
 
-            // Distinct Method is used to store only unique values in the list.
-            formatOrder = formatOrder.Distinct().ToList();
+            // Remove duplicates without LINQ allocation by using a seen set.
+            var seen = new HashSet<int>();
+            formatOrder.RemoveAll(x => !seen.Add(x));
             return formatOrder;
         }
 

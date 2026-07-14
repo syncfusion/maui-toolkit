@@ -314,8 +314,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				float xPos = pointX - seriesBounds.Left;
 				float yPos = pointY - seriesBounds.Top;
 
-				foreach (FastLineSegment segment in _segments.Cast<FastLineSegment>())
+				for (int i = 0; i < _segments.Count; i++)
 				{
+					if (_segments[i] is not FastLineSegment segment)
+					{
+						continue;
+					}
+
 					var xValues = segment._xValues;
 					var yValues = segment._yValues;
 
@@ -324,15 +329,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						return -1;
 					}
 
-					for (int i = 0; i < xValues.Count; i++)
+					for (int j = 0; j < xValues.Count; j++)
 					{
-						var xVal = xValues[i];
-						var yVal = yValues[i];
+						var xVal = xValues[j];
+						var yVal = yValues[j];
 						float xPoint = TransformToVisibleX(xVal, yVal);
 						float yPoint = TransformToVisibleY(xVal, yVal);
 						if (ChartSegment.IsRectContains(xPoint, yPoint, xPos, yPos, (float)StrokeWidth))
 						{
-							return i;
+							return j;
 						}
 					}
 				}
@@ -377,8 +382,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 			else
 			{
-				foreach (FastLineSegment segment in _segments.Cast<FastLineSegment>())
+				for (int i = 0; i < _segments.Count; i++)
 				{
+					if (_segments[i] is not FastLineSegment segment)
+					{
+						continue;
+					}
+
 					segment.SetData(xValues, YValues);
 				}
 			}
@@ -432,8 +442,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			ChartDataLabelStyle labelStyle = DataLabelSettings.LabelStyle;
 
-			foreach (FastLineSegment segment in _segments.Cast<FastLineSegment>())
+			for (int segIdx = 0; segIdx < _segments.Count; segIdx++)
 			{
+				if (_segments[segIdx] is not FastLineSegment segment)
+				{
+					continue;
+				}
+
 				var xValues = segment._xValues;
 				var yValues = segment._yValues;
 

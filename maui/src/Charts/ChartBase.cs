@@ -597,8 +597,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return null;
 			}
 
-			foreach (var chartSeries in visibleSeries.Reverse())
+			for (int i = visibleSeries.Count - 1; i >= 0; i--)
 			{
+				var chartSeries = visibleSeries[i];
 				if (!chartSeries.EnableTooltip || chartSeries.PointsCount <= 0)
 				{
 					continue;

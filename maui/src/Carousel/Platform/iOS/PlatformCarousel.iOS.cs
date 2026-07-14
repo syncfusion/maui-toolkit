@@ -879,7 +879,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
         void EnableOrDisableInteraction()
         {
             UserInteractionEnabled = IsInteractionEnable();
-            Subviews.ToList().ForEach(subView => subView.UserInteractionEnabled = IsInteractionEnable());
+            bool interactionEnabled = IsInteractionEnable();
+            foreach (var subView in Subviews)
+            {
+                subView.UserInteractionEnabled = interactionEnabled;
+            }
+
             OnEnableInteractionPropertyChanged();
         }
 

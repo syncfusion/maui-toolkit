@@ -1574,14 +1574,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
         /// <param name="exclude">True to exclude from accessibility, false to include.</param>
 		void UpdateSingleElement(VisualElement visualChild,bool exclude)
 		{
-			if (!_originalAccessibilityProperties.ContainsKey(visualChild))
-			{
-				// Store original values only if not already stored
-				_originalAccessibilityProperties[visualChild] = (
-					SemanticProperties.GetDescription(visualChild),
-					SemanticProperties.GetHint(visualChild)
-				);
-			}
+			_originalAccessibilityProperties.TryAdd(visualChild, (
+				SemanticProperties.GetDescription(visualChild),
+				SemanticProperties.GetHint(visualChild)
+			));
 
 			if (exclude)
 			{
@@ -1619,10 +1615,9 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			var nativeContent = Content?.Handler?.PlatformView as Android.Views.View;
 			if (nativeContent is Android.Views.View rootView)
 			{
-					if (Content != null && !_androidContentDescriptions.ContainsKey(Content))
+					if (Content != null)
 					{
-						_androidContentDescriptions[Content] =
-							rootView.ContentDescription;
+						_androidContentDescriptions.TryAdd(Content, rootView.ContentDescription);
 					}
 
 				if (exclude) // when you want to hide content

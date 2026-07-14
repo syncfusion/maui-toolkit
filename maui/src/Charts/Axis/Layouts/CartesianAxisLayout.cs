@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -499,10 +499,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		static ChartAxis? GetAxisByName(string name, ObservableCollection<ChartAxis>? axes)
 		{
-			var item = (from x in axes where x.Name == name select x).ToList();
-			if (item != null && item.Count > 0)
+			if (axes == null)
 			{
-				return item[0];
+				return null;
+			}
+
+			for (int i = 0; i < axes.Count; i++)
+			{
+				if (axes[i].Name == name)
+				{
+					return axes[i];
+				}
 			}
 
 			return null;

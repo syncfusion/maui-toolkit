@@ -900,16 +900,7 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 #else
 			string stateName = IsEnabled ? _isPressed ? "Pressed" : IsCheckable && IsChecked ? "Checked" : "Normal" : IsCheckable && IsChecked ? "Checked" : "Disabled";
 #endif
-			var stateGroup = VisualStateManager.GetVisualStateGroups(this);
-			var findName = "Normal";
-			foreach (VisualStateGroup state in stateGroup)
-			{
-				foreach (var a in state.States)
-				{
-					findName = a.Name == stateName ? stateName : findName;
-				}
-			}
-			VisualStateManager.GoToState(this, findName);
+			VisualStateManager.GoToState(this, stateName);
 			InvalidateDrawable();
 		}
 

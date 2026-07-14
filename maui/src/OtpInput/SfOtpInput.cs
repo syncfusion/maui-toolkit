@@ -1862,22 +1862,25 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				return;
 			}
 
-			for (int i = oldLength; i < newLength; i++)
-			{
-				if (i < newLength && i is not 0)
+				var entriesList = new List<OTPEntry>(_otpEntries);
+				for (int i = oldLength; i < newLength; i++)
 				{
-					SfLabel label = InitializeSeparator();
-					SetSeparatorPosition(i, label);
-					layout?.Children.Add(label);
+					if (i < newLength && i is not 0)
+					{
+						SfLabel label = InitializeSeparator();
+						SetSeparatorPosition(i, label);
+						layout?.Children.Add(label);
+					}
+
+					OTPEntry otpEntry = InitializeEntry();
+					AttachEvents(otpEntry);
+					entriesList.Add(otpEntry);
+					SetInputFieldPosition(i, otpEntry);
+					layout?.Children.Add(otpEntry);
 				}
 
-				OTPEntry otpEntry = InitializeEntry();
-				AttachEvents(otpEntry);
-                _otpEntries = _otpEntries.Concat(new[] { otpEntry }).ToArray();
-				SetInputFieldPosition(i, otpEntry);
-				layout?.Children.Add(otpEntry);
+				_otpEntries = entriesList.ToArray();
 			}
-		}
 
 		/// <summary>
 		/// Sets the position of an OTP input field within the SfOtpInput control.
@@ -1891,19 +1894,22 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				return;
 			}
 
-			RectF rect = new RectF(
-				(_entryWidth + _spacing) * i,
-				0,
-				_entryWidth,
-				_entryHeight);
-
-			_entryBounds = _entryBounds.Concat(new[] { rect }).ToArray();
-			AbsoluteLayout.SetLayoutBounds(otpEntry, new Rect(rect.X, rect.Y, rect.Width, rect.Height));
-
 			float entryX = ((_entryWidth + _spacing) * i) + _extraSpacing;
-			float entryY = _extraSpacing ;
-			_entryBounds[i] = new RectF(entryX, entryY, _entryWidth, _entryHeight);
-			AbsoluteLayout.SetLayoutBounds(otpEntry, new Rect(_entryBounds[i].X, _entryBounds[i].Y, _entryBounds[i].Width, _entryBounds[i].Height));
+			float entryY = _extraSpacing;
+			var bounds = new RectF(entryX, entryY, _entryWidth, _entryHeight);
+
+			var boundsList = new List<RectF>(_entryBounds);
+			if (i < boundsList.Count)
+			{
+				boundsList[i] = bounds;
+			}
+			else
+			{
+				boundsList.Add(bounds);
+			}
+
+			_entryBounds = boundsList.ToArray();
+			AbsoluteLayout.SetLayoutBounds(otpEntry, new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height));
 		}
 
 		/// <summary>
@@ -1917,7 +1923,9 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 			float separatorX = entryX + _entryWidth + _spacing / 2;
 			RectF separatorRect = new RectF(separatorX, 0, _separatorWidth, _separatorHeight);
 
-			_separators = _separators.Concat(new[] { label }).ToArray();
+			var separatorsList = new List<SfLabel>(_separators);
+			separatorsList.Add(label);
+			_separators = separatorsList.ToArray();
 			AbsoluteLayout.SetLayoutBounds(label, new Rect(separatorRect.X, separatorRect.Y, separatorRect.Width, separatorRect.Height));
 		}
 
@@ -2156,7 +2164,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 
 				default:
                     if ((e.Key >= Windows.System.VirtualKey.A && e.Key <= Windows.System.VirtualKey.Z) ||
-                        (e.Key >= Windows.System.VirtualKey.Number0 && e.Key <= Windows.System.VirtualKey.Number9))
+                        (e.Key >= Windows.System.VirtualKey.Number0 && e.Key <= Windows.System.VirtualKey.Number9) || (e.Key >= Windows.System.VirtualKey.NumberPad0 && e.Key <= Windows.System.VirtualKey.NumberPad9))
                     {
                         string text = e.Key.ToString();
                         HandleKeyPress(text);

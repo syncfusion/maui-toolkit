@@ -80,6 +80,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	{
 		#region Private Field
 
+		static readonly string _maximumLabel = SfCartesianChartResources.Maximum;
+		static readonly string _minimumLabel = SfCartesianChartResources.Minimum;
+		static readonly string _q3Label = SfCartesianChartResources.Q3;
+		static readonly string _q1Label = SfCartesianChartResources.Q1;
+		static readonly string _medianLabel = SfCartesianChartResources.Median;
+
 		bool _isEvenList;
 
 		#endregion
@@ -1227,11 +1233,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				else
 				{
 					var texts = info.Text.Split('/');
-					string maximumFormat = SfCartesianChartResources.Maximum + " :";
-					string minimumFormat = SfCartesianChartResources.Minimum + "  :";
-					string Q3Format = SfCartesianChartResources.Q3 + "\t    :";
-					string Q1Format = SfCartesianChartResources.Q1 + "\t    :";
-					string medianFormat = SfCartesianChartResources.Median + "      :";
+					string maximumFormat = _maximumLabel + " :";
+					string minimumFormat = _minimumLabel + "  :";
+					string Q3Format = _q3Label + "\t    :";
+					string Q1Format = _q1Label + "\t    :";
+					string medianFormat = _medianLabel + "      :";
 
 					var labels = new[]
 					{
@@ -1310,11 +1316,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 						xPosition = TransformToVisibleX(xValue, yValue);
 
-						string label = $"{SfCartesianChartResources.Maximum} : {segment.Maximum}\n" +
-									   $"{SfCartesianChartResources.Q3}\t   : {segment.UpperQuartile}\n" +
-									   $"{SfCartesianChartResources.Median}      : {segment.Median}\n" +
-									   $"{SfCartesianChartResources.Q1}\t   : {segment.LowerQuartile}\n" +
-									   $"{SfCartesianChartResources.Minimum}  : {segment.Minimum}";
+						string label = $"{_maximumLabel} : {segment.Maximum}\n" +
+									   $"{_q3Label}\t   : {segment.UpperQuartile}\n" +
+									   $"{_medianLabel}      : {segment.Median}\n" +
+									   $"{_q1Label}\t   : {segment.LowerQuartile}\n" +
+									   $"{_minimumLabel}  : {segment.Minimum}";
 
 						if (IsSideBySide)
 						{

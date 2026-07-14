@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
@@ -1102,8 +1102,92 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 				Assert.Equal(new PointF(526.688f, 248.4f), innerMidPoint);
 				Assert.Equal(new PointF(645.920044f, 248.4f), outerMidPoint);
 			}
-
-			
 		}
+
+		#region Performance Optimization Tests
+
+		[Fact]
+		public void ErrorBarSegment_SetData_WithAllNaN_ShouldNotThrow()
+		{
+			var errorBarSegment = new ErrorBarSegment();
+			var errorBarSeries = new ErrorBarSeries();
+			errorBarSeries.HorizontalErrorValue = 1;
+			errorBarSeries.VerticalErrorValue = 1;
+			errorBarSegment.Series = errorBarSeries;
+			var xValues = new double[] { double.NaN, double.NaN, double.NaN };
+			var yValues = new double[] { double.NaN, double.NaN, double.NaN };
+			var exception = Record.Exception(() => errorBarSegment.SetData(xValues, yValues));
+			Assert.Null(exception);
+		}
+
+		[Fact]
+		public void ErrorBarSegment_SetData_WithMixedNaN_ShouldNotThrow()
+		{
+			var errorBarSegment = new ErrorBarSegment();
+			var errorBarSeries = new ErrorBarSeries();
+			errorBarSeries.HorizontalErrorValue = 2;
+			errorBarSeries.VerticalErrorValue = 3;
+			errorBarSegment.Series = errorBarSeries;
+			var xValues = new double[] { double.NaN, 5, 10, double.NaN };
+			var yValues = new double[] { 2, double.NaN, 8, double.NaN };
+			var exception = Record.Exception(() => errorBarSegment.SetData(xValues, yValues));
+			Assert.Null(exception);
+		}
+
+		[Fact]
+		public void ErrorBarSegment_SetData_WithValidValues_ShouldNotThrow()
+		{
+			var errorBarSegment = new ErrorBarSegment();
+			var errorBarSeries = new ErrorBarSeries();
+			errorBarSeries.HorizontalErrorValue = 1;
+			errorBarSeries.VerticalErrorValue = 1;
+			errorBarSegment.Series = errorBarSeries;
+			var xValues = new double[] { 1, 2, 3 };
+			var yValues = new double[] { 4, 5, 6 };
+			var exception = Record.Exception(() => errorBarSegment.SetData(xValues, yValues));
+			Assert.Null(exception);
+			// Verify the series XRange was updated correctly
+			Assert.Equal(new DoubleRange(0, 4), errorBarSeries.XRange);
+		}
+
+		[Fact]
+		public void AreaSegment_SetData_WithAllNaN_ShouldNotThrow()
+		{
+			var areaSegment = new AreaSegment();
+			var areaSeries = new AreaSeries
+			{
+				ActualYAxis = new NumericalAxis
+				{
+					VisibleRange = new DoubleRange(0, 10)
+				}
+			};
+			var xValues = new double[] { 1, 2, 3 };
+			var yValues = new double[] { double.NaN, double.NaN, double.NaN };
+			areaSegment.Series = areaSeries;
+			var exception = Record.Exception(() => areaSegment.SetData(xValues, yValues));
+			Assert.Null(exception);
+			// With all NaN values, yMin defaults to 0, so Empty should be true
+			Assert.True(areaSegment.Empty);
+		}
+
+		[Fact]
+		public void AreaSegment_SetData_WithPartialNaN_ShouldComputeMinCorrectly()
+		{
+			var areaSegment = new AreaSegment();
+			var areaSeries = new AreaSeries
+			{
+				ActualYAxis = new NumericalAxis
+				{
+					VisibleRange = new DoubleRange(0, 10)
+				}
+			};
+			var xValues = new double[] { 1, 2, 3, 4 };
+			var yValues = new double[] { double.NaN, 7, 3, double.NaN };
+			areaSegment.Series = areaSeries;
+			areaSegment.SetData(xValues, yValues);
+			Assert.False(areaSegment.Empty);
+		}
+
+		#endregion
 	}
 }
