@@ -978,11 +978,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (PreviousPointInfos == null)
 				{
 					PreviousPointInfos = new List<TrackballPointInfo>(PointInfos.Count);
+					PreviousPointInfos.AddRange(PointInfos);
 				}
 				else
 				{
-					PreviousPointInfos.Clear();
-					PreviousPointInfos.AddRange(PointInfos);
+					// Swap lists to avoid copy allocation
+					var temp = PreviousPointInfos;
+					PreviousPointInfos = PointInfos;
+					PointInfos = temp;
 				}
 
 				PointInfos.Clear();
@@ -1188,9 +1191,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		void GenerateAxisTrackballInfos(float leastX)
 		{
 			if (_previousAxisPointInfos == null)
+			{
 				_previousAxisPointInfos = new List<TrackballAxisInfo>(_axisPointInfos.Count);
+			}
 			else
+			{
 				_previousAxisPointInfos.Clear();
+			}
+
 			_previousAxisPointInfos.AddRange(_axisPointInfos);
 			_axisPointInfos.Clear();
 
