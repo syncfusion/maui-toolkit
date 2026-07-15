@@ -135,32 +135,41 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (Series is CartesianSeries series && series.ActualYAxis != null)
 			{
-				_minY = YVal.Min();
-				if (double.IsNaN(_minY))
+				_minY = double.MaxValue;
+				_maxY = double.MinValue;
+				double xMin = double.MaxValue, xMax = double.MinValue;
+				for (int i = 0; i < YVal.Length; i++)
+				{
+					double val = YVal[i];
+					if (!double.IsNaN(val))
+					{
+						if (val < _minY) _minY = val;
+						if (val > _maxY) _maxY = val;
+					}
+
+					double xVal = XVal[i];
+					if (xVal < xMin) xMin = xVal;
+					if (xVal > xMax) xMax = xVal;
+				}
+
+				if (_minY == double.MaxValue)
 				{
 					_minY = 0;
-					if (YVal.Length > 0)
-					{
-						double yMin = double.MaxValue;
-						for (int i = 0; i < YVal.Length; i++)
-						{
-							double val = YVal[i];
-							if (!double.IsNaN(val) && val < yMin)
-							{
-								yMin = val;
-							}
-						}
-
-						if (yMin != double.MaxValue) _minY = yMin;
-					}
+					_maxY = 0;
 				}
-				_maxY = YVal.Max();
 
-				double startControlMin = ControlStartY.Min();
-				double startControlMax = ControlStartY.Max();
-
-				double endControlMin = ControlEndY.Min();
-				double endControlMax = ControlEndY.Max();
+				double startControlMin = double.MaxValue, startControlMax = double.MinValue;
+				double endControlMin = double.MaxValue, endControlMax = double.MinValue;
+				int controlCount = Math.Min(ControlStartY.Length, ControlEndY.Length);
+				for (int i = 0; i < controlCount; i++)
+				{
+					double sv = ControlStartY[i];
+					double ev = ControlEndY[i];
+					if (sv < startControlMin) startControlMin = sv;
+					if (sv > startControlMax) startControlMax = sv;
+					if (ev < endControlMin) endControlMin = ev;
+					if (ev > endControlMax) endControlMax = ev;
+				}
 
 				if (_maxY < startControlMax)
 				{
@@ -182,7 +191,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					_minY = endControlMin;
 				}
 
-				series.XRange += new DoubleRange(XVal.Min(), XVal.Max());
+				series.XRange += new DoubleRange(xMin, xMax);
 				series.YRange += new DoubleRange(_minY, _maxY);
 			}
 		}
@@ -200,9 +209,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			var xAxis = cartesian.ActualXAxis;
 			var crossingValue = double.IsNaN(xAxis.RenderingCrossesValue) ? cartesian.GetAxisCrossingValue(xAxis) : xAxis.RenderingCrossesValue;
 			var count = XVal.Length;
-			FillPoints = [];
-			StartControlPoints = [];
-			EndControlPoints = [];
+			if (FillPoints == null) FillPoints = new List<float>(); else FillPoints.Clear();
+			if (StartControlPoints == null) StartControlPoints = new List<float>(); else StartControlPoints.Clear();
+			if (EndControlPoints == null) EndControlPoints = new List<float>(); else EndControlPoints.Clear();
 
 			double xValue = XVal[0], startX, startY, endX, endY;
 
@@ -242,9 +251,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (Series is CartesianSeries series && SeriesView != null && series.ActualYAxis != null)
 			{
 				float x, y, ControlStartXVal, ControlStartYVal, ControlEndXVal, ControlEndYVal;
-				StrokePoints = [];
-				StrokeControlStartPoints = [];
-				StrokeControlEndPoints = [];
+				if (StrokePoints == null) StrokePoints = new List<float>(); else StrokePoints.Clear();
+				if (StrokeControlStartPoints == null) StrokeControlStartPoints = new List<float>(); else StrokeControlStartPoints.Clear();
+				if (StrokeControlEndPoints == null) StrokeControlEndPoints = new List<float>(); else StrokeControlEndPoints.Clear();
 				int segsCount = series._segments.Count;
 				var halfStrokeWidth = (float)StrokeWidth / 2;
 				double yValue, xValue, startX, startY, endX, endY;
