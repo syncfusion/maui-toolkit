@@ -214,12 +214,35 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (errorBarSeries.Type == ErrorBarType.Percentage)
 				{
-					var validTopPoints = _topPointCollection.Where(p => !double.IsNaN(p.Y)).Select(p => p.Y);
-					var validBottomPoints = _bottomPointCollection.Where(p => !double.IsNaN(p.Y)).Select(p => p.Y);
+					double rangeMin = double.MaxValue;
+					double rangeMax = double.MinValue;
+					bool hasValid = false;
 
-					if (validTopPoints.Any() && validBottomPoints.Any())
+					for (int i = 0; i < _topPointCollection.Count; i++)
 					{
-						YRange = new DoubleRange(Math.Min(validBottomPoints.Min(), validTopPoints.Min()), Math.Max(validBottomPoints.Max(), validTopPoints.Max()));
+						double y = _topPointCollection[i].Y;
+						if (!double.IsNaN(y))
+						{
+							if (y < rangeMin) rangeMin = y;
+							if (y > rangeMax) rangeMax = y;
+							hasValid = true;
+						}
+					}
+
+					for (int i = 0; i < _bottomPointCollection.Count; i++)
+					{
+						double y = _bottomPointCollection[i].Y;
+						if (!double.IsNaN(y))
+						{
+							if (y < rangeMin) rangeMin = y;
+							if (y > rangeMax) rangeMax = y;
+							hasValid = true;
+						}
+					}
+
+					if (hasValid)
+					{
+						YRange = new DoubleRange(rangeMin, rangeMax);
 					}
 				}
 				else

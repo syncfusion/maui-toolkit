@@ -1,4 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -20,6 +20,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Private Fields
 
 		bool _isComplexYProperty;
+
+		bool _isComplexXProperty;
 
 		ChartValueType _xValueType;
 
@@ -185,21 +187,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (oldValue is IEnumerable enumerable)
 			{
-				IEnumerator enumerator = enumerable.GetEnumerator();
-
-				if (!enumerator.MoveNext())
+				foreach (var item in enumerable)
 				{
-					return;
-				}
-
-				do
-				{
-					if (enumerator.Current is INotifyPropertyChanged item)
+					if (item is INotifyPropertyChanged notifyItem)
 					{
-						item.PropertyChanged -= OnItemPropertyChanged;
+						notifyItem.PropertyChanged -= OnItemPropertyChanged;
 					}
 				}
-				while (enumerator.MoveNext());
 			}
 		}
 
@@ -234,10 +228,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (categoryAxis.RegisteredSeries.Count > 0)
 					{
-						foreach (CartesianSeries chartSeries in categoryAxis.RegisteredSeries.Cast<CartesianSeries>())
+						for (int i = 0; i < categoryAxis.RegisteredSeries.Count; i++)
 						{
-							chartSeries.SegmentsCreated = false;
-							chartSeries.ChartArea?.UpdateVisibleSeries();
+							if (categoryAxis.RegisteredSeries[i] is CartesianSeries chartSeries)
+							{
+								chartSeries.SegmentsCreated = false;
+								chartSeries.ChartArea?.UpdateVisibleSeries();
+							}
 						}
 					}
 				}
@@ -672,6 +669,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			IList<double>[]? yLists = null;
 			_isComplexYProperty = false;
+			_isComplexXProperty = !string.IsNullOrEmpty(XBindingPath) && XBindingPath.Contains('.', StringComparison.Ordinal);
 			bool isArrayProperty = false;
 			YComplexPaths = new string[yPaths.Length][];
 
@@ -709,7 +707,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						GenerateComplexPropertyPoints(yPaths, yLists, GetArrayPropertyValue);
 					}
-					else if (XBindingPath.Contains('.', StringComparison.Ordinal) || _isComplexYProperty)
+					else if (_isComplexXProperty || _isComplexYProperty)
 					{
 						GenerateComplexPropertyPoints(yPaths, yLists, GetPropertyValue);
 					}
@@ -824,11 +822,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						if (XValues is List<string> xValue)
 						{
+							int yPathCount = yPropertyAccessor.Count;
 							do
 							{
 								var xVal = xProperty.GetValue(enumerator.Current);
 								xValue.Add(xVal.Tostring());
-								for (int i = 0; i < yPropertyAccessor.Count; i++)
+								for (int i = 0; i < yPathCount; i++)
 								{
 									var yVal = yPropertyAccessor[i].GetValue(enumerator.Current);
 									yLists[i].Add(Convert.ToDouble(yVal ?? double.NaN));
@@ -844,6 +843,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						if (XValues is List<double> xValue)
 						{
+							int yPathCount = yPropertyAccessor.Count;
 							do
 							{
 								var xVal = xProperty.GetValue(enumerator.Current);
@@ -856,7 +856,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								}
 
 								xValue.Add(XData);
-								for (int i = 0; i < yPropertyAccessor.Count; i++)
+								for (int i = 0; i < yPathCount; i++)
 								{
 									var yVal = yPropertyAccessor[i].GetValue(enumerator.Current);
 									yLists[i].Add(Convert.ToDouble(yVal ?? double.NaN));
@@ -872,6 +872,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						if (XValues is List<double> xValue)
 						{
+							int yPathCount = yPropertyAccessor.Count;
 							do
 							{
 								var xVal = xProperty.GetValue(enumerator.Current);
@@ -884,7 +885,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								}
 
 								xValue.Add(XData);
-								for (int i = 0; i < yPropertyAccessor.Count; i++)
+								for (int i = 0; i < yPathCount; i++)
 								{
 									var yVal = yPropertyAccessor[i].GetValue(enumerator.Current);
 									yLists[i].Add(Convert.ToDouble(yVal ?? double.NaN));
@@ -1279,8 +1280,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				var path = paths[i];
 				if (path.Contains('[', StringComparison.Ordinal))
 				{
-					int index = Convert.ToInt32(path.Substring(path.IndexOf('[', StringComparison.Ordinal) + 1, path.IndexOf(']', StringComparison.Ordinal) - path.IndexOf('[', StringComparison.Ordinal) - 1));
-					string actualPath = path.Replace(path[path.IndexOf('[', StringComparison.Ordinal)..], string.Empty, StringComparison.Ordinal);
+					int bracketOpen = path.IndexOf('[', StringComparison.Ordinal);
+					int bracketClose = path.IndexOf(']', StringComparison.Ordinal);
+					int index = Convert.ToInt32(path.Substring(bracketOpen + 1, bracketClose - bracketOpen - 1));
+					string actualPath = path.Replace(path[bracketOpen..], string.Empty, StringComparison.Ordinal);
 					parentObj = ReflectedObject(parentObj, actualPath);
 
 					if (parentObj == null)
@@ -1338,7 +1341,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					{
 						if (listenToPropertyChange)
 						{
-							if (_isComplexYProperty || XBindingPath.Contains('.', StringComparison.Ordinal))
+							if (_isComplexYProperty || _isComplexXProperty)
 							{
 								HookComplexProperty(enumerator.Current, XComplexPaths!);
 
@@ -1470,7 +1473,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return;
 			}
 
-			if (_isComplexYProperty || XBindingPath.Contains('.', StringComparison.Ordinal))
+			if (_isComplexYProperty || _isComplexXProperty)
 			{
 				ComplexPropertyChanged(sender, e);
 			}

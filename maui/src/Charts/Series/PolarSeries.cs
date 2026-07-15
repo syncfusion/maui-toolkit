@@ -1,4 +1,4 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -792,7 +792,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return null;
 			}
 
-			double xIndexValues = 0d;
 			var xValues = ActualXValues as List<double>;
 
 			if (IsIndexed || xValues == null)
@@ -805,26 +804,24 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 					else
 					{
-						var source = ActualXValues as List<string>;
-						var indexList = new List<double>(source?.Count ?? 0);
-						if (source != null)
+						var stringValues = ActualXValues as List<string>;
+						if (stringValues != null)
 						{
-							for (int i = 0; i < source.Count; i++)
+							xValues = new List<double>(stringValues.Count);
+							for (int i = 0; i < stringValues.Count; i++)
 							{
-								indexList.Add(xIndexValues++);
+								xValues.Add(i);
 							}
 						}
-
-						xValues = indexList;
 					}
 				}
 				else
 				{
-					int count = xValues?.Count ?? (ActualXValues as List<string>)?.Count ?? 0;
-					var indexList = new List<double>(count);
-					for (int i = 0; i < count; i++)
+					int sourceCount = xValues?.Count ?? (ActualXValues as List<string>)?.Count ?? 0;
+					var indexList = new List<double>(sourceCount);
+					for (int i = 0; i < sourceCount; i++)
 					{
-						indexList.Add(xIndexValues++);
+						indexList.Add(i);
 					}
 
 					xValues = indexList;

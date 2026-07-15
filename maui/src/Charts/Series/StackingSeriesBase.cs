@@ -333,7 +333,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (ChartArea != null)
 			{
 				var visibleSeries = ChartArea.VisibleSeries;
-
 				if (visibleSeries == null)
 				{
 					return;

@@ -54,11 +54,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 					else
 					{
-						foreach (var xVal in xValues)
+						foreach (var val in xValues)
 						{
-							if (groupingValuesSet.Add(xVal))
+							if (groupingValuesSet.Add(val))
 							{
-								groupingValues.Add(xVal);
+								groupingValues.Add(val);
 							}
 						}
 					}
@@ -95,21 +95,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (series.ActualXValues is List<string> list)
 				{
 					var indexes = new List<double>(list.Count);
-					foreach (var val in list)
+					for (int i = 0; i < list.Count; i++)
 					{
-						indexes.Add(indexMap.TryGetValue(val, out int idx) ? idx : -1);
+						indexes.Add(indexMap.TryGetValue(list[i], out int idx) ? idx : -1);
 					}
-
 					series.GroupedXValuesIndexes = indexes;
 				}
-				else if (series.ActualXValues is List<double> doubleList)
+				else if (series.ActualXValues is List<double> doubleValues)
 				{
-					var indexes = new List<double>(doubleList.Count);
-					foreach (var val in doubleList)
+					var indexes = new List<double>(doubleValues.Count);
+					for (int i = 0; i < doubleValues.Count; i++)
 					{
-						indexes.Add(indexMap.TryGetValue(val.ToString(), out int idx) ? idx : -1);
+						indexes.Add(indexMap.TryGetValue(doubleValues[i].ToString(), out int idx) ? idx : -1);
 					}
-
 					series.GroupedXValuesIndexes = indexes;
 				}
 
