@@ -118,8 +118,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (_chartAxis.TickPosition == AxisElementPosition.Inside)
 			{
-				elements.Insert(0, elementsRender);
-				sizes.Insert(0, elementsRender.GetDesiredSize());
+				elements.Add(elementsRender);
+				sizes.Add(elementsRender.GetDesiredSize());
 			}
 			else
 			{

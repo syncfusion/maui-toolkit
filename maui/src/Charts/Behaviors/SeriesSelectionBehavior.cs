@@ -32,8 +32,9 @@
 			var visibleSeries = ChartArea?.VisibleSeries;
 			if (visibleSeries != null && Chart != null)
 			{
-				foreach (var series in visibleSeries.Reverse())
+				for (int i = visibleSeries.Count - 1; i >= 0; i--)
 				{
+					var series = visibleSeries[i];
 					RectF bounds = series.AreaBounds;
 					foreach (var segment in series._segments)
 					{
@@ -91,12 +92,12 @@
 
 		internal override void ResetMultiSelection()
 		{
-			var selectedIndexes = ActualSelectedIndexes.ToList();
-			ActualSelectedIndexes.Clear();
-			foreach (var index in selectedIndexes)
+			for (int i = ActualSelectedIndexes.Count - 1; i >= 0; i--)
 			{
-				UpdateSelectedItem(index);
+				UpdateSelectedItem(ActualSelectedIndexes[i]);
 			}
+
+			ActualSelectedIndexes.Clear();
 		}
 
 		internal override void SelectionIndexChanged(int oldValue, int newValue)

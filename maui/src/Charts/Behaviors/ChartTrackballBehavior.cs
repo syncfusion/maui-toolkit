@@ -1707,13 +1707,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			}
 
-			var copyList = PointInfos.ToList();
-
-			foreach (var pointInfo in copyList)
+			for (int i = PointInfos.Count - 1; i >= 0; i--)
 			{
-				if (!leastXPointsInfo.Contains(pointInfo))
+				if (!leastXPointsInfo.Contains(PointInfos[i]))
 				{
-					RemoveTrackballInfo(pointInfo);
+					RemoveTrackballInfo(PointInfos[i]);
 				}
 			}
 

@@ -645,21 +645,28 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (Parent is ChartBase chart && sender is ChartLegendLabelStyle style && chart._legendLayout._areaBase.PlotArea is IChartPlotArea plotArea)
 			{
-				var updateActions = new Dictionary<string, Action<ILegendItem>>
+				foreach (var item in plotArea.LegendItems)
 				{
-					{ nameof(ChartLegendLabelStyle.TextColor), item => item.TextColor = style.TextColor },
-					{ nameof(ChartLegendLabelStyle.FontAttributes), item => item.FontAttributes = style.FontAttributes },
-					{ nameof(ChartLegendLabelStyle.FontFamily), item => item.FontFamily = style.FontFamily },
-					{ nameof(ChartLegendLabelStyle.Margin), item => item.TextMargin = style.Margin },
-					{ nameof(ChartLegendLabelStyle.DisableBrush), item => item.DisableBrush = style.DisableBrush },
-					{ nameof(ChartLegendLabelStyle.FontSize), item => item.FontSize = (float)style.FontSize }
-				};
-
-				if (updateActions.TryGetValue(e.PropertyName.Tostring(), out var updateAction))
-				{
-					foreach (var item in plotArea.LegendItems)
+					switch (e.PropertyName)
 					{
-						updateAction(item);
+						case nameof(ChartLegendLabelStyle.TextColor):
+							item.TextColor = style.TextColor;
+							break;
+						case nameof(ChartLegendLabelStyle.FontAttributes):
+							item.FontAttributes = style.FontAttributes;
+							break;
+						case nameof(ChartLegendLabelStyle.FontFamily):
+							item.FontFamily = style.FontFamily;
+							break;
+						case nameof(ChartLegendLabelStyle.Margin):
+							item.TextMargin = style.Margin;
+							break;
+						case nameof(ChartLegendLabelStyle.DisableBrush):
+							item.DisableBrush = style.DisableBrush;
+							break;
+						case nameof(ChartLegendLabelStyle.FontSize):
+							item.FontSize = (float)style.FontSize;
+							break;
 					}
 				}
 			}

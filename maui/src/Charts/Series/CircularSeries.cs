@@ -1337,9 +1337,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			currentPoint.XPoints[1] = endPoint.X;
 			currentPoint.YPoints[1] = endPoint.Y;
 
-			_ = new Rect(startPoint.X, startPoint.Y, currentPoint.LabelRect.Width, currentPoint.LabelRect.Height);
-
-
 			Rect rect;
 			if (currentPoint.DataLabelRenderingPosition == Position.Right)
 			{
@@ -1378,10 +1375,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			var segments = _segments;
 			int currentPointIndex = currentPoint.Index;
+			int currentSegmentIndex = segments.IndexOf(currentPoint);
 
 			for (int i = 0; i < currentPointIndex; i++)
 			{
-				if (i != segments.IndexOf(currentPoint) && segments[i].IsVisible && segments[i] is PieSegment segment &&
+				if (i != currentSegmentIndex && segments[i].IsVisible && segments[i] is PieSegment segment &&
 					CircularSeries.IsOverlap(currentPoint.LabelRect, segment.LabelRect))
 				{
 					segments[currentPointIndex].IsVisible = false;
