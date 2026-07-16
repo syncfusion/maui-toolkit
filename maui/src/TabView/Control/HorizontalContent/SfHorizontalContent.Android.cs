@@ -25,7 +25,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		double _density = Android.App.Application.Context.Resources.DisplayMetrics.Density;
 #pragma warning restore CS8602
 
-		double _swipeThreshold => 5 * _density;
+		/// <summary>
+		/// Gets the swipe threshold in pixels, derived from the tab view's
+		/// <see cref="SfTabView.SwipeSensitivity"/> and the device display density.
+		/// A higher base value means the user must swipe further before a tab
+		/// switch is triggered (i.e. less sensitive).
+		/// </summary>
+		double _swipeThreshold => (_tabView?.SwipeSensitivity ?? SfTabView.DefaultSwipeSensitivity) * _density;
 
 
 		#endregion
