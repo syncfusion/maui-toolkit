@@ -166,6 +166,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(new CornerRadius(-1), tabView.IndicatorCornerRadius);
 			Assert.False(tabView.IsScrollButtonEnabled);
 			Assert.False(tabView.EnableSwiping);
+			Assert.Equal(SfTabView.DefaultSwipeSensitivity, tabView.SwipeSensitivity);
 			Assert.Equal(100d, tabView.ContentTransitionDuration);
 			Assert.True(tabView.IsContentTransitionEnabled);
 		}
@@ -467,6 +468,111 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			Assert.Equal(expected, tabView.EnableSwiping);
 		}
+
+		#region SwipeSensitivity
+
+		[Fact]
+		public void SwipeSensitivity_DefaultValue_IsFive()
+		{
+			var tabView = new SfTabView();
+
+			Assert.Equal(5.0d, tabView.SwipeSensitivity);
+			Assert.Equal(SfTabView.DefaultSwipeSensitivity, tabView.SwipeSensitivity);
+		}
+
+		[Fact]
+		public void DefaultSwipeSensitivity_Constant_IsFive()
+		{
+			Assert.Equal(5.0d, SfTabView.DefaultSwipeSensitivity);
+		}
+
+		[Theory]
+		[InlineData(1.0)]
+		[InlineData(2.5)]
+		[InlineData(5.0)]
+		[InlineData(15.0)]
+		[InlineData(20.0)]
+		[InlineData(double.Epsilon)]
+		[InlineData(1000.0)]
+		public void SwipeSensitivity_ValidPositiveValue_SetAndGet_ReturnsExpectedValue(double value)
+		{
+			var tabView = new SfTabView
+			{
+				SwipeSensitivity = value
+			};
+
+			Assert.Equal(value, tabView.SwipeSensitivity);
+		}
+
+		[Fact]
+		public void SwipeSensitivity_ZeroValue_IsRejectedAndRetainsDefault()
+		{
+			var tabView = new SfTabView();
+
+			tabView.SwipeSensitivity = 0;
+
+			Assert.Equal(SfTabView.DefaultSwipeSensitivity, tabView.SwipeSensitivity);
+		}
+
+		[Theory]
+		[InlineData(-1.0)]
+		[InlineData(-0.001)]
+		[InlineData(double.NegativeInfinity)]
+		public void SwipeSensitivity_NegativeOrInfiniteValue_IsRejectedAndRetainsDefault(double invalidValue)
+		{
+			var tabView = new SfTabView();
+
+			tabView.SwipeSensitivity = invalidValue;
+
+			Assert.Equal(SfTabView.DefaultSwipeSensitivity, tabView.SwipeSensitivity);
+		}
+
+		[Fact]
+		public void SwipeSensitivity_NaN_IsRejectedAndRetainsDefault()
+		{
+			var tabView = new SfTabView();
+
+			tabView.SwipeSensitivity = double.NaN;
+
+			Assert.Equal(SfTabView.DefaultSwipeSensitivity, tabView.SwipeSensitivity);
+		}
+
+		[Fact]
+		public void SwipeSensitivity_PositiveInfinity_IsRejectedAndRetainsDefault()
+		{
+			var tabView = new SfTabView();
+
+			tabView.SwipeSensitivity = double.PositiveInfinity;
+
+			Assert.Equal(SfTabView.DefaultSwipeSensitivity, tabView.SwipeSensitivity);
+		}
+
+		[Fact]
+		public void SwipeSensitivity_RuntimeChange_UpdatesValue()
+		{
+			var tabView = new SfTabView();
+			Assert.Equal(5.0d, tabView.SwipeSensitivity);
+
+			tabView.SwipeSensitivity = 10.0;
+			Assert.Equal(10.0d, tabView.SwipeSensitivity);
+
+			tabView.SwipeSensitivity = 2.0;
+			Assert.Equal(2.0d, tabView.SwipeSensitivity);
+		}
+
+		[Fact]
+		public void SwipeSensitivityProperty_BindableProperty_IsNotNull()
+		{
+			Assert.NotNull(SfTabView.SwipeSensitivityProperty);
+		}
+
+		[Fact]
+		public void SwipeSensitivityProperty_DefaultValue_IsFive()
+		{
+			Assert.Equal(5.0d, (double)SfTabView.SwipeSensitivityProperty.DefaultValue);
+		}
+
+		#endregion
 
 		[Theory]
 		[InlineData(double.MinValue)]

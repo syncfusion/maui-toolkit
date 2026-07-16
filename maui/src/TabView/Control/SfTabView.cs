@@ -3170,5 +3170,65 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 		}
 		#endregion
+
+		#region Swipe Sensitivity
+
+		/// <summary>
+		/// The default base swipe threshold (in density-independent units).
+		/// Matches the original hard-coded base value of 5, preserving backward compatibility.
+		/// </summary>
+		public const double DefaultSwipeSensitivity = 5.0;
+
+		/// <summary>
+		/// Identifies the <see cref="SwipeSensitivity"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The default value is <c>5.0</c>.
+		/// Higher values require a larger horizontal swipe distance before a tab
+		/// switch is triggered (less sensitive). Lower values make the control
+		/// react to shorter swipes (more sensitive).
+		/// </remarks>
+		public static readonly BindableProperty SwipeSensitivityProperty =
+			BindableProperty.Create(
+				nameof(SwipeSensitivity),
+				typeof(double),
+				typeof(SfTabView),
+				DefaultSwipeSensitivity,
+				validateValue: (_, value) => value is double d && double.IsFinite(d) && d > 0);
+
+		/// <summary>
+		/// Gets or sets the base swipe threshold (in density-independent units) that
+		/// determines how far the user must swipe horizontally before a tab switch
+		/// is triggered on Android.
+		/// </summary>
+		/// <value>
+		/// A positive <see cref="double"/> value. Defaults to <c>5.0</c>.
+		/// </value>
+		/// <remarks>
+		/// The actual pixel threshold used internally is <c>SwipeSensitivity × DisplayDensity</c>.
+		/// <list type="bullet">
+		///   <item>
+		///     <description>
+		///       Increase this value (e.g. <c>15</c>–<c>20</c>) when users accidentally
+		///       switch tabs while scrolling vertically through list content inside a tab.
+		///     </description>
+		///   </item>
+		///   <item>
+		///     <description>
+		///       Decrease this value (e.g. <c>2</c>–<c>3</c>) if you want the control to
+		///       respond to very short horizontal swipes.
+		///     </description>
+		///   </item>
+		/// </list>
+		/// This property only affects the Android platform; on other platforms the
+		/// swipe gesture is handled natively and is not configurable through this API.
+		/// </remarks>
+		public double SwipeSensitivity
+		{
+			get => (double)GetValue(SwipeSensitivityProperty);
+			set => SetValue(SwipeSensitivityProperty, value);
+		}
+
+		#endregion
 	}
 }
