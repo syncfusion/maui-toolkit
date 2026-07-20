@@ -911,7 +911,8 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 						}
 					}
 
-					foreach (var value in pairs.OrderBy(value => value.x))
+					pairs.Sort((a, b) => a.x.CompareTo(b.x));
+					foreach (var value in pairs)
 					{
 						xValues.Add(value.x);
 						yValues.Add(value.y);
@@ -931,7 +932,8 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 						}
 					}
 
-					foreach (var value in pairs.OrderBy(value => value.x))
+					pairs.Sort((a, b) => a.x.CompareTo(b.x));
+					foreach (var value in pairs)
 					{
 						xValues.Add(value.x);
 						yValues.Add(value.y);
@@ -1185,16 +1187,34 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 				return;
 			}
 
-			var validYValues = yValues.Where(y => !double.IsNaN(y)).ToList();
+			// Single-pass min/max calculation avoids LINQ allocation and multiple enumerations
+			double yMin = double.MaxValue;
+			double yMax = double.MinValue;
+			for (int i = 0; i < yValues.Count; i++)
+			{
+				double y = yValues[i];
+				if (!double.IsNaN(y))
+				{
+					if (y < yMin)
+					{
+						yMin = y;
+					}
 
-			if (validYValues.Count == 0)
+					if (y > yMax)
+					{
+						yMax = y;
+					}
+				}
+			}
+
+			if (yMin == double.MaxValue)
 			{
 				minYValue = maxYValue = 0;
 			}
 			else
 			{
-				minYValue = validYValues.Min();
-				maxYValue = validYValues.Max();
+				minYValue = yMin;
+				maxYValue = yMax;
 			}
 
 			if (!double.IsNaN(MinimumYValue))
@@ -1216,8 +1236,25 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 
 			if (xValues.Count > 0)
 			{
-				minXValue = xValues.Min();
-				maxXValue = xValues.Max();
+				// Single-pass min/max avoids two separate enumerations
+				double xMin = xValues[0];
+				double xMax = xValues[0];
+				for (int i = 1; i < xValues.Count; i++)
+				{
+					double x = xValues[i];
+					if (x < xMin)
+					{
+						xMin = x;
+					}
+
+					if (x > xMax)
+					{
+						xMax = x;
+					}
+				}
+
+				minXValue = xMin;
+				maxXValue = xMax;
 			}
 			else
 			{

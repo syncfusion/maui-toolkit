@@ -341,5 +341,118 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.SparkCharts
         }
 
         #endregion
+
+        #region Performance Optimization Tests
+
+        [Fact]
+        public void UpdateMinMaxValues_AllNaNValues_ReturnsZeroMinMax()
+        {
+            // Arrange
+            var chart = new TestSparkChart();
+
+            // Act
+            chart.ItemsSource = new List<double> { double.NaN, double.NaN, double.NaN };
+
+            // Assert
+            Assert.Equal(0, chart.MinY);
+            Assert.Equal(0, chart.MaxY);
+        }
+
+        [Fact]
+        public void UpdateMinMaxValues_MixedNaNAndValidValues_IgnoresNaN()
+        {
+            // Arrange - use EmptyPointMode.None so NaN values remain as-is
+            var chart = new TestSparkChart();
+            chart.EmptyPointMode = SparkChartEmptyPointMode.None;
+
+            // Act
+            chart.ItemsSource = new List<double> { double.NaN, 5, double.NaN, 15, double.NaN, 10 };
+
+            // Assert - NaN values should be ignored in min/max calculation
+            Assert.Equal(5, chart.MinY);
+            Assert.Equal(15, chart.MaxY);
+        }
+
+        [Fact]
+        public void UpdateMinMaxValues_SingleValidValue_MinEqualsMax()
+        {
+            // Arrange
+            var chart = new TestSparkChart();
+
+            // Act
+            chart.ItemsSource = new List<double> { 42 };
+
+            // Assert
+            Assert.Equal(42, chart.MinY);
+            Assert.Equal(42, chart.MaxY);
+            Assert.Equal(0, chart.MinX);
+            Assert.Equal(0, chart.MaxX);
+        }
+
+        [Fact]
+        public void UpdateMinMaxValues_EmptySource_ReturnsZeroes()
+        {
+            // Arrange
+            var chart = new TestSparkChart();
+
+            // Act
+            chart.ItemsSource = new List<double>();
+
+            // Assert
+            Assert.Equal(0, chart.MinY);
+            Assert.Equal(0, chart.MaxY);
+            Assert.Equal(0, chart.MinX);
+            Assert.Equal(0, chart.MaxX);
+        }
+
+        [Fact]
+        public void UpdateMinMaxValues_NegativeValues_CalculatesCorrectly()
+        {
+            // Arrange
+            var chart = new TestSparkChart();
+
+            // Act
+            chart.ItemsSource = new List<double> { -50, -10, -30, -20 };
+
+            // Assert
+            Assert.Equal(-50, chart.MinY);
+            Assert.Equal(-10, chart.MaxY);
+        }
+
+        [Fact]
+        public void NumericAxis_SortsDataByXValue()
+        {
+            // Arrange - verifies in-place sort produces correct ordering
+            var chart = new SfSparkLineChart();
+            var data = new List<NumericAxisData>
+            {
+                new() { X = 30, Y = 100 },
+                new() { X = 10, Y = 200 },
+                new() { X = 20, Y = 150 },
+            };
+
+            // Act
+            chart.XBindingPath = "X";
+            chart.YBindingPath = "Y";
+            chart.AxisType = SparkChartAxisType.Numeric;
+            chart.ItemsSource = data;
+
+            // Assert - data should be sorted by X
+            Assert.Equal(3, chart.DataCount);
+            Assert.Equal(10, chart.xValues[0]);
+            Assert.Equal(20, chart.xValues[1]);
+            Assert.Equal(30, chart.xValues[2]);
+            Assert.Equal(200, chart.yValues[0]);
+            Assert.Equal(150, chart.yValues[1]);
+            Assert.Equal(100, chart.yValues[2]);
+        }
+
+        private class NumericAxisData
+        {
+            public double X { get; set; }
+            public double Y { get; set; }
+        }
+
+        #endregion
     }
 }
