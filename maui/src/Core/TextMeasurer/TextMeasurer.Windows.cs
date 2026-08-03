@@ -1,6 +1,5 @@
 ﻿using Microsoft.Maui.Platform;
 using Microsoft.UI.Xaml.Controls;
-using Windows.UI.ViewManagement;
 
 namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 {
@@ -31,6 +30,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 
 			_textBlock.Text = text;
 			double fontSize = textSize > 0 ? textSize : 12;
+			_textBlock.IsTextScaleFactorEnabled = true;
 			_textBlock.FontSize = fontSize;
 			_textBlock.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
 			return new Size((float)_textBlock.DesiredSize.Width, (float)_textBlock.DesiredSize.Height);
@@ -104,17 +104,9 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 
 		private void UpdateFontSize(ITextElement textElement)
 		{
-			var uiSettings = new UISettings();
-			float fontScale = (float)uiSettings.TextScaleFactor;
 			double fontSize = textElement.FontSize > 0 ? textElement.FontSize : 12;
-			if (textElement.FontAutoScalingEnabled)
-			{
-				_textBlock!.FontSize = fontSize * fontScale;
-			}
-			else
-			{
-				_textBlock!.FontSize = fontSize;
-			}
+			_textBlock!.IsTextScaleFactorEnabled = textElement.FontAutoScalingEnabled;
+			_textBlock!.FontSize = fontSize;
 		}
 	}
 }

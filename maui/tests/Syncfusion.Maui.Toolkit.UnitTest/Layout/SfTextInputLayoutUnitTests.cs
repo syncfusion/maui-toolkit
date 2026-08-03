@@ -555,6 +555,52 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Fact]
+		public void TestHintLabelStyleFontAutoScalingEnabledAppliedOnAssign()
+		{
+			var inputLayout = new SfTextInputLayout()
+			{
+				Hint = "Enter text here",
+				HintLabelStyle = new LabelStyle { FontAutoScalingEnabled = true },
+			};
+
+			Assert.True(GetInternalLabelStyle(inputLayout, "_internalHintLabelStyle").FontAutoScalingEnabled);
+		}
+
+		[Fact]
+		public void TestHintLabelStyleFontAutoScalingEnabledAppliedOnChange()
+		{
+			var inputLayout = new SfTextInputLayout()
+			{
+				Hint = "Enter text here",
+				HintLabelStyle = new LabelStyle(),
+			};
+
+			inputLayout.HintLabelStyle.FontAutoScalingEnabled = true;
+
+			Assert.True(GetInternalLabelStyle(inputLayout, "_internalHintLabelStyle").FontAutoScalingEnabled);
+		}
+
+		[Fact]
+		public void TestErrorLabelStyleFontAutoScalingEnabledAppliedOnAssign()
+		{
+			var inputLayout = new SfTextInputLayout()
+			{
+				ErrorText = "Error text",
+				ErrorLabelStyle = new LabelStyle { FontAutoScalingEnabled = true },
+			};
+
+			Assert.True(GetInternalLabelStyle(inputLayout, "_internalErrorLabelStyle").FontAutoScalingEnabled);
+		}
+
+		static LabelStyle GetInternalLabelStyle(SfTextInputLayout inputLayout, string fieldName)
+		{
+			var field = typeof(SfTextInputLayout).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
+			Assert.NotNull(field);
+
+			return (LabelStyle)field!.GetValue(inputLayout)!;
+		}
+
+		[Fact]
 		public void TestHelperLabelFontSize()
 		{
 			var inputLayout = new SfTextInputLayout()
