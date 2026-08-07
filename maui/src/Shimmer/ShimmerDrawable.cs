@@ -88,6 +88,12 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 		const float PersonaRectangleHeightFactor = 0.33f;
 		const float PersonaRowSpacingFactor = 0.1f;
 
+		// Cached Point values to avoid per-call allocations in CreateWavePaint.
+		static readonly Point s_pointOrigin = new(0, 0);
+		static readonly Point s_pointRight = new(1, 0);
+		static readonly Point s_pointBottom = new(0, 1);
+		static readonly Point s_pointDiagonal = new(1, 1);
+
 		#endregion
 
 		#region Constructor
@@ -161,24 +167,24 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 			switch (Shimmer?.WaveDirection)
 			{
 				case ShimmerWaveDirection.LeftToRight:
-					_gradient.StartPoint = new Point(0, 0);
-					_gradient.EndPoint = new Point(1, 0);
+					_gradient.StartPoint = s_pointOrigin;
+					_gradient.EndPoint = s_pointRight;
 					break;
 				case ShimmerWaveDirection.TopToBottom:
-					_gradient.StartPoint = new Point(0, 0);
-					_gradient.EndPoint = new Point(0, 1);
+					_gradient.StartPoint = s_pointOrigin;
+					_gradient.EndPoint = s_pointBottom;
 					break;
 				case ShimmerWaveDirection.RightToLeft:
-					_gradient.StartPoint = new Point(1, 0);
-					_gradient.EndPoint = new Point(0, 0);
+					_gradient.StartPoint = s_pointRight;
+					_gradient.EndPoint = s_pointOrigin;
 					break;
 				case ShimmerWaveDirection.BottomToTop:
-					_gradient.StartPoint = new Point(0, 1);
-					_gradient.EndPoint = new Point(0, 0);
+					_gradient.StartPoint = s_pointBottom;
+					_gradient.EndPoint = s_pointOrigin;
 					break;
 				default:
-					_gradient.StartPoint = new Point(0, 0);
-					_gradient.EndPoint = new Point(1, 1);
+					_gradient.StartPoint = s_pointOrigin;
+					_gradient.EndPoint = s_pointDiagonal;
 					break;
 			}
 		}
@@ -275,9 +281,12 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 
 			if (view is Layout layout)
 			{
-				foreach (View item in layout.Children.Cast<View>())
+				foreach (View item in layout.Children)
 				{
-					DrawCustomViewChildren(item, new Point(item.X + position.X, item.Y + position.Y));
+					if (item is View childView)
+					{
+						DrawCustomViewChildren(childView, new Point(childView.X + position.X, childView.Y + position.Y));
+					}
 				}
 			}
 			else if (view is ContentView contentView && contentView.Content != null)
