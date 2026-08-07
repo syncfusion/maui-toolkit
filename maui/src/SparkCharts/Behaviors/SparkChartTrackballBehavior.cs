@@ -22,6 +22,14 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		private SfTooltip? _templateView;
 		private SparkChartTrackballInfo? _previousTrackballInfo;
 
+		// Cached tooltip position list to avoid repeated allocations on every draw call
+		static readonly List<TooltipPosition> s_tooltipFallbackPositions =
+		[
+			TooltipPosition.Left,
+			TooltipPosition.Top,
+			TooltipPosition.Bottom
+		];
+
 		#endregion
 
 		#region Bindable Properties
@@ -975,12 +983,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			
 			// Set preferred position to right (similar to ChartTrackballBehavior)
 			TooltipHelper.PriorityPosition = TooltipPosition.Right;
-			TooltipHelper.PriorityPositionList = new List<TooltipPosition>
-			{
-				TooltipPosition.Left,
-				TooltipPosition.Top,
-				TooltipPosition.Bottom
-			};
+			TooltipHelper.PriorityPositionList = s_tooltipFallbackPositions;
 
 			// Create target rect around the marker point (small rect for nose to point to)
 			float markerWidth = MarkerSettings != null ? (float)MarkerSettings.Width : 8f;
@@ -1058,12 +1061,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 		private static void SetTemplatePosition(SfTooltip templateView)
 		{
 			templateView.Helper.PriorityPosition = TooltipPosition.Right;
-			templateView.Helper.PriorityPositionList = new List<TooltipPosition>
-			{
-				TooltipPosition.Left,
-				TooltipPosition.Top,
-				TooltipPosition.Bottom
-			};
+			templateView.Helper.PriorityPositionList = s_tooltipFallbackPositions;
 		}
 
 		/// <summary>
