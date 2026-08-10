@@ -48,8 +48,6 @@ jobs:
             "label": "MAUI open PRs",
             "message": "$OPEN_COUNT",
             "color": "0078D4",
-            "logo": "dotnet",
-            "logoColor": "white",
             "cacheSeconds": 86400
           }
           EOF
