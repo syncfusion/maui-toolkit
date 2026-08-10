@@ -833,7 +833,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					case PointerActions.Moved:
 						if (_isPressed)
 						{
-							HandleTouchMovement(point);
+							var moveDistanceX = Math.Abs(point.X - _startPoint.X);
+							var moveDistanceY = Math.Abs(point.Y - _startPoint.Y);
+							if (moveDistanceX >= this._tabView.SwipingSensitivity && moveDistanceX >= moveDistanceY)
+							{								
+								HandleTouchMovement(point);
+							}
 						}
 						break;
 

@@ -25,7 +25,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		double _density = Android.App.Application.Context.Resources.DisplayMetrics.Density;
 #pragma warning restore CS8602
 
-		double _swipeThreshold => 5 * _density;
+		double _swipeThreshold => _tabView!.SwipingSensitivity * _density;
 
 
 		#endregion
