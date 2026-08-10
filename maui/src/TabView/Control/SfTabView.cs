@@ -510,6 +510,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				true,
 				propertyChanged: OnEnableRippleAnimationChanged);
 
+		/// <summary>
+		/// Identifies the <see cref="SwipingSensitivity"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="SwipingSensitivity"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty SwipingSensitivityProperty = BindableProperty.Create(nameof(SwipingSensitivity), typeof(double), typeof(SfTabView), 5d, BindingMode.Default, null);
+
 		#endregion
 
 		#region Properties
@@ -1938,6 +1946,21 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			get => (bool)GetValue(EnableRippleAnimationProperty);
 			set => SetValue(EnableRippleAnimationProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the swipe sensitivity for navigating between tabs in the Tab View content area.
+		/// </summary>
+		/// <remarks>
+		/// A higher value requires a larger swipe gesture to trigger tab navigation, while a lower value makes swipe navigation more responsive.
+		/// </remarks>
+		/// <value>
+		/// It accepts double values and the default value is 5.
+		/// </value>
+		public double SwipingSensitivity
+		{
+			get { return (double)this.GetValue(SwipingSensitivityProperty); }
+			set { this.SetValue(SwipingSensitivityProperty, value); }
 		}
 
 		#endregion
