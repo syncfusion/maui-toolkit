@@ -1,0 +1,66 @@
+name: Update .NET MAUI Contribution Badges
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Get .NET MAUI contribution counts
+        id: counts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          merged=$(gh api --method GET search/issues -f q='repo:dotnet/maui is:pr is:merged label:partner/syncfusion' --jq '.total_count')
+          open=$(gh api --method GET search/issues -f q='repo:dotnet/maui is:pr is:open label:partner/syncfusion' --jq '.total_count')
+          echo "merged=$merged" >> "$GITHUB_OUTPUT"
+          echo "open=$open" >> "$GITHUB_OUTPUT"
+
+      - name: Update badge endpoints
+        env:
+          MERGED_COUNT: ${{ steps.counts.outputs.merged }}
+          OPEN_COUNT: ${{ steps.counts.outputs.open }}
+        run: |
+          cat > .github/badges/maui-merged-prs.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "MAUI merged PRs",
+            "message": "$MERGED_COUNT",
+            "color": "512BD4",
+            "logo": "dotnet",
+            "logoColor": "white",
+            "cacheSeconds": 86400
+          }
+          EOF
+          cat > .github/badges/maui-open-prs.json << EOF
+          {
+            "schemaVersion": 1,
+            "label": "MAUI open PRs",
+            "message": "$OPEN_COUNT",
+            "color": "0078D4",
+            "logo": "dotnet",
+            "logoColor": "white",
+            "cacheSeconds": 86400
+          }
+          EOF
+
+      - name: Commit updated badge counts
+        run: |
+          if git diff --quiet -- .github/badges; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/badges
+          git commit -m "chore: Update .NET MAUI contribution badges"
+          git push
