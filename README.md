@@ -33,8 +33,6 @@ Syncfusion actively contributes to the [.NET MAUI open-source project](https://d
 >
 > [David Ortinau, Principal Product Manager, .NET MAUI, Microsoft](https://devblogs.microsoft.com/dotnet/dotnet-maui-welcomes-syncfusion-open-source-contributions/)
 
-[![MAUI merged PRs](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsyncfusion%2Fmaui-toolkit%2Fmain%2F.github%2Fbadges%2Fmaui-merged-prs.json)](https://github.com/dotnet/maui/pulls?q=is%3Apr+is%3Amerged+label%3Apartner%2Fsyncfusion)
-[![MAUI open PRs](https://img.shields.io/endpoint?url=https%3A%2F%2Fraw.githubusercontent.com%2Fsyncfusion%2Fmaui-toolkit%2Fmain%2F.github%2Fbadges%2Fmaui-open-prs.json)](https://github.com/dotnet/maui/pulls?q=is%3Apr+is%3Aopen+label%3Apartner%2Fsyncfusion)
 
 * Microsoft introduced the Syncfusion Toolkit for .NET MAUI in the optional sample content for the .NET 9 project template; it continues to be included in .NET 10 alongside the [.NET MAUI Community Toolkit and CommunityToolkit.Mvvm](https://github.com/dotnet/maui/pull/25419).
 * [View Syncfusion's merged contributions to .NET MAUI](https://github.com/dotnet/maui/pulls?q=is%3Apr+is%3Amerged+label%3Apartner%2Fsyncfusion).
