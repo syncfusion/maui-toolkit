@@ -2283,6 +2283,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					inputLayout._internalHintLabelStyle.TextColor = newLabelStyle.TextColor;
 					inputLayout._internalHintLabelStyle.FontFamily = newLabelStyle.FontFamily;
 					inputLayout._internalHintLabelStyle.FontAttributes = newLabelStyle.FontAttributes;
+					inputLayout._internalHintLabelStyle.FontAutoScalingEnabled = newLabelStyle.FontAutoScalingEnabled;
 					inputLayout.HintFontSize = (float)(newLabelStyle.FontSize < 12d ? inputLayout.FloatedHintFontSize : newLabelStyle.FontSize);
 					newLabelStyle.PropertyChanged += inputLayout.OnHintLabelStylePropertyChanged;
 					if (inputLayout._initialLoaded)
@@ -2310,6 +2311,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					inputLayout._internalHelperLabelStyle.TextColor = newLabelStyle.TextColor;
 					inputLayout._internalHelperLabelStyle.FontFamily = newLabelStyle.FontFamily;
 					inputLayout._internalHelperLabelStyle.FontAttributes = newLabelStyle.FontAttributes;
+					inputLayout._internalHelperLabelStyle.FontAutoScalingEnabled = newLabelStyle.FontAutoScalingEnabled;
 					inputLayout._internalHelperLabelStyle.FontSize = newLabelStyle.FontSize;
 					newLabelStyle.PropertyChanged += inputLayout.OnHelperLabelStylePropertyChanged;
 					if (inputLayout._initialLoaded)
@@ -2338,6 +2340,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					inputLayout._internalErrorLabelStyle.FontFamily = newLabelStyle.FontFamily;
 					inputLayout._internalErrorLabelStyle.FontAttributes = newLabelStyle.FontAttributes;
 					inputLayout._internalErrorLabelStyle.FontSize = newLabelStyle.FontSize;
+					inputLayout._internalErrorLabelStyle.FontAutoScalingEnabled = newLabelStyle.FontAutoScalingEnabled;
 					newLabelStyle.PropertyChanged += inputLayout.OnErrorLabelStylePropertyChanged;
 					if (inputLayout._initialLoaded)
 					{
@@ -2360,6 +2363,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					inputLayout._internalCounterLabelStyle.TextColor = newLabelStyle.TextColor;
 					inputLayout._internalCounterLabelStyle.FontFamily = newLabelStyle.FontFamily;
 					inputLayout._internalCounterLabelStyle.FontAttributes = newLabelStyle.FontAttributes;
+					inputLayout._internalCounterLabelStyle.FontAutoScalingEnabled = newLabelStyle.FontAutoScalingEnabled;
 					inputLayout._internalCounterLabelStyle.FontSize = newLabelStyle.FontSize;
 					newLabelStyle.PropertyChanged += inputLayout.OnCounterLabelStylePropertyChanged;
 					if (inputLayout._initialLoaded)

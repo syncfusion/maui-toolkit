@@ -485,6 +485,11 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 			{
 				internalLabelStyle.FontFamily = labelStyle.FontFamily;
 			}
+
+			if (propertyName == nameof(LabelStyle.FontAutoScalingEnabled))
+			{
+				internalLabelStyle.FontAutoScalingEnabled = labelStyle.FontAutoScalingEnabled;
+			}
 		}
 
 		/// <summary>
