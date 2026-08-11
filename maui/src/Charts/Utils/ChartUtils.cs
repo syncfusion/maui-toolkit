@@ -1,4 +1,4 @@
-﻿using Color = Microsoft.Maui.Graphics.Color;
+using Color = Microsoft.Maui.Graphics.Color;
 using PointF = Microsoft.Maui.Graphics.PointF;
 using Rect = Microsoft.Maui.Graphics.Rect;
 using Microsoft.Maui.Controls.Shapes;
@@ -32,7 +32,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal static List<float> GetMidAngles(PointF center, List<float> midPoint)
 		{
-			List<float> midAngle = [];
+			List<float> midAngle = new(midPoint.Count / 2);
 
 			for (int i = 0; i < midPoint.Count; i++)
 			{
