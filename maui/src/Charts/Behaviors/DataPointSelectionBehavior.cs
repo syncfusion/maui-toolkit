@@ -67,12 +67,10 @@
 		{
 			if (Source != null)
 			{
-				int count = ActualSelectedIndexes.Count;
-				bool needsInvalidate = count > 0;
-
-				for (int i = count - 1; i >= 0; i--)
+				var selectedIndexes = ActualSelectedIndexes.ToList();
+				ActualSelectedIndexes.Clear();
+				foreach (var index in selectedIndexes)
 				{
-					int index = ActualSelectedIndexes[i];
 					if (index < Source.Segments.Count && index > -1)
 					{
 						Source.SetFillColor(Source.Segments[index]);
@@ -80,9 +78,7 @@
 					}
 				}
 
-				ActualSelectedIndexes.Clear();
-
-				if (needsInvalidate)
+				if (selectedIndexes.Count > 0)
 				{
 					Source.Invalidate();
 				}
