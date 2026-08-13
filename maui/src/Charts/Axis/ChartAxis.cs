@@ -386,15 +386,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (!IsPolarArea)
 			{
-				foreach (CartesianSeries series in visibleSeries.Cast<CartesianSeries>())
+				for (int i = 0; i < visibleSeries.Count; i++)
 				{
-					if (series.ActualXAxis == this)
+					if (visibleSeries[i] is CartesianSeries series)
 					{
-						range += series.VisibleXRange;
-					}
-					else if (series.ActualYAxis == this)
-					{
-						range += series.VisibleYRange;
+						if (series.ActualXAxis == this)
+						{
+							range += series.VisibleXRange;
+						}
+						else if (series.ActualYAxis == this)
+						{
+							range += series.VisibleYRange;
+						}
 					}
 				}
 			}

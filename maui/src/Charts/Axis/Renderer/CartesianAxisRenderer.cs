@@ -153,8 +153,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			float currentPosition = 0;
+			int elementCount = elements.Count;
 
-			for (int i = 0; i < elements.Count; i++)
+			for (int i = 0; i < elementCount; i++)
 			{
 				object element = elements[i];
 

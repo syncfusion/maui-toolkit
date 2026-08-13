@@ -16,6 +16,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		bool _isTapGestureRemoved;
 		UIPanGestureRecognizer? _panGesture;
 		LayoutViewExt? _nativeView;
+		static readonly System.Collections.Concurrent.ConcurrentDictionary<Type, bool> _drawActionTypeCache = new();
 
 		#endregion
 
@@ -80,7 +81,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					var touchViewType = touchView?.GetType();
                     if (touchViewType is not null)
                     {
-						var hasDrawAction = touchViewType.GetProperties().Any(p => p.PropertyType == typeof(Action<ICanvas, RectF>));
+						var hasDrawAction = _drawActionTypeCache.GetOrAdd(touchViewType, type =>
+							type.GetProperties().Any(p => p.PropertyType == typeof(Action<ICanvas, RectF>)));
                         if (hasDrawAction)
                         {
                             this._canProcessTouch = false;

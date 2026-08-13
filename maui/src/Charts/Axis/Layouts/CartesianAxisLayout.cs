@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -504,11 +504,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return null;
 			}
 
-			foreach (var axis in axes)
+			for (int i = 0; i < axes.Count; i++)
 			{
-				if (axis.Name == name)
+				if (axes[i].Name == name)
 				{
-					return axis;
+					return axes[i];
 				}
 			}
 

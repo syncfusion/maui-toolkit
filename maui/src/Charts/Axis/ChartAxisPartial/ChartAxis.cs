@@ -2163,9 +2163,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				var axisLayout = area._axisLayout;
 				var axes = IsVertical ? axisLayout.HorizontalAxes : axisLayout.VerticalAxes;
 
-				foreach (var axis in axes.Where(a => a.Name != null && a.Name.Equals(CrossAxisName, StringComparison.Ordinal)))
+				foreach (var axis in axes)
 				{
-					return axis;
+					if (axis.Name != null && axis.Name.Equals(CrossAxisName, StringComparison.Ordinal))
+					{
+						return axis;
+					}
 				}
 			}
 

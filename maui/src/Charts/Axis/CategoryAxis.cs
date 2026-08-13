@@ -54,10 +54,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 					else
 					{
-						groupingValues.AddRange(xValues);
-						foreach (var xVal in xValues)
+						foreach (var val in xValues)
 						{
-							groupingValuesSet.Add(xVal);
+							if (groupingValuesSet.Add(val))
+							{
+								groupingValues.Add(val);
+							}
 						}
 					}
 				}
@@ -66,8 +68,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					foreach (var val in doubleValues)
 					{
 						var str = val.ToString();
-						groupingValues.Add(str);
-						groupingValuesSet.Add(str);
+						if (groupingValuesSet.Add(str))
+						{
+							groupingValues.Add(str);
+						}
 					}
 				}
 
@@ -77,7 +81,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			var distinctXValues = groupingValues.Distinct().ToList();
+			var distinctXValues = groupingValues;
 			var indexMap = new Dictionary<string, int>(distinctXValues.Count, StringComparer.Ordinal);
 			for (int i = 0; i < distinctXValues.Count; i++)
 			{
@@ -91,21 +95,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (series.ActualXValues is List<string> list)
 				{
 					var indexes = new List<double>(list.Count);
-					foreach (var val in list)
+					for (int i = 0; i < list.Count; i++)
 					{
-						indexes.Add(indexMap.TryGetValue(val, out int idx) ? idx : -1);
+						indexes.Add(indexMap.TryGetValue(list[i], out int idx) ? idx : -1);
 					}
-
 					series.GroupedXValuesIndexes = indexes;
 				}
-				else if (series.ActualXValues is List<double> doubleList)
+				else if (series.ActualXValues is List<double> doubleValues)
 				{
-					var indexes = new List<double>(doubleList.Count);
-					foreach (var val in doubleList)
+					var indexes = new List<double>(doubleValues.Count);
+					for (int i = 0; i < doubleValues.Count; i++)
 					{
-						indexes.Add(indexMap.TryGetValue(val.ToString(), out int idx) ? idx : -1);
+						indexes.Add(indexMap.TryGetValue(doubleValues[i].ToString(), out int idx) ? idx : -1);
 					}
-
 					series.GroupedXValuesIndexes = indexes;
 				}
 

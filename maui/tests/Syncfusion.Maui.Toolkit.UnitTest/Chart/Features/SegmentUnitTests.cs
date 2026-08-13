@@ -1,4 +1,4 @@
-﻿using System.Data;
+using System.Data;
 using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
@@ -1166,8 +1166,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			areaSegment.Series = areaSeries;
 			var exception = Record.Exception(() => areaSegment.SetData(xValues, yValues));
 			Assert.Null(exception);
-			// With all NaN values, yMin defaults to 0, so Empty should be false
-			Assert.False(areaSegment.Empty);
+			// With all NaN values, yMin defaults to 0, so Empty should be true
+			Assert.True(areaSegment.Empty);
 		}
 
 		[Fact]

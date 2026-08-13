@@ -1153,13 +1153,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (ChartArea != null)
 			{
-				var sideBySideSeries = ChartArea.VisibleSeries?.Where(series => series.IsSideBySide);
+				var visibleSeries = ChartArea.VisibleSeries;
 
-				if (sideBySideSeries != null && sideBySideSeries.Any())
+				if (visibleSeries != null)
 				{
-					foreach (var chartSeries in sideBySideSeries)
+					foreach (var chartSeries in visibleSeries)
 					{
-						chartSeries.SegmentsCreated = false;
+						if (chartSeries.IsSideBySide)
+						{
+							chartSeries.SegmentsCreated = false;
+						}
 					}
 				}
 
@@ -1414,9 +1417,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (legend != null && legend.IsVisible && legendItems != null)
 			{
-				foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
+				for (int i = 0; i < legendItems.Count; i++)
 				{
-					if (legendItem != null && legendItem.Item == this)
+					if (legendItems[i] is LegendItem legendItem && legendItem.Item == this)
 					{
 						legendItem.IconBrush = GetFillColor(legendItem, legendItem.Index) ?? new SolidColorBrush(Colors.Transparent);
 						break;
@@ -1432,9 +1435,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (legend != null && legend.IsVisible && legendItems != null)
 			{
-				foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
+				for (int i = 0; i < legendItems.Count; i++)
 				{
-					if (legendItem != null && legendItem.Item == this)
+					if (legendItems[i] is LegendItem legendItem && legendItem.Item == this)
 					{
 						legendItem.IsToggled = !IsVisible;
 						break;
@@ -1543,16 +1546,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 										dataPointsList.Add(dataPoint);
 									}
 								}
-								else if (Math.Abs(pointX - currX) <= Math.Abs(pointX - nearPointX))
+								else
 								{
-									nearPointX = currX;
-									delta = pointX - currX;
-									dataPointsList.Clear();
-									var dataPoint = ActualData?[i];
-
-									if (dataPoint != null)
+									double currDist = Math.Abs(pointX - currX);
+									double nearDist = Math.Abs(pointX - nearPointX);
+									if (currDist <= nearDist)
 									{
-										dataPointsList.Add(dataPoint);
+										nearPointX = currX;
+										delta = pointX - currX;
+										dataPointsList.Clear();
+										var dataPoint = ActualData?[i];
+
+										if (dataPoint != null)
+										{
+											dataPointsList.Add(dataPoint);
+										}
 									}
 								}
 							}
@@ -2114,9 +2122,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				if (legendItems != null)
 				{
-					foreach (LegendItem legendItem in legendItems.Cast<LegendItem>())
+					for (int i = 0; i < legendItems.Count; i++)
 					{
-						if (legendItem != null && legendItem.Item == chartSeries)
+						if (legendItems[i] is LegendItem legendItem && legendItem.Item == chartSeries)
 						{
 							legendItem.Text = chartSeries.Label;
 							break;

@@ -9486,6 +9486,335 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		#endregion
 
+		#region Helpers
+
+		private TabItemCollection BuildTabItems(int count)
+		{
+			var items = new TabItemCollection();
+			for (int i = 0; i < count; i++)
+			{
+				items.Add(new SfTabItem
+				{
+					Header = $"Tab {i}",
+					Content = new Label { Text = $"Content {i}" }
+				});
+			}
+			return items;
+		}
+
+		private SfTabView CreateTabView(int itemCount = 3, double? swipeSensitive = null)
+		{
+			var tabView = new SfTabView
+			{
+				EnableSwiping = true,
+				Items = BuildTabItems(itemCount)
+			};
+
+			if (swipeSensitive.HasValue)
+			{
+				tabView.SwipingSensitivity = swipeSensitive.Value;
+			}
+
+			return tabView;
+		}
+
+		private SfHorizontalContent GetHorizontalContent(SfTabView tabView)
+		{
+			var horizontalContent = GetPrivateField<SfTabView>(tabView, "_tabContentContainer") as SfHorizontalContent;
+			Assert.NotNull(horizontalContent);
+			return horizontalContent!;
+		}
+
+		#endregion
+
+		#region Default Value
+
+		[Fact]
+		public void SwipingSensitivity_DefaultValue_IsFive()
+		{
+			// The documented/intended default value for the SwipingSensitivity
+			// property on SfTabView is 5d.
+			var tabView = new SfTabView();
+
+			Assert.Equal(5d, tabView.SwipingSensitivity);
+		}
+
+		#endregion
+
+		#region Property Round-Trip
+
+		[Theory]
+		[InlineData(0d)]
+		[InlineData(1d)]
+		[InlineData(5d)]
+		[InlineData(10d)]
+		[InlineData(50d)]
+		[InlineData(100d)]
+		public void SwipingSensitivity_SetAndGet_ReturnsExpectedValue(double expected)
+		{
+			var tabView = new SfTabView
+			{
+				SwipingSensitivity = expected
+			};
+
+			Assert.Equal(expected, tabView.SwipingSensitivity);
+		}
+
+		[Fact]
+		public void SwipingSensitivity_SetAfterConstruction_IsObservable()
+		{
+			// Changing SwipingSensitivity on the parent SfTabView must remain
+			// observable after the underlying SfHorizontalContent has been
+			// constructed, because it is the consumer of this value during
+			// OnHandleTouchInteraction.
+			var tabView = CreateTabView(itemCount: 3);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			tabView.SwipingSensitivity = 25d;
+
+			Assert.Equal(25d, tabView.SwipingSensitivity);
+			Assert.NotNull(horizontalContent);
+		}
+
+		#endregion
+
+		#region Pressed - Initialization
+
+		[Fact]
+		public void Pressed_AfterPointerDown_SetsIsPressed()
+		{
+			var tabView = CreateTabView();
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(0, 0));
+
+			Assert.True((bool)GetPrivateField(horizontalContent, "_isPressed")!);
+			Assert.False((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		[Fact]
+		public void Pressed_StoresStartPointAsOldPoint()
+		{
+			var tabView = CreateTabView();
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(50, 80));
+
+			var startPoint = (Point)GetPrivateField(horizontalContent, "_startPoint")!;
+			var oldPoint = (Point)GetPrivateField(horizontalContent, "_oldPoint")!;
+
+			Assert.Equal(50d, startPoint.X);
+			Assert.Equal(80d, startPoint.Y);
+			Assert.Equal(startPoint, oldPoint);
+		}
+
+		#endregion
+
+		#region Released - Cleanup
+
+		[Fact]
+		public void Released_AfterPressed_ResetsIsPressedAndIsMoved()
+		{
+			var tabView = CreateTabView();
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(0, 0));
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Released, new Point(0, 0));
+
+			Assert.False((bool)GetPrivateField(horizontalContent, "_isPressed")!);
+			Assert.False((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		#endregion
+
+		#region EnableSwiping Gate
+
+		[Fact]
+		public void OnHandleTouchInteraction_EnableSwipingFalse_DoesNothing()
+		{
+			// When EnableSwiping is false the dispatcher should not change
+			// any touch state, regardless of pointer events.
+			var tabView = new SfTabView
+			{
+				EnableSwiping = false,
+				Items = BuildTabItems(3)
+			};
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(0, 0));
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(200, 0));
+
+			Assert.False((bool)GetPrivateField(horizontalContent, "_isPressed")!);
+			Assert.False((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		#endregion
+
+		#region SwipingSensitivity Gate
+
+		[Fact]
+		public void Moved_DistanceBelowThreshold_DoesNotSetIsMoved()
+		{
+			// With default SwipingSensitivity = 5, a 2px move must not pass the
+			// gate and therefore must not mark the gesture as moved.
+			var tabView = CreateTabView(swipeSensitive: 5d);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(100, 100));
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(102, 100));
+
+			Assert.True((bool)GetPrivateField(horizontalContent, "_isPressed")!);
+			Assert.False((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		[Fact]
+		public void Moved_DistanceAtThreshold_SetsIsMoved()
+		{
+			// Exactly at the threshold the gate must allow the move through.
+			var tabView = CreateTabView(swipeSensitive: 5d);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(100, 100));
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(105, 100));
+
+			Assert.True((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		[Fact]
+		public void Moved_DistanceAboveThreshold_SetsIsMoved()
+		{
+			// A clearly above-threshold horizontal move must pass the gate.
+			var tabView = CreateTabView(swipeSensitive: 5d);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(100, 100));
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(140, 100));
+
+			Assert.True((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		[Fact]
+		public void Moved_VerticalDominantMove_DoesNotSetIsMoved()
+		{
+			// The gate requires horizontal distance >= vertical distance.
+			// A vertical-only move must not be treated as a swipe.
+			var tabView = CreateTabView(swipeSensitive: 5d);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(100, 100));
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(101, 200));
+
+			Assert.False((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		[Theory]
+		[InlineData(5d, 3, false)]   // below threshold
+		[InlineData(5d, 5, true)]    // at threshold
+		[InlineData(5d, 10, true)]   // above threshold
+		[InlineData(20d, 19, false)] // just below a higher threshold
+		[InlineData(20d, 20, true)]  // at a higher threshold
+		[InlineData(20d, 50, true)]  // well above a higher threshold
+		[InlineData(100d, 99, false)]
+		[InlineData(100d, 100, true)]
+		public void Moved_HorizontalDistance_VsSwipingSensitivity_GatesCorrectly(
+			double swipeSensitive, int horizontalDelta, bool shouldBeMoved)
+		{
+			var tabView = CreateTabView(swipeSensitive: swipeSensitive);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(0, 0));
+			horizontalContent.OnHandleTouchInteraction(
+				PointerActions.Moved,
+				new Point(horizontalDelta, 0));
+
+			Assert.Equal(shouldBeMoved, (bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		[Theory]
+		[InlineData(5d, -3, false)]  // below threshold, negative direction
+		[InlineData(5d, -5, true)]   // at threshold, negative direction
+		[InlineData(5d, -25, true)]  // above threshold, negative direction
+		public void Moved_NegativeHorizontalDistance_StillGatesByMagnitude(
+			double swipeSensitive, int horizontalDelta, bool shouldBeMoved)
+		{
+			var tabView = CreateTabView(swipeSensitive: swipeSensitive);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(200, 200));
+			horizontalContent.OnHandleTouchInteraction(
+				PointerActions.Moved,
+				new Point(200 + horizontalDelta, 200));
+
+			Assert.Equal(shouldBeMoved, (bool)GetPrivateField(horizontalContent, "_isMoved")!);
+		}
+
+		[Fact]
+		public void Moved_BelowThreshold_DoesNotUpdateOldPoint()
+		{
+			// If the gate rejects the move, HandleTouchMovement must not run,
+			// therefore _oldPoint must remain equal to _startPoint.
+			var tabView = CreateTabView(swipeSensitive: 50d);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(100, 100));
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(110, 100));
+
+			var startPoint = (Point)GetPrivateField(horizontalContent, "_startPoint")!;
+			var oldPoint = (Point)GetPrivateField(horizontalContent, "_oldPoint")!;
+
+			Assert.Equal(startPoint, oldPoint);
+		}
+
+		[Fact]
+		public void Moved_AboveThreshold_UpdatesOldPoint()
+		{
+			// Once the gate allows the move, _oldPoint must be advanced.
+			var tabView = CreateTabView(swipeSensitive: 5d);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(100, 100));
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(140, 100));
+
+			var oldPoint = (Point)GetPrivateField(horizontalContent, "_oldPoint")!;
+			Assert.Equal(140d, oldPoint.X);
+			Assert.Equal(100d, oldPoint.Y);
+		}
+
+		#endregion
+
+		#region Multi-Step Swipe
+
+		[Fact]
+		public void MultiStepSwipe_OnlyStepsAboveThresholdAdvanceState()
+		{
+			// Simulate a real gesture: many small moves that are all below the
+			// threshold should not move state. The first move that crosses the
+			// threshold should commit and subsequent moves should follow.
+			var tabView = CreateTabView(swipeSensitive: 10d);
+			var horizontalContent = GetHorizontalContent(tabView);
+
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Pressed, new Point(0, 0));
+
+			// Step 1: below threshold (3px)
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(3, 0));
+			Assert.False((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+			var oldPointAfter1 = (Point)GetPrivateField(horizontalContent, "_oldPoint")!;
+			Assert.Equal(0d, oldPointAfter1.X);
+
+			// Step 2: crosses threshold from origin (12px)
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(12, 0));
+			Assert.True((bool)GetPrivateField(horizontalContent, "_isMoved")!);
+			var oldPointAfter2 = (Point)GetPrivateField(horizontalContent, "_oldPoint")!;
+			Assert.Equal(12d, oldPointAfter2.X);
+
+			// Step 3: continues from the new old point (15px total, 3px delta)
+			horizontalContent.OnHandleTouchInteraction(PointerActions.Moved, new Point(15, 0));
+			var oldPointAfter3 = (Point)GetPrivateField(horizontalContent, "_oldPoint")!;
+			Assert.Equal(15d, oldPointAfter3.X);
+		}
+
+		#endregion
+
 	}
 
 	public class Model : INotifyPropertyChanged

@@ -9,9 +9,9 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 [![NuGet version](https://img.shields.io/nuget/v/Syncfusion.Maui.Toolkit)](https://www.nuget.org/packages/Syncfusion.Maui.Toolkit)
 [![NuGet Downloads](https://img.shields.io/nuget/dt/Syncfusion.Maui.Toolkit)](https://www.nuget.org/stats/packages/Syncfusion.Maui.Toolkit?groupby=Version)
 [![License](https://img.shields.io/github/license/syncfusion/maui-toolkit)](./LICENSE.txt)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20Mac%20%7C%20Windows-blue)
 [![.NET 9](https://img.shields.io/badge/.NET%209-5C2D91?logo=.net&logoColor=white)](https://dotnet.microsoft.com/download/dotnet/9.0)
+[![.NET 10](https://img.shields.io/badge/.NET%2010-5C2D91?logo=.net&logoColor=white)](https://dotnet.microsoft.com/download/dotnet/10.0)
 ![Contributions](https://img.shields.io/badge/contributions-welcome-green.svg)
 ![Contributors](https://img.shields.io/github/contributors/syncfusion/maui-toolkit)
 ![GitHub issues](https://img.shields.io/github/issues/syncfusion/maui-toolkit)
@@ -21,9 +21,22 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 
 ## Getting Started ##
 
-* [Install .NET MAUI](https://dot.net/maui)
+* Install the [.NET 9 or .NET 10 SDK with the .NET MAUI workload](https://dot.net/maui).
 * [Syncfusion .NET MAUI Toolkit Documentation](https://help.syncfusion.com/maui-toolkit/introduction/overview)
 * [Development Guide](./.github/DEVELOPMENT.md)
+
+## Microsoft Collaboration
+
+Syncfusion actively contributes to the [.NET MAUI open-source project](https://devblogs.microsoft.com/dotnet/dotnet-maui-welcomes-syncfusion-open-source-contributions/), helping improve the framework for the .NET developer community.
+
+> "We are thrilled to welcome Syncfusion as active contributors to the .NET MAUI open-source project. Their commitment to the success of .NET MAUI is incredible and their expertise in this space invaluable."
+>
+> [David Ortinau, Principal Product Manager, .NET MAUI, Microsoft](https://devblogs.microsoft.com/dotnet/dotnet-maui-welcomes-syncfusion-open-source-contributions/)
+
+
+* Microsoft introduced the Syncfusion Toolkit for .NET MAUI in the optional sample content for the .NET 9 project template; it continues to be included in .NET 10 alongside the [.NET MAUI Community Toolkit and CommunityToolkit.Mvvm](https://github.com/dotnet/maui/pull/25419).
+* [View Syncfusion's merged contributions to .NET MAUI](https://github.com/dotnet/maui/pulls?q=is%3Apr+is%3Amerged+label%3Apartner%2Fsyncfusion).
+* [Learn more about Syncfusion's collaboration on .NET MAUI](https://www.syncfusion.com/explore/microsoft-collaboration/).
 
 
 ## Controls list
@@ -130,7 +143,7 @@ The following XAML code demonstrates how to set up a basic `SfCartesianChart` us
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="ChartGettingStarted.MainPage"
-    xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+    xmlns:toolkit="http://schemas.syncfusion.com/maui/toolkit"
     xmlns:model="clr-namespace:ChartGettingStarted">
     
 	<!-- Set the BindingContext to the ViewModel -->
@@ -139,52 +152,52 @@ The following XAML code demonstrates how to set up a basic `SfCartesianChart` us
     </ContentPage.BindingContext>
 
     <!-- Define a Syncfusion Cartesian Chart to visualize data -->
-    <chart:SfCartesianChart>
+    <toolkit:SfCartesianChart>
 
         <!-- Set the title for the Cartesian chart -->
-        <chart:SfCartesianChart.Title>
+        <toolkit:SfCartesianChart.Title>
             <Label Text="Height Comparison" HorizontalOptions="Center" />
-        </chart:SfCartesianChart.Title>
+        </toolkit:SfCartesianChart.Title>
 
-        <!-- Add a legend to the chart for identifying series -->
-        <chart:SfCartesianChart.Legend>
-            <chart:ChartLegend />
-        </chart:SfCartesianChart.Legend>
+        <!-- Add a legend to identify series -->
+        <toolkit:SfCartesianChart.Legend>
+            <toolkit:ChartLegend />
+        </toolkit:SfCartesianChart.Legend>
 
         <!-- Define the horizontal (X) axis as a category axis -->
-        <chart:SfCartesianChart.XAxes>
-            <chart:CategoryAxis>
+        <toolkit:SfCartesianChart.XAxes>
+            <toolkit:CategoryAxis>
                 <!-- Set the title for the X-axis -->
-                <chart:CategoryAxis.Title>
-                    <chart:ChartAxisTitle Text="Name" />
-                </chart:CategoryAxis.Title>
-            </chart:CategoryAxis>
-        </chart:SfCartesianChart.XAxes>
+                <toolkit:CategoryAxis.Title>
+                    <toolkit:ChartAxisTitle Text="Name" />
+                </toolkit:CategoryAxis.Title>
+            </toolkit:CategoryAxis>
+        </toolkit:SfCartesianChart.XAxes>
 
         <!-- Define the vertical (Y) axis as a numerical axis -->
-        <chart:SfCartesianChart.YAxes>
-            <chart:NumericalAxis>
+        <toolkit:SfCartesianChart.YAxes>
+            <toolkit:NumericalAxis>
                 <!-- Set the title for the Y-axis -->
-                <chart:NumericalAxis.Title>
-                    <chart:ChartAxisTitle Text="Height(in cm)" />
-                </chart:NumericalAxis.Title>
-            </chart:NumericalAxis>
-        </chart:SfCartesianChart.YAxes>
+                <toolkit:NumericalAxis.Title>
+                    <toolkit:ChartAxisTitle Text="Height(in cm)" />
+                </toolkit:NumericalAxis.Title>
+            </toolkit:NumericalAxis>
+        </toolkit:SfCartesianChart.YAxes>
 
-        <!-- Initialize a ColumnSeries to visualize the data in columns -->
-        <chart:ColumnSeries Label="Height"
-                         EnableTooltip="True" 
-                         ShowDataLabels="True" 
-                         ItemsSource="{Binding Data}" 
-                         XBindingPath="Name" 
-                         YBindingPath="Height">
-            <!-- Define the settings for data labels of the columns -->
-            <chart:ColumnSeries.DataLabelSettings>
-                <chart:CartesianDataLabelSettings LabelPlacement="Inner" />
-            </chart:ColumnSeries.DataLabelSettings>
-        </chart:ColumnSeries>
+        <!-- Initialize a ColumnSeries to visualize the data -->
+        <toolkit:ColumnSeries Label="Height"
+                              EnableTooltip="True"
+                              ShowDataLabels="True"
+                              ItemsSource="{Binding Data}"
+                              XBindingPath="Name"
+                              YBindingPath="Height">
+            <!-- Define the settings for data labels -->
+            <toolkit:ColumnSeries.DataLabelSettings>
+                <toolkit:CartesianDataLabelSettings LabelPlacement="Inner" />
+            </toolkit:ColumnSeries.DataLabelSettings>
+        </toolkit:ColumnSeries>
 
-    </chart:SfCartesianChart>
+    </toolkit:SfCartesianChart>
 </ContentPage>
 
 ```
@@ -194,21 +207,21 @@ Define a simple data model C# class named `Person` to represent a data point, su
 **Person.cs**
 
 ```csharp
+/// <summary>
+/// Represents a person with a name and height.
+/// </summary>
+public class Person
+{
     /// <summary>
-    /// Represents a person with a name and height.
+    /// Gets or sets the name of the person.
     /// </summary>
-    public class Person
-    {
-        /// <summary>
-        /// Gets or sets the name of the person.
-        /// </summary>
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets the height of the person.
-        /// </summary>	
-        public double Height { get; set; }
-    }
+    /// <summary>
+    /// Gets or sets the height of the person.
+    /// </summary>
+    public double Height { get; set; }
+}
 ```
 
 Next, create a ViewModel class in C# and initialize it with a list of `Person` objects:
@@ -216,32 +229,31 @@ Next, create a ViewModel class in C# and initialize it with a list of `Person` o
 **ViewModel.cs**
 
 ```csharp
+/// <summary>
+/// ViewModel class that provides a list of Person objects for data binding.
+/// </summary>
+public class ViewModel
+{
     /// <summary>
-    /// ViewModel class that provides a list of Person objects for data binding.
+    /// Gets or sets the list of Person objects.
     /// </summary>
-    public class ViewModel
-    {
-        /// <summary>
-        /// Gets or sets the list of Person objects.
-        /// </summary>	
-        public List<Person> Data { get; set; }
+    public List<Person> Data { get; set; }
 
-        /// <summary>
-        /// Initializes a new instance of the ViewModel class with sample data.
-        /// </summary>
-        public ViewModel()
+    /// <summary>
+    /// Initializes a new instance of the ViewModel class with sample data.
+    /// </summary>
+    public ViewModel()
+    {
+        Data = new List<Person>
         {
-            // Initialize the Data property with a list of Person objects
-            Data = new List<Person>()
-            {
-                new Person { Name = "David", Height = 170 },
-                new Person { Name = "Michael", Height = 96 },
-                new Person { Name = "Steve", Height = 65 },
-                new Person { Name = "Joel", Height = 182 },
-                new Person { Name = "Bob", Height = 134 }
-            };
-        }
+            new Person { Name = "David", Height = 170 },
+            new Person { Name = "Michael", Height = 96 },
+            new Person { Name = "Steve", Height = 65 },
+            new Person { Name = "Joel", Height = 182 },
+            new Person { Name = "Bob", Height = 134 }
+        };
     }
+}
 ```
 
 ## Support
@@ -252,6 +264,14 @@ For any other queries, reach our [Syncfusion support team](https://mauitoolkit.s
 Contributions are welcome! If you'd like to contribute, please check out our [contributing guide](./.github/CONTRIBUTING.md) for details on how to get started. Whether you find a bug, have a feature request, or want to submit code, we appreciate your help in improving the toolkit.
 
 See the [Development Guide](./.github/DEVELOPMENT.md) for more details about this repository and project structure.
+
+Run the unit tests with:
+
+```shell
+dotnet test maui/tests/Syncfusion.Maui.Toolkit.UnitTest/
+```
+
+Explore the [Controls Gallery](./maui/samples/Gallery) for full control examples or use the [Sandbox](./maui/samples/Sandbox) for focused testing.
 
 <a href="https://github.com/syncfusion/maui-toolkit/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=syncfusion/maui-toolkit" />
