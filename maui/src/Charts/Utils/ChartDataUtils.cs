@@ -28,7 +28,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal static bool EqualDoubleValues(double x, double y)
 		{
-			return Math.Abs(x - y) < 1e-10;
+			return x.ToString() == y.ToString();
 		}
 
 		internal static DateTime IncreaseInterval(DateTime date, double visibleInterval, DateTimeIntervalType actualIntervalType)
