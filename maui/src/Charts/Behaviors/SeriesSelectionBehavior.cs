@@ -91,13 +91,12 @@
 
 		internal override void ResetMultiSelection()
 		{
-			int count = ActualSelectedIndexes.Count;
-			for (int i = count - 1; i >= 0; i--)
-			{
-				UpdateSelectedItem(ActualSelectedIndexes[i]);
-			}
-
+			var selectedIndexes = ActualSelectedIndexes.ToList();
 			ActualSelectedIndexes.Clear();
+			foreach (var index in selectedIndexes)
+			{
+				UpdateSelectedItem(index);
+			}
 		}
 
 		internal override void SelectionIndexChanged(int oldValue, int newValue)
