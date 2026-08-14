@@ -61,7 +61,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			SideBySideSeriesPosition = [];
-			var cartesianSeriesCollection = visibleSeries.OfType<CartesianSeries>();
+			var cartesianSeriesCollection = visibleSeries.OfType<CartesianSeries>().ToList();
 
 			foreach (var cartesianSeries in cartesianSeriesCollection)
 			{

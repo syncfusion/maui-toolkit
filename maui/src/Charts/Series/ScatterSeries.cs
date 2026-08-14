@@ -492,9 +492,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void UpdateScatterType(ShapeType type)
 		{
-			foreach (ScatterSegment item in _segments.Cast<ScatterSegment>())
+			foreach (ChartSegment item in _segments)
 			{
-				item.Type = type;
+				ScatterSegment scatterItem = (ScatterSegment)item;
+				scatterItem.Type = type;
 			}
 		}
 

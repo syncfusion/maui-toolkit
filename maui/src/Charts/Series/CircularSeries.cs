@@ -534,8 +534,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal void UpdateDataLabelPositions(ICanvas canvas)
 		{
-			foreach (PieSegment segment in _segments.Cast<PieSegment>())
+			foreach (ChartSegment item in _segments)
 			{
+				PieSegment segment = (PieSegment)item;
 				if (IsSegmentWithinBounds(segment) && segment.IsVisible)
 				{
 					DrawConnectorLine(canvas, segment);

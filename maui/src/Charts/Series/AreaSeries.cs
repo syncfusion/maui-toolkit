@@ -439,8 +439,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 
 				List<PointF> segPoints = [];
-				foreach (AreaSegment segment in _segments.Cast<AreaSegment>())
+				foreach (ChartSegment item in _segments)
 				{
+					AreaSegment segment = (AreaSegment)item;
 					var points = segment.FillPoints;
 					if (points != null)
 					{
