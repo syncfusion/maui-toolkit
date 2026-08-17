@@ -2077,7 +2077,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 
 				_internalHintLabelStyle.FontSize = _isAnimating ? (float)_animatingFontSize : IsHintFloated ? FloatedHintFontSize : HintLabelStyle.FontSize;
 
-				HorizontalAlignment horizontalAlignment = IsRTL ? HorizontalAlignment.Right : HorizontalAlignment.Left;
+				HorizontalAlignment horizontalAlignment = GetAlignment(Hint);
 #if IOS || MACCATALYST
 				VerticalAlignment verticalAlignment = VerticalAlignment.Top;
 #else
@@ -2102,10 +2102,51 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 				UpdateCounterTextPosition();
 				UpdateCounterTextColor();
 
-				canvas.DrawText(_counterText, _counterTextRect, IsRTL ? HorizontalAlignment.Right : HorizontalAlignment.Left, VerticalAlignment.Top, _internalCounterLabelStyle);
+				canvas.DrawText(_counterText, _counterTextRect, GetAlignment(_counterText) , VerticalAlignment.Top, _internalCounterLabelStyle);
 
 				canvas.CanvasRestoreState();
 			}
+		}
+
+#if ANDROID
+        static bool IsArabic(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return false;
+
+            foreach (char c in text)
+            {
+                if((c >= '\u0590' && c <= '\u05FF') || // Hebrew
+                   (c >= '\u0600' && c <= '\u06FF') || // Arabic
+                   (c >= '\u0750' && c <= '\u077F') || // Arabic Supplement
+                   (c >= '\u08A0' && c <= '\u08FF') || // Arabic Extended-A
+                   (c >= '\uFB1D' && c <= '\uFB4F') || // Hebrew Presentation Forms
+                   (c >= '\uFB50' && c <= '\uFDFF') || // Arabic Presentation Forms-A
+                   (c >= '\uFE70' && c <= '\uFEFF')) // Arabic Presentation Forms-B
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+#endif
+
+		HorizontalAlignment GetAlignment(string text)
+		{
+			HorizontalAlignment horizontalAlignment;
+#if ANDROID
+            if (IsArabic(text))
+            {
+                horizontalAlignment = IsRTL ? HorizontalAlignment.Left : HorizontalAlignment.Right;
+            }
+            else
+            {
+                horizontalAlignment = IsRTL ? HorizontalAlignment.Right : HorizontalAlignment.Left;
+            }
+#else
+			horizontalAlignment = IsRTL ? HorizontalAlignment.Right : HorizontalAlignment.Left;
+#endif
+			return horizontalAlignment;
 		}
 
 		/// <summary>
