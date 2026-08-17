@@ -2109,7 +2109,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		}
 
 #if ANDROID
-        private static bool IsArabic(string text)
+        bool IsArabic(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return false;
@@ -2131,7 +2131,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         }
 #endif
 
-		private HorizontalAlignment GetAlignment(string text)
+		HorizontalAlignment GetAlignment(string text)
 		{
 			HorizontalAlignment horizontalAlignment;
 #if ANDROID
