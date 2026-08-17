@@ -107,9 +107,13 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 			var uiSettings = new UISettings();
 			float fontScale = (float)uiSettings.TextScaleFactor;
 			double fontSize = textElement.FontSize > 0 ? textElement.FontSize : 12;
+
+			// Disable TextBlock auto-scaling to avoid applying the scale factor twice.
+			_textBlock!.IsTextScaleFactorEnabled = false;
+
 			if (textElement.FontAutoScalingEnabled)
 			{
-				_textBlock!.FontSize = fontSize * fontScale;
+				_textBlock.FontSize = fontSize * fontScale;
 			}
 			else
 			{
