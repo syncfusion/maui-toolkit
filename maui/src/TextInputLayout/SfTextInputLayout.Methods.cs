@@ -2109,7 +2109,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		}
 
 #if ANDROID
-        bool IsArabic(string text)
+        static bool IsArabic(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return false;
