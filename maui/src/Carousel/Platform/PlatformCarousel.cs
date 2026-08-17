@@ -22,6 +22,31 @@
 		/// </summary>
 		internal void Disconnect()
 		{
+#if MACCATALYST || IOS
+            if (_handler != null)
+            {
+                if (GestureRecognizer != null)
+                {
+                    RemoveGestureRecognizer(GestureRecognizer);
+                }
+
+                foreach (var view in Subviews)
+                {
+                    if (view is PlatformCarouselItem item)
+                    {
+                        item.InternalCarousel = null;
+                    }
+                }
+
+                _handler = null;
+            }
+#elif ANDROID
+            if (carouselHandler != null)
+            {
+                carouselHandler = null;
+            }
+#endif
+
 			_virtualView = null;
 		}
 
