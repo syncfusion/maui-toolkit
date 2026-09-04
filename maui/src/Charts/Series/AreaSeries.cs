@@ -352,6 +352,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		bool IMarkerDependent.NeedToAnimateMarker { get => _needToAnimateMarker; set => _needToAnimateMarker = EnableAnimation; }
 
+		internal override bool IsColorPathSeries => false;
+
 		void IDrawCustomLegendIcon.DrawSeriesLegend(ICanvas canvas, RectF rect, Brush fillColor, bool isSaveState)
 		{
 			if (isSaveState)

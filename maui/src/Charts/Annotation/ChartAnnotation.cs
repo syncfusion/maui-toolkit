@@ -390,6 +390,35 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Protected Methods
 
+		/// <summary>
+		/// The method is called when a touch interaction begins on the ChartAnnotation.
+		/// </summary>
+		/// <remarks>
+		/// <para>Use the provided points X and Y to determine the exact location of the touch.</para>
+		/// </remarks>
+		protected internal virtual void OnTouchDown(float pointX, float pointY)
+		{
+		}
+
+		/// <summary>
+		/// The method is called when touch movements occur over the ChartAnnotation.
+		/// </summary>
+		/// <remarks>
+		/// <para>This method updates the annotation's position based on the current touch coordinates (X and Y).</para>
+		/// </remarks>
+		protected internal virtual void OnTouchMove(float pointX, float pointY)
+		{
+		}
+
+		/// <summary>
+		/// The method is called when the touch interaction with the ChartAnnotation ends.
+		/// </summary>
+		/// <remarks>
+		/// <para>This method finalizes the annotation's position using the last known touch coordinates (X and Y).</para>
+		/// </remarks>
+		protected internal virtual void OnTouchUp(float pointX, float pointY)
+		{
+		}
 
 		/// <summary>
 		/// Draws the annotation of the chart.
@@ -401,6 +430,26 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#endregion
 
 		#region Internal Methods
+
+		internal virtual bool HitTest(Point touchPoint)
+		{
+			return false;
+		}
+
+		internal bool IsPointInLabelBounds(Point touchPoint, Rect bounds)
+		{
+			double rectWidth = bounds.Width;
+			double rectHeight = bounds.Height;
+			double strokeOffset = _annotationLabelStyle.StrokeWidth;
+			Rect labelBounds = new(
+				bounds.X - (rectWidth / 2) - (strokeOffset / 2),
+				bounds.Y - (rectHeight / 2) - (strokeOffset / 2),
+				rectWidth + strokeOffset,
+				rectHeight + strokeOffset
+			);
+
+			return labelBounds.Contains(touchPoint);
+		}
 
 		internal void UpdateLayout()
 		{

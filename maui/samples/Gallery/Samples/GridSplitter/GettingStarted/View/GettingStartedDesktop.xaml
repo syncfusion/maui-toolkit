@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.GridSplitter.SfGridSplitter.GettingStartedDesktop"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.GridSplitter"
+                       xmlns:customView="clr-namespace:Syncfusion.Maui.ControlsGallery.CustomView"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:splitter="clr-namespace:Syncfusion.Maui.Toolkit.GridSplitter;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:picker="clr-namespace:Syncfusion.Maui.Toolkit.Picker;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:textinput="clr-namespace:Syncfusion.Maui.Toolkit.TextInputLayout;assembly=Syncfusion.Maui.Toolkit">
+
+  <localCore:SampleView.Behaviors>
+    <local:GridSplitterBehaviour />
+  </localCore:SampleView.Behaviors>
+
+  <localCore:SampleView.Resources>
+    <Style TargetType="Label">
+      <Setter Property="LineBreakMode" Value="TailTruncation"/>
+    </Style>
+  </localCore:SampleView.Resources>
+    
+    <Grid x:Name="MainGrid" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" >
+      <Grid.BindingContext>
+        <local:DashboardViewModel />
+      </Grid.BindingContext>
+<splitter:SfGridSplitter x:Name="GridSplitter" Orientation="Vertical">
+    <splitter:SplitterPane IsCollapsible="False" >
+      <splitter:SfGridSplitter>
+        <splitter:SplitterPane Size="*" MinimumSize="100">
+          <Border Margin="10" Padding="16" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                 Stroke="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" StrokeShape="RoundRectangle 10"
+                  StrokeThickness="1">
+
+            <ScrollView VerticalScrollBarVisibility="Never">
+              <VerticalStackLayout Spacing="2">
+                <!-- Header -->
+
+                <Grid >
+
+                  <Label Text="Filters"
+                          FontAttributes="Bold"
+                          FontSize="18"/>
+
+                </Grid>
+
+                <VerticalStackLayout Spacing="8">
+
+                 <Border Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
+                     HeightRequest="35" >
+                  <Border.StrokeShape>
+                  <RoundRectangle CornerRadius="6" />
+                  </Border.StrokeShape>
+                  <customView:SfEntry x:Name="SearchBar" Background="Transparent"
+                                                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                                                          PlaceholderColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                                                          Placeholder="Enter Name"
+                                          Text="{Binding SearchText}">
+                                            <Entry.Margin>
+                                            <OnPlatform x:TypeArguments="Thickness" Default="12,-10,0,0">
+                                            <On Platform="MacCatalyst" Value="12,0,0,0" />
+                                            </OnPlatform>
+                                            </Entry.Margin>
+                                          </customView:SfEntry>
+                  </Border>
+
+                  <Label Text="Region"
+                          FontAttributes="Bold"
+                          FontSize="14"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+
+                  <Border
+                        Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
+                        StrokeThickness="1" StrokeShape="RoundRectangle 5">
+
+                  <Picker BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                      x:Name="RegionPicker"
+                      ItemsSource="{Binding Regions}" 
+                      SelectedItem="{Binding SelectedRegion}"/>
+                </Border>
+
+                </VerticalStackLayout>
+
+                <!-- Status -->
+
+                <VerticalStackLayout Spacing="8">
+
+                  <Label Text="Status"
+                          FontAttributes="Bold"
+                          FontSize="14"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+
+                  <Border
+                        Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
+                        StrokeThickness="1" StrokeShape="RoundRectangle 5">
+
+                <Picker BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                    x:Name="StatusPicker"
+                    ItemsSource="{Binding StatusList}"
+                    SelectedItem="{Binding SelectedStatus}" />
+                  </Border>
+
+                </VerticalStackLayout>
+
+                <!-- Type -->
+
+                <VerticalStackLayout Spacing="8">
+
+                  <Label Text="Type"
+                          FontAttributes="Bold"
+                          FontSize="14"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+
+                  <Border
+                        Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}"
+                        StrokeThickness="1" StrokeShape="RoundRectangle 5">
+
+                <Picker BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                    x:Name="TypePicker"
+                    ItemsSource="{Binding CustomerTypes}"
+                    SelectedItem="{Binding SelectedType}" />
+                  </Border>
+
+                </VerticalStackLayout>
+
+                <BoxView
+                    HeightRequest="1"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"/>
+
+                <!-- Buttons -->
+
+                  <HorizontalStackLayout Spacing="10" HorizontalOptions="Center" Margin="0,10,0,0">
+                    <Button Text="Apply "
+                    WidthRequest="70"
+                    Command="{Binding ApplyFilterCommand}"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBorderLight}, Dark={StaticResource PrimaryBorderDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource TileHeaderBackgroundLight}, Dark={StaticResource TileHeaderBackgroundDark}}"
+                    CornerRadius="10"/>
+
+                    <Button WidthRequest="70"
+                        Grid.Column="1"
+                        Text="Clear"
+                        Command="{Binding ClearFilterCommand}"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                        BorderWidth="1"
+                        CornerRadius="10"/>
+                  </HorizontalStackLayout>
+                
+                </VerticalStackLayout>
+            </ScrollView>
+          </Border>
+
+        </splitter:SplitterPane>
+
+        <splitter:SplitterPane MinimumSize="300" Size="2*" IsCollapsible="False">
+
+          <Border
+              Margin="5"
+              BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+              Stroke="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+              StrokeShape="RoundRectangle 10">
+
+              <Grid RowDefinitions="Auto,Auto,*,Auto">
+                  <!-- Header -->
+
+                  <Grid Grid.Row="0"
+                        Padding="5"
+                        ColumnDefinitions="*">
+
+                      <HorizontalStackLayout Spacing="8" Margin="0,5,0,0">
+
+                          <Label Text="&#xe761;" FontFamily="MauiSampleFontIcon"
+                                FontSize="16" />
+
+                          <Label Text="{Binding CustomerCountText}"
+                                FontSize="18"
+                                FontAttributes="Bold" />
+
+                      </HorizontalStackLayout>
+
+                  </Grid>
+
+                  <!-- Column Headers -->
+
+                  <Grid Grid.Row="1"
+                        Padding="15,5"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                        ColumnDefinitions="2.5*,2.5*,1.5*,2*">
+
+                      <Label Text="Customer"
+                            FontAttributes="Bold" />
+
+                      <Label Grid.Column="1"
+                            Text="Phone"
+                            FontAttributes="Bold" />
+
+                      <Label Grid.Column="2"
+                            Text="Status"
+                            FontAttributes="Bold" />
+
+                      <Label Grid.Column="3"
+                            Text="Joined On"
+                            FontAttributes="Bold" />
+
+                  </Grid>
+
+                  <!-- Data -->
+
+                  <CollectionView
+                      x:Name="CustomersCollectionView"
+                      Grid.Row="2"
+                      ItemsSource="{Binding FilteredCustomers}"
+                      SelectionMode="Single"
+                      SelectedItem="{Binding SelectedCustomer, Mode=TwoWay}">
+
+                      <CollectionView.ItemTemplate>
+
+                          <DataTemplate>
+
+                    <Grid Padding="12,8"
+                          ColumnDefinitions="2.5*,2.5*,1.5*,2*">
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup Name="CommonStates">
+
+                                <VisualState Name="Normal">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor"
+                                                Value="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" />
+
+                                        <Setter TargetName="NameLabel"
+                                                Property="Label.TextColor"
+                                                Value="{AppThemeBinding Light={StaticResource TextColourLight},Dark={StaticResource TextColourDark}}" />
+
+                                        <Setter TargetName="PhoneLabel"
+                                                Property="Label.TextColor"
+                                                Value="{AppThemeBinding Light={StaticResource TextColourLight},Dark={StaticResource TextColourDark}}" />
+
+                                        <Setter TargetName="DateLabel"
+                                                Property="Label.TextColor"
+                                                Value="{AppThemeBinding Light={StaticResource TextColourLight},Dark={StaticResource TextColourDark}}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+
+                                <VisualState Name="Selected">
+                                    <VisualState.Setters>
+                                        <Setter Property="BackgroundColor"
+                                                Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight},Dark={StaticResource PrimaryBackgroundDark}}" />
+
+                                        <Setter TargetName="NameLabel"
+                                                Property="Label.TextColor"
+                                                Value="{AppThemeBinding Light={StaticResource TileHeaderBackgroundLight}, Dark={StaticResource TileHeaderBackgroundDark}}" />
+
+                                        <Setter TargetName="PhoneLabel"
+                                                Property="Label.TextColor"
+                                                Value="{AppThemeBinding Light={StaticResource TileHeaderBackgroundLight}, Dark={StaticResource TileHeaderBackgroundDark}}" />
+
+                                        <Setter TargetName="DateLabel"
+                                                Property="Label.TextColor"
+                                                Value="{AppThemeBinding Light={StaticResource TileHeaderBackgroundLight}, Dark={StaticResource TileHeaderBackgroundDark}}" />
+                                    </VisualState.Setters>
+                                </VisualState>
+
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+
+
+                                  <Grid ColumnDefinitions="Auto,Auto"
+                                      ColumnSpacing="5">
+
+                                      <Border WidthRequest="32"
+                                            HeightRequest="32"
+                                            StrokeShape="RoundRectangle 16"
+                                            Padding="0"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                            Stroke="Transparent">
+
+                      <Image Source="{Binding Avatar}"
+                                Aspect="AspectFill"/>
+
+                                      </Border>
+
+                                      <Label x:Name="NameLabel" Text="{Binding Name}" Grid.Column="1" 
+                                            VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+
+                                  </Grid>
+
+                                  <!-- Phone -->
+
+                                  <Label Grid.Column="1" x:Name="PhoneLabel" 
+                                        Text="{Binding Phone}"
+                                        VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+
+                                  <!-- Status -->
+
+                                  <Border Grid.Column="2"
+                                          Padding="5,2" HeightRequest="25"
+                                          HorizontalOptions="Start"
+                                          StrokeThickness="0" WidthRequest="46">
+
+                                      <Border.Triggers>
+
+                                          <DataTrigger TargetType="Border"
+                                                      Binding="{Binding Status}"
+                                                      Value="Active">
+
+                                              <Setter Property="BackgroundColor"
+                                                      Value="{AppThemeBinding Light=#4A9608, Dark=#10AD4F}"/>
+
+                                          </DataTrigger>
+
+                                          <DataTrigger TargetType="Border"
+                                                      Binding="{Binding Status}"
+                                                      Value="Inactive">
+
+                                              <Setter Property="BackgroundColor"
+                                                      Value="{AppThemeBinding Light=#DE7207, Dark=#EA8D03}"/>
+
+                                          </DataTrigger>
+
+                                          <DataTrigger TargetType="Border"
+                                                      Binding="{Binding Status}"
+                                                      Value="Pending">
+
+                                              <Setter Property="BackgroundColor"
+                                                      Value="{AppThemeBinding Light=#DE7207, Dark=#EA8D03}"/>
+
+                                          </DataTrigger>
+
+                                      </Border.Triggers>
+
+                                      <Label Text="{Binding Status}" 
+                                            FontSize="10" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" LineBreakMode="TailTruncation">
+
+                                        <Label.Triggers>
+
+                                            <DataTrigger TargetType="Label"
+                                                        Binding="{Binding Status}"
+                                                        Value="Active">
+                                                <Setter Property="TextColor"
+                                                        Value="White"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger TargetType="Label"
+                                                        Binding="{Binding Status}"
+                                                        Value="Inactive">
+                                                <Setter Property="TextColor"
+                                                        Value="White"/>
+                                            </DataTrigger>
+
+                                            <DataTrigger TargetType="Label"
+                                                        Binding="{Binding Status}"
+                                                        Value="Pending">
+                                                <Setter Property="TextColor"
+                                                        Value="White"/>
+                                            </DataTrigger>
+
+                                        </Label.Triggers>
+
+                                      </Label>
+
+                                  </Border>
+
+                                  <!-- Joined Date -->
+
+                                  <Label Grid.Column="3" x:Name="DateLabel" 
+                                        Text="{Binding JoinedDate,StringFormat='{0:MMM d, yyyy}'}"
+                                        VerticalOptions="Center"/>
+
+                              </Grid>
+
+                          </DataTemplate>
+
+                      </CollectionView.ItemTemplate>
+
+                  </CollectionView> 
+
+              </Grid>
+
+          </Border>
+
+      </splitter:SplitterPane>
+      
+        <splitter:SplitterPane MinimumSize="100" Size="*" IsCollapsible="False">
+          <Border Margin="8" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                  Stroke="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                  StrokeShape="RoundRectangle 10">
+
+            <ScrollView VerticalScrollBarVisibility="Never">
+
+              <VerticalStackLayout Padding="20"
+                                Spacing="16">
+
+                <!-- Header -->
+
+                <Grid ColumnDefinitions="Auto,*">
+
+                  <Label Text="&#xe760;" FontFamily="MauiSampleFontIcon"
+                          FontSize="18" VerticalOptions="Center"/>
+
+                  <Label Grid.Column="1"
+                          Margin="8,0,0,0"
+                          Text="Customer Details"
+                          FontSize="18"
+                          FontAttributes="Bold"/>
+
+                </Grid>
+
+                <!-- Customer Summary -->
+
+                <Grid ColumnDefinitions="70,*" >
+                  <Border WidthRequest="64"
+                          HeightRequest="64"
+                          StrokeShape="RoundRectangle 32"
+                          Padding="0"
+                          Stroke="Transparent">
+
+                    <Image Source="{Binding SelectedCustomer.Avatar}"
+                              Aspect="AspectFill"/>
+                  </Border>
+
+                  <VerticalStackLayout Grid.Column="1"
+                                        Spacing="4">
+
+                      <Label Text="{Binding SelectedCustomer.Name}"
+                                  FontSize="20"
+                                  FontAttributes="Bold" />
+
+                      <Label Text="{Binding SelectedCustomer.CustomerId}"
+                              TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+
+                    <Label Text="{Binding SelectedCustomer.JoinedDate,
+                                      StringFormat='Joined on {0:MMM d, yyyy}'}"
+                              TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"/>
+
+                  </VerticalStackLayout>
+
+                </Grid>
+
+                <BoxView HeightRequest="1"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"/>
+
+                <!-- Contact Information -->
+
+                <VerticalStackLayout Spacing="15" >
+                  <Label Text="Contact Information"
+                          FontAttributes="Bold"
+                          FontSize="16"/>
+
+                  <HorizontalStackLayout Spacing="12">
+
+                    <Label Text="&#xe75c;" FontFamily="MauiSampleFontIcon"
+                              FontSize="16"/>
+
+                    <Label Text="{Binding SelectedCustomer.Email}"
+                              VerticalOptions="Center"/>
+                  </HorizontalStackLayout>
+
+                  <HorizontalStackLayout Spacing="12">
+
+                    <Label Text="&#xe763;" FontFamily="MauiSampleFontIcon"
+                              FontSize="16"  VerticalTextAlignment="Center"/>
+
+                    <Label Text="{Binding SelectedCustomer.Phone}"
+                              VerticalOptions="Center"/>
+                  </HorizontalStackLayout>
+
+                  <HorizontalStackLayout Spacing="12">
+
+                    <Label Text="&#xe76e;" FontFamily="MauiSampleFontIcon"
+                              FontSize="16"  VerticalTextAlignment="Center"/>
+
+                    <Label Text="{Binding SelectedCustomer.Location}"
+                              VerticalOptions="Center"/>
+                  </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+
+                <BoxView HeightRequest="1"
+                        BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"/>
+
+                <!-- Overview -->
+
+                <VerticalStackLayout Spacing="18">
+
+                  <Label Text="Overview"
+                          FontAttributes="Bold"
+                          FontSize="16"/>
+
+                  <Grid ColumnDefinitions="20,*,Auto" ColumnSpacing="8">
+                  <Grid.BindingContext>
+                    <local:DashboardViewModel/> 
+                  </Grid.BindingContext>
+                    <Label Text="&#xe73e;" FontFamily="MauiSampleFontIcon" FontSize="18" VerticalTextAlignment="Center"/>
+
+                    <Label Grid.Column="1"
+                              Text="Total Orders"/>
+
+                    <Label Grid.Column="2"
+                              Text="{Binding SelectedCustomer.TotalOrders}"
+                              FontAttributes="Bold"/>
+                  </Grid>
+
+                  <Grid ColumnDefinitions="20,*,Auto" ColumnSpacing="8">
+                  <Grid.BindingContext>
+                    <local:DashboardViewModel/> 
+                  </Grid.BindingContext>
+                    <Label Text="$"  FontSize="18" VerticalTextAlignment="Center" Padding="5,0,0,0"/>
+
+                    <Label Grid.Column="1"
+                              Text="Total Spent"/>
+
+                    <Label Grid.Column="2"
+                              Text="{Binding SelectedCustomer.TotalSpent,
+                                      StringFormat='${0:N2}'}"
+                              FontAttributes="Bold"/>
+                  </Grid>
+
+                  <Grid ColumnDefinitions="20,*,Auto" ColumnSpacing="8">
+                  <Grid.BindingContext>
+                    <local:DashboardViewModel/> 
+                  </Grid.BindingContext>
+                    <Label Text="&#xe723;" FontFamily="MauiSampleFontIcon"  FontSize="18" VerticalTextAlignment="Center"/>
+
+                    <Label Grid.Column="1"
+                              Text="Last Order"/>
+
+                    <Label Grid.Column="2"
+                              Text="{Binding SelectedCustomer.LastOrderDate,
+                                      StringFormat='{0:MMM d, yyyy}'}"
+                              FontAttributes="Bold"/>
+                  </Grid>
+
+                  <Grid ColumnDefinitions="20,*,Auto" ColumnSpacing="8">
+                    <Label Text="&#xe760;" FontFamily="MauiSampleFontIcon"  FontSize="18" VerticalTextAlignment="Center"/>
+
+                    <Label Grid.Column="1"
+                              Text="Customer Since"/>
+
+                    <Label Grid.Column="2"
+                              Text="{Binding SelectedCustomer.CustomerSinceDays,
+                                      StringFormat='{0} days'}"
+                              FontAttributes="Bold"/>
+                  </Grid>
+
+                </VerticalStackLayout>
+
+              </VerticalStackLayout>
+
+            </ScrollView>
+
+          </Border>
+        </splitter:SplitterPane>
+      </splitter:SfGridSplitter>
+
+      </splitter:SplitterPane>
+      
+    <splitter:SplitterPane Size="220">
+          <Border Margin="8" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                Stroke="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                StrokeShape="RoundRectangle 10">
+
+          <Grid RowDefinitions="Auto,*">
+              <!-- Header -->
+
+              <Grid
+                  Padding="5">
+
+                  <HorizontalStackLayout Spacing="8">
+
+                      <Label
+                          Text="&#xe758;" Padding="0,2,0,0" FontFamily="MauiSampleFontIcon"
+                          FontSize="18"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+
+                      <Label
+                          Text="Activity Timeline"
+                          FontSize="18"
+                          FontAttributes="Bold"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+
+                  </HorizontalStackLayout>
+
+              </Grid>
+
+              <!-- Timeline List -->
+              <CollectionView 
+                  Grid.Row="1"
+                  ItemsSource="{Binding Activities}"
+                  SelectionMode="None">
+
+                  <CollectionView.ItemTemplate>
+                      <DataTemplate>
+                        <Grid Padding="16,10"
+                              ColumnDefinitions="50,*,180">
+                            <!-- Timeline Column -->
+                              <Grid>
+                                  <BoxView WidthRequest="2"
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                                            HorizontalOptions="Center"
+                                            />
+                                  <Border WidthRequest="32"
+                                          HeightRequest="32"
+                                          BackgroundColor="{Binding Color}"
+                                          StrokeThickness="0"
+                                          StrokeShape="RoundRectangle 16"
+                                          HorizontalOptions="Center"
+                                          VerticalOptions="Start">
+
+                                      <Label Text="{Binding Icon}" FontFamily="MauiSampleFontIcon"
+                                              TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                                              FontSize="12"
+                                              HorizontalOptions="Center"
+                                              VerticalOptions="Center" />
+                                  </Border>
+                              </Grid>
+
+                            <!-- Activity Details -->
+
+                            <VerticalStackLayout Grid.Column="1"
+                                                  Spacing="2">
+
+                                <Label Text="{Binding Title}"
+                                        FontSize="14"
+                                        FontAttributes="Bold"
+                                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+
+                                <Label Text="{Binding Description}"
+                                        FontSize="13"
+                                        TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+
+                            </VerticalStackLayout>
+
+                            <!-- Timestamp -->
+
+                            <Label Grid.Column="2"
+                                    Text="{Binding Time, StringFormat='{0:MMM dd, yyyy hh:mm tt}'}"
+                                    FontSize="12"
+                                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}"
+                                    HorizontalTextAlignment="End"
+                                    VerticalOptions="Center" />
+
+                        </Grid>
+
+                    </DataTemplate>
+
+                  </CollectionView.ItemTemplate>
+              </CollectionView>
+            </Grid>
+        </Border>       
+    </splitter:SplitterPane>
+
+</splitter:SfGridSplitter>
+</Grid>
+</localCore:SampleView>

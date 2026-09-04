@@ -69,6 +69,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override bool HitTest(Point touchPoint)
+		{
+			return IsPointInsideRectangle(touchPoint) || IsPointInLabelBounds(touchPoint, LabelRect);
+		}
+
 		internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
 		{
 			ResetPosition();
@@ -111,6 +116,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			RenderRect = Rect.Zero;
 			LabelRect = Rect.Zero;
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		bool IsPointInsideRectangle(Point touchPoint)
+		{
+			double halfStrokeWidth = StrokeWidth / 2;
+			Rect expandedRect = new(
+				RenderRect.X - halfStrokeWidth,
+				RenderRect.Y - halfStrokeWidth,
+				RenderRect.Width + StrokeWidth,
+				RenderRect.Height + StrokeWidth
+			);
+
+			return expandedRect.Contains(touchPoint);
 		}
 
 		#endregion

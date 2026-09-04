@@ -302,199 +302,217 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 null, 
                 OnStrokeWidthPropertyChanged);
 
-        #endregion
+		#endregion
 
-        #region Public Properties
+		#region Public Properties
 
-        /// <summary>
-        /// Gets or sets the type of selection behavior.
-        /// </summary>
-        /// <value>The default value is <see cref="SunburstSelectionType.Single"/>.</value>
-        /// <example>
-        /// <code><![CDATA[
-        /// <sunburst:SfSunburstChart>
-        ///     <sunburst:SfSunburstChart.SelectionSettings>
-        ///         <sunburst:SunburstSelectionSettings Type="Child" />
-        ///     </sunburst:SfSunburstChart.SelectionSettings>
-        /// </sunburst:SfSunburstChart>
-        /// ]]></code>
-        /// # [MainPage.xaml.cs](#tab/tabid-9)
-        /// <code><![CDATA[
-        /// SfSunburstChart sunburstChart = new SfSunburstChart();
-        /// 
-        /// sunburstChart.SelectionSettings = new SunburstSelectionSettings
-        /// {
-        ///     Type = SunburstSelectionType.Child,
-        /// };
-        /// 
-        /// ]]>
-        /// </code>
-        /// </example>
-        public SunburstSelectionType Type
+		/// <summary>
+		/// Gets or sets the type of selection behavior.
+		/// </summary>
+		/// <value>The default value is <see cref="SunburstSelectionType.Single"/>.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-9)
+		/// <code><![CDATA[
+		/// <sunburst:SfSunburstChart>
+		///     <sunburst:SfSunburstChart.SelectionSettings>
+		///         <sunburst:SunburstSelectionSettings Type="Child" />
+		///     </sunburst:SfSunburstChart.SelectionSettings>
+		/// </sunburst:SfSunburstChart>
+		/// ]]></code>
+		/// # [MainPage.xaml.cs](#tab/tabid-10)
+		/// <code><![CDATA[
+		/// SfSunburstChart sunburstChart = new SfSunburstChart();
+		/// 
+		/// sunburstChart.SelectionSettings = new SunburstSelectionSettings
+		/// {
+		///     Type = SunburstSelectionType.Child,
+		/// };
+		/// 
+		/// this.Content = sunburstChart;
+		/// 
+		/// ]]>
+		/// </code>
+		/// </example>
+		public SunburstSelectionType Type
         {
             get { return (SunburstSelectionType)GetValue(TypeProperty); }
             set { SetValue(TypeProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the visual display mode for selected segments.
-        /// </summary>
-        /// <value>The default value is <see cref="SunburstSelectionDisplayMode.HighlightByBrush"/>.</value>
-        /// <example>
-        /// <code><![CDATA[
-        /// <sunburst:SfSunburstChart>
-        ///     <sunburst:SfSunburstChart.SelectionSettings>
-        ///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByStroke" />
-        ///     </sunburst:SfSunburstChart.SelectionSettings>
-        /// </sunburst:SfSunburstChart>
-        /// ]]>
-        /// </code>
-        /// # [MainPage.xaml.cs](#tab/tabid-10)
-        /// <code><![CDATA[
-        /// SfSunburstChart sunburstChart = new SfSunburstChart();
-        /// 
-        /// sunburstChart.SelectionSettings = new SunburstSelectionSettings
-        /// {
-        ///     DisplayMode = SunburstSelectionDisplayMode.HighlightByStroke,
-        /// };
-        /// 
-        /// ]]>
-        /// </code>
-        /// </example>
-        public SunburstSelectionDisplayMode DisplayMode
+		/// <summary>
+		/// Gets or sets the visual display mode for selected segments.
+		/// </summary>
+		/// <value>The default value is <see cref="SunburstSelectionDisplayMode.HighlightByBrush"/>.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-11)
+		/// <code><![CDATA[
+		/// <sunburst:SfSunburstChart>
+		///     <sunburst:SfSunburstChart.SelectionSettings>
+		///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByStroke" />
+		///     </sunburst:SfSunburstChart.SelectionSettings>
+		/// </sunburst:SfSunburstChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-12)
+		/// <code><![CDATA[
+		/// SfSunburstChart sunburstChart = new SfSunburstChart();
+		/// 
+		/// sunburstChart.SelectionSettings = new SunburstSelectionSettings
+		/// {
+		///     DisplayMode = SunburstSelectionDisplayMode.HighlightByStroke,
+		/// };
+		/// 
+		/// this.Content = sunburstChart;
+		/// 
+		/// ]]>
+		/// </code>
+		/// </example>
+		public SunburstSelectionDisplayMode DisplayMode
         {
             get { return (SunburstSelectionDisplayMode)GetValue(DisplayModeProperty); }
             set { SetValue(DisplayModeProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the opacity value for selected segments when <see cref="DisplayMode"/> is set to <see cref="SunburstSelectionDisplayMode.HighlightByOpacity"/>.
-        /// </summary>
-        /// <remarks>
-        /// The value should be between 0 and 1, where 0 is fully transparent and 1 is fully opaque.
-        /// </remarks>
-        /// <value>The default value is 0.7.</value>
-        /// <example>
-        /// <code><![CDATA[
-        /// <sunburst:SfSunburstChart>
-        ///     <sunburst:SfSunburstChart.SelectionSettings>
-        ///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByOpacity" Opacity="0.5" />
-        ///     </sunburst:SfSunburstChart.SelectionSettings>
-        /// </sunburst:SfSunburstChart>
-        /// ]]>
-        /// </code>
-        /// # [MainPage.xaml.cs](#tab/tabid-11)
-        /// <code><![CDATA[
-        /// SfSunburstChart sunburstChart = new SfSunburstChart();
-        /// 
-        /// sunburstChart.SelectionSettings = new SunburstSelectionSettings
-        /// {
-        ///     DisplayMode = SunburstSelectionDisplayMode.HighlightByOpacity,
-        ///     Opacity= 0.5
-        /// };
-        /// 
-        /// ]]>
-        /// </code>
-        /// </example>
-        public double Opacity
+		/// <summary>
+		/// Gets or sets the opacity value for selected segments when <see cref="DisplayMode"/> is set to <see cref="SunburstSelectionDisplayMode.HighlightByOpacity"/>.
+		/// </summary>
+		/// <remarks>
+		/// The value should be between 0 and 1, where 0 is fully transparent and 1 is fully opaque.
+		/// </remarks>
+		/// <value>The default value is 0.7.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-13)
+		/// <code><![CDATA[
+		/// <sunburst:SfSunburstChart>
+		///     <sunburst:SfSunburstChart.SelectionSettings>
+		///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByOpacity" Opacity="0.5" />
+		///     </sunburst:SfSunburstChart.SelectionSettings>
+		/// </sunburst:SfSunburstChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-14)
+		/// <code><![CDATA[
+		/// SfSunburstChart sunburstChart = new SfSunburstChart();
+		/// 
+		/// sunburstChart.SelectionSettings = new SunburstSelectionSettings
+		/// {
+		///     DisplayMode = SunburstSelectionDisplayMode.HighlightByOpacity,
+		///     Opacity= 0.5
+		/// };
+		/// 
+		/// this.Content = sunburstChart;
+		/// 
+		/// ]]>
+		/// </code>
+		/// </example>
+		public double Opacity
         {
             get { return (double)GetValue(OpacityProperty); }
             set { SetValue(OpacityProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the brush to be applied to selected segments when <see cref="DisplayMode"/> is set to <see cref="SunburstSelectionDisplayMode.HighlightByBrush"/>.
-        /// </summary>
-        /// <value>The default value is  #1C1B1F.</value>
-        /// <example>
-        /// <code><![CDATA[
-        /// <sunburst:SfSunburstChart>
-        ///     <sunburst:SfSunburstChart.SelectionSettings>
-        ///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByBrush" Fill="Blue" />
-        ///     </sunburst:SfSunburstChart.SelectionSettings>
-        /// </sunburst:SfSunburstChart>
-        /// ]]>
-        /// </code>
-        /// # [MainPage.xaml.cs](#tab/tabid-12)
-        /// <code><![CDATA[
-        /// SfSunburstChart sunburstChart = new SfSunburstChart();
-        /// 
-        /// sunburstChart.SelectionSettings = new SunburstSelectionSettings
-        /// {
-        ///     DisplayMode = SunburstSelectionDisplayMode.HighlightByBrush,
-        ///     Fill = new SolidColorBrush(Colors.Blue)
-        /// };
-        /// 
-        /// ]]>
-        /// </code>
-        /// </example>
-        public Brush Fill
+		/// <summary>
+		/// Gets or sets the brush to be applied to selected segments when <see cref="DisplayMode"/> is set to <see cref="SunburstSelectionDisplayMode.HighlightByBrush"/>.
+		/// </summary>
+		/// <value>The default value is  #1C1B1F.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-15)
+		/// <code><![CDATA[
+		/// <sunburst:SfSunburstChart>
+		///     <sunburst:SfSunburstChart.SelectionSettings>
+		///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByBrush" Fill="Blue" />
+		///     </sunburst:SfSunburstChart.SelectionSettings>
+		/// </sunburst:SfSunburstChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-16)
+		/// <code><![CDATA[
+		/// SfSunburstChart sunburstChart = new SfSunburstChart();
+		/// 
+		/// sunburstChart.SelectionSettings = new SunburstSelectionSettings
+		/// {
+		///     DisplayMode = SunburstSelectionDisplayMode.HighlightByBrush,
+		///     Fill = new SolidColorBrush(Colors.Blue)
+		/// };
+		/// 
+		/// this.Content = sunburstChart;
+		/// 
+		/// ]]>
+		/// </code>
+		/// </example>
+		public Brush Fill
         {
             get { return (Brush)GetValue(FillProperty); }
             set { SetValue(FillProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the brush to be applied to the stroke of selected segments when <see cref="DisplayMode"/> is set to <see cref="SunburstSelectionDisplayMode.HighlightByStroke"/>.
-        /// </summary>
-        /// <value>The default value is  #1C1B1F.</value>
-        /// <example>
-        /// <code><![CDATA[
-        /// <sunburst:SfSunburstChart>
-        ///     <sunburst:SfSunburstChart.SelectionSettings>
-        ///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByStroke" Stroke="Green" />
-        ///     </sunburst:SfSunburstChart.SelectionSettings>
-        /// </sunburst:SfSunburstChart>
-        /// ]]>
-        /// </code>
-        /// # [MainPage.xaml.cs](#tab/tabid-13)
-        /// <code><![CDATA[
-        /// SfSunburstChart sunburstChart = new SfSunburstChart();
-        /// 
-        /// sunburstChart.SelectionSettings = new SunburstSelectionSettings
-        /// {
-        ///     DisplayMode = SunburstSelectionDisplayMode.HighlightByStroke,
-        ///     Stroke = new SolidColorBrush(Colors.Green),
-        /// };
-        /// 
-        /// ]]>
-        /// </code>
-        /// </example>
-        public Brush Stroke
+		/// <summary>
+		/// Gets or sets the brush to be applied to the stroke of selected segments when <see cref="DisplayMode"/> is set to <see cref="SunburstSelectionDisplayMode.HighlightByStroke"/>.
+		/// </summary>
+		/// <value>The default value is  #1C1B1F.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-17)
+		/// <code><![CDATA[
+		/// <sunburst:SfSunburstChart>
+		///     <sunburst:SfSunburstChart.SelectionSettings>
+		///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByStroke" Stroke="Green" />
+		///     </sunburst:SfSunburstChart.SelectionSettings>
+		/// </sunburst:SfSunburstChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-18)
+		/// <code><![CDATA[
+		/// SfSunburstChart sunburstChart = new SfSunburstChart();
+		/// 
+		/// sunburstChart.SelectionSettings = new SunburstSelectionSettings
+		/// {
+		///     DisplayMode = SunburstSelectionDisplayMode.HighlightByStroke,
+		///     Stroke = new SolidColorBrush(Colors.Green),
+		/// };
+		/// 
+		/// this.Content = sunburstChart;
+		/// 
+		/// ]]>
+		/// </code>
+		/// </example>
+		public Brush Stroke
         {
             get { return (Brush)GetValue(StrokeProperty); }
             set { SetValue(StrokeProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets the stroke width for selected segments when <see cref="DisplayMode"/> is set to <see cref="SunburstSelectionDisplayMode.HighlightByStroke"/>.
-        /// </summary>
-        /// <value>The default value is 2.0.</value>
-        /// <remarks>
-        /// It is recommended to use it when value is greater than 0.
-        /// </remarks>
-        /// <example>
-        /// <code><![CDATA[
-        /// <sunburst:SfSunburstChart>
-        ///     <sunburst:SfSunburstChart.SelectionSettings>
-        ///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByStroke" StrokeWidth="3" />
-        ///     </sunburst:SfSunburstChart.SelectionSettings>
-        /// </sunburst:SfSunburstChart>
-        /// ]]>
-        /// </code>
-        /// # [MainPage.xaml.cs](#tab/tabid-14)
-        /// <code><![CDATA[
-        /// SfSunburstChart sunburstChart = new SfSunburstChart();
-        /// 
-        /// sunburstChart.SelectionSettings = new SunburstSelectionSettings
-        /// {
-        ///     DisplayMode = SunburstSelectionDisplayMode.HighlightByStroke,
-        ///     StrokeWidth = 3
-        /// };
-        /// ]]>
-        /// </code>
-        /// </example>
-        public double StrokeWidth
+		/// <summary>
+		/// Gets or sets the stroke width for selected segments when <see cref="DisplayMode"/> is set to <see cref="SunburstSelectionDisplayMode.HighlightByStroke"/>.
+		/// </summary>
+		/// <value>The default value is 2.0.</value>
+		/// <remarks>
+		/// It is recommended to use it when value is greater than 0.
+		/// </remarks>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-19)
+		/// <code><![CDATA[
+		/// <sunburst:SfSunburstChart>
+		///     <sunburst:SfSunburstChart.SelectionSettings>
+		///         <sunburst:SunburstSelectionSettings DisplayMode="HighlightByStroke" StrokeWidth="3" />
+		///     </sunburst:SfSunburstChart.SelectionSettings>
+		/// </sunburst:SfSunburstChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-20)
+		/// <code><![CDATA[
+		/// SfSunburstChart sunburstChart = new SfSunburstChart();
+		/// 
+		/// sunburstChart.SelectionSettings = new SunburstSelectionSettings
+		/// {
+		///     DisplayMode = SunburstSelectionDisplayMode.HighlightByStroke,
+		///     StrokeWidth = 3
+		/// };
+		/// this.Content = sunburstChart;
+		/// 
+		/// ]]>
+		/// </code>
+		/// </example>
+		public double StrokeWidth
         {
             get { return (double)GetValue(StrokeWidthProperty); }
             set { SetValue(StrokeWidthProperty, value); }

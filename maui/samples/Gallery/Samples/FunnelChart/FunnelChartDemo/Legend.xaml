@@ -6,18 +6,19 @@
              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
              xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery">
 
-    <localCore:SampleView.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <local:FunnelChartColorResources/>
-            </ResourceDictionary.MergedDictionaries>
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <local:FunnelChartColorResources/>
+      </ResourceDictionary.MergedDictionaries>
 
-            <converter:BrushToColorConverter x:Key="brushToColor" />
-        </ResourceDictionary>
-    </localCore:SampleView.Resources>
-    
-    <localCore:SampleView.Content>
-        <chart:SfFunnelChart  HorizontalOptions="Fill"
+      <converter:BrushToColorConverter x:Key="brushToColor" />
+      <local:TooltipValueConverter x:Key="valueConverter"/>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+
+  <localCore:SampleView.Content>
+    <chart:SfFunnelChart  HorizontalOptions="Fill"
                               VerticalOptions="Fill"
                               Margin="{OnPlatform Android='0,0,0,50', iOS='0,0,0,50', Default='0,0,0,0'}"
                               PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight2}, Dark={StaticResource PaletteBrushesDark2}}" 
@@ -28,31 +29,31 @@
                               YBindingPath="Size"
                               x:Name="Chart"
                               ShowDataLabels="True">
-                <chart:SfFunnelChart.BindingContext>
-                    <local:ViewModel />
-                </chart:SfFunnelChart.BindingContext>
-                <chart:SfFunnelChart.Title>
-                <Label Text="HR Recruitment Results - Q1FY21"
+      <chart:SfFunnelChart.BindingContext>
+        <local:ViewModel />
+      </chart:SfFunnelChart.BindingContext>
+      <chart:SfFunnelChart.Title>
+        <Label Text="HR Recruitment Results - Q1FY21"
                            HorizontalOptions="Fill"
                            HorizontalTextAlignment="Center"
                            VerticalOptions="Center"
                            FontSize="16" />
-                </chart:SfFunnelChart.Title>
-            
-                <chart:SfFunnelChart.Legend >
-                <chart:ChartLegend Placement="{OnPlatform WinUI='Bottom',MacCatalyst='Bottom',Default='Top'}">
-                    <chart:ChartLegend.ItemTemplate >
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="Auto,Auto,Auto" Padding="5,0,5,0" Margin="2">
-                                <Label Grid.Column="0"
+      </chart:SfFunnelChart.Title>
+
+      <chart:SfFunnelChart.Legend >
+        <chart:ChartLegend Placement="{OnPlatform WinUI='Bottom',MacCatalyst='Bottom',Default='Top'}">
+          <chart:ChartLegend.ItemTemplate >
+            <DataTemplate>
+              <Grid ColumnDefinitions="Auto,Auto,Auto" Padding="5,0,5,0" x:DataType="chart:LegendItem" Margin="2">
+                <Label Grid.Column="0"
                                        FontSize="13"
                                        VerticalTextAlignment="Center"
                                        HorizontalOptions="End"
                                        HorizontalTextAlignment="Center"
-                                       Text="{Binding Item.Value}"
+                                       Text="{Binding Item,Converter={StaticResource valueConverter},ConverterParameter='Value'}"
                                        Padding="5" />
 
-                                <BoxView Grid.Column="1"
+                <BoxView Grid.Column="1"
                                          Color="{Binding IconBrush,Converter={StaticResource brushToColor}}"
                                          HorizontalOptions="Center"
                                          VerticalOptions="Center"
@@ -60,29 +61,27 @@
                                          HeightRequest="10"
                                          WidthRequest="20" />
 
-                                <Label Grid.Column="2"
+                <Label Grid.Column="2"
                                        FontSize="13"
                                        VerticalTextAlignment="Center"
-                                       Text=" {Binding Item.Name}"
+                                       Text="{Binding Item, Converter={StaticResource valueConverter}, ConverterParameter='Name'}"
                                        HorizontalOptions="Start"
                                        HorizontalTextAlignment="Center"
                                        Padding="5" />
-                            </Grid>
-                        </DataTemplate>
-                    </chart:ChartLegend.ItemTemplate>
-                </chart:ChartLegend>
-                </chart:SfFunnelChart.Legend>
+              </Grid>
+            </DataTemplate>
+          </chart:ChartLegend.ItemTemplate>
+        </chart:ChartLegend>
+      </chart:SfFunnelChart.Legend>
 
 
-            <chart:SfFunnelChart.DataLabelSettings>
-                <chart:FunnelDataLabelSettings >
-                        <chart:FunnelDataLabelSettings.LabelStyle>
-                        <chart:ChartDataLabelStyle LabelFormat="#.##'%'" Margin="3,2"/>
-                        </chart:FunnelDataLabelSettings.LabelStyle>
-                    </chart:FunnelDataLabelSettings>
-                </chart:SfFunnelChart.DataLabelSettings>
-            </chart:SfFunnelChart>
-    </localCore:SampleView.Content>
+      <chart:SfFunnelChart.DataLabelSettings>
+        <chart:FunnelDataLabelSettings >
+          <chart:FunnelDataLabelSettings.LabelStyle>
+            <chart:ChartDataLabelStyle LabelFormat="#.##'%'" Margin="3,2" FontSize="16"/>
+          </chart:FunnelDataLabelSettings.LabelStyle>
+        </chart:FunnelDataLabelSettings>
+      </chart:SfFunnelChart.DataLabelSettings>
+    </chart:SfFunnelChart>
+  </localCore:SampleView.Content>
 </localCore:SampleView>
-
-    

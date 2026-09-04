@@ -1,0 +1,81 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.PointColorCustomization"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
+    
+    <localCore:SampleView.Content>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+
+            <Grid.BindingContext>
+                <local:PointColorViewModel/>
+            </Grid.BindingContext>
+
+            <chart:SfCartesianChart  Grid.Row="0" x:Name="chart">
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Average Monthly Temperature in London"
+                           FontSize="18"                                                      
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" Margin="0,0,0,20"/>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.ZoomPanBehavior>
+                    <chart:ChartZoomPanBehavior EnableDoubleTap="False" EnablePinchZooming="False"/>
+                </chart:SfCartesianChart.ZoomPanBehavior>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:CategoryAxis LabelPlacement="BetweenTicks"  
+                                        Interval="1" 
+                                        ShowMajorGridLines="false" 
+                                        AutoScrollingDelta="{OnPlatform iOS=6, Android=6}" 
+                                        AutoScrollingMode="Start">
+                    </chart:CategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis Interval="10" Maximum="90" ShowMajorGridLines="True">
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle/>
+                        </chart:NumericalAxis.LabelStyle>
+
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Day Temperature [&#176;F]"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:ColumnSeries ItemsSource="{Binding TemperatureData}"
+                                    XBindingPath="Name"
+                                    YBindingPath="Value"
+                                    PointColorPath="PointColor"
+                                    ShowDataLabels="True">
+
+                    <chart:ColumnSeries.DataLabelSettings>
+                        <chart:CartesianDataLabelSettings UseSeriesPalette="True">
+                            <chart:CartesianDataLabelSettings.LabelStyle>
+                                <chart:ChartDataLabelStyle LabelFormat="0.#&#186;F"/>
+                            </chart:CartesianDataLabelSettings.LabelStyle>
+                        </chart:CartesianDataLabelSettings>
+                    </chart:ColumnSeries.DataLabelSettings>
+                </chart:ColumnSeries>
+                
+            </chart:SfCartesianChart>
+            
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+                
+                <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" world-weather" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://world-weather.info/forecast/united_kingdom/london/january-2025/"/>
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+            
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

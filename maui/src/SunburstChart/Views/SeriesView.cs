@@ -1,5 +1,6 @@
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Graphics;
+using Syncfusion.Maui.Toolkit.Charts;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.SunburstChart
@@ -56,8 +57,14 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                         var segment = segments[i];
                         if (!segment.IsSelected)
                         {
-                            canvas.SaveState();
-                            segment.Draw(canvas);
+							// InvalidateDrawable triggers only OnDraw, not OnLayout.
+							// Since size animation happens in OnLayout, we manually call it to update the animation.
+							if (_chart.DrillDownManager != null)
+								segment.OnLayout();
+
+							canvas.SaveState();
+							_chart.DrillDownManager?.RendererSegments(segment, i);
+							segment.Draw(canvas);
                             canvas.RestoreState();
                         }
                     }
@@ -67,7 +74,13 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                         var segment = segments[i];
                         if (segment.IsSelected)
                         {
-                            canvas.SaveState();
+							// InvalidateDrawable triggers only OnDraw, not OnLayout.
+							// Since size animation happens in OnLayout, we manually call it to update the animation.
+							if (_chart.DrillDownManager != null)
+								segment.OnLayout();
+
+							canvas.SaveState();
+							_chart.DrillDownManager?.RendererSegments(segment, i);
                             segment.Draw(canvas);
                             canvas.RestoreState();
                         }
@@ -83,7 +96,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                     }
                 }
 #else
-				// Other platforms drawing approach
+                // Other platforms drawing approach
 				canvas.SaveState();
 
 				if (hasSelection)
@@ -93,6 +106,10 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 						var segment = segments[i];
 						if (!segment.IsSelected)
 						{
+							if (_chart.DrillDownManager != null)
+								segment.OnLayout();
+
+							_chart.DrillDownManager?.RendererSegments(segment, i);
 							segment.Draw(canvas);
 						}
 					}
@@ -102,6 +119,10 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 						var segment = segments[i];
 						if (segment.IsSelected)
 						{
+							if (_chart.DrillDownManager != null)
+								segment.OnLayout();
+
+							_chart.DrillDownManager?.RendererSegments(segment, i);
 							segment.Draw(canvas);
 						}
 					}
@@ -113,12 +134,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 						segments[i].Draw(canvas);
 					}
 				}
-
-                canvas.RestoreState();
+	
+				canvas.RestoreState();
 #endif
-            }
+			}
 
-            canvas.RestoreState();
+			canvas.RestoreState();
         }
 
         /// <summary>
@@ -134,7 +155,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 }
             }
 
-            if (_chart.CanAnimate())
+			if (_chart.CanAnimate())
             {
                 StartAnimation();
             }
@@ -182,7 +203,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 if (_chart.ShowLabels)
                 {
                     _chart.NeedToAnimateDataLabel = true;
-                    _chart.SunburstAnimation ?.Commit(this, _animationName, 16, 1000, null, OnAnimationFinished, () => false);
+                    _chart.DrilldownAnimation?.Commit(this, _animationName, 16, 1000, null, OnAnimationFinished, () => false);
                 }
             }
             else
@@ -192,23 +213,26 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        /// <summary>
-        /// Initializes and starts the chart's animation sequence.
-        /// </summary>
-        void StartAnimation()
-        {
-            //Todo: Need to move this code to series property changed event. Fow now added here.
-            if (_chart.EnableAnimation && _chart.SunburstAnimation  == null)
-            {
-                _chart.SunburstAnimation  = new Animation(OnAnimationStart);
-            }
-            else if (!_chart.EnableAnimation && _chart.SunburstAnimation  != null)
-            {
-                AbortAnimation();
-            }
+		/// <summary>
+		/// Initializes and starts the chart's animation sequence.
+		/// </summary>
+		void StartAnimation()
+		{
+			//Todo: Need to move this code to series property changed event. Fow now added here.
+			if (_chart.EnableAnimation && _chart.DrilldownAnimation == null)
+			{
+				_chart.DrilldownAnimation = new Animation(OnAnimationStart);
+			}
+			else if (!_chart.EnableAnimation && _chart.DrilldownAnimation != null)
+			{
+				AbortAnimation();
+			}
 
-			//chart.AnimateSunburstChart(OnAnimationStart);
-			_chart.SunburstAnimation ?.Commit(this, _animationName, 1, (uint)(_chart.AnimationDuration * 1000), null, OnAnimationFinished, () => false);
+			if (_chart.DrilldownAnimation != null)
+			{
+				//chart.AnimateSunburstChart(OnAnimationStart);
+				_chart.DrilldownAnimation.Commit(this, _animationName, 1, (uint)(_chart.AnimationDuration * 1000), null, OnAnimationFinished, () => false);
+			}
 		}
 
         /// <summary>

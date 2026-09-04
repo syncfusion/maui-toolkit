@@ -19,54 +19,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
         internal DateTime? _internalSelectedDateTime;
 
         /// <summary>
-        /// Holds the day column information.
-        /// </summary>
-        PickerColumn _dayColumn;
-
-        /// <summary>
-        /// Holds the month column information.
-        /// </summary>
-        PickerColumn _monthColumn;
-
-        /// <summary>
-        /// Holds the year column information.
-        /// </summary>
-        PickerColumn _yearColumn;
-
-        /// <summary>
-        /// Holds the hour column information.
-        /// </summary>
-        PickerColumn _hourColumn;
-
-        /// <summary>
-        /// Holds the minute column information.
-        /// </summary>
-        PickerColumn _minuteColumn;
-
-        /// <summary>
-        /// Holds the second column information.
-        /// </summary>
-        PickerColumn _secondColumn;
-
-        /// <summary>
-        /// Holds the meridiem column information.
-        /// </summary>
-        PickerColumn _meridiemColumn;
-
-        /// <summary>
-        /// Holds the millisecond column infromation.
-        /// </summary>
-        PickerColumn _millisecondColumn;
-
-        /// <summary>
         /// Holds the picker column collection.
         /// </summary>
         ObservableCollection<PickerColumn> _columns;
-
-        /// <summary>
-        /// Holds the value to identify the header selection(date or time).
-        /// </summary>
-        int _selectedIndex;
 
         #endregion
 
@@ -439,6 +394,232 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 defaultValueCreator: bindable => Color.FromArgb("#611C1B1F"),
                 propertyChanged: OnDisabledTextColorChanged);
 
+        /// <summary>
+        /// Identifies the <see cref="NormalDayColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalDayColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalDayColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalDayColumnTextColor),
+                typeof(Color),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalDayColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMonthColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMonthColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMonthColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalMonthColumnTextColor),
+                typeof(Color),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalMonthColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalYearColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalYearColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalYearColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalYearColumnTextColor),
+                typeof(Color),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalYearColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalDayColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalDayColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalDayColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalDayColumnFontSize),
+                typeof(double),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalDayColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMonthColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMonthColumnFontSize"/> dependenc
+        /// ///  property.
+        /// </value>
+        internal static readonly BindableProperty NormalMonthColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalMonthColumnFontSize),
+                typeof(double),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalMonthColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalYearColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalYearColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalYearColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalYearColumnFontSize),
+                typeof(double),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalYearColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalHourColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalHourColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalHourColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalHourColumnTextColor),
+                typeof(Color),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalHourColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMinuteColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMinuteColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMinuteColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalMinuteColumnTextColor),
+                typeof(Color),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalMinuteColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalSecondColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalSecondColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalSecondColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalSecondColumnTextColor),
+                typeof(Color),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalSecondColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMeridiemColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMeridiemColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMeridiemColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalMeridiemColumnTextColor),
+                typeof(Color),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalMeridiemColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMilliSecondColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMilliSecondColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMilliSecondColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalMilliSecondColumnTextColor),
+                typeof(Color),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalMilliSecondColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalHourColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalHourColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalHourColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalHourColumnFontSize),
+                typeof(double),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalHourColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMinuteColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMinuteColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMinuteColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalMinuteColumnFontSize),
+                typeof(double),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalMinuteColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalSecondColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalSecondColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalSecondColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalSecondColumnFontSize),
+                typeof(double),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalSecondColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMeridiemColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// /// The identifier for <see cref="NormalMeridiemColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMeridiemColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalMeridiemColumnFontSize),
+                typeof(double),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalMeridiemColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMilliSecondColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMilliSecondColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMilliSecondColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalMilliSecondColumnFontSize),
+                typeof(double),
+                typeof(SfDateTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalMilliSecondColumnFontSizeChanged);
+
+
         #endregion
 
         #region Constructor
@@ -448,16 +629,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         public SfDateTimePicker()
         {
-            _dayColumn = new PickerColumn();
-            _monthColumn = new PickerColumn();
-            _yearColumn = new PickerColumn();
-            _hourColumn = new PickerColumn();
-            _minuteColumn = new PickerColumn();
-            _secondColumn = new PickerColumn();
-            _meridiemColumn = new PickerColumn();
-            _millisecondColumn = new PickerColumn();
+            DayColumn = new PickerColumn();
+            MonthColumn = new PickerColumn();
+            YearColumn = new PickerColumn();
+            HourColumn = new PickerColumn();
+            MinuteColumn = new PickerColumn();
+            SecondColumn = new PickerColumn();
+            MeridiemColumn = new PickerColumn();
+            MillisecondColumn = new PickerColumn();
             _columns = new ObservableCollection<PickerColumn>();
-            _selectedIndex = 0;
+            SelectedIndex = 0;
             Initialize();
             GeneratePickerColumns();
             BaseColumns = _columns;
@@ -936,6 +1117,51 @@ namespace Syncfusion.Maui.Toolkit.Picker
         #region Internal Properties
 
         /// <summary>
+        /// Gets or sets the value to identify the header selection(date or time).
+        /// </summary>
+        internal int SelectedIndex { get; set; }
+
+        /// <summary>
+        /// Gets or sets the day column information.
+        /// </summary>
+        internal PickerColumn DayColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the month column information.
+        /// </summary>
+        internal PickerColumn MonthColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the year column information.
+        /// </summary>
+        internal PickerColumn YearColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the hour column information.
+        /// </summary>
+        internal PickerColumn HourColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minute column information.
+        /// </summary>
+        internal PickerColumn MinuteColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the second column information.
+        /// </summary>
+        internal PickerColumn SecondColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meridiem column information.
+        /// </summary>
+        internal PickerColumn MeridiemColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the millisecond column information.
+        /// </summary>
+        internal PickerColumn MillisecondColumn { get; set; }
+
+        /// <summary>
         /// Gets or sets the background color of the picker.
         /// </summary>
         internal Color DateTimePickerBackground
@@ -1022,6 +1248,150 @@ namespace Syncfusion.Maui.Toolkit.Picker
             set { SetValue(DisabledTextColorProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the normal day column text color of the text style.
+        /// </summary>
+        internal Color NormalDayColumnTextColor
+        {
+            get { return (Color)GetValue(NormalDayColumnTextColorProperty); }
+            set { SetValue(NormalDayColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal month column text color of the text style.
+        /// </summary>
+        internal Color NormalMonthColumnTextColor
+        {
+            get { return (Color)GetValue(NormalMonthColumnTextColorProperty); }
+            set { SetValue(NormalMonthColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal year column text color of the text style.
+        /// </summary>
+        internal Color NormalYearColumnTextColor
+        {
+            get { return (Color)GetValue(NormalYearColumnTextColorProperty); }
+            set { SetValue(NormalYearColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal day column font size of the text style.
+        /// </summary>
+        internal double NormalDayColumnFontSize
+        {
+            get { return (double)GetValue(NormalDayColumnFontSizeProperty); }
+            set { SetValue(NormalDayColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal month column font size of the text style.
+        /// </summary>
+        internal double NormalMonthColumnFontSize
+        {
+            get { return (double)GetValue(NormalMonthColumnFontSizeProperty); }
+            set { SetValue(NormalMonthColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal year column font size of the text style.
+        /// </summary>
+        internal double NormalYearColumnFontSize
+        {
+            get { return (double)GetValue(NormalYearColumnFontSizeProperty); }
+            set { SetValue(NormalYearColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal hour column text color of the text style.
+        /// </summary>
+        internal Color NormalHourColumnTextColor
+        {
+            get { return (Color)GetValue(NormalHourColumnTextColorProperty); }
+            set { SetValue(NormalHourColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal minute column text color of the text style.
+        /// </summary>
+        internal Color NormalMinuteColumnTextColor
+        {
+            get { return (Color)GetValue(NormalMinuteColumnTextColorProperty); }
+            set { SetValue(NormalMinuteColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal second column text color of the text style.
+        /// </summary>
+        internal Color NormalSecondColumnTextColor
+        {
+            get { return (Color)GetValue(NormalSecondColumnTextColorProperty); }
+            set { SetValue(NormalSecondColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal meridiem column text color of the text style.
+        /// </summary>
+        internal Color NormalMeridiemColumnTextColor
+        {
+            get { return (Color)GetValue(NormalMeridiemColumnTextColorProperty); }
+            set { SetValue(NormalMeridiemColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal milli second column text color of the text style.
+        /// </summary>
+        internal Color NormalMilliSecondColumnTextColor
+        {
+            get { return (Color)GetValue(NormalMilliSecondColumnTextColorProperty); }
+            set { SetValue(NormalMilliSecondColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal hour column font size of the text style.
+        /// </summary>
+        internal double NormalHourColumnFontSize
+        {
+            get { return (double)GetValue(NormalHourColumnFontSizeProperty); }
+            set { SetValue(NormalHourColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal minute column font size of the text style.
+        /// </summary>
+        internal double NormalMinuteColumnFontSize
+        {
+            get { return (double)GetValue(NormalMinuteColumnFontSizeProperty); }
+            set { SetValue(NormalMinuteColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal second column font size of the text style.
+        /// </summary>
+        internal double NormalSecondColumnFontSize
+        {
+            get { return (double)GetValue(NormalSecondColumnFontSizeProperty); }
+            set { SetValue(NormalSecondColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal meridiem column font size of the text style.
+        /// </summary>
+        internal double NormalMeridiemColumnFontSize
+        {
+            get { return (double)GetValue(NormalMeridiemColumnFontSizeProperty); }
+            set { SetValue(NormalMeridiemColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal milli second column font size of the text style.
+        /// </summary>
+        internal double NormalMilliSecondColumnFontSize
+        {
+            get { return (double)GetValue(NormalMilliSecondColumnFontSizeProperty); }
+            set { SetValue(NormalMilliSecondColumnFontSizeProperty, value); }
+        }
+
         #endregion
 
         #region Internal Methods
@@ -1031,9 +1401,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void ResetDateColumns()
         {
-            _dayColumn = new PickerColumn();
-            _monthColumn = new PickerColumn();
-            _yearColumn = new PickerColumn();
+            DayColumn = new PickerColumn();
+            MonthColumn = new PickerColumn();
+            YearColumn = new PickerColumn();
             GeneratePickerColumns();
             BaseColumns.Clear();
             BaseColumns = _columns;
@@ -1083,7 +1453,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else
             {
-                selectedTimeNullable = this.SelectedDate;
+                selectedTimeNullable = SelectedDate;
             }
 
             if (!selectedTimeNullable.HasValue)
@@ -1109,7 +1479,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">Selection changed event arguments.</param>
         void OnPickerSelectionIndexChanged(object? sender, PickerSelectionChangedEventArgs e)
         {
-            if (_selectedIndex == 0)
+            if (SelectedIndex == 0)
             {
                 OnDatePickerSelectionIndexChanged(e);
             }
@@ -1139,7 +1509,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 0:
                     {
                         int day = 1;
-                        if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && dayCollection.Count > e.NewValue)
+                        if (DayColumn.ItemsSource != null && DayColumn.ItemsSource is ObservableCollection<string> dayCollection && dayCollection.Count > e.NewValue)
                         {
                             //// Get the day value based on the selected index changes value.
                             day = dayCollection[e.NewValue].Length <= 2 ? int.Parse(dayCollection[e.NewValue]) : int.Parse(dayCollection[e.NewValue].Substring(dayCollection[e.NewValue].Length - 2));
@@ -1153,7 +1523,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 1:
                     {
                         int month = 1;
-                        if (_monthColumn.ItemsSource != null && _monthColumn.ItemsSource is ObservableCollection<string> monthCollection && monthCollection.Count > e.NewValue)
+                        if (MonthColumn.ItemsSource != null && MonthColumn.ItemsSource is ObservableCollection<string> monthCollection && monthCollection.Count > e.NewValue)
                         {
                             if (monthFormat == "M" || monthFormat == "MM")
                             {
@@ -1175,11 +1545,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         }
 
                         ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, previousSelectedDate.Year, MinimumDate, maxDate, DayInterval);
-                        ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> previousDays = DayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
                         //// Check the month selection changes needed to update the days collection.
                         if (!PickerHelper.IsCollectionEquals(days, previousDays))
                         {
-                            _dayColumn.ItemsSource = days;
+                            DayColumn.ItemsSource = days;
                         }
 
                         //// Check the new days collection have a selected day value, if not then update the nearby value.
@@ -1194,18 +1564,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 2:
                     {
                         int year = MinimumDate.Year;
-                        if (_yearColumn.ItemsSource != null && _yearColumn.ItemsSource is ObservableCollection<string> yearCollection && yearCollection.Count > e.NewValue)
+                        if (YearColumn.ItemsSource != null && YearColumn.ItemsSource is ObservableCollection<string> yearCollection && yearCollection.Count > e.NewValue)
                         {
                             //// Get the year value based on the selected index changes value.
                             year = int.Parse(yearCollection[e.NewValue]);
                         }
 
                         ObservableCollection<string> months = DatePickerHelper.GetMonths(monthFormat, year, MinimumDate, maxDate, MonthInterval);
-                        ObservableCollection<string> previousMonths = _monthColumn.ItemsSource is ObservableCollection<string> previousMonthCollection ? previousMonthCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> previousMonths = MonthColumn.ItemsSource is ObservableCollection<string> previousMonthCollection ? previousMonthCollection : new ObservableCollection<string>();
                         //// Check the year index changes needed to update the month collection.
                         if (!PickerHelper.IsCollectionEquals(months, previousMonths))
                         {
-                            _monthColumn.ItemsSource = months;
+                            MonthColumn.ItemsSource = months;
                         }
 
                         //// Check the month collection have selected month value, if not then update the nearby value.
@@ -1229,11 +1599,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         }
 
                         ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, year, MinimumDate, maxDate, DayInterval);
-                        ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> previousDays = DayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
                         //// Check the year and month(if month items source updated) changes needed to change the day collection.
                         if (!PickerHelper.IsCollectionEquals(days, previousDays))
                         {
-                            _dayColumn.ItemsSource = days;
+                            DayColumn.ItemsSource = days;
                         }
 
                         //// Check the day collection have selected day value, if not then update the nearby value.
@@ -1252,7 +1622,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 // If it does, revert the day column selection to the previous value
                 if (BlackoutDateTimes.Any(blackOutDateTime => DatePickerHelper.IsBlackoutDateTime(blackOutDateTime, selectedDate, out bool isTimeSpanAtZero)))
                 {
-                    _dayColumn.SelectedIndex = e.OldValue;
+                    DayColumn.SelectedIndex = e.OldValue;
                 }
                 // Set the internal selected date-time to the newly selected value
                 _internalSelectedDateTime = selectedDate;
@@ -1294,7 +1664,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 0:
                     {
                         int hour = 0;
-                        if (_hourColumn.ItemsSource != null && _hourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > e.NewValue)
+                        if (HourColumn.ItemsSource != null && HourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > e.NewValue)
                         {
                             //// Get the hour value based on the selected index changes value.
                             hour = int.Parse(hourCollection[e.NewValue]);
@@ -1310,10 +1680,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         }
 
                         ObservableCollection<string> minutes = TimePickerHelper.GetMinutes(MinuteInterval, hour, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
-                        ObservableCollection<string> previousMinutes = _minuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> previousMinutes = MinuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
                         if (!PickerHelper.IsCollectionEquals(minutes, previousMinutes))
                         {
-                            _minuteColumn.ItemsSource = minutes;
+                            MinuteColumn.ItemsSource = minutes;
                         }
 
                         int minuteIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, previousSelectedDate.Minute);
@@ -1321,21 +1691,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         int minute = int.Parse(minutes[minuteIndex]);
 
                         ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, hour, minute, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
-                        ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> previousSeconds = SecondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
                         if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
                         {
-                            _secondColumn.ItemsSource = seconds;
+                            SecondColumn.ItemsSource = seconds;
                         }
 
                         int secondIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(seconds, previousSelectedDate.Second);
                         //// Get the second value based on the selected index changes value.
                         int second = int.Parse(seconds[secondIndex]);
 
-                        ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(this.MilliSecondInterval, hour, minute, second, previousSelectedDate, isMinDate ? this.MinimumDate : null, isMaxDate ? maxDate : null);
-                        ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, hour, minute, second, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
+                        ObservableCollection<string> previousMilliseconds = MillisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
                         if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
                         {
-                            _millisecondColumn.ItemsSource = milliseconds;
+                            MillisecondColumn.ItemsSource = milliseconds;
                         }
 
                         int millisecondIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(milliseconds, previousSelectedDate.Millisecond);
@@ -1349,28 +1719,28 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 1:
                     {
                         int minutes = 0;
-                        if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > e.NewValue)
+                        if (MinuteColumn.ItemsSource != null && MinuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > e.NewValue)
                         {
                             //// Get the minute value based on the selected index changes value.
                             minutes = int.Parse(minuteCollection[e.NewValue]);
                         }
 
                         ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, previousSelectedDate.Hour, minutes, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
-                        ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> previousSeconds = SecondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
                         if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
                         {
-                            _secondColumn.ItemsSource = seconds;
+                            SecondColumn.ItemsSource = seconds;
                         }
 
                         int secondIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(seconds, previousSelectedDate.Second);
                         //// Get the second value based on the selected index changes value.
                         int second = int.Parse(seconds[secondIndex]);
 
-                        ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(this.MilliSecondInterval, previousSelectedDate.Hour, minutes, second, previousSelectedDate, isMinDate ? this.MinimumDate : null, isMaxDate ? maxDate : null);
-                        ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, previousSelectedDate.Hour, minutes, second, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
+                        ObservableCollection<string> previousMilliseconds = MillisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
                         if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
                         {
-                            _millisecondColumn.ItemsSource = milliseconds;
+                            MillisecondColumn.ItemsSource = milliseconds;
                         }
 
                         int millisecondIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(milliseconds, previousSelectedDate.Millisecond);
@@ -1384,17 +1754,17 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 2:
                     {
                         int seconds = 0;
-                        if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > e.NewValue)
+                        if (SecondColumn.ItemsSource != null && SecondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > e.NewValue)
                         {
                             //// Get the seconds value based on the selected index changes value.
                             seconds = int.Parse(secondCollection[e.NewValue]);
                         }
 
-                        ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(this.MilliSecondInterval, previousSelectedDate.Hour, previousSelectedDate.Minute, seconds, previousSelectedDate, isMinDate ? this.MinimumDate : null, isMaxDate ? maxDate : null);
-                        ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, previousSelectedDate.Hour, previousSelectedDate.Minute, seconds, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
+                        ObservableCollection<string> previousMilliseconds = MillisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
                         if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
                         {
-                            _millisecondColumn.ItemsSource = milliseconds;
+                            MillisecondColumn.ItemsSource = milliseconds;
                         }
 
                         int millisecondIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(milliseconds, previousSelectedDate.Millisecond);
@@ -1408,7 +1778,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 3:
                     {
                         ObservableCollection<string> meridiemCollection = new ObservableCollection<string>();
-                        if (_meridiemColumn.ItemsSource != null && _meridiemColumn.ItemsSource is ObservableCollection<string> meridiems)
+                        if (MeridiemColumn.ItemsSource != null && MeridiemColumn.ItemsSource is ObservableCollection<string> meridiems)
                         {
                             meridiemCollection = meridiems;
                         }
@@ -1424,10 +1794,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         selectedDate = new DateTime(previousSelectedDate.Year, previousSelectedDate.Month, previousSelectedDate.Day, (previousSelectedDate.Hour % 12) + neededHour, previousSelectedDate.Minute, previousSelectedDate.Second);
 
                         ObservableCollection<string> hours = TimePickerHelper.GetHours(hourFormat, HourInterval, selectedDate, MinimumDate, maxDate);
-                        ObservableCollection<string> previousHour = _hourColumn.ItemsSource is ObservableCollection<string> previousHourCollection ? previousHourCollection : new ObservableCollection<string>();
+                        ObservableCollection<string> previousHour = HourColumn.ItemsSource is ObservableCollection<string> previousHourCollection ? previousHourCollection : new ObservableCollection<string>();
                         if (!PickerHelper.IsCollectionEquals(hours, previousHour))
                         {
-                            _hourColumn.ItemsSource = hours;
+                            HourColumn.ItemsSource = hours;
                         }
 
                         int? hourIndex = TimePickerHelper.GetHourIndex(hourFormat, hours, previousSelectedDate.Hour);
@@ -1437,10 +1807,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
                             hour = (hour % 12) + neededHour;
 
                             ObservableCollection<string> minutes = TimePickerHelper.GetMinutes(MinuteInterval, hour, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
-                            ObservableCollection<string> previousMinutes = _minuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
+                            ObservableCollection<string> previousMinutes = MinuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
                             if (!PickerHelper.IsCollectionEquals(minutes, previousMinutes))
                             {
-                                _minuteColumn.ItemsSource = minutes;
+                                MinuteColumn.ItemsSource = minutes;
                             }
 
                             int minuteIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, previousSelectedDate.Minute);
@@ -1448,21 +1818,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
                             int minute = int.Parse(minutes[minuteIndex]);
 
                             ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, hour, minute, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
-                            ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+                            ObservableCollection<string> previousSeconds = SecondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
                             if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
                             {
-                                _secondColumn.ItemsSource = seconds;
+                                SecondColumn.ItemsSource = seconds;
                             }
 
                             int secondIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(seconds, previousSelectedDate.Second);
                             //// Get the second value based on the selected index changes value.
                             int second = int.Parse(seconds[secondIndex]);
 
-                            ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(this.MilliSecondInterval, hour, minute, second, previousSelectedDate, isMinDate ? this.MinimumDate : null, isMaxDate ? maxDate : null);
-                            ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
+                            ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, hour, minute, second, previousSelectedDate, isMinDate ? MinimumDate : null, isMaxDate ? maxDate : null);
+                            ObservableCollection<string> previousMilliseconds = MillisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
                             if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
                             {
-                                _millisecondColumn.ItemsSource = milliseconds;
+                                MillisecondColumn.ItemsSource = milliseconds;
                             }
 
                             int millisecondIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(milliseconds, previousSelectedDate.Millisecond);
@@ -1477,7 +1847,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 4:
                     {
                         int millisecond = 0;
-                        if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > e.NewValue)
+                        if (MillisecondColumn.ItemsSource != null && MillisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > e.NewValue)
                         {
                             ////Get the millisecond value based on the selected index change value.
                             millisecond = int.Parse(millisecondCollection[e.NewValue]);
@@ -1495,7 +1865,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 // If it does, revert the minute column selection to the previous value
                 if (BlackoutDateTimes.Any(blackOutDateTime => DatePickerHelper.IsBlackoutDateTime(blackOutDateTime, selectedDate, out bool isTimeSpanAtZero)))
                 {
-                    _minuteColumn.SelectedIndex = e.OldValue;
+                    MinuteColumn.SelectedIndex = e.OldValue;
                 }
                 // Set the internal selected date-time to the newly selected value
                 _internalSelectedDateTime = selectedDate;
@@ -1523,7 +1893,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="date">The selected date value.</param>
         void UpdateSelectedIndex(DateTime? date)
         {
-            if (_selectedIndex == 0)
+            if (SelectedIndex == 0)
             {
                 UpdateSelectedDateIndex(date);
             }
@@ -1547,7 +1917,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             DateTime newDate = (DateTime)newValue;
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(MinimumDate, MaximumDate);
             DateTime validSelectedDate = DatePickerHelper.GetValidDateTime(SelectedDate, MinimumDate, maxDate);
-            if (_selectedIndex == 0)
+            if (SelectedIndex == 0)
             {
                 UpdateMinimumMaximumDateColumns(oldDate, newDate, validSelectedDate, maxDate);
             }
@@ -1572,19 +1942,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int yearIndex = formatString.IndexOf(2);
             if (yearIndex != -1 && oldDate.Year != newDate.Year)
             {
-                _yearColumn = GenerateYearColumn(validSelectedDate);
-                _yearColumn.Parent = this;
-                _columns[yearIndex] = _yearColumn;
+                YearColumn = GenerateYearColumn(validSelectedDate);
+                YearColumn.Parent = this;
+                _columns[yearIndex] = YearColumn;
             }
 
             if (validSelectedDate.Year == MinimumDate.Year || validSelectedDate.Year == maxDate.Year)
             {
                 ObservableCollection<string> month = DatePickerHelper.GetMonths(monthFormat, validSelectedDate.Year, MinimumDate, maxDate, MonthInterval);
-                ObservableCollection<string> previousMonths = _monthColumn.ItemsSource is ObservableCollection<string> previousMonthCollection ? previousMonthCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousMonths = MonthColumn.ItemsSource is ObservableCollection<string> previousMonthCollection ? previousMonthCollection : new ObservableCollection<string>();
                 //// Check the year index changes needed to update the month collection.
                 if (!PickerHelper.IsCollectionEquals(month, previousMonths))
                 {
-                    _monthColumn = new PickerColumn()
+                    MonthColumn = new PickerColumn()
                     {
                         ItemsSource = month,
                         SelectedIndex = DatePickerHelper.GetMonthIndex(monthFormat, month, validSelectedDate.Month),
@@ -1593,7 +1963,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     int monthIndex = formatString.IndexOf(1);
                     if (monthIndex != -1)
                     {
-                        _columns[monthIndex] = _monthColumn;
+                        _columns[monthIndex] = MonthColumn;
                     }
                 }
             }
@@ -1601,11 +1971,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (!string.IsNullOrEmpty(dayFormat) && ((validSelectedDate.Year == MinimumDate.Year && validSelectedDate.Month == MinimumDate.Month) || (validSelectedDate.Year == maxDate.Year && validSelectedDate.Month == maxDate.Month)))
             {
                 ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, validSelectedDate.Month, validSelectedDate.Year, MinimumDate, maxDate, DayInterval);
-                ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousDays = DayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
                 //// Check the year and month(if month items source updated) changes needed to change the day collection.
                 if (!PickerHelper.IsCollectionEquals(days, previousDays))
                 {
-                    _dayColumn = new PickerColumn()
+                    DayColumn = new PickerColumn()
                     {
                         ItemsSource = days,
                         SelectedIndex = DatePickerHelper.GetDayIndex(dayFormat, days, validSelectedDate.Day, DayInterval),
@@ -1614,7 +1984,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     int dayIndex = formatString.IndexOf(0);
                     if (dayIndex != -1)
                     {
-                        _columns[dayIndex] = _dayColumn;
+                        _columns[dayIndex] = DayColumn;
                     }
                 }
             }
@@ -1641,26 +2011,26 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (oldDate.Hour != newDate.Hour && index != -1)
             {
                 TimeSpan selectedTime = new TimeSpan(validSelectedDate.Hour, validSelectedDate.Minute, validSelectedDate.Second);
-                _hourColumn = GenerateHourColumn(hourFormat, selectedTime, validSelectedDate);
+                HourColumn = GenerateHourColumn(hourFormat, selectedTime, validSelectedDate);
                 int hourIndex = index;
-                _hourColumn.Parent = this;
-                _columns[hourIndex] = _hourColumn;
+                HourColumn.Parent = this;
+                _columns[hourIndex] = HourColumn;
             }
 
             index = formatStringOrder.IndexOf(1);
             if (index != -1 && (validSelectedDate.Hour == oldDate.Hour || validSelectedDate.Hour == newDate.Hour))
             {
                 ObservableCollection<string> minutes = TimePickerHelper.GetMinutes(MinuteInterval, validSelectedDate.Hour, validSelectedDate, MinimumDate, maxDate);
-                ObservableCollection<string> previousMinutes = _minuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousMinutes = MinuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
                 if (!PickerHelper.IsCollectionEquals(minutes, previousMinutes))
                 {
-                    _minuteColumn = new PickerColumn()
+                    MinuteColumn = new PickerColumn()
                     {
                         ItemsSource = minutes,
                         SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, validSelectedDate.Minute),
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MinuteHeaderText),
                     };
-                    _columns[index] = _minuteColumn;
+                    _columns[index] = MinuteColumn;
                 }
             }
 
@@ -1668,16 +2038,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (index != -1 && ((validSelectedDate.Hour == oldDate.Hour && validSelectedDate.Minute == oldDate.Minute) || (validSelectedDate.Hour == newDate.Hour && validSelectedDate.Minute == newDate.Minute)))
             {
                 ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, validSelectedDate.Hour, validSelectedDate.Minute, validSelectedDate, MinimumDate, maxDate);
-                ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousSeconds = SecondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
                 if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
                 {
-                    _secondColumn = new PickerColumn()
+                    SecondColumn = new PickerColumn()
                     {
                         ItemsSource = seconds,
                         SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(seconds, validSelectedDate.Second),
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.SecondHeaderText),
                     };
-                    _columns[index] = _secondColumn;
+                    _columns[index] = SecondColumn;
                 }
             }
 
@@ -1685,16 +2055,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (index != -1 && ((int)(validSelectedDate.Hour / 12) == (int)(oldDate.Hour / 12) || (int)(validSelectedDate.Hour / 12) == (int)(newDate.Hour / 12)))
             {
                 ObservableCollection<string> meridiems = TimePickerHelper.GetMeridiem(MinimumDate, maxDate, validSelectedDate);
-                ObservableCollection<string> previousCollection = _meridiemColumn.ItemsSource is ObservableCollection<string> previousMeridiemCollection ? previousMeridiemCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousCollection = MeridiemColumn.ItemsSource is ObservableCollection<string> previousMeridiemCollection ? previousMeridiemCollection : new ObservableCollection<string>();
                 if (!PickerHelper.IsCollectionEquals(meridiems, previousCollection))
                 {
-                    _meridiemColumn = new PickerColumn()
+                    MeridiemColumn = new PickerColumn()
                     {
                         ItemsSource = meridiems,
                         SelectedIndex = validSelectedDate.Hour >= 12 ? meridiems.Count > 1 ? 1 : 0 : 0,
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MeridiemHeaderText),
                     };
-                    _columns[index] = _meridiemColumn;
+                    _columns[index] = MeridiemColumn;
                 }
             }
         }
@@ -1713,30 +2083,30 @@ namespace Syncfusion.Maui.Toolkit.Picker
             string dayFormat;
             string monthFormat;
             DatePickerHelper.GetFormatStringOrder(out dayFormat, out monthFormat, DateFormat);
-            if (_yearColumn.ItemsSource != null && _yearColumn.ItemsSource is ObservableCollection<string> yearCollection && yearCollection.Count > 0)
+            if (YearColumn.ItemsSource != null && YearColumn.ItemsSource is ObservableCollection<string> yearCollection && yearCollection.Count > 0)
             {
                 int index = DatePickerHelper.GetYearIndex(yearCollection, date.Value.Year);
-                if (_yearColumn.SelectedIndex != index)
+                if (YearColumn.SelectedIndex != index)
                 {
-                    _yearColumn.SelectedIndex = index;
+                    YearColumn.SelectedIndex = index;
                 }
             }
 
-            if (_monthColumn.ItemsSource != null && _monthColumn.ItemsSource is ObservableCollection<string> monthCollection && !string.IsNullOrEmpty(monthFormat))
+            if (MonthColumn.ItemsSource != null && MonthColumn.ItemsSource is ObservableCollection<string> monthCollection && !string.IsNullOrEmpty(monthFormat))
             {
                 int index = DatePickerHelper.GetMonthIndex(monthFormat, monthCollection, date.Value.Month);
-                if (_monthColumn.SelectedIndex != index)
+                if (MonthColumn.SelectedIndex != index)
                 {
-                    _monthColumn.SelectedIndex = index;
+                    MonthColumn.SelectedIndex = index;
                 }
             }
 
-            if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && !string.IsNullOrEmpty(dayFormat))
+            if (DayColumn.ItemsSource != null && DayColumn.ItemsSource is ObservableCollection<string> dayCollection && !string.IsNullOrEmpty(dayFormat))
             {
                 int index = DatePickerHelper.GetDayIndex(dayFormat, dayCollection, date.Value.Day, DayInterval);
-                if (_dayColumn.SelectedIndex != index)
+                if (DayColumn.SelectedIndex != index)
                 {
-                    _dayColumn.SelectedIndex = index;
+                    DayColumn.SelectedIndex = index;
                 }
             }
         }
@@ -1754,48 +2124,48 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             string hourFormat;
             TimePickerHelper.GetFormatStringOrder(out hourFormat, TimeFormat);
-            if (_hourColumn.ItemsSource != null && _hourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > 0)
+            if (HourColumn.ItemsSource != null && HourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > 0)
             {
                 int? index = TimePickerHelper.GetHourIndex(hourFormat, hourCollection, date.Value.Hour);
-                if (index.HasValue && _hourColumn.SelectedIndex != index)
+                if (index.HasValue && HourColumn.SelectedIndex != index)
                 {
-                    _hourColumn.SelectedIndex = index.Value;
+                    HourColumn.SelectedIndex = index.Value;
                 }
             }
 
-            if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > 0)
+            if (MinuteColumn.ItemsSource != null && MinuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > 0)
             {
                 int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minuteCollection, date.Value.Minute);
-                if (_minuteColumn.SelectedIndex != index)
+                if (MinuteColumn.SelectedIndex != index)
                 {
-                    _minuteColumn.SelectedIndex = index;
+                    MinuteColumn.SelectedIndex = index;
                 }
             }
 
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > 0)
+            if (SecondColumn.ItemsSource != null && SecondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > 0)
             {
                 int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(secondCollection, date.Value.Second);
-                if (_secondColumn.SelectedIndex != index)
+                if (SecondColumn.SelectedIndex != index)
                 {
-                    _secondColumn.SelectedIndex = index;
+                    SecondColumn.SelectedIndex = index;
                 }
             }
 
-            if (_meridiemColumn.ItemsSource != null && _meridiemColumn.ItemsSource is ObservableCollection<string> meridiemCollection && meridiemCollection.Count > 0)
+            if (MeridiemColumn.ItemsSource != null && MeridiemColumn.ItemsSource is ObservableCollection<string> meridiemCollection && meridiemCollection.Count > 0)
             {
                 int index = date.Value.Hour >= 12 ? 1 : 0;
-                if (_meridiemColumn.SelectedIndex != index)
+                if (MeridiemColumn.SelectedIndex != index)
                 {
-                    _meridiemColumn.SelectedIndex = index;
+                    MeridiemColumn.SelectedIndex = index;
                 }
             }
 
-            if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > 0)
+            if (MillisecondColumn.ItemsSource != null && MillisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > 0)
             {
                 int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(millisecondCollection, date.Value.Millisecond);
-                if (_millisecondColumn.SelectedIndex != index)
+                if (MillisecondColumn.SelectedIndex != index)
                 {
-                    _millisecondColumn.SelectedIndex = index;
+                    MillisecondColumn.SelectedIndex = index;
                 }
             }
         }
@@ -1826,35 +2196,35 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else if (e.PropertyName == nameof(DateTimePickerColumnHeaderView.DayHeaderText))
             {
-                _dayColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.DayHeaderText);
+                DayColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.DayHeaderText);
             }
             else if (e.PropertyName == nameof(DateTimePickerColumnHeaderView.MonthHeaderText))
             {
-                _monthColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MonthHeaderText);
+                MonthColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MonthHeaderText);
             }
             else if (e.PropertyName == nameof(DateTimePickerColumnHeaderView.YearHeaderText))
             {
-                _yearColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.YearHeaderText);
+                YearColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.YearHeaderText);
             }
             else if (e.PropertyName == nameof(DateTimePickerColumnHeaderView.HourHeaderText))
             {
-                _hourColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.HourHeaderText);
+                HourColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.HourHeaderText);
             }
             else if (e.PropertyName == nameof(DateTimePickerColumnHeaderView.MinuteHeaderText))
             {
-                _minuteColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MinuteHeaderText);
+                MinuteColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MinuteHeaderText);
             }
             else if (e.PropertyName == nameof(DateTimePickerColumnHeaderView.SecondHeaderText))
             {
-                _secondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.SecondHeaderText);
+                SecondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.SecondHeaderText);
             }
             else if (e.PropertyName == nameof(DateTimePickerColumnHeaderView.MeridiemHeaderText))
             {
-                _meridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MeridiemHeaderText);
+                MeridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MeridiemHeaderText);
             }
             else if (e.PropertyName == nameof(DateTimePickerColumnHeaderView.MilliSecondHeaderText))
             {
-                _millisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MilliSecondHeaderText);
+                MillisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MilliSecondHeaderText);
             }
         }
 
@@ -1902,7 +2272,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void GeneratePickerColumns()
         {
-            if (_selectedIndex == 0)
+            if (SelectedIndex == 0)
             {
                 GenerateDatePickerColumns();
             }
@@ -1930,43 +2300,46 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 switch (index)
                 {
                     case 0:
-                        _dayColumn = GenerateDayColumn(dayFormat, selectedDate);
+                        DayColumn = GenerateDayColumn(dayFormat, selectedDate);
                         if (Mode == PickerMode.Default)
                         {
-                            _dayColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_dayColumn) : null;
+                            DayColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(DayColumn) : null;
                         }
                         else
                         {
-                            _dayColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(_dayColumn);
+                            DayColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(DayColumn);
                         }
 
-                        pickerColumns.Add(_dayColumn);
+                        DayColumn.Width = DayColumnWidth;
+                        pickerColumns.Add(DayColumn);
                         break;
                     case 1:
-                        _monthColumn = GenerateMonthColumn(monthFormat, selectedDate);
+                        MonthColumn = GenerateMonthColumn(monthFormat, selectedDate);
                         if (Mode == PickerMode.Default)
                         {
-                            _monthColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_monthColumn) : null;
+                            MonthColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(MonthColumn) : null;
                         }
                         else
                         {
-                            _monthColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(_monthColumn);
+                            MonthColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(MonthColumn);
                         }
 
-                        pickerColumns.Add(_monthColumn);
+                        MonthColumn.Width = MonthColumnWidth;
+                        pickerColumns.Add(MonthColumn);
                         break;
                     case 2:
-                        _yearColumn = GenerateYearColumn(selectedDate);
+                        YearColumn = GenerateYearColumn(selectedDate);
                         if (Mode == PickerMode.Default)
                         {
-                            _yearColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_yearColumn) : null;
+                            YearColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(YearColumn) : null;
                         }
                         else
                         {
-                            _yearColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(_yearColumn);
+                            YearColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(YearColumn);
                         }
 
-                        pickerColumns.Add(_yearColumn);
+                        YearColumn.Width = YearColumnWidth;
+                        pickerColumns.Add(YearColumn);
                         break;
                 }
             }
@@ -1979,11 +2352,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void ResetTimeColumns()
         {
-            _hourColumn = new PickerColumn();
-            _minuteColumn = new PickerColumn();
-            _secondColumn = new PickerColumn();
-            _meridiemColumn = new PickerColumn();
-            _millisecondColumn = new PickerColumn();
+            HourColumn = new PickerColumn();
+            MinuteColumn = new PickerColumn();
+            SecondColumn = new PickerColumn();
+            MeridiemColumn = new PickerColumn();
+            MillisecondColumn = new PickerColumn();
             _columns = new ObservableCollection<PickerColumn>();
             GeneratePickerColumns();
             BaseColumns.Clear();
@@ -1995,14 +2368,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void UpdateColumnsSelectedItem()
         {
-            _yearColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_yearColumn);
-            _monthColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_monthColumn);
-            _dayColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_dayColumn);
-            _hourColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_hourColumn);
-            _minuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_minuteColumn);
-            _secondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_secondColumn);
-            _meridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_meridiemColumn);
-            _millisecondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_millisecondColumn);
+            YearColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(YearColumn);
+            MonthColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(MonthColumn);
+            DayColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(DayColumn);
+            HourColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(HourColumn);
+            MinuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(MinuteColumn);
+            SecondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(SecondColumn);
+            MeridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(MeridiemColumn);
+            MillisecondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(MillisecondColumn);
         }
 
         /// <summary>
@@ -2080,69 +2453,74 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 switch (index)
                 {
                     case 0:
-                        _hourColumn = GenerateHourColumn(hourFormat, selectedTime, selectedDate);
+                        HourColumn = GenerateHourColumn(hourFormat, selectedTime, selectedDate);
                         if (Mode == PickerMode.Default)
                         {
-                            _hourColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_hourColumn) : null;
+                            HourColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(HourColumn) : null;
                         }
                         else
                         {
-                            _hourColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(_hourColumn);
+                            HourColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(HourColumn);
                         }
 
-                        pickerColumns.Add(_hourColumn);
+                        HourColumn.Width = HourColumnWidth;
+                        pickerColumns.Add(HourColumn);
                         break;
                     case 1:
-                        _minuteColumn = GenerateMinuteColumn(selectedTime, selectedDate);
+                        MinuteColumn = GenerateMinuteColumn(selectedTime, selectedDate);
                         if (Mode == PickerMode.Default)
                         {
-                            _minuteColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_minuteColumn) : null;
+                            MinuteColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(MinuteColumn) : null;
                         }
                         else
                         {
-                            _minuteColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(_minuteColumn);
+                            MinuteColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(MinuteColumn);
                         }
 
-                        pickerColumns.Add(_minuteColumn);
+                        MinuteColumn.Width = MinuteColumnWidth;
+                        pickerColumns.Add(MinuteColumn);
                         break;
                     case 2:
-                        _secondColumn = GenerateSecondColumn(selectedTime, selectedDate);
-                        if (this.Mode == PickerMode.Default)
-                        {
-                            _secondColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_secondColumn) : null;
-                        }
-                        else
-                        {
-                            _secondColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(_secondColumn);
-                        }
-
-                        pickerColumns.Add(_secondColumn);
-                        break;
-                    case 3:
-                        _meridiemColumn = GenerateMeridiemColumn(selectedTime, selectedDate);
+                        SecondColumn = GenerateSecondColumn(selectedTime, selectedDate);
                         if (Mode == PickerMode.Default)
                         {
-                            _meridiemColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_meridiemColumn) : null;
+                            SecondColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(SecondColumn) : null;
                         }
                         else
                         {
-                            _meridiemColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(_meridiemColumn);
+                            SecondColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(SecondColumn);
                         }
 
-                        pickerColumns.Add(_meridiemColumn);
+                        SecondColumn.Width = SecondColumnWidth;
+                        pickerColumns.Add(SecondColumn);
+                        break;
+                    case 3:
+                        MeridiemColumn = GenerateMeridiemColumn(selectedTime, selectedDate);
+                        if (Mode == PickerMode.Default)
+                        {
+                            MeridiemColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(MeridiemColumn) : null;
+                        }
+                        else
+                        {
+                            MeridiemColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(MeridiemColumn);
+                        }
+
+                        MeridiemColumn.Width = MeridiemColumnWidth;
+                        pickerColumns.Add(MeridiemColumn);
                         break;
                     case 4:
-                        _millisecondColumn = GenerateMillisecondColumn(selectedTime, selectedDate);
-                        if (this.Mode == PickerMode.Default)
+                        MillisecondColumn = GenerateMillisecondColumn(selectedTime, selectedDate);
+                        if (Mode == PickerMode.Default)
                         {
-                            _millisecondColumn.SelectedItem = this.SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_millisecondColumn) : null;
+                            MillisecondColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(MillisecondColumn) : null;
                         }
                         else
                         {
-                            _millisecondColumn.SelectedItem = this.SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(_millisecondColumn);
+                            MillisecondColumn.SelectedItem = SelectedDate == null && _internalSelectedDateTime == null ? null : PickerHelper.GetSelectedItemDefaultValue(MillisecondColumn);
                         }
 
-                        pickerColumns.Add(_millisecondColumn);
+                        MillisecondColumn.Width = MilliSecondColumnWidth;
+                        pickerColumns.Add(MillisecondColumn);
                         break;
                 }
             }
@@ -2256,11 +2634,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             DateTime? minimumDate = null;
             DateTime? maximumDate = null;
-            DateTime maxDate = DatePickerHelper.GetValidMaxDate(this.MinimumDate, this.MaximumDate);
-            DateTime date = this.SelectedDate ?? _previousSelectedDateTime;
-            if (date.Date <= this.MinimumDate.Date)
+            DateTime maxDate = DatePickerHelper.GetValidMaxDate(MinimumDate, MaximumDate);
+            DateTime date = SelectedDate ?? _previousSelectedDateTime;
+            if (date.Date <= MinimumDate.Date)
             {
-                minimumDate = this.MinimumDate;
+                minimumDate = MinimumDate;
             }
 
             if (date.Date >= maxDate.Date)
@@ -2273,7 +2651,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 ItemsSource = milliseconds,
                 SelectedIndex = selectedTime != null ? TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(milliseconds, selectedTime.Value.Milliseconds) : _previousSelectedDateTime.Millisecond,
-                HeaderText = SfPickerResources.GetLocalizedString(this.ColumnHeaderView.MilliSecondHeaderText),
+                HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MilliSecondHeaderText),
             };
         }
 
@@ -2356,6 +2734,24 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SetDynamicResource(NormalFontSizeProperty, "SfDateTimePickerNormalFontSize");
 
             SetDynamicResource(DisabledTextColorProperty, "SfDateTimePickerDisabledTextColor");
+
+            SetDynamicResource(NormalDayColumnTextColorProperty, "SfDateTimePickerNormalDayColumnTextColor");
+            SetDynamicResource(NormalMonthColumnTextColorProperty, "SfDateTimePickerNormalMonthColumnTextColor");
+            SetDynamicResource(NormalYearColumnTextColorProperty, "SfDateTimePickerNormalYearColumnTextColor");
+            SetDynamicResource(NormalHourColumnTextColorProperty, "SfDateTimePickerNormalHourColumnTextColor");
+            SetDynamicResource(NormalMinuteColumnTextColorProperty, "SfDateTimePickerNormalMinuteColumnTextColor");
+            SetDynamicResource(NormalSecondColumnTextColorProperty, "SfDateTimePickerNormalSecondColumnTextColor");
+            SetDynamicResource(NormalMeridiemColumnTextColorProperty, "SfDateTimePickerNormalMeridiemColumnTextColor");
+            SetDynamicResource(NormalMilliSecondColumnTextColorProperty, "SfDateTimePickerNormalMilliSecondColumnTextColor");
+
+            SetDynamicResource(NormalDayColumnFontSizeProperty, "SfDateTimePickerNormalDayColumnFontSize");
+            SetDynamicResource(NormalMonthColumnFontSizeProperty, "SfDateTimePickerNormalMonthColumnFontSize");
+            SetDynamicResource(NormalYearColumnFontSizeProperty, "SfDateTimePickerNormalYearColumnFontSize");
+            SetDynamicResource(NormalHourColumnFontSizeProperty, "SfDateTimePickerNormalHourColumnFontSize");
+            SetDynamicResource(NormalMinuteColumnFontSizeProperty, "SfDateTimePickerNormalMinuteColumnFontSize");
+            SetDynamicResource(NormalSecondColumnFontSizeProperty, "SfDateTimePickerNormalSecondColumnFontSize");
+            SetDynamicResource(NormalMeridiemColumnFontSizeProperty, "SfDateTimePickerNormalMeridiemColumnFontSize");
+            SetDynamicResource(NormalMilliSecondColumnFontSizeProperty, "SfDateTimePickerNormalMilliSecondColumnFontSize");
         }
 
 		/// <summary>
@@ -2483,6 +2879,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 SetInheritedBindingContext(SelectionView, BindingContext);
             }
+
+            PickerHelper.SetColumnTextStyleBinding(DayColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(MonthColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(YearColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(HourColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(MinuteColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(SecondColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(MilliSecondColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(MeridiemColumnTextStyle, this);
         }
 
         /// <summary>
@@ -2491,13 +2896,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="index">Index of the header button.</param>
         protected override void OnHeaderButtonClicked(int index)
         {
-            if (_selectedIndex == index)
+            if (SelectedIndex == index)
             {
                 return;
             }
 
-            _selectedIndex = index;
-            if (_selectedIndex == 0)
+            SelectedIndex = index;
+            if (SelectedIndex == 0)
             {
                 ResetDateColumns();
                 ActiveView = DateTimePickerView.Date;
@@ -2519,7 +2924,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            if (_selectedIndex == 0)
+            if (SelectedIndex == 0)
             {
                 string dayFormat;
                 string monthFormat;
@@ -2530,26 +2935,26 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     switch (index)
                     {
                         case 0:
-                            int dayIndex = DatePickerHelper.GetDayIndex(dayFormat, (ObservableCollection<string>)_dayColumn.ItemsSource, selectedDate.Day, DayInterval);
-                            if (_dayColumn.SelectedIndex != dayIndex)
+                            int dayIndex = DatePickerHelper.GetDayIndex(dayFormat, (ObservableCollection<string>)DayColumn.ItemsSource, selectedDate.Day, DayInterval);
+                            if (DayColumn.SelectedIndex != dayIndex)
                             {
-                                _dayColumn.SelectedIndex = dayIndex;
+                                DayColumn.SelectedIndex = dayIndex;
                             }
 
                             break;
                         case 1:
-                            int monthIndex = DatePickerHelper.GetMonthIndex(monthFormat, (ObservableCollection<string>)_monthColumn.ItemsSource, selectedDate.Month);
-                            if (_monthColumn.SelectedIndex != monthIndex)
+                            int monthIndex = DatePickerHelper.GetMonthIndex(monthFormat, (ObservableCollection<string>)MonthColumn.ItemsSource, selectedDate.Month);
+                            if (MonthColumn.SelectedIndex != monthIndex)
                             {
-                                _monthColumn.SelectedIndex = monthIndex;
+                                MonthColumn.SelectedIndex = monthIndex;
                             }
 
                             break;
                         case 2:
-                            int yearIndex = DatePickerHelper.GetYearIndex((ObservableCollection<string>)_yearColumn.ItemsSource, selectedDate.Year);
-                            if (_yearColumn.SelectedIndex != yearIndex)
+                            int yearIndex = DatePickerHelper.GetYearIndex((ObservableCollection<string>)YearColumn.ItemsSource, selectedDate.Year);
+                            if (YearColumn.SelectedIndex != yearIndex)
                             {
-                                _yearColumn.SelectedIndex = yearIndex;
+                                YearColumn.SelectedIndex = yearIndex;
                             }
 
                             break;
@@ -2558,7 +2963,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else
             {
-                _selectedIndex = 0;
+                SelectedIndex = 0;
                 ResetHeaderHighlight();
                 ResetDateColumns();
             }
@@ -2573,13 +2978,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (_internalSelectedDateTime != null)
             {
                 _internalSelectedDateTime = null;
-                if (_selectedIndex == 0)
+                if (SelectedIndex == 0)
                 {
                     BaseHeaderView.DateText = GetDateHeaderText();
                 }
                 else
                 {
-                    BaseHeaderView.TimeText = this.GetTimeHeaderText();
+                    BaseHeaderView.TimeText = GetTimeHeaderText();
                 }
             }
 
@@ -2649,13 +3054,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 else
                 {
                     // If no date is selected, clear all column selections (date and time parts)
-                    _dayColumn.SelectedItem = null;
-                    _monthColumn.SelectedItem = null;
-                    _yearColumn.SelectedItem = null;
-                    _hourColumn.SelectedItem = null;
-                    _minuteColumn.SelectedItem = null;
-                    _secondColumn.SelectedItem = null;
-                    _millisecondColumn.SelectedItem = null;
+                    DayColumn.SelectedItem = null;
+                    MonthColumn.SelectedItem = null;
+                    YearColumn.SelectedItem = null;
+                    HourColumn.SelectedItem = null;
+                    MinuteColumn.SelectedItem = null;
+                    SecondColumn.SelectedItem = null;
+                    MillisecondColumn.SelectedItem = null;
                     BaseHeaderView.DateText = SfPickerResources.GetLocalizedString("Date");
                     BaseHeaderView.TimeText = SfPickerResources.GetLocalizedString("Time");
                 }
@@ -2768,14 +3173,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     TextStyle = newStyle.TextStyle,
                 };
 
-                picker._dayColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.DayHeaderText);
-                picker._monthColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MonthHeaderText);
-                picker._yearColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.YearHeaderText);
-                picker._hourColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.HourHeaderText);
-                picker._minuteColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MinuteHeaderText);
-                picker._secondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.SecondHeaderText);
-                picker._meridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MeridiemHeaderText);
-                picker._millisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MilliSecondHeaderText);
+                picker.DayColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.DayHeaderText);
+                picker.MonthColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MonthHeaderText);
+                picker.YearColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.YearHeaderText);
+                picker.HourColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.HourHeaderText);
+                picker.MinuteColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MinuteHeaderText);
+                picker.SecondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.SecondHeaderText);
+                picker.MeridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MeridiemHeaderText);
+                picker.MillisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MilliSecondHeaderText);
             }
         }
 
@@ -2845,14 +3250,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (newValue == null)
             {
-                picker._yearColumn.SelectedItem = null;
-                picker._monthColumn.SelectedItem = null;
-                picker._dayColumn.SelectedItem = null;
-                picker._hourColumn.SelectedItem = null;
-                picker._minuteColumn.SelectedItem = null;
-                picker._secondColumn.SelectedItem = null;
-                picker._meridiemColumn.SelectedItem = null;
-                picker._millisecondColumn.SelectedItem = null;
+                picker.YearColumn.SelectedItem = null;
+                picker.MonthColumn.SelectedItem = null;
+                picker.DayColumn.SelectedItem = null;
+                picker.HourColumn.SelectedItem = null;
+                picker.MinuteColumn.SelectedItem = null;
+                picker.SecondColumn.SelectedItem = null;
+                picker.MeridiemColumn.SelectedItem = null;
+                picker.MillisecondColumn.SelectedItem = null;
                 picker.UpdateSelectedDateIndex(previousSelectedDate);
                 picker.UpdateSelectedTimeIndex(previousSelectedDate);
                 picker.SelectionChanged?.Invoke(picker, new DateTimePickerSelectionChangedEventArgs() { OldValue = previousSelectedDate, NewValue = currentSelectedDate });
@@ -2982,17 +3387,17 @@ namespace Syncfusion.Maui.Toolkit.Picker
             string dayFormat;
             //// Get the day format and format string order and check the index.
             List<int> formatStringOrder = DatePickerHelper.GetFormatStringOrder(out dayFormat, out _, picker.DateFormat);
-            if (string.IsNullOrEmpty(dayFormat) || picker._selectedIndex != 0)
+            if (string.IsNullOrEmpty(dayFormat) || picker.SelectedIndex != 0)
             {
                 return;
             }
 
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(picker.MinimumDate, picker.MaximumDate);
             DateTime currentSelectedDate = DatePickerHelper.GetValidDateTime(picker.SelectedDate, picker.MinimumDate, maxDate);
-            picker._dayColumn = picker.GenerateDayColumn(dayFormat, currentSelectedDate);
+            picker.DayColumn = picker.GenerateDayColumn(dayFormat, currentSelectedDate);
             int dayIndex = formatStringOrder.IndexOf(0);
             //// Replace the day column with day interval.
-            picker._columns[dayIndex] = picker._dayColumn;
+            picker._columns[dayIndex] = picker.DayColumn;
         }
 
         /// <summary>
@@ -3012,17 +3417,17 @@ namespace Syncfusion.Maui.Toolkit.Picker
             string monthFormat;
             //// Get the month format and format string order and check the index.
             List<int> formatStringOrder = DatePickerHelper.GetFormatStringOrder(out _, out monthFormat, picker.DateFormat);
-            if (string.IsNullOrEmpty(monthFormat) || picker._selectedIndex != 0)
+            if (string.IsNullOrEmpty(monthFormat) || picker.SelectedIndex != 0)
             {
                 return;
             }
 
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(picker.MinimumDate, picker.MaximumDate);
             DateTime currentSelectedDate = DatePickerHelper.GetValidDateTime(picker.SelectedDate, picker.MinimumDate, maxDate);
-            picker._monthColumn = picker.GenerateMonthColumn(monthFormat, currentSelectedDate);
+            picker.MonthColumn = picker.GenerateMonthColumn(monthFormat, currentSelectedDate);
             int monthIndex = formatStringOrder.IndexOf(1);
             //// Replace the month column with month interval.
-            picker._columns[monthIndex] = picker._monthColumn;
+            picker._columns[monthIndex] = picker.MonthColumn;
         }
 
         /// <summary>
@@ -3042,16 +3447,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             //// Get the format string order and check the index.
             List<int> formatStringOrder = DatePickerHelper.GetFormatStringOrder(out _, out _, picker.DateFormat);
             int yearIndex = formatStringOrder.IndexOf(2);
-            if (yearIndex == -1 || picker._selectedIndex != 0)
+            if (yearIndex == -1 || picker.SelectedIndex != 0)
             {
                 return;
             }
 
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(picker.MinimumDate, picker.MaximumDate);
             DateTime currentSelectedDate = DatePickerHelper.GetValidDateTime(picker.SelectedDate, picker.MinimumDate, maxDate);
-            picker._yearColumn = picker.GenerateYearColumn(currentSelectedDate);
+            picker.YearColumn = picker.GenerateYearColumn(currentSelectedDate);
             //// Replace the year column with year interval.
-            picker._columns[yearIndex] = picker._yearColumn;
+            picker._columns[yearIndex] = picker.YearColumn;
         }
 
         /// <summary>
@@ -3074,12 +3479,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(picker.MinimumDate, picker.MaximumDate);
             DateTime selectedDate = DatePickerHelper.GetValidDateTime(picker.SelectedDate, picker.MinimumDate, maxDate);
             TimeSpan selectedTime = new TimeSpan(selectedDate.Hour, selectedDate.Minute, selectedDate.Second);
-            picker._hourColumn = picker.GenerateHourColumn(hourFormat, selectedTime, selectedDate);
-            if (picker._selectedIndex == 1)
+            picker.HourColumn = picker.GenerateHourColumn(hourFormat, selectedTime, selectedDate);
+            if (picker.SelectedIndex == 1)
             {
                 int hourIndex = formatStringOrder.IndexOf(0);
                 //// Replace the hour column with hour interval.
-                picker._columns[hourIndex] = picker._hourColumn;
+                picker._columns[hourIndex] = picker.HourColumn;
             }
         }
 
@@ -3108,11 +3513,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(picker.MinimumDate, picker.MaximumDate);
             DateTime selectedDate = DatePickerHelper.GetValidDateTime(picker.SelectedDate, picker.MinimumDate, maxDate);
             TimeSpan selectedTime = new TimeSpan(selectedDate.Hour, selectedDate.Minute, selectedDate.Second);
-            if (picker._selectedIndex == 1)
+            if (picker.SelectedIndex == 1)
             {
-                picker._minuteColumn = picker.GenerateMinuteColumn(selectedTime, selectedDate);
+                picker.MinuteColumn = picker.GenerateMinuteColumn(selectedTime, selectedDate);
                 //// Replace the minute column with minute interval.
-                picker._columns[minuteIndex] = picker._minuteColumn;
+                picker._columns[minuteIndex] = picker.MinuteColumn;
             }
         }
 
@@ -3141,11 +3546,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(picker.MinimumDate, picker.MaximumDate);
             DateTime selectedDate = DatePickerHelper.GetValidDateTime(picker.SelectedDate, picker.MinimumDate, maxDate);
             TimeSpan selectedTime = new TimeSpan(selectedDate.Hour, selectedDate.Minute, selectedDate.Second);
-            if (picker._selectedIndex == 1)
+            if (picker.SelectedIndex == 1)
             {
-                picker._secondColumn = picker.GenerateSecondColumn(selectedTime, selectedDate);
+                picker.SecondColumn = picker.GenerateSecondColumn(selectedTime, selectedDate);
                 //// Replace the second column with second interval.
-                picker._columns[secondIndex] = picker._secondColumn;
+                picker._columns[secondIndex] = picker.SecondColumn;
             }
         }
 
@@ -3174,11 +3579,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(picker.MinimumDate, picker.MaximumDate);
             DateTime selectedDate = DatePickerHelper.GetValidDateTime(picker.SelectedDate, picker.MinimumDate, maxDate);
             TimeSpan selectedTime = new TimeSpan(0, selectedDate.Hour, selectedDate.Minute, selectedDate.Second, selectedDate.Millisecond);
-            if (picker._selectedIndex == 1)
+            if (picker.SelectedIndex == 1)
             {
-                picker._millisecondColumn = picker.GenerateMillisecondColumn(selectedTime, selectedDate);
+                picker.MillisecondColumn = picker.GenerateMillisecondColumn(selectedTime, selectedDate);
                 //// Replace the second column with second interval.
-                picker._columns[millisecondIndex] = picker._millisecondColumn;
+                picker._columns[millisecondIndex] = picker.MillisecondColumn;
             }
         }
 
@@ -3377,6 +3782,278 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             picker.DisabledTextStyle.TextColor = picker.DisabledTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker day column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalDayColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.DayColumnTextStyle.TextColor = picker.NormalDayColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker month column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalMonthColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MonthColumnTextStyle.TextColor = picker.NormalMonthColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker year column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalYearColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.YearColumnTextStyle.TextColor = picker.NormalYearColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal day column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalDayColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.DayColumnTextStyle.FontSize = picker.NormalDayColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal month column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalMonthColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MonthColumnTextStyle.FontSize = picker.NormalMonthColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal year column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalYearColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.YearColumnTextStyle.FontSize = picker.NormalYearColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker hour column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalHourColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.HourColumnTextStyle.TextColor = picker.NormalHourColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker minute column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalMinuteColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MinuteColumnTextStyle.TextColor = picker.NormalMinuteColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker second column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalSecondColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.SecondColumnTextStyle.TextColor = picker.NormalSecondColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker meridiem column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalMeridiemColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MeridiemColumnTextStyle.TextColor = picker.NormalMeridiemColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker milli second column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalMilliSecondColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MilliSecondColumnTextStyle.TextColor = picker.NormalMilliSecondColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal hour column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalHourColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.HourColumnTextStyle.FontSize = picker.NormalHourColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal minute column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalMinuteColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MinuteColumnTextStyle.FontSize = picker.NormalMinuteColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal second column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalSecondColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.SecondColumnTextStyle.FontSize = picker.NormalSecondColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal meridiem column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalMeridiemColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MeridiemColumnTextStyle.FontSize = picker.NormalMeridiemColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal milli second font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        private static void OnNormalMilliSecondColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDateTimePicker? picker = bindable as SfDateTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MilliSecondColumnTextStyle.FontSize = picker.NormalMilliSecondColumnFontSize;
         }
 
         #endregion

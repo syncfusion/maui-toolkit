@@ -224,6 +224,25 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				ActualRange = new DoubleRange(minimumValue, maximumValue);
 			}
 		}
+
+		internal string GetFormatedAxisLabel(double axisValue, string format)
+		{
+			string formatted = axisValue.ToString(format);
+
+			return formatted.Length == 0 ? "0" : formatted;
+		}
+
+		/// <summary>
+		/// Add for numerical axis value to polar coefficient.
+		/// </summary>
+		internal override double ValueToPolarCoefficient(double value)
+		{
+			double result = double.NaN;
+			var start = VisibleRange.Start;
+			var delta = VisibleRange.Delta;
+			return result = (value - start) / delta;
+		}
+
 		#endregion
 
 		#region Private Methods

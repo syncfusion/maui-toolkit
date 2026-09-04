@@ -1,4 +1,4 @@
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Collections;
 using System.Data;
 
@@ -201,15 +201,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					double yVal = YValues[i];
 					if (!double.IsNaN(yVal))
 					{
-						if (yVal < yMin) yMin = yVal;
-						if (yVal > yMax) yMax = yVal;
+						if (yVal < yMin)
+							yMin = yVal;
+						if (yVal > yMax)
+							yMax = yVal;
 					}
 
 					double xVal = XValues[i];
 					if (!double.IsNaN(xVal))
 					{
-						if (xVal < xMin) xMin = xVal;
-						if (xVal > xMax) xMax = xVal;
+						if (xVal < xMin)
+							xMin = xVal;
+						if (xVal > xMax)
+							xMax = xVal;
 					}
 				}
 

@@ -6,330 +6,332 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 using PointerEventArgs = Syncfusion.Maui.Toolkit.Internals.PointerEventArgs;
 
 namespace Syncfusion.Maui.Toolkit.SunburstChart
 {
-    /// <summary>
-    ///  Represents hierarchical data with concentric circles, where each ring signifies a hierarchy level, and segments denote data categories.
-    /// </summary>
-    /// <remarks>
-    /// <para> The Sunburst chart control ensures a well-defined hierarchical structure of the data and effectively communicates relationships between different levels of information. </para>
-    /// 
-    /// <para> SfSunburstChart class properties provide an option to add the levels collection, allowing customization of the chart elements such as legend, data label, center view, and tooltip features.</para>
-    /// 
-    /// <para><b>Levels</b></para>
-    /// <para>Levels are used to visualize different layers or depths in a hierarchy, aiding in the visualization of structured data. SfSunburstChart offers <see cref="Levels"/> property.</para>
-    /// 
-    /// <para>To add the levels, create an instance of the required <see cref="SunburstHierarchicalLevel"/> class, and add it to the  <see cref="SunburstHierarchicalLevel.GroupMemberPath"/> property.</para>
-    ///  
-    /// # [MainPage.xaml](#tab/tabid-1)
-    /// <code> <![CDATA[
-    /// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" ValueMemberPath="EmployeesCount">
-    /// 
-    ///   <sunburst:SfSunburstChart.BindingContext>
-    ///        <model:SunburstViewModel x:Name="viewModel"/>
-    ///   </sunburst:SfSunburstChart.BindingContext>
-    ///
-    ///   <sunburst:SfSunburstChart.Levels>
-    ///     <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
-    ///     <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
-    ///     <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
-    ///   </sunburst:SfSunburstChart.Levels>
-    ///   
-    /// </sunburst:SfSunburstChart>
-    /// ]]>
-    /// </code>
-    /// # [MainPage.xaml.cs](#tab/tabid-2)
-    /// <code><![CDATA[
-    /// 
-    ///  SfSunburstChart sunburstChart = new SfSunburstChart();
-    ///  
-    ///  BindingContext = new SunburstViewModel();
-    ///  
-    ///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
-    ///  sunburstChart.ValueMemberPath = "EmployeesCount";
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
-    ///  
-    ///  Content = sunburstChart;
-    /// ]]>
-    /// </code>
-    /// # [SunburstModel.cs](#tab/tabid-3)
-    /// <code><![CDATA[
-    ///     public class SunburstModel
-    ///     {
-    ///         public string JobDescription { get; set; }
-    ///         public string JobGroup { get; set; }
-    ///         public string JobRole { get; set; }
-    ///         public double EmployeesCount { get; set; }
-    ///         public double Count { get; set; }
-    ///         public string Country { get; set; }
-    ///     }
-    /// ]]>
-    /// </code>
-    /// # [SunburstViewModel.cs](#tab/tabid-4)
-    /// <code><![CDATA[
-    /// 
-    /// public ObservableCollection<SunburstModel> DataSource { get; set; }
-    /// 
-    /// public SunburstViewModel()
-    /// {
-    ///    DataSource = new ObservableCollection<SunburstModel>
-    ///    {
-    ///         new SunburstModel { Country = "USA", JobDescription = "Sales", JobGroup="Executive", EmployeesCount = 50 , Count = 200},
-    ///         new SunburstModel { Country = "USA", JobDescription = "Sales", JobGroup = "Analyst", EmployeesCount = 40 },
-    ///         new SunburstModel { Country = "USA", JobDescription = "Marketing", EmployeesCount = 40 },
-    ///         new SunburstModel { Country = "USA", JobDescription = "Technical", JobGroup = "Testers", EmployeesCount = 35 },
-    ///         new SunburstModel { Country = "USA", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Windows", EmployeesCount = 175 },
-    ///         new SunburstModel { Country = "USA", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Web", EmployeesCount = 70 },
-    ///         new SunburstModel { Country = "USA", JobDescription = "Management", EmployeesCount = 40 },
-    ///         new SunburstModel { Country = "USA", JobDescription = "Accounts", EmployeesCount = 60 },
-    ///         new SunburstModel { Country = "India", JobDescription = "Technical", JobGroup = "Testers", EmployeesCount = 33 },
-    ///         new SunburstModel { Country = "India", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Windows", EmployeesCount = 125 },
-    ///         new SunburstModel { Country = "India", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Web", EmployeesCount = 60 },
-    ///         new SunburstModel { Country = "India", JobDescription = "HR Executives", EmployeesCount = 70 },
-    ///         new SunburstModel { Country = "India", JobDescription = "Accounts", EmployeesCount = 45 },
-    ///         new SunburstModel { Country = "Germany", JobDescription = "Sales", JobGroup = "Executive", EmployeesCount = 30 },
-    ///         new SunburstModel { Country = "Germany", JobDescription = "Sales", JobGroup = "Analyst", EmployeesCount = 40 },
-    ///         new SunburstModel { Country = "Germany", JobDescription = "Marketing", EmployeesCount = 50 },
-    ///         new SunburstModel { Country = "Germany", JobDescription = "Technical", JobGroup = "Testers", EmployeesCount = 40 },
-    ///         new SunburstModel { Country = "Germany", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Windows", EmployeesCount = 65 },
-    ///         new SunburstModel { Country = "Germany", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Web", EmployeesCount = 27 },
-    ///         new SunburstModel { Country = "Germany", JobDescription = "Management", EmployeesCount = 33 },
-    ///         new SunburstModel { Country = "Germany", JobDescription = "Accounts", EmployeesCount = 55 },
-    ///         new SunburstModel { Country = "UK", JobDescription = "Technical", JobGroup = "Testers", EmployeesCount = 25 },
-    ///         new SunburstModel { Country = "UK", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Windows", EmployeesCount = 96 },
-    ///         new SunburstModel { Country = "UK", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Web", EmployeesCount = 55 },
-    ///         new SunburstModel { Country = "UK", JobDescription = "HR Executives", EmployeesCount = 60 },
-    ///         new SunburstModel { Country = "UK", JobDescription = "Accounts", EmployeesCount = 30 }
-    ///    };
-    /// }
-    /// ]]>
-    /// </code>
-    /// ***
-    /// 
-    /// <para><b>Legend</b></para>
-    /// 
-    /// <para>The Legend includes data points from the first-level items. The information provided in each legend item helps identify the corresponding sunburst sub levels. The Levels of <see cref="SunburstHierarchicalLevel.GroupMemberPath"/> property value will be displayed in the legend item.</para>
-    /// 
-    /// <para>To render a legend, create an instance of <see cref="SunburstLegend"/>and assign it to the <see cref="Legend"/> property. </para>
-    /// 
-    /// # [MainPage.xaml](#tab/tabid-5)
-    /// <code> <![CDATA[
-    /// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" ValueMemberPath="EmployeesCount">
-    /// 
-    ///   <sunburst:SfSunburstChart.BindingContext>
-    ///         <model:SunburstViewModel x:Name="viewModel"/>
-    ///   </sunburst:SfSunburstChart.BindingContext>
-    ///   
-    ///   <sunburst:SfSunburstChart.Legend>
-    ///         <sunburst:SunburstLegend x:Name="legend"/>
-    ///   </sunburst:SunburstLegend>
-    /// 
-    ///   <sunburst:SfSunburstChart.Levels>
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
-    ///   </sunburst:SfSunburstChart.Levels>
-    ///   
-    /// </sunburst:SfSunburstChart>
-    /// ]]>
-    /// </code>
-    /// # [MainPage.xaml.cs](#tab/tabid-6)
-    /// <code><![CDATA[
-    /// 
-    ///  SfSunburstChart sunburstChart = new SfSunburstChart();
-    ///  
-    ///  BindingContext = new SunburstViewModel();
-    ///  
-    ///  sunburstChart.Legend = new SunburstLegend();
-    ///  
-    ///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
-    ///  sunburstChart.ValueMemberPath = "EmployeesCount";
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
-    ///  
-    ///  Content = sunburstChart;
-    /// ]]>
-    /// </code>
-    /// ***
-    /// 
-    /// <para><b>Data Label</b></para>
-    /// 
-    /// <para>Data labels are used to display values related to a sunburst chart segment. To render the data labels, you need to enable the <see cref="ShowLabels"/> property as <b>true</b> in <see cref="SfSunburstChart"/> class. </para>
-    /// 
-    /// <para>To customize the sunburst chart data labels rotation mode using <see cref="SunburstLabelRotationMode"/> and its default value is <see cref="SunburstLabelRotationMode.Angle"/>, overflow mode using <see cref="SunburstLabelOverflowMode"/> and its default value is <see cref="SunburstLabelOverflowMode.Hide"/>, and label styles, you need to create an instance of <see cref="SunburstDataLabelSettings"/> and set it to the <see cref="DataLabelSettings"/> property.</para>
-    /// 
-    /// # [MainPage.xaml](#tab/tabid-7)
-    /// <code><![CDATA[
-    /// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" 
-    ///              ShowLabels="True" ValueMemberPath="EmployeesCount">
-    /// 
-    ///   <sunburst:SfSunburstChart.BindingContext>
-    ///         <model:SunburstViewModel x:Name="viewModel"/>
-    ///   </sunburst:SfSunburstChart.BindingContext>
-    ///   
-    ///   <sunburst:SfSunburstChart.DataLabelSettings>
-    ///           <sunburst:SunburstDataLabelSettings FontSize="13" FontAttributes="Italic"
-    ///                                              RotationMode="Angle" OverFlowMode="Trim" />
-    ///   </sunburst:SfSunburstChart.DataLabelSettings>
-    ///  
-    ///   <sunburst:SfSunburstChart.Levels>
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
-    ///   </sunburst:SfSunburstChart.Levels>
-    ///   
-    /// </sunburst:SfSunburstChart>
-    ///
-    /// ]]>
-    /// </code>
-    /// # [MainPage.xaml.cs](#tab/tabid-8)
-    /// <code><![CDATA[
-    ///  SfSunburstChart sunburstChart = new SfSunburstChart();
-    ///  
-    ///  BindingContext = new SunburstViewModel();
-    ///  
-    ///  sunburstChart.ShowLabels = true;
-    ///  sunburstChart.DataLabelSettings = new SunburstDataLabelSettings()
-    ///  {
-    ///        OverFlowMode = SunburstLabelOverflowMode.Trim,
-    ///        RotationMode = SunburstLabelRotationMode.Angle,
-    ///        FontAttributes = FontAttributes.Italic,
-    ///        FontSize = 13
-    ///  };
-    ///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
-    ///  sunburstChart.ValueMemberPath = "EmployeesCount";
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
-    ///  
-    ///  Content = sunburstChart;
-    ///         
-    /// ]]>
-    /// </code>
-    /// ***
-    /// 
-    /// <para><b>Tooltip</b></para>
-    /// 
-    /// <para>Tooltip displays information while tapping or mouse hovering on the segment. To display the tooltip on the sunburst chart, you need to set the <see cref="EnableTooltip"/> property as <b>true</b> in <see cref="SfSunburstChart"/>. </para>
-    /// 
-    /// <para>To customize the appearance of the tooltip elements like Background, TextColor, and Font, create an instance of the <see cref="SunburstTooltipSettings"/> class, modify the values, and assign it to the <see cref="TooltipSettings"/> property in <see cref="SfSunburstChart"/>. </para>
-    /// 
-    /// # [MainPage.xaml](#tab/tabid-9)
-    /// <code><![CDATA[
-    /// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" 
-    ///              EnableTooltip="True" ValueMemberPath="EmployeesCount">
-    /// 
-    ///   <sunburst:SfSunburstChart.BindingContext>
-    ///         <model:SunburstViewModel x:Name="viewModel"/>
-    ///   </sunburst:SfSunburstChart.BindingContext>
-    ///   
-    ///   <sunburst:SfSunburstChart.TooltipSettings>
-    ///         <sunburst:SunburstTooltipSettings />
-    ///   </sunburst:SfSunburstChart.TooltipSettings>
-    ///  
-    ///   <sunburst:SfSunburstChart.Levels>
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
-    ///   </sunburst:SfSunburstChart.Levels>
-    ///   
-    /// </sunburst:SfSunburstChart>
-    /// ]]>
-    /// </code>
-    /// # [MainPage.xaml.cs](#tab/tabid-10)
-    /// <code><![CDATA[
-    /// SfSunburstChart sunburstChart = new SfSunburstChart();
-    ///  
-    ///  BindingContext = new SunburstViewModel();
-    /// 
-    ///  sunburstChart.TooltipSettings = new SunburstTooltipSettings();
-    /// 
-    ///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
-    ///  sunburstChart.ValueMemberPath = "EmployeesCount";
-    ///  sunburstChart.EnableTooltip = true;
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
-    ///  
-    ///  Content = sunburstChart;
-    ///
-    /// ]]>
-    /// </code>
-    /// ***
-    /// 
-    /// <para><b>CenterView</b></para>
-    /// 
-    /// <para>CenterView is used to share additional information about the sunburst chart. The binding context of the CenterView will be the respective sunburst. To display the center view on the sunburst chart, you need to set the<see cref="CenterView"/> property in <see cref="SfSunburstChart"/>. </para>
-    /// 
-    /// <para>CenterHoleSize is used to prevent overlapping with segments in the sunburst center view.</para>
-    /// 
-    /// # [MainPage.xaml](#tab/tabid-11)
-    /// <code><![CDATA[
-    /// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" 
-    ///              ValueMemberPath="EmployeesCount">
-    /// 
-    ///   <sunburst:SfSunburstChart.BindingContext>
-    ///         <model:SunburstViewModel x:Name="viewModel"/>
-    ///   </sunburst:SfSunburstChart.BindingContext>
-    ///   
-    ///   <sunburst:SfSunburstChart.CenterView>
-    ///            <StackLayout Orientation="Vertical"
-    ///                         HeightRequest="{Binding CenterHoleSize}"
-    ///                         WidthRequest="{Binding CenterHoleSize}"
-    ///                         HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-    ///                <Label Text = "CenterView" />
-    ///            </StackLayout>
-    ///   </sunburst:SfSunburstChart.CenterView>
-    ///  
-    ///   <sunburst:SfSunburstChart.Levels>
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
-    ///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
-    ///   </sunburst:SfSunburstChart.Levels>
-    ///   
-    /// </sunburst:SfSunburstChart>
-    /// ]]>
-    /// </code>
-    /// # [MainPage.xaml.cs](#tab/tabid-12)
-    /// <code><![CDATA[
-    ///  SfSunburstChart sunburstChart = new SfSunburstChart();
-    ///  
-    ///  BindingContext = new SunburstViewModel();
-    /// 
-    ///  StackLayout layout = new StackLayout();
-    ///  layout.HorizontalOptions = LayoutOptions.CenterAndExpand;
-    ///  layout.VerticalOptions = LayoutOptions.CenterAndExpand;
-    ///  layout.SetBinding(HeightRequestProperty, "CenterHoleSize");
-    ///  layout.SetBinding(WidthRequestProperty, "CenterHoleSize");
-    ///    
-    ///  Label label = new Label();
-    ///  label.Text = "CenterView";
-    ///  layout.Children.Add(label);
-    ///  sunburstChart.CenterView = layout;
-    /// 
-    ///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
-    ///  sunburstChart.ValueMemberPath = "EmployeesCount";
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
-    ///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
-    ///  
-    ///  Content = sunburstChart;
-    ///
-    /// ]]>
-    /// </code>
-    /// ***
-    /// </remarks>
-    public class SfSunburstChart : View, IContentView, ITouchListener, ITapGestureListener, IParentThemeElement
+	/// <summary>
+	///  Represents hierarchical data with concentric circles, where each ring signifies a hierarchy level, and segments denote data categories.
+	/// </summary>
+	/// <remarks>
+	/// <para> The Sunburst chart control ensures a well-defined hierarchical structure of the data and effectively communicates relationships between different levels of information. </para>
+	/// 
+	/// <para> SfSunburstChart class properties provide an option to add the levels collection, allowing customization of the chart elements such as legend, data label, center view, and tooltip features.</para>
+	/// 
+	/// <para><b>Levels</b></para>
+	/// <para>Levels are used to visualize different layers or depths in a hierarchy, aiding in the visualization of structured data. SfSunburstChart offers <see cref="Levels"/> property.</para>
+	/// 
+	/// <para>To add the levels, create an instance of the required <see cref="SunburstHierarchicalLevel"/> class, and add it to the  <see cref="SunburstHierarchicalLevel.GroupMemberPath"/> property.</para>
+	///  
+	/// # [MainPage.xaml](#tab/tabid-1)
+	/// <code> <![CDATA[
+	/// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" ValueMemberPath="EmployeesCount">
+	/// 
+	///   <sunburst:SfSunburstChart.BindingContext>
+	///        <model:SunburstViewModel x:Name="viewModel"/>
+	///   </sunburst:SfSunburstChart.BindingContext>
+	///
+	///   <sunburst:SfSunburstChart.Levels>
+	///     <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
+	///     <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
+	///     <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
+	///   </sunburst:SfSunburstChart.Levels>
+	///   
+	/// </sunburst:SfSunburstChart>
+	/// ]]>
+	/// </code>
+	/// # [MainPage.xaml.cs](#tab/tabid-2)
+	/// <code><![CDATA[
+	/// 
+	///  SfSunburstChart sunburstChart = new SfSunburstChart();
+	///  
+	///  BindingContext = new SunburstViewModel();
+	///  
+	///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
+	///  sunburstChart.ValueMemberPath = "EmployeesCount";
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
+	///  
+	///  Content = sunburstChart;
+	/// ]]>
+	/// </code>
+	/// # [SunburstModel.cs](#tab/tabid-3)
+	/// <code><![CDATA[
+	///     public class SunburstModel
+	///     {
+	///         public string JobDescription { get; set; }
+	///         public string JobGroup { get; set; }
+	///         public string JobRole { get; set; }
+	///         public double EmployeesCount { get; set; }
+	///         public double Count { get; set; }
+	///         public string Country { get; set; }
+	///     }
+	/// ]]>
+	/// </code>
+	/// # [SunburstViewModel.cs](#tab/tabid-4)
+	/// <code><![CDATA[
+	/// 
+	/// public ObservableCollection<SunburstModel> DataSource { get; set; }
+	/// 
+	/// public SunburstViewModel()
+	/// {
+	///    DataSource = new ObservableCollection<SunburstModel>
+	///    {
+	///         new SunburstModel { Country = "USA", JobDescription = "Sales", JobGroup="Executive", EmployeesCount = 50 , Count = 200},
+	///         new SunburstModel { Country = "USA", JobDescription = "Sales", JobGroup = "Analyst", EmployeesCount = 40 },
+	///         new SunburstModel { Country = "USA", JobDescription = "Marketing", EmployeesCount = 40 },
+	///         new SunburstModel { Country = "USA", JobDescription = "Technical", JobGroup = "Testers", EmployeesCount = 35 },
+	///         new SunburstModel { Country = "USA", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Windows", EmployeesCount = 175 },
+	///         new SunburstModel { Country = "USA", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Web", EmployeesCount = 70 },
+	///         new SunburstModel { Country = "USA", JobDescription = "Management", EmployeesCount = 40 },
+	///         new SunburstModel { Country = "USA", JobDescription = "Accounts", EmployeesCount = 60 },
+	///         new SunburstModel { Country = "India", JobDescription = "Technical", JobGroup = "Testers", EmployeesCount = 33 },
+	///         new SunburstModel { Country = "India", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Windows", EmployeesCount = 125 },
+	///         new SunburstModel { Country = "India", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Web", EmployeesCount = 60 },
+	///         new SunburstModel { Country = "India", JobDescription = "HR Executives", EmployeesCount = 70 },
+	///         new SunburstModel { Country = "India", JobDescription = "Accounts", EmployeesCount = 45 },
+	///         new SunburstModel { Country = "Germany", JobDescription = "Sales", JobGroup = "Executive", EmployeesCount = 30 },
+	///         new SunburstModel { Country = "Germany", JobDescription = "Sales", JobGroup = "Analyst", EmployeesCount = 40 },
+	///         new SunburstModel { Country = "Germany", JobDescription = "Marketing", EmployeesCount = 50 },
+	///         new SunburstModel { Country = "Germany", JobDescription = "Technical", JobGroup = "Testers", EmployeesCount = 40 },
+	///         new SunburstModel { Country = "Germany", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Windows", EmployeesCount = 65 },
+	///         new SunburstModel { Country = "Germany", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Web", EmployeesCount = 27 },
+	///         new SunburstModel { Country = "Germany", JobDescription = "Management", EmployeesCount = 33 },
+	///         new SunburstModel { Country = "Germany", JobDescription = "Accounts", EmployeesCount = 55 },
+	///         new SunburstModel { Country = "UK", JobDescription = "Technical", JobGroup = "Testers", EmployeesCount = 25 },
+	///         new SunburstModel { Country = "UK", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Windows", EmployeesCount = 96 },
+	///         new SunburstModel { Country = "UK", JobDescription = "Technical", JobGroup = "Developers", JobRole = "Web", EmployeesCount = 55 },
+	///         new SunburstModel { Country = "UK", JobDescription = "HR Executives", EmployeesCount = 60 },
+	///         new SunburstModel { Country = "UK", JobDescription = "Accounts", EmployeesCount = 30 }
+	///    };
+	/// }
+	/// ]]>
+	/// </code>
+	/// ***
+	/// 
+	/// <para><b>Legend</b></para>
+	/// 
+	/// <para>The Legend includes data points from the first-level items. The information provided in each legend item helps identify the corresponding sunburst sub levels. The Levels of <see cref="SunburstHierarchicalLevel.GroupMemberPath"/> property value will be displayed in the legend item.</para>
+	/// 
+	/// <para>To render a legend, create an instance of <see cref="SunburstLegend"/>and assign it to the <see cref="Legend"/> property. </para>
+	/// 
+	/// # [MainPage.xaml](#tab/tabid-5)
+	/// <code> <![CDATA[
+	/// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" ValueMemberPath="EmployeesCount">
+	/// 
+	///   <sunburst:SfSunburstChart.BindingContext>
+	///         <model:SunburstViewModel x:Name="viewModel"/>
+	///   </sunburst:SfSunburstChart.BindingContext>
+	///   
+	///   <sunburst:SfSunburstChart.Legend>
+	///         <sunburst:SunburstLegend x:Name="legend"/>
+	///   </sunburst:SfSunburstChart.Legend>
+	/// 
+	///   <sunburst:SfSunburstChart.Levels>
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
+	///   </sunburst:SfSunburstChart.Levels>
+	///   
+	/// </sunburst:SfSunburstChart>
+	/// ]]>
+	/// </code>
+	/// # [MainPage.xaml.cs](#tab/tabid-6)
+	/// <code><![CDATA[
+	/// 
+	///  SfSunburstChart sunburstChart = new SfSunburstChart();
+	///  
+	///  BindingContext = new SunburstViewModel();
+	///  
+	///  sunburstChart.Legend = new SunburstLegend();
+	///  
+	///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
+	///  sunburstChart.ValueMemberPath = "EmployeesCount";
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
+	///  
+	///  Content = sunburstChart;
+	/// ]]>
+	/// </code>
+	/// ***
+	/// 
+	/// <para><b>Data Label</b></para>
+	/// 
+	/// <para>Data labels are used to display values related to a sunburst chart segment. To render the data labels, you need to enable the <see cref="ShowLabels"/> property as <b>true</b> in <see cref="SfSunburstChart"/> class. </para>
+	/// 
+	/// <para>To customize the sunburst chart data labels rotation mode using <see cref="SunburstLabelRotationMode"/> and its default value is <see cref="SunburstLabelRotationMode.Angle"/>, overflow mode using <see cref="SunburstLabelOverflowMode"/> and its default value is <see cref="SunburstLabelOverflowMode.Hide"/>, and label styles, you need to create an instance of <see cref="SunburstDataLabelSettings"/> and set it to the <see cref="DataLabelSettings"/> property.</para>
+	/// 
+	/// # [MainPage.xaml](#tab/tabid-7)
+	/// <code><![CDATA[
+	/// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" 
+	///              ShowLabels="True" ValueMemberPath="EmployeesCount">
+	/// 
+	///   <sunburst:SfSunburstChart.BindingContext>
+	///         <model:SunburstViewModel x:Name="viewModel"/>
+	///   </sunburst:SfSunburstChart.BindingContext>
+	///   
+	///   <sunburst:SfSunburstChart.DataLabelSettings>
+	///           <sunburst:SunburstDataLabelSettings FontSize="13" FontAttributes="Italic"
+	///                                              RotationMode="Angle" OverFlowMode="Trim" />
+	///   </sunburst:SfSunburstChart.DataLabelSettings>
+	///  
+	///   <sunburst:SfSunburstChart.Levels>
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
+	///   </sunburst:SfSunburstChart.Levels>
+	///   
+	/// </sunburst:SfSunburstChart>
+	///
+	/// ]]>
+	/// </code>
+	/// # [MainPage.xaml.cs](#tab/tabid-8)
+	/// <code><![CDATA[
+	///  SfSunburstChart sunburstChart = new SfSunburstChart();
+	///  
+	///  BindingContext = new SunburstViewModel();
+	///  
+	///  sunburstChart.ShowLabels = true;
+	///  sunburstChart.DataLabelSettings = new SunburstDataLabelSettings()
+	///  {
+	///        OverFlowMode = SunburstLabelOverflowMode.Trim,
+	///        RotationMode = SunburstLabelRotationMode.Angle,
+	///        FontAttributes = FontAttributes.Italic,
+	///        FontSize = 13
+	///  };
+	///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
+	///  sunburstChart.ValueMemberPath = "EmployeesCount";
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
+	///  
+	///  Content = sunburstChart;
+	///         
+	/// ]]>
+	/// </code>
+	/// ***
+	/// 
+	/// <para><b>Tooltip</b></para>
+	/// 
+	/// <para>Tooltip displays information while tapping or mouse hovering on the segment. To display the tooltip on the sunburst chart, you need to set the <see cref="EnableTooltip"/> property as <b>true</b> in <see cref="SfSunburstChart"/>. </para>
+	/// 
+	/// <para>To customize the appearance of the tooltip elements like Background, TextColor, and Font, create an instance of the <see cref="SunburstTooltipSettings"/> class, modify the values, and assign it to the <see cref="TooltipSettings"/> property in <see cref="SfSunburstChart"/>. </para>
+	/// 
+	/// # [MainPage.xaml](#tab/tabid-9)
+	/// <code><![CDATA[
+	/// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" 
+	///              EnableTooltip="True" ValueMemberPath="EmployeesCount">
+	/// 
+	///   <sunburst:SfSunburstChart.BindingContext>
+	///         <model:SunburstViewModel x:Name="viewModel"/>
+	///   </sunburst:SfSunburstChart.BindingContext>
+	///   
+	///   <sunburst:SfSunburstChart.TooltipSettings>
+	///         <sunburst:SunburstTooltipSettings />
+	///   </sunburst:SfSunburstChart.TooltipSettings>
+	///  
+	///   <sunburst:SfSunburstChart.Levels>
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
+	///   </sunburst:SfSunburstChart.Levels>
+	///   
+	/// </sunburst:SfSunburstChart>
+	/// ]]>
+	/// </code>
+	/// # [MainPage.xaml.cs](#tab/tabid-10)
+	/// <code><![CDATA[
+	/// SfSunburstChart sunburstChart = new SfSunburstChart();
+	///  
+	///  BindingContext = new SunburstViewModel();
+	/// 
+	///  sunburstChart.TooltipSettings = new SunburstTooltipSettings();
+	/// 
+	///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
+	///  sunburstChart.ValueMemberPath = "EmployeesCount";
+	///  sunburstChart.EnableTooltip = true;
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
+	///  
+	///  Content = sunburstChart;
+	///
+	/// ]]>
+	/// </code>
+	/// ***
+	/// 
+	/// <para><b>CenterView</b></para>
+	/// 
+	/// <para>CenterView is used to share additional information about the sunburst chart. The binding context of the CenterView will be the respective sunburst. To display the center view on the sunburst chart, you need to set the<see cref="CenterView"/> property in <see cref="SfSunburstChart"/>. </para>
+	/// 
+	/// <para>CenterHoleSize is used to prevent overlapping with segments in the sunburst center view.</para>
+	/// 
+	/// # [MainPage.xaml](#tab/tabid-11)
+	/// <code><![CDATA[
+	/// <sunburst:SfSunburstChart ItemsSource="{Binding DataSource}" 
+	///              ValueMemberPath="EmployeesCount">
+	/// 
+	///   <sunburst:SfSunburstChart.BindingContext>
+	///         <model:SunburstViewModel x:Name="viewModel"/>
+	///   </sunburst:SfSunburstChart.BindingContext>
+	///   
+	///   <sunburst:SfSunburstChart.CenterView>
+	///            <StackLayout Orientation="Vertical"
+	///                         HeightRequest="{Binding CenterHoleSize}"
+	///                         WidthRequest="{Binding CenterHoleSize}"
+	///                         HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+	///                <Label Text = "CenterView" />
+	///            </StackLayout>
+	///   </sunburst:SfSunburstChart.CenterView>
+	///  
+	///   <sunburst:SfSunburstChart.Levels>
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "Country" />
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobDescription" />
+	///         <sunburst:SunburstHierarchicalLevel GroupMemberPath = "JobRole" />
+	///   </sunburst:SfSunburstChart.Levels>
+	///   
+	/// </sunburst:SfSunburstChart>
+	/// ]]>
+	/// </code>
+	/// # [MainPage.xaml.cs](#tab/tabid-12)
+	/// <code><![CDATA[
+	///  SfSunburstChart sunburstChart = new SfSunburstChart();
+	///  
+	///  BindingContext = new SunburstViewModel();
+	/// 
+	///  StackLayout layout = new StackLayout();
+	///  layout.HorizontalOptions = LayoutOptions.CenterAndExpand;
+	///  layout.VerticalOptions = LayoutOptions.CenterAndExpand;
+	///  layout.SetBinding(HeightRequestProperty, "CenterHoleSize");
+	///  layout.SetBinding(WidthRequestProperty, "CenterHoleSize");
+	///    
+	///  Label label = new Label();
+	///  label.Text = "CenterView";
+	///  layout.Children.Add(label);
+	///  sunburstChart.CenterView = layout;
+	/// 
+	///  sunburstChart.SetBinding(SfSunburstChart.ItemsSourceProperty, "DataSource");
+	///  sunburstChart.ValueMemberPath = "EmployeesCount";
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "Country" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobDescription" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobGroup" });
+	///  sunburstChart.Levels.Add(new SunburstHierarchicalLevel() { GroupMemberPath = "JobRole" });
+	///  
+	///  Content = sunburstChart;
+	///
+	/// ]]>
+	/// </code>
+	/// ***
+	/// </remarks>
+	public class SfSunburstChart : View, IContentView, ITouchListener, ITapGestureListener, IDoubleTapGestureListener, IParentThemeElement
     {
         #region private Fields
         List<SunburstItem>? _groupItems;
@@ -338,10 +340,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         double _outerRadius;
         double _centerHoleSize = 1;
         private readonly LegendLayout legendLayout;
-		private readonly SunburstChartArea area;
-		private int ZoomingLevel = -1;
 		ChartTitleView _titleView;
-
         View? _content;
         SunburstLevelCollection _actualLevel;
 
@@ -391,9 +390,23 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 				new ChartLegendLabelStyle(), 
 				propertyChanged: OnLegendPropertyChanged);
 
-        #endregion
+		#endregion
 
-        #region Internal Properties
+		#region Internal Properties
+
+		/// <summary>
+		/// Gets or sets the previous size stack for drill-down.
+		/// </summary>
+		internal double PreviousSize { get; set; }
+
+		internal DrillDownToolbar DrillDownToolbar { get; set; }
+
+		internal SunburstChartArea area;
+
+		/// <summary>
+		/// Gets the drill down manager for internal use.
+		/// </summary>
+		internal DrillDownManager? DrillDownManager { get; set; }
 
 		/// <summary>
 		/// Gets or sets the number of levels in the sunburst chart.
@@ -443,7 +456,9 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 		/// <summary>
 		/// Gets or sets the animation for operations.
 		/// </summary>
-		internal Animation? SunburstAnimation  { get; set; }
+		internal Animation? DrilldownAnimation { get; set; }
+
+		internal Animation? AlphaAnimation { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the chart needs to be animated.
@@ -716,20 +731,43 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 				null,
                 propertyChanged: OnSelectionSettingsPropertyChanged);
 
-        #endregion
+		/// <summary>
+		/// Identifies the <see cref="ToolbarSettings"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty ToolbarSettingsProperty = BindableProperty.Create(
+			nameof(ToolbarSettings),
+			typeof(SunburstToolbarSettings),
+			typeof(SfSunburstChart),
+			null,
+			propertyChanged: OnToolbarSettingsPropertyChanged);
 
-        #region Constructor
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SfSunburstChart"/> class.
-        /// </summary>
+		/// <summary>
+		/// Identifies the <see cref="EnableDrillDown"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty EnableDrillDownProperty = BindableProperty.Create(
+			nameof(EnableDrillDown),
+			typeof(bool),
+			typeof(SfSunburstChart),
+			false,
+			BindingMode.Default,
+			null,
+			propertyChanged: OnEnableDrillDownPropertyChanged);
+
+		#endregion
+
+		#region Constructor
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SfSunburstChart"/> class.
+		/// </summary>
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        public SfSunburstChart()
+		public SfSunburstChart()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
         {
             
             ThemeElement.InitializeThemeResources(this, "SfSunburstChartTheme");
             _titleView = new ChartTitleView();
-            area = new SunburstChartArea(this);
+			DrillDownToolbar = new DrillDownToolbar(this);
+			area = new SunburstChartArea(this);
             legendLayout = new LegendLayout(area);
             LegendStyle.Parent = this;
             Segments = new SunburstSegmentCollection();
@@ -742,20 +780,20 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             _actualLevel = new SunburstLevelCollection();
             _innerLevel = new SunburstHierarchicalLevel() { SunburstChart = this };
             DataLabelSettings = new SunburstDataLabelSettings();
-            _content = CreateTemplate(legendLayout);
+			_content = CreateTemplate(legendLayout);
             this.AddTouchListener(this);
             this.AddGestureListener(this);
         }
 
-        #endregion
+		#endregion
 
-        #region Public Properties
+		#region Public Properties
 
-        /// <summary>
-        /// Gets or sets a legend that is used to display a legend that helps to identify the parent of each level in the sunburst chart.
-        /// </summary>
-        /// <value>This property takes a <see cref="SunburstLegend"/> instance as value and its default value is null.</value>
-        public SunburstLegend Legend
+		/// <summary>
+		/// Gets or sets a legend that is used to display a legend that helps to identify the parent of each level in the sunburst chart.
+		/// </summary>
+		/// <value>This property takes a <see cref="SunburstLegend"/> instance as value and its default value is null.</value>
+		public SunburstLegend Legend
         {
             get => (SunburstLegend)GetValue(LegendProperty);
             set => SetValue(LegendProperty, value);
@@ -937,10 +975,19 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             set => SetValue(AnimationDurationProperty, value);
         }
 
-        /// <summary>
-        /// Gets the size of the sunburst center hole.
-        /// </summary>
-        public double CenterHoleSize
+		/// <summary>
+		/// Gets or sets a value indicating whether to enable the drill-down settings. 
+		/// </summary>
+		public bool EnableDrillDown
+		{
+			get { return (bool)GetValue(EnableDrillDownProperty); }
+			set { SetValue(EnableDrillDownProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets the size of the sunburst center hole.
+		/// </summary>
+		public double CenterHoleSize
         {
             get { return _centerHoleSize; }
             internal set
@@ -965,35 +1012,69 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         }
 
 		/// <summary>
+		/// Gets or sets the toolbar settings for the chart.
+		/// </summary>
+		/// <value>This property takes a <see cref="ToolbarSettings"/> instance as value and its default value is null.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-13)
+		/// <code>
+		/// <![CDATA[
+		/// <chart:SfSunburstChart EnableDrillDown="True">
+		///     <chart:SfSunburstChart.ToolbarSettings >
+		///         <chart:SunburstToolbarSettings HorizontalAlignment="End" VerticalAlignment="End"/>
+		///     </chart:SfSunburstChart.ToolbarSettings>
+		/// </chart:SfSunburstChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-14)
+		/// <code><![CDATA[
+		/// SfSunburstChart sunburst = new SfSunburstChart();
+		/// sunburst.EnableDrillDown = true;
+		/// SunburstToolbarSettings toolbarSettings = new SunburstToolbarSettings()
+		/// {
+		///     HorizontalAlignment = SunburstToolbarAlignment.End,
+		///     VerticalAlignment = SunburstToolbarAlignment.End,
+		/// };
+		/// sunburst.ToolbarSettings = toolbarSettings;
+		/// this.Content = sunburst
+		/// ]]>
+		/// </code>
+		/// </example>
+		public SunburstToolbarSettings ToolbarSettings
+		{
+			get { return (SunburstToolbarSettings)GetValue(ToolbarSettingsProperty); }
+			set { SetValue(ToolbarSettingsProperty, value); }
+		}
+
+		/// <summary>
 		/// Gets or sets the settings for segment selection in the sunburst chart.
 		/// </summary>
 		/// <value>
 		/// An instance of <see cref="SelectionSettings"/> class.
 		/// </value>
 		/// <example>
-        /// # [MainPage.xaml](#tab/tabid-13)
+		/// # [MainPage.xaml](#tab/tabid-15)
 		/// <code>
 		/// <![CDATA[
 		/// <sunburst:SfSunburstChart>
 		///     <sunburst:SfSunburstChart.SelectionSettings>
-		///         <sunburst:SunburstSelectionSettings 
-		///             Type="Child" 
-		///             SunburstSelectionDisplayMode="HighlightByColor"
-		///             Fill="Blue" />
+		///         <sunburst:SunburstSelectionSettings Fill="DarkRed" DisplayMode="HighlightByBrush" Type="Child"/>
 		///     </sunburst:SfSunburstChart.SelectionSettings>
 		/// </sunburst:SfSunburstChart>
 		/// ]]>
 		/// </code>
-		/// # [MainPage.xaml.cs](#tab/tabid-14)
+		/// # [MainPage.xaml.cs](#tab/tabid-16)
 		/// <code><![CDATA[
-		/// SfSunburstChart sunburstChart = new SfSunburstChart();
 		/// 
-		/// sunburstChart.SelectionSettings = new SunburstSelectionSettings
+		/// SfSunburstChart sunburstChart = new SfSunburstChart();
+		/// SunburstSelectionSettings selectionSettings = new SunburstSelectionSettings
 		/// {
-		///     Type = Type = SunburstSelectionType.Child,
-		///     DisplayMode = SunburstSelectionDisplayMode.HighlightByColor,
-		///     Fill = new SolidColorBrush(Colors.Blue)
-		/// }; 
+		///     Fill = Colors.DarkRed,
+		///     DisplayMode = SunburstSelectionDisplayMode.HighlightByBrush,
+		///     Type = SunburstSelectionType.Child,
+		/// };
+		/// sunburstChart.SelectionSettings = selectionSettings;
+		/// this.Content = sunburst;
 		/// ]]>
 		/// </code>
 		/// </example>
@@ -1067,7 +1148,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 if (_internalDataSource != value)
                 {
                     _internalDataSource = value;
-                    GenerateSunburstItems();
+					GenerateSunburstItems();
                     ScheduleUpdate();
                 }
             }
@@ -1156,7 +1237,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 SetInheritedBindingContext(DataLabelSettings, BindingContext);
             }
 
-            if (_content != null)
+			if (ToolbarSettings != null)
+			{
+				SetInheritedBindingContext(ToolbarSettings, BindingContext);
+			}
+
+			if (_content != null)
             {
                 SetInheritedBindingContext(_content, BindingContext);
             }
@@ -1223,7 +1309,9 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                     CenterHoleSize = Math.Abs(InnerRadius * Math.Min(SeriesRenderBounds.Width, SeriesRenderBounds.Height));
 
                     var size = OuterRadius - CenterHoleSize;
-					RingSize = size / LevelsCount; // Size has to be calculated based on the current levels count.
+					
+					// Size has to be calculated based on the current levels count on zooming.
+					RingSize = size / (DrillDownManager != null && DrillDownManager.IsZoomed ? DrillDownManager.EnumerateLevels : LevelsCount);
 				}
             }
         }
@@ -1254,7 +1342,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         internal void CreateSegments()
         {
             var index = -1;
-            var segmentIndex = 0;
+			var segmentIndex = 0;
 
             if (Levels.Count > 0)
             {
@@ -1271,7 +1359,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                             segment.CurrentLevel = index;
                             segment.Index = item.SliceIndex;
 
-                            segment.ArcStartAngle = item.ArcStart;
+							segment.ArcStartAngle = item.ArcStart;
                             segment.ArcEndAngle = item.ArcEnd;
                             var items = new List<object?>();
                             items.Add(item.Key?.ToString() ?? string.Empty);
@@ -1284,15 +1372,68 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                     }
                 }
 
-                FindSegmentsChilds();
+				// Assign unique keys for drilled segments like Xamarin does
+				if (DrillDownManager != null && DrillDownManager.IsZoomed)
+				{
+					AssignUniqueKeyToDrilledSegments();
+				}
+
+				FindSegmentsChilds();
             }
         }
+
+		/// <summary>
+		/// Assigns unique keys to drilled segments (matching Xamarin behavior).
+		/// </summary>
+		void AssignUniqueKeyToDrilledSegments()
+		{
+			if (DrillDownManager is DrillDownManager drillDownManager && drillDownManager.DrillDownSegment is SunburstSegment drilledSegment)
+			{
+
+				if (drillDownManager.IsDoubleClicked && drilledSegment.Childs != null)
+				{
+					for (int i = 0; i < Segments.Count; i++)
+					{
+						Segments[i].UniqueKey = drilledSegment.Childs[i].UniqueKey;
+					}
+				}
+				else if (drilledSegment.HasParent && Segments.Count == drilledSegment.Parent?.Childs?.Count())
+				{
+					for (int i = 0; i < Segments.Count; i++)
+					{
+						Segments[i].UniqueKey = drilledSegment.Parent.Childs[i].UniqueKey;
+					}
+				}
+				else
+				{
+					drillDownManager.Parents = new Stack<SunburstSegment>();
+
+					while (drilledSegment != null && drilledSegment.HasParent && drilledSegment.Parent != null)
+					{
+						drillDownManager.Parents.Push(drilledSegment.Parent);
+						drilledSegment = drilledSegment.Parent;
+					}
+
+					if (drillDownManager.Parents.Count > 0)
+					{
+						var parent = drillDownManager.Parents.First();
+						if (parent.Childs != null)
+						{
+							for (int i = 0; i < Segments.Count; i++)
+							{
+								Segments[i].UniqueKey = parent.Childs[i].UniqueKey;
+							}
+						}
+					}
+				}
+			}
+		}
 
 		/// <summary>
 		/// Updates the stroke color for all segments in the chart.
 		/// Applies the current <see cref="Stroke"/> value to each segment.
 		/// </summary>
-		private void UpdateStrokeColor()
+		void UpdateStrokeColor()
         {
             foreach (var segment in Segments)
             {
@@ -1304,7 +1445,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 		/// Updates the stroke width for all segments in the chart.
 		/// Converts the current <see cref="StrokeWidth"/> to float and applies it to each segment.
 		/// </summary>
-		private void UpdateStrokeWidth()
+		void UpdateStrokeWidth()
         {
             foreach (var segment in Segments)
             {
@@ -1318,6 +1459,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         internal void GenerateSunburstItems()
         {
             ClearExistingCollections();
+			ClearSegments();
 
             if (Levels == null || InternalDataSource == null || !InternalDataSource.GetEnumerator().MoveNext() || string.IsNullOrEmpty(ValueMemberPath))
             {
@@ -1326,24 +1468,26 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 
             _innerLevel = new SunburstHierarchicalLevel() { CurrentActualData = InternalDataSource, SunburstChart = this };
 
-			foreach (var level in Levels)
-            {
-                if (level.GroupingPath != null)
-                {
-                    if (_groupItems != null && _groupItems.Count > 0)
-                    {
+            var zoomLevel = DrillDownManager?.ZoomingLevel ?? -1;
+
+			for (int i = 0; i < Levels.Count; i++)
+			{
+				if (zoomLevel <= i && Levels[i].GroupingPath != null)
+				{
+					if (zoomLevel <= i && _groupItems != null && _groupItems.Count>0)
+					{
                         List<SunburstItem>? cloneItems;
                         (cloneItems = _groupItems.ToList()).Clear();
 
-						foreach (var item in _groupItems)
-                        {
-                            _innerLevel = new SunburstHierarchicalLevel() { CurrentActualData = item.Values, SunburstChart = this };
-                            var subItems = _innerLevel.GenerateItem(level.GroupingPath?.ToString() ?? string.Empty);
-                            if (subItems != null)
+						for (int j = 0; j < _groupItems.Count; j++)
+						{
+							_innerLevel = new SunburstHierarchicalLevel() { CurrentActualData = _groupItems[j].Values, SunburstChart = this };
+							var subItems = _innerLevel.GenerateItem(Levels[i].GroupingPath?.ToString() ?? string.Empty);
+							if (subItems != null)
                             {
                                 _innerLevel.GetKeyValue(subItems, ValueMemberPath);
-                                item.ChildItems = subItems;
-                                _innerLevel.GetSliceInfo(subItems, item.ArcStart, item.ArcEnd, item.SliceIndex);
+								_groupItems[j].ChildItems = subItems;
+								_innerLevel.GetSliceInfo(subItems, _groupItems[j].ArcStart, _groupItems[j].ArcEnd, _groupItems[j].SliceIndex);
                                 if (subItems.Count > 0)
                                 {
                                     foreach (var subItem in subItems)
@@ -1357,14 +1501,14 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                             }
                         }
 
-                       level.SunburstItems = _groupItems = cloneItems;
-                       level.SunburstChart = this;
+						Levels[i].SunburstItems = _groupItems = cloneItems;
+						Levels[i].SunburstChart = this;
                     }
                     else
                     {
-                        _groupItems = _innerLevel.GenerateItem(level.GroupingPath);
+                        _groupItems = _innerLevel.GenerateItem(Levels[i].GroupingPath);
                         _innerLevel.GetKeyValue(_groupItems, ValueMemberPath);
-                        level.SunburstItems = _groupItems;
+						Levels[i].SunburstItems = _groupItems;
                         var arcStartAngle = SunburstChartUtils.DegreeToRadianConverter(StartAngle);
                         var arcEndAngle = SunburstChartUtils.DegreeToRadianConverter(EndAngle);
                         _innerLevel.GetSliceInfo(_groupItems, arcStartAngle, arcEndAngle, -1);
@@ -1387,457 +1531,597 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             return fillColor;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        /// <summary>
-        /// Finds the segments relation.
-        /// </summary>
-        private void FindSegmentsChilds()
-        {
-            if (StartAngle < EndAngle)
-            {
-                foreach (var segment in Segments)
-                {
-                    segment.Childs = (from seg in Segments.Where(s => s.CurrentLevel >= segment.CurrentLevel)
-                                      where seg.ArcStartAngle >= segment.ArcStartAngle
-                                      && Math.Round(seg.ArcEndAngle, 2) <= Math.Round(segment.ArcEndAngle, 2)
-                                      select seg).ToList();
-                    segment.HasChild = segment.Childs.Any();
-
-                    segment.Parent = (from seg in Segments.Where(s => s.CurrentLevel == segment.CurrentLevel - 1)
-                                      where segment.ArcStartAngle >= seg.ArcStartAngle
-                                      && Math.Round(segment.ArcEndAngle, 2) <= Math.Round(seg.ArcEndAngle, 2)
-                                      select seg).FirstOrDefault();
-                    segment.HasParent = segment.Parent != null;
-                }
-            }
-            else
-            {
-                foreach (var segment in Segments)
-                {
-                    segment.Childs = (from seg in Segments.Where(s => s.CurrentLevel >= segment.CurrentLevel)
-                                      where seg.ArcStartAngle <= segment.ArcStartAngle
-                                      && Math.Round(seg.ArcEndAngle, 2) >= Math.Round(segment.ArcEndAngle, 2)
-                                      select seg).ToList();
-                    segment.HasChild = segment.Childs.Any();
-
-                    segment.Parent = (from seg in Segments.Where(s => s.CurrentLevel == segment.CurrentLevel - 1)
-                                      where segment.ArcStartAngle <= seg.ArcStartAngle
-                                      && Math.Round(segment.ArcEndAngle, 2) >= Math.Round(seg.ArcEndAngle, 2)
-                                      select seg).FirstOrDefault();
-                    segment.HasParent = segment.Parent != null;
-                }
-            }
-        }
-
-        private View CreateTemplate(LegendLayout legendLayout)
-        {
-            Grid grid = new Grid();
-            grid.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
-            grid.AddRowDefinition(new RowDefinition() { Height = GridLength.Star });
-            Grid.SetRow(_titleView, 0);
-            grid.Add(_titleView);
-            Grid.SetRow(legendLayout, 1);
-            grid.Add(legendLayout);
-            grid.Parent = this;
-
-            return grid;
-        }
-
-        private void SetFillColor(SunburstSegment segment)
-        {
-            segment.Fill = SelectionSettings != null && segment.IsSelected &&
-                           SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByBrush) && SelectionSettings.Fill != null
-                           ? SelectionSettings.Fill
-                           : GetFillColor(segment.Index) ?? Brush.Transparent;
-        }
-
-        internal void SetOpacity(SunburstSegment segment)
-        {
-            if (SelectionSettings == null || !SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByOpacity))
-            {
-                segment.Opacity = 1.0f;
-                return;
-            }
-
-            segment.Opacity = segment.IsSelected ? 1.0f : (float)SelectionSettings.Opacity;
-        }
-
-        void SetStroke(SunburstSegment segment)
-        {
-            if (SelectionSettings != null && segment.IsSelected &&
-                                      SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByStroke) &&
-                                      SelectionSettings.Stroke != null && SelectionSettings.StrokeWidth > 0)
-            {
-                segment.Stroke = SelectionSettings.Stroke;
-                segment.StrokeWidth = (float)SelectionSettings.StrokeWidth;
-            }
-            else
-            {
-                segment.Stroke = Stroke;
-                segment.StrokeWidth = (float)StrokeWidth;
-            }
-        }
-
-        /// <summary>
-        /// Clears the existing collections.
-        /// </summary>
-        private void ClearExistingCollections()
-        {
-            if (Levels != null)
-            {
-                foreach (var level in Levels.Where(level => level.SunburstItems != null))
-                {
-                    level.SunburstItems?.Clear();
-                }
-
-                // Levels.Clear();
-            }
-
-            _groupItems?.Clear();
-        }
-
-        private void Segments_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            e.Apply((obj, index, isTrue) => AddSegment(obj), (obj, index) => RemoveSegment(obj), ResetSegment);
-        }
-
-        private void AddSegment(object chartSegment)
-        {
-            if (chartSegment is SunburstSegment segment)
-            {
-                segment.Chart = this;
-                SetFillColor(segment);
-                SetStroke(segment);
-                SetOpacity(segment);
-            }
-        }
-
-        private void RemoveSegment(object chartSegment)
-        {
-            //Todo: Need to consider this case later.
-        }
-
-        private void ResetSegment()
-        {
-            //Todo: Need to consider this case later.
-        }
-
-        private void OnBindingPathChanged()
-        {
-
-        }
-
-        /// <summary>
-        /// Clears the unused segments.
-        /// </summary>
-        private void ClearSegments()
-        {
-            Segments?.Clear();
-        }
-
-        private void SelectedSegments_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            e.Apply((obj, index, isTrue) => AddSelectedSegment(obj), (obj, index) => RemoveSelectedSegment(obj), ResetSelectedSegment);
-        }
-
-        private void AddSelectedSegment(object sunburstItem)
-        {
-            if (sunburstItem is not SunburstItem item || GetSelectedSegment(item) is not SunburstSegment segment)
-                return;
-
-            segment.IsSelected = true;
-            bool isRootSegment = segment.Parent == null;
-            SetFillColor(segment);
-            SetStroke(segment);
-            SetOpacity(segment);
-
-            // Apply legend selection for root segments only
-            if (isRootSegment)
-            {
-                UpdateLegendItems(segment, SelectionSettings);
-            }
-        }
-
-        private void RemoveSelectedSegment(object sunburstItem)
-        {
-            if (sunburstItem is not SunburstItem item || GetSelectedSegment(item) is not SunburstSegment segment)
-                return;
-
-            var settings = SelectionSettings;
-            segment.IsSelected = false;
-            SetFillColor(segment);
-            SetStroke(segment);
-            SetOpacity(segment);
-
-            if (segment.Parent == null)
-                UpdateLegendItems(segment, settings);
-        }
-
-
-        /// <summary>
-        /// Common method to update legend items for both selection and deselection
-        /// </summary>
-        /// <param name="segment">The segment being processed</param>
-        /// <param name="settings">Selection settings</param>
-        private void UpdateLegendItems(SunburstSegment segment, SunburstSelectionSettings settings)
-        {
-            if (Legend?.IsVisible != true || area?.legendItems?.Count == 0)
-                return;
-
-            bool useBrush = settings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByBrush);
-            bool useOpacity = settings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByOpacity);
-
-            if (!useBrush && !useOpacity)
-                return;
-
-            if (useBrush)
-            {
-                // Reset only the specific legend item 
-                ResetSpecificLegendItem(segment);
-            }
-
-            if (useOpacity)
-            {
-                if (!segment.IsSelected)
-                    // Reset all legend items to full opacity (original RemoveSelectedSegment logic)
-                    ResetAllLegendItems();
-                else
-                    UpdateAllLegendItems();
-            }
-        }
-
-        /// <summary>
-        /// Updates all legend items for selection mode
-        /// </summary>
-        private void UpdateAllLegendItems()
-        {
-            float opacity = (float)SelectionSettings.Opacity;
-
-            if (!SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByOpacity) || SelectedSunburstItems.Count <= 0) return;
-
-            foreach (var item in area.legendItems.OfType<LegendItem>())
-            {
-                var originalBrush = GetFillColor(item.Index) ?? Brush.Transparent;
-                bool isSelectedItem = item.Index == SelectedSunburstItems[0].SliceIndex;
-
-                if (isSelectedItem)
-                {
-                    item.IconBrush = originalBrush;
-                    SetLegendItemTextOpacity(item, 1.0f);
-                }
-                else
-                {
-                    item.IconBrush = ApplyOpacityToBrush(originalBrush, opacity);
-                    SetLegendItemTextOpacity(item, opacity);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Resets a specific legend item (used in deselection for brush mode)
-        /// </summary>
-        private void ResetSpecificLegendItem(SunburstSegment segment)
-        {
-            var item = area.legendItems.FirstOrDefault(sel => sel.Index.Equals(segment.Index));
-            if (item is LegendItem legendItem)
-            {
-                legendItem.IconBrush = !segment.IsSelected ? GetFillColor(legendItem.Index) ?? Brush.Transparent : SelectionSettings.Fill;
-                var currentColor = legendItem.TextColor;
-                legendItem.TextColor = Color.FromRgba(
-                    currentColor.Red,
-                    currentColor.Green,
-                    currentColor.Blue,
-                    1.0f);
-            }
-        }
-
-        /// <summary>
-        /// Resets all legend items to full opacity (used in deselection for opacity mode)
-        /// </summary>
-        private void ResetAllLegendItems()
-        {
-            foreach (var item in area.legendItems.OfType<LegendItem>())
-            {
-                item.IconBrush = GetFillColor(item.Index) ?? Brush.Transparent;
-                var currentColor = item.TextColor;
-                item.TextColor = Color.FromRgba(
-                    currentColor.Red,
-                    currentColor.Green,
-                    currentColor.Blue,
-                    1.0f);
-            }
-        }
-
-        /// <summary>
-        /// Sets the text opacity for a legend item by modifying its TextColor.
-        /// </summary>
-        /// <param name="legendItem">The legend item to modify.</param>
-        /// <param name="opacity">The opacity value to apply (0.0 to 1.0).</param>
-        private void SetLegendItemTextOpacity(LegendItem legendItem, float opacity)
-        {
-            if (legendItem == null)
-                return;
-
-            var legendItemInterface = (ILegendItem)legendItem;
-            Color currentColor = legendItem.TextColor;
-            Color newColor = Color.FromRgba(
-                currentColor.Red,
-                currentColor.Green,
-                currentColor.Blue,
-                opacity
-            );
-            legendItemInterface.TextColor = newColor;
-        }
-
-        /// <summary>
-        /// Applies opacity to a brush by creating a new brush with modified alpha
-        /// </summary>
-        private Brush ApplyOpacityToBrush(Brush brush, double opacity)
-        {
-            if (brush is SolidColorBrush solidBrush)
-            {
-                Color color = solidBrush.Color;
-                return new SolidColorBrush(
-                    Color.FromRgba(
-                        color.Red,
-                        color.Green,
-                        color.Blue,
-                        (float)opacity
-                    )
-                );
-            }
-            return brush;
-        }
-
-        private void ResetSelectedSegment()
-        {
-
-        }
-
-        /// <summary>
-        /// On the angle changed.
-        /// </summary>
-        private void OnAngleChanged()
-        {
-            if (Levels == null || Levels.Count == 0 || InternalDataSource == null)
-            {
-                ClearSegments();
-                return;
-            }
-
-            for (int i = 0; i < Levels.Count; i++)
-            {
-                if (this.ZoomingLevel <= i && Levels[i].GroupMemberPath != null)
-                {
-                    var prevItems = i - 1 == -1 ? null : Levels[i - 1].SunburstItems;
-
-                    if (prevItems != null && prevItems.Any())
-                    {
-                        foreach (var item in prevItems)
-                        {
-                            _innerLevel.GetSliceInfo(item.ChildItems, item.ArcStart, item.ArcEnd, item.SliceIndex);
-                        }
-                    }
-                    else
-                    {
-                        var arcStartAngle = SunburstChartUtils.DegreeToRadianConverter(StartAngle);
-                        var arcEndAngle = SunburstChartUtils.DegreeToRadianConverter(EndAngle);
-                        _innerLevel.GetSliceInfo(Levels[i].SunburstItems, arcStartAngle, arcEndAngle, -1);
-                    }
-                }
-            }
-
-            ClearSegments();
-            CreateSegments();
-        }
-
-        private void OnLevelPropertyChanged(object oldValue, object newValue)
-        {
-            if (oldValue is SunburstLevelCollection oldCollection)
-            {
-                oldCollection.CollectionChanged -= Level_CollectionChanged;
-            }
-
-            if (newValue is SunburstLevelCollection newCollection)
-            {
-                newCollection.CollectionChanged += Level_CollectionChanged;
-                newCollection.SunburstChart = this;
-                _actualLevel = new SunburstLevelCollection();
-
-                foreach (var level in newCollection)
-                {
-                    level.BindingContext = this.BindingContext;
-                    Levels.Add(level);
-                }
-            }
-
-        }
-
-        private void Level_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-        {
-            e.Apply((obj, index, isTrue) => AddLevel(obj), (obj, index) => RemoveLevel(obj), ResetLevel);
-
-            if (Levels != null)
-            {
-                foreach (SunburstHierarchicalLevel level in this.Levels)
-                {
-                    SetInheritedBindingContext(level, this.BindingContext);
-                    level.SunburstChart = this;
-                    GenerateSunburstItems();
-                    ScheduleUpdate();
-                }
-            }
-        }
-
-        private void ResetLevel()
-        {
-            _actualLevel.Clear();
-        }
-
-        private void RemoveLevel(object obj)
-        {
-            if (obj is SunburstHierarchicalLevel level && _actualLevel.Contains(level))
-                _actualLevel.Remove(level);
-        }
-
-        private void AddLevel(object obj)
-        {
-            if (obj is SunburstHierarchicalLevel level && !_actualLevel.Contains(level))
-                _actualLevel.Add(level);
-        }
-
-        private SunburstSegment? GetSelectedSegment(float pointX, float pointY)
-        {
-            double adjustedX = pointX - ActualSeriesClipRect.Left;
-            double adjustedY = pointY - ActualSeriesClipRect.Top;
-
-            foreach (var segment in Segments)
-            {
-                if (segment.IsPointInSunburstSegment(adjustedX, adjustedY))
-                {
-                    return segment;
-                }
-            }
-
-            return null;
-        }
-
-        private void OnTouchMove(Point point, PointerDeviceType deviceType)
-        {
-            if (deviceType == PointerDeviceType.Mouse && !NeedToAnimate)
-            {
-                Show((float)point.X, (float)point.Y, true);
-            }
-        }
-
-        #endregion
-
-        #region private static methods
-
-        private static void OnAngleChanged(BindableObject bindable, object oldValue, object newValue)
+		/// <summary>
+		/// Animates the drill-down operation using MAUI Animation API.
+		/// </summary>
+		/// <param name="duration">Animation duration in milliseconds.</param>
+		internal void AnimateDrillDown(double duration = 550)
+		{
+			if (DrilldownAnimation != null)
+			{
+				this.AbortAnimation("SunburstDrillAnimation");
+			}
+			else
+			{
+				DrilldownAnimation = new Animation(OnDrillAnimationStart);
+			}
+
+			DrilldownAnimation.Commit(this, "SunburstDrillAnimation", 1, (uint)duration, null, OnDrillDownAnimationCompleted, () => false);
+		}
+
+		internal void AnimateAlpha(double duration)
+		{
+			if (AlphaAnimation != null)
+			{
+				this.AbortAnimation("AlphaAnimation");
+			}
+			else
+			{
+				AlphaAnimation = new Animation(OnAlphaAnimationStart);
+			}
+
+			HideDataLabelsForAnimation();
+
+			AlphaAnimation.Commit(this, "AlphaAnimation", 1, (uint)duration, null, OnAlphaAnimationCompleted, () => false);
+		}
+
+		/// <summary>
+		/// Hides data labels during animation (matching Xamarin behavior).
+		/// </summary>
+		void HideDataLabelsForAnimation()
+		{
+			if (area?.DataLabelView != null)
+			{
+				area.DataLabelView.IsVisible = false;
+			}
+		}
+
+		/// <summary>
+		/// Shows data labels with fade-in effect after animation completion.
+		/// </summary>
+		void ShowDataLabelsAfterAnimation()
+		{
+			if (area?.DataLabelView != null && ShowLabels)
+			{
+				area.DataLabelView.IsVisible = true;
+
+				// Add fade-in effect like Xamarin
+				area.DataLabelView.Opacity = 0;
+#if NET10_0_OR_GREATER
+                var animation = new Animation(v => area.DataLabelView.Opacity = v, 0, 1, Easing.CubicOut);
+                animation.Commit(area.DataLabelView, "FadeIn", length: 250);
+#else
+				area.DataLabelView.FadeTo(1.0, 250, Easing.CubicOut);
+#endif
+				area.DataLabelView.InvalidateDrawable();
+			}
+		}
+
+		void OnDrillAnimationStart(double value)
+		{
+			if (value >= 0.0 && DrillDownManager is DrillDownManager drillDownManager)
+			{
+				if (drillDownManager.IsDoubleClicked)
+				{
+					drillDownManager.ZoomAnimationValue = (float)value;
+				}
+				else if (drillDownManager.IsBackButtonClicked || drillDownManager.IsResetButtonClicked)
+				{
+					drillDownManager.ZoomAnimationValue = 1f - (float)value;
+				}
+
+				HideDataLabelsForAnimation();
+				area.SeriesView.InvalidateDrawable();
+			}
+		}
+
+		/// <summary>
+		/// Called when drill animation completes (matching Xamarin's Animator_AnimationEnd).
+		/// </summary>
+		void OnDrillDownAnimationCompleted(double value, bool isCompleted)
+		{
+			if (DrillDownManager is not DrillDownManager drillDownManager)
+				return;
+
+			this.AbortAnimation("SunburstDrillAnimation");
+			drillDownManager.IsDoubleClicked = false;
+
+			drillDownManager.UpdatePreviousSegmentOnReset();
+
+			Task.Delay(50);
+
+			drillDownManager.ChangeDataSourceOnZoomBack();
+			drillDownManager.ChangeDataSourceOnReset();
+
+			if (!drillDownManager.IsFadeInAnimated)
+			{
+				ShowDataLabelsAfterAnimation();
+			}
+		}
+
+		void OnAlphaAnimationCompleted(double value, bool isCompleted)
+		{
+			if (DrillDownManager is not DrillDownManager drillDownManager)
+				return;
+
+			this.AbortAnimation("AlphaAnimation");
+			drillDownManager.IsFadeInAnimated = false;
+		}
+
+		void OnAlphaAnimationStart(double value)
+		{
+			if (value >= 0.0 && DrillDownManager is DrillDownManager drillDownManager)
+			{
+				drillDownManager.AlphaAnimationValue = (float)value;
+				drillDownManager.IsBackButtonClicked = false;
+
+				ShowDataLabelsAfterAnimation();
+				area.SeriesView.InvalidateDrawable();
+			}
+		}
+
+		#endregion
+
+		#region Private Methods
+
+		/// <summary>
+		/// Finds the segments relation.
+		/// </summary>
+		void FindSegmentsChilds()
+		{
+			if (StartAngle < EndAngle)
+			{
+				foreach (var segment in Segments)
+				{
+					segment.Childs = (from seg in Segments.Where(s => s.CurrentLevel >= segment.CurrentLevel)
+									  where seg.ArcStartAngle >= segment.ArcStartAngle
+									  && Math.Round(seg.ArcEndAngle, 2) <= Math.Round(segment.ArcEndAngle, 2)
+									  select seg).ToList();
+					segment.HasChild = segment.Childs.Any();
+
+					segment.Parent = (from seg in Segments.Where(s => s.CurrentLevel == segment.CurrentLevel - 1)
+									  where segment.ArcStartAngle >= seg.ArcStartAngle
+									  && Math.Round(segment.ArcEndAngle, 2) <= Math.Round(seg.ArcEndAngle, 2)
+									  select seg).FirstOrDefault();
+					segment.HasParent = segment.Parent != null;
+				}
+			}
+			else
+			{
+				foreach (var segment in Segments)
+				{
+					segment.Childs = (from seg in Segments.Where(s => s.CurrentLevel >= segment.CurrentLevel)
+									  where seg.ArcStartAngle <= segment.ArcStartAngle
+									  && Math.Round(seg.ArcEndAngle, 2) >= Math.Round(segment.ArcEndAngle, 2)
+									  select seg).ToList();
+					segment.HasChild = segment.Childs.Any();
+
+					segment.Parent = (from seg in Segments.Where(s => s.CurrentLevel == segment.CurrentLevel - 1)
+									  where segment.ArcStartAngle <= seg.ArcStartAngle
+									  && Math.Round(segment.ArcEndAngle, 2) >= Math.Round(seg.ArcEndAngle, 2)
+									  select seg).FirstOrDefault();
+					segment.HasParent = segment.Parent != null;
+				}
+			}
+		}
+
+		View CreateTemplate(LegendLayout legendLayout)
+		{
+			Grid grid = new Grid();
+			grid.AddRowDefinition(new RowDefinition() { Height = GridLength.Auto });
+			grid.AddRowDefinition(new RowDefinition() { Height = GridLength.Star });
+			Grid.SetRow(_titleView, 0);
+			grid.Add(_titleView);
+			Grid.SetRow(legendLayout, 1);
+			grid.Add(legendLayout);
+			grid.Parent = this;
+
+			return grid;
+		}
+
+		void SetFillColor(SunburstSegment segment)
+		{
+			segment.Fill = SelectionSettings != null && segment.IsSelected &&
+						   SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByBrush) && SelectionSettings.Fill != null
+						   ? SelectionSettings.Fill
+						   : GetFillColor(segment.Index) ?? Brush.Transparent;
+		}
+
+		internal void SetOpacity(SunburstSegment segment)
+		{
+			if (SelectionSettings == null || !SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByOpacity))
+			{
+				segment.Opacity = 1.0f;
+				return;
+			}
+
+			segment.Opacity = segment.IsSelected ? 1.0f : (float)SelectionSettings.Opacity;
+		}
+
+		void SetStroke(SunburstSegment segment)
+		{
+			if (SelectionSettings != null && segment.IsSelected &&
+									  SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByStroke) &&
+									  SelectionSettings.Stroke != null && SelectionSettings.StrokeWidth > 0)
+			{
+				segment.Stroke = SelectionSettings.Stroke;
+				segment.StrokeWidth = (float)SelectionSettings.StrokeWidth;
+			}
+			else
+			{
+				segment.Stroke = Stroke;
+				segment.StrokeWidth = (float)StrokeWidth;
+			}
+		}
+
+		/// <summary>
+		/// Clears the existing collections.
+		/// </summary>
+		void ClearExistingCollections()
+		{
+			if (Levels != null)
+			{
+				foreach (var level in Levels.Where(level => level.SunburstItems != null))
+				{
+					level.SunburstItems?.Clear();
+				}
+
+				// Levels.Clear();
+			}
+
+			_groupItems?.Clear();
+		}
+
+		void Segments_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+		{
+			e.Apply((obj, index, isTrue) => AddSegment(obj), (obj, index) => RemoveSegment(obj), ResetSegment);
+		}
+
+		void AddSegment(object chartSegment)
+		{
+			if (chartSegment is SunburstSegment segment)
+			{
+				segment.Chart = this;
+				SetFillColor(segment);
+				SetStroke(segment);
+				SetOpacity(segment);
+			}
+		}
+
+		void RemoveSegment(object chartSegment)
+		{
+			//Todo: Need to consider this case later.
+		}
+
+		void ResetSegment()
+		{
+			//Todo: Need to consider this case later.
+		}
+
+		void OnBindingPathChanged()
+		{
+
+		}
+
+		/// <summary>
+		/// Clears the unused segments.
+		/// </summary>
+		void ClearSegments()
+		{
+			Segments?.Clear();
+		}
+
+		void SelectedSegments_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+		{
+			e.Apply((obj, index, isTrue) => AddSelectedSegment(obj), (obj, index) => RemoveSelectedSegment(obj), ResetSelectedSegment);
+		}
+
+		void AddSelectedSegment(object sunburstItem)
+		{
+			if (sunburstItem is not SunburstItem item || GetSelectedSegment(item) is not SunburstSegment segment)
+				return;
+
+			segment.IsSelected = true;
+			bool isRootSegment = segment.Parent == null;
+			SetFillColor(segment);
+			SetStroke(segment);
+			SetOpacity(segment);
+
+			// Apply legend selection for root segments only
+			if (isRootSegment)
+			{
+				UpdateLegendItems(segment, SelectionSettings);
+			}
+		}
+
+		void RemoveSelectedSegment(object sunburstItem)
+		{
+			if (sunburstItem is not SunburstItem item || GetSelectedSegment(item) is not SunburstSegment segment)
+				return;
+
+			var settings = SelectionSettings;
+			segment.IsSelected = false;
+			SetFillColor(segment);
+			SetStroke(segment);
+			SetOpacity(segment);
+
+			if (segment.Parent == null)
+				UpdateLegendItems(segment, settings);
+		}
+
+
+		/// <summary>
+		/// Common method to update legend items for both selection and deselection
+		/// </summary>
+		/// <param name="segment">The segment being processed</param>
+		/// <param name="settings">Selection settings</param>
+		void UpdateLegendItems(SunburstSegment segment, SunburstSelectionSettings settings)
+		{
+			if (Legend?.IsVisible != true || area?.legendItems?.Count == 0)
+				return;
+
+			bool useBrush = settings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByBrush);
+			bool useOpacity = settings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByOpacity);
+
+			if (!useBrush && !useOpacity)
+				return;
+
+			if (useBrush)
+			{
+				// Reset only the specific legend item 
+				ResetSpecificLegendItem(segment);
+			}
+
+			if (useOpacity)
+			{
+				if (!segment.IsSelected)
+					// Reset all legend items to full opacity (original RemoveSelectedSegment logic)
+					ResetAllLegendItems();
+				else
+					UpdateAllLegendItems();
+			}
+		}
+
+		/// <summary>
+		/// Updates all legend items for selection mode
+		/// </summary>
+		void UpdateAllLegendItems()
+		{
+			float opacity = (float)SelectionSettings.Opacity;
+
+			if (!SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByOpacity) || SelectedSunburstItems.Count <= 0)
+				return;
+
+			foreach (var item in area.legendItems.OfType<LegendItem>())
+			{
+				var originalBrush = GetFillColor(item.Index) ?? Brush.Transparent;
+				bool isSelectedItem = item.Index == SelectedSunburstItems[0].SliceIndex;
+
+				if (isSelectedItem)
+				{
+					item.IconBrush = originalBrush;
+					SetLegendItemTextOpacity(item, 1.0f);
+				}
+				else
+				{
+					item.IconBrush = ApplyOpacityToBrush(originalBrush, opacity);
+					SetLegendItemTextOpacity(item, opacity);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Resets a specific legend item (used in deselection for brush mode)
+		/// </summary>
+		void ResetSpecificLegendItem(SunburstSegment segment)
+		{
+			var item = area.legendItems.FirstOrDefault(sel => sel.Index.Equals(segment.Index));
+			if (item is LegendItem legendItem)
+			{
+				legendItem.IconBrush = !segment.IsSelected ? GetFillColor(legendItem.Index) ?? Brush.Transparent : SelectionSettings.Fill;
+				var currentColor = legendItem.TextColor;
+				legendItem.TextColor = Color.FromRgba(
+					currentColor.Red,
+					currentColor.Green,
+					currentColor.Blue,
+					1.0f);
+			}
+		}
+
+		/// <summary>
+		/// Resets all legend items to full opacity (used in deselection for opacity mode)
+		/// </summary>
+		void ResetAllLegendItems()
+		{
+			foreach (var item in area.legendItems.OfType<LegendItem>())
+			{
+				item.IconBrush = GetFillColor(item.Index) ?? Brush.Transparent;
+				var currentColor = item.TextColor;
+				item.TextColor = Color.FromRgba(
+					currentColor.Red,
+					currentColor.Green,
+					currentColor.Blue,
+					1.0f);
+			}
+		}
+
+		/// <summary>
+		/// Sets the text opacity for a legend item by modifying its TextColor.
+		/// </summary>
+		/// <param name="legendItem">The legend item to modify.</param>
+		/// <param name="opacity">The opacity value to apply (0.0 to 1.0).</param>
+		void SetLegendItemTextOpacity(LegendItem legendItem, float opacity)
+		{
+			if (legendItem == null)
+				return;
+
+			var legendItemInterface = (ILegendItem)legendItem;
+			Color currentColor = legendItem.TextColor;
+			Color newColor = Color.FromRgba(
+				currentColor.Red,
+				currentColor.Green,
+				currentColor.Blue,
+				opacity
+			);
+			legendItemInterface.TextColor = newColor;
+		}
+
+		/// <summary>
+		/// Applies opacity to a brush by creating a new brush with modified alpha
+		/// </summary>
+		Brush ApplyOpacityToBrush(Brush brush, double opacity)
+		{
+			if (brush is SolidColorBrush solidBrush)
+			{
+				Color color = solidBrush.Color;
+				return new SolidColorBrush(
+					Color.FromRgba(
+						color.Red,
+						color.Green,
+						color.Blue,
+						(float)opacity
+					)
+				);
+			}
+			return brush;
+		}
+
+		void ResetSelectedSegment()
+		{
+
+		}
+
+		/// <summary>
+		/// On the angle changed.
+		/// </summary>
+		void OnAngleChanged()
+		{
+			if (Levels == null || Levels.Count == 0 || InternalDataSource == null)
+			{
+				ClearSegments();
+				return;
+			}
+
+			for (int i = 0; i < Levels.Count; i++)
+			{
+				if (DrillDownManager?.ZoomingLevel <= i && Levels[i].GroupMemberPath != null)
+				{
+					var prevItems = i - 1 == -1 ? null : Levels[i - 1].SunburstItems;
+
+					if (prevItems != null && prevItems.Any())
+					{
+						foreach (var item in prevItems)
+						{
+							_innerLevel.GetSliceInfo(item.ChildItems, item.ArcStart, item.ArcEnd, item.SliceIndex);
+						}
+					}
+					else
+					{
+						var arcStartAngle = SunburstChartUtils.DegreeToRadianConverter(StartAngle);
+						var arcEndAngle = SunburstChartUtils.DegreeToRadianConverter(EndAngle);
+						_innerLevel.GetSliceInfo(Levels[i].SunburstItems, arcStartAngle, arcEndAngle, -1);
+					}
+				}
+			}
+
+			ClearSegments();
+			CreateSegments();
+		}
+
+		void OnLevelPropertyChanged(object oldValue, object newValue)
+		{
+			if (oldValue is SunburstLevelCollection oldCollection)
+			{
+				oldCollection.CollectionChanged -= Level_CollectionChanged;
+			}
+
+			if (newValue is SunburstLevelCollection newCollection)
+			{
+				newCollection.CollectionChanged += Level_CollectionChanged;
+				newCollection.SunburstChart = this;
+				_actualLevel = new SunburstLevelCollection();
+
+				foreach (var level in newCollection)
+				{
+					level.BindingContext = this.BindingContext;
+					Levels.Add(level);
+				}
+			}
+
+		}
+
+		void Level_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (DrillDownManager is DrillDownManager drillDownManager)
+			{
+				drillDownManager.ZoomingLevel = drillDownManager.EnumerateLevels = -1;
+
+				if (drillDownManager.IsZoomed)
+				{
+					drillDownManager.IsZoomed = false;
+				}
+			}
+
+			e.Apply((obj, index, isTrue) => AddLevel(obj), (obj, index) => RemoveLevel(obj), ResetLevel);
+
+			if (Levels != null)
+			{
+				foreach (SunburstHierarchicalLevel level in this.Levels)
+				{
+					SetInheritedBindingContext(level, this.BindingContext);
+					level.SunburstChart = this;
+					GenerateSunburstItems();
+					ScheduleUpdate();
+				}
+			}
+		}
+
+		void ResetLevel()
+		{
+			_actualLevel.Clear();
+		}
+
+		void RemoveLevel(object obj)
+		{
+			if (obj is SunburstHierarchicalLevel level && _actualLevel.Contains(level))
+				_actualLevel.Remove(level);
+		}
+
+		void AddLevel(object obj)
+		{
+			if (obj is SunburstHierarchicalLevel level && !_actualLevel.Contains(level))
+				_actualLevel.Add(level);
+		}
+
+		SunburstSegment? GetSelectedSegment(float pointX, float pointY)
+		{
+			double adjustedX = pointX - ActualSeriesClipRect.Left;
+			double adjustedY = pointY - ActualSeriesClipRect.Top;
+
+			foreach (var segment in Segments)
+			{
+				if (segment.IsPointInSunburstSegment(adjustedX, adjustedY))
+				{
+					return segment;
+				}
+			}
+
+			return null;
+		}
+
+		void OnTouchMove(Point point, PointerDeviceType deviceType)
+		{
+			if (deviceType == PointerDeviceType.Mouse && !NeedToAnimate)
+			{
+				Show((float)point.X, (float)point.Y, true);
+			}
+		}
+
+		#endregion
+
+		#region private static methods
+
+		static void OnAngleChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -1846,7 +2130,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnInnerRadiusPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnInnerRadiusPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -1854,12 +2138,153 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnTooltipTemplateChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnTooltipTemplateChanged(BindableObject bindable, object oldValue, object newValue)
         {
 
         }
 
-        private static void OnRadiusPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnEnableDrillDownPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfSunburstChart chart)
+			{
+				if (!chart.EnableDrillDown && chart.DrillDownManager is DrillDownManager drillDownManager)
+				{
+					if (drillDownManager.IsZoomed)
+						drillDownManager.Reset();
+
+				}
+			}
+		}
+
+		static void OnToolbarSettingsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfSunburstChart chart)
+			{
+				chart.OnToolbarSettingsPropertyChanged(oldValue as SunburstToolbarSettings, newValue as SunburstToolbarSettings);
+			}
+		}
+
+		void OnToolbarSettingsPropertyChanged(SunburstToolbarSettings? oldValue, SunburstToolbarSettings? newValue)
+		{
+			if (oldValue != null)
+			{
+				SetInheritedBindingContext(oldValue, null);
+				oldValue.PropertyChanged -= ToolbarSettings_PropertyChanged;
+			}
+
+			if (newValue != null)
+			{
+				SetInheritedBindingContext(newValue, BindingContext);
+				newValue.PropertyChanged += ToolbarSettings_PropertyChanged;
+			}
+
+			NeedToolbarPositionChange = true;
+		}
+
+		/// <summary>
+		/// Updates the toolbar position based on current settings and chart bounds.
+		/// </summary>
+		internal void UpdateToolbarPosition()
+		{
+			if (DrillDownToolbar == null || ToolbarSettings == null)
+				return;
+
+			// Pass chartArea AND settings to toolbar (clean architecture approach)
+			if (EnableDrillDown && NeedToolbarPositionChange)
+			{
+				DrillDownToolbar.IsVisible = true;
+
+				var chartBounds = new Rect(0, 0, ActualSeriesClipRect.Width, ActualSeriesClipRect.Height);
+				DrillDownToolbar.SetToolbarLocation(chartBounds, ToolbarSettings);
+				NeedToolbarPositionChange = false;
+			}
+		}
+
+		void ToolbarSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+		{
+			if (sender is SunburstToolbarSettings settings)
+			{
+				if (DrillDownManager is DrillDownManager drillDownManager && drillDownManager.IsZoomed)
+				{
+
+					if (e.PropertyName == SunburstToolbarSettings.HorizontalAlignmentProperty.PropertyName ||
+						e.PropertyName == SunburstToolbarSettings.VerticalAlignmentProperty.PropertyName ||
+						e.PropertyName == SunburstToolbarSettings.OffsetXProperty.PropertyName ||
+						e.PropertyName == SunburstToolbarSettings.OffsetYProperty.PropertyName)
+					{
+						NeedToolbarPositionChange = true;
+						UpdateToolbarPosition();
+					}
+					else
+					{
+						DrillDownToolbar.Background = settings.Background;
+
+						if (ToolbarSettings.IconBrush is SolidColorBrush solidColorBrush)
+						{
+							DrillDownToolbar.backIcon.TextColor = solidColorBrush.Color;
+							DrillDownToolbar.resetIcon.TextColor = solidColorBrush.Color;
+						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Initializes the drill down toolbar with proper parent layout management.
+		/// </summary>
+		void InitializeDrillDownToolbar()
+		{
+			if (DrillDownManager == null || DrillDownToolbar == null || ToolbarSettings == null)
+				return;
+
+			DrillDownToolbar.Background = ToolbarSettings.Background;
+
+			if (ToolbarSettings.IconBrush is SolidColorBrush solidColorBrush)
+			{
+				DrillDownToolbar.backIcon.TextColor = solidColorBrush.Color;
+				DrillDownToolbar.resetIcon.TextColor = solidColorBrush.Color;
+			}
+
+			UpdateToolbarPosition();
+		}
+
+		/// <summary>
+		/// Implements the OnDoubleTap method for the IDoubleTapGestureListener interface.
+		/// </summary>
+		/// <param name="e">The tap event arguments.</param>
+		void IDoubleTapGestureListener.OnDoubleTap(TapEventArgs e)
+		{
+			// Only process double-tap if drill down is enabled
+			if (!EnableDrillDown)
+				return;
+
+			if (DrillDownManager == null)
+			{
+				DrillDownManager = new DrillDownManager(this);
+				InitializeDrillDownToolbar();
+			}
+
+			var segment = GetSelectedSegment((float)e.TapPoint.X, (float)e.TapPoint.Y);
+
+			// Drill down if a segment with children was tapped
+			if (segment != null && segment.HasChild)
+			{
+				DrillDownManager.DrillDown(segment);
+			}
+		}
+
+		/// <summary>
+		/// Gets whether a single tap gesture recognizer should fail.
+		/// </summary>
+		bool IGestureListener.IsRequiredSingleTapGestureRecognizerToFail => true;
+
+		/// <summary>
+		/// Gets whether the touch event is handled.
+		/// </summary>
+		bool IGestureListener.IsTouchHandled => false;
+
+		internal bool NeedToolbarPositionChange { get; set; } = true;
+		static void OnRadiusPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -1867,7 +2292,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnTitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnTitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart && chart._titleView != null)
             {
@@ -1886,7 +2311,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 
         }
 
-        private static void OnLegendPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnLegendPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -1899,12 +2324,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnEnableAnimationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnEnableAnimationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
 
         }
 
-        private static void OnLevelChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnLevelChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -1917,7 +2342,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnStrokeWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnStrokeWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -1926,7 +2351,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnStrokeChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnStrokeChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -1935,7 +2360,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnValuePathChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnValuePathChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -1950,7 +2375,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnItemSourceChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnItemSourceChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart && newValue is IEnumerable source)
             {
@@ -1962,7 +2387,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnTooltipSettingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnTooltipSettingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart sunburstChart)
             {
@@ -1980,7 +2405,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private void HookAndUnhookCollectionChangedEvent(object oldValue, object? newValue)
+        void HookAndUnhookCollectionChangedEvent(object oldValue, object? newValue)
         {
             if (newValue != null)
             {
@@ -2001,13 +2426,13 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private void OnDataSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        void OnDataSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             e.Apply((obj, index, isTrue) => AddDataPoint(index, obj, e), (obj, index) => RemoveData(index, e), ResetDataPoint);
             area.ShouldPopulateLegendItems = true;
         }
 
-        private void AddDataPoint(int index, object data, NotifyCollectionChangedEventArgs e)
+        void AddDataPoint(int index, object data, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Add && EnableAnimation && AnimationDuration > 0)
             {
@@ -2019,19 +2444,19 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             ScheduleUpdate();
         }
 
-        private void ResetDataPoint()
+        void ResetDataPoint()
         {
             GenerateSunburstItems();
             ScheduleUpdate();
         }
 
-        private void RemoveData(int index, NotifyCollectionChangedEventArgs e)
+        void RemoveData(int index, NotifyCollectionChangedEventArgs e)
         {
             GenerateSunburstItems();
             ScheduleUpdate();
         }
 
-        private static void OnPaletteBrushesChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnPaletteBrushesChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (Equals(oldValue, newValue))
             {
@@ -2045,7 +2470,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnCenterViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnCenterViewPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart sunburstChart)
             {
@@ -2061,12 +2486,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private void CustomBrushes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        void CustomBrushes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             ScheduleUpdate();
         }
 
-        private void OnCustomBrushesChanged(ObservableCollection<Brush>? oldValue, ObservableCollection<Brush>? newValue)
+        void OnCustomBrushesChanged(ObservableCollection<Brush>? oldValue, ObservableCollection<Brush>? newValue)
         {
             if (oldValue != null)
             {
@@ -2079,7 +2504,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnDataLabelPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnDataLabelPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart sunburstChart)
             {
@@ -2087,7 +2512,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnDataLabelSettingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnDataLabelSettingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -2095,7 +2520,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private static void OnSelectionSettingsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnSelectionSettingsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfSunburstChart chart)
             {
@@ -2103,7 +2528,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private void OnSelectionSettingsPropertyChanged(SunburstSelectionSettings? oldValue, SunburstSelectionSettings? newValue)
+        void OnSelectionSettingsPropertyChanged(SunburstSelectionSettings? oldValue, SunburstSelectionSettings? newValue)
         {
             if (oldValue != null)
             {
@@ -2121,7 +2546,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             SelectionInvalidate();
         }
 
-        private void SelectionSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        void SelectionSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (sender is SunburstSelectionSettings settings)
             {
@@ -2150,7 +2575,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private void OnDataLabelPropertiesChanged(SunburstDataLabelSettings? oldValue, SunburstDataLabelSettings? newValue)
+        void OnDataLabelPropertiesChanged(SunburstDataLabelSettings? oldValue, SunburstDataLabelSettings? newValue)
         {
             if (oldValue != null)
             {
@@ -2170,12 +2595,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private void DataLabelSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        void DataLabelSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             ScheduleUpdate();
         }
 
-        private void RemoveCenterView(View oldView)
+        void RemoveCenterView(View oldView)
         {
             if (area.Children.Contains(oldView))
             {
@@ -2191,15 +2616,17 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             area.DataLabelView.InvalidateDrawable();
         }
 
-        #endregion
+		#endregion
 
-        #region TooltipHelper
+		#region TooltipHelper
 
-        #region Field
-        private SunburstSegment? previousSegmentInfo = null;
-        #endregion
+		#region Field
 
-        #region Internal Methods
+		SunburstSegment? previousSegmentInfo = null;
+
+		#endregion
+
+		#region Internal Methods
 
         /// <summary>
         /// Method used to show tooltip view at nearest datapoint for given x and y value.
@@ -2207,7 +2634,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         /// <param name="pointX"></param>
         /// <param name="pointY"></param>
         /// <param name="canAnimate"></param>
-        private void Show(float pointX, float pointY, bool canAnimate)
+        void Show(float pointX, float pointY, bool canAnimate)
         {
             GenerateTooltip(pointX, pointY, canAnimate);
         }
@@ -2221,11 +2648,11 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             TooltipView?.Hide(false);
         }
 
-        #endregion
+		#endregion
 
-        #region Private Methods
+		#region Private Methods
 
-        private void OnTapAction(SfSunburstChart sunburstChart, Point tapPoint, int tapCount)
+        void OnTapAction(SfSunburstChart sunburstChart, Point tapPoint, int tapCount)
         {
             Hide();
 
@@ -2285,7 +2712,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private SunburstSegment? GetSelectedSegment(SunburstItem? sunburstItem)
+        SunburstSegment? GetSelectedSegment(SunburstItem? sunburstItem)
         {
             if (sunburstItem != null)
             {
@@ -2299,7 +2726,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             return null;
         }
 
-        private void SelectSegments(SunburstSegment tappedSegment)
+        void SelectSegments(SunburstSegment tappedSegment)
         {
             var settings = SelectionSettings;
 
@@ -2358,7 +2785,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private void SelectionInvalidate()
+        void SelectionInvalidate()
         {
             if (area != null)
             {
@@ -2367,7 +2794,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private void ClearSelection()
+        void ClearSelection()
         {
             if (SelectedSunburstItems == null || SelectedSunburstItems.Count == 0)
                 return;
@@ -2383,7 +2810,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             ResetAllLegendItems(); //Resetting legend.
         }
 
-        private void ResetOpacity()
+        void ResetOpacity()
         {
             if (SelectedSunburstItems.Count == 0)
             {
@@ -2393,7 +2820,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 }
             }
         }
-        private bool IsSegmentSelected(SunburstSegment segment)
+        bool IsSegmentSelected(SunburstSegment segment)
         {
             if (segment.SunburstItems == null) return false;
 
@@ -2406,7 +2833,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         /// <param name="oldSegment">The previously selected segment.</param>
         /// <param name="newSegment">The newly selected segment.</param>
         /// <param name="isSelected">Whether the segment was selected (true) or deselected (false).</param>
-        private void RaiseSelectionChanged(SunburstSegment? oldSegment, SunburstSegment newSegment, bool isSelected)
+        void RaiseSelectionChanged(SunburstSegment? oldSegment, SunburstSegment newSegment, bool isSelected)
         {
             SelectionChanged?.Invoke(this, new SunburstSelectionChangedEventArgs(oldSegment, newSegment, isSelected));
         }
@@ -2417,7 +2844,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         /// <param name="oldSegment">The previously selected segment.</param>
         /// <param name="newSegment">The segment being selected.</param>
         /// <returns>True if the selection change should proceed; false if it was canceled.</returns>
-        private bool RaiseSelectionChanging(SunburstSegment? oldSegment, SunburstSegment newSegment)
+        bool RaiseSelectionChanging(SunburstSegment? oldSegment, SunburstSegment newSegment)
         {
             if (SelectionChanging != null)
             {
@@ -2430,9 +2857,9 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             return true;
         }
 
-        #endregion
+		#endregion
 
-        private void GenerateTooltip(float x, float y, bool canAnimate)
+        void GenerateTooltip(float x, float y, bool canAnimate)
         {
             Rect seriesBounds = ActualSeriesClipRect;
             var settings = ActualTooltipSettings;
@@ -2471,7 +2898,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        private Rect SetTooltipTargetRect(float x, float y)
+        Rect SetTooltipTargetRect(float x, float y)
         {
             float sizeValue = 1;
             float noseOffset = 2;
@@ -2481,7 +2908,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             return targetRect;
         }
 
-        private void SetTooltipPosition(SunburstSegment segmentInfo)
+        void SetTooltipPosition(SunburstSegment segmentInfo)
         {
             var r = (segmentInfo.OuterRadius + segmentInfo.InnerRadius) / 2;
             var radians = (segmentInfo.ArcStartAngle + segmentInfo.ArcEndAngle) / 2;
@@ -2489,7 +2916,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             segmentInfo.TooltipYPosition = (float)(Center.Y + r * Math.Sin(radians));
         }
 
-        private View? GetTooltipTemplate(SunburstTooltipSettings tooltipSettings, SunburstSegment sunburstSegment)
+        View? GetTooltipTemplate(SunburstTooltipSettings tooltipSettings, SunburstSegment sunburstSegment)
         {
             View? view;
             object layout;
@@ -2526,7 +2953,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 			return view;
         }
 
-        private DataTemplate GetDefaultTooltipTemplate(SunburstTooltipSettings settings, SunburstSegment? segment)
+        DataTemplate GetDefaultTooltipTemplate(SunburstTooltipSettings settings, SunburstSegment? segment)
         {
             Label category = new Label();
             category.VerticalOptions = LayoutOptions.Fill;
@@ -2535,7 +2962,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             category.HorizontalTextAlignment = TextAlignment.Start;
 #if WINDOWS
 			category.LineBreakMode = LineBreakMode.NoWrap;
-# endif
+#endif
 			category.SetBinding(Label.TextProperty, BindingHelper.CreateBinding("Item[0]", getter: static (SunburstSegment segment) => ((List<object>)segment.Item!)[0], source: segment));
             category.SetBinding(Label.TextColorProperty, BindingHelper.CreateBinding(nameof(SunburstTooltipSettings.TextColor), getter: static (SunburstTooltipSettings settings) => settings.TextColor, source: settings));
             category.SetBinding(Label.FontSizeProperty, BindingHelper.CreateBinding(nameof(SunburstTooltipSettings.FontSize), getter: static (SunburstTooltipSettings settings) => settings.FontSize, source: settings));
@@ -2573,12 +3000,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             return template;
         }
 
-        private void Tooltip_TooltipClosed(object? sender, TooltipClosedEventArgs e)
+        void Tooltip_TooltipClosed(object? sender, TooltipClosedEventArgs e)
         {
             previousSegmentInfo = null;
         }
 
-        private SunburstSegment? GetTooltip(float x, float y)
+        SunburstSegment? GetTooltip(float x, float y)
         {
             if (EnableTooltip && LevelsCount > 0)
             {
@@ -2599,5 +3026,5 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         }
 
 #endregion
-    }
+	}
 }

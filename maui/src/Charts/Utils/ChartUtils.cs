@@ -1,4 +1,4 @@
-using Color = Microsoft.Maui.Graphics.Color;
+﻿using Color = Microsoft.Maui.Graphics.Color;
 using PointF = Microsoft.Maui.Graphics.PointF;
 using Rect = Microsoft.Maui.Graphics.Rect;
 using Microsoft.Maui.Controls.Shapes;
@@ -511,6 +511,102 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return size;
+		}
+
+		/// <summary>
+		/// Determines whether a double-precision value is valid (i.e., a finite number).
+		/// </summary>
+		/// <param name="value">The double value to validate.</param>
+		/// <returns>
+		/// True if the value is neither <see cref="double.NaN"/> nor positive/negative infinity;
+		/// otherwise, false.
+		/// </returns>
+		/// <remarks>
+		/// This method filters out non-finite values such as <see cref="double.NaN"/>,
+		/// <see cref="double.PositiveInfinity"/>, and <see cref="double.NegativeInfinity"/>.
+		/// Use it when validating input for numeric computations to avoid propagation of invalid values.
+		/// </remarks>
+		internal static bool IsFinite(double value)
+		{
+			return !double.IsNaN(value) && !double.IsInfinity(value);
+		}
+
+		/// <summary>
+		/// Calculates R-squared value following dart implementation pattern.
+		/// This is a common method used by all regression-based trendlines.
+		/// </summary>
+		/// <param name="xValues"></param>
+		/// <param name="yValues"></param>
+		/// <param name="predictYValue">Function to calculate predicted Y value given X and coefficients.</param>
+		/// <returns>The R-squared value.</returns>
+		internal static double CalculateRSquaredForPoints(List<double> xValues, List<double> yValues, Func<double, double> predictYValue)
+		{
+			int yLength = xValues.Count;
+			if (yLength < 2)
+			{
+				return 0;
+			}
+
+			const int power = 2;
+			List<double> xValue = new List<double>();
+
+			double yMean = 0;
+			for (int i = 0; i < xValues.Count; i++)
+			{
+				double y = yValues[i];
+				if (!IsFinite(y))
+				{
+					y = 0;
+				}
+				xValue.Add(i + 1);
+				yMean += y;
+			}
+			yMean = yMean / yLength;
+
+			double sumOfSquare = 0.0;
+			for (int j = 0; j < yLength; j++)
+			{
+				double y = yValues[j];
+				if (!IsFinite(y))
+				{
+					y = 0;
+				}
+				sumOfSquare += Math.Pow(y - yMean, power);
+			}
+
+			double sumOfSquareDueToRegression = 0.0;
+			for (int k = 0; k < yLength; k++)
+			{
+				double predictedY = predictYValue(xValue[k]);
+				sumOfSquareDueToRegression += Math.Pow(predictedY - yMean, power);
+			}
+
+			double rSquare = sumOfSquareDueToRegression / sumOfSquare;
+			return double.IsNaN(rSquare) ? 0 : rSquare;
+		}
+
+		internal enum TrendlineIconType
+		{
+			Linear = 1,
+			Exponential = 2,
+			Logarithmic = 3,
+			Power = 4,
+			Polynomial = 5,
+			MovingAverage = 6
+		}
+
+		internal static TrendlineIconType GetTrendlineIconType(ChartTrendline trendline)
+		{
+			return trendline switch
+			{
+				LinearTrendline => TrendlineIconType.Linear,
+				ExponentialTrendline => TrendlineIconType.Exponential,
+				LogarithmicTrendline => TrendlineIconType.Logarithmic,
+				PowerTrendline => TrendlineIconType.Power,
+				PolynomialTrendline => TrendlineIconType.Polynomial,
+				MovingAverageTrendline => TrendlineIconType.MovingAverage,
+				_ => TrendlineIconType.Linear
+			};
 		}
 	}
 

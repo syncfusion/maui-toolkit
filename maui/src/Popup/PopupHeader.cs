@@ -62,8 +62,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 #if NET10_0
 			this.IgnoreSafeArea = !PopupExtension.GetSafeAreaEdges();
 #else
-			var mainPage = PopupExtension.GetMainPage();
-			this.IgnoreSafeArea = mainPage is null || !Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(mainPage);
+			this.IgnoreSafeArea = !Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(PopupExtension.GetMainPage());
 #endif
 #endif
 			Initialize();
@@ -78,8 +77,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 #if IOS
 			// When Page SafeArea is false, close icon overlaps header,because HeaderView arranging with safeArea.
 #pragma warning disable CS0618 // Suppressing CS0618 warning because Page.GetUseSafeArea is marked obsolete in .NET 10.
-			var mainPageForSafeArea = PopupExtension.GetMainPage();
-			IgnoreSafeArea = mainPageForSafeArea is null || !Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(mainPageForSafeArea);
+			IgnoreSafeArea = !Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(PopupExtension.GetMainPage());
 #pragma warning restore CS0618
 #endif
 			_popupView = popup;

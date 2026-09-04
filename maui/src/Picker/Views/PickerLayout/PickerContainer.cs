@@ -426,6 +426,91 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <summary>
         /// Method to get the total assigned width and default column width.
         /// </summary>
+        /// <param name="totalWidth">The total available width to distribute among columns.</param>
+        /// <returns>
+        /// A tuple of (assigned widths array, totalAssigned, defaultForUnassigned).
+        /// </returns>
+        (double[] assigned, double totalAssigned, double defaultForUnassigned) ComputeAssignedWidths(double totalWidth)
+        {
+        //// The method impmented the following logic:
+        //// - If there are no columns, returns an empty assignment.
+        //// - If any column has an explicit width >= totalWidth, the total width is distributed equally across all columns (this avoids a single column taking all space).
+        //// - Otherwise, explicit widths (>= 0) are honored up to the remaining available width.
+        //// - Columns with no explicit width (width <= -1) are treated as unassigned and will receive an equal share of any remaining space after explicit widths are allocated.
+        //// Returns a tuple containing: the per-column assigned widths array, the total assigned width, and the default width used for unassigned columns.
+            int totalColumns = _pickerInfo.Columns.Count;
+            double[] assigned = new double[totalColumns];
+            //// No columns -> nothing to assign.
+            if (totalColumns == 0)
+            {
+                return (assigned, 0, 0);
+            }
+
+            //// Special case: if any explicit column width is greater than or equal to the
+            //// entire available width, avoid letting that column dominate. Instead, distribute
+            //// the total width equally among all columns.
+            for (int index = 0; index < totalColumns; index++)
+            {
+                double width = _pickerInfo.Columns[index].Width;
+                if (width > -1 && width >= totalWidth)
+                {
+                    double columnWidth = totalWidth / totalColumns;
+                    for (int innerIndex = 0; innerIndex < totalColumns; innerIndex++)
+                    {
+                        assigned[innerIndex] = columnWidth;
+                    }
+
+                    return (assigned, totalWidth, columnWidth);
+                }
+            }
+
+            //// Determine iteration order based on layout direction. When RTL we should
+            //// consume the remaining space starting from the leading edge (right side),
+            //// so process columns in reverse order but still assign into their original indices.
+            int[] order = _pickerInfo.IsRTLLayout ? Enumerable.Range(0, totalColumns).Reverse().ToArray() : Enumerable.Range(0, totalColumns).ToArray();
+            //// Track remaining width after assigning explicit widths and count columns without explicit widths.
+            double remaining = totalWidth;
+            int unassignedCount = 0;
+
+            foreach (int index in order)
+            {
+                double width = _pickerInfo.Columns[index].Width;
+                //// Marker for an unassigned column (width <= -1). We'll fill these later.
+                if (width <= -1)
+                {
+                    assigned[index] = -1; // marker
+                    unassignedCount++;
+                }
+                else
+                {
+                    //// Use the smaller of the explicit width and the remaining available width.
+                    //// Also ensure we never assign negative sizes by clamping remaining with Math.Max(0, remaining).
+                    double use = Math.Min(width, Math.Max(0, remaining));
+                    assigned[index] = use;
+                    remaining -= use;
+                }
+            }
+
+            //// If there are unassigned columns, split any leftover space equally among them.
+            double defaultForUnassigned = unassignedCount > 0 ? (Math.Max(0, remaining) / unassignedCount) : 0;
+
+            //// Replace markers with the computed default width.
+            for (int index = 0; index < totalColumns; index++)
+            {
+                if (assigned[index] < 0)
+                {
+                    assigned[index] = defaultForUnassigned;
+                }
+            }
+
+            //// Sum up what we actually assigned (explicit + distributed) and return.
+            double totalAssigned = assigned.Sum();
+            return (assigned, totalAssigned, defaultForUnassigned);
+        }
+
+        /// <summary>
+        /// Method to get the total assigned width and default column width.
+        /// </summary>
         /// <param name="totalWidth">The total width.</param>
         /// <returns>Returns total assigned width and default column width.</returns>
         Point GetDefaultColumnWidth(double totalWidth)
@@ -556,17 +641,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <returns>The layout size.</returns>
         protected override Size ArrangeContent(Rect bounds)
         {
-            Point columnWidthInfo = GetDefaultColumnWidth(bounds.Width);
-            double defaultColumnWidth = columnWidthInfo.Y;
-            double totalColumnWidth = columnWidthInfo.X;
             int columnCount = _pickerInfo.Columns.Count;
-            double xPosition = (bounds.Width - totalColumnWidth) * 0.5;
+            var (assigned, totalAssigned, _) = ComputeAssignedWidths(bounds.Width);
+            double xPosition = (bounds.Width - totalAssigned) * 0.5;
             for (int index = 0; index < columnCount; index++)
             {
                 int actualIndex = _pickerInfo.IsRTLLayout ? columnCount - 1 - index : index;
                 var child = Children[actualIndex];
-                double columnWidth = _pickerInfo.Columns[actualIndex].Width;
-                columnWidth = columnWidth == -1 ? defaultColumnWidth : (columnWidth < -1 ? 0 : columnWidth);
+                double columnWidth = assigned[actualIndex];
                 child.Arrange(new Rect(xPosition, 0, columnWidth, bounds.Height));
                 xPosition += columnWidth;
             }
@@ -587,16 +669,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 GenerateChildren();
             }
 
-            Point columnWidthInfo = GetDefaultColumnWidth(widthConstraint);
-            double defaultColumnWidth = columnWidthInfo.Y;
-
-            int childCount = Math.Min(_pickerInfo.Columns.Count, Children.Count);
+            int columnCount = _pickerInfo.Columns.Count;
+            int childCount = Math.Min(columnCount, Children.Count);
+            var (assigned, _, _) = ComputeAssignedWidths(widthConstraint);
             for (int index = 0; index < childCount; index++)
             {
-                var child = Children[index];
-                double columnWidth = _pickerInfo.Columns[index].Width;
-                columnWidth = columnWidth == -1 ? defaultColumnWidth : (columnWidth < -1 ? 0 : columnWidth);
-                child.Measure(columnWidth, heightConstraint);
+                int actualIndex = _pickerInfo.IsRTLLayout ? columnCount - 1 - index : index;
+                if (actualIndex >= Children.Count)
+                {
+                    continue;
+                }
+
+                var child = Children[actualIndex];
+                child.Measure(assigned[actualIndex], heightConstraint);
             }
 
             return new Size(widthConstraint, heightConstraint);

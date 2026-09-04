@@ -18,19 +18,17 @@ namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 
 		private void type_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var picker = (MAUIPicker)sender;
-			int selectedIndex = picker.SelectedIndex;
-			if (selectedIndex == 0)
-			{
-				area1.IsVisible = area2.IsVisible = area3.IsVisible = true;
-				line1.IsVisible = line2.IsVisible = line3.IsVisible = false;
+			if (sender is not MAUIPicker picker)
+				return;
 
-			}
-			else if (selectedIndex == 1)
-			{
-				line1.IsVisible = line2.IsVisible = line3.IsVisible = true;
-				area1.IsVisible = area2.IsVisible = area3.IsVisible = false;
-			}
+			bool showArea = picker.SelectedIndex == 0;
+			bool showLine = picker.SelectedIndex == 1;
+
+			area1.IsVisible = area2.IsVisible = area3.IsVisible = showArea;
+			area1.IsVisibleOnLegend = area2.IsVisibleOnLegend = area3.IsVisibleOnLegend = showArea;
+
+			line1.IsVisible = line2.IsVisible = line3.IsVisible = showLine;
+			line1.IsVisibleOnLegend = line2.IsVisibleOnLegend = line3.IsVisibleOnLegend = showLine;
 		}
 
 		private void Angle_SelectedIndexChanged(object sender, EventArgs e)

@@ -19,21 +19,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
         internal DateTime? _internalSelectedDate;
 
         /// <summary>
-        /// Holds the day column information.
-        /// </summary>
-        PickerColumn _dayColumn;
-
-        /// <summary>
-        /// Holds the month column information.
-        /// </summary>
-        PickerColumn _monthColumn;
-
-        /// <summary>
-        /// Holds the year column information.
-        /// </summary>
-        PickerColumn _yearColumn;
-
-        /// <summary>
         /// Holds the picker column collection.
         /// </summary>
         ObservableCollection<PickerColumn> _columns;
@@ -194,6 +179,86 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 typeof(SfDatePicker),
                 defaultValueCreator: bindable => new ObservableCollection<DateTime>(),
                 propertyChanged: OnBlackOutDatesPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalDayColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalDayColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalDayColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalDayColumnTextColor),
+                typeof(Color), typeof(SfDatePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalDayColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMonthColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMonthColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMonthColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalMonthColumnTextColor),
+                typeof(Color), typeof(SfDatePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalMonthColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalYearColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalYearColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalYearColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalYearColumnTextColor),
+                typeof(Color), typeof(SfDatePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalYearColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalDayColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalDayColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalDayColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalDayColumnFontSize),
+                typeof(double),
+                typeof(SfDatePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalDayColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMonthColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMonthColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMonthColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalMonthColumnFontSize),
+                typeof(double),
+                typeof(SfDatePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalMonthColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalYearColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalYearColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalYearColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalYearColumnFontSize),
+                typeof(double), typeof(SfDatePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalYearColumnFontSizeChanged);
 
         #endregion
 
@@ -362,9 +427,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         public SfDatePicker()
         {
-            _dayColumn = new PickerColumn();
-            _monthColumn = new PickerColumn();
-            _yearColumn = new PickerColumn();
+            DayColumn = new PickerColumn();
+            MonthColumn = new PickerColumn();
+            YearColumn = new PickerColumn();
             _columns = new ObservableCollection<PickerColumn>();
             Initialize();
             GeneratePickerColumns();
@@ -711,6 +776,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
         #region Internal Properties
 
         /// <summary>
+        /// Gets or sets the day column information.
+        /// </summary>
+        internal PickerColumn DayColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the month column information.
+        /// </summary>
+        internal PickerColumn MonthColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the year column information.
+        /// </summary>
+        internal PickerColumn YearColumn { get; set; }
+
+        /// <summary>
         /// Gets or sets the background color of the date picker.
         /// </summary>
         internal Color DatePickerBackground
@@ -815,6 +895,60 @@ namespace Syncfusion.Maui.Toolkit.Picker
             set { SetValue(DisabledTextColorProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the normal day column text color of the text style.
+        /// </summary>
+        internal Color NormalDayColumnTextColor
+        {
+            get { return (Color)GetValue(NormalDayColumnTextColorProperty); }
+            set { SetValue(NormalDayColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal month column text color of the text style.
+        /// </summary>
+        internal Color NormalMonthColumnTextColor
+        {
+            get { return (Color)GetValue(NormalMonthColumnTextColorProperty); }
+            set { SetValue(NormalMonthColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal year column text color of the text style.
+        /// </summary>
+        internal Color NormalYearColumnTextColor
+        {
+            get { return (Color)GetValue(NormalYearColumnTextColorProperty); }
+            set { SetValue(NormalYearColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal day column font size of the text style.
+        /// </summary>
+        internal double NormalDayColumnFontSize
+        {
+            get { return (double)GetValue(NormalDayColumnFontSizeProperty); }
+            set { SetValue(NormalDayColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal month column font size of the text style.
+        /// </summary>
+        internal double NormalMonthColumnFontSize
+        {
+            get { return (double)GetValue(NormalMonthColumnFontSizeProperty); }
+            set { SetValue(NormalMonthColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal year column font size of the text style.
+        /// </summary>
+        internal double NormalYearColumnFontSize
+        {
+            get { return (double)GetValue(NormalYearColumnFontSizeProperty); }
+            set { SetValue(NormalYearColumnFontSizeProperty, value); }
+        }
+
         #endregion
 
         #region Internal Methods
@@ -825,9 +959,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
         internal void UpdateFormat()
         {
             BaseColumns.Clear();
-            _dayColumn = new PickerColumn();
-            _monthColumn = new PickerColumn();
-            _yearColumn = new PickerColumn();
+            DayColumn = new PickerColumn();
+            MonthColumn = new PickerColumn();
+            YearColumn = new PickerColumn();
             GeneratePickerColumns();
             BaseColumns = _columns;
         }
@@ -899,7 +1033,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 if (BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, selectedDate, Format)))
                 {
                     // If the selected date is a blackout date, revert the selection to the previous value
-                    _dayColumn.SelectedIndex = e.OldValue;
+                    DayColumn.SelectedIndex = e.OldValue;
                 }
                 // Set the internal selected date to the selected date (without time component)
                 _internalSelectedDate = selectedDate.Date;
@@ -942,18 +1076,18 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            if (_yearColumn.ItemsSource != null && _yearColumn.ItemsSource is ObservableCollection<string> yearCollection && yearCollection.Count > e.NewValue)
+            if (YearColumn.ItemsSource != null && YearColumn.ItemsSource is ObservableCollection<string> yearCollection && yearCollection.Count > e.NewValue)
             {
                 //// Get the year value based on the selected index changes value.
                 year = int.Parse(yearCollection[e.NewValue]);
             }
 
             ObservableCollection<string> months = DatePickerHelper.GetMonths(monthFormat, year, MinimumDate, maxDate, MonthInterval);
-            ObservableCollection<string> previousMonths = _monthColumn.ItemsSource is ObservableCollection<string> previousMonthCollection ? previousMonthCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousMonths = MonthColumn.ItemsSource is ObservableCollection<string> previousMonthCollection ? previousMonthCollection : new ObservableCollection<string>();
             //// Check the year index changes needed to update the month collection.
             if (!PickerHelper.IsCollectionEquals(months, previousMonths))
             {
-                _monthColumn.ItemsSource = months;
+                MonthColumn.ItemsSource = months;
             }
 
             //// Check the month collection have selected month value, if not then update the nearby value.
@@ -966,19 +1100,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else if (monthFormat == "MMM")
             {
-                //// Get the month value based on the selected index changes value.
-                month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames, months[monthIndex]) + 1;
-            }
+				//// Get the month value based on the selected index changes value.
+				month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames, months[monthIndex]) + 1;
+			}
             else if (monthFormat == "MMMM")
             {
-                month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.MonthNames, months[monthIndex]) + 1;
-            }
+				month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.MonthNames, months[monthIndex]) + 1;
+			}
+
             ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, year, MinimumDate, maxDate, DayInterval);
-            ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousDays = DayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
             //// Check the year and month(if month items source updated) changes needed to change the day collection.
             if (!PickerHelper.IsCollectionEquals(days, previousDays))
             {
-                _dayColumn.ItemsSource = days;
+                DayColumn.ItemsSource = days;
             }
 
             //// Check the day collection have selected day value, if not then update the nearby value.
@@ -1005,7 +1140,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            if (_monthColumn.ItemsSource != null && _monthColumn.ItemsSource is ObservableCollection<string> monthCollection && monthCollection.Count > e.NewValue)
+            if (MonthColumn.ItemsSource != null && MonthColumn.ItemsSource is ObservableCollection<string> monthCollection && monthCollection.Count > e.NewValue)
             {
                 if (monthFormat == "M" || monthFormat == "MM")
                 {
@@ -1014,14 +1149,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
                 else if (monthFormat == "MMM")
                 {
-                    //// Get the month value based on the selected index changes value.
-                    month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames, monthCollection[e.NewValue]) + 1;
-                }
+					//// Get the month value based on the selected index changes value.
+					month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.AbbreviatedMonthNames, monthCollection[e.NewValue]) + 1;
+				}
                 else if (monthFormat == "MMMM")
                 {
-                    //// Get the month value based on the selected index changes value.
-                    month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.MonthNames, monthCollection[e.NewValue]) + 1;
-                }
+					//// Get the month value based on the selected index changes value.
+					month = Array.IndexOf(DateTimeFormatInfo.CurrentInfo.MonthNames, monthCollection[e.NewValue]) + 1;
+				}
                 else if (monthFormat == "MM_ddd")
                 {
                     string value = monthCollection[e.NewValue];
@@ -1030,11 +1165,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, month, previousSelectedDate.Value.Year, MinimumDate, maxDate, DayInterval);
-            ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousDays = DayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
             //// Check the month selection changes needed to update the days collection.
             if (!PickerHelper.IsCollectionEquals(days, previousDays))
             {
-                _dayColumn.ItemsSource = days;
+                DayColumn.ItemsSource = days;
             }
 
             //// Check the new days collection have a selected day value, if not then update the nearby value.
@@ -1072,7 +1207,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 day = (e.NewValue * DayInterval) + 1;
             }
-            else if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && dayCollection.Count > e.NewValue)
+            else if (DayColumn.ItemsSource != null && DayColumn.ItemsSource is ObservableCollection<string> dayCollection && dayCollection.Count > e.NewValue)
             {
                 //// Get the day value based on the selected index changes value.
                 day = dayCollection[e.NewValue].Length <= 2 ? int.Parse(dayCollection[e.NewValue]) : int.Parse(dayCollection[e.NewValue].Substring(dayCollection[e.NewValue].Length - 2));
@@ -1098,9 +1233,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int yearIndex = formatString.IndexOf(2);
             if (yearIndex != -1 && oldDate.Year != newDate.Year)
             {
-                _yearColumn = GenerateYearColumn(validSelectedDate);
-                _yearColumn.Parent = this;
-                _columns[yearIndex] = _yearColumn;
+                YearColumn = GenerateYearColumn(validSelectedDate);
+                YearColumn.Parent = this;
+                _columns[yearIndex] = YearColumn;
             }
 
             if (validSelectedDate != null)
@@ -1108,11 +1243,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 if (validSelectedDate.Value.Year == MinimumDate.Year || validSelectedDate.Value.Year == maxDate.Year)
                 {
                     ObservableCollection<string> month = DatePickerHelper.GetMonths(monthFormat, validSelectedDate.Value.Year, MinimumDate, maxDate, MonthInterval);
-                    ObservableCollection<string> previousMonths = _monthColumn.ItemsSource is ObservableCollection<string> previousMonthCollection ? previousMonthCollection : new ObservableCollection<string>();
+                    ObservableCollection<string> previousMonths = MonthColumn.ItemsSource is ObservableCollection<string> previousMonthCollection ? previousMonthCollection : new ObservableCollection<string>();
                     //// Check the year index changes needed to update the month collection.
                     if (!PickerHelper.IsCollectionEquals(month, previousMonths))
                     {
-                        _monthColumn = new PickerColumn()
+                        MonthColumn = new PickerColumn()
                         {
                             ItemsSource = month,
                             SelectedIndex = DatePickerHelper.GetMonthIndex(monthFormat, month, validSelectedDate.Value.Month),
@@ -1121,7 +1256,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         int monthIndex = formatString.IndexOf(1);
                         if (monthIndex != -1)
                         {
-                            _columns[monthIndex] = _monthColumn;
+                            _columns[monthIndex] = MonthColumn;
                         }
                     }
                 }
@@ -1129,11 +1264,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 if (!string.IsNullOrEmpty(dayFormat) && ((validSelectedDate.Value.Year == MinimumDate.Year && validSelectedDate.Value.Month == MinimumDate.Month) || (validSelectedDate.Value.Year == maxDate.Year && validSelectedDate.Value.Month == maxDate.Month)))
                 {
                     ObservableCollection<string> days = DatePickerHelper.GetDays(dayFormat, validSelectedDate.Value.Month, validSelectedDate.Value.Year, MinimumDate, maxDate, DayInterval);
-                    ObservableCollection<string> previousDays = _dayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
+                    ObservableCollection<string> previousDays = DayColumn.ItemsSource is ObservableCollection<string> previousDayCollection ? previousDayCollection : new ObservableCollection<string>();
                     //// Check the year and month(if month items source updated) changes needed to change the day collection.
                     if (!PickerHelper.IsCollectionEquals(days, previousDays))
                     {
-                        _dayColumn = new PickerColumn()
+                        DayColumn = new PickerColumn()
                         {
                             ItemsSource = days,
                             SelectedIndex = DatePickerHelper.GetDayIndex(dayFormat, days, validSelectedDate.Value.Day, DayInterval),
@@ -1142,7 +1277,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                         int dayIndex = formatString.IndexOf(0);
                         if (dayIndex != -1)
                         {
-                            _columns[dayIndex] = _dayColumn;
+                            _columns[dayIndex] = DayColumn;
                         }
                     }
                 }
@@ -1163,30 +1298,30 @@ namespace Syncfusion.Maui.Toolkit.Picker
             string dayFormat;
             string monthFormat;
             DatePickerHelper.GetFormatStringOrder(out dayFormat, out monthFormat, Format);
-            if (_yearColumn.ItemsSource != null && _yearColumn.ItemsSource is ObservableCollection<string> yearCollection && yearCollection.Count > 0)
+            if (YearColumn.ItemsSource != null && YearColumn.ItemsSource is ObservableCollection<string> yearCollection && yearCollection.Count > 0)
             {
                 int index = DatePickerHelper.GetYearIndex(yearCollection, date.Value.Year);
-                if (_yearColumn.SelectedIndex != index)
+                if (YearColumn.SelectedIndex != index)
                 {
-                    _yearColumn.SelectedIndex = index;
+                    YearColumn.SelectedIndex = index;
                 }
             }
 
-            if (_monthColumn.ItemsSource != null && _monthColumn.ItemsSource is ObservableCollection<string> monthCollection && !string.IsNullOrEmpty(monthFormat))
+            if (MonthColumn.ItemsSource != null && MonthColumn.ItemsSource is ObservableCollection<string> monthCollection && !string.IsNullOrEmpty(monthFormat))
             {
                 int index = DatePickerHelper.GetMonthIndex(monthFormat, monthCollection, date.Value.Month);
-                if (_monthColumn.SelectedIndex != index)
+                if (MonthColumn.SelectedIndex != index)
                 {
-                    _monthColumn.SelectedIndex = index;
+                    MonthColumn.SelectedIndex = index;
                 }
             }
 
-            if (_dayColumn.ItemsSource != null && _dayColumn.ItemsSource is ObservableCollection<string> dayCollection && !string.IsNullOrEmpty(dayFormat))
+            if (DayColumn.ItemsSource != null && DayColumn.ItemsSource is ObservableCollection<string> dayCollection && !string.IsNullOrEmpty(dayFormat))
             {
                 int index = DatePickerHelper.GetDayIndex(dayFormat, dayCollection, date.Value.Day, DayInterval);
-                if (_dayColumn.SelectedIndex != index)
+                if (DayColumn.SelectedIndex != index)
                 {
-                    _dayColumn.SelectedIndex = index;
+                    DayColumn.SelectedIndex = index;
                 }
             }
 
@@ -1222,15 +1357,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else if (e.PropertyName == nameof(DatePickerColumnHeaderView.DayHeaderText))
             {
-                _dayColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.DayHeaderText);
+                DayColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.DayHeaderText);
             }
             else if (e.PropertyName == nameof(DatePickerColumnHeaderView.MonthHeaderText))
             {
-                _monthColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MonthHeaderText);
+                MonthColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MonthHeaderText);
             }
             else if (e.PropertyName == nameof(DatePickerColumnHeaderView.YearHeaderText))
             {
-                _yearColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.YearHeaderText);
+                YearColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.YearHeaderText);
             }
         }
 
@@ -1250,19 +1385,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 switch (index)
                 {
                     case 0:
-                        _dayColumn = GenerateDayColumn(dayFormat, selectedDate);
-                        _dayColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_dayColumn) : null;
-                        pickerColumns.Add(_dayColumn);
+                        DayColumn = GenerateDayColumn(dayFormat, selectedDate);
+                        DayColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(DayColumn) : null;
+                        DayColumn.Width = DayColumnWidth;
+                        pickerColumns.Add(DayColumn);
                         break;
                     case 1:
-                        _monthColumn = GenerateMonthColumn(monthFormat, selectedDate);
-                        _monthColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_monthColumn) : null;
-                        pickerColumns.Add(_monthColumn);
+                        MonthColumn = GenerateMonthColumn(monthFormat, selectedDate);
+                        MonthColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(MonthColumn) : null;
+                        MonthColumn.Width = MonthColumnWidth;
+                        pickerColumns.Add(MonthColumn);
                         break;
                     case 2:
-                        _yearColumn = GenerateYearColumn(selectedDate);
-                        _yearColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(_yearColumn) : null;
-                        pickerColumns.Add(_yearColumn);
+                        YearColumn = GenerateYearColumn(selectedDate);
+                        YearColumn.SelectedItem = SelectedDate != null ? PickerHelper.GetSelectedItemDefaultValue(YearColumn) : null;
+                        YearColumn.Width = YearColumnWidth;
+                        pickerColumns.Add(YearColumn);
                         break;
                 }
             }
@@ -1275,9 +1413,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         void UpdateSelectedItemInColumn()
         {
-            _dayColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_dayColumn);
-            _yearColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_yearColumn);
-            _monthColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_monthColumn);
+            DayColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(DayColumn);
+            YearColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(YearColumn);
+            MonthColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(MonthColumn);
         }
 
         /// <summary>
@@ -1444,13 +1582,20 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SetDynamicResource(NormalFontSizeProperty, "SfDatePickerNormalFontSize");
 
             SetDynamicResource(DisabledTextColorProperty, "SfDatePickerDisabledTextColor");
+
+            SetDynamicResource(NormalDayColumnTextColorProperty, "SfDatePickerNormalDayColumnTextColor");
+            SetDynamicResource(NormalMonthColumnTextColorProperty, "SfDatePickerNormalMonthColumnTextColor");
+            SetDynamicResource(NormalYearColumnTextColorProperty, "SfDatePickerNormalYearColumnTextColor");
+            SetDynamicResource(NormalDayColumnFontSizeProperty, "SfDatePickerNormalDayColumnFontSize");
+            SetDynamicResource(NormalMonthColumnFontSizeProperty, "SfDatePickerNormalMonthColumnFontSize");
+            SetDynamicResource(NormalYearColumnFontSizeProperty, "SfDatePickerNormalYearColumnFontSize");
         }
 
 		/// <summary>
 		/// Method to Selected Date based on confirmation.
 		/// </summary>
 		/// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
-		private void UpdateInternalValueToSelection(bool shouldUpdateSelection)
+		void UpdateInternalValueToSelection(bool shouldUpdateSelection)
 		{
 			// If the picker is not in Default mode and an internal selected date exists
 			if (shouldUpdateSelection && _internalSelectedDate != null)
@@ -1544,6 +1689,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 SetInheritedBindingContext(SelectionView, BindingContext);
             }
+
+            PickerHelper.SetColumnTextStyleBinding(DayColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(MonthColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(YearColumnTextStyle, this);
         }
 
         /// <summary>
@@ -1616,9 +1765,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 else
                 {
                     // If no date is selected, clear all column selections
-                    _yearColumn.SelectedItem = null;
-                    _monthColumn.SelectedItem = null;
-                    _dayColumn.SelectedItem = null;
+                    YearColumn.SelectedItem = null;
+                    MonthColumn.SelectedItem = null;
+                    DayColumn.SelectedItem = null;
                 }
                 // Clear the internal selected date if it exists
                 if (_internalSelectedDate != null)
@@ -1712,19 +1861,19 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     TextStyle = newStyle.TextStyle,
                 };
 
-                if (picker._dayColumn != null)
+                if (picker.DayColumn != null)
                 {
-                    picker._dayColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.DayHeaderText);
+                    picker.DayColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.DayHeaderText);
                 }
 
-                if (picker._monthColumn != null)
+                if (picker.MonthColumn != null)
                 {
-                    picker._monthColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MonthHeaderText);
+                    picker.MonthColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MonthHeaderText);
                 }
 
-                if (picker._yearColumn != null)
+                if (picker.YearColumn != null)
                 {
-                    picker._yearColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.YearHeaderText);
+                    picker.YearColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.YearHeaderText);
                 }
             }
         }
@@ -1784,9 +1933,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             //// Update the column with valid date(date between min and max date).
             if (newValue == null)
             {
-                datepicker._dayColumn.SelectedItem = null;
-                datepicker._yearColumn.SelectedItem = null;
-                datepicker._monthColumn.SelectedItem = null;
+                datepicker.DayColumn.SelectedItem = null;
+                datepicker.YearColumn.SelectedItem = null;
+                datepicker.MonthColumn.SelectedItem = null;
                 datepicker.SelectedDate = null;
                 datepicker.SelectionChanged?.Invoke(datepicker, new DatePickerSelectionChangedEventArgs() { OldValue = previousSelectedDate, NewValue = currentSelectedDate });
                 return;
@@ -1894,10 +2043,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(datepicker.MinimumDate, datepicker.MaximumDate);
             DateTime? currentSelectedDate = DatePickerHelper.GetValidDate(datepicker.SelectedDate, datepicker.MinimumDate, maxDate);
-            datepicker._dayColumn = datepicker.GenerateDayColumn(dayFormat, currentSelectedDate);
+            datepicker.DayColumn = datepicker.GenerateDayColumn(dayFormat, currentSelectedDate);
             int dayIndex = formatStringOrder.IndexOf(0);
             //// Replace the day column with updated day interval.
-            datepicker._columns[dayIndex] = datepicker._dayColumn;
+            datepicker._columns[dayIndex] = datepicker.DayColumn;
         }
 
         /// <summary>
@@ -1924,10 +2073,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(datepicker.MinimumDate, datepicker.MaximumDate);
             DateTime? currentSelectedDate = DatePickerHelper.GetValidDate(datepicker.SelectedDate, datepicker.MinimumDate, maxDate);
-            datepicker._monthColumn = datepicker.GenerateMonthColumn(monthFormat, currentSelectedDate);
+            datepicker.MonthColumn = datepicker.GenerateMonthColumn(monthFormat, currentSelectedDate);
             int monthIndex = formatStringOrder.IndexOf(1);
             //// Replace the month column with updated month interval.
-            datepicker._columns[monthIndex] = datepicker._monthColumn;
+            datepicker._columns[monthIndex] = datepicker.MonthColumn;
         }
 
         /// <summary>
@@ -1954,9 +2103,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             DateTime maxDate = DatePickerHelper.GetValidMaxDate(datepicker.MinimumDate, datepicker.MaximumDate);
             DateTime? currentSelectedDate = DatePickerHelper.GetValidDate(datepicker.SelectedDate, datepicker.MinimumDate, maxDate);
-            datepicker._yearColumn = datepicker.GenerateYearColumn(currentSelectedDate);
+            datepicker.YearColumn = datepicker.GenerateYearColumn(currentSelectedDate);
             //// Replace the year column with updated year interval.
-            datepicker._columns[yearIndex] = datepicker._yearColumn;
+            datepicker._columns[yearIndex] = datepicker.YearColumn;
         }
 
         /// <summary>
@@ -2170,6 +2319,108 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             picker.DisabledTextStyle.TextColor = picker.DisabledTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker day column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalDayColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDatePicker? picker = bindable as SfDatePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.DayColumnTextStyle.TextColor = picker.NormalDayColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker month column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalMonthColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDatePicker? picker = bindable as SfDatePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MonthColumnTextStyle.TextColor = picker.NormalMonthColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker year column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalYearColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDatePicker? picker = bindable as SfDatePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.YearColumnTextStyle.TextColor = picker.NormalYearColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal day column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalDayColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDatePicker? picker = bindable as SfDatePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.DayColumnTextStyle.FontSize = picker.NormalDayColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal month column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalMonthColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDatePicker? picker = bindable as SfDatePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MonthColumnTextStyle.FontSize = picker.NormalMonthColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal year column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalYearColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfDatePicker? picker = bindable as SfDatePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.YearColumnTextStyle.FontSize = picker.NormalYearColumnFontSize;
         }
 
         #endregion

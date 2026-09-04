@@ -1611,10 +1611,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             picker.ActiveView = DateTimePickerView.Time;
             InvokePrivateMethod(picker, "OnPickerLoading");
             Assert.Equal(DateTimePickerView.Time, picker.ActiveView);
-            var selectedIndex = GetPrivateField(picker, "_selectedIndex");
-            Assert.Equal(1, selectedIndex); // Time tab index expected
-            var hourColumn = GetPrivateField(picker, "_hourColumn");
-            Assert.NotNull(hourColumn);
+            Assert.Equal(1, picker.SelectedIndex); // Time tab index expected
+            Assert.NotNull(picker.HourColumn);
         }
 
          [Fact]
@@ -1626,10 +1624,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             picker.ActiveView = DateTimePickerView.Date;
             InvokePrivateMethod(picker, "OnPickerLoading");
             Assert.Equal(DateTimePickerView.Date, picker.ActiveView);
-            var selectedIndex = GetPrivateField(picker, "_selectedIndex");
-            Assert.Equal(0, selectedIndex); // Date tab index expected
-            var dayColumn = GetPrivateField(picker, "_dayColumn");
-            Assert.NotNull(dayColumn);
+            Assert.Equal(0, picker.SelectedIndex); // Date tab index expected
+            Assert.NotNull(picker.DayColumn);
         }
 
         [Fact]
@@ -1638,9 +1634,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var picker = new SfDateTimePicker();
             picker.SelectedDate = DateTime.Now;
             InvokePrivateMethod(picker, "OnPickerLoading");
-            var actualValue = GetPrivateField(picker, "_selectedIndex");
             Assert.Equal(DateTimePickerView.Date, picker.ActiveView);
-            Assert.Equal(0, actualValue);
+            Assert.Equal(0, picker.SelectedIndex);
         }
 
         [Fact]
@@ -1651,9 +1646,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             picker.ActiveView = DateTimePickerView.Date;
             picker.SelectedDate = DateTime.Now;
             InvokePrivateMethod(picker, "OnPickerLoading");
-            var actualValue = GetPrivateField(picker, "_selectedIndex");
             Assert.Equal(DateTimePickerView.Date, picker.ActiveView);
-            Assert.Equal(0, actualValue);
+            Assert.Equal(0, picker.SelectedIndex);
         }
 
         [Fact]
@@ -1663,8 +1657,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             picker.SelectedDate = DateTime.Now;
             InvokePrivateMethod(picker, "OnPickerLoading");
             picker.ActiveView = DateTimePickerView.Time;
-            var actualValue = GetPrivateField(picker, "_selectedIndex");
-            Assert.Equal(1, actualValue);
+            Assert.Equal(1, picker.SelectedIndex);
         }
 
         [Fact]
@@ -1688,8 +1681,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             InvokePrivateMethod(picker, "OnPopupClosed", new object[] { EventArgs.Empty });
             InvokePrivateMethod(picker, "OnPickerLoading");
             Assert.Equal(DateTimePickerView.Time, picker.ActiveView);
-            var selectedIndex = GetPrivateField(picker, "_selectedIndex");
-            Assert.Equal(1, selectedIndex);
+            Assert.Equal(1, picker.SelectedIndex);
         }
 
         [Fact]
@@ -1700,12 +1692,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             picker.ActiveView = DateTimePickerView.Date;
             InvokePrivateMethod(picker, "OnHeaderButtonClicked", new object[] { 1 });
             Assert.Equal(DateTimePickerView.Time, picker.ActiveView);
-            var selectedIndex = GetPrivateField(picker, "_selectedIndex");
-            Assert.Equal(1, selectedIndex);
+            Assert.Equal(1, picker.SelectedIndex);
             InvokePrivateMethod(picker, "OnHeaderButtonClicked", new object[] { 0 });
             Assert.Equal(DateTimePickerView.Date, picker.ActiveView);
-            selectedIndex = GetPrivateField(picker, "_selectedIndex");
-            Assert.Equal(0, selectedIndex);
+            Assert.Equal(0, picker.SelectedIndex);
         }
 
         [Fact]
@@ -1727,8 +1717,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             picker.SelectedDate = new DateTime(2021, 6, 15, 14, 30, 45);
             picker.ActiveView = DateTimePickerView.Time;
             InvokePrivateMethod(picker, "OnPickerLoading");
-            var hourColumn = GetPrivateField(picker, "_hourColumn");
-            var minuteColumn = GetPrivateField(picker, "_minuteColumn");
+            var hourColumn = picker.HourColumn;
+            var minuteColumn = picker.MinuteColumn;
             Assert.NotNull(hourColumn);
             Assert.NotNull(minuteColumn);
             if (hourColumn != null && hourColumn is PickerColumn pickerHourColumn)

@@ -1,4 +1,4 @@
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -764,6 +764,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			base.OnDataSourceChanged(oldValue, newValue);
 		}
 
+		internal override void UpdateLegendItems()
+		{
+			if (ChartArea != null)
+			{
+				if (IsColorPathSeries)
+				{
+					ChartArea.ShouldUpdateLegendIconBrush = true;
+				}
+			}
+		}
+
 		internal override void UpdateRange()
 		{
 			if (_segments.Count == 0 && PointsCount == 1)
@@ -893,7 +904,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					Item = dataPoint
 				};
 
-				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior);
+				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior, dataPoint, index);
 				return tooltipInfo;
 			}
 
@@ -920,6 +931,29 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return fillColor ?? new SolidColorBrush(Colors.Transparent);
+		}
+
+		internal override void UpdateLegendItemToggle()
+		{
+			var legend = Chart?.Legend;
+			var legendItems = ChartArea?.LegendItems;
+
+			if (legend == null || !legend.IsVisible || legendItems == null)
+			{
+				return;
+			}
+
+			for (int i = 0; i < legendItems.Count; i++)
+			{
+				if (legendItems[i] is LegendItem legendItem)
+				{
+					if (legendItem?.Item == this)
+					{
+					legendItem.IsToggled = !IsVisible;
+					continue;
+					}
+				}
+			}
 		}
 
 		internal override void UpdateLegendIconColor()

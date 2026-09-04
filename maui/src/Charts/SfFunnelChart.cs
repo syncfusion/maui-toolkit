@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Xml.Linq;
 using Microsoft.Maui.Layouts;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
@@ -164,6 +165,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal Rect _seriesBounds;
 		string[]? _yPaths;
 		ObservableCollection<ChartDataLabel> _dataLabels;
+		string[]? _colorComplexPaths;
+		private bool _isComplexColorProperty;
+		internal IList<Brush?> PointColorValues { get; set; } = new List<Brush?>();
 
 		#endregion
 
@@ -216,6 +220,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			BindingMode.Default,
 			null,
 			OnXBindingPathChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="PointColorPath"/> bindable property.
+		/// </summary>        
+		public static readonly BindableProperty PointColorPathProperty =
+			BindableProperty.Create(nameof(PointColorPath), typeof(string), typeof(SfFunnelChart), null, BindingMode.Default, null, propertyChanged: OnPointColorPathChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="PaletteBrushes"/> bindable property.
@@ -360,6 +370,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			null,
 			NeckHeightChanged);
 
+		/// <summary>
+		/// Identifies the <see cref="Orientation"/> bindable property.
+		/// </summary>        
+		public static readonly BindableProperty OrientationProperty = BindableProperty.Create(
+			nameof(Orientation), 
+			typeof(ChartOrientation), 
+			typeof(SfFunnelChart), 
+			ChartOrientation.Vertical, 
+			BindingMode.Default, 
+			null, 
+			propertyChanged: OnOrientationPropertyChanged);
+
 		#endregion
 
 		#region Constructor
@@ -464,6 +486,42 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			get { return (string)GetValue(XBindingPathProperty); }
 			set { SetValue(XBindingPathProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets a path value on the source object to serve a brush value to the chart for each data point.
+		/// </summary>
+		/// <value>
+		/// The string that represents the property name for the color to apply per segment, and its default value is null.
+		/// </value>
+		/// <example>
+		/// # [MainWindow.xaml](#tab/tabid-12)
+		/// <code><![CDATA[
+		/// <chart:SfFunnelChart ItemsSource="{Binding Data}" 
+		///                      XBindingPath="XValue" 
+		///                      YBindingPath="YValue"
+		///                      PointColorPath="PointColor">
+		/// </chart:SfFunnelChart>
+		/// ]]>
+		/// </code>
+		/// # [MainWindow.cs](#tab/tabid-13)
+		/// <code><![CDATA[
+		/// SfFunnelChart chart = new SfFunnelChart();
+		///
+		/// ViewModel viewModel = new ViewModel();
+		///
+		/// chart.ItemsSource = viewModel.Data;
+		/// chart.XBindingPath = "XValue";
+		/// chart.YBindingPath = "YValue";
+		/// chart.PointColorPath = "PointColor";
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public string PointColorPath
+		{
+			get { return (string)GetValue(PointColorPathProperty); }
+			set { SetValue(PointColorPathProperty, value); }
 		}
 
 		/// <summary>
@@ -987,6 +1045,47 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal DataLabelLayout? LabelTemplateView { get; set; }
 
+		/// <summary>
+		/// Gets or sets the orientation of the funnel chart.
+		/// </summary>
+		/// <value>
+		/// An enum value specifying the orientation. The default value is <see cref="ChartOrientation.Vertical"/>.
+		/// </value>
+		/// <remarks>
+		/// The <see cref="Orientation"/> property allows the funnel chart to be displayed either vertically (top to bottom) or horizontally (left to right).
+		/// </remarks>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-37)
+		/// <code><![CDATA[
+		/// <chart:SfFunnelChart ItemsSource="{Binding Data}"
+		///                      XBindingPath="Category"
+		///                      YBindingPath="Value"
+		///                      Orientation="Horizontal">
+		/// </chart:SfFunnelChart>
+		/// ]]>
+		/// </code>
+		///
+		/// # [MainPage.xaml.cs](#tab/tabid-38)
+		/// <code><![CDATA[
+		/// SfFunnelChart chart = new SfFunnelChart();
+		/// ViewModel viewModel = new ViewModel();
+		/// chart.ItemsSource = viewModel.Data;
+		/// chart.XBindingPath = "Category";
+		/// chart.YBindingPath = "Value";
+		/// chart.Orientation = ChartOrientation.Horizontal;
+		/// 
+		/// this.Content = chart;
+		///
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public ChartOrientation Orientation
+		{
+			get { return (ChartOrientation)GetValue(OrientationProperty); }
+			set { SetValue(OrientationProperty, value); }
+		}
+
 		#endregion
 
 		#region Methods
@@ -1169,16 +1268,32 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void IPyramidChartDependent.OnSelectionBehaviorPropertyChanged(object oldValue, object newValue)
 		{
-			if (oldValue is DataPointSelectionBehavior selectionBehavior)
-			{
-				SetInheritedBindingContext(selectionBehavior, null);
-			}
-
 			if (newValue is DataPointSelectionBehavior selection)
 			{
 				selection.Source = this;
+				selection.Parent = this;
 				SetInheritedBindingContext(selection, BindingContext);
+				selection.SelectionIndexChanged(oldValue is DataPointSelectionBehavior old ? old.SelectedIndex : -1, selection.SelectedIndex);
+				selection.InitializeDynamicResource(selection);
 			}
+
+			if (oldValue is DataPointSelectionBehavior oldSelection)
+			{
+				if (newValue == null)
+				{
+					oldSelection.ClearSelection();
+				}
+
+				oldSelection.Source = null;
+				oldSelection.Parent = null;
+				SetInheritedBindingContext(oldSelection, null);
+			}
+		}
+
+		IList<Brush?> IPyramidChartDependent.PointColorValues
+		{
+			get { return PointColorValues; }
+			set { PointColorValues = value; }
 		}
 
 		#endregion
@@ -1206,11 +1321,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					Y = segment.SegmentBounds.Center.Y + (float)_seriesBounds.Top,
 					Index = index,
 					Margin = behavior.Margin,
-					TextColor = behavior.TextColor ?? TooltipTextColor ?? Color.FromArgb("#F4EFF4"),
+					TextColor = behavior.GetTooltipTextColor(),
 					FontFamily = behavior.FontFamily,
-					FontSize = !float.IsNaN(behavior.FontSize) ? behavior.FontSize : !float.IsNaN((float)TooltipFontSize) ? (float)TooltipFontSize : 14.0f,
+					FontSize = behavior.GetTooltipFontSize(),
 					FontAttributes = behavior.FontAttributes,
-					Background = behavior.Background ?? TooltipBackground ?? new SolidColorBrush(Color.FromArgb("#1C1B1F")),
+					Background = behavior.GetTooltipBackground(segment.Fill, TooltipBackground),
 					Text = yValue.ToString("#.##"),
 					Item = dataPoint
 				};
@@ -1254,6 +1369,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		static void OnPointColorPathChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			var chart = bindable as SfFunnelChart;
+			if (chart != null)
+			{
+				if (newValue is string)
+				{
+					chart._colorComplexPaths = ((string)newValue).Split(new char[] { '.' });
+				}
+
+				chart.OnBindingPathChanged();
+			}
+		}
+
 		static void NeckWidthChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			if (bindable is IPyramidChartDependent chart)
@@ -1275,6 +1404,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (bindable is IPyramidChartDependent chart)
 			{
 				chart.OnLabelTemplateChanged((object)oldValue, (object)newValue);
+			}
+		}
+
+		static void OnOrientationPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfFunnelChart chart && oldValue != newValue)
+			{
+				chart.ScheduleUpdateChart();
 			}
 		}
 
@@ -1673,6 +1810,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			_actualData?.RemoveAt(index);
 			_yValues?.RemoveAt(index);
+
+			if (!string.IsNullOrEmpty(PointColorPath))
+			{
+				PointColorValues?.RemoveAt(index);
+			}
 		}
 
 		static ChartValueType GetDataType(IEnumerator enumerator, string[] paths)
@@ -1693,6 +1835,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			_actualData?.Clear();
 			_yValues.Clear();
+
+			// Clear PointColorValues
+			if (PointColorValues != null)
+			{
+				PointColorValues.Clear();
+			}
 
 			_pointsCount = 0;
 
@@ -1861,6 +2009,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
+			// Detect if PointColorPath is complex (contains "." or "[")
+			if (!string.IsNullOrEmpty(PointColorPath))
+			{
+				if (PointColorPath.Contains('.', StringComparison.Ordinal) || PointColorPath.Contains('[', StringComparison.Ordinal))
+				{
+					_isComplexColorProperty = true;
+				}
+			}
+
 			yLists = yValueLists;
 
 			_yPaths = yBindingPaths;
@@ -1871,11 +2028,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				if (ItemsSource is IEnumerable)
 				{
-					if (XBindingPath.Contains('[', StringComparison.Ordinal) || isArrayProperty)
+					if (XBindingPath.Contains('[', StringComparison.Ordinal) || isArrayProperty || _isComplexColorProperty)
 					{
 						GenerateComplexPropertyPoints(yBindingPaths, yLists, GetArrayPropertyValue);
 					}
-					else if (XBindingPath.Contains('.', StringComparison.Ordinal) || _isComplexYProperty)
+					else if (XBindingPath.Contains('.', StringComparison.Ordinal) || _isComplexYProperty || _isComplexColorProperty)
 					{
 						GenerateComplexPropertyPoints(yBindingPaths, yLists, GetPropertyValue);
 					}
@@ -1892,398 +2049,476 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			var enumerable = ItemsSource as IEnumerable;
 			var enumerator = enumerable?.GetEnumerator();
 
-			if (enumerable != null && enumerator != null && enumerator.MoveNext())
+			if (enumerable == null || enumerator == null || !enumerator.MoveNext())
 			{
-				var currObj = enumerator.Current;
+				return;
+			}
 
-				FastReflection xProperty = new FastReflection();
+			var currObj = enumerator.Current;
 
-				if (!xProperty.SetPropertyName(XBindingPath, currObj) || xProperty.IsArray(currObj))
+			var xProperty = new FastReflection();
+			if (!xProperty.SetPropertyName(XBindingPath, currObj) || xProperty.IsArray(currObj))
+			{
+				return;
+			}
+
+			FastReflection? colorProperty = null;
+			if (!string.IsNullOrEmpty(PointColorPath))
+			{
+				colorProperty = new FastReflection();
+				if (!colorProperty.SetPropertyName(PointColorPath, currObj) || colorProperty.IsArray(currObj))
 				{
-					return;
-				}
-
-				_xValueType = SfFunnelChart.GetDataType(xProperty, enumerable);
-
-				if (_xValueType == ChartValueType.DateTime || _xValueType == ChartValueType.Double ||
-					_xValueType == ChartValueType.Logarithmic || _xValueType == ChartValueType.TimeSpan)
-				{
-					if (_actualXValues is not List<double>)
-					{
-						_actualXValues = _xValues = new List<double>();
-					}
-				}
-				else
-				{
-					if (_actualXValues is not List<string>)
-					{
-						_actualXValues = _xValues = new List<string>();
-					}
-				}
-
-				string yPath;
-
-				if (string.IsNullOrEmpty(yPaths[0]))
-				{
-					return;
-				}
-				else
-				{
-					yPath = yPaths[0];
-				}
-
-				var yProperty = new FastReflection();
-
-				if (!yProperty.SetPropertyName(yPath, currObj) || yProperty.IsArray(currObj))
-				{
-					return;
-				}
-
-				IList<double> yValue = yLists[0];
-
-				if (_xValueType == ChartValueType.String)
-				{
-					if (_xValues is List<string> xValue)
-					{
-						do
-						{
-							var xVal = xProperty.GetValue(enumerator.Current);
-							var yVal = yProperty.GetValue(enumerator.Current);
-							xValue.Add(xVal.Tostring());
-							yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
-							_actualData?.Add(enumerator.Current);
-						}
-						while (enumerator.MoveNext());
-						_pointsCount = xValue.Count;
-					}
-				}
-				else if (_xValueType == ChartValueType.DateTime)
-				{
-					if (_xValues is List<double> xValue)
-					{
-						do
-						{
-							var xVal = xProperty.GetValue(enumerator.Current);
-							var yVal = yProperty.GetValue(enumerator.Current);
-
-							_xData = xVal != null ? ((DateTime)xVal).ToOADate() : double.NaN;
-
-							// Check the Data Collection is linear or not
-							if (_isLinearData && xValue.Count > 0 && _xData <= xValue[^1])
-							{
-								_isLinearData = false;
-							}
-
-							xValue.Add(_xData);
-							yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
-							_actualData?.Add(enumerator.Current);
-						}
-						while (enumerator.MoveNext());
-						_pointsCount = xValue.Count;
-					}
-				}
-				else if (_xValueType == ChartValueType.Double ||
-						 _xValueType == ChartValueType.Logarithmic)
-				{
-					if (_xValues is List<double> xValue)
-					{
-						do
-						{
-							var xVal = xProperty.GetValue(enumerator.Current);
-							var yVal = yProperty.GetValue(enumerator.Current);
-							_xData = Convert.ToDouble(xVal ?? double.NaN);
-
-							// Check the Data Collection is linear or not
-							if (_isLinearData && xValue.Count > 0 && _xData <= xValue[^1])
-							{
-								_isLinearData = false;
-							}
-
-							xValue.Add(_xData);
-							yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
-							_actualData?.Add(enumerator.Current);
-						}
-						while (enumerator.MoveNext());
-						_pointsCount = xValue.Count;
-					}
-				}
-				else if (_xValueType == ChartValueType.TimeSpan)
-				{
-					//TODO: ensure while implementing timespan.
+					colorProperty = null;
 				}
 			}
+
+			_xValueType = GetDataType(xProperty, enumerable);
+
+			if (_xValueType == ChartValueType.DateTime || _xValueType == ChartValueType.Double ||
+				_xValueType == ChartValueType.Logarithmic || _xValueType == ChartValueType.TimeSpan)
+			{
+				if (!(_actualXValues is List<double>))
+				{
+					_actualXValues = _xValues = new List<double>();
+				}
+			}
+			else
+			{
+				if (!(_actualXValues is List<string>))
+				{
+					_actualXValues = _xValues = new List<string>();
+				}
+			}
+
+			if (string.IsNullOrEmpty(yPaths[0]))
+			{
+				return;
+			}
+
+			var yPath = yPaths[0];
+			var yProperty = new FastReflection();
+			if (!yProperty.SetPropertyName(yPath, currObj) || yProperty.IsArray(currObj))
+			{
+				return;
+			}
+
+			IList<double> yValue = yLists[0];
+			var xValueDouble = _xValues as List<double>;
+			var xValueString = _xValues as List<string>;
+
+			Action<object> addXValue;
+			switch (_xValueType)
+			{
+				case ChartValueType.String:
+					addXValue = (obj) =>
+					{
+						var xVal = xProperty.GetValue(obj);
+						xValueString?.Add(xVal?.ToString() ?? "");
+					};
+					break;
+
+				case ChartValueType.Double:
+				case ChartValueType.Logarithmic:
+					addXValue = (obj) =>
+					{
+						var xVal = xProperty.GetValue(obj);
+						_xData = Convert.ToDouble(xVal ?? double.NaN);
+
+						if (_isLinearData && xValueDouble != null &&
+							xValueDouble.Count > 0 && _xData <= xValueDouble[xValueDouble.Count - 1])
+						{
+							_isLinearData = false;
+						}
+
+						xValueDouble?.Add(_xData);
+					};
+					break;
+
+				case ChartValueType.DateTime:
+					addXValue = (obj) =>
+					{
+						var xVal = xProperty.GetValue(obj);
+						_xData = xVal != null ? ((DateTime)xVal).ToOADate() : double.NaN;
+
+						if (_isLinearData && xValueDouble != null &&
+							xValueDouble.Count > 0 && _xData <= xValueDouble[xValueDouble.Count - 1])
+						{
+							_isLinearData = false;
+						}
+
+						xValueDouble?.Add(_xData);
+					};
+					break;
+
+				case ChartValueType.TimeSpan:
+					// TODO: ensure while implementing TimeSpan.
+					return;
+
+				default:
+					return;
+			}
+
+			Action<object> addPointColorAction = (obj) =>
+			{
+				if (PointColorValues == null)
+				{
+					PointColorValues = new List<Brush?>();
+				}
+
+				if (colorProperty != null)
+				{
+					var colorVal = colorProperty.GetValue(obj);
+					PointColorValues.Add(PyramidChartBase.GetBrushFromColor(colorVal));
+				}
+			};
+
+			Action processItem;
+			if (!string.IsNullOrEmpty(PointColorPath) && colorProperty != null)
+			{
+				processItem = () =>
+				{
+					var current = enumerator.Current;
+					addXValue(current);
+					var yVal = yProperty.GetValue(current);
+					yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
+					addPointColorAction(current);
+					_actualData?.Add(current);
+				};
+			}
+			else
+			{
+				processItem = () =>
+				{
+					var current = enumerator.Current;
+					addXValue(current);
+					var yVal = yProperty.GetValue(current);
+					yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
+					_actualData?.Add(current);
+				};
+			}
+
+			do
+			{
+				processItem();
+			}
+			while (enumerator.MoveNext());
+
+			_pointsCount = (_xValueType == ChartValueType.String ? xValueString?.Count : xValueDouble?.Count) ?? 0;
 		}
 
-		void GenerateComplexPropertyPoints(string[] yPaths, IList<double>[] yLists, GetReflectedProperty? getPropertyValue)
+		private void GenerateComplexPropertyPoints(string[] yPaths, IList<double>[] yLists, GetReflectedProperty? getPropertyValue)
 		{
 			var enumerable = ItemsSource as IEnumerable;
 			var enumerator = enumerable?.GetEnumerator();
 
-			if (enumerable != null && enumerator != null && getPropertyValue != null && enumerator.MoveNext() && _xComplexPaths != null && _yComplexPaths != null)
+			if (enumerable == null || enumerator == null || getPropertyValue == null ||
+				!enumerator.MoveNext() || _xComplexPaths == null || _yComplexPaths == null)
 			{
-				_xValueType = GetDataType(enumerator, _xComplexPaths);
+				return;
+			}
 
-				if (_xValueType == ChartValueType.DateTime || _xValueType == ChartValueType.Double ||
-					_xValueType == ChartValueType.Logarithmic || _xValueType == ChartValueType.TimeSpan)
+			string[]? colorComplexPaths = null;
+			if (!string.IsNullOrEmpty(PointColorPath))
+			{
+				colorComplexPaths = PointColorPath.Split(new char[] { '.' });
+			}
+
+			_xValueType = GetDataType(enumerator, _xComplexPaths);
+
+			if (_xValueType == ChartValueType.DateTime || _xValueType == ChartValueType.Double ||
+				_xValueType == ChartValueType.Logarithmic || _xValueType == ChartValueType.TimeSpan)
+			{
+				if (!(_xValues is List<double>))
 				{
-					if (_xValues is not List<double>)
-					{
-						_actualXValues = _xValues = new List<double>();
-					}
+					_actualXValues = _xValues = new List<double>();
 				}
-				else
+			}
+			else
+			{
+				if (!(_xValues is List<string>))
 				{
-					if (_xValues is not List<string>)
-					{
-						_actualXValues = _xValues = new List<string>();
-					}
+					_actualXValues = _xValues = new List<string>();
 				}
+			}
 
-				string[] tempYPath = _yComplexPaths[0];
+			if (string.IsNullOrEmpty(yPaths[0]))
+			{
+				return;
+			}
 
-				if (string.IsNullOrEmpty(yPaths[0]))
+			var tempYPath = _yComplexPaths[0];
+			IList<double> yValue = yLists[0];
+
+			var xValueDouble = _xValues as List<double>;
+			var xValueString = _xValues as List<string>;
+
+			Func<object, bool> addXValue;
+			switch (_xValueType)
+			{
+				case ChartValueType.String:
+					addXValue = (obj) =>
+					{
+						var xVal = getPropertyValue(obj, _xComplexPaths);
+						if (xVal == null)
+						{
+							return false;
+						}
+
+						xValueString?.Add((string)xVal);
+						return true;
+					};
+					break;
+
+				case ChartValueType.Double:
+				case ChartValueType.Logarithmic:
+					addXValue = (obj) =>
+					{
+						var xVal = getPropertyValue(obj, _xComplexPaths);
+						_xData = Convert.ToDouble(xVal ?? double.NaN);
+
+						if (_isLinearData && xValueDouble != null &&
+							xValueDouble.Count > 0 && _xData <= xValueDouble[xValueDouble.Count - 1])
+						{
+							_isLinearData = false;
+						}
+
+						xValueDouble?.Add(_xData);
+						return true;
+					};
+					break;
+
+				case ChartValueType.DateTime:
+					addXValue = (obj) =>
+					{
+						var xVal = getPropertyValue(obj, _xComplexPaths);
+						_xData = xVal != null ? ((DateTime)xVal).ToOADate() : double.NaN;
+
+						if (_isLinearData && xValueDouble != null &&
+							xValueDouble.Count > 0 && _xData <= xValueDouble[xValueDouble.Count - 1])
+						{
+							_isLinearData = false;
+						}
+
+						xValueDouble?.Add(_xData);
+						return true;
+					};
+					break;
+
+				case ChartValueType.TimeSpan:
+					// TODO: Ensure for TimeSpan.
+					return;
+
+				default:
+					return;
+			}
+
+			Action<object> addPointColorAction = _ => { };
+			if (colorComplexPaths != null)
+			{
+				addPointColorAction = (obj) =>
+				{
+					if (PointColorValues == null)
+					{
+						PointColorValues = new List<Brush?>();
+					}
+
+					var colorVal = getPropertyValue(obj, colorComplexPaths);
+					PointColorValues.Add(PyramidChartBase.GetBrushFromColor(colorVal));
+				};
+			}
+
+			Action<object> processItem = (current) =>
+			{
+				var yVal = getPropertyValue(current, tempYPath);
+				yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
+				addPointColorAction(current);
+				_actualData?.Add(current);
+			};
+
+			do
+			{
+				var current = enumerator.Current;
+				if (!addXValue(current))
 				{
 					return;
 				}
 
-				IList<double> yValue = yLists[0];
-				object? xVal, yVal;
-
-				if (_xValueType == ChartValueType.String)
-				{
-					if (_xValues is List<string> xValue)
-					{
-						do
-						{
-							xVal = getPropertyValue(enumerator.Current, _xComplexPaths);
-							yVal = getPropertyValue(enumerator.Current, tempYPath);
-
-							if (xVal == null)
-							{
-								return;
-							}
-
-							xValue.Add((string)xVal);
-							yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
-							_actualData?.Add(enumerator.Current);
-						}
-						while (enumerator.MoveNext());
-						_pointsCount = xValue.Count;
-					}
-				}
-				else if (_xValueType == ChartValueType.Double ||
-					_xValueType == ChartValueType.Logarithmic)
-				{
-					if (_xValues is List<double> xValue)
-					{
-						do
-						{
-							xVal = getPropertyValue(enumerator.Current, _xComplexPaths);
-							yVal = getPropertyValue(enumerator.Current, tempYPath);
-							_xData = Convert.ToDouble(xVal ?? double.NaN);
-
-							// Check the Data Collection is linear or not
-							if (_isLinearData && xValue.Count > 0 && _xData <= xValue[^1])
-							{
-								_isLinearData = false;
-							}
-
-							xValue.Add(_xData);
-							yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
-							_actualData?.Add(enumerator.Current);
-						}
-						while (enumerator.MoveNext());
-						_pointsCount = xValue.Count;
-					}
-				}
-				else if (_xValueType == ChartValueType.DateTime)
-				{
-					if (_xValues is List<double> xValue)
-					{
-						do
-						{
-							xVal = getPropertyValue(enumerator.Current, _xComplexPaths);
-							yVal = getPropertyValue(enumerator.Current, tempYPath);
-
-							_xData = xVal != null ? ((DateTime)xVal).ToOADate() : double.NaN;
-
-							// Check the Data Collection is linear or not
-							if (_isLinearData && xValue.Count > 0 && _xData <= xValue[^1])
-							{
-								_isLinearData = false;
-							}
-
-							xValue.Add(_xData);
-							yValue.Add(Convert.ToDouble(yVal ?? double.NaN));
-							_actualData?.Add(enumerator.Current);
-						}
-						while (enumerator.MoveNext());
-						_pointsCount = xValue.Count;
-					}
-				}
-				else if (_xValueType == ChartValueType.TimeSpan)
-				{
-					//TODO: Ensure for timespan;
-				}
+				processItem(current);
 			}
+			while (enumerator.MoveNext());
+
+			_pointsCount = (_xValueType == ChartValueType.String ? xValueString?.Count : xValueDouble?.Count) ?? 0;
 		}
 
 		void SetIndividualPoint(int index, object value, bool replace)
 		{
-			if (_yValues != null && _yPaths != null && ItemsSource != null)
+			if (_yValues == null || _yPaths == null || ItemsSource == null)
 			{
-				var xvalueType = GetArrayPropertyValue(value, _xComplexPaths);
+				return;
+			}
 
-				if (xvalueType != null)
+			var xvalueType = GetArrayPropertyValue(value, _xComplexPaths);
+			if (xvalueType != null)
+			{
+				_xValueType = GetDataType(xvalueType);
+			}
+
+			var tempYPath = _yComplexPaths != null ? _yComplexPaths[0] : null;
+			var yValue = _yValues;
+			var colorValues = PointColorValues;
+
+			// Set up X values list based on type
+			if (_xValueType == ChartValueType.String)
+			{
+				if (!(_xValues is List<string>))
 				{
-					_xValueType = SfFunnelChart.GetDataType(xvalueType);
+					_xValues = _actualXValues = new List<string>();
 				}
-
-				double yData;
-				var tempYPath = _yComplexPaths?[0];
-				var yValue = _yValues;
-
-				switch (_xValueType)
+			}
+			else if (_xValueType == ChartValueType.DateTime ||
+					 _xValueType == ChartValueType.Double ||
+					 _xValueType == ChartValueType.Logarithmic)
+			{
+				if (!(_xValues is List<double>))
 				{
-					case ChartValueType.String:
-						{
-							if (_xValues is not List<string>)
-							{
-								_xValues = _actualXValues = new List<string>();
-							}
-
-							IList<string> xValue = (List<string>)_xValues;
-							var xVal = GetArrayPropertyValue(value, _xComplexPaths);
-							var yVal = GetArrayPropertyValue(value, tempYPath);
-							yData = yVal != null ? Convert.ToDouble(yVal) : double.NaN;
-
-							if (replace && xValue.Count > index)
-							{
-								xValue[index] = xVal.Tostring();
-							}
-							else
-							{
-								xValue.Insert(index, xVal.Tostring());
-							}
-
-							if (replace && yValue.Count > index)
-							{
-								yValue[index] = yData;
-							}
-							else
-							{
-								yValue.Insert(index, yData);
-							}
-
-							_pointsCount = xValue.Count;
-						}
-
-						break;
-					case ChartValueType.Double:
-					case ChartValueType.Logarithmic:
-						{
-							if (_xValues is not List<double>)
-							{
-								_xValues = _actualXValues = new List<double>();
-							}
-
-							IList<double> xValue = (List<double>)_xValues;
-							var xVal = GetArrayPropertyValue(value, _xComplexPaths);
-							var yVal = GetArrayPropertyValue(value, tempYPath);
-							_xData = xVal != null ? Convert.ToDouble(xVal) : double.NaN;
-							yData = yVal != null ? Convert.ToDouble(yVal) : double.NaN;
-
-							// Check the Data Collection is linear or not
-							if (_isLinearData && xValue.Count > 0 && _xData <= xValue[xValue.Count - 1])
-							{
-								_isLinearData = false;
-							}
-
-							if (replace && xValue.Count > index)
-							{
-								xValue[index] = _xData;
-							}
-							else
-							{
-								xValue.Insert(index, _xData);
-							}
-
-							if (replace && yValue.Count > index)
-							{
-								yValue[index] = yData;
-							}
-							else
-							{
-								yValue.Insert(index, yData);
-							}
-
-							_pointsCount = xValue.Count;
-						}
-
-						break;
-					case ChartValueType.DateTime:
-						{
-							if (_xValues is not List<double>)
-							{
-								_xValues = _actualXValues = new List<double>();
-							}
-
-							IList<double> xValue = (List<double>)_xValues;
-							var xVal = GetArrayPropertyValue(value, _xComplexPaths);
-							var yVal = GetArrayPropertyValue(value, tempYPath);
-							_xData = Convert.ToDateTime(xVal).ToOADate();
-							yData = yVal != null ? Convert.ToDouble(yVal) : double.NaN;
-
-							// Check the Data Collection is linear or not
-							if (_isLinearData && xValue.Count > 0 && _xData <= xValue[xValue.Count - 1])
-							{
-								_isLinearData = false;
-							}
-
-							if (replace && xValue.Count > index)
-							{
-								xValue[index] = _xData;
-							}
-							else
-							{
-								xValue.Insert(index, _xData);
-							}
-
-							if (replace && yValue.Count > index)
-							{
-								yValue[index] = yData;
-							}
-							else
-							{
-								yValue.Insert(index, yData);
-							}
-
-							_pointsCount = xValue.Count;
-						}
-
-						break;
-					case ChartValueType.TimeSpan:
-						{
-							//TODO: Ensure on time span implementation.
-						}
-
-						break;
+					_xValues = _actualXValues = new List<double>();
 				}
+			}
+			else if (_xValueType == ChartValueType.TimeSpan)
+			{
+				// TODO: Ensure on TimeSpan implementation.
+				return;
+			}
 
-				if (_actualData != null)
+			var xValueDouble = _xValues as List<double>;
+			var xValueString = _xValues as List<string>;
+
+			// Define action to set/insert X value based on type
+			Action setXValue;
+			switch (_xValueType)
+			{
+				case ChartValueType.String:
+					setXValue = () =>
+					{
+						var xVal = GetArrayPropertyValue(value, _xComplexPaths);
+						if (replace && xValueString != null && xValueString.Count > index)
+						{
+							xValueString[index] = xVal?.ToString() ?? "";
+						}
+						else
+						{
+							xValueString?.Insert(index, xVal?.ToString() ?? "");
+						}
+					};
+					break;
+
+				case ChartValueType.Double:
+				case ChartValueType.Logarithmic:
+					setXValue = () =>
+					{
+						var xVal = GetArrayPropertyValue(value, _xComplexPaths);
+						_xData = xVal != null ? Convert.ToDouble(xVal) : double.NaN;
+
+						if (_isLinearData && xValueDouble != null && xValueDouble.Count > 0 && _xData <= xValueDouble[xValueDouble.Count - 1])
+						{
+							_isLinearData = false;
+						}
+
+						if (replace && xValueDouble != null && xValueDouble.Count > index)
+						{
+							xValueDouble[index] = _xData;
+						}
+						else
+						{
+							xValueDouble?.Insert(index, _xData);
+						}
+					};
+					break;
+
+				case ChartValueType.DateTime:
+					setXValue = () =>
+					{
+						var xVal = GetArrayPropertyValue(value, _xComplexPaths);
+						_xData = Convert.ToDateTime(xVal).ToOADate();
+
+						if (_isLinearData && xValueDouble != null && xValueDouble.Count > 0 && _xData <= xValueDouble[xValueDouble.Count - 1])
+						{
+							_isLinearData = false;
+						}
+
+						if (replace && xValueDouble != null && xValueDouble.Count > index)
+						{
+							xValueDouble[index] = _xData;
+						}
+						else
+						{
+							xValueDouble?.Insert(index, _xData);
+						}
+					};
+					break;
+
+				default:
+					return;
+			}
+
+			// Define action to set/insert Y value
+			Action setYValue = () =>
+			{
+				var yVal = GetArrayPropertyValue(value, tempYPath);
+				double yData = yVal != null ? Convert.ToDouble(yVal) : double.NaN;
+
+				if (replace && yValue.Count > index)
 				{
-					if (replace && _actualData.Count > index)
+					yValue[index] = yData;
+				}
+				else
+				{
+					yValue.Insert(index, yData);
+				}
+			};
+
+			// Define action to set/insert color value (no-op if not needed)
+			Action setColorValue = () => { };
+			if (!string.IsNullOrEmpty(PointColorPath))
+			{
+				setColorValue = () =>
+				{
+					var colorValue = GetArrayPropertyValue(value, _colorComplexPaths);
+					Brush? color = PyramidChartBase.GetBrushFromColor(colorValue);
+
+					if (replace && colorValues.Count > index)
 					{
-						_actualData[index] = value;
-					}
-					else if (_actualData.Count == index)
-					{
-						_actualData.Add(value);
+						colorValues[index] = color;
 					}
 					else
 					{
-						_actualData.Insert(index, value);
+						colorValues.Insert(index, color);
 					}
+				};
+			}
+
+			// Execute actions
+			setXValue();
+			setYValue();
+			setColorValue();
+
+			// Update pointsCount
+			_pointsCount = (_xValueType == ChartValueType.String ? xValueString?.Count : xValueDouble?.Count) ?? 0;
+
+			// Update actualData
+			if (_actualData != null)
+			{
+				if (replace && _actualData.Count > index)
+				{
+					_actualData[index] = value;
+				}
+				else if (_actualData.Count == index)
+				{
+					_actualData.Add(value);
+				}
+				else
+				{
+					_actualData.Insert(index, value);
 				}
 			}
 		}

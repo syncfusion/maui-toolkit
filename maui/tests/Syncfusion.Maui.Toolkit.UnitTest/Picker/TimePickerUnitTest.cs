@@ -2048,7 +2048,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             InvokePrivateMethod(picker, "OnPickerSelectionIndexChanged", null, e);
 
-            var minuteColumn = GetPrivateField<SfTimePicker>(picker, "_minuteColumn") as PickerColumn;
+            var minuteColumn = picker.MinuteColumn;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var minutes = (ObservableCollection<string>)minuteColumn.ItemsSource;
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
@@ -2471,7 +2471,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ItemsSource = new ObservableCollection<string> { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "00" },
                 SelectedIndex = 0
             };
-            SetPrivateField(timePicker, "_hourColumn", hourColumn);
+
+            timePicker.HourColumn = hourColumn;
 
             InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
@@ -2488,7 +2489,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ItemsSource = new ObservableCollection<string> { "00", "15", "30", "45" },
                 SelectedIndex = 0
             };
-            SetPrivateField(timePicker, "_minuteColumn", minuteColumn);
+            timePicker.MinuteColumn = minuteColumn;
 
             InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
@@ -2505,7 +2506,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ItemsSource = new ObservableCollection<string> { "00", "15", "30", "45" },
                 SelectedIndex = 0
             };
-            SetPrivateField(timePicker, "_secondColumn", secondColumn);
+            timePicker.SecondColumn = secondColumn;
 
             InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
@@ -2522,7 +2523,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ItemsSource = new ObservableCollection<string> { "AM", "PM" },
                 SelectedIndex = 0
             };
-            SetPrivateField(timePicker, "_meridiemColumn", meridiemColumn);
+            timePicker.MeridiemColumn = meridiemColumn;
 
             InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
@@ -2538,10 +2539,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var minuteColumn = new PickerColumn { SelectedIndex = 0 };
             var secondColumn = new PickerColumn { SelectedIndex = 0 };
             var meridiemColumn = new PickerColumn { SelectedIndex = 0 };
-            SetPrivateField(timePicker, "_hourColumn", hourColumn);
-            SetPrivateField(timePicker, "_minuteColumn", minuteColumn);
-            SetPrivateField(timePicker, "_secondColumn", secondColumn);
-            SetPrivateField(timePicker, "_meridiemColumn", meridiemColumn);
+            timePicker.HourColumn = hourColumn;
+            timePicker.MinuteColumn = minuteColumn;
+            timePicker.SecondColumn = secondColumn;
+            timePicker.MeridiemColumn = meridiemColumn;
 
             InvokePrivateMethod(timePicker, "UpdateSelectedIndex", timePicker.SelectedTime);
 
@@ -2564,7 +2565,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ItemsSource = new ObservableCollection<string> { "09", "10", "11", "12", "13", "14", "15", "16", "17", "18" },
                 SelectedIndex = 1
             };
-            SetPrivateField(timePicker, "_hourColumn", oldHourColumn);
+            timePicker.HourColumn = oldHourColumn;
 
             var columns = new ObservableCollection<PickerColumn> { oldHourColumn };
             SetPrivateField(timePicker, "_columns", columns);
@@ -2592,7 +2593,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ItemsSource = new ObservableCollection<string> { "00", "15", "30", "45" },
                 SelectedIndex = 2
             };
-            SetPrivateField(timePicker, "_minuteColumn", oldMinuteColumn);
+            timePicker.MinuteColumn = oldMinuteColumn;
 
             var columns = new ObservableCollection<PickerColumn> { new PickerColumn(), oldMinuteColumn };
             SetPrivateField(timePicker, "_columns", columns);
@@ -2619,7 +2620,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ItemsSource = new ObservableCollection<string> { "00", "15", "30", "45" },
                 SelectedIndex = 2
             };
-            SetPrivateField(timePicker, "_secondColumn", oldSecondColumn);
+            timePicker.SecondColumn = oldSecondColumn;
 
             var columns = new ObservableCollection<PickerColumn> { new PickerColumn(), new PickerColumn(), oldSecondColumn };
             SetPrivateField(timePicker, "_columns", columns);
@@ -2647,7 +2648,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 ItemsSource = new ObservableCollection<string> { "AM", "PM" },
                 SelectedIndex = 1
             };
-            SetPrivateField(timePicker, "_meridiemColumn", oldMeridiemColumn);
+            timePicker.MeridiemColumn = oldMeridiemColumn;
 
             var columns = new ObservableCollection<PickerColumn> { new PickerColumn(), new PickerColumn(), oldMeridiemColumn };
             SetPrivateField(timePicker, "_columns", columns);

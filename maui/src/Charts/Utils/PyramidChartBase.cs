@@ -140,12 +140,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// data labels are shown on the chart.
 		/// </remarks>
 		public static readonly BindableProperty ShowDataLabelsProperty = BindableProperty.Create(
-			nameof(IPyramidChartDependent.ShowDataLabels),
-			typeof(bool),
-			typeof(IPyramidChartDependent),
-			false,
-			BindingMode.Default,
-			null,
+			nameof(IPyramidChartDependent.ShowDataLabels), 
+			typeof(bool), 
+			typeof(IPyramidChartDependent), 
+			false, 
+			BindingMode.Default, 
+			null, 
 			OnShowDataLabelsChanged);
 
 		#endregion
@@ -214,6 +214,40 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return source.GetDataPointIndex(x, y);
 		}
 
+		/// <summary>
+		/// Converts a color value to a Brush. Supports Color, Brush, or Color hex string.
+		/// </summary>
+		internal static Brush? GetBrushFromColor(object? colorValue)
+		{
+			if (colorValue == null)
+			{
+				return null;
+			}
+
+			// If already a Brush, return it
+			if (colorValue is Brush brush)
+			{
+				return brush;
+			}
+
+			// If it's a Color, convert to SolidColorBrush
+			if (colorValue is Color color)
+			{
+				return new SolidColorBrush(color);
+			}
+
+			// If it's a string, try to parse as hex color
+			if (colorValue is string colorString)
+			{
+				if (Color.TryParse(colorString, out Color parsedColor))
+				{
+					return new SolidColorBrush(parsedColor);
+				}
+			}
+
+			return null;
+		}
+
 		#endregion
 	}
 
@@ -238,10 +272,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			_labelRects = [];
 		}
 
-		//Layout the data labels.
+		#region Internal Methods
+
+		/// <summary>
+		/// Arranges and positions all data labels within the chart bounds, handling overlaps and visibility.
+		/// </summary>
 		internal void ArrangeElements()
 		{
-			//DataLabel clip bounds.
+			// DataLabel clip bounds.
 			var clip = new Rect(new Point(0, 0), _chart.AreaBounds.Size);
 			var seriesBounds = _chart.SeriesBounds;
 			DesiredWidth = (float)(clip.Width - (seriesBounds.X + seriesBounds.Width));
@@ -282,79 +320,156 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		/// <summary>
+		/// Calculates the label rectangle position based on placement and size.
+		/// </summary>
 		Rect CalculateLabelRect(IPyramidLabels item, DataLabelPlacement placement, Size size)
 		{
-			var bounds = _chart.SeriesBounds;
+			var settings = _dataLabelSettings;
+			if (settings == null || settings.LabelStyle == null)
+			{
+				return Rect.Zero;
+			}
+
+			var style = settings.LabelStyle;
 			var labelRect = Rect.Zero;
 			var actualPosition = DataLabelPlacement.Inner;
 			item.LinePoints = null;
-			ChartDataLabelStyle style = _dataLabelSettings.LabelStyle;
-			double offsetX = double.IsNaN(style.OffsetX) ? 0f : style.OffsetX;
-			double offsetY = double.IsNaN(style.OffsetY) ? 0f : style.OffsetY;
-			item.DataLabelX += (float)offsetX;
-			item.DataLabelY += (float)offsetY;
 
-			switch (placement)
+			if (_chart.IsHorizontalOrientation)
 			{
-				case DataLabelPlacement.Inner:
-				case DataLabelPlacement.Center:
-				case DataLabelPlacement.Auto:
-					var x = item.DataLabelX - size.Width / 2;
-					var y = item.DataLabelY - size.Height / 2;
-					labelRect = new Rect(new Point(x, y), size);
-					actualPosition = DataLabelPlacement.Inner;
-					break;
-				case DataLabelPlacement.Outer:
-					var outerX = bounds.X + bounds.Width + offsetX;
-					y = item.DataLabelY;
+				var bounds = _chart.SeriesBounds;
+				var originalDataLabelX = item.DataLabelX;
+				var originalDataLabelY = item.DataLabelY;
 
-					var linePoints = new Point[3];
-					linePoints[0] = new Point(outerX, y);
-					var bend = (outerX - bounds.Center.X) * BendRatio;
-					linePoints[1] = new Point(outerX - bend, y);
-					linePoints[2] = item.SlopePoint;
+				double offsetX = double.IsNaN(style.OffsetX) ? 0d : style.OffsetX;
+				double offsetY = double.IsNaN(style.OffsetY) ? 0d : style.OffsetY;
 
-					item.LinePoints = linePoints;
-					x = outerX;
-					y = item.DataLabelY - size.Height / 2;
+				var finalDataLabelX = originalDataLabelX + (float)offsetX;
+				var finalDataLabelY = originalDataLabelY + (float)offsetY;
 
-					var width = size.Width < DesiredWidth ? size.Width : DesiredWidth;
-					labelRect = new Rect(new Point(x, y), new Size(width, size.Height));
-					actualPosition = DataLabelPlacement.Outer;
-					break;
+				switch (placement)
+				{
+					case DataLabelPlacement.Inner:
+					case DataLabelPlacement.Center:
+					case DataLabelPlacement.Auto:
+						{
+							var x = finalDataLabelX - size.Width / 2;
+							var y = finalDataLabelY - size.Height / 2;
+
+							labelRect = new Rect(new Point(x, y), size);
+							actualPosition = DataLabelPlacement.Inner;
+							break;
+						}
+
+					case DataLabelPlacement.Outer:
+						{
+							var outerY = Math.Min(bounds.Y, 10);
+							var x = finalDataLabelX - size.Width / 2;
+
+							var linePoints = new Point[2];
+							linePoints[0] = new Point(x + (size.Width / 2), outerY + size.Height);
+							linePoints[1] = item.SlopePoint;
+
+							item.LinePoints = linePoints;
+							labelRect = new Rect(new Point(x, outerY), size);
+							actualPosition = DataLabelPlacement.Outer;
+							break;
+						}
+				}
+			}
+			else
+			{
+				var bounds = _chart.SeriesBounds;
+
+				double offsetX = double.IsNaN(style.OffsetX) ? 0d : style.OffsetX;
+				double offsetY = double.IsNaN(style.OffsetY) ? 0d : style.OffsetY;
+				item.DataLabelX += (float)offsetX;
+				item.DataLabelY += (float)offsetY;
+
+				switch (placement)
+				{
+					case DataLabelPlacement.Inner:
+					case DataLabelPlacement.Center:
+					case DataLabelPlacement.Auto:
+						{
+							var x = item.DataLabelX - size.Width / 2;
+							var y = item.DataLabelY - size.Height / 2;
+
+							labelRect = new Rect(new Point(x, y), size);
+							actualPosition = DataLabelPlacement.Inner;
+							break;
+						}
+
+					case DataLabelPlacement.Outer:
+						{
+							var outerX = bounds.X + bounds.Width + offsetX;
+							var y = item.DataLabelY;
+
+							var linePoints = new Point[3];
+							linePoints[0] = new Point(outerX, y);
+							var bend = (outerX - bounds.Center.X) * BendRatio;
+							linePoints[1] = new Point(outerX - bend, y);
+							linePoints[2] = item.SlopePoint;
+
+							item.LinePoints = linePoints;
+							var width = size.Width < DesiredWidth ? size.Width : DesiredWidth;
+							var yPosition = item.DataLabelY - size.Height / 2;
+							labelRect = new Rect(new Point(outerX, yPosition), new Size(width, size.Height));
+							actualPosition = DataLabelPlacement.Outer;
+							break;
+						}
+				}
 			}
 
-			labelRect = ArrangeSmartLabel(item, actualPosition, labelRect);
-
-			return labelRect;
+			return ArrangeSmartLabel(item, actualPosition, labelRect);
 		}
 
+		/// <summary>
+		/// Arranges smart labels to avoid overlaps, handling visibility and repositioning.
+		/// </summary>
 		Rect ArrangeSmartLabel(IPyramidLabels item, DataLabelPlacement actualPosition, Rect labelRect)
 		{
+			if (_chart.IsHorizontalOrientation)
+			{
+				foreach (var rect in _labelRects)
+				{
+					var isIntersected = labelRect.IsOverlap(rect.Value);
+
+					if (isIntersected)
+					{
+						item.IsLabelVisible = false;
+						return labelRect;
+					}
+
+					item.IsLabelVisible = true;
+				}
+
+				return labelRect;
+			}
+
 			foreach (var rect in _labelRects)
 			{
-				var IsIntersected = labelRect.IsOverlap(rect.Value);
+				var isIntersected = labelRect.IsOverlap(rect.Value);
 
-				if (IsIntersected && actualPosition == DataLabelPlacement.Auto)
+				if (isIntersected)
 				{
-					actualPosition = DataLabelPlacement.Outer;
-					item.IsLabelVisible = true;
-					labelRect = CalculateLabelRect(item, actualPosition, labelRect.Size);
-					return labelRect;
-				}
+					if (actualPosition == DataLabelPlacement.Inner)
+					{
+						item.IsLabelVisible = false;
+						return labelRect;
+					}
+					else
+					{
+						var adjacentRect = rect.Value;
+						item.IsLabelVisible = true;
 
-				if (IsIntersected && actualPosition == DataLabelPlacement.Inner)
-				{
-					item.IsLabelVisible = false;
-					return labelRect;
-				}
-				else if (IsIntersected && actualPosition == DataLabelPlacement.Outer)
-				{
-					var adjacentRect = rect.Value;
-					item.IsLabelVisible = true;
-					item.DataLabelY = !_chart.ArrangeReverse ? adjacentRect.Y + adjacentRect.Height + Spacing + (float)labelRect.Height / 2
-						: adjacentRect.Y - Spacing - (float)labelRect.Height / 2;
-					labelRect = CalculateLabelRect(item, actualPosition, labelRect.Size);
+						item.DataLabelY = !_chart.ArrangeReverse ?
+							(float)(adjacentRect.Y + adjacentRect.Height + Spacing + labelRect.Height / 2) :
+							(float)(adjacentRect.Y - Spacing - labelRect.Height / 2);
+
+						labelRect = CalculateLabelRect(item, DataLabelPlacement.Outer, labelRect.Size);
+					}
 				}
 				else
 				{
@@ -366,24 +481,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 #pragma warning disable IDE0060 // Remove unused parameter
+		/// <summary>
+		/// Draws data labels and connector lines on the canvas.
+		/// </summary>
 		internal void OnDraw(ICanvas canvas, Rect dirtyRect)
 #pragma warning restore IDE0060 // Remove unused parameter
 		{
-			//TODO:Check label empty
-			//Check rotation angle
-			//Canvas stroke size
-			//Canvas stroke color
-			//Set fill paint
-			//Draw rectangle with fill & corner radius
-			//Draw stroke with corner radius.
-			//Canvas font color, set contrast fontColor. 
-			//Draw text.
-
 			foreach (var item in _segments)
 			{
 				if (item.IsLabelVisible)
 				{
-					//Draw Line
 					canvas.CanvasSaveState();
 					canvas.StrokeSize = 1;
 					canvas.StrokeColor = item.Fill?.ToColor();
@@ -393,8 +500,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (linePoint != null)
 					{
-						canvas.DrawLine(linePoint[0], linePoint[1]);
-						canvas.DrawLine(linePoint[1], linePoint[2]);
+						DrawConnectorLines(canvas, linePoint);
 					}
 
 					canvas.CanvasRestoreState();
@@ -459,6 +565,44 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		/// <summary>
+		/// Draws connector lines based on orientation-specific logic.
+		/// </summary>
+		internal virtual void DrawConnectorLines(ICanvas canvas, Point[] linePoints)
+		{
+			if (linePoints == null || linePoints.Length == 0)
+			{
+				return;
+			}
+
+			if (_chart.IsHorizontalOrientation)
+			{
+				if (linePoints.Length >= 2)
+				{
+					canvas.DrawLine(linePoints[0], linePoints[1]);
+				}
+			}
+			else
+			{
+				if (linePoints.Length >= 2)
+				{
+					canvas.DrawLine(linePoints[0], linePoints[1]);
+				}
+
+				if (linePoints.Length >= 3)
+				{
+					canvas.DrawLine(linePoints[1], linePoints[2]);
+				}
+			}
+		}
+
+		#endregion
+
+		#region Protected Methods
+
+		/// <summary>
+		/// Draws a data label at the specified position with the given style.
+		/// </summary>
 		static void DrawLabel(ICanvas canvas, IPyramidLabels item, Rect rect, ChartDataLabelStyle style)
 		{
 #if ANDROID
@@ -469,6 +613,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 #endif
 		}
 
+		/// <summary>
+		/// Draws the background of a data label with optional corner radius and border.
+		/// </summary>
 		static void DrawBackground(ICanvas canvas, Brush fill, ChartDataLabelStyle style, Rect backgroundRect)
 		{
 			canvas.CanvasSaveState();
@@ -502,11 +649,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			canvas.CanvasRestoreState();
 		}
 
+		/// <summary>
+		/// Draws a text label at the specified position with the given style.
+		/// </summary>
 		static void DrawLabel(ICanvas canvas, string label, PointF point, ChartDataLabelStyle style)
 		{
 			canvas.DrawText(label, point.X, point.Y, style);
 		}
 
+		/// <summary>
+		/// Adds a data label segment to the collection.
+		/// </summary>
 		internal void AddLabel(IPyramidLabels segment)
 		{
 			if (!_segments.Contains(segment))
@@ -515,12 +668,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		/// <summary>
+		/// Clears all stored label data and rectangles.
+		/// </summary>
 		internal void ClearDefaultValues()
 		{
 			_segments.Clear();
 			_labelRects.Clear();
 		}
 
+		/// <summary>
+		/// Updates the position of template-based data labels.
+		/// </summary>
 		internal void UpdateTemplatePosition()
 		{
 			for (int i = 0; i < _segments.Count; i++)
@@ -539,5 +698,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 		}
+
+		#endregion
 	}
 }

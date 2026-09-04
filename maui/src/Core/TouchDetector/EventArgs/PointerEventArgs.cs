@@ -48,6 +48,17 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			PointerDeviceType = deviceType;
 		}
 
+		/// <summary>
+        /// Internal constructor to set PagePosition
+        /// </summary>>
+        internal PointerEventArgs(long id, PointerActions action, Point touchPoint, Point pagePosition)
+        {
+            Id = id;
+            Action = action;
+            TouchPoint = touchPoint;
+            PagePosition = pagePosition;
+        }
+
 		internal PointerEventArgs(Func<IElement?, Point?>? position, long id, PointerActions action, PointerDeviceType deviceType, Point touchPoint) : this(id, action, deviceType, touchPoint)
 		{
 			_getPosition = position;
@@ -95,6 +106,8 @@ namespace Syncfusion.Maui.Toolkit.Internals
 		/// </remarks>
 		[UnsupportedOSPlatform("MACCATALYST")]
 		public bool IsRightButtonPressed { internal set; get; } = false;
+
+		internal Point PagePosition { get; private set; }
 
 		#endregion
 

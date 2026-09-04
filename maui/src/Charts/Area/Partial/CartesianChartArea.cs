@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -621,7 +621,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			return yValue;
 		}
-		
+
 		#endregion
 	}
 }

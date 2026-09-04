@@ -5,46 +5,47 @@
               xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit">
 
-    <localCore:SampleView.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <local:FunnelChartColorResources/>
-            </ResourceDictionary.MergedDictionaries>
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <local:FunnelChartColorResources/>
+      </ResourceDictionary.MergedDictionaries>
 
-            <DataTemplate x:Key="tooltipTemplate">
-                <Grid ColumnDefinitions="*"
-                  RowDefinitions="Auto,Auto,Auto">
-                    <HorizontalStackLayout Grid.Row="0" Grid.Column="0">
-                        <Label Text="{Binding Item.Name}"
+      <local:TooltipValueConverter x:Key="valueConverter"/>
+      <DataTemplate x:Key="tooltipTemplate" x:DataType="chart:TooltipInfo">
+        <Grid ColumnDefinitions="*"
+                      RowDefinitions="Auto,Auto,Auto">
+          <HorizontalStackLayout  Grid.Row="0" Grid.Column="0">
+            <Label Text="{Binding Item, Converter={StaticResource valueConverter}, ConverterParameter='Name'}"
+                               FontSize="12"
+                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+
+            <Label Text="{Binding Item, Converter={StaticResource valueConverter}, ConverterParameter='Value', StringFormat=': {0}'}"
+                               FontSize="12"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+          </HorizontalStackLayout>
+          <BoxView Grid.Column="0" Grid.Row="1"
+                             HeightRequest="1"
+                             Color="{AppThemeBinding Default={StaticResource ContentBackground}}"
+                             Margin="3"/>
+          <Label Grid.Row="2" Grid.Column="0"
+                           Text="{Binding Item, Converter={StaticResource valueConverter}, ConverterParameter='Percentage'}"
                            FontSize="12"
                            TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center" />
+        </Grid>
+      </DataTemplate>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
 
-                        <Label Text="{Binding Item.Value,StringFormat=': {0}'}"
-                           FontSize="12"
-                           FontAttributes="Bold"
-                           TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-                    <BoxView Grid.Column="0" Grid.Row="1"
-                         HeightRequest="1"
-                         Color="{AppThemeBinding Default={StaticResource ContentBackground}}"
-                         Margin="3"/>
-                    <Label Grid.Row="2" Grid.Column="0"
-                       Text="{Binding Item.Percentage}"
-                       FontSize="12"
-                       TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}"
-                       HorizontalOptions="Center"
-                        VerticalOptions="Center" />
-                </Grid>
-            </DataTemplate>
-        </ResourceDictionary>
-    </localCore:SampleView.Resources>
-
-    <localCore:SampleView.Content>
-        <chart:SfFunnelChart HorizontalOptions="Fill" VerticalOptions="Fill" 
+  <localCore:SampleView.Content>
+    <chart:SfFunnelChart HorizontalOptions="Fill" VerticalOptions="Fill" 
                              PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight3}, Dark={StaticResource PaletteBrushesDark3}}" 
                              Margin="{OnPlatform Android='0,0,0,50', iOS='0,0,0,50', Default='0,0,0,0'}"
                              StrokeWidth="2"
@@ -57,31 +58,30 @@
                              x:Name="Chart"
                              TooltipTemplate="{StaticResource tooltipTemplate}"
                              LegendIcon="SeriesType">
-            <chart:SfFunnelChart.BindingContext>
-                <local:ViewModel />
-            </chart:SfFunnelChart.BindingContext>
-            <chart:SfFunnelChart.Legend>
-                <chart:ChartLegend Placement="{OnPlatform WinUI='Bottom',MacCatalyst='Bottom',Default='Top'}"/>
-            </chart:SfFunnelChart.Legend>
-            <chart:SfFunnelChart.TooltipBehavior>
-                <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
-            </chart:SfFunnelChart.TooltipBehavior>
-            <chart:SfFunnelChart.DataLabelSettings>
-                <chart:FunnelDataLabelSettings UseSeriesPalette="{OnPlatform Android=True, iOS=True, Default=False}"
-                                               >
-                    <chart:FunnelDataLabelSettings.LabelStyle>
-                        <chart:ChartDataLabelStyle LabelFormat="#"
-                                                   Margin="5" />
-                    </chart:FunnelDataLabelSettings.LabelStyle>
-                </chart:FunnelDataLabelSettings>
-            </chart:SfFunnelChart.DataLabelSettings>
-            <chart:SfFunnelChart.Title>
-                <Label Text="Sales Funnel Stages"
+      <chart:SfFunnelChart.BindingContext>
+        <local:ViewModel />
+      </chart:SfFunnelChart.BindingContext>
+      <chart:SfFunnelChart.Legend>
+        <chart:ChartLegend Placement="{OnPlatform WinUI='Bottom',MacCatalyst='Bottom',Default='Top'}"/>
+      </chart:SfFunnelChart.Legend>
+      <chart:SfFunnelChart.TooltipBehavior>
+        <chart:ChartTooltipBehavior Background="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
+      </chart:SfFunnelChart.TooltipBehavior>
+      <chart:SfFunnelChart.DataLabelSettings>
+        <chart:FunnelDataLabelSettings>
+          <chart:FunnelDataLabelSettings.LabelStyle>
+            <chart:ChartDataLabelStyle LabelFormat="#" FontSize="16"
+                                                   Margin="5"/>
+          </chart:FunnelDataLabelSettings.LabelStyle>
+        </chart:FunnelDataLabelSettings>
+      </chart:SfFunnelChart.DataLabelSettings>
+      <chart:SfFunnelChart.Title>
+        <Label Text="Sales Funnel Stages"
                            HorizontalOptions="Fill"
                            HorizontalTextAlignment="Center"
                            VerticalOptions="Center"
                            FontSize="16"/>
-            </chart:SfFunnelChart.Title>
-        </chart:SfFunnelChart>
-    </localCore:SampleView.Content>
+      </chart:SfFunnelChart.Title>
+    </chart:SfFunnelChart>
+  </localCore:SampleView.Content>
 </localCore:SampleView>

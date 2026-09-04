@@ -133,8 +133,14 @@ internal class PickerDrawableView : SfDrawableView
     void DrawItem(ICanvas canvas, RectF dirtyRect, int index, double yPosition, double itemHeight, int maxDistance, PickerTextStyle unselectedTextStyle, PickerTextStyle selectedTextStyle, float minimumThresholdFontSize)
     {
         Rect rectangle = new Rect(0, yPosition, dirtyRect.Width, itemHeight);
-        PickerTextStyle blackoutStyle = _pickerLayoutInfo.PickerInfo.DisabledTextStyle;
-        blackoutStyle.FontSize = unselectedTextStyle.FontSize;
+        PickerTextStyle blackoutStyle = new PickerTextStyle()
+        {
+            TextColor = _pickerLayoutInfo.PickerInfo.DisabledTextStyle.TextColor,
+            FontSize = unselectedTextStyle.FontSize,
+            FontFamily = unselectedTextStyle.FontFamily,
+            FontAttributes = unselectedTextStyle.FontAttributes,
+            FontAutoScalingEnabled = unselectedTextStyle.FontAutoScalingEnabled,
+        };
 
         bool isSelected = index == _selectedIndex;
 
@@ -143,7 +149,7 @@ internal class PickerDrawableView : SfDrawableView
             PickerTextStyle defaultSelectedStyle = new PickerTextStyle { FontSize = selectedTextStyle.FontSize, TextColor = selectedTextStyle.TextColor, FontFamily = selectedTextStyle.FontFamily, FontAttributes = selectedTextStyle.FontAttributes, FontAutoScalingEnabled = selectedTextStyle.FontAutoScalingEnabled };
             if (_pickerLayoutInfo.Column.SelectedItem == null || _pickerLayoutInfo.Column.SelectedIndex <= -1)
             {
-                defaultSelectedStyle = _pickerLayoutInfo.PickerInfo.TextStyle;
+                defaultSelectedStyle = unselectedTextStyle;
             }
 
             canvas.DrawText(_sizeBasedItemsSource[index], rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, defaultSelectedStyle);
@@ -157,7 +163,7 @@ internal class PickerDrawableView : SfDrawableView
             }
 
             //// Prepare the value for blackout checks by using the base column ItemsSource (day column at baseColumns[0]) when available, ensuring formats like "ddd, 01" are preserved.
-            string currentValue = DatePickerHelper.GetCurrentValueForDay(this._pickerLayoutInfo.PickerInfo, this._pickerLayoutInfo.Column, index, this._sizeBasedItemsSource[index]);
+            string currentValue = DatePickerHelper.GetCurrentValueForDay(_pickerLayoutInfo.PickerInfo, _pickerLayoutInfo.Column, index, _sizeBasedItemsSource[index]);
             if (distance <= maxDistance || _pickerLayoutInfo.PickerInfo.EnableLooping)
             {
                 switch (_pickerLayoutInfo.PickerInfo.TextDisplayMode)
@@ -315,6 +321,55 @@ internal class PickerDrawableView : SfDrawableView
         return false;
     }
 
+    /// <summary>
+    /// Update the text style based on columntextstyle.
+    /// </summary>
+    /// <returns>The text style.</returns>
+    PickerTextStyle UpdateDateColumnTextStyle()
+    {
+        string dayFormat;
+        string monthFormat;
+        int dateIndex = 0;
+        List<int> formatString = new List<int>();
+        PickerTextStyle textStyle = new PickerTextStyle();
+        if (_pickerLayoutInfo.PickerInfo is SfDatePicker datePicker)
+        {
+            formatString = DatePickerHelper.GetFormatStringOrder(out dayFormat, out monthFormat, datePicker.Format);
+        }
+        else if (_pickerLayoutInfo.PickerInfo is SfDateTimePicker dateTimePicker)
+        {
+            formatString = DatePickerHelper.GetFormatStringOrder(out dayFormat, out monthFormat, dateTimePicker.DateFormat);
+        }
+
+        dateIndex = formatString[_pickerLayoutInfo.Column._columnIndex];
+        textStyle = DatePickerHelper.ApplyDateTextStyle(_pickerLayoutInfo.PickerInfo, dateIndex, textStyle);
+        return textStyle;
+    }
+
+    /// <summary>
+    /// Update the time column text style.
+    /// </summary>
+    /// <returns>The text style</returns>
+    private PickerTextStyle UpdateTimeColumnTextStyle()
+    {
+        string hourFormat;
+        int dateIndex = 0;
+        List<int> formatString = new List<int>();
+        PickerTextStyle textStyle = new PickerTextStyle();
+        if (_pickerLayoutInfo.PickerInfo is SfDateTimePicker dateTimePicker)
+        {
+            formatString = TimePickerHelper.GetFormatStringOrder(out hourFormat, dateTimePicker.TimeFormat);
+        }
+        else if (_pickerLayoutInfo.PickerInfo is SfTimePicker timePicker)
+        {
+            formatString = TimePickerHelper.GetFormatStringOrder(out hourFormat, timePicker.Format);
+        }
+
+        dateIndex = formatString[_pickerLayoutInfo.Column._columnIndex];
+        textStyle = TimePickerHelper.ApplyTimeTextStyle(_pickerLayoutInfo.PickerInfo, dateIndex, textStyle);
+        return textStyle;
+    }
+
     #endregion
 
     #region Override Methods
@@ -333,6 +388,29 @@ internal class PickerDrawableView : SfDrawableView
 
         dirtyRect.Height = (float)Math.Round(dirtyRect.Height);
         int padding = 5;
+        //// Determine column-specific style(if any) to use for trimming.
+        //// Apply ColumnTextStyle to the column's unselected text based on the format-order (index), falling back to the default TextStyle when ColumnTextStyle is null.
+        PickerTextStyle? columnStyle = null;
+        if (_pickerLayoutInfo.Column != null)
+        {
+            PickerTextStyle defaultTextStyle = new PickerTextStyle();
+            PickerTextStyle tempColumnStyle = defaultTextStyle;
+            if (_pickerLayoutInfo.PickerInfo is SfTimePicker || (_pickerLayoutInfo.PickerInfo is SfDateTimePicker datetimepicker && datetimepicker.SelectedIndex == 1))
+            {
+                tempColumnStyle = UpdateTimeColumnTextStyle();
+            }
+            else if (_pickerLayoutInfo.PickerInfo is SfDatePicker || (_pickerLayoutInfo.PickerInfo is SfDateTimePicker dateTimePicker && dateTimePicker.SelectedIndex == 0))
+            {
+                tempColumnStyle = UpdateDateColumnTextStyle();
+            }
+
+            //// Column-specific style takes precedence for unselected rendering.
+            if (tempColumnStyle != null && !PickerHelper.ArePickerTextStylesEqual(tempColumnStyle, defaultTextStyle))
+            {
+                columnStyle = tempColumnStyle;
+            }
+        }
+
         if (_drawnWidth != dirtyRect.Width || _sizeBasedItemsSource.Count == 0)
         {
             _drawnWidth = dirtyRect.Width;
@@ -340,9 +418,18 @@ internal class PickerDrawableView : SfDrawableView
             double maxTextWidth = _drawnWidth - padding;
             foreach (string value in _itemsSource)
             {
-                string unSelectedText = value.Length * (_pickerLayoutInfo.PickerInfo.TextStyle.FontSize * 0.6) > maxTextWidth
-                    ? PickerHelper.TrimText(value, maxTextWidth, _pickerLayoutInfo.PickerInfo.TextStyle)
-                    : value;
+                string unSelectedText = string.Empty;
+                if (columnStyle != null)
+                {
+                    unSelectedText = value.Length * (columnStyle.FontSize * 0.6) > maxTextWidth ? PickerHelper.TrimText(value, maxTextWidth, columnStyle) : value;
+                }
+                else
+                {
+                    unSelectedText = value.Length * (_pickerLayoutInfo.PickerInfo.TextStyle.FontSize * 0.6) > maxTextWidth
+                        ? PickerHelper.TrimText(value, maxTextWidth, _pickerLayoutInfo.PickerInfo.TextStyle)
+                        : value;
+                }
+
                 string selectedText = value.Length * (_pickerLayoutInfo.PickerInfo.SelectedTextStyle.FontSize * 0.6) > maxTextWidth
                     ? PickerHelper.TrimText(value, maxTextWidth, _pickerLayoutInfo.PickerInfo.SelectedTextStyle)
                     : value;
@@ -358,7 +445,7 @@ internal class PickerDrawableView : SfDrawableView
         bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && _sizeBasedItemsSource.Count > currentViewPortCount;
 
         float minimumThresholdFontSize = 8;
-        var unselectedTextStyle = _pickerLayoutInfo.PickerInfo.TextStyle;
+        var unselectedTextStyle = columnStyle ?? _pickerLayoutInfo.PickerInfo.TextStyle;
         var selectedTextStyle = _pickerLayoutInfo.PickerInfo.SelectedTextStyle;
         int maxDistance = (int)(currentViewPortCount / 2) + 1;
 

@@ -231,14 +231,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void DrawPrimaryAxis(ICanvas canvas, ChartAxis primaryAxis)
 		{
-			int totalSpokes;
-			if (primaryAxis is LogarithmicAxis)
+			int totalSpokes = primaryAxis.VisibleLabels.Count;
+
+			if (primaryAxis is RangeAxisBase rangeAxis && !rangeAxis.IsNeedLastLabel())
 			{
-				totalSpokes = primaryAxis.VisibleLabels.Count - 1;
-			}
-			else
-			{
-				totalSpokes = primaryAxis.VisibleLabels.Count;
+				totalSpokes -= 1;
 			}
 
 			DrawMajorTick(canvas, primaryAxis, totalSpokes);
@@ -305,22 +302,23 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return default;
 			}
 
-			float angle = 360 / totalSpokes;
-			SizeF size = labelStyle.MeasureLabel(_xAxis.VisibleLabels[index].Content.Tostring());
+			var label = _xAxis.VisibleLabels[index];
+			float angleValue = (float)_xAxis.ValueToPolarAngle(label.Position);
+			SizeF size = labelStyle.MeasureLabel(label.Content.Tostring());
 			float labelWidth = (float)(size.Width + labelStyle.Margin.Left + labelStyle.Margin.Right);
 			float labelHeight = (float)(size.Height + labelStyle.Margin.Top + labelStyle.Margin.Bottom);
 			float radius = (float)(_yAxis.ComputedDesiredSize.Height + _xAxis.MajorTickStyle.TickSize);
-			PointF pointF = _chartArea.PolarAngleToPoint(_xAxis, radius, index * angle);
+			PointF pointF = _chartArea.PolarAngleToPoint(_xAxis, radius, angleValue);
 			float labelAngle;
-			var angel = _chartArea._polarChart.PolarStartAngle;
+			var startAngle = _chartArea._polarChart.PolarStartAngle;
 			if (_xAxis.IsInversed)
 			{
-				labelAngle = angel - (index * angle);
+				labelAngle = startAngle - (angleValue);
 				labelAngle = labelAngle < 0 ? labelAngle + 360 : labelAngle;
 			}
 			else
 			{
-				labelAngle = (index * angle) + angel;
+				labelAngle = (angleValue) + startAngle;
 				labelAngle = labelAngle > 360 ? labelAngle - 360 : labelAngle;
 			}
 
@@ -373,21 +371,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return lower <= x && x <= upper;
 		}
 
-		void DrawMajorTick(ICanvas canvas, ChartAxis primaryAxis, float totalSpokes)
+		void DrawMajorTick(ICanvas canvas, ChartAxis axis, float totalSpokes)
 		{
 			if (_yAxis == null || totalSpokes == 0)
 			{
 				return;
 			}
 
-			float angle = 360 / totalSpokes;
-			double radius = _yAxis.ComputedDesiredSize.Height;
-			ChartAxisTickStyle tickStyle = primaryAxis.MajorTickStyle;
-			double radius1 = radius + tickStyle.TickSize;
+			float radius = (float)_yAxis.ComputedDesiredSize.Height;
+			ChartAxisTickStyle tickStyle = axis.MajorTickStyle;
+			float radius1 = (float)(radius + tickStyle.TickSize);
 			for (int i = 0; i < totalSpokes; i++)
 			{
-				PointF start = _chartArea.PolarAngleToPoint(primaryAxis, (float)radius, i * angle);
-				PointF end = _chartArea.PolarAngleToPoint(primaryAxis, (float)radius1, i * angle);
+				float angleValue = (float)axis.ValueToPolarAngle(axis.VisibleLabels[i].Position);
+				var start = _chartArea.PolarAngleToPoint(axis, radius, angleValue);
+				var end = _chartArea.PolarAngleToPoint(axis, radius1, angleValue);
+
 				canvas.StrokeSize = (float)tickStyle.StrokeWidth;
 				canvas.StrokeColor = tickStyle.Stroke.ToColor();
 				canvas.DrawLine(start.X, start.Y, end.X, end.Y);

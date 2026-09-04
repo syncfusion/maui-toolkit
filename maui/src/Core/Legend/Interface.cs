@@ -46,6 +46,28 @@ namespace Syncfusion.Maui.Toolkit
 	}
 
 	/// <summary>
+	/// Contains legend elements and floating legend options.
+	/// </summary>
+	internal interface IFloatingLegend : ILegend
+	{
+
+		/// <summary>
+		/// Gets or sets a value that determines whether the legend floats over the chart area.
+		/// </summary>
+		bool IsFloating { get; set; }
+
+		/// <summary>
+		/// Gets or sets the horizontal (X) offset of the floating legend, use positive value to shifts right, negative value to shifts left.
+		/// </summary>
+		double OffsetX { get; set; }
+
+		/// <summary>
+		/// Gets or sets the vertical (Y) offset of the floating legend, positive values move it downward, and negative values move it upward.
+		/// </summary>
+		double OffsetY { get; set; }
+	}
+
+	/// <summary>
 	/// Represents an interface that defines the elements of a legend item.
 	/// </summary>
 	public interface ILegendItem

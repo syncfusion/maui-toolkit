@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest.Charts

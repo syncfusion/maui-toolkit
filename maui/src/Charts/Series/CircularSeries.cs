@@ -45,6 +45,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		//TODO: Need to remove by calculate smartLabels without using series. 
 		internal Rect AdjacentLabelRect { get; set; } = Rect.Zero;
 
+		internal override bool IsDataLevelLegendSeries => true;
+
 		#endregion
 
 		#region Bindable properties
@@ -518,9 +520,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					EdgeDetectionForLabel(pieSegment);
 				}
 
+				var areabound = new Rect(new Point(0, 0), AreaBounds.Size);
+
+				var style = DataLabelSettings.LabelStyle;
+				var size = style.MeasureLabel(pieSegment.TrimmedText);
+				var margin = style.Margin;
+
+				float leftMargin = (float)((size.Width / 2) + (margin.Left / 2) - (margin.Right / 2));
+				float topMargin = (float)((size.Height / 2) + (margin.Top / 2) - (margin.Bottom / 2));
+
+				var labelBackgroundRect = new Rect(point.X - leftMargin, point.Y - topMargin, size.Width, size.Height);
 				pieSegment.IsVisible = !string.IsNullOrEmpty(pieSegment.TrimmedText);
 
-				if (pieSegment.IsVisible && AreaBounds.Contains(pieSegment.LabelRect))
+				if (pieSegment.IsVisible && areabound.Contains(labelBackgroundRect))
 				{
 					base.DrawDataLabel(canvas, fillColor, pieSegment.TrimmedText, point, index);
 					DrawConnectorLine(canvas, pieSegment);

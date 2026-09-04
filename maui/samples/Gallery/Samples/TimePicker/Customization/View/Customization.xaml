@@ -68,7 +68,7 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                     <local:AlarmPopup x:Name="alarmPopup" OnCreated="alarmPopup_OnCreated"/>
-                    <timePicker:SfTimePicker x:Name="alarmEditPicker" Background="Transparent" InputTransparent="True" Mode="Dialog" Format="hh_mm_tt" OkButtonClicked="AlarmEditPicker_OkButtonClicked" CancelButtonClicked="alarmEditPicker_CancelButtonClicked"/>
+                    <timePicker:SfTimePicker x:Name="alarmEditPicker" ShowCloseButton="True" Background="Transparent" InputTransparent="True" Mode="Dialog" Format="hh_mm_tt" OkButtonClicked="AlarmEditPicker_OkButtonClicked" CancelButtonClicked="alarmEditPicker_CancelButtonClicked"/>
 
                     <Grid ZIndex="{OnPlatform MacCatalyst=1}" Grid.Row="1" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin ="10">
                         <Path Fill="{AppThemeBinding Default={StaticResource PrimaryBackground}}">
@@ -130,7 +130,7 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
                 <local:AlarmPopup x:Name="alarmPopup1" OnCreated="alarmPopup_OnCreated"/>
-                <timePicker:SfTimePicker x:Name="alarmEditPicker1" Background="Transparent" InputTransparent="True" Mode="Dialog" Format="hh_mm_tt" OkButtonClicked="AlarmEditPicker_OkButtonClicked" CancelButtonClicked="alarmEditPicker_CancelButtonClicked"/>
+                <timePicker:SfTimePicker x:Name="alarmEditPicker1" ShowCloseButton="True" Background="Transparent" InputTransparent="True" Mode="Dialog" Format="hh_mm_tt" OkButtonClicked="AlarmEditPicker_OkButtonClicked" CancelButtonClicked="alarmEditPicker_CancelButtonClicked"/>
 
                 <Grid ZIndex="{OnPlatform iOS=1}" Grid.Row="1" HeightRequest="50" VerticalOptions="End" HorizontalOptions="End" Margin ="10">
                     <Path Fill="{AppThemeBinding Default={StaticResource PrimaryBackground}}">

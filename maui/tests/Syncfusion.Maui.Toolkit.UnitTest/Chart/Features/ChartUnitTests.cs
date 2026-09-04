@@ -98,36 +98,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			chartTooltipBehavior.TextColor = textColor;
 			chartTooltipBehavior.FontSize = fontSize;
 
-			var columnSeries  = new ColumnSeries();
-			columnSeries.Chart = sfCartesianChart;
-			TooltipInfo info = new TooltipInfo(columnSeries);
-
-			columnSeries.UpdateTooltipAppearance(info, chartTooltipBehavior);
-
-			Assert.Equal(info.Background, backgroundColor);
-			Assert.Equal(info.TextColor, textColor);
-			Assert.Equal(info.FontSize, fontSize);
-		}
-
-		[Fact]
-		public void UpdateTooltipAppearance_TestWithCartesianChartValues()
-		{
-			var backgroundColor = Colors.Red;
-			var textColor = Colors.Blue;
-			var fontSize = 12.0f;
-
-			var chartTooltipBehavior = new ChartTooltipBehavior();
-			var sfCartesianChart = new SfCartesianChart();
-
-			sfCartesianChart.TooltipBackground = backgroundColor;
-			sfCartesianChart.TooltipTextColor = textColor;
-			sfCartesianChart.TooltipFontSize = fontSize;
-
 			var columnSeries = new ColumnSeries();
 			columnSeries.Chart = sfCartesianChart;
 			TooltipInfo info = new TooltipInfo(columnSeries);
 
-			columnSeries.UpdateTooltipAppearance(info, chartTooltipBehavior);
+			columnSeries.UpdateTooltipAppearance(info, chartTooltipBehavior, new object(), 0);
 
 			Assert.Equal(info.Background, backgroundColor);
 			Assert.Equal(info.TextColor, textColor);

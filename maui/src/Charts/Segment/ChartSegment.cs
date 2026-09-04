@@ -180,6 +180,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal RectF SegmentBounds { get; set; }
 
+		internal RectF LabelBounds { get; set; }
+
 		internal bool HasStroke
 		{
 			get { return StrokeWidth > 0 && !ChartColor.IsEmpty(Stroke.ToColor()); }

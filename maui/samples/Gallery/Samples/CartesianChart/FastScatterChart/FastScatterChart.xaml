@@ -43,13 +43,17 @@
                                XBindingPath="Value" 
                                YBindingPath="Size" 
                                EnableTooltip="True"
-                               Label="Train travel"/>
+                               Label="Train travel"
+                               PointHeight="{OnPlatform MacCatalyst='8'}"
+                               PointWidth="{OnPlatform MacCatalyst='8'}"/>
 
       <chart:FastScatterSeries ItemsSource="{Binding TrainTravelData}" 
                                XBindingPath="Value" 
                                YBindingPath="Size" 
                                EnableTooltip="True"
-                               Label="Automobile travel"/>
+                               Label="Automobile travel"
+                               PointHeight="{OnPlatform MacCatalyst='8'}"
+                               PointWidth="{OnPlatform MacCatalyst='8'}"/>
     </chart:SfCartesianChart>
   </localCore:SampleView.Content>
 </localCore:SampleView>

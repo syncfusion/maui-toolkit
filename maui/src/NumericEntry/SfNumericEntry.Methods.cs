@@ -1330,7 +1330,12 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			CultureInfo selectedCulture = CustomFormat != null ?
 										(Culture ?? CultureInfo.CurrentUICulture) :
 										(Culture ?? CultureInfo.CurrentUICulture);
-
+#if WINDOWS
+			if (this.Culture != null && this.Culture.TextInfo.IsRightToLeft)
+			{
+				selectedCulture = CultureInfo.CurrentUICulture;
+			}
+#endif
 			// Return the NumberFormatInfo of the selected culture.
 			return selectedCulture.NumberFormat;
 		}

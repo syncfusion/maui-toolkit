@@ -85,6 +85,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override bool IsFillEmptyPoint { get { return false; } }
 
+		internal override bool IsColorPathSeries => false;
+
 		#endregion
 
 		#region Bindable Properties
@@ -560,8 +562,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             foreach (ChartSegment item in _segments)
             {
-                RangeAreaSegment dataLabel = (RangeAreaSegment)item;
-                if (dataLabel == null || dataLabel.XValues == null || dataLabel.HighValues == null || dataLabel.LowValues == null)
+				RangeAreaSegment dataLabel = (RangeAreaSegment)item;
+				if (dataLabel == null || dataLabel.XValues == null || dataLabel.HighValues == null || dataLabel.LowValues == null)
                 {
                     return;
                 }

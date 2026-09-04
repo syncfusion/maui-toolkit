@@ -192,8 +192,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 #if NET10_0
 				if (GetSafeAreaEdges())
 #else
-				var safeAreaPage = GetMainPage();
-				if (safeAreaPage is not null && Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(safeAreaPage))
+				if (Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(GetMainPage()))
 #endif
 				{
 					var platformWindow = WindowOverlayHelper._window?.ToPlatform() as UIWindow;

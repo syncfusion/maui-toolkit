@@ -98,6 +98,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override bool IsSideBySide => true;
 
+		internal override bool IsColorPathSeries => false;
+
 		#endregion
 
 		#region BindableProperties
@@ -1204,7 +1206,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						Item = dataPoint
 					};
 
-					UpdateTooltipAppearance(tooltipInfo, tooltipBehavior);
+					UpdateTooltipAppearance(tooltipInfo, tooltipBehavior, dataPoint, index);
 
 					if (IsOutlierTouch)
 					{

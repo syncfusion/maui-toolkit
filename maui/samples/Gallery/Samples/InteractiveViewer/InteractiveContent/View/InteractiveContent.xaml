@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localcore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:localcore="clr-namespace:Syncfusion.Maui.ControlsGallery"
+                      xmlns:interactiveViewer="clr-namespace:Syncfusion.Maui.Toolkit.InteractiveViewer;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.InteractiveViewer.SfInteractiveViewer"
+                      xmlns:button="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+                      Background="{StaticResource ContentBackgroundAlt3}"
+                      x:Class="Syncfusion.Maui.ControlsGallery.InteractiveViewer.SfInteractiveViewer.InteractiveContent">
+
+  <localcore:SampleView.Resources>
+    <Style x:Key="ToolbarButtonStyle" TargetType="button:SfButton">
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="TextColor" Value="{StaticResource IconColor}" />
+      <Setter Property="WidthRequest" Value="32" />
+      <Setter Property="HeightRequest" Value="32" />
+      <Setter Property="FontSize" Value="18" />
+      <Setter Property="VisualStateManager.VisualStateGroups">
+        <VisualStateGroupList>
+          <VisualStateGroup x:Name="CommonStates">
+            <VisualState x:Name="Normal">
+              <VisualState.Setters>
+                <Setter Property="Background" Value="Transparent" />
+              </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="Hovered">
+              <VisualState.Setters>
+                <Setter Property="Background" Value="{StaticResource IconBackgroundHovered}" />
+              </VisualState.Setters>
+            </VisualState>
+            <VisualState x:Name="Pressed">
+              <VisualState.Setters>
+                <Setter Property="Background" Value="{StaticResource IconBackgroundPressed}" />
+              </VisualState.Setters>
+            </VisualState>
+          </VisualStateGroup>
+        </VisualStateGroupList>
+      </Setter>
+    </Style>
+
+    <Style x:Key="FieldLabelStyle" TargetType="Label">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Opacity" Value="0.7" />
+      <Setter Property="Margin" Value="0,0,0,2" />
+    </Style>
+
+    <Style x:Key="FieldEntryStyle" TargetType="Entry">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="HeightRequest" Value="40" />
+    </Style>
+  </localcore:SampleView.Resources>
+
+  <localcore:SampleView.Content>
+    <Grid RowDefinitions="Auto,*,80" Background="Transparent">
+
+      <!-- Hint shown because hosted controls remain interactive while zoomed on Android. -->
+      <Label Grid.Row="0"
+             Margin="16,12,16,0"
+             FontSize="12"
+             Opacity="0.7"
+             LineBreakMode="WordWrap"
+             HorizontalTextAlignment="Center"
+             Text="Pinch or use the toolbar to zoom, then fill and submit the form. The hosted controls stay interactive." />
+
+      <Grid Grid.Row="1" Background="Transparent">
+        <interactiveViewer:SfInteractiveViewer x:Name="interactiveViewer"
+                                               Background="Transparent"
+                                               MinimumZoomFactor="1"
+                                               MaximumZoomFactor="4"
+                                               Margin="10,10,10,0">
+          <Border WidthRequest="300"
+                  BackgroundColor="{StaticResource ContentBackgroundAlt1}"
+                  Padding="20"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center">
+            <Border.StrokeShape>
+              <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Border.Shadow>
+              <Shadow Brush="#000000"
+                      Offset="0,2"
+                      Radius="6"
+                      Opacity="0.2" />
+            </Border.Shadow>
+
+            <VerticalStackLayout Spacing="12">
+              <Label Text="Create your account"
+                     FontSize="18"
+                     FontAttributes="Bold"
+                     HorizontalTextAlignment="Center" />
+
+              <VerticalStackLayout Spacing="2">
+                <Label Text="Full name" Style="{StaticResource FieldLabelStyle}" />
+                <Entry x:Name="nameEntry"
+                       Placeholder="Jane Doe"
+                       Style="{StaticResource FieldEntryStyle}" />
+              </VerticalStackLayout>
+
+              <VerticalStackLayout Spacing="2">
+                <Label Text="Email" Style="{StaticResource FieldLabelStyle}" />
+                <Entry x:Name="emailEntry"
+                       Placeholder="jane@example.com"
+                       Keyboard="Email"
+                       Style="{StaticResource FieldEntryStyle}" />
+              </VerticalStackLayout>
+
+              <VerticalStackLayout Spacing="2">
+                <Label Text="Password" Style="{StaticResource FieldLabelStyle}" />
+                <Entry x:Name="passwordEntry"
+                       Placeholder="********"
+                       IsPassword="True"
+                       Style="{StaticResource FieldEntryStyle}" />
+              </VerticalStackLayout>
+
+              <button:SfButton x:Name="signUpButton"
+                               Text="Sign Up"
+                               HeightRequest="42"
+                               CornerRadius="8"
+                               Margin="0,4,0,0" />
+
+              <Label x:Name="statusLabel"
+                     FontSize="13"
+                     IsVisible="False"
+                     HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+          </Border>
+        </interactiveViewer:SfInteractiveViewer>
+      </Grid>
+
+      <Border Grid.Row="2"
+              BackgroundColor="{StaticResource ContentBackgroundAlt1}"
+              Padding="10,8"
+              HorizontalOptions="Center"
+              VerticalOptions="Center">
+        <Border.StrokeShape>
+          <RoundRectangle CornerRadius="8" />
+        </Border.StrokeShape>
+        <Border.Shadow>
+          <Shadow Brush="#000000"
+                  Offset="0,1"
+                  Radius="3"
+                  Opacity="0.2" />
+        </Border.Shadow>
+
+        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+          <button:SfButton x:Name="zoomOutButton"
+                           Style="{StaticResource ToolbarButtonStyle}" >
+            <button:SfButton.Content>
+                <DataTemplate>
+                    <Grid>
+                        <Label Text="&#xE714;"
+                               FontFamily="MauiMaterialAssets"
+                               FontSize="18"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </button:SfButton.Content>
+          </button:SfButton>
+
+          <button:SfButton x:Name="zoomInButton"
+                           Style="{StaticResource ToolbarButtonStyle}" >
+            <button:SfButton.Content>
+                <DataTemplate>
+                    <Grid>
+                        <Label Text="&#xE713;"
+                               FontFamily="MauiMaterialAssets"
+                               FontSize="18"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </button:SfButton.Content>
+          </button:SfButton>
+
+          <button:SfButton x:Name="rotateButton"
+                           Style="{StaticResource ToolbarButtonStyle}"
+                           IsVisible="False" >
+            <button:SfButton.Content>
+                <DataTemplate>
+                    <Grid>
+                        <Label Text="&#xE743;"
+                               FontFamily="MauiMaterialAssets"
+                               FontSize="18"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </button:SfButton.Content>
+          </button:SfButton>
+
+          <button:SfButton x:Name="resetButton"
+                           Style="{StaticResource ToolbarButtonStyle}" >
+            <button:SfButton.Content>
+                <DataTemplate>
+                    <Grid>
+                        <Label Text="&#xE746;"
+                               FontFamily="MauiMaterialAssets"
+                               FontSize="18"
+                               HorizontalTextAlignment="Center"
+                               VerticalTextAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </button:SfButton.Content>
+          </button:SfButton>
+        </HorizontalStackLayout>
+      </Border>
+    </Grid>
+  </localcore:SampleView.Content>
+
+  <localcore:SampleView.Behaviors>
+    <local:InteractiveContentBehavior />
+  </localcore:SampleView.Behaviors>
+</localcore:SampleView>

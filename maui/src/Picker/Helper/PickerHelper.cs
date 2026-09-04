@@ -422,6 +422,44 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
         }
 
-#endregion
+        /// <summary>
+        /// Compares two <see cref="PickerTextStyle"/> instances by value.
+        /// </summary>
+        /// <param name="columnTextStyle">The column text style.</param>
+        /// <param name="defaultTextStyle">The default text style.</param>
+        /// <returns>Returns true if the text styles are equal; otherwise, false.</returns>
+        internal static bool ArePickerTextStylesEqual(PickerTextStyle columnTextStyle, PickerTextStyle defaultTextStyle)
+        {
+            if (ReferenceEquals(columnTextStyle, defaultTextStyle))
+            {
+                return true;
+            }
+
+            if (columnTextStyle is null || defaultTextStyle is null)
+            {
+                return false;
+            }
+
+            return columnTextStyle.FontSize == defaultTextStyle.FontSize
+                && Equals(columnTextStyle.TextColor, defaultTextStyle.TextColor)
+                && string.Equals(columnTextStyle.FontFamily, defaultTextStyle.FontFamily, StringComparison.Ordinal)
+                && columnTextStyle.FontAttributes == defaultTextStyle.FontAttributes
+                && columnTextStyle.FontAutoScalingEnabled == defaultTextStyle.FontAutoScalingEnabled;
+        }
+
+        /// <summary>
+        /// Update the column textstyle binding context.
+        /// </summary>
+        /// <param name="textStyle">The picker text style.</param>
+        /// <param name="pickerBase">The picker base.</param>
+        internal static void SetColumnTextStyleBinding(PickerTextStyle textStyle, PickerBase pickerBase)
+        {
+            if (textStyle != null)
+            {
+                BindableObject.SetInheritedBindingContext(textStyle, pickerBase.BindingContext);
+            }
+        }
+
+    #endregion
     }
 }

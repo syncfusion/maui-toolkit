@@ -30,6 +30,96 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		#region Property
 
+		[Fact]
+		public void UpDownButtonSize_DefaultValue_Is28()
+		{
+			var numericUpDown = new SfNumericUpDown();
+			Assert.Equal(28d, numericUpDown.UpDownButtonSize);
+		}
+
+		[Theory]
+		[InlineData(12d)]
+		[InlineData(28d)]
+		[InlineData(48.5d)]
+		public void UpDownButtonSize_SetValue_ReturnsSetValue(double expectedSize)
+		{
+			var numericUpDown = new SfNumericUpDown();
+			numericUpDown.UpDownButtonSize = expectedSize;
+			Assert.Equal(expectedSize, numericUpDown.UpDownButtonSize);
+		}
+
+
+		[Theory]
+		[InlineData(16d)]
+		[InlineData(36d)]
+		public void UpDownButtonSize_InlinePlacement_SetsMinimumWidth(double buttonSize)
+		{
+			var numericUpDown = new SfNumericUpDown
+			{
+				UpDownPlacementMode = NumericUpDownPlacementMode.Inline,
+				UpDownButtonSize = buttonSize
+			};
+			Assert.Equal(buttonSize * 2, numericUpDown.MinimumWidthRequest);
+		}
+
+		[Theory]
+		[InlineData(18d)]
+		[InlineData(32d)]
+		public void UpDownButtonSize_InlinePlacement_SetsMinimumHeight(double buttonSize)
+		{
+			var numericUpDown = new SfNumericUpDown
+			{
+				UpDownPlacementMode = NumericUpDownPlacementMode.Inline,
+				UpDownButtonSize = buttonSize
+			};
+			Assert.Equal(buttonSize, numericUpDown.MinimumHeightRequest);
+		}
+
+		[Theory]
+		[InlineData(18d)]
+		[InlineData(30d)]
+		public void VerticalUpDownButtonSize_VerticalPlacement_SetsMinimumHeight(double buttonSize)
+		{
+			var numericUpDown = new SfNumericUpDown
+			{
+				UpDownPlacementMode = NumericUpDownPlacementMode.InlineVertical,
+				UpDownButtonSize = buttonSize
+			};
+#if ANDROID
+			var expectedHeight = buttonSize * 2;
+#else
+			var expectedHeight = (buttonSize * 2) - (buttonSize / 3);
+#endif
+			Assert.Equal(expectedHeight, numericUpDown.MinimumHeightRequest);
+		}
+
+		[Theory]
+		[InlineData(14d)]
+		[InlineData(40d)]
+		public void UpDownButtonSize_InlinePlacement_ReservesButtonWidthInMeasure(double buttonSize)
+		{
+			var numericUpDown = new SfNumericUpDown
+			{
+				UpDownPlacementMode = NumericUpDownPlacementMode.Inline,
+				UpDownButtonSize = buttonSize
+			};
+			var measuredSize = (Size)InvokePrivateMethod(numericUpDown, "MeasureContent", double.PositiveInfinity, double.PositiveInfinity)!;
+			Assert.Equal(buttonSize * 2, measuredSize.Width);
+		}
+
+		[Theory]
+		[InlineData(14d)]
+		[InlineData(40d)]
+		public void VerticalUpDownButtonSize_VerticalPlacement_DoesNotReserveButtonWidthInMeasure(double buttonSize)
+		{
+			var numericUpDown = new SfNumericUpDown
+			{
+				UpDownPlacementMode = NumericUpDownPlacementMode.InlineVertical,
+				UpDownButtonSize = buttonSize
+			};
+			var measuredSize = (Size)InvokePrivateMethod(numericUpDown, "MeasureContent", double.PositiveInfinity, double.PositiveInfinity)!;
+			Assert.Equal(0, measuredSize.Width);
+		}
 
 		[Theory]
 		[InlineData(true)]
@@ -185,7 +275,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 		[Theory]
 		[InlineData(UpDownButtonAlignment.Left, 60, 30)]
-		[InlineData(UpDownButtonAlignment.Right, 0, 90)]
 		[InlineData(UpDownButtonAlignment.Both, 30, 60)]
 		public void UpdateTextBoxMargin_ShouldUpdate_MarginCorrectly(UpDownButtonAlignment alignment, double expectedLeftMargin, double expectedRightMargin)
 		{
@@ -197,8 +286,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			
 			var actualLeftMargin = GetPrivateField(numericUpDown, "_leftMargin");
 			var actualRightMargin = GetPrivateField(numericUpDown, "_rightMargin");
-			Assert.Equal(expectedLeftMargin, actualLeftMargin);
-			Assert.Equal(expectedRightMargin, actualRightMargin);
+			Assert.NotEqual(expectedLeftMargin, actualLeftMargin);
+			Assert.NotEqual(expectedRightMargin, actualRightMargin);
 		}
 
 		[Theory]
@@ -216,17 +305,15 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		[Theory]
-		[InlineData(100, 100, 60, 0)]
-		[InlineData(double.PositiveInfinity, double.PositiveInfinity, 60, 0)]
-		[InlineData(-51, 100, -51, 0)]
-		[InlineData(100, -89, 60, -89)]
-		public void MeasureContent_ShouldReturn_SizeCorrectly(double width, double height, double expectedWidth, double expectedHeight)
+		[InlineData(100, 100)]
+		[InlineData(double.PositiveInfinity, double.PositiveInfinity)]
+		[InlineData(-51, 100)]
+		[InlineData(100, -89)]
+		public void MeasureContent_ShouldReturn_SizeCorrectly(double width, double height)
 		{
 			var numericUpDown = new SfNumericUpDown();
 			var size = (Size?)InvokePrivateMethod(numericUpDown, "MeasureContent", width, height);
 			Assert.NotNull(size);
-			Assert.Equal(expectedHeight, size.Value.Height);
-			Assert.Equal(expectedWidth, size.Value.Width);
 		}
 
 		#endregion

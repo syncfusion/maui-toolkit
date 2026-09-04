@@ -588,6 +588,63 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return false;
         }
 
+        /// <summary>
+        /// Apply the time column textstyle based on columntextstyle.
+        /// </summary>
+        /// <param name="pickerInfo">The picker info.</param>
+        /// <param name="dateindex">The date index.</param>
+        /// <param name="textStyle">The picker textstyle.</param>
+        /// <returns>Returns the updated picker textstyle.</returns>
+        internal static PickerTextStyle ApplyTimeTextStyle(IPickerView pickerInfo, int dateindex, PickerTextStyle textStyle)
+        {
+            PickerBase? pickerBase = pickerInfo is SfDateTimePicker dateTimePicker ? dateTimePicker : pickerInfo is SfTimePicker timepicker ? timepicker : null;
+            if (pickerBase == null)
+            {
+                return textStyle;
+            }
+
+            switch (dateindex)
+            {
+                case 0:
+                    if (!PickerHelper.ArePickerTextStylesEqual(pickerBase.HourColumnTextStyle, textStyle))
+                    {
+                        textStyle = pickerBase.HourColumnTextStyle;
+                    }
+
+                    break;
+                case 1:
+                    if (!PickerHelper.ArePickerTextStylesEqual(pickerBase.MinuteColumnTextStyle, textStyle))
+                    {
+                        textStyle = pickerBase.MinuteColumnTextStyle;
+                    }
+
+                    break;
+                case 2:
+                    if (!PickerHelper.ArePickerTextStylesEqual(pickerBase.SecondColumnTextStyle, textStyle))
+                    {
+                        textStyle = pickerBase.SecondColumnTextStyle;
+                    }
+
+                    break;
+                case 3:
+                    if (!PickerHelper.ArePickerTextStylesEqual(pickerBase.MeridiemColumnTextStyle, textStyle))
+                    {
+                        textStyle = pickerBase.MeridiemColumnTextStyle;
+                    }
+
+                    break;
+                case 4:
+                    if (!PickerHelper.ArePickerTextStylesEqual(pickerBase.MilliSecondColumnTextStyle, textStyle))
+                    {
+                        textStyle = pickerBase.MilliSecondColumnTextStyle;
+                    }
+
+                    break;
+            }
+
+            return textStyle;
+        }
+
         #endregion
 
         #region Private Methods
@@ -632,10 +689,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
             }
 
-            // Remove duplicates without LINQ allocation by using a seen set.
-            var seen = new HashSet<int>();
-            formatOrder.RemoveAll(x => !seen.Add(x));
-            return formatOrder;
+			// Remove duplicates without LINQ allocation by using a seen set.
+			var seen = new HashSet<int>();
+			formatOrder.RemoveAll(x => !seen.Add(x));
+			return formatOrder;
         }
 
         #endregion

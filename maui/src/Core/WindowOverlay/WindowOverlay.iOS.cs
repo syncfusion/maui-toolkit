@@ -369,7 +369,12 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			WindowOverlayHorizontalAlignment horizontalAlignment,
 			WindowOverlayVerticalAlignment verticalAlignment)
 		{
-			if (!_positionDetails.TryGetValue(childView, out PositionDetails? details))
+			PositionDetails details;
+			if (_positionDetails.ContainsKey(childView))
+			{
+				details = _positionDetails[childView];
+			}
+			else
 			{
 				details = new PositionDetails();
 				_positionDetails.Add(childView, details);
@@ -408,7 +413,12 @@ namespace Syncfusion.Maui.Toolkit.Internals
 			double x = 0,
 			double y = 0)
 		{
-			if (!_positionDetails.TryGetValue(childView, out PositionDetails? details))
+			PositionDetails details;
+			if (_positionDetails.ContainsKey(childView))
+			{
+				details = _positionDetails[childView];
+			}
+			else
 			{
 				details = new PositionDetails();
 				_positionDetails.Add(childView, details);

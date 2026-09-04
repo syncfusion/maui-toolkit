@@ -209,8 +209,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     LayoutArrangeChildren(new Rect(0, 0, Width, Height));
                 }
 
-                void Finished(double value, bool isFinished)
+                async void Finished(double value, bool isFinished)
                 {
+                    await Task.Yield();
                     AnimationFinished(true, index);
                 }
 
@@ -232,8 +233,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     LayoutArrangeChildren(new Rect(0, 0, Width, Height));
                 }
 
-                void Finished(double value, bool isFinished)
+                async void Finished(double value, bool isFinished)
                 {
+                    await Task.Yield();
                     AnimationFinished(false, index);
                 }
 
@@ -480,8 +482,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 }
 
                 // To update the current children view after the animation.
-                void Finished(double value, bool isFinished)
+                async void Finished(double value, bool isFinished)
                 {
+                    await Task.Yield();
                     int index = isPreviousView ? (3 + _currentChildIndex - 1) % 3 : (_currentChildIndex + 1) % 3;
                     AnimationFinished(isPreviousView, index);
                 }

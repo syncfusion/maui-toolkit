@@ -61,15 +61,7 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		internal void UpdateItemSelection()
 		{
 			int selectedIndex = GetSelectedIndex();
-			SegmentItemView? olditemView = null;
-		foreach (var child in Children)
-		{
-			if (child is SegmentItemView siv && siv._isSelected)
-			{
-				olditemView = siv;
-				break;
-			}
-		}
+			SegmentItemView? olditemView = Children.OfType<SegmentItemView>().FirstOrDefault(x => x._isSelected);
 			SegmentItemView? newitemView = GetSegmentItemView(selectedIndex);
 
 			olditemView?.ClearSelection();
@@ -675,11 +667,11 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 			// Ticket-533501- Change the image source when item is selected.
 			if (propertyName == nameof(SfSegmentItem.ImageSource))
 			{
-				foreach (var child in Children)
+				foreach (SegmentItemView child in Children.Cast<SegmentItemView>())
 				{
-					if (child is SegmentItemView segmentItemView && segmentItemView._segmentItem.Equals(segmentItem))
+					if (child._segmentItem.Equals(segmentItem))
 					{
-						segmentItemView.UpdateImageView();
+						child.UpdateImageView();
 						break;
 					}
 				}

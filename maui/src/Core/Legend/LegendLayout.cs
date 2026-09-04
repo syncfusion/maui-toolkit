@@ -107,7 +107,11 @@ namespace Syncfusion.Maui.Toolkit.Internals
                     var legendRectangle = SfLegend.GetLegendRectangle(_legendItemsView, new Rect(0, 0, bounds.Width, bounds.Height),
 LegendLayout.GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25));
 
-                    if (_legendItemsView.Placement == LegendPlacement.Top)
+					if (_legendItemsView.IsFloating)
+					{
+						UpdateFloatingLegendPosition(bounds);
+					}
+					else if (_legendItemsView.Placement == LegendPlacement.Top)
                     {
                         AbsoluteLayout.SetLayoutBounds(_legendItemsView, new Rect(0, 0, bounds.Width, legendRectangle.Height));
 
@@ -140,7 +144,55 @@ LegendLayout.GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25
             }
         }
 
-        void OnLegendItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+		void UpdateFloatingLegendPosition(Rect bounds)
+		{
+			Size _legendSize;
+
+			double _coeff = GetMaximumCoeff(_legend?.ItemsMaximumHeightRequest?.Invoke() ?? 0.25);
+
+			if (_legendItemsView!.Placement == LegendPlacement.Top || _legendItemsView.Placement == LegendPlacement.Bottom)
+			{
+				double _maxHeight = Math.Max(0, bounds.Height * _coeff);
+				Size _actualLegendSize = _legendItemsView.Measure(bounds.Width, _maxHeight);
+				_legendSize = new Size(Math.Min(_actualLegendSize.Width, bounds.Width), Math.Min(_actualLegendSize.Height, _maxHeight));
+			}
+			else
+			{
+				double _maxWidth = Math.Max(0, bounds.Width * _coeff);
+				Size _actualLegendSize = _legendItemsView.Measure(_maxWidth, bounds.Height);
+				_legendSize = new Size(Math.Min(_actualLegendSize.Width, _maxWidth), Math.Min(_actualLegendSize.Height, bounds.Height));
+			}
+
+			double _xPos = _legendItemsView.OffsetX;
+			double _yPos = _legendItemsView.OffsetY;
+
+			switch (_legendItemsView.Placement)
+			{
+				case LegendPlacement.Top:
+					_xPos += (bounds.Width - _legendSize.Width) / 2;
+					break;
+				case LegendPlacement.Bottom:
+					_xPos += (bounds.Width - _legendSize.Width) / 2;
+					_yPos += bounds.Height - _legendSize.Height;
+					break;
+				case LegendPlacement.Left:
+					_yPos += (bounds.Height - _legendSize.Height) / 2;
+					break;
+				case LegendPlacement.Right:
+					_xPos += bounds.Width - _legendSize.Width;
+					_yPos += (bounds.Height - _legendSize.Height) / 2;
+					break;
+			}
+			// Ensures the legend’s position is clamped within the chart’s bounds.
+			double _legendX = Math.Max(bounds.X, Math.Min(_xPos, bounds.X + bounds.Width - _legendSize.Width));
+			double _legendY = Math.Max(bounds.Y, Math.Min(_yPos, bounds.Y + bounds.Height - _legendSize.Height));
+
+			Rect _legendBounds = new Rect(_legendX, _legendY, _legendSize.Width, _legendSize.Height);
+
+			AbsoluteLayout.SetLayoutBounds(_legendItemsView, _legendBounds);
+		}
+
+		void OnLegendItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
 
         }
@@ -197,6 +249,12 @@ LegendLayout.GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25
 					BindingHelper.CreateBinding(nameof(ILegend.IsVisible), getter: static (ILegend legend) => legend.IsVisible));
 				_legendItemsView.SetBinding(SfLegend.ItemsLayoutProperty,
 					BindingHelper.CreateBinding(nameof(ILegend.ItemsLayout), getter: static (ILegend legend) => legend.ItemsLayout));
+				_legendItemsView.SetBinding(SfLegend.IsFloatingProperty,
+	                BindingHelper.CreateBinding(nameof(IFloatingLegend.IsFloating), getter: static (IFloatingLegend legend) => legend.IsFloating));
+				_legendItemsView.SetBinding(SfLegend.OffsetXProperty,
+					BindingHelper.CreateBinding(nameof(IFloatingLegend.OffsetX), getter: static (IFloatingLegend legend) => legend.OffsetX));
+				_legendItemsView.SetBinding(SfLegend.OffsetYProperty,
+					BindingHelper.CreateBinding(nameof(IFloatingLegend.OffsetY), getter: static (IFloatingLegend legend) => legend.OffsetY));
 				_legendItemsView.ItemsSource = _plotArea.LegendItems;
                 _legendItemsView.ItemClicked += OnLegendItemToggled;
                 _legendItemsView.PropertyChanged += LegendItemsView_PropertyChanged;
@@ -223,12 +281,24 @@ LegendLayout.GetMaximumCoeff(_legend.ItemsMaximumHeightRequest?.Invoke() ?? 0.25
 #if MACCATALYST || IOS
             _legendItemsView?.UpdateRelayout();
 #endif
+			switch (e.PropertyName)
+			{
+				case nameof(SfLegend.Placement):
+					_legendItemsView?.UpdateLegendPlacement();
+					UpdateLegendLayout(Bounds);
+					break;
 
-            if (e.PropertyName == nameof(SfLegend.Placement))
-            {
-                UpdateLegendLayout(Bounds);
-            }
-        }
+				case nameof(SfLegend.IsFloating):
+					UpdateLegendLayout(Bounds);
+					break;
+
+				case nameof(SfLegend.OffsetX):
+				case nameof(SfLegend.OffsetY):
+					if (_legendItemsView?.IsFloating == true)
+						UpdateLegendLayout(Bounds);
+					break;
+			}
+		}
 
         void OnLegendItemToggled(object? sender, LegendItemClickedEventArgs e)
         {

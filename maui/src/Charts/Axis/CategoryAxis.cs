@@ -1,5 +1,6 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -24,12 +25,51 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <inheritdoc/>
 		protected sealed override DoubleRange ApplyRangePadding(DoubleRange range, double interval)
 		{
-			return LabelPlacement == LabelPlacement.BetweenTicks ? new DoubleRange(-0.5, (int)range.End + 0.5) : range;
+			return LabelPlacement == LabelPlacement.BetweenTicks ? new DoubleRange(-0.5 + (int)range.Start, (int)range.End + 0.5) : range;
 		}
 
 		#endregion
 
 		#region Internal Methods
+
+		internal int ForwardForecastValue { get; private set; }
+
+		internal void ResetForecastExtension()
+		{
+			ForwardForecastValue = 0;
+		}
+
+		internal void IncludeForwardForecast(int value)
+		{
+			if (value > ForwardForecastValue)
+			{
+				ForwardForecastValue = value;
+			}
+		}
+
+
+		/// <summary>
+		/// Registers a trendline's forecast requirements for this axis.
+		/// </summary>
+		internal void RegisterTrendlineForecast(CartesianSeries series)
+		{
+			if (series?.Trendlines == null)
+			{
+				return;
+			}
+
+			int maxForward = series.Trendlines
+				.Where(t => t?.IsVisible == true)
+				.Select(t => Math.Max(0, t.ForwardForecast))
+				.DefaultIfEmpty(0)
+				.Max();
+
+			if (maxForward > ForwardForecastValue)
+			{
+				ForwardForecastValue = maxForward;
+			}
+		}
+
 		internal void GroupData()
 		{
 			List<string> groupingValues = [];
@@ -140,7 +180,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			var values = ArrangeByIndex ? actualSeries?.XValues as IList : actualSeries?.GroupedXValues as IList;
 
-			var maxDataCount = values?.Count;
+			int dataCount = values?.Count ?? 0;
+			int maxDataCount = dataCount + ForwardForecastValue;
 
 			for (; position <= visibleRange.End; position += roundInterval)
 			{
@@ -149,7 +190,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (visibleRange.Inside(pos) && pos < maxDataCount && pos > -1)
 				{
 					var format = LabelStyle != null ? LabelStyle.LabelFormat : string.Empty;
-					var content = GetLabelContent(actualSeries, pos, format);
+					var content = pos < values?.Count ? GetLabelContent(actualSeries, pos, format) : pos.ToString(CultureInfo.InvariantCulture);
+
 					var axisLabel = new ChartAxisLabel(pos, content ?? string.Empty);
 					actualLabels?.Add(axisLabel);
 

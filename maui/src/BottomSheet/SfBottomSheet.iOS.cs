@@ -17,18 +17,18 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 		#region Private Methods
 
 		void ConfigureTouch()
-        {
-            if (Handler?.PlatformView is null)
-            {
-                UnwireEvents();
-            }
-            else
-            {
-                WireEvents();
-            }
-        }
+		{
+			if (Handler?.PlatformView is null)
+			{
+				UnwireEvents();
+			}
+			else
+			{
+				WireEvents();
+			}
+		}
 
-        void WireEvents()
+		void WireEvents()
 		{
 			if (Handler?.PlatformView is LayoutViewExt nativeView)
 			{
@@ -40,10 +40,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			}
 		}
 
-        void UnwireEvents()
-        {
-            _layoutViewExt = null;
-        }
+		void UnwireEvents()
+		{
+			_layoutViewExt = null;
+		}
 
 #if !MACCATALYST && IOS
 		/// <summary>

@@ -35,30 +35,30 @@ namespace Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart
 			   new Learning("Develop a Class Project",Color.FromArgb("#0DC920"))]},
 		   new ChartDataModel("Teach Others", 90){LearningCategories = [
 			   new Learning("Simulate Model",Color.FromArgb("#2EC4B6")),
-			   new Learning("Do the Real Thing",Color.FromArgb("#2EC4B6")) ]},
+			   new Learning("Do the Real Thing",Color.FromArgb("#2EC4B6"))]},
 			];
 
 			FinancialData =
 			[
 #if WINDOWS || MACCATALYST
-           new ChartDataModel("Retail",62,10),
-		  new ChartDataModel("Manufacturing",85,14.25),
-		  new ChartDataModel("Marketing",106,17.82),
-		  new ChartDataModel("Shipping",144,24.51),
-		  new ChartDataModel("R&D",193,32.71)
+			  new ChartDataModel("Retail",62,10),
+			  new ChartDataModel("Manufacturing",85,14.25),
+			  new ChartDataModel("Marketing",106,17.82),
+			  new ChartDataModel("Shipping",144,24.51),
+			  new ChartDataModel("R&D",193,32.71)
 #else
-          new ChartDataModel("Retail",83,14),
-		  new ChartDataModel("Manufacturing",85,14.25),
-		  new ChartDataModel("Marketing",106,17.82),
-		  new ChartDataModel("Shipping",144,22.51),
-		  new ChartDataModel("R&D",193,28.71)
+			  new ChartDataModel("Retail",83,14),
+			  new ChartDataModel("Manufacturing",85,14.25),
+			  new ChartDataModel("Marketing",106,17.82),
+			  new ChartDataModel("Shipping",144,22.51),
+			  new ChartDataModel("R&D",193,28.71)
 #endif
             ];
 
 			MusicData =
 			[
 #if WINDOWS || MACCATALYST
-                new ChartDataModel("CD/Cassette",10),
+				new ChartDataModel("CD/Cassette",10),
 				new ChartDataModel("Digital files",18),
 				new ChartDataModel("Streaming",32),
 				new ChartDataModel("Radio",36)

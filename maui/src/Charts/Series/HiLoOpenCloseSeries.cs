@@ -336,7 +336,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					Item = dataPoint
 				};
 
-				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior);
+				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior, dataPoint, index);
 
 				return tooltipInfo;
 			}

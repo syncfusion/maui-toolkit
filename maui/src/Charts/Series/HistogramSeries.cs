@@ -95,6 +95,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#endregion
 
+		#region Internal Properties
+
+		internal override bool IsColorPathSeries => false;
+
+		#endregion
+
 		#region Bindable Properties
 
 		/// <summary>

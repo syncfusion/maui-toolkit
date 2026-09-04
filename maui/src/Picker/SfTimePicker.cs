@@ -18,31 +18,6 @@ namespace Syncfusion.Maui.Toolkit.Picker
         internal TimeSpan? _internalSelectedTime;
 
         /// <summary>
-        /// Holds the hour column information.
-        /// </summary>
-        PickerColumn _hourColumn;
-
-        /// <summary>
-        /// Holds the minute column information.
-        /// </summary>
-        PickerColumn _minuteColumn;
-
-        /// <summary>
-        /// Holds the second column information.
-        /// </summary>
-        PickerColumn _secondColumn;
-
-        /// <summary>
-        /// Holds the meridiem column information.
-        /// </summary>
-        PickerColumn _meridiemColumn;
-
-        /// <summary>
-        /// Holds the millisecond column information.
-        /// </summary>
-        PickerColumn _millisecondColumn;
-
-        /// <summary>
         /// Holds the picker column collection.
         /// </summary>
         ObservableCollection<PickerColumn> _columns;
@@ -376,6 +351,145 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 defaultValueCreator: bindable => Color.FromArgb("#611C1B1F"),
                 propertyChanged: OnDisabledTextColorChanged);
 
+        /// <summary>
+        /// Identifies the <see cref="NormalHourColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalHourColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalHourColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalHourColumnTextColor),
+                typeof(Color),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalHourColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMinuteColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMinuteColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMinuteColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalMinuteColumnTextColor),
+                typeof(Color),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalMinuteColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalSecondColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalSecondColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalSecondColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalSecondColumnTextColor),
+                typeof(Color), typeof(SfTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalSecondColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMeridiemColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMeridiemColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMeridiemColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalMeridiemColumnTextColor),
+                typeof(Color),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalMeridiemColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMilliSecondColumnTextColor"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMilliSecondColumnTextColor"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMilliSecondColumnTextColorProperty =
+            BindableProperty.Create(
+                nameof(NormalMilliSecondColumnTextColor),
+                typeof(Color),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable => Color.FromArgb("#1C1B1F"),
+                propertyChanged: OnNormalMilliSecondColumnTextColorChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalHourColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalHourColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalHourColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalHourColumnFontSize),
+                typeof(double),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalHourColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMinuteColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMinuteColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMinuteColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalMinuteColumnFontSize),
+                typeof(double),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalMinuteColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalSecondColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalSecondColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalSecondColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalSecondColumnFontSize),
+                typeof(double),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalSecondColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMeridiemColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMeridiemColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMeridiemColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalMeridiemColumnFontSize),
+                typeof(double),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable => 16d,
+                propertyChanged: OnNormalMeridiemColumnFontSizeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="NormalMilliSecondColumnFontSize"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="NormalMilliSecondColumnFontSize"/> dependency property.
+        /// </value>
+        internal static readonly BindableProperty NormalMilliSecondColumnFontSizeProperty =
+            BindableProperty.Create(
+                nameof(NormalMilliSecondColumnFontSize),
+                typeof(double),
+                typeof(SfTimePicker),
+                defaultValueCreator: bindable =>
+                16d, propertyChanged: OnNormalMilliSecondColumnFontSizeChanged);
+
         #endregion
 
         #region Constructor
@@ -385,11 +499,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         public SfTimePicker()
         {
-            _hourColumn = new PickerColumn();
-            _minuteColumn = new PickerColumn();
-            _secondColumn = new PickerColumn();
-            _meridiemColumn = new PickerColumn();
-            _millisecondColumn = new PickerColumn();
+            HourColumn = new PickerColumn();
+            MinuteColumn = new PickerColumn();
+            SecondColumn = new PickerColumn();
+            MeridiemColumn = new PickerColumn();
+            MillisecondColumn = new PickerColumn();
             _columns = new ObservableCollection<PickerColumn>();
             Initialize();
             GeneratePickerColumns();
@@ -591,7 +705,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         public int MilliSecondInterval
         {
             get { return (int)GetValue(MilliSecondIntervalProperty); }
-            set { SetValue (MilliSecondIntervalProperty, value); }
+            set { SetValue(MilliSecondIntervalProperty, value); }
         }
 
         /// <summary>
@@ -766,6 +880,31 @@ namespace Syncfusion.Maui.Toolkit.Picker
         #region Internal Properties
 
         /// <summary>
+        /// Gets or sets the hour column information.
+        /// </summary>
+        internal PickerColumn HourColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the minute column information.
+        /// </summary>
+        internal PickerColumn MinuteColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the second column information.
+        /// </summary>
+        internal PickerColumn SecondColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the meridiem column information.
+        /// </summary>
+        internal PickerColumn MeridiemColumn { get; set; }
+
+        /// <summary>
+        /// Gets or sets the millisecond column information.
+        /// </summary>
+        internal PickerColumn MillisecondColumn { get; set; }
+
+        /// <summary>
         /// Gets or sets the background color of the time picker.
         /// </summary>
         internal Color TimePickerBackground
@@ -870,6 +1009,96 @@ namespace Syncfusion.Maui.Toolkit.Picker
             set { SetValue(DisabledTextColorProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the normal hour column text color of the text style.
+        /// </summary>
+        internal Color NormalHourColumnTextColor
+        {
+            get { return (Color)GetValue(NormalHourColumnTextColorProperty); }
+            set { SetValue(NormalHourColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal minute column text color of the text style.
+        /// </summary>
+        internal Color NormalMinuteColumnTextColor
+        {
+            get { return (Color)GetValue(NormalMinuteColumnTextColorProperty); }
+            set { SetValue(NormalMinuteColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal second column text color of the text style.
+        /// </summary>
+        internal Color NormalSecondColumnTextColor
+        {
+            get { return (Color)GetValue(NormalSecondColumnTextColorProperty); }
+            set { SetValue(NormalSecondColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal meridiem column text color of the text style.
+        /// </summary>
+        internal Color NormalMeridiemColumnTextColor
+        {
+            get { return (Color)GetValue(NormalMeridiemColumnTextColorProperty); }
+            set { SetValue(NormalMeridiemColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal milli second column text color of the text style.
+        /// </summary>
+        internal Color NormalMilliSecondColumnTextColor
+        {
+            get { return (Color)GetValue(NormalMilliSecondColumnTextColorProperty); }
+            set { SetValue(NormalMilliSecondColumnTextColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal hour column font size of the text style.
+        /// </summary>
+        internal double NormalHourColumnFontSize
+        {
+            get { return (double)GetValue(NormalHourColumnFontSizeProperty); }
+            set { SetValue(NormalHourColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal minute column font size of the text style.
+        /// </summary>
+        internal double NormalMinuteColumnFontSize
+        {
+            get { return (double)GetValue(NormalMinuteColumnFontSizeProperty); }
+            set { SetValue(NormalMinuteColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal second column font size of the text style.
+        /// </summary>
+        internal double NormalSecondColumnFontSize
+        {
+            get { return (double)GetValue(NormalSecondColumnFontSizeProperty); }
+            set { SetValue(NormalSecondColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal meridiem column font size of the text style.
+        /// </summary>
+        internal double NormalMeridiemColumnFontSize
+        {
+            get { return (double)GetValue(NormalMeridiemColumnFontSizeProperty); }
+            set { SetValue(NormalMeridiemColumnFontSizeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the normal milli second column font size of the text style.
+        /// </summary>
+        internal double NormalMilliSecondColumnFontSize
+        {
+            get { return (double)GetValue(NormalMilliSecondColumnFontSizeProperty); }
+            set { SetValue(NormalMilliSecondColumnFontSizeProperty, value); }
+        }
+
         #endregion
 
         #region Internal Methods
@@ -879,11 +1108,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         internal void UpdateFormat()
         {
-            _hourColumn = new PickerColumn();
-            _minuteColumn = new PickerColumn();
-            _secondColumn = new PickerColumn();
-            _meridiemColumn = new PickerColumn();
-            _millisecondColumn = new PickerColumn();
+            HourColumn = new PickerColumn();
+            MinuteColumn = new PickerColumn();
+            SecondColumn = new PickerColumn();
+            MeridiemColumn = new PickerColumn();
+            MillisecondColumn = new PickerColumn();
             GeneratePickerColumns();
             BaseColumns.Clear();
             BaseColumns = _columns;
@@ -893,22 +1122,22 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
         #region Private Methods
 
-		/// <summary>
-		/// Checks if the collection contains a string that parses to the specified integer value,
-		/// avoiding LINQ Select/Contains allocation overhead.
-		/// </summary>
-		static bool ContainsParsedValue(ObservableCollection<string> collection, int value)
-		{
-			for (int i = 0; i < collection.Count; i++)
-			{
-				if (int.TryParse(collection[i], out int parsed) && parsed == value)
-				{
-					return true;
-				}
-			}
+        /// <summary>
+        /// Checks if the collection contains a string that parses to the specified integer value,
+        /// avoiding LINQ Select/Contains allocation overhead.
+        /// </summary>
+        static bool ContainsParsedValue(ObservableCollection<string> collection, int value)
+        {
+            for (int i = 0; i < collection.Count; i++)
+            {
+                if (int.TryParse(collection[i], out int parsed) && parsed == value)
+                {
+                    return true;
+                }
+            }
 
-			return false;
-		}
+            return false;
+        }
 
         /// <summary>
         /// Method trigged whenever the base panel selection is changed.
@@ -966,13 +1195,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 case 4:
                     {
                         int millisecond = 0;
-                        if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > e.NewValue)
+                        if (MillisecondColumn.ItemsSource != null && MillisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > e.NewValue)
                         {
                             //// Get the millisecond value based on the selected index changes value.
                             millisecond = int.Parse(millisecondCollection[e.NewValue]);
                         }
 
-                        this.SetSelectedTime(new TimeSpan(0, previousSelectedTime.Value.Hours, previousSelectedTime.Value.Minutes, previousSelectedTime.Value.Seconds, millisecond), e.OldValue);
+                        SetSelectedTime(new TimeSpan(0, previousSelectedTime.Value.Hours, previousSelectedTime.Value.Minutes, previousSelectedTime.Value.Seconds, millisecond), e.OldValue);
                     }
 
                     break;
@@ -996,7 +1225,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             int hour = 0;
-            if (_hourColumn.ItemsSource != null && _hourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > e.NewValue)
+            if (HourColumn.ItemsSource != null && HourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > e.NewValue)
             {
                 //// Get the hour value based on the selected index changes value.
                 hour = int.Parse(hourCollection[e.NewValue]);
@@ -1012,39 +1241,39 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             ObservableCollection<string> minutes = TimePickerHelper.GetMinutes(MinuteInterval, hour, selectedTime, minimumTime, maximumTime);
-            ObservableCollection<string> previousMinutes = _minuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousMinutes = MinuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(minutes, previousMinutes))
             {
-                _minuteColumn.ItemsSource = minutes;
+                MinuteColumn.ItemsSource = minutes;
             }
 
             int minute = 0;
-            if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && ContainsParsedValue(minuteCollection, previousSelectedTime.Value.Minutes))
+            if (MinuteColumn.ItemsSource != null && MinuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && ContainsParsedValue(minuteCollection, previousSelectedTime.Value.Minutes))
             {
                 minute = previousSelectedTime.Value.Minutes;
             }
 
             ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, hour, minute, selectedTime, minimumTime, maximumTime);
-            ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousSeconds = SecondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
             {
-                _secondColumn.ItemsSource = seconds;
+                SecondColumn.ItemsSource = seconds;
             }
 
             int second = 0;
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && ContainsParsedValue(secondCollection, previousSelectedTime.Value.Seconds))
+            if (SecondColumn.ItemsSource != null && SecondColumn.ItemsSource is ObservableCollection<string> secondCollection && ContainsParsedValue(secondCollection, previousSelectedTime.Value.Seconds))
             {
                 second = previousSelectedTime.Value.Seconds;
             }
 
             ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, hour, minute, second, selectedTime, minimumTime, maximumTime);
-            ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousMilliseconds = MillisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
             {
-                _millisecondColumn.ItemsSource = milliseconds;
+                MillisecondColumn.ItemsSource = milliseconds;
             }
-			
-			SetSelectedTime(new TimeSpan(0, hour, minute, second, previousSelectedTime.Value.Milliseconds), e.OldValue);
+
+            SetSelectedTime(new TimeSpan(0, hour, minute, second, previousSelectedTime.Value.Milliseconds), e.OldValue);
         }
 
         /// <summary>
@@ -1067,34 +1296,34 @@ namespace Syncfusion.Maui.Toolkit.Picker
             hour = previousSelectedTime.Value.Hours;
 
             int minute = 0;
-            if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > e.NewValue)
+            if (MinuteColumn.ItemsSource != null && MinuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > e.NewValue)
             {
                 //// Get the hour value based on the selected index changes value.
                 minute = int.Parse(minuteCollection[e.NewValue]);
             }
 
             ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, hour, minute, selectedTime, minimumTime, maximumTime);
-            ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousSeconds = SecondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
             {
-                _secondColumn.ItemsSource = seconds;
+                SecondColumn.ItemsSource = seconds;
             }
 
             int second = 0;
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && ContainsParsedValue(secondCollection, previousSelectedTime.Value.Seconds))
+            if (SecondColumn.ItemsSource != null && SecondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Select(m => int.Parse(m)).Contains(previousSelectedTime.Value.Seconds))
             {
                 second = previousSelectedTime.Value.Seconds;
             }
 
-            ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(this.MilliSecondInterval, hour, minute, second, selectedTime, minimumTime, maximumTime);
-            ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
+            ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, hour, minute, second, selectedTime, minimumTime, maximumTime);
+            ObservableCollection<string> previousMilliseconds = MillisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
             {
-                _millisecondColumn.ItemsSource = milliseconds;
+                MillisecondColumn.ItemsSource = milliseconds;
             }
 
             int millisecond = 0;
-            if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > (previousSelectedTime.Value.Milliseconds / this.MilliSecondInterval))
+            if (MillisecondColumn.ItemsSource != null && MillisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > (previousSelectedTime.Value.Milliseconds / MilliSecondInterval))
             {
                 millisecond = previousSelectedTime.Value.Milliseconds;
             }
@@ -1126,21 +1355,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
             minute = previousSelectedTime.Value.Minutes;
 
             int second = 0;
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > e.NewValue)
+            if (SecondColumn.ItemsSource != null && SecondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > e.NewValue)
             {
                 //// Get the hour value based on the selected index changes value.
                 second = int.Parse(secondCollection[e.NewValue]);
             }
 
             ObservableCollection<string> milliseconds = TimePickerHelper.GetMilliseconds(MilliSecondInterval, hour, minute, second, selectedTime, minimumTime, maximumTime);
-            ObservableCollection<string> previousMilliseconds = _millisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousMilliseconds = MillisecondColumn.ItemsSource is ObservableCollection<string> previousMillisecondCollection ? previousMillisecondCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(milliseconds, previousMilliseconds))
             {
-                _millisecondColumn.ItemsSource = milliseconds;
+                MillisecondColumn.ItemsSource = milliseconds;
             }
 
             int millisecond = 0;
-            if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > (previousSelectedTime.Value.Milliseconds / this.MilliSecondInterval))
+            if (MillisecondColumn.ItemsSource != null && MillisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > (previousSelectedTime.Value.Milliseconds / MilliSecondInterval))
             {
                 millisecond = previousSelectedTime.Value.Milliseconds;
             }
@@ -1165,7 +1394,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             ObservableCollection<string> meridiemCollection = new ObservableCollection<string>();
-            if (_meridiemColumn.ItemsSource != null && _meridiemColumn.ItemsSource is ObservableCollection<string> meridiems)
+            if (MeridiemColumn.ItemsSource != null && MeridiemColumn.ItemsSource is ObservableCollection<string> meridiems)
             {
                 meridiemCollection = meridiems;
             }
@@ -1182,10 +1411,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
             DateTime selectedDates = Convert.ToDateTime(selectedDate.ToString());
 
             ObservableCollection<string> hours = TimePickerHelper.GetHours(hourFormat, HourInterval, selectedDates, minimumTime, maximumTime);
-            ObservableCollection<string> previousHour = _hourColumn.ItemsSource is ObservableCollection<string> previousHourCollection ? previousHourCollection : new ObservableCollection<string>();
+            ObservableCollection<string> previousHour = HourColumn.ItemsSource is ObservableCollection<string> previousHourCollection ? previousHourCollection : new ObservableCollection<string>();
             if (!PickerHelper.IsCollectionEquals(hours, previousHour))
             {
-                _hourColumn.ItemsSource = hours;
+                HourColumn.ItemsSource = hours;
             }
 
             int? hourIndex = TimePickerHelper.GetHourIndex(hourFormat, hours, previousSelectedTime.Value.Hours);
@@ -1195,10 +1424,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 hour = (hour % 12) + neededHour;
 
                 ObservableCollection<string> minutes = TimePickerHelper.GetMinutes(MinuteInterval, hour, selectedTime, minimumTime, maximumTime);
-                ObservableCollection<string> previousMinutes = _minuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousMinutes = MinuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
                 if (!PickerHelper.IsCollectionEquals(minutes, previousMinutes))
                 {
-                    _minuteColumn.ItemsSource = minutes;
+                    MinuteColumn.ItemsSource = minutes;
                 }
 
                 int minuteIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, previousSelectedTime.Value.Minutes);
@@ -1223,7 +1452,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 if (BlackoutTimes.Any(blackOutTime => TimePickerHelper.IsBlackoutTime(blackOutTime, selectedTime)))
                 {
                     // If it's a blackout time, revert the minute column selection to the previous value
-                    _minuteColumn.SelectedIndex = oldValue;
+                    MinuteColumn.SelectedIndex = oldValue;
                 }
                 // Set the internal selected time to the new selected time
                 _internalSelectedTime = selectedTime;
@@ -1265,23 +1494,23 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
             else if (e.PropertyName == nameof(TimePickerColumnHeaderView.HourHeaderText))
             {
-                _hourColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.HourHeaderText);
+                HourColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.HourHeaderText);
             }
             else if (e.PropertyName == nameof(TimePickerColumnHeaderView.MinuteHeaderText))
             {
-                _minuteColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MinuteHeaderText);
+                MinuteColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MinuteHeaderText);
             }
             else if (e.PropertyName == nameof(TimePickerColumnHeaderView.SecondHeaderText))
             {
-                _secondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.SecondHeaderText);
+                SecondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.SecondHeaderText);
             }
             else if (e.PropertyName == nameof(TimePickerColumnHeaderView.MeridiemHeaderText))
             {
-                _meridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MeridiemHeaderText);
+                MeridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MeridiemHeaderText);
             }
             else if (e.PropertyName == nameof(TimePickerColumnHeaderView.MilliSecondHeaderText))
             {
-                _millisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MilliSecondHeaderText);
+                MillisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MilliSecondHeaderText);
             }
         }
 
@@ -1301,29 +1530,33 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 switch (index)
                 {
                     case 0:
-                        _hourColumn = GenerateHourColumn(hourFormat, validSelectedTime, currentSelectedTime);
-                        _hourColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(_hourColumn) : null;
-                        pickerColumns.Add(_hourColumn);
+                        HourColumn = GenerateHourColumn(hourFormat, validSelectedTime, currentSelectedTime);
+                        HourColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(HourColumn) : null;
+                        HourColumn.Width = HourColumnWidth;
+                        pickerColumns.Add(HourColumn);
                         break;
                     case 1:
-                        _minuteColumn = GenerateMinuteColumn(validSelectedTime, currentSelectedTime);
-                        _minuteColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(_minuteColumn) : null;
-                        pickerColumns.Add(_minuteColumn);
+                        MinuteColumn = GenerateMinuteColumn(validSelectedTime, currentSelectedTime);
+                        MinuteColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(MinuteColumn) : null;
+                        MinuteColumn.Width = MinuteColumnWidth;
+                        pickerColumns.Add(MinuteColumn);
                         break;
                     case 2:
-                        _secondColumn = GenerateSecondColumn();
-                        _secondColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(_secondColumn) : null;
-                        pickerColumns.Add(_secondColumn);
+                        SecondColumn = GenerateSecondColumn();
+                        SecondColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(SecondColumn) : null;
+                        SecondColumn.Width = SecondColumnWidth;
+                        pickerColumns.Add(SecondColumn);
                         break;
                     case 3:
-                        _meridiemColumn = GenerateMeridiemColumn(validSelectedTime, currentSelectedTime);
-                        _meridiemColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(_meridiemColumn) : null;
-                        pickerColumns.Add(_meridiemColumn);
+                        MeridiemColumn = GenerateMeridiemColumn(validSelectedTime, currentSelectedTime);
+                        MeridiemColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(MeridiemColumn) : null;
+                        MeridiemColumn.Width = MeridiemColumnWidth;
+                        pickerColumns.Add(MeridiemColumn);
                         break;
                     case 4:
-                        _millisecondColumn = GenerateMillisecondColumn();
-                        _millisecondColumn.SelectedItem = this.SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(_millisecondColumn) : null;
-                        pickerColumns.Add(_millisecondColumn);
+                        MillisecondColumn = GenerateMillisecondColumn();
+                        MillisecondColumn.SelectedItem = SelectedTime != null ? PickerHelper.GetSelectedItemDefaultValue(MillisecondColumn) : null;
+                        pickerColumns.Add(MillisecondColumn);
                         break;
                 }
             }
@@ -1452,7 +1685,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             string hourFormat;
             TimePickerHelper.GetFormatStringOrder(out hourFormat, Format);
-            if (_hourColumn.ItemsSource != null && _hourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > 0)
+            if (HourColumn.ItemsSource != null && HourColumn.ItemsSource is ObservableCollection<string> hourCollection && hourCollection.Count > 0)
             {
                 int? index = TimePickerHelper.GetHourIndex(hourFormat, hourCollection, currentSelectedTime.Value.Hours);
                 if (index == null)
@@ -1460,55 +1693,55 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     return;
                 }
 
-                if (_hourColumn.SelectedIndex != index)
+                if (HourColumn.SelectedIndex != index)
                 {
-                    _hourColumn.SelectedIndex = (int)index;
+                    HourColumn.SelectedIndex = (int)index;
                 }
             }
 
-            if (_minuteColumn.ItemsSource != null && _minuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > 0)
+            if (MinuteColumn.ItemsSource != null && MinuteColumn.ItemsSource is ObservableCollection<string> minuteCollection && minuteCollection.Count > 0)
             {
                 int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minuteCollection, currentSelectedTime.Value.Minutes);
-                if (_minuteColumn.SelectedIndex != index)
+                if (MinuteColumn.SelectedIndex != index)
                 {
-                    _minuteColumn.SelectedIndex = index;
+                    MinuteColumn.SelectedIndex = index;
                 }
             }
 
-            if (_secondColumn.ItemsSource != null && _secondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > 0)
+            if (SecondColumn.ItemsSource != null && SecondColumn.ItemsSource is ObservableCollection<string> secondCollection && secondCollection.Count > 0)
             {
                 int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(secondCollection, currentSelectedTime.Value.Seconds);
-                if (_secondColumn.SelectedIndex != index)
+                if (SecondColumn.SelectedIndex != index)
                 {
-                    _secondColumn.SelectedIndex = index;
+                    SecondColumn.SelectedIndex = index;
                 }
             }
 
-            if (_meridiemColumn.ItemsSource != null && _meridiemColumn.ItemsSource is ObservableCollection<string> meridiemCollection && meridiemCollection.Count > 0)
+            if (MeridiemColumn.ItemsSource != null && MeridiemColumn.ItemsSource is ObservableCollection<string> meridiemCollection && meridiemCollection.Count > 0)
             {
                 int index = currentSelectedTime.Value.Hours >= 12 ? 1 : 0;
-                if (_meridiemColumn.SelectedIndex != index)
+                if (MeridiemColumn.SelectedIndex != index)
                 {
-                    _meridiemColumn.SelectedIndex = index;
+                    MeridiemColumn.SelectedIndex = index;
                 }
             }
 
-            if (_millisecondColumn.ItemsSource != null && _millisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > 0)
+            if (MillisecondColumn.ItemsSource != null && MillisecondColumn.ItemsSource is ObservableCollection<string> millisecondCollection && millisecondCollection.Count > 0)
             {
                 int index = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(millisecondCollection, currentSelectedTime.Value.Milliseconds);
-                if (_millisecondColumn.SelectedIndex != index)
+                if (MillisecondColumn.SelectedIndex != index)
                 {
-                    _millisecondColumn.SelectedIndex = index;
+                    MillisecondColumn.SelectedIndex = index;
                 }
             }
 
             if (IsScrollSelectionAllowed() && SelectedTime == null)
             {
-                _hourColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_hourColumn);
-                _minuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_minuteColumn);
-                _secondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_secondColumn);
-                _meridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(_meridiemColumn);
-                _millisecondColumn.SelectedIndex = PickerHelper.GetSelectedItemIndex(_millisecondColumn);
+                HourColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(HourColumn);
+                MinuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(MinuteColumn);
+                SecondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(SecondColumn);
+                MeridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(MeridiemColumn);
+                MillisecondColumn.SelectedIndex = PickerHelper.GetSelectedItemIndex(MillisecondColumn);
             }
         }
 
@@ -1530,26 +1763,26 @@ namespace Syncfusion.Maui.Toolkit.Picker
             int index = formatStringOrder.IndexOf(0);
             if (index != -1 && oldTime.Value.Hours != newTime.Value.Hours)
             {
-                _hourColumn = GenerateHourColumn(hourFormat, SelectedTime, currentSelectedTime);
+                HourColumn = GenerateHourColumn(hourFormat, SelectedTime, currentSelectedTime);
                 int hourIndex = index;
-                _hourColumn.Parent = this;
-                _columns[hourIndex] = _hourColumn;
+                HourColumn.Parent = this;
+                _columns[hourIndex] = HourColumn;
             }
 
             index = formatStringOrder.IndexOf(1);
             if (index != -1 && (currentSelectedTime.Hour == oldTime.Value.Hours || currentSelectedTime.Hour == newTime.Value.Hours))
             {
                 ObservableCollection<string> minutes = TimePickerHelper.GetMinutes(MinuteInterval, currentSelectedTime.Hour, currentSelectedTime, minimumTime, maximumTime);
-                ObservableCollection<string> previousMinutes = _minuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousMinutes = MinuteColumn.ItemsSource is ObservableCollection<string> previousMinuteCollection ? previousMinuteCollection : new ObservableCollection<string>();
                 if (!PickerHelper.IsCollectionEquals(minutes, previousMinutes))
                 {
-                    _minuteColumn = new PickerColumn()
+                    MinuteColumn = new PickerColumn()
                     {
                         ItemsSource = minutes,
                         SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(minutes, currentSelectedTime.Minute),
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MinuteHeaderText),
                     };
-                    _columns[index] = _minuteColumn;
+                    _columns[index] = MinuteColumn;
                 }
             }
 
@@ -1557,16 +1790,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (index != -1 && ((currentSelectedTime.Hour == oldTime.Value.Hours && currentSelectedTime.Minute == oldTime.Value.Minutes) || (currentSelectedTime.Hour == newTime.Value.Hours && currentSelectedTime.Minute == newTime.Value.Minutes && currentSelectedTime.Second == newTime.Value.Seconds)))
             {
                 ObservableCollection<string> seconds = TimePickerHelper.GetSeconds(SecondInterval, currentSelectedTime.Hour, currentSelectedTime.Minute, currentSelectedTime, minimumTime, maximumTime);
-                ObservableCollection<string> previousSeconds = _secondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousSeconds = SecondColumn.ItemsSource is ObservableCollection<string> previousSecondCollection ? previousSecondCollection : new ObservableCollection<string>();
                 if (!PickerHelper.IsCollectionEquals(seconds, previousSeconds))
                 {
-                    _secondColumn = new PickerColumn()
+                    SecondColumn = new PickerColumn()
                     {
                         ItemsSource = seconds,
                         SelectedIndex = TimePickerHelper.GetMinuteOrSecondOrMilliSecondsIndex(seconds, currentSelectedTime.Second),
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.SecondHeaderText),
                     };
-                    _columns[index] = _secondColumn;
+                    _columns[index] = SecondColumn;
                 }
             }
 
@@ -1574,16 +1807,16 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (index != -1 && ((int)(currentSelectedTime.Hour / 12) == (int)(oldTime.Value.Hours / 12) || (int)(currentSelectedTime.Hour / 12) == (int)(newTime.Value.Hours / 12)))
             {
                 ObservableCollection<string> meridiems = TimePickerHelper.GetMeridiem(minimumTime, maximumTime, currentSelectedTime);
-                ObservableCollection<string> previousCollection = _meridiemColumn.ItemsSource is ObservableCollection<string> previousMeridiemCollection ? previousMeridiemCollection : new ObservableCollection<string>();
+                ObservableCollection<string> previousCollection = MeridiemColumn.ItemsSource is ObservableCollection<string> previousMeridiemCollection ? previousMeridiemCollection : new ObservableCollection<string>();
                 if (!PickerHelper.IsCollectionEquals(meridiems, previousCollection))
                 {
-                    _meridiemColumn = new PickerColumn()
+                    MeridiemColumn = new PickerColumn()
                     {
                         ItemsSource = meridiems,
                         SelectedIndex = currentSelectedTime.Hour >= 12 ? meridiems.Count > 1 ? 1 : 0 : 0,
                         HeaderText = SfPickerResources.GetLocalizedString(ColumnHeaderView.MeridiemHeaderText),
                     };
-                    _columns[index] = _meridiemColumn;
+                    _columns[index] = MeridiemColumn;
                 }
             }
         }
@@ -1617,7 +1850,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="newValue">The new value.</param>
         void SetParent(Element? oldValue, Element? newValue)
         {
-			if (oldValue != null)
+            if (oldValue != null)
             {
                 oldValue.Parent = null;
             }
@@ -1657,37 +1890,49 @@ namespace Syncfusion.Maui.Toolkit.Picker
             SetDynamicResource(NormalFontSizeProperty, "SfTimePickerNormalFontSize");
 
             SetDynamicResource(DisabledTextColorProperty, "SfTimePickerDisabledTextColor");
+
+            SetDynamicResource(NormalHourColumnTextColorProperty, "SfTimePickerNormalHourColumnTextColor");
+            SetDynamicResource(NormalMinuteColumnTextColorProperty, "SfTimePickerNormalMinuteColumnTextColor");
+            SetDynamicResource(NormalSecondColumnTextColorProperty, "SfTimePickerNormalSecondColumnTextColor");
+            SetDynamicResource(NormalMeridiemColumnTextColorProperty, "SfTimePickerNormalMeridiemColumnTextColor");
+            SetDynamicResource(NormalMilliSecondColumnTextColorProperty, "SfTimePickerNormalMilliSecondColumnTextColor");
+
+            SetDynamicResource(NormalHourColumnFontSizeProperty, "SfTimePickerNormalHourColumnFontSize");
+            SetDynamicResource(NormalMinuteColumnFontSizeProperty, "SfTimePickerNormalMinuteColumnFontSize");
+            SetDynamicResource(NormalSecondColumnFontSizeProperty, "SfTimePickerNormalSecondColumnFontSize");
+            SetDynamicResource(NormalMeridiemColumnFontSizeProperty, "SfTimePickerNormalMeridiemColumnFontSize");
+            SetDynamicResource(NormalMilliSecondColumnFontSizeProperty, "SfTimePickerNormalMilliSecondColumnFontSize");
         }
 
-		/// <summary>
-		/// Method to update Selected Time based on confirmation.
-		/// </summary>
-		/// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
-		void UpdateInternalValueToSelection(bool shouldUpdateSelection)
-		{
-			// If the picker is not in Default mode and an internal selected time exists
-			if (shouldUpdateSelection && _internalSelectedTime != null)
-			{
-				// If the internal selected time is different from the currently selected time
-				if (!TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
-				{
-					// Update the selected time with the internal selected time
-					this.SelectedTime = _internalSelectedTime.Value;
-					// Clear the internal selected time after applying it
-					_internalSelectedTime = null;
-				}
-			}
-		}
+        /// <summary>
+        /// Method to update Selected Time based on confirmation.
+        /// </summary>
+        /// <param name="shouldUpdateSelection">Denotes whether selected value needs to be updated</param>
+        void UpdateInternalValueToSelection(bool shouldUpdateSelection)
+        {
+            // If the picker is not in Default mode and an internal selected time exists
+            if (shouldUpdateSelection && _internalSelectedTime != null)
+            {
+                // If the internal selected time is different from the currently selected time
+                if (!TimePickerHelper.IsSameTimeSpan(_internalSelectedTime, SelectedTime))
+                {
+                    // Update the selected time with the internal selected time
+                    SelectedTime = _internalSelectedTime.Value;
+                    // Clear the internal selected time after applying it
+                    _internalSelectedTime = null;
+                }
+            }
+        }
 
 
-		#endregion
+        #endregion
 
-		#region Override Methods
+        #region Override Methods
 
-		/// <summary>
-		/// Method to wire the events.
-		/// </summary>
-		protected override void Initialize()
+        /// <summary>
+        /// Method to wire the events.
+        /// </summary>
+        protected override void Initialize()
         {
             base.Initialize();
             BaseColumns = _columns;
@@ -1758,6 +2003,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 SetInheritedBindingContext(SelectionView, BindingContext);
             }
+
+            PickerHelper.SetColumnTextStyleBinding(HourColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(MinuteColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(SecondColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(MilliSecondColumnTextStyle, this);
+            PickerHelper.SetColumnTextStyleBinding(MeridiemColumnTextStyle, this);
         }
 
         /// <summary>
@@ -1802,7 +2053,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="e">The event arguments</param>
         protected override void OnOkButtonClicked(EventArgs e)
         {
-			UpdateInternalValueToSelection(IsScrollSelectionAllowed());
+            UpdateInternalValueToSelection(IsScrollSelectionAllowed());
             InvokeOkButtonClickedEvent(this, e);
             if (AcceptCommand != null && AcceptCommand.CanExecute(e))
             {
@@ -1830,11 +2081,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 else
                 {
                     // If no time is selected, clear all column selections
-                    _hourColumn.SelectedItem = null;
-                    _minuteColumn.SelectedItem = null;
-                    _secondColumn.SelectedItem = null;
-                    _meridiemColumn.SelectedItem = null;
-                    _millisecondColumn.SelectedItem = null;
+                    HourColumn.SelectedItem = null;
+                    MinuteColumn.SelectedItem = null;
+                    SecondColumn.SelectedItem = null;
+                    MeridiemColumn.SelectedItem = null;
+                    MillisecondColumn.SelectedItem = null;
                 }
                 // Clear the internal selected time if it exists
                 if (_internalSelectedTime != null)
@@ -1928,11 +2179,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     TextStyle = newStyle.TextStyle,
                 };
 
-                picker._hourColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.HourHeaderText);
-                picker._minuteColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MinuteHeaderText);
-                picker._secondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.SecondHeaderText);
-                picker._meridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MeridiemHeaderText);
-                picker._millisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MilliSecondHeaderText);
+                picker.HourColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.HourHeaderText);
+                picker.MinuteColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MinuteHeaderText);
+                picker.SecondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.SecondHeaderText);
+                picker.MeridiemColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MeridiemHeaderText);
+                picker.MillisecondColumn.HeaderText = SfPickerResources.GetLocalizedString(picker.ColumnHeaderView.MilliSecondHeaderText);
             }
         }
 
@@ -1992,21 +2243,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (newValue == null)
             {
-                picker._hourColumn.SelectedItem = null;
-                picker._minuteColumn.SelectedItem = null;
-                picker._secondColumn.SelectedItem = null;
-                picker._meridiemColumn.SelectedItem = null;
-                picker._millisecondColumn.SelectedItem = null;
+                picker.HourColumn.SelectedItem = null;
+                picker.MinuteColumn.SelectedItem = null;
+                picker.SecondColumn.SelectedItem = null;
+                picker.MeridiemColumn.SelectedItem = null;
+                picker.MillisecondColumn.SelectedItem = null;
                 picker.SelectionChanged?.Invoke(picker, new TimePickerSelectionChangedEventArgs() { OldValue = previousSelectedTime, NewValue = currentSelectedTime });
                 return;
             }
             else
             {
-                picker._hourColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._hourColumn);
-                picker._minuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._minuteColumn);
-                picker._secondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._secondColumn);
-                picker._meridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._meridiemColumn);
-                picker._millisecondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker._millisecondColumn);
+                picker.HourColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker.HourColumn);
+                picker.MinuteColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker.MinuteColumn);
+                picker.SecondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker.SecondColumn);
+                picker.MeridiemColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker.MeridiemColumn);
+                picker.MillisecondColumn.SelectedItem = PickerHelper.GetSelectedItemDefaultValue(picker.MillisecondColumn);
                 PickerContainer? pickerContainer = picker.GetPickerContainerValue();
                 pickerContainer?.UpdateScrollViewDraw();
                 pickerContainer?.InvalidateDrawable();
@@ -2066,9 +2317,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            picker._hourColumn = picker.GenerateHourColumn(hourFormat, picker.SelectedTime, Convert.ToDateTime(picker.SelectedTime.ToString()));
+            picker.HourColumn = picker.GenerateHourColumn(hourFormat, picker.SelectedTime, Convert.ToDateTime(picker.SelectedTime.ToString()));
             //// Replace the hour column with hour interval.
-            picker._columns[hourIndex] = picker._hourColumn;
+            picker._columns[hourIndex] = picker.HourColumn;
         }
 
         /// <summary>
@@ -2093,9 +2344,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            picker._minuteColumn = picker.GenerateMinuteColumn(picker.SelectedTime, Convert.ToDateTime(picker.SelectedTime.ToString()));
+            picker.MinuteColumn = picker.GenerateMinuteColumn(picker.SelectedTime, Convert.ToDateTime(picker.SelectedTime.ToString()));
             //// Replace the minute column with minute interval.
-            picker._columns[minuteIndex] = picker._minuteColumn;
+            picker._columns[minuteIndex] = picker.MinuteColumn;
         }
 
         /// <summary>
@@ -2120,9 +2371,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            picker._secondColumn = picker.GenerateSecondColumn();
+            picker.SecondColumn = picker.GenerateSecondColumn();
             //// Replace the second column with second interval.
-            picker._columns[secondIndex] = picker._secondColumn;
+            picker._columns[secondIndex] = picker.SecondColumn;
         }
 
         /// <summary>
@@ -2147,9 +2398,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return;
             }
 
-            picker._millisecondColumn = picker.GenerateMillisecondColumn();
+            picker.MillisecondColumn = picker.GenerateMillisecondColumn();
             //// Replace the millisecond column with millisecond interval.
-            picker._columns[millisecondIndex] = picker._millisecondColumn;
+            picker._columns[millisecondIndex] = picker.MillisecondColumn;
         }
 
         /// <summary>
@@ -2425,6 +2676,176 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             picker.DisabledTextStyle.TextColor = picker.DisabledTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker hour column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalHourColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.HourColumnTextStyle.TextColor = picker.NormalHourColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker minute column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalMinuteColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MinuteColumnTextStyle.TextColor = picker.NormalMinuteColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker second column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalSecondColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.SecondColumnTextStyle.TextColor = picker.NormalSecondColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker meridiem column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalMeridiemColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MeridiemColumnTextStyle.TextColor = picker.NormalMeridiemColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker milli second column text color changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalMilliSecondColumnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MilliSecondColumnTextStyle.TextColor = picker.NormalMilliSecondColumnTextColor;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal hour column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalHourColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.HourColumnTextStyle.FontSize = picker.NormalHourColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal minute column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalMinuteColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MinuteColumnTextStyle.FontSize = picker.NormalMinuteColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal second column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalSecondColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.SecondColumnTextStyle.FontSize = picker.NormalSecondColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal meridiem column font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalMeridiemColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MeridiemColumnTextStyle.FontSize = picker.NormalMeridiemColumnFontSize;
+        }
+
+        /// <summary>
+        /// Method invokes on the picker normal milli second font size changed.
+        /// </summary>
+        /// <param name="bindable">The text style object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnNormalMilliSecondColumnFontSizeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            SfTimePicker? picker = bindable as SfTimePicker;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.MilliSecondColumnTextStyle.FontSize = picker.NormalMilliSecondColumnFontSize;
         }
 
         #endregion

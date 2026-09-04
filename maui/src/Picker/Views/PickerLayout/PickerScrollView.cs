@@ -483,6 +483,25 @@ namespace Syncfusion.Maui.Toolkit.Picker
             ScrollToAsync(0, scrollPosition, false);
         }
 
+#if ANDROID
+        /// <summary>
+        /// To check the internal selection need
+        /// </summary>
+        /// <returns>Returns the internal selection or not</returns>
+        bool IsInternalSelectionNeeded()
+        {
+            if (_pickerLayoutInfo.Column._internalSelectedIndex != -1 && _pickerLayoutInfo.PickerInfo is SfPicker picker)
+            {
+                if (picker.Mode != PickerMode.Default && picker.FooterView.Height > 0 && picker.FooterView.ShowOkButton && picker.FooterTemplate == null && picker.IsSelectionImmediate == false )
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+#endif
+
         /// <summary>
         /// Method to update the selected scroll position on initial scrolling and content size changed.
         /// </summary>
@@ -520,7 +539,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 _pickerLayoutInfo.Column.SelectedIndex = selectedIndex;
             }
 
+#if ANDROID
+            //// Task(1032125) - Scroll position gets updated based on selected index even when IsSelectionImmediate is false on Android only.
+            //// On Android, Instead of using ScrollPosition to update SelectedIndex. we use selected index to update scroll position.
+            //// When IsSelectionImmeadiate is false. we need to update based on ScrollY. 
+            //// Instead of selected index as the selected index gets updated properly only when ok button is clicked.
+            double newScrollPosition = IsInternalSelectionNeeded() ? ScrollY : selectedIndex * itemHeight;
+#else
             double newScrollPosition = selectedIndex * itemHeight;
+#endif
             double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
             bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
             //// Check if looping is enabled and the current scroll end position is reaches the view height.

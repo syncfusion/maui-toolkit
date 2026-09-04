@@ -2109,7 +2109,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 		}
 
 #if ANDROID
-        static bool IsArabic(string text)
+        private static bool IsArabic(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return false;
@@ -2131,7 +2131,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
         }
 #endif
 
-		HorizontalAlignment GetAlignment(string text)
+		private HorizontalAlignment GetAlignment(string text)
 		{
 			HorizontalAlignment horizontalAlignment;
 #if ANDROID
@@ -2148,7 +2148,7 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 #endif
 			return horizontalAlignment;
 		}
-
+		
 		/// <summary>
 		/// Updates the clipping bound of the clear button path.
 		/// </summary>

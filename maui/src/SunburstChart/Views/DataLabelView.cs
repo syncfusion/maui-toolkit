@@ -41,8 +41,15 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         /// <param name="dirtyRect"></param>
         protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
         {
-            if (_sunburstChart.Levels.Count > 0 && _sunburstChart.ShowLabels && !_sunburstChart.NeedToAnimate)
-            {
+			bool isDrillAnimating = false;
+
+			if (_sunburstChart.DrillDownManager is DrillDownManager drillDownManager)
+			{
+				isDrillAnimating = drillDownManager.IsDoubleClicked || drillDownManager.IsBackButtonClicked || drillDownManager.IsResetButtonClicked;
+			}
+
+			if (_sunburstChart.Levels.Count > 0 && _sunburstChart.ShowLabels && !_sunburstChart.NeedToAnimate && !isDrillAnimating)
+			{
                 canvas.SaveState();
 
                 if (_sunburstChart.NeedToAnimateDataLabel)

@@ -2483,8 +2483,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static List<DateTime> GetCurrentMonthDates(List<DateTime> visibleDates)
         {
             int currentMonth = visibleDates[visibleDates.Count / 2].Month;
-            List<DateTime> currentMonthDates = new List<DateTime>(visibleDates.Count);
-            foreach (DateTime date in visibleDates)
+			List<DateTime> currentMonthDates = new List<DateTime>(visibleDates.Count);
+			foreach (DateTime date in visibleDates)
             {
                 if (date.Month != currentMonth)
                 {
@@ -2518,9 +2518,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="selectionCellTemplate">The template for the selection cell, can be a custom DataTemplate or a DataTemplateSelector.</param>
         /// <param name="templateSelectorContext">The context used for template selection (if a DataTemplateSelector is used).</param>
         /// <param name="details">A function to get the details for a specific date.</param>
-        /// <param name="rect">The rectangle defining the bounds and position for the view.</param>
         /// <returns>A view representing the selection cell template, or null if the template cannot be created.</returns>
-        internal static View? CreateSelectionCellTemplate(DateTime? selectedDate, DataTemplate selectionCellTemplate, BindableObject templateSelectorContext, CalendarCellDetails details, RectF rect)
+        internal static View? CreateSelectionCellTemplate(DateTime? selectedDate, DataTemplate selectionCellTemplate, BindableObject templateSelectorContext, CalendarCellDetails details)
         {
             // Early exit on nulls
             if (selectedDate == null || details == null || selectionCellTemplate == null)
@@ -2534,9 +2533,6 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 return null;
             }
-
-            viewResult.WidthRequest = rect.Width;
-            viewResult.HeightRequest = rect.Height;
 
             return viewResult;
         }

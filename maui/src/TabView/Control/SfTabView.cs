@@ -1962,7 +1962,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			get { return (double)this.GetValue(SwipingSensitivityProperty); }
 			set { this.SetValue(SwipingSensitivityProperty, value); }
 		}
-
+		
 		#endregion
 
 		#region Events
@@ -2524,6 +2524,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			_tabHeaderContainer.Background = TabBarBackground;
 			_tabHeaderContainer.Items = Items;
 
+			UpdateFontAutoScalingEnabled(FontAutoScalingEnabled);
 			UpdateIndicatorWidthMode(IndicatorWidthMode);
 			UpdateIndicatorBackground(IndicatorBackground);
 			UpdateIndicatorPlacement(IndicatorPlacement);

@@ -279,6 +279,36 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 {
                     SelectionView.PropertyChanged -= OnSelectionViewPropertyChanged;
                 }
+
+                if (DayColumnTextStyle != null)
+                {
+                    DayColumnTextStyle.PropertyChanged -= OnColumnTextStylePropertyChanged;
+                }
+
+                if (MonthColumnTextStyle != null)
+                {
+                    MonthColumnTextStyle.PropertyChanged -= OnColumnTextStylePropertyChanged;
+                }
+
+                if (YearColumnTextStyle != null)
+                {
+                    YearColumnTextStyle.PropertyChanged -= OnColumnTextStylePropertyChanged;
+                }
+
+                if (HourColumnTextStyle != null)
+                {
+                    HourColumnTextStyle.PropertyChanged -= OnColumnTextStylePropertyChanged;
+                }
+
+                if (MinuteColumnTextStyle != null)
+                {
+                    MinuteColumnTextStyle.PropertyChanged -= OnColumnTextStylePropertyChanged;
+                }
+
+                if (SecondColumnTextStyle != null)
+                {
+                    SecondColumnTextStyle.PropertyChanged -= OnColumnTextStylePropertyChanged;
+                }
             }
         }
 
@@ -605,9 +635,26 @@ namespace Syncfusion.Maui.Toolkit.Picker
             if (_popup == null)
             {
                 _popup = new SfPopup();
-                _popup.ShowHeader = false;
                 _popup.ShowFooter = false;
                 _popup.PopupStyle.CornerRadius = 5;
+                if (this is SfDateTimePicker)
+                {
+                    _popup.ShowHeader = ShowCloseButton;
+                    _popup.HeaderTitle = string.Empty;
+                    _popup.HeaderHeight = 63;
+                    _popup.ShowCloseButton = ShowCloseButton;
+                    _popup.PopupStyle.CloseButtonIcon = CloseButtonIcon;
+                    _popup.PopupStyle.SetDynamicResource(PopupStyle.CloseIconColorProperty, "SfDateTimePickerNormalCloseButtonStroke");
+                    _popup.PopupStyle.SetDynamicResource(PopupStyle.CloseButtonIconStrokeThicknessProperty, "SfDateTimePickerNormalCloseButtonStrokeThickness");
+                    _popup.PopupStyle.SetDynamicResource(PopupStyle.HoveredCloseButtonIconBackgroundProperty, "SfDateTimePickerHoverCloseButtonBackground");
+                    _popup.PopupStyle.SetDynamicResource(PopupStyle.PressedCloseButtonIconBackgroundProperty, "SfDateTimePickerPressedCloseButtonBackground");
+                 }
+                 else
+                 {
+                    _popup.ShowHeader = false;
+                    _popup.ShowCloseButton = false;
+                 }
+
                 _popup.Opened += OnPopupOpened;
                 _popup.Closed += OnPopupClosed;
                 _popup.Closing += OnPopupClosing;
@@ -648,6 +695,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             _popup.WidthRequest = PopupWidth <= 0 ? GetDefaultPopupWidth(this) : PopupWidth;
             _popup.HeightRequest = PopupHeight <= 0 ? GetDefaultPopupHeight(this) : PopupHeight;
+            if (this is SfDateTimePicker && ShowCloseButton)
+            {
+                _popup.HeightRequest += 60;
+            }
         }
 
         /// <summary>
@@ -764,6 +815,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 _availableSize = measuredSize;
             }
 
+#if WINDOWS
+            // If the available size changed, ensure date picker container updates measurements.
+            if (_availableSize == measuredSize && Mode == PickerMode.Default && Children is SfDatePicker)
+            {
+                _pickerContainer?.UpdateScrollViewDraw();
+            }
+#endif
+
             if (Mode != PickerMode.Default)
             {
                 return Size.Zero;
@@ -858,7 +917,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     BaseHeaderView.SelectionTextStyle.PropertyChanged += OnHeaderSelectionTextStylePropertyChanged;
                 }
 
-                PickerHelper.SetHeaderDynamicResource(this.BaseHeaderView, this);
+                PickerHelper.SetHeaderDynamicResource(BaseHeaderView, this);
             }
 
             // Wire events for footer view properties.
@@ -872,7 +931,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     FooterView.TextStyle.PropertyChanged += OnFooterTextStylePropertyChanged;
                 }
 
-                PickerHelper.SetFooterDynamicResource(this.FooterView, this);
+                PickerHelper.SetFooterDynamicResource(FooterView, this);
             }
 
             if (SelectedTextStyle != null)
@@ -900,9 +959,58 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
             if (SelectionView != null)
             {
-                PickerHelper.SetSelectionViewDynamicResource(this.SelectionView, this);
+                PickerHelper.SetSelectionViewDynamicResource(SelectionView, this);
                 SelectionView.PropertyChanged += OnSelectionViewPropertyChanged;
             }
+
+            if (DayColumnTextStyle != null)
+            {
+                SetInheritedBindingContext(DayColumnTextStyle, BindingContext);
+                DayColumnTextStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
+            if (MonthColumnTextStyle != null)
+            {
+                SetInheritedBindingContext(MonthColumnTextStyle, BindingContext);
+                MonthColumnTextStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
+            if (YearColumnTextStyle != null)
+            {
+                SetInheritedBindingContext(YearColumnTextStyle, BindingContext);
+                YearColumnTextStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
+            if (HourColumnTextStyle != null)
+            {
+                SetInheritedBindingContext(HourColumnTextStyle, BindingContext);
+                HourColumnTextStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
+            if (MinuteColumnTextStyle != null)
+            {
+                SetInheritedBindingContext(MinuteColumnTextStyle, BindingContext);
+                MinuteColumnTextStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
+            if (SecondColumnTextStyle != null)
+            {
+                SetInheritedBindingContext(SecondColumnTextStyle, BindingContext);
+                SecondColumnTextStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
+            if (MeridiemColumnTextStyle != null)
+            {
+                SetInheritedBindingContext(MeridiemColumnTextStyle, BindingContext);
+                MeridiemColumnTextStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
+            if (MilliSecondColumnTextStyle != null)
+            {
+                SetInheritedBindingContext(MilliSecondColumnTextStyle, BindingContext);
+                MilliSecondColumnTextStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
 
             if (BaseColumnHeaderView != null)
             {
@@ -1030,6 +1138,11 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 if ((IsScrollSelectionAllowed() && BaseColumns.Count == 1) && (pickerColumn.Parent is null || pickerColumn.Parent is SfPicker))
                 {
+                    if (pickerColumn._internalSelectedIndex == tappedIndex)
+                    {
+                        return;
+                    }
+
                     if (pickerColumn._internalSelectedIndex != -1)
                     {
                         pickerColumn._internalSelectedIndex = -1;
@@ -1041,8 +1154,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
 #endif
                     }
                 }
-
-                return;
+                else
+                {
+                    return;
+                }
             }
 
             if ((IsScrollSelectionAllowed() && BaseColumns.Count == 1) && (pickerColumn.Parent == null || pickerColumn.Parent is SfPicker))

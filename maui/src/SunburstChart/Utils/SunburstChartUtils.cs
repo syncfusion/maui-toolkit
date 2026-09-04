@@ -83,20 +83,20 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             return (byte)Math.Round(clampedInput);
         }
 
-        /// <summary>
-        /// Determines if two segments are equal based on their item, index, and level.
-        /// </summary>
-        /// <param name="segment">The primary segment.</param>
-        /// <param name="child">The segment to compare.</param>
-        /// <returns>true if equal; otherwise, false.</returns>
-        internal static bool EqualsTo(this SunburstSegment segment, SunburstSegment child)
-        {
-            if (segment.Item is List<object> list && child.Item is List<object> list1)
-            {
-                return list[0] == list1[0] && (double)list[1] == (double)list1[1] && segment.Index == child.Index && segment.CurrentLevel == child.CurrentLevel;
-            }
+		/// <summary>
+		/// Determines if two segments are equal based on their item, index, and level.
+		/// </summary>
+		/// <param name="segment">The primary segment.</param>
+		/// <param name="child">The segment to compare.</param>
+		/// <returns>true if equal; otherwise, false.</returns>
+		internal static bool EqualsTo(this SunburstSegment segment, SunburstSegment child)
+		{
+			if (segment.Item is List<object> list && child.Item is List<object> list1)
+			{
+				return list[0] == list1[0] && (double)list[1] == (double)list1[1] && segment.Index == child.Index && segment.CurrentLevel == child.CurrentLevel;
+			}
 
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 }

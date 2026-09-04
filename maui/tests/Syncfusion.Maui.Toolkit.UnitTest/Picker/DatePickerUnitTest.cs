@@ -2159,9 +2159,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
                 SelectedIndex = 0
             };
 
-            SetPrivateField(datePicker, "_dayColumn", dayColumn);
-            SetPrivateField(datePicker, "_monthColumn", monthColumn);
-            SetPrivateField(datePicker, "_yearColumn", yearColumn);
+            datePicker.DayColumn = dayColumn;
+            datePicker.MonthColumn = monthColumn;
+            datePicker.YearColumn = yearColumn;
 
             var columns = new ObservableCollection<PickerColumn> { dayColumn, monthColumn, yearColumn };
             SetPrivateField(datePicker, "_columns", columns);
@@ -2272,7 +2272,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             var oldValue = new DateTime(2020, 1, 1);
             var newValue = new DateTime(2022, 1, 1);
             InvokePrivateMethod(datePicker, "UpdateMinimumMaximumDate", oldValue, newValue);
-            var yearColumn = GetPrivateField(datePicker, "_yearColumn") as PickerColumn;
+            var yearColumn = datePicker.YearColumn;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var years = yearColumn.ItemsSource as ObservableCollection<string>;
             Assert.Equal("2020", years[0]);
@@ -2296,7 +2296,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             InvokePrivateMethod(datePicker, "UpdateMinimumMaximumDate", oldValue, newValue);
 
-            var yearColumn = GetPrivateField(datePicker, "_yearColumn") as PickerColumn;
+            var yearColumn = datePicker.YearColumn;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var years = yearColumn.ItemsSource as ObservableCollection<string>;
             Assert.Equal("2025", years[years.Count - 1]);
@@ -2320,7 +2320,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             InvokePrivateMethod(datePicker, "UpdateMinimumMaximumDate", oldValue, newValue);
 
-            var monthColumn = GetPrivateField(datePicker, "_monthColumn") as PickerColumn;
+            var monthColumn = datePicker.MonthColumn;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var months = monthColumn.ItemsSource as ObservableCollection<string>;
             Assert.Equal(12, months.Count);
@@ -2345,7 +2345,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             InvokePrivateMethod(datePicker, "UpdateMinimumMaximumDate", oldValue, newValue);
 
-            var monthColumn = GetPrivateField(datePicker, "_monthColumn") as PickerColumn;
+            var monthColumn = datePicker.MonthColumn;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var months = monthColumn.ItemsSource as ObservableCollection<string>;
             Assert.Equal(12, months.Count);
@@ -2370,7 +2370,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             InvokePrivateMethod(datePicker, "UpdateMinimumMaximumDate", oldValue, newValue);
 
-            var dayColumn = GetPrivateField(datePicker, "_dayColumn") as PickerColumn;
+            var dayColumn = datePicker.DayColumn;
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
             var days = dayColumn.ItemsSource as ObservableCollection<string>;
             Assert.Equal(31, days.Count);
@@ -2394,14 +2394,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             InvokePrivateMethod(datePicker, "UpdateSelectedIndex", newDate);
 
-            var dayColumn = GetPrivateField(datePicker, "_dayColumn") as PickerColumn;
-            var monthColumn = GetPrivateField(datePicker, "_monthColumn") as PickerColumn;
-            var yearColumn = GetPrivateField(datePicker, "_yearColumn") as PickerColumn;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            Assert.Equal(19, dayColumn.SelectedIndex);
-            Assert.Equal(7, monthColumn.SelectedIndex);
-            Assert.Equal(4, yearColumn.SelectedIndex);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            Assert.Equal(19, datePicker.DayColumn.SelectedIndex);
+            Assert.Equal(7, datePicker.MonthColumn.SelectedIndex);
+            Assert.Equal(4, datePicker.YearColumn.SelectedIndex);
         }
 
         [Fact]
@@ -2421,14 +2416,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
             InvokePrivateMethod(datePicker, "UpdateSelectedIndex", date);
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 
-            var dayColumn = GetPrivateField(datePicker, "_dayColumn") as PickerColumn;
-            var monthColumn = GetPrivateField(datePicker, "_monthColumn") as PickerColumn;
-            var yearColumn = GetPrivateField(datePicker, "_yearColumn") as PickerColumn;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            Assert.Equal(14, dayColumn.SelectedIndex);
-            Assert.Equal(5, monthColumn.SelectedIndex);
-            Assert.Equal(3, yearColumn.SelectedIndex);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            Assert.Equal(14, datePicker.DayColumn.SelectedIndex);
+            Assert.Equal(5, datePicker.MonthColumn.SelectedIndex);
+            Assert.Equal(3, datePicker.YearColumn.SelectedIndex);
         }
 
         [Fact]
@@ -2447,14 +2437,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             InvokePrivateMethod(datePicker, "UpdateSelectedIndex", outOfRangeDate);
 
-            var dayColumn = GetPrivateField(datePicker, "_dayColumn") as PickerColumn;
-            var monthColumn = GetPrivateField(datePicker, "_monthColumn") as PickerColumn;
-            var yearColumn = GetPrivateField(datePicker, "_yearColumn") as PickerColumn;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            Assert.Equal(0, dayColumn.SelectedIndex);
-            Assert.Equal(0, monthColumn.SelectedIndex);
-            Assert.Equal(5, yearColumn.SelectedIndex);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            Assert.Equal(0, datePicker.DayColumn.SelectedIndex);
+            Assert.Equal(0, datePicker.MonthColumn.SelectedIndex);
+            Assert.Equal(5, datePicker.YearColumn.SelectedIndex);
         }
 
         [Fact]
@@ -2474,14 +2459,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
             InvokePrivateMethod(datePicker, "UpdateSelectedIndex", newDate);
 
-            var dayColumn = GetPrivateField(datePicker, "_dayColumn") as PickerColumn;
-            var monthColumn = GetPrivateField(datePicker, "_monthColumn") as PickerColumn;
-            var yearColumn = GetPrivateField(datePicker, "_yearColumn") as PickerColumn;
-#pragma warning disable CS8602 // Dereference of a possibly null reference.
-            Assert.Equal(19, dayColumn.SelectedIndex);
-            Assert.Equal(7, monthColumn.SelectedIndex);
-            Assert.Equal(4, yearColumn.SelectedIndex);
-#pragma warning restore CS8602 // Dereference of a possibly null reference.
+            Assert.Equal(19, datePicker.DayColumn.SelectedIndex);
+            Assert.Equal(7, datePicker.MonthColumn.SelectedIndex);
+            Assert.Equal(4, datePicker.YearColumn.SelectedIndex);
         }
 
         [Fact]

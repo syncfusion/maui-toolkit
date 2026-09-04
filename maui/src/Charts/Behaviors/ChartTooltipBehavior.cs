@@ -65,10 +65,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
             nameof(Background),
             typeof(Brush),
             typeof(ChartTooltipBehavior),
-            null,
+			null,
             BindingMode.Default,
             null,
-            null);
+			defaultValueCreator: BackgroundDefaultValueCreator);
 
         /// <summary>
         /// Identifies the <see cref="Duration"/> bindable property.
@@ -95,10 +95,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
             nameof(TextColor),
             typeof(Color),
             typeof(ChartTooltipBehavior),
-            null,
+			null,
             BindingMode.Default,
             null,
-            null);
+			defaultValueCreator: TextColorDefaultValueCreator);
 
         /// <summary>
         /// Identifies the <see cref="Margin"/> bindable property.
@@ -125,8 +125,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             nameof(FontSize),
             typeof(float),
             typeof(ChartTooltipBehavior),
-            float.NaN,
-            BindingMode.Default,
+			14f,
+			BindingMode.Default,
             null);
 
         /// <summary>
@@ -156,6 +156,39 @@ namespace Syncfusion.Maui.Toolkit.Charts
             typeof(FontAttributes),
             typeof(ChartTooltipBehavior),
             FontAttributes.None,
+            BindingMode.Default,
+            null);
+
+        /// <summary>
+        /// Identifies the <see cref="Stroke"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty StrokeProperty = BindableProperty.Create(
+            nameof(Stroke),
+            typeof(Brush),
+            typeof(ChartTooltipBehavior),
+            null,
+            BindingMode.Default,
+            null);
+
+        /// <summary>
+        /// Identifies the <see cref="StrokeWidth"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty StrokeWidthProperty = BindableProperty.Create(
+            nameof(StrokeWidth),
+            typeof(double),
+            typeof(ChartTooltipBehavior),
+            0.0,
+            BindingMode.Default,
+            null);
+
+        /// <summary>
+        /// Identifies the <see cref="UseSeriesFillColor"/> bindable property.
+        /// </summary>
+        public static readonly BindableProperty UseSeriesFillColorProperty = BindableProperty.Create(
+            nameof(UseSeriesFillColor),
+            typeof(bool),
+            typeof(ChartTooltipBehavior),
+            false,
             BindingMode.Default,
             null);
 
@@ -534,6 +567,169 @@ namespace Syncfusion.Maui.Toolkit.Charts
             set { SetValue(FontAttributesProperty, value); }
         }
 
+        /// <summary>
+        /// Gets or sets the brush value to customize the tooltip border color.
+        /// </summary>
+        /// <value>It accepts the <see cref="Brush"/> value and the default value is Transparent. The tooltip border is only rendered when both <see cref="Stroke"/> is set and <see cref="StrokeWidth"/> is greater than 0.</value>
+        /// <example>
+        /// # [MainPage.xaml](#tab/tabid-13)
+        /// <code><![CDATA[
+        /// <chart:SfCartesianChart>
+        /// 
+        ///     <!--omitted for brevity-->
+        ///
+        ///     <chart:SfCartesianChart.TooltipBehavior>
+        ///         <chart:ChartTooltipBehavior Stroke="Blue" StrokeWidth="2"/>
+        ///     </chart:SfCartesianChart.TooltipBehavior>
+        ///
+        ///     <chart:LineSeries ItemsSource="{Binding Data}"
+        ///                       XBindingPath="XValue"
+        ///                       YBindingPath="YValue"
+        ///                       EnableTooltip="True"/>
+        /// 
+        /// </chart:SfCartesianChart>
+        /// ]]>
+        /// </code>
+        /// # [MainPage.xaml.cs](#tab/tabid-14)
+        /// <code><![CDATA[
+        /// SfCartesianChart chart = new SfCartesianChart();
+        /// ViewModel viewModel = new ViewModel();
+        ///
+        /// // omitted for brevity
+        /// chart.TooltipBehavior = new ChartTooltipBehavior()
+        /// {
+        ///    Stroke = new SolidColorBrush(Colors.Blue),
+        ///    StrokeWidth = 2
+        /// };
+        /// 
+        /// LineSeries series = new LineSeries()
+        /// {
+        ///    ItemsSource = viewModel.Data,
+        ///    XBindingPath = "XValue",
+        ///    YBindingPath = "YValue",
+        ///    EnableTooltip = true
+        /// };
+        /// chart.Series.Add(series);
+        ///
+        /// ]]>
+        /// </code>
+        /// ***
+        /// </example>
+        public Brush? Stroke
+        {
+            get { return (Brush?)GetValue(StrokeProperty); }
+            set { SetValue(StrokeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value to specify the tooltip border thickness.
+        /// </summary>
+        /// <value>It accepts the float values and the default value is 0. The tooltip border is only rendered when both <see cref="Stroke"/> is set and <see cref="StrokeWidth"/> is greater than 0.</value>
+        /// <example>
+        /// # [MainPage.xaml](#tab/tabid-15)
+        /// <code><![CDATA[
+        /// <chart:SfCartesianChart>
+        /// 
+        ///     <!--omitted for brevity-->
+        ///
+        ///     <chart:SfCartesianChart.TooltipBehavior>
+        ///         <chart:ChartTooltipBehavior Stroke="Blue" StrokeWidth="2"/>
+        ///     </chart:SfCartesianChart.TooltipBehavior>
+        ///
+        ///     <chart:LineSeries ItemsSource="{Binding Data}"
+        ///                       XBindingPath="XValue"
+        ///                       YBindingPath="YValue"
+        ///                       EnableTooltip="True"/>
+        /// 
+        /// </chart:SfCartesianChart>
+        /// ]]>
+        /// </code>
+        /// # [MainPage.xaml.cs](#tab/tabid-16)
+        /// <code><![CDATA[
+        /// SfCartesianChart chart = new SfCartesianChart();
+        /// ViewModel viewModel = new ViewModel();
+        ///
+        /// // omitted for brevity
+        /// chart.TooltipBehavior = new ChartTooltipBehavior()
+        /// {
+        ///    Stroke = new SolidColorBrush(Colors.Blue),
+        ///    StrokeWidth = 2
+        /// };
+        /// 
+        /// LineSeries series = new LineSeries()
+        /// {
+        ///    ItemsSource = viewModel.Data,
+        ///    XBindingPath = "XValue",
+        ///    YBindingPath = "YValue",
+        ///    EnableTooltip = true
+        /// };
+        /// chart.Series.Add(series);
+        ///
+        /// ]]>
+        /// </code>
+        /// ***
+        /// </example>
+        public double StrokeWidth
+        {
+            get { return (double)GetValue(StrokeWidthProperty); }
+            set { SetValue(StrokeWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the tooltip background matches the associated series fill color.
+        /// </summary>
+        /// <value>It accepts bool values and the default value is <c>false</c>. When set to <c>true</c>, the tooltip background uses the series fill color; otherwise, it uses the <see cref="Background"/> property.</value>
+        /// <remarks>
+        /// <para>Enabling this property improves visual association between the tooltip and its corresponding series, especially in multi-series charts.</para>
+        /// <para>If the <see cref="Background"/> property is explicitly set, it takes precedence over the series fill color.</para>
+        /// <para>For gradient fills, the tooltip uses the primary (first gradient stop) color as a solid color.</para>
+        /// </remarks>
+        /// <example>
+        /// # [MainPage.xaml](#tab/tabid-17)
+        /// <code><![CDATA[
+        /// <chart:SfCartesianChart>
+        ///
+        ///     <!-- omitted for brevity -->
+        ///
+        ///     <chart:SfCartesianChart.TooltipBehavior>
+        ///         <chart:ChartTooltipBehavior UseSeriesFillColor="True"/>
+        ///     </chart:SfCartesianChart.TooltipBehavior>
+        ///
+        ///     <chart:ColumnSeries ItemsSource="{Binding Data}"
+        ///                         XBindingPath="XValue"
+        ///                         YBindingPath="YValue"
+        ///                         EnableTooltip="True"/>
+        ///
+        /// </chart:SfCartesianChart>
+        /// ]]></code>
+        ///
+        /// # [MainPage.xaml.cs](#tab/tabid-18)
+        /// <code><![CDATA[
+        /// SfCartesianChart chart = new SfCartesianChart();
+        /// ViewModel viewModel = new ViewModel();
+        ///
+        /// chart.TooltipBehavior = new ChartTooltipBehavior()
+        /// {
+        ///     UseSeriesFillColor = true
+        /// };
+        ///
+        /// ColumnSeries series = new ColumnSeries()
+        /// {
+        ///     ItemsSource = viewModel.Data,
+        ///     XBindingPath = "XValue",
+        ///     YBindingPath = "YValue",
+        ///     EnableTooltip = true
+        /// };
+        ///
+        /// chart.Series.Add(series);
+        /// ]]></code>
+        /// </example>
+        public bool UseSeriesFillColor
+        {
+            get { return (bool)GetValue(UseSeriesFillColorProperty); }
+            set { SetValue(UseSeriesFillColorProperty, value); }
+        }
+
         #endregion
 
         #region Constructor
@@ -607,11 +803,99 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
+        /// <summary>
+        /// Gets the appropriate tooltip background brush based on the UseSeriesFillColor property and explicit Background setting.
+        /// </summary>
+        /// <param name="seriesFill">The fill brush of the associated series.</param>
+        /// <param name="tooltipBackground"></param>
+        /// <returns>The brush to use as the tooltip background.</returns>
+        internal Brush? GetTooltipBackground(Brush? seriesFill,Brush? tooltipBackground)
+        {
+            // Priority: Explicit Background > Series Fill (when UseSeriesFillColor=true) > Default Background  
+            if (IsSet(BackgroundProperty))
+            {
+                return Background;
+            }
+
+            // If UseSeriesFillColor is true and we have a series fill, derive the background from it
+            if (UseSeriesFillColor && seriesFill != null)
+            {
+                // For gradient brushes, extract the primary (first) color as a solid brush
+                if (seriesFill is GradientBrush gradient && gradient.GradientStops != null && gradient.GradientStops.Count > 0)
+                {
+                    Color stopColor = gradient.GradientStops[0].Color;
+                    if (stopColor != Colors.Transparent)
+                    {
+                        return new SolidColorBrush(stopColor);
+                    }
+                }
+                else
+                {
+                    // For solid brushes, use directly if not transparent
+                    Color brushColor = seriesFill.ToColor();
+                    if (brushColor != Colors.Transparent)
+                    {
+                        return seriesFill;
+                    }
+                }
+            }
+
+            if (tooltipBackground != null)
+            {
+                return tooltipBackground;
+            }
+
+            // Fall back to the default Background
+            return Background;
+        }
+        
+        internal Brush? GetChartBaseTooltipBackground()
+        {
+            if (this.Chart is ChartBase chartBase)
+            {
+                return chartBase.TooltipBackground;
+            }
+
+            return default;
+        }
+
+        internal Color GetTooltipTextColor()
+        {
+            if (IsSet(TextColorProperty))
+            {
+                return TextColor;
+            }
+
+            if (this.Chart is ChartBase chartBase &&
+                chartBase.TooltipTextColor != null)
+            {
+                return chartBase.TooltipTextColor;
+            }
+
+            return TextColor;
+        }
+
+        internal float GetTooltipFontSize()
+        {
+            if (IsSet(FontSizeProperty))
+            {
+                return FontSize;
+            }
+
+            if (this.Chart is ChartBase chartBase &&
+                !double.IsNaN(chartBase.TooltipFontSize))
+            {
+                return (float)chartBase.TooltipFontSize;
+            }
+
+            return FontSize;
+        }
+
         #endregion
 
-        #region Internal Methods
+		#region Internal Methods
 
-        internal override void OnSingleTap(IChart chart, float pointX, float pointY)
+		internal override void OnSingleTap(IChart chart, float pointX, float pointY)
         {
             base.OnSingleTap(chart, pointX, pointY);
 
@@ -694,6 +978,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
                         tooltip.BindingContext = tooltipInfo;
                         tooltip.Duration = Duration;
                         tooltip.Position = tooltipInfo.Position;
+						tooltip.StrokeWidth = (float)StrokeWidth >= 0 ? (float)StrokeWidth : 0;
+						if (Stroke != null && tooltip.StrokeWidth > 0)
+                        {
+                            tooltip.Stroke = Stroke;
+                        } 
                         tooltip.SetBinding(SfTooltip.BackgroundProperty, 
 							BindingHelper.CreateBinding(nameof(TooltipInfo.Background), getter: static(TooltipInfo tooltipInfo1) => tooltipInfo1.Background));
                         tooltip.Content = GetTooltipTemplate(tooltipInfo);
@@ -751,8 +1040,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return view;
         }
 
-        #endregion
+		static object TextColorDefaultValueCreator(BindableObject bindable)
+		{
+			return Color.FromArgb("#F4EFF4");
+		}
 
-        #endregion
-    }
+		static object BackgroundDefaultValueCreator(BindableObject bindable)
+		{
+			return new SolidColorBrush(Color.FromArgb("#1C1B1F"));
+		}
+
+		#endregion
+
+		#endregion
+	}
 }

@@ -1855,7 +1855,311 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.Equal(expected, chartSeries.ListenPropertyChange);
 		}
 
-		public class TestChartSeries : ChartSeries
+		#region PointColorPath Tests
+
+		[Fact]
+		public void ChartSeries_PointColorPath_SetAndGet_ReturnsExpectedValue()
+		{
+			var series = new ColumnSeries();
+			var expected = "PointColor";
+
+			series.PointColorPath = expected;
+
+			Assert.Equal(expected, series.PointColorPath);
+		}
+
+		[Fact]
+		public void ChartSeries_PointColorPath_WithBrushProperty_PopulatesPointColorValues()
+		{
+			var series = new ColumnSeries();
+			var data = new List<DataPoint>
+			{
+				new DataPoint { X = "A", Y = 10, PointColor = new SolidColorBrush(Colors.Red) },
+				new DataPoint { X = "B", Y = 20, PointColor = new SolidColorBrush(Colors.Green) },
+				new DataPoint { X = "C", Y = 30, PointColor = new SolidColorBrush(Colors.Blue) }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "PointColor";
+
+			Assert.NotEmpty(series.PointColorValues);
+			Assert.Equal(3, series.PointColorValues.Count);
+			Assert.NotNull(series.PointColorValues[0]);
+			Assert.NotNull(series.PointColorValues[1]);
+			Assert.NotNull(series.PointColorValues[2]);
+		}
+
+		[Fact]
+		public void ChartSeries_PointColorPath_WithColorProperty_PopulatesPointColorValues()
+		{
+			var series = new ColumnSeries();
+			var data = new List<ColorDataPoint>
+			{
+				new ColorDataPoint { X = "A", Y = 10, Color = Colors.Red },
+				new ColorDataPoint { X = "B", Y = 20, Color = Colors.Green },
+				new ColorDataPoint { X = "C", Y = 30, Color = Colors.Blue }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "Color";
+
+			Assert.NotEmpty(series.PointColorValues);
+			Assert.Equal(3, series.PointColorValues.Count);
+			Assert.NotNull(series.PointColorValues[0]);
+			Assert.NotNull(series.PointColorValues[1]);
+			Assert.NotNull(series.PointColorValues[2]);
+		}
+
+		[Fact]
+		public void ChartSeries_PointColorPath_WithStringColorProperty_PopulatesPointColorValues()
+		{
+			var series = new ColumnSeries();
+			var data = new List<StringColorDataPoint>
+			{
+				new StringColorDataPoint { X = "A", Y = 10, Color = "#FF0000" },
+				new StringColorDataPoint { X = "B", Y = 20, Color = "#00FF00" },
+				new StringColorDataPoint { X = "C", Y = 30, Color = "#0000FF" }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "Color";
+
+			Assert.NotEmpty(series.PointColorValues);
+			Assert.Equal(3, series.PointColorValues.Count);
+		}
+
+		[Fact]
+		public void ChartSeries_PointColorPath_WithComplexPath_PopulatesPointColorValues()
+		{
+			var series = new ColumnSeries();
+			var data = new List<NestedDataPoint>
+			{
+				new NestedDataPoint { X = "A", Y = 10, Metadata = new ColorMetadata { Color = Colors.Red } },
+				new NestedDataPoint { X = "B", Y = 20, Metadata = new ColorMetadata { Color = Colors.Green } },
+				new NestedDataPoint { X = "C", Y = 30, Metadata = new ColorMetadata { Color = Colors.Blue } }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "Metadata.Color";
+
+			Assert.NotEmpty(series.PointColorValues);
+			Assert.Equal(3, series.PointColorValues.Count);
+		}
+
+		[Fact]
+		public void ChartSeries_PointColorPath_WithNullProperty_AddsNullToPointColorValues()
+		{
+			var series = new ColumnSeries();
+			var data = new List<NullableColorDataPoint>
+			{
+				new NullableColorDataPoint { X = "A", Y = 10, PointColor = new SolidColorBrush(Colors.Red) },
+				new NullableColorDataPoint { X = "B", Y = 20, PointColor = null },
+				new NullableColorDataPoint { X = "C", Y = 30, PointColor = new SolidColorBrush(Colors.Blue) }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "PointColor";
+
+			Assert.NotEmpty(series.PointColorValues);
+			Assert.Equal(3, series.PointColorValues.Count);
+			Assert.NotNull(series.PointColorValues[0]);
+			Assert.Null(series.PointColorValues[1]);
+			Assert.NotNull(series.PointColorValues[2]);
+		}
+
+		[Fact]
+		public void ChartSeries_PointColorPath_ChangingPath_UpdatesPointColorValues()
+		{
+			var series = new ColumnSeries();
+			var data = new List<DualColorDataPoint>
+			{
+				new DualColorDataPoint { X = "A", Y = 10, PrimaryColor = Colors.Red, SecondaryColor = Colors.Orange },
+				new DualColorDataPoint { X = "B", Y = 20, PrimaryColor = Colors.Green, SecondaryColor = Colors.Lime },
+				new DualColorDataPoint { X = "C", Y = 30, PrimaryColor = Colors.Blue, SecondaryColor = Colors.Cyan }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+
+			// Set initial path
+			series.PointColorPath = "PrimaryColor";
+			Assert.Equal(3, series.PointColorValues.Count);
+
+			// Change path
+			series.PointColorPath = "SecondaryColor";
+			Assert.Equal(3, series.PointColorValues.Count);
+		}
+
+		[Fact]
+		public void ChartSeries_PointColorPath_ClearedOnItemsSourceChange()
+		{
+			var series = new ColumnSeries();
+			var data1 = new List<ColorDataPoint>
+			{
+				new ColorDataPoint { X = "A", Y = 10, Color = Colors.Red },
+				new ColorDataPoint { X = "B", Y = 20, Color = Colors.Green }
+			};
+
+			series.ItemsSource = data1;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "Color";
+
+			Assert.Equal(2, series.PointColorValues.Count);
+
+			// Change ItemsSource
+			var data2 = new List<ColorDataPoint>
+			{
+				new ColorDataPoint { X = "X", Y = 100, Color = Colors.Blue }
+			};
+			series.ItemsSource = data2;
+
+			// PointColorValues should be cleared and regenerated
+			Assert.Single(series.PointColorValues);
+		}
+
+		[Fact]
+		public void ChartSeries_GetFillColor_WithPointColorPath_ReturnsPointColor()
+		{
+			var series = new ColumnSeries();
+			var brush = new SolidColorBrush(Colors.Red);
+			var data = new List<DataPoint>
+			{
+				new DataPoint { X = "A", Y = 10, PointColor = brush }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "PointColor";
+
+			// Get the fill color for index 0
+			var fillColor = series.GetFillColor(data[0], 0);
+
+			Assert.NotNull(fillColor);
+			Assert.Equal(brush, fillColor);
+		}
+
+		[Fact]
+		public void ChartSeries_GetFillColor_Precedence_SelectionOverride()
+		{
+			var series = new ColumnSeries();
+			var pointColorBrush = new SolidColorBrush(Colors.Red);
+			var selectionBrush = new SolidColorBrush(Colors.Yellow);
+			var data = new List<DataPoint>
+			{
+				new DataPoint { X = "A", Y = 10, PointColor = pointColorBrush }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "PointColor";
+
+			// Without selection behavior, should return point color
+			var fillColor1 = series.GetFillColor(data[0], 0);
+			Assert.Equal(pointColorBrush, fillColor1);
+		}
+
+		[Fact]
+		public void ChartSeries_GetFillColor_Precedence_FillOverPointColor()
+		{
+			var series = new ColumnSeries();
+			var seriesFill = new SolidColorBrush(Colors.Purple);
+			var pointColor = new SolidColorBrush(Colors.Red);
+			var data = new List<DataPoint>
+			{
+				new DataPoint { X = "A", Y = 10, PointColor = pointColor }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "PointColor";
+			series.Fill = seriesFill;
+
+			// With Fill set, should return Fill color (higher precedence)
+			var fillColor = series.GetFillColor(data[0], 0);
+			Assert.Equal(seriesFill, fillColor);
+		}
+
+		[Fact]
+		public void ChartSeries_GetFillColor_Precedence_PointColorOverPalette()
+		{
+			var series = new ColumnSeries();
+			var pointColor = new SolidColorBrush(Colors.Red);
+			var paletteColor = new SolidColorBrush(Colors.Green);
+			var data = new List<DataPoint>
+			{
+				new DataPoint { X = "A", Y = 10, PointColor = pointColor }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "PointColor";
+			series.PaletteBrushes = new List<Brush> { paletteColor };
+
+			// Without series Fill, point color should be used (higher precedence than palette)
+			var fillColor = series.GetFillColor(data[0], 0);
+			Assert.Equal(pointColor, fillColor);
+		}
+
+		[Fact]
+		public void ChartSeries_GetFillColor_SelectionBehavior_OverridesPointColor()
+		{
+			var series = new TestChartSeries();
+			var pointColor = new SolidColorBrush(Colors.Red);
+			var selectionBrush = new SolidColorBrush(Colors.Yellow);
+			var data = new List<DataPoint>
+			{
+				new DataPoint { X = "A", Y = 10, PointColor = pointColor },
+				new DataPoint { X = "B", Y = 20, PointColor = new SolidColorBrush(Colors.Blue) }
+			};
+
+			series.ItemsSource = data;
+			series.XBindingPath = "X";
+			series.YBindingPath = "Y";
+			series.PointColorPath = "PointColor";
+
+			// Create and assign selection behavior with selection brush
+			var selectionBehavior = new DataPointSelectionBehavior
+			{
+				SelectionBrush = selectionBrush
+			};
+			series.SelectionBehavior = selectionBehavior;
+
+			// Programmatically select the first data point (index 0)
+			selectionBehavior.SelectedIndex = 0;
+
+			// Get fill color for the selected data point
+			var selectedFillColor = series.GetFillColor(data[0], 0);
+
+			// Selection brush should override point color when data point is selected
+			Assert.NotNull(selectedFillColor);
+			Assert.Equal(selectionBrush, selectedFillColor);
+
+			// Verify that unselected data point uses point color, not selection brush
+			var unselectedFillColor = series.GetFillColor(data[1], 1);
+			Assert.NotNull(unselectedFillColor);
+			Assert.NotEqual(selectionBrush, unselectedFillColor);
+			Assert.Equal(data[1].PointColor, unselectedFillColor);
+		}
+
+		#endregion
+
+		public class TestChartSeries : XYDataSeries
 		{
 			protected override ChartSegment? CreateSegment()
 			{
@@ -1867,5 +2171,54 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 		{
 
 		}
+	}
+
+	// Test data classes
+	public class DataPoint
+	{
+		public string? X { get; set; }
+		public double Y { get; set; }
+		public Brush? PointColor { get; set; }
+	}
+
+	public class ColorDataPoint
+	{
+		public string? X { get; set; }
+		public double Y { get; set; }
+		public Color? Color { get; set; }
+	}
+
+	public class StringColorDataPoint
+	{
+		public string? X { get; set; }
+		public double Y { get; set; }
+		public string? Color { get; set; }
+	}
+
+	public class NestedDataPoint
+	{
+		public string? X { get; set; }
+		public double Y { get; set; }
+		public ColorMetadata? Metadata { get; set; }
+	}
+
+	public class ColorMetadata
+	{
+		public Color? Color { get; set; }
+	}
+
+	public class NullableColorDataPoint
+	{
+		public string? X { get; set; }
+		public double Y { get; set; }
+		public Brush? PointColor { get; set; }
+	}
+
+	public class DualColorDataPoint
+	{
+		public string? X { get; set; }
+		public double Y { get; set; }
+		public Color? PrimaryColor { get; set; }
+		public Color? SecondaryColor { get; set; }
 	}
 }

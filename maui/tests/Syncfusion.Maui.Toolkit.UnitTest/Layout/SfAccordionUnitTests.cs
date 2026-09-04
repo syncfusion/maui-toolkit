@@ -1659,7 +1659,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var exception = Record.Exception(() => accordion.UpdateAccordionItemsBasedOnExpandModes(false));
 			Assert.Null(exception);
 		}
-
+		
 		#endregion
 
 	}

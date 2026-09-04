@@ -716,7 +716,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		AbsoluteLayout IChart.BehaviorLayout => BehaviorLayout;
 
-		double IChart.TitleHeight => TitleView != null ? TitleView.Height : 0;
+		double IChart.TitleHeight => Title != null && TitleView.Height > 0 ? TitleView.Height : 0;
 
 		Brush? IChart.GetSelectionBrush(ChartSeries series)
 		{

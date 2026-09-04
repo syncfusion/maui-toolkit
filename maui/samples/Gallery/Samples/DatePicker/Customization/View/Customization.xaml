@@ -94,7 +94,7 @@
                         </Grid.GestureRecognizers>
                     </Grid>
 
-                    <picker:SfDatePicker Mode="Dialog" x:Name="datePicker" Background="Transparent" OkButtonClicked="OnDatePickerOkButtonClicked" CancelButtonClicked="OnDatePickerCancelButtonClicked" Closed="OnDatePickerClosed"/>
+                    <picker:SfDatePicker Mode="Dialog" x:Name="datePicker" ShowCloseButton="True" Background="Transparent" OkButtonClicked="OnDatePickerOkButtonClicked" CancelButtonClicked="OnDatePickerCancelButtonClicked" Closed="OnDatePickerClosed"/>
                     <local:CustomPopUp x:Name="popup" OnCreated="OnPopupItemCreated"/>
                 </Grid>
             </Border>
@@ -122,7 +122,7 @@
                     </Grid.GestureRecognizers>
                 </Grid>
 
-                <picker:SfDatePicker Mode="Dialog" x:Name="datePicker1" Background="Transparent" OkButtonClicked="OnDatePickerOkButtonClicked" CancelButtonClicked="OnDatePickerCancelButtonClicked" Closed="OnDatePickerClosed"/>
+                <picker:SfDatePicker Mode="Dialog" x:Name="datePicker1" ShowCloseButton="True" Background="Transparent" OkButtonClicked="OnDatePickerOkButtonClicked" CancelButtonClicked="OnDatePickerCancelButtonClicked" Closed="OnDatePickerClosed"/>
                 <local:CustomPopUp x:Name="popup1" OnCreated="OnPopupItemCreated"/>
             </Grid>
 

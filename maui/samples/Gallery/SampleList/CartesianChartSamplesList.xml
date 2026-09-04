@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <SyncfusionControls>
   <ControlCategory Name="Data Visualization">
-	  <Control Title="Cartesian Charts" ControlName="SfCartesianChart" Image="cartesianchart.png" Description="Plot over 20+ chart types with extensive features like data label, trackball and zooming.">
+	  <Control Title="Cartesian Charts" StatusTag="Updated" ControlName="SfCartesianChart" Image="cartesianchart.png" Description="Plot over 20+ chart types with extensive features like data label, trackball and zooming.">
       <Category Title="Chart Types">
         <SubCategory Title="Column">
           <CardLayout>
@@ -172,7 +172,7 @@
 		  </Category>
 
 		
-			  <Sample Title="Annotation"  SampleName="ShapeAnnotationSample" Description="This sample showcases the shape annotation support, which includes line, horizontal line, vertical line, rectangle, and ellipse." SearchTags="annotation, chart annotation"/>
+			  <Sample Title="Annotation" StatusTag="Updated" SampleName="ShapeAnnotationSample" Description="This sample showcases the shape annotation support, which includes line, horizontal line, vertical line, rectangle, and ellipse." SearchTags="annotation, chart annotation"/>
 
         <Sample Title="Empty Points" SampleName="EmptyPointSupport" SearchTags="empty points, missing data points, missing values, incomplete data, data gaps, incomplete records, blank entries"/>
 
@@ -183,13 +183,18 @@
 			  <Sample Title="Vertical" SampleName="VerticalPlotBandWindows" Platforms="Windows,MacCatalyst" SearchTags="vertical plot, band, plotband"/>
 			  <Sample Title="Band recurrence" SampleName="PlotBandRecurrence" SearchTags="multiple plot, band, plotband, recurrence"/>
 		  </Category>
-		  <Category Title="Legend">
+      <Sample Title="Point Color Mapping" StatusTag="New" SampleName="PointColorCustomization"
+			  Description="This sample demonstrates how point color mapping applies distinct colors to individual chart data points using the PointColorPath property, helping to differentiate values visually and improve data readability."
+			  SearchTags="Point Color Mapping"/>
+		  <Category Title="Legend" StatusTag="Updated">
 			  <Sample Title="Legend customization" SampleName="CartesianLegend" SearchTags="legend"/>
 		  </Category>
 
 		  <Category Title="Data label">
 			  <Sample Title="Data label template" SampleName="DataLabelTemplate" SearchTags="data label customization, data label template, custom data label"/>
 		  </Category>
+
+      <Sample Title="Trendline" StatusTag="New" SampleName="Trendlines" SearchTags="trendline"/>
 
 		  <Category Title="Interactions">
 			  <SubCategory Title="Selection">
@@ -205,6 +210,7 @@
 			  <Sample Title="Tooltip" SampleName="CartesianTooltip" Description="This sample showcases the tooltip feature. On mobile, tap the data points, and on desktop, mouse over to the data points to raise the tooltip." SearchTags="tooltip"/>
 			  <Sample Title="Trackball" SampleName="CartesianTrackball" Description="This sample showcases the trackball feature. On mobile phones, long press on the chart to show the trackball, and drag the chart to change the position of the trackball. You can move the cursor over the chart area to display the trackball on the desktop." 
                 SearchTags="trackball, crosshair"/>
+        <Sample Title="Crosshair" StatusTag="New" SampleName="CartesianCrossHair" Description="This sample showcases the crosshair feature. On mobile long press or drag to show the crosshair, on desktop move the cursor to display the crosshair." SearchTags="crosshair, cross hair"/>
 			  <Sample Title="Zooming and Panning" SampleName="ChartZooming" Description="This sample showcases the zooming and panning features." SearchTags="zooming, panning"/>
 			  <Sample Title="Selection Zooming" SampleName="SelectionZooming" Description="This sample demonstrates zooming selection: For desktop, hold the left mouse button, double-click, and drag; for mobile, hold your finger, double-click, and drag to create a selection rectangle." SearchTags="select, highlight"/>
 			  <!--<Sample Title="Add a point on click" SampleName="TapToAdd" Description="This example shows the pixel-to-data point conversion feature. Tap/click on the chart area to add a data point dynamically on that location." SearchTags="zooming, panning"/>-->

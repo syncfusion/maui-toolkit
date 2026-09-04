@@ -598,6 +598,31 @@
 			return template;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ValueMemberPath"></param>
+		/// <returns></returns>
+		internal override List<double> GetYValues(string ValueMemberPath)
+		{
+			List<double> YValues = ValueMemberPath == "high" ? (List<double>)HighValues : (List<double>)LowValues;
+			return YValues;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ValueMemberPath"></param>
+		/// <returns></returns>
+		internal override List<int> GetEmptyPointIndexes(string ValueMemberPath)
+		{
+			if (EmptyPointIndexes != null && EmptyPointIndexes.Length > 1)
+			{
+				return ValueMemberPath == "high" ? (List<int>)EmptyPointIndexes[0] : (List<int>)EmptyPointIndexes[1];
+			}
+			return [];
+		}
+
 		#endregion
 
 		#region Private Methods

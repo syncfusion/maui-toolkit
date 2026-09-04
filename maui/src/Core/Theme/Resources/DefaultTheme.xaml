@@ -596,6 +596,9 @@
   <local:StaticThemeResource x:Key="SfPickerNormalColumnDividerColor" ResourceKey="Border" />
   <local:StaticThemeResource x:Key="SfPickerSelectedTextColor" ResourceKey="PrimaryForeground" />
   <local:StaticThemeResource x:Key="SfPickerNormalTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfPickerNormalCloseButtonStroke" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfPickerHoverCloseButtonBackground" ResourceKey="IconBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfPickerPressedCloseButtonBackground" ResourceKey="IconBackgroundPressed" />
 
   <sys:Double x:Key="SfPickerNormalHeaderFontSize">16</sys:Double>
   <sys:Double x:Key="SfPickerNormalFooterFontSize">14</sys:Double>
@@ -603,6 +606,7 @@
   <sys:Double x:Key="SfPickerNormalColumnHeaderFontSize">14</sys:Double>
   <sys:Double x:Key="SfPickerSelectedFontSize">16</sys:Double>
   <sys:Double x:Key="SfPickerNormalFontSize">16</sys:Double>
+  <sys:Double x:Key="SfPickerNormalCloseButtonStrokeThickness">1</sys:Double>
 
   <!--SfDatePicker-->
   <x:String x:Key="SfDatePickerTheme">CommonTheme</x:String>
@@ -623,12 +627,22 @@
   <local:StaticThemeResource x:Key="SfDatePickerNormalColumnDividerColor" ResourceKey="Border" />
   <local:StaticThemeResource x:Key="SfDatePickerNormalTextColor" ResourceKey="ContentForeground" />
   <local:StaticThemeResource x:Key="SfDatePickerDisabledTextColor" ResourceKey="ForegroundDisabled" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalCloseButtonStroke" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfDatePickerHoverCloseButtonBackground" ResourceKey="IconBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfDatePickerPressedCloseButtonBackground" ResourceKey="IconBackgroundPressed" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalDayColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalMonthColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDatePickerNormalYearColumnTextColor" ResourceKey="ContentForeground" />
   <sys:Double x:Key="SfDatePickerNormalHeaderFontSize">16</sys:Double>
   <sys:Double x:Key="SfDatePickerNormalFooterFontSize">14</sys:Double>
   <sys:Double x:Key="SfDatePickerNormalColumnHeaderFontSize">14</sys:Double>
   <sys:Double x:Key="SfDatePickerSelectedFontSize">16</sys:Double>
   <sys:Double x:Key="SfDatePickerNormalFontSize">16</sys:Double>
   <sys:Double x:Key="SfDatePickerSelectionCornerRadius">20</sys:Double>
+  <sys:Double x:Key="SfDatePickerNormalCloseButtonStrokeThickness">1</sys:Double>
+  <sys:Double x:Key="SfDatePickerNormalDayColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDatePickerNormalMonthColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDatePickerNormalYearColumnFontSize">16</sys:Double>
 
   <!--SfTimePicker-->
   <x:String x:Key="SfTimePickerTheme">CommonTheme</x:String>
@@ -649,12 +663,26 @@
   <local:StaticThemeResource x:Key="SfTimePickerNormalColumnDividerColor" ResourceKey="Border" />
   <local:StaticThemeResource x:Key="SfTimePickerNormalTextColor" ResourceKey="ContentForeground" />
   <local:StaticThemeResource x:Key="SfTimePickerDisabledTextColor" ResourceKey="ForegroundDisabled" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalCloseButtonStroke" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfTimePickerHoverCloseButtonBackground" ResourceKey="IconBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfTimePickerPressedCloseButtonBackground" ResourceKey="IconBackgroundPressed" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalHourColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalMinuteColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalSecondColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalMeridiemColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfTimePickerNormalMilliSecondColumnTextColor" ResourceKey="ContentForeground" />
   <sys:Double x:Key="SfTimePickerNormalHeaderFontSize">16</sys:Double>
   <sys:Double x:Key="SfTimePickerNormalFooterFontSize">14</sys:Double>
   <sys:Double x:Key="SfTimePickerNormalColumnHeaderFontSize">14</sys:Double>
   <sys:Double x:Key="SfTimePickerSelectedFontSize">16</sys:Double>
   <sys:Double x:Key="SfTimePickerNormalFontSize">16</sys:Double>
   <sys:Double x:Key="SfTimePickerSelectionCornerRadius">20</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalCloseButtonStrokeThickness">1</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalHourColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalMinuteColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalSecondColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalMeridiemColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfTimePickerNormalMilliSecondColumnFontSize">16</sys:Double>
 
   <!--SfDateTimePicker-->
   <x:String x:Key="SfDateTimePickerTheme">CommonTheme</x:String>
@@ -676,6 +704,17 @@
   <local:StaticThemeResource x:Key="SfDateTimePickerNormalColumnDividerColor" ResourceKey="Border" />
   <local:StaticThemeResource x:Key="SfDateTimePickerNormalTextColor" ResourceKey="ContentForeground" />
   <local:StaticThemeResource x:Key="SfDateTimePickerDisabledTextColor" ResourceKey="ForegroundDisabled" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalCloseButtonStroke" ResourceKey="IconColor" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerHoverCloseButtonBackground" ResourceKey="IconBackgroundHovered" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerPressedCloseButtonBackground" ResourceKey="IconBackgroundPressed" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalDayColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalMonthColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalYearColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalHourColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalMinuteColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalSecondColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalMeridiemColumnTextColor" ResourceKey="ContentForeground" />
+  <local:StaticThemeResource x:Key="SfDateTimePickerNormalMilliSecondColumnTextColor" ResourceKey="ContentForeground" />
   <sys:Double x:Key="SfDateTimePickerNormalHeaderFontSize">14</sys:Double>
   <sys:Double x:Key="SfDateTimePickerHeaderSelectionFontSize">14</sys:Double>
   <sys:Double x:Key="SfDateTimePickerNormalFooterFontSize">14</sys:Double>
@@ -683,6 +722,15 @@
   <sys:Double x:Key="SfDateTimePickerSelectedFontSize">16</sys:Double>
   <sys:Double x:Key="SfDateTimePickerNormalFontSize">16</sys:Double>
   <sys:Double x:Key="SfDateTimePickerSelectionCornerRadius">20</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalCloseButtonStrokeThickness">1</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalDayColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalMonthColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalYearColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalHourColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalMinuteColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalSecondColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalMeridiemColumnFontSize">16</sys:Double>
+  <sys:Double x:Key="SfDateTimePickerNormalMilliSecondColumnFontSize">16</sys:Double>
   
   <!--SfSparkChart-->
   <local:StaticThemeResource x:Key="SfSparkChartTrackballLineStroke" ResourceKey="ContentForegroundAlt1" />
@@ -692,4 +740,16 @@
   <local:StaticThemeResource x:Key="SfSparkChartTrackballMarkerFill" ResourceKey="ContentForegroundAlt1" />
   <sys:Double x:Key="SfSparkChartTrackballLabelTextFontSize">12</sys:Double>
 
+ <!--SfInteractiveViewer-->
+  <x:String x:Key="SfInteractiveViewerTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfInteractiveViewerBackground" ResourceKey="ContentBackgroundAlt3" /> <!--SfGridSplitter-->
+  <x:String x:Key="SfGridSplitterTheme">CommonTheme</x:String>
+  <local:StaticThemeResource x:Key="SfGridSplitterSeparatorBackground" ResourceKey="Border" />
+  <local:StaticThemeResource x:Key="SfGridSplitterResizeIconColor" ResourceKey="ContentForegroundAlt1" />
+  <local:StaticThemeResource x:Key="SfGridSplitterSeparatorHoverBackground" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfGridSplitterResizeIconHoverColor" ResourceKey="PrimaryForeground" />
+  <local:StaticThemeResource x:Key="SfGridSplitterExpandCollapseIconColor" ResourceKey="PrimaryBackground" />
+  <local:StaticThemeResource x:Key="SfGridSplitterExpandCollapseButtonFill" ResourceKey="ContentBackgroundAlt1" />
+  <local:StaticThemeResource x:Key="SfGridSplitterPaneBorderColor" ResourceKey="Border" />
+  <sys:Double x:Key="SfGridSplitterPaneBorderStrokeSize">1</sys:Double>
 </local:SyncfusionThemeDictionary>
