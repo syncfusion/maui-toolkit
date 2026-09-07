@@ -19,14 +19,14 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         {
             InitializeComponent();
 #if ANDROID || IOS
-            alarmEditPicker1.HeaderView.Height = 40;
+            alarmEditPicker1.HeaderView.Height = 50;
             alarmEditPicker1.HeaderView.Text = "Edit Alarm";
-            alarmEditPicker1.FooterView.Height = 40;
+            alarmEditPicker1.FooterView.Height = 50;
             alarmEditPicker1.FooterView.OkButtonText = "Save";
 #else
-            alarmEditPicker.HeaderView.Height = 40;
+            alarmEditPicker.HeaderView.Height = 50;
             alarmEditPicker.HeaderView.Text = "Edit Alarm";
-            alarmEditPicker.FooterView.Height = 40;
+            alarmEditPicker.FooterView.Height = 50;
             alarmEditPicker.FooterView.OkButtonText = "Save";
 #endif
         }

@@ -69,6 +69,12 @@
 	/// </example>
 	public partial class PolarAreaSeries : PolarSeries
 	{
+		#region Internal Property
+
+		internal override bool IsColorPathSeries => false;
+
+		#endregion
+
 		#region Bindable Property
 
 		/// <summary>

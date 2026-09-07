@@ -10,14 +10,19 @@
 		private readonly int _noOfTapCounts;
 		private readonly Point _tapPoint;
 
-		#endregion
+        /// <summary>
+        /// The position relative to the content origin.
+        /// </summary>
+        private readonly Point _contentPosition;
 
-		#region Properties
+        #endregion
 
-		/// <summary>
-		/// Gets the point where the tap occurred.
-		/// </summary>
-		public Point TapPoint
+        #region Properties
+
+        /// <summary>
+        /// Gets the point where the tap occurred.
+        /// </summary>
+        public Point TapPoint
 		{
 			get
 			{
@@ -35,6 +40,7 @@
 				return _noOfTapCounts;
 			}
 		}
+
 		#endregion
 
 		#region Constructor
@@ -49,6 +55,19 @@
 			_tapPoint = touchPoint;
 			_noOfTapCounts = tapCount;
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TapEventArgs"/> class.
+        /// </summary>
+        /// <param name="touchPoint">The location where the tap occurred.</param>
+        /// <param name="tapCount">The number of consecutive taps detected.</param>
+        /// <param name="contentPosition">The position relative to the content origin.</param>
+        public TapEventArgs(Point touchPoint, int tapCount, Point contentPosition)
+        {
+            _tapPoint = touchPoint;
+            _noOfTapCounts = tapCount;
+            _contentPosition = contentPosition;
+        }
 
 		#endregion
 

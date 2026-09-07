@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Data;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -179,7 +181,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			typeof(bool),
 			typeof(ChartSeries),
 			true,
-			BindingMode.Default,
+			BindingMode.TwoWay,
 			null,
 			OnVisiblePropertyChanged);
 
@@ -332,6 +334,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			BindingMode.Default,
 			null,
 			OnLabelTemplateChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="PointColorPath"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty PointColorPathProperty =
+			BindableProperty.Create(nameof(PointColorPath), typeof(string), typeof(ChartSeries), null, BindingMode.Default, null, OnPointColorPathChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="ListenPropertyChange"/> bindable property.
@@ -1136,6 +1144,52 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		/// <summary>
+		/// Gets or sets a path value on the source object to serve a brush value to the series for each data point.
+		/// </summary>
+		/// <value>
+		/// The string that represents the property name for the color to apply per segment, and its default value is null.
+		/// </value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-3)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///
+		///          <chart:ColumnSeries ItemsSource="{Binding Data}"
+		///                            XBindingPath="XValue"
+		///                            YBindingPath="YValue"
+		///                            PointColorPath="PointColor"/>
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-4)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     ViewModel viewModel = new ViewModel();
+		///
+		///     // Eliminated for simplicity
+		///
+		///     ColumnSeries columnSeries = new ColumnSeries()
+		///     {
+		///           ItemsSource = viewModel.Data,
+		///           XBindingPath = "XValue",
+		///           YBindingPath = "YValue",
+		///           PointColorPath = "PointColor"
+		///     };
+		///     
+		///     chart.Series.Add(columnSeries);
+		///
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public string PointColorPath
+		{
+			get { return (string)GetValue(PointColorPathProperty); }
+			set { SetValue(PointColorPathProperty, value); }
+		}
+
+		/// <summary>
 		/// Gets or sets a value indicating whether the chart series should listen for changes in properties.
 		/// </summary>
 		/// <value>A boolean value that specifies if property change events should be listened to. The default value is <c>false</c>.</value>
@@ -1458,6 +1512,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 
 				UpdateDataLabelAppearance(canvas, segment, dataLabelSettings, labelStyle);
+
+				// Record hit detection region for this data label
+				if (Chart?.Area is CartesianChartArea && segment.LabelBounds != RectF.Zero)
+				{
+					// Get the corresponding data item from ItemsSource
+					object? dataItem = null;
+					if (ItemsSource is IList itemsList && segment.Index >= 0 && segment.Index < itemsList.Count)
+					{
+						dataItem = itemsList[segment.Index];
+					}
+				}
 			}
 		}
 
@@ -1659,6 +1724,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 		}
 
+		internal virtual bool UpdateSeriesSelection(float pointX, float pointY)
+		{
+			RectF bounds = AreaBounds;
+			foreach (var segment in _segments)
+			{
+				if (segment.HitTest(pointX - bounds.Left, pointY - bounds.Top))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		internal virtual void UpdateLegendIconColor()
 		{
 		}
@@ -1687,10 +1766,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			Brush? fillColor;
 
-			// Chart selection check. 
+			var isLegendItem = item is LegendItem && !IsDataLevelLegendSeries;
+
+			// Chart-level selection brush overrides everything
 			fillColor = Chart?.GetSelectionBrush(this);
 
-			//Series selection behavior check.
+			// Series-level selection behavior can override normal coloring
 			fillColor ??= GetSelectionBrush(item, index);
 
 			if (fillColor == null)
@@ -1699,9 +1780,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					fillColor = Fill;
 				}
-				else if (_paletteColors != null)
+				else if (IsColorPathSeries && PointColorValues.Count > 0) //Point color path check.
 				{
-					fillColor = _paletteColors.Count > 0 ? _paletteColors[index % _paletteColors.Count] : new SolidColorBrush(Colors.Transparent);
+					fillColor = isLegendItem ? PointColorValues[0] : PointColorValues[index];
+				}
+
+				if (fillColor == null && _paletteColors != null)
+				{
+					fillColor = _paletteColors.Count > 0 ? isLegendItem ? _paletteColors[0] : _paletteColors[index % _paletteColors.Count] : new SolidColorBrush(Colors.Transparent);
 				}
 			}
 
@@ -1745,15 +1831,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// ChartTooltipBehavior Background with AppThemeBinding · Issue #159 · syncfusion/maui-toolkit
 		/// Resolved the issue where tooltip background doesn't update dynamically by changing the theme when using AppThemeBinding.
 		/// </summary>
-		internal void UpdateTooltipAppearance(TooltipInfo info, ChartTooltipBehavior tooltipBehavior)
+		internal void UpdateTooltipAppearance(TooltipInfo info, ChartTooltipBehavior tooltipBehavior, object dataPoint, int index)
 		{
 			if (Chart is ChartBase chart)
 			{
-				info.Background = tooltipBehavior.Background ?? chart.TooltipBackground ?? new SolidColorBrush(Color.FromArgb("#1C1B1F"));
-				info.TextColor = tooltipBehavior.TextColor ?? chart.TooltipTextColor ?? Color.FromArgb("#F4EFF4");
-				info.FontSize = !float.IsNaN(tooltipBehavior.FontSize) ? tooltipBehavior.FontSize : !float.IsNaN((float)chart.TooltipFontSize) ? (float)chart.TooltipFontSize : 14.0f;
+				info.Background = tooltipBehavior.GetTooltipBackground(GetFillColor(dataPoint, index), tooltipBehavior.GetChartBaseTooltipBackground());
+				info.TextColor = tooltipBehavior.GetTooltipTextColor();
+				info.FontSize = tooltipBehavior.GetTooltipFontSize();
 			}
-		}	
+		}
 
 		internal virtual void InitiateDataLabels(ChartSegment segment)
 		{
@@ -2041,11 +2127,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (newValue is DataPointSelectionBehavior selection)
 				{
 					selection.Source = series;
+					selection.Parent = series;
 					SetInheritedBindingContext(selection, series.BindingContext);
+					selection.SelectionIndexChanged(oldValue is DataPointSelectionBehavior old ? old.SelectedIndex : -1, selection.SelectedIndex);
+					selection.InitializeDynamicResource(selection);
 				}
 
 				if (oldValue is DataPointSelectionBehavior oldSelection)
 				{
+					if (newValue == null)
+					{
+						oldSelection.ClearSelection();
+					}
+
+					oldSelection.Source = null;
+					oldSelection.Parent = null;
 					SetInheritedBindingContext(oldSelection, null);
 				}
 			}
@@ -2247,6 +2343,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (sender != null)
 			{
 				PaletteColorsChanged();
+			}
+		}
+
+		static void OnPointColorPathChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			var chartSeries = bindable as ChartSeries;
+
+			if (chartSeries != null)
+			{
+				if (newValue != null && newValue is string)
+				{
+					chartSeries.ColorComplexPaths = ((string)newValue).Split(new char[] { '.' });
+				}
+
+				chartSeries.OnBindingPathChanged();
 			}
 		}
 

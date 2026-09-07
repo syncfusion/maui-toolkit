@@ -20,12 +20,13 @@
 
             <chart:SfPolarChart.Resources>
                 <ResourceDictionary>
+                    <local:TooltipValueConverter x:Key="tooltipValueConverter"/>
                     <DataTemplate x:Key="tooltipTemplate1">
                         <StackLayout Orientation="Horizontal">
                             <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series6Light}, Dark={StaticResource series6Dark}}"/>
-                            <StackLayout Orientation="Vertical">
-                                <Label Text="{Binding Item.Category}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="15" Padding="5,0,0,0" FontAttributes="Bold"/>
-                                <Label Text="{Binding Item.Value1,StringFormat='Budget : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0" Margin="0,2,0,0"/>
+                            <StackLayout Orientation="Vertical" x:DataType="chart:TooltipInfo">
+                                <Label Text="{Binding Item, Converter={StaticResource tooltipValueConverter}, ConverterParameter='Category'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="15" Padding="5,0,0,0" FontAttributes="Bold"/>
+                                <Label Text="{Binding Item, Converter={StaticResource tooltipValueConverter}, ConverterParameter='Value1',StringFormat='Budget : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0" Margin="0,2,0,0"/>
                             </StackLayout>
                         </StackLayout>
                     </DataTemplate>
@@ -33,9 +34,9 @@
                     <DataTemplate x:Key="tooltipTemplate2">
                         <StackLayout Orientation="Horizontal">
                             <Rectangle HeightRequest="35" WidthRequest="8" Fill="{AppThemeBinding Default={StaticResource series2Light}, Dark={StaticResource series2Dark}}"/>
-                            <StackLayout Orientation="Vertical">
-                                <Label Text="{Binding Item.Category}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="15" Padding="5,0,0,0" FontAttributes="Bold"/>
-                                <Label Text="{Binding Item.Value2,StringFormat='Expenditure : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0" Margin="0,2,0,0"/>
+                            <StackLayout Orientation="Vertical" x:DataType="chart:TooltipInfo" >
+                                <Label Text="{Binding Item, Converter={StaticResource tooltipValueConverter}, ConverterParameter='Category'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="15" Padding="5,0,0,0" FontAttributes="Bold"/>
+                                <Label Text="{Binding Item, Converter={StaticResource tooltipValueConverter}, ConverterParameter='Value2', StringFormat='Expenditure : {0}%'}" TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontSize="13" Padding="5,0,0,0" Margin="0,2,0,0"/>
                             </StackLayout>
                         </StackLayout>
                     </DataTemplate>

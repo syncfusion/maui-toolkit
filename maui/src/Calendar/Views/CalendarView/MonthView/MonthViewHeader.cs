@@ -257,8 +257,11 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 index = index + 7;
             }
 
-            tappedDate = _visibleDates[index];
-            _calendarInfo.TriggerCalendarInteractionEvent(isTapped, tapCount, tappedDate, CalendarElement.ViewHeader);
+            if (index >= 0 && index < _visibleDates.Count)
+            {
+                tappedDate = _visibleDates[index];
+                _calendarInfo.TriggerCalendarInteractionEvent(isTapped, tapCount, tappedDate, CalendarElement.ViewHeader);
+            }
         }
 
         /// <summary>

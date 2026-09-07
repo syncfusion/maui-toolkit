@@ -110,10 +110,10 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 
 			// Disable TextBlock auto-scaling to avoid applying the scale factor twice.
 			_textBlock!.IsTextScaleFactorEnabled = false;
-
+			
 			if (textElement.FontAutoScalingEnabled)
 			{
-				_textBlock.FontSize = fontSize * fontScale;
+				_textBlock!.FontSize = fontSize * fontScale;
 			}
 			else
 			{

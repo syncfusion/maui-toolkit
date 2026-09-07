@@ -77,7 +77,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Internal Properties
 
 		internal double ToleranceCoefficient { get; set; }
-		internal override bool IsFillEmptyPoint { get { return false; } } 
+
+		internal override bool IsColorPathSeries => false;
 
 		#endregion
 
@@ -360,6 +361,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		/// <inheritdoc />
 		internal override void GenerateSegments(SeriesView seriesView)
 		{
 			var xValues = GetXValues();
@@ -368,9 +370,45 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return;
 			}
 
+			// Gap mode: EmptyPointMode.None with NaN Y-values present → split into per-run segments.
+			if (EmptyPointMode == EmptyPointMode.None && YValues != null && ContainsNaN(YValues))
+			{
+				// Return any existing segments to the pool before rebuilding.
+				for (int i = 0; i < _segments.Count; i++)
+				{
+					if (_segments[i] is FastLineSegment old)
+					{
+						FastLineSegmentPool.Return(old);
+					}
+				}
+
+				_segments.Clear();
+
+				var runs = GetValidRuns(YValues);
+				foreach (var (start, end) in runs)
+				{
+					var segment = FastLineSegmentPool.Rent();
+					segment.Series = this;
+					segment.SeriesView = seriesView;
+					segment.Item = ActualData;
+					segment.SetData(xValues, YValues, start, end);
+					InitiateDataLabels(segment);
+					_segments.Add(segment);
+				}
+
+				return;
+			}
+
+			if (YValues == null)
+			{
+				return;
+			}
+
+			// Zero / Average / no-NaN path: single segment (original behavior).
 			if (_segments.Count == 0)
 			{
-				if (CreateSegment() is FastLineSegment segment)
+				var segment = CreateSegment() as FastLineSegment;
+				if (segment != null)
 				{
 					segment.Series = this;
 					segment.SeriesView = seriesView;
@@ -393,6 +431,56 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 		}
+
+		/// <summary>
+		/// Returns the contiguous index ranges of valid (non-NaN) Y-values.
+		/// Consecutive NaN values collapse into a single gap — no zero-length runs are produced.
+		/// </summary>
+		internal static List<(int Start, int End)> GetValidRuns(IList<double> yValues)
+		{
+			var runs = new List<(int, int)>();
+			int count = yValues.Count;
+			int i = 0;
+
+			while (i < count)
+			{
+				// Skip NaN values.
+				if (double.IsNaN(yValues[i]))
+				{
+					i++;
+					continue;
+				}
+
+				// Found a valid value — find the end of this run.
+				int start = i;
+				while (i < count && !double.IsNaN(yValues[i]))
+				{
+					i++;
+				}
+
+				runs.Add((start, i - 1));
+			}
+
+			return runs;
+		}
+
+		/// <summary>
+		/// Returns true when the collection contains at least one NaN value.
+		/// Used to decide whether Gap-mode splitting is needed.
+		/// </summary>
+		private static bool ContainsNaN(IList<double> yValues)
+		{
+			for (int i = 0; i < yValues.Count; i++)
+			{
+				if (double.IsNaN(yValues[i]))
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 
 		internal override bool IsIndividualSegment()
 		{
@@ -495,6 +583,43 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				InitiateDataLabels(segment);
 				segment.OnDataLabelLayout();
+			}
+		}
+
+		#endregion
+
+		#region Nested Types
+
+		/// <summary>
+		/// A lightweight object pool that recycles <see cref="FastLineSegment"/> instances across
+		/// <see cref="GenerateSegments"/> calls, reducing GC pressure when Gap-mode splitting is active.
+		/// </summary>
+		internal static class FastLineSegmentPool
+		{
+			private static readonly Stack<FastLineSegment> _pool = new Stack<FastLineSegment>();
+
+			/// <summary>
+			/// Returns a <see cref="FastLineSegment"/> from the pool (or allocates a new one).
+			/// </summary>
+			internal static FastLineSegment Rent()
+			{
+				if (_pool.Count > 0)
+				{
+					var segment = _pool.Pop();
+					segment.Reset();
+					return segment;
+				}
+
+				return new FastLineSegment();
+			}
+
+			/// <summary>
+			/// Returns a used <see cref="FastLineSegment"/> to the pool for later reuse.
+			/// </summary>
+			internal static void Return(FastLineSegment segment)
+			{
+				segment.Reset();
+				_pool.Push(segment);
 			}
 		}
 

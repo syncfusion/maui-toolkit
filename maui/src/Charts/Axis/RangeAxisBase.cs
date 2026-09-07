@@ -50,6 +50,12 @@
 				}
 			}
 		}
+
+		internal bool IsNeedLastLabel()
+		{
+			return VisibleRange.Delta % ActualInterval != 0;
+		}
+
 		#endregion
 	}
 }

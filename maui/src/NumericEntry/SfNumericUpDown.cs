@@ -72,16 +72,6 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		Point _touchPoint;
 
 		/// <summary>
-		/// Size of the up/down buttons in pixels.
-		/// </summary>
-		const int UpDownButtonSize = 28;
-
-		/// <summary>
-		/// Represents the size of the up/down button when placed vertically.
-		/// </summary>
-		const int VerticalUpDownButtonSize = 24;
-
-		/// <summary>
 		/// Padding around the buttons in pixels.
 		/// </summary>
 		const int ButtonPadding = 2;
@@ -264,6 +254,19 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				Color.FromArgb("#611c1b1f"),
 				BindingMode.Default,
 				propertyChanged: OnUpDownButtonColorPropertyChanged);
+
+		/// <summary>
+		/// Identifies <see cref="UpDownButtonSize"/> dependency property.
+		/// </summary>
+		/// <value>The identifier for the <see cref="UpDownButtonSize"/> bindable property.</value>
+		public static readonly BindableProperty UpDownButtonSizeProperty =
+			BindableProperty.Create(
+				nameof(UpDownButtonSize),
+				typeof(double),
+				typeof(SfNumericUpDown),
+				28d,
+				BindingMode.Default,
+				propertyChanged: OnUpDownButtonSizeChanged);
 
 		#endregion
 
@@ -559,6 +562,37 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			set { SetValue(UpDownButtonDisableColorProperty, value); }
 		}
 
+		/// <summary>
+		/// Gets or sets the size of the up-down buttons size in the <see cref="SfNumericUpDown"/> control.
+		/// </summary>
+		/// <value> The default value is 28d. </value>
+		/// <example>
+		/// Below is an example of how to configure the <see cref="UpDownButtonSize"/> property using XAML and C#:
+		///
+		/// # [XAML](#tab/tabid-1)
+		/// <code Lang="XAML"><![CDATA[
+		/// <numericUpDown:SfNumericUpDown
+		///     x:Name="numericUpDown"
+		///     UpDownPlacementMode="Inline"
+		///     UpDownButtonSize="20" />
+		/// ]]></code>
+		///
+		/// # [C#](#tab/tabid-2)
+		/// <code Lang="C#"><![CDATA[
+		/// SfNumericUpDown numericUpDown = new SfNumericUpDown();
+		/// numericUpDown.UpDownButtonSize = 20;
+		/// numericUpDown.UpDownPlacementMode = NumericUpDownPlacementMode.Inline;
+		/// this.Content = numericUpDown;
+		/// ]]></code>
+		///
+		/// ***
+		/// </example>
+		public double UpDownButtonSize
+		{
+			get { return (double)GetValue(UpDownButtonSizeProperty); }
+			set { SetValue(UpDownButtonSizeProperty, value); }
+		}
+
 		#endregion
 
 		#region Property Changed
@@ -649,6 +683,21 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			}
 		}
 
+		/// <summary>
+		/// Invoked whenever the <see cref="UpDownButtonSizeProperty"/> is set.
+		/// </summary>
+		/// <param name="bindable">The bindable.</param>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		static void OnUpDownButtonSizeChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfNumericUpDown numericUpDown)
+			{
+				SfNumericUpDown.UpdateSpinButtonPlacement(numericUpDown);
+				numericUpDown.InvalidateDrawable();
+			}
+		}
+
 		#endregion
 
 		#region Private Methods
@@ -731,6 +780,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			}
 
 			float xPosition;
+			float buttonSlotSize = GetUpDownButtonSize();
 
 			if (UpDownPlacementMode == NumericUpDownPlacementMode.InlineVertical)
 			{
@@ -743,7 +793,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				xPosition = IsRTL()
 					? (UpDownPlacementMode == NumericUpDownPlacementMode.Inline ? UpDownButtonAlignment == UpDownButtonAlignment.Left
 												? _tempUpDownX :
-												_tempUpDownX - ButtonSize : _tempUpDownX)
+												_tempUpDownX - buttonSlotSize : _tempUpDownX)
 					: _downButtonRectF.X;
 
 				if (UpDownButtonAlignment==UpDownButtonAlignment.Both && IsRTL())
@@ -766,13 +816,14 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			}
 
 			float xPosition;
+			float buttonSlotSize = GetUpDownButtonSize();
 
 			if (IsInlineVerticalPlacement())
 			{
 				_downButtonView.Measure(_downButtonRectF.Width, _downButtonRectF.Height);
 
 				xPosition = IsRTL()
-					? (IsInlinePlacement() ? _tempUpDownX - ButtonSize : _tempUpDownX)
+					? (IsInlinePlacement() ? _tempUpDownX - buttonSlotSize : _tempUpDownX)
 					: _downButtonRectF.X;
 
 				AbsoluteLayout.SetLayoutBounds(_downButtonView, new RectF(xPosition, _downButtonRectF.Y, _downButtonRectF.Width, _downButtonRectF.Height));
@@ -782,7 +833,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				_downButtonView.Measure(_upButtonRectF.Width, _upButtonRectF.Height);
 
 				xPosition = IsRTL() ? UpDownButtonAlignment == UpDownButtonAlignment.Left
-												? _tempUpDownX + ButtonSize : _tempUpDownX : _upButtonRectF.X;
+												? _tempUpDownX + buttonSlotSize : _tempUpDownX : _upButtonRectF.X;
 				AbsoluteLayout.SetLayoutBounds(_downButtonView, new RectF(xPosition, _upButtonRectF.Y, _upButtonRectF.Width, _upButtonRectF.Height));
 			}
 		}
@@ -920,9 +971,17 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		{
 			if (_textBox != null)
 			{
-				_textBox.ButtonSize = ButtonSize + 4;
+				_textBox.ButtonSize = GetUpDownButtonSize() + 4;
 				_textBox.Margin = GetMarginBasedOnTextAlignment(_leftMargin, 0, _rightMargin, 0);
 			}
+		}
+
+		/// <summary>
+		/// Gets the effective up/down button size used for layout, measure, and margin calculations
+		/// </summary>
+		double GetEffectiveButtonSize()
+		{
+			return GetUpDownButtonSize();
 		}
 
 		/// <summary>
@@ -941,11 +1000,11 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <returns>The size of the up/down button, depending on whether it is placed inline vertically.</returns>
 		float GetUpDownButtonSize()
 		{
-			if(_upButtonView != null && _downButtonView != null && IsInlineVerticalPlacement())
+			if(IsInlineVerticalPlacement())
 			{
-				return VerticalUpDownButtonSize;
+				return (float)UpDownButtonSize;
 			}
-			return UpDownButtonSize;
+			return (float)UpDownButtonSize;
 		}
 
 		/// <summary>
@@ -954,7 +1013,8 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <param name="bounds">The bounding rectangle that defines the available space for button placement.</param>
 		void ConfigureVerticalButtonPositions(RectF bounds)
 		{
-			float xOffset = bounds.X + bounds.Width - GetUpDownButtonSize() - ButtonPadding;
+			float buttonSize = GetUpDownButtonSize();
+			float xOffset = bounds.X + bounds.Width - buttonSize - ButtonPadding;
 #if ANDROID
     xOffset -= 4;
 #endif
@@ -983,16 +1043,16 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			}
 			if (_upButtonView == null || _downButtonView == null)
 			{
-				_upButtonRectF.Y = bounds.Center.Y - (UpDownButtonSize * 0.75f) - ButtonPadding;
-				_downButtonRectF.Y = bounds.Center.Y - (UpDownButtonSize * 0.25f) + ButtonPadding;
+				_upButtonRectF.Y = (float)(bounds.Center.Y - (buttonSize * 0.75f) - ButtonPadding);
+				_downButtonRectF.Y = (float)(bounds.Center.Y - (buttonSize * 0.25f) + ButtonPadding);
 			}
 			else
 			{
-				_upButtonRectF.Y = bounds.Center.Y - GetUpDownButtonSize()-ButtonPadding;
+				_upButtonRectF.Y = bounds.Center.Y - buttonSize - ButtonPadding;
 				_downButtonRectF.Y = _upButtonRectF.Bottom;
 			}
 
-			UpdateButtonSize(GetUpDownButtonSize());
+			UpdateButtonSize(buttonSize);
 		}
 
 		/// <summary>
@@ -1001,20 +1061,21 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 		/// <param name="bounds">The bounding rectangle that defines the available space for button placement.</param>
 		void ConfigureInlineButtonPositions(RectF bounds)
 		{
-			float xOffset = bounds.X + bounds.Width - ButtonSize;
+			float buttonSize= GetUpDownButtonSize();
+			float xOffset = bounds.X + bounds.Width - buttonSize;
 #if ANDROID
     xOffset -= 4;
 #endif
 
 			_upButtonRectF.X = IsRTL() ? 4 : xOffset;
-			_downButtonRectF.X = IsRTL() ? _upButtonRectF.X + ButtonSize : _upButtonRectF.X - ButtonSize;
-			_upButtonRectF.Y = _downButtonRectF.Y = bounds.Center.Y - (ButtonSize / 2);
+			_downButtonRectF.X = IsRTL() ? _upButtonRectF.X + buttonSize : _upButtonRectF.X - buttonSize;
+			_upButtonRectF.Y = _downButtonRectF.Y = bounds.Center.Y - (buttonSize / 2);
 
 			switch (UpDownButtonAlignment)
 			{
 				case UpDownButtonAlignment.Left:
 					_downButtonRectF.X = IsRTL() ? xOffset : 4;
-					_upButtonRectF.X = IsRTL() ? _downButtonRectF.X - ButtonSize : _downButtonRectF.X + ButtonSize;
+					_upButtonRectF.X = IsRTL() ? _downButtonRectF.X - buttonSize : _downButtonRectF.X + buttonSize;
 					if (IsRTL())
 					{
 						_tempUpDownX = 4 ;
@@ -1022,7 +1083,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 					break;
 				case UpDownButtonAlignment.Right:
 					_upButtonRectF.X = IsRTL() ? 4 : xOffset;
-					_downButtonRectF.X = IsRTL() ? _upButtonRectF.X + ButtonSize : _upButtonRectF.X - ButtonSize;
+					_downButtonRectF.X = IsRTL() ? _upButtonRectF.X + buttonSize : _upButtonRectF.X - buttonSize;
 					if (IsRTL())
 					{
 						_tempUpDownX = xOffset;
@@ -1038,7 +1099,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 					break;
 			}
 			
-			UpdateButtonSize(GetUpDownButtonSize());
+			UpdateButtonSize(buttonSize);
 		}
 
 		/// <summary>
@@ -1198,10 +1259,14 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				measure = _textBox.Measure(widthConstraint, heightConstraint);
 			}
 
+			// Use the effective up/down button size so the control reserves space
+			// for the customized button size, not the default ButtonSize constant.
+			double buttonSpace = GetEffectiveButtonSize();
+
 			// Adjust width for inline button placement
 			if (UpDownPlacementMode == NumericUpDownPlacementMode.Inline)
 			{
-				measure.Width += 2 * ButtonSize;
+				measure.Width += 2 * buttonSpace;
 			}
 
 			// Calculate measured width considering constraints
@@ -1213,7 +1278,7 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			// Ensure minimum height if EntryVisibility is Collapsed
 			if (EntryVisibility == Visibility.Collapsed)
 			{
-				measuredHeight = Math.Max(measuredHeight, ButtonSize);
+				measuredHeight = Math.Max(measuredHeight, buttonSpace);
 			}
 
 			return new Size(measuredWidth, measuredHeight);
@@ -1226,13 +1291,14 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 				return;
 			}
 
+			double effectiveButtonSize = GetEffectiveButtonSize();
 			// Calculate minimum height based on placement mode
 			MinimumHeightRequest = UpDownPlacementMode == NumericUpDownPlacementMode.InlineVertical
 				? SfNumericUpDown.DetermineMinimumHeightForVerticalPlacement(this)
-				: SfNumericUpDown.DetermineMinimumHeightForInlinePlacement();
+				: SfNumericUpDown.DetermineMinimumHeightForInlinePlacement(this);
 
 			// Set minimum width request commonly for both placement modes
-			MinimumWidthRequest = 2 * ButtonSize;
+			MinimumWidthRequest = 2 * effectiveButtonSize;
 		}
 
 		static double DetermineMinimumHeightForVerticalPlacement(SfNumericUpDown numericUpDown)
@@ -1241,26 +1307,31 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			bool isVerticalTemplate = numericUpDown._upButtonView != null && numericUpDown._downButtonView != null;
 			if (!isVerticalTemplate)
 			{
+				// In InlineVertical placement, the default (non-template) buttons
+				// render at the effective size, so the minimum height must follow that
+				// value, not UpDownButtonSize.
+				double verticalButtonSize = numericUpDown.UpDownButtonSize;
 #if !ANDROID
-				return (2 * UpDownButtonSize) - (UpDownButtonSize / 3);
+				return (2 * verticalButtonSize) - (verticalButtonSize / 3);
 #else
-				return 2 * UpDownButtonSize;
+				return 2 * verticalButtonSize;
 #endif
 			}
 			else
 			{
 #if !ANDROID
-				return (2 * VerticalUpDownButtonSize) + ButtonPadding;
+				return (2 * numericUpDown.UpDownButtonSize) + ButtonPadding;
 #else
-				return (2 * VerticalUpDownButtonSize) + AndroidButtonHeightPadding + ButtonPadding;
+				return (2 * numericUpDown.UpDownButtonSize) + AndroidButtonHeightPadding + ButtonPadding;
 #endif
 			}
 		}
 
-		static double DetermineMinimumHeightForInlinePlacement()
+		static double DetermineMinimumHeightForInlinePlacement(SfNumericUpDown numericUpDown)
 		{
-			// For inline placement, return height based on button size
-			return ButtonSize;
+			// For inline placement, the height should follow the effective up/down
+			// button size so the control grows/shrinks when UpDownButtonSize changes.
+			return numericUpDown.UpDownButtonSize;
 		}
 
 		internal override void UpdateTextInputLayoutUI()
@@ -2022,16 +2093,19 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			{
 				return;
 			}
+			// Use the customized up/down button size for margin calculations so the
+			// text X position is reserved correctly when UpDownButtonSize changes.
+			double buttonSpace = GetEffectiveButtonSize();
 			if (UpDownPlacementMode == NumericUpDownPlacementMode.InlineVertical)
 			{
 				if (UpDownButtonAlignment == UpDownButtonAlignment.Left)
 				{
-					_leftMargin = ButtonSize;
+					_leftMargin = buttonSpace;
 					_rightMargin = 0;
 				}
 				else if (UpDownButtonAlignment == UpDownButtonAlignment.Right || UpDownButtonAlignment == UpDownButtonAlignment.Both)
 				{
-					_rightMargin = ButtonSize;
+					_rightMargin = buttonSpace;
 					_leftMargin = 0;
 				}
 			}
@@ -2039,18 +2113,18 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			{
 				if (UpDownButtonAlignment == UpDownButtonAlignment.Left)
 				{
-					_leftMargin = 2 * ButtonSize;
+					_leftMargin = 2 * buttonSpace;
 					_rightMargin = 0;
 				}
 				else if (UpDownButtonAlignment == UpDownButtonAlignment.Right)
 				{
-					_rightMargin = 2 * ButtonSize;
+					_rightMargin = 2 * buttonSpace;
 					_leftMargin = 0;
 				}
 				else
 				{
-					_leftMargin = ButtonSize;
-					_rightMargin = ButtonSize;
+					_leftMargin = buttonSpace;
+					_rightMargin = buttonSpace;
 				}
 			}
 			else
@@ -2101,19 +2175,21 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown
 			{
 				return;
 			}
+			
+			double buttonSpace = GetEffectiveButtonSize();
 			switch (UpDownButtonAlignment)
 			{
 				case UpDownButtonAlignment.Left:
-					_leftMargin = IsInlinePlacement() ? ButtonSize * 2 : ButtonSize;
-					_rightMargin = ButtonSize;
+					_leftMargin = IsInlinePlacement() ? buttonSpace * 2 : buttonSpace;
+					_rightMargin = buttonSpace;
 					break;
 				case UpDownButtonAlignment.Right:
-					_rightMargin = IsInlinePlacement() ? ButtonSize * 3 : ButtonSize * 2;
+					_rightMargin = IsInlinePlacement() ? buttonSpace * 3 : buttonSpace * 2;
 					_leftMargin = 0;
 					break;
 				case UpDownButtonAlignment.Both:
-					_leftMargin = IsInlinePlacement() ? ButtonSize : 0 ;
-					_rightMargin = ButtonSize *2;
+					_leftMargin = IsInlinePlacement() ? buttonSpace : 0 ;
+					_rightMargin = buttonSpace * 2;
 					break;
 			}
 		}

@@ -153,7 +153,7 @@ namespace Syncfusion.Maui.Toolkit.Charts.Chart.Layouts
 				{
 					labelFormat = axis.TrackballLabelStyle.LabelFormat;
 				}
-				else if (axis is DateTimeAxis)
+				else if (axis is DateTimeAxis || axis is DateTimeCategoryAxis)
 				{
 					labelFormat = "MM-dd-yyyy";
 				}
@@ -167,16 +167,16 @@ namespace Syncfusion.Maui.Toolkit.Charts.Chart.Layouts
 					_xValue = (float)clipRect.Left - axisRect.Left;
 				}
 
-				TrackballAxisInfo axisPointInfo1 = new TrackballAxisInfo(axis, new TooltipHelper(Drawable) { Duration = int.MaxValue }, GetAxisLabel(axis, chart.PointToValue(axis, startPoint.X + _xValue, startPoint.Y + _yValue), labelFormat), startPoint.X, startPoint.Y + (float)clipRect.Top);
-				TrackballAxisInfo axisPointInfo2 = new TrackballAxisInfo(axis, new TooltipHelper(Drawable) { Duration = int.MaxValue }, GetAxisLabel(axis, chart.PointToValue(axis, endPoint.X + _xValue, endPoint.Y + _yValue), labelFormat), endPoint.X, endPoint.Y + (float)clipRect.Top);
+				TrackballAxisInfo axisPointInfo1 = new TrackballAxisInfo(axis, new TooltipHelper(Drawable) { Duration = int.MaxValue }, TrackballAxisLabelHelper.GetAxisLabel(axis, chart.PointToValue(axis, startPoint.X + _xValue, startPoint.Y + _yValue), labelFormat), startPoint.X, startPoint.Y + (float)clipRect.Top);
+				TrackballAxisInfo axisPointInfo2 = new TrackballAxisInfo(axis, new TooltipHelper(Drawable) { Duration = int.MaxValue }, TrackballAxisLabelHelper.GetAxisLabel(axis, chart.PointToValue(axis, endPoint.X + _xValue, endPoint.Y + _yValue), labelFormat), endPoint.X, endPoint.Y + (float)clipRect.Top);
 
 				axisPointInfo1.Helper.Position = tooltipPosition;
 				axisPointInfo2.Helper.Position = tooltipPosition;
 
 				if (axis.TrackballLabelStyle != null)
 				{
-					ChartZoomPanView.MapChartLabelStyle(chart, axisPointInfo1.Helper, axis.TrackballLabelStyle);
-					ChartZoomPanView.MapChartLabelStyle(chart, axisPointInfo2.Helper, axis.TrackballLabelStyle);
+					TrackballAxisLabelHelper.MapChartLabelStyle(chart, axisPointInfo1.Helper, axis.TrackballLabelStyle);
+					TrackballAxisLabelHelper.MapChartLabelStyle(chart, axisPointInfo2.Helper, axis.TrackballLabelStyle);
 				}
 
 				Rect actualArrangeRect = new Rect(axisRect.X, axisRect.Y, axisRect.X + axisRect.Width, axisRect.Y + axisRect.Height);
@@ -186,59 +186,6 @@ namespace Syncfusion.Maui.Toolkit.Charts.Chart.Layouts
 
 				_axisPointInfos.Add(axisPointInfo1);
 				_axisPointInfos.Add(axisPointInfo2);
-			}
-		}
-
-		static string GetAxisLabel(ChartAxis axis, double value, string labelFormat)
-		{
-			if (axis is CategoryAxis categoryAxis)
-			{
-				var currSeries = categoryAxis.GetActualSeries();
-				if (currSeries != null)
-				{
-					int roundedValue = Math.Max(0, (int)Math.Round(value));
-					return categoryAxis.GetLabelContent(currSeries, roundedValue, labelFormat);
-				}
-			}
-			else if (axis is NumericalAxis)
-			{
-				return value.ToString(labelFormat);
-			}
-			else if (axis is LogarithmicAxis)
-			{
-				return ChartAxis.GetActualLabelContent(value, labelFormat).ToString();
-			}
-			else if (axis is DateTimeAxis datetimeAxis)
-			{
-				string format = labelFormat ?? ChartAxis.GetSpecificFormattedLabel(datetimeAxis.ActualIntervalType);
-				return ChartAxis.GetFormattedAxisLabel(format, value);
-			}
-
-			return ChartAxis.GetActualLabelContent(value, labelFormat);
-		}
-
-		static void MapChartLabelStyle(SfCartesianChart cartesianChart, TooltipHelper helper, ChartLabelStyle chartLabelStyle)
-		{
-			var background = chartLabelStyle.Background;
-			helper.FontAttributes = chartLabelStyle.FontAttributes;
-			helper.FontFamily = chartLabelStyle.FontFamily;
-			helper.FontSize = chartLabelStyle.FontSize;
-			helper.Padding = chartLabelStyle.Margin;
-			helper.Stroke = chartLabelStyle.Stroke;
-			helper.StrokeWidth = (float)chartLabelStyle.StrokeWidth;
-			helper.Background = chartLabelStyle.Background;
-			helper.Font = ((ITextElement)chartLabelStyle).Font;
-
-			if (!chartLabelStyle.IsTextColorUpdated)
-			{
-				var fontColor = background == default(Brush) || background.ToColor() == Colors.Transparent ?
-						cartesianChart.GetTextColorBasedOnChartBackground() :
-						ChartUtils.GetContrastColor((background as SolidColorBrush).ToColor());
-				helper.TextColor = fontColor;
-			}
-			else
-			{
-				helper.TextColor = chartLabelStyle.TextColor;
 			}
 		}
 

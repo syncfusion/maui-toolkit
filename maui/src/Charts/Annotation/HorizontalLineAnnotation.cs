@@ -324,7 +324,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			float marginLeft = (float)_axisLabelStyle.Margin.Left;
 			float marginRight = (float)_axisLabelStyle.Margin.Right;
 			string labelFormat = !string.IsNullOrEmpty(_axisLabelStyle.LabelFormat) ? _axisLabelStyle.LabelFormat : "##.##";
-			_labelText = Y1.ToString(labelFormat);
+			
+			if (yAxis is NumericalAxis numericalAxis)
+			{
+				_labelText = numericalAxis.GetFormatedAxisLabel(Y1, labelFormat);
+			}
+			else
+			{
+				_labelText = Y1.ToString(labelFormat);
+			}
+			
 			var labelSize = _axisLabelStyle.MeasureLabel(_labelText);
 			float x, y;
 

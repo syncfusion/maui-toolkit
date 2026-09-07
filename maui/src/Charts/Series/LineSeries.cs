@@ -477,32 +477,36 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					return false;
 				}
 
-				LineSegment? endSegment = null;
-				var seriesClipRect = AreaBounds;
-				point.X -= ((float)seriesClipRect.Left);
-				point.Y -= ((float)seriesClipRect.Top);
-
-
-				LineSegment? startSegment;
-				if (TooltipDataPointIndex == 0)
-				{
-					startSegment = _segments[TooltipDataPointIndex] as LineSegment;
-				}
-				else if (TooltipDataPointIndex == PointsCount - 1)
-				{
-					startSegment = _segments[TooltipDataPointIndex - 1] as LineSegment;
-				}
-				else
-				{
-					startSegment = _segments[TooltipDataPointIndex - 1] as LineSegment;
-					endSegment = _segments[TooltipDataPointIndex] as LineSegment;
-				}
-
-				return SegmentContains(startSegment, endSegment, point, this);
+				return IsSegmentContainsWithPoints(point, TooltipDataPointIndex);
 			}
 
 			return false;
 		}
+
+		internal virtual bool IsSegmentContainsWithPoints(PointF point, int index)
+		{
+			LineSegment? endSegment = null;
+			var seriesClipRect = AreaBounds;
+			point.X -= ((float)seriesClipRect.Left);
+			point.Y -= ((float)seriesClipRect.Top);
+
+			LineSegment? startSegment;
+			if (TooltipDataPointIndex == 0)
+			{
+				startSegment = _segments[TooltipDataPointIndex] as LineSegment;
+			}
+			else if (TooltipDataPointIndex == PointsCount - 1)
+			{
+				startSegment = _segments[TooltipDataPointIndex - 1] as LineSegment;
+			}
+			else
+			{
+				startSegment = _segments[TooltipDataPointIndex - 1] as LineSegment;
+				endSegment = _segments[TooltipDataPointIndex] as LineSegment;
+			}
+
+			return SegmentContains(startSegment, endSegment, point, this);
+		}				
 
 		internal virtual bool SegmentContains(ChartSegment? startSegment, ChartSegment? endSegment, PointF point, ChartSeries series)
 		{
@@ -517,6 +521,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return false;
+		}
+
+		internal override bool UpdateSeriesSelection(float pointX, float pointY)
+		{
+			return SeriesContainsPoint(new PointF(pointX, pointY));
 		}
 
 		internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior tooltipBehavior, float tooltipX, float tooltipY)

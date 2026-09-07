@@ -403,7 +403,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
         #region Fields
         internal readonly CartesianChartArea _chartArea;
         internal readonly ChartTrackballView _trackballView;
-        internal readonly ChartZoomPanView _zoomPanView;
+		internal readonly ChartCrosshairView _crosshairView;
+		internal readonly ChartZoomPanView _zoomPanView;
         internal readonly AnnotationLayout _annotationLayout;
 
 		readonly ObservableCollection<ChartAxis> _xAxes = [];
@@ -546,14 +547,29 @@ namespace Syncfusion.Maui.Toolkit.Charts
             null,
             OnTrackballBehaviorPropertyChanged);
 
-        /// <summary>
-        /// Identifies the <see cref="Annotations"/> bindable property.
-        /// </summary>
-        /// <remarks>
-        /// The identifier for the <see cref="Annotations"/> bindable property determines the 
-        /// collection of annotations in the chart.
-        /// </remarks>
-        public static readonly BindableProperty AnnotationsProperty = BindableProperty.Create(
+		/// <summary>
+		/// Identifies the <see cref="CrosshairBehavior"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="CrosshairBehavior"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty CrosshairBehaviorProperty = BindableProperty.Create(
+			nameof(CrosshairBehavior),
+			typeof(ChartCrosshairBehavior),
+			typeof(SfCartesianChart),
+			null,
+			BindingMode.Default,
+			null,
+			OnCrossHairBehaviorPropertyChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="Annotations"/> bindable property.
+		/// </summary>
+		/// <remarks>
+		/// The identifier for the <see cref="Annotations"/> bindable property determines the 
+		/// collection of annotations in the chart.
+		/// </remarks>
+		public static readonly BindableProperty AnnotationsProperty = BindableProperty.Create(
             nameof(Annotations),
             typeof(ChartAnnotationCollection),
             typeof(SfCartesianChart),
@@ -578,85 +594,85 @@ namespace Syncfusion.Maui.Toolkit.Charts
             null,
             OnAnnotationBehindSeries);
 
-        #endregion
+		#endregion
 
-        #region Public Properties
+		#region Public Properties
 
-        /// <summary>
-        /// Gets or sets a collection of chart series to be added in cartesian chart.
-        /// </summary>
-        /// <value>This property takes <see cref="ChartSeriesCollection"/> instance as value.</value>
-        /// <remarks><para>To render a series, create an instance of required series class, and add it to the <see cref="Series"/> collection.</para></remarks>
-        /// <example>
-        /// # [Xaml](#tab/tabid-14)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///        <chart:SfCartesianChart.BindingContext>
-        ///            <local:ViewModel/>
-        ///        </chart:SfCartesianChart.BindingContext>
-        ///
-        ///        <chart:SfCartesianChart.XAxes>
-        ///            <chart:NumericalAxis/>
-        ///        </chart:SfCartesianChart.XAxes>
-        ///
-        ///        <chart:SfCartesianChart.YAxes>
-        ///            <chart:NumericalAxis/>
-        ///        </chart:SfCartesianChart.YAxes>
-        ///
-        ///        <chart:SfCartesianChart.Series>
-        ///            <chart:LineSeries ItemsSource="{Binding Data}" XBindingPath="XValue" YBindingPath="YValue1"/>
-        ///            <chart:LineSeries ItemsSource="{Binding Data}" XBindingPath="XValue" YBindingPath="YValue2"/>
-        ///        </chart:SfCartesianChart.Series>  
-        ///           
-        ///     </chart:SfCartesianChart>
-        /// ]]></code>
-        /// # [C#](#tab/tabid-15)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();
-        ///     
-        ///     ViewModel viewModel = new ViewModel();
-        ///	    chart.BindingContext = viewModel;
-        ///     
-        ///     NumericalAxis xAxis = new NumericalAxis();
-        ///     chart.XAxes.Add(xAxis);	
-        ///     
-        ///     NumericalAxis yAxis = new NumericalAxis();
-        ///     chart.YAxes.Add(yAxis);
-        ///     
-        ///     LineSeries series1 = new LineSeries()
-        ///     {
-        ///         ItemsSource = viewModel.Data,
-        ///         XBindingPath = "XValue",
-        ///         YBindingPath = "YValue1"
-        ///     };
-        ///     chart.Series.Add(series1);
-        ///     
-        ///     LineSeries series2 = new LineSeries()
-        ///     {
-        ///         ItemsSource = viewModel.Data,
-        ///         XBindingPath = "XValue",
-        ///         YBindingPath = "YValue2"
-        ///     };
-        ///     chart.Series.Add(series2);
-        ///     
-        /// ]]></code>
-        /// # [ViewModel](#tab/tabid-16)
-        /// <code><![CDATA[
-        /// public ObservableCollection<Model> Data { get; set; }
-        /// 
-        /// public ViewModel()
-        /// {
-        ///    Data = new ObservableCollection<Model>();
-        ///    Data.Add(new Model() { XValue = 10, YValue1 = 100, YValue2 = 110 });
-        ///    Data.Add(new Model() { XValue = 20, YValue1 = 150, YValue2 = 100 });
-        ///    Data.Add(new Model() { XValue = 30, YValue1 = 110, YValue2 = 130 });
-        ///    Data.Add(new Model() { XValue = 40, YValue1 = 230, YValue2 = 180 });
-        /// }
-        /// ]]></code>
-        /// ***
-        /// </example>
-        public ChartSeriesCollection Series
+		/// <summary>
+		/// Gets or sets a collection of chart series to be added in cartesian chart.
+		/// </summary>
+		/// <value>This property takes <see cref="ChartSeriesCollection"/> instance as value.</value>
+		/// <remarks><para>To render a series, create an instance of required series class, and add it to the <see cref="Series"/> collection.</para></remarks>
+		/// <example>
+		/// # [Xaml](#tab/tabid-14)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///        <chart:SfCartesianChart.BindingContext>
+		///            <local:ViewModel/>
+		///        </chart:SfCartesianChart.BindingContext>
+		///
+		///        <chart:SfCartesianChart.XAxes>
+		///            <chart:NumericalAxis/>
+		///        </chart:SfCartesianChart.XAxes>
+		///
+		///        <chart:SfCartesianChart.YAxes>
+		///            <chart:NumericalAxis/>
+		///        </chart:SfCartesianChart.YAxes>
+		///
+		///        <chart:SfCartesianChart.Series>
+		///            <chart:LineSeries ItemsSource="{Binding Data}" XBindingPath="XValue" YBindingPath="YValue1"/>
+		///            <chart:LineSeries ItemsSource="{Binding Data}" XBindingPath="XValue" YBindingPath="YValue2"/>
+		///        </chart:SfCartesianChart.Series>  
+		///           
+		///     </chart:SfCartesianChart>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-15)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///     
+		///     ViewModel viewModel = new ViewModel();
+		///	    chart.BindingContext = viewModel;
+		///     
+		///     NumericalAxis xAxis = new NumericalAxis();
+		///     chart.XAxes.Add(xAxis);	
+		///     
+		///     NumericalAxis yAxis = new NumericalAxis();
+		///     chart.YAxes.Add(yAxis);
+		///     
+		///     LineSeries series1 = new LineSeries()
+		///     {
+		///         ItemsSource = viewModel.Data,
+		///         XBindingPath = "XValue",
+		///         YBindingPath = "YValue1"
+		///     };
+		///     chart.Series.Add(series1);
+		///     
+		///     LineSeries series2 = new LineSeries()
+		///     {
+		///         ItemsSource = viewModel.Data,
+		///         XBindingPath = "XValue",
+		///         YBindingPath = "YValue2"
+		///     };
+		///     chart.Series.Add(series2);
+		///     
+		/// ]]></code>
+		/// # [ViewModel](#tab/tabid-16)
+		/// <code><![CDATA[
+		/// public ObservableCollection<Model> Data { get; set; }
+		/// 
+		/// public ViewModel()
+		/// {
+		///    Data = new ObservableCollection<Model>();
+		///    Data.Add(new Model() { XValue = 10, YValue1 = 100, YValue2 = 110 });
+		///    Data.Add(new Model() { XValue = 20, YValue1 = 150, YValue2 = 100 });
+		///    Data.Add(new Model() { XValue = 30, YValue1 = 110, YValue2 = 130 });
+		///    Data.Add(new Model() { XValue = 40, YValue1 = 230, YValue2 = 180 });
+		/// }
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public ChartSeriesCollection Series
         {
             get { return (ChartSeriesCollection)GetValue(SeriesProperty); }
             set { SetValue(SeriesProperty, value); }
@@ -744,7 +760,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// <value>This property takes the boolean value and its default value is <c>true</c>.</value>
         /// <remarks>If the value is true, series placed side by side, else series rendered one over other(overlapped).</remarks>
         /// <example>
-        /// # [MainPage.xaml](#tab/tabid-25)
+        /// # [MainPage.xaml](#tab/tabid-21)
         /// <code><![CDATA[
         ///     <chart:SfCartesianChart EnableSideBySideSeriesPlacement = "True">
         ///           
@@ -756,7 +772,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         ///           
         ///     </chart:SfCartesianChart>
         /// ]]></code>
-        /// # [MainPage.xaml.cs](#tab/tabid-26)
+        /// # [MainPage.xaml.cs](#tab/tabid-22)
         /// <code><![CDATA[
         ///     SfCartesianChart chart = new SfCartesianChart();
         ///     chart.EnableSideBySideSeriesPlacement = true;
@@ -789,7 +805,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// <value>This property takes the boolean value and its default value is <c>false</c>.</value>
         /// <remarks>If the value is true, the orientation of x-axis is set to vertical and orientation of y-axis is set to horizontal.</remarks>
         /// <example>
-        /// # [MainPage.xaml](#tab/tabid-27)
+        /// # [MainPage.xaml](#tab/tabid-23)
         /// <code><![CDATA[
         ///     <chart:SfCartesianChart IsTransposed = "True">
         ///           
@@ -801,7 +817,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         ///           
         ///     </chart:SfCartesianChart>
         /// ]]></code>
-        /// # [MainPage.xaml.cs](#tab/tabid-28)
+        /// # [MainPage.xaml.cs](#tab/tabid-24)
         /// <code><![CDATA[
         ///     SfCartesianChart chart = new SfCartesianChart();
         ///     chart.IsTransposed = true;
@@ -833,7 +849,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         /// <value>This property takes the list of <see cref="Brush"/> and its default value is predefined palette.</value>
         /// <example>
-        /// # [Xaml](#tab/tabid-29)
+        /// # [Xaml](#tab/tabid-25)
         /// <code><![CDATA[
         ///     <chart:SfCartesianChart PaletteBrushes = "{Binding CustomBrushes}">
         ///
@@ -845,7 +861,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         ///
         ///     </chart:SfCartesianChart>
         /// ]]></code>
-        /// # [C#](#tab/tabid-30)
+        /// # [C#](#tab/tabid-26)
         /// <code><![CDATA[
         ///     SfCartesianChart chart = new SfCartesianChart();
         ///     ViewModel viewModel = new ViewModel();
@@ -897,7 +913,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         /// <value>This property takes the <see cref="ChartZoomPanBehavior"/> value and its default value is null.</value>
         /// <example>
-        /// # [MainPage.xaml](#tab/tabid-21)
+        /// # [MainPage.xaml](#tab/tabid-27)
         /// <code><![CDATA[
         ///     <chart:SfCartesianChart>
         ///           
@@ -923,7 +939,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         ///           
         ///     </chart:SfCartesianChart>
         /// ]]></code>
-        /// # [MainPage.xaml.cs](#tab/tabid-22)
+        /// # [MainPage.xaml.cs](#tab/tabid-28)
         /// <code><![CDATA[
         ///     SfCartesianChart chart = new SfCartesianChart();
         ///     
@@ -960,7 +976,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         /// <value>This property takes a <see cref="SeriesSelectionBehavior"/> instance as a value, and its default value is null.</value>
         ///  <example>
-        /// # [MainPage.xaml](#tab/tabid-23)
+        /// # [MainPage.xaml](#tab/tabid-29)
         /// <code><![CDATA[
         /// <chart:SfCartesianChart>
         ///         <chart:SfCartesianChart.XAxes>
@@ -978,7 +994,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// ]]>
         /// </code>
         /// 
-        /// # [MainPage.xaml.cs](#tab/tabid-24)
+        /// # [MainPage.xaml.cs](#tab/tabid-30)
         /// <code><![CDATA[
         ///  SfCartesianChart chart = new SfCartesianChart();
         ///  
@@ -1022,7 +1038,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         /// <value>This property takes a<see cref= "ChartTrackballBehavior" /> instance as a value, and its default value is null.</value>
         /// <example>
-        /// # [Xaml](#tab/tabid-37)
+        /// # [Xaml](#tab/tabid-31)
         /// <code><![CDATA[
         ///     <chart:SfCartesianChart>
         ///
@@ -1032,7 +1048,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
         ///           
         ///     </chart:SfCartesianChart>
         /// ]]></code>
-        /// # [C#](#tab/tabid-38)
+        /// # [C#](#tab/tabid-32)
         /// <code><![CDATA[
         ///     SfCartesianChart chart = new SfCartesianChart();
         ///     . . .
@@ -1048,38 +1064,83 @@ namespace Syncfusion.Maui.Toolkit.Charts
             set { SetValue(TrackballBehaviorProperty, value); }
         }
 
-        /// <summary>
-        /// Gets or sets a collection of annotations to the chart.
-        /// </summary>
-        /// <value>This property takes a<see cref= "ChartAnnotationCollection" /> instance as a value, and its default value is null.</value>
-        /// <example>
-        /// # [Xaml](#tab/tabid-37)
-        /// <code><![CDATA[
-        ///     <chart:SfCartesianChart>
-        ///
-        ///     <!-- ... Eliminated for simplicity-->
-        ///     <chart:SfCartesianChart.Annotations>
-        ///          <chart:VerticalLineAnnotation X1="1"/>
-        ///     </chart:SfCartesianChart.Annotations>  
-        ///     
-        ///     </chart:SfCartesianChart>
-        /// ]]>
-        /// </code>
-        /// # [C#](#tab/tabid-29)
-        /// <code><![CDATA[
-        ///     SfCartesianChart chart = new SfCartesianChart();     
-        ///
-        ///     // Eliminated for simplicity
-        ///     var verticalLineAnnotation = new VerticalLineAnnotation()
-        ///     {
-        ///         X1 = 1,
-        ///     };
-        ///  
-        ///     chart.Annotations.Add(verticalLineAnnotation);
-        /// ]]></code>
-        /// ***
-        /// </example>
-        public ChartAnnotationCollection Annotations
+		/// <summary>
+		/// Gets or sets a value for initiating crosshair, which displays the crosshair line and labels for the precise value inspection when you interact on the chart plot area.
+		/// </summary>
+		/// <value>This property takes a <see cref= "ChartCrosshairBehavior" /> instance as a value, and its default value is null.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-35)
+		/// <code><![CDATA[
+		/// <chart:SfCartesianChart>
+		///     
+		///     <chart:SfCartesianChart.XAxes>
+		///         <chart:CategoryAxis ShowTrackballLabel = "True"/>
+		///     </chart:SfCartesianChart.XAxes>
+		///
+		///     <chart:SfCartesianChart.CrosshairBehavior>
+		///         <chart:ChartCrosshairBehavior/>
+		///     </chart:SfCartesianChart.CrosshairBehavior>
+		///        
+		///  <!--omitted for brevity-->
+		///           
+		/// </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-36)
+		/// <code><![CDATA[
+		/// SfCartesianChart chart = new SfCartesianChart();
+		/// 
+		/// // omitted for brevity 
+		/// 
+		/// CategoryAxis xaxis = new CategoryAxis()
+		/// {
+		///    ShowTrackballLabel = true,
+		/// };
+		/// 
+		/// chart.XAxes.Add(xaxis);
+		/// 
+		/// chart.CrosshairBehavior = new ChartCrosshairBehavior();
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public ChartCrosshairBehavior CrosshairBehavior
+		{
+			get { return (ChartCrosshairBehavior)GetValue(CrosshairBehaviorProperty); }
+			set { SetValue(CrosshairBehaviorProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets a collection of annotations to the chart.
+		/// </summary>
+		/// <value>This property takes a<see cref= "ChartAnnotationCollection" /> instance as a value, and its default value is null.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-37)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///     <chart:SfCartesianChart.Annotations>
+		///          <chart:VerticalLineAnnotation X1="1"/>
+		///     </chart:SfCartesianChart.Annotations>  
+		///     
+		///     </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-29)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();     
+		///
+		///     // Eliminated for simplicity
+		///     var verticalLineAnnotation = new VerticalLineAnnotation()
+		///     {
+		///         X1 = 1,
+		///     };
+		///  
+		///     chart.Annotations.Add(verticalLineAnnotation);
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public ChartAnnotationCollection Annotations
         {
             get { return (ChartAnnotationCollection)GetValue(AnnotationsProperty); }
             set { SetValue(AnnotationsProperty, value); }
@@ -1090,6 +1151,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             get { return (bool)GetValue(CanAnnotationUnderPlotAreaProperty); }
             set { SetValue(CanAnnotationUnderPlotAreaProperty, value); }
         }
+
+		private ChartAnnotation? _touchedAnnotation;
 
 		#region Event
 
@@ -1138,6 +1201,29 @@ namespace Syncfusion.Maui.Toolkit.Charts
         /// </summary>
         public event EventHandler<ChartResetZoomEventArgs> ResetZoom;
 
+		/// <summary>
+		/// This event is triggered when an axis label is tapped.
+		/// </summary>
+		/// <remarks>
+		/// <para>This event is raised when a user taps on an axis label in the chart.
+		/// The event arguments provide details about which axis and label were tapped, as well as the tap position.</para>
+		/// </remarks>
+		public event EventHandler<AxisLabelTappedEventArgs> AxisLabelTapped;
+
+		/// <summary>
+		/// This event is triggered when a data label is tapped.
+		/// </summary>
+		/// <remarks>
+		/// <para>This event is raised when a user taps on a data label in the chart.
+		/// The event arguments provide details about which series, data point, and label were tapped, as well as the tap position and optional segment information.</para>
+		/// </remarks>
+		public event EventHandler<DataLabelTappedEventArgs> DataLabelTapped;
+
+        /// <summary>
+		/// This event is triggered when an annotation is tapped.
+		/// </summary>
+		public event EventHandler<AnnotationTappedEventArgs> AnnotationTapped;
+
 		#endregion
 
 		#endregion
@@ -1168,7 +1254,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             _zoomPanView ??= [];
 
-            UpdateView();
+			_crosshairView ??= [];
+
+			UpdateView();
         }
 
         internal override AreaBase CreateChartArea()
@@ -1223,6 +1311,122 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
+        /// <summary>
+        /// Suspends collection change notification processing for all <see cref="CartesianSeries"/> in this <see cref="SfCartesianChart"/>.
+        /// Data source changes made while suspended are buffered and applied in a single consolidated
+        /// update when <see cref="ResumeSeriesNotification"/> is called.
+        /// </summary>
+        /// <remarks>
+        /// <para>Calling this method multiple times has no additional effect after the first call.</para>
+        /// <para>Use this to batch large data updates across all series without triggering
+        /// a render cycle for every individual change.</para>
+        /// </remarks>
+        /// <example>
+        /// # [C#](#tab/tabid-35)
+        /// <code><![CDATA[
+        /// SfCartesianChart chart = new SfCartesianChart();
+        /// 
+        /// NumericalAxis xAxis = new NumericalAxis();
+        /// NumericalAxis yAxis = new NumericalAxis();
+        /// chart.XAxes.Add(xAxis);
+        /// chart.YAxes.Add(yAxis);
+        /// 
+        /// FastLineSeries series1 = new FastLineSeries();
+        /// FastLineSeries series2 = new FastLineSeries();
+        /// ObservableCollection<DataModel> data1 = new ObservableCollection<DataModel>();
+        /// ObservableCollection<DataModel> data2 = new ObservableCollection<DataModel>();
+        /// 
+        /// series1.ItemsSource = data1;
+        /// series2.ItemsSource = data2;
+        /// chart.Series.Add(series1);
+        /// chart.Series.Add(series2);
+        /// 
+        /// chart.SuspendSeriesNotification();
+        /// try
+        /// {
+        ///     for (int i = 0; i < 1000; i++)
+        ///     {
+        ///         data1.Add(new DataModel { XValue = i, YValue = i * 10 });
+        ///         data2.Add(new DataModel { XValue = i, YValue = i * 20 });
+        ///     }
+        /// }
+        /// finally
+        /// {
+        ///     chart.ResumeSeriesNotification();
+        /// }
+        /// ]]>
+        /// </code>
+        /// ***
+        /// </example>
+        public void SuspendSeriesNotification()
+        {
+            if (Series == null)
+                return;
+
+            foreach (var series in Series)
+            {
+                if (series is CartesianSeries cartesianSeries)
+                    cartesianSeries.SuspendNotification();
+            }
+        }
+
+        /// <summary>
+        /// Resumes collection change notification processing for all <see cref="CartesianSeries"/> in this <see cref="SfCartesianChart"/>.
+        /// All changes buffered since the last <see cref="SuspendSeriesNotification"/> call are applied at once,
+        /// resulting in a single consolidated visual update.
+        /// </summary>
+        /// <remarks>
+        /// <para>If the <see cref="SfCartesianChart"/> is not currently suspended, this method has no effect.</para>
+        /// </remarks>
+        /// <example>
+        /// # [C#](#tab/tabid-36)
+        /// <code><![CDATA[
+        /// SfCartesianChart chart = new SfCartesianChart();
+        /// 
+        /// NumericalAxis xAxis = new NumericalAxis();
+        /// NumericalAxis yAxis = new NumericalAxis();
+        /// chart.XAxes.Add(xAxis);
+        /// chart.YAxes.Add(yAxis);
+        /// 
+        /// FastLineSeries series1 = new FastLineSeries();
+        /// FastLineSeries series2 = new FastLineSeries();
+        /// ObservableCollection<DataModel> data1 = new ObservableCollection<DataModel>();
+        /// ObservableCollection<DataModel> data2 = new ObservableCollection<DataModel>();
+        /// 
+        /// series1.ItemsSource = data1;
+        /// series2.ItemsSource = data2;
+        /// chart.Series.Add(series1);
+        /// chart.Series.Add(series2);
+        /// 
+        /// chart.SuspendSeriesNotification();
+        /// try
+        /// {
+        ///     for (int i = 0; i < 1000; i++)
+        ///     {
+        ///         data1.Add(new DataModel { XValue = i, YValue = i * 10 });
+        ///         data2.Add(new DataModel { XValue = i, YValue = i * 20 });
+        ///     }
+        /// }
+        /// finally
+        /// {
+        ///     chart.ResumeSeriesNotification();
+        /// }
+        /// ]]>
+        /// </code>
+        /// ***
+        /// </example>
+        public void ResumeSeriesNotification()
+        {
+            if (Series == null)
+                return;
+
+            foreach (var series in Series)
+            {
+                if (series is CartesianSeries cartesianSeries)
+                    cartesianSeries.ResumeNotification();
+            }
+        }
+
         #endregion
 
         #region Protected Methods
@@ -1251,7 +1455,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
             UpdateBindingContext(ZoomPanBehavior);
             UpdateBindingContext(TrackballBehavior);
-            UpdateBindingContext(SelectionBehavior);
+			UpdateBindingContext(CrosshairBehavior);
+			UpdateBindingContext(SelectionBehavior);
 
             if (XAxes != null)
             {
@@ -1352,12 +1557,36 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                    _chartArea.Add(_zoomPanView);
                 }
-            }
+
+				if (!_chartArea.Contains(_crosshairView))
+				{
+					_chartArea.Add(_crosshairView);
+				}
+			}
         }
 
-        #region Interaction Overrides
+		/// <summary>
+		/// Gets tooltip information for the chart at the specified coordinates, checking both series and trendlines.
+		/// </summary>
+		/// <param name="behavior">The tooltip behavior that contains styling information.</param>
+		/// <param name="x">The X coordinate of the interaction point in screen coordinates.</param>
+		/// <param name="y">The Y coordinate of the interaction point in screen coordinates.</param>
+		/// <returns>A TooltipInfo object if a tooltip should be displayed; otherwise, null.</returns>
+		internal override TooltipInfo? GetTooltipInfo(ChartTooltipBehavior behavior, float x, float y)
+		{
+			var trendlineTooltipInfo = GetTrendlineTooltipInfo(behavior, x, y);
+			if (trendlineTooltipInfo != null)
+			{
+				return trendlineTooltipInfo;
+			}
+			// First, check series tooltips using the base implementation
+			var seriesTooltipInfo = base.GetTooltipInfo(behavior, x, y);
+			return seriesTooltipInfo;
+		}
 
-        bool IGestureListener.IsTouchHandled
+		#region Interaction Overrides
+
+		bool IGestureListener.IsTouchHandled
         {
             get { return IsHandled; }
         }
@@ -1436,7 +1665,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
         void OnLongPress(double x, double y, GestureStatus status)
         {
             TrackballBehavior?.OnLongPressActivation(this, (float)x, (float)y, status);
-        }
+			CrosshairBehavior?.OnLongPressActivation(this, (float)x, (float)y, status);
+		}
 
         /// <inheritdoc/>
         void ITouchListener.OnScrollWheel(ScrollEventArgs e)
@@ -1448,7 +1678,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void OnTouchDown(IChart chart, long pointerId, Point point, PointerDeviceType deviceType)
         {
-            InteractiveBehavior?.OnTouchDown(this, (float)point.X, (float)point.Y);
+			OnTouchDownAnnotation(point);
+			InteractiveBehavior?.OnTouchDown(this, (float)point.X, (float)point.Y);
 
             if (ZoomPanBehavior != null)
             {
@@ -1475,8 +1706,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 #if MONOANDROID || WINDOWS
             IsHandled = false;
 #endif
-
-            OnPanEnded();
+			OnTouchUpAnnotation(point);
+			OnPanEnded();
             InteractiveBehavior?.OnTouchUp(this, (float)point.X, (float)point.Y);
 
             ZoomPanBehavior?.OnTouchUp(this, (float)point.X, (float)point.Y);
@@ -1489,12 +1720,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
             tooltipBehavior?.OnTouchUp(this, (float)point.X, (float)point.Y);
 #endif
             TrackballBehavior?.OnTouchUp(this, (float)point.X, (float)point.Y);
-        }
+
+			CrosshairBehavior?.OnTouchUp(this, (float)point.X, (float)point.Y);
+		}
 
         internal void OnPinchStateChanged(GestureStatus action, Point location, double angle, float scale)
         {
             HideTooltipView();
             HideTrackballView();
+			HideCrossHairView();
 
             ZoomPanBehavior?.OnPinchStateChanged(this, action, location, angle, scale);
         }
@@ -1537,8 +1771,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             HideTooltipView();
             HideTrackballView();
+			HideCrossHairView();
+			RaiseLabelTappedEvents(chart, tapPoint);
 
-            if (chart.ActualSeriesClipRect.Contains(tapPoint))
+			if (chart.ActualSeriesClipRect.Contains(tapPoint))
             {
                 ZoomPanBehavior?.OnTapped(this, tapPoint, tapCount);
 
@@ -1551,8 +1787,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     var visibleSeries = _chartArea.VisibleSeries;
                     if (visibleSeries != null)
                     {
-                        for (int i = visibleSeries.Count - 1; i >= 0; i--)
-                        {
+						for (int i = visibleSeries.Count - 1; i >= 0; i--)
+						{
                             if (visibleSeries[i].SelectionHitTest((float)tapPoint.X, (float)tapPoint.Y))
 							{
 								break;
@@ -1568,7 +1804,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
         internal void OnTouchMove(IChart chart, Point point, PointerDeviceType deviceType)
         {
-            InteractiveBehavior?.OnTouchMove(this, (float)point.X, (float)point.Y);
+			OnTouchMoveAnnotation(point);
+			InteractiveBehavior?.OnTouchMove(this, (float)point.X, (float)point.Y);
 
             var tooltipBehavior = chart.ActualTooltipBehavior;
             if (tooltipBehavior != null)
@@ -1583,26 +1820,30 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 TrackballBehavior.OnTouchMove(this, (float)point.X, (float)point.Y);
             }
 
-            ZoomPanBehavior?.OnTouchMove(this, (float)point.X, (float)point.Y);
-        }
+			CrosshairBehavior?.OnTouchMove(this, (float)point.X, (float)point.Y);
+			ZoomPanBehavior?.OnTouchMove(this, (float)point.X, (float)point.Y);
+		}
 
         internal void OnTouchCancel(long pointerId, Point point)
         {
             TrackballBehavior?.OnTouchCancel((float)point.X, (float)point.Y);
-        }
+			CrosshairBehavior?.OnTouchCancel((float)point.X, (float)point.Y);
+		}
 
         void OnMouseWheelChanged(ScrollEventArgs e)
         {
             HideTrackballView();
             HideTooltipView();
+			HideCrossHairView();
 
-            ZoomPanBehavior?.OnMouseWheelChanged(this, e.TouchPoint, e.ScrollDelta);
+			ZoomPanBehavior?.OnMouseWheelChanged(this, e.TouchPoint, e.ScrollDelta);
         }
 
         internal void OnTouchExit()
         {
             TrackballBehavior?.OnTouchExit();
-        }
+			CrosshairBehavior?.OnTouchExit();
+		}
 
         internal void RaiseTrackballCreatedEvent(List<TrackballPointInfo> pointInfos)
         {
@@ -1724,8 +1965,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
         {
             TrackballBehavior?.Hide();
         }
+        
+		void HideCrossHairView()
+		{
+			CrosshairBehavior?.Hide();
+		}
 
-        static void OnTransposedPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnTransposedPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfCartesianChart chart)
             {
@@ -1811,12 +2057,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     selection.ChartArea = chart._chartArea;
                     selection.Chart = chart;
+					selection.Parent = chart;
                     SetInheritedBindingContext(selection, chart.BindingContext);
-                }
+					selection.SelectionIndexChanged(oldValue is SeriesSelectionBehavior old ? old.SelectedIndex : -1, selection.SelectedIndex);
+					selection.InitializeDynamicResource(selection);
+				}
 
                 if (oldValue is SeriesSelectionBehavior oldSelection)
                 {
-                    SetInheritedBindingContext(oldSelection, null);
+					if (newValue == null)
+					{
+						oldSelection.ClearSelection();
+					}
+
+					oldSelection.Chart = null;
+					oldSelection.Parent = null;
+					SetInheritedBindingContext(oldSelection, null);
                 }
             }
         }
@@ -1849,7 +2105,35 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
-        static void OnAnnotationsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnCrossHairBehaviorPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfCartesianChart chart)
+			{
+				if (newValue is ChartCrosshairBehavior newCrossHair)
+				{
+					newCrossHair.CartesianChart = chart;
+					SetInheritedBindingContext(newCrossHair, chart.BindingContext);
+
+					var drawableView = chart._crosshairView;
+					drawableView.CrosshairBehavior = newCrossHair;
+					AbsoluteLayout.SetLayoutBounds(drawableView, new Rect(0, 0, 1, 1));
+					AbsoluteLayout.SetLayoutFlags(drawableView, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.All);
+					chart.UpdateView();
+				}
+
+				if (oldValue is ChartCrosshairBehavior oldCrossHair)
+				{
+					chart._crosshairView?.RemoveBinding(AbsoluteLayout.LayoutBoundsProperty);
+					chart._crosshairView?.RemoveBinding(AbsoluteLayout.LayoutFlagsProperty);
+					chart._chartArea.Remove(chart._crosshairView);
+					SetInheritedBindingContext(oldCrossHair, null);
+				}
+
+				SetParent((Element)oldValue, (Element)newValue, (Element)bindable);
+			}
+		}
+
+		static void OnAnnotationsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SfCartesianChart chart)
             {
@@ -2014,8 +2298,224 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
         }
 
-        #endregion
+		/// <summary>
+		/// Gets tooltip information for trendlines at the specified coordinates.
+		/// </summary>
+		/// <param name="behavior">The tooltip behavior that contains styling information.</param>
+		/// <param name="x">The X coordinate of the interaction point in screen coordinates.</param>
+		/// <param name="y">The Y coordinate of the interaction point in screen coordinates.</param>
+		/// <returns>A TooltipInfo object if a trendline tooltip should be displayed; otherwise, null.</returns>
+		TooltipInfo? GetTrendlineTooltipInfo(ChartTooltipBehavior behavior, float x, float y)
+		{
+			var visibleSeries = _chartArea.VisibleSeries;
+			if (visibleSeries == null)
+			{
+				return null;
+			}
 
-        #endregion
-    }
+			try
+			{
+				// Check trendlines for each visible series (in reverse order for proper hit testing priority)
+				for (int i = visibleSeries.Count - 1; i >= 0; i--)
+				{
+					var series = visibleSeries[i];
+					if (series is CartesianSeries cartesianSeries && cartesianSeries.Trendlines != null)
+					{
+						// Check each trendline in the series (in reverse order for proper hit testing priority)
+						for (int j = cartesianSeries.Trendlines.Count - 1; j >= 0; j--)
+						{
+							var trendline = cartesianSeries.Trendlines[j];
+
+							// Currently only LinearTrendline has tooltip implementation
+
+							var tooltipInfo = trendline.GetTooltipInfo(behavior, x, y);
+							if (tooltipInfo != null)
+							{
+								return tooltipInfo;
+							}
+							// Future trendline types can be added here when they implement tooltips
+							// e.g., if (trendline is ExponentialTrendline exponentialTrendline)
+						}
+					}
+				}
+			}
+			catch (Exception)
+			{
+				// Silently handle any errors during trendline tooltip processing
+				// to prevent crashes in the tooltip system
+            }
+
+			return null;
+		}
+        
+		/// <summary>
+		/// Attempts to detect and raise label tapped events (axis and data labels)
+		/// </summary>
+		void RaiseLabelTappedEvents(IChart chart, Point tapPoint)
+		{
+			if (chart is SfCartesianChart cartesianChart)
+			{
+				HandleDataLabelTap(chart, tapPoint);
+
+				HandleAxisLabelTap(cartesianChart, tapPoint);
+			}
+		}
+
+		/// <summary>
+		/// Detects whether a data label is tapped and raises the corresponding event if a hit is found.
+		/// </summary>
+		void HandleDataLabelTap(IChart chart, PointF tapPoint)
+		{
+			Point tapPointInClipRect = new Point(tapPoint.X - chart.ActualSeriesClipRect.Left, tapPoint.Y - chart.ActualSeriesClipRect.Top);
+
+			foreach (var dataSeries in Series.GetVisibleSeries())
+			{
+				foreach (var segment in dataSeries._segments)
+				{
+					if (segment?.Item == null)
+						continue;
+
+					if (segment.LabelBounds.Contains(tapPointInClipRect))
+					{
+						RaiseDataLabelTappedEvent(dataSeries, segment.Index, segment.Item, tapPointInClipRect, segment);
+					}
+				}
+			}
+		}
+
+		void HandleAxisLabelTap(SfCartesianChart chart, Point tapPoint)
+		{
+			var area = chart._chartArea;
+
+			var horizontalAxes = area._axisLayout.HorizontalAxes;
+			var verticalAxes = area._axisLayout.VerticalAxes;
+
+			// Process horizontal axes
+			foreach (var axis in horizontalAxes)
+			{
+				CheckAndRaiseAxisLabelTap(area, axis, tapPoint, isHorizontal: true);
+			}
+
+			// Process vertical axes
+			foreach (var axis in verticalAxes)
+			{
+				CheckAndRaiseAxisLabelTap(area, axis, tapPoint, isHorizontal: false);
+			}
+		}
+
+		void CheckAndRaiseAxisLabelTap(CartesianChartArea area, ChartAxis axis, Point tapPoint, bool isHorizontal)
+		{
+			Rect chartAreaBounds = area.AreaBounds;
+
+			float areaTapX = (float)tapPoint.X - (float)chartAreaBounds.Left;
+			float areaTapY = (float)tapPoint.Y - (float)chartAreaBounds.Top - (float)this.TitleView.Height;
+
+			if (!axis.RenderRectContains(areaTapX, areaTapY))
+				return;
+
+			int index = axis.GetHitLabelIndex(areaTapX, areaTapY);
+
+			if (index != -1)
+			{
+				var label = axis.VisibleLabels[index];
+
+				if (label.IsVisible)
+				{
+					RaiseAxisLabelTappedEvent(axis, label, tapPoint);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Raises the AxisLabelTapped event
+		/// </summary>
+		void RaiseAxisLabelTappedEvent(ChartAxis axis, ChartAxisLabel axisLabel, PointF tapPoint)
+		{
+			if (AxisLabelTapped != null)
+			{
+				var args = new AxisLabelTappedEventArgs(axis, axisLabel, tapPoint);
+				AxisLabelTapped.Invoke(this, args);
+			}
+		}
+
+		/// <summary>
+		/// Raises the DataLabelTapped event
+		/// </summary>
+		void RaiseDataLabelTappedEvent(ChartSeries series, int dataIndex, object dataItem, PointF tapPoint, ChartSegment segment)
+		{
+			if (DataLabelTapped != null)
+			{
+				var args = new DataLabelTappedEventArgs(series, dataIndex, dataItem, tapPoint, segment);
+				DataLabelTapped.Invoke(this, args);
+            }
+        }
+        
+		void OnTouchDownAnnotation(Point touchPoint)
+		{
+			if (Annotations.Count > 0 && _chartArea.AnnotationClipRect.Contains(touchPoint))
+			{
+				Point newTouchPoint = AnnotationPoint(touchPoint);
+				_touchedAnnotation = FindAnnotation(newTouchPoint);
+				if (_touchedAnnotation != null)
+				{
+					_touchedAnnotation!.OnTouchDown((float)newTouchPoint.X, (float)newTouchPoint.Y);
+				}
+			}
+		}
+
+		void OnTouchMoveAnnotation(Point touchPoint)
+		{
+			if (_touchedAnnotation != null && _chartArea.AnnotationClipRect.Contains(touchPoint))
+			{
+				Point newTouchPoint = AnnotationPoint(touchPoint);
+				_touchedAnnotation!.OnTouchMove((float)newTouchPoint.X, (float)newTouchPoint.Y);
+			}
+		}
+
+		void OnTouchUpAnnotation(Point touchPoint)
+		{
+			if (_touchedAnnotation != null)
+			{
+				Point newTouchPoint = AnnotationPoint(touchPoint);
+				RaiseAnnotationTappedEvent(_touchedAnnotation, newTouchPoint);
+				_touchedAnnotation!.OnTouchUp((float)newTouchPoint.X, (float)newTouchPoint.Y);
+			}
+			_touchedAnnotation = null;
+
+		}
+
+		Point AnnotationPoint(Point touchPoint)
+		{
+			Rect annotationAreaBounds = _chartArea.AnnotationClipRect;
+			return new Point(touchPoint.X - annotationAreaBounds.Left, touchPoint.Y - annotationAreaBounds.Top);
+		}
+
+		ChartAnnotation? FindAnnotation(Point touchPoint)
+		{
+			int length = Annotations.Count;
+			for (int i = length - 1; i >= 0; i--)
+			{
+				ChartAnnotation annotation = Annotations[i];
+				if (annotation.IsVisible && annotation.HitTest(touchPoint))
+				{
+					return annotation;
+				}
+			}
+
+			return null;
+		}
+		
+		void RaiseAnnotationTappedEvent(ChartAnnotation annotation, Point touchPoint)
+		{
+			if (AnnotationTapped != null)
+			{
+				AnnotationTappedEventArgs args = new(annotation, touchPoint.X, touchPoint.Y);
+				AnnotationTapped.Invoke(this, args);
+			}
+		}
+
+		#endregion
+
+		#endregion
+	}
 }

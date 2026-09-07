@@ -159,8 +159,32 @@
 		internal override void OnDataSourceChanged(object oldValue, object newValue)
 		{
 			YValues.Clear();
-			GeneratePoints([YBindingPath], YValues);
+			base.GeneratePoints([YBindingPath], YValues);
 			base.OnDataSourceChanged(oldValue, newValue);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ValueMemberPath"></param>
+		/// <returns></returns>
+		internal override List<double> GetYValues(string ValueMemberPath)
+		{
+			return (List<double>)YValues;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ValueMemberPath"></param>
+		/// <returns></returns>
+		internal override List<int> GetEmptyPointIndexes(string ValueMemberPath)
+		{
+			if (EmptyPointIndexes != null && EmptyPointIndexes.Length > 0)
+			{
+				return (List<int>)EmptyPointIndexes[0];
+			}
+			return [];
 		}
 
 		internal override void ValidateYValues()

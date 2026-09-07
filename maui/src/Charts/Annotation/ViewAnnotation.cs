@@ -247,14 +247,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
-        #endregion
+		#endregion
 
-        #region Internal Methods
+		#region Internal Methods
 
-        internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
+		internal override bool HitTest(Point touchPoint)
+		{
+			return View.Bounds.Contains(touchPoint);
+		}
+
+		internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
         {
-			ViewAnnotation.ResetPosition(x1, y1);
-
 			if (View != null && X1 != null && !double.IsNaN(Y1))
 			{
 				if (CoordinateUnit == ChartCoordinateUnit.Axis)
@@ -468,10 +471,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     break;
             }
         }
-
-		static void ResetPosition(double x, double y)
-        {
-		}
 
 		#endregion
 

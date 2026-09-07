@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -49,8 +49,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			UpdateAxisTransposed(); //Implement axis transpose.
 
+			ResetCategoryAxisForecast();
+
 			ClearActualAxis(visibleSeries); //Clear actual axis of the series if required. 
 			UpdateActualAxis(visibleSeries);//Assign axis to series
+
+			UpdateCategoryAxesForecast(visibleSeries);
 
 			_area.UpdateStackingSeries(); //Calculate stacking series values. 
 
@@ -97,6 +101,35 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		#region Private Methods
+
+		void ResetCategoryAxisForecast()
+		{
+			ResetCategoryAxisCollection(HorizontalAxes);
+			ResetCategoryAxisCollection(VerticalAxes);
+		}
+
+		static void ResetCategoryAxisCollection(ObservableCollection<ChartAxis> axes)
+		{
+			foreach (var axis in axes)
+			{
+				if (axis is CategoryAxis categoryAxis)
+				{
+					categoryAxis.ResetForecastExtension();
+				}
+			}
+		}
+
+		void UpdateCategoryAxesForecast(ReadOnlyObservableCollection<ChartSeries> visibleSeries)
+		{
+			foreach (CartesianSeries series in visibleSeries)
+			{
+				if (series?.ActualXAxis is CategoryAxis categoryAxis)
+				{
+					categoryAxis.RegisterTrendlineForecast(series);
+				}
+			}
+		}
+
 		void Init()
 		{
 			_leftSizes = [];
@@ -455,6 +488,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					series.ValidateYValues();
 				}
+
+				series.GenerateTrendlinesPoints();
 
 				if (!series.SegmentsCreated) //creates segment if segmentsCreated is false. 
 				{

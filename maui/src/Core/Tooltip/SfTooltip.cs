@@ -174,8 +174,8 @@ namespace Syncfusion.Maui.Toolkit
 			Content.VerticalOptions = LayoutOptions.Fill;
             Content.HorizontalOptions = LayoutOptions.Fill;
 #else
-			Content.VerticalOptions = LayoutOptions.Start;
-            Content.HorizontalOptions = LayoutOptions.Start;
+			Content.VerticalOptions = LayoutOptions.Center;
+            Content.HorizontalOptions = LayoutOptions.Center;
 #endif
 
             _tooltipHelper.ContentSize = Content.Measure(double.PositiveInfinity, double.PositiveInfinity);

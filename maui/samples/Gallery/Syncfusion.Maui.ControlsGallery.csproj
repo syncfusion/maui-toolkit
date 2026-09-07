@@ -110,6 +110,7 @@
 	  <EmbeddedResource Include="Resources\Images\image_8.png" />
 	  <EmbeddedResource Include="Resources\Images\polarchart.png" />
 	  <EmbeddedResource Include="Resources\Images\pyramidchart.png" />
+	  <EmbeddedResource Include="Resources\Images\interactiveviewer.png" />
     <EmbeddedResource Include="SampleList\AccordionSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\ButtonsSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\CalendarSamplesList.xml" />
@@ -121,6 +122,7 @@
 	  <EmbeddedResource Include="SampleList\EffectsViewSamplesList.xml" />
     <EmbeddedResource Include="SampleList\ExpanderSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\FunnelChartSamplesList.xml" />
+	  <EmbeddedResource Include="SampleList\InteractiveViewerSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NavigationDrawerSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\BottomSheetSamplesList.xml" />
 	  <EmbeddedResource Include="SampleList\NumericUpDownSamplesList.xml" />
@@ -137,6 +139,7 @@
     <EmbeddedResource Include="SampleList\ProgressBarSamplesList.xml" />
     <EmbeddedResource Include="SampleList\SunburstChartSamplesList.xml" />
     <EmbeddedResource Include="SampleList\SparkChartSamplesList.xml" />
+	<EmbeddedResource Include="SampleList\GridSplitterSamplesList.xml" />
 	  <EmbeddedResource Include="ControlList.xml" />
 	</ItemGroup>
 

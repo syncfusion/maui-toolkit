@@ -24,6 +24,7 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		public Size MeasureText(string text, float textSize, FontAttributes attributes = FontAttributes.None, string? fontFamily = null)
 		{
 			text ??= string.Empty;
+
 			NSString? nsText = new NSString(text);
 
 			UIFont? font = UIFont.SystemFontOfSize(textSize);
@@ -50,6 +51,8 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		/// <returns></returns>
 		public Size MeasureText(string text, ITextElement textElement)
 		{
+			text ??= string.Empty;
+
 			NSString? nsText = new NSString(text);
 			UIStringAttributes uiStringAttributes = GetUIStringAttributes(textElement);
 
@@ -67,6 +70,8 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 		/// <returns></returns>
 		public Size MeasureText(string text, double width, ITextElement textElement)
 		{
+			text ??= string.Empty;
+
 			NSString? nsText = new NSString(text);
 			UIStringAttributes uiStringAttributes = GetUIStringAttributes(textElement);
 			NSMutableParagraphStyle textParagraphStyle = new NSMutableParagraphStyle

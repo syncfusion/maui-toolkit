@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+  <ControlCategory Name="Viewer">
+    <Control ControlName="SfInteractiveViewer"
+             Title="Interactive Viewer"
+             Image="interactiveviewer.png"
+             Description="Explore content seamlessly with zoom, pan, and rotation interactions."
+             StatusTag="New">
+      <Sample SampleName="GettingStarted"
+              Title="Getting Started"
+              SearchTags="interactiveviewer,viewer,interactive"
+              StatusTag="New"/>
+      <Sample SampleName="InteractiveContent" 
+              Title="Interactive Content" 
+              SearchTags="interactiveviewer,viewer,interactive,form,zoom,pan" 
+              StatusTag="New"/>
+    </Control>
+  </ControlCategory>
+</SyncfusionControls>

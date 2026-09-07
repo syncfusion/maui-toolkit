@@ -8,8 +8,8 @@ namespace Syncfusion.Maui.Toolkit
 	/// <summary>
 	/// Represents a legend component for displaying chart legends or other graphical legends.
 	/// </summary>
-	internal partial class SfLegend : SfView, ILegend
-    {
+	internal partial class SfLegend : SfView, ILegend, IFloatingLegend
+	{
 
 		#region Fields
 
@@ -94,17 +94,48 @@ namespace Syncfusion.Maui.Toolkit
             null,
             null);
 
-        #endregion
+		/// <summary>
+		/// Gets or sets a value that determines whether the legend floats over the chart area. This is a bindable property.
+		/// </summary>
+		internal static readonly BindableProperty IsFloatingProperty = BindableProperty.Create(
+			nameof(IsFloating),
+			typeof(bool),
+			typeof(SfLegend),
+			false,
+			BindingMode.Default);
 
-        #endregion
+		/// <summary>
+		/// Gets or sets the horizontal (X) offset of the floating legend, use positive value to shifts right, negative value to shifts left. This is a bindable property.
+		/// </summary>
+		internal static readonly BindableProperty OffsetXProperty = BindableProperty.Create(
+			nameof(OffsetX),
+			typeof(double),
+			typeof(SfLegend),
+			0d,
+			BindingMode.Default);
 
-        #region Public Properties
+		/// <summary>
+		/// Gets or sets the vertical (Y) offset of the floating legend, use positive values to shift down, negative values to shift up. This is a bindable property.
+		/// </summary>
+		internal static readonly BindableProperty OffsetYProperty = BindableProperty.Create(
+			nameof(OffsetY),
+			typeof(double),
+			typeof(SfLegend),
+			0d,
+			BindingMode.Default);
 
-        /// <summary>
-        ///  Gets or sets the ItemsSource for the legend.
-        /// </summary>
-        /// <remarks>The default will be of <see cref="LegendItem"/> type.</remarks>
-        public IEnumerable ItemsSource
+
+		#endregion
+
+		#endregion
+
+		#region Public Properties
+
+		/// <summary>
+		///  Gets or sets the ItemsSource for the legend.
+		/// </summary>
+		/// <remarks>The default will be of <see cref="LegendItem"/> type.</remarks>
+		public IEnumerable ItemsSource
         {
             get { return (IEnumerable)GetValue(ItemsSourceProperty); }
             set { SetValue(ItemsSourceProperty, value); }
@@ -151,7 +182,34 @@ namespace Syncfusion.Maui.Toolkit
             set { SetValue(PlacementProperty, value); }
         }
 
-        internal Layout ContentLayout { get; set; }
+		/// <summary>
+		/// Gets or sets a value that determines whether the legend floats over the chart area
+		/// </summary>
+		internal bool IsFloating
+		{
+			get { return (bool)GetValue(IsFloatingProperty); }
+			set { SetValue(IsFloatingProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the horizontal (X) offset of the floating legend, use positive value to shifts right, negative value to shifts left.
+		/// </summary>
+		internal double OffsetX
+		{
+			get { return (double)GetValue(OffsetXProperty); }
+			set { SetValue(OffsetXProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the vertical (Y) offset of the floating legend, use positive values to shift down, negative values to shift up.
+		/// </summary>
+		internal double OffsetY
+		{
+			get { return (double)GetValue(OffsetYProperty); }
+			set { SetValue(OffsetYProperty, value); }
+		}
+
+		internal Layout ContentLayout { get; set; }
 
         LegendPlacement ILegend.Placement { get => Placement; set { } }
 
@@ -167,14 +225,20 @@ namespace Syncfusion.Maui.Toolkit
             set { _getLegendSizeCoeff = value; }
         }
 
-        #endregion
+		bool IFloatingLegend.IsFloating { get => IsFloating; set => IsFloating = value; }
 
-        #region Constructor
+		double IFloatingLegend.OffsetX { get => OffsetX; set => OffsetX = value; }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SfLegend"/> class.
-        /// </summary>
-        public SfLegend()
+		double IFloatingLegend.OffsetY { get => OffsetY; set => OffsetY = value; }
+
+		#endregion
+
+		#region Constructor
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SfLegend"/> class.
+		/// </summary>
+		public SfLegend()
         {
 			_legendView = new ScrollView
 			{
@@ -336,8 +400,11 @@ namespace Syncfusion.Maui.Toolkit
                 }
             }
 
-            OnLegendLayoutChanged();
-            _legendView.Content = ContentLayout;
+			if (_legendView.Content != ContentLayout)
+			{
+				OnLegendLayoutChanged();
+				_legendView.Content = ContentLayout;
+			}
         }
 
         void OnLegendLayoutChanged()

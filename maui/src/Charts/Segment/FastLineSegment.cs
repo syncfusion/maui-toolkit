@@ -18,6 +18,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal IList<double>? _yValues;
 		bool _enableAntiAliasing;
 		Brush? _stroke;
+		bool IsSegementSplited;
+		int segmentStart;
+		int segmentEnd;
 
 #if __ANDROID__
 		readonly float _displayScale;
@@ -146,7 +149,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			bool isTransposed = chart.IsTransposed;
 			float preXPos = 0, preYPos = 0;
 			double preXValue = 0d, preYValue = 0d;
-			int dataCount = _xValues.Count;
+			// When IsSegementSplited is true this segment covers only [segmentStart..segmentEnd].
+			int loopStart = IsSegementSplited ? segmentStart : 0;
+			int loopEnd = IsSegementSplited ? segmentEnd : _xValues.Count - 1;
+			int dataCount = loopEnd - loopStart + 1;
 			float[] linePoints = new float[dataCount * 4];
 			_arrayCount = 0;
 
@@ -184,8 +190,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					if (dataCount > 0)
 					{
-						preXValue = _xValues[0];
-						preYValue = _yValues[0];
+						preXValue = _xValues[loopStart];
+						preYValue = _yValues[loopStart];
 
 						preXPos = fastLineSeries.TransformToVisibleX(preXValue, preYValue);
 						preYPos = fastLineSeries.TransformToVisibleY(preXValue, preYValue);
@@ -195,7 +201,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 #endif
 					}
 
-					for (int i = 1; i < dataCount; i++)
+					for (int i = loopStart + 1; i <= loopEnd; i++)
 					{
 						if (i >= _xValues.Count || i >= _yValues.Count)
 						{
@@ -443,6 +449,82 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				Series.YRange += new DoubleRange(yMin, yMax);
 			}
 		}
+
+		/// <summary>
+		/// Resets cached drawing state so this segment can be reused from the pool.
+		/// </summary>
+		internal void Reset()
+		{
+			_drawPoints = null;
+			_arrayCount = 0;
+			_xValues = null;
+			_yValues = null;
+			Empty = false;
+			Series = null;
+			SeriesView = null;
+			Item = null;
+			IsSegementSplited = false;
+			segmentStart = 0;
+			segmentStart = 0;
+		}
+
+		/// <summary>
+		/// Sets the values for this segment using a contiguous slice of the full data arrays.
+		/// Used for Gap-mode rendering where each segment covers one run of valid (non-NaN) points.
+		/// </summary>
+		/// <param name="xValues">Full X-values list shared across all segments.</param>
+		/// <param name="yValues">Full Y-values list shared across all segments.</param>
+		/// <param name="start">Inclusive start index of the valid run.</param>
+		/// <param name="end">Inclusive end index of the valid run.</param>
+		internal void SetData(List<double> xValues, IList<double> yValues, int start, int end)
+		{
+			if (Series is XYDataSeries series && series.ActualYAxis != null)
+			{
+				// Store slice bounds. XValues / YValues reference the parent lists;
+				// OnLayout reads only indices [start..end].
+				_xValues = xValues;
+				_yValues = yValues;
+				segmentStart = start;
+				segmentEnd = end;
+				IsSegementSplited = true;
+
+				double xMin = double.MaxValue, xMax = double.MinValue;
+				double yMin = double.MaxValue, yMax = double.MinValue;
+
+				for (int i = start; i <= end; i++)
+				{
+					if (i >= xValues.Count || i >= yValues.Count)
+					{
+						break;
+					}
+
+					double xValue = xValues[i];
+					double yValue = yValues[i];
+
+					if (xValue > xMax)
+						xMax = xValue;
+					if (xValue < xMin)
+						xMin = xValue;
+					if (yValue > yMax)
+						yMax = yValue;
+					if (yValue < yMin)
+						yMin = yValue;
+				}
+
+				if (xMin == double.MaxValue)
+					xMin = double.NaN;
+				if (xMax == double.MinValue)
+					xMax = double.NaN;
+				if (yMin == double.MaxValue)
+					yMin = double.NaN;
+				if (yMax == double.MinValue)
+					yMax = double.NaN;
+
+				Series.XRange += new DoubleRange(xMin, xMax);
+				Series.YRange += new DoubleRange(yMin, yMax);
+			}
+		}
+
 
 		/// <summary>
 		/// Update calculated pixels values in array.

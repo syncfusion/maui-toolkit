@@ -32,7 +32,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			_trackballView = new SparkChartTrackballView(this);
 			_templateContainer = new SfAbsoluteLayout();
 			AxisLineStyle = new SparkChartLineStyle();
-			
+
 			// Use AbsoluteLayout as content to support both drawable view and template views
 			_content = CreateContentLayout();
 

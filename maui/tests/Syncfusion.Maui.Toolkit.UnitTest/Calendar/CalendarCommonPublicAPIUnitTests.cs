@@ -986,7 +986,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 			if (selectedCellDetail != null)
 			{
-				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail, new RectF(10, 20, 40, 20));
+				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail);
 				Assert.NotNull(view);
 			}
 		}
@@ -1016,7 +1016,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 			if (selectedCellDetail != null)
 			{
-				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail, new RectF(10, 20, 40, 20));
+				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail);
 				Assert.Null(view);
 			}
 		}
@@ -1063,7 +1063,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 			if (selectedCellDetail != null)
 			{
-				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail, new RectF(10, 20, 40, 20));
+				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail);
 				Assert.NotNull(view);
 			}
 		}
@@ -1093,7 +1093,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 			if (selectedCellDetail != null)
 			{
-				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail, new RectF(10, 20, 40, 20));
+				View? view = CalendarViewHelper.CreateSelectionCellTemplate(new DateTime(2025, 03, 20), calendar.SelectionCellTemplate, calendar.MonthView, selectedCellDetail);
 				Assert.Null(view);
 			}
 		}

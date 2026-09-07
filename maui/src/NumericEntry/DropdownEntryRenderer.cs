@@ -405,19 +405,38 @@
 		/// </summary>
 		/// <param name="canvas">The canvas on which to draw.</param>
 		/// <param name="rectF">The rectangle defining the button's bounds.</param>
-		public void DrawUpButton(ICanvas canvas, RectF rectF) {
-            rectF.X = rectF.Center.X - _padding;
-            rectF.Y = rectF.Center.Y - (_padding / 2);
-            rectF.Width = (_padding * 2);
-            rectF.Height = _padding;
+		public void DrawUpButton(ICanvas canvas, RectF rectF)
+		{
+#if ANDROID
+			float defaultWidth = 32f;
+            float defaultHeight = 30f;
 
-            float x = rectF.X;
-            float y = rectF.Y + rectF.Height;
-            float width = x + rectF.Width;
-            float height = y - rectF.Height;
-            float midWidth = x + (rectF.Width / 2);
+            float widthFactor = defaultWidth / _padding;
+            float heightFactor = defaultHeight / _padding;
 
-            var path = new PathF();
+            float widthPadding = rectF.Width / widthFactor;
+            float heightPadding = rectF.Height / heightFactor;
+
+            float x = rectF.Center.X - widthPadding;
+            float y = rectF.Center.Y + (heightPadding / 2);
+            float width = x + (widthPadding * 2);
+            float height = y - heightPadding;
+            float midWidth = x + widthPadding;
+#else
+			var imageSize = (rectF.Width / 2) - (_padding / 2);
+			rectF.X = rectF.Center.X - imageSize / 2;
+			rectF.Y = rectF.Center.Y - imageSize / 4;
+			rectF.Width = imageSize;
+			rectF.Height = imageSize / 2;
+
+			float x = rectF.X;
+			float y = rectF.Y;
+			float width = x + rectF.Width;
+			float height = y + rectF.Height;
+			float midWidth = x + (rectF.Width / 2);
+#endif
+
+			var path = new PathF();
             path.MoveTo(x, y);
             path.LineTo(width, y);
             path.LineTo(midWidth, height);

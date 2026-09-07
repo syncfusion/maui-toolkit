@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyncfusionControls>
+  <ControlCategory Name="Layouts">
+    <Control Title="Grid Splitter" ControlName="SfGridSplitter" StatusTag="New" Image="gridsplitter.png" Description="Allows users to resize rows and columns dynamically at runtime.">
+      <Sample SearchTags="grid splitter, resize, layout, panel, column, row, drag, divider, resizable"
+              StatusTag="New" SampleName="GettingStarted" Title="Getting Started" />
+    </Control>
+  </ControlCategory>
+</SyncfusionControls>

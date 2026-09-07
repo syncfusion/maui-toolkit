@@ -192,6 +192,37 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override bool HitTest(Point touchPoint)
+		{
+			// Early exit validation - positions must be valid.
+			if (float.IsNaN(XPosition1) || float.IsNaN(YPosition1) ||
+				float.IsNaN(XPosition2) || float.IsNaN(YPosition2))
+			{
+				return false;
+			}
+
+			// Check line annotation hit - return immediately if true.
+			if (ContainsPointInRotatedBounds(touchPoint, GetLineAnnotationBoundsCorners()))
+			{
+				return true;
+			}
+
+			// Check arrowhead hit and label hit - return result.
+			return HitTestArrowHeadAndLabel(touchPoint);
+		}
+
+		internal bool HitTestArrowHeadAndLabel(Point touchPoint)
+		{
+			// Check arrowhead hit - return immediately if true.
+			if (ContainsPointInArrowHead(touchPoint))
+			{
+				return true;
+			}
+
+			// Check label hit - return result.
+			return ContainsPointInRotatedBounds(touchPoint, GetLabelBoundsCorners());
+		}
+
 		internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
 		{
 			ResetPosition();
@@ -519,6 +550,167 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				Invalidate();
 			}
+		}
+
+		bool ContainsPointInRotatedBounds(Point touchPoint, PointF[] rectCorners)
+		{
+			if (rectCorners == null || rectCorners.Length != 4)
+				return false;
+
+			// Use the first corner as the origin; its two adjacent edges define the rectangle axes.
+			var origin = rectCorners[0];
+			var widthCorner = rectCorners[1];   // corner along the width direction from origin
+			var heightCorner = rectCorners[3];  // corner along the height direction from origin
+
+			// Edge vectors representing the rectangle’s local width and height directions.
+			float widthVecX = widthCorner.X - origin.X;
+			float widthVecY = widthCorner.Y - origin.Y;
+			float heightVecX = heightCorner.X - origin.X;
+			float heightVecY = heightCorner.Y - origin.Y;
+
+			// Reject degenerate rectangles (zero or near-zero edge lengths).
+			const float epsilon = 1e-4f;
+			float widthLenSq = widthVecX * widthVecX + widthVecY * widthVecY;
+			float heightLenSq = heightVecX * heightVecX + heightVecY * heightVecY;
+			if (widthLenSq < epsilon || heightLenSq < epsilon)
+				return false;
+
+			// Vector from origin to the test point.
+			float toPointX = (float)touchPoint.X - origin.X;
+			float toPointY = (float)touchPoint.Y - origin.Y;
+
+			// Project the point onto the width and height axes (dot products, no normalization needed).
+			float projOnWidth = toPointX * widthVecX + toPointY * widthVecY;   // in “width-squared units”
+			float projOnHeight = toPointX * heightVecX + toPointY * heightVecY; // in “height-squared units”
+
+			// Inside if both projections lie within [0, |axis|^2], with a small tolerance.
+			bool insideWidth = projOnWidth >= -epsilon && projOnWidth <= widthLenSq + epsilon;
+			bool insideHeight = projOnHeight >= -epsilon && projOnHeight <= heightLenSq + epsilon;
+
+			return insideWidth && insideHeight;
+		}
+
+		bool ContainsPointInArrowHead(Point p)
+		{
+			if (LineCapPoints.Count == 3)
+			{
+				Point a = LineCapPoints[0];
+				Point b = LineCapPoints[1];
+				Point c = LineCapPoints[2];
+				double denominator = ((b.Y - c.Y) * (a.X - c.X) + (c.X - b.X) * (a.Y - c.Y));
+				double alpha = ((b.Y - c.Y) * (p.X - c.X) + (c.X - b.X) * (p.Y - c.Y)) / denominator;
+				double beta = ((c.Y - a.Y) * (p.X - c.X) + (a.X - c.X) * (p.Y - c.Y)) / denominator;
+				double gamma = 1.0 - alpha - beta;
+				return alpha >= 0 && beta >= 0 && gamma >= 0;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// Computes the four corners of a rotated rectangle aligned with the line (X1,Y1)-(X2,Y2).
+		/// <param name="halfThickness"> Distance from the line outward on both sides (half of the rectangle’s thickness).</param>
+		/// <param name="shrinkAlongLineLengthBy"> Amount to reduce the rectangle’s length along the line (e.g., label width).</param>
+		/// Returns corners arranged in sequence: LeftTop → RightTop → RightBottom → LeftBottom.
+		/// </summary>
+		PointF[] ComputeRotatedRectCorners(float halfThickness, float shrinkAlongLineLengthBy)
+		{
+			float x1 = (float)XPosition1;
+			float y1 = (float)YPosition1;
+			float x2 = (float)XPosition2;
+			float y2 = (float)YPosition2;
+			float dx = x2 - x1;
+			float dy = y2 - y1;
+			float length = MathF.Sqrt(dx * dx + dy * dy);
+			// Degenerate segment: return an axis-aligned square around (x1,y1).
+			if (length < 1e-3f)
+			{
+				return
+				[
+					new PointF(x1 - halfThickness, y1 - halfThickness),
+					new PointF(x1 + halfThickness, y1 - halfThickness),
+					new PointF(x1 + halfThickness, y1 + halfThickness),
+					new PointF(x1 - halfThickness, y1 + halfThickness),
+				];
+			}
+
+			float angle = MathF.Atan2(dy, dx);
+			float midX = (x1 + x2) / 2f;
+			float midY = (y1 + y2) / 2f;
+			float halfLength = MathF.Max(0f, (length - shrinkAlongLineLengthBy) / 2f);
+
+			// Local corners in (tangent x, normal y).
+			// Order: LT, RT, RB, LB to match your usage.
+			(float x, float y)[] raw =
+			[
+				(-halfLength, -halfThickness),
+				( halfLength, -halfThickness),
+				( halfLength,  halfThickness),
+				(-halfLength,  halfThickness),
+			];
+
+			float cosA = MathF.Cos(angle);
+			float sinA = MathF.Sin(angle);
+			PointF[] rotatedCorners = new PointF[4];
+			for (int i = 0; i < 4; i++)
+			{
+				float rawX = raw[i].x;
+				float rawY = raw[i].y;
+				float rotatedX = rawX * cosA - rawY * sinA + midX;
+				float rotatedY = rawX * sinA + rawY * cosA + midY;
+				rotatedCorners[i] = new PointF(rotatedX, rotatedY);
+			}
+
+			return rotatedCorners;
+		}
+
+		/// <summary>
+		/// Computes the pure line annotation bounds corners, using half stroke width as thickness.
+		/// </summary>
+		PointF[] GetLineAnnotationBoundsCorners()
+		{
+			return ComputeRotatedRectCorners(
+				(float)StrokeWidth / 2f,
+				0f // Pure line bounds (no tangential shrink).
+			);
+		}
+
+		PointF[] GetLabelBoundsCorners()
+		{
+			if (_annotationLabelStyle == null || string.IsNullOrEmpty(Text) || LabelRect.IsEmpty)
+				return [];
+
+			double centerX = LabelRect.X;
+			double centerY = LabelRect.Y;
+			double labelWidth = LabelRect.Width;
+			double labelHeight = LabelRect.Height;
+			// Border thickness (half) from the label style.
+			float halfLabelBorderWidth = (float)(_annotationLabelStyle.StrokeWidth / 2.0);
+			// Convert angle to radians for rotation math.
+			float radians = (float)(Angle * Math.PI / 180.0);
+			// Half dimensions, expanded to include the border.
+			float halfWidth = (float)(labelWidth / 2.0) + halfLabelBorderWidth;
+			float halfHeight = (float)(labelHeight / 2.0) + halfLabelBorderWidth;
+			// Raw corners relative to center.
+			var rawCorners = new (float x, float y)[]
+			{
+				(-halfWidth, -halfHeight),
+				( halfWidth, -halfHeight),
+				( halfWidth,  halfHeight),
+				(-halfWidth,  halfHeight)
+			};
+
+			float cosA = MathF.Cos(radians);
+			float sinA = MathF.Sin(radians);
+			PointF[] rotatedCorners = new PointF[4];
+			for (int i = 0; i < 4; i++)
+			{
+				float rx = rawCorners[i].x * cosA - rawCorners[i].y * sinA + (float)centerX;
+				float ry = rawCorners[i].x * sinA + rawCorners[i].y * cosA + (float)centerY;
+				rotatedCorners[i] = new PointF(rx, ry);
+			}
+
+			return rotatedCorners;
 		}
 
 		#endregion

@@ -11,18 +11,23 @@
 		readonly Func<IElement?, Point?>? _getPosition;
 #if IOS || MACCATALYST
 		private readonly GestureStatus _status;
+#else
+        /// <summary>
+        /// The position relative to the content origin.
+        /// </summary>
+        private readonly Point _contentPosition;
 #endif
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		/// <summary>
-		/// Gets the actual touch point on long press.
-		/// </summary>
-		/// <value>
-		/// A <see cref="Point"/> representing the touch point where the long press occurred.
-		/// </value>
-		public Point TouchPoint => _touchPoint;
+        /// <summary>
+        /// Gets the actual touch point on long press.
+        /// </summary>
+        /// <value>
+        /// A <see cref="Point"/> representing the touch point where the long press occurred.
+        /// </value>
+        public Point TouchPoint => _touchPoint;
 
 #if IOS || MACCATALYST
 		internal GestureStatus Status { get { return _status; } }
@@ -52,6 +57,18 @@
 		{
 			_touchPoint = touchPoint;
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LongPressEventArgs"/> class.
+        /// </summary>
+        /// <param name="touchPoint">The location where the long press occurred.</param>
+        /// <param name="contentPosition">The position relative to the content origin.</param>
+        public LongPressEventArgs(Point touchPoint, Point contentPosition)
+        {
+            _touchPoint = touchPoint;
+            _contentPosition = contentPosition;
+        }
+
 #endif
 
 		#endregion

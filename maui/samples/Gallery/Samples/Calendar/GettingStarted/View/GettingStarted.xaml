@@ -124,7 +124,8 @@
                         VerticalTextAlignment="Center"/>
             <DatePicker x:Name="datePicker" 
                                 Grid.Column="1"
-                                VerticalOptions="Center" />
+                                VerticalOptions="Center"
+                                HorizontalOptions ="Start" />
           </Grid>
 
           <Grid x:Name="allowViewNavigationGrid">

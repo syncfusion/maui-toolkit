@@ -16,6 +16,8 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 
 		public double Size { get; set; }
 
+		public double Volume { get; set; }
+
 		public double High { get; set; }
 
 		public double Low { get; set; }
@@ -56,6 +58,8 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 		public double Releases { get; set; }
 
 		public string? TopMovie { get; set; }
+
+		public Color? PointColor { get; set; }
 
 		public ChartDataModel() { }
 
@@ -124,6 +128,16 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			Low = low;
 			Value = open;
 			Size = close;
+		}
+
+		public ChartDataModel(DateTime date, double high, double low, double open, double close, double volume)
+		{
+			Date = date;
+			Value = open;
+			High = high;
+			Low = low;
+			Size = close;
+			Volume = volume;
 		}
 
 		public ChartDataModel(DateTime date, double high, double low, double open, double close)

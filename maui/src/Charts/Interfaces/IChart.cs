@@ -43,7 +43,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#endregion
 	}
 
-	internal interface IChartLegend : ILegend
+	internal interface IChartLegend : IFloatingLegend
 	{
 		#region Properties
 
@@ -56,5 +56,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		void OnLegendItemCreated(ILegendItem item);
 
 		#endregion
+	}
+
+	internal interface ICartesianLegendDependent
+	{
+		Brush? GetLegendBrush(object item, int index);
+		bool IsVisible { get; }
+		string LegendText { get; }
+		Toolkit.ShapeType LegendIcon { get; }
 	}
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -223,8 +223,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						double y = _topPointCollection[i].Y;
 						if (!double.IsNaN(y))
 						{
-							if (y < rangeMin) rangeMin = y;
-							if (y > rangeMax) rangeMax = y;
+							if (y < rangeMin)
+								rangeMin = y;
+							if (y > rangeMax)
+								rangeMax = y;
 							hasValid = true;
 						}
 					}
@@ -234,8 +236,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						double y = _bottomPointCollection[i].Y;
 						if (!double.IsNaN(y))
 						{
-							if (y < rangeMin) rangeMin = y;
-							if (y > rangeMax) rangeMax = y;
+							if (y < rangeMin)
+								rangeMin = y;
+							if (y > rangeMax)
+								rangeMax = y;
 							hasValid = true;
 						}
 					}

@@ -2313,6 +2313,40 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		/// <summary>
+		/// Gets the index of the label hit by a touch point, accounting for all axis properties.
+		/// Converts chart touch coordinates through the proper transformation pipeline.
+		/// </summary>
+		/// <param name="chartTouchX">Touch point X in chart area coordinates</param>
+		/// <param name="chartTouchY">Touch point Y in chart area coordinates</param>
+		/// <returns>Index of hit label, or -1 if no label was hit</returns>
+		internal int GetHitLabelIndex(float chartTouchX, float chartTouchY)
+		{
+			var labelsRect = AxisLabelsRenderer?.LabelLayout?.LabelsRect;
+
+			if (labelsRect == null || labelsRect.Count == 0)
+			{
+				return -1;
+			}
+
+			// Convert chart touch point to label layout space
+			ConvertChartPointToLabelLayoutSpace(chartTouchX, chartTouchY, out float localX, out float localY);
+
+			// Check which label bounds the local point falls into
+			for (int i = 0; i < labelsRect.Count; i++)
+			{
+				RectF labelRect = labelsRect[i];
+
+				// Test if local point is within this label's bounds
+				if (labelRect.Contains(localX, localY))
+				{
+					return i;
+				}
+			}
+
+			return -1;
+		}
+
 		#endregion
 
 		#region Protected Methods
@@ -2610,6 +2644,41 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			return axisArrangeRect;
+		}
+
+		/// <summary>
+		/// Converts a chart area touch point to axis label layout coordinate space by accounting for
+		/// axis arrangement, label renderer position, axis opposition, label position, and tick position.
+		/// 
+		/// All positioning factors are implicitly handled through the LabelsRenderer position which is
+		/// computed by CartesianAxisRenderer.Layout() considering:
+		/// - IsOpposed() status (affects element ordering)
+		/// - LabelsPosition (Inside/Outside - affects element ordering)
+		/// - TickPosition (Inside/Outside - affects element ordering)
+		/// - Multi-level labels (affects element ordering and cumulative offset)
+		/// </summary>
+		/// <param name="chartTouchX">Touch point X in chart area coordinates</param>
+		/// <param name="chartTouchY">Touch point Y in chart area coordinates</param>
+		/// <param name="localX">Output: X coordinate in label layout space</param>
+		/// <param name="localY">Output: Y coordinate in label layout space</param>
+		/// <returns>True if conversion was successful and label layout exists, false otherwise</returns>
+		void ConvertChartPointToLabelLayoutSpace(float chartTouchX, float chartTouchY, out float localX, out float localY)
+		{
+			localX = 0;
+			localY = 0;
+
+			// Calculate base offset: ArrangeRect position + LabelsRenderer position
+			// LabelsRenderer position (left, top) is set by CartesianAxisRenderer.Layout() which
+			// accumulates positions accounting for IsOpposed(), LabelsPosition, TickPosition, and multi-level labels
+			double rendererLeft = AxisLabelsRenderer!.GetLeft();
+			double rendererTop = AxisLabelsRenderer!.GetTop();
+
+			double totalOffsetX = ArrangeRect.Left + rendererLeft;
+			double totalOffsetY = ArrangeRect.Top + rendererTop;
+
+			// Convert chart coordinates to label layout local space
+			localX = chartTouchX - (float)totalOffsetX;
+			localY = chartTouchY - (float)totalOffsetY;
 		}
 
 		#region Property Changed Methods

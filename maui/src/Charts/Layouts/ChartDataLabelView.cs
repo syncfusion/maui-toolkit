@@ -44,6 +44,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						}
 
 						series.DrawDataLabels(canvas);
+						RegisterDataLabelRegions(series);
 						canvas.CanvasRestoreState();
 					}
 
@@ -56,6 +57,55 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			canvas.CanvasRestoreState();
 		}
+
+		#region Private methods
+
+		/// <summary>
+		/// Registers data label regions for hit detection
+		/// </summary>
+		void RegisterDataLabelRegions(ChartSeries series)
+		{
+			if (series._segments == null)
+				return;
+
+			for (int i = 0; i < series._segments.Count; i++)
+			{
+				var segment = series._segments[i];
+
+				// Get label bounds from segment
+				if (segment is ChartSegment chartSegment)
+				{
+					// Register each data label region
+					segment.LabelBounds = GetDataLabelBounds(chartSegment);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Gets the bounding rectangle of a data label
+		/// </summary>
+		RectF GetDataLabelBounds(ChartSegment segment)
+		{
+			// For other series types, calculate from label position and size
+			var labelContent = segment.LabelContent?.ToString() ?? string.Empty;
+			if (string.IsNullOrEmpty(labelContent))
+				return RectF.Zero;
+
+			// Estimate label size - can be improved with actual measurement
+			float estimatedWidth = labelContent.Length * 6f;
+			float estimatedHeight = 16f;
+
+			PointF labelPos = segment.LabelPositionPoint;
+
+			return new RectF(
+				labelPos.X - (estimatedWidth / 2),
+				labelPos.Y - (estimatedHeight / 2),
+				estimatedWidth,
+				estimatedHeight
+			);
+		}
+
+		#endregion
 
 		#endregion
 

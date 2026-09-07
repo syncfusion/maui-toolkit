@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+                      x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.Trendlines"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      x:DataType="local:TrendlineViewModel">
+
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:CartesianChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+    
+    <localCore:SampleView.BindingContext>
+        <local:TrendlineViewModel />
+    </localCore:SampleView.BindingContext>
+
+    <localCore:SampleView.Content>
+        <Border>
+            <chart:SfCartesianChart>
+
+                <chart:SfCartesianChart.Title>
+                    <Label Text="Enterprise Revenue Trend (FY2018–FY2025)"
+                           FontSize="18"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center"/>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.Legend>
+                    <chart:ChartLegend Placement="Bottom"
+                                       ToggleSeriesVisibility="True"/>
+                </chart:SfCartesianChart.Legend>
+
+                <chart:SfCartesianChart.TooltipBehavior>
+                    <chart:ChartTooltipBehavior/>
+                </chart:SfCartesianChart.TooltipBehavior>
+
+                <chart:SfCartesianChart.XAxes>
+                    <chart:NumericalAxis EdgeLabelsDrawingMode="Center" 
+                                         PlotOffsetStart="10" 
+                                         PlotOffsetEnd="14" 
+                                         ShowMajorGridLines="False">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Year"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis EdgeLabelsDrawingMode="Center"
+                                         PlotOffsetEnd="10"
+                                         Minimum="200"
+                                         Maximum="1000"
+                                         ShowMajorGridLines="False"
+                                         ShowMinorGridLines="False">
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Revenue (in $)"/>
+                        </chart:NumericalAxis.Title>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="0'k'" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
+                </chart:SfCartesianChart.YAxes>
+
+                <chart:ColumnSeries x:Name="RevenueSeries"
+                                    ItemsSource="{Binding QuarterlyRevenue}"
+                                    XBindingPath="Year"
+                                    YBindingPath="Revenue"
+                                    LegendIcon="Diamond"
+                                    Label="Actual revenue"
+                                    Fill="#90CAF9"
+                                    Stroke="#1A73E8"
+                                    StrokeWidth="1"
+                                    EnableTooltip="True">
+                </chart:ColumnSeries>
+            </chart:SfCartesianChart>
+        </Border>
+    </localCore:SampleView.Content>
+    <localCore:SampleView.OptionView>
+        <ScrollView>
+            <VerticalStackLayout Padding="5" Spacing="2">
+                <Grid ColumnDefinitions="Auto,*"
+                      ColumnSpacing="6"
+                      Padding="0,4"
+                      HorizontalOptions="Fill">
+                    <Label Text="Trendline"
+                           Grid.Column="0"
+                           VerticalOptions="Center"
+                           Margin="0" />
+                    <CheckBox x:Name="TrendlineVisible"
+                              Grid.Column="1"
+                              VerticalOptions="Center"
+                              HorizontalOptions="End"
+                              IsChecked="{Binding IsTrendlineVisible, Mode=TwoWay}">
+                    </CheckBox>
+                </Grid>
+
+                <Grid ColumnDefinitions="Auto,*"
+                      ColumnSpacing="3"
+                      Padding="0,4"
+                      HorizontalOptions="Fill">
+                    <Label Grid.Column="0"
+                           VerticalOptions="Center"
+                           Text="Trendline types"
+                           Margin="0" />
+                    <Picker Grid.Column="1"
+                            HorizontalOptions="End"
+                            WidthRequest="120"
+                            FontSize="13"
+                            Background="{OnPlatform Default={AppThemeBinding Dark={StaticResource TextColour1Dark}, Light={StaticResource BackgroundLight}},Android=Transparent}"
+                            TextColor="{OnPlatform Default={StaticResource TextColourLight}, Android={AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}}"
+                            ItemsSource="{Binding TrendlineTypes}"
+                            SelectedItem="{Binding SelectedTrendlineType}"
+                            Margin="0" />
+                </Grid>
+
+                <VerticalStackLayout Spacing="4" IsVisible="{Binding IsPolynomialVisible}">
+                    <Label Text="Polynomial order" FontAttributes="Bold" Margin="0,6,0,2" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" RowSpacing="0">
+                        <Label Text="Order" VerticalTextAlignment="Center" />
+
+                        <Grid Grid.Column="1"
+                          ColumnDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="4"
+                          HorizontalOptions="End"
+                          HeightRequest="36">
+                            <Button Text="−"
+                                WidthRequest="32" HeightRequest="32" Padding="0" Margin="0"
+                                FontSize="16" CornerRadius="6"
+                                Command="{Binding DecrementPolynomialOrderCommand}" />
+                            <Label Grid.Column="1"
+                               WidthRequest="36" HeightRequest="32"
+                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="{Binding PolynomialOrder}" />
+                            <Button Grid.Column="2" Text="+"
+                                WidthRequest="32" HeightRequest="32" Padding="0" Margin="0"
+                                FontSize="16" CornerRadius="6"
+                                Command="{Binding IncrementPolynomialOrderCommand}" />
+                        </Grid>
+                    </Grid>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="4" IsVisible="{Binding IsMovingAverageVisible}">
+                    <Label Text="Moving-average period" FontAttributes="Bold" Margin="0,6,0,2" />
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" RowSpacing="0">
+                        <Label Text="Period" VerticalTextAlignment="Center" />
+
+                        <Grid Grid.Column="1"
+                          ColumnDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="4"
+                          HorizontalOptions="End"
+                          HeightRequest="36">
+                            <Button Text="−"
+                                WidthRequest="32" HeightRequest="32" Padding="0" Margin="0"
+                                FontSize="16" CornerRadius="6"
+                                Command="{Binding DecrementMAPeriodCommand}" />
+                            <Label Grid.Column="1"
+                               WidthRequest="36" HeightRequest="32"
+                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="{Binding MovingAveragePeriod}" />
+                            <Button Grid.Column="2" Text="+"
+                                WidthRequest="32" HeightRequest="32" Padding="0" Margin="0"
+                                FontSize="16" CornerRadius="6"
+                                Command="{Binding IncrementMAPeriodCommand}" />
+                        </Grid>
+                    </Grid>
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Forecast" FontAttributes="Bold" Margin="0,6,0,2" />
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" RowSpacing="8">
+                        <Label Text="Forward" VerticalTextAlignment="Center" />
+                        <Grid Grid.Column="1"
+                          ColumnDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="4"
+                          HorizontalOptions="End"
+                          HeightRequest="36">
+                            <Button Text="−"
+                                WidthRequest="32" HeightRequest="32" Padding="0" Margin="0"
+                                FontSize="16" CornerRadius="6"
+                                Command="{Binding DecrementForwardCommand}" />
+                            <Label Grid.Column="1"
+                               WidthRequest="36" HeightRequest="32"
+                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="{Binding ForwardForecast}" />
+                            <Button Grid.Column="2" Text="+"
+                                WidthRequest="32" HeightRequest="32" Padding="0" Margin="0"
+                                FontSize="16" CornerRadius="6"
+                                Command="{Binding IncrementForwardCommand}" />
+                        </Grid>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" RowSpacing="8" Margin="0,4,0,0">
+                        <Label Text="Backward" VerticalTextAlignment="Center" />
+                        <Grid Grid.Column="1"
+                          ColumnDefinitions="Auto,Auto,Auto"
+                          ColumnSpacing="4"
+                          HorizontalOptions="End"
+                          HeightRequest="36">
+                            <Button Text="−"
+                                WidthRequest="32" HeightRequest="32" Padding="0" Margin="0"
+                                FontSize="16" CornerRadius="6"
+                                Command="{Binding DecrementBackwardCommand}" />
+                            <Label Grid.Column="1"
+                               WidthRequest="36" HeightRequest="32"
+                               HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                               Text="{Binding BackwardForecast}" />
+                            <Button Grid.Column="2" Text="+"
+                                WidthRequest="32" HeightRequest="32" Padding="0" Margin="0"
+                                FontSize="16" CornerRadius="6"
+                                Command="{Binding IncrementBackwardCommand}" />
+                        </Grid>
+                    </Grid>
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

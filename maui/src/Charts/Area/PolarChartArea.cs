@@ -18,7 +18,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
         readonly PolarAxisLayoutView _axisLayout;
 
         bool _shouldPopulateLegendItems = true;
-        View? _plotAreaBackgroundView;
+		bool _shouldUpdateLegendIconBrush = false;
+		View? _plotAreaBackgroundView;
         RectF _actualSeriesClipRect;
         IChartLegend? _legend;
         ChartPolarSeriesCollection? _series;
@@ -46,7 +47,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
-        public ReadOnlyObservableCollection<ChartSeries>? VisibleSeries => Series?.GetVisibleSeries();
+		public bool ShouldUpdateLegendIconBrush
+		{
+			get
+			{
+				return _shouldUpdateLegendIconBrush;
+			}
+			set
+			{
+				_shouldUpdateLegendIconBrush = value;
+			}
+		}
+
+		public ReadOnlyObservableCollection<ChartSeries>? VisibleSeries => Series?.GetVisibleSeries();
 
         #endregion
 
@@ -173,7 +186,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 _shouldPopulateLegendItems = false;
                 _legendItemsUpdated?.Invoke(this, EventArgs.Empty);
             }
-        }
+			else if (_shouldUpdateLegendIconBrush && Series != null)
+			{
+				foreach (var series in Series)
+				{
+					if (series.IsColorPathSeries)
+					{
+						series.UpdateLegendIconColor();
+					}
+				}
+
+				_shouldUpdateLegendIconBrush = false;
+			}
+		}
 
         #endregion
 

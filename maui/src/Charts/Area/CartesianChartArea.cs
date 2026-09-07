@@ -17,6 +17,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		bool _enableSideBySideSeriesPlacement = true;
 		Dictionary<string, List<StackingSeriesBase>>? _seriesGroup;
 		RectF _actualSeriesClipRect;
+		RectF _annotationClipRect;
 		ChartSeriesCollection? _series;
 		readonly Element _sourceParent;
 		#endregion
@@ -41,6 +42,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal Rect SeriesClipRect { get; set; }
 
 		internal RectF ActualSeriesClipRect { get { return _actualSeriesClipRect; } set { _actualSeriesClipRect = value; } }
+
+		internal RectF AnnotationClipRect { get { return _annotationClipRect; } set { _annotationClipRect = value; } }
 
 		#endregion
 
@@ -137,10 +140,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			cartesianChart.ActualSeriesClipRect = ChartUtils.GetSeriesClipRect(
 				AreaBounds.SubtractThickness(PlotAreaMargin),
 				_cartesianPlotArea._chart.TitleHeight);
+			AnnotationClipRect = ChartUtils.GetSeriesClipRect(AreaBounds, _cartesianPlotArea._chart.TitleHeight);
 
 			//Need to set the trackballview padding to display the trackball template exact position
 			if (cartesianChart is SfCartesianChart chart)
+			{
 				chart._trackballView.Padding = PlotAreaMargin;
+				chart._crosshairView.Padding = PlotAreaMargin;
+			}
 
 			UpdateVisibleSeries(); //series create segment logics.
 

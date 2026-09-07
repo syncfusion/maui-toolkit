@@ -1,6 +1,6 @@
+using System.Collections.ObjectModel;
 using Microsoft.Maui.Layouts;
 using Syncfusion.Maui.Toolkit.Internals;
-using System.Collections.ObjectModel;
 
 namespace Syncfusion.Maui.Toolkit.SunburstChart
 {
@@ -69,7 +69,11 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             AbsoluteLayout.SetLayoutFlags(chart.BehaviorLayout, AbsoluteLayoutFlags.All);
             Add(chart.BehaviorLayout);
 
-            BatchCommit();
+			chart.BehaviorLayout.Add(chart.DrillDownToolbar);
+			AbsoluteLayout.SetLayoutBounds(chart.DrillDownToolbar, new Rect(1, 0, 120, 48));// Updated size as per Figma.
+			AbsoluteLayout.SetLayoutFlags(chart.DrillDownToolbar, AbsoluteLayoutFlags.PositionProportional);
+
+			BatchCommit();
         }
 
         #endregion
@@ -141,7 +145,25 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 				_chart.GetRadius();
 				_chart.GenerateSegments();
 				SeriesView?.Layout();
-			    Invalidate();
+
+				if (_chart.DrillDownManager is DrillDownManager manager)
+				{
+					if (manager.IsDoubleClicked)
+					{
+						_chart.AnimateDrillDown(500);
+					}
+
+					if (manager.IsFadeInAnimated)
+					{
+						_chart.AnimateAlpha(500);
+					}
+
+					_chart.UpdateToolbarPosition();
+				}
+				else
+				{
+					Invalidate();
+				}
 			}
 		}
 
@@ -155,10 +177,24 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 return;
             }
 
-            legendItems.Clear();
-            var items = _chart.Levels[0].SunburstItems;
+			bool isZoomed = _chart.DrillDownManager != null? _chart.DrillDownManager.IsZoomed : false;
+			SunburstLevelCollection filteredLevels = new SunburstLevelCollection();
 
-            if (items != null && items.Count > 0)
+			if (isZoomed)
+			{
+				foreach (var level in _chart.Levels)
+				{
+					if (level.SunburstItems != null && level.SunburstItems.Count > 0)
+					{
+						filteredLevels.Add(level);
+					}
+				}
+			}
+
+			legendItems.Clear();
+			var items = isZoomed ? filteredLevels[0].SunburstItems : _chart.Levels[0].SunburstItems;
+
+			if (items != null && items.Count > 0)
             {
                 for (int i = 0; i < items.Count; i++)
                 {
@@ -167,8 +203,8 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                     {
                         var legendItem = new LegendItem();
                         legendItem.IconType = ShapeType.Circle;
-                        var solidColor = _chart.GetFillColor(i) ?? Brush.Transparent;
-                        legendItem.IconBrush = solidColor ?? new SolidColorBrush(Colors.Transparent);
+						var solidColor = _chart.GetFillColor(currentItem.SliceIndex) ?? Brush.Transparent;
+						legendItem.IconBrush = solidColor ?? new SolidColorBrush(Colors.Transparent);
                         legendItem.Text = currentItem.Key?.ToString() ?? string.Empty;
                         legendItem.Index = currentItem.SliceIndex;
                         UpdateLegendItem(legendItem);
@@ -184,7 +220,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 		/// Updates the visual properties of a legend item.
 		/// </summary>
 		/// <param name="legendItem">The legend item to update.</param>
-		private void UpdateLegendItem(LegendItem legendItem)
+		void UpdateLegendItem(LegendItem legendItem)
         {
             if (_chart != null)
             {
@@ -217,14 +253,15 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 		/// <summary>
 		/// Invalidates the drawable views for the series and data labels.
 		/// </summary>
-		private void Invalidate()
+		void Invalidate()
         {
             if (!_chart.NeedToAnimate)
             {
                 SeriesView?.InvalidateDrawable();
                 DataLabelView?.InvalidateDrawable();
             }
-        }
+
+		}
 
 		/// <summary>
 		/// Updates the icon color of the legend items.
@@ -263,7 +300,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 		/// <param name="seriesClipRect">The original clipping rectangle.</param>
 		/// <param name="titleHeight">The height of the chart title.</param>
 		/// <returns>The adjusted clipping rectangle.</returns>
-		private Rect GetSeriesClipRect(Rect seriesClipRect, double titleHeight)
+		Rect GetSeriesClipRect(Rect seriesClipRect, double titleHeight)
         {
             return new Rect(
                 seriesClipRect.X,

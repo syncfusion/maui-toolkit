@@ -88,6 +88,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override bool IsSideBySide => true;
 
+		internal override bool IsColorPathSeries => false;
+
 		#endregion
 
 		#region Bindable Properties

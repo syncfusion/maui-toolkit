@@ -18,6 +18,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		ChartSeriesCollection? _series;
 		View? _plotAreaBackgroundView;
 		bool _shouldPopulateLegendItems = true;
+		bool _shouldUpdateLegendIconBrush = false;
 		EventHandler<EventArgs>? _legendItemsUpdated;
 		EventHandler<LegendItemEventArgs>? _legendItemsToggled;
 
@@ -82,6 +83,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			set
 			{
 				_shouldPopulateLegendItems = value;
+			}
+		}
+
+		public bool ShouldUpdateLegendIconBrush
+		{
+			get
+			{
+				return _shouldUpdateLegendIconBrush;
+			}
+			set
+			{
+				_shouldUpdateLegendIconBrush = value;
 			}
 		}
 
@@ -155,6 +168,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				UpdateLegendItemsSource();
 				_shouldPopulateLegendItems = false;
 				_legendItemsUpdated?.Invoke(this, EventArgs.Empty);
+			}
+			else if (_shouldUpdateLegendIconBrush && Series != null)
+			{
+				foreach (var series in Series)
+				{
+					if (series.IsColorPathSeries)
+					{
+						series.UpdateLegendIconColor();
+					}
+				}
+
+				_shouldUpdateLegendIconBrush = false;
 			}
 		}
 
@@ -313,6 +338,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (chartLegendItem.Source is ChartSeries series)
 				{
 					series.LegendItemToggled(chartLegendItem);
+				}
+				else if (chartLegendItem.Source is ChartTrendline trendline)
+				{
+					trendline.LegendItemToggled(chartLegendItem);
 				}
 			}
 		}

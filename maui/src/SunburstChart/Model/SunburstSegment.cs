@@ -135,10 +135,15 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             get { return StrokeWidth > 0 && !IsEmpty(SunburstChartUtils.ToColor(Stroke)); }
         }
 
-        /// <summary>
-        /// Gets or sets the current segment's child's.
-        /// </summary>
-        internal List<SunburstSegment>? Childs { get; set; }
+		/// <summary>
+		/// Gets or sets a value indicating whether fade-in is needed for current segment.
+		/// </summary>
+		internal bool IsFadeInNeeded { get; set; }
+
+		/// <summary>
+		/// Gets or sets the current segment's child's.
+		/// </summary>
+		internal List<SunburstSegment>? Childs { get; set; }
 
         /// <summary>
         /// Gets or sets the current segment's parent.
@@ -165,10 +170,15 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         /// </summary>
         internal SfSunburstChart? Chart { get; set; }
 
-        /// <summary>
-        /// Gets or sets the inner radius of this segment.
-        /// </summary>
-        internal double InnerRadius { get; set; }
+		/// <summary>
+		/// Gets or sets the unique key for segment identification during drill operations.
+		/// </summary>
+		internal int UniqueKey { get; set; }
+
+		/// <summary>
+		/// Gets or sets the inner radius of this segment.
+		/// </summary>
+		internal double InnerRadius { get; set; }
 
         /// <summary>
         /// Gets or sets the outer radius of this segment.
@@ -190,70 +200,103 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         /// </summary>
         internal bool IsSelected { get; set; }
 
-        #endregion
+		#endregion
 
-        #region Internal methods
+		#region Internal methods
 
-        /// <summary>
-        /// Draws the segment using the provided canvas context.
-        /// </summary>
-        /// <param name="canvas"></param>
-        internal void Draw(ICanvas canvas)
-        {
-            if (Chart == null) return;
+		/// <summary>
+		/// Draws the segment using the provided canvas context.
+		/// </summary>
+		/// <param name="canvas"></param>
+		internal void Draw(ICanvas canvas)
+		{
+			if (Chart == null)
+				return;
 
-			canvas.Alpha = (float)Opacity;
+			canvas.Alpha = OnAlphaAnimation(Chart, Opacity);
 
 			PathF pathF = new PathF();
 
-            var segmentStartAngle = _currentSegmentStartAngle;
-            var segmentEndAngle = _currentSegmentEndAngle;
+			var segmentStartAngle = _currentSegmentStartAngle;
+			var segmentEndAngle = _currentSegmentEndAngle;
 
-            if (Chart.CanAnimate())
-            {
-                float animationValue = Chart.AnimationValue;
+			if (Chart.CanAnimate())
+			{
+				float animationValue = Chart.AnimationValue;
 
-                segmentStartAngle = (float)(Chart.StartAngle + ((_currentSegmentStartAngle - Chart.StartAngle) * animationValue));
-                segmentEndAngle = _currentSegmentEndAngle * animationValue;
-            }
+				segmentStartAngle = (float)(Chart.StartAngle + ((_currentSegmentStartAngle - Chart.StartAngle) * animationValue));
+				segmentEndAngle = _currentSegmentEndAngle * animationValue;
+			}
+			
+			SegmentAngleAnimation(canvas, Chart, ref segmentStartAngle, ref segmentEndAngle);
 
-            pathF.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom,
-                -segmentStartAngle, -segmentEndAngle, true);
-            pathF.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom,
-                -segmentEndAngle, -segmentStartAngle, false);
-            pathF.Close();
-            canvas.SetFillPaint(Fill, pathF.Bounds);
-            canvas.FillPath(pathF);
-            _segmentBounds = pathF.Bounds;
+			pathF.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom,
+				-segmentStartAngle, -segmentEndAngle, true);
+			pathF.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom,
+				-segmentEndAngle, -segmentStartAngle, false);
+			pathF.Close();
+			canvas.SetFillPaint(Fill, pathF.Bounds);
+			canvas.FillPath(pathF);
+			_segmentBounds = pathF.Bounds;
 
-            if (HasStroke)
-            {
-                if (_isCircularBar)
-                {
-                    var outerPath = new PathF();
-                    outerPath.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom,
-                   -segmentStartAngle, -segmentEndAngle, true);
-                    var innerPath = new PathF();
-                    innerPath.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom,
-                        -segmentEndAngle, -segmentStartAngle, false);
-                    canvas.StrokeColor = SunburstChartUtils.ToColor(Stroke);
-                    canvas.StrokeSize = (float)StrokeWidth;
-                    canvas.DrawPath(innerPath);
-                    canvas.DrawPath(outerPath);
-                }
-                else
-                {
-                    canvas.StrokeColor = SunburstChartUtils.ToColor(Stroke);
-                    canvas.StrokeSize = (float)StrokeWidth;
-                    canvas.DrawPath(pathF);
-                }
-            }
-        }
+			if (HasStroke)
+			{
+				if (_isCircularBar)
+				{
+					var outerPath = new PathF();
+					outerPath.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom,
+				   -segmentStartAngle, -segmentEndAngle, true);
+					var innerPath = new PathF();
+					innerPath.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom,
+						-segmentEndAngle, -segmentStartAngle, false);
+					canvas.StrokeColor = SunburstChartUtils.ToColor(Stroke);
+					canvas.StrokeSize = (float)StrokeWidth;
+					canvas.DrawPath(innerPath);
+					canvas.DrawPath(outerPath);
+				}
+				else
+				{
+					canvas.StrokeColor = SunburstChartUtils.ToColor(Stroke);
+					canvas.StrokeSize = (float)StrokeWidth;
+					canvas.DrawPath(pathF);
+				}
+			}
+		}
 
-        /// <summary>
+		float OnAlphaAnimation(SfSunburstChart chart, float opacity)
+		{
+			if (chart.DrillDownManager is DrillDownManager drillDownManager)
+			{
+				if (drillDownManager.IsFadeInAnimated && IsFadeInNeeded)
+				{
+					return Opacity * drillDownManager.AlphaAnimationValue;
+				}
+			}
+
+			return opacity;
+		}
+
+		void SegmentAngleAnimation(ICanvas canvas, SfSunburstChart chart, ref float segmentStartAngle, ref float segmentEndAngle)
+		{
+			float startAngleToAnimate = 0, EndAngleToAnimate = 0;
+
+			if (chart.DrillDownManager is DrillDownManager drillDownManager)
+			{
+				//Drill down angle animation
+				if (drillDownManager.IsDoubleClicked || drillDownManager.IsBackButtonClicked || drillDownManager.IsResetButtonClicked)
+				{
+					startAngleToAnimate = (drillDownManager.PreviousStartAngle - _currentSegmentStartAngle) * (-drillDownManager.ZoomAnimationValue);
+					EndAngleToAnimate = (_currentSegmentEndAngle - drillDownManager.PreviousEndAngle) * (drillDownManager.ZoomAnimationValue);
+					segmentStartAngle = startAngleToAnimate + drillDownManager.PreviousStartAngle;
+					segmentEndAngle = EndAngleToAnimate + drillDownManager.PreviousEndAngle;
+				}
+			}
+		}
+
+		/// <summary>
 		/// Updates the segment's bounds and layout-related properties.
 		/// </summary>
-        internal void OnLayout()
+		internal void OnLayout()
         {
             UpdateBounds();
         }
@@ -395,7 +438,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             {
                 var center = Chart.Center;
 
-                double size = Chart.RingSize;
+                double size;
+
+				if (Chart.DrillDownManager is DrillDownManager manager)
+					size = manager.GetDrilledSegmentRingSize();
+				else
+					size = Chart.RingSize;
 
 				double outerRadius = Math.Abs(Chart.OuterRadius - (size * (Chart.LevelsCount - (CurrentLevel + 1))));
                 var innerRadius = outerRadius - size;

@@ -517,6 +517,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
+		internal void InitializeDynamicResource(ChartSelectionBehavior behavior)
+		{
+			if (behavior is DataPointSelectionBehavior)
+			{
+				SetDynamicResource(SelectionBrushProperty, "SfChartDataPointSelectionBrush");
+			}
+			else
+			{
+				SetDynamicResource(SelectionBrushProperty, "SfChartSeriesSelectionBrush");
+			}
+		}
+
 		internal virtual void SelectionIndexesPropertyChanged(List<int> newValue)
 		{
 		}
@@ -575,18 +587,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		void InternalClearSelection()
 		{
 			ResetMultiSelection();
-		}
-
-		void InitializeDynamicResource(ChartSelectionBehavior behavior)
-		{
-			if (behavior is DataPointSelectionBehavior)
-			{
-				SetDynamicResource(SelectionBrushProperty, "SfChartDataPointSelectionBrush");
-			}
-			else
-			{
-				SetDynamicResource(SelectionBrushProperty, "SfChartSeriesSelectionBrush");
-			}
 		}
 
 		static void OnSelectionTypeChanged(BindableObject bindable, object oldValue, object newValue)

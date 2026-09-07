@@ -7,10 +7,6 @@
 	{
 		#region Fields
 
-		float _preXPos;
-		float _preYPos;
-		float _preXValue;
-		float _preYValue;
 		readonly List<PointF> _fastScatterPlottingPoints = [];
 		RectF _actualRectF;
 
@@ -123,75 +119,54 @@
 				double yStart = _yRange.Start;
 				double yEnd = _yRange.End;
 
-				_preXValue = (float)XValues[0];
-				_preYValue = (float)YValues[0];
-
-				_preXPos = series.TransformToVisibleX(_preXValue, _preYValue);
-				_preYPos = series.TransformToVisibleY(_preXValue, _preYValue);
-
 				_fastScatterPlottingPoints.Clear();
 
-				if (!series.IsIndexed)
+				var isGrouped = series.ActualXAxis is CategoryAxis category && category.ArrangeByIndex;
+
+				if (!series.IsIndexed || (series.IsIndexed && !isGrouped))
 				{
-					for (int i = 1; i < dataCount; i++)
+					for (int i = 0; i < dataCount; i++)
 					{
+						if (i >= XValues.Count || i >= YValues.Count)
+						{
+							break;
+						}
+
 						double xValue = XValues[i];
 						double yValue = YValues[i];
 
-						if (xEnd <= xValue && xStart >= XValues[i - 1])
-						{
-							float x = series.TransformToVisibleX(xValue, yValue);
-							float y = series.TransformToVisibleY(xValue, yValue);
-							_preXPos = series.TransformToVisibleX(XValues[i - 1], YValues[i - 1]);
-							_preYPos = series.TransformToVisibleY(XValues[i - 1], YValues[i - 1]);
-
-							_fastScatterPlottingPoints.Add(new PointF(_preXPos, _preYPos));
-
-							_preXPos = x;
-							_preYPos = y;
-							_preXValue = (float)xValue;
-							_preYValue = (float)yValue;
-						}
-						else if ((xValue <= xEnd && xValue >= xStart) || (yValue >= yStart && yValue <= yEnd))
+						// Check if point is within visible range
+						if ((xValue <= xEnd && xValue >= xStart) &&
+							(yValue >= yStart && yValue <= yEnd))
 						{
 							float x = series.TransformToVisibleX(xValue, yValue);
 							float y = series.TransformToVisibleY(xValue, yValue);
 
-							_fastScatterPlottingPoints.Add(new PointF(_preXPos, _preYPos));
-
-							_preXPos = x;
-							_preYPos = y;
-							_preXValue = (float)xValue;
-							_preYValue = (float)yValue;
+							_fastScatterPlottingPoints.Add(new PointF(x, y));
 						}
 					}
 				}
 				else
 				{
-					for (int i = 1; i < dataCount; i++)
+					for (int i = 0; i < dataCount; i++)
 					{
+						if (i >= YValues.Count)
+						{
+							break;
+						}
+
 						double yValue = YValues[i];
 
-						if ((i <= xEnd + 1) && (i >= xStart - 1))
+						// For indexed series, check if index is within visible range
+						if ((i <= xEnd) && (i >= xStart) &&
+							(yValue >= yStart && yValue <= yEnd))
 						{
 							float x = series.TransformToVisibleX(i, yValue);
 							float y = series.TransformToVisibleY(i, yValue);
 
-							_fastScatterPlottingPoints.Add(new PointF(_preXPos, _preYPos));
-
-							_preXPos = x;
-							_preYPos = y;
-							_preXValue = (float)i;
-							_preYValue = (float)yValue;
+							_fastScatterPlottingPoints.Add(new PointF(x, y));
 						}
 					}
-				}
-
-				if (_fastScatterPlottingPoints.Count != dataCount)
-				{
-					float lastX = series.TransformToVisibleX(XValues[dataCount - 1], YValues[dataCount - 1]);
-					float lastY = series.TransformToVisibleY(XValues[dataCount - 1], YValues[dataCount - 1]);
-					_fastScatterPlottingPoints.Add(new PointF(lastX, lastY));
 				}
 			}
 		}

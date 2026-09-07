@@ -15,6 +15,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
         const int StrokeThickness = 1;
 
         /// <summary>
+        /// The default width and height that should be reserved for the close button.
+        /// </summary>
+        const double _closeButtonSize = 40d;
+ 
+        /// <summary>
+        /// Default padding applied around the close button.
+        /// </summary>
+        const double _closeButtonPadding = 8d;
+
+        /// <summary>
+        /// The optional close button rendered inside the header.
+        /// </summary>
+        PickerCloseButton? _closeButton;
+
+        /// <summary>
         /// The header view.
         /// </summary>
         readonly IHeaderView _pickerInfo;
@@ -42,7 +57,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             _pickerInfo = pickerInfo;
             if (_pickerInfo.HeaderView.Parent != null)
             {
-                DrawingOrder = DrawingOrder.AboveContent;
+                DrawingOrder = DrawingOrder.BelowContent;
+                //// Draw header background/content below child views so child elements
+                //// like the close button (which should overlay) remain visible.
                 AutomationId = $"{PickerHelper.GetParentName(_pickerInfo.HeaderView.Parent)} HeaderView";
                 BackgroundColor = Colors.Transparent;
             }
@@ -157,6 +174,56 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
+        /// Updates the close button visibility based on the picker configuration.
+        /// </summary>
+        internal void UpdateCloseButton()
+        {
+            if (!CanShowCloseButton())
+            {
+                if (_closeButton != null && this.Children.Contains(_closeButton))
+                {
+                    Children.Remove(_closeButton);
+                    InvalidateMeasure();
+                    InvalidateDrawable();
+                    _closeButton = null;
+                }
+
+                return;
+            }
+
+            if (_pickerInfo is not PickerBase picker)
+            {
+                return;
+            }
+
+            if (_closeButton == null)
+            {
+                _closeButton = new PickerCloseButton(picker);
+                Children.Add(_closeButton);
+            }
+        }
+
+        /// <summary>
+        /// Updates the icon of the close button.
+        /// </summary>
+        internal void UpdateCloseButtonIcon()
+        {
+            if (!CanShowCloseButton())
+            {
+                return;
+            }
+ 
+            if (_closeButton == null)
+            {
+                UpdateCloseButton();
+                return;
+            }
+ 
+            _closeButton.UpdateIcon();
+            this.InvalidateDrawable();
+         }
+
+        /// <summary>
         /// Method to create a template view.
         /// </summary>
         internal void InitializeTemplateView()
@@ -206,6 +273,55 @@ namespace Syncfusion.Maui.Toolkit.Picker
         #endregion
 
         #region Private Methods
+
+        /// <summary>
+        /// Determines whether the header should render the close button.
+        /// </summary>
+        /// <returns><c>true</c> when the close button can be displayed; otherwise, <c>false</c>.</returns>
+        bool CanShowCloseButton()
+        {
+            if (_pickerInfo is not PickerBase picker)
+            {
+                return false;
+            }
+
+            //// Do not show the close button when a header template is applied
+            //// as templates control their own layout and content.
+            if (_pickerInfo.HeaderTemplate != null)
+            {
+                return false;
+            }
+
+            if (picker is SfDateTimePicker)
+            {
+                return false;
+            }
+
+            //// Show close button only when explicitly enabled and when the picker
+            //// is in Dialog or RelativeDialog mode (not Default).
+            return picker.ShowCloseButton && picker.Mode != PickerMode.Default;
+        }
+
+        /// <summary>
+        /// Arranges the close button inside the header bounds.
+        /// </summary>
+        /// <param name="width">The available width.</param>
+        /// <param name="height">The available height.</param>
+        void ArrangeCloseButton(double width, double height)
+        {
+            if (_closeButton == null || !CanShowCloseButton())
+            {
+                return;
+            }
+
+            double buttonWidth = _closeButtonSize;
+            double buttonHeight = height < _closeButtonSize ? height : _closeButtonSize;
+            double xPosition = _pickerInfo.IsRTLLayout ? _closeButtonPadding : width - buttonWidth - _closeButtonPadding;
+            xPosition = Math.Max(0, xPosition);
+            double yPosition = (height - buttonHeight) / 2;
+            yPosition = Math.Max(0, yPosition);
+            _closeButton.Arrange(new Rect(xPosition, yPosition, buttonWidth, buttonHeight));
+        }
 
         /// <summary>
         /// Method to draw the button.
@@ -267,6 +383,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 button.Clicked = OnTimeButtonClicked;
             }
 
+            this.UpdateCloseButton();
             //// While remove and add header view, need to reset the header highlight and columns based on active view.
             ResetHeaderHighlight();
         }
@@ -390,11 +507,48 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 canvas.FillRectangle(rectangle);
             }
 
+            //// Compute text bounds. Prefer to keep the header text visually centered across
+            //// the full header width, but trim it so it won't overlap an overlayed close button.
             if (!string.IsNullOrEmpty(_pickerInfo.HeaderView.Text) && _pickerInfo.HeaderTemplate == null)
             {
-                string headerText = PickerHelper.TrimText(_pickerInfo.HeaderView.Text, width, _pickerInfo.HeaderView.TextStyle);
+                string originalText = _pickerInfo.HeaderView.Text;
+                double maxTextWidth = width;
+                double reserved = 0;
+
+                if (CanShowCloseButton() && _closeButton != null)
+                {
+                    reserved = _closeButtonSize + _closeButtonPadding;
+                    maxTextWidth = Math.Max(0, width - reserved);
+                }
+
+                string headerText = PickerHelper.TrimText(originalText, maxTextWidth, _pickerInfo.HeaderView.TextStyle);
+                var textStyle = _pickerInfo.HeaderView.TextStyle;
+                double measuredWidth = headerText.Measure(textStyle).Width;
+
+                //// If the original text fits completely far enough from the close button,
+                //// keep it visually centered across the full header. Otherwise center it
+                //// inside the safe area (excluding reserved space for the overlay close button)
+                //// to avoid overlap when centering.
+                double availableForFullCenter = width - (2 * reserved);
+                bool usedFullCenter = headerText == originalText && measuredWidth <= availableForFullCenter;
                 SemanticProperties.SetDescription(this, headerText);
-                canvas.DrawText(headerText, rectangle, HorizontalAlignment.Center, VerticalAlignment.Center, _pickerInfo.HeaderView.TextStyle);
+                if (usedFullCenter)
+                {
+                    Rect textRect = new Rect(xPosition, yPosition, width, height - (isDividerEnabled ? StrokeThickness : 0));
+                    canvas.DrawText(headerText, textRect, HorizontalAlignment.Center, VerticalAlignment.Center, textStyle);
+                }
+                else
+                {
+                    double safeLeft = xPosition;
+                    double safeWidth = Math.Max(0, width - reserved);
+                    if (_pickerInfo.IsRTLLayout)
+                    {
+                        safeLeft += reserved;
+                    }
+
+                    Rect safeRect = new Rect(safeLeft, yPosition, safeWidth, height - (isDividerEnabled ? StrokeThickness : 0));
+                    canvas.DrawText(headerText, safeRect, HorizontalAlignment.Center, VerticalAlignment.Center, textStyle);
+                }
             }
 
             if (isDividerEnabled)
@@ -406,6 +560,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 canvas.DrawLine(xPosition, lineBottomPosition, width, lineBottomPosition);
             }
 
+            //// Close-icon drawing moved to `PickerCloseButton`; header no longer draws fallback icon here.
             canvas.RestoreState();
         }
 
@@ -416,44 +571,48 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <returns>The view size.</returns>
         protected override Size ArrangeContent(Rect bounds)
         {
-            if (Children.Count == 0)
+            if (Children.Count == 0 && !CanShowCloseButton())
             {
                 return base.ArrangeContent(bounds);
             }
 
-            double width = bounds.Width / 2;
+            double totalWidth = bounds.Width;
             //// Stroke thickness denotes the below divider line space.
             double height = bounds.Height - StrokeThickness;
             bool isRTL = _pickerInfo.IsRTLLayout;
-            double buttonXPosition = 0;
-            if (isRTL)
+
+            if (_pickerInfo is SfDateTimePicker && _pickerInfo.HeaderTemplate == null)
             {
-                buttonXPosition = width;
+                double width = totalWidth / 2;
+                double buttonXPosition = isRTL ? width : 0;
+                foreach (var child in this.Children)
+                {
+                    if (child == _closeButton)
+                    {
+                        continue;
+                    }
+
+                    child.Arrange(new Rect(buttonXPosition, 0, width, height));
+                    buttonXPosition = isRTL ? buttonXPosition - width : buttonXPosition + width;
+                }
+
+                return bounds.Size;
             }
 
             if (_pickerInfo.HeaderTemplate != null)
             {
                 foreach (var child in Children)
                 {
-                    child.Arrange(new Rect(0, 0, bounds.Width, height));
-                }
+                    if (child == _closeButton)
+                    {
+                        continue;
+                    }
 
-                return bounds.Size;
-            }
-
-            foreach (var child in Children)
-            {
-                child.Arrange(new Rect(buttonXPosition, 0, width, height));
-                if (isRTL)
-                {
-                    buttonXPosition -= width;
-                }
-                else
-                {
-                    buttonXPosition += width;
+                    child.Arrange(new Rect(0, 0, totalWidth, height));
                 }
             }
 
+            ArrangeCloseButton(totalWidth, height);
             return bounds.Size;
         }
 
@@ -465,7 +624,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <returns>The maximum size of the view.</returns>
         protected override Size MeasureContent(double widthConstraint, double heightConstraint)
         {
-            if (Children.Count == 0)
+            if (Children.Count == 0 && !CanShowCloseButton())
             {
                 return base.MeasureContent(widthConstraint, heightConstraint);
             }
@@ -475,19 +634,34 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double buttonWidth = width / 2;
             //// Stroke thickness denotes the below divider line space.
             double buttonHeight = height - 1;
-            if (_pickerInfo.HeaderTemplate != null)
+            if (_pickerInfo is SfDateTimePicker && _pickerInfo.HeaderTemplate == null)
             {
-                foreach (var child in Children)
+                foreach (var child in this.Children)
                 {
+                    if (child == _closeButton)
+                    {
+                        continue;
+                    }
+
+                    child.Measure(buttonWidth, buttonHeight);
+                }
+            }
+            else if (_pickerInfo.HeaderTemplate != null)
+            {
+                foreach (var child in this.Children)
+                {
+                    if (child == _closeButton)
+                    {
+                        continue;
+                    }
+
                     child.Measure(width, buttonHeight);
                 }
-
-                return new Size(width, height);
             }
 
-            foreach (var child in Children)
+            if (_closeButton != null && CanShowCloseButton())
             {
-                child.Measure(buttonWidth, buttonHeight);
+                _closeButton.Measure(_closeButtonSize, buttonHeight);
             }
 
             return new Size(width, height);
@@ -506,16 +680,56 @@ namespace Syncfusion.Maui.Toolkit.Picker
             _semanticsNodes = new List<SemanticsNode>();
             _semanticsSize = newSize;
             bool isDividerEnabled = _pickerInfo.HeaderView.DividerColor != Colors.Transparent;
+
             //// To avoid the separator line overlapping with the text, the height of the rectangle is reduced by the stroke thickness.
+            //// Use the full header bounds for the semantics node but trim the text
+            //// so it matches the visually centered text (trimmed to avoid overlapping the close button).
+            double maxTextWidth = width;
+            if (this.CanShowCloseButton() && _closeButton != null)
+            {
+                double reserved = _closeButtonSize + _closeButtonPadding;
+                maxTextWidth = Math.Max(0, width - reserved);
+            }
+
             Rect rectangle = new Rect(0, 0, width, height - (isDividerEnabled ? StrokeThickness : 0));
             if (!string.IsNullOrEmpty(_pickerInfo.HeaderView.Text))
             {
+                string originalText = _pickerInfo.HeaderView.Text;
+                string semanticText = PickerHelper.TrimText(originalText, maxTextWidth, _pickerInfo.HeaderView.TextStyle);
+                double measuredWidth = semanticText.Measure(_pickerInfo.HeaderView.TextStyle).Width;
+                double reservedForSemantics = 0;
+                if (this.CanShowCloseButton() && _closeButton != null)
+                {
+                    reservedForSemantics = _closeButtonSize + _closeButtonPadding;
+                }
+
+                double availableForFullCenter = width - (2 * reservedForSemantics);
+                bool useFullBounds = semanticText == originalText && measuredWidth <= availableForFullCenter;
+
+                Rect boundsRect;
+                if (useFullBounds)
+                {
+                    boundsRect = rectangle;
+                }
+                else
+                {
+                    double safeLeft = 0;
+                    double safeWidth = Math.Max(0, width - (this.CanShowCloseButton() && _closeButton != null ? _closeButtonSize + _closeButtonPadding : 0));
+                    if (_pickerInfo.IsRTLLayout && this.CanShowCloseButton() && _closeButton != null)
+                    {
+                        safeLeft += _closeButtonSize + _closeButtonPadding;
+                    }
+
+                    boundsRect = new Rect(safeLeft, 0, safeWidth, height - (isDividerEnabled ? StrokeThickness : 0));
+                }
+
                 SemanticsNode node = new SemanticsNode()
                 {
-                    Text = _pickerInfo.HeaderView.Text,
-                    Bounds = rectangle,
+                    Text = semanticText,
+                    Bounds = boundsRect,
                     IsTouchEnabled = true,
                 };
+
                 _semanticsNodes.Add(node);
             }
 

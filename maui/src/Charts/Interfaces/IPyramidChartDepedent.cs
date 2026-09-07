@@ -37,6 +37,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		bool SegmentsCreated { get; set; }
 
+		internal IList<Brush?> PointColorValues { get; set; }
+
+		ChartOrientation Orientation { get; set; }
+
+		bool IsHorizontalOrientation { get { return Orientation == ChartOrientation.Horizontal; } }
+
 		#endregion
 
 		#region Methods
@@ -223,9 +229,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			Brush? fillColor = GetSelectionBrush(index);
 
-			if (fillColor == null && PaletteBrushes != null)
+			if (fillColor == null)
 			{
-				fillColor = PaletteBrushes.Count > 0 ? PaletteBrushes[index % PaletteBrushes.Count] : new SolidColorBrush(Colors.Transparent);
+				if (index < PointColorValues.Count && PointColorValues[index] != null) //Point color path check.
+				{
+					fillColor = PointColorValues[index];
+				}
+				else if (PaletteBrushes != null)
+				{
+					fillColor = PaletteBrushes.Count > 0 ? PaletteBrushes[index % PaletteBrushes.Count()] : new SolidColorBrush(Colors.Transparent);
+				}
 			}
 
 			return fillColor;

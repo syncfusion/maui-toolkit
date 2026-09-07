@@ -325,7 +325,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			string labelFormat = !string.IsNullOrEmpty(_axisLabelStyle.LabelFormat) ?
 				_axisLabelStyle.LabelFormat : xAxis is DateTimeAxis ?
 				"MM-dd-yyyy" : "##.##";
-			_labelText = xValue.ToString(labelFormat);
+			
+			if (xAxis is NumericalAxis numericalAxis)
+			{
+				_labelText = numericalAxis.GetFormatedAxisLabel(xValue, labelFormat);
+			}
+			else
+			{
+				_labelText = xValue.ToString(labelFormat);
+			}
+
 			var labelSize = _axisLabelStyle.MeasureLabel(_labelText);
 
 			float y;

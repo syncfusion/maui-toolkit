@@ -347,7 +347,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			if (_isPointerPressed && _isManipulationStarted)
 			{
 				// Only forward deltas if we are not over a scrollable OR we have handed off
-				if (!_isPointerInsideScrollable || _handoffToSheet)
+				if (!_isPointerInsideScrollable || _handoffToSheet )
 				{
 					// Convert to local coordinates if we have a bottom sheet
 					double localY = _bottomSheet is not null ? e.Position.Y - _bottomSheet.TranslationY : e.Position.Y;

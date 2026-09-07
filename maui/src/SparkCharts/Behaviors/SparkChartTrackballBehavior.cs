@@ -576,7 +576,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			{
 				// For column-based charts, use slot-based hit testing
 				float slotWidth = (float)(rect.Width / SparkChart.DataCount);
-				
+
 				for (int i = 0; i < SparkChart.yValues.Count; i++)
 				{
 					// Skip invalid points
@@ -980,7 +980,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			// Configure tooltip helper
 			MapLabelStyleToTooltipHelper(TooltipHelper, LabelStyle);
 			TooltipHelper.Text = CurrentTrackballInfo.Label;
-			
+
 			// Set preferred position to right (similar to ChartTrackballBehavior)
 			TooltipHelper.PriorityPosition = TooltipPosition.Right;
 			TooltipHelper.PriorityPositionList = s_tooltipFallbackPositions;
@@ -988,7 +988,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 			// Create target rect around the marker point (small rect for nose to point to)
 			float markerWidth = MarkerSettings != null ? (float)MarkerSettings.Width : 8f;
 			float markerHeight = MarkerSettings != null ? (float)MarkerSettings.Height : 8f;
-			
+
 			Rect targetRect = new Rect(
 				CurrentTrackballInfo.X - (markerWidth / 2),
 				CurrentTrackballInfo.Y - (markerHeight / 2),
@@ -998,7 +998,7 @@ namespace Syncfusion.Maui.Toolkit.SparkCharts
 
 			// Show tooltip with nose pointer
 			TooltipHelper.Show(rect, targetRect, false);
-			
+
 			// Draw the tooltip
 			TooltipHelper.Draw(canvas);
 		}

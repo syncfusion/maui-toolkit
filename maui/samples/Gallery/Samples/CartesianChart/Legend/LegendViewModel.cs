@@ -4,6 +4,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
 	public partial class LegendViewModel : BaseViewModel
 	{
+		public string[] LegendPositionType => ["Top", "Left", "Bottom", "Right"];
 		public ObservableCollection<ChartDataModel> ChartData1 { get; set; }
 		public ObservableCollection<ChartDataModel> ChartData2 { get; set; }
 		public ObservableCollection<ChartDataModel> ChartData3 { get; set; }

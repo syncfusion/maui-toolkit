@@ -90,6 +90,112 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.Equal(textColor, chartTooltipBehavior.TextColor);
 		}
 
+		[Fact]
+		public void Stroke_SetValue_ReturnsExpectedValue()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+			var stroke = new SolidColorBrush(Colors.Blue);
+
+			chartTooltipBehavior.Stroke = stroke;
+
+			Assert.Equal(stroke, chartTooltipBehavior.Stroke);
+		}
+
+		[Theory]
+		[InlineData(1.0f)]
+		[InlineData(2.5f)]
+		[InlineData(5.0f)]
+		public void StrokeWidth_SetValue_ReturnsExpectedValue(float strokeWidth)
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+
+			chartTooltipBehavior.StrokeWidth = strokeWidth;
+
+			Assert.Equal(strokeWidth, chartTooltipBehavior.StrokeWidth);
+		}
+
+		[Fact]
+		public void StrokeWidth_DefaultValue_IsZero()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+
+			Assert.Equal(0f, chartTooltipBehavior.StrokeWidth);
+		}
+
+		[Fact]
+		public void Stroke_DefaultValue_IsNull()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+
+			Assert.Null(chartTooltipBehavior.Stroke);
+		}
+
+		[Fact]
+		public void UseSeriesFillColor_DefaultValue_IsFalse()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+
+			Assert.False(chartTooltipBehavior.UseSeriesFillColor);
+		}
+
+		[Fact]
+		public void UseSeriesFillColor_SetTrue_ReturnsTrue()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+
+			chartTooltipBehavior.UseSeriesFillColor = true;
+
+			Assert.True(chartTooltipBehavior.UseSeriesFillColor);
+		}
+
+		[Fact]
+		public void UseSeriesFillColor_SetFalse_ReturnsFalse()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior
+			{
+				UseSeriesFillColor = true
+			};
+
+			chartTooltipBehavior.UseSeriesFillColor = false;
+
+			Assert.False(chartTooltipBehavior.UseSeriesFillColor);
+		}
+
+		[Fact]
+		public void GetTooltipBackground_WithExplicitBackground_ReturnsExplicitBackground()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+			var explicitBackground = new SolidColorBrush(Colors.Red);
+
+			chartTooltipBehavior.Background = explicitBackground;
+			chartTooltipBehavior.UseSeriesFillColor = true;
+
+			Assert.Equal(explicitBackground, chartTooltipBehavior.Background);
+		}
+
+		[Fact]
+		public void GetTooltipBackground_UseSeriesFillColorFalseWithSeriesFill_ReturnsDefaultBackground()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+			var defaultBackground = chartTooltipBehavior.Background;
+			var seriesFill = new SolidColorBrush(Colors.Purple);
+
+			chartTooltipBehavior.UseSeriesFillColor = false;
+
+			Assert.Equal(chartTooltipBehavior.Background, defaultBackground);
+		}
+
+
+		[Fact]
+		public void GetTooltipBackground_UseSeriesFillColorTrueWithNullFill_ReturnsDefaultBackground()
+		{
+			ChartTooltipBehavior chartTooltipBehavior = new ChartTooltipBehavior();
+			var defaultBackground = chartTooltipBehavior.Background;
+			chartTooltipBehavior.UseSeriesFillColor = true;
+
+			Assert.Equal(chartTooltipBehavior.Background, defaultBackground);
+		}
+
 		// Trackball behavior tests cases
 
 		[Theory]

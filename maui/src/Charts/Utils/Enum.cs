@@ -943,6 +943,28 @@
 		Sum
 	}
 
+	#region Orientation For Funnel and Pyramid chart
+	/// <summary>
+	/// Specifies the orientation of the chart.
+	/// </summary>
+	/// <remarks>
+	/// This enum allows switching between vertical and horizontal orientations for charts that support both display modes.
+	/// </remarks>
+	public enum ChartOrientation
+	{
+		/// <summary>
+		/// Indicates the chart should be rendered in vertical orientation.
+		/// </summary>
+		Vertical,
+
+		/// <summary>
+		/// Indicates the chart should be rendered in horizontal orientation.
+		/// </summary>
+		Horizontal
+	}
+
+	#endregion
+
 	#region Mode For Pyramid chart
 	/// <summary>
 	/// Represents the rendering mode of the pyramid chart.

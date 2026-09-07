@@ -303,6 +303,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override bool HitTest(Point touchPoint)
+		{
+			return IsPointInEllipseBounds(touchPoint) || IsPointInLabelBounds(touchPoint, LabelRect);
+		}
+
 		internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
 		{
 			ResetPosition();
@@ -388,6 +393,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			RenderRect = new RectF((float)x, (float)y, (float)width, (float)height);
+		}
+
+		bool IsPointInEllipseBounds(Point touchPoint)
+		{
+			double halfWidth = RenderRect.Width / 2;
+			double halfHeight = RenderRect.Height / 2;
+			double centerX = RenderRect.X + halfWidth;
+			double centerY = RenderRect.Y + halfHeight;
+			double dx = touchPoint.X - centerX;
+			double dy = touchPoint.Y - centerY;
+			// Expand ellipse radius by half of stroke width to include stroke area.
+			double halfStrokeWidth = StrokeWidth / 2;
+			double adjustedHalfWidth = halfWidth + halfStrokeWidth;
+			double adjustedHalfHeight = halfHeight + halfStrokeWidth;
+			return (dx * dx) / (adjustedHalfWidth * adjustedHalfWidth) +
+				   (dy * dy) / (adjustedHalfHeight * adjustedHalfHeight) <= 1;
 		}
 
 		#endregion

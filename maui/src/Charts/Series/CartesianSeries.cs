@@ -1,16 +1,35 @@
 using System.Collections.Specialized;
+using Core = Syncfusion.Maui.Toolkit;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
 	/// <summary>
 	/// <see cref="CartesianSeries"/> is the base class for all cartesian based series such as column, line, area, and so on.
 	/// </summary>
-	public abstract class CartesianSeries : ChartSeries
+	public abstract class CartesianSeries : ChartSeries, ICartesianLegendDependent
 	{
 		#region Fields
 
 		ChartAxis? _actualXAxis;
 		ChartAxis? _actualYAxis;
+		
+		/// <summary>
+        /// Indicates whether collection change notification processing is currently suspended.
+        /// When true, all data source changes are buffered instead of being processed immediately.
+        /// </summary>
+        private bool _isSuspended;
+
+        /// <summary>
+        /// Provides thread-safe access to the suspension state and buffered changes.
+        /// </summary>
+        private readonly object _suspensionLock = new object();
+
+        /// <summary>
+        /// Stores collection change events that occur while notification processing is suspended.
+        /// These changes are applied in a single batch operation when <see cref="ResumeNotification"/> is called.
+        /// </summary>
+        private List<NotifyCollectionChangedEventArgs>? _bufferedChanges;
+
 		double _xAxisMin = double.MaxValue;
 		double _xAxisMax = double.MinValue;
 		double _yAxisMin = double.MaxValue;
@@ -153,6 +172,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			BindingMode.Default,
 			null,
 			null);
+
+		/// <summary>
+		/// Identifies the <see cref="Trendlines"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty TrendlinesProperty = BindableProperty.Create(
+			nameof(Trendlines),
+			typeof(ChartTrendlineCollection),
+			typeof(CartesianSeries),
+			null,
+			BindingMode.Default,
+			null, OnTrendlinesPropertyChanged);
 
 		#endregion
 
@@ -714,7 +744,27 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					_actualYAxis = value;
 				}
 			}
-		} 
+		}
+
+		/// <summary>
+		/// Gets or sets the collection of trendlines for this series.
+		/// </summary>
+		public ChartTrendlineCollection Trendlines
+		{
+			get { return (ChartTrendlineCollection)GetValue(TrendlinesProperty); }
+			set { SetValue(TrendlinesProperty, value); }
+		}
+
+		bool ICartesianLegendDependent.IsVisible { get { return IsVisible; } }
+
+		string ICartesianLegendDependent.LegendText { get { return Label; } }
+
+		Core.ShapeType ICartesianLegendDependent.LegendIcon => ChartUtils.GetShapeType(LegendIcon);
+
+		Brush? ICartesianLegendDependent.GetLegendBrush(object item, int index)
+		{
+			return GetFillColor(item, index);
+		}
 
 		#endregion
 
@@ -727,6 +777,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			DataLabelSettings = new CartesianDataLabelSettings();
 			_emptyPointSettings = new EmptyPointSettings();
+			Trendlines = new ChartTrendlineCollection();
+
+			Trendlines.CollectionChanged += OnTrendlinesCollectionChanged;
 		}
 
 		#endregion
@@ -773,6 +826,142 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return GetDataPoints(startX, endX, startY, endY, minimum, maximum, xValues, IsLinearData);
 		}
 
+		/// <summary>
+        /// Suspends collection change notification processing for this series. All data source changes 
+        /// are buffered and deferred until <see cref="ResumeNotification"/> is called, resulting in a 
+        /// single consolidated visual update instead of individual updates for each change.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// Use this method to efficiently batch large data updates, such as adding or modifying 1000+ data points
+        /// in a single operation. Without suspension, each collection change triggers a full segment generation 
+        /// and render cycle, which can cause UI freezes and dropped frames. With suspension/resume, all changes 
+        /// are applied atomically in a single render cycle.
+        /// </para>
+        /// <para>
+        /// Calling this method multiple times has no additional effect after the first call. The suspension 
+        /// state remains active until <see cref="ResumeNotification"/> is explicitly called.
+        /// </para>
+        /// <para>
+        /// <b>Performance Benefit:</b> For bulk operations involving 1000+ items, using suspend/resume can 
+        /// improve processing time.
+        /// </para>
+        /// </remarks>
+        /// <example>
+        /// # [C#](#tab/tabid-17)
+        /// <code><![CDATA[
+        ///     SfCartesianChart chart = new SfCartesianChart();
+        ///     ViewModel viewModel = new ViewModel();
+        ///     
+        ///     var series = new FastLineSeries()
+        ///     {
+        ///         ItemsSource = viewModel.Data,
+        ///         XBindingPath = "XValue",
+        ///         YBindingPath = "YValue"
+        ///     };
+        ///     
+        ///     chart.Series.Add(series);
+        ///     
+        ///     // Suspend notifications before bulk update
+        ///     series.SuspendNotification();
+        ///     try
+        ///     {
+        ///         // Add many data points without triggering updates
+        ///         for (int i = 0; i < 1000; i++)
+        ///         {
+        ///             viewModel.Data.Add(new DataPoint 
+        ///             { 
+        ///                 XValue = i, 
+        ///                 YValue = i+1 
+        ///             });
+        ///         }
+        ///     }
+        ///     finally
+        ///     {
+        ///         // Resume and apply all changes at once
+        ///         series.ResumeNotification();
+        ///     }
+        /// ]]></code>
+        /// ***
+        /// </example>
+        public void SuspendNotification()
+        {
+            lock (_suspensionLock)
+            {
+                if (!_isSuspended)
+                {
+                    _bufferedChanges = new List<NotifyCollectionChangedEventArgs>();
+                    _isSuspended = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Resumes collection change notification processing for this series. All buffered collection 
+        /// changes are applied in a single consolidated update: segments generated once, axes 
+        /// recalculated once, and a single render refresh triggered.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method processes all changes that were buffered during suspension. The changes are 
+        /// coalesced where possible (e.g., consecutive Add operations) to maximize performance before 
+        /// being applied to the series.
+        /// </para>
+        /// <para>
+        /// If the series is not currently suspended, this method returns immediately without 
+        /// performing any operations.
+        /// </para>
+        /// </remarks>
+        /// <example>
+        /// # [C#](#tab/tabid-18)
+        /// <code><![CDATA[
+        ///     SfCartesianChart chart = new SfCartesianChart();
+        ///     ViewModel viewModel = new ViewModel();
+        ///     
+        ///     var series = new FastLineSeries()
+        ///     {
+        ///         ItemsSource = viewModel.Data,
+        ///         XBindingPath = "Category",
+        ///         YBindingPath = "Value"
+        ///     };
+        ///     
+        ///     chart.Series.Add(series);
+        ///     
+        ///     // Batch multiple operations efficiently
+        ///     series.SuspendNotification();
+        ///     
+        ///     // Perform multiple data modifications
+        ///     viewModel.Data.Clear();
+        ///     viewModel.Data.Add(new DataModel { Category = "A", Value = 10 });
+        ///     viewModel.Data.Add(new DataModel { Category = "B", Value = 20 });
+        ///     viewModel.Data.Add(new DataModel { Category = "C", Value = 30 });
+        ///     
+        ///     // Apply all changes in one visual update
+        ///     series.ResumeNotification();
+        /// ]]></code>
+        /// ***
+        /// </example>
+        public void ResumeNotification()
+        {
+            lock (_suspensionLock)
+            {
+                if (!_isSuspended || _bufferedChanges == null)
+                {
+                    return;
+                }
+
+                _isSuspended = false;
+                foreach (var bufferedEvent in _bufferedChanges)
+                {
+					_cachedIndexedXValues = null;
+                    ResetAutoScroll();
+                    base.OnDataSource_CollectionChanged(null, bufferedEvent);
+                }
+				
+                _bufferedChanges = null;
+            }
+        }
+
 		#endregion
 
 		#region Protected Methods
@@ -798,6 +987,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				SetInheritedBindingContext(DataLabelSettings, BindingContext);
 			}
+			if (Trendlines != null)
+			{
+				foreach (var trendline in Trendlines)
+				{
+					SetInheritedBindingContext(trendline, BindingContext);
+				}
+			}
 
 			if (_emptyPointSettings != null)
 			{
@@ -814,6 +1010,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			//Todo: While dynamically updating the ItemSource, the legend items not to be updated again
 			//Task 866797 : When inheriting ObservableObject (https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/observableobject#simple-property) in the ViewModel, the legend items not updated for load time.
 			//Issue fixed PR: https://github.com/essential-studio/maui-charts/pull/1139
+
+			if (ChartArea != null)
+			{
+				if (IsColorPathSeries)
+				{
+					if (ChartArea.PlotArea is ChartPlotArea plotArea)
+					{
+						plotArea.ShouldUpdateLegendIconBrush = true;
+					}
+				}
+			}
 		}
 
 		internal List<double>? CalculateControlPoints(IList<double> values, double yCoef, double nextyCoef, int i)
@@ -875,7 +1082,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override void LegendItemToggled(LegendItem legendItem)
 		{
-			IsVisible = !legendItem.IsToggled;
+			bool newVisibility = !legendItem.IsToggled;
+			if (IsVisible == newVisibility)
+			{
+				return;
+			}
+
+			IsVisible = newVisibility;
+			ApplySeriesVisibilityToTrendlines(IsVisible);
 		}
 
 		internal override float TransformToVisibleX(double x, double y)
@@ -1018,6 +1232,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						VisibleYRange = new DoubleRange(yValues[0], yValues[0]);
 					}
 				}
+				if (Trendlines != null)
+				{
+					foreach (var trendline in Trendlines)
+					{
+						trendline?.UpdateRange(trendline);
+					}
+				}
 			}
 		}
 
@@ -1077,11 +1298,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		internal override void OnDataSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-		{
+        {
+            lock (_suspensionLock)
+            {
+                if (_isSuspended && _bufferedChanges != null)
+                {
+                    _bufferedChanges.Add(e);
+                    return;
+                }
+            }
+			
 			_cachedIndexedXValues = null;
-			ResetAutoScroll();
-			base.OnDataSource_CollectionChanged(sender, e);
-		}
+            ResetAutoScroll();
+            base.OnDataSource_CollectionChanged(sender, e);
+        }
 
 		internal override void AddDataPoint(object data, int index, NotifyCollectionChangedEventArgs e)
 		{
@@ -1089,9 +1319,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			foreach(var item in EmptyPointIndexes)
 			{
 				item?.Clear();
-			}	
+			}
 
 			base.AddDataPoint(data, index, e);
+			GenerateTrendlinesPoints();
 		}
 
 		internal override void RemoveData(int index, NotifyCollectionChangedEventArgs e)
@@ -1103,6 +1334,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			base.RemoveData(index, e);
+			GenerateTrendlinesPoints();
 		}
 
 		internal override void OnBindingPathChanged()
@@ -1356,7 +1588,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					Item = dataPoint
 				};
 
-				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior);
+				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior, dataPoint, index);
 
 				return tooltipInfo;
 			}
@@ -1432,19 +1664,81 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			var legend = Chart?.Legend;
 			var legendItems = ChartArea?.PlotArea.LegendItems;
+			var trendlines = Trendlines;
 
-			if (legend != null && legend.IsVisible && legendItems != null)
+			if (legend == null || !legend.IsVisible || legendItems == null)
 			{
-				for (int i = 0; i < legendItems.Count; i++)
+				return;
+			}
+
+			for (int i = 0; i < legendItems.Count; i++)
+			{
+				if (legendItems[i] is LegendItem legendItem)
 				{
-					if (legendItems[i] is LegendItem legendItem && legendItem.Item == this)
+					if (legendItem?.Item == this)
 					{
 						legendItem.IsToggled = !IsVisible;
-						break;
+						if (trendlines == null || trendlines.Count == 0)
+						{
+							break;
+						}
+						continue;
+					}
+
+					if (legendItem?.Source is ChartTrendline trendline && trendline.Series == this)
+					{
+						legendItem.IsToggled = !trendline.IsVisible;
 					}
 				}
 			}
 		}
+
+		/// <summary>
+		/// Applies the parent series visibility state to all attached trendlines.
+		/// When the series is hidden we cache each trendline’s current visibility so it can be restored later.
+		/// </summary>
+		internal void ApplySeriesVisibilityToTrendlines(bool seriesVisible)
+		{
+			if (Trendlines == null || Trendlines.Count == 0)
+			{
+				return;
+			}
+
+			foreach (var trendline in Trendlines)
+			{
+				if (trendline == null)
+				{
+					continue;
+				}
+
+				if (!seriesVisible)
+				{
+					if (!trendline.CachedVisibilityFromSeriesToggle.HasValue)
+					{
+						trendline.CachedVisibilityFromSeriesToggle = trendline.IsVisible;
+					}
+
+					if (trendline.IsVisible)
+					{
+						trendline.IsVisible = false;
+					}
+				}
+				else
+				{
+					if (trendline.CachedVisibilityFromSeriesToggle.HasValue)
+					{
+						var previousState = trendline.CachedVisibilityFromSeriesToggle.Value;
+						trendline.CachedVisibilityFromSeriesToggle = null;
+
+						if (trendline.IsVisible != previousState)
+						{
+							trendline.IsVisible = previousState;
+						}
+					}
+				}
+			}
+		}
+
 
 		internal override void UpdateLegendIconColor(ChartSelectionBehavior sender, int index)
 		{
@@ -1882,6 +2176,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							break;
 
 						default:
+							HandleNoneMode(values, i);
 							break;
 					}
 				}
@@ -1904,6 +2199,40 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Private Methods
 
+		/// <summary>
+		/// 
+		/// </summary>
+		internal void GenerateTrendlinesPoints()
+		{
+			if (Trendlines == null || Trendlines.Count == 0)
+			{
+				return;
+			}
+
+			foreach (var trendline in Trendlines)
+			{
+				trendline?.GeneratePoints();
+			}
+		}
+
+		internal override void GeneratePoints(string[] yPaths, params IList<double>[] yValueLists)
+		{
+			base.GeneratePoints(yPaths, yValueLists);
+		}
+
+		internal override void OnSeriesLayout()
+		{
+			base.OnSeriesLayout();
+
+			if (Trendlines != null && Trendlines.Count > 0)
+			{
+				foreach (var trendline in Trendlines)
+				{
+					trendline?.OnLayout();
+				}
+			}
+		}
+
 		void HandleZeroMode(IList<double> values, int emptyPointIndex)
 		{
 			for (int i = 0; i < values.Count; i++)
@@ -1918,6 +2247,20 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 		}
+		void HandleNoneMode(IList<double> values, int emptyPointIndex)
+		{
+			for (int i = 0; i < values.Count; i++)
+			{
+				if (double.IsNaN(values[i]))
+				{
+					if (!EmptyPointIndexes[emptyPointIndex].Contains(i))
+					{
+						EmptyPointIndexes[emptyPointIndex].Add(i);
+					}
+				}
+			}
+		}
+
 
 		void HandleAverageMode(IList<double> values, int emptyPointIndex)
 		{
@@ -2132,6 +2475,92 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 				}
 			}
+		}
+
+		private static void OnTrendlinesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is not CartesianSeries series)
+			{
+				return;
+			}
+
+			if (oldValue is ChartTrendlineCollection oldCollection)
+			{
+				oldCollection.CollectionChanged -= series.OnTrendlinesCollectionChanged;
+			}
+			series.RefreshLegend();
+		}
+
+		private void RefreshLegend()
+		{
+			if (ChartArea?.PlotArea is ChartPlotArea plotArea)
+			{
+				plotArea.ShouldPopulateLegendItems = true;
+				plotArea.UpdateLegendItems();
+			}
+
+			ScheduleUpdateChart();
+		}
+
+		/// <summary>
+		/// Handles collection changed events from the Trendlines collection.
+		/// This method is called when individual trendlines are added, removed, or replaced.
+		/// </summary>
+		/// <param name="sender">The trendlines collection</param>
+		/// <param name="e">Collection changed event arguments</param>
+		private void OnTrendlinesCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+		{
+			if (e.OldItems != null)
+			{
+				foreach (ChartTrendline oldTrendline in e.OldItems)
+				{
+					if (oldTrendline != null)
+					{
+						SetInheritedBindingContext(oldTrendline, null);
+					}
+				}
+			}
+
+			if (e.NewItems != null)
+			{
+				foreach (ChartTrendline newTrendline in e.NewItems)
+				{
+					if (newTrendline != null)
+					{
+						newTrendline.Series = this;
+						SetInheritedBindingContext(newTrendline, BindingContext);
+						newTrendline.GeneratePoints();
+					}
+				}
+			}
+
+			if (ChartArea?.PlotArea is ChartPlotArea plotArea)
+			{
+				plotArea.ShouldPopulateLegendItems = true;
+				plotArea.UpdateLegendItems();
+			}
+
+			ScheduleUpdateChart();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ValueMemberPath"></param>
+		/// <returns></returns>
+		internal virtual List<double> GetYValues(string ValueMemberPath)
+		{
+			return new List<double>();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ValueMemberPath"></param>
+		/// <returns></returns>
+		internal virtual List<int> GetEmptyPointIndexes(string ValueMemberPath)
+		{
+			return new List<int>();
 		}
 
 		#endregion

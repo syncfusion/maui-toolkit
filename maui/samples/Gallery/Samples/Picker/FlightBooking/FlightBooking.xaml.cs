@@ -116,20 +116,20 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
                 mobileReturnDatePicker.MinimumDate = mobileReturnDatePicker.SelectedDate.Value.Date;
             }
 
-            mobileFromPicker.HeaderView.Height = 40;
+            mobileFromPicker.HeaderView.Height = 50;
             mobileFromPicker.HeaderView.Text = "FROM";
             mobileFromPicker.FooterView.Height = 40;
 
-            mobileToPicker.HeaderView.Height = 40;
+            mobileToPicker.HeaderView.Height = 50;
             mobileToPicker.HeaderView.Text = "TO";
             mobileToPicker.FooterView.Height = 40;
 
-            mobileDepartureDatePicker.HeaderView.Height = 40;
+            mobileDepartureDatePicker.HeaderView.Height = 50;
             mobileDepartureDatePicker.HeaderView.Text = "Select a date";
             mobileDepartureDatePicker.FooterView.Height = 40;
             mobileDepartureDatePicker.MinimumDate = DateTime.Now;
 
-            mobileReturnDatePicker.HeaderView.Height = 40;
+            mobileReturnDatePicker.HeaderView.Height = 50;
             mobileReturnDatePicker.HeaderView.Text = "Select a date";
             mobileReturnDatePicker.FooterView.Height = 40;
 #else
@@ -149,20 +149,20 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
                 returnDatePicker.MinimumDate = returnDatePicker.SelectedDate.Value.Date;
             }
 
-            fromPicker.HeaderView.Height = 40;
+            fromPicker.HeaderView.Height = 50;
             fromPicker.HeaderView.Text = "FROM";
             fromPicker.FooterView.Height = 40;
 
-            toPicker.HeaderView.Height = 40;
+            toPicker.HeaderView.Height = 50;
             toPicker.HeaderView.Text = "TO";
             toPicker.FooterView.Height = 40;
 
-            departureDatePicker.HeaderView.Height = 40;
+            departureDatePicker.HeaderView.Height = 50;
             departureDatePicker.HeaderView.Text = "Select a date";
             departureDatePicker.FooterView.Height = 40;
             departureDatePicker.MinimumDate = DateTime.Now;
 
-            returnDatePicker.HeaderView.Height = 40;
+            returnDatePicker.HeaderView.Height = 50;
             returnDatePicker.HeaderView.Text = "Select a date";
             returnDatePicker.FooterView.Height = 40;
 #endif

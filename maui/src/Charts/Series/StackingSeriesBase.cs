@@ -1,4 +1,4 @@
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -281,6 +281,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			base.OnDataSource_CollectionChanged(sender, e);
 		}
 
+		internal List<double>? GetStackedYTotals()
+		{
+			if (TopValues == null || TopValues.Count == 0)
+				return null;
+
+			return TopValues.ToList();
+		}
+
 		#endregion
 
 		#region Private Methods
@@ -333,6 +341,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (ChartArea != null)
 			{
 				var visibleSeries = ChartArea.VisibleSeries;
+
 				if (visibleSeries == null)
 				{
 					return;

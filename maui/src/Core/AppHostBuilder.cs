@@ -33,6 +33,7 @@ namespace Syncfusion.Maui.Toolkit.Hosting
                 handlers.AddHandler(typeof(IDrawableView), typeof(SfDrawableViewHandler));
                 handlers.AddHandler(typeof(IDrawableLayout), typeof(SfViewHandler));
                 handlers.AddHandler(typeof(ICarousel), typeof(CarouselHandler));
+				handlers.AddHandler(typeof(SfInteractiveScrollView), typeof(SfInteractiveScrollViewHandler));
 				handlers.AddHandler(typeof(WindowOverlayContainer), typeof(OverlayContainerHandler));
                 handlers.AddHandler(typeof(SfPickerView), typeof(SfPickerScrollViewHandler));
 #if __ANDROID__
@@ -86,7 +87,7 @@ namespace Syncfusion.Maui.Toolkit.Hosting
 		}
 
 		/// <summary>
-		/// Method to add the 
+		/// Method to add the library resources to the application resources.
 		/// </summary>
 		internal static void AddLibraryResources(this Microsoft.UI.Xaml.ResourceDictionary? resources, string key, string uri)
 		{

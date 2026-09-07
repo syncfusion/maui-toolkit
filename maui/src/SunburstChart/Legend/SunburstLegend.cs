@@ -154,7 +154,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 
         #region Methods
 
-        private static double GetMaximumSizeCoefficient()
+        static double GetMaximumSizeCoefficient()
         {
             return 0.25d;
         }
@@ -242,7 +242,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         {
         }
 
-        private static void OnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
+        static void OnTextColorChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is ChartLegendLabelStyle legendStyle)
             {

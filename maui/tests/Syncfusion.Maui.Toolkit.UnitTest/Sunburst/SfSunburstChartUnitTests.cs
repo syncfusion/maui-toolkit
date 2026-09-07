@@ -1777,8 +1777,5 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Sunburst
         }
 
         #endregion
-
-
     }
 }
-

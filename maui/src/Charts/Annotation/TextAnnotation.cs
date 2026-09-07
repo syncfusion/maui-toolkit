@@ -253,6 +253,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override bool HitTest(Point touchPoint)
+		{
+			return IsPointInLabelBounds(touchPoint, LabelRect);
+		}
+
 		internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
 		{
 			ResetPosition();

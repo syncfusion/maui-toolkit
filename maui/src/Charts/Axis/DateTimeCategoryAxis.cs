@@ -355,6 +355,44 @@ public partial class DateTimeCategoryAxis : ChartAxis
 		return position.ToString();
 	}
 
+	internal ChartSeries? GetActualSeries()
+	{
+		var visibleSeries = GetVisibleSeries();
+		if (visibleSeries == null)
+		{
+			return null;
+		}
+
+		int dataCount = 0;
+		ChartSeries? selectedSeries = null;
+
+		if (IsPolarArea)
+		{
+			foreach (PolarSeries series in visibleSeries.Cast<PolarSeries>())
+			{
+				if (series != null && series.ActualXAxis == this && series.PointsCount > dataCount)
+				{
+					selectedSeries = series;
+					dataCount = series.PointsCount;
+				}
+			}
+		}
+		else
+		{
+
+			foreach (CartesianSeries series in visibleSeries.Cast<CartesianSeries>())
+			{
+				if (series != null && series.ActualXAxis == this && series.PointsCount > dataCount)
+				{
+					selectedSeries = series;
+					dataCount = series.PointsCount;
+				}
+			}
+		}
+
+		return selectedSeries;
+	}
+
 	#endregion
 
 	#region Callback Method
@@ -746,44 +784,6 @@ public partial class DateTimeCategoryAxis : ChartAxis
 		{
 			TickPositions.Add(pos);
 		}
-	}
-
-	private ChartSeries? GetActualSeries()
-	{
-		var visibleSeries = GetVisibleSeries();
-		if (visibleSeries == null)
-		{
-			return null;
-		}
-
-		int dataCount = 0;
-		ChartSeries? selectedSeries = null;
-
-		if (IsPolarArea)
-		{
-			foreach (PolarSeries series in visibleSeries.Cast<PolarSeries>())
-			{
-				if (series != null && series.ActualXAxis == this && series.PointsCount > dataCount)
-				{
-					selectedSeries = series;
-					dataCount = series.PointsCount;
-				}
-			}
-		}
-		else
-		{
-
-			foreach (CartesianSeries series in visibleSeries.Cast<CartesianSeries>())
-			{
-				if (series != null && series.ActualXAxis == this && series.PointsCount > dataCount)
-				{
-					selectedSeries = series;
-					dataCount = series.PointsCount;
-				}
-			}
-		}
-
-		return selectedSeries;
 	}
 
 	#endregion

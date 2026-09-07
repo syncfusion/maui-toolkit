@@ -1,4 +1,4 @@
-using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using System.Collections;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -73,15 +73,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				_yValues = new double[_pointsCount];
 				xDatas.CopyTo(_xValues, 0);
 				yDatas.CopyTo(_yValues, 0);
-
 				double xMin = double.MaxValue, xMax = double.MinValue;
 				double yMin = double.MaxValue, yMax = double.MinValue;
 
 				for (int i = 0; i < _xValues.Length; i++)
 				{
 					double x = _xValues[i];
-					if (x < xMin) xMin = x;
-					if (x > xMax) xMax = x;
+					if (x < xMin)
+						xMin = x;
+					if (x > xMax)
+						xMax = x;
 				}
 
 				for (int i = 0; i < _yValues.Length; i++)
@@ -89,15 +90,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					double y = _yValues[i];
 					if (!double.IsNaN(y))
 					{
-						if (y < yMin) yMin = y;
-						if (y > yMax) yMax = y;
+						if (y < yMin)
+							yMin = y;
+						if (y > yMax)
+							yMax = y;
 					}
 				}
 
-				if (xMin == double.MaxValue) xMin = 0;
-				if (xMax == double.MinValue) xMax = 0;
-				if (yMin == double.MaxValue) yMin = 0;
-				if (yMax == double.MinValue) yMax = 0;
+				if (xMin == double.MaxValue)
+					xMin = 0;
+				if (xMax == double.MinValue)
+					xMax = 0;
+				if (yMin == double.MaxValue)
+					yMin = 0;
+				if (yMax == double.MinValue)
+					yMax = 0;
 
 				series.XRange += new DoubleRange(xMin, xMax);
 				series.YRange += new DoubleRange(yMin, yMax);

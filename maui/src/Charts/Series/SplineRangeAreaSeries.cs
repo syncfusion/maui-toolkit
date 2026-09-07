@@ -82,6 +82,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal override bool IsFillEmptyPoint { get { return false; } }
 
+		internal override bool IsColorPathSeries => false;
+
 		#endregion
 
 		#region Bindable Properties

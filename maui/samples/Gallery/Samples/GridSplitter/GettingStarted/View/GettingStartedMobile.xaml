@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.GridSplitter.SfGridSplitter.GettingStartedMobile"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.GridSplitter"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:splitter="clr-namespace:Syncfusion.Maui.Toolkit.GridSplitter;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:converter="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+                      >
+
+  <localCore:SampleView.Behaviors>
+    <local:GridSplitterBehaviour />
+  </localCore:SampleView.Behaviors>
+
+  <localCore:SampleView.Resources>
+    <ResourceDictionary>
+      <converter:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+      <Style x:Key="PhotoTileBorder" TargetType="Border">
+        <Setter Property="StrokeShape" Value="RoundRectangle 12" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="BackgroundColor" Value="Transparent" />
+      </Style>
+    </ResourceDictionary>
+  </localCore:SampleView.Resources>
+
+  <splitter:SfGridSplitter x:Name="GridSplitter" Orientation="Vertical">
+
+    <!-- First Pane: Image gallery -->
+    <splitter:SplitterPane Size="65*" IsCollapsible="False">
+
+      <Border StrokeThickness="1"
+          Margin="8"
+          Padding="8"
+          BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+          Stroke="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+          StrokeShape="RoundRectangle 12">
+
+        <CollectionView
+            x:Name="PhotosCollectionView"
+            ItemsSource="{Binding Photos}"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedPhoto, Mode=TwoWay}">
+              <CollectionView.BindingContext>
+                <local:DashboardViewModel/> 
+              </CollectionView.BindingContext>
+          <CollectionView.ItemsLayout>
+            <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="10" VerticalItemSpacing="10" />
+          </CollectionView.ItemsLayout>
+
+          <CollectionView.ItemTemplate>
+            <DataTemplate x:DataType="local:PhotoItem">
+              <Border Style="{StaticResource PhotoTileBorder}">
+                      <VisualStateManager.VisualStateGroups>
+                      <VisualStateGroup Name="CommonStates">
+                    <VisualState Name="Normal" >
+                      <VisualState.Setters>
+                        <Setter Property="StrokeThickness" Value="1"/>
+                        <Setter Property="Stroke"
+                          Value="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+                      </VisualState.Setters>
+                    </VisualState>
+                      <VisualState Name="Selected">
+                      <VisualState.Setters>
+                        <Setter Property="BackgroundColor"
+                      Value="Transparent" />
+                      </VisualState.Setters>
+                      </VisualState>
+                      </VisualStateGroup>
+                      </VisualStateManager.VisualStateGroups>
+                <Border.Triggers>
+                  <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="True">
+                    <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" />
+                    <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" />
+                    <Setter Property="StrokeThickness" Value="4" />
+                  </DataTrigger>
+                  <DataTrigger TargetType="Border" Binding="{Binding IsSelected}" Value="False">
+                    <Setter Property="StrokeThickness" Value="0" />
+                  </DataTrigger>
+                </Border.Triggers>
+
+                <Grid RowDefinitions="120,Auto" RowSpacing="6">
+
+                  <Image Grid.Row="0"
+                         Source="{Binding Image}"
+                         Aspect="AspectFill" />
+
+                  <Label Grid.Row="1"
+                         Text="{Binding Name}"
+                         FontSize="13"
+                         FontAttributes="Bold"
+                         HorizontalTextAlignment="Center"
+                         LineBreakMode="TailTruncation"
+                         MaxLines="1" />
+
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+      </Border>
+
+    </splitter:SplitterPane>
+
+    <!-- Second Pane: Placeholder OR Details -->
+    <splitter:SplitterPane Size="35*" IsCollapsible="False">
+
+      <Border
+          Margin="8"
+          Padding="12"
+          BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+          Stroke="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+          StrokeShape="RoundRectangle 12">
+
+        <Grid BindingContext="{Binding Source={x:Reference PhotosCollectionView}, Path=BindingContext}">
+          <!-- Placeholder: shown when no photo is selected -->
+          <VerticalStackLayout
+              IsVisible="{Binding HasNoSelection}"
+              HorizontalOptions="Center"
+              VerticalOptions="Center"
+              Spacing="8">
+            <Label Text="&#xe7e6;"
+                   FontFamily="MauiSampleFontIcon"
+                   FontSize="42"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+
+            <Label Text="Photo Explorer"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+
+            <Label Text="Select a landmark from the gallery to view details and discover interesting facts."
+                   FontSize="12"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+
+          </VerticalStackLayout>
+
+          <!-- Details: shown when a photo is selected -->
+<ScrollView IsVisible="{Binding HasNoSelection, Converter={StaticResource InvertedBoolConverter}}">
+
+    <VerticalStackLayout
+        Padding="4"
+        Spacing="12">
+
+        <!-- Title -->
+        <Label
+            Text="{Binding SelectedPhoto.Title}"
+            FontSize="22"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center" 
+            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}" />
+
+        <!-- Description -->
+        <Label
+            Text="{Binding SelectedPhoto.Description}"
+            FontSize="13"
+            LineBreakMode="WordWrap"
+            HorizontalTextAlignment="Center"
+            Opacity="0.8" 
+            TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}"/>
+
+        <!-- Information Cards -->
+        <Grid
+            ColumnDefinitions="*,*"
+            ColumnSpacing="10">
+
+                <Border Stroke="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}"
+                Grid.Column="0"
+                Padding="10"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Grid ColumnDefinitions="20,Auto" ColumnSpacing="5">
+                    <Label
+                        Text="&#xe76e;" FontFamily="MauiSampleFontIcon"
+                        FontSize="18"
+                        Opacity="0.7" VerticalTextAlignment="Center"/>
+
+                    <Label Grid.Column="1"
+                        Text="{Binding SelectedPhoto.Location}"
+                        FontAttributes="Bold" />
+                </Grid>
+
+            </Border>
+
+                <Border Stroke="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}"
+                Grid.Column="1"
+                Padding="10"
+                StrokeThickness="1"
+                StrokeShape="RoundRectangle 10">
+
+                <Grid ColumnDefinitions="20,Auto" ColumnSpacing="5">
+                    <Label
+                        Text="&#xe730;" FontFamily="MauiSampleFontIcon"
+                        FontSize="18"
+                        Opacity="0.7" VerticalTextAlignment="Center"/>
+
+                    <Label Grid.Column="1"
+                        Text="{Binding SelectedPhoto.Category}"
+                        FontAttributes="Bold" />
+                </Grid>
+
+            </Border>
+
+        </Grid>
+
+        <!-- Additional Details -->
+        <Grid
+            ColumnDefinitions="20,*" ColumnSpacing="5"
+            RowDefinitions="Auto,Auto"
+            RowSpacing="8">
+
+            <Label Text="&#xe76d;" FontFamily="MauiSampleFontIcon" VerticalTextAlignment="Center"/>
+            <Label
+                Grid.Column="1"
+                Text="{Binding SelectedPhoto.Photographer}" />
+
+            <Label
+                Grid.Row="1"
+                Text="&#xe72f;" FontFamily="MauiSampleFontIcon" VerticalTextAlignment="Center"/>
+
+            <Label
+                Grid.Row="1"
+                Grid.Column="1"
+                Text="{Binding SelectedPhoto.FileSize}" />
+
+        </Grid>
+
+        <!-- Action -->
+        <Button BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
+          TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}"
+            Margin="0,10,0,0"
+            Text="✨ Did You Know?"
+            FontAttributes="Bold"
+            CornerRadius="10"
+            HeightRequest="50"
+            Command="{Binding MarkAsFavoriteCommand}" />
+
+    </VerticalStackLayout>
+
+</ScrollView>
+        </Grid>
+
+      </Border>
+
+    </splitter:SplitterPane>
+
+  </splitter:SfGridSplitter>
+</localCore:SampleView>

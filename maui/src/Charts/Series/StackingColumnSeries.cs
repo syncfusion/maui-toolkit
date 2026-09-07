@@ -584,7 +584,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					Text = content.ToString()
 				};
 
-				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior);
+				UpdateTooltipAppearance(tooltipInfo, tooltipBehavior, dataPoint, index);
 				tooltipInfo.Item = dataPoint;
 
 				return tooltipInfo;
@@ -657,8 +657,40 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return DataLabelSettings.GetLabelPositionForRectangularSeries(this, dataLabel.Index, labelSize, labelPosition, padding, DataLabelSettings.BarAlignment);
 		}
 
-		internal override void GenerateTrackballPointInfo(List<object> nearestDataPoints, List<TrackballPointInfo> PointInfos, ref bool isSideBySide)
+		internal override void GenerateTrackballPointInfo(List<object> nearestDataPoints, List<TrackballPointInfo> pointInfos, ref bool isSideBySide)
 		{
+			var xValues = GetXValues();
+
+			if (nearestDataPoints != null && ActualData != null && xValues != null && SeriesYValues != null && TopValues != null)
+			{
+				IList<double> topValues = TopValues;
+				IList<double> yValues = SeriesYValues[0];
+
+				foreach (object point in nearestDataPoints)
+				{
+					int index = ActualData.IndexOf(point);
+					var xValue = xValues[index];
+					double topValue = topValues[index];
+					double yValue = yValues[index];
+					if (double.IsNaN(yValue))
+					{
+						continue;
+					}
+
+					string label = yValue.ToString();
+					var xPoint = TransformToVisibleX(xValue, topValue);
+					var yPoint = TransformToVisibleY(xValue, topValue);
+
+					TrackballPointInfo? chartPointInfo = CreateTrackballPointInfo(xPoint, yPoint, label, point);
+
+					if (chartPointInfo != null)
+					{
+						chartPointInfo.XValue = xValue;
+						chartPointInfo.YValues.Add(yValue);
+						pointInfos.Add(chartPointInfo);
+					}
+				}
+			}
 		}
 
 		#endregion

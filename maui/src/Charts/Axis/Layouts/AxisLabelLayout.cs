@@ -308,6 +308,83 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#endregion
 
+		#region Protected Methods
+
+		/// <summary>
+		/// Calculates the axis-aligned bounding box of a rotated rectangle.
+		/// </summary>
+		protected static RectF CalculateRotatedBounds(RectF rect,
+													 double rotationAngle, float rotateOriginX, float rotateOriginY)
+		{
+			// If no rotation, return the original rect
+			if (Math.Abs(rotationAngle) < 0.01)
+			{
+				return rect;
+			}
+
+			var x = rect.X;
+			var y = rect.Y;
+			var width = rect.Width;
+			var height = rect.Height;
+
+			// Convert angle to radians
+			double angleRadians = rotationAngle * Math.PI / 180.0;
+			double cos = Math.Cos(angleRadians);
+			double sin = Math.Sin(angleRadians);
+
+			// Get the four corners of the original rectangle
+			PointF[] corners = new PointF[4]
+			{
+				new PointF(x, y),                           // Top-left
+                new PointF(x + width, y),                   // Top-right
+                new PointF(x + width, y + height),          // Bottom-right
+                new PointF(x, y + height)                   // Bottom-left
+            };
+
+			// Rotate each corner around the rotation origin
+			float minX = float.MaxValue;
+			float minY = float.MaxValue;
+			float maxX = float.MinValue;
+			float maxY = float.MinValue;
+
+			foreach (var corner in corners)
+			{
+				// Translate to origin
+				double translatedX = corner.X - rotateOriginX;
+				double translatedY = corner.Y - rotateOriginY;
+
+				// Apply rotation
+				double rotatedX = translatedX * cos - translatedY * sin;
+				double rotatedY = translatedX * sin + translatedY * cos;
+
+				// Translate back
+				float finalX = (float)(rotatedX + rotateOriginX);
+				float finalY = (float)(rotatedY + rotateOriginY);
+
+				// Track min/max to get bounding box
+				minX = Math.Min(minX, finalX);
+				minY = Math.Min(minY, finalY);
+				maxX = Math.Max(maxX, finalX);
+				maxY = Math.Max(maxY, finalY);
+			}
+
+			return new RectF(minX, minY, maxX - minX, maxY - minY);
+		}
+
+		/// <summary>
+		/// Applies rotation to a rectangle using center-based rotation.
+		/// Used when rotation origin isn't yet calculated (e.g., in CalcBounds during Measure phase).
+		/// </summary>
+		protected RectF ApplyRotationToRect(RectF rect, double rotationAngle)
+		{
+			return NeedToRotate
+				? CalculateRotatedBounds(rect,
+										rotationAngle, rect.X + rect.Width / 2, rect.Y + rect.Height / 2)
+				: rect;
+		}
+
+		#endregion
+
 		#region Private Methods
 
 		void InsertToRowOrColumn(int rowOrColIndex, int itemIndex, RectF rect)
@@ -573,7 +650,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (LabelsRect != null)
 					{
-						LabelsRect[i] = new RectF(xPos, yPos, actualSize.Width, actualSize.Height);
+						RectF labelBounds = new RectF(xPos, yPos, actualSize.Width, actualSize.Height);
+						// Calculate rotated bounding box for accurate hit testing when labels are rotated
+						LabelsRect[i] = NeedToRotate
+							? CalculateRotatedBounds(labelBounds, rotateAngle, rotateOriginX, rotateOriginY)
+							: labelBounds;
 					}
 
 					canvas.CanvasRestoreState();
@@ -713,14 +794,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				var rectByRowAndCols = RectByRowsAndCols.ElementAt(0);
 				if (rectByRowAndCols[0].Left < 0)
 				{
-					LabelsRect[0] = rectByRowAndCols[0] = new RectF(0, 0, computedSize.Width, computedSize.Height);
+					var labelRect = new RectF(0, 0, computedSize.Width, computedSize.Height);
+					LabelsRect[0] = rectByRowAndCols[0] = ApplyRotationToRect(labelRect, Axis.LabelRotation);
 				}
 
 				int index = axisLabels.Count - 1;
 				if (rectByRowAndCols[index].Right > size)
 				{
 					computedSize = ComputedSizes[index];
-					LabelsRect[index] = rectByRowAndCols[index] = new RectF(size - computedSize.Width, 0, computedSize.Width, computedSize.Height);
+					var labelRect = new RectF(size - computedSize.Width, 0, computedSize.Width, computedSize.Height);
+					LabelsRect[index] = rectByRowAndCols[index] = ApplyRotationToRect(labelRect, Axis.LabelRotation);
 				}
 			}
 			else if (Axis.EdgeLabelsDrawingMode == EdgeLabelsDrawingMode.Hide)
@@ -939,7 +1022,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					if (LabelsRect != null)
 					{
-						LabelsRect[i] = new RectF(xPos, yPos, actualSize.Width, actualSize.Height);
+						RectF labelBounds = new RectF(xPos, yPos, actualSize.Width, actualSize.Height);
+						// Calculate rotated bounding box for accurate hit testing when labels are rotated
+						LabelsRect[i] = NeedToRotate
+							? CalculateRotatedBounds(labelBounds, rotateAngle, rotateOriginX, rotateOriginY)
+							: labelBounds;
 					}
 
 					canvas.CanvasRestoreState();
@@ -1105,7 +1192,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				var rectByRowAndCols = RectByRowsAndCols.ElementAt(0);
 				if (rectByRowAndCols[0].Bottom > size)
 				{
-					rectByRowAndCols[0] = new RectF(0, size - computedSize.Height, computedSize.Width, computedSize.Height);
+					var labelRect = new RectF(0, size - computedSize.Height, computedSize.Width, computedSize.Height);
+					LabelsRect[0] = rectByRowAndCols[0] = ApplyRotationToRect(labelRect, Axis.LabelRotation);
 				}
 
 				if (axisLabels != null)
@@ -1114,7 +1202,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					if (rectByRowAndCols[index].Top < 0)
 					{
 						computedSize = computedSizes[index];
-						rectByRowAndCols[index] = new RectF(0, 0, computedSize.Width, computedSize.Height);
+						var labelRect = new RectF(0, 0, computedSize.Width, computedSize.Height);
+						LabelsRect[index] = rectByRowAndCols[index] = ApplyRotationToRect(labelRect, Axis.LabelRotation);
 					}
 				}
 			}

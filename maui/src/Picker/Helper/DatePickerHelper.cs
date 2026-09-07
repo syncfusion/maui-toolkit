@@ -383,8 +383,8 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return monthIndex;
             }
 
-            string[]? monthNames = null;
-            bool isAbbreviatedMonth = format == "MMM";
+			string[]? monthNames = null;
+			bool isAbbreviatedMonth = format == "MMM";
             bool isFullMonth = format == "MMMM";
             bool isMonthDay = format == "MM_ddd";
             if (isFullMonth)
@@ -407,13 +407,13 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     }
                 }
             }
-            else if ((isAbbreviatedMonth || isFullMonth) && monthNames is not null)
-            {
+			else if ((isAbbreviatedMonth || isFullMonth) && monthNames is not null)
+			{
                 for (int i = 0; i < months.Count; i++)
                 {
-                    string monthItem = months[i];
-                    if (Array.IndexOf(monthNames, monthItem) + 1 > month)
-                    {
+					string monthItem = months[i];
+					if (Array.IndexOf(monthNames, monthItem) + 1 > month)
+					{
                         monthIndex = i;
                         break;
                     }
@@ -766,6 +766,49 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
+        /// Apply the date column text style based on columntextstyle.
+        /// </summary>
+        /// <param name="pickerInfo">The picker info.</param>
+        /// <param name="dateindex">The dateindex.</param>
+        /// <param name="textStyle">The picker textstyle.</param>
+        /// <returns>Returns the updated picker textstyle.</returns>
+        internal static PickerTextStyle ApplyDateTextStyle(IPickerView pickerInfo, int dateindex, PickerTextStyle textStyle)
+        {
+            PickerBase? pickerBase = pickerInfo is SfDateTimePicker dateTimePicker ? dateTimePicker : pickerInfo is SfDatePicker datepicker ? datepicker : null;
+            if (pickerBase == null)
+            {
+                return textStyle;
+            }
+
+            switch (dateindex)
+            {
+                case 0:
+                    if (!PickerHelper.ArePickerTextStylesEqual(pickerBase.DayColumnTextStyle, textStyle))
+                    {
+                        textStyle = pickerBase.DayColumnTextStyle;
+                    }
+
+                    break;
+                case 1:
+                    if (!PickerHelper.ArePickerTextStylesEqual(pickerBase.MonthColumnTextStyle, textStyle))
+                    {
+                        textStyle = pickerBase.MonthColumnTextStyle;
+                    }
+
+                    break;
+                case 2:
+                    if (!PickerHelper.ArePickerTextStylesEqual(pickerBase.YearColumnTextStyle, textStyle))
+                    {
+                        textStyle = pickerBase.YearColumnTextStyle;
+                    }
+
+                    break;
+            }
+
+            return textStyle;
+        }
+
+        /// <summary>
         /// Determines whether the specified date format excludes the day column.
         /// When the day column is missing, updating the selected date is restricted
         /// for blackout conditions based on the day value; otherwise, the selected
@@ -857,10 +900,10 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
             }
 
-            // Remove duplicates without LINQ allocation by using a seen set.
-            var seen = new HashSet<int>();
-            formatOrder.RemoveAll(x => !seen.Add(x));
-            return formatOrder;
+			// Remove duplicates without LINQ allocation by using a seen set.
+			var seen = new HashSet<int>();
+			formatOrder.RemoveAll(x => !seen.Add(x));
+			return formatOrder;
         }
 
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 
 namespace Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart
 {
@@ -97,5 +98,39 @@ namespace Syncfusion.Maui.ControlsGallery.PyramidChart.SfPyramidChart
 	public partial class ChartColorModel : ObservableCollection<Brush>
 	{
 
+	}
+
+	public class TooltipValueConverter : IValueConverter
+	{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			if (value is ChartDataModel model)
+			{
+				switch (parameter?.ToString())
+				{
+					case "Name":
+						return model.Name;
+					case "Value":
+						return model.Value;
+					case "LearningCategories":
+						return model.LearningCategories;
+				}
+			}
+			else if (value is Learning series)
+			{
+				switch (parameter?.ToString())
+				{
+					case "Category":
+						return series.Category;
+				}
+			}
+
+			return value;
+		}
+
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			return value;
+		}
 	}
 }

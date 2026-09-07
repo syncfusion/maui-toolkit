@@ -2339,8 +2339,8 @@ namespace Syncfusion.Maui.Toolkit.TextInputLayout
 					inputLayout._internalErrorLabelStyle.TextColor = newLabelStyle.TextColor;
 					inputLayout._internalErrorLabelStyle.FontFamily = newLabelStyle.FontFamily;
 					inputLayout._internalErrorLabelStyle.FontAttributes = newLabelStyle.FontAttributes;
-					inputLayout._internalErrorLabelStyle.FontSize = newLabelStyle.FontSize;
 					inputLayout._internalErrorLabelStyle.FontAutoScalingEnabled = newLabelStyle.FontAutoScalingEnabled;
+					inputLayout._internalErrorLabelStyle.FontSize = newLabelStyle.FontSize;
 					newLabelStyle.PropertyChanged += inputLayout.OnErrorLabelStylePropertyChanged;
 					if (inputLayout._initialLoaded)
 					{

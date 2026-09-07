@@ -17,8 +17,7 @@
 		{
 			get
 			{
-				int count = OpenPopups.Count;
-				return count > 0 ? OpenPopups[count - 1] : null;
+				return OpenPopups.Count > 0 ? OpenPopups[OpenPopups.Count - 1] : null;
 			}
 		}
 
@@ -33,38 +32,61 @@
 		internal static Page? GetMainPage(bool shouldReturnOnlyMainPage = false)
 		{
 			var windowPage = PopupExtension.GetMainWindowPage();
-			if (windowPage is null)
+			if (windowPage is not null)
 			{
-				return null;
-			}
-
-			// An exception is thrown when showing the popup in the OnAppearing() method of a modally pushed page.
-			if (windowPage.Navigation is not null && windowPage.Navigation.ModalStack is not null)
-			{
-				var modalPage = windowPage.Navigation.ModalStack.LastOrDefault();
-				if (modalPage is not null)
+				if (windowPage is not null)
 				{
-					// Calling Navigation.PushModalAsync(new NavigationPage(new ModalPage())) does not return the NavigationPage of the current page.
-					if (modalPage is NavigationPage navPage)
+					// An exception is thrown when showing the popup in the OnAppearing() method of a modally pushed page.
+					if (windowPage.Navigation is not null && windowPage.Navigation.ModalStack is not null)
 					{
-						return navPage.CurrentPage ?? windowPage;
+						var modalPage = windowPage.Navigation.ModalStack.LastOrDefault();
+						if (modalPage is not null)
+						{
+							// Calling Navigation.PushModalAsync(new NavigationPage(new ModalPage())) does not return the NavigationPage of the current page.
+							if (modalPage is NavigationPage navPage)
+							{
+								if (navPage.CurrentPage is null)
+								{
+									return new Page();
+								}
+								else
+								{
+									return navPage.CurrentPage;
+								}
+							}
+
+							return modalPage;
+						}
 					}
 
-					return modalPage;
+					if (windowPage is NavigationPage navigationPage && !shouldReturnOnlyMainPage)
+					{
+						// When navigation current page is null, returned new page.
+						if (navigationPage.CurrentPage == null)
+						{
+							return new Page();
+						}
+
+						return navigationPage.CurrentPage;
+					}
+					else if (windowPage is Shell shellPage)
+					{
+						// 837430 : when shell current page is null, NullReferenceException is thrown in ios in release mode.
+						if (shellPage.CurrentPage == null)
+						{
+							return new Page();
+						}
+
+						return shellPage.CurrentPage;
+					}
 				}
-			}
 
-			if (windowPage is NavigationPage navigationPage && !shouldReturnOnlyMainPage)
-			{
-				return navigationPage.CurrentPage ?? windowPage;
+				return windowPage;
 			}
-			else if (windowPage is Shell shellPage)
+			else
 			{
-				// 837430 : when shell current page is null, NullReferenceException is thrown in ios in release mode.
-				return shellPage.CurrentPage ?? windowPage;
+				return new Page();
 			}
-
-			return windowPage;
 		}
 
 		/// <summary>
@@ -79,7 +101,7 @@
 				return application.Windows[0].Page;
 			}
 
-			return null;
+			return new Page();
 		}
 
 #if !IOS

@@ -101,4 +101,25 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
         /// </summary>
         HighlightByStroke = 1 << 2   // 4
     }
+
+	/// <summary>
+	/// Represents the alignment options for the drill down toolbar.
+	/// </summary>
+	public enum SunburstToolbarAlignment
+	{
+		/// <summary>
+		/// Aligns the toolbar to the start of the chart.
+		/// </summary>
+		Start,
+
+		/// <summary>
+		/// Aligns the toolbar to the center of the chart.
+		/// </summary>
+		Center,
+
+		/// <summary>
+		/// Aligns the toolbar to the end of the chart.
+		/// </summary>
+		End
+	}
 }

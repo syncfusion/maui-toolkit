@@ -1615,9 +1615,10 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			var nativeContent = Content?.Handler?.PlatformView as Android.Views.View;
 			if (nativeContent is Android.Views.View rootView)
 			{
-					if (Content != null)
+					if (Content != null && !_androidContentDescriptions.ContainsKey(Content))
 					{
-						_androidContentDescriptions.TryAdd(Content, rootView.ContentDescription);
+						_androidContentDescriptions[Content] =
+							rootView.ContentDescription;
 					}
 
 				if (exclude) // when you want to hide content
@@ -2949,6 +2950,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 			}
 
 			sheet.UpdateStateChanged((BottomSheetState)oldValue, newState);
+
 		}
 
 		/// <summary>
@@ -3229,5 +3231,6 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 
 		#endregion
 	}
+
 }
 

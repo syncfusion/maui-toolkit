@@ -1,6 +1,7 @@
 using System.Collections;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
 using Syncfusion.Maui.Toolkit.Internals;
+using static Syncfusion.Maui.Toolkit.Charts.ChartUtils;
 using Core = Syncfusion.Maui.Toolkit;
 
 namespace Syncfusion.Maui.Toolkit.Charts
@@ -131,6 +132,36 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			BindingMode.Default,
 			null,
 			propertyChanged: OnLegendStylePropertyChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="IsFloating"/> bindable property. 
+		/// </summary>
+		public static readonly BindableProperty IsFloatingProperty = BindableProperty.Create(
+			nameof(IsFloating),
+			typeof(bool),
+			typeof(ChartLegend),
+			false,
+			BindingMode.Default);
+
+		/// <summary>
+		/// Identifies the <see cref="OffsetX"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty OffsetXProperty = BindableProperty.Create(
+			nameof(OffsetX),
+			typeof(double),
+			typeof(ChartLegend),
+			0d,
+			BindingMode.Default);
+
+		/// <summary>
+		/// Identifies the <see cref="OffsetY"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty OffsetYProperty = BindableProperty.Create(
+			nameof(OffsetY),
+			typeof(double),
+			typeof(ChartLegend),
+			0d,
+			BindingMode.Default);
 
 		#endregion
 
@@ -458,6 +489,160 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			set { SetValue(LabelStyleProperty, value); }
 		}
 
+		/// <summary>
+		/// Gets or sets a value indicating whether the legend floats over the chart's plot area.
+		/// </summary>
+		/// <remarks>
+		/// When this property is set to <c>true</c>, the legend detaches from its default docking position
+		/// and can be positioned explicitly by using the <see cref="OffsetX"/> and <see cref="OffsetY"/> properties.
+		/// <para><b>Note:</b> This property is only applicable for Cartesian, Circular, Pyramid, and Funnel charts.</para>
+		/// </remarks>
+		/// <value>It accepts bool values and the default value is <c>False</c>.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-15)
+		/// <code><![CDATA[
+		/// <chart:SfCartesianChart>
+		///
+		///     <chart:SfCartesianChart.Legend>
+		///         <chart:ChartLegend IsFloating="True"/>
+		///     </chart:SfCartesianChart.Legend>
+		///
+		///     <chart:ColumnSeries ItemsSource="{Binding Data}"
+		///                         XBindingPath="Category"
+		///                         YBindingPath="Value"/>
+		/// </chart:SfCartesianChart>
+		/// ]]></code>
+		/// # [MainPage.xaml.cs](#tab/tabid-16)
+		/// <code><![CDATA[
+		/// SfCartesianChart chart = new SfCartesianChart();
+		/// ViewModel viewModel = new ViewModel();
+		///
+		/// ChartLegend legend = new ChartLegend()
+		/// {
+		///     IsFloating = true,
+		/// };
+		///
+		/// chart.Legend = legend;
+		///
+		/// ColumnSeries series = new ColumnSeries()
+		/// {
+		///     ItemsSource = viewModel.Data,
+		///     XBindingPath = "Category",
+		///     YBindingPath = "Value"
+		/// };
+		///
+		/// chart.Series.Add(series);
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public bool IsFloating
+		{
+			get { return (bool)GetValue(IsFloatingProperty); }
+			set { SetValue(IsFloatingProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the horizontal offset, in device-independent units, applied when the legend is floating.
+		/// </summary>
+		/// <remarks>
+		/// This property is effective only when <see cref="IsFloating"/> is <c>true</c>. Positive values move the legend to the right,
+		/// and negative values move it to the left relative to its floating anchor point.
+		/// </remarks>
+		/// <value>It accepts <c>double</c> values and the default value is <c>0</c>.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-17)
+		/// <code><![CDATA[
+		/// <chart:SfCircularChart>
+		///
+		///     <chart:SfCircularChart.Legend>
+		///         <chart:ChartLegend IsFloating="True"
+		///                            OffsetX="30"/>
+		///     </chart:SfCircularChart.Legend>
+		///
+		///     <chart:PieSeries ItemsSource="{Binding Data}"
+		///                      XBindingPath="XValue"
+		///                      YBindingPath="YValue"/>
+		/// </chart:SfCircularChart>
+		/// ]]></code>
+		/// # [MainPage.xaml.cs](#tab/tabid-18)
+		/// <code><![CDATA[
+		/// SfCircularChart chart = new SfCircularChart();
+		/// ViewModel viewModel = new ViewModel();
+		///
+		/// chart.Legend = new ChartLegend()
+		/// {
+		///     IsFloating = true,
+		///     OffsetX = 30
+		/// };
+		///
+		/// PieSeries series = new PieSeries()
+		/// {
+		///     ItemsSource = viewModel.Data,
+		///     XBindingPath = "XValue",
+		///     YBindingPath = "YValue"
+		/// };
+		///
+		/// chart.Series.Add(series);
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public double OffsetX
+		{
+			get { return (double)GetValue(OffsetXProperty); }
+			set { SetValue(OffsetXProperty, value); }
+		}
+
+		/// <summary>
+		/// Gets or sets the vertical offset, in device-independent units, applied when the legend is floating.
+		/// </summary>
+		/// <remarks>
+		/// This property is effective only when <see cref="IsFloating"/> is <c>true</c>. Positive values move the legend downward,
+		/// and negative values move it upward relative to its floating anchor point.
+		/// </remarks>
+		/// <value>It accepts <c>double</c> values and the default value is <c>0</c>.</value>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-19)
+		/// <code><![CDATA[
+		/// <chart:SfFunnelChart>
+		///
+		///     <chart:SfFunnelChart.Legend>
+		///         <chart:ChartLegend IsFloating="True"
+		///                             OffsetY="-25"/>
+		///     </chart:SfFunnelChart.Legend>
+		///
+		///     <chart:FunnelSeries ItemsSource="{Binding Data}"
+		///                         XBindingPath="Category"
+		///                         YBindingPath="Value"/>
+		/// </chart:SfFunnelChart>
+		/// ]]></code>
+		/// # [MainPage.xaml.cs](#tab/tabid-20)
+		/// <code><![CDATA[
+		/// SfFunnelChart chart = new SfFunnelChart();
+		/// ViewModel viewModel = new ViewModel();
+		///
+		/// chart.Legend = new ChartLegend()
+		/// {
+		///     IsFloating = true,
+		///     OffsetY = -25
+		/// };
+		///
+		/// FunnelSeries series = new FunnelSeries()
+		/// {
+		///     ItemsSource = viewModel.Data,
+		///     XBindingPath = "Category",
+		///     YBindingPath = "Value"
+		/// };
+		///
+		/// chart.Series.Add(series);
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public double OffsetY
+		{
+			get { return (double)GetValue(OffsetYProperty); }
+			set { SetValue(OffsetYProperty, value); }
+		}
+
 		internal SfLegend? sfLegend { get; set; }
 		IEnumerable? _itemsSource;
 #pragma warning disable CS8603 // Possible null reference return.
@@ -723,6 +908,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (BindingContext is LegendItem legendItem)
 			{
+				if (legendItem.Source is ChartTrendline trendline)
+				{
+					DrawTrendlineIcon(canvas, rect, trendline, strokeColor, strokeWidth);
+					return;
+				}
+
 				if (legendItem.IconType == Core.ShapeType.HorizontalLine || legendItem.IconType == Core.ShapeType.VerticalLine)
 				{
 					//TODO: Reason for strokeWidth 0, default legend icon not has stroke support.
@@ -772,6 +963,205 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					DrawShape(canvas, rect, Core.ShapeType.Circle, fillColor, strokeWidth > 0, true);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Draws custom trendline icons in the legend.
+		/// </summary>
+		void DrawTrendlineIcon(ICanvas canvas, Rect rect, ChartTrendline trendline,
+			Brush strokeColor, float strokeWidth)
+		{
+			canvas.SaveState();
+
+			canvas.StrokeSize = Math.Max(1.5f, strokeWidth);
+			canvas.StrokeColor = (strokeColor as SolidColorBrush)?.Color ?? Colors.Black;
+			canvas.StrokeLineCap = LineCap.Round;
+			canvas.StrokeLineJoin = LineJoin.Round;
+
+			float x = (float)rect.X;
+			float y = (float)rect.Y;
+			float width = (float)rect.Width;
+			float height = (float)rect.Height;
+
+			TrendlineIconType iconType = ChartUtils.GetTrendlineIconType(trendline);
+
+			switch (iconType)
+			{
+				case TrendlineIconType.Linear:
+					DrawLinearIcon(canvas, x, y, width, height);
+					break;
+				case TrendlineIconType.Exponential:
+					DrawExponentialIcon(canvas, x, y, width, height);
+					break;
+				case TrendlineIconType.Logarithmic:
+					DrawLogarithmicIcon(canvas, x, y, width, height);
+					break;
+				case TrendlineIconType.Power:
+					DrawPowerIcon(canvas, x, y, width, height);
+					break;
+				case TrendlineIconType.Polynomial:
+					DrawPolynomialIcon(canvas, x, y, width, height);
+					break;
+				case TrendlineIconType.MovingAverage:
+					DrawPolynomialIcon(canvas, x, y, width, height);
+					break;
+			}
+
+			canvas.RestoreState();
+		}
+
+		/// <summary>
+		/// Draws a Legend icon for Linear Trendline.
+		/// </summary>
+		void DrawLinearIcon(ICanvas canvas, float x, float y, float width, float height)
+		{
+			float padding = width * 0.15f;
+			float startX = x + padding;
+			float startY = y + height - padding;
+			float endX = x + width - padding;
+			float endY = y + padding;
+
+			canvas.DrawLine(startX, startY, endX, endY);
+		}
+
+		/// <summary>
+		/// Draws a Legend icon for Exponential Trendline.
+		/// </summary>
+		static void DrawExponentialIcon(ICanvas canvas, float x, float y, float width, float height)
+		{
+			var path = new PathF();
+			float padding = width * 0.12f;
+			float startX = x + padding;
+			float endX = x + width - padding;
+			float startY = y + height - padding;
+			float endY = y + padding;
+
+			path.MoveTo(startX, startY);
+
+			int segments = 25;
+			for (int i = 1; i <= segments; i++)
+			{
+				float t = (float)i / segments;
+				float pointX = startX + (endX - startX) * t;
+				float a = 4.5f;
+				float exponentialValue = ((float)Math.Exp(a * t) - 1) / ((float)Math.Exp(a) - 1);
+				float pointY = startY + (endY - startY) * exponentialValue;
+
+				path.LineTo(pointX, pointY);
+			}
+
+			canvas.DrawPath(path);
+		}
+
+		/// <summary>
+		/// Draws a Legend icon for Logarithmic Trendline.
+		/// </summary>
+		static void DrawLogarithmicIcon(ICanvas canvas, float x, float y, float width, float height)
+		{
+			float startX = x + width * 0.24f;
+			float startY = y + height * 0.84f;
+
+			float midX = x + width * 0.58f;
+			float midY = y + height * 0.30f;
+
+			float arcEndX = x + width * 0.90f;
+			float arcEndY = y + height * 0.38f;
+
+			var path = new PathF();
+			path.MoveTo(startX, startY);
+
+			path.CurveTo(
+				startX + width * 0.26f, startY - height * 0.36f,
+				midX - width * 0.10f, midY + height * 0.08f,
+				midX, midY);
+
+			path.CurveTo(
+				midX + width * 0.16f, midY - height * 0.16f,
+				arcEndX - width * 0.03f, arcEndY - height * 0.06f,
+				arcEndX, arcEndY);
+
+			canvas.DrawPath(path);
+		}
+
+		/// <summary>
+		/// Draws a Legend icon for Power Trendline.
+		/// </summary>
+		static void DrawPowerIcon(ICanvas canvas, float x, float y, float width, float height)
+		{
+			float leftPadding = width * 0.14f;
+			float rightPadding = width * 0.10f;
+			float topPadding = height * 0.18f;
+			float bottomPadding = height * 0.04f;
+
+			float usableWidth = width - leftPadding - rightPadding;
+			float usableHeight = height - topPadding - bottomPadding;
+
+			if (usableWidth <= 0 || usableHeight <= 0)
+			{
+				return;
+			}
+
+			float startX = x + leftPadding;
+			float startY = y + height - bottomPadding;
+			float amplitude = usableHeight * 0.98f;
+			float topY = y + topPadding;
+
+			var path = new PathF();
+			path.MoveTo(startX, startY);
+
+			int segments = 30;
+			float exponent = 2.75f;
+			float bulgeStrength = 0.08f;
+
+			for (int i = 1; i <= segments; i++)
+			{
+				float t = (float)i / segments;
+				float eased = 1f - MathF.Pow(1f - t, exponent);
+				float bulge = bulgeStrength * t * (1f - t);
+				float curve = MathF.Min(1f, eased + bulge);
+
+				float pointX = startX + usableWidth * t;
+				float pointY = startY - amplitude * curve;
+				path.LineTo(pointX, pointY);
+			}
+
+			float tailEndX = MathF.Min(x + width - rightPadding * 0.2f, startX + usableWidth + width * 0.12f);
+			float tailY = topY + height * 0.03f;
+			path.LineTo(tailEndX, tailY);
+
+			canvas.DrawPath(path);
+		}
+
+		/// <summary>
+		/// Draws a Legend icon for Polynomial and MovingAverage Trendline.
+		/// </summary>
+		static void DrawPolynomialIcon(ICanvas canvas, float x, float y, float width, float height)
+		{
+			float horizontalPadding = width * 0.12f;
+
+
+			float startX = x + horizontalPadding;
+			float endX = x + width - horizontalPadding;
+			float usableWidth = endX - startX;
+
+			float centerY = y + height * 0.6f;
+			float waveAmplitude = height * 0.25f;
+
+			var path = new PathF();
+
+			path.MoveTo(startX, centerY);
+
+			path.CurveTo(
+				startX + usableWidth * 0.15f, centerY - waveAmplitude,
+				startX + usableWidth * 0.35f, centerY - waveAmplitude,
+				startX + usableWidth * 0.5f, centerY);
+
+			path.CurveTo(
+				startX + usableWidth * 0.65f, centerY + waveAmplitude,
+				startX + usableWidth * 0.85f, centerY + waveAmplitude,
+				endX, centerY);
+
+			canvas.DrawPath(path);
 		}
 	}
 }

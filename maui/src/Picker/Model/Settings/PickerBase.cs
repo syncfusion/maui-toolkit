@@ -282,6 +282,145 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 propertyChanged: OnPopupHeightPropertyChanged);
 
         /// <summary>
+        /// Identifies the <see cref="ShowCloseButton"/> bindable property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="ShowCloseButton"/> bindable property.
+        /// </value>
+        public static readonly BindableProperty ShowCloseButtonProperty =
+            BindableProperty.Create(
+                nameof(ShowCloseButton),
+                typeof(bool), typeof(PickerBase),
+                false,
+                propertyChanged: OnShowCloseButtonChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="CloseButtonIcon"/> bindable property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="CloseButtonIcon"/> bindable property.
+        /// </value>
+        public static readonly BindableProperty CloseButtonIconProperty =
+            BindableProperty.Create(
+                nameof(CloseButtonIcon),
+                typeof(ImageSource),
+                typeof(PickerBase),
+                null,
+                propertyChanged: OnCloseButtonIconChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="DayColumnTextStyle"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="DayColumnTextStyle"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty DayColumnTextStyleProperty =
+            BindableProperty.Create(
+                nameof(DayColumnTextStyle),
+                typeof(PickerTextStyle),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => new PickerTextStyle(),
+                propertyChanged: OnDayColumnTextStylePropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MonthColumnTextStyle"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MonthColumnTextStyle"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MonthColumnTextStyleProperty =
+            BindableProperty.Create(
+                nameof(MonthColumnTextStyle),
+                typeof(PickerTextStyle),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => new PickerTextStyle(),
+                propertyChanged: OnMonthColumnTextStylePropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="YearColumnTextStyle"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="YearColumnTextStyle"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty YearColumnTextStyleProperty =
+            BindableProperty.Create(
+                nameof(YearColumnTextStyle),
+                typeof(PickerTextStyle), typeof(PickerBase),
+                defaultValueCreator: bindable => new PickerTextStyle(),
+                propertyChanged: OnYearColumnTextStylePropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="HourColumnTextStyle"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="HourColumnTextStyle"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty HourColumnTextStyleProperty =
+            BindableProperty.Create(
+                nameof(HourColumnTextStyle),
+                typeof(PickerTextStyle),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => new PickerTextStyle(),
+                propertyChanged: OnHourColumnTextStylePropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MinuteColumnTextStyle"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MinuteColumnTextStyle"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MinuteColumnTextStyleProperty =
+            BindableProperty.Create(
+                nameof(MinuteColumnTextStyle),
+                typeof(PickerTextStyle),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => new PickerTextStyle(),
+                propertyChanged: OnMinuteColumnTextStylePropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="SecondColumnTextStyle"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="SecondColumnTextStyle"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty SecondColumnTextStyleProperty =
+            BindableProperty.Create(
+                nameof(SecondColumnTextStyle),
+                typeof(PickerTextStyle),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => new PickerTextStyle(),
+                propertyChanged: OnSecondColumnTextStylePropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MilliSecondColumnTextStyle"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MilliSecondColumnTextStyle"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MilliSecondColumnTextStyleProperty =
+            BindableProperty.Create(
+                nameof(MilliSecondColumnTextStyle),
+                typeof(PickerTextStyle),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => new PickerTextStyle(),
+                propertyChanged: OnMilliSecondColumnTextStylePropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MeridiemColumnTextStyle"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MeridiemColumnTextStyle"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MeridiemColumnTextStyleProperty =
+            BindableProperty.Create(
+                nameof(MeridiemColumnTextStyle),
+                typeof(PickerTextStyle),
+                typeof(PickerBase),
+                defaultValueCreator: bindable => new PickerTextStyle(),
+                propertyChanged: OnMeridiemColumnTextStylePropertyChanged);
+
+
+        /// <summary>
         /// Identifies the <see cref="IsSelectionImmediate"/> dependency property.
         /// </summary>
         /// <value>
@@ -293,6 +432,117 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 typeof(bool), typeof(PickerBase),
                 false);
 
+        /// <summary>
+        /// Identifies the <see cref="DayColumnWidth"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="DayColumnWidth"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty DayColumnWidthProperty =
+            BindableProperty.Create(
+                nameof(DayColumnWidth),
+                typeof(double),
+                typeof(PickerBase),
+                -1d,
+                propertyChanged: OnDayColumnWidthPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MonthColumnWidth"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MonthColumnWidth"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MonthColumnWidthProperty =
+            BindableProperty.Create(
+                nameof(MonthColumnWidth),
+                typeof(double),
+                typeof(PickerBase),
+                -1d,
+                propertyChanged: OnMonthColumnWidthPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="YearColumnWidth"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="YearColumnWidth"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty YearColumnWidthProperty =
+            BindableProperty.Create(
+                nameof(YearColumnWidth),
+                typeof(double),
+                typeof(PickerBase),
+                -1d,
+                propertyChanged: OnYearColumnWidthPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="HourColumnWidth"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="HourColumnWidth"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty HourColumnWidthProperty =
+            BindableProperty.Create(
+                nameof(HourColumnWidth),
+                typeof(double),
+                typeof(PickerBase),
+                -1d,
+                propertyChanged: OnHourColumnWidthPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MinuteColumnWidth"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MinuteColumnWidth"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MinuteColumnWidthProperty =
+            BindableProperty.Create(
+                nameof(MinuteColumnWidth),
+                typeof(double),
+                typeof(PickerBase),
+                -1d,
+                propertyChanged: OnMinuteColumnWidthPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="SecondColumnWidth"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="SecondColumnWidth"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty SecondColumnWidthProperty =
+            BindableProperty.Create(
+                nameof(SecondColumnWidth),
+                typeof(double),
+                typeof(PickerBase),
+                -1d,
+                propertyChanged: OnSecondColumnWidthPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MilliSecondColumnWidth"/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MilliSecondColumnWidth"/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MilliSecondColumnWidthProperty =
+            BindableProperty.Create(
+                nameof(MilliSecondColumnWidth),
+                typeof(double),
+                typeof(PickerBase),
+                -1d,
+                propertyChanged: OnMilliSecondColumnWidthPropertyChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MeridiemColumnWidth "/> dependency property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MeridiemColumnWidth "/> dependency property.
+        /// </value>
+        public static readonly BindableProperty MeridiemColumnWidthProperty =
+            BindableProperty.Create(
+                nameof(MeridiemColumnWidth),
+                typeof(double),
+                typeof(PickerBase),
+                -1d,
+                propertyChanged: OnMeridiemColumnWidthPropertyChanged);
 
         #endregion
 
@@ -899,6 +1149,240 @@ namespace Syncfusion.Maui.Toolkit.Picker
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the close button should be shown in the picker header. This is not supported by <see cref="SfDateTimePicker"/>.
+        /// </summary>
+        public bool ShowCloseButton
+        {
+            get { return (bool)GetValue(ShowCloseButtonProperty); }
+            set { SetValue(ShowCloseButtonProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the icon that should be rendered inside the picker close button.
+        /// </summary>
+        public ImageSource CloseButtonIcon
+        {
+            get { return (ImageSource)GetValue(CloseButtonIconProperty); }
+            set { SetValue(CloseButtonIconProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the text style for picker day column.
+        /// </summary>
+        /// <remarks>The unselected text style will not apply when setting this style.</remarks>
+        /// <example>
+        /// The below example shows how to set the day column textstyle property for the sfdatepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfDatePicker >
+        ///     <picker:SfDatePicker.DayColumnTextStyle>
+        ///         <picker:PickerTextStyle TextColor = "Red" FontSize = "20" />
+        ///     </picker:SfDatePicker.DayColumnTextStyle>
+        /// </picker:SfDatePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfDatePicker picker = new SfDatePicker();
+        /// picker.DayColumnTextStyle = new PickerTextStyle() { TextColor = Colors.Red, FontSize = 20 };
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public PickerTextStyle DayColumnTextStyle
+        {
+            get { return (PickerTextStyle)GetValue(DayColumnTextStyleProperty); }
+            set { SetValue(DayColumnTextStyleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the text style for picker month column.
+        /// </summary>
+        /// <remarks>The unselected text style will not apply when setting this style.</remarks>
+        /// <example>
+        /// The below example shows how to set the month column textstyle property for the sfdatepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfDatePicker >
+        ///     <picker:SfDatePicker.MonthColumnTextStyle>
+        ///         <picker:PickerTextStyle TextColor = "Red" FontSize = "20" />
+        ///     </picker:SfDatePicker.MonthColumnTextStyle>
+        /// </picker:SfDatePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfDatePicker picker = new SfDatePicker();
+        /// picker.MonthColumnTextStyle = new PickerTextStyle() { TextColor = Colors.Red, FontSize = 20 };
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public PickerTextStyle MonthColumnTextStyle
+        {
+            get { return (PickerTextStyle)GetValue(MonthColumnTextStyleProperty); }
+            set { SetValue(MonthColumnTextStyleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the text style for picker year column.
+        /// </summary>
+        /// <remarks>The unselected text style will not apply when setting this style.</remarks>
+        /// <example>
+        /// The below example shows how to set the year column textstyle property for the sfdatepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfDatePicker >
+        ///     <picker:SfDatePicker.YearColumnTextStyle>
+        ///         <picker:PickerTextStyle TextColor = "Red" FontSize = "20" />
+        ///     </picker:SfDatePicker.YearColumnTextStyle>
+        /// </picker:SfDatePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfDatePicker picker = new SfDatePicker();
+        /// picker.YearColumnTextStyle = new PickerTextStyle() { TextColor = Colors.Red, FontSize = 20 };
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public PickerTextStyle YearColumnTextStyle
+        {
+            get { return (PickerTextStyle)GetValue(YearColumnTextStyleProperty); }
+            set { SetValue(YearColumnTextStyleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the text style for picker hour column.
+        /// </summary>
+        /// <remarks>The unselected text style will not apply when setting this style.</remarks>
+        /// <example>
+        /// The below example shows how to set the hour column textstyle property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker >
+        ///     <picker:SfTimePicker.HourColumnTextStyle>
+        ///         <picker:PickerTextStyle TextColor = "Red" FontSize = "20" />
+        ///     </picker:SfTimePicker.HourColumnTextStyle>
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.HourColumnTextStyle = new PickerTextStyle() { TextColor = Colors.Red, FontSize = 20 };
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public PickerTextStyle HourColumnTextStyle
+        {
+            get { return (PickerTextStyle)GetValue(HourColumnTextStyleProperty); }
+            set { SetValue(HourColumnTextStyleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the text style for picker minute column.
+        /// </summary>
+        /// <remarks>The unselected text style will not apply when setting this style.</remarks>
+        /// <example>
+        /// The below example shows how to set the minute column textstyle property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker >
+        ///     <picker:SfTimePicker.MinuteColumnTextStyle>
+        ///         <picker:PickerTextStyle TextColor = "Red" FontSize = "20" />
+        ///     </picker:SfTimePicker.MinuteColumnTextStyle>
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.MinuteColumnTextStyle = new PickerTextStyle() { TextColor = Colors.Red, FontSize = 20 };
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public PickerTextStyle MinuteColumnTextStyle
+        {
+            get { return (PickerTextStyle)GetValue(MinuteColumnTextStyleProperty); }
+            set { SetValue(MinuteColumnTextStyleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the text style for picker seconds column.
+        /// </summary>
+        /// <remarks>The unselected text style will not apply when setting this style.</remarks>
+        /// <example>
+        /// The below example shows how to set the second column textstyle property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker >
+        ///     <picker:SfTimePicker.SecondColumnTextStyle>
+        ///         <picker:PickerTextStyle TextColor = "Red" FontSize = "20" />
+        ///     </picker:SfTimePicker.SecondColumnTextStyle>
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.SecondColumnTextStyle = new PickerTextStyle() { TextColor = Colors.Red, FontSize = 20 };
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public PickerTextStyle SecondColumnTextStyle
+        {
+            get { return (PickerTextStyle)GetValue(SecondColumnTextStyleProperty); }
+            set { SetValue(SecondColumnTextStyleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the text style for picker milli seconds column.
+        /// </summary>
+        /// <remarks>The unselected text style will not apply when setting this style.</remarks>
+        /// <example>
+        /// The below example shows how to set the milli seconds column textstyle property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker >
+        ///     <picker:SfTimePicker.MilliSecondColumnTextStyle>
+        ///         <picker:PickerTextStyle TextColor = "Red" FontSize = "20" />
+        ///     </picker:SfTimePicker.MilliSecondColumnTextStyle>
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.MilliSecondColumnTextStyle = new PickerTextStyle() { TextColor = Colors.Red, FontSize = 20 };
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public PickerTextStyle MilliSecondColumnTextStyle
+        {
+            get { return (PickerTextStyle)GetValue(MilliSecondColumnTextStyleProperty); }
+            set { SetValue(MilliSecondColumnTextStyleProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the text style for picker meridiem column.
+        /// </summary>
+        /// <remarks>The unselected text style will not apply when setting this style.</remarks>
+        /// <example>
+        /// The below example shows how to set the meridiem column textstyle property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker >
+        ///     <picker:SfTimePicker.MeridiemColumnTextStyle>
+        ///         <picker:PickerTextStyle TextColor = "Red" FontSize = "20" />
+        ///     </picker:SfTimePicker.MeridiemColumnTextStyle>
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.MeridiemColumnTextStyle = new PickerTextStyle() { TextColor = Colors.Red, FontSize = 20 };
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public PickerTextStyle MeridiemColumnTextStyle
+        {
+            get { return (PickerTextStyle)GetValue(MeridiemColumnTextStyleProperty); }
+            set { SetValue(MeridiemColumnTextStyleProperty, value); }
+        }
+
+        /// <summary>
         /// Gets or sets a value indicating whether the user must explicitly confirm
         /// the selection made in the picker when it is displayed in a dialog or relative dialog mode.
         /// When this property is set to <c>false</c>, the picker requires an explicit
@@ -911,6 +1395,206 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             get { return (bool)GetValue(IsSelectionImmediateProperty); }
             set { SetValue(IsSelectionImmediateProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width for picker day column.
+        /// </summary>
+        /// <remarks>This day column width applicable for SfDatepicker and SfDateTimePicker only.</remarks>
+        /// <example>
+        /// The below example shows how to set the day column width property for the sfdatepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfDatePicker
+        ///                    DayColumnWidth = "200">
+        /// </picker:SfDatePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfDatePicker picker = new SfDatePicker();
+        /// picker.DayColumnWidth = 200;
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public double DayColumnWidth
+        {
+            get { return (double)GetValue(DayColumnWidthProperty); }
+            set { SetValue(DayColumnWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width for picker month column.
+        /// </summary>
+        /// <remarks>This month column width applicable for SfDatepicker and SfDateTimePicker only.</remarks>
+        /// <example>
+        /// The below example shows how to set the month column width property for the sfdatepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfDatePicker
+        ///                    MonthColumnWidth = "200">
+        /// </picker:SfDatePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfDatePicker picker = new SfDatePicker();
+        /// picker.MonthColumnWidth = 200;
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public double MonthColumnWidth
+        {
+            get { return (double)GetValue(MonthColumnWidthProperty); }
+            set { SetValue(MonthColumnWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width for picker year column.
+        /// </summary>
+        /// <remarks>This year column width applicable for SfDatepicker and SfDateTimePicker only.</remarks>
+        /// <example>
+        /// The below example shows how to set the year column width property for the sfdatepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfDatePicker
+        ///                    YearColumnWidth="200">
+        /// </picker:SfDatePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfDatePicker picker = new SfDatePicker();
+        /// picker.YearColumnWidth = 200;
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public double YearColumnWidth
+        {
+            get { return (double)GetValue(YearColumnWidthProperty); }
+            set { SetValue(YearColumnWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width for picker hour column.
+        /// </summary>
+        /// <remarks>This hour column width applicable for SfTimepicker and SfDateTimePicker only.</remarks>
+        /// <example>
+        /// The below example shows how to set the hour column width property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker
+        ///                    HourColumnWidth = "200">
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.HourColumnWidth = 200;
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public double HourColumnWidth
+        {
+            get { return (double)GetValue(HourColumnWidthProperty); }
+            set { SetValue(HourColumnWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width for picker minute column.
+        /// </summary>
+        /// <remarks>This minute column width applicable for SfTimepicker and SfDateTimePicker only.</remarks>
+        /// <example>
+        /// The below example shows how to set the minute column width property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker
+        ///                    MinuteColumnWidth = "200">
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.MinuteColumnWidth = 200;
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public double MinuteColumnWidth
+        {
+            get { return (double)GetValue(MinuteColumnWidthProperty); }
+            set { SetValue(MinuteColumnWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width for picker second column.
+        /// </summary>
+        /// <remarks>This second column width applicable for SfTimepicker and SfDateTimePicker only.</remarks>
+        /// <example>
+        /// The below example shows how to set the second column width property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker
+        ///                    SecondColumnWidth = "200">
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.SecondColumnWidth = 200;
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public double SecondColumnWidth
+        {
+            get { return (double)GetValue(SecondColumnWidthProperty); }
+            set { SetValue(SecondColumnWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width for picker milli second column.
+        /// </summary>
+        /// <remarks>This millisecond column width applicable for SfTimepicker and SfDateTimePicker only.</remarks>
+        /// <example>
+        /// The below example shows how to set the mill seconds column width property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker
+        ///                    MilliSecondColumnWidth = "200">
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.MilliSecondColumnWidth = 200;
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public double MilliSecondColumnWidth
+        {
+            get { return (double)GetValue(MilliSecondColumnWidthProperty); }
+            set { SetValue(MilliSecondColumnWidthProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the width for picker meridiem column.
+        /// </summary>
+        /// <remarks>This day column width aƒpplicable for SfTimepicker and SfDateTimePicker only.</remarks>
+        /// <example>
+        /// The below example shows how to set the meridiem column width property for the sftimepicker.
+        /// # [XAML](#tab/tabid-43)
+        /// <code Lang="XAML"><![CDATA[
+        /// <picker:SfTimePicker
+        ///                    MeridiemColumnWidth="200">
+        /// </picker:SfTimePicker>
+        /// ]]></code>
+        /// # [C#](#tab/tabid-45)
+        /// <code Lang="C#"><![CDATA[
+        /// SfTimePicker picker = new SfTimePicker();
+        /// picker.MeridiemColumnWidth = 200;
+        /// this.Content = picker;
+        /// ]]></code>
+        /// </example>
+        public double MeridiemColumnWidth
+        {
+            get { return (double)GetValue(MeridiemColumnWidthProperty); }
+            set { SetValue(MeridiemColumnWidthProperty, value); }
         }
 
         #endregion
@@ -1105,6 +1789,37 @@ namespace Syncfusion.Maui.Toolkit.Picker
             {
                 newValue.Parent = this;
             }
+        }
+
+        /// <summary>
+        /// Initialize the column text style.
+        /// </summary>
+        /// <param name="oldValue">The old value.</param>
+        /// <param name="newValue">The new value.</param>
+        void InitializeColumnTextStyle(object oldValue, object newValue)
+        {
+            PickerTextStyle? oldStyle = oldValue as PickerTextStyle;
+            if (oldStyle != null)
+            {
+                oldStyle.PropertyChanged -= OnColumnTextStylePropertyChanged;
+                oldStyle.BindingContext = null;
+                oldStyle.Parent = null;
+            }
+
+            PickerTextStyle? newStyle = newValue as PickerTextStyle;
+            if (newStyle != null)
+            {
+                newStyle.Parent = this;
+                SetInheritedBindingContext(newStyle, BindingContext);
+                newStyle.PropertyChanged += OnColumnTextStylePropertyChanged;
+            }
+
+            if (_availableSize == Size.Zero || _pickerContainer == null)
+            {
+                return;
+            }
+
+            _pickerContainer.UpdateScrollViewDraw();
         }
 
         #endregion
@@ -1650,6 +2365,15 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 }
             }
 
+            //// Ensure header reflects whether the close button should be shown
+            picker._headerLayout?.UpdateCloseButton();
+
+            //// Refresh container views so size-based caches are rebuilt on mode change
+            //// (fixes cases where month text remains trimmed after dialog -> default).
+#if MACCATALYST
+            picker._pickerContainer?.UpdateScrollViewDraw();
+#endif
+
             picker.InvalidateMeasure();
         }
 
@@ -1740,6 +2464,384 @@ namespace Syncfusion.Maui.Toolkit.Picker
             }
 
             picker.UpdatePopupSize();
+        }
+
+        /// <summary>
+        /// Method invokes on day column text style property changed.
+        /// </summary>
+        static void OnDayColumnTextStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.InitializeColumnTextStyle(oldValue, newValue);
+        }
+
+        /// <summary>
+        /// Method invokes on month column text style property changed.
+        /// </summary>
+        static void OnMonthColumnTextStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.InitializeColumnTextStyle(oldValue, newValue);
+        }
+
+        /// <summary>
+        /// Method invokes on year column text style property changed.
+        /// </summary>
+        static void OnYearColumnTextStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.InitializeColumnTextStyle(oldValue, newValue);
+        }
+
+        /// <summary>
+        /// Method invokes on hour column text style property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnHourColumnTextStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.InitializeColumnTextStyle(oldValue, newValue);
+        }
+
+        /// <summary>
+        /// Method invokes on minute column text style property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMinuteColumnTextStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.InitializeColumnTextStyle(oldValue, newValue);
+        }
+
+        /// <summary>
+        /// Method invokes on second column text style property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnSecondColumnTextStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.InitializeColumnTextStyle(oldValue, newValue);
+        }
+
+        /// <summary>
+        /// Method invokes on milli second column text style property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMilliSecondColumnTextStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.InitializeColumnTextStyle(oldValue, newValue);
+        }
+
+        /// <summary>
+        /// Method invokes on meridiem column text style property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMeridiemColumnTextStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            picker.InitializeColumnTextStyle(oldValue, newValue);
+        }
+
+        /// <summary>
+        /// Method invokes on day column width property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnDayColumnWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null || picker.Children == null)
+            {
+                return;
+            }
+
+            if (picker.Children is SfDatePicker datepicker)
+            {
+                datepicker.DayColumn.Width = picker.DayColumnWidth;
+            }
+            else if (picker.Children is SfDateTimePicker datetimepicker)
+            {
+                datetimepicker.DayColumn.Width = picker.DayColumnWidth;
+            }
+        }
+
+        /// <summary>
+        /// Method invokes on month column width property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMonthColumnWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null || picker.Children == null)
+            {
+                return;
+            }
+
+            if (picker.Children is SfDatePicker datepicker)
+            {
+                datepicker.MonthColumn.Width = picker.MonthColumnWidth;
+            }
+            else if (picker.Children is SfDateTimePicker datetimepicker)
+            {
+                datetimepicker.MonthColumn.Width = picker.MonthColumnWidth;
+            }
+        }
+
+        /// <summary>
+        /// Method invokes on year column width property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnYearColumnWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null || picker.Children == null)
+            {
+                return;
+            }
+
+            if (picker.Children is SfDatePicker datepicker)
+            {
+                datepicker.YearColumn.Width = picker.YearColumnWidth;
+            }
+            else if (picker.Children is SfDateTimePicker datetimepicker)
+            {
+                datetimepicker.YearColumn.Width = picker.YearColumnWidth;
+            }
+        }
+
+        /// <summary>
+        /// Method invokes on hour column width property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnHourColumnWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null || picker.Children == null)
+            {
+                return;
+            }
+
+            if (picker.Children is SfTimePicker timepicker)
+            {
+                timepicker.HourColumn.Width = picker.HourColumnWidth;
+            }
+            else if (picker.Children is SfDateTimePicker datetimepicker)
+            {
+                datetimepicker.HourColumn.Width = picker.HourColumnWidth;
+            }
+        }
+
+        /// <summary>
+        /// Method invokes on minute column width property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMinuteColumnWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null || picker.Children == null)
+            {
+                return;
+            }
+
+            if (picker.Children is SfTimePicker timepicker)
+            {
+                timepicker.MinuteColumn.Width = picker.MinuteColumnWidth;
+            }
+            else if (picker.Children is SfDateTimePicker datetimepicker)
+            {
+                datetimepicker.MinuteColumn.Width = picker.MinuteColumnWidth;
+            }
+        }
+
+        /// <summary>
+        /// Method invokes on second column width property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnSecondColumnWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null || picker.Children == null)
+            {
+                return;
+            }
+
+            if (picker.Children is SfTimePicker timepicker)
+            {
+                timepicker.SecondColumn.Width = picker.SecondColumnWidth;
+            }
+            else if (picker.Children is SfDateTimePicker datetimepicker)
+            {
+                datetimepicker.SecondColumn.Width = picker.SecondColumnWidth;
+            }
+        }
+
+        /// <summary>
+        /// Method invokes on milli second column width property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMilliSecondColumnWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null || picker.Children == null)
+            {
+                return;
+            }
+
+            if (picker.Children is SfTimePicker timepicker)
+            {
+                timepicker.MillisecondColumn.Width = picker.MilliSecondColumnWidth;
+            }
+            else if (picker.Children is SfDateTimePicker datetimepicker)
+            {
+                datetimepicker.MillisecondColumn.Width = picker.MilliSecondColumnWidth;
+            }
+        }
+
+        /// <summary>
+        /// Method invokes on meridiem column width property changed.
+        /// </summary>
+        /// <param name="bindable">The PickerBase object.</param>
+        /// <param name="oldValue">Property old value.</param>
+        /// <param name="newValue">Property new value.</param>
+        static void OnMeridiemColumnWidthPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null || picker.Children == null)
+            {
+                return;
+            }
+
+            if (picker.Children is SfTimePicker timepicker)
+            {
+                timepicker.MeridiemColumn.Width = picker.MeridiemColumnWidth;
+            }
+            else if (picker.Children is SfDateTimePicker datetimepicker)
+            {
+                datetimepicker.MeridiemColumn.Width = picker.MeridiemColumnWidth;
+            }
+        }
+
+        /// <summary>
+        /// Invoked when the <see cref="ShowCloseButton"/> property value is changed.
+        /// </summary>
+        /// <param name="bindable">The picker instance.</param>
+        /// <param name="oldValue">Old property value.</param>
+        /// <param name="newValue">New property value.</param>
+        static void OnShowCloseButtonChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            if (picker.Mode == PickerMode.Default)
+            {
+                return;
+            }
+
+            if (picker._popup != null && picker is SfDateTimePicker)
+            {
+                picker._popup.ShowCloseButton = picker.ShowCloseButton;
+                picker._popup.ShowHeader = picker.ShowCloseButton;
+            }
+            else
+            {
+                picker._headerLayout?.UpdateCloseButton();
+            }
+        }
+
+        /// <summary>
+        /// Invoked when the <see cref="CloseButtonIcon"/> property value is changed.
+        /// </summary>
+        /// <param name="bindable">The picker instance.</param>
+        /// <param name="oldValue">Old property value.</param>
+        /// <param name="newValue">New property value.</param>
+        static void OnCloseButtonIconChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            PickerBase? picker = bindable as PickerBase;
+            if (picker == null)
+            {
+                return;
+            }
+
+            if (picker.Mode == PickerMode.Default)
+            {
+                return;
+            }
+
+            if (picker._popup != null && picker is SfDateTimePicker)
+            {
+                picker._popup.PopupStyle.CloseButtonIcon = picker.CloseButtonIcon;
+            }
+            else
+            {
+                picker._headerLayout?.UpdateCloseButtonIcon();
+            }
         }
 
         /// <summary>
@@ -2002,7 +3104,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                     column.Parent = this;
                     if (column.Parent is SfPicker)
                     {
-                        if (!this.EnableLooping)
+                        if (!EnableLooping)
                         {
                             column.SelectedIndex = -1;
                             column._isSelectedItemChanged = true;
@@ -2627,6 +3729,21 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// <param name="sender">The sender.</param>
         /// <param name="e">The property changed events args.</param>
         void OnDisabledTextStylePropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (_pickerContainer == null || _availableSize == Size.Zero)
+            {
+                return;
+            }
+
+            _pickerContainer.UpdateScrollViewDraw();
+        }
+
+        /// <summary>
+        /// Method invokes when any column text style changed.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The property changed event args.</param>
+        void OnColumnTextStylePropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (_pickerContainer == null || _availableSize == Size.Zero)
             {

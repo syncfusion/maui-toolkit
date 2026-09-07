@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localcore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      xmlns:localcore="clr-namespace:Syncfusion.Maui.ControlsGallery"
+                      xmlns:interactiveViewer="clr-namespace:Syncfusion.Maui.Toolkit.InteractiveViewer;assembly=Syncfusion.Maui.Toolkit"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.InteractiveViewer.SfInteractiveViewer"
+                      xmlns:button="clr-namespace:Syncfusion.Maui.Toolkit.Buttons;assembly=Syncfusion.Maui.Toolkit"
+                      Background="{StaticResource ContentBackgroundAlt3}"
+                      x:Class="Syncfusion.Maui.ControlsGallery.InteractiveViewer.SfInteractiveViewer.GettingStarted">
+
+    <localcore:SampleView.Resources>
+        <Style x:Key="ToolbarButtonStyle" TargetType="button:SfButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="TextColor" Value="{StaticResource IconColor}" />
+            <Setter Property="WidthRequest" Value="32" />
+            <Setter Property="HeightRequest" Value="32" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter Property="Background" Value="Transparent" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Hovered">
+                            <VisualState.Setters>
+                                <Setter Property="Background" Value="{StaticResource IconBackgroundHovered}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Pressed">
+                            <VisualState.Setters>
+                                <Setter Property="Background" Value="{StaticResource IconBackgroundPressed}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </localcore:SampleView.Resources>
+
+    <localcore:SampleView.Content>
+        <Grid RowDefinitions="*,80" Background ="Transparent">
+            <Grid Background ="Transparent">
+                <interactiveViewer:SfInteractiveViewer x:Name="interactiveViewer"
+                                                       Background="Transparent"
+                                                       MinimumZoomFactor="1"
+                                                       MaximumZoomFactor="4"
+                                                       Margin="10,10,10,0">
+                    <Image Source="interactiveviewerimage.png" Aspect="AspectFit" />
+                </interactiveViewer:SfInteractiveViewer>
+            </Grid>
+
+            <Border Grid.Row="1"
+                    BackgroundColor="{StaticResource ContentBackgroundAlt1}"
+                    Padding="10,8"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <Border.Shadow>
+                    <Shadow Brush="#000000"
+                            Offset="0,1"
+                            Radius="3"
+                            Opacity="0.2" />
+                </Border.Shadow>
+
+                <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                    <button:SfButton x:Name="zoomOutButton"
+                                     Style="{StaticResource ToolbarButtonStyle}" >
+                        <button:SfButton.Content>
+                            <DataTemplate>
+                                <Grid>
+                                    <Label Text="&#xE714;"
+                                           FontFamily="MauiMaterialAssets"
+                                           FontSize="18"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </button:SfButton.Content>
+                    </button:SfButton>
+
+                    <button:SfButton x:Name="zoomInButton"
+                                     Style="{StaticResource ToolbarButtonStyle}" >
+                        <button:SfButton.Content>
+                            <DataTemplate>
+                                <Grid>
+                                    <Label Text="&#xE713;"
+                                           FontFamily="MauiMaterialAssets"
+                                           FontSize="18"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </button:SfButton.Content>
+                    </button:SfButton>
+
+                    <button:SfButton x:Name="rotateButton"
+                                     Style="{StaticResource ToolbarButtonStyle}" >
+                        <button:SfButton.Content>
+                            <DataTemplate>
+                                <Grid>
+                                    <Label Text="&#xE743;"
+                                           FontFamily="MauiMaterialAssets"
+                                           FontSize="18"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </button:SfButton.Content>
+                    </button:SfButton>
+
+                    <button:SfButton x:Name="resetButton"
+                                     Style="{StaticResource ToolbarButtonStyle}" >
+                        <button:SfButton.Content>
+                            <DataTemplate>
+                                <Grid>
+                                    <Label Text="&#xE746;"
+                                           FontFamily="MauiMaterialAssets"
+                                           FontSize="18"
+                                           HorizontalTextAlignment="Center"
+                                           VerticalTextAlignment="Center"/>
+                                </Grid>
+                            </DataTemplate>
+                        </button:SfButton.Content>
+                    </button:SfButton>
+                </HorizontalStackLayout>
+            </Border>
+        </Grid>
+    </localcore:SampleView.Content>
+
+    <localcore:SampleView.Behaviors>
+        <local:GettingStartedBehavior />
+    </localcore:SampleView.Behaviors>
+</localcore:SampleView>

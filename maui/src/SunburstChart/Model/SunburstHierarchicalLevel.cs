@@ -238,9 +238,13 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 arcEndAngle = (double)(Math.Abs(keyValues[i]) * (arcLength / total));
                 groupElement.ArcEnd = arcStartAngle + (double.IsNaN(arcEndAngle) ? 0 : arcEndAngle);
                 groupElement.ArcMid = arcStartAngle + (arcEndAngle / 2);
-                groupElement.SliceIndex = index == -1 ? sliceIndex[i] : index;
 
-                arcStartAngle += arcEndAngle;
+				if (SunburstChart!.DrillDownManager is DrillDownManager drillDownManager && drillDownManager.IsZoomed)
+					groupElement.SliceIndex = drillDownManager.ZoomingSlice;
+				else
+					groupElement.SliceIndex = index == -1 ? sliceIndex[i] : index;
+
+				arcStartAngle += arcEndAngle;
             }
         }
 

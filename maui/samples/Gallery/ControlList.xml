@@ -13,6 +13,7 @@
 		<Assembly Name="EffectsView" />
 		<Assembly Name="Shimmer" />
 		<Assembly Name="PullToRefresh" />
+		<Assembly Name="InteractiveViewer" />
 		<Assembly Name="NavigationDrawer" />
 		<Assembly Name="Carousel" />
     <Assembly Name="BottomSheet" />
@@ -28,5 +29,6 @@
 	 <Assembly Name="Picker" />
     <Assembly Name="SunburstChart" />
     <Assembly Name="SparkChart" />
+	<Assembly Name="GridSplitter" />
 	</Assemblies>
 </SampleBrowser>

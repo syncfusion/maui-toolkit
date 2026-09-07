@@ -1,0 +1,116 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                      x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.CartesianCrossHair"
+                      xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
+                      xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+                      xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+                      x:DataType="local:CartesianCrossHairViewModel">
+
+    <localCore:SampleView.Content>
+            <chart:SfCartesianChart EnableSideBySideSeriesPlacement="False">
+
+                <chart:SfCartesianChart.Title>
+                <Label Text="Stock Performance Analysis" Margin="0,0,0,5" FontSize="Subtitle" HorizontalOptions="Center"/>
+                </chart:SfCartesianChart.Title>
+
+                <chart:SfCartesianChart.BindingContext>
+                    <local:CartesianCrossHairViewModel x:Name="viewModel1"/>
+                </chart:SfCartesianChart.BindingContext>
+
+                <!-- X Axis -->
+                <chart:SfCartesianChart.XAxes>
+                <chart:DateTimeCategoryAxis LabelRotation="{OnPlatform WinUI=-90, MacCatalyst=-90}" 
+                                            IntervalType="Days" LabelExtent="{OnPlatform Android=30, iOS=30}"
+                                            ShowMajorGridLines="False"
+                                            ShowTrackballLabel="True"
+                                            LabelCreated="Primary_LabelCreated">
+                        <chart:DateTimeCategoryAxis.TrackballLabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="MMM dd, yyyy"
+                                                           Background="{AppThemeBinding Light=Gray, Dark=White}"
+                                                           TextColor="{AppThemeBinding Light=White, Dark=Black}"/>
+                        </chart:DateTimeCategoryAxis.TrackballLabelStyle>
+
+                        <chart:DateTimeCategoryAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="MMM dd"/>
+                        </chart:DateTimeCategoryAxis.LabelStyle>
+                    </chart:DateTimeCategoryAxis>
+                </chart:SfCartesianChart.XAxes>
+
+                <!-- Y Axis -->
+                <chart:SfCartesianChart.YAxes>
+                    <chart:NumericalAxis x:Name="priceAxis" 
+                                             Minimum="360"
+                                             Maximum="600"
+                                             Interval="30"
+                                             ShowTrackballLabel="True"
+                                             ShowMajorGridLines="True" 
+                                             EdgeLabelsDrawingMode="Fit">
+                        <chart:NumericalAxis.TrackballLabelStyle>
+                            <chart:ChartAxisLabelStyle 
+                               Background="{AppThemeBinding Light=Gray, Dark=White}"
+                               TextColor="{AppThemeBinding Light=White, Dark=Black}"/>
+                        </chart:NumericalAxis.TrackballLabelStyle>
+                        <chart:NumericalAxis.MajorGridLineStyle>
+                            <chart:ChartLineStyle Stroke="{AppThemeBinding Light=LightGray, Dark=#4DFFFFF7}" StrokeDashArray="2, 5"/>
+                        </chart:NumericalAxis.MajorGridLineStyle>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle LabelFormat="$0"/>
+                        </chart:NumericalAxis.LabelStyle>
+                        <chart:NumericalAxis.Title>
+                            <chart:ChartAxisTitle Text="Stock prices in dollars"/>
+                        </chart:NumericalAxis.Title>
+                    </chart:NumericalAxis>
+
+                    <chart:NumericalAxis x:Name="volumeAxis"
+                                             Minimum="0"
+                                             Maximum="140"
+                                             Interval="40"
+                                             IsVisible="False"
+                                             ShowMajorGridLines="False" />
+                </chart:SfCartesianChart.YAxes>
+
+                <!-- Chart -->
+                <chart:SfCartesianChart.Series>
+                    <chart:CandleSeries ItemsSource="{Binding StockPrices}"
+                                            XBindingPath="Date"
+                                            Open="Value"
+                                            High="High"
+                                            Low="Low"
+                                            Close="Size"
+                                            EnableSolidCandle="True"
+                                            BearishFill="#EF5350"
+                                            BullishFill="#26A69A"
+                                            Width="0.75" />
+
+                    <chart:ColumnSeries ItemsSource="{Binding VolumeUp}"
+                                            XBindingPath="Date"
+                                            YBindingPath="Volume"
+                                            YAxisName="volumeAxis"
+                                            Fill="#26A69A"
+                                            Width="0.92"
+                                            Opacity="0.85" />
+
+                    <chart:ColumnSeries ItemsSource="{Binding VolumeDown}"
+                                            XBindingPath="Date"
+                                            YBindingPath="Volume"
+                                            YAxisName="volumeAxis"
+                                            Fill="#EF5350"
+                                            Width="0.92"
+                                            Opacity="0.8" />
+                </chart:SfCartesianChart.Series>
+
+                <!-- Crosshair behavior -->
+                <chart:SfCartesianChart.CrosshairBehavior>
+                    <chart:ChartCrosshairBehavior>
+                        <chart:ChartCrosshairBehavior.HorizontalLineStyle>
+                        <chart:ChartLineStyle Stroke="{AppThemeBinding Light=Gray, Dark= #99FFFFF7}"/>
+                    </chart:ChartCrosshairBehavior.HorizontalLineStyle>
+                        <chart:ChartCrosshairBehavior.VerticalLineStyle>
+                        <chart:ChartLineStyle Stroke="{AppThemeBinding Light=Gray, Dark=#99FFFFF7}"/>
+                    </chart:ChartCrosshairBehavior.VerticalLineStyle>
+                    </chart:ChartCrosshairBehavior>
+                </chart:SfCartesianChart.CrosshairBehavior>
+
+        </chart:SfCartesianChart>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

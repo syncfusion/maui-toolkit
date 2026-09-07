@@ -85,8 +85,8 @@ namespace Syncfusion.Maui.Toolkit.Accordion
 			}
 
 			return (Accordion.ExpandMode == AccordionExpandMode.Single ||
-					Accordion.ExpandMode == AccordionExpandMode.Multiple) && expandedCount == 1;	
-        }
+					Accordion.ExpandMode == AccordionExpandMode.Multiple) && expandedCount == 1;
+		}
 
 		#endregion
 

@@ -1,0 +1,56 @@
+<localCore:SampleView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart.DrillDown"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.SunburstChart;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.SunburstChart.SfSunburstChart"
+             x:DataType="local:ViewModel">
+    
+    <localCore:SampleView.BindingContext>
+        <local:ViewModel/>
+    </localCore:SampleView.BindingContext>
+    
+    <localCore:SampleView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:SunburstChartColorResources/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </localCore:SampleView.Resources>
+
+    <localCore:SampleView.Content>
+        <Grid RowDefinitions="{OnPlatform Android='9*,1*',iOS='9*,1*'}" >
+            
+            <chart:SfSunburstChart x:Name="sunburstChart" ItemsSource="{Binding DataSource4}" Radius="{OnPlatform Default=0.85, Android=0.9, iOS=0.9}"
+                                   ValueMemberPath="EmployeesCount" EnableDrillDown="True"
+                                   Stroke="{AppThemeBinding Dark=Black,Light=White}"
+                                   PaletteBrushes="{AppThemeBinding Default={StaticResource PaletteBrushesLight5}, Dark={StaticResource PaletteBrushesDark5}}" 
+                                   ShowLabels="True" InnerRadius="0.2" StartAngle="-90" EndAngle="270">
+
+                <chart:SfSunburstChart.Title>
+                    <Label Text="Hierarchical Data Breakdown Across Layers" FontAttributes="Bold" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="18"/>
+                </chart:SfSunburstChart.Title>
+
+                <chart:SfSunburstChart.DataLabelSettings>
+                    <chart:SunburstDataLabelSettings x:Name="dataLabel"/>
+                </chart:SfSunburstChart.DataLabelSettings>
+
+                <chart:SfSunburstChart.ToolbarSettings >
+                    <chart:SunburstToolbarSettings OffsetX="{OnPlatform Default=-60,Android=-10,iOS=-10}"/>
+                </chart:SfSunburstChart.ToolbarSettings>
+
+                <chart:SfSunburstChart.Levels>
+                    <chart:SunburstHierarchicalLevel GroupMemberPath="Country"/>
+                    <chart:SunburstHierarchicalLevel GroupMemberPath="JobDescription"/>
+                    <chart:SunburstHierarchicalLevel GroupMemberPath="JobGroup"/>
+                </chart:SfSunburstChart.Levels>
+
+            </chart:SfSunburstChart>
+
+            <Label Grid.Row="1" HorizontalTextAlignment="Center" IsVisible="{OnPlatform Android=True,iOS=True,Default=False}"
+                   VerticalTextAlignment="Center"  
+                   Text="Double tap on the segment to perform drill down.">
+            </Label>
+        </Grid>
+    </localCore:SampleView.Content>
+</localCore:SampleView>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Maui;
@@ -1017,11 +1017,40 @@ namespace Syncfusion.Maui.Toolkit.Charts
 								series.GenerateTrackballPointInfo(nearestDataPoints, PointInfos, ref _isAnySideBySideSeries);
 							}
 						}
+						ProcessTrendlinesForTrackball(series, pointX, pointY);
 					}
 				}
 
 				UpdateTrackballPointInfos(pointX - (float)chart.ActualSeriesClipRect.Left, pointY - (float)chart.ActualSeriesClipRect.Top);
 				Invalidate();
+			}
+		}
+
+		/// <summary>
+		/// Processes trendlines for trackball interaction.
+		/// This method integrates trendline trackball support with the existing trackball system.
+		/// </summary>
+		/// <param name="series">The series that contains trendlines to process</param>
+		/// <param name="pointX">Touch X coordinate in screen pixels</param>
+		/// <param name="pointY">Touch Y coordinate in screen pixels</param>
+		void ProcessTrendlinesForTrackball(CartesianSeries series, float pointX, float pointY)
+		{
+			if (series?.Trendlines == null || !series.IsVisible || CartesianChart == null)
+				return;
+
+			foreach (var trendline in series.Trendlines)
+			{
+				if (trendline?.IsVisible == true && trendline.ShowTrackballLabel && !trendline.Empty)
+				{
+					double trackballDataX = CartesianChart.PointToValue(series.ActualXAxis!, pointX, pointY);
+
+					var intersectionPoints = trendline.CalculateTrackballIntersection(trackballDataX);
+
+					if (intersectionPoints.Count > 0)
+					{
+						trendline.GeneratePointInfo(intersectionPoints, PointInfos);
+					}
+				}
 			}
 		}
 
@@ -1238,7 +1267,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				string labelFormat = "##.##";
 
-				if (axis.TrackballLabelStyle != null)
+				if (axis.TrackballLabelStyle != null && !string.IsNullOrEmpty(axis.TrackballLabelStyle.LabelFormat))
 				{
 					labelFormat = axis.TrackballLabelStyle.LabelFormat;
 				}
@@ -1759,6 +1788,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			foreach (TrackballPointInfo pointInfo in tempTrackballPointInfos)
 			{
+				if (pointInfo.DataItem is ChartTrendline)
+				{
+					continue;
+				}
+
 				CartesianSeries series = pointInfo.Series;
 				ChartAxis? axis = series.ActualXAxis;
 				ChartAxis? verticalAxis = series.ActualYAxis;
@@ -1814,6 +1848,33 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					else if (!(locationX < xEnd && locationX >= xStart))
 					{
 						RemoveTrackballInfo(pointInfo);
+					}
+
+					if (DisplayMode == LabelDisplayMode.NearestPoint && series is StackingColumnSeries)
+					{
+						if (series.ActualData != null)
+						{
+							int index = series.ActualData.IndexOf(pointInfo.DataItem);
+
+							if (index >= 0)
+							{
+								if (series._segments[index] is ColumnSegment segment)
+								{
+									RectF bounds = segment.SegmentBounds;
+
+									bool contains =
+										bounds.Top <= locationY &&
+										bounds.Bottom >= locationY;
+
+									if (!contains)
+									{
+										RemoveTrackballInfo(pointInfo);
+									}
+								}
+							}
+							continue;
+
+						}
 					}
 				}
 
@@ -1949,7 +2010,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							if (pointInfo.DataItem != prevTrackballInfo?.DataItem)
 							{
 								trackballView.BindingContext = pointInfo;
-								trackballView.Content = ChartTrackballBehavior.GetTheTrackballTemplate(pointInfo.Series.TrackballLabelTemplate, pointInfo);
+								var template = pointInfo.ResolveTrackballTemplate();
+								trackballView.Content = template != null ? GetTheTrackballTemplate(template, pointInfo) : null;
 								ChartTrackballBehavior.SetTemplatePosition(chart, trackballView);
 							}
 
@@ -2108,8 +2170,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					label = dateTimeCategoryAxis.GetLabelContent(xValue, labelFormat);
 					break;
 
-				case NumericalAxis:
-					label = ((int)Math.Round(xValue)).ToString(labelFormat);
+				case NumericalAxis numericalAxis:
+					label = numericalAxis.GetFormatedAxisLabel(xValue, labelFormat);
 					break;
 
 				case LogarithmicAxis:

@@ -34,20 +34,16 @@
 			{
 				foreach (var series in visibleSeries.Reverse())
 				{
-					RectF bounds = series.AreaBounds;
-					foreach (var segment in series._segments)
-					{
-						if (segment.HitTest(pointX - bounds.Left, pointY - bounds.Top))
-						{
-							var index = visibleSeries.IndexOf(series);
-							if (IsSelectionChangingInvoked(Chart, index))
-							{
-								UpdateSelectionChanging(index, true);
-								InvokeSelectionChangedEvent(Chart, index);
-							}
+					var index = visibleSeries.IndexOf(series);
 
-							return true;
+					if (series.UpdateSeriesSelection(pointX, pointY))
+					{
+						if (IsSelectionChangingInvoked(Chart, index))
+						{
+							UpdateSelectionChanging(index, true);
+							InvokeSelectionChangedEvent(Chart, index);
 						}
+						return true;
 					}
 				}
 			}

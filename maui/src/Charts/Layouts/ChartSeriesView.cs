@@ -63,6 +63,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				InvalidateDrawable();
 			}
+
+			if (_chartPlotArea is CartesianPlotArea cartesianPlotArea && !_series.NeedToAnimateSeries)
+			{
+				cartesianPlotArea._chartTrendlineView.InvalidateDrawable();
+			}
 		}
 
 		internal void Animate()
@@ -160,6 +165,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (value >= 0.0)
 			{
 				_series.AnimationValue = (float)value;
+				if (_chartPlotArea is CartesianPlotArea cartesianPlotArea)
+				{
+					cartesianPlotArea._chartTrendlineView.InvalidateDrawable();
+				}
 
 				if (_series.NeedToAnimateSeries || (_series is IMarkerDependent series && series.NeedToAnimateMarker))
 				{

@@ -1,4 +1,5 @@
 ﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -7,7 +8,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Fields
 
 		Size _desiredSize;
-		float _totalSpokes;
 		readonly PolarChartArea _area;
 		ChartAxis? _xAxis => _area.GetPrimaryAxis();
 		ChartAxis? _yAxis => _area.GetSecondaryAxis();
@@ -45,7 +45,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				canvas.Translate(0, 0);
 				if (_xAxis != null)
 				{
-					_totalSpokes = _xAxis.VisibleLabels.Count;
 					DrawPrimaryAxisGridLine(_xAxis, canvas);
 				}
 
@@ -94,17 +93,25 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				}
 			}
 
-			float angle = 360 / _totalSpokes;
 			float radius = float.NaN;
 			if (_yAxis != null)
 			{
 				radius = (float)_yAxis.ComputedDesiredSize.Height;
 			}
 
-			for (int i = 0; i < _totalSpokes; i++)
+			var totalSpokes = axis.VisibleLabels.Count;
+
+			if (axis is RangeAxisBase rangeAxis && !rangeAxis.IsNeedLastLabel())
 			{
-				Point pointF = _area.PolarAngleToPoint(axis, radius, i * angle);
-				canvas.DrawLine((float)(_desiredSize.Width / 2), (float)(_desiredSize.Height / 2), (float)pointF.X, (float)pointF.Y);
+				totalSpokes -= 1;
+			}
+
+			for (int i = 0; i < totalSpokes; i++)
+			{
+				float angleValue = (float)axis.ValueToPolarAngle(axis.VisibleLabels[i].Position);
+				var point = _area.PolarAngleToPoint(axis, radius, angleValue);
+
+				canvas.DrawLine((float)(_desiredSize.Width / 2), (float)(_desiredSize.Height / 2), (float)point.X, (float)point.Y);
 			}
 		}
 

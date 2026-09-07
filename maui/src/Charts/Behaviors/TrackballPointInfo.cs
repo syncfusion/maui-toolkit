@@ -25,13 +25,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal TooltipHelper TooltipHelper { get; set; }
 		internal Size GroupLabelSize { get; set; }
 		internal SfTooltip? ContentTemplateView { get; set; }
-		internal bool HaveTemplateView
-		{
-			get
-			{
-				return Series.TrackballLabelTemplate != null;
-			}
-		}
+		internal ChartTrendline? TrendlineTrackball { get; set; }
+		internal DataTemplate? TrackballTemplate { get; set; }
+		internal bool HaveTemplateView => ResolveTrackballTemplate() != null;
 
 		#endregion
 
@@ -123,6 +119,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Methods
 
 		#region Internal Methods
+
+		internal DataTemplate? ResolveTrackballTemplate()
+		{
+			if (TrackballTemplate != null)
+			{
+				return TrackballTemplate;
+			}
+
+			if (TrendlineTrackball != null)
+			{
+				return TrendlineTrackball.TrackballLabelTemplate;
+			}
+
+			return Series.TrackballLabelTemplate;
+		}
 
 		internal void ShowTrackballLabel(SfCartesianChart cartesianChart, Rect bounds)
 		{

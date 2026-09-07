@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
+using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 {
@@ -41,5 +43,35 @@ namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 	public partial class ChartColorModel : ObservableCollection<Brush>
 	{
 
+	}
+
+	public class TooltipValueConverter : IValueConverter
+	{
+		public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			if (value is ChartDataModel model)
+			{
+				switch (parameter?.ToString())
+				{
+					case "Category":
+						return model.Category;
+					case "Value1":
+						return model.Value1;
+					case "Value2":
+						return model.Value2;
+				}
+			}
+			else if (value is PolarAreaSeries series)
+			{
+				return series.Label;
+			}
+
+			return value;
+		}
+
+		public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+		{
+			return value;
+		}
 	}
 }

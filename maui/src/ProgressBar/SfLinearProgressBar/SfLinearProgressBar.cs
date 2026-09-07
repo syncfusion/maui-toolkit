@@ -1128,8 +1128,7 @@ namespace Syncfusion.Maui.Toolkit.ProgressBar
             }
             else
             {
-                List<ProgressGradientStop> gradientStopsList = new List<ProgressGradientStop>(GradientStops);
-                gradientStopsList.Sort((a, b) => a.ActualValue.CompareTo(b.ActualValue));
+                List<ProgressGradientStop> gradientStopsList = GradientStops.OrderBy(x => x.ActualValue).ToList();
                 if (gradientStopsList[0].Value != ActualMinimum)
                 {
                     gradientStopsList.Insert(0, new ProgressGradientStop
