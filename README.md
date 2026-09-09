@@ -31,6 +31,23 @@ Analyze Xamarin.Forms solutions and identify what stands between your applicatio
 
 [Get Started with the Xamarin to .NET MAUI Migration Advisor](https://github.com/syncfusion/Xamarin-MAUI-Migration-Advisor)
 
+## Xamarin to .NET MAUI Migration Skills
+
+Accelerate Xamarin.Forms migration with AI-ready skills built for .NET MAUI. The skills provide structured guidance for framework migration, Syncfusion control migration, platform-specific updates, and converting custom renderers to handlers.
+
+Use them with an AI coding assistant to analyze your existing Xamarin.Forms application, identify required migration changes, and work through the migration feature by feature.
+
+[Get Started with the Xamarin to .NET MAUI Migration Skills](https://github.com/syncfusion/xamarin-maui-migration-skills)
+
+## .NET MAUI Toolkit UI Components Skills
+
+Build .NET MAUI applications faster with AI-ready skills for Syncfusion Toolkit UI components. Get comprehensive guidance, code examples, and best practices for 30+ controls, including Charts, Calendar, Cards, and more.
+
+Use these skills with AI coding assistants to discover components, implement features, and follow recommended patterns while building .NET MAUI applications.
+
+[Get Started with the .NET MAUI Toolkit UI Components Skills](https://github.com/syncfusion/maui-toolkit-ui-components-skills)
+
+
 ## Microsoft Collaboration
 
 Syncfusion actively contributes to the [.NET MAUI open-source project](https://devblogs.microsoft.com/dotnet/dotnet-maui-welcomes-syncfusion-open-source-contributions/), helping improve the framework for the .NET developer community.
@@ -73,6 +90,7 @@ Syncfusion actively contributes to the [.NET MAUI open-source project](https://d
 |                      | Expander              | Allows users to expand or collapse content dynamically, improving space management and user experience.  |
 |                      | Popup                 | Allows users to display an alert message with customizable buttons or load any desired content inside a popup view.|
 |                      | Text Input Layout     | Enhances input fields with floating labels and validation, improving user interaction.                   |
+|                      | Grid Splitter         | Enables users to resize, expand, and collapse layout regions for flexible, resizable workspaces.         |
 | Buttons              | Button                | Customizable button control with icon support, background images, and visual state styling.              |
 |                      | Chips                 | Interactive tags for filtering, labeling, or visual options, perfect for e-commerce or task management.  |
 |                      | Segmented Control     | Quickly switch between views or categories, ideal for apps with multiple layout options.                 |
@@ -81,6 +99,7 @@ Syncfusion actively contributes to the [.NET MAUI open-source project](https://d
 |                      | Pull to Refresh       | Allows users to refresh live data by pulling down, ideal for real-time data syncing.                     |
 | Miscellaneous        | Effects View          | Add visual enhancements like shadows, blurs, or highlights to make UI elements stand out.                |
 |                      | Shimmer               | Indicates loading content with customizable wave directions, great for data-heavy apps.                  |
+|                      | Interactive Viewer    | Allows users to zoom, pan, rotate, and reset visual content for easier exploration of images, diagrams, and other detailed content.|
 
 
 ## Installation
