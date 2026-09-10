@@ -30,8 +30,8 @@ The Syncfusion® Toolkit is built with community collaboration in mind, aiming t
 The Syncfusion® ecosystem includes companion tools and AI-ready skills that accelerate .NET MAUI development alongside the Toolkit.
 
 * [Xamarin to .NET MAUI Migration Advisor](https://github.com/syncfusion/Xamarin-MAUI-Migration-Advisor): Assess your Xamarin.Forms solution and identify migration requirements, potential issues, and estimated effort.
-* [Xamarin to .NET MAUI Migration Skills](https://github.com/syncfusion/xamarin-maui-migration-skills): Work through migration tasks with structured assistance for APIs, Syncfusion controls, platform-specific code, and custom renderers.
-* [.NET MAUI Toolkit UI Components Skills](https://github.com/syncfusion/maui-toolkit-ui-components-skills): Find implementation patterns, API guidance, and practical examples for integrating 30+ Syncfusion Toolkit controls into your .NET MAUI applications.
+* [Xamarin to .NET MAUI Migration Skills](https://github.com/syncfusion/xamarin-maui-migration-skills): Work through migration tasks with structured assistance for APIs, Syncfusion® controls, platform-specific code, and custom renderers.
+* [.NET MAUI Toolkit UI Components Skills](https://github.com/syncfusion/maui-toolkit-ui-components-skills): Find implementation patterns, API guidance, and practical examples for integrating 30+ Syncfusion® Toolkit controls into your .NET MAUI applications.
 
 
 ## Microsoft Collaboration
