@@ -360,7 +360,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			Children.Add(_progressCircleView);
 			ClipToBounds = true;
 			ThemeElement.InitializeThemeResources(this, "SfPullToRefreshTheme");
-		
+
 			// Ensures the refreshing animation starts if IsRefreshing was set via global styles.
 			if (this.IsRefreshing && !this.ActualIsRefreshing)
 			{
@@ -1327,6 +1327,16 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 			RaisePullingCancelled();
 			return true;
 		}
+
+		/// <summary>
+		/// Gets and Updates the previousBounds.
+		/// </summary>
+		/// <returns>Returns the rect based on Previous height passed in arrange pass to pull to refresh.</returns>
+		internal Rect GetAndUpdateWithPreviousBounds()
+		{
+			return new Rect(this.Bounds.X, this.Bounds.Y, this.Bounds.Width, this.Bounds.Height);
+		}
+
 		#endregion
 
 		#region Private Methods
@@ -1782,15 +1792,16 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 
 			// Included condition for battery saver logic for android platform.
 			HideSfProgressCircleView();
-			var canAnimate = TransitionMode == PullToRefreshTransitionType.Push;
-#if ANDROID
-			canAnimate = Battery.Default.EnergySaverStatus is not EnergySaverStatus.On;
-#endif
-			ArrangePullableContent(GetBounds(), canAnimate);
-			(this as IView).InvalidateMeasure();
-			if (Refreshed is not null)
+			var canAnimate = this.TransitionMode == PullToRefreshTransitionType.Push && !(DeviceInfo.Platform == DevicePlatform.Android && Battery.Default.EnergySaverStatus == EnergySaverStatus.On);
+			if (this.TransitionMode == PullToRefreshTransitionType.Push)
 			{
-				Refreshed(this, EventArgs.Empty);
+				this.ArrangePullableContent(this.GetAndUpdateWithPreviousBounds(), canAnimate);
+			}
+
+			(this as IView).InvalidateMeasure();
+			if (this.Refreshed != null)
+			{
+				this.Refreshed(this, EventArgs.Empty);
 			}
 		}
 
@@ -1833,18 +1844,17 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				}
 				catch
 				{
-#if WINDOWS
+					if (DeviceInfo.Platform != DevicePlatform.Android && DeviceInfo.Platform != DevicePlatform.iOS)
+					{
 #if NET10_0_OR_GREATER
-                    await PullableContent.TranslateToAsync(0, RefreshViewHeight * 2, 300);
-                    await ProgressCircleView.TranslateToAsync((Width / 2) - (RefreshViewWidth / 2), RefreshViewHeight / 1.5, 250);
+                        await this.PullableContent.TranslateToAsync(0, this.RefreshViewHeight * 2, 300);
+                        await this.ProgressCircleView.TranslateToAsync((this.Width / 2) - (this.RefreshViewWidth / 2), this.RefreshViewHeight / 1.5, 250);
 #else
-					const int contentLength = 300;
-					const int circleViewLength = 250;
-					await PullableContent.LayoutTo(new Rect(0, RefreshViewHeight * 2, Width, Height - (RefreshViewHeight * 2)), contentLength).ConfigureAwait(true);
-					await ProgressCircleView.LayoutTo(new Rect((Width / 2) - (RefreshViewWidth / 2), RefreshViewHeight / 1.5, RefreshViewWidth, RefreshViewHeight), circleViewLength).ConfigureAwait(true);
+						await this.PullableContent.LayoutTo(new Rect(0, this.RefreshViewHeight * 2, this.Width, this.Height - (this.RefreshViewHeight * 2)), 300).ConfigureAwait(true);
+						await this.ProgressCircleView.LayoutTo(new Rect((this.Width / 2) - (this.RefreshViewWidth / 2), this.RefreshViewHeight / 1.5, this.RefreshViewWidth, this.RefreshViewHeight), 250).ConfigureAwait(true);
 #endif
-					HideSfProgressCircleView();
-#endif
+						this.HideSfProgressCircleView();
+					}
 				}
 
 				_isCircleRotating = false;
