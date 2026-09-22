@@ -244,14 +244,14 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 				
 				// Convert to local coordinates if we have a bottom sheet
 				double localY = _bottomSheet is not null ? point.Y - _bottomSheet.TranslationY : point.Y;
-				double dy = localY - _lastPointerY;
+				double dy = point.Y - _lastPointerY;
 
 				if (_isPointerInsideScrollable && _activeScrollViewer is not null)
 				{
 					// While inner can scroll in this direction, do NOT route to sheet
 					if (CanInnerScroll(_activeScrollViewer, dy))
 					{
-						_lastPointerY = localY;
+						_lastPointerY = point.Y;
 						return; // inner ScrollViewer consumes it naturally
 					}
 
@@ -278,7 +278,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 					_sheetWasDragged = true;
 				}
 
-				_lastPointerY = localY;
+				_lastPointerY = point.Y;
 			}
 		}
 

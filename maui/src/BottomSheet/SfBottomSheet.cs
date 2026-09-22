@@ -2544,7 +2544,7 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet
 #if IOS || MACCATALYST || ANDROID
 		    return point.Y + Height - _bottomSheet?.HeightRequest ?? 0;
 #else
-		    return point.Y;
+		    return point.Y + (_bottomSheet?.TranslationY ?? 0);
 #endif
 		}
 
