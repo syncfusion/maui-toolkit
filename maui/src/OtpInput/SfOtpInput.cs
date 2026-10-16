@@ -1594,6 +1594,10 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 									.Where(e => !string.IsNullOrEmpty(e.Text))
 									.Select(e => e.Text));
 							}
+							else
+							{
+								Value = new string(valueArray); 
+							}
 
 #else
 							Value = new string(valueArray); 
