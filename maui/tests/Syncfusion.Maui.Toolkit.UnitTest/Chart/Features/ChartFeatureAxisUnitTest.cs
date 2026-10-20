@@ -127,6 +127,158 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
             Assert.Empty(axis.AssociatedAxes);
         }
 
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void CartesianActualYAxis_SetToNull_ClearsOnlyYAxis(bool clearXAxisFirst)
+		{
+			var area = new CartesianChartArea(new SfCartesianChart());
+			var xAxis = new CategoryAxis { Area = area };
+			var yAxis = new NumericalAxis { Area = area };
+			var series = new LineSeries { ActualXAxis = xAxis, ActualYAxis = yAxis };
+			xAxis.AddRegisteredSeries(series);
+			yAxis.AddRegisteredSeries(series);
+			yAxis.AssociatedAxes.Add(xAxis);
+
+			if (clearXAxisFirst)
+			{
+				series.ActualXAxis = null;
+			}
+
+			series.ActualYAxis = null;
+			series.ActualYAxis = null;
+
+			Assert.Null(series.ActualYAxis);
+			Assert.Empty(yAxis.RegisteredSeries);
+			Assert.Empty(yAxis.AssociatedAxes);
+			if (!clearXAxisFirst)
+			{
+				Assert.Same(xAxis, series.ActualXAxis);
+				Assert.Same(series, Assert.Single(xAxis.RegisteredSeries));
+			}
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void PolarActualYAxis_SetToNull_ClearsOnlyYAxis(bool clearXAxisFirst)
+		{
+			var area = new PolarChartArea(new SfPolarChart());
+			var xAxis = new CategoryAxis { PolarArea = area };
+			var yAxis = new NumericalAxis { PolarArea = area };
+			var series = new PolarLineSeries { ActualXAxis = xAxis, ActualYAxis = yAxis };
+			xAxis.AddRegisteredSeries(series);
+			yAxis.AddRegisteredSeries(series);
+			yAxis.AssociatedAxes.Add(xAxis);
+
+			if (clearXAxisFirst)
+			{
+				series.ActualXAxis = null;
+			}
+
+			series.ActualYAxis = null;
+			series.ActualYAxis = null;
+
+			Assert.Null(series.ActualYAxis);
+			Assert.Empty(yAxis.RegisteredSeries);
+			Assert.Empty(yAxis.AssociatedAxes);
+			if (!clearXAxisFirst)
+			{
+				Assert.Same(xAxis, series.ActualXAxis);
+				Assert.Same(series, Assert.Single(xAxis.RegisteredSeries));
+			}
+		}
+
+		[Fact]
+		public void ClearRegisteredSeries_PolarOnlyAxis_ClearsRegistrationsAndAssociations()
+		{
+			var axis = new NumericalAxis { PolarArea = new PolarChartArea(new SfPolarChart()) };
+			axis.AddRegisteredSeries(new PolarLineSeries());
+			axis.AssociatedAxes.Add(new CategoryAxis());
+			Assert.Null(axis.Area);
+
+			axis.ClearRegisteredSeries();
+
+			Assert.Empty(axis.RegisteredSeries);
+			Assert.Empty(axis.AssociatedAxes);
+		}
+
+		[Fact]
+		public void OnDetachedToChart_SharedCartesianAxes_ReRegistersOnlyRemainingSeries()
+		{
+			var area = new CartesianChartArea(new SfCartesianChart());
+			var xAxis = new CategoryAxis { Area = area };
+			var yAxis = new NumericalAxis { Area = area };
+			area.PrimaryAxis = xAxis;
+			area.SecondaryAxis = yAxis;
+			var layout = new CartesianAxisLayout(area);
+			var remaining = new LineSeries { ChartArea = area };
+			var visibleSeries = new ReadOnlyObservableCollection<ChartSeries>([remaining]);
+			InvokePrivateMethod(layout, "UpdateActualAxis", visibleSeries);
+
+			for (int i = 0; i < 3; i++)
+			{
+				var removed = new LineSeries { ChartArea = area, ActualXAxis = xAxis, ActualYAxis = yAxis };
+				xAxis.AddRegisteredSeries(removed);
+				yAxis.AddRegisteredSeries(removed);
+				area.RequiredAxisReset = false;
+
+				removed.OnDetachedToChart();
+
+				Assert.Null(removed.ActualXAxis);
+				Assert.Null(removed.ActualYAxis);
+				Assert.Empty(xAxis.RegisteredSeries);
+				Assert.Empty(yAxis.RegisteredSeries);
+				Assert.True(area.RequiredAxisReset);
+
+				InvokePrivateMethod(layout, "ClearActualAxis", visibleSeries);
+				InvokePrivateMethod(layout, "UpdateActualAxis", visibleSeries);
+
+				Assert.False(area.RequiredAxisReset);
+				Assert.Same(remaining, Assert.Single(xAxis.RegisteredSeries));
+				Assert.Same(remaining, Assert.Single(yAxis.RegisteredSeries));
+				Assert.Contains(yAxis, xAxis.AssociatedAxes);
+				Assert.Contains(xAxis, yAxis.AssociatedAxes);
+			}
+		}
+
+		[Fact]
+		public void ClearActualAxis_SharedPolarAxes_ReRegistersOnlyRemainingSeries()
+		{
+			var chart = new SfPolarChart
+			{
+				PrimaryAxis = new CategoryAxis(),
+				SecondaryAxis = new NumericalAxis()
+			};
+			var area = new PolarChartArea(chart);
+			var xAxis = chart.PrimaryAxis;
+			var yAxis = chart.SecondaryAxis;
+			xAxis.PolarArea = area;
+			yAxis.PolarArea = area;
+			var layout = new PolarAxisLayoutView(area);
+			var remaining = new PolarLineSeries();
+			var visibleSeries = new ReadOnlyObservableCollection<ChartSeries>([remaining]);
+			InvokePrivateMethod(layout, "UpdateActualAxis", visibleSeries);
+
+			for (int i = 0; i < 3; i++)
+			{
+				var removed = new PolarLineSeries { ActualXAxis = xAxis, ActualYAxis = yAxis };
+				xAxis.AddRegisteredSeries(removed);
+				yAxis.AddRegisteredSeries(removed);
+
+				InvokePrivateMethod(layout, "ClearActualAxis", visibleSeries);
+
+				Assert.Empty(xAxis.RegisteredSeries);
+				Assert.Empty(yAxis.RegisteredSeries);
+				InvokePrivateMethod(layout, "UpdateActualAxis", visibleSeries);
+
+				Assert.Same(remaining, Assert.Single(xAxis.RegisteredSeries));
+				Assert.Same(remaining, Assert.Single(yAxis.RegisteredSeries));
+				Assert.Contains(yAxis, xAxis.AssociatedAxes);
+				Assert.Contains(xAxis, yAxis.AssociatedAxes);
+			}
+		}
+
         [Fact]
         public void Test_RemoveRegisteredSeries()
         {

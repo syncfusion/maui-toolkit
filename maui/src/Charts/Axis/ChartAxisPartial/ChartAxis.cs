@@ -2200,7 +2200,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal void ClearRegisteredSeries()
 		{
-			if (Area != null)
+			if (Area != null || PolarArea != null)
 			{
 				RegisteredSeries.Clear();
 				AssociatedAxes.Clear();
