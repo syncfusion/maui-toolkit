@@ -16,6 +16,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal readonly ObservableCollection<ILegendItem> _legendItems;
 
 		ChartSeriesCollection? _series;
+		ReadOnlyObservableCollection<ILegendItem>? _readOnlyLegendItems;
 		View? _plotAreaBackgroundView;
 		bool _shouldPopulateLegendItems = true;
 		bool _shouldUpdateLegendIconBrush = false;
@@ -123,7 +124,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		public ReadOnlyObservableCollection<ILegendItem> LegendItems => new(_legendItems);
+		public ReadOnlyObservableCollection<ILegendItem> LegendItems => _readOnlyLegendItems ??= new(_legendItems);
 
 		public ReadOnlyObservableCollection<ChartSeries>? VisibleSeries => _series?.GetVisibleSeries();
 
