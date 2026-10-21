@@ -1,9 +1,137 @@
 using Syncfusion.Maui.Toolkit.Charts;
+using System.Collections.Specialized;
+using System.ComponentModel;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
 	public class ChartLegendUnitTests
 	{
+		[Fact]
+		public void LegendItems_RepeatedAccess_ReturnsSameWrapperPerPlotArea()
+		{
+			var plotArea = new ChartPlotArea();
+			var legendItems = plotArea.LegendItems;
+
+			for (int i = 0; i < 1000; i++)
+			{
+				Assert.Same(legendItems, plotArea.LegendItems);
+			}
+
+			Assert.NotSame(legendItems, new ChartPlotArea().LegendItems);
+		}
+
+		[Fact]
+		public void LegendItems_CollectionChanges_ForwardsLiveContentsAndNotifications()
+		{
+			var plotArea = new ChartPlotArea();
+			var legendItems = plotArea.LegendItems;
+			var actions = new List<NotifyCollectionChangedAction>();
+			var properties = new List<string?>();
+			((INotifyCollectionChanged)legendItems).CollectionChanged += (sender, args) =>
+			{
+				Assert.Same(legendItems, sender);
+				actions.Add(args.Action);
+			};
+			((INotifyPropertyChanged)legendItems).PropertyChanged += (_, args) => properties.Add(args.PropertyName);
+			var first = new LegendItem();
+			var replacement = new LegendItem();
+
+			plotArea._legendItems.Add(first);
+			Assert.Same(first, Assert.Single(legendItems));
+			plotArea._legendItems[0] = replacement;
+			Assert.Same(replacement, Assert.Single(legendItems));
+			plotArea._legendItems.Remove(replacement);
+			Assert.Empty(legendItems);
+			plotArea._legendItems.Add(first);
+			plotArea._legendItems.Clear();
+			Assert.Empty(legendItems);
+			Assert.Same(legendItems, plotArea.LegendItems);
+			Assert.Equal(new[]
+			{
+				NotifyCollectionChangedAction.Add,
+				NotifyCollectionChangedAction.Replace,
+				NotifyCollectionChangedAction.Remove,
+				NotifyCollectionChangedAction.Add,
+				NotifyCollectionChangedAction.Reset
+			}, actions);
+			Assert.Equal(4, properties.Count(name => name == "Count"));
+			Assert.Equal(5, properties.Count(name => name == "Item[]"));
+		}
+
+		[Theory]
+		[InlineData(false)]
+		[InlineData(true)]
+		public void LegendItems_FillAndPaletteChanges_PreservesWrapperAndUpdatesIcon(bool hasLegend)
+		{
+			var chart = new SfCartesianChart();
+			// Palette callbacks skip legend updates until the chart has plot bounds.
+			((IChart)chart).ActualSeriesClipRect = new Rect(0, 0, 100, 100);
+			if (hasLegend)
+			{
+				// Avoid native dispatcher-dependent icon bindings; assert the icon brush below.
+				chart.Legend = new ChartLegend { ItemTemplate = new DataTemplate(() => new Label()) };
+			}
+
+			var series = new ColumnSeries();
+			chart.Series.Add(series);
+			var plotArea = Assert.IsAssignableFrom<ChartPlotArea>(chart._chartArea.PlotArea);
+			var legendItems = plotArea.LegendItems;
+			var legendItem = new LegendItem { Item = series };
+			plotArea._legendItems.Add(legendItem);
+			Brush red = new SolidColorBrush(Colors.Red);
+			Brush blue = new SolidColorBrush(Colors.Blue);
+
+			for (int i = 0; i < 1000; i++)
+			{
+				var brush = i % 2 == 0 ? red : blue;
+				series.Fill = brush;
+				Assert.Same(legendItems, plotArea.LegendItems);
+				if (hasLegend)
+				{
+					Assert.Same(brush, legendItem.IconBrush);
+				}
+
+				series.ClearValue(ChartSeries.FillProperty);
+				chart.PaletteBrushes = new List<Brush> { brush };
+				series.PaletteBrushes = new List<Brush> { brush };
+				Assert.Same(legendItems, plotArea.LegendItems);
+				if (hasLegend)
+				{
+					Assert.Same(brush, legendItem.IconBrush);
+				}
+			}
+		}
+
+		[Fact]
+		public void SfLegend_SameItemsSource_RefreshesChildrenThroughCollectionChanges()
+		{
+			var plotArea = new ChartPlotArea();
+			var legendItems = plotArea.LegendItems;
+			var first = new LegendItem { Text = "First" };
+			var second = new LegendItem { Text = "Second" };
+			plotArea._legendItems.Add(first);
+			var legend = new SfLegend { ItemsSource = legendItems };
+			Assert.Same(first, Assert.IsAssignableFrom<BindableObject>(Assert.Single(legend.ContentLayout.Children)).BindingContext);
+
+			// Reassign the same wrapper as LegendLayout does when legend items are updated.
+			legend.ItemsSource = plotArea.LegendItems;
+			Assert.Same(legendItems, legend.ItemsSource);
+			Assert.Same(legendItems, BindableLayout.GetItemsSource(legend.ContentLayout));
+
+			plotArea._legendItems.Add(second);
+			Assert.Equal(2, legend.ContentLayout.Children.Count);
+			Assert.Same(second, Assert.IsAssignableFrom<BindableObject>(legend.ContentLayout.Children[1]).BindingContext);
+			plotArea._legendItems[0] = second;
+			Assert.Same(second, Assert.IsAssignableFrom<BindableObject>(legend.ContentLayout.Children[0]).BindingContext);
+			plotArea._legendItems.RemoveAt(0);
+			Assert.Same(second, Assert.IsAssignableFrom<BindableObject>(Assert.Single(legend.ContentLayout.Children)).BindingContext);
+			plotArea._legendItems.Clear();
+			Assert.Empty(legend.ContentLayout.Children);
+			plotArea._legendItems.Add(first);
+			Assert.Same(first, Assert.IsAssignableFrom<BindableObject>(Assert.Single(legend.ContentLayout.Children)).BindingContext);
+			Assert.Same(legendItems, legend.ItemsSource);
+		}
+
 		[Fact]
 		public void ChartLegend_Constructor_InitializesDefaultsCorrectly()
 		{
