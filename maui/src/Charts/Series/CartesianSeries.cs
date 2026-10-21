@@ -734,9 +734,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			internal set
 			{
-				if (_actualXAxis != null && value == null)
+				if (_actualYAxis != null && value == null)
 				{
-					_actualXAxis.ClearRegisteredSeries();
+					_actualYAxis.ClearRegisteredSeries();
 				}
 
 				if (_actualYAxis != value)
