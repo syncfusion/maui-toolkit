@@ -2747,6 +2747,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						
 					}
 					_parentGrid.RowDefinitions[tabContentContainerIndex].Height = GridLength.Star;
+#if NET10_0
+					// With the tab bar on top, the tab content decides the bottom inset, so it can reach the screen edge when the page lets it.
+					// A bottom tab bar keeps the default, which holds it clear of the home indicator.
+					if (tabBarPlacement == TabBarPlacement.Top)
+					{
+						_parentGrid.SafeAreaEdges = new SafeAreaEdges(SafeAreaRegions.Container, SafeAreaRegions.Container, SafeAreaRegions.Container, SafeAreaRegions.None);
+					}
+					else
+					{
+						_parentGrid.ClearValue(Microsoft.Maui.Controls.Layout.SafeAreaEdgesProperty);
+					}
+#endif
 				}
 
 				UpdateCenterButtonPosition();
