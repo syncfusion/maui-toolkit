@@ -236,6 +236,55 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(expected, tabView.TabBarPlacement);
 		}
 
+		[Fact]
+		public void TabBarPlacement_Top_LeavesTheBottomSafeAreaToTheTabContent()
+		{
+			var tabView = new SfTabView
+			{
+				TabBarPlacement = TabBarPlacement.Top
+			};
+
+			var parentGrid = GetPrivateField(tabView, "_parentGrid") as Grid;
+
+			Assert.NotNull(parentGrid);
+			Assert.Equal(SafeAreaRegions.None, parentGrid.SafeAreaEdges.Bottom);
+			Assert.Equal(SafeAreaRegions.Container, parentGrid.SafeAreaEdges.Top);
+		}
+
+		[Fact]
+		public void TabBarPlacement_Bottom_KeepsTheDefaultSafeArea()
+		{
+			var tabView = new SfTabView
+			{
+				TabBarPlacement = TabBarPlacement.Top
+			};
+			tabView.TabBarPlacement = TabBarPlacement.Bottom;
+
+			var parentGrid = GetPrivateField(tabView, "_parentGrid") as Grid;
+
+			Assert.NotNull(parentGrid);
+			Assert.False(parentGrid.IsSet(Microsoft.Maui.Controls.Layout.SafeAreaEdgesProperty));
+		}
+
+		[Fact]
+		public void TabContentContainer_LeavesSafeAreaInsetsToTheTabContent()
+		{
+			var tabView = new SfTabView();
+			tabView.Items.Add(new SfTabItem { Header = "One", Content = new Grid() });
+
+			var contentContainer = GetPrivateField(tabView, "_tabContentContainer") as SfHorizontalContent;
+			Assert.NotNull(contentContainer);
+			var parentGrid = GetPrivateField(contentContainer, "_parentGrid") as Grid;
+			var stackLayout = GetPrivateField(contentContainer, "_horizontalStackLayout") as HorizontalStackLayout;
+
+			Assert.True(contentContainer.IgnoreSafeArea);
+			Assert.NotNull(parentGrid);
+			Assert.Equal(SafeAreaEdges.None, parentGrid.SafeAreaEdges);
+			Assert.NotNull(stackLayout);
+			Assert.Equal(SafeAreaEdges.None, stackLayout.SafeAreaEdges);
+			Assert.All(stackLayout.Children.OfType<Grid>(), itemGrid => Assert.Equal(SafeAreaEdges.None, itemGrid.SafeAreaEdges));
+		}
+
 		[Theory]
 		[InlineData(TabIndicatorPlacement.Top)]
 		[InlineData(TabIndicatorPlacement.Bottom)]
