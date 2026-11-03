@@ -348,6 +348,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void InitializeControl()
 		{
 			Items = [];
+#if NET10_0
+			// The tab content decides its own safe-area insets, as it would placed directly in a page.
+			IgnoreSafeArea = true;
+#endif
 			_parentGrid = new SfGrid()
 			{
 				IsClippedToBounds = true, // Ensuring content bounds are clipped within the grid
@@ -356,6 +360,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				HorizontalOptions = LayoutOptions.Fill, // Fill the available horizontal space
 				ColumnSpacing = 0,
 				RowSpacing = 0,
+#if NET10_0
+				SafeAreaEdges = SafeAreaEdges.None, // The tab content decides its own safe-area insets
+#endif
 			};
 
 			_horizontalStackLayout = new SfHorizontalStackLayout()
@@ -365,6 +372,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				VerticalOptions = LayoutOptions.Fill, // Fill the available vertical space
 				HorizontalOptions = LayoutOptions.Start, // Align horizontally at the start
 				Spacing = 0,
+#if NET10_0
+				SafeAreaEdges = SafeAreaEdges.None, // The tab content decides its own safe-area insets
+#endif
 			};
 
 			_parentGrid.Children.Add(_horizontalStackLayout);
@@ -575,7 +585,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				HorizontalOptions = LayoutOptions.Fill, // Fill the available horizontal space
 				Style = new Style(typeof(SfGrid)),
 				ColumnSpacing = 0,
-				RowSpacing = 0
+				RowSpacing = 0,
+#if NET10_0
+				SafeAreaEdges = SafeAreaEdges.None, // The tab content decides its own safe-area insets
+#endif
 			};
 			parentGrid.Children.Add(item.Content);
 			parentGrid.SetBinding(Grid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item) => item.IsVisible, source: item));
