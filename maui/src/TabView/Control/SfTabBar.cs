@@ -378,6 +378,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
             _tabSelectionChangedEventArgs = new CoreEventArgs();
             _tabItemTappedEventArgs = new TabItemTappedEventArgs();
             ResetStyle();
+#if NET10_0
+            SafeAreaEdges = SafeAreaEdges.None;
+#endif
         }
 
         #endregion
@@ -2559,6 +2562,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 HorizontalOptions = LayoutOptions.Fill,
 				Spacing = 0,
+#if NET10_0
+                SafeAreaEdges = SafeAreaEdges.None,
+#endif
 			};
 
             // Create a grid to hold the tab items and indicator
@@ -2568,6 +2574,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 Children = { _tabHeaderItemContent, _tabSelectionIndicator },
 				ColumnSpacing = 0,
 				RowSpacing = 0,
+#if NET10_0
+                SafeAreaEdges = SafeAreaEdges.None,
+#endif
 			};
 
 			InitializeCenterButtonViewPlaceholder();
@@ -2584,6 +2593,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 Content = _tabHeaderContentContainer,
                 Orientation = ScrollOrientation.Horizontal,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+#if NET10_0
+                SafeAreaEdges = SafeAreaEdges.None,
+#endif
             };
             _tabHeaderScrollView.Scrolled += TabHeaderScrollView_Scrolled;
 
@@ -2599,6 +2611,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 },
 				ColumnSpacing = 0,
 				RowSpacing = 0,
+#if NET10_0
+                SafeAreaEdges = SafeAreaEdges.None,
+#endif
 			};
 			_tabHeaderParenRoundRectangle = new RoundRectangle();
 			_tabHeaderParentBorder = new SfBorder()
@@ -2607,6 +2622,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				StrokeThickness = 0,
 				Stroke = Colors.Transparent,
 				Content = _tabHeaderParentContainer,
+#if NET10_0
+                SafeAreaEdges = SafeAreaEdges.None,
+#endif
 			};
 			_tabHeaderParentBorder.StrokeShape = _tabHeaderParenRoundRectangle;
 			_backwardArrow = new ArrowIcon

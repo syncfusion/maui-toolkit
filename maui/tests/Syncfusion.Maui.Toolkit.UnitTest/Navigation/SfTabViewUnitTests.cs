@@ -236,6 +236,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(expected, tabView.TabBarPlacement);
 		}
 
+		[Fact]
+		public void TabBarPlacement_Top_LeavesTheBottomSafeAreaToTheTabContent()
+		{
+			var tabView = new SfTabView
+			{
+				TabBarPlacement = TabBarPlacement.Top
+			};
+			var parentGrid = GetPrivateField(tabView, "_parentGrid") as Grid;
+			Assert.NotNull(parentGrid);
+			Assert.Equal(SafeAreaRegions.None, parentGrid.SafeAreaEdges.Bottom);
+			Assert.Equal(SafeAreaRegions.Container, parentGrid.SafeAreaEdges.Top);
+		}
+
 		[Theory]
 		[InlineData(TabIndicatorPlacement.Top)]
 		[InlineData(TabIndicatorPlacement.Bottom)]

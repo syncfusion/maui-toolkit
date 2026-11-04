@@ -2476,6 +2476,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				VerticalOptions = LayoutOptions.Fill,
 				RowSpacing = 0,
 				ColumnSpacing = 0,
+#if NET10_0
+                SafeAreaEdges = SafeAreaEdges.None,
+#endif
 			};
 
 			InitializeHeaderContainer();
@@ -2630,6 +2633,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			if (_tabHeaderContainer != null)
 			{
 				_tabContentContainer ??= new SfHorizontalContent(this, _tabHeaderContainer) { HorizontalOptions = LayoutOptions.Fill, VerticalOptions = LayoutOptions.Fill };
+				_tabContentContainer.IgnoreSafeArea = true;
 				_tabContentContainer.Items = Items;
 				_tabContentContainer.SelectionChanging += TabContentContainer_SelectionChanging;
 			}
@@ -2747,6 +2751,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						
 					}
 					_parentGrid.RowDefinitions[tabContentContainerIndex].Height = GridLength.Star;
+#if NET10_0
+						_parentGrid.SafeAreaEdges = new SafeAreaEdges(SafeAreaRegions.Container, SafeAreaRegions.Container, SafeAreaRegions.Container, SafeAreaRegions.None);
+#endif
 				}
 
 				UpdateCenterButtonPosition();
