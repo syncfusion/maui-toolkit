@@ -1129,7 +1129,12 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 		static void OnItemsSourceChanged(BindableObject bindable, object oldValue, object newValue)
 		{
 			SfSegmentedControl segmentedControl = (SfSegmentedControl)bindable;
+#if !ANDROID
 			if (segmentedControl == null || !segmentedControl.IsLoaded)
+#else
+			// TODO: Retain the IsLoaded check as runtime ItemsSource updates are currently not working on Android, possibly due to a recent framework change. Remove this check once the issue is resolved.
+			if (segmentedControl == null)
+#endif
 			{
 				return;
 			}
