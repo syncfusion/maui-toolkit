@@ -39,7 +39,7 @@
                                                         <RoundRectangle CornerRadius="20,20,20,0"/>
                                                     </Border.StrokeShape>
                                                         
-                                                        <Label FontFamily="Roboto-Medium" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TileHeaderForegroundLight}, Dark={StaticResource Tile
+                                                        <Label FontFamily="Roboto-Medium" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TileHeaderForegroundLight}, Dark={StaticResource TileHeaderForegroundDark
                                                             }}" Text="{Binding Name}" FontSize="16" />
                                                 </Border>
                                             </Grid>
