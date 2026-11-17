@@ -189,11 +189,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			{
 				// PopUp is drawn in safe area also crap when it is shown based on relative to view point.
 				// Fix Details: SafeArea is calculated only for iOS X simulator in iOS.
-#if NET10_0
+
 				if (GetSafeAreaEdges())
-#else
-				if (Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(GetMainPage()))
-#endif
 				{
 					var platformWindow = WindowOverlayHelper._window?.ToPlatform() as UIWindow;
 					UIInterfaceOrientation? statusBarOrientation = null;
@@ -422,12 +419,19 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			if (WindowOverlayHelper._window != null)
 			{
-#if NET10_0
 				if (GetMainPage() != null && GetMainPage() is ContentPage page && page.SafeAreaEdges != SafeAreaEdges.None)
+                {
+						return true;
+				}
+
+#pragma warning disable CS0618
+
+				// Legacy iOS Page.GetUseSafeArea() — set via On<iOS>().SetUseSafeArea(true). This is independent of the new SafeAreaEdges property in .NET 10; the two do not auto-sync. Honor the legacy flag too so positioning and IgnoreSafeArea decisions stay consistent across both APIs.
+				if (GetMainPage() is not null && Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(GetMainPage()))
 				{
 					return true;
 				}
-#endif
+#pragma warning restore CS0618
 			}
 			else
 			{

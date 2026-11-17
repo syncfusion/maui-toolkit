@@ -99,7 +99,7 @@
                             </customView:SfEffectsViewAdv>
                         </VerticalStackLayout>
 
-                            <VerticalStackLayout Grid.Row="3" Margin="0,5,0,0" IsClippedToBounds="True" Spacing="10" VerticalOptions="End">
+                            <VerticalStackLayout Grid.Row="3" Margin="0,5,0,0"  Spacing="10" VerticalOptions="End">
                                 <customView:SfEffectsViewAdv HeightRequest="40" IsVisible="False">
                                     <customView:SfEffectsViewAdv.GestureRecognizers>
                                         <TapGestureRecognizer Tapped="PricingTapTapped"/>
@@ -147,7 +147,7 @@
                         </Grid.GestureRecognizers>
                     </Grid>
                     <BoxView Color="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" CornerRadius="20" Grid.ColumnSpan="3" Margin="16,0,16,20"/>
-                    <ScrollView x:Name="filteredScrollViewer" IsVisible="false" HorizontalScrollBarVisibility="Never" IsClippedToBounds="True" Margin="16,10,16,30" VerticalScrollBarVisibility="Never">
+                    <ScrollView x:Name="filteredScrollViewer" IsVisible="false" HorizontalScrollBarVisibility="Never"  Margin="16,10,16,30" VerticalScrollBarVisibility="Never">
                         <VerticalStackLayout>
                             <Grid x:Name="filteredGridNewSample"  Margin="12,0,12,20" ColumnSpacing="24" RowDefinitions="35,*" ColumnDefinitions="*,*,*" IsVisible="false">
                                  <Grid HeightRequest="35" Grid.ColumnSpan="3">
@@ -309,7 +309,7 @@
                             </Grid>
                         </VerticalStackLayout>
                     </ScrollView>
-                    <ScrollView x:Name="sortedGridScrollViewer" IsVisible="false" HorizontalScrollBarVisibility="Never" IsClippedToBounds="True" Margin="16,10,16,30" VerticalScrollBarVisibility="Never">
+                    <ScrollView x:Name="sortedGridScrollViewer" IsVisible="false" HorizontalScrollBarVisibility="Never"  Margin="16,10,16,30" VerticalScrollBarVisibility="Never">
                         <Grid x:Name="sortedGrid"  Margin="12,0,12,20" ColumnSpacing="24" RowDefinitions="*" ColumnDefinitions="*,*,*" IsVisible="false">
                             <VerticalStackLayout x:Name="sortedcolumOneLayout" Margin="12,12,0,0">
                                 <BindableLayout.ItemTemplate>
@@ -427,7 +427,7 @@
                             </VerticalStackLayout>
                         </Grid>
                     </ScrollView>
-                    <ScrollView x:Name="controlListScrollViewer" HorizontalScrollBarVisibility="Never" IsClippedToBounds="True" Margin="16,10,16,20" VerticalScrollBarVisibility="Never" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                    <ScrollView x:Name="controlListScrollViewer" HorizontalScrollBarVisibility="Never"  Margin="16,10,16,20" VerticalScrollBarVisibility="Never" Background="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
                     <Grid x:Name="controlListGrid" Margin="12,0,12,20" ColumnSpacing="24" RowDefinitions="*" ColumnDefinitions="*,*,*">
                         <VerticalStackLayout x:Name="columOneLayout" Margin="12,12,0,0">
                             <BindableLayout.ItemTemplate>
@@ -1147,7 +1147,7 @@
                 Margin="16,12,0,12"
                 FontFamily="Roboto-Medium" 
                 VerticalTextAlignment="Center"
-                FontSize="16" VerticalOptions="CenterAndExpand"/>
+                FontSize="16" VerticalOptions="Center"/>
                 <Switch VerticalOptions="Center" Grid.Column="2" Margin="15,0,0,0" Toggled="themePopupSwitch_Toggled" x:Name="themePopupSwitch" Style="{StaticResource switchStyle}"/>
             </Grid>
         </Grid>

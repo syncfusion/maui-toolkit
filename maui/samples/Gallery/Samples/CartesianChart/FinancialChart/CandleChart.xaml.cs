@@ -2,7 +2,6 @@
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class CandleChart : SampleView
 	{
 		public CandleChart()
@@ -51,9 +50,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void checkBox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		private void checkBox_CheckedChanged(object? sender, CheckedChangedEventArgs e)
 		{
-			var checkBox = (CheckBox)sender;
+			if (sender is not CheckBox checkBox)
+			{
+				return;
+			}
+
 			if (ViewModel != null)
 			{
 				Candle.EnableSolidCandle = checkBox.IsChecked;

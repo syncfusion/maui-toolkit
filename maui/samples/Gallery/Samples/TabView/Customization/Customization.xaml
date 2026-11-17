@@ -58,7 +58,7 @@
 
             <!-- TabView with multiple TabItems -->
             <tabView:SfTabView x:Name="TabView"
-                               TabBarHeight="72"
+                               TabBarSize="72"
                                EnableSwiping="True"
                                SelectionChanged="SfTabView_SelectionChanged">
                 <!-- Document TabItem -->

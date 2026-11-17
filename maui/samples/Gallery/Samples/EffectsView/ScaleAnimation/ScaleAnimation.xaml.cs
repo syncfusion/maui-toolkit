@@ -4,7 +4,6 @@ using System.Globalization;
 
 namespace Syncfusion.Maui.ControlsGallery.EffectsView.SfEffectsView
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class ScaleAnimation : SampleView
 	{
 		public ScaleAnimation()
@@ -12,8 +11,13 @@ namespace Syncfusion.Maui.ControlsGallery.EffectsView.SfEffectsView
 			InitializeComponent();
 		}
 
-		private void AnimationCompleted(object sender, EventArgs e)
+		private void AnimationCompleted(object? sender, EventArgs e)
 		{
+			if(sender is not Syncfusion.Maui.Toolkit.EffectsView.SfEffectsView)
+			{
+				return; 
+			}
+
 			var effectsView = (Syncfusion.Maui.Toolkit.EffectsView.SfEffectsView)sender;
 			if (effectsView.ScaleFactor == 0.85)
 			{

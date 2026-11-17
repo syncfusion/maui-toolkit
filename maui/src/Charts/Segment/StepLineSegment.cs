@@ -9,11 +9,36 @@
 
 		internal override void DrawLine(ICanvas canvas, float x1, float x2, float y1, float y2)
 		{
-			canvas.DrawLine(x1, y1, x2, y1);
-
-			if (X2 == x2)
+			// Check if fill is a gradient brush
+			if (Fill is GradientBrush && (StrokeDashArray == null || StrokeDashArray.Count == 0))
 			{
-				canvas.DrawLine(x2, y1, x2, y2);
+				// For series-level gradients, compute bounds across all segments
+				RectF? gradientBounds = null;
+
+				if (ReferenceEquals(Fill, Series?.Fill))
+				{
+					gradientBounds = GetGradientBounds();
+				}
+
+				// Draw horizontal segment with gradient
+				canvas.DrawLineWithGradient(x1, y1, x2, y1, Fill, (float)StrokeWidth, gradientBounds);
+
+				// Draw vertical segment if needed
+				if (X2 == x2)
+				{
+					canvas.DrawLineWithGradient(x2, y1, x2, y2, Fill, (float)StrokeWidth, gradientBounds);
+				}
+			}
+			else
+			{
+				// Fallback to solid color rendering
+				canvas.StrokeColor = Fill.ToColor();
+				canvas.DrawLine(x1, y1, x2, y1);
+
+				if (X2 == x2)
+				{
+					canvas.DrawLine(x2, y1, x2, y2);
+				}
 			}
 		}
 

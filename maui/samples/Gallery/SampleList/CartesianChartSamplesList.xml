@@ -3,9 +3,9 @@
   <ControlCategory Name="Data Visualization">
 	  <Control Title="Cartesian Charts" StatusTag="Updated" ControlName="SfCartesianChart" Image="cartesianchart.png" Description="Plot over 20+ chart types with extensive features like data label, trackball and zooming.">
       <Category Title="Chart Types">
-        <SubCategory Title="Column">
+        <SubCategory Title="Column" StatusTag="Updated">
           <CardLayout>
-            <Sample Title="Default column chart" SampleName="ColumnChart" Description="This sample demonstrates the default column chart. The data point information is shown using data label support." SearchTags="Column, bar" />
+            <Sample Title="Default column chart" StatusTag="Updated" SampleName="ColumnChart" Description="This sample demonstrates the default column chart. The data point information is shown using data label support." SearchTags="Column, bar" />
             <Sample Title="Column with rounded corners" SampleName="Column_RoundedEdges" SearchTags="Column, roundedegde"/>
             <Sample Title="Column width and spacing" SampleName="Column_WidthCustomization" SearchTags="Column, customization"/>
             <Sample Title="Column with track" SampleName="Column_Customization" Description="This sample renders the column chart with a track." SearchTags="Column, customization"/>
@@ -14,7 +14,7 @@
           </CardLayout>
         </SubCategory>
         
-        <SubCategory Title="Bar">
+        <SubCategory Title="Bar" StatusTag="Updated">
           <CardLayout>
             <Sample Title="Default bar chart" SampleName="BarChart" Description="This sample demonstrates the default bar chart by transposing the column chart. The data point information is shown using data label support." SearchTags="bar"/>
             <Sample Title="Bar with rounded corners" SampleName="BarChart_RoundedEdge" SearchTags="bar, roundedegde"/>
@@ -23,9 +23,9 @@
           </CardLayout>
         </SubCategory>
         
-        <SubCategory Title="Line">
+        <SubCategory Title="Line" StatusTag="Updated">
           <CardLayout>
-            <Sample Title="Default line chart" SampleName="LineChart" Description="This sample demonstrates the default line chart. The marker, tooltip, and legend are enabled in the model. Tap the data point to view information about that data point in a tooltip." SearchTags="line"/>
+            <Sample Title="Default line chart" StatusTag="Updated" SampleName="LineChart" Description="This sample demonstrates the default line chart. The marker, tooltip, and legend are enabled in the model. Tap the data point to view information about that data point in a tooltip." SearchTags="line"/>
             <Sample Title="Line with dashes" SampleName="DashedLineChart" Description="This sample showcases a rendered line chart with dashes." SearchTags="line, dashedlinr"/>
             <Sample Title="Dynamic update animation" SampleName="Line_DynamicUpdate" SearchTags="line, dynamic"/>
           </CardLayout>
@@ -59,17 +59,17 @@
 
       <Sample Title="Fast Scatter" SampleName="FastScatterChart" SearchTags="scatter, scatter chart, scatter plot, fast scatter, fast scatter chart, fast scatter plot, high performance chart"/>
 
-		  <SubCategory Title="Spline">
+		  <SubCategory Title="Spline" StatusTag="Updated">
 			  <CardLayout>
-				  <Sample Title="Default spline chart" SampleName="SplineChart" Description="This sample demonstrates the default spline chart. The marker, tooltip, and legend are enabled in the model. Tap the data point to view information about that data point in a tooltip." SearchTags="spline"/>
+				  <Sample Title="Default spline chart" StatusTag="Updated" SampleName="SplineChart" Description="This sample demonstrates the default spline chart. The marker, tooltip, and legend are enabled in the model. Tap the data point to view information about that data point in a tooltip." SearchTags="spline"/>
 				  <Sample Title="Spline with dashes" SampleName="DashedSplineChart" Description="This sample showcases a rendered spline chart with dashes." SearchTags="spline, dashed"/>
 				  <Sample Title="Dynamic update animation" SampleName="Spline_DynamicUpdate" SearchTags="spline, dynamic"/>
 			  </CardLayout>
 		  </SubCategory>
 
-		  <SubCategory Title="Step Line">
+		  <SubCategory Title="Step Line" StatusTag="Updated">
 			  <CardLayout>
-				  <Sample Title="Default Step Line Chart" SampleName="StepLineChart" SearchTags="Stepline"/>
+				  <Sample Title="Default Step Line Chart" StatusTag="Updated" SampleName="StepLineChart" SearchTags="Stepline"/>
 				  <Sample Title="Dashed Step Line chart" SampleName="DashedStepLineChart" SearchTags="Stepline,Dashed stepline"/>
 				  <Sample Title="Vertical Step Line chart" SampleName="VerticalStepLineChart" SearchTags="Stepline,Vertical Stepline"/>
 				  <Sample Title="Dynamic update animation" SampleName="StepLine_DynamicUpdate" SearchTags="Stepline,Vertical Stepline,StepLine_DynamicUpdate"/>
@@ -80,16 +80,16 @@
 		 
 		  <Sample Title="100% Stacked Line" SampleName="StackedLine100Chart" SearchTags="stackedline100, line"/>
 		
-		  <SubCategory Title="Range Column">
+		  <SubCategory Title="Range Column" StatusTag="Updated">
 			  <CardLayout>
-				  <Sample Title="Default Range Column" SampleName="DefaultRangeColumn" SearchTags="range column"/>
+				  <Sample Title="Default Range Column" StatusTag="Updated" SampleName="DefaultRangeColumn" SearchTags="range column"/>
 				  <Sample Title="Dynamic update animation" SampleName="RangeColumnAnimation" SearchTags="rangeColumn, animation"/>
 			  </CardLayout>
 		  </SubCategory>
 
-		  <SubCategory Title="Range Bar">
+		  <SubCategory Title="Range Bar" StatusTag="Updated">
 			  <CardLayout>
-				  <Sample Title="Default Range Bar" SampleName="DefaultRangeBar" SearchTags="range bar"/>
+				  <Sample Title="Default Range Bar" StatusTag="Updated" SampleName="DefaultRangeBar" SearchTags="range bar"/>
 				  <Sample Title="Dynamic update animation" SampleName="RangeBarAnimation" SearchTags="rangebar, animation"/>
 			  </CardLayout>
 		  </SubCategory>
@@ -172,7 +172,7 @@
 		  </Category>
 
 		
-			  <Sample Title="Annotation" StatusTag="Updated" SampleName="ShapeAnnotationSample" Description="This sample showcases the shape annotation support, which includes line, horizontal line, vertical line, rectangle, and ellipse." SearchTags="annotation, chart annotation"/>
+			  <Sample Title="Annotation" SampleName="ShapeAnnotationSample" Description="This sample showcases the shape annotation support, which includes line, horizontal line, vertical line, rectangle, and ellipse." SearchTags="annotation, chart annotation"/>
 
         <Sample Title="Empty Points" SampleName="EmptyPointSupport" SearchTags="empty points, missing data points, missing values, incomplete data, data gaps, incomplete records, blank entries"/>
 
@@ -183,10 +183,10 @@
 			  <Sample Title="Vertical" SampleName="VerticalPlotBandWindows" Platforms="Windows,MacCatalyst" SearchTags="vertical plot, band, plotband"/>
 			  <Sample Title="Band recurrence" SampleName="PlotBandRecurrence" SearchTags="multiple plot, band, plotband, recurrence"/>
 		  </Category>
-      <Sample Title="Point Color Mapping" StatusTag="New" SampleName="PointColorCustomization"
+      <Sample Title="Point Color Mapping" SampleName="PointColorCustomization"
 			  Description="This sample demonstrates how point color mapping applies distinct colors to individual chart data points using the PointColorPath property, helping to differentiate values visually and improve data readability."
 			  SearchTags="Point Color Mapping"/>
-		  <Category Title="Legend" StatusTag="Updated">
+		  <Category Title="Legend">
 			  <Sample Title="Legend customization" SampleName="CartesianLegend" SearchTags="legend"/>
 		  </Category>
 
@@ -194,7 +194,7 @@
 			  <Sample Title="Data label template" SampleName="DataLabelTemplate" SearchTags="data label customization, data label template, custom data label"/>
 		  </Category>
 
-      <Sample Title="Trendline" StatusTag="New" SampleName="Trendlines" SearchTags="trendline"/>
+      <Sample Title="Trendline" SampleName="Trendlines" SearchTags="trendline"/>
 
 		  <Category Title="Interactions">
 			  <SubCategory Title="Selection">
@@ -210,7 +210,7 @@
 			  <Sample Title="Tooltip" SampleName="CartesianTooltip" Description="This sample showcases the tooltip feature. On mobile, tap the data points, and on desktop, mouse over to the data points to raise the tooltip." SearchTags="tooltip"/>
 			  <Sample Title="Trackball" SampleName="CartesianTrackball" Description="This sample showcases the trackball feature. On mobile phones, long press on the chart to show the trackball, and drag the chart to change the position of the trackball. You can move the cursor over the chart area to display the trackball on the desktop." 
                 SearchTags="trackball, crosshair"/>
-        <Sample Title="Crosshair" StatusTag="New" SampleName="CartesianCrossHair" Description="This sample showcases the crosshair feature. On mobile long press or drag to show the crosshair, on desktop move the cursor to display the crosshair." SearchTags="crosshair, cross hair"/>
+        <Sample Title="Crosshair" SampleName="CartesianCrossHair" Description="This sample showcases the crosshair feature. On mobile long press or drag to show the crosshair, on desktop move the cursor to display the crosshair." SearchTags="crosshair, cross hair"/>
 			  <Sample Title="Zooming and Panning" SampleName="ChartZooming" Description="This sample showcases the zooming and panning features." SearchTags="zooming, panning"/>
 			  <Sample Title="Selection Zooming" SampleName="SelectionZooming" Description="This sample demonstrates zooming selection: For desktop, hold the left mouse button, double-click, and drag; for mobile, hold your finger, double-click, and drag to create a selection rectangle." SearchTags="select, highlight"/>
 			  <!--<Sample Title="Add a point on click" SampleName="TapToAdd" Description="This example shows the pixel-to-data point conversion feature. Tap/click on the chart area to add a data point dynamically on that location." SearchTags="zooming, panning"/>-->

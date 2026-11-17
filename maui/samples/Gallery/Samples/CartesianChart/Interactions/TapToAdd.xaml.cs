@@ -21,7 +21,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			categoryChart.Handler?.DisconnectHandler();
 		}
 
-		private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+		private void TapGestureRecognizer_Tapped(object? sender, EventArgs e)
 		{
 			realTimeViewModel?.ResetChartData();
 		}

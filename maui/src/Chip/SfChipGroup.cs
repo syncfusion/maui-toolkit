@@ -1799,11 +1799,7 @@ namespace Syncfusion.Maui.Toolkit.Chips
 			}
 
 			var layout = dataTemplate.CreateContent();
-#if NET10_0_OR_GREATER
 			View? customView = layout as View;
-#else
-			View? customView = layout is ViewCell ? (layout as ViewCell)?.View : (View)layout;
-#endif
 
 			if (customView != null)
 			{

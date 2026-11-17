@@ -37,7 +37,7 @@
                         <HorizontalStackLayout Grid.Column="1" HeightRequest="46" Spacing="10" HorizontalOptions="End" VerticalOptions="Center">
 
 							<StackLayout WidthRequest="42" HeightRequest="34" VerticalOptions="Center" x:Name="usStack">
-                                <Border VerticalOptions="FillAndExpand" x:Name="usBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
+                <Border VerticalOptions="Fill" x:Name="usBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="4"/>
                                     </Border.StrokeShape>
@@ -50,7 +50,7 @@
 							</StackLayout>
 
 							<StackLayout WidthRequest="36" HeightRequest="28" x:Name="indiaStack">
-                                <Border VerticalOptions="FillAndExpand" x:Name="indiaBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
+                <Border VerticalOptions="Fill" x:Name="indiaBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="4"/>
                                     </Border.StrokeShape>
@@ -63,7 +63,7 @@
 							</StackLayout>
 							
 							<StackLayout WidthRequest="36" HeightRequest="28" x:Name="russiaStack">
-                                <Border VerticalOptions="FillAndExpand" x:Name="russiaBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
+                <Border VerticalOptions="Fill" x:Name="russiaBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="4"/>
                                     </Border.StrokeShape>
@@ -76,7 +76,7 @@
 							</StackLayout>
 							
 							<StackLayout WidthRequest="36" HeightRequest="28" x:Name="franceStack">
-                                <Border VerticalOptions="FillAndExpand" x:Name="franceBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
+                <Border VerticalOptions="Fill" x:Name="franceBorder" BackgroundColor="Transparent" Padding="2" StrokeThickness="3">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="4"/>
                                     </Border.StrokeShape>
@@ -127,7 +127,7 @@
 				</VerticalStackLayout>
             </Border>
 
-            <Border Grid.Row="1" StrokeThickness="1" Padding="20" VerticalOptions="FillAndExpand" HorizontalOptions="Center" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" >
+      <Border Grid.Row="1" StrokeThickness="1" Padding="20" VerticalOptions="Fill" HorizontalOptions="Center" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}" >
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="10"/>
                 </Border.StrokeShape>

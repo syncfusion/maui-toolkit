@@ -304,12 +304,36 @@
 				canvas.SetFillPaint(Fill, path.Bounds);
 				canvas.Alpha = Opacity;
 				canvas.FillPath(path);
+				SemanticBounds = path.Bounds;
 				SegmentStrokePath(canvas, series, segmentStartAngle, segmentEndAngle, drawStartAngle);
 			}
 		}
 
 		void DrawFlatSegment(ICanvas canvas, DoughnutSeries series, float drawStartAngle, float drawEndAngle, PathF path)
 		{
+			if (Math.Abs(drawEndAngle - drawStartAngle) >= 359.999f)
+			{
+				path.AppendEllipse(_actualBounds);
+				path.AppendEllipse(_currentBounds);
+				canvas.SaveState();
+				canvas.Antialias = true;
+				canvas.ClipPath(path, WindingMode.EvenOdd);
+				canvas.Alpha = Opacity;
+				canvas.SetFillPaint(Fill, _actualBounds);
+				canvas.FillRectangle(_actualBounds);
+				canvas.RestoreState();
+				if (HasStroke)
+				{
+					canvas.SaveState();
+					canvas.Antialias = true;
+					canvas.StrokeColor = Stroke.ToColor();
+					canvas.StrokeSize = (float)StrokeWidth;
+					canvas.DrawPath(path);
+					canvas.RestoreState();
+				}
+				return;
+			}
+
 			var radius = (float)series.InnerRadius * (Math.Min(_actualBounds.Width, _actualBounds.Height) / 2);
 			var x = (float)(_currentBounds.X + (_currentBounds.Width / 2) + (radius * Math.Cos(drawStartAngle * (Math.PI / 180))));
 			var y = (float)(_currentBounds.Y + (_currentBounds.Width / 2) + (radius * Math.Sin(drawStartAngle * (Math.PI / 180))));
@@ -321,6 +345,7 @@
 			canvas.SetFillPaint(Fill, path.Bounds);
 			canvas.Alpha = Opacity;
 			canvas.FillPath(path);
+			SemanticBounds = path.Bounds;
 
 			if (HasStroke)
 			{

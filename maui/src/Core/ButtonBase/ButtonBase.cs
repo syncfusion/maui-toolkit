@@ -1241,14 +1241,7 @@ namespace Syncfusion.Maui.Toolkit
 		{
 			var x = 0;
 			var y = 0;
-#if WINDOWS && NET8_0
-            if (!(Parent is Frame))
-			{
-				Clip = new RoundRectangleGeometry(CornerRadius, new Rect(x, y, Width, Height));
-			}
-#else
 			Clip = new RoundRectangleGeometry(CornerRadius, new Rect(x, y, Width, Height));
-#endif
 		}
 
 		private void InitializeBackgroundImage()

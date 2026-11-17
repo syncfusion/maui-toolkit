@@ -5,7 +5,6 @@ namespace Syncfusion.Maui.Toolkit.BottomSheet;
 /// <summary>
 /// SfBottomSheetStyle provides a set of predefined styles for SfBottomSheet control.
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SfBottomSheetStyle : ResourceDictionary
 {
     /// <summary>

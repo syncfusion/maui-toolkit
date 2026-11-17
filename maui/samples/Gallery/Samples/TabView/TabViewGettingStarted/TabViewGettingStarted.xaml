@@ -40,7 +40,7 @@
                     </RoundRectangle>
                 </Border.StrokeShape>
             <tabView:SfTabView x:Name="tabView" 
-                               TabBarHeight="75"
+                               TabBarSize="75"
                                TabWidthMode="Default"
                                EnableSwiping="True"
                                TabBarPlacement="Bottom"                                                       
@@ -62,7 +62,7 @@
                                     <FlexLayout x:DataType="{x:Type local:TabViewModel}" Wrap="Wrap" Padding="0" AlignItems="Start" AlignContent="Start"  BindableLayout.ItemsSource="{Binding TabModelSource}" >
                                         <BindableLayout.ItemTemplate>
                                             <DataTemplate x:DataType="{x:Type local:TabModel}">
-                                                <Border WidthRequest="{OnPlatform WinUI=110,MacCatalyst=110}" HeightRequest="{OnPlatform WinUI=120,MacCatalyst=120}" Margin="10" Padding="0" BackgroundColor="Transparent">
+                                                <Border Margin="10" Padding="0" BackgroundColor="Transparent">
                                                   <Border.StrokeShape>
                                                     <RoundRectangle CornerRadius="10" />
                                                   </Border.StrokeShape>
@@ -80,7 +80,7 @@
                                                           </Border.StrokeShape>
                                                             <Image Source="{Binding ImageSource}" WidthRequest="70" HeightRequest="70"/>
                                                         </Border>
-                                                        <Label FontSize="Medium" 
+                                                        <Label FontSize="14" 
                                                        FontFamily="Roboto-Regular" 
                                                        Text="{Binding Name}"                                                     
                                                        VerticalOptions="End" 

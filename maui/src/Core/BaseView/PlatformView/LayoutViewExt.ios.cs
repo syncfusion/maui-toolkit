@@ -255,6 +255,10 @@ namespace Syncfusion.Maui.Toolkit.Platform
 			{
 				base.Draw(dirtyRect);
 				var coreGraphics = UIGraphics.GetCurrentContext();
+				if(coreGraphics == null)
+				{
+					return;
+				}
 
 				if (Drawable == null)
 				{

@@ -699,7 +699,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void Control_Tapped(object sender, EventArgs e)
+		async void Control_Tapped(object? sender, EventArgs e)
 		{
 			busyIndicatorMainPage.IsVisible = true;
 			await Task.Delay(100);
@@ -779,7 +779,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments containing the old and new text values.</param>
-		void Entry_TextChanged(object sender, TextChangedEventArgs e)
+		void Entry_TextChanged(object? sender, TextChangedEventArgs e)
 		{
 			if (e.NewTextValue.Length > 1 && !searchListGrid.IsVisible)
 			{
@@ -798,7 +798,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void Entry_Unfocused(object sender, FocusEventArgs e)
+		void Entry_Unfocused(object? sender, FocusEventArgs e)
 		{
 			searchListGrid.IsVisible = false;
 		}
@@ -809,7 +809,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void BackButtonPressed(object sender, EventArgs e)
+		void BackButtonPressed(object? sender, EventArgs e)
 		{
 			busyIndicatorMainPage.IsVisible = true;
 
@@ -852,7 +852,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The sender of the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void Category_Tapped(object sender, EventArgs e)
+		async void Category_Tapped(object? sender, EventArgs e)
 		{
 			var sampleCategoryModel = ((sender as Grid)?.BindingContext as SampleCategoryModel);
 			if (sampleCategoryModel == null)
@@ -959,7 +959,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// <param name="sampleModel">The model of the sample to prepare.</param>
 		void PrepareSampleModel(SampleModel sampleModel)
 		{
-			if (sampleModel.SamplePath != null && sampleModel.SamplePath.StartsWith('/'))
+			if (sampleModel.SamplePath != null && sampleModel.SamplePath.StartsWith('/',StringComparison.Ordinal))
 			{
 				sampleModel.SamplePath = sampleModel.SamplePath.Remove(0, 1);
 			}
@@ -1062,7 +1062,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void SubCategory_Tapped(object sender, EventArgs e)
+		async void SubCategory_Tapped(object? sender, EventArgs e)
 		{
 			var effectsView = sender as SfEffectsViewAdv;
 			await Task.Delay(200);
@@ -1147,7 +1147,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void Chip_Tapped(object sender, EventArgs e)
+		void Chip_Tapped(object? sender, EventArgs e)
 		{
 			var cardModel = ((sender as Grid)?.BindingContext as CardLayoutModel);
 			if (_selectedCardLayoutModel != null)
@@ -1177,7 +1177,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+		async void TapGestureRecognizer_Tapped(object? sender, EventArgs e)
 		{
 			busyIndicatorMainPage.IsVisible = true;
 			_loopExit = true;
@@ -1262,7 +1262,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void OptionButton_Tapped(object sender, EventArgs e)
+		void OptionButton_Tapped(object? sender, EventArgs e)
 		{
 			propertyFrame.IsVisible = !propertyFrame.IsVisible;
 		}
@@ -1272,7 +1272,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void CollapseRightButtonTapped(object sender, EventArgs e)
+		void CollapseRightButtonTapped(object? sender, EventArgs e)
 		{
 			UpdatePropertyWindow();
 		}
@@ -1283,7 +1283,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void CodeViewerTapped(object sender, EventArgs e)
+		async void CodeViewerTapped(object? sender, EventArgs e)
 		{
 			try
 			{
@@ -1312,7 +1312,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void YoutubeIconTapped(object sender, EventArgs e)
+		async void YoutubeIconTapped(object? sender, EventArgs e)
 		{
 			try
 			{
@@ -1335,7 +1335,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void SourceLinkTapped(object sender, EventArgs e)
+		async void SourceLinkTapped(object? sender, EventArgs e)
 		{
 			try
 			{
@@ -1357,7 +1357,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void WhatsNewTapped(object sender, EventArgs e)
+		void WhatsNewTapped(object? sender, EventArgs e)
 		{
 			// Add your code
 		}
@@ -1368,7 +1368,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">EventArgs</param>
-		void SortIconTapped(object sender, EventArgs e)
+		void SortIconTapped(object? sender, EventArgs e)
 		{
 
 			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
@@ -1393,7 +1393,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">EventArgs</param>
-		void CloseButtonClicked(object sender, EventArgs e)
+		void CloseButtonClicked(object? sender, EventArgs e)
 		{
 			sortOptionGrid.IsVisible = false;
 			tempGrid.IsVisible = false;
@@ -1416,7 +1416,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void SortGridTapped(object sender, EventArgs e)
+		void SortGridTapped(object? sender, EventArgs e)
 		{
 			//When the sort option grid is tapped, the sort option grid and sort temp grid should not be hidden, For that we have added this method.
 		}
@@ -1427,7 +1427,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">EventArgs</param>
-		void ApplyButtonClicked(object sender, EventArgs e)
+		void ApplyButtonClicked(object? sender, EventArgs e)
 		{
 			HideSortOptions();
 
@@ -1621,7 +1621,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">CheckedChangedEventArgs</param>
-		void AllSamplesCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+		void AllSamplesCheckBoxChanged(object? sender, CheckedChangedEventArgs e)
 		{
 			if (!_programmaticUpdate)
 			{
@@ -1637,7 +1637,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">CheckedChangedEventArgs</param>
-		void NewSamplesCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+		void NewSamplesCheckBoxChanged(object? sender, CheckedChangedEventArgs e)
 		{
 			HandleSampleCheckBoxChange(newSamples.IsChecked, updatedSamples.IsChecked);
 		}
@@ -1647,7 +1647,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">Sender</param>
 		/// <param name="e">CheckedChangedEventArgs</param>
-		void UpdatedSamplesCheckBoxChanged(object sender, CheckedChangedEventArgs e)
+		void UpdatedSamplesCheckBoxChanged(object? sender, CheckedChangedEventArgs e)
 		{
 			HandleSampleCheckBoxChange(newSamples.IsChecked, updatedSamples.IsChecked);
 		}
@@ -1676,7 +1676,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void DocumentationTapTapped(object sender, EventArgs e)
+		async void DocumentationTapTapped(object? sender, EventArgs e)
 		{
 			try
 			{
@@ -1696,7 +1696,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void PricingTapTapped(object sender, EventArgs e)
+		void PricingTapTapped(object? sender, EventArgs e)
 		{
 			//Home Page UI PricingTap Tapped, write your code 
 		}
@@ -1707,7 +1707,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		async void ContactTapTapped(object sender, EventArgs e)
+		async void ContactTapTapped(object? sender, EventArgs e)
 		{
 			try
 			{
@@ -1726,7 +1726,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void ChangeThemeTapTapped(object sender, EventArgs e)
+		void ChangeThemeTapTapped(object? sender, EventArgs e)
 		{
 			_isThemePopupOpen = !_isThemePopupOpen;
 			themePopup.IsVisible = _isThemePopupOpen;
@@ -1742,7 +1742,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments containing the new toggle state.</param>
-		void themePopupSwitch_Toggled(object sender, ToggledEventArgs e)
+		void themePopupSwitch_Toggled(object? sender, ToggledEventArgs e)
 		{
 			if (Application.Current != null)
 			{
@@ -1772,7 +1772,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void Graylayout_Tapped(object sender, TappedEventArgs e)
+		void Graylayout_Tapped(object? sender, TappedEventArgs e)
 		{
 
 			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
@@ -1794,7 +1794,7 @@ namespace Syncfusion.Maui.ControlsGallery
 		/// </summary>
 		/// <param name="sender">The object that triggered the event.</param>
 		/// <param name="e">The event arguments.</param>
-		void ThemePopupCloseIcon_Tapped(object sender, TappedEventArgs e)
+		void ThemePopupCloseIcon_Tapped(object? sender, TappedEventArgs e)
 		{
 
 			/* Unmerged change from project 'Syncfusion.Maui.ControlsGallery (net8.0-android)'
@@ -1810,7 +1810,10 @@ namespace Syncfusion.Maui.ControlsGallery
 			Graylayout.IsVisible = false;
 		}
 
+		private void CollapseRightButtonTapped(object? sender, TappedEventArgs e)
+		{
 
-	}
+        }
+    }
 }
 

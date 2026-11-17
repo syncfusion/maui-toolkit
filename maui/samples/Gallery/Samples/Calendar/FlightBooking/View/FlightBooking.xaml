@@ -39,7 +39,7 @@
                         </Grid.RowDefinitions>
 
                         <!-- First Row: Flight Booking -->
-                        <Label Grid.Row="0" Text="Book a Flight" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" Grid.ColumnSpan="2" HorizontalOptions="Center" FontSize="Title" VerticalOptions="Center"/>
+                        <Label Grid.Row="0" Text="Book a Flight" TextColor="{AppThemeBinding Light={StaticResource TileTextColourAlt1Light}, Dark={StaticResource TileTextColourAlt1}}" Grid.ColumnSpan="2" HorizontalOptions="Center" FontSize="24" VerticalOptions="Center"/>
 
                         <!-- Second Row: Radio Buttons -->
                         <StackLayout Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,10,10,10" HorizontalOptions="Start">

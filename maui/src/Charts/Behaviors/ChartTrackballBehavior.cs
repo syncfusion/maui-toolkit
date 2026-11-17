@@ -1168,6 +1168,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					Background = _actualLabelStyle.Background
 				};
 
+			var visiblePointInfos = PointInfos.Any(static info => !info.IsVisible)
+				? PointInfos.Where(static info => info.IsVisible).ToList()
+				: PointInfos;
+
 			var cellContent = new SfItemViewCell
 			{
 				ItemTemplate = new DataTemplate(() =>
@@ -1175,7 +1179,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 				var layout = new VerticalStackLayout();
 
-				BindableLayout.SetItemsSource(layout, PointInfos);
+				BindableLayout.SetItemsSource(layout, visiblePointInfos);
 				var labelTemplate = new DataTemplate(() =>
 				{
 					var label = new Label
@@ -1208,7 +1212,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return layout;
 			}),
 
-				Item = PointInfos
+				Item = visiblePointInfos
 			};
 
 			GroupedLabelView.Content = cellContent;
@@ -1397,7 +1401,25 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return;
 			}
 
-			List<TrackballPointInfo> tempTrackballInfo = new List<TrackballPointInfo>(PointInfos);
+			// Build the collision-detection working set from the visible points only.
+			// Points hidden via IsVisible=false still remain in PointInfos so their markers
+			// draw, but they must not participate in label layout (their ContentTemplateView is
+			// not created and would otherwise produce a null TooltipRect).
+			List<TrackballPointInfo> tempTrackballInfo = new List<TrackballPointInfo>(PointInfos.Count);
+			for (int i = 0; i < PointInfos.Count; i++)
+			{
+				if (PointInfos[i].IsVisible)
+				{
+					tempTrackballInfo.Add(PointInfos[i]);
+				}
+			}
+
+			if (tempTrackballInfo.Count == 0)
+			{
+				UpdatePositionForIntersectedLabels();
+				return;
+			}
+
 			_intersectedGroups = [];
 			List<TrackballPointInfo> tempIntersectedLabels = [tempTrackballInfo[0]];
 
@@ -1991,11 +2013,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (pointInfo != null)
 			{
+				// SetTargetRect positions the marker; it must run even when the label is
+				// hidden via IsVisible=false so that the marker still draws at DrawTrackballLabels.
 				pointInfo.SetTargetRect(this);
 
-				//Validate not for grouped all points.
-				if (DisplayMode != LabelDisplayMode.GroupAllPoints)
+				// When the point's label has been hidden through IsVisible=false (typically
+				// set in the TrackballCreated/LabelsGenerated event), skip label creation and
+				// display while keeping the marker and trackball line intact.
+				if (pointInfo.IsVisible && DisplayMode != LabelDisplayMode.GroupAllPoints)
 				{
+					//Validate not for grouped all points.
 					if (pointInfo.HaveTemplateView && CartesianChart is SfCartesianChart chart)
 					{
 						TrackballPointInfo? prevTrackballInfo = PreviousPointInfos.Find(previousPointInfo =>
@@ -2203,7 +2230,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 				}
 
-				if (ShowLabel && !info.HaveTemplateView && DisplayMode != LabelDisplayMode.GroupAllPoints)
+				if (ShowLabel && !info.HaveTemplateView && DisplayMode != LabelDisplayMode.GroupAllPoints && info.IsVisible)
 				{
 					info.TooltipHelper.Draw(canvas);
 				}

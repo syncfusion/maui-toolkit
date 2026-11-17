@@ -7,6 +7,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// </summary>
 	public partial class SplineSegment : CartesianSegment, IMarkerDependentSegment
 	{
+		#region Gradient rendering fields
+
+		private RectF _cachedGradientBounds;
+		private bool _gradientBoundsDirty = true;
+
+		#endregion
+
 		#region Properties
 
 		/// <summary>
@@ -62,6 +69,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal float PreviousEndControlX { get; set; } = float.NaN;
 		internal float PreviousEndControlY { get; set; } = float.NaN;
 
+		Rect _markerBounds;
+
 		#endregion
 
 		#region Methods
@@ -74,6 +83,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return;
 			}
 
+			_gradientBoundsDirty = true;
+
 			X1 = Y1 = X2 = Y2 = StartControlX = StartControlY = EndControlX = EndControlY = float.NaN;
 
 			X1 = series.TransformToVisibleX(StartPtX, StartPtY);
@@ -85,6 +96,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			StartControlY = series.TransformToVisibleY(StartControlPtX, StartControlPtY);
 			EndControlX = series.TransformToVisibleX(EndControlPtX, EndControlPtY);
 			EndControlY = series.TransformToVisibleY(EndControlPtX, EndControlPtY);
+
+			// Update semantic bounds during layout so all data points (including the last point) have proper bounds
+			UpdateSemanticBounds();
 		}
 
 		/// <summary>
@@ -201,7 +215,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				canvas.StrokeDashPattern = StrokeDashArray.ToFloatArray();
 			}
 
-			SplineSegment.DrawQuad(canvas, new PointF(x1, y1), new PointF(x2, y2), new PointF(startControlX, startControlY), new PointF(endControlX, endControlY));
+			DrawQuad(canvas, new PointF(x1, y1), new PointF(x2, y2), new PointF(startControlX, startControlY), new PointF(endControlX, endControlY));
 		}
 
 		internal void SetPreviousData(float[] values)
@@ -216,15 +230,134 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			PreviousEndControlY = values[7];
 		}
 
-		static void DrawQuad(ICanvas canvas, PointF startPoint, PointF endPoint, PointF controlStartPoint, PointF controlEndPoint)
+		void DrawQuad(ICanvas canvas, PointF startPoint, PointF endPoint, PointF controlStartPoint, PointF controlEndPoint)
 		{
-			var path = new PathF();
+			// Check if fill is a gradient brush
+			if (Fill is GradientBrush && (StrokeDashArray == null || StrokeDashArray.Count == 0))
+			{
+				// For series-level gradients, compute bounds across all segments
+				RectF? gradientBounds = null;
+				if (ReferenceEquals(Fill, Series?.Fill))
+				{
+					gradientBounds = GetGradientBounds();
+				}
 
-			path.MoveTo(startPoint.X, startPoint.Y);
+				// Create a thick path and apply gradient
+				var strokedPath = CreateStrokedPath(startPoint, endPoint, controlStartPoint, controlEndPoint, (float)StrokeWidth);
+				var bounds = gradientBounds ?? strokedPath.Bounds;
 
-			path.CurveTo(controlStartPoint.X, controlStartPoint.Y, controlEndPoint.X, controlEndPoint.Y, endPoint.X, endPoint.Y);
+				canvas.SetFillPaint(Fill, bounds);
+				canvas.FillPath(strokedPath);
+			}
+			else
+			{
+				// Use native path drawing for non-gradient fills
+				var path = new PathF();
+				path.MoveTo(startPoint.X, startPoint.Y);
+				path.CurveTo(controlStartPoint.X, controlStartPoint.Y, controlEndPoint.X, controlEndPoint.Y, endPoint.X, endPoint.Y);
+				canvas.DrawPath(path);
+			}
+		}
 
-			canvas.DrawPath(path);
+		/// <summary>
+		/// Creates a thick path from a Bezier curve for gradient stroke rendering.
+		/// </summary>
+		PathF CreateStrokedPath(PointF startPoint, PointF endPoint, PointF controlStartPoint, PointF controlEndPoint, float strokeWidth)
+		{
+			// Approximate the Bezier curve with line segments and build a thick outline
+			var curvePoints = new List<PointF>();
+			float steps = 50; // Number of segments to approximate the curve
+
+			for (float t = 0; t <= 1; t += 1f / steps)
+			{
+				// Cubic Bezier formula: B(t) = (1-t)^3*P0 + 3(1-t)^2*t*P1 + 3(1-t)*t^2*P2 + t^3*P3
+				float mt = 1 - t;
+				float mtPow2 = mt * mt;
+				float mtPow3 = mtPow2 * mt;
+				float tPow2 = t * t;
+				float tPow3 = tPow2 * t;
+
+				float x = mtPow3 * startPoint.X + 3 * mtPow2 * t * controlStartPoint.X + 3 * mt * tPow2 * controlEndPoint.X + tPow3 * endPoint.X;
+				float y = mtPow3 * startPoint.Y + 3 * mtPow2 * t * controlStartPoint.Y + 3 * mt * tPow2 * controlEndPoint.Y + tPow3 * endPoint.Y;
+
+				curvePoints.Add(new PointF(x, y));
+			}
+
+			// Build outline path
+			PathF path = new();
+			float half = strokeWidth / 2;
+
+			// Forward pass
+			for (int i = 0; i < curvePoints.Count; i++)
+			{
+				// Calculate perpendicular
+				PointF current = curvePoints[i];
+				PointF next = (i < curvePoints.Count - 1) ? curvePoints[i + 1] : endPoint;
+				PointF prev = (i > 0) ? curvePoints[i - 1] : startPoint;
+
+				float dx = next.X - current.X;
+				float dy = next.Y - current.Y;
+				float length = (float)Math.Sqrt(dx * dx + dy * dy);
+
+				if (length > 0)
+				{
+					float perpX = -dy / length;
+					float perpY = dx / length;
+
+					if (i == 0)
+					{
+						path.MoveTo(current.X + perpX * half, current.Y + perpY * half);
+					}
+					else
+					{
+						path.LineTo(current.X + perpX * half, current.Y + perpY * half);
+					}
+				}
+				else if (i == 0)
+				{
+					path.MoveTo(current.X, current.Y);
+				}
+			}
+
+			// Backward pass
+			for (int i = curvePoints.Count - 1; i >= 0; i--)
+			{
+				PointF current = curvePoints[i];
+				PointF next = (i < curvePoints.Count - 1) ? curvePoints[i + 1] : endPoint;
+				PointF prev = (i > 0) ? curvePoints[i - 1] : startPoint;
+
+				float dx = next.X - current.X;
+				float dy = next.Y - current.Y;
+				float length = (float)Math.Sqrt(dx * dx + dy * dy);
+
+				if (length > 0)
+				{
+					float perpX = -dy / length;
+					float perpY = dx / length;
+					path.LineTo(current.X - perpX * half, current.Y - perpY * half);
+				}
+			}
+
+			path.Close();
+			return path;
+		}
+
+		/// <summary>
+		/// Computes and caches the gradient bounds across all segments in the series.
+		/// </summary>
+		RectF GetGradientBounds()
+		{
+			if (_gradientBoundsDirty)
+			{
+				if (Series is SplineSeries series)
+				{
+					_cachedGradientBounds = ChartUtils.CalculateGradientBoundsForSeries(series, StrokeWidth, includeControlPoints: true);
+				}
+
+				_gradientBoundsDirty = false;
+			}
+
+			return _cachedGradientBounds;
 		}
 
 		void IMarkerDependentSegment.DrawMarker(ICanvas canvas)
@@ -234,11 +367,26 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				var marker = series.MarkerSettings;
 				var fill = marker.Fill;
 				var type = marker.Type;
-				var rect = new Rect(X1 - (marker.Width / 2), Y1 - (marker.Height / 2), marker.Width, marker.Height);
+				_markerBounds = new Rect(X1 - (marker.Width / 2), Y1 - (marker.Height / 2), marker.Width, marker.Height);
 
-				canvas.SetFillPaint(fill == default(Brush) ? Fill : fill, rect);
+				canvas.SetFillPaint(fill == default(Brush) ? Fill : fill, _markerBounds);
 
-				series.DrawMarker(canvas, Index, type, rect);
+				series.DrawMarker(canvas, Index, type, _markerBounds);
+			}
+		}
+
+		void UpdateSemanticBounds()
+		{
+			if (Series is IMarkerDependent markerDependent && markerDependent.ShowMarkers && markerDependent.MarkerSettings != null)
+			{
+				SemanticBounds = _markerBounds;
+			}
+			else
+			{
+				// Create a small rect around the data point for semantic bounds
+				const float semanticPointSize = 10f;
+				float halfSize = semanticPointSize / 2f;
+				SemanticBounds = new RectF(this.X1 - halfSize, this.Y1 - halfSize, semanticPointSize, semanticPointSize);
 			}
 		}
 

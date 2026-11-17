@@ -80,7 +80,7 @@
                                 </Border.StrokeShape>
                                 <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
                                                         RippleBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
-                                                        VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                        VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <Label Text="Cancel" FontSize="14" FontFamily="Roboto-Medium" 
                                            TextColor="{AppThemeBinding Dark={StaticResource PrimaryBorder}, Light={StaticResource PrimaryBackgroundLight}}" CharacterSpacing="0.5"
                                             HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -97,7 +97,7 @@
                                 </Border.StrokeShape>
                                 <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
                                                         RippleBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
-                                                        VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                        VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <Label Text="Delete" FontSize="14" FontFamily="Roboto-Medium" 
                                            TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForeground}}" CharacterSpacing="0.5"
                                            HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -145,7 +145,7 @@
                                 </Border.StrokeShape>
                                 <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
                                                         RippleBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
-                                                        VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                        VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <Label Text="Cancel" FontSize="14" FontFamily="Roboto-Medium" 
                                            TextColor="{AppThemeBinding Dark={StaticResource PrimaryBorder}, Light={StaticResource PrimaryBackgroundLight}}" CharacterSpacing="0.5"
                                            HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -162,7 +162,7 @@
                                 </Border.StrokeShape>
                                 <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
                                                         RippleBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
-                                                        VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                                                        VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <Label Text="Block"  FontSize="14" FontFamily="Roboto-Medium" 
                                            TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForeground}}" CharacterSpacing="0.5"
                                            HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -212,7 +212,7 @@
                                 </Border.StrokeShape>
                                 <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
                             RippleBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
-                            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                            VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <Label Text="NO" FontSize="14" FontFamily="Roboto-Medium" 
                TextColor="{AppThemeBinding Dark={StaticResource PrimaryBorder}, Light={StaticResource PrimaryBackgroundLight}}" CharacterSpacing="0.5"
                HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -229,7 +229,7 @@
                                 </Border.StrokeShape>
                                 <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
                             RippleBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
-                            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                            VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <Label Text="YES" FontSize="14" FontFamily="Roboto-Medium" 
                TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForeground}}" CharacterSpacing="0.5"
                HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -330,7 +330,7 @@ BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight},
                             </Border.StrokeShape>
                             <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
                     RippleBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
-                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    VerticalOptions="Fill" HorizontalOptions="Fill">
                                 <Label Text="Add account" FontSize="14" FontFamily="Roboto-Medium" 
        TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForeground}}" CharacterSpacing="0.5"
        HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -399,7 +399,7 @@ BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight},
                             </Border.StrokeShape>
                             <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
              RippleBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
-             VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+             VerticalOptions="Fill" HorizontalOptions="Fill">
                                 <Label Text="OK" FontSize="14" FontFamily="Roboto-Medium" 
 TextColor="{AppThemeBinding Dark={StaticResource PrimaryBorder}, Light={StaticResource PrimaryBackgroundLight}}" CharacterSpacing="0.5"
 HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -754,7 +754,7 @@ HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
                                 </Border.StrokeShape>
                                 <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
                     RippleBackground="{AppThemeBinding Dark={StaticResource PrimaryBackground}, Light={StaticResource PrimaryBackgroundLight}}" 
-                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <Label Text="NO" FontSize="14" FontFamily="Roboto-Medium" 
        TextColor="{AppThemeBinding Dark={StaticResource PrimaryBorder}, Light={StaticResource PrimaryBackgroundLight}}" CharacterSpacing="0.5"
        HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
@@ -771,7 +771,7 @@ BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight},
                                 </Border.StrokeShape>
                                 <local:SfEffectsViewAdv HighlightBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
                     RippleBackground="{AppThemeBinding Light=#CFBCFF, Dark={StaticResource PrimaryBackgroundLight}}" 
-                    VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                    VerticalOptions="Fill" HorizontalOptions="Fill">
                                     <Label Text="YES" FontSize="14" FontFamily="Roboto-Medium" 
        TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForeground}}" CharacterSpacing="0.5"
        HorizontalTextAlignment="Center" VerticalTextAlignment="Center">

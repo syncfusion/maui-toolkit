@@ -29,7 +29,7 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 			Chart.Handler?.DisconnectHandler();
 		}
 
-		private void smartDataLabel_SelectedIndexChanged(object sender, EventArgs e)
+		private void smartDataLabel_SelectedIndexChanged(object? sender, EventArgs e)
 		{
 			var value = dataLabel.SelectedIndex;
 			switch (value)

@@ -397,8 +397,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
         internal List<double> YValues { get; set; } = new List<double>();
         internal List<float> XCoordinates { get; set; } = new List<float>();
         internal List<float> YCoordinates { get; set; } = new List<float>();
+		internal Rect SemanticBounds;
 
-        internal double XMin = double.PositiveInfinity;
+		internal double XMin = double.PositiveInfinity;
         internal double XMax = double.NegativeInfinity;
         internal double YMin = double.PositiveInfinity;
         internal double YMax = double.NegativeInfinity;
@@ -677,17 +678,62 @@ namespace Syncfusion.Maui.Toolkit.Charts
             return !Empty;
         }
 
-        #endregion
+		internal virtual Rect GetSemanticsBounds()
+		{
+			if (Empty || XCoordinates.Count < 2 || YCoordinates.Count < 2)
+			{
+				return Rect.Zero;
+			}
 
-        #region Public Methods
+			float minX = float.MaxValue;
+			float maxX = float.MinValue;
+			float minY = float.MaxValue;
+			float maxY = float.MinValue;
 
-        /// <summary>
-        /// Generates trackball point information for trendline intersections.
-        /// This method follows the pattern of CartesianSeries.GeneratePointInfos() method.
-        /// </summary>
-        /// <param name="nearestPoints">The nearest trendline intersection points</param>
-        /// <param name="pointInfos">The list to add trackball info to</param>
-        internal void GeneratePointInfo(List<Point> nearestPoints, List<TrackballPointInfo> pointInfos)
+			for (int i = 0; i < XCoordinates.Count; i++)
+			{
+				float x = XCoordinates[i];
+				float y = YCoordinates[i];
+
+				if (x < minX)
+					minX = x;
+				if (x > maxX)
+					maxX = x;
+				if (y < minY)
+					minY = y;
+				if (y > maxY)
+					maxY = y;
+			}
+
+			double expandSize = StrokeWidth / 2;
+
+			double width = maxX - minX + (expandSize * 2);
+			double height = maxY - minY + (expandSize * 2);
+
+			if (this is PowerTrendline || this is ExponentialTrendline || this is LogarithmicTrendline || this is PolynomialTrendline)
+			{
+				return new Rect(SemanticBounds.X, SemanticBounds.Y, width, SemanticBounds.Height);
+			}
+
+			if (width > 0 && height > 0)
+			{
+				return new Rect(minX - expandSize, minY - expandSize, width, height);
+			}
+
+			return Rect.Zero;
+		}
+
+		#endregion
+
+		#region Public Methods
+
+		/// <summary>
+		/// Generates trackball point information for trendline intersections.
+		/// This method follows the pattern of CartesianSeries.GeneratePointInfos() method.
+		/// </summary>
+		/// <param name="nearestPoints">The nearest trendline intersection points</param>
+		/// <param name="pointInfos">The list to add trackball info to</param>
+		internal void GeneratePointInfo(List<Point> nearestPoints, List<TrackballPointInfo> pointInfos)
         {
             if (!ShowTrackballLabel || Series == null || nearestPoints.Count == 0)
             {
@@ -1244,11 +1290,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                     BindingHelper.CreateBinding(nameof(TooltipInfo.FontAttributes),
                         getter: static (TooltipInfo tooltipInfo) => tooltipInfo.FontAttributes));
 
-#if NET10_0_OR_GREATER
                 return label;
-#else
-                return new ViewCell { View = label };
-#endif
             });
         }
 
@@ -1726,7 +1768,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 {
                     path.LineTo((float)nextPoint.X, (float)nextPoint.Y);
                 }
-            }
+
+				SemanticBounds = path.Bounds;
+			}
         }
 
         /// <summary>

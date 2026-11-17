@@ -7,6 +7,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 	/// </summary>
 	public partial class LineSegment : CartesianSegment, IMarkerDependentSegment
 	{
+		#region Gradient rendering fields
+
+		private RectF _cachedGradientBounds;
+		private bool _gradientBoundsDirty = true;
+
+		#endregion
+
 		#region Properties
 
 		/// <summary>
@@ -44,6 +51,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal float PreviousX2 { get; set; } = float.NaN;
 
 		internal float PreviousY2 { get; set; } = float.NaN;
+
+		#endregion
+
+		#region Marker bounds fields
+
+		internal Rect _markerBounds;
 
 		#endregion
 
@@ -117,7 +130,44 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal virtual void DrawLine(ICanvas canvas, float x1, float x2, float y1, float y2)
 		{
-			canvas.DrawLine(x1, y1, x2, y2);
+			// Check if fill is a gradient brush
+			if (Fill is GradientBrush && (StrokeDashArray == null || StrokeDashArray.Count == 0))
+			{
+				// For series-level gradients, compute bounds across all segments
+				RectF? gradientBounds = null;
+				if (ReferenceEquals(Fill, Series?.Fill))
+				{
+					gradientBounds = GetGradientBounds();
+				}
+
+				// Use gradient helper
+				canvas.DrawLineWithGradient(x1, y1, x2, y2, Fill, (float)StrokeWidth, gradientBounds);
+			}
+			else
+			{
+				canvas.StrokeColor = Fill.ToColor();
+				canvas.DrawLine(x1, y1, x2, y2);
+			}
+		}
+
+		/// <summary>
+		/// Gets the gradient bounds for all segments in this series.
+		/// Used to apply a unified gradient across all line segments.
+		/// </summary>
+		/// <returns>A RectF representing the bounding rectangle for gradient application.</returns>
+		internal RectF GetGradientBounds()
+		{
+			if (_gradientBoundsDirty)
+			{
+				if (Series is CartesianSeries series)
+				{
+					_cachedGradientBounds = ChartUtils.CalculateGradientBoundsForSeries(series, StrokeWidth, includeControlPoints: false);
+				}
+
+				_gradientBoundsDirty = false;
+			}
+
+			return _cachedGradientBounds;
 		}
 
 		/// <inheritdoc/>
@@ -127,6 +177,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				return;
 			}
+
+			// Invalidate gradient bounds cache when layout changes
+			_gradientBoundsDirty = true;
 
 			var xAxis = series.ActualXAxis;
 			var start = Math.Floor(xAxis.VisibleRange.Start);
@@ -140,6 +193,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				X2 = series.TransformToVisibleX(X2Pos, Y2Pos);
 				Y2 = series.TransformToVisibleY(X2Pos, Y2Pos);
 			}
+
+			UpdateSemanticBounds();
 		}
 
 		/// <summary>
@@ -192,6 +247,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			return new Rect(X1 - (markerWidth / 2), Y1 - (markerHeight / 2), markerWidth, markerHeight);
 		}
+		private void UpdateSemanticBounds()
+		{
+			if (Series is IMarkerDependent markerDependent && markerDependent.ShowMarkers && markerDependent.MarkerSettings != null)
+			{
+				// Use marker bounds for semantic accessibility
+				SemanticBounds = _markerBounds;
+			}
+			else
+			{
+				// Create a small rect around the data point for semantic bounds
+				// Use a default size that represents the clickable area for the point
+				const float semanticPointSize = 10f;
+				float halfSize = semanticPointSize / 2f;
+				SemanticBounds = new RectF(this.X1 - halfSize, this.Y1 - halfSize, semanticPointSize, semanticPointSize);
+			}
+		}
 
 		internal void SetPreviousData(float[] values)
 		{
@@ -214,10 +285,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				var fill = marker.Fill;
 				var type = marker.Type;
 
-				var rect = new Rect(X1 - (marker.Width / 2), Y1 - (marker.Height / 2), marker.Width, marker.Height);
+				_markerBounds = new Rect(X1 - (marker.Width / 2), Y1 - (marker.Height / 2), marker.Width, marker.Height);
 
-				canvas.SetFillPaint(fill == default(Brush) ? Fill : fill, rect);
-				series.DrawMarker(canvas, Index, type, rect);
+				canvas.SetFillPaint(fill == default(Brush) ? Fill : fill, _markerBounds);
+				series.DrawMarker(canvas, Index, type, _markerBounds);
 			}
 		}
 

@@ -142,10 +142,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// </summary>
 		bool _isCtrlPressed = false;
 
-		/// <summary>
-		/// Indicates the StrokeThickness of the entry.
-		/// </summary>
-		float _strokeThickness = 1 ;
 #endif
 
 #if ANDROID || WINDOWS
@@ -251,6 +247,18 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		/// </summary>
 		public static readonly BindableProperty BoxHeightProperty =
 			BindableProperty.Create(nameof(BoxHeight), typeof(double), typeof(SfOtpInput), 40.0, BindingMode.TwoWay, propertyChanged: OnBoxSizePropertyChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="StrokeThickness"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty StrokeThicknessProperty =
+			BindableProperty.Create(nameof(StrokeThickness), typeof(double), typeof(SfOtpInput), 1.0, BindingMode.TwoWay, propertyChanged: OnStrokeThicknessPropertyChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="FocusedStrokeThickness"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty FocusedStrokeThicknessProperty =
+			BindableProperty.Create(nameof(FocusedStrokeThickness), typeof(double), typeof(SfOtpInput), 2.0, BindingMode.TwoWay, propertyChanged: OnStrokeThicknessPropertyChanged);
 
 		#endregion
 
@@ -813,6 +821,46 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
             set => SetValue(BoxHeightProperty, value);
         }
 
+		/// <summary>
+		/// Gets or sets a value that defines the stroke thickness of each input field in the OTP input. 
+		/// </summary>
+		/// <value>
+		/// It accepts double values, and the default value is 1.
+		/// </value>
+		/// <example>
+		/// <code Lang="XAML"><![CDATA[
+		/// <otpInput:SfOtpInput StrokeThickness="1.5" />
+		/// ]]></code>
+		/// <code Lang="C#"><![CDATA[
+		/// otpInput.StrokeThickness = 1.5;
+		/// ]]></code>
+		/// </example>
+		public double StrokeThickness
+		{
+			get => (double)GetValue(StrokeThicknessProperty);
+			set => SetValue(StrokeThicknessProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets a value that defines the stroke thickness of the focused input field in the OTP input.
+		/// </summary>
+		/// <value>
+		///  It accepts double values, and the default value is 2.
+		/// </value>
+		/// <example>
+		/// <code Lang="XAML"><![CDATA[
+		/// <otpInput:SfOtpInput FocusedStrokeThickness="3" />
+		/// ]]></code>
+		/// <code Lang="C#"><![CDATA[
+		/// otpInput.FocusedStrokeThickness = 3;
+		/// ]]></code>
+		/// </example>
+		public double FocusedStrokeThickness
+		{
+			get => (double)GetValue(FocusedStrokeThicknessProperty);
+			set => SetValue(FocusedStrokeThicknessProperty, value);
+		}
+
         #endregion
 
         #region Event
@@ -1189,6 +1237,23 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 			}
 		}
 
+		/// <summary>
+		/// Invoked when the <see cref="StrokeThickness"/> or <see cref="FocusedStrokeThickness"/> property of the control is changed.
+		/// </summary>
+		/// <param name="bindable">The bindable object should be SfOtpInput.</param>
+		/// <param name="oldValue">The old value of the stroke thickness property.</param>
+		/// <param name="newValue">The new value of the stroke thickness property.</param>
+		static void OnStrokeThicknessPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SfOtpInput otpInput)
+			{
+				// Re-measure the control so MeasureContent returns a size that includes the new stroke
+				// thickness, preventing thick strokes from being clipped when no explicit height is set.
+				otpInput?.InvalidateMeasure();
+				otpInput?.InvalidateDrawable();
+			}
+		}
+
         /// <summary>
         /// Updates all OTP entry dimensions when BoxWidth or BoxHeight changes.
         /// </summary>
@@ -1384,11 +1449,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 
             var layout = new AbsoluteLayout();
 #if IOS
-#if NET10_0_OR_GREATER
             layout.SafeAreaEdges = SafeAreaEdges.None;
-#else
-            layout.IgnoreSafeArea = true;
-#endif
 
 #endif
 			layout.BindingContext = this;
@@ -1466,7 +1527,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
             ApplyEntrySize(otpEntry);
             otpEntry.BindingContext = this;
             otpEntry.SetBinding(OTPEntry.PlaceholderColorProperty, BindingHelper.CreateBinding(nameof(PlaceholderColor), getter: static (SfOtpInput otpInput) => otpInput.PlaceholderColor));
-            otpEntry.SetBinding(OTPEntry.TextColorProperty, BindingHelper.CreateBinding(nameof(TextColor), getter: static (SfOtpInput otpInput) => otpInput.TextColor));
+			otpEntry.SetBinding(OTPEntry.TextColorProperty, BindingHelper.CreateBinding(nameof(TextColor), getter: static (SfOtpInput otpInput) => otpInput.TextColor));
 
             return otpEntry;
         }
@@ -1478,15 +1539,8 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 		{
 			entry.MinimumWidthRequest = _entryWidth;
 			entry.WidthRequest = _entryWidth;
-
-#if WINDOWS
-			float height = (StylingMode == OtpInputStyle.Filled) ? _entryHeight - _strokeThickness : _entryHeight;
-#else
-			float height = _entryHeight;
-#endif
-
-			entry.MinimumHeightRequest = height;
-			entry.HeightRequest = height;
+			entry.MinimumHeightRequest = _entryHeight;
+			entry.HeightRequest = _entryHeight;
 		}
 
         /// <summary>
@@ -1598,7 +1652,6 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 							{
 								Value = new string(valueArray); 
 							}
-
 #else
 							Value = new string(valueArray); 
 #endif
@@ -1716,7 +1769,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
         /// <returns>Returns the stroke size for the OTP entry.</returns>
         float GetStrokeThickness(int index)
         {
-            return _otpEntries is not null && _otpEntries[index].IsFocused ? 2 : 1;
+            return _otpEntries is not null && _otpEntries[index].IsFocused ? (float)FocusedStrokeThickness : (float)StrokeThickness;
         }
 
 		/// <summary>
@@ -2429,11 +2482,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				{
 					if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
 					{
-#if NET10_0_OR_GREATER
 						previousPlatformView.ShouldChangeCharactersInRanges -= Handle_ShouldChangeCharactersInRanges;
-#else
-						previousPlatformView.ShouldChangeCharacters -= ValidateText;
-#endif
 					}
 					else
 					{
@@ -2463,11 +2512,7 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 				{
 					if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
 					{
-#if NET10_0_OR_GREATER
 						platformView.ShouldChangeCharactersInRanges += Handle_ShouldChangeCharactersInRanges;
-#else
-						platformView.ShouldChangeCharacters += ValidateText;
-#endif
 					}
 					else
 					{
@@ -2640,6 +2685,29 @@ namespace Syncfusion.Maui.Toolkit.OtpInput
 			InvalidateDrawable();
 
 			return base.ArrangeContent(bounds);
+		}
+
+		/// <summary>
+		/// Measures the content of the control. In Filled mode, extends the measured height by the
+		/// configured stroke thickness so the bottom border stroke is not clipped by the layout
+		/// container when no explicit height is provided.
+		/// </summary>
+		/// <param name="widthConstraint">The maximum width available for the content.</param>
+		/// <param name="heightConstraint">The maximum height available for the content.</param>
+		/// <returns>The measured size of the content.</returns>
+		/// <exclude/>
+		protected override Size MeasureContent(double widthConstraint, double heightConstraint)
+		{
+			Size measuredSize = base.MeasureContent(widthConstraint, heightConstraint);
+
+			if (StylingMode == OtpInputStyle.Filled)
+			{
+				double maxStrokeThickness = FocusedStrokeThickness > StrokeThickness
+					? FocusedStrokeThickness : StrokeThickness;
+				measuredSize.Height += maxStrokeThickness;
+			}
+
+			return measuredSize;
 		}
 
 		/// <summary>

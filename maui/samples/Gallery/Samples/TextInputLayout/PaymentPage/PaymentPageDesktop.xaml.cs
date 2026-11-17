@@ -28,7 +28,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 #endif
 		}
 
-		private void SubmitButton_Clicked(object sender, EventArgs e)
+		private void SubmitButton_Clicked(object? sender, EventArgs e)
 		{
 			PaymentPageDesktop.FieldNullCheck(PayNameField);
 			PaymentPageDesktop.FieldNullCheck(CardNumberField);
@@ -102,7 +102,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 
 		}
 
-		private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+		private void Entry_TextChanged(object? sender, TextChangedEventArgs e)
 		{
 			if (e.NewTextValue.Length == 4)
 			{
@@ -110,7 +110,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 			}
 		}
 
-		private void Entry2_TextChanged(object sender, TextChangedEventArgs e)
+		private void Entry2_TextChanged(object? sender, TextChangedEventArgs e)
 		{
 			if (e.NewTextValue.Length == 4)
 			{
@@ -118,7 +118,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 			}
 		}
 
-		private void Entry3_TextChanged(object sender, TextChangedEventArgs e)
+		private void Entry3_TextChanged(object? sender, TextChangedEventArgs e)
 		{
 			if (e.NewTextValue.Length == 4)
 			{

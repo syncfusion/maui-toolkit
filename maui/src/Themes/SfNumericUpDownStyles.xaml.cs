@@ -5,7 +5,6 @@ namespace Syncfusion.Maui.Toolkit.NumericUpDown;
 /// <summary>
 /// Initializes the SfNumericUpDownStyles class.
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SfNumericUpDownStyles : ResourceDictionary
 {
 	/// <summary>

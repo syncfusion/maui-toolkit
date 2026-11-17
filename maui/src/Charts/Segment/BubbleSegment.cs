@@ -108,6 +108,8 @@
 				canvas.StrokeColor = Stroke.ToColor();
 				canvas.DrawCircle(centerX, centerY, radius);
 			}
+
+			SemanticBounds = new RectF(centerX - radius, centerY - radius, radius * 2, radius * 2);
 		}
 
 		/// <summary>

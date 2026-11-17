@@ -34,7 +34,7 @@
                     <HorizontalStackLayout HeightRequest="46" WidthRequest="220" Spacing="15" HorizontalOptions="End" VerticalOptions="Center" BackgroundColor="{AppThemeBinding Light={StaticResource FilledInputBackgroundLight}, Dark={StaticResource FilledInputBackgroundDark}}" >
 
 						<StackLayout WidthRequest="42" HeightRequest="34" Margin="12,0,0,0" VerticalOptions="Center" x:Name="usStack">
-                            <Border VerticalOptions="FillAndExpand" x:Name="usBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Padding="2">
+                            <Border VerticalOptions="Fill" x:Name="usBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Padding="2">
 								<Border.GestureRecognizers>
 									<TapGestureRecognizer Tapped="USImageButton_Clicked"/>
 								</Border.GestureRecognizers>
@@ -44,7 +44,7 @@
 						</StackLayout>
 
 						<StackLayout WidthRequest="36" HeightRequest="28" x:Name="indiaStack">
-                            <Border VerticalOptions="FillAndExpand"  x:Name="indiaBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4"  Padding="2">
+              <Border VerticalOptions="Fill"  x:Name="indiaBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4"  Padding="2">
 								<Border.GestureRecognizers>
 									<TapGestureRecognizer Tapped="IndiaImageButton_Clicked"/>
 								</Border.GestureRecognizers>
@@ -53,7 +53,7 @@
 							</Border>
 						</StackLayout>
 						<StackLayout WidthRequest="36" HeightRequest="28" x:Name="russiaStack">
-                            <Border  VerticalOptions="FillAndExpand" x:Name="russiaBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Stroke="Transparent" Padding="2">
+              <Border  VerticalOptions="Fill" x:Name="russiaBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Stroke="Transparent" Padding="2">
 								<Border.GestureRecognizers>
 									<TapGestureRecognizer Tapped="RussiaImageButton_Clicked"/>
 								</Border.GestureRecognizers>
@@ -62,7 +62,7 @@
 							</Border>
 						</StackLayout>
 						<StackLayout WidthRequest="36" HeightRequest="28" x:Name="franceStack">
-                            <Border  VerticalOptions="FillAndExpand" x:Name="franceBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Stroke="Transparent" Padding="2">
+              <Border  VerticalOptions="Fill" x:Name="franceBorder" BackgroundColor="Transparent" StrokeShape="RoundRectangle 4" Stroke="Transparent" Padding="2">
 								<Border.GestureRecognizers>
 									<TapGestureRecognizer Tapped="FranceImageButton_Clicked"/>
 								</Border.GestureRecognizers>

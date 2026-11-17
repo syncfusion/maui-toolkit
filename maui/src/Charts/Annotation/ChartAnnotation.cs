@@ -124,6 +124,14 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			null,
 			OnAnnotationPropertyChanged);
 
+		/// <summary>
+		/// Identifies the <see cref="ZIndex"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="ZIndex"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty ZIndexProperty = BindableProperty.Create(nameof(ZIndex), typeof(int), typeof(ChartAnnotation), 0, BindingMode.Default, null, propertyChanged: OnAnnotationPropertyChanged);
+
 		#endregion
 
 		#region Public Properties
@@ -372,6 +380,68 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			set { SetValue(CoordinateUnitProperty, value); }
 		}
 
+		/// <summary>
+		/// Gets or sets the rendering order of the annotation relative to the chart series and other annotations.
+		/// </summary>
+		/// <remarks>
+		/// <para>Annotations with a higher <see cref="ZIndex"/> value render above annotations with a lower value, and annotations sharing the same value render in the order they were added.</para>
+		/// <para>An annotation with a negative <see cref="ZIndex"/> value renders below the chart series, while an annotation with a zero (default) or positive value renders above the chart series.</para>
+		/// </remarks>
+		/// <value>This property takes the <c>int</c> as its value. Its default value is 0.</value>
+		/// <example>
+		/// # [Xaml](#tab/tabid-13)
+		/// <code><![CDATA[
+		///     <chart:SfCartesianChart>
+		///
+		///     <!-- ... Eliminated for simplicity-->
+		///     <chart:SfCartesianChart.Annotations>
+		///          <!-- Renders below the series -->
+		///          <chart:RectangleAnnotation X1="10" Y1="20" X2="30" Y2="60" Fill="#30FFCC00" ZIndex="-1"/>
+		///
+		///          <!-- Renders above the series -->
+		///          <chart:LineAnnotation X1="25" Y1="0" X2="25" Y2="100" Stroke="Red" ZIndex="10"/>
+		///     </chart:SfCartesianChart.Annotations>
+		///
+		///     </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [C#](#tab/tabid-14)
+		/// <code><![CDATA[
+		///     SfCartesianChart chart = new SfCartesianChart();
+		///
+		///     // Eliminated for simplicity
+		///     var rectangleAnnotation = new RectangleAnnotation()
+		///     {
+		///         X1 = 10,
+		///         Y1 = 20,
+		///         X2 = 30,
+		///         Y2 = 60,
+		///         Fill = new SolidColorBrush(Color.FromArgb("#30FFCC00")),
+		///         ZIndex = -1,
+		///     };
+		///
+		///     var lineAnnotation = new LineAnnotation()
+		///     {
+		///         X1 = 25,
+		///         Y1 = 0,
+		///         X2 = 25,
+		///         Y2 = 100,
+		///         Stroke = new SolidColorBrush(Colors.Red),
+		///         ZIndex = 10,
+		///     };
+		///
+		///     chart.Annotations.Add(rectangleAnnotation);
+		///     chart.Annotations.Add(lineAnnotation);
+		/// ]]>
+		/// </code>
+		/// ***
+		/// </example>
+		public int ZIndex
+		{
+			get { return (int)GetValue(ZIndexProperty); }
+			set { SetValue(ZIndexProperty, value); }
+		}
+
 		#endregion
 
 		#region Constructor
@@ -431,6 +501,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal virtual Rect GetSemanticsBounds()
+		{
+			return new Rect();
+		}
 		internal virtual bool HitTest(Point touchPoint)
 		{
 			return false;
@@ -520,11 +594,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			if (bindable is ChartAnnotation annotation)
 			{
-				if (annotation is ShapeAnnotation shapeAnnotation)
-				{
-					shapeAnnotation.InitializeDynamicResource(shapeAnnotation);
-				}
-
 				annotation.Invalidate();
 			}
 		}

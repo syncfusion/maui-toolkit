@@ -38,7 +38,7 @@ public partial class Customization : SampleView
     /// </summary>
     /// <param name="sender">The sender object.</param>
     /// <param name="e">The event args.</param>
-    void OnTapGestureTapped(object sender, EventArgs e)
+    void OnTapGestureTapped(object? sender, EventArgs e)
     {
 #if ANDROID || IOS
         popup1.Reset();
@@ -54,7 +54,7 @@ public partial class Customization : SampleView
     /// </summary>
     /// <param name="sender">The sender object.</param>
     /// <param name="e">The event args.</param>
-    void OnItemTapGestureTapped(object sender, EventArgs e)
+    void OnItemTapGestureTapped(object? sender, EventArgs e)
     {
 #if ANDROID || IOS
         if (sender is Grid grid && grid.BindingContext != null && grid.BindingContext is ToDoDetails details)
@@ -80,7 +80,7 @@ public partial class Customization : SampleView
     /// </summary>
     /// <param name="sender">The sender object.</param>
     /// <param name="e">The event args.</param>
-    void OnDatePickerOkButtonClicked(object sender, EventArgs e)
+    void OnDatePickerOkButtonClicked(object? sender, EventArgs e)
     {
         if (sender is Syncfusion.Maui.Toolkit.Picker.SfDatePicker picker && _toDoDetails != null && picker.SelectedDate?.Date != null)
         {
@@ -104,7 +104,7 @@ public partial class Customization : SampleView
     /// </summary>
     /// <param name="sender">The sender object.</param>
     /// <param name="e">The event args.</param>
-    void OnDatePickerClosed(object sender, EventArgs e)
+    void OnDatePickerClosed(object? sender, EventArgs e)
     {
         _toDoDetails = null;
     }
@@ -114,7 +114,7 @@ public partial class Customization : SampleView
     /// </summary>
     /// <param name="sender">The sender object.</param>
     /// <param name="e">The event args.</param>
-    void OnDatePickerCancelButtonClicked(object sender, EventArgs e)
+    void OnDatePickerCancelButtonClicked(object? sender, EventArgs e)
     {
         if (sender is Syncfusion.Maui.Toolkit.Picker.SfDatePicker picker)
         {
@@ -128,11 +128,24 @@ public partial class Customization : SampleView
     /// </summary>
     /// <param name="sender">The sender object.</param>
     /// <param name="e">The event args.</param>
-    void OnPopupItemCreated(object sender, EventArgs e)
+    void OnPopupItemCreated(object? sender, EventArgs e)
     {
         if (BindingContext != null && BindingContext is DatePickerCustomizationViewModel bindingContext && sender is ToDoDetails details)
         {
             bindingContext.DataSource.Add(details);
+        }
+    }
+
+    /// <summary>
+    /// Method to handle the second popup item created event.
+    /// </summary>
+    /// <param name="sender">The sender object.</param>
+    /// <param name="e">The event args.</param>
+    void OnPopupItemCreated1(object? sender, EventArgs e)
+    {
+        if (BindingContext != null && BindingContext is DatePickerCustomizationViewModel bindingContext && sender is ToDoDetails details)
+        {
+            bindingContext.DataSource1.Add(details);
         }
     }
 }
@@ -146,6 +159,11 @@ public class DatePickerCustomizationViewModel : INotifyPropertyChanged
     /// The data source.
     /// </summary>
     ObservableCollection<ToDoDetails> _dataSource;
+
+    /// <summary>
+    /// The second data source.
+    /// </summary>
+    ObservableCollection<ToDoDetails> _dataSource1;
 
     /// <summary>
     /// Gets or sets the data source.
@@ -164,6 +182,22 @@ public class DatePickerCustomizationViewModel : INotifyPropertyChanged
     }
 
     /// <summary>
+    /// Gets or sets the second data source.
+    /// </summary>
+    public ObservableCollection<ToDoDetails> DataSource1
+    {
+        get
+        {
+            return _dataSource1;
+        }
+        set
+        {
+            _dataSource1 = value;
+            RaisePropertyChanged("DataSource1");
+        }
+    }
+
+    /// <summary>
     /// Method to raise the property changed event.
     /// </summary>
     /// <param name="propertyName">The property name.</param>
@@ -177,7 +211,17 @@ public class DatePickerCustomizationViewModel : INotifyPropertyChanged
     /// </summary>
     public DatePickerCustomizationViewModel()
     {
-        _dataSource = new ObservableCollection<ToDoDetails>()
+        _dataSource = CreateDataSource();
+        _dataSource1 = CreateDataSource();
+    }
+
+    /// <summary>
+    /// Creates a new collection containing the initial tasks.
+    /// </summary>
+    /// <returns>A new collection of task details.</returns>
+    static ObservableCollection<ToDoDetails> CreateDataSource()
+    {
+        return new ObservableCollection<ToDoDetails>()
         {
             new ToDoDetails() {Subject = "Get quote from travel agent", Date= DateTime.Now.Date},
             new ToDoDetails() {Subject = "Book flight ticket", Date= DateTime.Now.Date.AddDays(2)},

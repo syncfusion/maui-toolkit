@@ -60,7 +60,7 @@ public partial class GettingStarted : SampleView
     /// </summary>
     /// <param name="sender">The Sender.</param>
     /// <param name="e">The event args.</param>
-    void OnPickerSelectionChanged(object sender, PickerSelectionChangedEventArgs e)
+    void OnPickerSelectionChanged(object? sender, PickerSelectionChangedEventArgs e)
     {
         Syncfusion.Maui.Toolkit.Picker.SfPicker? picker = sender as Syncfusion.Maui.Toolkit.Picker.SfPicker;
         if (picker == null || picker.Columns == null || picker.Columns.Count == 0)
@@ -190,7 +190,7 @@ public partial class GettingStarted : SampleView
         }
     }
 
-    void OnClearButtonClicked(object sender, EventArgs e)
+    void OnClearButtonClicked(object? sender, EventArgs e)
     {
 #if WINDOWS || MACCATALYST
         labelStack.Children.Clear();

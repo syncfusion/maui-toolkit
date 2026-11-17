@@ -16,9 +16,13 @@ public partial class DataLabel : SampleView
         sunburstChart.Handler?.DisconnectHandler();
     }
 
-    private void ModePicker_SelectedIndexChanged(object sender, EventArgs e)
+    private void ModePicker_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        var picker = (MAUIPicker)sender;
+        if (sender is not MAUIPicker picker)
+        {
+            return;
+        }
+
         int selectedIndex = picker.SelectedIndex;
 
         if (selectedIndex == 0)
@@ -31,9 +35,13 @@ public partial class DataLabel : SampleView
         }
     }
 
-    private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+    private void Picker_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        var picker = (MAUIPicker)sender;
+        if (sender is not MAUIPicker picker)
+        {
+            return;
+        }
+
         int selectedIndex = picker.SelectedIndex;
 
         if (selectedIndex == 0)

@@ -1053,7 +1053,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     var dateTime = _selectedDate.Value;
                     int dateInex = _visibleDates.IndexOf(dateTime);
                     bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
-                    bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                    bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                     if (!isBlackoutDate && !isDisabledDate && dateInex != -1)
                     {
                         AddOrRemoveSelectionTemplate();
@@ -1554,7 +1554,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 }
 
                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
-                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
 
                 // The current date is today date and not a range then need to considered the today text style.
                 bool isTodayDate = todayDate.Date.Equals(dateTime.Date);
@@ -1842,7 +1842,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                             if (isSelectedDate)
                             {
                                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
-                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                                 if (!isBlackoutDate && !isDisabledDate)
                                 {
                                     DrawSelectionShape(canvas, highlightBounds, selectionRadius, cornerRadius, selectedDateBackground, centerPosition);
@@ -1860,7 +1860,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                             if (isSelectedDate)
                             {
                                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
-                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                                 if (!isBlackoutDate && !isDisabledDate)
                                 {
                                     DrawRangeSelection(canvas, highlightBounds, rangeSelectionStatus, rangeSelectionBackground, startRangeSelectionBackground, endRangeSelectionBackground, cornerRadius, isRTL, selectionRadius, circleSize, circleTopPosition, centerPosition, column);
@@ -1878,7 +1878,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                             if (isSelectedDate)
                             {
                                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
-                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                                 if (!isBlackoutDate && !isDisabledDate)
                                 {
                                     DrawRangeSelection(canvas, highlightBounds, multiRangeSelectionStatus, rangeSelectionBackground, startRangeSelectionBackground, endRangeSelectionBackground, cornerRadius, isRTL, selectionRadius, circleSize, circleTopPosition, centerPosition, column);
@@ -3058,7 +3058,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 }
 
                 string blackOutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates) ? SfCalendarResources.GetLocalizedString("Blackout Date") : string.Empty;
-                string disabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier) ? SfCalendarResources.GetLocalizedString("Disabled Date") : string.Empty;
+                string disabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode) ? SfCalendarResources.GetLocalizedString("Disabled Date") : string.Empty;
 				CalendarIconDetails? calendarSpecialDayIconDetails = GetSpecialDateIcon(dateTime);
                 string specialDate = calendarSpecialDayIconDetails == null ? string.Empty : SfCalendarResources.GetLocalizedString("Special Date");
                 string dateType = string.IsNullOrEmpty(specialDate) ? !string.IsNullOrEmpty(blackOutDate) ? blackOutDate : disabledDate : specialDate;

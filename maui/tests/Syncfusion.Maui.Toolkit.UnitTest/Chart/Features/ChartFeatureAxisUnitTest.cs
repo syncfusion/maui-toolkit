@@ -279,7 +279,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			}
 		}
 
-        [Fact]
+		[Fact]
         public void Test_RemoveRegisteredSeries()
         {
             var axis = new CategoryAxis() { Name = "X-Axis" };

@@ -5,7 +5,6 @@ namespace Syncfusion.Maui.Toolkit.Themes;
 /// <summary>
 /// OtpEntryStyles provides a set of predefined styles for SfOtpInput control.
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SfOtpInputStyles : ResourceDictionary
 {
 	/// <summary>

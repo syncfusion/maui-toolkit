@@ -51,17 +51,14 @@
                  Color="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}"/>
       </Grid>
 
-      <ListView ItemsSource="{Binding OrderInfoCollection}"
+      <CollectionView ItemsSource="{Binding OrderInfoCollection}"
                 Margin="4"
                 Grid.Row="1"
                 VerticalOptions="Fill"
                 VerticalScrollBarVisibility="Never"
-                RowHeight="60"
-                SelectionMode="None" 
-                SeparatorVisibility="None">
-        <ListView.ItemTemplate>
+                SelectionMode="None">
+        <CollectionView.ItemTemplate>
             <DataTemplate>
-              <ViewCell>
                 <Grid ColumnDefinitions="1*,1.2*,1.2*,2.2*,2.2*,2.2*" 
                       ColumnSpacing="8" 
                       HeightRequest="60">
@@ -92,10 +89,9 @@
                  Color="{AppThemeBinding Light={StaticResource PreviewAreaBorderLight}, Dark={StaticResource PreviewAreaBorderDark}}"/>
                   
                 </Grid>
-              </ViewCell>
             </DataTemplate>
-          </ListView.ItemTemplate>
-        </ListView>
+          </CollectionView.ItemTemplate>
+        </CollectionView>
 
     </Grid>
 

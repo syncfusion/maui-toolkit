@@ -96,7 +96,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// </summary>
         /// <param name="sender">Return the object</param>
         /// <param name="e">Event Arguments</param>
-        void comboBox_SelectionChanged(object sender, EventArgs e)
+        void comboBox_SelectionChanged(object? sender, EventArgs e)
         {
             if (sender is Microsoft.Maui.Controls.Picker picker && picker.SelectedItem is string theme)
             {

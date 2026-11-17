@@ -135,6 +135,8 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             get { return StrokeWidth > 0 && !IsEmpty(SunburstChartUtils.ToColor(Stroke)); }
         }
 
+		internal SunburstHierarchicalLevel? HierarchicalLevel { get; set; }
+
 		/// <summary>
 		/// Gets or sets a value indicating whether fade-in is needed for current segment.
 		/// </summary>

@@ -1154,12 +1154,11 @@ namespace Syncfusion.Maui.Toolkit.Expander
                 InvalidateForceLayout();
                 return;
             }
-#if !NET8_0_OR_GREATER
+
             if (Battery.Default.EnergySaverStatus == EnergySaverStatus.On)
             {
                 return;
             }
-#endif
 #endif
 			ApplyAnimation();
 		}
@@ -1262,13 +1261,11 @@ namespace Syncfusion.Maui.Toolkit.Expander
 
 			UpdateContentViewLayoutAndVisibility();
 
-#if !NET8_0_OR_GREATER
             // SfExpander does not expand or collapse when batterySaver mode is enabled
             if (DeviceInfo.Platform == DevicePlatform.Android && Battery.Default.EnergySaverStatus == EnergySaverStatus.On)
             {
                 InvalidateForceLayout();
             }
-#endif
 		}
 
 		/// <summary>

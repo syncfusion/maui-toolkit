@@ -1,6 +1,6 @@
-using Syncfusion.Maui.Toolkit.Charts;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using Syncfusion.Maui.Toolkit.Charts;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {

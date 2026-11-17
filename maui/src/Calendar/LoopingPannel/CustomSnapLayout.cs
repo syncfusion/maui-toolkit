@@ -92,10 +92,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             // Layout should clip its children to its bounds when the value is true.
             IsClippedToBounds = true;
 
-#if (IOS || ANDROID) && NET10_0
+#if IOS || ANDROID
             this.SafeAreaEdges = SafeAreaEdges.None;
-#elif IOS
-            IgnoreSafeArea = true;
 #endif
         }
 
@@ -523,8 +521,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             if (_calendarInfo.EnableSwipeSelection && (_calendarInfo.SelectionMode == CalendarSelectionMode.Range || _calendarInfo.SelectionMode == CalendarSelectionMode.MultiRange))
             {
                 // For Month view, don't need to navigate the view
-                // For Year view, don't need to navigate the view only when the allow view navigation is false. Because we won't select the range while allow view navigation is false.
-                if (_calendarInfo.View == CalendarView.Month || !_calendarInfo.AllowViewNavigation)
+                // For Year view, don't need to navigate the view only when the allow view navigation is false or at minimum display mode.
+                if (_calendarInfo.View == CalendarView.Month || !_calendarInfo.AllowViewNavigation || _calendarInfo.View == _calendarInfo.MinimumDisplayMode)
                 {
                     (Children[_currentChildIndex] as ICalendarView)?.HandleSwipeRangeSelection(status, point);
                     return;

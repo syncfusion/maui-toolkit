@@ -101,10 +101,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				Stroke = MinorGridLineStroke,
 				StrokeWidth = 0.5f
 			};
-			MinorTickStyle = new ChartAxisTickStyle
-			{
-				TickSize = 4d
-			};
+			SetDynamicResource(MinorTickLineStrokeProperty, "SfCartesianChartMinorTickLineStroke");
+			MinorTickStyle = new ChartAxisTickStyle() { Stroke = MinorTickLineStroke, TickSize = 4d };
 		}
 
 		#endregion
@@ -329,10 +327,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#endregion
 
 		internal static readonly BindableProperty MinorGridLineStrokeProperty = BindableProperty.Create(nameof(MinorGridLineStroke), typeof(Brush), typeof(RangeAxisBase), new SolidColorBrush(Color.FromArgb("#EDEFF1")), BindingMode.Default, null, null);
+		
 		internal Brush MinorGridLineStroke
 		{
 			get { return (Brush)GetValue(MinorGridLineStrokeProperty); }
 			set { SetValue(MinorGridLineStrokeProperty, value); }
+		}
+
+		internal static readonly BindableProperty MinorTickLineStrokeProperty = BindableProperty.Create(nameof(MinorTickLineStroke), typeof(Brush), typeof(RangeAxisBase), new SolidColorBrush(Color.FromArgb("#CAC4D0")), BindingMode.Default, null, null);
+
+		internal Brush MinorTickLineStroke
+		{
+			get { return (Brush)GetValue(MinorTickLineStrokeProperty); }
+			set { SetValue(MinorTickLineStrokeProperty, value); }
 		}
 
 		#region Methods
@@ -353,6 +360,24 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (MinorTickStyle != null)
 			{
 				SetInheritedBindingContext(MinorTickStyle, BindingContext);
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected override void OnParentSet()
+		{
+			base.OnParentSet();
+
+			if (MinorGridLineStyle != null)
+			{
+				MinorGridLineStyle.Parent = this.Parent;
+			}
+
+			if (MinorTickStyle != null)
+			{
+				MinorTickStyle.Parent = this.Parent;
 			}
 		}
 
@@ -440,7 +465,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (newValue is ChartAxisTickStyle tickStyle)
 				{
 					SetInheritedBindingContext(tickStyle, axis.BindingContext);
-					axis.MinorTickStyle.InitializeDynamicResource("MinorTickStyle");
 					tickStyle.PropertyChanged += axis.LineStyle_PropertyChanged;
 					tickStyle.Parent = axis.Parent;
 				}

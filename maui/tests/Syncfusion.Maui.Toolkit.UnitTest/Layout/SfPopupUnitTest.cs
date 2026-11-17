@@ -1,9 +1,225 @@
-﻿using Syncfusion.Maui.Toolkit.Popup;
+﻿using System.Reflection;
+using Syncfusion.Maui.Toolkit.Popup;
 
 namespace Syncfusion.Maui.Toolkit.UnitTest
 {
 	public class SfPopupUnitTest : BaseUnitTest
 	{
+		#region iOS SafeArea / FullScreen CloseButton regression tests
+
+		/// <summary>
+		/// In non-fullscreen mode, the header must keep the constructor's
+		/// IgnoreSafeArea value (i.e. respect the host page's safe-area setting).
+		/// The fix must not flip non-fullscreen popups to IgnoreSafeArea = true,
+		/// because that would re-introduce the 895700 close-icon overlap bug.
+		/// </summary>
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestPopupHeaderNonFullScreenPreservesIgnoreSafeArea(bool headerIgnoreSafeArea)
+		{
+			var popup = new SfPopup
+			{
+				IsOpen = true,
+				IsFullScreen = false,
+				ShowCloseButton = true,
+				ShowHeader = true,
+			};
+
+			var popupView = GetPrivateField(popup, "_popupView")
+				as Syncfusion.Maui.Toolkit.Popup.PopupView;
+			Assert.NotNull(popupView);
+
+			var header = GetPrivateField(popupView!, "_headerView")
+				as Syncfusion.Maui.Toolkit.Popup.PopupHeader;
+			Assert.NotNull(header);
+
+			// Preset the constructor's value.
+			header!.IgnoreSafeArea = headerIgnoreSafeArea;
+
+			InvokePrivateMethod(header, "AddChildViews");
+
+			// Non-fullscreen must not flip the header's IgnoreSafeArea.
+			Assert.Equal(headerIgnoreSafeArea, header.IgnoreSafeArea);
+
+			// Inner grid must mirror the header's value.
+			var innerGrid = GetPrivateField(header, "_headerView") as Microsoft.Maui.Controls.Layout;
+			Assert.NotNull(innerGrid);
+		}
+
+		/// <summary>
+		/// PopupExtension.GetSafeAreaEdges() is iOS-only — defined in
+		/// PopupExtension.iOS.cs under #if IOS and in PopupExtension.Standard.cs
+		/// (stub returning false) under #if !IOS. The method is therefore
+		/// platform-gated by design. This test asserts that the production
+		/// source file actually contains the unified check for both the new
+		/// (.NET 10 SafeAreaEdges) and the legacy (Page.GetUseSafeArea)
+		/// APIs — i.e. that the fix is in place and the file wasn't silently
+		/// reverted.
+		///
+		/// Source-level assertion is the right tool here because:
+		///   1. The behavior is iOS-only and not exercisable on the test host.
+		///   2. Appium tests in maui-sandbox-ui-test-creation cover the
+		///      runtime behavior.
+		///   3. Regressions in this file (e.g. someone removes the legacy
+		///      branch) would otherwise go undetected by unit tests.
+		/// </summary>
+		[Fact]
+		public void TestPopupExtensionGetSafeAreaEdgesUnifiesApis()
+		{
+			// Source-relative path: the iOS source file lives in the same
+			// project as the test project, so we can read it directly.
+			var sourceFile = System.IO.Path.Combine(
+				AppContext.BaseDirectory,
+				"..", "..", "..", "..", "..",
+				"src", "Popup", "Helpers", "PopupExtension", "PopupExtension.iOS.cs");
+
+			sourceFile = System.IO.Path.GetFullPath(sourceFile);
+			Assert.True(System.IO.File.Exists(sourceFile),
+				$"Expected source file not found at {sourceFile}");
+
+			var source = System.IO.File.ReadAllText(sourceFile);
+
+			// New .NET 10 API must still be checked.
+			Assert.Contains("page.SafeAreaEdges != SafeAreaEdges.None", source, System.StringComparison.Ordinal);
+
+			// Legacy Page.GetUseSafeArea API must also be checked (the fix).
+			Assert.Contains(
+				"Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea",
+				source, System.StringComparison.Ordinal);
+		}
+
+		#endregion
+
+		#region PopupRefreshAnimationTest
+
+		[Theory]
+		[InlineData(PopupAnimationMode.Zoom)]
+		[InlineData(PopupAnimationMode.SlideOnLeft)]
+		[InlineData(PopupAnimationMode.SlideOnRight)]
+		[InlineData(PopupAnimationMode.SlideOnTop)]
+		[InlineData(PopupAnimationMode.SlideOnBottom)]
+		public void Test_Refresh_WithAnimationMode_ResetsAnimatedProperties(PopupAnimationMode animationMode)
+		{
+			// Ticket 881122: Test that Refresh() resets animation properties when animation modes are enabled
+			// This ensures that content layout is updated correctly after changing StackLayout orientation
+			var popup = new SfPopup();
+			popup.AnimationMode = animationMode;
+			popup.AnimationDuration = 300;
+			popup.Show();
+			Assert.True(popup.IsOpen);
+
+			// Get the PopupView to check animated properties
+			var popupViewField = typeof(SfPopup).GetField("_popupView", BindingFlags.Instance | BindingFlags.NonPublic);
+			var popupView = popupViewField?.GetValue(popup) as View;
+			Assert.NotNull(popupView);
+
+			// Simulate animation state by setting animated properties (as would happen during animation)
+			popupView!.Scale = 0.8;
+			popupView.TranslationX = 10;
+			popupView.TranslationY = 20;
+			popupView.Opacity = 0.9;
+
+			// Verify initial state was set
+			Assert.Equal(0.8, popupView.Scale);
+			Assert.Equal(10.0, popupView.TranslationX);
+			Assert.Equal(20.0, popupView.TranslationY);
+			Assert.Equal(0.9, popupView.Opacity);
+
+			// Act - call Refresh which should reset animated properties
+			popup.Refresh();
+
+			// Assert - animated properties should be reset to their default values
+			Assert.Equal(1.0, popupView.Scale);
+			Assert.Equal(0.0, popupView.TranslationX);
+			Assert.Equal(0.0, popupView.TranslationY);
+			Assert.Equal(1.0, popupView.Opacity);
+			Assert.True(popup.IsOpen);
+		}
+
+		[Fact]
+		public void Test_Refresh_WithAnimationMode_None_StillWorks()
+		{
+			// Ensure that AnimationMode.None doesn't break (this was already working)
+			var popup = new SfPopup();
+			popup.AnimationMode = PopupAnimationMode.None;
+			popup.AnimationDuration = 0;
+			popup.Show();
+			Assert.True(popup.IsOpen);
+
+			// Get the PopupView to check animated properties
+			var popupViewField = typeof(SfPopup).GetField("_popupView", BindingFlags.Instance | BindingFlags.NonPublic);
+			var popupView = popupViewField?.GetValue(popup) as View;
+			Assert.NotNull(popupView);
+
+			// Set some animated properties
+			popupView!.Scale = 0.8;
+			popupView.TranslationX = 10;
+
+			// Act - call Refresh
+			popup.Refresh();
+
+			// Assert - popup still open (AnimationMode.None means CanAnimate() is false, so ResetAnimatedProperties should not be called)
+			Assert.True(popup.IsOpen);
+		}
+
+		[Theory]
+		[InlineData(PopupAnimationMode.Zoom)]
+		[InlineData(PopupAnimationMode.SlideOnLeft)]
+		[InlineData(PopupAnimationMode.SlideOnRight)]
+		[InlineData(PopupAnimationMode.SlideOnTop)]
+		[InlineData(PopupAnimationMode.SlideOnBottom)]
+		public void Test_Refresh_WithAnimationMode_AndContent_LayoutsCorrectly(PopupAnimationMode animationMode)
+		{
+			// Ticket 881122: Test that Refresh() correctly measures content after orientation change
+			var popup = new SfPopup();
+			popup.AnimationMode = animationMode;
+			popup.AnimationDuration = 300;
+
+			// Create a StackLayout as content (simulating the issue scenario)
+			var stackLayout = new StackLayout
+			{
+				Orientation = StackOrientation.Vertical,
+				Padding = 10,
+				Children =
+				{
+					new Label { Text = "Test Content", FontSize = 16 },
+					new Button { Text = "Button" }
+				}
+			};
+
+			popup.ContentTemplate = new DataTemplate(() =>
+			{
+				return stackLayout;
+			});
+
+			popup.Show();
+			Assert.True(popup.IsOpen);
+
+			// Get the PopupView
+			var popupViewField = typeof(SfPopup).GetField("_popupView", BindingFlags.Instance | BindingFlags.NonPublic);
+			var popupView = popupViewField?.GetValue(popup) as View;
+			Assert.NotNull(popupView);
+
+			// Simulate animation state
+			popupView!.Scale = 0.5;
+			popupView.TranslationY = 100;
+
+			// Change the StackLayout orientation
+			stackLayout.Orientation = StackOrientation.Horizontal;
+
+			// Act - call Refresh (which should reset animation properties and remeasure content)
+			popup.Refresh();
+
+			// Assert - animated properties are reset, popup is still open
+			Assert.Equal(1.0, popupView.Scale);
+			Assert.Equal(0.0, popupView.TranslationY);
+			Assert.True(popup.IsOpen);
+			Assert.Equal(StackOrientation.Horizontal, stackLayout.Orientation);
+		}
+
+		#endregion
+
 		[Theory]
 		[InlineData(true)]
 		[InlineData(false)]

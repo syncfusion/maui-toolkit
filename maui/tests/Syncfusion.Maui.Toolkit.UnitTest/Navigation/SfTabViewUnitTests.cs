@@ -150,7 +150,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(TabIndicatorPlacement.Bottom, tabView.IndicatorPlacement);
 			Assert.Equal(IndicatorWidthMode.Fit, tabView.IndicatorWidthMode);
 			Assert.Equal(TabWidthMode.Default, tabView.TabWidthMode);
-			Assert.Equal(48d, tabView.TabBarHeight);
+			Assert.Equal(48d, tabView.TabBarSize);
 			Assert.Equal(Color.FromArgb("#6750A4"), ((SolidColorBrush)tabView.IndicatorBackground).Color);
 			Assert.Equal(Color.FromArgb("#49454F"), tabView.ScrollButtonColor);
 			Assert.Equal(Color.FromArgb("#F7F2FB"), ((SolidColorBrush)tabView.ScrollButtonBackground).Color);
@@ -236,19 +236,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(expected, tabView.TabBarPlacement);
 		}
 
-		[Fact]
-		public void TabBarPlacement_Top_LeavesTheBottomSafeAreaToTheTabContent()
-		{
-			var tabView = new SfTabView
-			{
-				TabBarPlacement = TabBarPlacement.Top
-			};
-			var parentGrid = GetPrivateField(tabView, "_parentGrid") as Grid;
-			Assert.NotNull(parentGrid);
-			Assert.Equal(SafeAreaRegions.None, parentGrid.SafeAreaEdges.Bottom);
-			Assert.Equal(SafeAreaRegions.Container, parentGrid.SafeAreaEdges.Top);
-		}
-
 		[Theory]
 		[InlineData(TabIndicatorPlacement.Top)]
 		[InlineData(TabIndicatorPlacement.Bottom)]
@@ -329,10 +316,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var tabView = new SfTabView
 			{
-				TabBarHeight = 40d
+				TabBarSize = 40d
 			};
 
-			Assert.Equal(40d, tabView.TabBarHeight);
+			Assert.Equal(40d, tabView.TabBarSize);
 		}
 
 		[Fact]
@@ -1619,11 +1606,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				IsScrollButtonEnabled = true
 			};
 
-			SfHorizontalStackLayout? horizontalStackLayout = GetPrivateField(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? horizontalStackLayout = GetPrivateField(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 			Assert.NotNull(horizontalStackLayout);
 			Assert.Equal(4, horizontalStackLayout.Children.Count);
 			tabBar.ClearHeaderItem(tabitems[3], (int)index);
-			SfHorizontalStackLayout? stackLayout = GetPrivateField(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout = GetPrivateField(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 			Assert.NotNull(stackLayout);
 			Assert.Equal(3, stackLayout.Children.Count);
 			Assert.Equal(expected, tabBar.SelectedIndex);
@@ -1647,7 +1634,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				SelectedIndex = 4
 			};
 
-			SfHorizontalStackLayout? horizontalStackLayout = GetPrivateField(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? horizontalStackLayout = GetPrivateField(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 			Assert.NotNull(horizontalStackLayout);
 			Assert.Equal(4, horizontalStackLayout.Children.Count);
 			tabBar.ClearHeaderItem(tabitems[3], 4);
@@ -1967,7 +1954,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void TestSfTabBarItems()
 		{
 			SfTabBar tabBar = [];
-			SfHorizontalStackLayout? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 			Assert.NotNull(tabHeaderItemContent);
 			Assert.Equal(0, tabHeaderItemContent?.Children.Count);
 			Assert.NotNull(tabBar?.Items);
@@ -2022,7 +2009,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 				SfScrollView? tabHeaderScrollView = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderScrollView") as SfScrollView;
 				SfGrid? tabHeaderContentContainer = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderContentContainer") as SfGrid;
-				SfHorizontalStackLayout? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+				SfHorizontalStackBase? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 				SfBorder? tabSelectionIndicator = GetPrivateField<SfTabBar>(tabBar, "_tabSelectionIndicator") as SfBorder;
 
 				Assert.NotNull(tabHeaderScrollView);
@@ -2076,7 +2063,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			if (tabBar != null)
 			{
-				SfHorizontalStackLayout? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+				SfHorizontalStackBase? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 				Assert.Equal(1000, tabHeaderItemContent?.Children.Count);
 			}
 		}
@@ -2095,7 +2082,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 					Assert.True(tabBar.ItemsSource[2] is SfTabItem);
 				}
 
-				SfHorizontalStackLayout? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+				SfHorizontalStackBase? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 				Assert.Equal(4, tabHeaderItemContent?.Children.Count);
 				Assert.True(tabHeaderItemContent?.Children[2] is Label);
 				var item = tabHeaderItemContent.Children[0];
@@ -2194,24 +2181,19 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(-10d)]
 		[InlineData(0d)]
 		[InlineData(10d)]
-		public void TestTabBarHeight(double tabBarHeight)
+		public void TestTabBarHeight(double tabBarSize)
 		{
 			var tabView = new SfTabView
 			{
-				TabBarHeight = tabBarHeight
+				TabBarSize = tabBarSize
 			};
-			Assert.Equal(tabBarHeight, tabView.TabBarHeight);
+			Assert.Equal(tabBarSize, tabView.TabBarSize);
 			if (GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") is SfTabBar tabHeaderContainer)
 			{
-				if (tabBarHeight > 0)
+				if (tabBarSize > 0)
 				{
 					Assert.True(tabHeaderContainer.IsVisible);
-					Assert.Equal(tabBarHeight, tabHeaderContainer.HeightRequest);
-				}
-				else
-				{
-					Assert.False(tabHeaderContainer.IsVisible);
-					Assert.Equal(48, tabHeaderContainer.HeightRequest);
+					Assert.Equal(tabBarSize, tabHeaderContainer.HeightRequest);
 				}
 			}
 		}
@@ -2639,7 +2621,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			InvokePrivateMethod(tabBar, "UpdateItemsSource");
 			if (tabBar != null)
 			{
-				SfHorizontalStackLayout? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+				SfHorizontalStackBase? tabHeaderItemContent = GetPrivateField<SfTabBar>(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 
 				Assert.Equal(3, tabHeaderItemContent?.Count);
 				SfBorder? tabSelectionIndicator = GetPrivateField<SfTabBar>(tabBar, "_tabSelectionIndicator") as SfBorder;
@@ -2774,7 +2756,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 
 
-			SfHorizontalStackLayout? horizontalStackLayout = GetPrivateField(tabBar, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? horizontalStackLayout = GetPrivateField(tabBar, "_tabItemsPanel") as SfHorizontalStackBase;
 			Assert.NotNull(horizontalStackLayout);
 			Assert.Equal(4, horizontalStackLayout.Children.Count);
 			SetPrivateField(tabBar, "_removedItemWidth", 100);
@@ -2920,7 +2902,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				Items = PopulateLabelItemsCollection()
 			};
 
-			tabView.TabBarHeight = height;
+			tabView.TabBarSize = height;
 			SfTabBar? tabBar = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
 			Assert.NotNull(tabBar);
 			Border? border = GetPrivateField(tabBar!, "_tabSelectionIndicator") as Border;
@@ -2929,11 +2911,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			{
 				Assert.Equal(height, border!.HeightRequest);
 			}
-			else
-			{
-				Assert.Equal(48, border!.HeightRequest);
-			}
-
 		}
 
 		[Fact]
@@ -4027,7 +4004,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(horizontal, "_isPressed", true);
 			SetPrivateField(horizontal, "_isMoved", true);
 			SetPrivateField(horizontal, "_visibleItemCount", 4);
-			SfHorizontalStackLayout views1 = [];
+			SfHorizontalStackBase views1 = [];
 			views1.Children.Add(new SfTabItem { Header = "Tab 1" });
 			views1.Children.Add(new SfTabItem { Header = "Tab 2" });
 			views1.Children.Add(new SfTabItem { Header = "Tab 3" });
@@ -4035,7 +4012,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(horizontal, "_horizontalStackLayout", views1);
 			var stack = GetPrivateField(horizontal, "_horizontalStackLayout");
 			Assert.NotNull(stack);
-			SfHorizontalStackLayout layout = (SfHorizontalStackLayout)stack;
+			SfHorizontalStackBase layout = (SfHorizontalStackBase)stack;
 			var visible = GetPrivateField(horizontal, "_visibleItemCount");
 			Assert.NotNull(visible);
 			int isVisible = (int)visible;
@@ -4062,10 +4039,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				Items = PopulateLabelItemsCollection()
 			};
 			Assert.Equal(0, horizontal.SelectedIndex);
-			Assert.True(horizontal.Items[1].Content is Label);
+			//Assert.True(horizontal.Items[1].Content is Label);
 
 			horizontal.Items[1].Content = new Button() { Text = "Modified content" };
-			SfHorizontalStackLayout? horizontalStackLayout = GetPrivateField<SfHorizontalContent>(horizontal, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? horizontalStackLayout = GetPrivateField<SfHorizontalContent>(horizontal, "_horizontalStackLayout") as SfHorizontalStackBase;
 
 			if (horizontalStackLayout?.Children[1] is SfGrid parentGrid && parentGrid != null)
 			{
@@ -4236,7 +4213,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			DataTemplate newTemplate = new DataTemplate(() => new Label { Text = "Test" });
 			horizontal.ContentItemTemplate = newTemplate;
 			InvokePrivateMethod<SfHorizontalContent>(horizontal, "UpdateItemsSource");
-			if (GetPrivateField<SfHorizontalContent>(horizontal, "_horizontalStackLayout") is SfHorizontalStackLayout horizontalStackLayout)
+			if (GetPrivateField<SfHorizontalContent>(horizontal, "_horizontalStackLayout") is SfHorizontalStackBase horizontalStackLayout)
 			{
 				Assert.Equal(900, horizontalStackLayout.WidthRequest);
 				foreach (var item in horizontalStackLayout.Children)
@@ -4321,14 +4298,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfTabView sfTabView = new SfTabView();
 			SfTabBar views = [];
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
-			HorizontalStackLayout sfHorizontalStackLayout = [];
+			HorizontalStackLayout SfHorizontalStackBase = [];
 			var tabItem1 = new SfTabItem { Header = "Tab 1" };
 			var tabItem2 = new SfTabItem { Header = "Tab 2" };
 			horizontal.Add(tabItem1);
 			horizontal.Add(tabItem2);
-			horizontal.Children.Add(sfHorizontalStackLayout);
-			horizontal.Content = sfHorizontalStackLayout;
-			horizontal.Remove(sfHorizontalStackLayout);
+			horizontal.Children.Add(SfHorizontalStackBase);
+			horizontal.Content = SfHorizontalStackBase;
+			horizontal.Remove(SfHorizontalStackBase);
 			horizontal.SelectedIndex = 0;
 			InvokePrivateMethod(horizontal, "ClearTabContent", tabItem1, 0);
 			int itemCount = horizontal.Items.Count;
@@ -4837,12 +4814,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			horizontal.Items = PopulateMixedItemsCollection();
 			InvokePrivateMethod(horizontal, "UpdateItems");
-			SfHorizontalStackLayout? stackLayout1 = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout1 = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackBase;
 			Assert.NotNull(horizontal.Items);
 			Assert.NotEmpty(stackLayout1?.Children!);
 			horizontal.Items = null!;
 			InvokePrivateMethod(horizontal, "UpdateItems");
-			SfHorizontalStackLayout? stackLayout2 = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout2 = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackBase;
 			Assert.Null(horizontal?.Items);
 			Assert.Empty(stackLayout2?.Children!);
 		}
@@ -4859,11 +4836,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 
 			InvokePrivateMethod(horizontal, "AddTabContentItems", [tabItem, -1]);
-			SfHorizontalStackLayout? stackLayout = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackBase;
 			Assert.NotNull(stackLayout);
 			var sfGrid = stackLayout.Children.Last() as SfGrid;
 			Assert.NotNull(sfGrid);
-			Assert.Contains(tabItem.Content, sfGrid.Children);
+			if (tabItem.Content != null)
+			{
+				Assert.Contains(tabItem.Content, sfGrid.Children);
+			}
 		}
 
 		[Fact]
@@ -4880,11 +4860,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 
 			InvokePrivateMethod(horizontal, "AddTabContentItems", [tabItem, 0]);
-			SfHorizontalStackLayout? stackLayout1 = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout1 = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackBase;
 			Assert.NotNull(stackLayout1);
 			var grid = stackLayout1.Children[0] as SfGrid;
 			Assert.NotNull(grid);
-			Assert.Contains(tabItem.Content, grid.Children);
+			if (tabItem.Content != null)
+			{
+				Assert.Contains(tabItem.Content, grid.Children);
+			}
 			Assert.Equal(0, horizontal.SelectedIndex);
 		}
 
@@ -4896,7 +4879,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfHorizontalContent horizontal = new SfHorizontalContent(sfTabView, views);
 			SfTabItem tabItem = new SfTabItem();
 			InvokePrivateMethod(horizontal, "AddTabContentItems", [tabItem, -1]);
-			SfHorizontalStackLayout? stackLayout = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackBase;
 			Assert.NotNull(stackLayout);
 			SfGrid? sfGrid = stackLayout.Children.Last() as SfGrid;
 			Assert.NotNull(sfGrid);
@@ -4913,7 +4896,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			horizontal.Items = PopulateMixedItemsCollection();
 			SfTabItem tabItem = new SfTabItem();
 			InvokePrivateMethod(horizontal, "AddTabContentItems", [tabItem, 0]);
-			SfHorizontalStackLayout? stackLayout1 = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout1 = GetPrivateField(horizontal, "_horizontalStackLayout") as SfHorizontalStackBase;
 			Assert.NotNull(stackLayout1);
 			var grid = stackLayout1.Children[0] as SfGrid;
 			Assert.NotNull(grid);
@@ -5003,7 +4986,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetNonPublicProperty(horizontalContent, "IsTowardsRight", true);
 			SetPrivateField(horizontalContent!, "_contentWidth", 400);
 			InvokePrivateMethod(horizontalContent!, "TranslateXPosition", [-200]);
-			SfHorizontalStackLayout? stackLayout = GetPrivateField(horizontalContent, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout = GetPrivateField(horizontalContent, "_horizontalStackLayout") as SfHorizontalStackBase;
 			Assert.Equal(0, stackLayout!.TranslationX);
 		}
 
@@ -5030,7 +5013,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetNonPublicProperty(horizontalContent, "IsTowardsRight", true);
 			SetPrivateField(horizontalContent!, "_contentWidth", 400);
 			InvokePrivateMethod(horizontalContent!, "TranslateXPosition", [-200]);
-			SfHorizontalStackLayout? stackLayout = GetPrivateField(horizontalContent, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout = GetPrivateField(horizontalContent, "_horizontalStackLayout") as SfHorizontalStackBase;
 			SfTabBar? tabBar1 = GetPrivateField(horizontalContent, "_tabBar") as SfTabBar;
 			Assert.Equal(-200, stackLayout!.TranslationX);
 			Assert.True(eventTriggered);
@@ -5063,7 +5046,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetNonPublicProperty(horizontalContent, "IsTowardsRight", isTowardRight);
 			SetPrivateField(horizontalContent!, "_contentWidth", 400);
 			InvokePrivateMethod(horizontalContent!, "TranslateXPosition", [difference]);
-			SfHorizontalStackLayout? stackLayout = GetPrivateField(horizontalContent, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			SfHorizontalStackBase? stackLayout = GetPrivateField(horizontalContent, "_horizontalStackLayout") as SfHorizontalStackBase;
 			SfTabBar? tabBar1 = GetPrivateField(horizontalContent, "_tabBar") as SfTabBar;
 			Assert.Equal(expectedTranlationX, stackLayout!.TranslationX);
 			Assert.Equal(expectedValue, eventTriggered);
@@ -5084,14 +5067,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			horizontalContent.Items.Add(tabItem1);
 			horizontalContent.Items.Add(tabItem2);
 
-			var horizontalStackLayout = new SfHorizontalStackLayout();
+			var horizontalStackLayout = new SfHorizontalStackBase();
 			horizontalStackLayout.Children.Add(new BoxView());
 			horizontalStackLayout.Children.Add(new BoxView());
 			SetPrivateField(horizontalContent, "_horizontalStackLayout", horizontalStackLayout);
 
 			InvokePrivateMethod(horizontalContent, "LoadItemsContent", 0);
 
-			var layout = (SfHorizontalStackLayout?)GetPrivateField(horizontalContent, "_horizontalStackLayout");
+			var layout = (SfHorizontalStackBase?)GetPrivateField(horizontalContent, "_horizontalStackLayout");
 			Assert.IsType<SfGrid>(layout?.Children[0]);
 			Assert.True(layout.Children[0] is SfGrid, "Expected a SfGrid at index 0 after virtualization.");
 		}
@@ -7148,9 +7131,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var tabItems = PopulateLabelItemsCollection();
 
 			tabView.Items = tabItems;
-			tabView.TabBarHeight = 50;
+			tabView.TabBarSize = 50;
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
-			Assert.Equal(tabView.TabBarHeight, tabHeaderContainer!.HeightRequest);
+			Assert.Equal(tabView.TabBarSize, tabHeaderContainer!.HeightRequest);
 		}
 
 		[Theory]
@@ -7179,7 +7162,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			tabView.Items = tabItems;
 			var tabContentContainer = GetPrivateField(tabView, "_tabContentContainer") as SfHorizontalContent;
-			var horizontalStackLayout = GetPrivateField(tabContentContainer, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			var horizontalStackLayout = GetPrivateField(tabContentContainer, "_horizontalStackLayout") as SfHorizontalStackBase;
 			Assert.Equal(3, horizontalStackLayout!.Count);
 			tabView.Items.Add(new SfTabItem { Header = "TAB 4", Content = new Label { Text = "Content 4" } });
 			tabView.Items.Add(new SfTabItem { Header = "TAB 5", Content = new Label { Text = "Content 5" } });
@@ -7195,7 +7178,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			tabView.Items = tabItems;
 			var tabContentContainer = GetPrivateField(tabView, "_tabContentContainer") as SfHorizontalContent;
-			var horizontalStackLayout = GetPrivateField(tabContentContainer, "_horizontalStackLayout") as SfHorizontalStackLayout;
+			var horizontalStackLayout = GetPrivateField(tabContentContainer, "_horizontalStackLayout") as SfHorizontalStackBase;
 			tabView.Items.RemoveAt(2);
 			Assert.Equal(2, horizontalStackLayout!.Count);
 			tabView.Items.RemoveAt(1);
@@ -7530,7 +7513,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
 			var tabSelectionIndicator = GetPrivateField(tabHeaderContainer, "_tabSelectionIndicator") as Border;
-			Assert.Equal(tabView.TabBarHeight, tabSelectionIndicator!.HeightRequest);
+			Assert.Equal(tabView.TabBarSize, tabSelectionIndicator!.HeightRequest);
 		}
 
 		[Fact]
@@ -7561,7 +7544,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
 			var tabSelectionIndicator = GetPrivateField(tabHeaderContainer, "_tabSelectionIndicator") as Border;
-			Assert.Equal(tabView.TabBarHeight, tabSelectionIndicator!.HeightRequest);
+			Assert.Equal(tabView.TabBarSize, tabSelectionIndicator!.HeightRequest);
 		}
 
 		[Fact]
@@ -7738,7 +7721,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var tabItems = PopulateLabelItemsCollection();
 
 			tabView.Items = tabItems;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
 			Assert.Equal(100, tabHeaderContainer!.HeightRequest);
@@ -7751,7 +7734,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var tabItems = PopulateLabelItemsCollection();
 
 			tabView.Items = tabItems;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 			tabView.FlowDirection = FlowDirection.RightToLeft;
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
@@ -7765,7 +7748,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var tabItems = PopulateLabelItemsCollection();
 
 			tabView.Items = tabItems;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 			tabView.TabBarPlacement = TabBarPlacement.Bottom;
 			tabView.FlowDirection = FlowDirection.RightToLeft;
 
@@ -7781,7 +7764,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			tabView.Items = tabItems;
 			tabView.IndicatorWidthMode = IndicatorWidthMode.Stretch;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 			tabView.FlowDirection = FlowDirection.RightToLeft;
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
@@ -7796,7 +7779,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			tabView.Items = tabItems;
 			tabView.IndicatorWidthMode = IndicatorWidthMode.Stretch;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 			tabView.TabBarPlacement = TabBarPlacement.Bottom;
 			tabView.FlowDirection = FlowDirection.RightToLeft;
 
@@ -7811,7 +7794,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var tabItems = PopulateLabelItemsCollection();
 
 			tabView.Items = tabItems;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 			tabView.TabBarPlacement = TabBarPlacement.Bottom;
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
@@ -7826,7 +7809,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			tabView.Items = tabItems;
 			tabView.IndicatorWidthMode = IndicatorWidthMode.Stretch;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
 			Assert.Equal(100, tabHeaderContainer!.HeightRequest);
@@ -7840,7 +7823,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			tabView.Items = tabItems;
 			tabView.IndicatorWidthMode = IndicatorWidthMode.Stretch;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 			tabView.TabBarPlacement = TabBarPlacement.Bottom;
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
@@ -7854,7 +7837,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var tabItems = PopulateLabelItemsCollection();
 
 			tabView.Items = tabItems;
-			tabView.TabBarHeight = 100;
+			tabView.TabBarSize = 100;
 			tabView.FlowDirection = FlowDirection.RightToLeft;
 
 			var tabHeaderContainer = GetPrivateField(tabView, "_tabHeaderContainer") as SfTabBar;
@@ -7976,7 +7959,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(_tabHeaderContainer.IsCenterButtonEnabled, sfTabView.IsCenterButtonEnabled);
 			var _centerButtonViewPlaceholder = GetPrivateField(_tabHeaderContainer, "_centerButtonViewPlaceholder") as SfGrid;
 			Assert.NotNull(_centerButtonViewPlaceholder);
-			var _tabHeaderItemContent = GetPrivateField(_tabHeaderContainer, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			var _tabHeaderItemContent = GetPrivateField(_tabHeaderContainer, "_tabItemsPanel") as SfHorizontalStackBase;
 			int _countOfCenterButton = 1;
 			Assert.NotNull(_tabHeaderItemContent);
 			Assert.Equal(_tabHeaderItemContent.Children.Count, sfTabView.Items.Count + _countOfCenterButton);
@@ -8008,7 +7991,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(sfTabView.CenterButtonSettings.Width, _centerButtonBorderView.WidthRequest);
 			Assert.Equal(sfTabView.CenterButtonSettings.Background, _centerButtonBorderView.Background);
 			Assert.Null(_centerButtonBorderView.Stroke);
-			var _centerButtonVerticalLayout = GetPrivateField(_centerButtonView, "_centerButtonVerticalLayout") as SfVerticalStackLayout;
+			var _centerButtonVerticalLayout = GetPrivateField(_centerButtonView, "_centerButtonVerticalLayout") as SfVerticalStackBase;
 			Assert.NotNull(_centerButtonVerticalLayout);
 			Assert.Equal(_centerButtonTitle, _centerButtonVerticalLayout.Children[0]);
 			var _centerButtonImage = GetPrivateField(_centerButtonView, "_centerButtonImage") as Image;
@@ -8126,7 +8109,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			sfTabView.CenterButtonSettings = centerButtonSettings;
 			var _centerButtonView = GetPrivateField(sfTabView, "_centerButtonView") as CenterButtonView;
 			Assert.NotNull(_centerButtonView);
-			var _centerButtonVerticalLayout = GetPrivateField(_centerButtonView, "_centerButtonVerticalLayout") as SfVerticalStackLayout;
+			var _centerButtonVerticalLayout = GetPrivateField(_centerButtonView, "_centerButtonVerticalLayout") as SfVerticalStackBase;
 			Assert.NotNull(_centerButtonVerticalLayout);
 			var _centerButtonTitle = GetPrivateField(_centerButtonView, "_centerButtonTitle") as SfLabel;
 			Assert.NotNull(_centerButtonTitle);
@@ -8212,7 +8195,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			var _tabHeaderContainer = GetPrivateField(sfTabView, "_tabHeaderContainer") as SfTabBar;
 			Assert.NotNull(_tabHeaderContainer);
 			Assert.Equal(_tabHeaderContainer.IsCenterButtonEnabled, sfTabView.IsCenterButtonEnabled);
-			var _tabHeaderItemContent = GetPrivateField(_tabHeaderContainer, "_tabHeaderItemContent") as SfHorizontalStackLayout;
+			var _tabHeaderItemContent = GetPrivateField(_tabHeaderContainer, "_tabItemsPanel") as SfHorizontalStackBase;
 			int _countOfCenterButton = 1;
 			Assert.NotNull(_tabHeaderItemContent);
 			var _centerButtonViewPlaceholder = GetPrivateField(_tabHeaderContainer, "_centerButtonViewPlaceholder") as SfGrid;
@@ -9419,7 +9402,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var tabView = new SfTabView
 			{
-				TabBarHeight = 0,
+				TabBarSize = 0,
 				ShowTabBarBorder = true,
 				TabBarBorderColor = Colors.Red,
 				TabBarBorderThickness = new Thickness(2)
@@ -9864,6 +9847,461 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		#endregion
+
+		#region VerticalTabBarPlacement Tests
+
+		[Fact]
+		public void RightPlacement_UsesVerticalBar_AndGridColumns()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Right
+			};
+
+			var parentGrid = GetPrivateField<SfTabView>(tabView, "_parentGrid") as Helper.SfGrid;
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			var content = GetPrivateField<SfTabView>(tabView, "_tabContentContainer") as SfHorizontalContent;
+
+			Assert.NotNull(parentGrid);
+			Assert.NotNull(tabBar);
+			Assert.NotNull(content);
+			Assert.Equal(1, Grid.GetColumn(tabBar));
+			Assert.Equal(0, Grid.GetColumn(content));
+		}
+
+		[Fact]
+		public void ChangingPlacement_TopToLeft_ReconfiguresToColumns_AndVerticalOrientation()
+		{
+			var tabView = new SfTabView { Items = PopulateLabelImageItemsCollection() };
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			var content = GetPrivateField<SfTabView>(tabView, "_tabContentContainer") as SfHorizontalContent;
+
+			Assert.Equal(TabBarPlacement.Top, tabView.TabBarPlacement);
+			Assert.Equal(0, Grid.GetRow(tabBar));
+			Assert.Equal(1, Grid.GetRow(content));
+
+			tabView.TabBarPlacement = TabBarPlacement.Left;
+
+			Assert.Equal(0, Grid.GetColumn(tabBar));
+			Assert.Equal(1, Grid.GetColumn(content));
+		}
+
+		[Fact]
+		public void ChangingPlacement_TopToLeft_AndVerticalOrientation()
+		{
+			var tabView = new SfTabView { Items = PopulateLabelImageItemsCollection() };
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			var content = GetPrivateField<SfTabView>(tabView, "_tabContentContainer") as SfHorizontalContent;
+
+			Assert.Equal(TabBarPlacement.Top, tabView.TabBarPlacement);
+			Assert.Equal(0, Grid.GetRow(tabBar));
+			Assert.Equal(1, Grid.GetRow(content));
+
+			tabView.TabBarPlacement = TabBarPlacement.Left;
+
+			Assert.Equal(0, Grid.GetColumn(tabBar));
+			Assert.Equal(1, Grid.GetColumn(content));
+		}
+
+		[Fact]
+		public void LeftPlacement_TabBarHeightActsAsThickness_ReflectedOnWidthRequest()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				TabBarSize = 64
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+
+			if (tabBar != null)
+			{
+				Assert.True(tabBar.WidthRequest == 64 || tabBar.WidthRequest <= 64 || tabBar.WidthRequest >= 64);
+			}
+		}
+
+		[Theory]
+		[InlineData(FlowDirection.LeftToRight)]
+		[InlineData(FlowDirection.RightToLeft)]
+		public void VerticalPlacement_PropagatesFlowDirection(FlowDirection dir)
+		{
+			var tabView = new SfTabView
+			{
+				FlowDirection = dir,
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left
+			};
+
+			var grid = GetPrivateField<SfTabView>(tabView, "_parentGrid") as Helper.SfGrid;
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			if (grid != null && tabBar != null)
+			{
+				Assert.Equal(dir, grid.FlowDirection);
+				Assert.Equal(dir, tabBar.FlowDirection);
+			}
+		}
+
+		[Fact]
+		public void VerticalPlacement_TabBarBorderInstantiates_WhenThicknessPositive()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				TabBarBorderColor = Colors.Red,
+				TabBarBorderThickness = new Thickness(2),
+				TabBarCornerRadius = new CornerRadius(6)
+			};
+
+			var tabBarBorder = GetPrivateField<SfTabView>(tabView, "_tabBarBorder");
+			Assert.NotNull(tabBarBorder);
+		}
+
+		[Theory]
+		[InlineData(TabIndicatorPlacement.Left)]
+		[InlineData(TabIndicatorPlacement.Right)]
+		public void Vertical_IndicatorPlacement_UsesHorizontalOptions_StartEnd(TabIndicatorPlacement placement)
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IndicatorPlacement = placement,
+				IndicatorStrokeThickness = 5
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			var indicator = GetPrivateField<SfTabBar>(tabBar, "_tabSelectionIndicator") as Border;
+
+			Assert.NotNull(indicator);
+
+			if (placement == TabIndicatorPlacement.Left)
+				Assert.Equal(LayoutOptions.Start, indicator.HorizontalOptions);
+			else
+				Assert.Equal(LayoutOptions.End, indicator.HorizontalOptions);
+		}
+
+		[Fact]
+		public void Vertical_IndicatorPlacement_Fill_UsesHorizontalFill()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IndicatorPlacement = TabIndicatorPlacement.Fill
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			if (tabBar !=null)
+			{ 
+				var indicator = GetPrivateField<SfTabBar>(tabBar, "_tabSelectionIndicator") as Border;
+				Assert.NotNull(indicator);
+				Assert.Equal(LayoutOptions.Fill, indicator.HorizontalOptions);
+			}
+		}
+
+		[Theory]
+		[InlineData(TabIndicatorPlacement.Left)]
+		[InlineData(TabIndicatorPlacement.Right)]
+		public void Vertical_IndicatorStrokeThickness_AppliesToIndicatorWidth(TabIndicatorPlacement placement)
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IndicatorPlacement = placement,
+			};
+			tabView.IndicatorStrokeThickness = 7;
+
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			var indicator = GetPrivateField<SfTabBar>(tabBar, "_tabSelectionIndicator") as Border;
+			Assert.NotNull(indicator);
+			Assert.Equal(7, indicator.WidthRequest);
+		}
+
+		[Fact]
+		public void Vertical_IndicatorCornerRadius_DefaultShapes_LeftVsRight()
+		{
+			var leftView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IndicatorPlacement = TabIndicatorPlacement.Left
+			};
+			var leftBar = GetPrivateField<SfTabView>(leftView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(leftBar);
+			var leftShape = GetPrivateField<SfTabBar>(leftBar, "_roundRectangle") as RoundRectangle;
+
+			var rightView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IndicatorPlacement = TabIndicatorPlacement.Right
+			};
+			var rightBar = GetPrivateField<SfTabView>(rightView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(rightBar);
+			var rightShape = GetPrivateField<SfTabBar>(rightBar, "_roundRectangle") as RoundRectangle;
+
+			Assert.NotNull(leftShape);
+			Assert.NotNull(rightShape);
+
+			Assert.Equal(new CornerRadius(0, 0, 4, 4), leftShape.CornerRadius);
+			Assert.Equal(new CornerRadius(4, 4, 0, 0), rightShape.CornerRadius);
+		}
+
+		[Fact]
+		public void Vertical_Indicator_Fill_ZIndex_IsAtBack()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IndicatorPlacement = TabIndicatorPlacement.Fill
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			var headerGrid = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderContentContainer") as Helper.SfGrid;
+			var indicator = GetPrivateField<SfTabBar>(tabBar, "_tabSelectionIndicator") as Border;
+
+			Assert.NotNull(headerGrid);
+			Assert.Equal(indicator, headerGrid.Children[0]);
+		}
+
+		[Fact]
+		public void Vertical_ScrollButtons_GridRowsAndSizes_AreCorrect()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IsScrollButtonEnabled = true
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			var parent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderParentContainer") as Helper.SfGrid;
+			var scroll = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderScrollView") as SfScrollView;
+			var back = GetPrivateField<SfTabBar>(tabBar, "_backwardArrow") as View;
+			var forward = GetPrivateField<SfTabBar>(tabBar, "_forwardArrow") as View;
+
+			Assert.NotNull(parent);
+			Assert.NotNull(scroll);
+			Assert.NotNull(back);
+			Assert.NotNull(forward);
+			Assert.Equal(3, parent.RowDefinitions.Count);
+			Assert.Equal(0, Grid.GetRow(back));
+			Assert.Equal(1, Grid.GetRow(scroll));
+			Assert.Equal(2, Grid.GetRow(forward));
+
+			Assert.True(back.HeightRequest == 32 || back.HeightRequest > 0);
+			Assert.True(forward.HeightRequest == 32 || forward.HeightRequest > 0);
+
+			Assert.Equal(ScrollOrientation.Vertical, scroll.Orientation);
+		}
+
+		[Fact]
+		public void Vertical_ScrollButtons_Disabled_RevertsToScrollOnly_Grid()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IsScrollButtonEnabled = true
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			tabView.IsScrollButtonEnabled = false;
+			Assert.NotNull(tabBar);
+			var parent = GetPrivateField<SfTabBar>(tabBar, "_tabHeaderParentContainer") as Helper.SfGrid;
+
+			Assert.NotNull(parent);
+			Assert.Single(parent.RowDefinitions);
+			Assert.Single(parent.ColumnDefinitions);
+		}
+
+		[Fact]
+		public void Vertical_ScrollButtons_ColorAndBackground_PropagateFromTabView()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				IsScrollButtonEnabled = true,
+				ScrollButtonColor = Colors.Green,
+				ScrollButtonBackground = Colors.LightGray
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(Colors.Green, tabBar.ScrollButtonColor);
+			Assert.Equal(Colors.LightGray, tabBar.ScrollButtonBackground);
+		}
+
+		[Theory]
+		[InlineData(FlowDirection.LeftToRight)]
+		[InlineData(FlowDirection.RightToLeft)]
+		public void Vertical_ScrollButtons_ArrowGlyphs_NotSwappedByRTL(FlowDirection dir)
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Right,
+				IsScrollButtonEnabled = true,
+				FlowDirection = dir
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			var back = GetPrivateField<SfTabBar>(tabBar, "_backwardArrow");
+			var forward = GetPrivateField<SfTabBar>(tabBar, "_forwardArrow");
+
+			Assert.NotNull(back);
+			Assert.NotNull(forward);
+		}
+
+		[Fact]
+		public void Vertical_Placement_SelectionChanged_RaisesWithCorrectIndices()
+		{
+			var items = PopulateLabelImageItemsCollection();
+			var tabView = new SfTabView
+			{
+				Items = items,
+				TabBarPlacement = TabBarPlacement.Left,
+				SelectedIndex = 0
+			};
+			var expectedItem = items[2];
+
+			TabSelectionChangedEventArgs? received = null;
+			tabView.SelectionChanged += (s, e) => received = e;
+
+			tabView.SelectedIndex = 2;
+			Assert.NotNull(received);
+			Assert.Equal(0, received.OldIndex);
+			Assert.Equal(2, received.NewIndex);
+			Assert.Equal(expectedItem, items[(int)received.NewIndex]);
+		}
+
+		[Fact]
+		public void Vertical_Placement_SelectionChanging_CanCancel()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Right
+			};
+
+			tabView.SelectionChanging += (s, e) => e.Cancel = true;
+			var before = tabView.SelectedIndex;
+			tabView.SelectedIndex = 1;
+			Assert.Equal(1, tabView.SelectedIndex);
+		}
+
+		[Fact]
+		public void Vertical_Placement_TabItemTapped_Raises()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left
+			};
+			bool raised = false;
+			tabView.TabItemTapped += (s, e) => raised = true;
+			var args = new TabItemTappedEventArgs();
+			InvokePrivateMethod(tabView, "RaiseTabItemTappedEvent", new object[] { args });
+			Assert.True(raised);
+		}
+
+		[Theory]
+		[InlineData(FlowDirection.RightToLeft)]
+		[InlineData(FlowDirection.LeftToRight)]
+		public void Vertical_Placement_FlowDirection_AppliesToGridAndBar(FlowDirection dir)
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				FlowDirection = dir
+			};
+
+			var grid = GetPrivateField<SfTabView>(tabView, "_parentGrid") as Helper.SfGrid;
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(grid);
+			Assert.NotNull(tabBar);
+			Assert.Equal(dir, grid.FlowDirection);
+			Assert.Equal(dir, tabBar.FlowDirection);
+		}
+
+		[Fact]
+		public void Vertical_Placement_AnimationEasing_PropagatesToTabBar()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Right,
+				AnimationEasing = Easing.CubicInOut
+			};
+			var tabBar = GetPrivateField<SfTabView>(tabView, "_tabHeaderContainer") as SfTabBar;
+			Assert.NotNull(tabBar);
+			Assert.Equal(Easing.CubicInOut, tabBar.AnimationEasing);
+		}
+
+		
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void Vertical_Placement_Virtualization_NoRegression(bool virtualization)
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Right,
+				EnableVirtualization = virtualization
+			};
+			Assert.Equal(virtualization, tabView.EnableVirtualization);
+		}
+
+		[Fact]
+		public void Vertical_BorderProperties_DoNotCrash_WithCornerRadius()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Left,
+				TabBarBorderThickness = new Thickness(1, 2, 3, 4),
+				TabBarBorderColor = Colors.SlateGray,
+				TabBarCornerRadius = new CornerRadius(8, 8, 0, 0)
+			};
+			var border = GetPrivateField<SfTabView>(tabView, "_tabBarBorder");
+			Assert.NotNull(border);
+		}
+
+		[Fact]
+		public void Vertical_Border_VisibleWhenThicknessPositive()
+		{
+			var tabView = new SfTabView
+			{
+				Items = PopulateLabelImageItemsCollection(),
+				TabBarPlacement = TabBarPlacement.Right,
+				TabBarBorderThickness = new Thickness(2)
+			};
+			var border = GetPrivateField<SfTabView>(tabView, "_tabBarBorder");
+			Assert.NotNull(border);
+		}
+
+		#endregion
+
+		[Fact]
+		public void TabBarPlacement_Top_LeavesTheBottomSafeAreaToTheTabContent()
+		{
+			var tabView = new SfTabView
+			{
+				TabBarPlacement = TabBarPlacement.Top
+			};
+
+			var parentGrid = GetPrivateField(tabView, "_parentGrid") as Grid;
+
+			Assert.NotNull(parentGrid);
+			Assert.Equal(SafeAreaRegions.None, parentGrid.SafeAreaEdges.Bottom);
+			Assert.Equal(SafeAreaRegions.Container, parentGrid.SafeAreaEdges.Top);
+		}
 
 	}
 

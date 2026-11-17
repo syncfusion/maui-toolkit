@@ -48,6 +48,24 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				series.OnDrawMarker(canvas, _series._readOnlySegments, dirtyRect);
 				canvas.CanvasRestoreState();
 			}
+
+			// Segment bounds are populated by DrawSeries. Refresh the Windows
+			// automation children after rendering, when those bounds are available.
+			if (_series is ChartSeries chartSeries && !chartSeries.NeedToAnimateSeries)
+			{
+				if (_chartPlotArea is CircularPlotArea circularPlotArea)
+				{
+					circularPlotArea.InvalidateSegmentSemantics();
+				}
+				else if (_chartPlotArea is PolarChartArea polarChartArea)
+				{
+					polarChartArea.InvalidateSegmentSemantics();
+				}
+				else if (_chartPlotArea is CartesianPlotArea cartesianPlotArea)
+				{
+					cartesianPlotArea.InvalidateSegmentSemantics();
+				}
+			}
 		}
 
 		#endregion
@@ -62,6 +80,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			if (!_series.NeedToAnimateSeries)
 			{
 				InvalidateDrawable();
+
+				if (_chartPlotArea is CircularPlotArea circularPlotArea)
+				{
+					circularPlotArea.InvalidateSegmentSemantics();
+				}
+				else if (_chartPlotArea is CartesianPlotArea plotArea)
+				{
+					plotArea.InvalidateSegmentSemantics();
+				}
 			}
 
 			if (_chartPlotArea is CartesianPlotArea cartesianPlotArea && !_series.NeedToAnimateSeries)

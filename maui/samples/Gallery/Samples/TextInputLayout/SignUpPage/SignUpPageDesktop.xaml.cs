@@ -15,7 +15,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 			AddListItems();
 			Content.BindingContext = this;
 		}
-		private void SubmitButton_Clicked(object sender, EventArgs e)
+		private void SubmitButton_Clicked(object? sender, EventArgs e)
 		{
 			ValidateText();
 		}
@@ -327,7 +327,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 		}
 
 
-		private void ResetButton_Clicked(object sender, EventArgs e)
+		private void ResetButton_Clicked(object? sender, EventArgs e)
 		{
 			firstNameEntry.Text = string.Empty;
 			lastNameEntry.Text = string.Empty;
@@ -348,7 +348,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 			PasswordField.HasError = false;
 		}
 
-		private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+		private void Entry_TextChanged(object? sender, TextChangedEventArgs e)
 		{
 			if (sender is Entry)
 			{

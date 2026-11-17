@@ -27,9 +27,13 @@ public partial class Selection : SampleView
         sunburstChart.Handler?.DisconnectHandler();
     }
 
-    private void selectionType_SelectedIndexChanged(object sender, EventArgs e)
+    private void selectionType_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        var picker = (MAUIPicker)sender;
+        if (sender is not MAUIPicker picker)
+        {
+            return;
+        }
+
         int selectedIndex = picker.SelectedIndex;
 
         if (selectedIndex == 0)
@@ -50,9 +54,13 @@ public partial class Selection : SampleView
         }
     }
 
-    private void selectionDisplayMode_SelectedIndexChanged(object sender, EventArgs e)
+    private void selectionDisplayMode_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        var picker = (MAUIPicker)sender;
+        if (sender is not MAUIPicker picker)
+        {
+            return;
+        }
+
         int selectedIndex = picker.SelectedIndex;
 
         if (selectedIndex == 0)
@@ -69,9 +77,13 @@ public partial class Selection : SampleView
         }
     }
 
-    private void selectionFill_SelectedIndexChanged(object sender, EventArgs e)
+    private void selectionFill_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        var picker = (MAUIPicker)sender;
+        if (sender is not MAUIPicker picker)
+        {
+            return;
+        }
+
         int selectedIndex = picker.SelectedIndex;
 
         if (selectedIndex == 0)
@@ -88,9 +100,13 @@ public partial class Selection : SampleView
         }
     }
 
-    private void selectionStroke_SelectedIndexChanged(object sender, EventArgs e)
+    private void selectionStroke_SelectedIndexChanged(object? sender, EventArgs e)
     {
-        var picker = (MAUIPicker)sender;
+        if (sender is not MAUIPicker picker)
+        {
+            return;
+        }
+
         int selectedIndex = picker.SelectedIndex;
 
         if (selectedIndex == 0)
@@ -107,9 +123,13 @@ public partial class Selection : SampleView
         }
     }
 
-    private void selection_ValueChanged(object sender, ValueChangedEventArgs e)
+    private void selection_ValueChanged(object? sender, ValueChangedEventArgs e)
     {
-        var slider = (Slider)sender;
+        if (sender is not Slider slider)
+        {
+            return;
+        }
+
         if (selectionViewModel != null)
         {
             var value = slider.StyleId;

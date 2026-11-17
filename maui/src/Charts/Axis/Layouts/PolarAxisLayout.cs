@@ -380,15 +380,25 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			float radius = (float)_yAxis.ComputedDesiredSize.Height;
 			ChartAxisTickStyle tickStyle = axis.MajorTickStyle;
+			bool hasRangeStyles = axis.HasRangeStyles;
 			float radius1 = (float)(radius + tickStyle.TickSize);
 			for (int i = 0; i < totalSpokes; i++)
 			{
-				float angleValue = (float)axis.ValueToPolarAngle(axis.VisibleLabels[i].Position);
+				var effectiveTickStyle = tickStyle;
+
+				double position = axis.VisibleLabels[i].Position;
+
+				if (hasRangeStyles)
+				{
+					effectiveTickStyle = axis.GetMajorTickStyleInRange(position) ?? tickStyle;
+				}
+
+				float angleValue = (float)axis.ValueToPolarAngle(position);
 				var start = _chartArea.PolarAngleToPoint(axis, radius, angleValue);
 				var end = _chartArea.PolarAngleToPoint(axis, radius1, angleValue);
 
-				canvas.StrokeSize = (float)tickStyle.StrokeWidth;
-				canvas.StrokeColor = tickStyle.Stroke.ToColor();
+				canvas.StrokeSize = (float)effectiveTickStyle.StrokeWidth;
+				canvas.StrokeColor = effectiveTickStyle.Stroke.ToColor();
 				canvas.DrawLine(start.X, start.Y, end.X, end.Y);
 			}
 		}

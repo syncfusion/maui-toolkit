@@ -356,7 +356,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							if (xValues != null && xValues.Count > 0)
 							{
 								//DateTimeAxis not rendered properly when series have single datapoint with different x position
-								var actualXValues = xValues as List<double> ?? xValues.ToList();
+								var actualXValues = xValues.ToList();
 								previousXValues.AddRange(actualXValues);
 								UpdateMinWidth(cartesianSeries, ref minWidth, previousXValues);
 								previousXValues = actualXValues;

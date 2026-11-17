@@ -21,7 +21,7 @@
               <RowDefinition Height="*"></RowDefinition>
               <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
-            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}">
+            <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill">
                 <chart:SfCartesianChart.Title>
                     <Label Text="Electricity Production from Various Sources (% of total)" MaxLines="2" LineBreakMode="WordWrap" Margin="0" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16" />
                 </chart:SfCartesianChart.Title>
@@ -47,20 +47,26 @@
 
                 <chart:SfCartesianChart.Series>
                     <chart:StepLineSeries  Label="United Kingdom"  
+                                           x:Name="stepLineSeries1"
+                                           StrokeWidth="2"
                                            ItemsSource="{Binding ElectricityProductionData}" 
                                            XBindingPath="Name" 
                                            YBindingPath="Value" 
                                            EnableAnimation="True" 
                                            EnableTooltip="True" 
-                                           LegendIcon="SeriesType"/>
+                                           LegendIcon="SeriesType"
+                                           Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"/>
 
                     <chart:StepLineSeries  Label="United States" 
+                                           x:Name="stepLineSeries2"
+                                           StrokeWidth="2"
                                            ItemsSource="{Binding ElectricityProductionData}" 
                                            XBindingPath="Name" 
                                            YBindingPath="Size" 
                                            EnableAnimation="True" 
                                            EnableTooltip="True" 
-                                           LegendIcon="SeriesType"/>
+                                           LegendIcon="SeriesType"
+                                           Fill="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}"/>
 
                 </chart:SfCartesianChart.Series>
             </chart:SfCartesianChart>
@@ -75,4 +81,12 @@
         </Grid>
     </localCore:SampleView.Content>
 
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <HorizontalStackLayout>
+                <Label Text="Apply gradient" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                <CheckBox x:Name="gradientCheckBox" IsChecked="False" CheckedChanged="gradientCheckBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
 </localCore:SampleView>

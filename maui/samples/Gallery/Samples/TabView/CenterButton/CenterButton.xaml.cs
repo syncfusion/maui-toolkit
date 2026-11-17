@@ -19,7 +19,7 @@ public partial class CenterButton : SampleView
 		this.BindingContext = this;
 	}
 
-	void Handle_SelectionChanged(object sender, SelectionChangedEventArgs e)
+	void Handle_SelectionChanged(object? sender, Toolkit.TabView.TabSelectionChangedEventArgs e)
 	{
 		if (TabView.SelectedIndex == 3)
 		{
@@ -27,7 +27,7 @@ public partial class CenterButton : SampleView
 		}
 	}
 
-	void CenterButton_Tapped(object sender, System.EventArgs e)
+	void CenterButton_Tapped(object? sender, System.EventArgs e)
 	{
 		ComposeDialog.Opacity = 0;
 		boxView.BackgroundColor = Color.FromArgb("#1E90FF");
@@ -36,7 +36,7 @@ public partial class CenterButton : SampleView
 
 
 	}
-	void Button_Clicked(object sender, System.EventArgs e)
+	void Button_Clicked(object? sender, System.EventArgs e)
 	{
 		TabView.SelectedIndex = 0;
 	}
@@ -49,7 +49,7 @@ public partial class CenterButton : SampleView
 		TabView.SelectedIndex = 0;
 	}
 
-	private void Grid_Tapped(object sender, TappedEventArgs e)
+	private void Grid_Tapped(object? sender, TappedEventArgs e)
 	{
 		if (ComposeDialog.IsVisible)
 		{
@@ -57,12 +57,12 @@ public partial class CenterButton : SampleView
 		}
 	}
 
-	private void SendButton_Clicked(object sender, TappedEventArgs e)
+	private void SendButton_Clicked(object? sender, TappedEventArgs e)
 	{
 		CloseDialog();
 	}
 
-	private void TapGestureRecognizer_Tapped(object sender, TappedEventArgs e)
+	private void TapGestureRecognizer_Tapped(object? sender, TappedEventArgs e)
 	{
 	}
 }

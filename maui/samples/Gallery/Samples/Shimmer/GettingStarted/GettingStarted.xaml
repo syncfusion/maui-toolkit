@@ -42,7 +42,7 @@
                 <tabView:SfTabView x:Name="tabView" ItemsSource="{Binding ShimmerTypes}"
                                    SelectionChanged="SfTabView_SelectionChanged"
                                    TabWidthMode="SizeToContent"
-                                   TabBarHeight="40">
+                                   TabBarSize="40">
                     <tabView:SfTabItem Header="Feed"/>
                     <tabView:SfTabItem Header="Video"/>
                     <tabView:SfTabItem Header="Shopping"/>
@@ -64,9 +64,9 @@
                                    RepeatCount="{Binding RepeatCount}">
                     <shimmer:SfShimmer.Content>
                         <StackLayout>
-                            <Label HorizontalOptions="CenterAndExpand"
+              <Label HorizontalOptions="Center"
                                    Text="Content is loaded!"
-                                   VerticalOptions="CenterAndExpand" />
+                                   VerticalOptions="Center" />
                         </StackLayout>
                     </shimmer:SfShimmer.Content>
                 </shimmer:SfShimmer>
@@ -217,7 +217,7 @@
                        VerticalTextAlignment="Center" />
 
                 <Slider x:Name="repeatCountSlider"
-                        HorizontalOptions="FillAndExpand"
+                        HorizontalOptions="Fill"
                         Maximum="4" 
                         Minimum="1"
                         VerticalOptions="Center"
@@ -231,7 +231,7 @@
                        VerticalTextAlignment="Center" />
 
                 <Slider x:Name="sliderWaveWidth"
-                            HorizontalOptions="FillAndExpand"
+                            HorizontalOptions="Fill"
                             Maximum="200"
                             Minimum="50"
                             VerticalOptions="Center"
@@ -245,7 +245,7 @@
                        VerticalTextAlignment="Center" />
 
                 <Slider x:Name="sliderAnimationDuration"
-                            HorizontalOptions="FillAndExpand"
+                            HorizontalOptions="Fill"
                             Maximum="3000"
                             Minimum="1000"
                             VerticalOptions="Center"

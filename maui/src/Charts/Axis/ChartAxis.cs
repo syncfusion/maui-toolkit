@@ -744,6 +744,17 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					item.LabelStyle = args.LabelStyle;
 				}
 			}
+
+			//Apply the matching range style label last so it takes precedence over the default style.
+			//When multiple overlapping ranges set a label style, the last matching range's style wins;
+			//ranges that leave the label style unset do not block styles set by other overlapping ranges.
+			var rangeLabelStyle = GetLabelStyleInRange(item.Position);
+
+			if (rangeLabelStyle != null)
+			{
+				rangeLabelStyle.Parent = this.Parent;
+				item.LabelStyle = rangeLabelStyle;
+			}
 		}
 
 		[UnconditionalSuppressMessage("Trimming", "IL2026:Members annotated with 'RequiresUnreferencedCodeAttribute' require dynamic access otherwise can break functionality when trimming application code", Justification = "<Pending>")]

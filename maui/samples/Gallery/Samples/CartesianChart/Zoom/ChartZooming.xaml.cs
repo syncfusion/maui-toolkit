@@ -16,9 +16,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			chart.Handler?.DisconnectHandler();
 		}
 
-		private void ZoomModeChanged(object sender, EventArgs e)
+		private void ZoomModeChanged(object? sender, EventArgs e)
 		{
-			var picker = (MAUIPicker)sender;
+			if (sender is not MAUIPicker picker)
+			{
+				return;
+			}
+
 			int selectedIndex = picker.SelectedIndex;
 			if (selectedIndex == 0)
 			{
@@ -34,9 +38,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void checkbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		private void checkbox_CheckedChanged(object? sender, CheckedChangedEventArgs e)
 		{
-			var checkBox = (CheckBox)sender;
+			if (sender is not CheckBox checkBox)
+			{
+				return;
+			}
+
 			if (ViewModel != null && (DeviceInfo.Platform == DevicePlatform.iOS || DeviceInfo.Platform == DevicePlatform.Android))
 			{
 				zoomingBehavior.EnableDirectionalZooming = checkBox.IsChecked;

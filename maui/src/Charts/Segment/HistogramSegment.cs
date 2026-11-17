@@ -11,6 +11,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		internal double HistogramLabelPosition { get; set; }
 		internal double PointsCount { get; set; }
+		internal double IntervalStart { get; private set; }
+		internal double IntervalEnd { get; private set; }
 
 		#endregion
 
@@ -27,6 +29,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal override void SetData(double[] values)
 		{
 			base.SetData(values);
+			IntervalStart = values[0];
+			IntervalEnd = values[1];
 
 			if (Series is HistogramSeries series)
 			{
@@ -67,6 +71,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					canvas.DrawRectangle(rect);
 				}
+
+				SemanticBounds = new RectF(Left, Top, Right - Left, Bottom - Top);
 			}
 		}
 

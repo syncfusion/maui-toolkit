@@ -1096,6 +1096,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         void IKeyboardListener.OnKeyDown(KeyEventArgs args)
         {
             HandleKeyboardAccessiblity(args);
+            args.Handled = true;
         }
 
         /// <summary>

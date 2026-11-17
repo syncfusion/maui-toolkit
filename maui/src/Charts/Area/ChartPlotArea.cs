@@ -210,6 +210,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Series CollectionChanged Methods
 
+		internal virtual void NotifySegmentSemanticsChanged()
+		{
+
+		}
 		internal virtual void AddSeries(int index, object series)
 		{
 			if (series is ChartSeries chartSeries)
@@ -231,6 +235,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				AbsoluteLayout.SetLayoutBounds(labelView, new Rect(0, 0, 1, 1));
 				AbsoluteLayout.SetLayoutFlags(labelView, AbsoluteLayoutFlags.All);
 				_itemLabelLayout.Insert(index, labelView);
+				NotifySegmentSemanticsChanged();
 			}
 		}
 
@@ -246,6 +251,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					_seriesViews.Children.Remove(seriesView);
 				}
+
+				chartSeries.Chart = null;
+				chartSeries.Parent = null;
+				NotifySegmentSemanticsChanged();
 			}
 		}
 
@@ -306,6 +315,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				area.NeedsRelayout = true;
 				area.ScheduleUpdateArea();
 			}
+
+			NotifySegmentSemanticsChanged();
 		}
 
 		void ResetSeries()
@@ -323,6 +334,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			_itemLabelLayout.Clear();
 			_seriesViews.Clear();
+			NotifySegmentSemanticsChanged();
 		}
 
 		#endregion

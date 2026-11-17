@@ -231,6 +231,12 @@
 				canvas.DrawLine(Left, Top, CenterHigh, Top);
 				canvas.DrawLine(CenterHigh, Bottom, Right, Bottom);
 			}
+
+			float left = Math.Min(Math.Min(Left, Right), Math.Min(CenterHigh, CenterLow));
+			float right = Math.Max(Math.Max(Left, Right), Math.Max(CenterHigh, CenterLow));
+			float top = Math.Min(Math.Min(Top, Bottom), Math.Min(HighPointY, LowPointY));
+			float bottom = Math.Max(Math.Max(Top, Bottom), Math.Max(HighPointY, LowPointY));
+			SemanticBounds = new RectF(left, top, right - left, bottom - top);
 		}
 
 		#endregion

@@ -888,5 +888,694 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 
 			Assert.True(intervalCount > 1.0);
 		}
+
+		#region Axis Range Style Tests
+
+		[Fact]
+		public void RangeStyles_DefaultValue_IsEmptyCollectionWithNullStyles()
+		{
+			// Arrange & Act
+			var axis = new NumericalAxis();
+			var style = new ChartAxisRangeStyle();
+
+			// Assert - the axis provides a default empty collection; the range style's element
+			// styles default to null so unset styles fall back to the axis-level styles.
+			Assert.NotNull(axis.RangeStyles);
+			Assert.Empty(axis.RangeStyles);
+			Assert.Null(style.MajorGridLineStyle);
+			Assert.Null(style.MinorGridLineStyle);
+			Assert.Null(style.MajorTickStyle);
+			Assert.Null(style.MinorTickStyle);
+			Assert.Null(style.LabelStyle);
+		}
+
+		[Fact]
+		public void RangeStyles_AddRangeStyle_CountIncreases()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var rangeStyle = new ChartAxisRangeStyle { Start = 15, End = 21 };
+
+			// Act
+			axis.RangeStyles.Add(rangeStyle);
+
+			// Assert
+			Assert.Single(axis.RangeStyles);
+			Assert.Equal(15, axis.RangeStyles[0].Start);
+			Assert.Equal(21, axis.RangeStyles[0].End);
+		}
+
+		[Theory]
+		[InlineData(15, 21)]
+		[InlineData(-50, -10)]
+		[InlineData(0, 100)]
+		[InlineData(0.5, 0.75)]
+		public void RangeStyles_StartAndEnd_SetValue_ReturnsExpectedValue(double start, double end)
+		{
+			// Arrange
+			var rangeStyle = new ChartAxisRangeStyle { Start = start, End = end };
+
+			// Assert
+			Assert.Equal(start, rangeStyle.Start);
+			Assert.Equal(end, rangeStyle.End);
+		}
+
+		[Fact]
+		public void RangeStyles_CompatibleWithAllAxisTypes()
+		{
+			// Arrange
+			var numericalAxis = new NumericalAxis();
+			var categoryAxis = new CategoryAxis();
+			var dateTimeAxis = new DateTimeAxis();
+			var logAxis = new LogarithmicAxis();
+			var dateTimeCategoryAxis = new DateTimeCategoryAxis();
+
+			var rangeStyle = new ChartAxisRangeStyle { Start = 15, End = 21 };
+
+			// Act
+			numericalAxis.RangeStyles.Add(rangeStyle);
+			categoryAxis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 0, End = 5 });
+			dateTimeAxis.RangeStyles.Add(new ChartAxisRangeStyle
+			{
+				Start = new DateTime(2024, 1, 1),
+				End = new DateTime(2024, 6, 30)
+			});
+			logAxis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 10, End = 100 });
+			dateTimeCategoryAxis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 0, End = 3 });
+
+			// Assert
+			Assert.Single(numericalAxis.RangeStyles);
+			Assert.Single(categoryAxis.RangeStyles);
+			Assert.Single(dateTimeAxis.RangeStyles);
+			Assert.Single(logAxis.RangeStyles);
+			Assert.Single(dateTimeCategoryAxis.RangeStyles);
+		}
+
+		[Fact]
+		public void RangeStyles_MajorGridLineStyle_SetValue_ReturnsExpectedValue()
+		{
+			// Arrange
+			var rangeStyle = new ChartAxisRangeStyle();
+
+			// Act
+			rangeStyle.MajorGridLineStyle = new ChartLineStyle
+			{
+				Stroke = Colors.Blue,
+				StrokeWidth = 3,
+				StrokeDashArray = [2, 2]
+			};
+
+			// Assert
+			Assert.Equal(Colors.Blue, rangeStyle.MajorGridLineStyle.Stroke);
+			Assert.Equal(3, rangeStyle.MajorGridLineStyle.StrokeWidth);
+			Assert.Equal(2, rangeStyle.MajorGridLineStyle.StrokeDashArray[0]);
+		}
+
+		[Fact]
+		public void RangeStyles_MinorGridLineStyle_SetValue_ReturnsExpectedValue()
+		{
+			// Arrange
+			var rangeStyle = new ChartAxisRangeStyle();
+
+			// Act
+			rangeStyle.MinorGridLineStyle = new ChartLineStyle
+			{
+				Stroke = Colors.Green,
+				StrokeWidth = 2
+			};
+
+			// Assert
+			Assert.Equal(Colors.Green, rangeStyle.MinorGridLineStyle.Stroke);
+			Assert.Equal(2, rangeStyle.MinorGridLineStyle.StrokeWidth);
+		}
+
+		[Fact]
+		public void RangeStyles_MajorTickStyle_SetValue_ReturnsExpectedValue()
+		{
+			// Arrange
+			var rangeStyle = new ChartAxisRangeStyle();
+
+			// Act
+			rangeStyle.MajorTickStyle = new ChartAxisTickStyle
+			{
+				Stroke = Colors.Red,
+				StrokeWidth = 1
+			};
+
+			// Assert
+			Assert.Equal(Colors.Red, rangeStyle.MajorTickStyle.Stroke);
+			Assert.Equal(1, rangeStyle.MajorTickStyle.StrokeWidth);
+		}
+
+		[Fact]
+		public void RangeStyles_MinorTickStyle_SetValue_ReturnsExpectedValue()
+		{
+			// Arrange
+			var rangeStyle = new ChartAxisRangeStyle();
+
+			// Act
+			rangeStyle.MinorTickStyle = new ChartAxisTickStyle
+			{
+				Stroke = Colors.Purple,
+				StrokeWidth = 1
+			};
+
+			// Assert
+			Assert.Equal(Colors.Purple, rangeStyle.MinorTickStyle.Stroke);
+			Assert.Equal(1, rangeStyle.MinorTickStyle.StrokeWidth);
+		}
+
+		[Fact]
+		public void RangeStyles_LabelStyle_SetValue_ReturnsExpectedValue()
+		{
+			// Arrange
+			var rangeStyle = new ChartAxisRangeStyle();
+
+			// Act
+			rangeStyle.LabelStyle = new ChartAxisLabelStyle
+			{
+				TextColor = Color.FromArgb("#096EBF"),
+				FontAttributes = FontAttributes.Bold
+			};
+
+			// Assert
+			Assert.Equal(Color.FromArgb("#096EBF"), rangeStyle.LabelStyle.TextColor);
+			Assert.Equal(FontAttributes.Bold, rangeStyle.LabelStyle.FontAttributes);
+		}
+
+		[Fact]
+		public void RangeStyles_IsValueInRange_ValueInsideAndOutsideRange()
+		{
+			// Arrange
+			var rangeStyle = new ChartAxisRangeStyle { Start = 15, End = 21 };
+
+			// Act & Assert
+			Assert.True(rangeStyle.IsValueInRange(15));
+			Assert.True(rangeStyle.IsValueInRange(18));
+			Assert.True(rangeStyle.IsValueInRange(21));
+			Assert.False(rangeStyle.IsValueInRange(14.9));
+			Assert.False(rangeStyle.IsValueInRange(21.1));
+			Assert.False(rangeStyle.IsValueInRange(double.NaN));
+		}
+
+		[Fact]
+		public void RangeStyles_OpenEndedRanges_AreSupported()
+		{
+			// Arrange
+			var startOnly = new ChartAxisRangeStyle { Start = 15 };
+			var endOnly = new ChartAxisRangeStyle { End = 21 };
+
+			// Act & Assert
+			Assert.True(startOnly.IsValueInRange(25));
+			Assert.False(startOnly.IsValueInRange(14));
+			Assert.True(endOnly.IsValueInRange(10));
+			Assert.False(endOnly.IsValueInRange(22));
+		}
+
+		[Fact]
+		public void RangeStyles_ReversedBounds_AreNormalized()
+		{
+			// Arrange - Start greater than End should still match values between them.
+			var rangeStyle = new ChartAxisRangeStyle { Start = 21, End = 15 };
+
+			// Act & Assert
+			Assert.True(rangeStyle.IsValueInRange(17));
+			Assert.False(rangeStyle.IsValueInRange(25));
+			Assert.False(rangeStyle.IsValueInRange(12));
+		}
+
+		[Fact]
+		public void RangeStyles_BothBoundsMissing_StyleIsNeverApplied()
+		{
+			// Arrange
+			var rangeStyle = new ChartAxisRangeStyle();
+
+			// Act & Assert
+			Assert.False(rangeStyle.IsValueInRange(0));
+			Assert.False(rangeStyle.IsValueInRange(1000));
+		}
+
+		[Fact]
+		public void RangeStyles_DateTimeValues_AreSupported()
+		{
+			// Arrange
+			var start = new DateTime(2024, 1, 1);
+			var end = new DateTime(2024, 6, 30);
+			var rangeStyle = new ChartAxisRangeStyle { Start = start, End = end };
+
+			// Act & Assert
+			Assert.True(rangeStyle.IsValueInRange(start.ToOADate()));
+			Assert.True(rangeStyle.IsValueInRange(new DateTime(2024, 4, 15).ToOADate()));
+			Assert.False(rangeStyle.IsValueInRange(new DateTime(2025, 1, 1).ToOADate()));
+		}
+
+		[Fact]
+		public void RangeStyles_GetRangeStyle_ReturnsFirstMatchingStyle()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var firstStyle = new ChartAxisRangeStyle { Start = 10, End = 20 };
+			var secondStyle = new ChartAxisRangeStyle { Start = 15, End = 25 };
+			axis.RangeStyles.Add(firstStyle);
+			axis.RangeStyles.Add(secondStyle);
+
+			// Act
+			var matchMid = axis.GetRangeStyle(18);
+			var matchOutside = axis.GetRangeStyle(5);
+
+			// Assert
+			Assert.Same(firstStyle, matchMid);
+			Assert.Null(matchOutside);
+			Assert.Same(secondStyle, axis.GetRangeStyle(22));
+		}
+
+		[Fact]
+		public void RangeStyles_EmptyCollection_GetRangeStyleReturnsNull()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+
+			// Act & Assert
+			Assert.False(axis.HasRangeStyles);
+			Assert.Null(axis.GetRangeStyle(15));
+		}
+
+		[Fact]
+		public void RangeStyles_RemoveRangeStyle_CountDecreases()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var rangeStyle = new ChartAxisRangeStyle { Start = 15, End = 21 };
+			axis.RangeStyles.Add(rangeStyle);
+
+			// Act
+			axis.RangeStyles.Remove(rangeStyle);
+
+			// Assert
+			Assert.Empty(axis.RangeStyles);
+			Assert.False(axis.HasRangeStyles);
+		}
+
+		[Fact]
+		public void RangeStyles_ClearCollection_GetRangeStyleReturnsNull()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 15, End = 21 });
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 40, End = 60 });
+
+			// Act
+			axis.RangeStyles.Clear();
+
+			// Assert
+			Assert.Empty(axis.RangeStyles);
+			Assert.False(axis.HasRangeStyles);
+			Assert.Null(axis.GetRangeStyle(50));
+		}
+
+		[Fact]
+		public void RangeStyles_ReplaceCollection_NewStylesAreUsed()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var newCollection = new ChartAxisRangeStyleCollection
+			{
+				new ChartAxisRangeStyle { Start = 5, End = 8 }
+			};
+
+			// Act
+			axis.RangeStyles = newCollection;
+
+			// Assert
+			Assert.Same(newCollection, axis.RangeStyles);
+			Assert.True(axis.HasRangeStyles);
+			Assert.NotNull(axis.GetRangeStyle(6));
+		}
+
+		[Fact]
+		public void RangeStyles_MultipleRangeStyles_MutuallyExclusiveVisualBehavior()
+		{
+			// Arrange - two adjacent ranges covering different sections of the axis.
+			var axis = new NumericalAxis();
+			var rangeA = new ChartAxisRangeStyle { Start = 0, End = 10 };
+			var rangeB = new ChartAxisRangeStyle { Start = 20, End = 30 };
+			axis.RangeStyles.Add(rangeA);
+			axis.RangeStyles.Add(rangeB);
+
+			// Act & Assert - each value resolves to exactly one range style.
+			Assert.Same(rangeA, axis.GetRangeStyle(5));
+			Assert.Same(rangeB, axis.GetRangeStyle(25));
+			Assert.Null(axis.GetRangeStyle(15));
+		}
+
+		[Fact]
+		public void RangeStyles_LabelCreation_AppliesRangeStyleLabelStyle()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var rangeStyle = new ChartAxisRangeStyle
+			{
+				Start = 15,
+				End = 21,
+				LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.Blue }
+			};
+			axis.RangeStyles.Add(rangeStyle);
+
+			// Act - simulate label creation through the visible labels pipeline.
+			var inRangeLabel = new ChartAxisLabel(18, "18");
+			var axisMethod = typeof(ChartAxis).GetMethod("InvokeLabelCreated",
+				System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+			axisMethod?.Invoke(axis, new object[] { inRangeLabel });
+
+			var outOfRangeLabel = new ChartAxisLabel(25, "25");
+			axisMethod?.Invoke(axis, new object[] { outOfRangeLabel });
+
+			// Assert
+			Assert.NotNull(inRangeLabel.LabelStyle);
+			Assert.Equal(Colors.Blue, inRangeLabel.LabelStyle.TextColor);
+			Assert.Null(outOfRangeLabel.LabelStyle);
+		}
+
+		[Fact]
+		public void RangeStyles_NullStyleInCollection_IsSkippedDuringLookup()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 15, End = 21 });
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 30, End = 40 });
+
+			// Act & Assert - values outside all defined ranges do not match anything.
+			Assert.Null(axis.GetRangeStyle(25));
+		}
+
+		[Fact]
+		public void RangeStyles_WithZooming_StyleLookupStillResolves()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var rangeStyle = new ChartAxisRangeStyle { Start = 15, End = 21 };
+			axis.RangeStyles.Add(rangeStyle);
+
+			// Act - simulate zoom state.
+			axis.ZoomFactor = 0.5;
+			axis.ZoomPosition = 0.25;
+
+			// Assert - the range lookup is pure value-based, unaffected by zoom transformations.
+			Assert.Same(rangeStyle, axis.GetRangeStyle(18));
+		}
+
+		[Theory]
+		[InlineData(0, 3, 1.5)]
+		[InlineData(3, 7, 5)]
+		[InlineData(7, 11, 9)]
+		[InlineData(0, 11, 5.5)]
+		public void RangeStyles_CategoryAxisIndexBounds_StyleIsAppliedOnIndexRange(double indexStart, double indexEnd, double indexInside)
+		{
+			// Arrange
+			var categoryAxis = new CategoryAxis();
+			var rangeStyle = new ChartAxisRangeStyle { Start = indexStart, End = indexEnd };
+			categoryAxis.RangeStyles.Add(rangeStyle);
+
+			// Act & Assert
+			Assert.Same(rangeStyle, categoryAxis.GetRangeStyle(indexInside));
+			Assert.Null(categoryAxis.GetRangeStyle(indexEnd + 5));
+		}
+
+		[Fact]
+		public void RangeStyles_AddDynamically_RaisesCollectionChangedSoAxisRedraws()
+		{
+			// Arrange - the axis must observe membership changes to trigger UpdateLayout.
+			var axis = new NumericalAxis();
+			int notifyCount = 0;
+			axis.RangeStyles.RangeStyleChanged += (s, e) => notifyCount++;
+
+			// Act - dynamically adding a style must raise the notification.
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 15, End = 21 });
+
+			// Assert
+			Assert.Equal(1, notifyCount);
+		}
+
+		[Fact]
+		public void RangeStyles_AddMultipleDynamically_RaisesNotificationForEachChange()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			int notifyCount = 0;
+			axis.RangeStyles.RangeStyleChanged += (s, e) => notifyCount++;
+
+			// Act - multiple dynamic additions must each raise the notification.
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 5, End = 8 });
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 15, End = 21 });
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 30, End = 40 });
+
+			// Assert
+			Assert.Equal(3, notifyCount);
+			Assert.True(axis.HasRangeStyles);
+		}
+
+		[Fact]
+		public void RangeStyles_RemoveDynamically_RaisesCollectionChangedSoAxisRedraws()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var rangeStyle = new ChartAxisRangeStyle { Start = 15, End = 21 };
+			axis.RangeStyles.Add(rangeStyle);
+			int notifyCount = 0;
+			axis.RangeStyles.RangeStyleChanged += (s, e) => notifyCount++;
+
+			// Act
+			axis.RangeStyles.Remove(rangeStyle);
+
+			// Assert
+			Assert.Equal(1, notifyCount);
+			Assert.False(axis.HasRangeStyles);
+		}
+
+		[Fact]
+		public void RangeStyles_ClearDynamically_RaisesCollectionChangedSoAxisRedraws()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 5, End = 8 });
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 15, End = 21 });
+			int notifyCount = 0;
+			axis.RangeStyles.RangeStyleChanged += (s, e) => notifyCount++;
+
+			// Act
+			axis.RangeStyles.Clear();
+
+			// Assert
+			Assert.Equal(1, notifyCount);
+			Assert.False(axis.HasRangeStyles);
+		}
+
+		[Fact]
+		public void RangeStyles_ReplaceDynamically_RaisesCollectionChangedSoAxisRedraws()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			axis.RangeStyles.Add(new ChartAxisRangeStyle { Start = 5, End = 8 });
+			int notifyCount = 0;
+			axis.RangeStyles.RangeStyleChanged += (s, e) => notifyCount++;
+
+			// Act - indexer replace must raise the notification too.
+			axis.RangeStyles[0] = new ChartAxisRangeStyle { Start = 15, End = 21 };
+
+			// Assert
+			Assert.Equal(1, notifyCount);
+			Assert.Same(axis.GetRangeStyle(18), axis.RangeStyles[0]);
+		}
+
+		[Fact]
+		public void RangeStyles_ItemStyleChange_AfterDynamicAdd_StillRaisesNotification()
+		{
+			// Arrange - dynamically added items must keep propagating property changes.
+			var axis = new NumericalAxis();
+			var rangeStyle = new ChartAxisRangeStyle
+			{
+				Start = 15,
+				End = 21,
+				MajorGridLineStyle = new ChartLineStyle()
+			};
+			axis.RangeStyles.Add(rangeStyle);
+			int notifyCount = 0;
+			axis.RangeStyles.RangeStyleChanged += (s, e) => notifyCount++;
+
+			// Act - mutating a nested style property and the range bounds.
+			rangeStyle.MajorGridLineStyle!.StrokeWidth = 4;
+			rangeStyle.Start = 10;
+
+			// Assert
+			Assert.Equal(2, notifyCount);
+		}
+
+		[Fact]
+		public void RangeStyles_StyleProperties_DefaultToNull_SoUnsetStylesFallBackToAxisStyles()
+		{
+			// Arrange & Act - a range that only customizes the major grid line must not own
+			// the other element styles, allowing fallthrough to axis-level defaults.
+			var rangeStyle = new ChartAxisRangeStyle();
+
+			// Assert
+			Assert.Null(rangeStyle.MajorGridLineStyle);
+			Assert.Null(rangeStyle.MinorGridLineStyle);
+			Assert.Null(rangeStyle.MajorTickStyle);
+			Assert.Null(rangeStyle.MinorTickStyle);
+			Assert.Null(rangeStyle.LabelStyle);
+		}
+
+		[Fact]
+		public void RangeStyles_OverlappingRanges_EachElementTypeResolvesIndependently()
+		{
+			// Arrange - the user's exact overlap scenario:
+			// Range A (0-50) sets major grid line style.
+			// Range B (30-80) sets major tick style.
+			// Range C (40-70) sets minor grid line style.
+			var axis = new NumericalAxis();
+			var rangeA = new ChartAxisRangeStyle
+			{
+				Start = 0,
+				End = 50,
+				MajorGridLineStyle = new ChartLineStyle { Stroke = Colors.Red, StrokeWidth = 2 }
+			};
+			var rangeB = new ChartAxisRangeStyle
+			{
+				Start = 30,
+				End = 80,
+				MajorTickStyle = new ChartAxisTickStyle { Stroke = Colors.Green, StrokeWidth = 2 }
+			};
+			var rangeC = new ChartAxisRangeStyle
+			{
+				Start = 40,
+				End = 70,
+				MinorGridLineStyle = new ChartLineStyle { Stroke = Colors.Blue, StrokeWidth = 2 }
+			};
+			axis.RangeStyles.Add(rangeA);
+			axis.RangeStyles.Add(rangeB);
+			axis.RangeStyles.Add(rangeC);
+
+			// Act & Assert - at value 45 all three ranges contain the value; each element
+			// style must resolve from its own setting range, not just the first match.
+			Assert.Same(rangeA.MajorGridLineStyle, axis.GetMajorGridLineStyleInRange(45));
+			Assert.Same(rangeB.MajorTickStyle, axis.GetMajorTickStyleInRange(45));
+			Assert.Same(rangeC.MinorGridLineStyle, axis.GetMinorGridLineStyleInRange(45));
+
+			// The unset element styles of overlapping ranges must fall back to null (axis default).
+			Assert.Null(axis.GetMinorTickStyleInRange(45));
+			Assert.Null(axis.GetLabelStyleInRange(45));
+		}
+
+		[Fact]
+		public void RangeStyles_OverlappingRanges_LastRangeSettingSameElementWins()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var first = new ChartAxisRangeStyle
+			{
+				Start = 0,
+				End = 50,
+				MajorTickStyle = new ChartAxisTickStyle { Stroke = Colors.Green }
+			};
+			var last = new ChartAxisRangeStyle
+			{
+				Start = 20,
+				End = 50,
+				MajorTickStyle = new ChartAxisTickStyle { Stroke = Colors.Orange }
+			};
+			axis.RangeStyles.Add(first);
+			axis.RangeStyles.Add(last);
+
+			// Act & Assert - in the overlap, the last range setting the same element style wins.
+			Assert.Same(last.MajorTickStyle, axis.GetMajorTickStyleInRange(35));
+			// Outside the last range's start, the first range's style still applies.
+			Assert.Same(first.MajorTickStyle, axis.GetMajorTickStyleInRange(10));
+		}
+
+		[Fact]
+		public void RangeStyles_RangeLeavingStyleUnset_DoesNotBlockOtherOverlappingRanges()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var earlier = new ChartAxisRangeStyle
+			{
+				Start = 0,
+				End = 60,
+				MajorGridLineStyle = new ChartLineStyle { Stroke = Colors.Red }
+			};
+			var middle = new ChartAxisRangeStyle { Start = 10, End = 40 }; // sets nothing
+			axis.RangeStyles.Add(earlier);
+			axis.RangeStyles.Add(middle);
+
+			// Act & Assert - inside 'middle', the earlier range's style must still resolve
+			// because the middle range does not set (null) that style.
+			Assert.Same(earlier.MajorGridLineStyle, axis.GetMajorGridLineStyleInRange(25));
+			// Outside 'earlier' entirely, nothing resolves.
+			Assert.Null(axis.GetMajorGridLineStyleInRange(70));
+		}
+
+		[Fact]
+		public void RangeStyles_OverlappingRanges_LabelStyle_MergesAcrossRanges()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			var rangeA = new ChartAxisRangeStyle
+			{
+				Start = 0,
+				End = 50,
+				LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.Red }
+			};
+			var rangeB = new ChartAxisRangeStyle
+			{
+				Start = 30,
+				End = 80,
+				LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.Blue }
+			};
+			axis.RangeStyles.Add(rangeA);
+			axis.RangeStyles.Add(rangeB);
+
+			// Act & Assert - inside the overlap the last range's label style wins;
+			// inside range A only, its style applies; outside both, none applies.
+			Assert.Same(rangeA.LabelStyle, axis.GetLabelStyleInRange(20));
+			Assert.Same(rangeB.LabelStyle, axis.GetLabelStyleInRange(45));
+			Assert.Null(axis.GetLabelStyleInRange(90));
+		}
+
+		[Fact]
+		public void RangeStyles_LabelCreation_AppliesMergedLabelStyleFromOverlappingRanges()
+		{
+			// Arrange
+			var axis = new NumericalAxis();
+			axis.RangeStyles.Add(new ChartAxisRangeStyle
+			{
+				Start = 0,
+				End = 50,
+				LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.Red }
+			});
+			axis.RangeStyles.Add(new ChartAxisRangeStyle
+			{
+				Start = 30,
+				End = 80,
+				LabelStyle = new ChartAxisLabelStyle { TextColor = Colors.Blue }
+			});
+
+			var overlapLabel = new ChartAxisLabel(45, "45");
+			var earlierOnlyLabel = new ChartAxisLabel(10, "10");
+			var outsideLabel = new ChartAxisLabel(90, "90");
+			var axisMethod = typeof(ChartAxis).GetMethod("InvokeLabelCreated",
+				System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+			// Act
+			axisMethod?.Invoke(axis, new object[] { overlapLabel });
+			axisMethod?.Invoke(axis, new object[] { earlierOnlyLabel });
+			axisMethod?.Invoke(axis, new object[] { outsideLabel });
+
+			// Assert
+			Assert.Equal(Colors.Blue, overlapLabel.LabelStyle?.TextColor);
+			Assert.Equal(Colors.Red, earlierOnlyLabel.LabelStyle?.TextColor);
+			Assert.Null(outsideLabel.LabelStyle);
+		}
+
+		#endregion
 	}
 }

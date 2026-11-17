@@ -343,12 +343,12 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		public static readonly BindableProperty StartYProperty =
 			BindableProperty.Create(nameof(StartY), typeof(int), typeof(SfPopup), -1, BindingMode.Default, null, propertyChanged: OnStartYPropertyChanged);
-		
+
 		/// <summary>
-        /// Identifies the Padding bindable property.
-        /// </summary>
-        public static new readonly BindableProperty PaddingProperty =
-            BindableProperty.Create("Padding", typeof(Thickness), typeof(SfPopup), new Thickness(0.0), BindingMode.Default, propertyChanged: OnPaddingPropertyChanged);
+		/// Identifies the Padding bindable property.
+		/// </summary>
+		public static new readonly BindableProperty PaddingProperty =
+			BindableProperty.Create("Padding", typeof(Thickness), typeof(SfPopup), new Thickness(0.0), BindingMode.Default, propertyChanged: OnPaddingPropertyChanged);
 
 		/// <summary>
 		/// Identifies the PopupStyle bindable property.
@@ -1030,16 +1030,16 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-        /// Gets or sets the padding space between popup overlay and the popupView.
-        /// </summary>
-        /// <remarks>
-        /// The popupView will be padded inside the overlay when the popupView bounds intersect the padding region.
-        /// </remarks>
-        public new Thickness Padding
-        {
-            get { return (Thickness)GetValue(PaddingProperty); }
-            set { SetValue(PaddingProperty, value); }
-        }
+		/// Gets or sets the padding space between popup overlay and the popupView.
+		/// </summary>
+		/// <remarks>
+		/// The popupView will be padded inside the overlay when the popupView bounds intersect the padding region.
+		/// </remarks>
+		public new Thickness Padding
+		{
+			get { return (Thickness)GetValue(PaddingProperty); }
+			set { SetValue(PaddingProperty, value); }
+		}
 
 		/// <summary>
 		/// Gets or sets the style to be applied to the _popupView in <see cref="SfPopup"/>.
@@ -1748,6 +1748,14 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 			if (IsOpen && _popupView is not null)
 			{
+				// Ticket 881122: Reset animation properties before layout recalculation.
+				// When animations are applied (Zoom, Slide modes), the transforms (Scale, TranslationX, TranslationY)
+				// affect layout measurements on iOS. Resetting these ensures accurate size and position calculations.
+				if (this.CanAnimate())
+				{
+					this.ResetAnimatedProperties();
+				}
+
 				ResetPopupWidthHeight();
 				_popupView.ApplyShadowAndCornerRadius();
 				_popupView.InvalidateForceLayout();
@@ -2257,26 +2265,26 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			}
 			else
 			{
-                x = _isRTL ? horizontalEndPoint - _showXPosition - _popupViewWidth : _showXPosition + horizontalStartPoint;
-                y = _showYPosition + verticalStartPoint;
+				x = _isRTL ? horizontalEndPoint - _showXPosition - _popupViewWidth : _showXPosition + horizontalStartPoint;
+				y = _showYPosition + verticalStartPoint;
 
-                if (_showXPosition is -1 && _showYPosition is -1)
-                {
-                    if (RelativeView is not null && RelativeView.Handler is not null && RelativeView.Handler.PlatformView is not null)
-                    {
-                        CalculateRelativePoint(RelativeView, RelativePosition, AbsoluteX, AbsoluteY, ref x, ref y);
-                    }
-                    else
-                    {
-                        x = StartX is -1 ? (ScreenWidth - _popupViewWidth) / 2 : _isRTL ? horizontalEndPoint - StartX - _popupViewWidth : StartX + horizontalStartPoint;
-                        y = StartY is -1 ? (ScreenHeight - _popupViewHeight) / 2 : StartY + verticalStartPoint;
-                    }
-                }
-            }
+				if (_showXPosition is -1 && _showYPosition is -1)
+				{
+					if (RelativeView is not null && RelativeView.Handler is not null && RelativeView.Handler.PlatformView is not null)
+					{
+						CalculateRelativePoint(RelativeView, RelativePosition, AbsoluteX, AbsoluteY, ref x, ref y);
+					}
+					else
+					{
+						x = StartX is -1 ? (ScreenWidth - _popupViewWidth) / 2 : _isRTL ? horizontalEndPoint - StartX - _popupViewWidth : StartX + horizontalStartPoint;
+						y = StartY is -1 ? (ScreenHeight - _popupViewHeight) / 2 : StartY + verticalStartPoint;
+					}
+				}
+			}
 
-            x = ValidatePopupPosition(x, _popupViewWidth, horizontalStartPoint + (_isRTL ? rightPadding : leftPadding), horizontalEndPoint);
-            y = ValidatePopupPosition(y, _popupViewHeight, verticalStartPoint + topPadding, verticalEndPoint);
-            LayoutPopup(x, y);
+			x = ValidatePopupPosition(x, _popupViewWidth, horizontalStartPoint + (_isRTL ? rightPadding : leftPadding), horizontalEndPoint);
+			y = ValidatePopupPosition(y, _popupViewHeight, verticalStartPoint + topPadding, verticalEndPoint);
+			LayoutPopup(x, y);
 		}
 
 		/// <summary>
@@ -2539,46 +2547,46 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		bool CalculatePopupViewHeight(double availableWidth, double availableHeight)
 		{
-            double strokeThickness = PopupStyle.GetStrokeThickness();
-            double tempPopupViewHeight = 0;
-            if (CanShowPopupInFullScreen)
-            {
-                tempPopupViewHeight = availableHeight;
-            }
-            else
-            {
-                double contentHeightRequest = -1;
-                if (ContentTemplate is not null && _popupView is not null && _popupView._popupMessageView is not null && _popupView._popupMessageView.Content is not null
-                    && (HeightRequest >= 0 || _popupView._popupMessageView.HeightRequest >= 0))
-                {
-                    // MAUI-826711 Created multiple instance of ContentTemplate in Maui SfPopup.
-                    // Removed the CreateContent() and used the PopupView.PopupMessageView.Content.
-                    contentHeightRequest = GetFinalHeight(_popupView._popupMessageView.Content as View);
-                }
+			double strokeThickness = PopupStyle.GetStrokeThickness();
+			double tempPopupViewHeight = 0;
+			if (CanShowPopupInFullScreen)
+			{
+				tempPopupViewHeight = availableHeight;
+			}
+			else
+			{
+				double contentHeightRequest = -1;
+				if (ContentTemplate is not null && _popupView is not null && _popupView._popupMessageView is not null && _popupView._popupMessageView.Content is not null
+					&& (HeightRequest >= 0 || _popupView._popupMessageView.HeightRequest >= 0))
+				{
+					// MAUI-826711 Created multiple instance of ContentTemplate in Maui SfPopup.
+					// Removed the CreateContent() and used the PopupView.PopupMessageView.Content.
+					contentHeightRequest = GetFinalHeight(_popupView._popupMessageView.Content as View);
+				}
 
-                if (contentHeightRequest >= 0)
-                {
-                    tempPopupViewHeight = contentHeightRequest + AppliedHeaderHeight + AppliedFooterHeight + strokeThickness;
-                }
-                else if (HeightRequest >= 0)
-                {
-                    tempPopupViewHeight = Math.Max(HeightRequest, MinimumHeightRequest);
-                }
-                else
-                {
-                    if (AutoSizeMode is PopupAutoSizeMode.Width || AutoSizeMode is PopupAutoSizeMode.None || ContentTemplate is null)
-                    {
-                        tempPopupViewHeight = Math.Max(MinimumHeightRequest, _defaultPopupViewHeight + AppliedHeaderHeight + AppliedFooterHeight);
-                    }
-                    else
-                    {
-                        return true;
-                    }
-                }
-            }
+				if (contentHeightRequest >= 0)
+				{
+					tempPopupViewHeight = contentHeightRequest + AppliedHeaderHeight + AppliedFooterHeight + strokeThickness;
+				}
+				else if (HeightRequest >= 0)
+				{
+					tempPopupViewHeight = Math.Max(HeightRequest, MinimumHeightRequest);
+				}
+				else
+				{
+					if (AutoSizeMode is PopupAutoSizeMode.Width || AutoSizeMode is PopupAutoSizeMode.None || ContentTemplate is null)
+					{
+						tempPopupViewHeight = Math.Max(MinimumHeightRequest, _defaultPopupViewHeight + AppliedHeaderHeight + AppliedFooterHeight);
+					}
+					else
+					{
+						return true;
+					}
+				}
+			}
 
-            ValidateAndSetPopupHeight(availableHeight, calculatedPopupViewHeight: tempPopupViewHeight);
-            return false;
+			ValidateAndSetPopupHeight(availableHeight, calculatedPopupViewHeight: tempPopupViewHeight);
+			return false;
 		}
 
 		/// <summary>
@@ -2586,10 +2594,10 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// </summary>
 		void CalculateAutoSize(double availableWidth, double availableHeight, bool canAutoSizeWidth, bool canAutoSizeHeight)
 		{
-            // MAUI-826711 Created multiple instance of ContentTemplate in Maui SfPopup.
-            // Removed the CreateContent() and used the PopupView.PopupMessageView.Content.
-            if (_popupView is not null && _popupView._popupMessageView is not null && _popupView._popupMessageView.Content is not null)
-            {
+			// MAUI-826711 Created multiple instance of ContentTemplate in Maui SfPopup.
+			// Removed the CreateContent() and used the PopupView.PopupMessageView.Content.
+			if (_popupView is not null && _popupView._popupMessageView is not null && _popupView._popupMessageView.Content is not null)
+			{
 				// When AutoSizeMode is set to Both and a height request or content height is specified, only the width should be measured and auto-resized to the measured size, since the height request takes priority.
 				// Similarly, when AutoSizeMode is set to Both and a width request is specified, only the height should be measured and auto-resized to the measured size, as the width request takes priority.
 				if (AutoSizeMode is PopupAutoSizeMode.Width || (canAutoSizeWidth && !canAutoSizeHeight))
@@ -2609,7 +2617,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					ValidateAndSetPopupWidth(availableWidth, calculatedContentWidth: sizeRequest.Width);
 					ValidateAndSetPopupHeight(availableHeight, calculatedContentHeight: sizeRequest.Height);
 				}
-            }
+			}
 		}
 
 		/// <summary>
@@ -2620,24 +2628,24 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="calculatedPopupViewWidth">Width calculated for PopupView.</param>
 		void ValidateAndSetPopupWidth(double availableWidth, double calculatedContentWidth = -1, double calculatedPopupViewWidth = -1)
 		{
-            double strokeThickness = PopupStyle is not null ? PopupStyle.StrokeThickness : 0;
-            if (calculatedContentWidth is not -1)
-            {
-                // If the content width is calculated, then PopupViewWidth should be set to the content width.
-                calculatedPopupViewWidth = calculatedContentWidth + strokeThickness;
-            }
+			double strokeThickness = PopupStyle is not null ? PopupStyle.StrokeThickness : 0;
+			if (calculatedContentWidth is not -1)
+			{
+				// If the content width is calculated, then PopupViewWidth should be set to the content width.
+				calculatedPopupViewWidth = calculatedContentWidth + strokeThickness;
+			}
 
-            if (calculatedPopupViewWidth > availableWidth)
-            {
-                _popupViewWidth = availableWidth;
-            }
-            else
-            {
-                _popupViewWidth = calculatedPopupViewWidth;
-            }
+			if (calculatedPopupViewWidth > availableWidth)
+			{
+				_popupViewWidth = availableWidth;
+			}
+			else
+			{
+				_popupViewWidth = calculatedPopupViewWidth;
+			}
 
-            _popupViewWidth = Math.Max(0, _popupViewWidth);
-            AppliedPopupBodyWidth = Math.Max(0, _popupViewWidth - strokeThickness);
+			_popupViewWidth = Math.Max(0, _popupViewWidth);
+			AppliedPopupBodyWidth = Math.Max(0, _popupViewWidth - strokeThickness);
 		}
 
 		/// <summary>
@@ -2787,13 +2795,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				if (windowPage.Navigation.ModalStack.LastOrDefault() is not null)
 				{
 					// LayoutChanged only wired for Modal page. Since when Popup is opened OnAppearing of Modal page height and width is not update in native level.
-#if NET10_0
 					page.SizeChanged -= this.OnPageSizeChanged;
 					page.SizeChanged += this.OnPageSizeChanged;
-#else
-					page.SizeChanged -= this.OnPageLayoutChanged;
-					page.SizeChanged += this.OnPageLayoutChanged;
-#endif
 				}
 #else
 				// while calling show() from onAppearing, page.window is not null. So fails the first condition and hook the onMainPageLoaded.
@@ -2883,11 +2886,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			// Unwire the LayoutChanged to avoid issues when resizing the window with Popup.IsOpen set to false.
 			if (sender is Page page)
 			{
-#if NET10_0
 				page.SizeChanged -= this.OnPageSizeChanged;
-#else
-				page.LayoutChanged -= this.OnPageLayoutChanged;
-#endif
 			}
 		}
 
@@ -3101,7 +3100,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					{
 						_popupOverlayContainer.Parent = page;
 
-   						// _popupOverlayContainer visibility is set to false after dismissing the popup.
+						// _popupOverlayContainer visibility is set to false after dismissing the popup.
 						// _popupOverlayContainer will be set as the parent to popupView here from DisplayPopup().
 						// Due to Maui 9.0.50 changes [https://github.com/dotnet/maui/pull/20154],
 						// the IsVisible property of _popupView is set to false when reopening with the same instance of the popup, since _popupOverlayContainer visibility will now be false.
@@ -3538,7 +3537,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			}
 
 			if (!_isOverlayAdded && Handler != null)
-            {
+			{
 				InitializeOverlay();
 
 				// 989436: Popup is not shown when IsOpen is set in XAML or in the constructor during loading with a direct page. So, the popup needs to be displayed when it is still not shown from OnIsOpenChanged.
@@ -3857,7 +3856,7 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				popup.SetPopupViewDefaultHeight();
 				if (popup._popupView is not null)
 				{
-					if(popup._popupView._headerView is not null)
+					if (popup._popupView._headerView is not null)
 					{
 						if ((bool)newValue)
 						{
@@ -4089,15 +4088,15 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		/// <param name="newValue">New value obtained in the property.</param>
 		static void OnShowCloseButtonPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-            var popup = (SfPopup)bindable;
-            if (popup is not null && popup._popupView is not null)
-            {
-                popup._popupView.UpdateHeaderView();
-                if (popup.IsOpen && popup._popupView is not null)
-                {
-                    popup._popupView.InvalidateForceLayout();
-                }
-            }
+			var popup = (SfPopup)bindable;
+			if (popup is not null && popup._popupView is not null)
+			{
+				popup._popupView.UpdateHeaderView();
+				if (popup.IsOpen && popup._popupView is not null)
+				{
+					popup._popupView.InvalidateForceLayout();
+				}
+			}
 		}
 
 		/// <summary>
@@ -4221,19 +4220,19 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		}
 
 		/// <summary>
-        /// Delegate for Padding bindable property changed.
-        /// </summary>
-        /// <param name="bindable">Instance of the <see cref="SfPopup"/> class.</param>
-        /// <param name="oldValue">Old value in the property.</param>
-        /// <param name="newValue">New value obtained in the property.</param>
-        private static void OnPaddingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            var popup = (SfPopup)bindable;
-            if (popup is not null && popup.IsOpen && newValue is not null && newValue != oldValue)
-            {
-                popup.PositionPopupView();
-            }
-        }
+		/// Delegate for Padding bindable property changed.
+		/// </summary>
+		/// <param name="bindable">Instance of the <see cref="SfPopup"/> class.</param>
+		/// <param name="oldValue">Old value in the property.</param>
+		/// <param name="newValue">New value obtained in the property.</param>
+		private static void OnPaddingPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			var popup = (SfPopup)bindable;
+			if (popup is not null && popup.IsOpen && newValue is not null && newValue != oldValue)
+			{
+				popup.PositionPopupView();
+			}
+		}
 
 		#endregion
 

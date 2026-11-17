@@ -145,26 +145,131 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 			switch (e.Action)
 			{
-				case PointerActions.Pressed:
-					OnHandleTouchInteraction(PointerActions.Pressed, e.TouchPoint);
-					break;
+               case PointerActions.Pressed:
+                    {
+                        bool handled = false;
 
-				case PointerActions.Moved:
-					OnHandleTouchInteraction(PointerActions.Moved, e.TouchPoint);
-					break;
+                        // Prioritize primary drawer if it has priority or is already open/swiping
+                        if ((this.IsPrimaryDrawerPrioritized() && !_isSecondaryDrawerOpen) || _isDrawerOpen || _isPrimaryDrawerSwiping)
+                        {
+                            this.OnHandleTouchInteraction(PointerActions.Pressed, e.TouchPoint);
+                            _isPrimaryDrawerSwiping = true;
+                            handled = true;
+                        }
+                        // Handle secondary drawer if it's open/swiping and primary isn't prioritized
+                        else if ((this.SecondaryDrawerSettings?.IsOpen ?? false) || _isSecondaryDrawerSwiping)
+                        {
+                            this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, e.TouchPoint);
+                            handled = true;
+                        }
+                        // Edge activation for secondary drawer (only if primary isn't prioritized or active)
+                        else if (this.SecondaryDrawerSettings != null && !_isPrimaryDrawerSwiping)
+                        {
+                            switch (this.SecondaryDrawerSettings.Position)
+                            {
+                                case Position.Left:
+									if ((!_isRTL && e.TouchPoint.X <= this.SecondaryDrawerSettings.TouchThreshold && e.TouchPoint.X >= 0) ||
+									    (_isRTL && e.TouchPoint.X >= (this.ScreenWidth - this.SecondaryDrawerSettings.TouchThreshold) && e.TouchPoint.X <= this.ScreenWidth))
 
-				case PointerActions.Released:
-					if (_isTapGestureRemoved)
-					{
-						this.AddGestureListener(this);
-						_isTapGestureRemoved = false;
-					}
-					OnHandleTouchInteraction(PointerActions.Released, e.TouchPoint);
-					break;
+                                    {
+                                        this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, e.TouchPoint);
+                                        _isSecondaryDrawerSwiping = true;
+                                        handled = true;
+                                    }
+                                    break;
+                                case Position.Right:
+                                    if ((!_isRTL && e.TouchPoint.X >= (this.ScreenWidth - this.SecondaryDrawerSettings.TouchThreshold) && e.TouchPoint.X <= this.ScreenWidth) ||
+                                        (_isRTL && e.TouchPoint.X <= this.SecondaryDrawerSettings.TouchThreshold && e.TouchPoint.X >= 0))
 
-				case PointerActions.Cancelled:
-				case PointerActions.Entered:
-					break;
+                                    {
+                                        this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, e.TouchPoint);
+                                        _isSecondaryDrawerSwiping = true;
+                                        handled = true;
+                                    }
+                                    break;
+                                case Position.Top:
+                                    if (e.TouchPoint.Y <= this.SecondaryDrawerSettings.TouchThreshold && e.TouchPoint.Y >= 0)
+                                    {
+                                        this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, e.TouchPoint);
+                                        _isSecondaryDrawerSwiping = true;
+                                        handled = true;
+                                    }
+                                    break;
+                                case Position.Bottom:
+                                    if (e.TouchPoint.Y >= (this.ScreenHeight - this.SecondaryDrawerSettings.TouchThreshold) && e.TouchPoint.Y <= this.ScreenHeight)
+                                    {
+                                        this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, e.TouchPoint);
+                                        _isSecondaryDrawerSwiping = true;
+                                        handled = true;
+                                    }
+                                    break;
+                            }
+                        }
+
+                        // Fallback to primary drawer if not handled by secondary and primary itself is not currently swiping
+                        if (!handled && !_isPrimaryDrawerSwiping && !_isSecondaryDrawerSwiping)
+                        {
+                            this.OnHandleTouchInteraction(PointerActions.Pressed, e.TouchPoint);
+                            _isPrimaryDrawerSwiping = true;
+                        }
+
+                        break;
+                    }
+
+                case PointerActions.Moved:
+                    {
+
+                        if ((this.SecondaryDrawerSettings?.IsOpen ?? false) || _isSecondaryDrawerSwiping)
+                        {
+                            this.OnSecondaryHandleTouchInteraction(PointerActions.Moved, e.TouchPoint);
+                        }
+                        else if (_isDrawerOpen || _isPrimaryDrawerSwiping)
+                        {
+                            this.OnHandleTouchInteraction(PointerActions.Moved, e.TouchPoint);
+                        }
+                        break;
+                    }
+
+                case PointerActions.Released:
+                    {
+                        if (_isTapGestureRemoved)
+                        {
+                            this.AddGestureListener(this);
+                            _isTapGestureRemoved = false;
+                        }
+
+                        if ((this.SecondaryDrawerSettings?.IsOpen ?? false) || _isSecondaryDrawerSwiping)
+                        {
+                            this.OnSecondaryHandleTouchInteraction(PointerActions.Released, e.TouchPoint);
+                            _isSecondaryDrawerSwiping = false;
+                        }
+                        else
+                        {
+                            this.OnHandleTouchInteraction(PointerActions.Released, e.TouchPoint);
+                            _isPrimaryDrawerSwiping = false;
+                        }
+                        break;
+                    }
+
+                case PointerActions.Cancelled:
+                    {
+                        if ((this.SecondaryDrawerSettings?.IsOpen ?? false) || _isSecondaryDrawerSwiping)
+                        {
+                            this.OnSecondaryHandleTouchInteraction(PointerActions.Cancelled, e.TouchPoint);
+                            _isSecondaryDrawerSwiping = false;
+                        }
+                        else
+                        {
+                            this.OnHandleTouchInteraction(PointerActions.Cancelled, e.TouchPoint);
+                            _isPrimaryDrawerSwiping = false;
+                        }
+                        break;
+                    }
+
+                case PointerActions.Entered:
+                    {
+                        break;
+                    }
 			}
 		}
 
@@ -175,6 +280,17 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		{
 			InitializeGesture();
 		}
+
+        // Mirrors Windows: primary gets priority when both drawers share the same edge
+        private bool IsPrimaryDrawerPrioritized()
+        {
+            if (this.SecondaryDrawerSettings != null && this.DrawerSettings.Position == this.SecondaryDrawerSettings.Position && 
+            (this.DrawerSettings.DrawerHeaderView !=null || this.DrawerSettings.DrawerContentView !=null || this.DrawerSettings.DrawerFooterView!=null))
+            {
+                return true;
+            }
+            return false;
+        }
 
 #if !MACCATALYST
 
@@ -251,10 +367,15 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 #if !MACCATALYST
 
-            // Use the improved gesture detection logic
-            if (view is not null && view.IsOpen)
+             // Use the improved gesture detection logic for both primary and secondary drawers
+            if (view is not null && (((view.DrawerSettings?.IsOpen) ?? false) || ((view.SecondaryDrawerSettings?.IsOpen) ?? false)))
             {
-                if(view.DrawerSettings.Position == Position.Bottom || view.DrawerSettings.Position == Position.Top)
+                // Determine which drawer is currently active
+                var activePosition = (view.SecondaryDrawerSettings?.IsOpen ?? false) && view.SecondaryDrawerSettings != null
+                    ? view.SecondaryDrawerSettings.Position
+                    : view.DrawerSettings!.Position;
+
+                if (activePosition == Position.Bottom || activePosition == Position.Top)
                 {
                     if (uIGestureRecognizer is UIPanGestureRecognizer panGesture)
                     {
@@ -270,9 +391,9 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
                             {
                                 bool atTop = scrollView.ContentOffset.Y <= 0;
                                 bool atBottom = scrollView.ContentOffset.Y >= scrollView.ContentSize.Height - scrollView.Bounds.Height;
-                                if(ShouldProcessDrawerScroll(atTop, atBottom, view.DrawerSettings.Position,translation))
+                                if(ShouldProcessDrawerScroll(atTop, atBottom, activePosition, translation))
                                 {
-                                    view.isScroll =false;
+                                    view.isScroll = false;
                                     return true;
                                 }
 
@@ -283,7 +404,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
                             {
                                 bool atTop = collectionView.ContentOffset.Y <= 0;
                                 bool atBottom = collectionView.ContentOffset.Y >= collectionView.ContentSize.Height - collectionView.Bounds.Height;
-                                if (ShouldProcessDrawerScroll(atTop, atBottom, view.DrawerSettings.Position, translation))
+                                if (ShouldProcessDrawerScroll(atTop, atBottom, activePosition, translation))
                                 {
                                     view.isScroll = false;
                                     return true;

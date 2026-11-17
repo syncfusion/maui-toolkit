@@ -16,9 +16,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			trackballChart.Handler?.DisconnectHandler();
 		}
 
-		private void picker_SelectedIndexChanged(object sender, EventArgs e)
+		private void picker_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var picker = (MAUIPicker)sender;
+			if (sender is not MAUIPicker picker)
+			{
+				return;
+			}
+
 			int selectedIndex = picker.SelectedIndex;
 			if (selectedIndex == 0)
 			{
@@ -43,7 +47,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void trackballChart_TrackballCreated(object sender, TrackballEventArgs e)
+		private void trackballChart_TrackballCreated(object? sender, TrackballEventArgs e)
 		{
 			foreach (var info in e.TrackballPointsInfo)
 			{
@@ -67,7 +71,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void checkbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		private void checkbox_CheckedChanged(object? sender, CheckedChangedEventArgs e)
 		{
 			var state = e.Value;
 

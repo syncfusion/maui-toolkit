@@ -7,7 +7,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			InitializeComponent();
 		}
 
-		private void TextColorSegment_Clicked(object sender, EventArgs e)
+		private void TextColorSegment_Clicked(object? sender, EventArgs e)
 		{
 			chip.TextColor = Color.FromArgb("#FFFFFF");
 			chip.SelectionIndicatorColor = Color.FromArgb("#FFFFFF");
@@ -27,7 +27,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 		}
 
 
-		private void TextColorSegment_Clicked_1(object sender, EventArgs e)
+		private void TextColorSegment_Clicked_1(object? sender, EventArgs e)
 		{
 			chip.TextColor = Color.FromArgb("#C76B00");
 			chip.SelectionIndicatorColor = Color.FromArgb("#C76B00");
@@ -46,7 +46,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			text8.Stroke = Colors.Transparent;
 		}
 
-		private void TextColorSegment_Clicked_2(object sender, EventArgs e)
+		private void TextColorSegment_Clicked_2(object? sender, EventArgs e)
 		{
 			chip.TextColor = Color.FromArgb("#A007A3");
 			chip.SelectionIndicatorColor = Color.FromArgb("#A007A3");
@@ -66,7 +66,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 
 		}
 
-		private void TextColorSegment_Clicked_3(object sender, EventArgs e)
+		private void TextColorSegment_Clicked_3(object? sender, EventArgs e)
 		{
 			chip.TextColor = Color.FromArgb("#00C737");
 			chip.SelectionIndicatorColor = Color.FromArgb("#00C737");
@@ -85,7 +85,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			text8.Stroke = Colors.Transparent;
 		}
 
-		private void TextColorSegment_Clicked_4(object sender, EventArgs e)
+		private void TextColorSegment_Clicked_4(object? sender, EventArgs e)
 		{
 			chip.TextColor = Color.FromArgb("#000000");
 			chip.SelectionIndicatorColor = Color.FromArgb("#000000");
@@ -104,7 +104,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			text8.Stroke = Colors.Transparent;
 
 		}
-		private void TextColorSegment_Clicked_5(object sender, EventArgs e)
+		private void TextColorSegment_Clicked_5(object? sender, EventArgs e)
 		{
 			chip.TextColor = Color.FromArgb("#0012B2");
 			chip.SelectionIndicatorColor = Color.FromArgb("#0012B2");
@@ -123,7 +123,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			text8.Stroke = Colors.Transparent;
 
 		}
-		private void TextColorSegment_Clicked_6(object sender, EventArgs e)
+		private void TextColorSegment_Clicked_6(object? sender, EventArgs e)
 		{
 			chip.TextColor = Color.FromArgb("#D1B400");
 			chip.SelectionIndicatorColor = Color.FromArgb("#D1B400");
@@ -142,7 +142,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			text8.Stroke = Colors.Transparent;
 
 		}
-		private void TextColorSegment_Clicked_7(object sender, EventArgs e)
+		private void TextColorSegment_Clicked_7(object? sender, EventArgs e)
 		{
 			chip.TextColor = Color.FromArgb("#CC0000");
 			chip.SelectionIndicatorColor = Color.FromArgb("#CC0000");
@@ -159,7 +159,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 				text8.Stroke = Application.Current.UserAppTheme == AppTheme.Dark ? (Color)App.Current.Resources["PrimaryBackgroundDark"] : (Color)App.Current.Resources["PrimaryBackgroundLight"];
 			}
 		}
-		private void BackgroundColorSegment_Clicked(object sender, EventArgs e)
+		private void BackgroundColorSegment_Clicked(object? sender, EventArgs e)
 		{
 			chip.Background = Color.FromArgb("#FFFFFF");
 			chip.StrokeThickness = viewModel.BorderThickness;
@@ -177,7 +177,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			background8.Stroke = Colors.Transparent;
 		}
 
-		private void BackgroundColorSegment_Clicked_1(object sender, EventArgs e)
+		private void BackgroundColorSegment_Clicked_1(object? sender, EventArgs e)
 		{
 			chip.Background = Color.FromArgb("#C76B00");
 			chip.StrokeThickness = viewModel.BorderThickness;
@@ -195,7 +195,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			background8.Stroke = Colors.Transparent;
 		}
 
-		private void BackgroundColorSegment_Clicked_2(object sender, EventArgs e)
+		private void BackgroundColorSegment_Clicked_2(object? sender, EventArgs e)
 		{
 			chip.Background = Color.FromArgb("#A007A3");
 			chip.StrokeThickness = viewModel.BorderThickness;
@@ -213,7 +213,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			background8.Stroke = Colors.Transparent;
 		}
 
-		private void BackgroundColorSegment_Clicked_3(object sender, EventArgs e)
+		private void BackgroundColorSegment_Clicked_3(object? sender, EventArgs e)
 		{
 			chip.Background = Color.FromArgb("#00C737");
 			chip.StrokeThickness = viewModel.BorderThickness;
@@ -231,7 +231,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			background8.Stroke = Colors.Transparent;
 		}
 
-		private void BackgroundColorSegment_Clicked_4(object sender, EventArgs e)
+		private void BackgroundColorSegment_Clicked_4(object? sender, EventArgs e)
 		{
 			chip.Background = Color.FromArgb("#000000");
 			chip.StrokeThickness = viewModel.BorderThickness;
@@ -248,7 +248,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			background7.Stroke = Colors.Transparent;
 			background8.Stroke = Colors.Transparent;
 		}
-		private void BackgroundColorSegment_Clicked_5(object sender, EventArgs e)
+		private void BackgroundColorSegment_Clicked_5(object? sender, EventArgs e)
 		{
 			chip.Background = Color.FromArgb("#0012B2");
 			chip.StrokeThickness = viewModel.BorderThickness;
@@ -265,7 +265,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			background7.Stroke = Colors.Transparent;
 			background8.Stroke = Colors.Transparent;
 		}
-		private void BackgroundColorSegment_Clicked_6(object sender, EventArgs e)
+		private void BackgroundColorSegment_Clicked_6(object? sender, EventArgs e)
 		{
 			chip.Background = Color.FromArgb("#D1B400");
 			chip.StrokeThickness = viewModel.BorderThickness;
@@ -282,7 +282,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 
 			background8.Stroke = Colors.Transparent;
 		}
-		private void BackgroundColorSegment_Clicked_7(object sender, EventArgs e)
+		private void BackgroundColorSegment_Clicked_7(object? sender, EventArgs e)
 		{
 			chip.Background = Color.FromArgb("#CC0000");
 			chip.StrokeThickness = viewModel.BorderThickness;
@@ -299,7 +299,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			}
 		}
 
-		private void BorderColorSegment_Clicked(object sender, EventArgs e)
+		private void BorderColorSegment_Clicked(object? sender, EventArgs e)
 		{
 			chip.Stroke = Color.FromArgb("#FFFFFF");
 			if (Application.Current != null)
@@ -315,7 +315,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			border7.Stroke = Colors.Transparent;
 			border8.Stroke = Colors.Transparent;
 		}
-		private void BorderColorSegment_Clicked_1(object sender, EventArgs e)
+		private void BorderColorSegment_Clicked_1(object? sender, EventArgs e)
 		{
 			chip.Stroke = Color.FromArgb("#C76B00");
 			border1.Stroke = Colors.Transparent;
@@ -332,7 +332,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			border8.Stroke = Colors.Transparent;
 		}
 
-		private void BorderColorSegment_Clicked_2(object sender, EventArgs e)
+		private void BorderColorSegment_Clicked_2(object? sender, EventArgs e)
 		{
 			chip.Stroke = Color.FromArgb("#A007A3");
 			border1.Stroke = Colors.Transparent;
@@ -349,7 +349,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			border8.Stroke = Colors.Transparent;
 		}
 
-		private void BorderColorSegment_Clicked_3(object sender, EventArgs e)
+		private void BorderColorSegment_Clicked_3(object? sender, EventArgs e)
 		{
 			chip.Stroke = Color.FromArgb("#00C737");
 			border1.Stroke = Colors.Transparent;
@@ -366,7 +366,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			border8.Stroke = Colors.Transparent;
 		}
 
-		private void BorderColorSegment_Clicked_4(object sender, EventArgs e)
+		private void BorderColorSegment_Clicked_4(object? sender, EventArgs e)
 		{
 			chip.Stroke = Color.FromArgb("#141414");
 			border1.Stroke = Colors.Transparent;
@@ -382,7 +382,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			border7.Stroke = Colors.Transparent;
 			border8.Stroke = Colors.Transparent;
 		}
-		private void BorderColorSegment_Clicked_5(object sender, EventArgs e)
+		private void BorderColorSegment_Clicked_5(object? sender, EventArgs e)
 		{
 			chip.Stroke = Color.FromArgb("#0012B2");
 			border1.Stroke = Colors.Transparent;
@@ -398,7 +398,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 			border7.Stroke = Colors.Transparent;
 			border8.Stroke = Colors.Transparent;
 		}
-		private void BorderColorSegment_Clicked_6(object sender, EventArgs e)
+		private void BorderColorSegment_Clicked_6(object? sender, EventArgs e)
 		{
 			chip.Stroke = Color.FromArgb("#D1B400");
 			border1.Stroke = Colors.Transparent;
@@ -414,7 +414,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 
 			border8.Stroke = Colors.Transparent;
 		}
-		private void BorderColorSegment_Clicked_7(object sender, EventArgs e)
+		private void BorderColorSegment_Clicked_7(object? sender, EventArgs e)
 		{
 			chip.Stroke = Color.FromArgb("#CC0000");
 			border1.Stroke = Colors.Transparent;

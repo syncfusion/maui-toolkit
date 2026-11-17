@@ -163,6 +163,18 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			0d,
 			BindingMode.Default);
 
+		/// <summary>
+		/// Identifies the <see cref="Title"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty TitleProperty = BindableProperty.Create(
+			nameof(Title),
+			typeof(object),
+			typeof(ChartLegend),
+			null,
+			BindingMode.Default,
+			null,
+			propertyChanged: OnTitlePropertyChanged);
+
 		#endregion
 
 		#region Public Properties
@@ -643,6 +655,56 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			set { SetValue(OffsetYProperty, value); }
 		}
 
+		/// <summary>
+		/// Gets or sets the title for the legend. It supports the string or any view as title.
+		/// </summary>
+		/// <value>It accepts the <see cref="object"/> value and its default value is null.</value>
+		/// <remarks>
+		/// The title is displayed before the legend items. To customize the appearance of a text title, assign a <see cref="View"/> title with the desired text settings, or set a custom view as the title.
+		/// </remarks>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-21)
+		/// <code><![CDATA[
+		/// <chart:SfCartesianChart>
+		///
+		///     <chart:SfCartesianChart.Legend>
+		///         <chart:ChartLegend Title="Sales Report"/>
+		///     </chart:SfCartesianChart.Legend>
+		///
+		///     <chart:ColumnSeries ItemsSource="{Binding Data}"
+		///                         XBindingPath="Category"
+		///                         YBindingPath="Value"/>
+		///     
+		/// </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-22)
+		/// <code><![CDATA[
+		/// SfCartesianChart chart = new SfCartesianChart();
+		/// ViewModel viewModel = new ViewModel();
+		///
+		/// chart.Legend = new ChartLegend()
+		/// {
+		///     Title = "Sales Report"
+		/// };
+		///
+		/// ColumnSeries series = new ColumnSeries()
+		/// {
+		///     ItemsSource = viewModel.Data,
+		///     XBindingPath = "Category",
+		///     YBindingPath = "Value"
+		/// };
+		/// chart.Series.Add(series);
+		/// ]]>
+		/// </code>
+		/// *** 
+		/// </example>
+		public object Title
+		{
+			get { return GetValue(TitleProperty); }
+			set { SetValue(TitleProperty, value); }
+		}
+
 		internal SfLegend? sfLegend { get; set; }
 		IEnumerable? _itemsSource;
 #pragma warning disable CS8603 // Possible null reference return.
@@ -874,6 +936,36 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			layout._areaBase.ScheduleUpdateArea();
 		}
 
+		static void OnTitlePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is not ChartLegend legend)
+				return;
+
+			legend.UpdateTitleView();
+			legend.ScheduleLegendRelayout();
+		}
+
+		/// <summary>
+		/// Recreates the title view inside the created legend view whenever the title changes.
+		/// </summary>
+		void UpdateTitleView()
+		{
+			(sfLegend as SfLegendExt)?.UpdateLegendTitleView(Title);
+		}
+
+		/// <summary>
+		/// Requests a new measurement pass for the chart layout so the legend title participates in the legend size negotiation.
+		/// </summary>
+		void ScheduleLegendRelayout()
+		{
+			if (Parent is not ChartBase chart)
+				return;
+
+			chart._legendLayout._areaBase.PlotArea.ShouldPopulateLegendItems = true;
+			chart._legendLayout._areaBase.NeedsRelayout = true;
+			chart._legendLayout._areaBase.ScheduleUpdateArea();
+		}
+
 		#endregion
 
 		#region Interface Methods
@@ -886,6 +978,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		SfLegend ILegend.CreateLegendView()
 		{
 			sfLegend = new SfLegendExt();
+			((SfLegendExt)sfLegend).UpdateLegendTitleView(Title);
 			return sfLegend;
 		}
 
@@ -896,10 +989,202 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 	internal partial class SfLegendExt : SfLegend
 	{
+		#region Fields
+
+		/// <summary>
+		/// The container that hosts the title view: the label for text titles or the assigned view title.
+		/// </summary>
+		internal readonly ContentView TitleView = new ContentView()
+		{
+			IsVisible = false,
+			HorizontalOptions = LayoutOptions.Fill,
+			VerticalOptions = LayoutOptions.Fill,
+			Padding = 0
+		};
+
+		/// <summary>
+		/// The scroll view that hosts the legend items; created by the base <see cref="SfLegend"/> constructor.
+		/// </summary>
+		private readonly View legendItemsView;
+
+		#endregion
+
+		#region Constructor
+
+		internal SfLegendExt()
+		{
+			legendItemsView = (View)((IList<IView>)this)[0];
+
+			Insert(0, TitleView);
+		}
+
+		#endregion
+		
+		#region Protected Methods
 		protected override SfShapeView CreateShapeView()
 		{
 			return new ChartLegendShapeView();
 		}
+		/// <summary>
+		/// Measures the title view together with the legend items so the title participates in the legend size negotiation.
+		/// </summary>
+		protected override Size MeasureContent(double widthConstraint, double heightConstraint)
+		{
+			if (!TitleView.IsVisible)
+			{
+				return base.MeasureContent(widthConstraint, heightConstraint);
+			}
+
+			Size titleSize = GetTitleDesiredSize(widthConstraint);
+			Size itemsSize = base.MeasureContent(widthConstraint, heightConstraint);
+
+			if (titleSize.Height > 0 && heightConstraint < titleSize.Height + itemsSize.Height)
+			{
+				itemsSize = base.MeasureContent(widthConstraint, Math.Max(0, heightConstraint - titleSize.Height));
+			}
+
+			return new Size(Math.Max(titleSize.Width, itemsSize.Width), titleSize.Height + itemsSize.Height);
+		}
+
+		/// <summary>
+		/// Arranges the legend block inside the available bounds: the title is placed on top of
+		/// the legend items and the combined block is centered both horizontally and vertically
+		/// in the legend strip for every placement. When the available height cannot fit the block,
+		/// the remaining height is split proportionally between the title and the items according
+		/// to their measured heights.
+		/// </summary>
+		/// <remarks>
+		/// The children are arranged directly (instead of through <c>AbsoluteLayout.SetLayoutBounds </c>)
+		/// because Core's <c>DrawableLayoutManager</c> (the base <c>SfView</c> layout engine) gives every
+		/// auto-sized child the same full bounds in arrange and overwrites — not accumulates — the measured
+		/// height per auto-sized child in measure; two un-bounded children therefore overlap and cannot be
+		/// stacked or centered as a block. Fixed <c>LayoutBounds</c> are also unsuitable: the manager re-measures
+		/// children at those pre-set sizes, leaking arrange-time rects into the next measure pass after a
+		/// title change. This override is the designed Core extension surface
+		/// (<see cref="SfView.MeasureContent"/>/<see cref="SfView.ArrangeContent"/> virtual methods).
+		/// </remarks>
+		protected override Size ArrangeContent(Rect bounds)
+		{
+			if (!TitleView.IsVisible)
+			{
+				return base.ArrangeContent(bounds);
+			}
+
+			Size titleSize = GetTitleDesiredSize(bounds.Width);
+			double itemsHeight = legendItemsView.DesiredSize.Height;
+			double itemsWidth = legendItemsView.DesiredSize.Width;
+
+			double naturalHeight = titleSize.Height + itemsHeight;
+			double titleHeight = titleSize.Height;
+			if (naturalHeight > 0 && bounds.Height < naturalHeight)
+			{
+				double scale = bounds.Height <= 0 ? 0 : bounds.Height / naturalHeight;
+				titleHeight = titleSize.Height * scale;
+				itemsHeight = itemsHeight * scale;
+			}
+
+			double topOffset = Math.Max(0, (bounds.Height - (titleHeight + itemsHeight)) / 2);
+
+			double titleWidth = Math.Min(Math.Max(titleSize.Width, 0), Math.Max(bounds.Width, 0));
+			double itemSlotWidth = Math.Min(Math.Max(itemsWidth, 0), Math.Max(bounds.Width, 0));
+			double titleX = bounds.X + Math.Max(0, (bounds.Width - titleWidth) / 2);
+			double itemsX = bounds.X + Math.Max(0, (bounds.Width - itemSlotWidth) / 2);
+
+			TitleView.Arrange(new Rect(titleX, bounds.Y + topOffset, titleWidth, titleHeight));
+
+			double itemsSlotHeight = Math.Max(0, Math.Min(itemsHeight, bounds.Height - topOffset - titleHeight));
+			Rect itemsBounds = new Rect(itemsX, bounds.Y + topOffset + titleHeight, itemSlotWidth, itemsSlotHeight);
+			legendItemsView.Arrange(itemsBounds);
+
+			return new Size(Math.Max(Math.Max(bounds.Width, titleWidth), itemSlotWidth), titleHeight + itemsSlotHeight);
+		}
+
+		#endregion
+
+		#region Internal Methods
+
+		/// <summary>
+		/// Gets the title view size for the given available width: the size from the preceding
+		/// measure pass when one exists, otherwise a fresh measurement of the title view.
+		/// </summary>
+		private Size GetTitleDesiredSize(double widthConstraint)
+		{
+			if (!TitleView.DesiredSize.IsZero
+				&& (double.IsInfinity(widthConstraint) || widthConstraint >= TitleView.DesiredSize.Width))
+			{
+				return TitleView.DesiredSize;
+			}
+
+			Size reMeasuredSize = TitleView.Measure(widthConstraint, double.PositiveInfinity);
+
+			return reMeasuredSize.IsZero ? TitleView.DesiredSize : reMeasuredSize;
+		}
+
+		/// <summary>
+		/// Creates or updates the legend title view for the given title content.
+		/// </summary>
+		/// <param name="title">The title content; a string renders as a label, a <see cref="View"/> is used directly.</param>
+		internal void UpdateLegendTitleView(object? title)
+		{
+			ClearTitleView();
+			View? newTitleView = null;
+
+			if (title != null)
+			{
+				if (title is View view)
+				{
+					newTitleView = view;
+				}
+				else
+				{
+					string text = title.ToString() ?? string.Empty;
+
+					if (!string.IsNullOrEmpty(text))
+					{
+						newTitleView = CreateTitleLabelView(text);
+					}
+				}
+			}
+
+			if (newTitleView != null)
+			{
+				TitleView.Content = newTitleView;
+				TitleView.IsVisible = true;
+			}
+
+			InvalidateMeasure();
+		}
+
+		/// <summary>
+		/// Clears the current title view so no title is rendered in front of the legend items.
+		/// </summary>
+		private void ClearTitleView()
+		{
+			TitleView.Content = null;
+			TitleView.IsVisible = false;
+		}
+
+		/// <summary>
+		/// Creates the label that renders the text-based legend title.
+		/// </summary>
+		private Label CreateTitleLabelView(string text)
+		{
+			Label label = new Label()
+			{
+				Text = text,
+				TextColor = Color.FromArgb("#1C1B1F"),
+				FontSize = 14,
+				FontAttributes = FontAttributes.Bold,
+				HorizontalOptions = LayoutOptions.Center,
+				VerticalOptions = LayoutOptions.Start,
+				LineBreakMode = LineBreakMode.WordWrap,
+				HorizontalTextAlignment = TextAlignment.Center
+			};
+
+			return label;
+		}
+
+		#endregion
 	}
 
 	internal partial class ChartLegendShapeView : SfShapeView

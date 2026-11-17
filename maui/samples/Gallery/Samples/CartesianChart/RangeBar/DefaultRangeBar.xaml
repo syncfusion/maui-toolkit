@@ -50,13 +50,14 @@
                     </chart:NumericalAxis>
                 </chart:SfCartesianChart.YAxes>
             
-                <chart:RangeColumnSeries  EnableAnimation="True"
-                                     ShowDataLabels="True"
-                                     Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"
-                                     ItemsSource="{Binding TemperatureData}"
-                                     XBindingPath="Name"
-                                     High="Value"
-                                     Low="Size">
+                <chart:RangeColumnSeries EnableAnimation="True"
+                                         ShowDataLabels="True"
+                                         x:Name="rangeColumnSeries1"
+                                         Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"
+                                         ItemsSource="{Binding TemperatureData}"
+                                         XBindingPath="Name"
+                                         High="Value"
+                                         Low="Size">
 
                     <chart:RangeColumnSeries.DataLabelSettings>
                         <chart:CartesianDataLabelSettings UseSeriesPalette="False">
@@ -82,4 +83,13 @@
 
         </Grid>
     </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <HorizontalStackLayout>
+                <Label Text="Apply gradient" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                <CheckBox x:Name="gradientCheckBox" IsChecked="False" CheckedChanged="gradientCheckBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
 </localCore:SampleView>

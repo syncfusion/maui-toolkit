@@ -11,8 +11,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         SfImage? _image;
         SfLabel? _header;
-        SfHorizontalStackLayout? _horizontalLayout;
-        SfVerticalStackLayout? _verticalLayout;
+        SfHorizontalStackBase? _horizontalLayout;
+        SfVerticalStackBase? _verticalLayout;
 		View? _headerContent;
 
         #endregion
@@ -158,12 +158,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
             if (_horizontalLayout != null)
             {
-                _horizontalLayout.Style = new Style(typeof(SfHorizontalStackLayout));
+                _horizontalLayout.Style = new Style(typeof(SfHorizontalStackBase));
             }
 
             if (_verticalLayout != null)
             {
-                _verticalLayout.Style = new Style(typeof(SfVerticalStackLayout));
+                _verticalLayout.Style = new Style(typeof(SfVerticalStackBase));
             }
 
             if (_image != null)
@@ -182,14 +182,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// </summary>
         void InitializeLayout()
         {
-            _horizontalLayout = new SfHorizontalStackLayout()
+            _horizontalLayout = new SfHorizontalStackBase()
             {
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.Fill,
 				Spacing = 0,
 			};
 
-            _verticalLayout = new SfVerticalStackLayout()
+            _verticalLayout = new SfVerticalStackBase()
             {
                 HorizontalOptions = LayoutOptions.Fill,
                 VerticalOptions = LayoutOptions.Center,

@@ -258,7 +258,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 
                     int dateInex = _visibleDates.IndexOf(dateTime);
                     bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
-                    bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                    bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                     if (!isBlackoutDate && !isDisabledDate && dateInex != -1)
                     {
                         AddOrRemoveSelectionTemplate();
@@ -600,7 +600,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
 
                 // Bool Property to check the disabled date
-                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
 
                 // To get the textStyle for the year view panel cells
                 CalendarTextStyle textStyle = GetYearCellStyles(dateTime, _calendarViewInfo.View, isBlackoutDate, isDisabledDate, _calendarViewInfo.ShowOutOfRangeDates, isTodayDate, isLeadingDate, _calendarViewInfo.YearView.Background.ToColor(), ref fillColor, _calendarViewInfo.YearView.DisabledDatesBackground.ToColor(), _calendarViewInfo.YearView.LeadingDatesBackground.ToColor());
@@ -706,7 +706,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="cellWidthOffset">The cell width offset value</param>
         void DrawTemplateSelection(ICanvas canvas, float xPosition, float yPosition, bool isRTL, float yearViewWidth, float yearCellWidth, float yearCellHeight, float cellWidthOffset)
         {
-            if (_calendarViewInfo.AllowViewNavigation)
+            if (_calendarViewInfo.AllowViewNavigation && !(_calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode))
             {
                 return;
             }
@@ -817,7 +817,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
 
                                 // Bool Property to check the disabled date
-                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                                 if (!isBlackoutDate && !isDisabledDate)
                                 {
                                     DrawSelectionHighlight(canvas, highlightRect, rectCornerRadius, circleCornerRadius, selectionBackground);
@@ -837,7 +837,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
 
                                 // Bool Property to check the disabled date
-                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                                 if (!isBlackoutDate && !isDisabledDate)
                                 {
                                     // If the selected date is range need to apply the range text style, otherwise need to apply selection text style
@@ -858,7 +858,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
 
                                 // Bool Property to check the disabled date
-                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                                 if (!isBlackoutDate && !isDisabledDate)
                                 {
                                     // If the selected date is range need to apply the range text style, otherwise need to apply selection text style
@@ -983,7 +983,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             // Check if a SelectionCellTemplate is defined, if the selection mode is Single,
             // if view navigation is not allowed, and if the current view is not a Month view.
-            if (_calendarViewInfo.SelectionCellTemplate != null && _calendarViewInfo.SelectionMode == CalendarSelectionMode.Single && !_calendarViewInfo.AllowViewNavigation && _calendarViewInfo.View != CalendarView.Month && _selectedDate != null)
+            if (_calendarViewInfo.SelectionCellTemplate != null && _calendarViewInfo.SelectionMode == CalendarSelectionMode.Single && !(_calendarViewInfo.AllowViewNavigation && !(_calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode)) && _calendarViewInfo.View != CalendarView.Month && _selectedDate != null)
             {
                 return;
             }
@@ -1080,7 +1080,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return null;
             }
 
-            if (_calendarViewInfo.AllowViewNavigation)
+            if (_calendarViewInfo.AllowViewNavigation && !(_calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode))
             {
                 _calendarViewInfo.TriggerCalendarInteractionEvent(isTapped, tapCount, tappedDate.Value, CalendarElement.CalendarCell);
             }
@@ -1185,7 +1185,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <returns>Returns true if the date is selected date and false if the date is not selected date.</returns>
         bool IsSelectedDate(bool isBlackoutDate, bool isDisabledDate, DateTime dateTime)
         {
-            if (_calendarViewInfo.AllowViewNavigation || isDisabledDate || isBlackoutDate)
+            if ((_calendarViewInfo.AllowViewNavigation && !(_calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode)) || isDisabledDate || isBlackoutDate)
             {
                 return false;
             }
@@ -2235,7 +2235,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 }
 
                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
-                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                 string dateType = isBlackoutDate || isDisabledDate ? SfCalendarResources.GetLocalizedString("Disabled Cell") : string.Empty;
                 //// Method to get the year cell date text
                 //// Here pass the arguments as true then it considered the control accessibility is enabled.
@@ -2295,9 +2295,15 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             Focus();
             DateTime? tappedDate = OnInteractionEvent(e.TapPoint, true, e.TapCount);
 
-            // If the Allow view navigation is true, no need to select the cell
-            // No need to update when the tapped date is null
-            if (_calendarViewInfo.AllowViewNavigation || tappedDate == null)
+            //// Selection should be allowed when:
+            //// 1) AllowViewNavigation is false (existing behavior), or
+            //// 2) AllowViewNavigation is true but current view already reached
+            //// MinimumDisplayMode.
+            bool canSelectInCurrentView = !_calendarViewInfo.AllowViewNavigation ||
+                _calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode;
+
+            // No need to update when tapped date is null or selection is not allowed in this view.
+            if (!canSelectInCurrentView || tappedDate == null)
             {
                 return;
             }
@@ -2334,7 +2340,12 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     }
             }
 
-            if (tappedDate != null)
+            //// To avoid the view navigation when tap on the selected date in year view if
+            //// the navigation is allowed, because it will navigate to month view which shows the same
+            //// selected date cell.
+            bool canNavigateToLowerView = _calendarViewInfo.AllowViewNavigation &&
+                _calendarViewInfo.View != _calendarViewInfo.MinimumDisplayMode;
+            if (tappedDate != null && canNavigateToLowerView)
             {
                 _calendarViewInfo.TriggerCalendarInteractionEvent(true, e.TapCount, tappedDate.Value, CalendarElement.CalendarCell);
             }
@@ -2761,7 +2772,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
 #if MACCATALYST || (!ANDROID && !IOS)
             _hoverView.UpdateSelectedDateRange(_selectedDateRange);
 #endif
-            if (_calendarViewInfo.AllowViewNavigation || _calendarViewInfo.SelectionMode != CalendarSelectionMode.Range)
+            if ((_calendarViewInfo.AllowViewNavigation && !(_calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode)) || _calendarViewInfo.SelectionMode != CalendarSelectionMode.Range)
             {
                 return;
             }

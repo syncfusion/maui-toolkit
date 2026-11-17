@@ -59,11 +59,8 @@ namespace Syncfusion.Maui.Toolkit.Popup
 		{
 #if IOS
 			// 895700 : When Page SafeArea is false, close icon overlaps header.Because HeaderView arranging with safeArea.
-#if NET10_0
 			this.IgnoreSafeArea = !PopupExtension.GetSafeAreaEdges();
-#else
-			this.IgnoreSafeArea = !Microsoft.Maui.Controls.PlatformConfiguration.iOSSpecific.Page.GetUseSafeArea(PopupExtension.GetMainPage());
-#endif
+
 #endif
 			Initialize();
 		}
@@ -342,6 +339,6 @@ namespace Syncfusion.Maui.Toolkit.Popup
 			}
 		}
 
-		#endregion
+#endregion
 	}
 }

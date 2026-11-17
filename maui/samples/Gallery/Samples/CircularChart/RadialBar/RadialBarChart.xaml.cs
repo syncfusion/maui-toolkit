@@ -38,9 +38,13 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 			chart.Handler?.DisconnectHandler();
 		}
 
-		private void trackStroke_SelectedIndexChanged(object sender, EventArgs e)
+		private void trackStroke_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var value = (MAUIPicker)sender;
+			if (sender is not MAUIPicker value)
+			{
+				return;
+			}
+
 			switch (value.SelectedIndex)
 			{
 				case 0:
@@ -71,9 +75,13 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 			}
 		}
 
-		private void trackFill_SelectedIndexChanged(object sender, EventArgs e)
+		private void trackFill_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var value = (MAUIPicker)sender;
+			if (sender is not MAUIPicker value)
+			{
+				return;
+			}
+
 			switch (value.SelectedIndex)
 			{
 				case 0:
@@ -112,9 +120,13 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 			}
 		}
 
-		private void slider_ValueChanged(object sender, ValueChangedEventArgs e)
+		private void slider_ValueChanged(object? sender, ValueChangedEventArgs e)
 		{
-			var slider = (Slider)sender;
+			if (sender is not Slider slider)
+			{
+				return;
+			}
+
 			if (viewModel != null)
 			{
 				var value = slider.StyleId;
@@ -133,7 +145,7 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 			}
 		}
 
-		private void capStyle_SelectedIndexChanged(object sender, EventArgs e)
+		private void capStyle_SelectedIndexChanged(object? sender, EventArgs e)
 		{
 			var value = capStyle.SelectedIndex;
 			switch (value)

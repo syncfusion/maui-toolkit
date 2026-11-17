@@ -10,15 +10,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
 {
 
 	/// <summary>
-	/// Represents the SfHorizontalStackLayout class.
+	/// Represents the SfHorizontalStackBase class.
 	/// </summary>
 	internal partial class SfHorizontalContent : SfTabViewExt, ITouchListener, ITapGestureListener
 	{
 		#region Fields
 
-		SfHorizontalStackLayout? _horizontalStackLayout;
+		SfHorizontalStackBase? _horizontalStackLayout;
+		SfVerticalStackBase? _verticalStackLayout;
+		TabBarPlacement _previousPlacement;
 		SfGrid? _parentGrid;
 		double _contentWidth;
+		double _contentHeight;
 		readonly SfTabView? _tabView;
 		readonly SfTabBar? _tabBar;
 		bool _isPressed;
@@ -229,6 +232,26 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		}
 
 		/// <summary>
+		/// Gets or sets the value that defines the content Height of each tab header item.
+		/// </summary>
+		internal double ContentHeight
+		{
+			get
+			{
+				return _contentHeight;
+			}
+			set
+			{
+				if (_contentHeight != value)
+				{
+					_contentHeight = value;
+					UpdateTabItemContentSize();
+					UpdateTabItemContentPosition();
+				}
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets a value indicating whether the tab content moves toward the right or left.
 		/// </summary>
 		bool? IsTowardsRight
@@ -288,6 +311,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				}
 				MinimumWidthRequest = bounds.Width;
 				ContentWidth = bounds.Width;
+				ContentHeight = bounds.Height;
 				UpdateTabItemContentSize();
 				UpdateTabItemContentPosition();
 			}
@@ -313,6 +337,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 			if (heightConstraint > 0 && heightConstraint != double.PositiveInfinity )
 			{
+				ContentHeight = heightConstraint;
 				UpdateTabItemContentSize();
 				UpdateTabItemContentPosition();
 				_tabBar?.UpdateTabIndicatorWidth();
@@ -361,29 +386,157 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				ColumnSpacing = 0,
 				RowSpacing = 0,
 #if NET10_0
-				SafeAreaEdges = SafeAreaEdges.None, // The tab content decides its own safe-area insets
+                SafeAreaEdges = SafeAreaEdges.None,
 #endif
 			};
 
-			_horizontalStackLayout = new SfHorizontalStackLayout()
-			{
-				IsClippedToBounds = true, // Ensuring content bounds are clipped within the stack layout
-				Style = new Style(typeof(SfHorizontalStackLayout)),
-				VerticalOptions = LayoutOptions.Fill, // Fill the available vertical space
-				HorizontalOptions = LayoutOptions.Start, // Align horizontally at the start
-				Spacing = 0,
-#if NET10_0
-				SafeAreaEdges = SafeAreaEdges.None, // The tab content decides its own safe-area insets
-#endif
-			};
+			CreateHorizontalStackLayout();
+			CreateVerticalStackLayout();
+			AddActiveLayoutToParent();
 
-			_parentGrid.Children.Add(_horizontalStackLayout);
 			Content = _parentGrid;
 			if (Items != null)
 			{
 				Items.CollectionChanged -= OnItemsCollectionChanged;
 				Items.CollectionChanged += OnItemsCollectionChanged;
 			}
+
+			ApplyLayoutOptionsForPlacement();
+
+			if (_tabView != null)
+			{
+				_tabView.PropertyChanged -= TabView_PropertyChanged;
+				_tabView.PropertyChanged += TabView_PropertyChanged;
+			}
+		}
+
+		void CreateHorizontalStackLayout()
+		{
+			if (_horizontalStackLayout == null)
+			{
+				_horizontalStackLayout = new SfHorizontalStackBase()
+				{
+					IsClippedToBounds = true,
+					Style = new Style(typeof(SfHorizontalStackBase)),
+					Spacing = 0,
+#if NET10_0
+                    SafeAreaEdges = SafeAreaEdges.None,
+#endif
+				};
+			}
+		}
+
+		void CreateVerticalStackLayout()
+		{
+			if (_verticalStackLayout == null)
+			{
+				_verticalStackLayout = new SfVerticalStackBase()
+				{
+					IsClippedToBounds = true,
+					Style = new Style(typeof(SfVerticalStackBase)),
+					Spacing = 0,
+#if NET10_0
+                    SafeAreaEdges = SafeAreaEdges.None,
+#endif
+				};
+			}
+		}
+
+		void AddActiveLayoutToParent()
+		{
+			_parentGrid?.Children.Clear();
+
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Left ||
+				_tabView?.TabBarPlacement == TabBarPlacement.Right)
+			{
+				if (_verticalStackLayout != null)
+					_parentGrid?.Children.Add(_verticalStackLayout);
+			}
+			else
+			{
+				if (_horizontalStackLayout != null)
+					_parentGrid?.Children.Add(_horizontalStackLayout);
+			}
+		}
+
+		void ApplyLayoutOptionsForPlacement()
+		{
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Left ||
+				_tabView?.TabBarPlacement == TabBarPlacement.Right)
+			{
+				if (_verticalStackLayout != null)
+				{
+					_verticalStackLayout.VerticalOptions = LayoutOptions.Start;
+					_verticalStackLayout.HorizontalOptions = LayoutOptions.Fill;
+				}
+			}
+			else
+			{
+				if (_horizontalStackLayout != null)
+				{
+					_horizontalStackLayout.HorizontalOptions = LayoutOptions.Start;
+					_horizontalStackLayout.VerticalOptions = LayoutOptions.Fill;
+				}
+			}
+		}
+
+		void TabView_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+		{
+			if (e?.PropertyName != nameof(SfTabView.TabBarPlacement) || _parentGrid == null)
+			{
+				return;
+			}
+
+			var currentPlacement = _tabView?.TabBarPlacement ?? _previousPlacement;
+			bool prevIsHorizontal = _previousPlacement == TabBarPlacement.Top || _previousPlacement == TabBarPlacement.Bottom;
+			bool currIsHorizontal = currentPlacement == TabBarPlacement.Top || currentPlacement == TabBarPlacement.Bottom;
+			bool prevIsVertical = _previousPlacement == TabBarPlacement.Left || _previousPlacement == TabBarPlacement.Right;
+			bool currIsVertical = currentPlacement == TabBarPlacement.Left || currentPlacement == TabBarPlacement.Right;
+			if (prevIsHorizontal != currIsHorizontal || prevIsVertical != currIsVertical)
+			{
+				AddActiveLayoutToParent();
+			}
+			ApplyLayoutOptionsForPlacement();
+
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Left || _tabView?.TabBarPlacement == TabBarPlacement.Right)
+			{
+				_horizontalStackLayout?.Clear();
+
+				if (_tabView?.Height is double height && height > 0)
+				{
+					ContentHeight = height;
+				}
+
+			}
+			else
+			{
+				_verticalStackLayout?.Clear();
+				if (_tabView?.Width is double width && width > 0)
+				{
+					ContentWidth = width;
+				}
+			}
+
+			_parentGrid.InvalidateMeasure();
+			_horizontalStackLayout?.InvalidateMeasure();
+			_verticalStackLayout?.InvalidateMeasure();
+
+			if (Items != null && Items.Count > 0)
+			{
+				if (prevIsHorizontal != currIsHorizontal || prevIsVertical != currIsVertical)
+				{
+					UpdateItems();
+				}
+			}
+
+			UpdateDynamicChanges();
+			UpdateItemsSource();
+			UpdateSelectedIndex();
+
+			InvalidateDrawable();
+			InvalidateMeasure();
+
+			_previousPlacement = currentPlacement;
 		}
 
 		void OnItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -424,6 +577,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			if (Items == null || Items.Count == 0)
 			{
 				_horizontalStackLayout?.Children.Clear();
+				_verticalStackLayout?.Children.Clear();
 			}
 		}
 
@@ -431,7 +585,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			if (tabItem != null)
 			{
-				_horizontalStackLayout?.Children.RemoveAt(index);
+				if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
+				{
+					_horizontalStackLayout?.Children.RemoveAt(index);
+				}
+				else
+				{
+					_verticalStackLayout?.Children.RemoveAt(index);
+				}
 			}
 #if WINDOWS
 			_isItemRemoved = true;
@@ -457,6 +618,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			if (Items != null)
 			{
 				_horizontalStackLayout?.Children.Clear();
+				_verticalStackLayout?.Children.Clear();
 				foreach (var item in Items)
 				{
 					if (item != null)
@@ -477,26 +639,54 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		void UpdateItemsSource()
 		{
-			if (_horizontalStackLayout != null && ItemsSource != null)
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
 			{
-				BindableLayout.SetItemsSource(_horizontalStackLayout, ItemsSource);
-			}
-
-			if (ItemsSource != null && ContentItemTemplate != null)
-			{
-				if (ItemsSource is INotifyCollectionChanged oldNotifyTabItemsSource && oldNotifyTabItemsSource != null)
-				{
-					oldNotifyTabItemsSource.CollectionChanged -= OnTabItemsSourceCollectionChanged;
-				}
-
-				if (ItemsSource is INotifyCollectionChanged newNotifyTabItemsSource && newNotifyTabItemsSource != null)
-				{
-					newNotifyTabItemsSource.CollectionChanged += OnTabItemsSourceCollectionChanged;
-				}
-
 				if (_horizontalStackLayout != null && ItemsSource != null)
 				{
-					BindableLayout.SetItemTemplate(_horizontalStackLayout, ContentItemTemplate);
+					BindableLayout.SetItemsSource(_horizontalStackLayout, ItemsSource);
+				}
+
+				if (ItemsSource != null && ContentItemTemplate != null)
+				{
+					if (ItemsSource is INotifyCollectionChanged oldNotifyTabItemsSource && oldNotifyTabItemsSource != null)
+					{
+						oldNotifyTabItemsSource.CollectionChanged -= OnTabItemsSourceCollectionChanged;
+					}
+
+					if (ItemsSource is INotifyCollectionChanged newNotifyTabItemsSource && newNotifyTabItemsSource != null)
+					{
+						newNotifyTabItemsSource.CollectionChanged += OnTabItemsSourceCollectionChanged;
+					}
+
+					if (_horizontalStackLayout != null && ItemsSource != null)
+					{
+						BindableLayout.SetItemTemplate(_horizontalStackLayout, ContentItemTemplate);
+					}
+				}
+			}
+			else
+			{
+				if (_verticalStackLayout != null && ItemsSource != null)
+				{
+					BindableLayout.SetItemsSource(_verticalStackLayout, ItemsSource);
+				}
+
+				if (ItemsSource != null && ContentItemTemplate != null)
+				{
+					if (ItemsSource is INotifyCollectionChanged oldNotifyTabItemsSource && oldNotifyTabItemsSource != null)
+					{
+						oldNotifyTabItemsSource.CollectionChanged -= OnTabItemsSourceCollectionChanged;
+					}
+
+					if (ItemsSource is INotifyCollectionChanged newNotifyTabItemsSource && newNotifyTabItemsSource != null)
+					{
+						newNotifyTabItemsSource.CollectionChanged += OnTabItemsSourceCollectionChanged;
+					}
+
+					if (_verticalStackLayout != null && ItemsSource != null)
+					{
+						BindableLayout.SetItemTemplate(_verticalStackLayout, ContentItemTemplate);
+					}
 				}
 			}
 
@@ -519,48 +709,98 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			if (item != null)
 			{
-				if (item.Content != null)
+				if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
 				{
-					SfGrid parentGrid = new();
-
-					if (!EnableVirtualization || (EnableVirtualization && !(index != SelectedIndex && item.IsVisible)))
+					if (item.Content != null)
 					{
-						parentGrid = CreateParentGrid(item);
-					}
+						SfGrid parentGrid = new();
 
-					if (index >= 0)
-					{
-						if (EnableVirtualization && index != SelectedIndex && item.IsVisible)
+						if (!EnableVirtualization || (EnableVirtualization && !(index != SelectedIndex && item.IsVisible)))
 						{
-							var content = new BoxView
+							parentGrid = CreateParentGrid(item);
+						}
+
+						if (index >= 0)
+						{
+							if (EnableVirtualization && index != SelectedIndex && item.IsVisible)
 							{
-								WidthRequest = 0,
-								HeightRequest = 0,
-								Opacity = 0
-							};
-							_horizontalStackLayout?.Children.Insert(index, content);
+								var content = new BoxView
+								{
+									WidthRequest = 0,
+									HeightRequest = 0,
+									Opacity = 0
+								};
+								_horizontalStackLayout?.Children.Insert(index, content);
+							}
+							else
+							{
+								_horizontalStackLayout?.Children.Insert(index, parentGrid);
+							}
 						}
 						else
 						{
-							_horizontalStackLayout?.Children.Insert(index, parentGrid);
+							_horizontalStackLayout?.Children.Add(parentGrid);
 						}
 					}
 					else
 					{
-						_horizontalStackLayout?.Children.Add(parentGrid);
+						SfGrid parentGrid = [];
+						parentGrid.SetBinding(SfGrid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item) => item.IsVisible, source: item));
+						if (index >= 0)
+						{
+							_horizontalStackLayout?.Children.Insert(index, parentGrid);
+						}
+						else
+						{
+							_horizontalStackLayout?.Children.Add(parentGrid);
+						}
 					}
 				}
 				else
 				{
-					SfGrid parentGrid = [];
-					parentGrid.SetBinding(SfGrid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item)=> item.IsVisible, source: item));
-					if (index >= 0)
+					if (item.Content != null)
 					{
-						_horizontalStackLayout?.Children.Insert(index, parentGrid);
+						SfGrid parentGrid = new();
+
+						if (!EnableVirtualization || (EnableVirtualization && !(index != SelectedIndex && item.IsVisible)))
+						{
+							parentGrid = CreateParentGrid(item);
+						}
+
+						if (index >= 0)
+						{
+							if (EnableVirtualization && index != SelectedIndex && item.IsVisible)
+							{
+								var content = new BoxView
+								{
+									WidthRequest = 0,
+									HeightRequest = 0,
+									Opacity = 0
+								};
+								_verticalStackLayout?.Children.Insert(index, content);
+							}
+							else
+							{
+								_verticalStackLayout?.Children.Insert(index, parentGrid);
+							}
+						}
+						else
+						{
+							_verticalStackLayout?.Children.Add(parentGrid);
+						}
 					}
 					else
 					{
-						_horizontalStackLayout?.Children.Add(parentGrid);
+						SfGrid parentGrid = [];
+						parentGrid.SetBinding(SfGrid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item) => item.IsVisible, source: item));
+						if (index >= 0)
+						{
+							_verticalStackLayout?.Children.Insert(index, parentGrid);
+						}
+						else
+						{
+							_verticalStackLayout?.Children.Add(parentGrid);
+						}
 					}
 				}
 
@@ -587,9 +827,26 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				ColumnSpacing = 0,
 				RowSpacing = 0,
 #if NET10_0
-				SafeAreaEdges = SafeAreaEdges.None, // The tab content decides its own safe-area insets
+                SafeAreaEdges = SafeAreaEdges.None,
 #endif
 			};
+
+			if (item.Content != null)
+			{
+				if (item.Content.Parent is Layout oldLayout)
+				{
+					oldLayout.Children.Remove(item.Content);
+				}
+				else if (item.Content.Parent is ContentView oldContentView)
+				{
+					oldContentView.Content = null;
+				}
+				else if (item.Content.Parent is SfGrid oldSfGrid)
+				{
+					oldSfGrid.Children.Remove(item.Content);
+				}
+			}
+
 			parentGrid.Children.Add(item.Content);
 			parentGrid.SetBinding(Grid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item) => item.IsVisible, source: item));
 			return parentGrid;
@@ -618,38 +875,83 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void UpdateOnTabItemContentChanged(SfTabItem item)
 		{
 			int index = Items.IndexOf(item);
-			if (_horizontalStackLayout != null)
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
 			{
-				SfGrid parentGrid = (SfGrid)_horizontalStackLayout.Children[index];
-				if (parentGrid != null)
+				if (_horizontalStackLayout != null)
 				{
-					parentGrid.Children.Clear();
-					parentGrid.Children.Add(item.Content);
+					SfGrid parentGrid = (SfGrid)_horizontalStackLayout.Children[index];
+					if (parentGrid != null)
+					{
+						parentGrid.Children.Clear();
+						parentGrid.Children.Add(item.Content);
+					}
+				}
+			}
+			else
+			{
+				if (_verticalStackLayout != null)
+				{
+					SfGrid parentGrid = (SfGrid)_verticalStackLayout.Children[index];
+					if (parentGrid != null)
+					{
+						parentGrid.Children.Clear();
+						parentGrid.Children.Add(item.Content);
+					}
 				}
 			}
 		}
 
 		void UpdateTabItemContentSize()
 		{
-			if (_horizontalStackLayout != null)
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
 			{
-				if (ContentWidth > 0)
+				if (_horizontalStackLayout != null)
 				{
-					_horizontalStackLayout.WidthRequest = ContentWidth * GetCountVisibleItems();
-				}
-				foreach (var item in _horizontalStackLayout.Children)
-				{
-					if (item != null)
+					if (ContentWidth > 0)
 					{
-						if (item is View child && child != null)
+						_horizontalStackLayout.WidthRequest = ContentWidth * GetCountVisibleItems();
+					}
+					foreach (var item in _horizontalStackLayout.Children)
+					{
+						if (item != null)
 						{
-							if (ContentWidth > 0)
+							if (item is View child && child != null)
 							{
-								child.WidthRequest = ContentWidth;
+								if (ContentWidth > 0)
+								{
+									child.WidthRequest = ContentWidth;
+								}
+								if (HeightRequest > 0)
+								{
+									child.HeightRequest = HeightRequest;
+								}
 							}
-							if (HeightRequest > 0)
+						}
+					}
+				}
+			}
+			else
+			{
+				if (_verticalStackLayout != null)
+				{
+					if (ContentHeight > 0)
+					{
+						_verticalStackLayout.HeightRequest = ContentHeight * GetCountVisibleItems();
+					}
+					foreach (var item in _verticalStackLayout.Children)
+					{
+						if (item != null)
+						{
+							if (item is View child && child != null)
 							{
-								child.HeightRequest = HeightRequest;
+								if (ContentHeight > 0)
+								{
+									child.HeightRequest = ContentHeight;
+								}
+								if (ContentWidth > 0)
+								{
+									child.WidthRequest = ContentWidth;
+								}
 							}
 						}
 					}
@@ -659,7 +961,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		void UpdateTabItemContentPosition()
 		{
-			if (ContentWidth > 0 && SelectedIndex >= 0)
+			if (SelectedIndex < 0)
+			{
+				return;
+			}
+
+			bool isHorizontal = _tabView?.TabBarPlacement == TabBarPlacement.Top ||
+				_tabView?.TabBarPlacement == TabBarPlacement.Bottom;
+			if ((isHorizontal && ContentWidth <= 0) || (!isHorizontal && ContentHeight <= 0))
+			{
+				return;
+			}
+
+			if (SelectedIndex >= 0)
 			{
 				if (ContentItemTemplate != null)
 				{
@@ -674,21 +988,20 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 		void UpdateTabItemContentPositionWithTemplate()
 		{
-			double xPosition = 0;
-
-			if (SelectedIndex < _horizontalStackLayout?.Children.Count)
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
 			{
-				if (SelectedIndex >= 0)
+				double xPosition = 0;
+
+				if (SelectedIndex < _horizontalStackLayout?.Children.Count)
 				{
-					xPosition = ContentWidth * SelectedIndex;
+					if (SelectedIndex >= 0)
+					{
+						xPosition = ContentWidth * SelectedIndex;
 #if WINDOWS
 					if (_isSelectionProcessed)
 					{
-#if NET10_0
+
                         _horizontalStackLayout?.TranslateToAsync(-xPosition, 0, (uint)ContentTransitionDuration, AnimationEasing);
-#else
-						_horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, AnimationEasing);
-#endif					
 						_isSelectionProcessed = false;
 					}
 					else
@@ -699,31 +1012,74 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						}
 					}
 #else
-					double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
+						double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
+						if (_isSelectionProcessed)
+						{
+
+						_horizontalStackLayout?.TranslateToAsync(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
+							_isSelectionProcessed = false;
+						}
+						else
+						{
+							if (_horizontalStackLayout is not null)
+								_horizontalStackLayout.TranslationX = targetX;
+						}
+#endif
+					}
+				}
+			}
+			else
+			{
+				double yPosition = 0;
+
+				if (SelectedIndex < _verticalStackLayout?.Children.Count)
+				{
+					if (SelectedIndex >= 0)
+					{
+						yPosition = ContentHeight * SelectedIndex;
+#if WINDOWS
 					if (_isSelectionProcessed)
 					{
-#if NET10_0
-						_horizontalStackLayout?.TranslateToAsync(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
-#else
-						_horizontalStackLayout?.TranslateTo(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
-#endif
+                        _verticalStackLayout?.TranslateToAsync(0, -yPosition, (uint)ContentTransitionDuration, AnimationEasing);
 						_isSelectionProcessed = false;
 					}
 					else
 					{
-						if (_horizontalStackLayout is not null)
-							_horizontalStackLayout.TranslationX = targetX;
+						if (_verticalStackLayout is not null)
+						{
+							_verticalStackLayout.TranslationY = -yPosition;
+						}
 					}
+#else
+						double targetY = -yPosition;
+						if (_isSelectionProcessed)
+						{
+
+						_verticalStackLayout?.TranslateToAsync(0, targetY, (uint)ContentTransitionDuration, AnimationEasing);
+							_isSelectionProcessed = false;
+						}
+						else
+						{
+							if (_verticalStackLayout is not null)
+								_verticalStackLayout.TranslationY = targetY;
+						}
 #endif
+					}
 				}
 			}
 		}
 
 		void UpdateTabItemContentPositionWithoutTemplate()
 		{
-			double xPosition = ContentWidth * GetVisibleItemsCount();
-			if (SelectedIndex >= 0 && SelectedIndex < Items.Count)
+			double yPosition = 0;
+			double xPosition = 0;
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
 			{
+				if (this.ContentWidth > 0 && this.SelectedIndex >= 0)
+				{
+				xPosition = ContentWidth * GetVisibleItemsCount();
+				if (SelectedIndex >= 0 && SelectedIndex < Items.Count)
+				{
 #if WINDOWS
 				if (_isItemRemoved)
 				{
@@ -738,11 +1094,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				{
 					if (_isSelectionProcessed)
 					{
-#if NET10_0
                        _horizontalStackLayout?.TranslateToAsync(-xPosition, 0, (uint)ContentTransitionDuration, AnimationEasing);
-#else
-                       _horizontalStackLayout?.TranslateTo(-xPosition, 0, (uint)ContentTransitionDuration, AnimationEasing);
-#endif
                        _isSelectionProcessed = false;
 					}
 					else
@@ -754,22 +1106,69 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					}
 				}
 #else
-				double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
-				if (_isSelectionProcessed)
-				{
-#if NET10_0
+					double targetX = ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) is not EffectiveFlowDirection.RightToLeft ? -xPosition : xPosition;
+					if (_isSelectionProcessed)
+					{
 					_horizontalStackLayout?.TranslateToAsync(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
-#else
-					_horizontalStackLayout?.TranslateTo(targetX, 0, (uint)ContentTransitionDuration, AnimationEasing);
+						_isSelectionProcessed = false;
+					}
+					else
+					{
+						if (_horizontalStackLayout is not null)
+							_horizontalStackLayout.TranslationX = targetX;
+					}
 #endif
-					_isSelectionProcessed = false;
+				}
+			}
+			}
+			else
+			{
+				if (this.ContentHeight > 0 && this.SelectedIndex >= 0)
+				{
+					yPosition = ContentHeight * GetVisibleItemsCount();
+					if (SelectedIndex >= 0 && SelectedIndex < Items.Count)
+					{
+#if WINDOWS
+				if (_isItemRemoved)
+				{
+					if (_verticalStackLayout != null)
+					{
+						_verticalStackLayout.TranslationY = -yPosition;
+					}
+
+					_isItemRemoved = false;
 				}
 				else
 				{
-					if (_horizontalStackLayout is not null)
-						_horizontalStackLayout.TranslationX = targetX;
+					if (_isSelectionProcessed)
+					{
+                       _verticalStackLayout?.TranslateToAsync(0, -yPosition, (uint)ContentTransitionDuration, AnimationEasing);
+                       _isSelectionProcessed = false;
+					}
+					else
+					{
+						if (_verticalStackLayout is not null)
+						{
+							_verticalStackLayout.TranslationY = -yPosition;
+						}
+					}
 				}
+#else
+						double targetY = -yPosition;
+						if (_isSelectionProcessed)
+						{
+
+					         _verticalStackLayout?.TranslateToAsync(0, targetY, (uint)ContentTransitionDuration, AnimationEasing);
+							_isSelectionProcessed = false;
+						}
+						else
+						{
+							if (_verticalStackLayout is not null)
+								_verticalStackLayout.TranslationY = targetY;
+						}
 #endif
+					}
+				}
 			}
 
 		}
@@ -789,7 +1188,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 			if (count == 0 && ContentItemTemplate != null)
 			{
-				count = _horizontalStackLayout?.Children.Count ?? 0;
+				if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
+				{
+					count = _horizontalStackLayout?.Children.Count ?? 0;
+				}
+				else
+				{
+					count = _verticalStackLayout?.Children.Count ?? 0;
+				}
 			}
 			return count;
 		}
@@ -835,7 +1241,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <param name="point">The point value.</param>
 		public void OnHandleTouchInteraction(PointerActions action, Point point)
 		{
-			if (_tabView != null && _tabView.EnableSwiping)
+			if (_tabView != null && _tabView.EnableSwiping && (_tabView.TabBarPlacement == TabBarPlacement.Top || _tabView.TabBarPlacement == TabBarPlacement.Bottom))
 			{
 				switch (action)
 				{
@@ -1116,14 +1522,30 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <param name="index">This index position of the child in the HorizontalStackLayout to replaced with a tab item.</param>
 		void LoadItemsContent(int index)
 		{
-			if (_horizontalStackLayout != null)
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
 			{
-				if (Items is not null && index >= 0 && index < _horizontalStackLayout.Children.Count && _horizontalStackLayout.Children[index] is BoxView)
+				if (_horizontalStackLayout != null)
 				{
-					SfGrid parentGrid = CreateParentGrid(Items[index]);
-					_horizontalStackLayout?.Children.RemoveAt(index);
-					_horizontalStackLayout?.Children.Insert(index, parentGrid);
-					UpdateDynamicChanges();
+					if (Items is not null && index >= 0 && index < _horizontalStackLayout.Children.Count && _horizontalStackLayout.Children[index] is BoxView)
+					{
+						SfGrid parentGrid = CreateParentGrid(Items[index]);
+						_horizontalStackLayout?.Children.RemoveAt(index);
+						_horizontalStackLayout?.Children.Insert(index, parentGrid);
+						UpdateDynamicChanges();
+					}
+				}
+			}
+			else
+			{
+				if (_verticalStackLayout != null)
+				{
+					if (Items is not null && index >= 0 && index < _verticalStackLayout.Children.Count && _verticalStackLayout.Children[index] is BoxView)
+					{
+						SfGrid parentGrid = CreateParentGrid(Items[index]);
+						_verticalStackLayout?.Children.RemoveAt(index);
+						_verticalStackLayout?.Children.Insert(index, parentGrid);
+						UpdateDynamicChanges();
+					}
 				}
 			}
 		}
@@ -1406,26 +1828,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 			{
-#if NET10_0
 				_horizontalStackLayout.TranslateToAsync(-ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
-#else
-				_horizontalStackLayout.TranslateTo(-ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
-#endif
 			}
 			else
 			{
-#if NET10_0
 				_horizontalStackLayout.TranslateToAsync(ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
-#else
-				_horizontalStackLayout.TranslateTo(ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
-#endif
 			}
 #else
-#if NET10_0
 			_horizontalStackLayout.TranslateToAsync(-ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
-#else
-			_horizontalStackLayout.TranslateTo(-ContentWidth * (_currentIndex + 1), 0, 100, AnimationEasing);
-#endif
 #endif
 
 			SelectNextItem();
@@ -1454,26 +1864,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 			{
-#if NET10_0
 				_horizontalStackLayout?.TranslateToAsync(-ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
-#else
-				_horizontalStackLayout?.TranslateTo(-ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
-#endif
 			}
 			else
 			{
-#if NET10_0
 				_horizontalStackLayout?.TranslateToAsync(ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
-#else
-				_horizontalStackLayout?.TranslateTo(ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
-#endif
 			}
 #else
-#if NET10_0
 				_horizontalStackLayout?.TranslateToAsync(-ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
-#else
-				_horizontalStackLayout?.TranslateTo(-ContentWidth * (_currentIndex - 1), 0, 100, AnimationEasing);
-#endif
 
 #endif
 			SelectPreviousTabItem();
@@ -1506,26 +1904,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 #if !WINDOWS
 			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) != EffectiveFlowDirection.RightToLeft)
 			{
-#if NET10_0
 				_horizontalStackLayout.TranslateToAsync(-ContentWidth * _currentIndex, 0, 100, AnimationEasing);
-#else
-				_horizontalStackLayout.TranslateTo(-ContentWidth * _currentIndex, 0, 100, AnimationEasing);
-#endif
 			}
 			else
 			{
-#if NET10_0
 				_horizontalStackLayout.TranslateToAsync(ContentWidth * _currentIndex, 0, 100, AnimationEasing);
-#else
-				_horizontalStackLayout.TranslateTo(ContentWidth * _currentIndex, 0, 100, AnimationEasing);
-#endif
 			}
 #else
-#if NET10_0
 				_horizontalStackLayout.TranslateToAsync(-ContentWidth * _currentIndex, 0, 100, AnimationEasing);
-#else
-			    _horizontalStackLayout.TranslateTo(-ContentWidth * _currentIndex, 0, 100, AnimationEasing);
-#endif
 #endif
 		}
 
@@ -1625,13 +2011,27 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void UpdateItemVisibility()
 		{
-			if (ContentItemTemplate != null && _horizontalStackLayout != null && _tabBar != null)
+			if (_tabView?.TabBarPlacement == TabBarPlacement.Top || _tabView?.TabBarPlacement == TabBarPlacement.Bottom)
 			{
-				UpdateVisibilityWithTemplate(_horizontalStackLayout, _tabBar);
+				if (ContentItemTemplate != null && _horizontalStackLayout != null && _tabBar != null)
+				{
+					UpdateHorizontalVisibilityWithTemplate(_horizontalStackLayout, _tabBar);
+				}
+				else
+				{
+					UpdateVisibilityWithoutTemplate();
+				}
 			}
 			else
 			{
-				UpdateVisibilityWithoutTemplate();
+				if (ContentItemTemplate != null && _verticalStackLayout != null && _tabBar != null)
+				{
+					UpdateVerticalVisibilityWithTemplate(_verticalStackLayout, _tabBar);
+				}
+				else
+				{
+					UpdateVisibilityWithoutTemplate();
+				}
 			}
 		}
 
@@ -1664,7 +2064,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 		}
 
-		void UpdateVisibilityWithTemplate(SfHorizontalStackLayout horizontalStackLayout, SfTabBar tabBar)
+		void UpdateHorizontalVisibilityWithTemplate(SfHorizontalStackBase horizontalStackLayout, SfTabBar tabBar)
 		{
 			double selectedIndex = tabBar.SelectedIndex;
 			if (horizontalStackLayout.Children != null)
@@ -1674,6 +2074,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 			_isPreviousItemVisible = selectedIndex > 0;
 		}
+
+		void UpdateVerticalVisibilityWithTemplate(SfVerticalStackBase verticalStackLayout, SfTabBar tabBar)
+		{
+			double selectedIndex = tabBar.SelectedIndex;
+			if (verticalStackLayout.Children != null)
+			{
+				int childrenCount = verticalStackLayout.Children.Count;
+				_isNextItemVisible = selectedIndex < childrenCount - 1;
+			}
+			_isPreviousItemVisible = selectedIndex > 0;
+		}
+
 		#endregion
 
 		#region Events

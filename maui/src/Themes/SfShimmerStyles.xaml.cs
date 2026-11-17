@@ -5,7 +5,6 @@ namespace Syncfusion.Maui.Toolkit.Shimmer
 	/// Shimmer theme resource dictionary.
 	/// </summary>
 	/// <exclude/>
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SfShimmerStyles : ResourceDictionary
 	{
 		/// <summary>

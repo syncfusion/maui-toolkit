@@ -975,5 +975,57 @@ public class CalendarMethodsUnitTests : BaseUnitTest
         Assert.Equal(expectedValue,actualValue);
     }
 
-	#endregion
+    #endregion
+
+    #region GetValidDisplayViewMode
+
+    [Fact]
+    public void GetValidDisplayViewMode_ClampsToMinimum_WhenViewBelowMinimum()
+    {
+        CalendarView view = CalendarView.Month;
+        CalendarView minimum = CalendarView.Year;
+        CalendarView maximum = CalendarView.Century;
+
+        CalendarView result = CalendarViewHelper.GetValidDisplayViewMode(view, minimum, maximum);
+
+        Assert.Equal(minimum, result);
+    }
+
+    [Fact]
+    public void GetValidDisplayViewMode_ClampsToMaximum_WhenViewAboveMaximum()
+    {
+        CalendarView view = CalendarView.Century;
+        CalendarView minimum = CalendarView.Month;
+        CalendarView maximum = CalendarView.Decade;
+
+        CalendarView result = CalendarViewHelper.GetValidDisplayViewMode(view, minimum, maximum);
+
+        Assert.Equal(maximum, result);
+    }
+
+    [Fact]
+    public void GetValidDisplayViewMode_ReturnsView_WhenWithinRange()
+    {
+        CalendarView view = CalendarView.Year;
+        CalendarView minimum = CalendarView.Month;
+        CalendarView maximum = CalendarView.Century;
+
+        CalendarView result = CalendarViewHelper.GetValidDisplayViewMode(view, minimum, maximum);
+
+        Assert.Equal(view, result);
+    }
+
+    [Fact]
+    public void GetValidDisplayViewMode_ReturnsMinimum_WhenMinimumEqualsMaximum()
+    {
+        CalendarView view = CalendarView.Decade;
+        CalendarView minimum = CalendarView.Year;
+        CalendarView maximum = CalendarView.Year;
+
+        CalendarView result = CalendarViewHelper.GetValidDisplayViewMode(view, minimum, maximum);
+
+        Assert.Equal(minimum, result);
+    }
+
+    #endregion
 }

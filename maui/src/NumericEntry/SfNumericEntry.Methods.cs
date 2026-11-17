@@ -502,11 +502,11 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
             ////If we typed new character below condition become true
             char typedChar = GetTypedChar(text, start, lengthBefore, lengthAfter, entry);
 
-            if (typedChar.Equals(decimalSeparator[0]))
+            if (typedChar == decimalSeparator[0])
             {
                 HandleDecimalSeparatorInput(caretPosition, decimalSeparator);
             }
-            else if (typedChar.Equals('-'))
+            else if (typedChar == '-')
             {
                 HandleNegativeInput(isNegative, caretPosition);
             }
@@ -857,14 +857,14 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			{
 				typedChar = replacementString[0];
 
-				if (typedChar.Equals(decimalSeparator[0]))
+				if (typedChar == decimalSeparator[0])
 				{
 					if ((_maximumPositiveFractionDigit != 0 && _textBox != null && !_textBox.Text.Contains('-', StringComparison.Ordinal)) || (_maximumNegativeFractionDigit != 0 && _textBox != null && _textBox.Text.Contains('-', StringComparison.Ordinal)))
 					{
 						HandleDecimalSeparator(decimalSeparator, caretPosition);
 					}
 				}
-				else if (typedChar.Equals('-'))
+			    else if (typedChar == '-')
 				{
 					if (string.IsNullOrEmpty(_previousText) && _textBox != null)
 					{
@@ -2134,7 +2134,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 #endif
 				}
 #if ANDROID
-                else if (displayText.StartsWith('.') && _isSamsungWithSamsungKeyboard)
+                else if (displayText.StartsWith(".", StringComparison.Ordinal) && _isSamsungWithSamsungKeyboard)
                 {
                     string decimalSeparator = GetNumberDecimalSeparator(GetNumberFormat());
                     displayText = string.Concat("", displayText.AsSpan(1));
@@ -2830,11 +2830,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 				_uiEntry = macEntry;
 				if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
 				{
-#if NET10_0_OR_GREATER
 					macEntry.ShouldChangeCharactersInRanges += Handle_ShouldChangeCharactersInRanges;
-#else
-					macEntry.ShouldChangeCharacters += ValidateTextChanged;
-#endif
 				}
 				else
 				{
@@ -2858,11 +2854,7 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 			{
 				if (OperatingSystem.IsIOSVersionAtLeast(26, 0) || OperatingSystem.IsMacCatalystVersionAtLeast(26, 0))
 				{
-#if NET10_0_OR_GREATER
 					_uiEntry.ShouldChangeCharactersInRanges -= Handle_ShouldChangeCharactersInRanges;
-#else
-					_uiEntry.ShouldChangeCharacters -= ValidateTextChanged;
-#endif
 				}
 				else
 				{

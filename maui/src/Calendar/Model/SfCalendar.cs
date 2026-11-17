@@ -293,6 +293,34 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 propertyChanged: OnAllowViewNavigationChanged);
 
         /// <summary>
+        /// Identifies the <see cref="MinimumDisplayMode"/> bindable property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MinimumDisplayMode"/> bindable property.
+        /// </value>
+        public static readonly BindableProperty MinimumDisplayModeProperty =
+            BindableProperty.Create(
+                nameof(MinimumDisplayMode),
+                typeof(CalendarView),
+                typeof(SfCalendar),
+                CalendarView.Month,
+                propertyChanged: OnMinMaxDisplayModeChanged);
+
+        /// <summary>
+        /// Identifies the <see cref="MaximumDisplayMode"/> bindable property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="MaximumDisplayMode"/> bindable property.
+        /// </value>
+        public static readonly BindableProperty MaximumDisplayModeProperty =
+            BindableProperty.Create(
+                nameof(MaximumDisplayMode),
+                typeof(CalendarView),
+                typeof(SfCalendar),
+                CalendarView.Century,
+                propertyChanged: OnMinMaxDisplayModeChanged);
+
+        /// <summary>
         /// Identifies the <see cref="TodayHighlightBrush"/> dependency property.
         /// </summary>
         /// <value>
@@ -1378,6 +1406,40 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             get { return (bool)GetValue(AllowViewNavigationProperty); }
             set { SetValue(AllowViewNavigationProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the minimum display mode, which restricts the lowest (most detailed) calendar view level that users can navigate to.
+        /// </summary>
+        /// <value>
+        /// The default value is <see cref="CalendarView.Month"/>.
+        /// </value>
+        /// <remarks>
+        /// When set to a value, the calendar does not allow navigation below this view level.
+        /// For example, if set to <see cref="CalendarView.Year"/>, users cannot navigate to Month view.
+        /// If the current <see cref="View"/> is below this level when set, it is automatically clamped to this minimum.
+        /// </remarks>
+        public CalendarView MinimumDisplayMode
+        {
+            get { return (CalendarView)GetValue(MinimumDisplayModeProperty); }
+            set { SetValue(MinimumDisplayModeProperty, value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the maximum display mode, which restricts the highest (least detailed) calendar view level that users can navigate to.
+        /// </summary>
+        /// <value>
+        /// The default value is <see cref="CalendarView.Century"/>.
+        /// </value>
+        /// <remarks>
+        /// When set to a value, the calendar does not allow navigation above this view level.
+        /// For example, if set to <see cref="CalendarView.Decade"/>, users cannot navigate to Century view.
+        /// If the current <see cref="View"/> is above this level when set, it is automatically clamped to this maximum.
+        /// </remarks>
+        public CalendarView MaximumDisplayMode
+        {
+            get { return (CalendarView)GetValue(MaximumDisplayModeProperty); }
+            set { SetValue(MaximumDisplayModeProperty, value); }
         }
 
         /// <summary>
@@ -2744,7 +2806,22 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         static void OnViewChanged(BindableObject bindable, object oldValue, object newValue)
         {
             SfCalendar? calendar = bindable as SfCalendar;
-            if (calendar == null || calendar._customScrollLayout == null)
+
+            if (calendar == null)
+            {
+                return;
+            }
+
+            //// To get the valid display mode based on the new view and min/max display mode.
+            //// If the valid view is different from the new view, update the View and bail — the property-changed callback will re-enter with the valid value.
+            CalendarView validView = CalendarViewHelper.GetValidDisplayViewMode((CalendarView)newValue, calendar.MinimumDisplayMode, calendar.MaximumDisplayMode);
+            if (validView != (CalendarView)newValue)
+            {
+                calendar.View = validView;
+                return;
+            }
+
+            if (calendar._customScrollLayout == null)
             {
                 return;
             }
@@ -3336,7 +3413,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return;
             }
 
-            if (calendar.View == CalendarView.Month || !calendar.AllowViewNavigation)
+            if (calendar.View == CalendarView.Month || !calendar.AllowViewNavigation || calendar.View == calendar.MinimumDisplayMode)
             {
                 calendar._customScrollLayout.InvalidateViewCellsDraw();
             }
@@ -3373,6 +3450,27 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             calendar._customScrollLayout.InvalidateViewCellsDraw();
+        }
+
+        /// <summary>
+        /// Handles changes to the MinimumDisplayMode or MaximumDisplayMode properties by clamping the current View.
+        /// </summary>
+        /// <param name="bindable">The calendar instance.</param>
+        /// <param name="oldValue">The previous property value.</param>
+        /// <param name="newValue">The new property value.</param>
+        static void OnMinMaxDisplayModeChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var calendar = bindable as SfCalendar;
+            if (calendar == null)
+            {
+                return;
+            }
+
+            CalendarView clampedView = CalendarViewHelper.GetValidDisplayViewMode(calendar.View, calendar.MinimumDisplayMode, calendar.MaximumDisplayMode);
+            if (clampedView != calendar.View)
+            {
+                calendar.View = clampedView;
+            }
         }
 
         /// <summary>

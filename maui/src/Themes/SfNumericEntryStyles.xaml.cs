@@ -5,7 +5,6 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry;
 /// <summary>
 /// Initializing SfNumericEntryStyles class
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SfNumericEntryStyles : ResourceDictionary
 {
 	/// <summary>

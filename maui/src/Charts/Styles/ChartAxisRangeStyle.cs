@@ -1,7 +1,75 @@
-﻿namespace Syncfusion.Maui.Toolkit.Charts
+﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using System;
+
+namespace Syncfusion.Maui.Toolkit.Charts
 {
-	internal partial class ChartAxisRangeStyle : BindableObject
+	/// <summary>
+	/// Represents the range style class used to customize the grid lines, tick lines and labels of a chart axis within a specified range.
+	/// </summary>
+	/// <remarks>
+	/// <para>To customize axis elements within a specific range, create an instance of this class, set the <see cref="Start"/> and <see cref="End"/> values, customize the style properties, and add it to the <see cref="ChartAxis.RangeStyles"/> collection.</para>
+	/// <para>The <see cref="Start"/> and <see cref="End"/> values accept numeric, date-time, or category index values depending on the axis type.</para>
+	/// </remarks>
+	/// <example>
+	/// # [MainPage.xaml](#tab/tabid-1)
+	/// <code><![CDATA[
+	/// <chart:SfCartesianChart>
+	///  
+	///     <chart:SfCartesianChart.XAxes>
+	///         <chart:NumericalAxis>
+	///             <chart:NumericalAxis.RangeStyles>
+	///                 <chart:ChartAxisRangeStyleCollection>
+	///                     <chart:ChartAxisRangeStyle Start="15" End="21">
+	///                         <chart:ChartAxisRangeStyle.MajorGridLineStyle>
+	///                             <chart:ChartLineStyle Stroke="#096EBF" StrokeWidth="3"/>
+	///                         </chart:ChartAxisRangeStyle.MajorGridLineStyle>
+	///                         <chart:ChartAxisRangeStyle.LabelStyle>
+	///                             <chart:ChartAxisLabelStyle TextColor="#096EBF" FontAttributes="Bold"/>
+	///                         </chart:ChartAxisRangeStyle.LabelStyle>
+	///                     </chart:ChartAxisRangeStyle>
+	///                 </chart:ChartAxisRangeStyleCollection>
+	///             </chart:NumericalAxis.RangeStyles>
+	///         </chart:NumericalAxis>
+	///     </chart:SfCartesianChart.XAxes>
+	/// 
+	/// </chart:SfCartesianChart>
+	/// ]]>
+	/// </code>
+	/// # [MainPage.xaml.cs](#tab/tabid-2)
+	/// <code><![CDATA[
+	/// SfCartesianChart chart = new SfCartesianChart();
+	/// 
+	/// NumericalAxis xAxis = new NumericalAxis();
+	/// ChartAxisRangeStyle rangeStyle = new ChartAxisRangeStyle()
+	/// {
+	///     Start = 15,
+	///     End = 21,
+	///     MajorGridLineStyle = new ChartLineStyle()
+	///     {
+	///         Stroke = Color.FromArgb("#096EBF"),
+	///         StrokeWidth = 3
+	///     },
+	///     LabelStyle = new ChartAxisLabelStyle()
+	///     {
+	///         TextColor = Color.FromArgb("#096EBF"),
+	///         FontAttributes = FontAttributes.Bold
+	///     }
+	/// };
+	/// xAxis.RangeStyles.Add(rangeStyle);
+	/// chart.XAxes.Add(xAxis);
+	/// 
+	/// ]]>
+	/// </code>
+	/// ***
+	/// </example>
+	public class ChartAxisRangeStyle : Element
 	{
+		#region Fields
+
+		internal event EventHandler? StyleValueChanged;
+
+		#endregion
+
 		#region Bindabale Properties
 
 		/// <summary>
@@ -17,7 +85,7 @@
 			null,
 			BindingMode.Default,
 			null,
-			OnStartPropertyChanged);
+			OnRangePropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="End"/> bindable property.
@@ -32,7 +100,7 @@
 			null,
 			BindingMode.Default,
 			null,
-			OnEndPropertyChanged);
+			OnRangePropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="MajorGridLineStyle"/> bindable property.
@@ -47,7 +115,7 @@
 			null,
 			BindingMode.Default,
 			null,
-			OnMajorGridLineStylePropertyChanged);
+			OnRangeStylePropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="MinorGridLineStyle"/> bindable property.
@@ -62,7 +130,7 @@
 			null,
 			BindingMode.Default,
 			null,
-			OnMinorGridLineStylePropertyChanged);
+			OnRangeStylePropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="MajorTickStyle"/> bindable property.
@@ -77,7 +145,7 @@
 			null,
 			BindingMode.Default,
 			null,
-			OnMajorTickStylePropertyChanged);
+			OnRangeStylePropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="MinorTickStyle"/> bindable property.
@@ -92,7 +160,7 @@
 			null,
 			BindingMode.Default,
 			null,
-			OnMinorTickStylePropertyChanged);
+			OnRangeStylePropertyChanged);
 
 		/// <summary>
 		/// Identifies the <see cref="LabelStyle"/> bindable property.
@@ -107,7 +175,7 @@
 			null,
 			BindingMode.Default,
 			null,
-			OnLabelStylePropertyChanged);
+			OnRangeStylePropertyChanged);
 
 		#endregion
 
@@ -116,6 +184,11 @@
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ChartAxisRangeStyle"/> class.
 		/// </summary>
+		/// <remarks>
+		/// The style properties are intentionally left null by default. Only the styles explicitly set on a range
+		/// are applied within that range; unset styles fall back to the axis-level styles, and overlapping ranges
+		/// resolve each element style independently (the last range that sets a style wins).
+		/// </remarks>
 		public ChartAxisRangeStyle()
 		{
 		}
@@ -196,38 +269,74 @@
 
 		#region Methods  
 
-		static void OnStartPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		internal bool IsValueInRange(double value)
 		{
+			if (double.IsNaN(value))
+			{
+				return false;
+			}
 
+			var start = ChartUtils.ConvertToDouble(Start);
+			var end = ChartUtils.ConvertToDouble(End);
+
+			// When both Start and End are not set, the range style is not applied.
+			if (double.IsNaN(start) && double.IsNaN(end))
+			{
+				return false;
+			}
+
+			// When only Start is set, the range is open-ended (Start -> axis maximum).
+			if (double.IsNaN(end))
+			{
+				return value >= start;
+			}
+
+			// When only End is set, the range is open-ended (axis minimum -> End).
+			if (double.IsNaN(start))
+			{
+				return value <= end;
+			}
+
+			var range = start <= end ? new DoubleRange(start, end) : new DoubleRange(end, start);
+
+			return range.Inside(value);
 		}
 
-		static void OnEndPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		internal void RaiseStyleChanged()
 		{
-
+			StyleValueChanged?.Invoke(this, EventArgs.Empty);
 		}
 
-		static void OnMajorGridLineStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		void OnStylePropertyChanged(object? oldValue, object? newValue)
 		{
+			if (oldValue is BindableObject oldStyle)
+			{
+				SetInheritedBindingContext(oldStyle, null);
+				oldStyle.PropertyChanged -= RangeStyle_PropertyChanged;
+			}
+
+			if (newValue is BindableObject newStyle)
+			{
+				SetInheritedBindingContext(newStyle, BindingContext);
+				newStyle.PropertyChanged += RangeStyle_PropertyChanged;
+			}
+
+			RaiseStyleChanged();
 		}
 
-		static void OnMinorGridLineStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		void RangeStyle_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
 		{
-
+			RaiseStyleChanged();
 		}
 
-		static void OnMajorTickStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnRangePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-
+			(bindable as ChartAxisRangeStyle)?.RaiseStyleChanged();
 		}
 
-		static void OnMinorTickStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
+		static void OnRangeStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-
-		}
-
-		static void OnLabelStylePropertyChanged(BindableObject bindable, object oldValue, object newValue)
-		{
-
+			(bindable as ChartAxisRangeStyle)?.OnStylePropertyChanged(oldValue, newValue);
 		}
 
 		#endregion

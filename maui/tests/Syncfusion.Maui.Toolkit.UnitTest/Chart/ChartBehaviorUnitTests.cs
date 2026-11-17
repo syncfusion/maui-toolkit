@@ -2,7 +2,7 @@
 
 namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 {
-	public class ChartBehaviorUnitTests
+	public class ChartBehaviorUnitTests : BaseUnitTest
 	{
 		// Tooltip behavior tests cases
 
@@ -506,5 +506,112 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 
 			Assert.Equal(type, selectionBehavior.Type);
 		}
+
+		// Setting IsVisible = false inside the TrackballCreated event must still raise the event with
+		// the full point list, but the hidden point's label is suppressed. The point itself remains in
+		// PointInfos so its marker and the trackball line still draw; only the label is hidden.
+		[Fact]
+		public void UpdateTrackballPointInfos_IsVisibleFalseInHandler_KeepsPointHidesLabel()
+		{
+			var chart = new SfCartesianChart { SeriesBounds = new Rect(0, 0, 200, 200) };
+			var behavior = new ChartTrackballBehavior { CartesianChart = chart, SeriesBounds = new RectF(0, 0, 200, 200) };
+			var visible = new TrackballPointInfo(SeriesWithAxis()) { X = 100, Y = 50, XValue = 5 };
+			var hidden = new TrackballPointInfo(SeriesWithAxis()) { X = 100, Y = 150, XValue = 5 };
+			behavior.PointInfos.Add(visible);
+			behavior.PointInfos.Add(hidden);
+			List<TrackballPointInfo>? received = null;
+			chart.TrackballCreated += (_, e) =>
+			{
+				received = e.TrackballPointsInfo;
+				hidden.IsVisible = false;
+			};
+
+			InvokePrivateMethod(behavior, "UpdateTrackballPointInfos", 100f, 100f);
+
+			// The event was invoked with both points (full list) before label suppression.
+			Assert.NotNull(received);
+			Assert.Equal(2, received.Count);
+			Assert.Contains(visible, received);
+			Assert.Contains(hidden, received);
+			// Both points remain in PointInfos so markers and the trackball line still draw.
+			Assert.Equal(2, behavior.PointInfos.Count);
+			Assert.Contains(visible, behavior.PointInfos);
+			Assert.Contains(hidden, behavior.PointInfos);
+			// The hidden point's IsVisible flag is false; the visible one is unaffected.
+			Assert.True(visible.IsVisible);
+			Assert.False(hidden.IsVisible);
+		}
+
+		static LineSeries SeriesWithAxis()
+		{
+			var axis = new NumericalAxis
+			{
+				RenderedRect = new RectF(0, 0, 200, 100),
+				VisibleRange = new DoubleRange(0, 10),
+			};
+			return new LineSeries { ActualXAxis = axis, ActualYAxis = axis };
+		}
+
+		#region IsVisible
+
+		// L41-43 IsVisible: the public property supports getting and setting with default value of true.
+		[Fact]
+		public void IsVisible_DefaultValue_IsTrue()
+		{
+			var info = new TrackballPointInfo(new LineSeries());
+
+			Assert.True(info.IsVisible);
+		}
+
+		// L41-53 IsVisible: setting to false changes the value and raises PropertyChanged.
+		[Fact]
+		public void IsVisible_SetFalse_ChangesValueAndRaisesPropertyChanged()
+		{
+			var info = NewInfo(out var raised);
+
+			info.IsVisible = false;
+
+			Assert.False(info.IsVisible);
+			Assert.Equal(new[] { "IsVisible" }, raised);
+		}
+
+		// L41-53 IsVisible: setting to true from false changes the value and raises PropertyChanged.
+		[Fact]
+		public void IsVisible_SetTrue_ChangesValueAndRaisesPropertyChanged()
+		{
+			var info = NewInfo(out var raised);
+			info.IsVisible = false;
+			raised.Clear();
+
+			info.IsVisible = true;
+
+			Assert.True(info.IsVisible);
+			Assert.Equal(new[] { "IsVisible" }, raised);
+		}
+
+		// L41-53 IsVisible: setting the same value does not raise PropertyChanged again.
+		[Fact]
+		public void IsVisible_SetSameValue_DoesNotRaiseAgain()
+		{
+			var info = NewInfo(out var raised);
+			info.IsVisible = false;
+			raised.Clear();
+
+			info.IsVisible = false;
+
+			Assert.False(info.IsVisible);
+			Assert.Empty(raised);
+		}
+
+		static TrackballPointInfo NewInfo(out List<string> raised)
+		{
+			var info = new TrackballPointInfo(new LineSeries());
+			var names = new List<string>();
+			info.PropertyChanged += (_, e) => names.Add(e.PropertyName!);
+			raised = names;
+			return info;
+		}
+
+		#endregion
 	}
 }

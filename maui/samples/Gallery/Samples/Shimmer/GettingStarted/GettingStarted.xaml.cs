@@ -2,7 +2,6 @@ using Syncfusion.Maui.Toolkit.Shimmer;
 
 namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class GettingStarted : SampleView
 	{
 		public GettingStarted()
@@ -18,7 +17,7 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 			viewModel.WaveColor = viewModel.WaveColors[index];
 		}
 
-		private void SfTabView_SelectionChanged(object sender, Syncfusion.Maui.Toolkit.TabView.TabSelectionChangedEventArgs e)
+		private void SfTabView_SelectionChanged(object? sender, Syncfusion.Maui.Toolkit.TabView.TabSelectionChangedEventArgs e)
 		{
 			string type = viewModel.ShimmerTypes[e.NewIndex];
 
@@ -45,8 +44,13 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 			}
 		}
 
-		private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+		private void TapGestureRecognizer_Tapped(object? sender, EventArgs e)
 		{
+			if(sender == null)
+			{
+				return;
+			}
+
 			Border border = (Border)sender;
 			foreach (var item in ColorGrid.Children)
 			{
@@ -63,8 +67,13 @@ namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 			}
 		}
 
-		private void TapGestureRecognizer_Tapped_1(object sender, EventArgs e)
+		private void TapGestureRecognizer_Tapped_1(object? sender, EventArgs e)
 		{
+			if (sender == null)
+			{
+				return;
+			}
+
 			Border border = (Border)sender;
 			int waveIndex = directionGrid.Children.IndexOf(border);
 			shimmer.WaveDirection = (ShimmerWaveDirection)waveIndex;

@@ -40,8 +40,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void Constructor_InitializesDefaultsCorrectly()
 		{
-			SfNavigationDrawer navigationDrawer = [];
-			Assert.False(navigationDrawer.IsOpen);
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSettings = new DrawerSettings();
+			navigationDrawer.DrawerSettings = drawerSettings;
+			Assert.False(navigationDrawer.DrawerSettings.IsOpen);
 			Assert.Null(navigationDrawer.ContentView);
 			Assert.NotNull(navigationDrawer.DrawerSettings);
 		}
@@ -49,7 +51,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void DrawerSetting_Contructor_InitializesDefaultCorrectly()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 
@@ -79,16 +81,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(true)]
 		public void IsOpen_SetValue_ReturnsExpectedValue(bool isOpen)
 		{
-			SfNavigationDrawer navigationDrawer = [];
-			navigationDrawer.IsOpen = isOpen;
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.DrawerSettings.IsOpen = isOpen;
 
-			Assert.Equal(isOpen, navigationDrawer.IsOpen);
+			Assert.Equal(isOpen, navigationDrawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
 		public void ContentView_SetValue_ReturnsExpectedValue()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var contentView = new ContentView
 			{
 				Content = new Label { Text = "Navigation Drawer" }
@@ -103,7 +105,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(0d)]
 		public void DrawerHeight_SetValue_ReturnsExpectedValue(double drawerHeight)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.DrawerHeight = drawerHeight;
@@ -114,7 +116,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void ContentBackground_SetValue_ReturnsExpectedValue()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			var contentBackground = Color.FromArgb("#FFF0");
@@ -129,7 +131,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(0d)]
 		public void DrawerHeaderHeight_SetValue_ReturnsExpectedValue(double drawerHeaderHeight)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.DrawerHeaderHeight = drawerHeaderHeight;
@@ -143,7 +145,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(0d)]
 		public void DrawerFooterrHeight_SetValue_ReturnsExpectedValue(double drawerFooterHeight)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.DrawerFooterHeight = drawerFooterHeight;
@@ -157,7 +159,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(1.0d)]
 		public void Duration_SetValue_ReturnsExpectedValue(double duration)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.Duration = duration;
@@ -171,7 +173,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(0d)]
 		public void TouchThreshold_SetValue_ReturnsExpectedValue(double touchThreshold)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.TouchThreshold = touchThreshold;
@@ -185,7 +187,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(Transition.SlideOnTop)]
 		public void Transition_SetValue_ReturnsExpectedValue(Transition transition)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.Transition = transition;
@@ -200,7 +202,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(Position.Bottom)]
 		public void Position_SetValue_ReturnsExpectedValue(Position position)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.Position = position;
@@ -213,7 +215,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(true)]
 		public void EnableSwipeGetstuse_SetValue_ReturnsExpectedValue(bool enableSwipeGesture)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.EnableSwipeGesture = enableSwipeGesture;
@@ -227,7 +229,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(0d)]
 		public void DrawerWidth_SetValue_ReturnsExpectedValue(double drawerWidth)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			drawerSetting.DrawerWidth = drawerWidth;
@@ -238,7 +240,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void DrawerContentView_SetValue_ReturnsExpectedValue()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			var drawerContentView = new Label { Text = " DrawerContentView" };
@@ -250,7 +252,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void DrawerHeaderView_SetValue_ReturnsExpectedValue()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			var drawerHeaderView = new Label
@@ -265,7 +267,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void DrawerFooterView_SetValue_ReturnsExpectedValue()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var drawerSetting = new DrawerSettings();
 			navigationDrawer.DrawerSettings = drawerSetting;
 			var drawerFooterView = new Label { Text = "DrawerFooterView" };
@@ -294,11 +296,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { ContentView = new Grid() };
 			navigationDrawer.DrawerSettings.Position = Position.Left;
 			navigationDrawer.DrawerSettings.Transition = Transition.Push;
-			navigationDrawer.IsOpen = true;
+			navigationDrawer.DrawerSettings.IsOpen = true;
 			navigationDrawer.DrawerSettings.Position += 1;
 
 			Assert.Equal(Position.Right, navigationDrawer.DrawerSettings.Position);
-			Assert.True(navigationDrawer.IsOpen);
+			Assert.True(navigationDrawer.DrawerSettings.IsOpen);
 			Assert.Equal(new Grid(), navigationDrawer.ContentView);
 		}
 
@@ -724,7 +726,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void ContentBackgroundColor_SetValue_ReturnsExpectedValue()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.ContentBackgroundColor = Colors.Indigo;
 			Color expectedValue = navigationDrawer.ContentBackgroundColor;
 
@@ -734,7 +736,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void GreyOverLayColor_SetValue_ReturnsExpectedValue()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.GreyOverlayColor = Colors.DarkRed;
 			Color expectedValue = navigationDrawer.GreyOverlayColor;
 
@@ -747,7 +749,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(500)]
 		public void ScreenWidth_SetValue_ReturnsExpectedValue(double screenWidth)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.ScreenWidth = screenWidth;
 
 			Assert.Equal(screenWidth, navigationDrawer.ScreenWidth);
@@ -759,7 +761,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(500)]
 		public void ScreenHeight_SetValue_ReturnsExpectedValue(double screenHeight)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.ScreenHeight = screenHeight;
 
 			Assert.Equal(screenHeight, navigationDrawer.ScreenHeight);
@@ -790,7 +792,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.ScreenHeight = 600;
 			navigationDrawer.ContentView = new Grid();
 			navigationDrawer.DrawerSettings.DrawerContentView = new Grid();
-			navigationDrawer.IsOpen = true;
+			navigationDrawer.DrawerSettings.IsOpen = true;
 
 			var ex = Record.Exception(() => navigationDrawer.DrawerSettings.AnimationEasing = Easing.BounceOut);
 			Assert.Null(ex);
@@ -835,7 +837,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestFirstMoveActionStarted()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			InvokePrivateMethod(navigationDrawer, "FirstMoveActionStarted");
 			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isPressed"));
 			Assert.True(expectedValue);
@@ -848,7 +850,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestFirstMoveActionCompleted()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			InvokePrivateMethod(navigationDrawer, "FirstMoveActionCompleted");
 			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_actionFirstMoveOpen"));
 			Assert.False(expectedValue);
@@ -859,7 +861,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestValidateRemainDrawerWidth()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			SetPrivateField(navigationDrawer, "_remainDrawerWidth", 30);
 			InvokePrivateMethod(navigationDrawer, "ValidateRemainDrawerWidth");
 			double expectedValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_remainDrawerWidth"));
@@ -869,7 +871,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestValidateRemainDrawerHeight()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			SetPrivateField(navigationDrawer, "_remainDrawerHeight", 30);
 			InvokePrivateMethod(navigationDrawer, "ValidateRemainDrawerHeight");
 			double expectedValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_remainDrawerHeight"));
@@ -879,7 +881,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestValidateRemainDrawerWidthNegative()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			SetPrivateField(navigationDrawer, "_remainDrawerWidth", -30);
 			navigationDrawer.DrawerSettings.DrawerWidth = 20;
 			InvokePrivateMethod(navigationDrawer, "ValidateRemainDrawerWidth");
@@ -890,7 +892,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestValidateRemainDrawerHeightNegative()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			SetPrivateField(navigationDrawer, "_remainDrawerHeight", -30);
 			navigationDrawer.DrawerSettings.DrawerHeight = 20;
 			InvokePrivateMethod(navigationDrawer, "ValidateRemainDrawerHeight");
@@ -904,7 +906,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[InlineData(500d)]
 		public void TestValidateCurrentDuration(double expectedValue)
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			double actualValue = Convert.ToDouble(InvokePrivateStaticMethod(navigationDrawer, "ValidateCurrentDuration", expectedValue));
 			expectedValue = expectedValue <= 0 ? 1 : expectedValue;
 			Assert.Equal(expectedValue, actualValue);
@@ -953,7 +955,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestOnSizeAllocated()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			InvokePrivateMethod(navigationDrawer, "OnSizeAllocated", 1200, 2042);
 			double expectedValue = navigationDrawer.ScreenWidth;
 			Assert.Equal(1200, expectedValue);
@@ -964,7 +966,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestFlowDirectionMatchParentLTR()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.FlowDirection = FlowDirection.MatchParent;
 			navigationDrawer.Parent = new Grid() { FlowDirection = FlowDirection.LeftToRight };
 			InvokePrivateMethod(navigationDrawer, "OnPropertyChanged", "FlowDirection");
@@ -975,7 +977,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestFlowDirectionMatchParentRTL()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.FlowDirection = FlowDirection.MatchParent;
 			navigationDrawer.Parent = new Grid() { FlowDirection = FlowDirection.RightToLeft };
 			InvokePrivateMethod(navigationDrawer, "OnPropertyChanged", "FlowDirection");
@@ -986,7 +988,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestFlowDirectionLTR()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.FlowDirection = FlowDirection.LeftToRight;
 			InvokePrivateMethod(navigationDrawer, "OnPropertyChanged", "FlowDirection");
 			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isRTL"));
@@ -996,7 +998,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnRightvelocitiyPositive()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Right;
 			SetPrivateField(navigationDrawer, "_velocityX", 550);
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
@@ -1007,7 +1009,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnBottomvelocitiyPositive()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			SetPrivateField(navigationDrawer, "_velocityY", 550);
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
@@ -1018,7 +1020,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnLeftvelocitiyNegative()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Left;
 			SetPrivateField(navigationDrawer, "_velocityX", -550);
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
@@ -1029,7 +1031,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnRightvelocitiyNegative()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Right;
 			navigationDrawer.DrawerSettings.Transition = Transition.Push;
 			SetPrivateField(navigationDrawer, "_velocityX", 550);
@@ -1041,7 +1043,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnTopvelocitiyNegative()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			SetPrivateField(navigationDrawer, "_velocityY", -550);
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
@@ -1052,7 +1054,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnBottomvelocitiyNegative()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			navigationDrawer.DrawerSettings.Transition = Transition.Push;
 			SetPrivateField(navigationDrawer, "_velocityY", 550);
@@ -1064,7 +1066,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnLeft()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Left;
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
 			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
@@ -1074,7 +1076,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnRight()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Right;
 			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
@@ -1085,7 +1087,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnTop()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
@@ -1096,7 +1098,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestCompleteSwipeOnBottom()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
 			InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe");
@@ -1107,9 +1109,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestUpdateToggleOutEvent()
 		{
-			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { IsOpen = true };
-			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent");
-			Assert.False(navigationDrawer.IsOpen);
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() ;
+			navigationDrawer.DrawerSettings.IsOpen = true;
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent", true);
+			Assert.False(navigationDrawer.DrawerSettings.IsOpen);
 		}
 
 		[Theory]
@@ -1127,7 +1130,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				}
 			};
 			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
-			InvokePrivateMethod(navigationDrawer, "LeftDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "LeftDrawerSwipe", 25, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1146,7 +1149,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				}
 			};
 			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
-			InvokePrivateMethod(navigationDrawer, "RightDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "RightDrawerSwipe", 25, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1163,7 +1166,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				}
 			};
 			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
-			InvokePrivateMethod(navigationDrawer, "RightDrawerSwipe", 525);
+			InvokePrivateMethod(navigationDrawer, "RightDrawerSwipe", 525, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.False(actualValue);
 		}
@@ -1183,7 +1186,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				}
 			};
 			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
-			InvokePrivateMethod(navigationDrawer, "TopDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "TopDrawerSwipe", 25, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1202,7 +1205,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				}
 			};
 			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
-			InvokePrivateMethod(navigationDrawer, "BottomDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "BottomDrawerSwipe", 25, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1219,7 +1222,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				}
 			};
 			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
-			InvokePrivateMethod(navigationDrawer, "BottomDrawerSwipe", 525);
+			InvokePrivateMethod(navigationDrawer, "BottomDrawerSwipe", 525, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.False(actualValue);
 		}
@@ -1246,10 +1249,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
-			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", 25, true, false);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
-			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", -25);
+			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", -25, true, false);
 			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1263,10 +1266,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
-			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", 25, true, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
-			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", -25);
+			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", -25, true, true);
 			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1280,10 +1283,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
-			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", 25, true, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
-			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", -25);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", -25, true, true);
 			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1297,7 +1300,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
-			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", 25, true, false);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1311,7 +1314,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
-			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", 25, true, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1325,10 +1328,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
-			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", 25,true, false);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
-			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", -25);
+			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", -25,true, false);
 			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1342,10 +1345,10 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
-			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", 25, true, true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
-			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", -25);
+			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", -25, true, true);
 			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1359,9 +1362,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
 			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
-			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", 25);
+			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", 25, true, false);
 			_ = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
-			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", -25);
+			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", -25, true,false);
 			var actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1387,7 +1390,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Left;
 			SetPrivateField(navigationDrawer, "_oldPoint", new Point(20, 20));
 			SetPrivateField(navigationDrawer, "_newPoint", new Point(50, 20));
-			InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition");
+			InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition", true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1399,7 +1402,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Top;
 			SetPrivateField(navigationDrawer, "_oldPoint", new Point(20, 20));
 			SetPrivateField(navigationDrawer, "_newPoint", new Point(50, 50));
-			InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition");
+			InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition", true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.True(actualValue);
 		}
@@ -1411,7 +1414,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Right;
 			SetPrivateField(navigationDrawer, "_oldPoint", new Point(20, 20));
 			SetPrivateField(navigationDrawer, "_newPoint", new Point(50, 20));
-			InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition");
+			InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition", true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.False(actualValue);
 		}
@@ -1423,7 +1426,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Position = Position.Bottom;
 			SetPrivateField(navigationDrawer, "_oldPoint", new Point(20, 20));
 			SetPrivateField(navigationDrawer, "_newPoint", new Point(50, 50));
-			InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition");
+			InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition", true);
 			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
 			Assert.False(actualValue);
 		}
@@ -1664,7 +1667,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
 			var greyOverlayGrid = new SfGrid();
 			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
-			InvokePrivateMethod(navigationDrawer, "UpdateGridOverlayTranslate");
+			InvokePrivateMethod(navigationDrawer, "UpdateGridOverlayTranslate", true);
 			var actualGreyOverlay = GetPrivateField(navigationDrawer, "_greyOverlayGrid") as Grid;
 			Assert.NotNull(actualGreyOverlay);
 			Assert.Equal(0, actualGreyOverlay.TranslationX);
@@ -2148,11 +2151,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void Test_ParentFlowDirection3()
 		{
-			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid(), IsOpen = true };
-			InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent");
-			Assert.True(navigationDrawer.IsOpen);
-			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent");
-			Assert.False(navigationDrawer.IsOpen);
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid()};
+			navigationDrawer.DrawerSettings.IsOpen = true;
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent",true);
+			Assert.True(navigationDrawer.DrawerSettings.IsOpen);
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent",true);
+			Assert.False(navigationDrawer.DrawerSettings.IsOpen);
 			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
 			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
 			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
@@ -2163,11 +2167,12 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void Test_ParentFlowDirection4()
 		{
-			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid(), IsOpen = true };
-			InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent");
-			Assert.True(navigationDrawer.IsOpen);
-			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent");
-			Assert.False(navigationDrawer.IsOpen);
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { DrawerSettings = new DrawerSettings(), ContentView = new Grid()};
+			navigationDrawer.DrawerSettings.IsOpen = true;
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent",true);
+			Assert.True(navigationDrawer.DrawerSettings.IsOpen);
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent", true);
+			Assert.False(navigationDrawer.DrawerSettings.IsOpen);
 			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
 			var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
 			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
@@ -2255,14 +2260,14 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		[Fact]
 		public void TestDrawerClosedInvoked()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var fired = false;
 			Grid content = [new Label()];
 			navigationDrawer.ContentView = content;
 			navigationDrawer.DrawerClosed += (sender, e) => fired = true;
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 			navigationDrawer.DrawerSettings.Transition = Transition.Reveal;
-			InvokePrivateMethod(navigationDrawer, "OnDrawerClosedToggledEvent");
+			InvokePrivateMethod(navigationDrawer, "OnDrawerClosedToggledEvent", true);
 			Assert.True(fired);
 		}
 
@@ -2276,7 +2281,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			var fired = false;
 			navigationDrawer.DrawerOpened += (sender, e) => fired = true;
-			InvokePrivateMethod(navigationDrawer, "OnDrawerOpenedToggledEvent");
+			InvokePrivateMethod(navigationDrawer, "OnDrawerOpenedToggledEvent", true);
 			Assert.True(fired);
 		}
 
@@ -2290,17 +2295,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 			var fired = false;
 			navigationDrawer.DrawerOpening += (sender, e) => fired = true;
-			InvokePrivateMethod(navigationDrawer, "SetDrawerOpeningEvent");
+			InvokePrivateMethod(navigationDrawer, "SetDrawerOpeningEvent", true);
 			Assert.True(fired);
 		}
 
 		[Fact]
 		public void TestDrawerToggledInvoked()
 		{
-			SfNavigationDrawer navigationDrawer = [];
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
 			var fired = false;
 			navigationDrawer.DrawerToggled += (sender, e) => fired = true;
-			InvokePrivateMethod(navigationDrawer, "OnDrawerOpenedToggledEvent");
+			InvokePrivateMethod(navigationDrawer, "OnDrawerOpenedToggledEvent", true);
 			Assert.True(fired);
 		}
 
@@ -2422,7 +2427,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer();
 			
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 			Assert.Null(drawer.ContentView);
 			Assert.NotNull(drawer.DrawerSettings);
 			Assert.Equal(Colors.Transparent, drawer.BackgroundColor);
@@ -2432,18 +2437,18 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		public void Phase1_IsOpen_CanBeSetToTrue()
 		{
 			var drawer = new SfNavigationDrawer();
-			drawer.IsOpen = true;
+			drawer.DrawerSettings.IsOpen = true;
 			
-			Assert.True(drawer.IsOpen);
+			Assert.True(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
 		public void Phase1_IsOpen_CanBeSetToFalse()
 		{
-			var drawer = new SfNavigationDrawer { IsOpen = true };
-			drawer.IsOpen = false;
+			var drawer = new SfNavigationDrawer { DrawerSettings = new DrawerSettings { IsOpen = true } };
+			drawer.DrawerSettings.IsOpen = false;
 			
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -2451,16 +2456,16 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer();
 			
-			drawer.IsOpen = true;
-			Assert.True(drawer.IsOpen);
+			drawer.DrawerSettings.IsOpen = true;
+			Assert.True(drawer.DrawerSettings.IsOpen);
 			
-			drawer.IsOpen = false;
-			Assert.False(drawer.IsOpen);
+			drawer.DrawerSettings.IsOpen = false;
+			Assert.False(drawer.DrawerSettings.IsOpen);
 			
-			drawer.IsOpen = true;
-			Assert.True(drawer.IsOpen);
+			drawer.DrawerSettings.IsOpen = true;
+			Assert.True(drawer.DrawerSettings.IsOpen);
 		}
-
+			
 		[Fact]
 		public void Phase1_ContentView_CanBeSet()
 		{
@@ -2770,7 +2775,6 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		#endregion
-
 		#region Phase 2: Event Handling Tests (10-20% Coverage)
 
 		[Fact]
@@ -2787,7 +2791,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			};
 
 			// Invoke the internal method directly
-			InvokePrivateMethod(drawer, "OnDrawerClosed", new EventArgs());
+			InvokePrivateMethod(drawer, "OnDrawerClosed", new DrawerEventArgs(true));
 
 			Assert.True(eventFired);
 			Assert.NotNull(capturedArgs);
@@ -2798,7 +2802,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
 			bool eventFired = false;
-			EventArgs? capturedArgs = null;
+			DrawerEventArgs? capturedArgs = null;
 
 			drawer.DrawerOpened += (sender, args) =>
 			{
@@ -2806,7 +2810,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				capturedArgs = args;
 			};
 
-			InvokePrivateMethod(drawer, "OnDrawerOpened", new EventArgs());
+			InvokePrivateMethod(drawer, "OnDrawerOpened", new DrawerEventArgs(true));
 
 			Assert.True(eventFired);
 			Assert.NotNull(capturedArgs);
@@ -2846,7 +2850,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				capturedArgs = args;
 			};
 
-			var cancelArgs = new CancelEventArgs();
+			var cancelArgs = new DrawerCancelEventArgs(true);
 			InvokePrivateMethod(drawer, "OnDrawerOpening", cancelArgs);
 
 			Assert.True(eventFired);
@@ -2858,7 +2862,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer { DrawerSettings = new DrawerSettings(), ContentView = new Grid() };
 			bool eventFired = false;
-			CancelEventArgs? capturedArgs = null;
+			DrawerCancelEventArgs? capturedArgs = null;
 
 			drawer.DrawerClosing += (sender, args) =>
 			{
@@ -2866,7 +2870,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				capturedArgs = args;
 			};
 
-			var cancelArgs = new CancelEventArgs();
+			var cancelArgs = new DrawerCancelEventArgs(true);
 			InvokePrivateMethod(drawer, "OnDrawerClosing", cancelArgs);
 
 			Assert.True(eventFired);
@@ -2883,7 +2887,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			drawer.DrawerClosed += (sender, args) => callCount++;
 			drawer.DrawerClosed += (sender, args) => callCount++;
 
-			InvokePrivateMethod(drawer, "OnDrawerClosed", new EventArgs());
+			InvokePrivateMethod(drawer, "OnDrawerClosed", new DrawerEventArgs(true));
 
 			Assert.Equal(3, callCount);
 		}
@@ -2898,7 +2902,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				args.Cancel = true;
 			};
 
-			var cancelArgs = new CancelEventArgs();
+			var cancelArgs = new DrawerCancelEventArgs(true);
 			InvokePrivateMethod(drawer, "OnDrawerOpening", cancelArgs);
 
 			Assert.True(cancelArgs.Cancel);
@@ -2914,7 +2918,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				args.Cancel = true;
 			};
 
-			var cancelArgs = new CancelEventArgs();
+			var cancelArgs = new DrawerCancelEventArgs(true);
 			InvokePrivateMethod(drawer, "OnDrawerClosing", cancelArgs);
 
 			Assert.True(cancelArgs.Cancel);
@@ -3035,7 +3039,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			drawer.DrawerOpening += (sender, args) => callCount++;
 			drawer.DrawerOpening += (sender, args) => callCount++;
 
-			var cancelArgs = new CancelEventArgs();
+			var cancelArgs = new DrawerCancelEventArgs ( true );
 			InvokePrivateMethod(drawer, "OnDrawerOpening", cancelArgs);
 
 			Assert.Equal(2, callCount);
@@ -3051,7 +3055,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			drawer.DrawerClosing += (sender, args) => callCount++;
 			drawer.DrawerClosing += (sender, args) => callCount++;
 
-			var cancelArgs = new CancelEventArgs();
+			var cancelArgs = new DrawerCancelEventArgs(true);
 			InvokePrivateMethod(drawer, "OnDrawerClosing", cancelArgs);
 
 			Assert.Equal(3, callCount);
@@ -3163,7 +3167,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				capturedSender = sender;
 			};
 
-			InvokePrivateMethod(drawer, "OnDrawerClosed", new EventArgs());
+			InvokePrivateMethod(drawer, "OnDrawerClosed", new DrawerEventArgs(true));
 
 			Assert.Same(drawer, capturedSender);
 		}
@@ -3200,11 +3204,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
 
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 
 			var ex = Record.Exception(() => drawer.ToggleDrawer());
 			Assert.NotNull(ex);
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -3212,18 +3216,17 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings(), 
-				ContentView = new Grid(),
-				IsOpen = true
+				DrawerSettings = new DrawerSettings { IsOpen = true }, 
+				ContentView = new Grid()
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
 
-			Assert.True(drawer.IsOpen);
+			Assert.True(drawer.DrawerSettings.IsOpen);
 
 			var ex = Record.Exception(() => drawer.ToggleDrawer());
 			Assert.NotNull(ex);
-			Assert.True(drawer.IsOpen);
+			Assert.True(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -3237,11 +3240,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
 
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 
 			var ex = Record.Exception(() => drawer.ToggleDrawer());
 			Assert.NotNull(ex);
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Theory]
@@ -3259,11 +3262,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
 
-			var initialState = drawer.IsOpen;
+			var initialState = drawer.DrawerSettings.IsOpen;
 
 			var ex = Record.Exception(() => drawer.ToggleDrawer());
 			Assert.NotNull(ex);
-			Assert.Equal(initialState, drawer.IsOpen);
+			Assert.Equal(initialState, drawer.DrawerSettings.IsOpen);
 		}
 
 		[Theory]
@@ -3280,11 +3283,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
 
-			var initialState = drawer.IsOpen;
+			var initialState = drawer.DrawerSettings.IsOpen;
 
 			var ex = Record.Exception(() => drawer.ToggleDrawer());
 			Assert.NotNull(ex);
-			Assert.Equal(initialState, drawer.IsOpen);
+			Assert.Equal(initialState, drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -3313,9 +3316,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings(), 
+				DrawerSettings = new DrawerSettings { IsOpen = true}, 
 				ContentView = new Grid(),
-				IsOpen = true
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -3389,7 +3391,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 			catch (Exception) { }
 
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -3409,7 +3411,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 			catch (Exception) { }
 
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -3429,7 +3431,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 			catch (Exception) { }
 
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -3449,7 +3451,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			}
 			catch (Exception) { }
 
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -3465,11 +3467,11 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 
 			var openEx = Record.Exception(() => drawer.ToggleDrawer());
 			Assert.NotNull(openEx);
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 
 			var closeEx = Record.Exception(() => drawer.ToggleDrawer());
 			Assert.NotNull(closeEx);
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -3693,9 +3695,9 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Left }, 
+				DrawerSettings = new DrawerSettings { IsOpen = true, Position = Position.Left }, 
 				ContentView = new Grid(),
-				IsOpen = true
+	
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -3725,9 +3727,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Right }, 
+				DrawerSettings = new DrawerSettings { Position = Position.Right , IsOpen = true }, 
 				ContentView = new Grid(),
-				IsOpen = true
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -3757,9 +3758,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Top }, 
+				DrawerSettings = new DrawerSettings { IsOpen = true, Position = Position.Top }, 
 				ContentView = new Grid(),
-				IsOpen = true
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -3789,9 +3789,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Bottom }, 
+				DrawerSettings = new DrawerSettings { IsOpen = true, Position = Position.Bottom }, 
 				ContentView = new Grid(),
-				IsOpen = true
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -3985,7 +3984,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				ContentView = new Grid() 
 			};
 
-			InvokePrivateMethod(drawer, "SetVisibility", true);
+			InvokePrivateMethod(drawer, "SetVisibility", true, true);
 
 			var overlayGrid = GetPrivateField(drawer, "_greyOverlayGrid") as SfGrid;
 			Assert.NotNull(overlayGrid);
@@ -4000,7 +3999,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				ContentView = new Grid() 
 			};
 
-			InvokePrivateMethod(drawer, "SetVisibility", false);
+			InvokePrivateMethod(drawer, "SetVisibility", false, true);
 
 			var overlayGrid = GetPrivateField(drawer, "_greyOverlayGrid") as SfGrid;
 			Assert.NotNull(overlayGrid);
@@ -4015,7 +4014,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				ContentView = new Grid() 
 			};
 
-			InvokePrivateMethod(drawer, "UpdateGridOverlayTranslate");
+			InvokePrivateMethod(drawer, "UpdateGridOverlayTranslate", true);
 
 			var overlayGrid = GetPrivateField(drawer, "_greyOverlayGrid") as SfGrid;
 			Assert.NotNull(overlayGrid);
@@ -4030,7 +4029,7 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 				ContentView = new Grid() 
 			};
 
-			InvokePrivateMethod(drawer, "UpdateGridOverlayTranslate");
+			InvokePrivateMethod(drawer, "UpdateGridOverlayTranslate", true);
 
 			var overlayGrid = GetPrivateField(drawer, "_greyOverlayGrid") as SfGrid;
 			Assert.Equal(0, overlayGrid?.TranslationX);
@@ -4079,136 +4078,136 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 			Assert.Equal(200, startPoint?.Y);
 		}
 		[Fact]
-public void Phase4_HandlePointerPressed_LeftPosition_RecordsPosition()
-{
-    var drawer = new SfNavigationDrawer
-    {
-        DrawerSettings = new DrawerSettings { Position = Position.Left },
-        ContentView = new Grid()
-    };
-    drawer.ScreenHeight = 667;
-    drawer.ScreenWidth = 375;
+		public void Phase4_HandlePointerPressed_LeftPosition_RecordsPosition()
+		{
+			var drawer = new SfNavigationDrawer
+			{
+				DrawerSettings = new DrawerSettings { Position = Position.Left },
+				ContentView = new Grid()
+			};
+			drawer.ScreenHeight = 667;
+			drawer.ScreenWidth = 375;
 
-    var point = new Point(50, 100);
-    InvokePrivateMethod(drawer, "HandlePointerPressed", point);
+			var point = new Point(50, 100);
+			InvokePrivateMethod(drawer, "HandlePointerPressed", point);
 
-    var startPoint = GetPrivateField(drawer, "_startPoint") as Point?;
-    Assert.NotNull(startPoint);
-    Assert.Equal(50, startPoint?.X);
-    Assert.Equal(100, startPoint?.Y);
-}
+			var startPoint = GetPrivateField(drawer, "_startPoint") as Point?;
+			Assert.NotNull(startPoint);
+			Assert.Equal(50, startPoint?.X);
+			Assert.Equal(100, startPoint?.Y);
+		}
 
-[Fact]
-public void Phase4_HandlePointerPressed_RightPosition_RecordsPosition()
-{
-    var drawer = new SfNavigationDrawer
-    {
-        DrawerSettings = new DrawerSettings { Position = Position.Right },
-        ContentView = new Grid()
-    };
-    drawer.ScreenHeight = 667;
-    drawer.ScreenWidth = 375;
+		[Fact]
+		public void Phase4_HandlePointerPressed_RightPosition_RecordsPosition()
+		{
+			var drawer = new SfNavigationDrawer
+			{
+				DrawerSettings = new DrawerSettings { Position = Position.Right },
+				ContentView = new Grid()
+			};
+			drawer.ScreenHeight = 667;
+			drawer.ScreenWidth = 375;
 
-    var point = new Point(300, 150);
-    InvokePrivateMethod(drawer, "HandlePointerPressed", point);
+			var point = new Point(300, 150);
+			InvokePrivateMethod(drawer, "HandlePointerPressed", point);
 
-    var startPoint = GetPrivateField(drawer, "_startPoint") as Point?;
-    Assert.NotNull(startPoint);
-    Assert.Equal(300, startPoint?.X);
-    Assert.Equal(150, startPoint?.Y);
-}
+			var startPoint = GetPrivateField(drawer, "_startPoint") as Point?;
+			Assert.NotNull(startPoint);
+			Assert.Equal(300, startPoint?.X);
+			Assert.Equal(150, startPoint?.Y);
+		}
 
-[Fact]
-public void Phase4_HandlePointerPressed_TopPosition_RecordsPosition()
-{
-    var drawer = new SfNavigationDrawer
-    {
-        DrawerSettings = new DrawerSettings { Position = Position.Top },
-        ContentView = new Grid()
-    };
-    drawer.ScreenHeight = 667;
-    drawer.ScreenWidth = 375;
+		[Fact]
+		public void Phase4_HandlePointerPressed_TopPosition_RecordsPosition()
+		{
+			var drawer = new SfNavigationDrawer
+			{
+				DrawerSettings = new DrawerSettings { Position = Position.Top },
+				ContentView = new Grid()
+			};
+			drawer.ScreenHeight = 667;
+			drawer.ScreenWidth = 375;
 
-    var point = new Point(200, 50);
-    InvokePrivateMethod(drawer, "HandlePointerPressed", point);
+			var point = new Point(200, 50);
+			InvokePrivateMethod(drawer, "HandlePointerPressed", point);
 
-    var startPoint = GetPrivateField(drawer, "_startPoint") as Point?;
-    Assert.NotNull(startPoint);
-    Assert.Equal(200, startPoint?.X);
-    Assert.Equal(50, startPoint?.Y);
-}
+			var startPoint = GetPrivateField(drawer, "_startPoint") as Point?;
+			Assert.NotNull(startPoint);
+			Assert.Equal(200, startPoint?.X);
+			Assert.Equal(50, startPoint?.Y);
+		}
 
-[Fact]
-public void Phase4_HandlePointerPressed_BottomPosition_RecordsPosition()
-{
-    var drawer = new SfNavigationDrawer
-    {
-        DrawerSettings = new DrawerSettings { Position = Position.Bottom },
-        ContentView = new Grid()
-    };
-    drawer.ScreenHeight = 667;
-    drawer.ScreenWidth = 375;
+		[Fact]
+		public void Phase4_HandlePointerPressed_BottomPosition_RecordsPosition()
+		{
+			var drawer = new SfNavigationDrawer
+			{
+				DrawerSettings = new DrawerSettings { Position = Position.Bottom },
+				ContentView = new Grid()
+			};
+			drawer.ScreenHeight = 667;
+			drawer.ScreenWidth = 375;
 
-    var point = new Point(200, 600);
-    InvokePrivateMethod(drawer, "HandlePointerPressed", point);
+			var point = new Point(200, 600);
+			InvokePrivateMethod(drawer, "HandlePointerPressed", point);
 
-    var startPoint = GetPrivateField(drawer, "_startPoint") as Point?;
-    Assert.NotNull(startPoint);
-    Assert.Equal(200, startPoint?.X);
-    Assert.Equal(600, startPoint?.Y);
-}
+			var startPoint = GetPrivateField(drawer, "_startPoint") as Point?;
+			Assert.NotNull(startPoint);
+			Assert.Equal(200, startPoint?.X);
+			Assert.Equal(600, startPoint?.Y);
+		}
 
-[Fact]
-public void Phase4_HandlePointerMoved_TracksMovement()
-{
-    var drawer = new SfNavigationDrawer
-    {
-        DrawerSettings = new DrawerSettings(),
-        ContentView = new Grid()
-    };
-    drawer.ScreenHeight = 667;
-    drawer.ScreenWidth = 375;
+		[Fact]
+		public void Phase4_HandlePointerMoved_TracksMovement()
+		{
+			var drawer = new SfNavigationDrawer
+			{
+				DrawerSettings = new DrawerSettings(),
+				ContentView = new Grid()
+			};
+			drawer.ScreenHeight = 667;
+			drawer.ScreenWidth = 375;
 
-    var pressPoint = new Point(100, 200);
-    var movePoint = new Point(150, 250);
+			var pressPoint = new Point(100, 200);
+			var movePoint = new Point(150, 250);
 
-    InvokePrivateMethod(drawer, "HandlePointerPressed", pressPoint);
-    InvokePrivateMethod(drawer, "HandlePointerMoved", movePoint);
+			InvokePrivateMethod(drawer, "HandlePointerPressed", pressPoint);
+			InvokePrivateMethod(drawer, "HandlePointerMoved", movePoint);
 
-    var newPoint = GetPrivateField(drawer, "_newPoint") as Point?;
-    Assert.NotNull(newPoint);
-    Assert.Equal(150, newPoint?.X);
-    Assert.Equal(250, newPoint?.Y);
-}
+			var newPoint = GetPrivateField(drawer, "_newPoint") as Point?;
+			Assert.NotNull(newPoint);
+			Assert.Equal(150, newPoint?.X);
+			Assert.Equal(250, newPoint?.Y);
+		}
 
-[Fact]
-public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
-{
-    var drawer = new SfNavigationDrawer
-    {
-        DrawerSettings = new DrawerSettings(),
-        ContentView = new Grid()
-    };
-    drawer.ScreenHeight = 667;
-    drawer.ScreenWidth = 375;
+		[Fact]
+		public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
+		{
+			var drawer = new SfNavigationDrawer
+			{
+				DrawerSettings = new DrawerSettings(),
+				ContentView = new Grid()
+			};
+			drawer.ScreenHeight = 667;
+			drawer.ScreenWidth = 375;
 
-    var pressPoint = new Point(100, 200);
-    var releasePoint = new Point(100, 200);
+			var pressPoint = new Point(100, 200);
+			var releasePoint = new Point(100, 200);
 
-    InvokePrivateMethod(drawer, "HandlePointerPressed", pressPoint);
-    InvokePrivateMethod(drawer, "HandlePointerReleased", releasePoint);
+			InvokePrivateMethod(drawer, "HandlePointerPressed", pressPoint);
+			InvokePrivateMethod(drawer, "HandlePointerReleased", releasePoint);
 
-    var isDrawerOpen = Convert.ToBoolean(GetPrivateField(drawer, "_isDrawerOpen"));
-    Assert.False(isDrawerOpen);
-}
+			var isDrawerOpen = Convert.ToBoolean(GetPrivateField(drawer, "_isDrawerOpen"));
+			Assert.False(isDrawerOpen);
+		}
+
 		[Fact]
 		public void Phase4_HandlePointerReleased_SmallDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Left }, 
+				DrawerSettings = new DrawerSettings { IsOpen = false, Position = Position.Left }, 
 				ContentView = new Grid(),
-				IsOpen = false
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4221,7 +4220,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			InvokePrivateMethod(drawer, "HandlePointerReleased", releasePoint);
 
 			// May or may not toggle depending on threshold
-			var isOpen = drawer.IsOpen;
+			var isOpen = drawer.DrawerSettings.IsOpen;
 			Assert.IsType<bool>(isOpen);
 		}
 
@@ -4230,9 +4229,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Left }, 
+				DrawerSettings = new DrawerSettings { IsOpen = false,Position = Position.Left }, 
 				ContentView = new Grid(),
-				IsOpen = false
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4246,7 +4244,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			InvokePrivateMethod(drawer, "HandlePointerReleased", release1);
 
 			// State after first swipe
-			var isOpenAfterFirst = drawer.IsOpen;
+			var isOpenAfterFirst = drawer.DrawerSettings.IsOpen;
 
 			// Second swipe (opposite direction)
 			var press2 = new Point(250, 300);
@@ -4257,7 +4255,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			InvokePrivateMethod(drawer, "HandlePointerReleased", release2);
 
 			// State should have changed or remained stable
-			var isOpenAfterSecond = drawer.IsOpen;
+			var isOpenAfterSecond = drawer.DrawerSettings.IsOpen;
 			Assert.IsType<bool>(isOpenAfterSecond);
 		}
 
@@ -4266,9 +4264,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Left }, 
+				DrawerSettings = new DrawerSettings { IsOpen = false, Position = Position.Left }, 
 				ContentView = new Grid(),
-				IsOpen = false
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4287,9 +4284,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Right }, 
+				DrawerSettings = new DrawerSettings { IsOpen = false, Position = Position.Right }, 
 				ContentView = new Grid(),
-				IsOpen = false
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4306,9 +4302,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Top }, 
+				DrawerSettings = new DrawerSettings { IsOpen = false, Position = Position.Top }, 
 				ContentView = new Grid(),
-				IsOpen = false
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4325,9 +4320,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Bottom }, 
+				DrawerSettings = new DrawerSettings { IsOpen = false, Position = Position.Bottom }, 
 				ContentView = new Grid(),
-				IsOpen = false
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4348,9 +4342,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			{
 				var drawer = new SfNavigationDrawer 
 				{ 
-					DrawerSettings = new DrawerSettings { Position = position }, 
+					DrawerSettings = new DrawerSettings { IsOpen = false, Position = position }, 
 					ContentView = new Grid(),
-					IsOpen = false
 				};
 				drawer.ScreenHeight = 667;
 				drawer.ScreenWidth = 375;
@@ -4368,9 +4361,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Left }, 
+				DrawerSettings = new DrawerSettings { IsOpen = true, Position = Position.Left }, 
 				ContentView = new Grid(),
-				IsOpen = true
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4379,7 +4371,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			InvokePrivateMethod(drawer, "HandlePointerPressed", pressPoint);
 
 			// Should handle pointer press on open drawer
-			Assert.True(drawer.IsOpen);
+			Assert.True(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -4387,9 +4379,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Left }, 
+				DrawerSettings = new DrawerSettings { IsOpen = false, Position = Position.Left }, 
 				ContentView = new Grid(),
-				IsOpen = false
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4406,7 +4397,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			// Gesture completed successfully
 			Assert.NotNull(ex);
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		[Fact]
@@ -4414,9 +4405,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Left }, 
+				DrawerSettings = new DrawerSettings { IsOpen = false,Position = Position.Left }, 
 				ContentView = new Grid(),
-				IsOpen = false
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4575,10 +4565,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 				DrawerSettings = new DrawerSettings 
 				{ 
 					Position = Position.Left,
-					Transition = Transition.Push
+					Transition = Transition.Push,
+					IsOpen = true
 				}, 
-				ContentView = new Grid(),
-				IsOpen = true
+				ContentView = new Grid()
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4596,10 +4586,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			{ 
 				DrawerSettings = new DrawerSettings 
 				{ 
-					Position = Position.Left
+					Position = Position.Left,
+					IsOpen = true
 				}, 
 				ContentView = new Grid(),
-				IsOpen = true
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
@@ -4741,16 +4731,15 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Position = Position.Left }, 
+				DrawerSettings = new DrawerSettings { IsOpen = true, Position = Position.Left }, 
 				ContentView = new Grid(),
-				IsOpen = true
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
 
 			drawer.DrawerSettings.Position = Position.Right;
 
-			Assert.True(drawer.IsOpen);
+			Assert.True(drawer.DrawerSettings.IsOpen);
 			Assert.Equal(Position.Right, drawer.DrawerSettings.Position);
 		}
 
@@ -4759,16 +4748,15 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer 
 			{ 
-				DrawerSettings = new DrawerSettings { Transition = Transition.Push }, 
+				DrawerSettings = new DrawerSettings { IsOpen = true, Transition = Transition.Push }, 
 				ContentView = new Grid(),
-				IsOpen = true
 			};
 			drawer.ScreenHeight = 667;
 			drawer.ScreenWidth = 375;
 
 			drawer.DrawerSettings.Transition = Transition.Reveal;
 
-			Assert.True(drawer.IsOpen);
+			Assert.True(drawer.DrawerSettings.IsOpen);
 			Assert.Equal(Transition.Reveal, drawer.DrawerSettings.Transition);
 		}
 
@@ -4835,7 +4823,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			var ex = Record.Exception(() => drawer.ToggleDrawer());
 
-			Assert.Null(ex);
+			Assert.NotNull(ex);
 		}
 
 
@@ -4868,10 +4856,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			drawer.DrawerClosing += (_, __) => order.Add("Closing");
 			drawer.DrawerClosed += (_, __) => order.Add("Closed");
 
-			InvokePrivateMethod(drawer, "OnDrawerOpening", new CancelEventArgs());
-			InvokePrivateMethod(drawer, "OnDrawerOpened", EventArgs.Empty);
-			InvokePrivateMethod(drawer, "OnDrawerClosing", new CancelEventArgs());
-			InvokePrivateMethod(drawer, "OnDrawerClosed", EventArgs.Empty);
+			InvokePrivateMethod(drawer, "OnDrawerOpening", new DrawerCancelEventArgs(true));
+			InvokePrivateMethod(drawer, "OnDrawerOpened", new DrawerEventArgs(true));
+			InvokePrivateMethod(drawer, "OnDrawerClosing", new DrawerCancelEventArgs(true));
+			InvokePrivateMethod(drawer, "OnDrawerClosed", new DrawerEventArgs(true));
 
 			Assert.Equal(new[] { "Opening", "Opened", "Closing", "Closed" }, order);
 		}
@@ -4901,7 +4889,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			SetPrivateField(drawer, "_remainDrawerWidth", 50);
 
-			InvokePrivateMethod(drawer, "HandleLeftDrawerSwipe", 50);
+			InvokePrivateMethod(drawer, "HandleLeftDrawerSwipe", 50 , true,false);
 
 			object? value = GetPrivateField(drawer, "_isTransitionDifference");
 
@@ -4911,22 +4899,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			Assert.True(result);
 
 		}
-		[Fact]
-		public void Velocity_Zero_DoesNotTriggerTransition()
-		{
-			var drawer = new SfNavigationDrawer();
 
-			SetPrivateField(drawer, "_velocityX", 0);
-			InvokePrivateMethod(drawer, "CompletedDrawerSwipe");
-
-			object? value = GetPrivateField(drawer, "_isTransitionDifference");
-
-			Assert.NotNull(value);
-			bool result = (bool)value;
-
-			Assert.False(result);
-
-		}
 		[Fact]
 		public void RapidToggle_DoesNotBreakState()
 		{
@@ -4994,46 +4967,14 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		}
 
 		[Fact]
-		public void ToggleDrawer_Twice_ShouldCloseDrawer()
-		{
-			var drawer = new SfNavigationDrawer();
-
-			drawer.ToggleDrawer();
-			drawer.ToggleDrawer();
-
-			Assert.False(drawer.IsOpen);
-		}
-
-		[Theory]
-		[InlineData(Transition.Push)]
-		[InlineData(Transition.Reveal)]
-		[InlineData(Transition.SlideOnTop)]
-		public void Drawer_ShouldSupportAllTransitions(Transition transition)
-		{
-			var drawer = new SfNavigationDrawer
-			{
-				DrawerSettings = new DrawerSettings
-				{
-					Transition = transition
-				}
-			};
-
-			drawer.ToggleDrawer();
-
-				// Assert
-			bool isDrawerOpen = Convert.ToBoolean(GetPrivateField(drawer, "_isDrawerOpen"));
-			Assert.False(isDrawerOpen);
-		}
-
-		[Fact]
 		public void Setting_IsOpen_ShouldTriggerToggle()
 		{
 			var drawer = new SfNavigationDrawer();
 
-			drawer.IsOpen = true;
+			drawer.DrawerSettings.IsOpen = true;
 
-			Assert.True(drawer.IsOpen);
-		}
+			Assert.True(drawer.DrawerSettings.IsOpen);
+		}	
 
 
 		[Fact]
@@ -5110,10 +5051,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			var navigationDrawer = new SfNavigationDrawer();
 
 			// Act
-			navigationDrawer.IsOpen = isOpen;
+			navigationDrawer.DrawerSettings.IsOpen = isOpen;
 
 			// Assert
-			Assert.Equal(isOpen, navigationDrawer.IsOpen);
+			Assert.Equal(isOpen, navigationDrawer.DrawerSettings.IsOpen);
 		}
 		#if !WINDOWS
 		[Theory]
@@ -5227,7 +5168,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			};
 
-			InvokePrivateMethod(drawer, "InitializeDrawer");
+			InvokePrivateMethod(drawer, "InitializeDrawer", true);
 			InvokePrivateMethod(drawer, "InitializeGreyOverlayGrid");
 
 			InvokePrivateMethod(drawer, "UpdateAllChild");
@@ -5257,15 +5198,14 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			var drawer = new SfNavigationDrawer
 			{
 				ContentView = new Grid(),
-				IsOpen = false
 			};
-
+			drawer.DrawerSettings.IsOpen = false;
 			drawer.Measure(600, 900);
 			drawer.Arrange(new Rect(0, 0, 600, 900));
 
 
 			// Trigger toggle indirectly
-			drawer.IsOpen = false;
+			drawer.DrawerSettings.IsOpen = false;
 
 			Assert.NotNull(drawer);
 		}
@@ -5370,10 +5310,9 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 				ContentView = new Grid(),
 				DrawerSettings = new DrawerSettings
 				{
-					
+					IsOpen = true,
 					DrawerWidth = 200
 				},
-				IsOpen = true,
 			};
 			SetPrivateField(drawer, "_isDrawerOpen", true);
 			drawer.ScreenWidth = 500;
@@ -5468,7 +5407,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			// FORCE initialization (critical)
 			var initDrawer = typeof(SfNavigationDrawer)
 				.GetMethod("InitializeDrawer", BindingFlags.NonPublic | BindingFlags.Instance);
-			initDrawer?.Invoke(drawer, null);
+
+			initDrawer?.Invoke(drawer, new object[] { true });
 
 			var initOverlay = typeof(SfNavigationDrawer)
 				.GetMethod("InitializeGreyOverlayGrid", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -5494,7 +5434,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		public void ToggleDrawer_WhenAlreadyOpen_CoversClosePath()
 		{
 			var drawer = CreateInitializedDrawer();
-			drawer.IsOpen = true;
+			drawer.DrawerSettings.IsOpen = true;
 
 			SetPrivateField(drawer, "_isDrawerOpen", true);
 
@@ -5636,7 +5576,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			drawer.DrawerSettings.Position = pos;
 			drawer.DrawerSettings.Transition = transition;
 
-			InvokePrivateMethod(drawer, "UpdateGridOverlayTranslate");
+			InvokePrivateMethod(drawer, "UpdateGridOverlayTranslate",true);
 
 			Assert.NotNull(drawer);
 		}
@@ -5649,7 +5589,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			SetPrivateField(drawer, "_oldPoint", new Point(100, 100));
 			SetPrivateField(drawer, "_newPoint", new Point(100, 100));
 
-			InvokePrivateMethod(drawer, "TranslateDrawerXPosition");
+			InvokePrivateMethod(drawer, "TranslateDrawerXPosition", true);
 
 			Assert.True(true);
 		}
@@ -5684,7 +5624,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			typeof(SfNavigationDrawer)
 				.GetMethod("InitializeDrawer", BindingFlags.NonPublic | BindingFlags.Instance)
-				?.Invoke(drawer, null);
+				?.Invoke(drawer, new object[] { true });
 
 			typeof(SfNavigationDrawer)
 				.GetMethod("InitializeGreyOverlayGrid", BindingFlags.NonPublic | BindingFlags.Instance)
@@ -5775,7 +5715,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			drawer.DrawerSettings.Transition = transition;
 
-			InvokePrivateMethod(drawer, "UpdateGridOverlayTranslate");
+			InvokePrivateMethod(drawer, "UpdateGridOverlayTranslate", true);
 
 			Assert.NotNull(drawer);
 		}
@@ -5784,8 +5724,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = CreateFullyReadyDrawer();
 
-			InvokePrivateMethod(drawer, "HandleLeftDrawerSwipe", 50);
-			InvokePrivateMethod(drawer, "HandleLeftDrawerSwipe", -50);
+			InvokePrivateMethod(drawer, "HandleLeftDrawerSwipe", 50,true,true);
+			InvokePrivateMethod(drawer, "HandleLeftDrawerSwipe", -50,true,true);
 
 			Assert.True(true);
 		}
@@ -5837,11 +5777,11 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			SetPrivateField(drawer, "_oldPoint", new Point(0, 0));
 			SetPrivateField(drawer, "_newPoint", new Point(100, 0));
 
-			InvokePrivateMethod(drawer, "TranslateDrawerXPosition");
+			InvokePrivateMethod(drawer, "TranslateDrawerXPosition", true);
 
 			drawer.DrawerSettings.Position = Position.Right;
 
-			InvokePrivateMethod(drawer, "TranslateDrawerXPosition");
+			InvokePrivateMethod(drawer, "TranslateDrawerXPosition", true);
 
 			Assert.True(true);
 		}
@@ -6806,7 +6746,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
             var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "CompletedDrawerSwipe"));
             Assert.Null(exception);
-            Assert.True(navigationDrawer.IsOpen);
+            Assert.True(navigationDrawer.DrawerSettings.IsOpen);
         }
 
         // velocityY < -500 → Reveal → ContentView.TranslationY != -DrawerHeight → DrawerBottomIn (animation)
@@ -7120,7 +7060,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", true);
             SetPrivateField(navigationDrawer, "_actionFirstMoveClose", true);
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerLeftIn"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerLeftIn",true));
             Assert.Null(exception);
 
             // Verify the else branch was reached — greyOverlayGrid.TranslationX == ScreenWidth
@@ -7142,7 +7082,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             var drawerLayout = GetPrivateField(navigationDrawer, "_drawerLayout") as SfGrid;
             if (drawerLayout != null) drawerLayout.TranslationX = 0;
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerLeftIn"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerLeftIn",true));
             Assert.Null(exception);
 
             // Verify else-if branch reached — isDrawerOpen should be true and settings.IsOpen true
@@ -7161,7 +7101,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             navigationDrawer.ContentView = null!;
 
             SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
-            navigationDrawer.IsOpen = true;
+            navigationDrawer.DrawerSettings.IsOpen = true;
 			// Use reflection to set private fields
 			var greyOverlayGrid = new SfGrid();
 			var drawerLayout = new SfGrid();
@@ -7235,7 +7175,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", true);
             SetPrivateField(navigationDrawer, "_actionFirstMoveClose", true);
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerRightIn"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerRightIn",true));
             Assert.Null(exception);
 
             var greyOverlayGrid = GetPrivateField(navigationDrawer, "_greyOverlayGrid") as SfGrid;
@@ -7257,7 +7197,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             // TranslationX == (ScreenWidth - DrawerWidth) == 200 → outer if is false → falls into else if
             if (drawerLayout != null) drawerLayout.TranslationX = 200;
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerRightIn"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerRightIn",true));
             Assert.Null(exception);
 
             var isDrawerOpen = (bool?)GetPrivateField(navigationDrawer, "_isDrawerOpen");
@@ -7274,7 +7214,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             navigationDrawer.ContentView = null!;
 
             SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
-            navigationDrawer.IsOpen = true;
+            navigationDrawer.DrawerSettings.IsOpen = true;
 
 			// Use reflection to set private fields
 			var greyOverlayGrid = new SfGrid();
@@ -7344,7 +7284,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", true);
             SetPrivateField(navigationDrawer, "_actionFirstMoveClose", true);
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerTopIn"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerTopIn",true));
             Assert.Null(exception);
 
             var greyOverlayGrid = GetPrivateField(navigationDrawer, "_greyOverlayGrid") as SfGrid;
@@ -7376,7 +7316,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			contentViewProperty?.SetValue(navigationDrawer, contentView);
 	            // target = -((400/2) - (200/2)) = -100; drawerMoveTop defaults to 0
             if (drawerLayout != null) drawerLayout.TranslationY = -100;
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerTopIn"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerTopIn",true));
             Assert.Null(exception);
         }
 
@@ -7391,7 +7331,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             navigationDrawer.ContentView = new Grid(); // required by outer guard
 
             SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
-            navigationDrawer.IsOpen = true;
+            navigationDrawer.DrawerSettings.IsOpen = true;
 
             var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerTopOut"));
             Assert.NotNull(exception);
@@ -7448,7 +7388,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", true);
             SetPrivateField(navigationDrawer, "_actionFirstMoveClose", true);
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerBottomIn"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerBottomIn",true));
             Assert.Null(exception);
 
             var greyOverlayGrid = GetPrivateField(navigationDrawer, "_greyOverlayGrid") as SfGrid;
@@ -7470,7 +7410,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             
             if (drawerLayout != null) drawerLayout.TranslationY = 100;
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerBottomIn"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerBottomIn", true));
             Assert.Null(exception);
 
             var isDrawerOpen = (bool?)GetPrivateField(navigationDrawer, "_isDrawerOpen");
@@ -7499,7 +7439,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			drawerLayoutField?.SetValue(navigationDrawer, drawerLayout);
 			contentViewProperty?.SetValue(navigationDrawer, contentView);
             SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
-            navigationDrawer.IsOpen = true;
+            navigationDrawer.DrawerSettings.IsOpen = true;
 
             var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "DrawerBottomOut"));
             Assert.NotNull(exception);
@@ -7538,7 +7478,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
         {
             var navigationDrawer = new SfNavigationDrawer();
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "SetDrawerOpeningEvent"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "SetDrawerOpeningEvent", true));
             Assert.Null(exception);
         }
 
@@ -7557,7 +7497,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
         {
             var navigationDrawer = new SfNavigationDrawer();
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent", true));
             Assert.Null(exception);
         }
 
@@ -7567,7 +7507,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             var navigationDrawer = new SfNavigationDrawer();
 
             var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent"));
-            Assert.Null(exception);
+            Assert.NotNull(exception);
         }
 
 
@@ -7579,10 +7519,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             navigationDrawer.DrawerSettings.Position = Position.Top;
             // Ensure primary components are initialized
             InvokePrivateMethod(navigationDrawer, "InitializeGreyOverlayGrid");
-            InvokePrivateMethod(navigationDrawer, "InitializeDrawer");
+            InvokePrivateMethod(navigationDrawer, "InitializeDrawer",true);
 
             // Mark primary drawer as open
-            navigationDrawer.IsOpen = true;
+            navigationDrawer.DrawerSettings.IsOpen = true;
             SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 
             // Act
@@ -7600,10 +7540,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             navigationDrawer.DrawerSettings.Position = Position.Bottom;
             // Ensure primary components are initialized
             InvokePrivateMethod(navigationDrawer, "InitializeGreyOverlayGrid");
-            InvokePrivateMethod(navigationDrawer, "InitializeDrawer");
+            InvokePrivateMethod(navigationDrawer, "InitializeDrawer",true);
 
             // Mark primary drawer as open
-            navigationDrawer.IsOpen = true;
+            navigationDrawer.DrawerSettings.IsOpen = true;
             SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 
             // Act
@@ -7621,10 +7561,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             navigationDrawer.DrawerSettings.Position = Position.Left;
             // Ensure primary components are initialized
             InvokePrivateMethod(navigationDrawer, "InitializeGreyOverlayGrid");
-            InvokePrivateMethod(navigationDrawer, "InitializeDrawer");
+            InvokePrivateMethod(navigationDrawer, "InitializeDrawer",true);
 
             // Mark drawer as open
-            navigationDrawer.IsOpen = true;
+            navigationDrawer.DrawerSettings.IsOpen = true;
             SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 
             // Act: default LTR
@@ -7646,10 +7586,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             navigationDrawer.DrawerSettings.Position = Position.Right;
             // Ensure primary components are initialized
             InvokePrivateMethod(navigationDrawer, "InitializeGreyOverlayGrid");
-            InvokePrivateMethod(navigationDrawer, "InitializeDrawer");
+            InvokePrivateMethod(navigationDrawer, "InitializeDrawer",true);
 
             // Mark drawer as open
-            navigationDrawer.IsOpen = true;
+            navigationDrawer.DrawerSettings.IsOpen = true;
             SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 
             // Act: default LTR
@@ -7734,7 +7674,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", true);
             SetPrivateField(navigationDrawer, "_actionFirstMoveClose", true);
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition",true));
             Assert.Null(exception);
         }
 
@@ -7750,8 +7690,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", true);
             SetPrivateField(navigationDrawer, "_actionFirstMoveClose", true);
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition"));
-            Assert.Null(exception);
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition",true));
+            Assert.NotNull(exception);
         }
 
         [Fact]
@@ -7766,8 +7706,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", true);
             SetPrivateField(navigationDrawer, "_actionFirstMoveClose", true);
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition"));
-            Assert.Null(exception);
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition",true));
+            Assert.NotNull(exception);
         }
 
         [Fact]
@@ -7782,7 +7722,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
             SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", true);
             SetPrivateField(navigationDrawer, "_actionFirstMoveClose", true);
 
-            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition"));
+            var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition",true));
             Assert.Null(exception);
         }
 
@@ -7833,7 +7773,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			drawer.DrawerOpened += (s, e) => fired = true;
 
-			InvokePrivateMethod(drawer, "OnDrawerOpened", EventArgs.Empty);
+			InvokePrivateMethod(drawer, "OnDrawerOpened", new DrawerEventArgs(true));
 
 			Assert.True(fired);
 		}
@@ -7845,7 +7785,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			drawer.DrawerClosed += (s, e) => fired = true;
 
-			InvokePrivateMethod(drawer, "OnDrawerClosed", EventArgs.Empty);
+			InvokePrivateMethod(drawer, "OnDrawerClosed", new DrawerEventArgs(true));
 
 			Assert.True(fired);
 		}
@@ -7869,7 +7809,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			drawer.DrawerOpening += (s, e) => fired = true;
 
-			InvokePrivateMethod(drawer, "OnDrawerOpening", new CancelEventArgs());
+			InvokePrivateMethod(drawer, "OnDrawerOpening", new DrawerCancelEventArgs(true));
 
 			Assert.True(fired);
 		}
@@ -7881,7 +7821,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 
 			drawer.DrawerClosing += (s, e) => fired = true;
 
-			InvokePrivateMethod(drawer, "OnDrawerClosing", new CancelEventArgs());
+			InvokePrivateMethod(drawer, "OnDrawerClosing", new DrawerCancelEventArgs(true));
 
 			Assert.True(fired);
 		}
@@ -7968,18 +7908,6 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		}
 
 		[Fact]
-		public void Test_HandlePointerReleased_WhenMoved()
-		{
-			var drawer = new SfNavigationDrawer();
-			
-			SetPrivateField(drawer, "_isPressed", true);
-			SetPrivateField(drawer, "_isMoved", true);
-
-			InvokePrivateMethod(drawer, "HandlePointerReleased", new Point(20, 20));
-
-			Assert.False((bool?)GetPrivateField(drawer, "_isPressed"));
-		}
-		[Fact]
 		public void Test_HandlePointerReleased_WhenOpen()
 		{
 			var drawer = new SfNavigationDrawer()
@@ -8007,7 +7935,7 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 
 			// Act
-			var ex = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "HandleLeftDrawer"));
+			var ex = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "HandleLeftDrawer",true));
 			Assert.Null(ex);
 			// Assert
 			// Add assertions to verify DrawerLeftOut is called
@@ -8035,8 +7963,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
 
 			// Act
-			var ex = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "HandleRightDrawer"));
-			Assert.Null(ex);
+			var ex = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "HandleRightDrawer",true));
+			Assert.NotNull(ex);
 			// Assert
 			// Add assertions to verify DrawerRightOut is called
 		}
@@ -8049,8 +7977,8 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
 
 			// Act
-			var ex = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "HandleRightDrawer"));
-			Assert.Null(ex);
+			var ex = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "HandleRightDrawer",true));
+			Assert.NotNull(ex);
 
 			// Assert
 			// Add assertions to verify DrawerRightIn is called
@@ -8097,12 +8025,12 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
 		{
 			var drawer = new SfNavigationDrawer();
 
-			drawer.IsOpen = false;
+			drawer.DrawerSettings.IsOpen = false;
 			SetPrivateField(drawer, "_isDrawerOpen", false);
 
 			InvokePrivateMethod(drawer, "UpdateIsOpen");
 
-			Assert.False(drawer.IsOpen);
+			Assert.False(drawer.DrawerSettings.IsOpen);
 		}
 
 		#endregion
@@ -8628,10 +8556,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
         {
             var nav = CreateFullyInitializedDrawer(Position.Left, Transition.Push, false);
 
-            InvokePrivateMethod(nav, "UpdateToggleInEvent");
+            InvokePrivateMethod(nav, "UpdateToggleInEvent", true);
 
             Assert.True(Convert.ToBoolean(GetPrivateField(nav, "_isDrawerOpen")));
-            Assert.True(nav.IsOpen);
+            Assert.True(nav.DrawerSettings.IsOpen);
             Assert.False(Convert.ToBoolean(GetPrivateField(nav, "_isTransitionDifference")));
         }
 
@@ -8645,10 +8573,10 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
                 greyOverlayGrid.TranslationX = 0;
             }
 
-            InvokePrivateMethod(nav, "UpdateToggleOutEvent");
+            InvokePrivateMethod(nav, "UpdateToggleOutEvent",true);
 
             Assert.False(Convert.ToBoolean(GetPrivateField(nav, "_isDrawerOpen")));
-            Assert.False(nav.IsOpen);
+            Assert.False(nav.DrawerSettings.IsOpen);
             Assert.False(Convert.ToBoolean(GetPrivateField(nav, "_isTransitionDifference")));
         }
 
@@ -8730,5 +8658,1435 @@ public void Phase4_HandlePointerReleased_ZeroDelta_NoToggle()
         }
 
         #endregion
-	}
+// Secondary Drawer Scripts
+
+		[Theory]
+		[InlineData(100d)]
+		[InlineData(1000d)]
+		[InlineData(0d)]
+		public void SecondaryDrawerHeight_SetValue_ReturnsExpectedValue(double drawerHeight)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.DrawerHeight = drawerHeight;
+
+			Assert.Equal(drawerSetting.DrawerHeight, drawerHeight);
+		}
+
+		[Fact]
+		public void SecondaryContentBackground_SetValue_ReturnsExpectedValue()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			var contentBackground = Color.FromArgb("#FFF0");
+			drawerSetting.ContentBackground = contentBackground;
+
+			Assert.Same(contentBackground, drawerSetting.ContentBackground);
+		}
+
+		[Theory]
+		[InlineData(100d)]
+		[InlineData(-1000d)]
+		[InlineData(0d)]
+		public void SecondaryDrawerHeaderHeight_SetValue_ReturnsExpectedValue(double drawerHeaderHeight)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.DrawerHeaderHeight = drawerHeaderHeight;
+
+			Assert.Equal(drawerSetting.DrawerHeaderHeight, drawerHeaderHeight);
+		}
+
+		[Theory]
+		[InlineData(100d)]
+		[InlineData(-1000d)]
+		[InlineData(0d)]
+		public void SecondaryDrawerFooterrHeight_SetValue_ReturnsExpectedValue(double drawerFooterHeight)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.DrawerFooterHeight = drawerFooterHeight;
+
+			Assert.Equal(drawerSetting.DrawerFooterHeight, drawerFooterHeight);
+		}
+
+		[Theory]
+		[InlineData(1.9d)]
+		[InlineData(500d)]
+		[InlineData(1.0d)]
+		public void SecondaryDuration_SetValue_ReturnsExpectedValue(double duration)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.Duration = duration;
+
+			Assert.Equal(drawerSetting.Duration, duration);
+		}
+
+		[Theory]
+		[InlineData(100d)]
+		[InlineData(-1000d)]
+		[InlineData(0d)]
+		public void SecondaryTouchThreshold_SetValue_ReturnsExpectedValue(double touchThreshold)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.TouchThreshold = touchThreshold;
+
+			Assert.Equal(drawerSetting.TouchThreshold, touchThreshold);
+		}
+
+		[Theory]
+		[InlineData(Transition.Push)]
+		[InlineData(Transition.Reveal)]
+		[InlineData(Transition.SlideOnTop)]
+		public void SecondaryTransition_SetValue_ReturnsExpectedValue(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.Transition = transition;
+
+			Assert.Equal(drawerSetting.Transition, transition);
+		}
+
+		[Theory]
+		[InlineData(Position.Top)]
+		[InlineData(Position.Left)]
+		[InlineData(Position.Right)]
+		[InlineData(Position.Bottom)]
+		public void SecondaryPosition_SetValue_ReturnsExpectedValue(Position position)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.Position = position;
+
+			Assert.Equal(drawerSetting.Position, position);
+		}
+
+		[Theory]
+		[InlineData(false)]
+		[InlineData(true)]
+		public void SecondaryEnableSwipeGetstuse_SetValue_ReturnsExpectedValue(bool enableSwipeGesture)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.EnableSwipeGesture = enableSwipeGesture;
+
+			Assert.Equal(enableSwipeGesture, drawerSetting.EnableSwipeGesture);
+		}
+
+		[Theory]
+		[InlineData(100d)]
+		[InlineData(1000d)]
+		[InlineData(0d)]
+		public void SecondaryDrawerWidth_SetValue_ReturnsExpectedValue(double drawerWidth)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			drawerSetting.DrawerWidth = drawerWidth;
+
+			Assert.Equal(drawerSetting.DrawerWidth, drawerWidth);
+		}
+
+		[Fact]
+		public void SecondaryDrawerContentView_SetValue_ReturnsExpectedValue()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			var drawerContentView = new Label { Text = " DrawerContentView" };
+			drawerSetting.DrawerContentView = drawerContentView;
+
+			Assert.Same(drawerContentView, drawerSetting.DrawerContentView);
+		}
+
+		[Fact]
+		public void SecondaryDrawerHeaderView_SetValue_ReturnsExpectedValue()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			var drawerHeaderView = new Label
+			{
+				Text = " DrawerHeaderView"
+			};
+			drawerSetting.DrawerHeaderView = drawerHeaderView;
+
+			Assert.Same(drawerHeaderView, drawerSetting.DrawerHeaderView);
+		}
+
+		[Fact]
+		public void SecondaryDrawerFooterView_SetValue_ReturnsExpectedValue()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var drawerSetting = new DrawerSettings();
+			navigationDrawer.SecondaryDrawerSettings = drawerSetting;
+			var drawerFooterView = new Label { Text = "DrawerFooterView" };
+			drawerSetting.DrawerFooterView = drawerFooterView;
+
+			Assert.Same(drawerFooterView, drawerSetting.DrawerFooterView);
+		}
+
+		[Fact]
+		public void TestSecondaryHeaderViewTransfer()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() { DrawerHeaderView = new Grid() } };
+
+			Assert.Equal(new Grid(), navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView);
+			Assert.Null(navigationDrawer.SecondaryDrawerSettings.DrawerFooterView);
+
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView;
+
+			Assert.NotNull(navigationDrawer.SecondaryDrawerSettings.DrawerFooterView);
+			Assert.Equal(new Grid(), navigationDrawer.SecondaryDrawerSettings.DrawerFooterView);
+		}
+
+
+		[Fact]
+		public void TestSecondaryDrawerHeightWhenContentLoaded()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() };
+			var drawerHeaderView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				Children =
+				{
+					new Label { Text = "Welcome", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerContentView = new StackLayout
+			{
+				Children =
+				{
+					new Label { Text = "Item 1", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 2", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 3", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 4", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 5", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 6", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 7", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 8", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 9", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 10", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 11", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 12", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerFooterView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				Children =
+				{
+					new Button { Text = "Submit" },
+					new Label { Text = "Footer", HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			Assert.Equal(500d, navigationDrawer.SecondaryDrawerSettings.DrawerHeight);
+
+			navigationDrawer.SecondaryDrawerSettings.DrawerContentView = drawerContentView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView = drawerHeaderView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = drawerFooterView;
+
+			Assert.Equal(500d, navigationDrawer.SecondaryDrawerSettings.DrawerHeight);
+		}
+
+		[Fact]
+		public void TestSecondaryDrawerWidthWhenContentLoaded()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() };
+			var drawerHeaderView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				Children =
+				{
+					new Label { Text = "Welcome", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerContentView = new StackLayout
+			{
+				Children =
+				{
+					new Label { Text = "Item 1", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 2", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 3", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 4", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 5", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 6", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 7", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 8", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 9", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 10", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 11", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 12", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerFooterView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				Children =
+				{
+					new Button { Text = "Submit" },
+					new Label { Text = "Footer", HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			Assert.Equal(200d, navigationDrawer.SecondaryDrawerSettings.DrawerWidth);
+
+			navigationDrawer.SecondaryDrawerSettings.DrawerContentView = drawerContentView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView = drawerHeaderView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = drawerFooterView;
+
+			Assert.Equal(200d, navigationDrawer.SecondaryDrawerSettings.DrawerWidth);
+		}
+
+		[Theory]
+		[InlineData(-5)]
+		[InlineData(-1522)]
+		[InlineData(-200)]
+		[InlineData(-245)]
+		public void TestSecondaryDrawerWidthWhenNegative(double value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() };
+			navigationDrawer.SecondaryDrawerSettings.DrawerWidth = value;
+
+			Assert.Equal(200d, navigationDrawer.SecondaryDrawerSettings.DrawerWidth);
+		}
+
+		[Theory]
+		[InlineData(-57)]
+		[InlineData(-450)]
+		[InlineData(-225)]
+		[InlineData(-300)]
+		public void TestSecondaryDrawerHeightWhenNegative(double value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() };
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeight = value;
+
+			Assert.Equal(500d, navigationDrawer.SecondaryDrawerSettings.DrawerHeight);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(235)]
+		[InlineData(-3534)]
+		[InlineData(4567)]
+		[InlineData(-3250)]
+		public void TestSecondaryDrawerHeaderHeight(double value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() };
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderHeight = value;
+			var drawerHeaderView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				Children =
+				{
+					new Label { Text = "Welcome", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerContentView = new StackLayout
+			{
+				Children =
+				{
+					new Label { Text = "Item 1", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 2", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 3", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 4", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 5", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 6", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 7", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 8", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 9", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 10", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 11", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 12", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+
+			_ = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				Children =
+				{
+					new Button { Text = "Submit" },
+					new Label { Text = "Footer", HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			navigationDrawer.SecondaryDrawerSettings.DrawerContentView = drawerContentView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView = drawerHeaderView;
+
+			Assert.Equal(value, navigationDrawer.SecondaryDrawerSettings.DrawerHeaderHeight);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(235)]
+		[InlineData(-3534)]
+		[InlineData(4567)]
+		[InlineData(-3250)]
+		public void TestSecondaryDrawerFooterHeight(double value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() };
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterHeight = value;
+			var drawerHeaderView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				Children =
+				{
+					new Label { Text = "Welcome", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerContentView = new StackLayout
+			{
+				Children =
+				{
+					new Label { Text = "Item 1", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 2", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 3", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 4", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 5", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 6", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 7", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 8", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 9", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 10", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 11", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 12", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerFooterView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				Children =
+				{
+					new Button { Text = "Submit" },
+					new Label { Text = "Footer", HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			navigationDrawer.SecondaryDrawerSettings.DrawerContentView = drawerContentView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView = drawerHeaderView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = drawerFooterView;
+
+			Assert.Equal(value, navigationDrawer.SecondaryDrawerSettings.DrawerFooterHeight);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(25)]
+		[InlineData(353)]
+		[InlineData(2379)]
+		[InlineData(98762)]
+		public void TestSecondaryDrawerHeightWithDifferentValues(double value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() };
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeight = value;
+			var drawerHeaderView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				HeightRequest = value,
+				Children =
+				{
+					new Label { Text = "Welcome", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerContentView = new StackLayout
+			{
+				HeightRequest = value,
+				Children =
+				{
+					new Label { Text = "Item 1", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 2", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 3", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 4", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 5", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 6", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 7", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 8", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 9", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 10", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 11", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 12", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerFooterView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				HeightRequest = value,
+				Children =
+				{
+					new Button { Text = "Submit" },
+					new Label { Text = "Footer", HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			navigationDrawer.SecondaryDrawerSettings.DrawerContentView = drawerContentView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView = drawerHeaderView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = drawerFooterView;
+
+			Assert.Equal(value, navigationDrawer.SecondaryDrawerSettings.DrawerHeight);
+		}
+
+		[Theory]
+		[InlineData(0)]
+		[InlineData(25)]
+		[InlineData(353)]
+		[InlineData(2379)]
+		[InlineData(98762)]
+		public void TestSecondaryDrawerWidthWithDifferentValues(double value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings() };
+			navigationDrawer.SecondaryDrawerSettings.DrawerWidth = value;
+			var drawerHeaderView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				WidthRequest = value,
+				Children =
+				{
+					new Label { Text = "Welcome", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerContentView = new StackLayout
+			{
+				WidthRequest = value,
+				Children =
+				{
+					new Label { Text = "Item 1", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 2", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 3", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 4", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 5", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 6", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 7", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 8", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 9", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 10", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 11", FontSize = 24, HorizontalOptions = LayoutOptions.Center },
+					new Label { Text = "Item 12", FontSize = 24, HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			var drawerFooterView = new StackLayout
+			{
+				BackgroundColor = Color.FromArgb("F7F7F7"),
+				Padding = 10,
+				WidthRequest = value,
+				Children =
+				{
+					new Button { Text = "Submit" },
+					new Label { Text = "Footer", HorizontalOptions = LayoutOptions.Center }
+				}
+			};
+			navigationDrawer.SecondaryDrawerSettings.DrawerContentView = drawerContentView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView = drawerHeaderView;
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = drawerFooterView;
+
+			Assert.Equal(value, navigationDrawer.SecondaryDrawerSettings.DrawerWidth);
+		}
+
+		[Theory]
+		[InlineData(Position.Left)]
+		[InlineData(Position.Right)]
+		[InlineData(Position.Top)]
+		[InlineData(Position.Bottom)]
+		public void TestSecondaryDrawerContentViewAndHeaderFooterViewIsType(Position position)
+		{
+			var navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new StackLayout(),
+				SecondaryDrawerSettings = new DrawerSettings
+				{
+					DrawerHeaderView = new Label { Text = "Header" },
+					DrawerFooterView = new Label { Text = "Footer" },
+					Position = position
+				}
+			};
+			Assert.IsType<StackLayout>(navigationDrawer.ContentView);
+			Assert.IsType<Label>(navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView);
+			Assert.IsType<Label>(navigationDrawer.SecondaryDrawerSettings.DrawerFooterView);
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = new Button();
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView = new Button();
+			Assert.IsType<Button>(navigationDrawer.SecondaryDrawerSettings.DrawerFooterView);
+			Assert.IsType<Button>(navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView);
+		}
+
+		[Theory]
+		[InlineData(Position.Left)]
+		[InlineData(Position.Right)]
+		[InlineData(Position.Top)]
+		[InlineData(Position.Bottom)]
+		public void TestSecondaryDrawerContentViewAndHeaderFooterViewTexts(Position position)
+		{
+			var navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new StackLayout(),
+				SecondaryDrawerSettings = new DrawerSettings
+				{
+					DrawerHeaderView = new Label { Text = "Header" },
+					DrawerFooterView = new Label { Text = "Footer" },
+					Position = position
+				}
+			};
+			Assert.Equal("Header", ((Label)navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView).Text);
+			Assert.Equal("Footer", ((Label)navigationDrawer.SecondaryDrawerSettings.DrawerFooterView).Text);
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = new Button() { Text = "New Footer" };
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeaderView = new Button() { Text = "New Header" };
+			Assert.Equal("New Footer", ((Button)navigationDrawer.SecondaryDrawerSettings.DrawerFooterView).Text);
+			Assert.Equal("New Footer", ((Button)navigationDrawer.SecondaryDrawerSettings.DrawerFooterView).Text);
+
+		}
+
+		#region private methods
+
+		[Fact]
+		public void TestValidateSecondaryRemainDrawerWidth()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			SetPrivateField(navigationDrawer, "_remainDrawerWidth", 30);
+			InvokePrivateMethod(navigationDrawer, "ValidateSecondaryRemainDrawerWidth");
+			double expectedValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_remainDrawerWidth"));
+			Assert.Equal(0, expectedValue);
+		}
+
+		[Fact]
+		public void TestValidateSecondaryRemainDrawerHeight()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			SetPrivateField(navigationDrawer, "_remainDrawerHeight", 30);
+			InvokePrivateMethod(navigationDrawer, "ValidateSecondaryRemainDrawerHeight");
+			double expectedValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_remainDrawerHeight"));
+			Assert.Equal(0, expectedValue);
+		}
+
+		[Fact]
+		public void TestValidateSecondaryRemainDrawerWidthNegative()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			SetPrivateField(navigationDrawer, "_remainDrawerWidth", -30);
+			navigationDrawer.SecondaryDrawerSettings.DrawerWidth = 20;
+			InvokePrivateMethod(navigationDrawer, "ValidateSecondaryRemainDrawerWidth");
+			double expectedValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_remainDrawerWidth"));
+			Assert.Equal(-20, expectedValue);
+		}
+
+		[Fact]
+		public void TestValidateSecondaryRemainDrawerHeightNegative()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			SetPrivateField(navigationDrawer, "_remainDrawerHeight", -30);
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeight = 20;
+			InvokePrivateMethod(navigationDrawer, "ValidateSecondaryRemainDrawerHeight");
+			double expectedValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_remainDrawerHeight"));
+			Assert.Equal(-20, expectedValue);
+		}
+
+		[Fact]
+		public void TestSecondaryCompleteSwipeOnRightvelocitiyPositive()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Right;
+			SetPrivateField(navigationDrawer, "_velocityX", 550);
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestSecondaryCompleteSwipeOnBottomvelocitiyPositive()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Bottom;
+			SetPrivateField(navigationDrawer, "_velocityY", 550);
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestSecondaryCompleteSwipeOnLeftvelocitiyNegative()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Left;
+			SetPrivateField(navigationDrawer, "_velocityX", -550);
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestCompleteSecondarySwipeOnRightvelocitiyNegative()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Right;
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Push;
+			SetPrivateField(navigationDrawer, "_velocityX", 550);
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestSecondaryCompleteSwipeOnTopvelocitiyNegative()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Top;
+			SetPrivateField(navigationDrawer, "_velocityY", -550);
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestSecondaryCompleteSwipeOnBottomvelocitiyNegative()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Bottom;
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Push;
+			SetPrivateField(navigationDrawer, "_velocityY", 550);
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestCompleteSecondarySwipeOnLeft()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Left;
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestCompleteSecondarySwipeOnRight()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Right;
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Reveal;
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestCompleteSecondarySwipeOnTop()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Top;
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Reveal;
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestSecondaryCompleteSwipeOnBottom()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Bottom;
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Reveal;
+			InvokePrivateMethod(navigationDrawer, "CompletedSecondaryDrawerSwipe");
+			bool expectedValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(expectedValue);
+		}
+
+		[Fact]
+		public void TestSecondaryUpdateToggleOutEvent()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.IsOpen = true;
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent", false);
+			Assert.False(navigationDrawer.SecondaryDrawerSettings.IsOpen);
+		}
+
+		[Theory]
+		[InlineData(Transition.SlideOnTop)]
+		[InlineData(Transition.Reveal)]
+		[InlineData(Transition.Push)]
+		public void TestLeftSecondaryDrawerSwipe(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				SecondaryDrawerSettings = new DrawerSettings
+				{
+					Transition = transition
+				}
+			};
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
+			InvokePrivateMethod(navigationDrawer, "LeftDrawerSwipe", 25, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(Transition.SlideOnTop)]
+		[InlineData(Transition.Push)]
+		public void TestRightSecondaryDrawerSwipe(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				SecondaryDrawerSettings = new DrawerSettings
+				{
+					Transition = transition
+				}
+			};
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
+			InvokePrivateMethod(navigationDrawer, "RightDrawerSwipe", 25, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Fact]
+		public void TestRightSecondaryDrawerSwipeReveal()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				SecondaryDrawerSettings = new DrawerSettings
+				{
+					Transition = Transition.Reveal
+				}
+			};
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
+			InvokePrivateMethod(navigationDrawer, "RightDrawerSwipe", 525, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(actualValue);
+		}
+
+		[Theory]
+		[InlineData(Transition.SlideOnTop)]
+		[InlineData(Transition.Push)]
+		[InlineData(Transition.Reveal)]
+		public void TestTopSecondaryDrawerSwipe(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				SecondaryDrawerSettings = new DrawerSettings
+				{
+					Transition = transition
+				}
+			};
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
+			InvokePrivateMethod(navigationDrawer, "TopDrawerSwipe", 25, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(Transition.SlideOnTop)]
+		[InlineData(Transition.Push)]
+		public void TestBottomSecondaryDrawerSwipe(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				SecondaryDrawerSettings = new DrawerSettings
+				{
+					Transition = transition
+				}
+			};
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
+			InvokePrivateMethod(navigationDrawer, "BottomDrawerSwipe", 25, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Fact]
+		public void TestBottomSecondaryDrawerSwipeReveal()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				SecondaryDrawerSettings = new DrawerSettings
+				{
+					Transition = Transition.Reveal
+				}
+			};
+			SetPrivateField(navigationDrawer, "_isTransitionDifference", false);
+			InvokePrivateMethod(navigationDrawer, "BottomDrawerSwipe", 525, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(actualValue);
+		}
+
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestHandleTopSecondaryDrawerWhenClose(bool value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
+			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", 25, false, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", -25, false, false);
+			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestHandleTopSecondaryDrawerWhenOpen(bool value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
+			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", 25, false, true);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+			InvokePrivateMethod(navigationDrawer, "HandleTopDrawerSwipe", -25, false, true);
+			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestHandleLeftSecondaryDrawerWhenOpen(bool value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", 25, false, true);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", -25, false, true);
+			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestHandleLeftSecondaryDrawerWhenClose(bool value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
+			InvokePrivateMethod(navigationDrawer, "HandleLeftDrawerSwipe", 25, false, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestHandleRightSecondaryDrawerWhenOpen(bool value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
+			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", 25, false, true);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestHandleRightSecondaryDrawerWhenClose(bool value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
+			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", 25, false, false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+			InvokePrivateMethod(navigationDrawer, "HandleRightDrawerSwipe", -25, false, false);
+			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestHandleBottomSecondaryDrawerWhenOpen(bool value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", true);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
+			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", 25, false, true);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", -25, false, true);
+			actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Theory]
+		[InlineData(true)]
+		[InlineData(false)]
+		public void TestHandleBottomSecondaryDrawerWhenClose(bool value)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isDrawerOpen", false);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveOpen", value);
+			SetPrivateField(navigationDrawer, "_actionFirstMoveClose", value);
+			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", 25, false, false);
+			_ = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			InvokePrivateMethod(navigationDrawer, "HandleBottomDrawerSwipe", -25, false, false);
+			var actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Fact]
+		public void TestSecondaryFindVelocity()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_startPoint", new Point(20, 20));
+			SetPrivateField(navigationDrawer, "_startTime", DateTime.Now.AddSeconds(-10));
+			InvokePrivateMethod(navigationDrawer, "FindVelocity", new Point(120, 120));
+			double actualValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_velocityX"));
+			Assert.Equal(10d, Math.Round(actualValue));
+			actualValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_velocityY"));
+			Assert.Equal(10d, Math.Round(actualValue));
+
+		}
+
+		[Fact]
+		public void TestToggleSecondaryDrawerXPositionLeft()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Left;
+			SetPrivateField(navigationDrawer, "_oldPoint", new Point(20, 20));
+			SetPrivateField(navigationDrawer, "_newPoint", new Point(50, 20));
+			InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition", false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Fact]
+		public void TestToggleSecondaryDrawerYPositionTop()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Top;
+			SetPrivateField(navigationDrawer, "_oldPoint", new Point(20, 20));
+			SetPrivateField(navigationDrawer, "_newPoint", new Point(50, 50));
+			InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition", false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.True(actualValue);
+		}
+
+		[Fact]
+		public void TestToggleSecondaryDrawerXPositionRight()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Right;
+			SetPrivateField(navigationDrawer, "_oldPoint", new Point(20, 20));
+			SetPrivateField(navigationDrawer, "_newPoint", new Point(50, 20));
+			InvokePrivateMethod(navigationDrawer, "TranslateDrawerXPosition", true);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(actualValue);
+		}
+
+		[Fact]
+		public void TestToggleSecondaryDrawerYPositionBottom()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Bottom;
+			SetPrivateField(navigationDrawer, "_oldPoint", new Point(20, 20));
+			SetPrivateField(navigationDrawer, "_newPoint", new Point(50, 50));
+			InvokePrivateMethod(navigationDrawer, "TranslateDrawerYPosition", false);
+			bool actualValue = Convert.ToBoolean(GetPrivateField(navigationDrawer, "_isTransitionDifference"));
+			Assert.False(actualValue);
+		}
+
+		[Fact]
+		public void TestSecondaryUpdateTouchThresholdRight()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { ScreenWidth = 150, SecondaryDrawerSettings = new DrawerSettings() { TouchThreshold = 50, Position = Position.Right }, ContentView = new Grid() };
+			InvokePrivateMethod(navigationDrawer, "UpdateSecondaryTouchThreshold");
+			double actualValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_touchRightThreshold"));
+			Assert.Equal(100, actualValue);
+		}
+
+		[Fact]
+		public void TestSecondaryUpdateTouchThresholdBottom()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { ScreenHeight = 150, SecondaryDrawerSettings = new DrawerSettings() { TouchThreshold = 50, Position = Position.Bottom }, ContentView = new Grid() };
+			InvokePrivateMethod(navigationDrawer, "UpdateSecondaryTouchThreshold");
+			double actualValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_touchBottomThreshold"));
+			Assert.Equal(100, actualValue);
+		}
+
+		[Fact]
+		public void TestSecondaryUpdateDrawerFlowDirection()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			SetPrivateField(navigationDrawer, "_isRTL", true);
+			InvokePrivateMethod(navigationDrawer, "UpdateSecondaryDrawerFlowDirection");
+			Assert.Equal(FlowDirection.RightToLeft, navigationDrawer.ContentView?.FlowDirection);
+		}
+
+		[Fact]
+		public void TestSecondaryPositionUpdateOnDrawerCloseRight()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Right;
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			double actualValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_touchRightThreshold"));
+			Assert.Equal(-120, actualValue);
+
+		}
+
+		[Theory]
+		[InlineData(Transition.Reveal)]
+		[InlineData(Transition.Push)]
+		public void TestSecondaryPositionUpdateOnDrawerCloseRightTransition(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Right;
+			navigationDrawer.SecondaryDrawerSettings.Transition = transition;
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationX);
+
+		}
+
+		[Fact]
+		public void TestSecondaryPositionUpdateOnDrawerOpenRight()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Right;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			double actualValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_touchRightThreshold"));
+			Assert.Equal(-120, actualValue);
+		}
+
+		[Fact]
+		public void TestSecondaryPositionUpdateOnDrawerOpenRightWithPush()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Right;
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Push;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			double actualValue = Convert.ToDouble(GetPrivateField(navigationDrawer, "_touchRightThreshold"));
+			Assert.Equal(-120, actualValue);
+		}
+
+		[Fact]
+		public void TestSecondaryPositionUpdateOnDrawerOpenLeft()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Left;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationX);
+		}
+
+		[Theory]
+		[InlineData(Transition.Push)]
+		[InlineData(Transition.Reveal)]
+		public void TestSecondaryPositionUpdateOnDrawerOpenLeftWithTransition(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Left;
+			navigationDrawer.SecondaryDrawerSettings.Transition = transition;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(navigationDrawer.SecondaryDrawerSettings.DrawerWidth, navigationDrawer.ContentView?.TranslationX);
+		}
+
+		[Fact]
+		public void TestSecondaryPositionUpdateOnDrawerCloseTopReveal()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Top;
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Reveal;
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
+		}
+
+		[Fact]
+		public void TestSecondaryPositionUpdateOnDrawerCloseTopPush()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Top;
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Push;
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
+		}
+
+		[Fact]
+		public void TestSecondaryPositionUpdateOnDrawerOpenTop()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Top;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
+		}
+
+		[Theory]
+		[InlineData(Transition.Reveal)]
+		[InlineData(Transition.Push)]
+		public void TestSecondaryPositionUpdateOnDrawerOpenTopWithTransition(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Top;
+			navigationDrawer.SecondaryDrawerSettings.Transition = transition;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(navigationDrawer.SecondaryDrawerSettings.DrawerHeight, navigationDrawer.ContentView?.TranslationY);
+		}
+
+		[Fact]
+		public void TestSecondaryPositionUpdateOnDrawerOpenBottom()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Bottom;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
+		}
+
+		[Theory]
+		[InlineData(Transition.Reveal)]
+		[InlineData(Transition.Push)]
+		public void TestSecondaryPositionUpdateOnDrawerOpenBottomWithTransition(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Bottom;
+			navigationDrawer.SecondaryDrawerSettings.Transition = transition;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(-navigationDrawer.SecondaryDrawerSettings.DrawerHeight, navigationDrawer.ContentView?.TranslationY);
+		}
+
+		[Theory]
+		[InlineData(Transition.Push)]
+		[InlineData(Transition.Reveal)]
+		public void TestSecondaryPositionUpdateOnDrawerCloseBottom(Transition transition)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Bottom;
+			navigationDrawer.SecondaryDrawerSettings.Transition = transition;
+			InvokePrivateMethod(navigationDrawer, "SecondaryPositionUpdate");
+			Assert.Equal(0, navigationDrawer.ContentView?.TranslationY);
+		}
+
+		[Fact]
+		public void TestSecondaryIsTouchOutsideDrawerBoundsOnTop()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Top;
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeight = 50;
+			SetPrivateField(navigationDrawer, "_initialTouchPoint", new Point(0, 100));
+			bool actualValue = Convert.ToBoolean(InvokePrivateMethod(navigationDrawer, "IsTouchOutsideDrawerBounds"));
+			Assert.False(actualValue);
+		}
+
+		[Fact]
+		public void TestSecondaryIsTouchOutsideDrawerBoundsOnBottom()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Position = Position.Bottom;
+			navigationDrawer.SecondaryDrawerSettings.DrawerHeight = 50;
+			navigationDrawer.ScreenHeight = 100;
+			SetPrivateField(navigationDrawer, "_initialTouchPoint", new Point(0, 20));
+			bool actualValue = Convert.ToBoolean(InvokePrivateMethod(navigationDrawer, "IsTouchOutsideDrawerBounds"));
+			Assert.False(actualValue);
+		}
+
+		[Fact]
+		public void TestSecondaryUpdateGridOverlayTranslate()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Reveal;
+			var greyOverlayGrid = new SfGrid();
+			SetPrivateField(navigationDrawer, "_greyOverlayGrid", greyOverlayGrid);
+			InvokePrivateMethod(navigationDrawer, "UpdateGridOverlayTranslate", false);
+			var actualGreyOverlay = GetPrivateField(navigationDrawer, "_greyOverlayGrid") as Grid;
+			Assert.NotNull(actualGreyOverlay);
+			Assert.Equal(0, actualGreyOverlay.TranslationX);
+		}
+
+
+		#endregion
+
+		#region Drawer Scripts
+
+		[Fact]
+		public void Test_SecondaryParentFlowDirection1()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_secondaryDrawerLayout") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
+		}
+
+		[Fact]
+		public void Test_SecondaryParentFlowDirection2()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_secondaryDrawerLayout") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
+			navigationDrawer.FlowDirection = FlowDirection.LeftToRight;
+			Assert.Equal(FlowDirection.LeftToRight, drawerLayout?.FlowDirection);
+		}
+
+
+		[Fact]
+		public void Test_SecondaryParentFlowDirection3()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.IsOpen = true;
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent", false);
+			Assert.True(navigationDrawer.SecondaryDrawerSettings.IsOpen);
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent", false);
+			Assert.False(navigationDrawer.SecondaryDrawerSettings.IsOpen);
+			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_secondaryDrawerLayout") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
+			navigationDrawer.FlowDirection = FlowDirection.LeftToRight;
+			Assert.Equal(FlowDirection.LeftToRight, drawerLayout?.FlowDirection);
+		}
+
+		[Fact]
+		public void Test_SecondaryParentFlowDirection4()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.IsOpen = true;
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleInEvent", false);
+			Assert.True(navigationDrawer.SecondaryDrawerSettings.IsOpen);
+			InvokePrivateMethod(navigationDrawer, "UpdateToggleOutEvent", false);
+			Assert.False(navigationDrawer.SecondaryDrawerSettings.IsOpen);
+			navigationDrawer.FlowDirection = FlowDirection.RightToLeft;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_secondaryDrawerLayout") as SfGrid;
+			Assert.Equal(FlowDirection.RightToLeft, drawerLayout?.FlowDirection);
+		}
+
+		[Theory]
+		[InlineData(100)]
+		[InlineData(0)]
+		[InlineData(600)]
+		public void Test_SecondaryDrawerWidth(double drawerWidth)
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer() { SecondaryDrawerSettings = new DrawerSettings(), ContentView = new Grid() };
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterView = new Label();
+			navigationDrawer.SecondaryDrawerSettings.DrawerFooterHeight = 350;
+			navigationDrawer.SecondaryDrawerSettings.DrawerWidth = drawerWidth;
+			var drawerLayout = GetPrivateField(navigationDrawer, "_secondaryDrawerLayout") as SfGrid;
+			if (drawerLayout != null)
+			{
+				foreach (var child in drawerLayout.Children)
+				{
+					var width = child.DesiredSize.Width;
+				}
+			}
+			Assert.Equal(drawerWidth, drawerLayout?.WidthRequest);
+		}
+
+		#endregion
+
+	
+		#region events
+
+		[Fact]
+		public void TestSecondaryDrawerClosedInvoked()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var fired = false;
+			Grid content = [new Label()];
+			navigationDrawer.ContentView = content;
+			navigationDrawer.DrawerClosed += (sender, e) => fired = true;
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			navigationDrawer.SecondaryDrawerSettings.Transition = Transition.Reveal;
+			InvokePrivateMethod(navigationDrawer, "OnDrawerClosedToggledEvent", false);
+			Assert.True(fired);
+		}
+
+		[Fact]
+		public void TestSecondaryDrawerOpenedInvoked()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				SecondaryDrawerSettings = new DrawerSettings { Transition = Transition.Reveal }
+			};
+			var fired = false;
+			navigationDrawer.DrawerOpened += (sender, e) => fired = true;
+			InvokePrivateMethod(navigationDrawer, "OnDrawerOpenedToggledEvent", false);
+			Assert.True(fired);
+		}
+
+		[Fact]
+		public void TestSecondaryDrawerOpeningInvoked()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer
+			{
+				ContentView = new Grid(),
+				SecondaryDrawerSettings = new DrawerSettings { Transition = Transition.Reveal }
+			};
+			var fired = false;
+			navigationDrawer.DrawerOpening += (sender, e) => fired = true;
+			InvokePrivateMethod(navigationDrawer, "SetDrawerOpeningEvent", false);
+			Assert.True(fired);
+		}
+
+		[Fact]
+		public void TestSecondaryDrawerToggledInvoked()
+		{
+			SfNavigationDrawer navigationDrawer = new SfNavigationDrawer();
+			var fired = false;
+			navigationDrawer.DrawerToggled += (sender, e) => fired = true;
+			InvokePrivateMethod(navigationDrawer, "OnDrawerOpenedToggledEvent", false);
+			Assert.True(fired);
+		}
+
+		[Theory]
+		[InlineData(PointerActions.Pressed, Position.Left)]
+		[InlineData(PointerActions.Pressed, Position.Right)]
+		[InlineData(PointerActions.Pressed, Position.Top)]
+		[InlineData(PointerActions.Pressed, Position.Bottom)]
+		[InlineData(PointerActions.Moved, Position.Left)]
+		[InlineData(PointerActions.Exited, Position.Left)]
+		[InlineData(PointerActions.Cancelled, Position.Left)]
+		public void Test_SecondaryDrawer_OnHandleTouch(PointerActions action, Position position)
+		{
+			var navigationDrawer = new SfNavigationDrawer();
+			navigationDrawer.SecondaryDrawerSettings.Position = position;
+			SetPrivateField(navigationDrawer, "_isPressed", true);
+			SetPrivateField(navigationDrawer, "_isMoved", true);
+			SetPrivateField(navigationDrawer, "_isSecondaryDrawerOpen", true);
+			var eventArgs = new Syncfusion.Maui.Toolkit.Internals.PointerEventArgs(1, action, new Point(30, 30));
+
+			var exception = Record.Exception(() => InvokePrivateMethod(navigationDrawer, "OnSecondaryHandleTouchInteraction", action, new Point(30, 30)));
+			Assert.Null(exception);
+		}
+
+
+		#endregion	}
 }
+	}

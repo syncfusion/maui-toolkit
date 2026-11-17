@@ -1918,6 +1918,12 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 //// Prevents Selection changed event from triggering if new value is black out date.
                 if (datepicker.BlackoutDates.Any(blackOutDate => DatePickerHelper.IsBlackoutDate(true, string.Empty, blackOutDate, newSelectedDate, datepicker.Format)))
                 {
+#if WINDOWS
+                    if (datepicker._previousSelectedDateTime != newSelectedDate)
+                    {
+                        datepicker.UpdateSelectedIndex(datepicker._previousSelectedDateTime);
+                    }
+#endif
                     return;
                 }
 

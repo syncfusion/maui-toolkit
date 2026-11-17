@@ -5,7 +5,6 @@ using Microsoft.Maui.Controls;
 /// <summary>
 /// Represents <see cref="SfCalendarStyles"/> class.
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SfCalendarStyles : ResourceDictionary
 {
     #region Constructor

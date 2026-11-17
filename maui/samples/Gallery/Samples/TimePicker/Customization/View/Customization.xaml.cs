@@ -24,6 +24,9 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
             alarmEditPicker1.FooterView.Height = 50;
             alarmEditPicker1.FooterView.OkButtonText = "Save";
 #else
+#if WINDOWS
+            alarmListView1.ItemsSource = null;
+#endif
             alarmEditPicker.HeaderView.Height = 50;
             alarmEditPicker.HeaderView.Text = "Edit Alarm";
             alarmEditPicker.FooterView.Height = 50;
@@ -36,7 +39,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void OnAlarmTapped(object sender, EventArgs e)
+        void OnAlarmTapped(object? sender, EventArgs e)
         {
 #if ANDROID || IOS
             if (sender is Border border && border.BindingContext != null && border.BindingContext is AlarmDetails alarmDetails)
@@ -90,7 +93,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void alarmEditPicker_CancelButtonClicked(object sender, EventArgs e)
+        void alarmEditPicker_CancelButtonClicked(object? sender, EventArgs e)
         {
 #if ANDROID || IOS
             alarmEditPicker1.IsOpen = false;
@@ -104,7 +107,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void alarmSwitch_Toggled(object sender, ToggledEventArgs e)
+        void alarmSwitch_Toggled(object? sender, ToggledEventArgs e)
         {
             if (sender is Switch toggleSwitch && toggleSwitch.BindingContext != null && toggleSwitch.BindingContext is AlarmDetails alarmDetails)
             {
@@ -127,7 +130,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void OnAddAlarmTapped(object sender, EventArgs e)
+        void OnAddAlarmTapped(object? sender, EventArgs e)
         {
 #if ANDROID || IOS
             alarmPopup1.IsOpen = true;
@@ -141,7 +144,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfTimePicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void alarmPopup_OnCreated(object sender, EventArgs e)
+        void alarmPopup_OnCreated(object? sender, EventArgs e)
         {
             if (BindingContext != null && BindingContext is ViewModel bindingContext && sender is AlarmDetails details)
             {

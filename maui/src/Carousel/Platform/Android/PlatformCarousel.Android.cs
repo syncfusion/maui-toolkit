@@ -369,10 +369,16 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 		{
 
 			ClipToOutline = true;
+
 #if !ANDROID22_0_OR_GREATER
+#pragma warning disable CS0618
 			AnimationCacheEnabled = true;
+#pragma warning disable CA1422
 			DrawingCacheEnabled = true;
+#pragma warning restore CA1422
+#pragma warning restore CS0618
 #endif
+
 			LayoutParameters = new LayoutParams(ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.MatchParent);
 		}
 

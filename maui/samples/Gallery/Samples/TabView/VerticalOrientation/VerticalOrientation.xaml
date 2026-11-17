@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<localCore:SampleView x:Class="Syncfusion.Maui.ControlsGallery.TabView.SfTabView.VerticalOrientation"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.TabView.SfTabView"
+             xmlns:tabView="clr-namespace:Syncfusion.Maui.Toolkit.TabView;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:localCore="clr-namespace:Syncfusion.Maui.ControlsGallery;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:converters="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             xmlns:core="clr-namespace:Syncfusion.Maui.Toolkit;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:Expander="clr-namespace:Syncfusion.Maui.Toolkit.Expander;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:ListCollection="clr-namespace:System.Collections.Generic;assembly=netstandard" 
+             xmlns:imageExtension="clr-namespace:Syncfusion.Maui.ControlsGallery.Converters;assembly=Syncfusion.Maui.ControlsGallery"
+             BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+
+    <localCore:SampleView.BindingContext>
+        <local:MainViewModel />
+    </localCore:SampleView.BindingContext>
+
+    <Grid>
+        <tabView:SfTabView
+            x:Name="TabView"
+            HeaderDisplayMode="Default"
+            TabBarBackground="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight},
+                                               Dark={StaticResource SampleBrowserBackground}}"
+            TabBarPlacement="Left"
+            TabBarSize="60"
+            TabHeaderPadding="0"
+            EnableVirtualization="True"
+            TabWidthMode="SizeToContent">
+
+            <tabView:SfTabItem
+                FontFamily="MauiSampleFontIcon"
+                FontSize="25"
+                Header="&#xe75e;">
+                <tabView:SfTabItem.Content>
+                    <Grid Padding="12" RowDefinitions="Auto, *">
+                        <Grid Padding="0,0,0,12" ColumnDefinitions="Auto">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="20"
+                                Text="Activity"
+                                VerticalOptions="Center" />
+                        </Grid>
+                        <CollectionView
+                            Grid.Row="1"
+                            Margin="0,10"
+                            ItemsSource="{Binding ActivityItems}"
+                            SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="10" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid ColumnDefinitions="40,*,Auto" RowDefinitions="Auto">
+
+                                        <Grid HeightRequest="40" WidthRequest="40">
+                                            <Border BackgroundColor="{Binding ImageColor}">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="20" />
+                                                </Border.StrokeShape>
+                                            </Border>
+                                            <Label
+                                                FontSize="22"
+                                                HorizontalTextAlignment="Center"
+                                                Text="{Binding Initials}"
+                                                TextColor="White"
+                                                VerticalTextAlignment="Center" />
+                                        </Grid>
+
+                                        <VerticalStackLayout
+                                            Grid.Column="1"
+                                            Padding="8,0"
+                                            Spacing="2">
+                                            <HorizontalStackLayout Spacing="4">
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    FontSize="{OnPlatform Android=12,
+                                                                          iOS=12}"
+                                                    Text="{Binding Name}" />
+                                                <Label FontSize="{OnPlatform Android=12, iOS=12}" Text="{Binding Action}" />
+                                            </HorizontalStackLayout>
+                                            <Label
+                                                FontSize="12"
+                                                LineBreakMode="TailTruncation"
+                                                Text="{Binding Content}"
+                                                TextColor="#666" />
+                                            <HorizontalStackLayout>
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{Binding Context1}"
+                                                    TextColor="#666" />
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{Binding Context2}"
+                                                    TextColor="#666" />
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+
+                                        <Label
+                                            Grid.Column="2"
+                                            FontSize="12"
+                                            Text="{Binding Time}"
+                                            TextColor="#888"
+                                            VerticalOptions="Start" />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem
+                FontFamily="MauiSampleFontIcon"
+                FontSize="25"
+                Header="&#xe761;">
+                <tabView:SfTabItem.Content>
+                    <Grid RowDefinitions="Auto, Auto, *">
+                        <Label
+                            Margin="12"
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            Text="All contacts" />
+                        <Grid
+                            x:Name="ContactHeader"
+                            Grid.Row="1"
+                            Padding="12,0"
+                            ColumnDefinitions="{OnIdiom Phone='*,*',
+                                                        Desktop='*,*,*'}">
+                            <Label Text="Name" VerticalOptions="Center" />
+                            <Label
+                                Grid.Column="1"
+                                Text="Contact info"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Column="2"
+                                IsVisible="{OnIdiom Phone=false,
+                                                    Desktop=true}"
+                                Text="Catagories"
+                                VerticalOptions="Center" />
+                        </Grid>
+                        <CollectionView
+                            Grid.Row="2"
+                            Margin="12,12,12,0"
+                            ItemsSource="{Binding ContactItems}"
+                            SelectionMode="None">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="15" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="local:ContactItem">
+                                    <Grid x:Name="ContactItemGrid" ColumnDefinitions="{OnIdiom Phone='*,*', Desktop='*,*,*'}">
+                                        <Grid ColumnDefinitions="Auto, *" ColumnSpacing="8">
+
+
+                                            <Border
+                                                Padding="0"
+                                                BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight},
+                                                                                  Dark={StaticResource BackgroundDark}}"
+                                                HeightRequest="{OnPlatform WinUI=52,
+                                                                           Android=40,
+                                                                           MacCatalyst=42,
+                                                                           iOS=40}"
+                                                HorizontalOptions="Center"
+                                                Stroke="#E5E5E5"
+                                                VerticalOptions="Center"
+                                                WidthRequest="{OnPlatform WinUI=52,
+                                                                          Android=40,
+                                                                          MacCatalyst=42,
+                                                                          iOS=40}">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="35" />
+                                                </Border.StrokeShape>
+                                                <Image
+                                                    HeightRequest="52"
+                                                    Source="{Binding Images}"
+                                                    WidthRequest="52" />
+                                            </Border>
+                                            <Label
+                                                Grid.Column="1"
+                                                Text="{Binding Name}"
+                                                VerticalOptions="Center" />
+                                        </Grid>
+                                        <Label
+                                            Grid.Column="1"
+                                            FontSize="13"
+                                            Text="{Binding Email}"
+                                            TextColor="#666"
+                                            VerticalOptions="Center" />
+                                        <Border
+                                            Grid.Column="2"
+                                            Padding="10,2"
+                                            BackgroundColor="#fde9e9"
+                                            HorizontalOptions="Start"
+                                            IsVisible="{OnIdiom Phone=false,
+                                                                Desktop=true}"
+                                            Stroke="#de3d3d"
+                                            StrokeShape="RoundRectangle 4"
+                                            StrokeThickness="1"
+                                            VerticalOptions="Center"
+                                            WidthRequest="140">
+                                            <Label
+                                                FontSize="13"
+                                                HorizontalOptions="Center"
+                                                Text="{Binding Category}"
+                                                TextColor="#de3d3d"
+                                                VerticalOptions="Center"
+                                                WidthRequest="{OnPlatform Android=90,
+                                                                          MacCatalyst=42,
+                                                                          iOS=40}" />
+                                        </Border>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem
+                FontFamily="MauiSampleFontIcon"
+                FontSize="25"
+                Header="&#xe75a;">
+                <tabView:SfTabItem.Content>
+                    <Grid
+                        Padding="12"
+                        RowDefinitions="Auto, *"
+                        RowSpacing="12">
+                        <Grid ColumnDefinitions="Auto">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="20"
+                                Text="Chat"
+                                VerticalOptions="Center" />
+                        </Grid>
+                        <Expander:SfExpander
+                            Grid.Row="1"
+                            Padding="0"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight},
+                                                              Dark={StaticResource BackgroundDark}}"
+                            HeaderIconPosition="Start"
+                            IsExpanded="True">
+                            <Expander:SfExpander.Header>
+                                <Grid Margin="0,15">
+                                    <Label
+                                        Margin="8,0"
+                                        FontSize="16"
+                                        Text="Chats"
+                                        VerticalOptions="Center" />
+                                </Grid>
+                            </Expander:SfExpander.Header>
+                            <Expander:SfExpander.Content>
+                                <CollectionView
+                                    Margin="0,12"
+                                    ItemsSource="{Binding ChatItems}"
+                                    SelectionMode="None">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border StrokeShape="RoundRectangle 4" StrokeThickness="0">
+                                                <Grid Padding="8" ColumnDefinitions="Auto, *">
+                                                    <Label
+                                                        Background="{Binding ImageColor}"
+                                                        FontSize="15"
+                                                        HeightRequest="40"
+                                                        HorizontalTextAlignment="Center"
+                                                        Text="{Binding Initials}"
+                                                        TextColor="White"
+                                                        VerticalTextAlignment="Center"
+                                                        WidthRequest="40" />
+                                                    <Label
+                                                        Grid.Column="1"
+                                                        Margin="8,0"
+                                                        Text="{Binding Name}"
+                                                        VerticalOptions="Center" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Expander:SfExpander.Content>
+                        </Expander:SfExpander>
+                    </Grid>
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+
+            <tabView:SfTabItem
+                FontFamily="MauiSampleFontIcon"
+                FontSize="25"
+                Header="&#xe763;">
+                <tabView:SfTabItem.Content>
+                    <Grid Padding="12" RowDefinitions="Auto, *">
+                        <!--  Header  -->
+                        <Grid ColumnDefinitions="Auto, Auto, Auto">
+                            <Label
+                                FontFamily="MauiSampleFontIcon"
+                                FontSize="20"
+                                Text="&#xe763;"
+                                TextColor="#4B53BC"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="12,0"
+                                FontAttributes="Bold"
+                                FontSize="20"
+                                Text="Calls"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Column="2"
+                                FontSize="16"
+                                Text="Personal"
+                                TextColor="#4B53BC"
+                                VerticalOptions="Center" />
+                        </Grid>
+                        <Expander:SfExpander
+                            Grid.Row="1"
+                            Padding="0"
+                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight},
+                                                              Dark={StaticResource BackgroundDark}}"
+                            HeaderIconPosition="Start"
+                            IsExpanded="True">
+                            <Expander:SfExpander.Header>
+                                <Grid Margin="0,15" ColumnDefinitions="*, Auto">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        Text="History"
+                                        VerticalOptions="Center" />
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="12,4"
+                                        Background="#4B53BC"
+                                        StrokeShape="RoundRectangle 15">
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Label
+                                                Text="All"
+                                                TextColor="White"
+                                                VerticalOptions="Center" />
+                                            <Label
+                                                FontFamily="MauiSampleFontIcon"
+                                                Text="&#xe703;"
+                                                TextColor="White"
+                                                VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </Grid>
+                            </Expander:SfExpander.Header>
+                            <Expander:SfExpander.Content>
+                                <CollectionView ItemsSource="{Binding CallItems}" SelectionMode="None">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="local:CallItem">
+                                            <Grid Padding="0,8" ColumnDefinitions="Auto, *, Auto">
+
+                                                <Border
+                                                    Padding="0"
+                                                    BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight},
+                                                                                      Dark={StaticResource BackgroundDark}}"
+                                                    HeightRequest="{OnPlatform WinUI=42,
+                                                                               Android=40,
+                                                                               MacCatalyst=42,
+                                                                               iOS=40}"
+                                                    HorizontalOptions="Center"
+                                                    Stroke="#E5E5E5"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="{OnPlatform WinUI=42,
+                                                                              Android=40,
+                                                                              MacCatalyst=42,
+                                                                              iOS=40}">
+                                                    <Border.StrokeShape>
+                                                        <RoundRectangle CornerRadius="20" />
+                                                    </Border.StrokeShape>
+                                                    <Image
+                                                        HeightRequest="42"
+                                                        Source="{Binding Images}"
+                                                        WidthRequest="42" />
+                                                </Border>
+
+                                                <!--  Name and Status  -->
+                                                <VerticalStackLayout Grid.Column="1" Margin="12,0">
+                                                    <Label FontSize="15" Text="{Binding Name}" />
+                                                    <HorizontalStackLayout Spacing="4">
+                                                        <Label
+                                                            FontFamily="MauiSampleFontIcon"
+                                                            FontSize="12"
+                                                            Text="&#xe763;"
+                                                            TextColor="#888"
+                                                            VerticalOptions="Center" />
+                                                        <Label
+                                                            FontSize="13"
+                                                            Text="{Binding Status}"
+                                                            TextColor="#888" />
+                                                    </HorizontalStackLayout>
+                                                </VerticalStackLayout>
+
+                                                <!--  Time and Duration  -->
+                                                <VerticalStackLayout Grid.Column="2" HorizontalOptions="End">
+                                                    <Label
+                                                        FontSize="13"
+                                                        HorizontalOptions="End"
+                                                        Text="{Binding Time}" />
+                                                    <Label
+                                                        FontSize="13"
+                                                        HorizontalOptions="End"
+                                                        Text="{Binding Duration}"
+                                                        TextColor="#888" />
+                                                </VerticalStackLayout>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Expander:SfExpander.Content>
+                        </Expander:SfExpander>
+                    </Grid>
+                </tabView:SfTabItem.Content>
+            </tabView:SfTabItem>
+        </tabView:SfTabView>
+    </Grid>
+
+
+    <localCore:SampleView.OptionView>
+        <Grid Padding="0,0,0,10">
+            <VerticalStackLayout Margin="10,15,10,10" Spacing="20">
+                <Grid ColumnDefinitions="*,1.1*">
+                    <Label
+                        FontAttributes="Bold"
+                        Text="Tab Bar Placement"
+                        VerticalOptions="Center" />
+                    <Picker
+                        x:Name="placemntcomboBox"
+                        Grid.Column="1"
+                        HeightRequest="{OnPlatform Android=40,
+                                                   iOS=35,
+                                                   MacCatalyst=35,
+                                                   WinUI=35}"
+                        SelectedIndexChanged="placemntcomboBox_SelectedIndexChanged"
+                        SelectedItem="Left"
+                        WidthRequest="100">
+                        <Picker.ItemsSource>
+                            <ListCollection:List x:TypeArguments="x:String">
+                                <x:String>Left</x:String>
+                                <x:String>Right</x:String>
+                            </ListCollection:List>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </Grid>
+                <Grid ColumnDefinitions="*,1.1*">
+                    <Label
+                        FontAttributes="Bold"
+                        Text="Indicator Placement"
+                        VerticalOptions="Center" />
+                    <Picker
+                        x:Name="indicatorplacemntcomboBox"
+                        Grid.Column="1"
+                        HeightRequest="{OnPlatform Android=40,
+                                                   iOS=35,
+                                                   MacCatalyst=35,
+                                                   WinUI=35}"
+                        SelectedIndexChanged="indicatorplacemntcomboBox_SelectedIndexChanged"
+                        SelectedItem="Left"
+                        WidthRequest="100">
+                        <Picker.ItemsSource>
+                            <ListCollection:List x:TypeArguments="x:String">
+                                <x:String>Left</x:String>
+                                <x:String>Right</x:String>
+                                <x:String>Fill</x:String>
+                            </ListCollection:List>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </Grid>
+            </VerticalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
+</localCore:SampleView>

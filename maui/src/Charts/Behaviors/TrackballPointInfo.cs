@@ -11,6 +11,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		string _text = string.Empty;
 		object _dataItem = string.Empty;
+		private bool isVisible = true;
 		Rect _rect;
 
 		#endregion
@@ -89,6 +90,26 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// Gets or sets the style for the trackball markers.
 		/// </summary>
 		public ChartMarkerSettings? MarkerSettings { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value that indicates whether the trackball label should be visible.
+		/// </summary>
+		/// <value>The default value is <c>true</c>. Setting this to <c>false</c> will hide the label without preventing the TrackballCreated event from being raised.</value>
+		public bool IsVisible
+		{
+			get
+			{
+				return isVisible;
+			}
+			set
+			{
+				if (isVisible != value)
+				{
+					isVisible = value;
+					OnPropertyChanged(nameof(IsVisible));
+				}
+			}
+		}
 
 		#endregion
 

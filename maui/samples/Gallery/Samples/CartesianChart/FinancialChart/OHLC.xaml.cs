@@ -2,7 +2,6 @@
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class OHLC : SampleView
 	{
 		public OHLC()

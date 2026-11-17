@@ -1,11 +1,11 @@
-﻿using Microsoft.Maui.Controls;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Maui.Controls;
 
 namespace Syncfusion.Maui.Toolkit.SunburstChart
 {
@@ -89,26 +89,58 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 null, 
                 propertyChanged: OnGroupPathChanged);
 
-        #endregion
+		/// <summary>
+		/// Identifies the <see cref="Fill"/> bindable property.
+		/// </summary>
+		public static readonly BindableProperty FillProperty =
+			BindableProperty.Create(nameof(Fill), typeof(Brush), typeof(SunburstHierarchicalLevel), null, propertyChanged: OnFillChanged);
 
-        #region Public Property
+		#endregion
 
-        /// <summary>
-        /// Gets or sets the GroupMemberPath property. This property is used to set the path of the value data in ItemsSource.
-        /// </summary>
-        public string GroupMemberPath
+		#region Public Property
+
+		/// <summary>
+		/// Gets or sets the GroupMemberPath property. This property is used to set the path of the value data in ItemsSource.
+		/// </summary>
+		public string GroupMemberPath
         {
             get { return (string)GetValue(GroupMemberPathProperty); }
             set { SetValue(GroupMemberPathProperty, value); }
         }
 
-        #endregion
+		/// <summary>
+		/// Gets or sets the brush applied to all segments generated from this hierarchy level.
+		/// </summary>
+		/// <value>The default value is <c>null</c>.</value>
+		/// <remarks>
+		/// <para>When set, every segment of this level is painted with this brush. When <c>null</c>, the segments are colored by the chart <c>PaletteBrushes</c>.
+		/// An explicit <see cref="Brush.Transparent"/> is honored as a real fill.</para>
+		/// <para>Selection with <c>HighlightByBrush</c> overrides this value. The legend icons follow the <see cref="Fill"/> of the first level (level 0). A <see cref="Fill"/> on any other level does not affect the legend, which keeps using the chart <c>PaletteBrushes</c>.</para>
+		/// </remarks>
+		/// <example>
+		/// <code lang="XAML"><![CDATA[
+		/// <sunburst:SfSunburstChart.Levels>
+		///     <sunburst:SunburstHierarchicalLevel GroupMemberPath="Country" Fill="Navy"/>
+		///     <sunburst:SunburstHierarchicalLevel GroupMemberPath="JobDescription"/>
+		/// </sunburst:SfSunburstChart.Levels>
+		/// ]]></code>
+		/// <code lang="C#"><![CDATA[
+		/// chart.Levels[0].Fill = Brush.Navy;
+		/// ]]></code>
+		/// </example>
+		public Brush Fill
+		{
+			get { return (Brush)GetValue(FillProperty); }
+			set { SetValue(FillProperty, value); }
+		}
 
-        #region Protected Methods
+		#endregion
 
-        /// <inheritdoc/>
+		#region Protected Methods
+
+		/// <inheritdoc/>
 		/// <exclude/>
-        protected override void OnBindingContextChanged()
+		protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
         }
@@ -248,17 +280,35 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             }
         }
 
-        #endregion
+		#endregion
 
-        #region Private methods
+		#region Private methods
 
-        /// <summary>
-        /// Handles the property changed event for the <see cref="GroupMemberPathProperty"/>.
-        /// </summary>
-        /// <param name="bindable">The bindable object.</param>
-        /// <param name="oldValue">The old value.</param>
-        /// <param name="newValue">The new value.</param>
-        static void OnGroupPathChanged(BindableObject bindable, object oldValue, object newValue)
+		/// <summary>
+		/// Handles the property changed event for the <see cref="FillProperty"/>.
+		/// </summary>
+		/// <param name="bindable">The bindable object.</param>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		static void OnFillChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			if (bindable is SunburstHierarchicalLevel level && !Equals(oldValue, newValue))
+			{
+				if (level.SunburstChart != null)
+				{
+					level.SunburstChart.area.ShouldPopulateLegendItems = true;
+					level.SunburstChart.ScheduleUpdate();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Handles the property changed event for the <see cref="GroupMemberPathProperty"/>.
+		/// </summary>
+		/// <param name="bindable">The bindable object.</param>
+		/// <param name="oldValue">The old value.</param>
+		/// <param name="newValue">The new value.</param>
+		static void OnGroupPathChanged(BindableObject bindable, object oldValue, object newValue)
         {
 			var sunburstHierarchical = bindable as SunburstHierarchicalLevel;
 			if (sunburstHierarchical != null)

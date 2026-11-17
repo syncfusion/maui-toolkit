@@ -11,6 +11,9 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		Microsoft.Maui.Controls.CollectionView? _collectionView;
 		MailInfoViewModel? _viewModel;
 		Microsoft.Maui.Controls.Picker? _positionType;
+		Microsoft.Maui.Controls.Picker? _transitionType;
+		Microsoft.Maui.Controls.Picker? _secondaryPositionType;
+		Microsoft.Maui.Controls.Picker? _secondaryTransitionType;
 		SfEffectsView? _inboxeffectsView;
 		SfEffectsView? _starredeffectsView;
 		SfEffectsView? _senteffectsView;
@@ -36,6 +39,12 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 			_navigationdrawer.BindingContext = _viewModel;
 			_positionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("positioncomboBox");
 			_positionType.SelectedIndexChanged += OnPositionSelectionChanged;
+			_transitionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("transitioncomboBox");
+			_transitionType.SelectedIndexChanged += OnTransitionSelectionChanged;
+			_secondaryPositionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("secondarypositioncomboBox");
+			_secondaryPositionType.SelectedIndexChanged += OnSecondaryPositionSelectionChanged;
+			_secondaryTransitionType = bindable.FindByName<Microsoft.Maui.Controls.Picker>("secondarytransitioncomboBox");
+			_secondaryTransitionType.SelectedIndexChanged += OnSecondaryTransitionSelectionChanged;
 
 			_inboxeffectsView = bindable.FindByName<SfEffectsView>("inboxEffects");
 			TapGestureRecognizer inboxtapGestureRecognizer = new TapGestureRecognizer();
@@ -211,7 +220,61 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 			}
 		}
 
-
+		/// <summary>
+		///  Fires whenever Position ComboBox's selection changed.
+		/// </summary>
+		/// <param name="sender">OnPositionSelectionChanged sender.</param>
+		/// <param name="e">SelectionChangedEventArgs e.</param>
+		private void OnTransitionSelectionChanged(object? sender, EventArgs e)
+		{
+			if (_transitionType != null && _navigationdrawer != null)
+			{
+				_navigationdrawer.DrawerSettings.Transition = (_transitionType.SelectedItem?.ToString()) switch
+				{
+					"SlideOnTop" => Transition.SlideOnTop,
+					"Push" => Transition.Push,
+					"Reveal" => Transition.Reveal,
+					_ => Transition.SlideOnTop,
+				};
+			}
+		}
+		/// <summary>
+		///  Fires whenever Position ComboBox's selection changed.
+		/// </summary>
+		/// <param name="sender">OnPositionSelectionChanged sender.</param>
+		/// <param name="e">SelectionChangedEventArgs e.</param>
+		private void OnSecondaryPositionSelectionChanged(object? sender, EventArgs e)
+		{
+			if (_secondaryPositionType != null && _navigationdrawer != null)
+			{
+				_navigationdrawer.SecondaryDrawerSettings.Position = (_secondaryPositionType.SelectedItem?.ToString()) switch
+				{
+					"Left" => Position.Left,
+					"Right" => Position.Right,
+					"Top" => Position.Top,
+					"Bottom" => Position.Bottom,
+					_ => Position.Left,
+				};
+			}
+		}
+		/// <summary>
+		///  Fires whenever Position ComboBox's selection changed.
+		/// </summary>
+		/// <param name="sender">OnPositionSelectionChanged sender.</param>
+		/// <param name="e">SelectionChangedEventArgs e.</param>
+		private void OnSecondaryTransitionSelectionChanged(object? sender, EventArgs e)
+		{
+			if (_secondaryTransitionType != null && _navigationdrawer != null)
+			{
+				_navigationdrawer.SecondaryDrawerSettings.Transition = (_secondaryTransitionType.SelectedItem?.ToString()) switch
+				{
+					"SlideOnTop" => Transition.SlideOnTop,
+					"Push" => Transition.Push,
+					"Reveal" => Transition.Reveal,
+					_ => Transition.SlideOnTop,
+				};
+			}
+		}
 		/// <summary>
 		/// You can override this method while View was detached from window
 		/// </summary>

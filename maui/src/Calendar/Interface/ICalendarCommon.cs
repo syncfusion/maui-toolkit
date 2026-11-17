@@ -115,5 +115,10 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// Gets a calendar mode.
         /// </summary>
         CalendarMode Mode { get; }
+
+        /// <summary>
+        /// Gets the minimum display mode of the calendar.
+        /// </summary>
+        CalendarView MinimumDisplayMode { get; }
     }
 }

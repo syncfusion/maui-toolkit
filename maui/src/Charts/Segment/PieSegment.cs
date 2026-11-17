@@ -162,6 +162,8 @@
 				canvas.StrokeSize = (float)StrokeWidth;
 				canvas.DrawPath(path);
 			}
+
+			SemanticBounds = path.Bounds;
 		}
 
 		#endregion

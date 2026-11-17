@@ -5,6 +5,7 @@
 		#region Private Fields
 
 		readonly CircularChartArea _circularChartArea;
+		private readonly ExtentSemanticsView _semanticsView;
 
 		#endregion
 
@@ -15,11 +16,25 @@
 		public CircularPlotArea(CircularChartArea chartArea) : base()
 		{
 			_circularChartArea = chartArea;
+			_semanticsView = new ExtentSemanticsView { ChartArea = _circularChartArea };
+			AbsoluteLayout.SetLayoutBounds(_semanticsView, new Rect(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutFlags(_semanticsView, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.All);
+			Add(_semanticsView);
 		}
 
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Invalidates the cached segment semantics so the platform accessibility
+		/// tree is rebuilt with the latest segment geometry.
+		/// </summary>
+		internal void InvalidateSegmentSemantics()
+		{
+			_semanticsView?.InvalidateSemanticsNodes();
+		}
+
 		protected override void UpdateLegendItemsSource()
 		{
 			if (Series == null || _legend == null)

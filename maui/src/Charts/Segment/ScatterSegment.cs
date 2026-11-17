@@ -109,6 +109,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			canvas.DrawShape(_actualRectF, shapeType: Type, HasStroke, false);
+			SemanticBounds = _actualRectF;
 		}
 
 		/// <summary>

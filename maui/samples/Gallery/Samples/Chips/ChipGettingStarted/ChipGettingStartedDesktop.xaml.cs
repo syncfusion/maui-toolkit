@@ -9,7 +9,7 @@ namespace Syncfusion.Maui.ControlsGallery.Chips.SfChip
 		{
 			InitializeComponent();
 		}
-		private void SfChipGroup_SelectionChanged(object sender, Syncfusion.Maui.Toolkit.Chips.SelectionChangedEventArgs e)
+		private void SfChipGroup_SelectionChanged(object? sender, Syncfusion.Maui.Toolkit.Chips.SelectionChangedEventArgs e)
 		{
 			if (sender != null && sender is SfChipGroup chipGroup && chipGroup.BindingContext is ChipViewModel viewModel)
 			{

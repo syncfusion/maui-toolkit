@@ -3,7 +3,6 @@ namespace Syncfusion.Maui.Toolkit.Accordion;
 /// <summary>
 /// Dictionary for theming the accordion control.
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SfAccordionStyles : ResourceDictionary
 {
     /// <summary>

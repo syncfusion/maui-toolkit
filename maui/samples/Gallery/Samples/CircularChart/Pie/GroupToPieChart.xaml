@@ -28,10 +28,10 @@
                                         <Label Text="{Binding Name}"
                                                    TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" Grid.Column="0"
                                                    HorizontalTextAlignment="Start"
-                                                   FontSize="Caption"
+                                                   FontSize="12"
                                                    VerticalOptions="Center"/>
                                             <Label Text="{Binding Converter={StaticResource StingConvert}, ConverterParameter={x:Reference pieSeries1}}"
-                                                   FontSize="Caption" Grid.Column="2"
+                                                   FontSize="12" Grid.Column="2"
                                                    TextColor="{AppThemeBinding Default={StaticResource ContentBackground}}" FontAttributes="Bold"
                                                    HorizontalOptions="End" HorizontalTextAlignment="End"
                                                    VerticalOptions="Center"/>

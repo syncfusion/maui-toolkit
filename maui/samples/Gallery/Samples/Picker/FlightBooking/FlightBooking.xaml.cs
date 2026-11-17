@@ -297,7 +297,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void TapGestureRecognizer_Tapped(System.Object sender, System.EventArgs e)
+        void TapGestureRecognizer_Tapped(System.Object? sender, System.EventArgs e)
         {
 #if ANDROID || IOS
             mobileFromPicker.IsOpen = true;
@@ -346,7 +346,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void TapGestureRecognizer_Tapped_1(System.Object sender, System.EventArgs e)
+        void TapGestureRecognizer_Tapped_1(System.Object? sender, System.EventArgs e)
         {
 #if ANDROID || IOS
             mobileToPicker.IsOpen = true;
@@ -394,7 +394,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void FromPicker_SelectionChanged(System.Object sender, PickerSelectionChangedEventArgs e)
+        void FromPicker_SelectionChanged(System.Object? sender, PickerSelectionChangedEventArgs e)
         {
             if (e.ColumnIndex == 1)
             {
@@ -423,7 +423,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void ToPicker_SelectionChanged(System.Object sender, PickerSelectionChangedEventArgs e)
+        void ToPicker_SelectionChanged(System.Object? sender, PickerSelectionChangedEventArgs e)
         {
             if (e.ColumnIndex == 1)
             {
@@ -452,7 +452,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void FromPicker_CancelButtonClicked(System.Object sender, System.EventArgs e)
+        void FromPicker_CancelButtonClicked(System.Object? sender, System.EventArgs e)
         {
 #if ANDROID || IOS
             mobileFromPicker.IsOpen = false;
@@ -466,7 +466,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void ToPicker_CancelButtonClicked(System.Object sender, System.EventArgs e)
+        void ToPicker_CancelButtonClicked(System.Object? sender, System.EventArgs e)
         {
 #if ANDROID || IOS
             mobileToPicker.IsOpen = false;
@@ -480,7 +480,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void FromPicker_OkButtonClicked(System.Object sender, System.EventArgs e)
+        void FromPicker_OkButtonClicked(System.Object? sender, System.EventArgs e)
         {
             if (sender is Syncfusion.Maui.Toolkit.Picker.SfPicker picker)
             {
@@ -505,7 +505,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void ToPicker_OkButtonClicked(System.Object sender, System.EventArgs e)
+        void ToPicker_OkButtonClicked(System.Object? sender, System.EventArgs e)
         {
             if (sender is Syncfusion.Maui.Toolkit.Picker.SfPicker picker)
             {
@@ -692,7 +692,7 @@ namespace Syncfusion.Maui.ControlsGallery.Picker.SfPicker
         /// </summary>
         /// <param name="sender">The sender object.</param>
         /// <param name="e">The event args.</param>
-        void SearchButton_Clicked(object sender, EventArgs e)
+        void SearchButton_Clicked(object? sender, EventArgs e)
         {
             if (popup == null)
             {
