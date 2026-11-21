@@ -223,6 +223,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override Rect GetSemanticsBounds()
+		{
+			return base.GetSemanticsBounds();
+		}
 		internal override void Dispose()
 		{
 			UnHookStylePropertyChanged(AxisLabelStyle);

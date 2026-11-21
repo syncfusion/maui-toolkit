@@ -41,7 +41,7 @@ namespace Syncfusion.Maui.ControlsGallery.CircularChart.SfCircularChart
 			Chart.Handler?.DisconnectHandler();
 		}
 
-		private void groupTo_SelectedIndexChanged(object sender, EventArgs e)
+		private void groupTo_SelectedIndexChanged(object? sender, EventArgs e)
 		{
 			var index = groupTo.SelectedIndex;
 			if (index != -1)

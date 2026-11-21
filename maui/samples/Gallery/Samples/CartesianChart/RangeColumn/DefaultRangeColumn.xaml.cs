@@ -4,6 +4,8 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
 	public partial class DefaultRangeColumn : SampleView
 	{
+		private readonly Dictionary<int, Brush?> _originalFills = new();
+
 		public DefaultRangeColumn()
 		{
 			InitializeComponent();
@@ -24,6 +26,12 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 		{
 			base.OnDisappearing();
 			Chart.Handler?.DisconnectHandler();
+		}
+
+		private void gradientCheckBox_CheckedChanged(object? sender, CheckedChangedEventArgs e)
+		{
+			if (sender is CheckBox cb)
+				ChartBrushes.ApplyGradientToggle(rangeColumnSeries1, this.Resources, paletteIndex: 0, useGradient: cb.IsChecked, _originalFills, cacheIndex: 0);
 		}
 	}
 }

@@ -13,6 +13,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		readonly IPyramidChartDependent _chart;
 		readonly PyramidChartView _seriesView;
 		readonly PyramidDataLabelView _dataLabelView;
+		readonly PyramidExtentSemanticsView _semanticsView;
 		readonly ObservableCollection<ILegendItem> _legendItems;
 
 		bool _shouldPopulateLegendItems = true;
@@ -37,12 +38,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			_legendItems = [];
 			_seriesView = new PyramidChartView(chart);
 			_dataLabelView = new PyramidDataLabelView(chart);
+			_semanticsView = new PyramidExtentSemanticsView { Chart = this._chart };
 			AbsoluteLayout.SetLayoutBounds(_seriesView, new Rect(0, 0, 1, 1));
 			AbsoluteLayout.SetLayoutFlags(_seriesView, AbsoluteLayoutFlags.All);
 			AbsoluteLayout.SetLayoutBounds(_dataLabelView, new Rect(0, 0, 1, 1));
 			AbsoluteLayout.SetLayoutFlags(_dataLabelView, AbsoluteLayoutFlags.All);
+			AbsoluteLayout.SetLayoutBounds(_semanticsView, new Rect(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutFlags(_semanticsView, AbsoluteLayoutFlags.All);
 			Add(_seriesView);
 			Add(_dataLabelView);
+			Add(_semanticsView);
 
 			if (chart is IChart iChart)
 			{
@@ -139,6 +144,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			_chart.GenerateSegments();
 			_chart.LayoutSegments();
 			InvalidateChart();
+			InvalidateSegmentSemantics();
 		}
 
 		public void UpdateLegendItems()
@@ -155,6 +161,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			_seriesView?.InvalidateDrawable();
 			_dataLabelView?.InvalidateDrawable();
+		}
+
+		internal void InvalidateSegmentSemantics()
+		{
+			_semanticsView.InvalidateSemanticsNodes();
 		}
 
 		internal View? PlotAreaBackgroundView

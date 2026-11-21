@@ -3,7 +3,6 @@ namespace Syncfusion.Maui.Toolkit.Expander;
 /// <summary>
 /// Dictionary for theming the expander control.
 /// </summary>
-[XamlCompilation(XamlCompilationOptions.Compile)]
 public partial class SfExpanderStyles : ResourceDictionary
 {
 	/// <summary>

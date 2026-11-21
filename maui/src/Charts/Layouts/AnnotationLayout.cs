@@ -1,4 +1,5 @@
-﻿using Syncfusion.Maui.Toolkit.Graphics.Internals;
+﻿using System.Net.Sockets;
+using Syncfusion.Maui.Toolkit.Graphics.Internals;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -36,17 +37,67 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#endregion
 	}
 
-	internal partial class AnnotationDrawableView : SfDrawableView
+	internal class AnnotationDrawableView : AnnotationDrawerView
+	{
+		#region Constructor
+
+		internal AnnotationDrawableView(SfCartesianChart chart) : base(chart)
+		{
+		}
+
+		#endregion
+
+		#region Methods
+
+		#region Protected Methods
+
+		protected override bool IncludeAnnotation(ChartAnnotation annotation)
+		{
+			return annotation.ZIndex >= 0;
+		}
+
+		#endregion
+
+		#endregion
+	}
+
+	internal class BackgroundAnnotationDrawableView : AnnotationDrawerView
+	{
+		#region Constructor
+
+		internal BackgroundAnnotationDrawableView(SfCartesianChart chart) : base(chart)
+		{
+		}
+
+		#endregion
+
+		#region Methods
+
+		#region Protected Methods
+
+		protected override bool IncludeAnnotation(ChartAnnotation annotation)
+		{
+			return annotation.ZIndex < 0;
+		}
+
+		#endregion
+
+		#endregion
+	}
+
+	internal abstract class AnnotationDrawerView : SfDrawableView
 	{
 		#region Fields
 
 		readonly SfCartesianChart _chart;
 
+		readonly List<ChartAnnotation> _bucket = new List<ChartAnnotation>();
+
 		#endregion
 
 		#region Constructor
 
-		internal AnnotationDrawableView(SfCartesianChart chart)
+		internal AnnotationDrawerView(SfCartesianChart chart)
 		{
 			_chart = chart;
 		}
@@ -57,19 +108,49 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Protected Methods
 
+		protected abstract bool IncludeAnnotation(ChartAnnotation annotation);
+
 		protected override void OnDraw(ICanvas canvas, RectF dirtyRect)
 		{
-			if (_chart != null)
+			if (_chart == null)
 			{
-				foreach (var annotation in _chart.Annotations)
+				return;
+			}
+
+			_bucket.Clear();
+			for (int i = 0; i < _chart.Annotations.Count; i++)
+			{
+				ChartAnnotation annotation = _chart.Annotations[i];
+				if (annotation.IsVisible && IncludeAnnotation(annotation))
 				{
-					if (annotation.IsVisible)
-					{
-						canvas.CanvasSaveState();
-						annotation.Draw(canvas, dirtyRect);
-						canvas.CanvasRestoreState();
-					}
+					_bucket.Add(annotation);
 				}
+			}
+
+			if (_bucket.Count == 0)
+			{
+				return;
+			}
+
+			for (int i = 1; i < _bucket.Count; i++)
+			{
+				ChartAnnotation annotation = _bucket[i];
+				int zIndex = annotation.ZIndex;
+				int j = i - 1;
+				while (j >= 0 && _bucket[j].ZIndex > zIndex)
+				{
+					_bucket[j + 1] = _bucket[j];
+					j--;
+				}
+
+				_bucket[j + 1] = annotation;
+			}
+
+			for (int i = 0; i < _bucket.Count; i++)
+			{
+				canvas.SaveState();
+				_bucket[i].Draw(canvas, dirtyRect);
+				canvas.RestoreState();
 			}
 		}
 

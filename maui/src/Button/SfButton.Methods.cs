@@ -348,11 +348,7 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		void InsertCustomViewInChildren(DataTemplate dataTemplate)
 		{			
 			var layout = dataTemplate.CreateContent();
-#if NET10_0_OR_GREATER
 			_customView = layout as View;
-#else
-			_customView = layout is ViewCell cell ? cell.View : (View)layout;
-#endif
 			if (_customView != null)
 			{
 				if (_effectsView != null && Children.Contains(_effectsView))
@@ -393,12 +389,6 @@ namespace Syncfusion.Maui.Toolkit.Buttons
 		/// </summary>
 		void UpdateButtonClip()
 		{
-#if WINDOWS && NET8_0
-			if (Parent is Frame)
-			{
-				return;
-			}
-#endif
 #if WINDOWS || ANDROID
 			Clip = CornerRadius != 0 ? new RoundRectangleGeometry(CornerRadius, new Rect(0, 0, Width, Height)) : null;
 #else

@@ -135,10 +135,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             DrawingOrder = DrawingOrder.AboveContent;
             BackgroundColor = CalendarBackground;
             _layout = new CalendarVerticalStackLayout(HeaderView.Height, FooterView.ShowActionButtons || FooterView.ShowTodayButton, FooterView.Height);
-#if (IOS || ANDROID) && NET10_0
+#if IOS || ANDROID
             this._layout.SafeAreaEdges = SafeAreaEdges.None;
-#elif IOS
-            _layout.IgnoreSafeArea = true;
 #endif
 			Add(_layout);
             _displayDate = DisplayDate;
@@ -799,13 +797,14 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 case KeyboardKey.Up:
                 case KeyboardKey.Down:
-                    //// Have to navigate to the other view only when the allow view navigation is false.
-                    if (!AllowViewNavigation)
+                    //// Have to navigate to the other view only when the allow view navigation is true and not at minimum display mode.
+                    if (!AllowViewNavigation || View == MinimumDisplayMode)
                     {
                         return;
                     }
 
-                    View = CalendarViewHelper.ProcessControlKeyPressed(View, args);
+                    CalendarView keyPressView = CalendarViewHelper.ProcessControlKeyPressed(View, args);
+                    View = CalendarViewHelper.GetValidDisplayViewMode(keyPressView, MinimumDisplayMode, MaximumDisplayMode);
                     break;
 
                 case KeyboardKey.Left:
@@ -899,7 +898,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 TappedCommand.Execute(calendarTappedEventArgs);
             }
 
-            // Returns when the view navigation is false, when the view is month view or tapped date is null
+            // Returns when the view navigation is false, at minimum display mode, or tapped date is null
             if (!AllowViewNavigation)
             {
                 return;
@@ -917,14 +916,43 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 switch (View)
                 {
                     case CalendarView.Century:
-                        View = CalendarView.Decade;
-                        break;
+                        {
+                            CalendarView targetView = CalendarView.Decade;
+                            if (CalendarViewHelper.GetValidDisplayViewMode(targetView, MinimumDisplayMode, MaximumDisplayMode) == targetView)
+                            {
+                                View = targetView;
+                            }
+
+                            break;
+                        }
+
                     case CalendarView.Decade:
-                        View = CalendarView.Year;
-                        break;
+                        {
+                            CalendarView targetView = CalendarView.Year;
+                            if (CalendarViewHelper.GetValidDisplayViewMode(targetView, MinimumDisplayMode, MaximumDisplayMode) == targetView)
+                            {
+                                View = targetView;
+                            }
+
+                            break;
+                        }
+
                     case CalendarView.Year:
-                        View = CalendarView.Month;
-                        break;
+                        {
+                            CalendarView targetView = CalendarView.Month;
+                            if (CalendarViewHelper.GetValidDisplayViewMode(targetView, MinimumDisplayMode, MaximumDisplayMode) == targetView)
+                            {
+                                View = targetView;
+                            }
+                            else if (targetView == MinimumDisplayMode)
+                            {
+                                // At minimum display mode - allow date selection without navigation
+                                NavigateToAdjacentDates(calendarTappedEventArgs);
+                            }
+
+                            break;
+                        }
+
                     case CalendarView.Month:
                         NavigateToAdjacentDates(calendarTappedEventArgs);
                         break;
@@ -936,14 +964,37 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 switch (View)
                 {
                     case CalendarView.Month:
-                        View = CalendarView.Year;
-                        break;
+                        {
+                            CalendarView targetView = CalendarView.Year;
+                            if (CalendarViewHelper.GetValidDisplayViewMode(targetView, MinimumDisplayMode, MaximumDisplayMode) == targetView)
+                            {
+                                View = targetView;
+                            }
+
+                            break;
+                        }
+
                     case CalendarView.Year:
-                        View = CalendarView.Decade;
-                        break;
+                        {
+                            CalendarView targetView = CalendarView.Decade;
+                            if (CalendarViewHelper.GetValidDisplayViewMode(targetView, MinimumDisplayMode, MaximumDisplayMode) == targetView)
+                            {
+                                View = targetView;
+                            }
+
+                            break;
+                        }
+
                     case CalendarView.Decade:
-                        View = CalendarView.Century;
-                        break;
+                        {
+                            CalendarView targetView = CalendarView.Century;
+                            if (CalendarViewHelper.GetValidDisplayViewMode(targetView, MinimumDisplayMode, MaximumDisplayMode) == targetView)
+                            {
+                                View = targetView;
+                            }
+
+                            break;
+                        }
                 }
             }
         }

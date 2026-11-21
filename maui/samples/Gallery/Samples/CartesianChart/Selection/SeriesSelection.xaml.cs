@@ -47,7 +47,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 				 new SolidColorBrush(Color.FromArgb("#402EC4B6"))
 		];
 
-		private void checkbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		private void checkbox_CheckedChanged(object? sender, CheckedChangedEventArgs e)
 		{
 			seriesSelection.Type = e.Value ? ChartSelectionType.Multiple : ChartSelectionType.SingleDeselect;
 			_selectedIndexes.Clear();
@@ -59,7 +59,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 
 		readonly List<int> _selectedIndexes = [];
 
-		private void seriesSelection_SelectionChanging(object sender, ChartSelectionChangingEventArgs e)
+		private void seriesSelection_SelectionChanging(object? sender, ChartSelectionChangingEventArgs e)
 		{
 			foreach (var index in e.NewIndexes)
 			{

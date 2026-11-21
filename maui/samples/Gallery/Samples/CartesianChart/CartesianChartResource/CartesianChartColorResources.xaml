@@ -4,34 +4,6 @@
                     xmlns:local="clr-namespace:Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart"
              x:Class="Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart.CartesianChartColorResources">
 
-
-    <!--Old palette-->
-    <!--<SolidColorBrush x:Key="series1Light">#314A6E</SolidColorBrush>
-    <SolidColorBrush x:Key="series2Light">#48988B</SolidColorBrush>
-    <SolidColorBrush x:Key="series3Light">#5E498C</SolidColorBrush>
-    <SolidColorBrush x:Key="series4Light">#74BD6F</SolidColorBrush>
-    <SolidColorBrush x:Key="series5Light">#597FCA</SolidColorBrush>
-
-    <SolidColorBrush x:Key="series1Light30">#C4314A6E</SolidColorBrush>
-    <SolidColorBrush x:Key="series2Light30">#C448988B</SolidColorBrush>
-    <SolidColorBrush x:Key="series3Light30">#C45E498C</SolidColorBrush>
-    <SolidColorBrush x:Key="series4Light30">#C474BD6F</SolidColorBrush>
-    <SolidColorBrush x:Key="series5Light30">#C4597FCA</SolidColorBrush>
-
-    <local:ChartColorModel x:Key="PaletteBrushesLight" >
-        <SolidColorBrush>#314A6E</SolidColorBrush>
-        <SolidColorBrush>#48988B</SolidColorBrush>
-        <SolidColorBrush>#5E498C</SolidColorBrush>
-        <SolidColorBrush>#74BD6F</SolidColorBrush>
-        <SolidColorBrush>#597FCA</SolidColorBrush>
-    </local:ChartColorModel>
-
-    <local:ChartColorModel x:Key="AlterBrushesLight" >
-        <SolidColorBrush>#314A6E</SolidColorBrush>
-        <SolidColorBrush>#48988B</SolidColorBrush>
-    </local:ChartColorModel>-->
-    <!--End-->
-
     <SolidColorBrush x:Key="series1Light">#3068F7</SolidColorBrush>
     <SolidColorBrush x:Key="series2Light">#BD34B7</SolidColorBrush>
     <SolidColorBrush x:Key="series3Light">#7442DD</SolidColorBrush>
@@ -117,4 +89,86 @@
 
     <SolidColorBrush x:Key="series1Light50">#36323B</SolidColorBrush>
     <SolidColorBrush x:Key="series1Dark50">#ffffff</SolidColorBrush>
+
+    <!-- Column/RangeColumn gradients (light to dark, left to right) -->
+    <local:ChartColorModel x:Key="GradientPaletteBrushesLight">
+        <!-- Blue -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#143FCF" Offset="0.00"/>
+            <GradientStop Color="#2457E8" Offset="0.25"/>
+            <GradientStop Color="#3068F7" Offset="0.50"/>
+            <GradientStop Color="#5F8EFF" Offset="0.75"/>
+            <GradientStop Color="#9CC0FF" Offset="1.00"/>
+        </LinearGradientBrush>
+
+        <!-- Magenta -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#871B82" Offset="0.00"/>
+            <GradientStop Color="#A723A1" Offset="0.25"/>
+            <GradientStop Color="#BD34B7" Offset="0.50"/>
+            <GradientStop Color="#D66FD2" Offset="0.75"/>
+            <GradientStop Color="#F0B7ED" Offset="1.00"/>
+        </LinearGradientBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="GradientPaletteBrushesDark">
+        <!-- Blue -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#2457E8" Offset="0.00"/>
+            <GradientStop Color="#3568EF" Offset="0.25"/>
+            <GradientStop Color="#4A7BF8" Offset="0.50"/>
+            <GradientStop Color="#78A0FF" Offset="0.75"/>
+            <GradientStop Color="#BDD1FF" Offset="1.00"/>
+        </LinearGradientBrush>
+
+        <!-- Magenta -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#9B2B95" Offset="0.00"/>
+            <GradientStop Color="#B033AD" Offset="0.25"/>
+            <GradientStop Color="#C53EC0" Offset="0.50"/>
+            <GradientStop Color="#D96FD7" Offset="0.75"/>
+            <GradientStop Color="#E8A5D9" Offset="1.00"/>
+        </LinearGradientBrush>
+    </local:ChartColorModel>
+
+    <!-- Line/Spline/StepLine gradients (smooth directional: light to dark) -->
+    <local:ChartColorModel x:Key="GradientPaletteBrushesLightLine">
+        <!-- Blue: Bright cyan to deep blue gradient -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#66E8FF" Offset="0.00"/>
+            <GradientStop Color="#4AB0FF" Offset="0.25"/>
+            <GradientStop Color="#2E7FFF" Offset="0.50"/>
+            <GradientStop Color="#1555FF" Offset="0.75"/>
+            <GradientStop Color="#0033FF" Offset="1.00"/>
+        </LinearGradientBrush>
+
+        <!-- Magenta: Bright pink to deep purple gradient -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FF7FFF" Offset="0.00"/>
+            <GradientStop Color="#FF4FE8" Offset="0.25"/>
+            <GradientStop Color="#E820D0" Offset="0.50"/>
+            <GradientStop Color="#C71BB0" Offset="0.75"/>
+            <GradientStop Color="#9B0080" Offset="1.00"/>
+        </LinearGradientBrush>
+    </local:ChartColorModel>
+
+    <local:ChartColorModel x:Key="GradientPaletteBrushesDarkLine">
+        <!-- Blue: Bright cyan to deep blue gradient (dark theme) -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#7FE8FF" Offset="0.00"/>
+            <GradientStop Color="#5AC8FF" Offset="0.25"/>
+            <GradientStop Color="#3B95FF" Offset="0.50"/>
+            <GradientStop Color="#2070FF" Offset="0.75"/>
+            <GradientStop Color="#0055FF" Offset="1.00"/>
+        </LinearGradientBrush>
+
+        <!-- Green: Bright lime to deep green gradient (dark theme) -->
+        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#66FF99" Offset="0.00"/>
+            <GradientStop Color="#44DD77" Offset="0.25"/>
+            <GradientStop Color="#2BBC5F" Offset="0.50"/>
+            <GradientStop Color="#159A52" Offset="0.75"/>
+            <GradientStop Color="#00AA44" Offset="1.00"/>
+        </LinearGradientBrush>
+    </local:ChartColorModel>
 </ResourceDictionary>

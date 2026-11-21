@@ -90,7 +90,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             Scrolled += OnViewScrolling;
             Content = _pickerView;
             PropertyChanged += OnScrollPropertyChanged;
-#if (IOS || ANDROID) && NET10_0
+#if IOS || ANDROID
             SafeAreaEdges = SafeAreaEdges.None;
 #endif
         }
@@ -885,6 +885,9 @@ namespace Syncfusion.Maui.Toolkit.Picker
             double itemHeight = _pickerLayoutInfo.PickerInfo.ItemHeight;
             int itemsCount = PickerHelper.GetItemsCount(_pickerLayoutInfo.Column.ItemsSource);
             double viewPortItemCount = Math.Round(_pickerView.GetViewPortHeight() / itemHeight);
+#if WINDOWS
+            int currentSelectedIndex = PickerHelper.GetValidSelectedIndex(_pickerLayoutInfo.Column.SelectedIndex, itemsCount);
+#endif
             bool enableLooping = _pickerLayoutInfo.PickerInfo.EnableLooping && itemsCount > viewPortItemCount;
 #if WINDOWS || MACCATALYST
             scrollEndPosition = Math.Ceiling(scrollEndPosition);
@@ -943,6 +946,14 @@ namespace Syncfusion.Maui.Toolkit.Picker
 
 			//// From above example the scrollEndPosition is 109. So that the positionDifference is 109 - 100 = 9.
 			double positionDifference = scrollEndPosition - currentItemPosition;
+
+#if WINDOWS
+            double currentSelectedIndexPosition = currentSelectedIndex * itemHeight;
+            if (positionDifference == 0 && currentItemPosition == currentSelectedIndexPosition)
+            {
+                return;
+            }
+#endif
             //// While scroll view fast scrolling and we started new scrolling before end of the previous scrolling then the scroll view is not scrolled to the exact position.
             //// Method to update the position based on animation value.
             void UpdateProperty(double value)

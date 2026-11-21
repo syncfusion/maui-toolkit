@@ -38,6 +38,11 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 			_uiStringAttributes.Font = font;
 			//TODO: Calculate the size with embedded fonts.
 			CGSize sizeF = nsText.GetSizeUsingAttributes(_uiStringAttributes);
+			if (font == null)
+			{
+				return new Size(0,0);
+			}
+
 			font.Dispose();
 			nsText.Dispose();
 			return new Size(sizeF.Width, sizeF.Height - 5);
@@ -113,6 +118,11 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 				}
 
 				// Apply the FontAttributes to the UIFont instance
+				if (uiFont == null)
+				{
+					return _uiStringAttributes;
+				}
+
 				var fontDescriptor = uiFont.FontDescriptor;
 				if (textElement.FontAttributes.HasFlag(FontAttributes.Bold))
 				{
@@ -131,14 +141,24 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 			return _uiStringAttributes;
 		}
 
-		private static UIFont GetNativeFont(float size, FontAttributes attributes)
+		private static UIFont? GetNativeFont(float size, FontAttributes attributes)
 		{
 			bool bold = (attributes & FontAttributes.Bold) != 0;
 			bool italic = (attributes & FontAttributes.Italic) != 0;
 			if (bold && italic)
 			{
 				UIFont? defaultFont = UIFont.SystemFontOfSize(size);
+				if (defaultFont == null)
+				{
+					return UIFont.SystemFontOfSize(14);
+				}
+
 				UIFontDescriptor? descriptor = defaultFont.FontDescriptor.CreateWithTraits(UIFontDescriptorSymbolicTraits.Bold | UIFontDescriptorSymbolicTraits.Italic);
+				if (descriptor == null)
+				{
+					return defaultFont;
+				}
+
 				return UIFont.FromDescriptor(descriptor, 0);
 			}
 

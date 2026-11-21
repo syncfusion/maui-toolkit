@@ -85,6 +85,11 @@ namespace Syncfusion.Maui.Toolkit.Popup
 					// Maui:990575-TODO : Shell page size changed event not triggered after .NET 10 update, so wire the size changed event for the current page of the Shell page.
 					shellPage.CurrentPage.SizeChanged += OnMainPageSizeChanged;
 				}
+				else if (windowPage is FlyoutPage flyoutPage && flyoutPage.Detail != null)
+				{
+					// 1059467 - Listen on Detail SizeChanged so orientation / display changes properly reposition the popup.
+					flyoutPage.Detail.SizeChanged += this.OnMainPageSizeChanged;
+				}
 				else
 				{
 					windowPage.SizeChanged += this.OnMainPageSizeChanged;
@@ -117,6 +122,11 @@ namespace Syncfusion.Maui.Toolkit.Popup
 				{
 					// Maui:990575-TODO : Shell page size changed event not triggered after .NET 10 update, so unwire the size changed event for the current page of the Shell page.
 					shellPage.CurrentPage.SizeChanged -= this.OnMainPageSizeChanged;
+				}
+				else if (windowPage is FlyoutPage flyoutPage && flyoutPage.Detail != null)
+				{
+					// Bug:1059467 - Mirror the unwire for the Detail page.
+					flyoutPage.Detail.SizeChanged -= this.OnMainPageSizeChanged;
 				}
 				else
 				{

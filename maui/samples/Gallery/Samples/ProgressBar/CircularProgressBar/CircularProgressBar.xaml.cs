@@ -118,7 +118,7 @@ public partial class CircularProgressBar : SampleView
     /// Toggles the <see cref="isRunning"/> flag and updates the play button's text.
     /// If the video player is running, it restarts the progress updates.
     /// </remarks>
-    private void PlayButton_Clicked(object sender, EventArgs e)
+    private void PlayButton_Clicked(object? sender, EventArgs e)
     {
         isRunning = !isRunning;
         this.PlayButton.Text = isRunning ? "\ue769" : "\ue737";
@@ -141,7 +141,7 @@ public partial class CircularProgressBar : SampleView
     /// This method toggles the progress of the TrackOutsideProgressBar between 0 and 100.
     /// When the progress reaches 100, it resets to 0. When it reaches 0, it sets the progress back to 100.
     /// </remarks>
-    private void TrackOutsideProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void TrackOutsideProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -168,7 +168,7 @@ public partial class CircularProgressBar : SampleView
     /// This method toggles the progress of the FilledIndicatorProgressBar between 0 and 100.
     /// When the progress reaches 100, it resets to 0. When it reaches 0, it sets the progress back to 100.
     /// </remarks>
-    private void FilledIndicatorProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void FilledIndicatorProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -195,7 +195,7 @@ public partial class CircularProgressBar : SampleView
     /// This method toggles the progress of the ThinTrackStyle progress bar between 0 and 100.
     /// When the progress reaches 100, it resets to 0. When it reaches 0, it sets the progress back to 100.
     /// </remarks>
-    private void ThinTrackStyle_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void ThinTrackStyle_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -257,7 +257,7 @@ public partial class CircularProgressBar : SampleView
     /// This method toggles the progress of the SegmentedCircularProgressBar between 0 and 75.
     /// When the progress reaches 75, it resets to 0. When it reaches 0, it sets the progress back to 75.
     /// </remarks>
-    private void SegmentedCircularProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void SegmentedCircularProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -280,7 +280,7 @@ public partial class CircularProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the SegmentedPaddingCircularProgressBar.</param>
     /// <param name="e">An instance of <see cref="ProgressValueEventArgs"/> containing the progress value.</param>
-    private void SegmentedPaddingCircularProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void SegmentedPaddingCircularProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -338,7 +338,7 @@ public partial class CircularProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the AngleCustomizationProgressBar.</param>
     /// <param name="e">An instance of <see cref="ProgressValueEventArgs"/> containing the progress value.</param>
-    private void AngleCustomizationProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void AngleCustomizationProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -365,7 +365,7 @@ public partial class CircularProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the RangeColorProgressBar.</param>
     /// <param name="e">An instance of <see cref="ProgressValueEventArgs"/> containing the progress value.</param>
-    private void RangeColorProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void RangeColorProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {

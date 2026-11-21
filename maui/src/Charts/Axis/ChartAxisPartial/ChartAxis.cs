@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Syncfusion.Maui.Toolkit.Themes;
 using Syncfusion.Maui.Toolkit.Graphics.Internals;
+using Syncfusion.Maui.Toolkit.Themes;
 
 namespace Syncfusion.Maui.Toolkit.Charts
 {
@@ -434,14 +434,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		/// <remarks>
 		/// Defines the range styles for customizing the axis.
 		/// </remarks>
-		internal static readonly BindableProperty RangeStylesProperty = BindableProperty.Create(
+		public static readonly BindableProperty RangeStylesProperty = BindableProperty.Create(
 			nameof(RangeStyles),
 			typeof(ChartAxisRangeStyleCollection),
 			typeof(ChartAxis),
 			null,
 			BindingMode.Default,
 			null,
-			OnRangeStylesPropertyChanged);
+			OnRangeStylesPropertyChanged,
+			defaultValueCreator: _ => new ChartAxisRangeStyleCollection());
 
 		/// <summary>
 		/// Identifies the <see cref="TickPosition"/> bindable property.
@@ -1940,10 +1941,66 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		//Todo: Need to provide support for next release.
 
 		/// <summary>
-		/// Gets or sets the collection of the ChartAxisRangeStyle to customize the axis GridLine, TickLine and LabelStyle for specific range. 
+		/// Gets or sets the collection of range styles used to customize the grid lines, tick lines and labels of the axis for a specific range. 
 		/// </summary>
 		/// <value>This property takes the <see cref="ChartAxisRangeStyleCollection"/> as its value.</value>
-		internal ChartAxisRangeStyleCollection RangeStyles
+		/// <remarks>
+		/// <para>To customize axis elements within a specific range, create an instance of the <see cref="ChartAxisRangeStyle"/> class, set its <see cref="ChartAxisRangeStyle.Start"/> and <see cref="ChartAxisRangeStyle.End"/> values, customize the style properties and add it to the <see cref="RangeStyles"/> collection.</para>
+		/// <para>Elements that fall within the specified range use the range styles; elements outside the range retain the default axis style.</para>
+		/// </remarks>
+		/// <example>
+		/// # [MainPage.xaml](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <chart:SfCartesianChart>
+		///  
+		///     <chart:SfCartesianChart.XAxes>
+		///         <chart:NumericalAxis>
+		///             <chart:NumericalAxis.RangeStyles>
+		///                 <chart:ChartAxisRangeStyleCollection>
+		///                     <chart:ChartAxisRangeStyle Start="15" End="21">
+		///                         <chart:ChartAxisRangeStyle.MajorGridLineStyle>
+		///                             <chart:ChartLineStyle Stroke="#096EBF" StrokeWidth="3"/>
+		///                         </chart:ChartAxisRangeStyle.MajorGridLineStyle>
+		///                         <chart:ChartAxisRangeStyle.LabelStyle>
+		///                             <chart:ChartAxisLabelStyle TextColor="#096EBF" FontAttributes="Bold"/>
+		///                         </chart:ChartAxisRangeStyle.LabelStyle>
+		///                     </chart:ChartAxisRangeStyle>
+		///                 </chart:ChartAxisRangeStyleCollection>
+		///             </chart:NumericalAxis.RangeStyles>
+		///         </chart:NumericalAxis>
+		///     </chart:SfCartesianChart.XAxes>
+		/// 
+		/// </chart:SfCartesianChart>
+		/// ]]>
+		/// </code>
+		/// # [MainPage.xaml.cs](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// SfCartesianChart chart = new SfCartesianChart();
+		/// 
+		/// NumericalAxis xAxis = new NumericalAxis();
+		/// ChartAxisRangeStyle rangeStyle = new ChartAxisRangeStyle()
+		/// {
+		///     Start = 15,
+		///     End = 21,
+		///     MajorGridLineStyle = new ChartLineStyle()
+		///     {
+		///         Stroke = Color.FromArgb("#096EBF"),
+		///         StrokeWidth = 3
+		///     },
+		///     LabelStyle = new ChartAxisLabelStyle()
+		///     {
+		///         TextColor = Color.FromArgb("#096EBF"),
+		///         FontAttributes = FontAttributes.Bold
+		///     }
+		/// };
+		/// xAxis.RangeStyles.Add(rangeStyle);
+		/// chart.XAxes.Add(xAxis);
+		/// 
+		/// ]]>
+		/// </code>
+		/// *** 
+		/// </example>
+		public ChartAxisRangeStyleCollection RangeStyles
 		{
 			get { return (ChartAxisRangeStyleCollection)GetValue(RangeStylesProperty); }
 			set { SetValue(RangeStylesProperty, value); }
@@ -1971,6 +2028,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			get { return (Brush)GetValue(MajorGridLineStrokeProperty); }
 			set { SetValue(MajorGridLineStrokeProperty, value); }
+		}
+
+		internal static readonly BindableProperty MajorTickLineStrokeProperty = BindableProperty.Create(nameof(MajorTickLineStroke), typeof(Brush), typeof(ChartAxis), new SolidColorBrush(Color.FromArgb("#CAC4D0")), BindingMode.Default, null, null);
+
+		internal Brush MajorTickLineStroke
+		{
+			get { return (Brush)GetValue(MajorTickLineStrokeProperty); }
+			set { SetValue(MajorTickLineStrokeProperty, value); }
+		}
+
+		internal static readonly BindableProperty AxisLineStrokeProperty = BindableProperty.Create(nameof(AxisLineStroke), typeof(Brush), typeof(ChartAxis), new SolidColorBrush(Color.FromArgb("#CAC4D0")), BindingMode.Default, null, null);
+
+		internal Brush AxisLineStroke
+		{
+			get { return (Brush)GetValue(AxisLineStrokeProperty); }
+			set { SetValue(AxisLineStrokeProperty, value); }
 		}
 
 		#region is Polar
@@ -2189,6 +2262,131 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			return ShowMajorGridLines && MajorGridLineStyle.CanDraw();
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether any range style is defined for this axis.
+		/// </summary>
+		internal bool HasRangeStyles
+		{
+			get
+			{
+				var rangeStyles = RangeStyles;
+				return rangeStyles != null && rangeStyles.Count > 0;
+			}
+		}
+
+		/// <summary>
+		/// Returns the first range style whose range contains the given axis value, or null when no range matches.
+		/// </summary>
+		/// <param name="position">The axis value to test.</param>
+		/// <remarks>The value is compared in axis value space; DateTime ranges are converted through their OLE date equivalent.</remarks>
+		internal ChartAxisRangeStyle? GetRangeStyle(double position)
+		{
+			if (!HasRangeStyles || double.IsNaN(position))
+			{
+				return null;
+			}
+
+			foreach (var rangeStyle in RangeStyles!)
+			{
+				if (rangeStyle != null && rangeStyle.IsValueInRange(position))
+				{
+					return rangeStyle;
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// Returns the last matching range's <see cref="ChartAxisRangeStyle.MajorGridLineStyle"/>, or null when no matching
+		/// range explicitly sets it. When multiple overlapping ranges contain the value, the last one that sets the
+		/// style wins, mirroring WPF range style semantics.
+		/// </summary>
+		/// <param name="position">The axis value to test.</param>
+		internal ChartLineStyle? GetMajorGridLineStyleInRange(double position)
+		{
+			return GetStyleInRange(position, rangeStyle => rangeStyle.MajorGridLineStyle);
+		}
+
+		/// <summary>
+		/// Returns the last matching range's <see cref="ChartAxisRangeStyle.MinorGridLineStyle"/>, or null when no matching
+		/// range explicitly sets it. When multiple overlapping ranges contain the value, the last one that sets the
+		/// style wins, mirroring WPF range style semantics.
+		/// </summary>
+		/// <param name="position">The axis value to test.</param>
+		internal ChartLineStyle? GetMinorGridLineStyleInRange(double position)
+		{
+			return GetStyleInRange(position, rangeStyle => rangeStyle.MinorGridLineStyle);
+		}
+
+		/// <summary>
+		/// Returns the last matching range's <see cref="ChartAxisRangeStyle.MajorTickStyle"/>, or null when no matching
+		/// range explicitly sets it. When multiple overlapping ranges contain the value, the last one that sets the
+		/// style wins, mirroring WPF range style semantics.
+		/// </summary>
+		/// <param name="position">The axis value to test.</param>
+		internal ChartAxisTickStyle? GetMajorTickStyleInRange(double position)
+		{
+			return GetStyleInRange(position, rangeStyle => rangeStyle.MajorTickStyle);
+		}
+
+		/// <summary>
+		/// Returns the last matching range's <see cref="ChartAxisRangeStyle.MinorTickStyle"/>, or null when no matching
+		/// range explicitly sets it. When multiple overlapping ranges contain the value, the last one that sets the
+		/// style wins, mirroring WPF range style semantics.
+		/// </summary>
+		/// <param name="position">The axis value to test.</param>
+		internal ChartAxisTickStyle? GetMinorTickStyleInRange(double position)
+		{
+			return GetStyleInRange(position, rangeStyle => rangeStyle.MinorTickStyle);
+		}
+
+		/// <summary>
+		/// Returns the last matching range's <see cref="ChartAxisRangeStyle.LabelStyle"/>, or null when no matching
+		/// range explicitly sets it. When multiple overlapping ranges contain the value, the last one that sets the
+		/// style wins, mirroring WPF range style semantics.
+		/// </summary>
+		/// <param name="position">The axis value to test.</param>
+		internal ChartAxisLabelStyle? GetLabelStyleInRange(double position)
+		{
+			return GetStyleInRange(position, rangeStyle => rangeStyle.LabelStyle);
+		}
+
+		/// <summary>
+		/// Resolves a per-element style across all ranges containing the value. Because the collection is scanned in
+		/// order and only non-null candidates overwrite the result, later ranges that contain the value win when several
+		/// overlapping ranges set the same element style, and ranges that leave the style unset do not block styles set
+		/// by other overlapping ranges.
+		/// </summary>
+		/// <typeparam name="T">The style type (grid line, tick or label style).</typeparam>
+		/// <param name="position">The axis value to test.</param>
+		/// <param name="styleSelector">Selects the element style from a range style.</param>
+		/// <returns>The winning style, or null when no containing range sets it.</returns>
+		private T? GetStyleInRange<T>(double position, Func<ChartAxisRangeStyle, T?> styleSelector) where T : class
+		{
+			if (!HasRangeStyles || double.IsNaN(position))
+			{
+				return null;
+			}
+
+			T? result = null;
+
+			foreach (var rangeStyle in RangeStyles!)
+			{
+				if (rangeStyle != null && rangeStyle.IsValueInRange(position))
+				{
+					var candidate = styleSelector(rangeStyle);
+
+					if (candidate != null)
+					{
+						result = candidate;
+					}
+				}
+			}
+
+			return result;
+		}
+
 		//Axes change on register series change. 
 		internal void AddRegisteredSeries(ChartSeries series)
 		{
@@ -2266,6 +2464,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				MajorTickStyle.Parent = null;
 			}
 
+			if (RangeStyles != null)
+			{
+				RangeStyles.RangeStyleChanged -= OnRangeStylesCollectionChanged;
+			}
+
 			if (ActualPlotBands != null)
 			{
 				foreach (var plotBand in ActualPlotBands)
@@ -2311,6 +2514,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				axis.OnPlotBandsPropertyChanged(oldValue as NumericalPlotBandCollection, newValue as NumericalPlotBandCollection);
 			}
+		}
+
+		/// <summary>
+		/// Handles add/remove/replace of range style items as well as property changes on any
+		/// individual range style, invalidating the axis layout so the new styles are rendered.
+		/// </summary>
+		internal void OnRangeStylesCollectionChanged(object? sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+		{
+			UpdateLayout();
 		}
 
 		/// <summary>
@@ -2453,6 +2665,39 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					SetInheritedBindingContext(plotBand, BindingContext);
 				}
 			}
+
+			if (RangeStyles != null)
+			{
+				foreach (var rangeStyle in RangeStyles)
+				{
+					SetInheritedBindingContext(rangeStyle, BindingContext);
+
+					if (rangeStyle.MajorGridLineStyle != null)
+					{
+						SetInheritedBindingContext(rangeStyle.MajorGridLineStyle, BindingContext);
+					}
+
+					if (rangeStyle.MinorGridLineStyle != null)
+					{
+						SetInheritedBindingContext(rangeStyle.MinorGridLineStyle, BindingContext);
+					}
+
+					if (rangeStyle.MajorTickStyle != null)
+					{
+						SetInheritedBindingContext(rangeStyle.MajorTickStyle, BindingContext);
+					}
+
+					if (rangeStyle.MinorTickStyle != null)
+					{
+						SetInheritedBindingContext(rangeStyle.MinorTickStyle, BindingContext);
+					}
+
+					if (rangeStyle.LabelStyle != null)
+					{
+						SetInheritedBindingContext(rangeStyle.LabelStyle, BindingContext);
+					}
+				}
+			}
 		}
 
 		/// <summary>
@@ -2512,13 +2757,24 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			SetDynamicResource(TrackballAxisBackgroundProperty, "SfCartesianChartTrackballAxisLabelBackground");
 			SetDynamicResource(TrackballAxisFontSizeProperty, "SfCartesianChartTrackballAxisLabelTextFontSize");
 			SetDynamicResource(MajorGridLineStrokeProperty, "SfCartesianChartMajorGridLineStroke");
+			SetDynamicResource(MajorTickLineStrokeProperty, "SfCartesianChartMajorTickLineStroke");
+			SetDynamicResource(AxisLineStrokeProperty, "SfCartesianChartAxisLineStroke");
 			//Todo: Remove this code, After ClipsToBounds works in iOS and Windows.
 			EdgeLabelsDrawingMode = EdgeLabelsDrawingMode.Shift;
-			AxisLineStyle = new ChartLineStyle();
+			AxisLineStyle = new ChartLineStyle() { Stroke = AxisLineStroke };
 			LabelStyle = new ChartAxisLabelStyle();
 			MajorGridLineStyle = new ChartLineStyle() { Stroke = MajorGridLineStroke };
-			MajorTickStyle = new ChartAxisTickStyle();
+			MajorTickStyle = new ChartAxisTickStyle() { Stroke = MajorTickLineStroke };
 			TrackballLabelStyle = new ChartLabelStyle() { FontSize = TrackballAxisFontSize, Background = TrackballAxisBackground };
+
+			// The RangeStyles collection follows the same pattern: created via defaultValueCreator,
+			// so the property-change callback never fires for the default instance. Subscribe here so
+			// items added via XAML (into the default collection) trigger layout updates.
+			var defaultRangeStyles = RangeStyles;
+			if (defaultRangeStyles != null)
+			{
+				defaultRangeStyles.RangeStyleChanged += OnRangeStylesCollectionChanged;
+			}
 		}
 
 		void UpdateRenderers()
@@ -2704,7 +2960,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (newValue is ChartAxisTickStyle tickStyle)
 				{
 					SetInheritedBindingContext(tickStyle, axis.BindingContext);
-					axis.MajorTickStyle.InitializeDynamicResource("MajorTickStyle");
 					tickStyle.PropertyChanged += axis.Style_PropertyChanged;
 				}
 
@@ -2812,7 +3067,6 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				if (newValue is ChartLineStyle lineStyle)
 				{
 					SetInheritedBindingContext(lineStyle, axis.BindingContext);
-					lineStyle.SetDynamicResource(ChartLineStyle.StrokeProperty, "SfCartesianChartAxisLineStroke");
 					lineStyle.PropertyChanged += axis.Style_PropertyChanged;
 				}
 
@@ -2823,17 +3077,22 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		static void OnRangeStylesPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 		{
-			if (oldValue != null)
+			if (bindable is not ChartAxis axis)
 			{
-				//TODO: Unhook collection changed
+				return;
 			}
 
-			if (newValue != null)
+			if (oldValue is ChartAxisRangeStyleCollection oldCollection)
 			{
-				//TODO: Hook collection changed.
+				oldCollection.RangeStyleChanged -= axis.OnRangeStylesCollectionChanged;
 			}
 
-			(bindable as ChartAxis)?.UpdateLayout();
+			if (newValue is ChartAxisRangeStyleCollection newCollection)
+			{
+				newCollection.RangeStyleChanged += axis.OnRangeStylesCollectionChanged;
+			}
+
+			axis.UpdateLayout();
 		}
 
 		static void OnLabelStyleChanged(BindableObject bindable, object oldValue, object newValue)

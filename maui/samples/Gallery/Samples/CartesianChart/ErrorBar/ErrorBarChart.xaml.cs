@@ -43,9 +43,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void typePicker_SelectedIndexChanged(object sender, EventArgs e)
+		private void typePicker_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var picker = (MAUIPicker)sender;
+			if (sender is not MAUIPicker picker)
+			{
+				return;
+			}
+
 			int selectedIndex = picker.SelectedIndex;
 			if (selectedIndex == 0)
 			{
@@ -65,9 +69,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void modePicker_SelectedIndexChanged(object sender, EventArgs e)
+		private void modePicker_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var picker = (MAUIPicker)sender;
+			if (sender is not MAUIPicker picker)
+			{
+				return;
+			}
+
 			int selectedIndex = picker.SelectedIndex;
 			if (selectedIndex == 0)
 			{
@@ -91,9 +99,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void directionPicker_SelectedIndexChanged(object sender, EventArgs e)
+		private void directionPicker_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var picker = (MAUIPicker)sender;
+			if (sender is not MAUIPicker picker)
+			{
+				return;
+			}
+
 			int selectedIndex = picker.SelectedIndex;
 			if (selectedIndex == 0)
 			{
@@ -143,9 +155,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-	    private void stepper_ValueChanged(object sender, ValueChangedEventArgs e)
+	    private void stepper_ValueChanged(object? sender, ValueChangedEventArgs e)
 		{
-			var stepper = (Stepper)sender;
+			if (sender is not Stepper stepper)
+			{
+				return;
+			}
+
 			var selectedValue = stepper.StyleId;
 			switch (selectedValue)
 			{

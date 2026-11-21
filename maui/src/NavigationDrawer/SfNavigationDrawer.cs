@@ -17,15 +17,32 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 	{
 		#region Fields
 
-		SfGrid? _greyOverlayGrid;
+		// Additional fields for swipe state
 
-		bool _isDrawerOpen;
+        internal bool _isPrimaryDrawerSwiping;
+
+        internal bool _isSecondaryDrawerSwiping;
+
+        // Primary drawer fields
+        SfGrid? _greyOverlayGrid;
+
+        SfGrid? _drawerLayout;
+        
+        bool _isDrawerOpen;
+
+        // Secondary drawer fields
+
+        SfGrid? _secondaryDrawerLayout;
+
+        bool _isSecondaryDrawerOpen;
+
+		View? _oldSecondaryHeaderView;
+
+        View? _oldSecondaryFooterView;
 
 		double _screenWidth;
 
 		double _screenHeight;
-
-		SfGrid? _drawerLayout;
 
 		double _touchRightThreshold;
 
@@ -59,9 +76,13 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 		readonly ToggledEventArgs _toggledEventArgs = new();
 
-		readonly CancelEventArgs _cancelOpenEventArgs = new();
+		readonly DrawerCancelEventArgs _cancelOpenEventArgs = new DrawerCancelEventArgs(true);
 
-		readonly CancelEventArgs _cancelCloseEventArgs = new();
+        readonly DrawerCancelEventArgs _cancelCloseEventArgs = new DrawerCancelEventArgs(true);
+
+        readonly DrawerCancelEventArgs _secondaryCancelOpenEventArgs = new DrawerCancelEventArgs(false);
+
+        readonly DrawerCancelEventArgs _secondaryCancelCloseEventArgs = new DrawerCancelEventArgs(false);
 
 		DateTime _startTime;
 
@@ -117,6 +138,22 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				null,
 				propertyChanged: OnDrawerSettingsChanged);
 
+		/// <summary>
+        /// Identifies the <see cref="SecondaryDrawerSettings"/> bindable property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="SecondaryDrawerSettings"/> bindable property.
+        /// </value>
+        public static readonly BindableProperty SecondaryDrawerSettingsProperty = 
+			BindableProperty.Create
+				(nameof(SecondaryDrawerSettings), 
+				typeof(DrawerSettings), 
+				typeof(SfNavigationDrawer), 
+				new DrawerSettings(), 
+				BindingMode.Default, 
+				null, 
+				propertyChanged: OnSecondaryDrawerSettingsChanged);		
+
 #if !WINDOWS
 		/// <summary>
 		/// Identifies the <see cref="FlowDirection"/> bindable property.
@@ -131,19 +168,6 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				null,
 				propertyChanged: OnFlowDirectionChanged);
 #endif
-
-		/// <summary>
-		/// Identifies the <see cref="IsOpen"/> bindable property.
-		/// </summary>
-		public static readonly BindableProperty IsOpenProperty =
-			BindableProperty.Create(
-				nameof(IsOpen),
-				typeof(bool),
-				typeof(SfNavigationDrawer),
-				false,
-				BindingMode.TwoWay,
-				null,
-				propertyChanged: OnIsOpenChanged);
 
 		#endregion
 
@@ -185,10 +209,12 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		public SfNavigationDrawer()
 		{
 			ThemeElement.InitializeThemeResources(this, "SfNavigationDrawerTheme");
-			InitializeDrawer();
+			InitializeDrawer(true);
 			InitializeGreyOverlayGrid();
+			InitializeDrawer(false);
 			UpdateAllChild();
 			PositionUpdate();
+			SecondaryPositionUpdate();
 			this.AddTouchListener(this);
 #if IOS || MACCATALYST
 			this.AddGestureListener(this);
@@ -301,31 +327,15 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			set { SetValue(DrawerSettingsProperty, value); }
 		}
 
-		/// <summary>
-		/// Gets or sets a value indicating whether to open or close the drawer.
-		/// </summary>
-		/// <value>
-		/// It accepts <see cref="IsOpen"/> values and the default value is false.
-		/// </value>
-		/// <example>
-		/// The below examples shows, how to use the <see cref="IsOpen"/> property in the <see cref="SfNavigationDrawer"/>.
-		/// # [XAML](#tab/tabid-5)
-		/// <code Lang="XAML"><![CDATA[
-		/// <navigationdrawer:SfNavigationDrawer IsOpen = "True" />
-		/// ]]></code>
-		/// # [C#](#tab/tabid-6)
-		/// <code Lang="C#"><![CDATA[
-		/// var navigationDrawer = new SfNavigationDrawer
-		/// {
-		///     IsOpen = true
-		/// };
-		/// ]]></code>
-		/// </example>
-		public bool IsOpen
-		{
-			get { return (bool)GetValue(IsOpenProperty); }
-			set { SetValue(IsOpenProperty, value); }
-		}
+        /// <summary>
+        /// Gets or sets the SecondaryDrawerSettings, which is a container for various customization options for the secondary drawer, allowing its appearance to be customized.
+        /// </summary>
+        public DrawerSettings SecondaryDrawerSettings
+        {
+            get { return (DrawerSettings)GetValue(SecondaryDrawerSettingsProperty); }
+            set { SetValue(SecondaryDrawerSettingsProperty, value); }
+        }
+
 
 		// Workaround for RTL (Right-to-Left) layout issue - The coordinate points are not calculated correctly in RTL layouts, 
 		// causing incorrect positioning. This flag helps to apply RTL-specific adjustments.
@@ -397,6 +407,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					_screenWidth = value;
 #if !ANDROID
 					PositionUpdate();
+					SecondaryPositionUpdate();
 #endif
 				}
 			}
@@ -418,6 +429,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					_screenHeight = value;
 					PositionUpdate();
+					SecondaryPositionUpdate();
 				}
 			}
 		}
@@ -425,6 +437,22 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		#endregion
 
 		#region Public Methods
+
+        /// <summary>
+        /// Methods to open or close the drawer based on the existing state in the SfNavigationDrawer.
+        /// </summary>
+        public void ToggleDrawer()
+        {
+            ToggleDrawer(true);
+        }
+
+        /// <summary>
+        /// Methods to open or close the secondary drawer based on the existing state in the SfNavigationDrawer.
+        /// </summary>
+        public void ToggleSecondaryDrawer()
+        {
+            ToggleDrawer(false);
+        }
 
 		/// <summary>
 		/// Methods to open or close the drawer based on the existing state in the SfNavigationDrawer.
@@ -440,10 +468,35 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// }
 		/// ]]></code>
 		/// </example>
-		public void ToggleDrawer()
+		public void ToggleDrawer(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null)
+			 DrawerSettings? settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+            SfGrid? navigationDrawerLayout = isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+            bool isDrawerOpen = isPrimaryDrawer ? _isDrawerOpen : _isSecondaryDrawerOpen;
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null )
 			{
+				if ((settings.Position == Position.Top || settings.Position == Position.Bottom) && settings.DrawerHeight <= 0)
+				{
+					if (isPrimaryDrawer ? !_isSecondaryDrawerOpen : !_isDrawerOpen)
+					{
+						SetVisibility(false, isPrimaryDrawer);
+					}
+
+					return;
+				}
+
+				// Mutual exclusivity: If secondary drawer is open, close it first
+                if (isPrimaryDrawer && SecondaryDrawerSettings != null && _isSecondaryDrawerOpen)
+                {
+                    SecondaryDrawerSettings.IsOpen = false;
+                }
+                // Mutual exclusivity: If primary drawer is open, close it first
+                else if (!isPrimaryDrawer && DrawerSettings != null && _isDrawerOpen)
+                {
+                    DrawerSettings.IsOpen = false;
+                }
+
 				if (_greyOverlayGrid.AnimationIsRunning("greyOverlayAnimation"))
 				{
 					_greyOverlayGrid.AbortAnimation("greyOverlayAnimation");
@@ -470,22 +523,27 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				_actionFirstMoveOpen = true;
 				_actionFirstMoveClose = true;
 
-				switch (DrawerSettings.Position)
+				if (!isPrimaryDrawer)
+                {
+                    SecondaryPositionUpdate();
+                }
+
+				switch (settings.Position)
 				{
 					case Position.Left:
-						HandleLeftDrawer();
+						HandleLeftDrawer(isPrimaryDrawer);
 						break;
 
 					case Position.Right:
-						HandleRightDrawer();
+						HandleRightDrawer(isPrimaryDrawer);
 						break;
 
 					case Position.Top:
-						HandleTopDrawer();
+						HandleTopDrawer(isPrimaryDrawer);
 						break;
 
 					case Position.Bottom:
-						HandleBottomDrawer();
+						HandleBottomDrawer(isPrimaryDrawer);
 						break;
 				}
 			}
@@ -499,7 +557,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method represents the action taken when the drawer is closed.
 		/// </summary>
 		/// <param name="args">The closed argument.</param>
-		internal virtual void OnDrawerClosed(EventArgs args)
+		internal virtual void OnDrawerClosed(DrawerEventArgs args)
 		{
 			DrawerClosed?.Invoke(this, args);
 		}
@@ -508,7 +566,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method represents the action taken when the drawer is opened.
 		/// </summary>
 		/// <param name="args">The opened argument.</param>
-		internal virtual void OnDrawerOpened(EventArgs args)
+		internal virtual void OnDrawerOpened(DrawerEventArgs args)
 		{
 			DrawerOpened?.Invoke(this, args);
 		}
@@ -526,7 +584,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method represents the action taken when the drawer is opening.
 		/// </summary>
 		/// <param name="args">The opening argument.</param>
-		internal virtual void OnDrawerOpening(CancelEventArgs args)
+		internal virtual void OnDrawerOpening(DrawerCancelEventArgs args)
 		{
 			DrawerOpening?.Invoke(this, args);
 		}
@@ -535,7 +593,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method represents the action taken when the drawer is closing.
 		/// </summary>
 		/// <param name="args">the closing operation.</param>
-		internal virtual void OnDrawerClosing(CancelEventArgs args)
+		internal virtual void OnDrawerClosing(DrawerCancelEventArgs args)
 		{
 			DrawerClosing?.Invoke(this, args);
 		}
@@ -544,91 +602,95 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 		#region Private Methods
 
-		void HandleLeftDrawer()
+		void HandleLeftDrawer(bool isPrimaryDrawer)
 		{
-			if (_isDrawerOpen)
+			bool isDrawerOpen = isPrimaryDrawer ? _isDrawerOpen : _isSecondaryDrawerOpen;
+			if (isDrawerOpen)
 			{
 #if !WINDOWS
 				if (_isRTL)
 				{
-					DrawerRightOut();
+					DrawerRightOut(isPrimaryDrawer);
 				}
 				else
 #endif
 				{
-					DrawerLeftOut();
+					DrawerLeftOut(isPrimaryDrawer);
 				}
 			}
 			else
 			{
-				UpdateGridOverlayTranslate();
+				UpdateGridOverlayTranslate(isPrimaryDrawer);
 #if !WINDOWS
 				if (_isRTL)
 				{
-					DrawerRightIn();
+					DrawerRightIn(isPrimaryDrawer);
 				}
 				else
 #endif
 				{
-					DrawerLeftIn();
+					DrawerLeftIn(isPrimaryDrawer);
 				}
 			}
 		}
 
-		void HandleRightDrawer()
+		void HandleRightDrawer(bool isPrimaryDrawer)
 		{
-			if (_isDrawerOpen)
+			bool isDrawerOpen = isPrimaryDrawer ? _isDrawerOpen : _isSecondaryDrawerOpen;
+			if (isDrawerOpen)
 			{
 #if !WINDOWS
 				if (_isRTL)
 				{
-					DrawerLeftOut();
+					DrawerLeftOut(isPrimaryDrawer);
 				}
 				else
 #endif
 				{
-					DrawerRightOut();
+					DrawerRightOut(isPrimaryDrawer);
 				}
 			}
 			else
 			{
-				UpdateGridOverlayTranslate();
+				UpdateGridOverlayTranslate(isPrimaryDrawer);
 #if !WINDOWS
 				if (_isRTL)
 				{
-					DrawerLeftIn();
+					DrawerLeftIn(isPrimaryDrawer);
 				}
 				else
 #endif
 				{
-					DrawerRightIn();
+					DrawerRightIn(isPrimaryDrawer);
 				}
 			}
 		}
 
-		void HandleTopDrawer()
+		void HandleTopDrawer(bool isPrimaryDrawer)
 		{
-			if (_isDrawerOpen)
+			bool isDrawerOpen = isPrimaryDrawer ? _isDrawerOpen : _isSecondaryDrawerOpen;
+			if (isDrawerOpen)
 			{
-				DrawerTopOut();
+				DrawerTopOut(isPrimaryDrawer);
 			}
 			else
 			{
-				UpdateGridOverlayTranslate();
-				DrawerTopIn();
+				UpdateGridOverlayTranslate(isPrimaryDrawer);
+				DrawerTopIn(isPrimaryDrawer);
 			}
 		}
 
-		void HandleBottomDrawer()
+		void HandleBottomDrawer(bool isPrimaryDrawer)
 		{
-			if (_isDrawerOpen)
+			bool isDrawerOpen = isPrimaryDrawer ? _isDrawerOpen : _isSecondaryDrawerOpen;
+			if (isDrawerOpen)
 			{
-				DrawerBottomOut();
+				DrawerBottomOut(isPrimaryDrawer);
 			}
 			else
 			{
-				UpdateGridOverlayTranslate();
-				DrawerBottomIn();
+				UpdateGridOverlayTranslate(isPrimaryDrawer);
+				DrawerBottomIn(isPrimaryDrawer);
 			}
 		}
 
@@ -639,24 +701,38 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		{
 #if !WINDOWS
 			UpdateDrawerFlowDirection();
+            UpdateSecondaryDrawerFlowDirection();
 #endif
-			if (DrawerSettings.Transition == Transition.Reveal)
-			{
-				AddChild(_drawerLayout);
-				AddChild(ContentView);
-				AddChild(_greyOverlayGrid);
-			}
-			else
-			{
-				AddChild(ContentView);
-				AddChild(_greyOverlayGrid);
-				AddChild(_drawerLayout);
-			}
+            var primaryTransition = DrawerSettings?.Transition ?? Transition.SlideOnTop;
+            var secondaryTransition = SecondaryDrawerSettings?.Transition ?? Transition.SlideOnTop;
+            bool isPrimaryViewsInitialized = DrawerSettings?.DrawerContentView != null || DrawerSettings?.DrawerHeaderView  != null || DrawerSettings?.DrawerFooterView  != null;
+            bool isSecondaryViewsInitialized = SecondaryDrawerSettings?.DrawerContentView != null || SecondaryDrawerSettings?.DrawerHeaderView  != null || SecondaryDrawerSettings?.DrawerFooterView  != null;
+            // 1) Any REVEAL drawer must be BELOW ContentView
+            if (primaryTransition == Transition.Reveal && _drawerLayout != null && isPrimaryViewsInitialized)
+                AddChild(_drawerLayout);
+
+            if (secondaryTransition == Transition.Reveal && _secondaryDrawerLayout != null && isSecondaryViewsInitialized)
+                AddChild(_secondaryDrawerLayout);
+
+            // 2) ContentView
+            if (ContentView != null)
+                AddChild(ContentView);
+
+            // 3) Overlays (above content to dim it)
+            if (_greyOverlayGrid != null && (isPrimaryViewsInitialized || isSecondaryViewsInitialized))
+                AddChild(_greyOverlayGrid);
+
+            // 4) Any NON-REVEAL drawer (SlideOnTop / Push) must be ABOVE overlays
+            if (primaryTransition != Transition.Reveal && _drawerLayout != null && isPrimaryViewsInitialized)
+                AddChild(_drawerLayout);
+
+            if (secondaryTransition != Transition.Reveal && _secondaryDrawerLayout != null && isSecondaryViewsInitialized)
+                AddChild(_secondaryDrawerLayout);
 		}
 
 		void AddChild(View? child)
 		{
-			if (child != null)
+			if (child != null && Children.Contains(child) == false)
 			{
 				Children.Add(child);
 			}
@@ -665,20 +741,35 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// This method is used to initialize the drawer layout.
 		/// </summary>
-		void InitializeDrawer()
-		{
-			_drawerLayout = new SfGrid()
-			{
-				BackgroundColor = DrawerSettings.ContentBackground,
-				RowDefinitions =
-				{
-					new RowDefinition { Height = new GridLength(DrawerSettings.DrawerHeaderHeight) },
-					new RowDefinition(),
-					new RowDefinition { Height = new GridLength(DrawerSettings.DrawerFooterHeight) },
-				},
-				RowSpacing = 0,
-			};
-		}
+ 		void InitializeDrawer(bool isPrimaryDrawer)
+        {
+            DrawerSettings? settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+            SfGrid? navigationDrawerLayout = isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+
+            if (settings != null)
+            {
+                navigationDrawerLayout = new SfGrid()
+                {
+                    BackgroundColor = settings.ContentBackground,
+                    RowDefinitions =
+                    {
+                        new RowDefinition { Height = new GridLength(settings.DrawerHeaderHeight) },
+                        new RowDefinition(),
+                        new RowDefinition { Height = new GridLength(settings.DrawerFooterHeight) },
+                    },
+                    RowSpacing = 0,
+					IsClippedToBounds = true
+                };
+            }
+            if (isPrimaryDrawer)
+            {
+                _drawerLayout = navigationDrawerLayout;
+            }
+            else
+            {
+                _secondaryDrawerLayout = navigationDrawerLayout;
+            }
+        }
 
 		/// <summary>
 		/// This method is used to initialize the greyOverlayGrid.
@@ -717,6 +808,160 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			}
 		}
 
+        /// <summary>
+        /// Handles touch interaction for the secondary drawer.
+        /// </summary>
+        private void OnSecondaryHandleTouchInteraction(PointerActions action, Point point)
+        {
+            // If both drawers share the same position, primary has swipe priority for opening.
+            if (SecondaryDrawerSettings != null && DrawerSettings != null &&
+                !_isSecondaryDrawerOpen && action == PointerActions.Pressed &&
+                SecondaryDrawerSettings.Position == DrawerSettings.Position &&
+                (DrawerSettings.DrawerHeaderView !=null || DrawerSettings.DrawerContentView !=null || DrawerSettings.DrawerFooterView!=null))
+            {
+                return;
+            }
+
+            if (SecondaryDrawerSettings!=null && SecondaryDrawerSettings.EnableSwipeGesture)
+            {
+                switch (action)
+                {
+                    case PointerActions.Pressed:
+                        {
+                            _oldPoint = point;
+                            _initialTouchPoint = point;
+                            _startTime = DateTime.Now;
+                            _startPoint = point;
+
+                            if (SecondaryDrawerSettings.Position == Position.Left || SecondaryDrawerSettings.Position == Position.Right)
+                            {
+                                _remainDrawerWidth = _isSecondaryDrawerOpen ? 0 : -SecondaryDrawerSettings.DrawerWidth;
+
+                                switch (SecondaryDrawerSettings.Position)
+                                {
+                                    case Position.Left:
+#if !WINDOWS
+                                        if ((_initialTouchPoint.X <= SecondaryDrawerSettings.TouchThreshold && !_isSecondaryDrawerOpen && !_isRTL) || (_initialTouchPoint.X >= _touchRightThreshold && !_isSecondaryDrawerOpen && _isRTL) || _isSecondaryDrawerOpen)
+#else
+                                        if ((_initialTouchPoint.X <= SecondaryDrawerSettings.TouchThreshold && !_isSecondaryDrawerOpen)
+                                            || _isSecondaryDrawerOpen)
+#endif
+                                        {
+                                            FirstMoveActionStarted();
+                                        }
+                                        break;
+                                    case Position.Right:
+#if !WINDOWS
+                                        if ((_initialTouchPoint.X >= _touchRightThreshold && !_isSecondaryDrawerOpen && !_isRTL) || (_initialTouchPoint.X <= SecondaryDrawerSettings.TouchThreshold && !_isSecondaryDrawerOpen && _isRTL) || _isSecondaryDrawerOpen)
+#else
+                                        if ((_initialTouchPoint.X >= ScreenWidth - SecondaryDrawerSettings.TouchThreshold && !_isSecondaryDrawerOpen)
+                                            || _isSecondaryDrawerOpen)
+#endif
+                                        {
+                                            FirstMoveActionStarted();
+                                        }
+                                        break;
+                                }
+                            }
+                            else if (SecondaryDrawerSettings.Position == Position.Top || SecondaryDrawerSettings.Position == Position.Bottom)
+                            {
+                                _remainDrawerHeight = _isSecondaryDrawerOpen ? 0 : -SecondaryDrawerSettings.DrawerHeight;
+
+                                switch (SecondaryDrawerSettings.Position)
+                                {
+                                    case Position.Top:
+                                        if ((_initialTouchPoint.Y <= SecondaryDrawerSettings.TouchThreshold && !_isSecondaryDrawerOpen)
+                                            || _isSecondaryDrawerOpen)
+                                        {
+                                            FirstMoveActionStarted();
+                                        }
+                                        break;
+                                    case Position.Bottom:
+                                        if ((_initialTouchPoint.Y >= ScreenHeight - SecondaryDrawerSettings.TouchThreshold && !_isSecondaryDrawerOpen)
+                                            || _isSecondaryDrawerOpen)
+                                        {
+                                            FirstMoveActionStarted();
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
+                        }
+                    case PointerActions.Moved:
+                        {
+                            if (_isPressed && (point.X != _initialTouchPoint.X || point.Y != _initialTouchPoint.Y))
+                            {
+                                _isMoved = true;
+                                _newPoint = point;
+                                FindVelocity(point);
+                                if (SecondaryDrawerSettings.Position == Position.Left || SecondaryDrawerSettings.Position == Position.Right)
+                                {
+                                    TranslateDrawerXPosition(false);
+                                }
+                                else
+                                {
+                                    TranslateDrawerYPosition(false);
+                                }
+                                _oldPoint = _newPoint;
+                            }
+                            break;
+                        }
+                    case PointerActions.Released:
+                        {
+                            if (_isPressed && _isMoved)
+                            {
+                                CompletedSecondaryDrawerSwipe();
+                            }
+                            else if (_isPressed && _isSecondaryDrawerOpen)
+                            {
+#if !WINDOWS
+                                if (_isRTL)
+                                {
+                                    if ((_initialTouchPoint.X < ScreenWidth - SecondaryDrawerSettings.DrawerWidth && SecondaryDrawerSettings.Position == Position.Left)
+                                    || (_initialTouchPoint.X > SecondaryDrawerSettings.DrawerWidth && SecondaryDrawerSettings.Position == Position.Right)
+                                    || (_initialTouchPoint.Y > SecondaryDrawerSettings.DrawerHeight && SecondaryDrawerSettings.Position == Position.Top)
+                                    || (_initialTouchPoint.Y < ScreenHeight - SecondaryDrawerSettings.DrawerHeight && SecondaryDrawerSettings.Position == Position.Bottom))
+                                    {
+                                        ToggleSecondaryDrawer();
+                                    }
+                                }
+                                else
+#endif
+                                {
+                                    if ((_initialTouchPoint.X > SecondaryDrawerSettings.DrawerWidth && SecondaryDrawerSettings.Position == Position.Left)
+                                        || (_initialTouchPoint.X < ScreenWidth - SecondaryDrawerSettings.DrawerWidth && SecondaryDrawerSettings.Position == Position.Right)
+                                        || (_initialTouchPoint.Y > SecondaryDrawerSettings.DrawerHeight && SecondaryDrawerSettings.Position == Position.Top)
+                                        || (_initialTouchPoint.Y < ScreenHeight - SecondaryDrawerSettings.DrawerHeight && SecondaryDrawerSettings.Position == Position.Bottom))
+                                    {
+                                        ToggleSecondaryDrawer();
+                                    }
+                                }
+                            }
+                            _isPressed = false;
+                            _isMoved = false;
+                            break;
+                        }
+                    case PointerActions.Cancelled:
+                        break;
+                    case PointerActions.Entered:
+                        break;
+                }
+            }
+            else
+            {
+                if (action == PointerActions.Pressed && _isSecondaryDrawerOpen && SecondaryDrawerSettings != null)
+                {
+                    _initialTouchPoint = point;
+                    if ((_initialTouchPoint.X > SecondaryDrawerSettings.DrawerWidth && SecondaryDrawerSettings.Position == Position.Left)
+                        || (_initialTouchPoint.X < ScreenWidth - SecondaryDrawerSettings.DrawerWidth && SecondaryDrawerSettings.Position == Position.Right)
+                        || (_initialTouchPoint.Y > SecondaryDrawerSettings.DrawerHeight && SecondaryDrawerSettings.Position == Position.Top)
+                        || (_initialTouchPoint.Y < ScreenHeight - SecondaryDrawerSettings.DrawerHeight && SecondaryDrawerSettings.Position == Position.Bottom))
+                    {
+                        ToggleSecondaryDrawer();
+                    }
+                }
+            }
+        }
 		void HandleTouchWhenDrawerOpen(PointerActions action, Point point)
 		{
 			if (action == PointerActions.Pressed && _isDrawerOpen)
@@ -818,11 +1063,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 				if (DrawerSettings.Position == Position.Left || DrawerSettings.Position == Position.Right)
 				{
-					TranslateDrawerXPosition();
+					TranslateDrawerXPosition(true);
 				}
 				else
 				{
-					TranslateDrawerYPosition();
+					TranslateDrawerYPosition(true);
 				}
 
 				_oldPoint = _newPoint;
@@ -877,7 +1122,9 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			{
 				_isRTL = parentLayout.FlowDirection == FlowDirection.RightToLeft;
 				UpdateDrawerFlowDirection();
+				UpdateSecondaryDrawerFlowDirection();
 				PositionUpdate();
+				SecondaryPositionUpdate();
 			}
 
 			Unloaded += SfNavigationDrawer_Unloaded;
@@ -969,9 +1216,76 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					case "TouchThreshold":
 						UpdateTouchThreshold();
 						break;
+
+                    case "IsOpen":
+                        UpdateIsOpen();
+                        break;
 				}
 			}
 		}
+
+		void OnSecondaryDrawerSettings_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (SecondaryDrawerSettings != null)
+            {
+                switch (e.PropertyName)
+                {
+                    case "DrawerContentView":
+                        UpdateSecondaryDrawerContentView();
+                        break;
+
+                    case "DrawerHeaderView":
+                        UpdateSecondaryDrawerHeaderView();
+                        break;
+
+                    case "DrawerFooterView":
+                        UpdateSecondaryDrawerFooterView();
+                        break;
+
+                    case "ContentBackground":
+                        UpdateSecondaryContentBackground();
+                        break;
+
+                    case "DrawerHeaderHeight":
+                        UpdateSecondaryDrawerHeaderFooterSize();
+                        break;
+
+                    case "DrawerFooterHeight":
+                        UpdateSecondaryDrawerHeaderFooterSize();
+                        break;
+
+                    case "DrawerWidth":
+                        SecondaryDrawerSettings.UpdateDrawerWidth();
+                        UpdateSecondaryDrawerLayoutSize();
+                        break;
+
+                    case "DrawerHeight":
+                        SecondaryDrawerSettings.UpdateDrawerHeight();
+                        UpdateSecondaryDrawerLayoutSize();
+                        break;
+
+                    case "Duration":
+                        DurationPropertyUpdate(SecondaryDrawerSettings.Duration);
+                        break;
+
+                    case "Position":
+                        SecondaryPositionUpdate();
+                        break;
+
+                    case "Transition":
+                        UpdateSecondaryTransitionAnimation();
+                        break;
+
+                    case "TouchThreshold":
+                        UpdateSecondaryTouchThreshold();
+                        break;
+
+                    case "IsOpen":
+                        UpdateSecondaryIsOpen();
+                        break;
+                }
+            }
+        }
 
 		/// <summary>
 		/// This method is used assigns the values of drawer settings to the navigation drawer.
@@ -989,9 +1303,30 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				PositionUpdate();
 				UpdateContentBackground();
 				UpdateTransitionAnimation();
+                UpdateIsOpen();
+                UpdateAllChild();
 			}
 		}
 
+        /// <summary>
+        /// This method is used assigns the values of secondary drawer settings to the navigation drawer.
+        /// </summary>
+        void OnSecondaryDrawerSettingsChanged()
+        {
+            if (SecondaryDrawerSettings != null)
+            {
+                UpdateSecondaryDrawerContentView();
+                UpdateSecondaryDrawerHeaderView();
+                UpdateSecondaryDrawerFooterView();
+                UpdateSecondaryDrawerHeaderFooterSize();
+                UpdateSecondaryDrawerLayoutSize();
+                DurationPropertyUpdate(SecondaryDrawerSettings.Duration);
+                SecondaryPositionUpdate();
+                UpdateSecondaryContentBackground();
+                UpdateSecondaryIsOpen();
+                UpdateAllChild();
+            }
+        }
 		/// <summary>
 		/// This method is used to update the drawer header view.
 		/// </summary>
@@ -1108,16 +1443,16 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// This method is used to update the drawer to be open or not.
 		/// </summary>
-		void UpdateIsOpen()
-		{
-			if (ScreenHeight > 0)
-			{
-				if ((IsOpen && !_isDrawerOpen) || (!IsOpen && _isDrawerOpen))
-				{
-					ToggleDrawer();
-				}
-			}
-		}
+        void UpdateIsOpen()
+        {
+            if (ScreenHeight > 0)
+            {
+                if ((DrawerSettings.IsOpen && !_isDrawerOpen) || (!DrawerSettings.IsOpen && _isDrawerOpen))
+                {
+                    ToggleDrawer();
+                }
+            }
+        }
 
 		/// <summary>
 		/// This method is used to clear and update the children and position to the SfNavigationDrawer.
@@ -1145,16 +1480,19 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				}
 			}
 		}
+        void UpdateGridOverlayTranslate(bool isPrimaryDrawer = true)
+        {
+			var settings = GetDrawerSettings(isPrimaryDrawer);
 
-		void UpdateGridOverlayTranslate()
-		{
-			SetVisibility(true);
-			if ((DrawerSettings.Transition == Transition.Reveal || DrawerSettings.Transition == Transition.Push) && _greyOverlayGrid != null)
+			if (settings != null && ( settings.Position == Position.Left || settings.Position == Position.Right ||
+					((settings.Position == Position.Top || settings.Position == Position.Bottom) && settings.DrawerHeight > 0)))
 			{
-				_greyOverlayGrid.TranslationX = 0;
+				if ((settings.Transition == Transition.Reveal || settings.Transition == Transition.Push) &&  _greyOverlayGrid != null)
+				{
+					_greyOverlayGrid.TranslationX = 0;
+				}
 			}
 		}
-
 		/// <summary>
 		/// This method is used to update the position of the drawer layout and greyOverlayGrid.
 		/// </summary>
@@ -1173,7 +1511,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					_drawerLayout.TranslationY = 0;
 					if (_isDrawerOpen)
 					{
-						SetVisibility(true);
+                        SetVisibility(true,true);
 						_drawerLayout.TranslationX = ScreenWidth - DrawerSettings.DrawerWidth;
 						if (DrawerSettings.Transition == Transition.SlideOnTop && ContentView != null)
 						{
@@ -1195,16 +1533,19 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 						if ((!_drawerLayout.AnimationIsRunning("drawerAnimation") && !_greyOverlayGrid.AnimationIsRunning("greyOverlayTranslateAnimation")) || (DrawerSettings.Transition == Transition.Reveal && !ContentView.AnimationIsRunning("contentViewTranslatePushAnimation")))
 #endif
 						{
-							SetVisibility(false);
+							if (!SecondaryDrawerSettings.IsOpen)
+							{
+								SetVisibility(false, true);
+							}
 						}
-
-						_greyOverlayGrid.TranslationX = ScreenWidth;
-
+						if (!SecondaryDrawerSettings.IsOpen)
+						{
+							_greyOverlayGrid.TranslationX = ScreenWidth;
+						}
 						if (DrawerSettings.Transition == Transition.Reveal && ContentView != null)
 						{
 							_drawerLayout.TranslationX = ScreenWidth - DrawerSettings.DrawerWidth;
 							ContentView.TranslationX = 0;
-							ContentView.BackgroundColor = ContentView.BackgroundColor ?? ContentBackgroundColor;
 						}
 						else
 						{
@@ -1218,6 +1559,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 					_touchRightThreshold = ScreenWidth - DrawerSettings.TouchThreshold;
 				}
+
 #if !WINDOWS
 				else if ((DrawerSettings.Position == Position.Left && !_isRTL) || (DrawerSettings.Position == Position.Right && _isRTL))
 #else
@@ -1230,7 +1572,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					_drawerLayout.TranslationY = 0;
 					if (_isDrawerOpen)
 					{
-						SetVisibility(true);
+                        SetVisibility(true,true);
 						_drawerLayout.TranslationX = 0;
 						if (DrawerSettings.Transition == Transition.SlideOnTop && ContentView != null)
 						{
@@ -1251,15 +1593,20 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 						if ((!_drawerLayout.AnimationIsRunning("drawerAnimation") && !_greyOverlayGrid.AnimationIsRunning("greyOverlayTranslateAnimation")) || (DrawerSettings.Transition == Transition.Reveal && !ContentView.AnimationIsRunning("contentViewTranslatePushAnimation")))
 #endif
 						{
-							SetVisibility(false);
+							if (!SecondaryDrawerSettings.IsOpen)
+							{
+								SetVisibility(false, true);
+							}
 						}
 
-						_greyOverlayGrid.TranslationX = ScreenWidth;
+						if(!SecondaryDrawerSettings.IsOpen)
+						{
+							_greyOverlayGrid.TranslationX = ScreenWidth;
+						}
 						if (DrawerSettings.Transition == Transition.Reveal && ContentView != null)
 						{
 							_drawerLayout.TranslationX = 0;
 							ContentView.TranslationX = 0;
-							ContentView.BackgroundColor = ContentView.BackgroundColor ?? ContentBackgroundColor;
 						}
 						else
 						{
@@ -1284,7 +1631,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					_drawerLayout.TranslationX = 0;
 					if (_isDrawerOpen)
 					{
-						SetVisibility(true);
+                        SetVisibility(true,true);
 						_greyOverlayGrid.TranslationX = 0;
 						_drawerLayout.TranslationY = -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2));
 						if (DrawerSettings.Transition == Transition.SlideOnTop && ContentView != null)
@@ -1306,16 +1653,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 #if WINDOWS || MACCATALYST
 						if ((!_drawerLayout.AnimationIsRunning("drawerAnimation") && !_greyOverlayGrid.AnimationIsRunning("greyOverlayTranslateAnimation")) || (DrawerSettings.Transition == Transition.Reveal && !ContentView.AnimationIsRunning("contentViewTranslatePushAnimation")))
 #endif
+							{
+								if (!SecondaryDrawerSettings.IsOpen)
+								{
+									SetVisibility(false, true);
+								}
+							}
+							
+						if(!SecondaryDrawerSettings.IsOpen)
 						{
-							SetVisibility(false);
+							_greyOverlayGrid.TranslationX = ScreenWidth;
 						}
-
-						_greyOverlayGrid.TranslationX = ScreenWidth;
 						if (DrawerSettings.Transition == Transition.Reveal && ContentView != null)
 						{
 							_drawerLayout.TranslationY = -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerMoveTop;
 							ContentView.TranslationY = 0;
-							ContentView.BackgroundColor = ContentView.BackgroundColor ?? ContentBackgroundColor;
 						}
 						else
 						{
@@ -1335,7 +1687,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					_drawerLayout.TranslationX = 0;
 					if (_isDrawerOpen)
 					{
-						SetVisibility(true);
+						SetVisibility(true,true);
 						_greyOverlayGrid.TranslationX = 0;
 						_drawerLayout.TranslationY = (ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2);
 						if (DrawerSettings.Transition == Transition.SlideOnTop && ContentView != null)
@@ -1356,16 +1708,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 						if ((!_drawerLayout.AnimationIsRunning("drawerAnimation") && !_greyOverlayGrid.AnimationIsRunning("greyOverlayTranslateAnimation")) || (DrawerSettings.Transition == Transition.Reveal && !ContentView.AnimationIsRunning("contentViewTranslatePushAnimation")))
 #endif
 						{
-							SetVisibility(false);
+							if (!SecondaryDrawerSettings.IsOpen)
+							{
+								SetVisibility(false, true);
+							}
 						}
-
+						
+						if(!SecondaryDrawerSettings.IsOpen)
+						{
 						_greyOverlayGrid.TranslationX = ScreenWidth;
-
+						}
+						
 						if (DrawerSettings.Transition == Transition.Reveal && ContentView != null)
 						{
 							_drawerLayout.TranslationY = (ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2);
 							ContentView.TranslationY = 0;
-							ContentView.BackgroundColor = ContentView.BackgroundColor ?? ContentBackgroundColor;
 						}
 						else
 						{
@@ -1381,6 +1738,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				}
 			}
 		}
+
 
 #if !WINDOWS
 		void UpdateDrawerFlowDirection()
@@ -1425,53 +1783,75 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// This method employed to translate the drawer horizontally (along the X-axis) when swiping from the sides.
 		/// </summary>
-		void TranslateDrawerXPosition()
+		void TranslateDrawerXPosition(bool isPrimaryDrawer)
 		{
+			DrawerSettings? settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+            SfGrid? navigationDrawerLayout = isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+            bool isDrawerOpen = isPrimaryDrawer ? _isDrawerOpen : _isSecondaryDrawerOpen;
+            DrawerCancelEventArgs cancelOpenEventArgs = isPrimaryDrawer ? _cancelOpenEventArgs : _secondaryCancelOpenEventArgs;
+            DrawerCancelEventArgs cancelCloseEventArgs = isPrimaryDrawer ? _cancelCloseEventArgs : _secondaryCancelCloseEventArgs;
+            // Determine if this swipe is an OPEN attempt
+            bool isOpeningAttempt = !isDrawerOpen; 
+            // Block only if trying to OPEN this drawer while the other drawer is already open
+            if (isOpeningAttempt)
+            {
+                if (isPrimaryDrawer && _isSecondaryDrawerOpen) return;
+                if (!isPrimaryDrawer && _isDrawerOpen) return;
+            }
 			var difference = _newPoint.X - _oldPoint.X;
 			if (_greyOverlayGrid != null && _drawerLayout != null)
 			{
 #if !WINDOWS
-				if ((DrawerSettings.Position == Position.Left && !_isRTL) || (DrawerSettings.Position == Position.Right && _isRTL))
+                if ((settings.Position == Position.Left && !_isRTL) || (settings.Position == Position.Right && _isRTL))
 #else
-				if (DrawerSettings.Position == Position.Left)
+                if (settings.Position == Position.Left)
 #endif
 				{
 					// Method to handle the swipe action for the left drawer
-					HandleLeftDrawerSwipe(difference);
+					HandleLeftDrawerSwipe(difference,isPrimaryDrawer,isDrawerOpen);
 				}
 #if !WINDOWS
-				else if ((DrawerSettings.Position == Position.Right && !_isRTL) || (DrawerSettings.Position == Position.Left && _isRTL))
+                else if ((settings.Position == Position.Right && !_isRTL) || (settings.Position == Position.Left && _isRTL))
 #else
-				else if (DrawerSettings.Position == Position.Right)
+                else if (settings.Position == Position.Right)
 #endif
 				{
 					// Method to handle the swipe action for the right drawer
-					HandleRightDrawerSwipe(difference);
+					HandleRightDrawerSwipe(difference,isPrimaryDrawer,isDrawerOpen);
 				}
 			}
 		}
 
-		void HandleLeftDrawerSwipe(double difference)
+		void HandleLeftDrawerSwipe(double difference,bool isPrimaryDrawer,bool isDrawerOpen)
 		{
-			// Update remaining drawer width based on swipe difference
+            DrawerCancelEventArgs cancelOpenEventArgs = isPrimaryDrawer ? _cancelOpenEventArgs : _secondaryCancelOpenEventArgs;
+			DrawerCancelEventArgs cancelCloseEventArgs = isPrimaryDrawer ? _cancelCloseEventArgs : _secondaryCancelCloseEventArgs;
+            // Update remaining drawer width based on swipe difference
 			_remainDrawerWidth += difference;
-			ValidateRemainDrawerWidth();
+			if (isPrimaryDrawer)
+			{
+				ValidateRemainDrawerWidth();
+			}
+			else
+			{
+				ValidateSecondaryRemainDrawerWidth();
+			}
 
-			if (!_isDrawerOpen)
+			if (!isDrawerOpen)
 			{
 				// Check if it's the first swipe action to open the drawer
 				if (_actionFirstMoveOpen && _actionFirstMoveClose && difference > 0)
 				{
-					SetDrawerOpeningEvent();
-					if (!_cancelOpenEventArgs.Cancel)
+					SetDrawerOpeningEvent(isPrimaryDrawer);
+					if (!cancelOpenEventArgs.Cancel)
 					{
-						SetVisibility(true);
+						SetVisibility(true,isPrimaryDrawer);
 					}
 				}
 
-				if (!_cancelOpenEventArgs.Cancel)
+				if (!cancelOpenEventArgs.Cancel)
 				{
-					LeftDrawerSwipe(difference);
+					LeftDrawerSwipe(difference,isPrimaryDrawer);
 				}
 			}
 			else
@@ -1479,38 +1859,47 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				// Check if it's the first swipe action to close the drawer
 				if (_actionFirstMoveOpen && _actionFirstMoveClose && difference < 0)
 				{
-					OnDrawerClosing(_cancelCloseEventArgs);
+					OnDrawerClosing(cancelCloseEventArgs);
 					FirstMoveActionCompleted();
 				}
 
-				if (!_cancelCloseEventArgs.Cancel)
+				if (!cancelCloseEventArgs.Cancel)
 				{
-					LeftDrawerSwipe(difference);
+					LeftDrawerSwipe(difference,isPrimaryDrawer);
 				}
 			}
 		}
 
-		void HandleRightDrawerSwipe(double difference)
+		void HandleRightDrawerSwipe(double difference,bool isPrimaryDrawer,bool isDrawerOpen)
 		{
 			// Update remaining drawer width based on swipe difference
-			_remainDrawerWidth -= difference;
-			ValidateRemainDrawerWidth();
+            DrawerCancelEventArgs cancelOpenEventArgs = isPrimaryDrawer ? _cancelOpenEventArgs : _secondaryCancelOpenEventArgs;
+			DrawerCancelEventArgs cancelCloseEventArgs = isPrimaryDrawer ? _cancelCloseEventArgs : _secondaryCancelCloseEventArgs;
+            _remainDrawerWidth -= difference;
+			if (isPrimaryDrawer)
+			{
+				ValidateRemainDrawerWidth();
+			}
+			else
+			{
+				ValidateSecondaryRemainDrawerWidth();
+			}
 
-			if (!_isDrawerOpen)
+			if (!isDrawerOpen)
 			{
 				// Check if it's the first swipe action to open the drawer
 				if (_actionFirstMoveOpen && _actionFirstMoveClose && difference < 0)
 				{
-					SetDrawerOpeningEvent();
-					if (!_cancelOpenEventArgs.Cancel)
+					SetDrawerOpeningEvent(isPrimaryDrawer);
+					if (!cancelOpenEventArgs.Cancel)
 					{
-						SetVisibility(true);
+						SetVisibility(true, isPrimaryDrawer);
 					}
 				}
 
-				if (!_cancelOpenEventArgs.Cancel)
+				if (!cancelOpenEventArgs.Cancel)
 				{
-					RightDrawerSwipe(difference);
+					RightDrawerSwipe(difference, isPrimaryDrawer);
 				}
 			}
 			else
@@ -1518,13 +1907,13 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				// Check if it's the first swipe action to close the drawer
 				if (_actionFirstMoveOpen && _actionFirstMoveClose && difference > 0)
 				{
-					OnDrawerClosing(_cancelCloseEventArgs);
+					OnDrawerClosing(cancelCloseEventArgs);
 					FirstMoveActionCompleted();
 				}
 
-				if (!_cancelCloseEventArgs.Cancel)
+				if (!cancelCloseEventArgs.Cancel)
 				{
-					RightDrawerSwipe(difference);
+					RightDrawerSwipe(difference, isPrimaryDrawer);
 				}
 			}
 		}
@@ -1532,106 +1921,136 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// This method employed to translate the drawer vertically (along the Y-axis) when swiping from the sides.
 		/// </summary>
-		void TranslateDrawerYPosition()
+		void TranslateDrawerYPosition(bool isPrimaryDrawer)
 		{
+			DrawerSettings? settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+            SfGrid? navigationDrawerLayout = isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+            bool isDrawerOpen = isPrimaryDrawer ? _isDrawerOpen : _isSecondaryDrawerOpen;
+            DrawerCancelEventArgs cancelOpenEventArgs = isPrimaryDrawer ? _cancelOpenEventArgs : _secondaryCancelOpenEventArgs;
+            DrawerCancelEventArgs cancelCloseEventArgs = isPrimaryDrawer ? _cancelCloseEventArgs : _secondaryCancelCloseEventArgs;
+
 			var difference = _newPoint.Y - _oldPoint.Y;
-			if (DrawerSettings.Position == Position.Top)
-			{
-				// Method to handle the swipe action for the top drawer
-				HandleTopDrawerSwipe(difference);
-			}
-			else if (DrawerSettings.Position == Position.Bottom)
-			{
-				// Method to handle the swipe action for the bottom drawer
-				HandleBottomDrawerSwipe(difference);
+            if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
+            {
+                if (settings.Position == Position.Top)
+                {
+					// Method to handle the swipe action for the top drawer
+					HandleTopDrawerSwipe(difference,isPrimaryDrawer,isDrawerOpen);
+				}
+				else if (settings.Position == Position.Bottom)
+				{
+					// Method to handle the swipe action for the bottom drawer
+					HandleBottomDrawerSwipe(difference,isPrimaryDrawer,isDrawerOpen);
+				}
 			}
 		}
 
-		void HandleTopDrawerSwipe(double difference)
+		void HandleTopDrawerSwipe(double difference,bool isPrimaryDrawer,bool isDrawerOpen)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null)
+            DrawerCancelEventArgs cancelOpenEventArgs = isPrimaryDrawer ? _cancelOpenEventArgs : _secondaryCancelOpenEventArgs;
+			DrawerCancelEventArgs cancelCloseEventArgs = isPrimaryDrawer ? _cancelCloseEventArgs : _secondaryCancelCloseEventArgs;
+            DrawerSettings? settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+            SfGrid? navigationDrawerLayout = isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+            if (_greyOverlayGrid != null && navigationDrawerLayout != null)
 			{
 				_remainDrawerHeight += difference;
-				ValidateRemainDrawerHeight();
-
-				if (!_isDrawerOpen)
+				if (isPrimaryDrawer)
+				{
+					ValidateRemainDrawerHeight();
+				}
+				else
+				{
+					ValidateSecondaryRemainDrawerHeight();
+				}
+				if (!isDrawerOpen)
 				{
 					if (_actionFirstMoveOpen && _actionFirstMoveClose && difference > 0)
 					{
-						SetDrawerOpeningEvent();
-						if (!_cancelOpenEventArgs.Cancel)
+						SetDrawerOpeningEvent(isPrimaryDrawer);
+						if (!cancelOpenEventArgs.Cancel)
 						{
-							SetVisibility(true);
+							SetVisibility(true, isPrimaryDrawer);
 						}
 #if WINDOWS
-						if (!_cancelOpenEventArgs.Cancel && DrawerSettings.Transition == Transition.Push)
+						if (!cancelOpenEventArgs.Cancel && settings.Transition == Transition.Push)
 						{
-							_drawerLayout.TranslationY += _toolBarHeight;
+							navigationDrawerLayout.TranslationY += _toolBarHeight;
 						}
 #elif ANDROID || IOS
 
-						if (!_cancelOpenEventArgs.Cancel && DrawerSettings.Transition == Transition.Push)
+						if (!cancelOpenEventArgs.Cancel && settings.Transition == Transition.Push)
 						{
-							_drawerLayout.TranslationY += _drawerMoveTop;
+							navigationDrawerLayout.TranslationY += _drawerMoveTop;
 						}
 #endif
 					}
 
-					if (!_cancelOpenEventArgs.Cancel)
+					if (!cancelOpenEventArgs.Cancel)
 					{
-						TopDrawerSwipe(difference);
+						TopDrawerSwipe(difference,isPrimaryDrawer);
 					}
 				}
 				else
 				{
 					if (_actionFirstMoveOpen && _actionFirstMoveClose && difference < 0)
 					{
-						OnDrawerClosing(_cancelCloseEventArgs);
+						OnDrawerClosing(cancelCloseEventArgs);
 						FirstMoveActionCompleted();
 					}
 
-					if (!_cancelCloseEventArgs.Cancel)
+					if (!cancelCloseEventArgs.Cancel)
 					{
-						TopDrawerSwipe(difference);
+						TopDrawerSwipe(difference, isPrimaryDrawer);
 					}
 				}
 			}
 		}
 
-		void HandleBottomDrawerSwipe(double difference)
+		void HandleBottomDrawerSwipe(double difference,bool isPrimaryDrawer,bool isDrawerOpen)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null)
+            DrawerCancelEventArgs cancelOpenEventArgs = isPrimaryDrawer ? _cancelOpenEventArgs : _secondaryCancelOpenEventArgs;
+			DrawerCancelEventArgs cancelCloseEventArgs = isPrimaryDrawer ? _cancelCloseEventArgs : _secondaryCancelCloseEventArgs;
+            DrawerSettings? settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+            SfGrid? navigationDrawerLayout = isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null)
 			{
 				_remainDrawerHeight -= difference;
-				ValidateRemainDrawerHeight();
+				if (isPrimaryDrawer)
+				{
+					ValidateRemainDrawerHeight();
+				}
+				else
+				{
+					ValidateSecondaryRemainDrawerHeight();
+				}
 
-				if (!_isDrawerOpen)
+				if (!isDrawerOpen)
 				{
 					if (_actionFirstMoveOpen && _actionFirstMoveClose && difference < 0)
 					{
-						SetDrawerOpeningEvent();
-						if (!_cancelOpenEventArgs.Cancel)
+						SetDrawerOpeningEvent(isPrimaryDrawer);
+						if (!cancelOpenEventArgs.Cancel)
 						{
-							SetVisibility(true);
+							SetVisibility(true, isPrimaryDrawer);
 						}
 					}
 
-					if (!_cancelOpenEventArgs.Cancel)
+					if (!cancelOpenEventArgs.Cancel)
 					{
-						BottomDrawerSwipe(difference);
+						BottomDrawerSwipe(difference, isPrimaryDrawer);
 					}
 				}
 				else
 				{
 					if (_actionFirstMoveOpen && _actionFirstMoveClose && difference > 0)
 					{
-						OnDrawerClosing(_cancelCloseEventArgs);
+						OnDrawerClosing(cancelCloseEventArgs);
 						FirstMoveActionCompleted();
 					}
 
-					if (!_cancelCloseEventArgs.Cancel)
+					if (!cancelCloseEventArgs.Cancel)
 					{
-						BottomDrawerSwipe(difference);
+						BottomDrawerSwipe(difference,isPrimaryDrawer);
 					}
 				}
 			}
@@ -1695,11 +2114,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (ContentView.TranslationX == DrawerSettings.DrawerWidth && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerLeftIn();
+						DrawerLeftIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1707,11 +2126,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (_drawerLayout.TranslationX == 0 && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerLeftIn();
+						DrawerLeftIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1728,11 +2147,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						if (ContentView.TranslationX == 0)
 						{
-							UpdateToggleOutEvent();
+							UpdateToggleOutEvent(true);
 						}
 						else
 						{
-							DrawerLeftOut();
+							DrawerLeftOut(true);
 							_isTransitionDifference = false;
 						}
 					}
@@ -1740,11 +2159,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						if (_drawerLayout.TranslationX == -DrawerSettings.DrawerWidth)
 						{
-							UpdateToggleOutEvent();
+							UpdateToggleOutEvent(true);
 						}
 						else
 						{
-							DrawerLeftOut();
+							DrawerLeftOut(true);
 							_isTransitionDifference = false;
 						}
 					}
@@ -1760,29 +2179,29 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (_drawerLayout.TranslationX == 0 && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerLeftIn();
+						DrawerLeftIn(true);
 					}
 				}
 				else if (ContentView != null && ContentView.TranslationX >= DrawerSettings.DrawerWidth / 2 && _greyOverlayGrid.TranslationX != ScreenWidth && DrawerSettings.Transition == Transition.Reveal)
 				{
 					if (ContentView.TranslationX == DrawerSettings.DrawerWidth && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerLeftIn();
+						DrawerLeftIn(true);
 					}
 				}
 				else if (!_cancelOpenEventArgs.Cancel)
 				{
 					if ((_drawerLayout.TranslationX != -DrawerSettings.DrawerWidth && DrawerSettings.Transition != Transition.Reveal) || (DrawerSettings.Transition == Transition.Reveal && ContentView != null && ContentView.TranslationX != 0) || _isDrawerOpen || _isTransitionDifference)
 					{
-						DrawerLeftOut();
+						DrawerLeftOut(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1813,11 +2232,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (ContentView.TranslationX == -DrawerSettings.DrawerWidth && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerRightIn();
+						DrawerRightIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1825,11 +2244,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (_drawerLayout.TranslationX == (ScreenWidth - DrawerSettings.DrawerWidth) && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerRightIn();
+						DrawerRightIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1846,11 +2265,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						if (ContentView.TranslationX == 0)
 						{
-							UpdateToggleOutEvent();
+							UpdateToggleOutEvent(true);
 						}
 						else
 						{
-							DrawerRightOut();
+							DrawerRightOut(true);
 							_isTransitionDifference = false;
 						}
 					}
@@ -1858,11 +2277,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						if (_drawerLayout.TranslationX == ScreenWidth)
 						{
-							UpdateToggleOutEvent();
+							UpdateToggleOutEvent(true);
 						}
 						else
 						{
-							DrawerRightOut();
+							DrawerRightOut(true);
 							_isTransitionDifference = false;
 						}
 					}
@@ -1878,11 +2297,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (_drawerLayout.TranslationX == (ScreenWidth - DrawerSettings.DrawerWidth) && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerRightIn();
+						DrawerRightIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1890,11 +2309,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (ContentView.TranslationX == -DrawerSettings.DrawerWidth && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerRightIn();
+						DrawerRightIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1902,7 +2321,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if ((_drawerLayout.TranslationX != ScreenWidth && DrawerSettings.Transition != Transition.Reveal) || (DrawerSettings.Transition == Transition.Reveal && ContentView != null && ContentView.TranslationX != 0) || _isDrawerOpen || _isTransitionDifference)
 					{
-						DrawerRightOut();
+						DrawerRightOut(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1933,11 +2352,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (ContentView.TranslationY == DrawerSettings.DrawerHeight && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerTopIn();
+						DrawerTopIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1945,11 +2364,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (_drawerLayout.TranslationY == -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerMoveTop && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerTopIn();
+						DrawerTopIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -1966,11 +2385,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						if (ContentView.TranslationY == 0)
 						{
-							UpdateToggleOutEvent();
+							UpdateToggleOutEvent(true);
 						}
 						else
 						{
-							DrawerTopOut();
+							DrawerTopOut(true);
 							_isTransitionDifference = false;
 						}
 					}
@@ -1978,11 +2397,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						if (_drawerLayout.TranslationY == -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerMoveTop)
 						{
-							UpdateToggleOutEvent();
+							UpdateToggleOutEvent(true);
 						}
 						else
 						{
-							DrawerTopOut();
+							DrawerTopOut(true);
 							_isTransitionDifference = false;
 						}
 					}
@@ -1998,11 +2417,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (_drawerLayout.TranslationY == -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerMoveTop && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerTopIn();
+						DrawerTopIn(true);
 					}
 					_isTransitionDifference = false;
 				}
@@ -2010,11 +2429,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (ContentView.TranslationY == DrawerSettings.DrawerHeight && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerTopIn();
+						DrawerTopIn(true);
 					}
 					_isTransitionDifference = false;
 				}
@@ -2022,7 +2441,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if ((_drawerLayout.TranslationY != -((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) + _toolBarHeight) && DrawerSettings.Transition != Transition.Reveal) || (DrawerSettings.Transition == Transition.Reveal && ContentView != null && ContentView.TranslationY != 0) || _isDrawerOpen || _isTransitionDifference)
 					{
-						DrawerTopOut();
+						DrawerTopOut(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -2053,11 +2472,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (ContentView.TranslationY == -DrawerSettings.DrawerHeight && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerBottomIn();
+						DrawerBottomIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -2065,11 +2484,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (_drawerLayout.TranslationY == (ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2) && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerBottomIn();
+						DrawerBottomIn(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -2086,11 +2505,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						if (ContentView.TranslationY == 0)
 						{
-							UpdateToggleOutEvent();
+							UpdateToggleOutEvent(true);
 						}
 						else
 						{
-							DrawerBottomOut();
+							DrawerBottomOut(true);
 							_isTransitionDifference = false;
 						}
 					}
@@ -2098,11 +2517,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						if (_drawerLayout.TranslationY == (ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2))
 						{
-							UpdateToggleOutEvent();
+							UpdateToggleOutEvent(true);
 						}
 						else
 						{
-							DrawerBottomOut();
+							DrawerBottomOut(true);
 							_isTransitionDifference = false;
 						}
 					}
@@ -2118,11 +2537,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (_drawerLayout.TranslationY == (ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2) - DrawerSettings.DrawerHeight && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerBottomIn();
+						DrawerBottomIn(true);
 					}
 					_isTransitionDifference = false;
 				}
@@ -2130,11 +2549,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if (ContentView.TranslationY == -DrawerSettings.DrawerHeight && (!_isDrawerOpen || _isTransitionDifference))
 					{
-						UpdateToggleInEvent();
+						UpdateToggleInEvent(true);
 					}
 					else
 					{
-						DrawerBottomIn();
+						DrawerBottomIn(true);
 					}
 					_isTransitionDifference = false;
 				}
@@ -2142,7 +2561,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				{
 					if ((_drawerLayout.TranslationY != (ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) && DrawerSettings.Transition != Transition.Reveal) || (DrawerSettings.Transition == Transition.Reveal && ContentView != null && ContentView.TranslationY != 0) || _isDrawerOpen || _isTransitionDifference)
 					{
-						DrawerBottomOut();
+						DrawerBottomOut(true);
 						_isTransitionDifference = false;
 					}
 				}
@@ -2152,62 +2571,92 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// This method updates the event-handling logic for toggling the drawer in an inward direction.
 		/// </summary>
-		void UpdateToggleInEvent()
+		private void UpdateToggleInEvent(bool isPrimaryDrawer)
 		{
+			if (GetDrawerCancelOpenEventArgs(isPrimaryDrawer).Cancel)
+			{
+				SetVisibility(false, isPrimaryDrawer);
+				_isTransitionDifference = false;
+				return;
+			}
+
 			_toggledEventArgs.IsOpen = true;
-			_isDrawerOpen = true;
-			IsOpen = true;
+			_toggledEventArgs.IsPrimary = isPrimaryDrawer;
+			if (isPrimaryDrawer)
+			{
+				_isDrawerOpen = true;
+				DrawerSettings.IsOpen = true;
+				OnDrawerOpened(new DrawerEventArgs(true));
+			}
+			else
+			{
+				_isSecondaryDrawerOpen = true;
+				SecondaryDrawerSettings.IsOpen = true;
+				OnDrawerOpened(new DrawerEventArgs(false));
+			}
 			_isTransitionDifference = false;
-			OnDrawerOpened(new EventArgs());
 			OnDrawerToggled(_toggledEventArgs);
 		}
 
 		/// <summary>
 		/// This method updates the event-handling logic for toggling the drawer in an outward direction.
 		/// </summary>
-		void UpdateToggleOutEvent()
+		private void UpdateToggleOutEvent(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null)
+			_toggledEventArgs.IsOpen = false;
+			_toggledEventArgs.IsPrimary = isPrimaryDrawer;
+			if (isPrimaryDrawer)
 			{
-				_toggledEventArgs.IsOpen = false;
 				_isDrawerOpen = false;
-				IsOpen = false;
-				_greyOverlayGrid.TranslationX = ScreenWidth;
-				SetVisibility(false);
-				_isTransitionDifference = false;
-				OnDrawerClosed(new EventArgs());
-				OnDrawerToggled(_toggledEventArgs);
+				DrawerSettings.IsOpen = false;
+				_greyOverlayGrid!.TranslationX = ScreenWidth;
+				SetVisibility(false,true);
+				OnDrawerClosed(new DrawerEventArgs(true));
 			}
+			else
+			{
+				_isSecondaryDrawerOpen = false;
+				SecondaryDrawerSettings.IsOpen = false;
+				_greyOverlayGrid!.TranslationX = ScreenWidth;
+				SetVisibility(false,false);
+				OnDrawerClosed(new DrawerEventArgs(false));
+			}
+			_isTransitionDifference = false;
+		   OnDrawerToggled(_toggledEventArgs);
 		}
 
 		/// <summary>
 		/// This method is used to swipe the drawer to or from the left side.
 		/// </summary>
 		/// <param name="difference">The distance of the swipe.</param>
-		void LeftDrawerSwipe(double difference)
+		/// <param name="isPrimaryDrawer">A boolean value indicating the primary drawer.</param>
+		void LeftDrawerSwipe(double difference, bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+			SfGrid? navigationDrawerLayout = isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
 				double transitionDifference = 0;
 				double oldTransition = 0;
 				SetGreyOverLayGridTranslationX();
 
-				if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
+				if (settings.Transition == Transition.SlideOnTop || settings.Transition == Transition.Push)
 				{
-					oldTransition = Math.Round(_drawerLayout.TranslationX);
-					_drawerLayout.TranslationX = Math.Clamp(_drawerLayout.TranslationX + difference, -DrawerSettings.DrawerWidth, 0);
-					transitionDifference = Math.Abs(Math.Round(_drawerLayout.TranslationX) - oldTransition);
+					oldTransition = Math.Round(navigationDrawerLayout.TranslationX);
+					navigationDrawerLayout.TranslationX = Math.Clamp(navigationDrawerLayout.TranslationX + difference, -settings.DrawerWidth, 0);
+					transitionDifference = Math.Abs(Math.Round(navigationDrawerLayout.TranslationX) - oldTransition);
 				}
 				else
 				{
 					oldTransition = Math.Round(ContentView.TranslationX);
 				}
 
-				if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+				if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 				{
-					_greyOverlayGrid.TranslationX = Math.Clamp(_greyOverlayGrid.TranslationX + difference, 0, DrawerSettings.DrawerWidth);
-					ContentView.TranslationX = Math.Clamp(ContentView.TranslationX + difference, 0, DrawerSettings.DrawerWidth);
-					if (DrawerSettings.Transition == Transition.Reveal)
+					_greyOverlayGrid.TranslationX = Math.Clamp(_greyOverlayGrid.TranslationX + difference, 0, settings.DrawerWidth);
+					ContentView.TranslationX = Math.Clamp(ContentView.TranslationX + difference, 0, settings.DrawerWidth);
+					if (settings.Transition == Transition.Reveal)
 					{
 						transitionDifference = Math.Abs(Math.Round(ContentView.TranslationX) - oldTransition);
 					}
@@ -2215,20 +2664,20 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 #if WINDOWS
 					if (ContentView.TranslationX != 0 && _greyOverlayGrid.TranslationX != 0)
 					{
-						SetVisibility(true);
+						SetVisibility(true, isPrimaryDrawer);
 					}
 #endif
 				}
 
 #if WINDOWS
-				if (DrawerSettings.Transition == Transition.SlideOnTop && _drawerLayout.TranslationX != -DrawerSettings.DrawerWidth)
+				if (settings.Transition == Transition.SlideOnTop && navigationDrawerLayout.TranslationX != -settings.DrawerWidth)
 				{
-					SetVisibility(true);
+					SetVisibility(true, isPrimaryDrawer);
 				}
 #endif
 
 				SetIsTransitionDifference(transitionDifference);
-				_greyOverlayGrid.Opacity = (_remainDrawerWidth * (_opacity / DrawerSettings.DrawerWidth)) + _opacity;
+				_greyOverlayGrid.Opacity = (_remainDrawerWidth * (_opacity / settings.DrawerWidth)) + _opacity;
 			}
 		}
 
@@ -2236,30 +2685,34 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method is used to swipe the drawer to or from the right side.
 		/// </summary>
 		/// <param name="difference">The distance of the swipe.</param>
-		void RightDrawerSwipe(double difference)
+		/// <param name="isPrimaryDrawer">A boolean value indicating the primary drawer.</param>
+		void RightDrawerSwipe(double difference, bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+			SfGrid? navigationDrawerLayout = isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
 				double transitionDifference = 0;
 				double oldTransition = 0;
 				SetGreyOverLayGridTranslationX();
 
-				if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
+				if (settings.Transition == Transition.SlideOnTop || settings.Transition == Transition.Push)
 				{
-					oldTransition = Math.Round(_drawerLayout.TranslationX);
-					_drawerLayout.TranslationX = Math.Clamp(_drawerLayout.TranslationX + difference, ScreenWidth - DrawerSettings.DrawerWidth, ScreenWidth);
-					transitionDifference = Math.Abs(Math.Round(_drawerLayout.TranslationX) - oldTransition);
+					oldTransition = Math.Round(navigationDrawerLayout.TranslationX);
+					navigationDrawerLayout.TranslationX = Math.Clamp(navigationDrawerLayout.TranslationX + difference, ScreenWidth - settings.DrawerWidth, ScreenWidth);
+					transitionDifference = Math.Abs(Math.Round(navigationDrawerLayout.TranslationX) - oldTransition);
 				}
 				else
 				{
 					oldTransition = Math.Round(ContentView.TranslationX);
 				}
 
-				if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+				if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 				{
-					_greyOverlayGrid.TranslationX = Math.Clamp(_greyOverlayGrid.TranslationX + difference, -DrawerSettings.DrawerWidth, 0);
-					ContentView.TranslationX = Math.Clamp(ContentView.TranslationX + difference, -DrawerSettings.DrawerWidth, 0);
-					if (DrawerSettings.Transition == Transition.Reveal)
+					_greyOverlayGrid.TranslationX = Math.Clamp(_greyOverlayGrid.TranslationX + difference, -settings.DrawerWidth, 0);
+					ContentView.TranslationX = Math.Clamp(ContentView.TranslationX + difference, -settings.DrawerWidth, 0);
+					if (settings.Transition == Transition.Reveal)
 					{
 						transitionDifference = Math.Abs(Math.Round(ContentView.TranslationX) - oldTransition);
 					}
@@ -2267,20 +2720,20 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 #if WINDOWS
 					if (ContentView.TranslationX != 0 && _greyOverlayGrid.TranslationX != 0)
 					{
-						SetVisibility(true);
+						SetVisibility(true, isPrimaryDrawer);
 					}
 #endif
 				}
 
 #if WINDOWS
-				if (DrawerSettings.Transition == Transition.SlideOnTop && _drawerLayout.TranslationX != ScreenWidth)
+				if (settings.Transition == Transition.SlideOnTop && navigationDrawerLayout.TranslationX != ScreenWidth)
 				{
-					SetVisibility(true);
+					SetVisibility(true, isPrimaryDrawer);
 				}
 #endif
 
 				SetIsTransitionDifference(transitionDifference);
-				_greyOverlayGrid.Opacity = (_remainDrawerWidth * (_opacity / DrawerSettings.DrawerWidth)) + _opacity;
+				_greyOverlayGrid.Opacity = (_remainDrawerWidth * (_opacity / settings.DrawerWidth)) + _opacity;
 			}
 		}
 
@@ -2288,30 +2741,34 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method is used to swipe the drawer to or from the top side.
 		/// </summary>
 		/// <param name="difference">The distance of the swipe.</param>
-		void TopDrawerSwipe(double difference)
+		/// <param name="isPrimaryDrawer">A boolean value indicating the primary drawer.</param>
+		void TopDrawerSwipe(double difference, bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
 				double transitionDifference = 0;
 				double oldTransition = 0;
 				SetGreyOverLayGridTranslationX();
 
-				if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
+				if (settings.Transition == Transition.SlideOnTop || settings.Transition == Transition.Push)
 				{
-					oldTransition = Math.Round(_drawerLayout.TranslationY);
-					_drawerLayout.TranslationY = Math.Clamp(_drawerLayout.TranslationY + difference, -((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) + _toolBarHeight), -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerMoveTop);
-					transitionDifference = Math.Abs(Math.Round(_drawerLayout.TranslationY) - oldTransition);
+					oldTransition = Math.Round(navigationDrawerLayout.TranslationY);
+					navigationDrawerLayout.TranslationY = Math.Clamp(navigationDrawerLayout.TranslationY + difference, -((ScreenHeight / 2) + (settings.DrawerHeight / 2) + _toolBarHeight), -((ScreenHeight / 2) - (settings.DrawerHeight / 2)) - _drawerMoveTop);
+					transitionDifference = Math.Abs(Math.Round(navigationDrawerLayout.TranslationY) - oldTransition);
 				}
 				else
 				{
 					oldTransition = Math.Round(ContentView.TranslationY);
 				}
 
-				if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+				if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 				{
-					_greyOverlayGrid.TranslationY = Math.Clamp(_greyOverlayGrid.TranslationY + difference, 0, DrawerSettings.DrawerHeight);
-					ContentView.TranslationY = Math.Clamp(ContentView.TranslationY + difference, 0, DrawerSettings.DrawerHeight);
-					if (DrawerSettings.Transition == Transition.Reveal)
+					_greyOverlayGrid.TranslationY = Math.Clamp(_greyOverlayGrid.TranslationY + difference, 0, settings.DrawerHeight);
+					ContentView.TranslationY = Math.Clamp(ContentView.TranslationY + difference, 0, settings.DrawerHeight);
+					if (settings.Transition == Transition.Reveal)
 					{
 						transitionDifference = Math.Abs(Math.Round(ContentView.TranslationY) - oldTransition);
 					}
@@ -2319,20 +2776,20 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 #if WINDOWS
 					if (ContentView.TranslationY != 0 && _greyOverlayGrid.TranslationY != 0)
 					{
-						SetVisibility(true);
+						SetVisibility(true, isPrimaryDrawer);
 					}
 #endif
 				}
 
 #if WINDOWS
-				if (DrawerSettings.Transition == Transition.SlideOnTop && _drawerLayout.TranslationY != -((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) + _toolBarHeight))
+				if (settings.Transition == Transition.SlideOnTop && navigationDrawerLayout.TranslationY != -((ScreenHeight / 2) + (settings.DrawerHeight / 2) + _toolBarHeight))
 				{
-					SetVisibility(true);
+					SetVisibility(true, isPrimaryDrawer);
 				}
 #endif
 
 				SetIsTransitionDifference(transitionDifference);
-				_greyOverlayGrid.Opacity = (_remainDrawerHeight * (_opacity / DrawerSettings.DrawerHeight)) + _opacity;
+				_greyOverlayGrid.Opacity = (_remainDrawerHeight * (_opacity / settings.DrawerHeight)) + _opacity;
 			}
 		}
 
@@ -2352,30 +2809,34 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method is used to swipe the drawer to or from the bottom side.
 		/// </summary>
 		/// <param name="difference">The distance of the swipe.</param>
-		void BottomDrawerSwipe(double difference)
+		/// <param name="isPrimaryDrawer"></param> 
+		void BottomDrawerSwipe(double difference, bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
 				double transitionDifference = 0;
 				double oldTransition = 0;
 				SetGreyOverLayGridTranslationX();
 
-				if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
+				if (settings.Transition == Transition.SlideOnTop || settings.Transition == Transition.Push)
 				{
-					oldTransition = Math.Round(_drawerLayout.TranslationY);
-					_drawerLayout.TranslationY = Math.Clamp(_drawerLayout.TranslationY + difference, (ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2), (ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2));
-					transitionDifference = Math.Abs(Math.Round(_drawerLayout.TranslationY) - oldTransition);
+					oldTransition = Math.Round(navigationDrawerLayout.TranslationY);
+					navigationDrawerLayout.TranslationY = Math.Clamp(navigationDrawerLayout.TranslationY + difference, (ScreenHeight / 2) - (settings.DrawerHeight / 2), (ScreenHeight / 2) + (settings.DrawerHeight / 2));
+					transitionDifference = Math.Abs(Math.Round(navigationDrawerLayout.TranslationY) - oldTransition);
 				}
 				else
 				{
 					oldTransition = Math.Round(ContentView.TranslationY);
 				}
 
-				if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+				if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 				{
-					_greyOverlayGrid.TranslationY = Math.Clamp(_greyOverlayGrid.TranslationY + difference, -DrawerSettings.DrawerHeight, 0);
-					ContentView.TranslationY = Math.Clamp(ContentView.TranslationY + difference, -DrawerSettings.DrawerHeight, 0);
-					if (DrawerSettings.Transition == Transition.Reveal)
+					_greyOverlayGrid.TranslationY = Math.Clamp(_greyOverlayGrid.TranslationY + difference, -settings.DrawerHeight, 0);
+					ContentView.TranslationY = Math.Clamp(ContentView.TranslationY + difference, -settings.DrawerHeight, 0);
+					if (settings.Transition == Transition.Reveal)
 					{
 						transitionDifference = Math.Abs(Math.Round(ContentView.TranslationY) - oldTransition);
 					}
@@ -2383,90 +2844,481 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 #if WINDOWS
 					if (ContentView.TranslationY != 0 && _greyOverlayGrid.TranslationY != 0)
 					{
-						SetVisibility(true);
+						SetVisibility(true, isPrimaryDrawer);
 					}
 #endif
 				}
 
 #if WINDOWS
-				if (DrawerSettings.Transition == Transition.SlideOnTop && _drawerLayout.TranslationY != (ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2))
+				if (settings.Transition == Transition.SlideOnTop && navigationDrawerLayout.TranslationY != (ScreenHeight / 2) + (settings.DrawerHeight / 2))
 				{
-					SetVisibility(true);
+					SetVisibility(true, isPrimaryDrawer);
 				}
 #endif
 
 				SetIsTransitionDifference(transitionDifference);
-				_greyOverlayGrid.Opacity = (_remainDrawerHeight * (_opacity / DrawerSettings.DrawerHeight)) + _opacity;
+				_greyOverlayGrid.Opacity = (_remainDrawerHeight * (_opacity / settings.DrawerHeight)) + _opacity;
 			}
 		}
 
 		/// <summary>
+		/// This method is used to update the secondary drawer after swipe complete.
+		/// </summary>
+
+        private void CompletedSecondaryDrawerSwipe()
+        {
+            if (_secondaryDrawerLayout != null && _greyOverlayGrid != null && SecondaryDrawerSettings != null)
+            {
+#if !WINDOWS
+                if ((SecondaryDrawerSettings.Position == Position.Left && !_isRTL) || (SecondaryDrawerSettings.Position == Position.Right && _isRTL))
+#else
+                if (SecondaryDrawerSettings.Position == Position.Left)
+#endif
+                {
+                    if (_velocityX > 500)
+                    {
+                        if (SecondaryDrawerSettings.Transition == Transition.Reveal)
+                        {
+                            if (ContentView.TranslationX == SecondaryDrawerSettings.DrawerWidth && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                            {
+                                UpdateToggleInEvent(false);
+                            }
+                            else
+                            {
+                                DrawerLeftIn(false);
+                                _isTransitionDifference = false;
+                            }
+                        }
+                        else
+                        {
+                            if (_secondaryDrawerLayout.TranslationX == 0 && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                            {
+                                UpdateToggleInEvent(false);
+                            }
+                            else
+                            {
+                                DrawerLeftIn(false);
+                                _isTransitionDifference = false;
+                            }
+                        }
+                    }
+                    else if (_velocityX < -500)
+                    {
+                        if ((_isSecondaryDrawerOpen || (_greyOverlayGrid.TranslationX == 0 && !_isSecondaryDrawerOpen)) && _isTransitionDifference)
+                        {
+                            if (SecondaryDrawerSettings.Transition == Transition.Reveal)
+                            {
+                                if (ContentView.TranslationX == 0)
+                                {
+                                    UpdateToggleOutEvent(false);
+                                }
+                                else
+                                {
+                                    DrawerLeftOut(false);
+                                    _isTransitionDifference = false;
+                                }
+                            }
+                            else
+                            {
+                                if (_secondaryDrawerLayout.TranslationX == -SecondaryDrawerSettings.DrawerWidth)
+                                {
+                                    UpdateToggleOutEvent(false);
+                                }
+                                else
+                                {
+                                    DrawerLeftOut(false);
+                                    _isTransitionDifference = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (_secondaryDrawerLayout.TranslationX >= (-SecondaryDrawerSettings.DrawerWidth / 2) && SecondaryDrawerSettings.Transition != Transition.Reveal)
+                    {
+                        if (_secondaryDrawerLayout.TranslationX == 0 && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                        {
+                            UpdateToggleInEvent(false);
+                        }
+                        else
+                        {
+                            DrawerLeftIn(false);
+                        }
+                    }
+                    else if (ContentView != null && ContentView.TranslationX >= SecondaryDrawerSettings.DrawerWidth / 2 && _greyOverlayGrid.TranslationX != ScreenWidth && SecondaryDrawerSettings.Transition == Transition.Reveal)
+                    {
+                        if (ContentView.TranslationX == SecondaryDrawerSettings.DrawerWidth && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                        {
+                            UpdateToggleInEvent(false);
+                        }
+                        else
+                        {
+                            DrawerLeftIn(false);
+                        }
+                    }
+                    else if (!_cancelOpenEventArgs.Cancel)
+                    {
+                        if ((_secondaryDrawerLayout.TranslationX != -SecondaryDrawerSettings.DrawerWidth && SecondaryDrawerSettings.Transition != Transition.Reveal) || (SecondaryDrawerSettings.Transition == Transition.Reveal && ContentView != null && ContentView.TranslationX != 0) || _isSecondaryDrawerOpen || _isTransitionDifference)
+                        {
+                            DrawerLeftOut(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                }
+#if !WINDOWS
+                else if ((SecondaryDrawerSettings.Position == Position.Right && !_isRTL) || (SecondaryDrawerSettings.Position == Position.Left && _isRTL))
+#else
+                else if (SecondaryDrawerSettings.Position == Position.Right)
+#endif
+                {
+                    if (_velocityX < -500)
+                    {
+                        if (SecondaryDrawerSettings.Transition == Transition.Reveal)
+                        {
+                            if (ContentView.TranslationX == -SecondaryDrawerSettings.DrawerWidth && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                            {
+                                UpdateToggleInEvent(false);
+                            }
+                            else
+                            {
+                                DrawerRightIn(false);
+                                _isTransitionDifference = false;
+                            }
+                        }
+                        else
+                        {
+                            if (_secondaryDrawerLayout.TranslationX == (ScreenWidth - SecondaryDrawerSettings.DrawerWidth) && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                            {
+                                UpdateToggleInEvent(false);
+                            }
+                            else
+                            {
+                                DrawerRightIn(false);
+                                _isTransitionDifference = false;
+                            }
+                        }
+                    }
+                    else if (_velocityX > 500)
+                    {
+                        if ((_isSecondaryDrawerOpen || (_greyOverlayGrid.TranslationX == 0 && !_isSecondaryDrawerOpen)) && _isTransitionDifference)
+                        {
+                            if (SecondaryDrawerSettings.Transition == Transition.Reveal)
+                            {
+                                if (ContentView.TranslationX == 0)
+                                {
+                                    UpdateToggleOutEvent(false);
+                                }
+                                else
+                                {
+                                    DrawerRightOut(false);
+                                    _isTransitionDifference = false;
+                                }
+                            }
+                            else
+                            {
+                                if (_secondaryDrawerLayout.TranslationX == ScreenWidth)
+                                {
+                                    UpdateToggleOutEvent(false);
+                                }
+                                else
+                                {
+                                    DrawerRightOut(false);
+                                    _isTransitionDifference = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (_remainDrawerWidth >= (-SecondaryDrawerSettings.DrawerWidth / 2) && SecondaryDrawerSettings.Transition != Transition.Reveal)
+                    {
+                        if (_secondaryDrawerLayout.TranslationX == (ScreenWidth - SecondaryDrawerSettings.DrawerWidth) && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                        {
+                            UpdateToggleInEvent(false);
+                        }
+                        else
+                        {
+                            DrawerRightIn(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                    else if (ContentView != null && ContentView.TranslationX <= -SecondaryDrawerSettings.DrawerWidth / 2 && _greyOverlayGrid.TranslationX != ScreenWidth && SecondaryDrawerSettings.Transition == Transition.Reveal)
+                    {
+                        if (ContentView.TranslationX == -SecondaryDrawerSettings.DrawerWidth && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                        {
+                            UpdateToggleInEvent(false);
+                        }
+                        else
+                        {
+                            DrawerRightIn(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                    else if (!_cancelOpenEventArgs.Cancel)
+                    {
+                        if ((_secondaryDrawerLayout.TranslationX != ScreenWidth && SecondaryDrawerSettings.Transition != Transition.Reveal) || (SecondaryDrawerSettings.Transition == Transition.Reveal && ContentView != null && ContentView.TranslationX != 0) || _isSecondaryDrawerOpen || _isTransitionDifference)
+                        {
+                            DrawerRightOut(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                }
+                else if (SecondaryDrawerSettings.Position == Position.Top)
+                {
+                    if (_velocityY > 500)
+                    {
+                        if (SecondaryDrawerSettings.Transition == Transition.Reveal)
+                        {
+                            if (ContentView.TranslationY == SecondaryDrawerSettings.DrawerHeight && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                            {
+                                UpdateToggleInEvent(false);
+                            }
+                            else
+                            {
+                                DrawerTopIn(false);
+                                _isTransitionDifference = false;
+                            }
+                        }
+                        else
+                        {
+                            if (_secondaryDrawerLayout.TranslationY == -((ScreenHeight / 2) - (SecondaryDrawerSettings.DrawerHeight / 2)) - _drawerMoveTop && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                            {
+                                UpdateToggleInEvent(false);
+                            }
+                            else
+                            {
+                                DrawerTopIn(false);
+                                _isTransitionDifference = false;
+                            }
+                        }
+                    }
+                    else if (_velocityY < -500)
+                    {
+                        if ((_isSecondaryDrawerOpen || (_greyOverlayGrid.TranslationX == 0 && !_isSecondaryDrawerOpen)) && _isTransitionDifference)
+                        {
+                            if (SecondaryDrawerSettings.Transition == Transition.Reveal)
+                            {
+                                if (ContentView.TranslationY == 0)
+                                {
+                                    UpdateToggleOutEvent(false);
+                                }
+                                else
+                                {
+                                    DrawerTopOut(false);
+                                    _isTransitionDifference = false;
+                                }
+                            }
+                            else
+                            {
+                                if (_secondaryDrawerLayout.TranslationY == -((ScreenHeight / 2) - (SecondaryDrawerSettings.DrawerHeight / 2)) - _drawerMoveTop)
+                                {
+                                    UpdateToggleOutEvent(false);
+                                }
+                                else
+                                {
+                                    DrawerTopOut(false);
+                                    _isTransitionDifference = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (_remainDrawerHeight >= (-SecondaryDrawerSettings.DrawerHeight / 2) && SecondaryDrawerSettings.Transition != Transition.Reveal)
+                    {
+                        if (_secondaryDrawerLayout.TranslationY == -((ScreenHeight / 2) - (SecondaryDrawerSettings.DrawerHeight / 2)) - _drawerMoveTop && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                        {
+                            UpdateToggleInEvent(false);
+                        }
+                        else
+                        {
+                            DrawerTopIn(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                    else if (ContentView != null && ContentView.TranslationY >= SecondaryDrawerSettings.DrawerHeight / 2 && _greyOverlayGrid.TranslationX != ScreenWidth && SecondaryDrawerSettings.Transition == Transition.Reveal)
+                    {
+                        if (ContentView.TranslationY == SecondaryDrawerSettings.DrawerHeight && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                        {
+                            UpdateToggleInEvent(false);
+                        }
+                        else
+                        {
+                            DrawerTopIn(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                    else if (!_cancelOpenEventArgs.Cancel)
+                    {
+                        if ((_secondaryDrawerLayout.TranslationY != -((ScreenHeight / 2) + (SecondaryDrawerSettings.DrawerHeight / 2) + _toolBarHeight) && SecondaryDrawerSettings.Transition != Transition.Reveal) || (SecondaryDrawerSettings.Transition == Transition.Reveal && ContentView != null && ContentView.TranslationY != 0) || _isSecondaryDrawerOpen || _isTransitionDifference)
+                        {
+                            DrawerTopOut(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                }
+                else if (SecondaryDrawerSettings.Position == Position.Bottom)
+                {
+                    if (_velocityY < -500)
+                    {
+                        if (SecondaryDrawerSettings.Transition == Transition.Reveal)
+                        {
+                            if (ContentView.TranslationY == -SecondaryDrawerSettings.DrawerHeight && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                            {
+                                UpdateToggleInEvent(false);
+                            }
+                            else
+                            {
+                                DrawerBottomIn(false);
+                                _isTransitionDifference = false;
+                            }
+                        }
+                        else
+                        {
+                            if (_secondaryDrawerLayout.TranslationY == (ScreenHeight / 2) - (SecondaryDrawerSettings.DrawerHeight / 2) && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                            {
+                                UpdateToggleInEvent(false);
+                            }
+                            else
+                            {
+                                DrawerBottomIn(false);
+                                _isTransitionDifference = false;
+                            }
+                        }
+                    }
+                    else if (_velocityY > 500)
+                    {
+                        if ((_isSecondaryDrawerOpen || (_greyOverlayGrid.TranslationX == 0 && !_isSecondaryDrawerOpen)) && _isTransitionDifference)
+                        {
+                            if (SecondaryDrawerSettings.Transition == Transition.Reveal)
+                            {
+                                if (ContentView.TranslationY == 0)
+                                {
+                                    UpdateToggleOutEvent(false);
+                                }
+                                else
+                                {
+                                    DrawerBottomOut(false);
+                                    _isTransitionDifference = false;
+                                }
+                            }
+                            else
+                            {
+                                if (_secondaryDrawerLayout.TranslationY == (ScreenHeight / 2) + (SecondaryDrawerSettings.DrawerHeight / 2))
+                                {
+                                    UpdateToggleOutEvent(false);
+                                }
+                                else
+                                {
+                                    DrawerBottomOut(false);
+                                    _isTransitionDifference = false;
+                                }
+                            }
+                        }
+                    }
+                    else if (_remainDrawerHeight >= (-SecondaryDrawerSettings.DrawerHeight / 2) && SecondaryDrawerSettings.Transition != Transition.Reveal)
+                    {
+                        if (_secondaryDrawerLayout.TranslationY == ((ScreenHeight / 2) + (SecondaryDrawerSettings.DrawerHeight / 2) - SecondaryDrawerSettings.DrawerHeight) && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                        {
+                            UpdateToggleInEvent(false);
+                        }
+                        else
+                        {
+                            DrawerBottomIn(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                    else if (ContentView != null && ContentView.TranslationY <= (-SecondaryDrawerSettings.DrawerHeight / 2) && _greyOverlayGrid.TranslationX != ScreenWidth && SecondaryDrawerSettings.Transition == Transition.Reveal)
+                    {
+                        if (ContentView.TranslationY == -SecondaryDrawerSettings.DrawerHeight && (!_isSecondaryDrawerOpen || _isTransitionDifference))
+                        {
+                            UpdateToggleInEvent(false);
+                        }
+                        else
+                        {
+                            DrawerBottomIn(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                    else if (!_cancelOpenEventArgs.Cancel)
+                    {
+                        if ((_secondaryDrawerLayout.TranslationY != (ScreenHeight / 2) + (SecondaryDrawerSettings.DrawerHeight / 2) && SecondaryDrawerSettings.Transition != Transition.Reveal) || (SecondaryDrawerSettings.Transition == Transition.Reveal && ContentView != null && ContentView.TranslationY != 0) || _isSecondaryDrawerOpen || _isTransitionDifference)
+                        {
+                            DrawerBottomOut(false);
+                            _isTransitionDifference = false;
+                        }
+                    }
+                }
+            }
+        }
+
+		/// <summary>
 		/// Method used to provide the animation to the drawer when moving from the left side.
 		/// </summary>
-		void DrawerLeftIn()
+		void DrawerLeftIn(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			 DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+			bool isDrawerOpen = GetDrawerOpenState(isPrimaryDrawer);
+			DrawerCancelEventArgs _cancelOpenEventArgs = GetDrawerCancelOpenEventArgs(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
-				if (_drawerLayout.TranslationX != 0 || (DrawerSettings.Transition == Transition.Reveal && ContentView.TranslationX != DrawerSettings.DrawerWidth))
+				if (navigationDrawerLayout.TranslationX != 0 || (settings.Transition == Transition.Reveal && ContentView?.TranslationX != settings.DrawerWidth))
 				{
 					if (_actionFirstMoveOpen && _actionFirstMoveClose)
 					{
-						SetDrawerOpeningEvent();
+						SetDrawerOpeningEvent(isPrimaryDrawer);
 					}
 
 					if (!_cancelOpenEventArgs.Cancel)
 					{
 						double currentDuration;
-						var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-						if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
+						if (settings.Transition == Transition.SlideOnTop || settings.Transition == Transition.Push)
 						{
-							currentDuration = (Math.Abs(_drawerLayout.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
+							currentDuration = (Math.Abs(navigationDrawerLayout.TranslationX) / settings.DrawerWidth) * settings.Duration;
 						}
 						else
 						{
-							currentDuration = (Math.Abs(DrawerSettings.DrawerWidth - _greyOverlayGrid.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
+							currentDuration = (Math.Abs(settings.DrawerWidth - _greyOverlayGrid.TranslationX) / settings.DrawerWidth) * settings.Duration;
 						}
 
 						currentDuration = ValidateCurrentDuration(currentDuration);
-						Animation drawerAnimation = new Animation(d => _drawerLayout.TranslationX = d, _drawerLayout.TranslationX, 0);
-						Animation greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0.5);
-						Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
-						if (DrawerSettings.Transition == Transition.SlideOnTop)
+						var drawerAnimation = new Animation(d => navigationDrawerLayout.TranslationX = d, navigationDrawerLayout.TranslationX, 0);
+						var greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0.5);
+						var greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
+						if (settings.Transition == Transition.SlideOnTop)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+							navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 							{
-								OnDrawerOpenedToggledEvent();
+								OnDrawerOpenedToggledEvent(isPrimaryDrawer);
 							});
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear, finished: (v, e) =>
 							{
-								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
 							});
 						}
-						else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+						else if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 						{
-							Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, DrawerSettings.DrawerWidth);
-							Animation contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationX = d, ContentView.TranslationX, DrawerSettings.DrawerWidth);
-							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing);
-							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
-							ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+							var greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, settings.DrawerWidth);
+							var contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationX = d, ContentView.TranslationX, settings.DrawerWidth);
+							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+							ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 							{
-								OnDrawerOpenedToggledEvent();
+								OnDrawerOpenedToggledEvent(isPrimaryDrawer);
 							});
-							DrawerPushAnimation(currentDuration, drawerAnimation);
+							DrawerPushAnimation(currentDuration, drawerAnimation, isPrimaryDrawer);
 						}
 
-						_isDrawerOpen = true;
+						SetDrawerOpenState(isPrimaryDrawer, true);
 						_toggledEventArgs.IsOpen = true;
-						IsOpen = true;
+						settings.IsOpen = true;
+						_toggledEventArgs.IsPrimary = isPrimaryDrawer;
 					}
 					else
 					{
 						_greyOverlayGrid.TranslationX = ScreenWidth;
 					}
 				}
-				else if (_drawerLayout.TranslationX == 0)
+				else if (navigationDrawerLayout.TranslationX == 0)
 				{
-					_isDrawerOpen = true;
+					SetDrawerOpenState(isPrimaryDrawer, true);
+					settings.IsOpen = true;
 				}
 			}
 		}
@@ -2474,9 +3326,13 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		///  Method used to provide the animation to the drawer when moving towards the left side.
 		/// </summary>
-		void DrawerLeftOut()
+		void DrawerLeftOut(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null)
+			DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+			DrawerCancelEventArgs _cancelCloseEventArgs = GetDrawerCancelCloseEventArgs(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
 				if (_actionFirstMoveOpen && _actionFirstMoveClose)
 				{
@@ -2487,144 +3343,161 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				if (!_cancelCloseEventArgs.Cancel)
 				{
 					double currentDuration;
-					var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-					if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
+					if (settings.Transition == Transition.SlideOnTop || settings.Transition == Transition.Push)
 					{
-						currentDuration = (Math.Abs(DrawerSettings.DrawerWidth + _drawerLayout.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
+						currentDuration = (Math.Abs(settings.DrawerWidth + navigationDrawerLayout.TranslationX) / settings.DrawerWidth) * settings.Duration;
 					}
 					else
 					{
-						currentDuration = (Math.Abs(_greyOverlayGrid.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
+						currentDuration = (Math.Abs(_greyOverlayGrid.TranslationX) / settings.DrawerWidth) * settings.Duration;
 					}
 
 					currentDuration = ValidateCurrentDuration(currentDuration);
-					Animation drawerAnimation = new Animation(d => _drawerLayout.TranslationX = d, _drawerLayout.TranslationX, -DrawerSettings.DrawerWidth);
-					Animation greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0);
-					Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
-					if (DrawerSettings.Transition == Transition.SlideOnTop)
+					var drawerAnimation = new Animation(d => navigationDrawerLayout.TranslationX = d, navigationDrawerLayout.TranslationX, -settings.DrawerWidth);
+					var greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0);
+					var greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
+					if (settings.Transition == Transition.SlideOnTop)
 					{
-						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
 #if WINDOWS
-							if (_drawerLayout.TranslationX == -DrawerSettings.DrawerWidth)
+							if (navigationDrawerLayout.TranslationX == -settings.DrawerWidth)
 #endif
 							{
-								OnDrawerClosedToggledEvent();
+								OnDrawerClosedToggledEvent(isPrimaryDrawer);
 							}
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
 						});
 					}
-					else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+					else if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 					{
-						Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
-						Animation contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationX = d, ContentView.TranslationX, 0);
-						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						var greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
+						var contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationX = d, ContentView.TranslationX, 0);
+						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
-						ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+						ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
 #if WINDOWS
-							if (ContentView.TranslationX == 0)
+if (ContentView.TranslationX == 0)
 #endif
 							{
-								OnDrawerClosedToggledEvent();
+								OnDrawerClosedToggledEvent(isPrimaryDrawer);
 							}
 						});
-						DrawerPushAnimation(currentDuration, drawerAnimation);
+						DrawerPushAnimation(currentDuration, drawerAnimation, isPrimaryDrawer);
 					}
 
-					_isDrawerOpen = false;
+					SetDrawerOpenState(isPrimaryDrawer, false);
 					_toggledEventArgs.IsOpen = false;
-					IsOpen = false;
+					settings.IsOpen = false;
 				}
 			}
 		}
 
-		void OnDrawerClosedToggledEvent()
+		void OnDrawerClosedToggledEvent(bool isPrimaryDrawer)
 		{
-			OnDrawerClosed(new EventArgs());
-			OnDrawerToggled(_toggledEventArgs);
+			if (isPrimaryDrawer)
+			{
+				OnDrawerClosed(new DrawerEventArgs(true));
+				OnDrawerToggled(_toggledEventArgs);
 #if WINDOWS
 			if (!_isDrawerOpen)
 #endif
+				{
+					SetVisibility(false,true);
+				}
+			}
+			else
 			{
-				SetVisibility(false);
+				OnDrawerClosed(new DrawerEventArgs(false));
+				OnDrawerToggled(_toggledEventArgs);
+#if WINDOWS
+if (!_isSecondaryDrawerOpen)
+#endif
+				{
+					SetVisibility(false,false);
+				}
 			}
 		}
-
 		/// <summary>
 		/// Method used to provide the animation to the drawer when moving from the right side.
 		/// </summary>
-		void DrawerRightIn()
+		void DrawerRightIn(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+			bool isDrawerOpen = GetDrawerOpenState(isPrimaryDrawer);
+			DrawerCancelEventArgs _cancelOpenEventArgs = GetDrawerCancelOpenEventArgs(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
-				if (_drawerLayout.TranslationX != ScreenWidth - DrawerSettings.DrawerWidth || (DrawerSettings.Transition == Transition.Reveal && ContentView.TranslationX != -DrawerSettings.DrawerWidth))
+				if (navigationDrawerLayout.TranslationX != ScreenWidth - settings.DrawerWidth || (settings.Transition == Transition.Reveal && ContentView?.TranslationX != -settings.DrawerWidth))
 				{
 					if (_actionFirstMoveOpen && _actionFirstMoveClose)
 					{
-						SetDrawerOpeningEvent();
+						SetDrawerOpeningEvent(isPrimaryDrawer);
 					}
 
 					if (!_cancelOpenEventArgs.Cancel)
 					{
 						double currentDuration;
-						var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-						if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
+						if (settings.Transition == Transition.SlideOnTop || settings.Transition == Transition.Push)
 						{
-							currentDuration = (Math.Abs((ScreenWidth - DrawerSettings.DrawerWidth) - _drawerLayout.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
+							currentDuration = (Math.Abs((ScreenWidth - settings.DrawerWidth) - navigationDrawerLayout.TranslationX) / settings.DrawerWidth) * settings.Duration;
 						}
 						else
 						{
-							currentDuration = (Math.Abs(DrawerSettings.DrawerWidth + ContentView.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
+							currentDuration = (Math.Abs(settings.DrawerWidth + ContentView!.TranslationX) / settings.DrawerWidth) * settings.Duration;
 						}
 
 						currentDuration = ValidateCurrentDuration(currentDuration);
-						Animation drawerAnimation = new Animation(d => _drawerLayout.TranslationX = d, _drawerLayout.TranslationX, ScreenWidth - DrawerSettings.DrawerWidth);
-						Animation greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0.5);
-						Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
-						if (DrawerSettings.Transition == Transition.SlideOnTop)
+						var drawerAnimation = new Animation(d => navigationDrawerLayout.TranslationX = d, navigationDrawerLayout.TranslationX, ScreenWidth - settings.DrawerWidth);
+						var greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0.5);
+						var greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
+						if (settings.Transition == Transition.SlideOnTop)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: animationEasing, finished: (v, e) =>
+							navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)settings.Duration, easing: Easing.Linear, finished: (v, e) =>
 							{
-								OnDrawerOpenedToggledEvent();
+								OnDrawerOpenedToggledEvent(isPrimaryDrawer);
 							});
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear, finished: (v, e) =>
 							{
-								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: animationEasing);
+								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(settings.Duration / 2), easing: Easing.Linear);
 							});
 						}
-						else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+						else if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 						{
-							Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, -DrawerSettings.DrawerWidth);
-							Animation contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationX = d, ContentView.TranslationX, -DrawerSettings.DrawerWidth);
-							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing);
-							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: animationEasing);
-							ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+							var greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, -settings.DrawerWidth);
+							var contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationX = d, ContentView.TranslationX, -settings.DrawerWidth);
+							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(settings.Duration / 2), easing: Easing.Linear);
+							ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 							{
-								OnDrawerOpenedToggledEvent();
+								OnDrawerOpenedToggledEvent(isPrimaryDrawer);
 							});
-							DrawerPushAnimation(currentDuration, drawerAnimation);
+							DrawerPushAnimation(currentDuration, drawerAnimation, isPrimaryDrawer);
 						}
 
-						_isDrawerOpen = true;
+						SetDrawerOpenState(isPrimaryDrawer, true);
 						_toggledEventArgs.IsOpen = true;
-						IsOpen = true;
+						settings.IsOpen = true;
+						_toggledEventArgs.IsPrimary = isPrimaryDrawer;
 					}
 					else
 					{
 						_greyOverlayGrid.TranslationX = ScreenWidth;
 					}
 				}
-				else if (_drawerLayout.TranslationX == ScreenWidth - DrawerSettings.DrawerWidth)
+				else if (navigationDrawerLayout.TranslationX == ScreenWidth - settings.DrawerWidth)
 				{
-					_isDrawerOpen = true;
-					_toggledEventArgs.IsOpen = true;
+					SetDrawerOpenState(isPrimaryDrawer, true);
+					settings.IsOpen = true;
 				}
 			}
 		}
@@ -2632,73 +3505,76 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// Method used to provide the animation to the drawer when moving towards the right side.
 		/// </summary>
-		void DrawerRightOut()
+		void DrawerRightOut(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+			DrawerCancelEventArgs cancelCloseEventArgs = GetDrawerCancelCloseEventArgs(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
 				if (_actionFirstMoveOpen && _actionFirstMoveClose)
 				{
-					OnDrawerClosing(_cancelCloseEventArgs);
+					OnDrawerClosing(cancelCloseEventArgs);
 					FirstMoveActionCompleted();
 				}
 
-				if (!_cancelCloseEventArgs.Cancel)
+				if (!cancelCloseEventArgs.Cancel)
 				{
 					double currentDuration;
-					var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-					if (DrawerSettings.Transition == Transition.SlideOnTop || DrawerSettings.Transition == Transition.Push)
+					if (settings.Transition == Transition.SlideOnTop || settings.Transition == Transition.Push)
 					{
-						currentDuration = (Math.Abs(ScreenWidth - _drawerLayout.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
+						currentDuration = (Math.Abs(ScreenWidth - navigationDrawerLayout.TranslationX) / settings.DrawerWidth) * settings.Duration;
 					}
 					else
 					{
-						currentDuration = (Math.Abs(ContentView.TranslationX) / DrawerSettings.DrawerWidth) * DrawerSettings.Duration;
+						currentDuration = (Math.Abs(ContentView.TranslationX) / settings.DrawerWidth) * settings.Duration;
 					}
 
 					currentDuration = ValidateCurrentDuration(currentDuration);
-					Animation drawerAnimation = new Animation(d => _drawerLayout.TranslationX = d, _drawerLayout.TranslationX, ScreenWidth);
-					Animation greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0);
-					Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
-					if (DrawerSettings.Transition == Transition.SlideOnTop)
+					var drawerAnimation = new Animation(d => navigationDrawerLayout.TranslationX = d, navigationDrawerLayout.TranslationX, ScreenWidth);
+					var greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0);
+					var greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
+					if (settings.Transition == Transition.SlideOnTop)
 					{
-						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: animationEasing, finished: (v, e) =>
+						navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)settings.Duration, easing: Easing.Linear, finished: (v, e) =>
 						{
 #if WINDOWS
-							if (_drawerLayout.TranslationX == ScreenWidth)
+if (navigationDrawerLayout.TranslationX == ScreenWidth)
 #endif
 							{
-								OnDrawerClosedToggledEvent();
+								OnDrawerClosedToggledEvent(isPrimaryDrawer);
 							}
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: animationEasing, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(settings.Duration / 2), easing: Easing.Linear, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
 						});
 					}
-					else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+					else if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 					{
-						Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
-						Animation contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationX = d, ContentView.TranslationX, 0);
-						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						var greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
+						var contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationX = d, ContentView.TranslationX, 0);
+						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
-						ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+						ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (ContentView.TranslationX == 0)
 #endif
 							{
-								OnDrawerClosedToggledEvent();
+								OnDrawerClosedToggledEvent(isPrimaryDrawer);
 							}
 						});
-						DrawerPushAnimation(currentDuration, drawerAnimation);
+						DrawerPushAnimation(currentDuration, drawerAnimation, isPrimaryDrawer);
 					}
 
-					_isDrawerOpen = false;
+					SetDrawerOpenState(isPrimaryDrawer, false);
 					_toggledEventArgs.IsOpen = false;
-					IsOpen = false;
+					settings.IsOpen = false;
 				}
 			}
 		}
@@ -2706,18 +3582,23 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// Method used to provide the animation to the drawer when moving from the top side.
 		/// </summary>
-		void DrawerTopIn()
+		void DrawerTopIn(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+			bool isDrawerOpen = GetDrawerOpenState(isPrimaryDrawer);
+			DrawerCancelEventArgs _cancelOpenEventArgs = GetDrawerCancelOpenEventArgs(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
-				if (_drawerLayout.TranslationY != -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerMoveTop || (DrawerSettings.Transition == Transition.Reveal && ContentView.TranslationY != DrawerSettings.DrawerHeight))
+				if (navigationDrawerLayout.TranslationY != -((ScreenHeight / 2) - (settings.DrawerHeight / 2)) - _drawerMoveTop || (settings.Transition == Transition.Reveal && ContentView?.TranslationY != settings.DrawerHeight))
 				{
 					if (_actionFirstMoveOpen && _actionFirstMoveClose)
 					{
-						SetDrawerOpeningEvent();
-						if (DeviceInfo.Platform == DevicePlatform.WinUI && DrawerSettings.Transition != Transition.Reveal)
+						SetDrawerOpeningEvent(isPrimaryDrawer);
+						if (DeviceInfo.Platform == DevicePlatform.WinUI && settings.Transition != Transition.Reveal)
 						{
-							_drawerLayout.TranslationY += _toolBarHeight;
+							navigationDrawerLayout.TranslationY += _toolBarHeight;
 						}
 					}
 
@@ -2725,64 +3606,64 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					{
 						double currentDuration = 0;
 						double pushDuration = 0;
-						var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-						if (DrawerSettings.Transition != Transition.Reveal)
+						if (settings.Transition != Transition.Reveal)
 						{
-							currentDuration = Math.Abs(-((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
-							if (DrawerSettings.Transition == Transition.Push)
+							currentDuration = Math.Abs(-((ScreenHeight / 2) - (settings.DrawerHeight / 2)) - navigationDrawerLayout.TranslationY) / settings.DrawerHeight * settings.Duration;
+							if (settings.Transition == Transition.Push)
 							{
-								pushDuration = Math.Abs((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2) + _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
+								pushDuration = Math.Abs((ScreenHeight / 2) - (settings.DrawerHeight / 2) + navigationDrawerLayout.TranslationY) / settings.DrawerHeight * settings.Duration;
 							}
 						}
 						else
 						{
-							currentDuration = Math.Abs(DrawerSettings.DrawerHeight - ContentView.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
+							currentDuration = Math.Abs(settings.DrawerHeight - ContentView?.TranslationY ?? 0) / settings.DrawerHeight * settings.Duration;
 						}
 
 						currentDuration = ValidateCurrentDuration(currentDuration);
-						Animation drawerAnimation = new Animation(d => _drawerLayout.TranslationY = d, _drawerLayout.TranslationY, -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerMoveTop);
-						Animation greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0.5);
-						Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
-						if (DrawerSettings.Transition == Transition.SlideOnTop)
+						var drawerAnimation = new Animation(d => navigationDrawerLayout.TranslationY = d, navigationDrawerLayout.TranslationY, -((ScreenHeight / 2) - (settings.DrawerHeight / 2)) - _drawerMoveTop);
+						var greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0.5);
+						var greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
+						if (settings.Transition == Transition.SlideOnTop)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+							navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 							{
-								OnDrawerOpenedToggledEvent();
+								OnDrawerOpenedToggledEvent(isPrimaryDrawer);
 							});
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear, finished: (v, e) =>
 							{
-								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
 							});
 						}
-						else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+						else if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 						{
-							Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, DrawerSettings.DrawerHeight);
-							Animation contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationY = d, ContentView.TranslationY, DrawerSettings.DrawerHeight);
-							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing);
-							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
-							ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+							var greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, settings.DrawerHeight);
+							var contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationY = d, ContentView.TranslationY, settings.DrawerHeight);
+							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+							ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 							{
-								OnDrawerOpenedToggledEvent();
+								OnDrawerOpenedToggledEvent(isPrimaryDrawer);
 							});
-							if (DrawerSettings.Transition == Transition.Push)
+							if (settings.Transition == Transition.Push)
 							{
-								_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)pushDuration, easing: animationEasing);
+								navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)pushDuration, easing: Easing.Linear);
 							}
 						}
 
-						_isDrawerOpen = true;
+						SetDrawerOpenState(isPrimaryDrawer, true);
 						_toggledEventArgs.IsOpen = true;
-						IsOpen = true;
+						settings.IsOpen = true;
+						_toggledEventArgs.IsPrimary = isPrimaryDrawer;
 					}
 					else
 					{
 						_greyOverlayGrid.TranslationX = ScreenWidth;
 					}
 				}
-				else if (_drawerLayout.TranslationY == -((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2)) - _drawerMoveTop)
+				else if (navigationDrawerLayout.TranslationY == -((ScreenHeight / 2) - (settings.DrawerHeight / 2)) - _drawerMoveTop)
 				{
-					_isDrawerOpen = true;
-					_toggledEventArgs.IsOpen = true;
+					SetDrawerOpenState(isPrimaryDrawer, true);
+					settings.IsOpen = true;
 				}
 			}
 		}
@@ -2790,81 +3671,84 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		///  Method used to provide the animation to the drawer when moving towards the top side.
 		/// </summary>
-		void DrawerTopOut()
+		void DrawerTopOut(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+			DrawerCancelEventArgs cancelCloseEventArgs = GetDrawerCancelCloseEventArgs(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null && ContentView != null)
 			{
 				if (_actionFirstMoveOpen && _actionFirstMoveClose)
 				{
-					OnDrawerClosing(_cancelCloseEventArgs);
+					OnDrawerClosing(cancelCloseEventArgs);
 					FirstMoveActionCompleted();
 				}
 
-				if (!_cancelCloseEventArgs.Cancel)
+				if (!cancelCloseEventArgs.Cancel)
 				{
 					double currentDuration;
 					double pushDuration = 0;
-					var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-					if (DrawerSettings.Transition != Transition.Reveal)
+					if (settings.Transition != Transition.Reveal)
 					{
-						currentDuration = (Math.Abs(((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2)) + _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight) * DrawerSettings.Duration;
-						if (DrawerSettings.Transition == Transition.Push)
+						currentDuration = (Math.Abs(((ScreenHeight / 2) + (settings.DrawerHeight / 2)) + navigationDrawerLayout.TranslationY) / settings.DrawerHeight) * settings.Duration;
+						if (settings.Transition == Transition.Push)
 						{
-							pushDuration = Math.Abs((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) + _drawerLayout.TranslationY + _toolBarHeight) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
+							pushDuration = Math.Abs((ScreenHeight / 2) + (settings.DrawerHeight / 2) + navigationDrawerLayout.TranslationY + _toolBarHeight) / settings.DrawerHeight * settings.Duration;
 						}
 					}
 					else
 					{
-						currentDuration = Math.Abs(ContentView.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
+						currentDuration = Math.Abs(ContentView.TranslationY) / settings.DrawerHeight * settings.Duration;
 					}
 
 					currentDuration = ValidateCurrentDuration(currentDuration);
-					Animation drawerAnimation = new Animation(d => _drawerLayout.TranslationY = d, _drawerLayout.TranslationY, -((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) + _toolBarHeight));
-					Animation greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0);
-					Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
-					if (DrawerSettings.Transition == Transition.SlideOnTop)
+					var drawerAnimation = new Animation(d => navigationDrawerLayout.TranslationY = d, navigationDrawerLayout.TranslationY, -((ScreenHeight / 2) + (settings.DrawerHeight / 2) + _toolBarHeight));
+					var greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0);
+					var greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
+					if (settings.Transition == Transition.SlideOnTop)
 					{
-						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)DrawerSettings.Duration, easing: animationEasing, finished: (v, e) =>
+						navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)settings.Duration, easing: Easing.Linear, finished: (v, e) =>
 						{
 #if WINDOWS
-							if (_drawerLayout.TranslationY == -((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) + _toolBarHeight))
+if (navigationDrawerLayout.TranslationY == -((ScreenHeight / 2) + (settings.DrawerHeight / 2) + _toolBarHeight))
 #endif
 							{
-								OnDrawerClosedToggledEvent();
+								OnDrawerClosedToggledEvent(isPrimaryDrawer);
 							}
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(DrawerSettings.Duration / 2), easing: animationEasing, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(settings.Duration / 2), easing: Easing.Linear, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
 						});
 					}
-					else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+					else if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 					{
-						Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, 0);
-						Animation contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationY = d, ContentView.TranslationY, 0);
-						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						var greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, 0);
+						var contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationY = d, ContentView.TranslationY, 0);
+						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
-						ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+						ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (ContentView.TranslationY == 0)
 #endif
 							{
-								OnDrawerClosedToggledEvent();
+								OnDrawerClosedToggledEvent(isPrimaryDrawer);
 							}
 						});
-						if (DrawerSettings.Transition == Transition.Push)
+						if (settings.Transition == Transition.Push)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)pushDuration, easing: animationEasing);
+							navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)pushDuration, easing: Easing.Linear);
 						}
 					}
 
-					_isDrawerOpen = false;
+					SetDrawerOpenState(isPrimaryDrawer, false);
 					_toggledEventArgs.IsOpen = false;
-					IsOpen = false;
+					settings.IsOpen = false;
 				}
 			}
 		}
@@ -2872,71 +3756,76 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// Method used to provide the animation to the drawer when moving from the bottom side.
 		/// </summary>
-		void DrawerBottomIn()
+		void DrawerBottomIn(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			 DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+			bool isDrawerOpen = GetDrawerOpenState(isPrimaryDrawer);
+			DrawerCancelEventArgs _cancelOpenEventArgs = GetDrawerCancelOpenEventArgs(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
-				if (_drawerLayout.TranslationY != (ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2) || (DrawerSettings.Transition == Transition.Reveal && ContentView.TranslationY != -DrawerSettings.DrawerHeight))
+				if (navigationDrawerLayout.TranslationY != (ScreenHeight / 2) - (settings.DrawerHeight / 2) || (settings.Transition == Transition.Reveal && ContentView?.TranslationY != -settings.DrawerHeight))
 				{
 					if (_actionFirstMoveOpen && _actionFirstMoveClose)
 					{
-						SetDrawerOpeningEvent();
+						SetDrawerOpeningEvent(isPrimaryDrawer);
 					}
 
 					if (!_cancelOpenEventArgs.Cancel)
 					{
 						double currentDuration = 0;
-						var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-						if (DrawerSettings.Transition != Transition.Reveal)
+						if (settings.Transition != Transition.Reveal)
 						{
-							currentDuration = Math.Abs((ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2) - _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
+							currentDuration = Math.Abs((ScreenHeight / 2) - (settings.DrawerHeight / 2) - navigationDrawerLayout.TranslationY) / settings.DrawerHeight * settings.Duration;
 						}
 						else
 						{
-							currentDuration = Math.Abs(DrawerSettings.DrawerHeight + ContentView.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
+							currentDuration = Math.Abs(settings.DrawerHeight + ContentView?.TranslationY ?? 0) / settings.DrawerHeight * settings.Duration;
 						}
 
 						currentDuration = ValidateCurrentDuration(currentDuration);
-						Animation drawerAnimation = new Animation(d => _drawerLayout.TranslationY = d, _drawerLayout.TranslationY, (ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2));
-						Animation greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0.5);
-						Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
-						if (DrawerSettings.Transition == Transition.SlideOnTop)
+						var drawerAnimation = new Animation(d => navigationDrawerLayout.TranslationY = d, navigationDrawerLayout.TranslationY, (ScreenHeight / 2) - (settings.DrawerHeight / 2));
+						var greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0.5);
+						var greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, 0);
+						if (settings.Transition == Transition.SlideOnTop)
 						{
-							_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+							navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 							{
-								OnDrawerOpenedToggledEvent();
+								OnDrawerOpenedToggledEvent(isPrimaryDrawer);
 							});
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing, finished: (v, e) =>
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear, finished: (v, e) =>
 							{
-								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
+								_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
 							});
 						}
-						else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+						else if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 						{
-							Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, -DrawerSettings.DrawerHeight);
-							Animation contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationY = d, ContentView.TranslationY, -DrawerSettings.DrawerHeight);
-							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing);
-							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
-							ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+							var greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, -settings.DrawerHeight);
+							var contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationY = d, ContentView.TranslationY, -settings.DrawerHeight);
+							_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear);
+							_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+							ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 							{
-								OnDrawerOpenedToggledEvent();
+								OnDrawerOpenedToggledEvent(isPrimaryDrawer);
 							});
-							DrawerPushAnimation(currentDuration, drawerAnimation);
-						}
+						DrawerPushAnimation(currentDuration, drawerAnimation, isPrimaryDrawer);
+					}
 
-						_isDrawerOpen = true;
-						_toggledEventArgs.IsOpen = true;
-						IsOpen = true;
-					}
-					else
-					{
-						_greyOverlayGrid.TranslationX = ScreenWidth;
-					}
-				}
-				else if (_drawerLayout.TranslationY == (ScreenHeight / 2) - (DrawerSettings.DrawerHeight / 2))
-				{
-					_isDrawerOpen = true;
+					SetDrawerOpenState(isPrimaryDrawer, true);
 					_toggledEventArgs.IsOpen = true;
+					settings.IsOpen = true;
+					_toggledEventArgs.IsPrimary = isPrimaryDrawer;
+				}
+				else
+				{
+					_greyOverlayGrid.TranslationX = ScreenWidth;
+				}
+			}
+				else if (navigationDrawerLayout.TranslationY == (ScreenHeight / 2) - (settings.DrawerHeight / 2))
+				{
+					SetDrawerOpenState(isPrimaryDrawer, true);
+					settings.IsOpen = true;
 				}
 			}
 		}
@@ -2944,73 +3833,76 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		///  Method used to provide the animation to the drawer when moving towards the bottom side.
 		/// </summary>
-		void DrawerBottomOut()
+		void DrawerBottomOut(bool isPrimaryDrawer)
 		{
-			if (_greyOverlayGrid != null && _drawerLayout != null && ContentView != null)
+			DrawerSettings? settings = GetDrawerSettings(isPrimaryDrawer);
+			SfGrid? navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+			DrawerCancelEventArgs cancelCloseEventArgs = GetDrawerCancelCloseEventArgs(isPrimaryDrawer);
+
+			if (_greyOverlayGrid != null && navigationDrawerLayout != null && settings != null)
 			{
 				if (_actionFirstMoveOpen && _actionFirstMoveClose)
 				{
-					OnDrawerClosing(_cancelCloseEventArgs);
+					OnDrawerClosing(cancelCloseEventArgs);
 					FirstMoveActionCompleted();
 				}
 
-				if (!_cancelCloseEventArgs.Cancel)
+				if (!cancelCloseEventArgs.Cancel)
 				{
 					double currentDuration;
-					var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-					if (DrawerSettings.Transition != Transition.Reveal)
+					if (settings.Transition != Transition.Reveal)
 					{
-						currentDuration = Math.Abs((ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2) - _drawerLayout.TranslationY) / DrawerSettings.DrawerHeight * DrawerSettings.Duration;
+						currentDuration = Math.Abs((ScreenHeight / 2) + (settings.DrawerHeight / 2) - navigationDrawerLayout.TranslationY) / settings.DrawerHeight * settings.Duration;
 					}
 					else
 					{
-						currentDuration = (Math.Abs(ContentView.TranslationY) / DrawerSettings.DrawerHeight) * DrawerSettings.Duration;
+						currentDuration = (Math.Abs(ContentView?.TranslationY ?? 0) / settings.DrawerHeight) * settings.Duration;
 					}
 
 					currentDuration = ValidateCurrentDuration(currentDuration);
-					Animation drawerAnimation = new Animation(d => _drawerLayout.TranslationY = d, _drawerLayout.TranslationY, (ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2));
-					Animation greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0);
-					Animation greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
-					if (DrawerSettings.Transition == Transition.SlideOnTop)
+					var drawerAnimation = new Animation(d => navigationDrawerLayout.TranslationY = d, navigationDrawerLayout.TranslationY, (ScreenHeight / 2) + (settings.DrawerHeight / 2));
+					var greyOverlayAnimation = new Animation(d => _greyOverlayGrid.Opacity = double.IsNaN(d) ? 0 : d, _greyOverlayGrid.Opacity, 0);
+					var greyOverlayTranslateAnimation = new Animation(d => _greyOverlayGrid.TranslationX = d, _greyOverlayGrid.TranslationX, ScreenWidth);
+					if (settings.Transition == Transition.SlideOnTop)
 					{
-						_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
 #if WINDOWS
-							if (_drawerLayout.TranslationY == (ScreenHeight / 2) + (DrawerSettings.DrawerHeight / 2))
+if (navigationDrawerLayout.TranslationY == (ScreenHeight / 2) + (settings.DrawerHeight / 2))
 #endif
 							{
-								OnDrawerClosedToggledEvent();
+								OnDrawerClosedToggledEvent(isPrimaryDrawer);
 							}
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
 						});
 					}
-					else if ((DrawerSettings.Transition == Transition.Push || DrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+					else if ((settings.Transition == Transition.Push || settings.Transition == Transition.Reveal) && ContentView != null)
 					{
-						Animation greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, 0);
-						Animation contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationY = d, ContentView.TranslationY, 0);
-						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						var greyOverlayTranslatePushAnimation = new Animation(d => _greyOverlayGrid.TranslationY = d, _greyOverlayGrid.TranslationY, 0);
+						var contentViewTranslatePushAnimation = new Animation(d => ContentView.TranslationY = d, ContentView.TranslationY, 0);
+						_greyOverlayGrid.Animate("greyOverlayTranslatePushAnimation", greyOverlayTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
-							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: animationEasing);
+							_greyOverlayGrid.Animate("greyOverlayTranslateAnimation", greyOverlayTranslateAnimation, length: 0, easing: Easing.Linear);
 						});
-						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: animationEasing);
-						ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: animationEasing, finished: (v, e) =>
+						_greyOverlayGrid.Animate("greyOverlayAnimation", greyOverlayAnimation, length: (uint)(currentDuration / 2), easing: Easing.Linear);
+						ContentView.Animate("contentViewTranslatePushAnimation", contentViewTranslatePushAnimation, length: (uint)currentDuration, easing: Easing.Linear, finished: (v, e) =>
 						{
 #if WINDOWS
 							if (ContentView.TranslationY == 0)
 #endif
 							{
-								OnDrawerClosedToggledEvent();
+								OnDrawerClosedToggledEvent(isPrimaryDrawer);
 							}
 						});
-						DrawerPushAnimation(currentDuration, drawerAnimation);
+						DrawerPushAnimation(currentDuration, drawerAnimation, isPrimaryDrawer);
 					}
 
-					_isDrawerOpen = false;
+					SetDrawerOpenState(isPrimaryDrawer, false);
 					_toggledEventArgs.IsOpen = false;
-					IsOpen = false;
+					settings.IsOpen = false;
 				}
 			}
 		}
@@ -3038,29 +3930,428 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// This method is used to provide the visibility for the drawerLayout and greyOverlayGrid.
 		/// </summary>
 		/// <param name="isVisible"></param>
-		void SetVisibility(bool isVisible)
-		{
-			if (_drawerLayout != null && _greyOverlayGrid != null)
-			{
-				_drawerLayout.IsVisible = isVisible;
-				_greyOverlayGrid.IsVisible = isVisible;
+		/// <param name="isPrimaryDrawer"></param>
+        void SetVisibility(bool isVisible, bool isPrimaryDrawer)
+        {
+            if (_greyOverlayGrid != null)
+            {
+                var Settings = isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+                bool isViewsInitialized = Settings.DrawerContentView !=null || Settings.DrawerHeaderView!=null|| Settings.DrawerFooterView!=null;
+                var navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+                if (navigationDrawerLayout != null && isViewsInitialized)
+                {
+                    navigationDrawerLayout.IsVisible = isVisible;
+                    _greyOverlayGrid.IsVisible = isVisible;
 
-				// Workaround for framework issue https://github.com/dotnet/maui/issues/27434: Content inside DrawerContentView does not resize correctly on macOS and iOS.
-				// This forces an invalidation of the measure to ensure proper layout updates.
 #if MACCATALYST || IOS
-				if (DrawerSettings is not null && DrawerSettings.DrawerContentView is not null)
-				{
-					if (DrawerSettings.DrawerContentView is View view)
-					{
-						if (view.IsVisible)
-						{
-							(view as IView)?.InvalidateMeasure();
-						}
-					}
-				}
+                    var settings = GetDrawerSettings(isPrimaryDrawer);
+                    if (settings is not null && settings.DrawerContentView is not null)
+                    {
+                        if (settings.DrawerContentView is View view)
+                        {
+                            if (view.IsVisible)
+                            {
+                                (view as IView)?.InvalidateMeasure();
+                            }
+                        }
+                    }
 #endif
-			}
-		}
+                }
+            }
+        }
+
+#if !WINDOWS
+        void UpdateSecondaryDrawerFlowDirection()
+        {
+            if (_secondaryDrawerLayout != null && ContentView != null)
+            {
+                if (_isRTL)
+                {
+                    _secondaryDrawerLayout.FlowDirection = ContentView.FlowDirection = FlowDirection.RightToLeft;
+                }
+                else
+                {
+                    _secondaryDrawerLayout.FlowDirection = ContentView.FlowDirection = FlowDirection.LeftToRight;
+                }
+            }
+        }
+#endif
+
+        void UpdateSecondaryDrawerContentView()
+        {
+            if (_secondaryDrawerLayout != null)
+            {
+                if (SecondaryDrawerSettings.DrawerContentView != null)
+                {
+                    _secondaryDrawerLayout.Remove(SecondaryDrawerSettings.DrawerContentView);
+                    _secondaryDrawerLayout.SetRow(SecondaryDrawerSettings.DrawerContentView, 1);
+                    _secondaryDrawerLayout.Children.Add(SecondaryDrawerSettings.DrawerContentView);
+#if !WINDOWS
+                    UpdateSecondaryDrawerFlowDirection();
+#endif
+                }
+            }
+        }
+
+        void UpdateSecondaryDrawerHeaderView()
+        {
+            if (_secondaryDrawerLayout != null)
+            {
+                UpdateSecondaryDrawerHeaderFooterSize();
+                if (SecondaryDrawerSettings.DrawerHeaderView != null)
+                {
+                    _secondaryDrawerLayout.Remove(SecondaryDrawerSettings.DrawerHeaderView);
+                    _secondaryDrawerLayout.SetRow(SecondaryDrawerSettings.DrawerHeaderView, 0);
+                    _secondaryDrawerLayout.Children.Add(SecondaryDrawerSettings.DrawerHeaderView);
+                    _oldSecondaryHeaderView = SecondaryDrawerSettings.DrawerHeaderView;
+                }
+                else
+                {
+                    _secondaryDrawerLayout.Remove(_oldSecondaryHeaderView);
+                    _oldSecondaryHeaderView = SecondaryDrawerSettings.DrawerHeaderView;
+                }
+            }
+        }
+
+        void UpdateSecondaryDrawerFooterView()
+        {
+            if (_secondaryDrawerLayout != null)
+            {
+                UpdateSecondaryDrawerHeaderFooterSize();
+                if (SecondaryDrawerSettings.DrawerFooterView != null)
+                {
+                    _secondaryDrawerLayout.Remove(SecondaryDrawerSettings.DrawerFooterView);
+                    _secondaryDrawerLayout.SetRow(SecondaryDrawerSettings.DrawerFooterView, 2);
+                    _secondaryDrawerLayout.Children.Add(SecondaryDrawerSettings.DrawerFooterView);
+                    _oldSecondaryFooterView = SecondaryDrawerSettings.DrawerFooterView;
+                }
+                else
+                {
+                    _secondaryDrawerLayout.Remove(_oldSecondaryFooterView);
+                    _oldSecondaryFooterView = SecondaryDrawerSettings.DrawerFooterView;
+                }
+            }
+        }
+
+        void UpdateSecondaryDrawerHeaderFooterSize()
+        {
+            if (_secondaryDrawerLayout != null)
+            {
+                double headerHeight = 0;
+                double footerHeight = 0;
+                if (SecondaryDrawerSettings.DrawerHeaderView != null)
+                {
+                    headerHeight = (SecondaryDrawerSettings.DrawerHeaderHeight < 0) ? (double)DrawerSettings.DrawerHeaderHeightProperty.DefaultValue : SecondaryDrawerSettings.DrawerHeaderHeight;
+                    SecondaryDrawerSettings.DrawerHeaderView.IsVisible = headerHeight > 0;
+                }
+
+                if (SecondaryDrawerSettings.DrawerFooterView != null)
+                {
+                    footerHeight = (SecondaryDrawerSettings.DrawerFooterHeight < 0) ? (double)DrawerSettings.DrawerFooterHeightProperty.DefaultValue : SecondaryDrawerSettings.DrawerFooterHeight;
+                    SecondaryDrawerSettings.DrawerFooterView.IsVisible = footerHeight > 0;
+                }
+
+                _secondaryDrawerLayout.RowDefinitions.Clear();
+                _secondaryDrawerLayout.RowDefinitions = new RowDefinitionCollection()
+                {
+                    new RowDefinition { Height = new GridLength(headerHeight) },
+                    new RowDefinition(),
+                    new RowDefinition { Height = new GridLength(footerHeight) },
+                };
+            }
+        }
+
+        void UpdateSecondaryDrawerLayoutSize()
+        {
+            if (_secondaryDrawerLayout != null)
+            {
+                SecondaryPositionUpdate();
+            }
+        }
+        void UpdateSecondaryContentBackground()
+        {
+            if (_secondaryDrawerLayout != null && SecondaryDrawerSettings != null)
+            {
+                _secondaryDrawerLayout.BackgroundColor = SecondaryDrawerSettings.ContentBackground;
+               
+            }
+        }
+
+        void UpdateSecondaryIsOpen()
+        {
+            if (ScreenHeight > 0)
+            {
+                if ((SecondaryDrawerSettings.IsOpen && !_isSecondaryDrawerOpen) || (!SecondaryDrawerSettings.IsOpen && _isSecondaryDrawerOpen))
+                {
+                    if (!SecondaryDrawerSettings.IsOpen || DrawerSettings.IsOpen != SecondaryDrawerSettings.IsOpen)
+                    {
+                        ToggleSecondaryDrawer();
+                    }
+                }
+            }
+        }
+
+        void UpdateSecondaryTransitionAnimation()
+        {
+            Children.Clear();
+            UpdateAllChild();
+            SecondaryPositionUpdate();
+        }
+
+        void UpdateSecondaryTouchThreshold()
+        {
+            if (SecondaryDrawerSettings != null)
+            {
+                if (SecondaryDrawerSettings.Position == Position.Right)
+                {
+                    _touchRightThreshold = ScreenWidth - SecondaryDrawerSettings.TouchThreshold;
+                }
+                else if (SecondaryDrawerSettings.Position == Position.Bottom)
+                {
+                    _touchBottomThreshold = ScreenHeight - SecondaryDrawerSettings.TouchThreshold;
+                }
+            }
+        }
+
+		void SecondaryPositionUpdate()
+        {
+            if (_secondaryDrawerLayout != null && _greyOverlayGrid != null && SecondaryDrawerSettings != null)
+            {
+#if !WINDOWS
+                if ((SecondaryDrawerSettings.Position == Position.Right && !_isRTL) || (SecondaryDrawerSettings.Position == Position.Left && _isRTL))
+#else
+                if (SecondaryDrawerSettings.Position == Position.Right)
+#endif
+                {
+                    _secondaryDrawerLayout.WidthRequest = SecondaryDrawerSettings.DrawerWidth;
+                    _secondaryDrawerLayout.HeightRequest = ScreenHeight;
+                    _secondaryDrawerLayout.TranslationY = 0;
+                    if (_isSecondaryDrawerOpen)
+                    {
+                        SetVisibility(true,false);
+                        _secondaryDrawerLayout.TranslationX = ScreenWidth - SecondaryDrawerSettings.DrawerWidth;
+                        if (SecondaryDrawerSettings.Transition == Transition.SlideOnTop && ContentView != null)
+                        {
+                            _greyOverlayGrid.TranslationX = 0;
+                            ContentView.TranslationX = 0;
+                        }
+
+                        if ((SecondaryDrawerSettings.Transition == Transition.Push || SecondaryDrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+                        {
+                            ContentView.TranslationX = -SecondaryDrawerSettings.DrawerWidth;
+                            _greyOverlayGrid.TranslationX = -SecondaryDrawerSettings.DrawerWidth;
+                            ContentView.TranslationY = 0;
+                            _greyOverlayGrid.TranslationY = 0;
+                        }
+                    }
+                    else
+                    {
+#if WINDOWS || MACCATALYST
+                        if ((!_secondaryDrawerLayout.AnimationIsRunning("drawerAnimation") && !_greyOverlayGrid.AnimationIsRunning("greyOverlayTranslateAnimation")) || (SecondaryDrawerSettings.Transition == Transition.Reveal && !ContentView.AnimationIsRunning("contentViewTranslatePushAnimation")))
+#endif
+                        {
+                            if (!DrawerSettings.IsOpen)
+                            {
+                                SetVisibility(false, false);
+                            }
+                        }
+                        if(!DrawerSettings.IsOpen)
+                        {
+                            _greyOverlayGrid.TranslationX = ScreenWidth;
+                        }
+
+                        if (SecondaryDrawerSettings.Transition == Transition.Reveal && ContentView != null)
+                        {
+                            _secondaryDrawerLayout.TranslationX = ScreenWidth - SecondaryDrawerSettings.DrawerWidth;
+                            ContentView.TranslationX = 0;
+                        }
+                        else
+                        {
+                            _secondaryDrawerLayout.TranslationX = ScreenWidth;
+                            if (SecondaryDrawerSettings.Transition == Transition.Push && ContentView != null)
+                            {
+                                ContentView.TranslationX = 0;
+                            }
+                        }
+                    }
+
+                    _touchRightThreshold = ScreenWidth - SecondaryDrawerSettings.TouchThreshold;
+                }
+#if !WINDOWS
+                else if ((SecondaryDrawerSettings.Position == Position.Left && !_isRTL) || (SecondaryDrawerSettings.Position == Position.Right && _isRTL))
+#else
+                else if (SecondaryDrawerSettings.Position == Position.Left)
+#endif
+                {
+                    _secondaryDrawerLayout.HorizontalOptions = LayoutOptions.Start;
+                    _secondaryDrawerLayout.WidthRequest = SecondaryDrawerSettings.DrawerWidth;
+                    _secondaryDrawerLayout.HeightRequest = ScreenHeight;
+                    _secondaryDrawerLayout.TranslationY = 0;
+                    if (_isSecondaryDrawerOpen)
+                    {
+                        SetVisibility(true,false);
+                        _secondaryDrawerLayout.TranslationX = 0;
+                        if (SecondaryDrawerSettings.Transition == Transition.SlideOnTop && ContentView != null)
+                        {
+                            _greyOverlayGrid.TranslationX = 0;
+                            ContentView.TranslationX = 0;
+                        }
+                        else if ((SecondaryDrawerSettings.Transition == Transition.Push || SecondaryDrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+                        {
+                            _greyOverlayGrid.TranslationX = SecondaryDrawerSettings.DrawerWidth;
+                            ContentView.TranslationX = SecondaryDrawerSettings.DrawerWidth;
+                            ContentView.TranslationY = 0;
+                            _secondaryDrawerLayout.TranslationY = 0;
+                        }
+                    }
+                    else
+                    {
+#if WINDOWS || MACCATALYST
+                        if ((!_secondaryDrawerLayout.AnimationIsRunning("drawerAnimation") && !_greyOverlayGrid.AnimationIsRunning("greyOverlayTranslateAnimation")) || (SecondaryDrawerSettings.Transition == Transition.Reveal && !ContentView.AnimationIsRunning("contentViewTranslatePushAnimation")) && !DrawerSettings.IsOpen)
+#endif
+                        {
+                            if (!DrawerSettings.IsOpen)
+                            {
+                                SetVisibility(false, false);
+                            }
+                        }
+                        if(!DrawerSettings.IsOpen)
+                        {
+                            _greyOverlayGrid.TranslationX = ScreenWidth;
+                        }
+                        if (SecondaryDrawerSettings.Transition == Transition.Reveal && ContentView != null)
+                        {
+                            _secondaryDrawerLayout.TranslationX = 0;
+                            ContentView.TranslationX = 0;
+                        }
+                        else
+                        {
+                            _secondaryDrawerLayout.TranslationX = -SecondaryDrawerSettings.DrawerWidth;
+                            if (SecondaryDrawerSettings.Transition == Transition.Push && ContentView != null)
+                            {
+                                ContentView.TranslationX = 0;
+                            }
+                        }
+                    }
+#if !WINDOWS
+                    if (_isRTL)
+                    {
+                        _touchRightThreshold = SecondaryDrawerSettings.TouchThreshold;
+                    }
+#endif
+                }
+                else if (SecondaryDrawerSettings.Position == Position.Top)
+                {
+                    _secondaryDrawerLayout.WidthRequest = ScreenWidth;
+                    _secondaryDrawerLayout.HeightRequest = SecondaryDrawerSettings.DrawerHeight;
+                    _secondaryDrawerLayout.TranslationX = 0;
+                    if (_isSecondaryDrawerOpen)
+                    {
+                        SetVisibility(true,false);
+                        _greyOverlayGrid.TranslationX = 0;
+                        _secondaryDrawerLayout.TranslationY = -((ScreenHeight / 2) - (SecondaryDrawerSettings.DrawerHeight / 2));
+                        if (SecondaryDrawerSettings.Transition == Transition.SlideOnTop && ContentView != null)
+                        {
+                            ContentView.TranslationY = 0;
+                            ContentView.TranslationX = 0;
+                            _greyOverlayGrid.TranslationY = 0;
+                        }
+                        else if ((SecondaryDrawerSettings.Transition == Transition.Push || SecondaryDrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+                        {
+                            _secondaryDrawerLayout.TranslationY -= _drawerMoveTop;
+                            _greyOverlayGrid.TranslationY = SecondaryDrawerSettings.DrawerHeight;
+                            ContentView.TranslationY = SecondaryDrawerSettings.DrawerHeight;
+                            ContentView.TranslationX = 0;
+                        }
+                    }
+                    else
+                    {
+#if WINDOWS || MACCATALYST
+                        if ((!_secondaryDrawerLayout.AnimationIsRunning("drawerAnimation") && !_greyOverlayGrid.AnimationIsRunning("greyOverlayTranslateAnimation")) || (SecondaryDrawerSettings.Transition == Transition.Reveal && !ContentView.AnimationIsRunning("contentViewTranslatePushAnimation")) && !DrawerSettings.IsOpen)
+#endif
+                        {
+                            if (!DrawerSettings.IsOpen)
+                            {
+                                SetVisibility(false, false);
+                            }
+                        }
+                        if(!DrawerSettings.IsOpen)
+                        {
+                            _greyOverlayGrid.TranslationX = ScreenWidth;
+                        }
+                        if (SecondaryDrawerSettings.Transition == Transition.Reveal && ContentView != null)
+                        {
+                            _secondaryDrawerLayout.TranslationY = -((ScreenHeight / 2) - (SecondaryDrawerSettings.DrawerHeight / 2));
+                            ContentView.TranslationY = 0;
+                        }
+                        else
+                        {
+                            _secondaryDrawerLayout.TranslationY = -((ScreenHeight / 2) + (SecondaryDrawerSettings.DrawerHeight / 2) + _toolBarHeight);
+                            if (SecondaryDrawerSettings.Transition == Transition.Push && ContentView != null)
+                            {
+                                ContentView.TranslationY = 0;
+                                _secondaryDrawerLayout.TranslationY -= _drawerMoveTop;
+                            }
+                        }
+                    }
+                }
+                else if (SecondaryDrawerSettings.Position == Position.Bottom)
+                {
+                    _secondaryDrawerLayout.WidthRequest = ScreenWidth;
+                    _secondaryDrawerLayout.HeightRequest = SecondaryDrawerSettings.DrawerHeight;
+                    _secondaryDrawerLayout.TranslationX = 0;
+                    if (_isSecondaryDrawerOpen)
+                    {
+                        SetVisibility(true,false);
+                        _greyOverlayGrid.TranslationX = 0;
+                        _secondaryDrawerLayout.TranslationY = (ScreenHeight / 2) - (SecondaryDrawerSettings.DrawerHeight / 2);
+                        if (SecondaryDrawerSettings.Transition == Transition.SlideOnTop && ContentView != null)
+                        {
+                            ContentView.TranslationY = 0;
+                            ContentView.TranslationX = 0;
+                        }
+                        else if ((SecondaryDrawerSettings.Transition == Transition.Push || SecondaryDrawerSettings.Transition == Transition.Reveal) && ContentView != null)
+                        {
+                            _greyOverlayGrid.TranslationY = -SecondaryDrawerSettings.DrawerHeight;
+                            ContentView.TranslationY = -SecondaryDrawerSettings.DrawerHeight;
+                            ContentView.TranslationX = 0;
+                        }
+                    }
+                    else
+                    {
+#if WINDOWS || MACCATALYST
+                        if ((!_secondaryDrawerLayout.AnimationIsRunning("drawerAnimation") && !_greyOverlayGrid.AnimationIsRunning("greyOverlayTranslateAnimation")) || (SecondaryDrawerSettings.Transition == Transition.Reveal && !ContentView.AnimationIsRunning("contentViewTranslatePushAnimation")) && !DrawerSettings.IsOpen)
+#endif
+                        {
+                            if (!DrawerSettings.IsOpen)
+                            {
+                                SetVisibility(false, false);
+                            }
+                        }
+                        if(!DrawerSettings.IsOpen)
+                        {
+                            _greyOverlayGrid.TranslationX = ScreenWidth;
+                        }
+
+                        if (SecondaryDrawerSettings.Transition == Transition.Reveal && ContentView != null)
+                        {
+                            _secondaryDrawerLayout.TranslationY = (ScreenHeight / 2) - (SecondaryDrawerSettings.DrawerHeight / 2);
+                            ContentView.TranslationY = 0;
+                        }
+                        else
+                        {
+                            _secondaryDrawerLayout.TranslationY = (ScreenHeight / 2) + (SecondaryDrawerSettings.DrawerHeight / 2);
+                            if (SecondaryDrawerSettings.Transition == Transition.Push && ContentView != null)
+                            {
+                                ContentView.TranslationY = 0;
+                            }
+                        }
+                    }
+
+                    _touchBottomThreshold = ScreenHeight - SecondaryDrawerSettings.TouchThreshold;
+                }
+            }
+        }
 
 		/// <summary>
 		/// Methods to validate current duration.
@@ -3103,6 +4394,21 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			}
 		}
 
+        /// <summary>
+        /// Methods to validate remain drawer height.
+        /// </summary>
+        void ValidateSecondaryRemainDrawerHeight()
+        {
+            if (_remainDrawerHeight < -SecondaryDrawerSettings.DrawerHeight)
+            {
+                _remainDrawerHeight = -SecondaryDrawerSettings.DrawerHeight;
+            }
+            else if (_remainDrawerHeight > 0)
+            {
+                _remainDrawerHeight = 0;
+            }
+        }
+
 		/// <summary>
 		/// Methods to validate remain drawer width.
 		/// </summary>
@@ -3118,26 +4424,115 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			}
 		}
 
-		void SetDrawerOpeningEvent()
-		{
-			OnDrawerOpening(_cancelOpenEventArgs);
-			FirstMoveActionCompleted();
-		}
+		/// <summary>
+        /// Methods to validate remain secondary drawer width.
+        /// </summary>
+        void ValidateSecondaryRemainDrawerWidth()
+        {
+            if (_remainDrawerWidth < -SecondaryDrawerSettings.DrawerWidth)
+            {
+                _remainDrawerWidth = -SecondaryDrawerSettings.DrawerWidth;
+            }
+            else if (_remainDrawerWidth > 0)
+            {
+                _remainDrawerWidth = 0;
+            }
+        }
 
-		void OnDrawerOpenedToggledEvent()
-		{
-			OnDrawerOpened(new EventArgs());
-			OnDrawerToggled(_toggledEventArgs);
-		}
+		void SetDrawerOpeningEvent(bool isPrimaryDrawer)
+        {
+			DrawerCancelEventArgs cancelOpenEventArgs;
+			if (isPrimaryDrawer)
+            {
+				cancelOpenEventArgs = _cancelOpenEventArgs;
+            }
+            else
+            {
+				cancelOpenEventArgs = _secondaryCancelOpenEventArgs;
+            }
 
-		void DrawerPushAnimation(double currentDuration, Animation drawerAnimation)
-		{
-			var animationEasing = this.DrawerSettings.AnimationEasing ?? Easing.Linear;
-			if (DrawerSettings.Transition == Transition.Push)
-			{
-				_drawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: animationEasing);
-			}
-		}
+			OnDrawerOpening(cancelOpenEventArgs);
+			SetVisibility(!cancelOpenEventArgs.Cancel, isPrimaryDrawer);
+            FirstMoveActionCompleted();
+        }
+        void OnDrawerOpenedToggledEvent(bool isPrimaryDrawer)
+        {
+            if (isPrimaryDrawer)
+            {
+                OnDrawerOpened(new DrawerEventArgs(true));
+                OnDrawerToggled(_toggledEventArgs);
+            }
+            else
+            {
+                OnDrawerOpened(new DrawerEventArgs(false));
+                OnDrawerToggled(_toggledEventArgs);
+            }
+        }
+        void DrawerPushAnimation(double currentDuration, Animation drawerAnimation, bool isPrimaryDrawer)
+        {
+            var settings = GetDrawerSettings(isPrimaryDrawer);
+            var navigationDrawerLayout = GetDrawerLayout(isPrimaryDrawer);
+            
+            if (settings?.Transition == Transition.Push && navigationDrawerLayout != null)
+            {
+                navigationDrawerLayout.Animate("drawerAnimation", drawerAnimation, length: (uint)currentDuration, easing: Easing.Linear);
+            }
+        }
+
+        /// <summary>
+        /// Generic helper method to get drawer settings.
+        /// </summary>
+        DrawerSettings? GetDrawerSettings(bool isPrimaryDrawer)
+        {
+            return isPrimaryDrawer ? DrawerSettings : SecondaryDrawerSettings;
+        }
+
+        /// <summary>
+        /// Generic helper method to get drawer layout.
+        /// </summary>
+        SfGrid? GetDrawerLayout(bool isPrimaryDrawer)
+        {
+            return isPrimaryDrawer ? _drawerLayout : _secondaryDrawerLayout;
+        }
+
+        /// <summary>
+        /// Generic helper method to get drawer open state.
+        /// </summary>
+        bool GetDrawerOpenState(bool isPrimaryDrawer)
+        {
+            return isPrimaryDrawer ? _isDrawerOpen : _isSecondaryDrawerOpen;
+        }
+
+        /// <summary>
+        /// Generic helper method to set drawer open state.
+        /// </summary>
+        void SetDrawerOpenState(bool isPrimaryDrawer, bool isOpen)
+        {
+            if (isPrimaryDrawer)
+            {
+                _isDrawerOpen = isOpen;
+            }
+            else
+            {
+                _isSecondaryDrawerOpen = isOpen;
+            }
+        }
+
+        /// <summary>
+        /// Generic helper method to get drawer cancel event args.
+        /// </summary>
+        DrawerCancelEventArgs GetDrawerCancelOpenEventArgs(bool isPrimaryDrawer)
+        {
+            return isPrimaryDrawer ? _cancelOpenEventArgs : _secondaryCancelOpenEventArgs;
+        }
+
+        /// <summary>
+        /// Generic helper method to get drawer cancel close event args.
+        /// </summary>
+        DrawerCancelEventArgs GetDrawerCancelCloseEventArgs(bool isPrimaryDrawer)
+        {
+            return isPrimaryDrawer ? _cancelCloseEventArgs : _secondaryCancelCloseEventArgs;
+        }
 
 		#endregion
 
@@ -3152,7 +4547,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <returns>It returns the size</returns>
 		protected override Size MeasureContent(double widthConstraint, double heightConstraint)
 		{
-			if (DrawerSettings != null && _drawerLayout != null)
+			if (DrawerSettings != null && _drawerLayout != null && _secondaryDrawerLayout != null)
 			{
 				if (widthConstraint > 0 && widthConstraint != double.PositiveInfinity && _drawerLayout.WidthRequest != widthConstraint)
 				{
@@ -3167,6 +4562,22 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 					if (DrawerSettings.Position == Position.Left || DrawerSettings.Position == Position.Right)
 					{
 						_drawerLayout.HeightRequest = heightConstraint;
+					}
+				}
+
+				if (widthConstraint > 0 && widthConstraint != double.PositiveInfinity && _secondaryDrawerLayout.WidthRequest != widthConstraint)
+				{
+					if (SecondaryDrawerSettings.Position == Position.Bottom || SecondaryDrawerSettings.Position == Position.Top)
+					{
+						_secondaryDrawerLayout.WidthRequest = widthConstraint;
+					}
+				}
+
+				if (heightConstraint > 0 && heightConstraint != double.PositiveInfinity && _secondaryDrawerLayout.HeightRequest != heightConstraint)
+				{
+					if (SecondaryDrawerSettings.Position == Position.Left || SecondaryDrawerSettings.Position == Position.Right)
+					{
+						_secondaryDrawerLayout.HeightRequest = heightConstraint;
 					}
 				}
 			}
@@ -3200,6 +4611,7 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 				if (IsLoaded)
 				{
 					UpdateIsOpen();
+					UpdateSecondaryIsOpen();
 				}
 			}
 
@@ -3220,6 +4632,11 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			{
 				SfNavigationDrawer.SetInheritedBindingContext(DrawerSettings, BindingContext);
 			}
+			if (SecondaryDrawerSettings != null)
+			{
+				SfNavigationDrawer.SetInheritedBindingContext(SecondaryDrawerSettings, BindingContext);
+			}
+			UpdateAllChild();
 		}
 
 #if !WINDOWS
@@ -3307,6 +4724,36 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 		}
 
+		static void OnSecondaryDrawerSettingsChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var drawer = bindable as SfNavigationDrawer;
+            if (drawer != null)
+            {
+                drawer.OnSecondaryDrawerSettingsChanged();
+                drawer.SecondaryDrawerSettings.PropertyChanged -= drawer.OnSecondaryDrawerSettings_PropertyChanged;
+                drawer.SecondaryDrawerSettings.PropertyChanged += drawer.OnSecondaryDrawerSettings_PropertyChanged;
+            }
+
+            if (oldValue != null)
+            {
+                if (oldValue is DrawerSettings previousSetting)
+                {
+                    previousSetting.PropertyChanged -= drawer!.OnSecondaryDrawerSettings_PropertyChanged;
+                    previousSetting.BindingContext = null;
+                    previousSetting.Parent = null;
+                }
+            }
+            if (newValue != null)
+            {
+                if (newValue is DrawerSettings currentSetting && bindable is SfNavigationDrawer sfNavigationDrawer)
+                {
+                    currentSetting.Parent = sfNavigationDrawer;
+                    SetInheritedBindingContext(sfNavigationDrawer.SecondaryDrawerSettings, sfNavigationDrawer.BindingContext);
+                }
+            }
+
+        }
+
 		/// <summary>
 		/// Invoked whenever the <see cref="GreyOverlayColorProperty"/> is set.
 		/// </summary>
@@ -3335,28 +4782,6 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			}
 		}
 
-
-		/// <summary>	 
-		/// Invoked whenever the <see cref="IsOpenProperty"/> is set.
-		/// </summary>
-		/// <param name="bindable">The bindable.</param>
-		/// <param name="oldValue">The old value.</param>
-		/// <param name="newValue">The new value.</param>
-		static void OnIsOpenChanged(BindableObject bindable, object oldValue, object newValue)
-		{
-			{
-				if (bindable is not SfNavigationDrawer drawer)
-				{
-					return;
-				}
-
-				if (drawer.IsLoaded)
-				{
-					drawer.UpdateIsOpen();
-				}
-			}
-		}
-
 #if !WINDOWS
 		/// <summary>
 		/// Invoked whenever the <see cref="ContentBackgroundColorProperty"/> is set.
@@ -3369,7 +4794,9 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 			if (bindable is SfNavigationDrawer navigation && navigation != null)
 			{
 				navigation.UpdateDrawerFlowDirection();
+				navigation.UpdateSecondaryDrawerFlowDirection();
 				navigation.PositionUpdate();
+				navigation.SecondaryPositionUpdate();
 			}
 		}
 #endif
@@ -3419,12 +4846,12 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// It is drawer closed event.
 		/// </summary>
-		public event EventHandler<EventArgs>? DrawerClosed;
+		public event EventHandler<DrawerEventArgs>? DrawerClosed;
 
 		/// <summary>
 		/// It is drawer opened event.
 		/// </summary>
-		public event EventHandler<EventArgs>? DrawerOpened;
+		public event EventHandler<DrawerEventArgs>? DrawerOpened;
 
 		/// <summary>
 		/// It is drawer toggled event.
@@ -3434,12 +4861,12 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <summary>
 		/// It is drawer closing event.
 		/// </summary>
-		public event EventHandler<CancelEventArgs>? DrawerClosing;
+		public event EventHandler<DrawerCancelEventArgs>? DrawerClosing;
 
 		/// <summary>
 		/// It is drawer opening event.
 		/// </summary>
-		public event EventHandler<CancelEventArgs>? DrawerOpening;
+		public event EventHandler<DrawerCancelEventArgs>? DrawerOpening;
 
 		#endregion
 	}

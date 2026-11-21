@@ -196,7 +196,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// </summary>
         /// <param name="sender">The object.</param>
         /// <param name="e">Event arguments.</param>
-        void AppointmentBooking_SelectionChanged(object sender, CalendarSelectionChangedEventArgs e)
+        void AppointmentBooking_SelectionChanged(object? sender, CalendarSelectionChangedEventArgs e)
         {
 #if MACCATALYST
             UpdateDateSelection(appointmentBooking1, label1, flexLayout1);
@@ -249,7 +249,7 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// </summary>
         /// <param name="sender">The object.</param>
         /// <param name="e">Event arguments.</param>
-        void AppointmentanBooking(object sender, EventArgs e)
+        void AppointmentanBooking(object? sender, EventArgs e)
         {
 #if MACCATALYST
             BookAppointment(appointmentBooking1, flexLayout1);
@@ -314,14 +314,28 @@ namespace Syncfusion.Maui.ControlsGallery.Calendar.Calendar
         /// </summary>
         /// <param name="sender">The object.</param>
         /// <param name="e">Event arguments.</param>
-        void SlotBooking_Changed(object sender, EventArgs e)
+        void SlotBooking_Changed(object? sender, EventArgs e)
         {
+			if (sender == null)
+			{
+				return;
+			}
 #if MACCATALYST
+			if(sender == null)
+			{
+				return;
+			}
+
             UpdateTimeSlotSelection(appointmentBooking1, (SfButton)sender, flexLayout1);
 #elif !ANDROID && !IOS
+			if(sender == null)
+			{
+				return;
+			}
+
             UpdateTimeSlotSelection(appointmentBooking, (SfButton)sender, flexLayout);
 #else
-            if (DeviceInfo.Idiom == DeviceIdiom.Tablet)
+			if (DeviceInfo.Idiom == DeviceIdiom.Tablet)
             {
                 UpdateTimeSlotSelection(appointmentBooking1, (SfButton)sender, flexLayout1);
             }

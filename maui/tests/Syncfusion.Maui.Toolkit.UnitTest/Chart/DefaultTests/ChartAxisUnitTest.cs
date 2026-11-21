@@ -100,7 +100,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.Empty(axis.RegisteredSeries);
 			Assert.NotNull(axis.ActualPlotBands);
 			Assert.Empty(axis.ActualPlotBands);
-			Assert.Null(axis.RangeStyles);
+			Assert.NotNull(axis.RangeStyles);
+			Assert.Empty(axis.RangeStyles);
 			Assert.Equal(3, axis.MaximumLabels);
 			Assert.Null(axis.PlotBands);
 		}
@@ -285,7 +286,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.Empty(axis.RegisteredSeries);
 			Assert.NotNull(axis.ActualPlotBands);
 			Assert.Empty(axis.ActualPlotBands);
-			Assert.Null(axis.RangeStyles);
+			Assert.NotNull(axis.RangeStyles);
+			Assert.Empty(axis.RangeStyles);
 			Assert.Equal(3, axis.MaximumLabels);
 			Assert.Null(axis.PlotBands);
 		}
@@ -538,7 +540,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.Null(axis.Area);
 			Assert.Null(axis.CartesianArea);
 			Assert.Null(axis.AxisRenderer);
-			Assert.Null(axis.RangeStyles);
+			Assert.NotNull(axis.RangeStyles);
+			Assert.Empty(axis.RangeStyles);
 			Assert.Equal(0, axis.SideBySideSeriesCount);
 			Assert.Equal(3, axis.MaximumLabels);
 			Assert.NotNull(axis.MinorGridLineStyle);
@@ -705,7 +708,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.Null(axis.Area);
 			Assert.Null(axis.CartesianArea);
 			Assert.Null(axis.AxisRenderer);
-			Assert.Null(axis.RangeStyles);
+			Assert.NotNull(axis.RangeStyles);
+			Assert.Empty(axis.RangeStyles);
 			Assert.Null(axis.TrackballLabelTemplate);
 			Assert.Equal(Rect.Zero, axis.ArrangeRect);
 		}
@@ -874,7 +878,8 @@ namespace Syncfusion.Maui.Toolkit.UnitTest.Charts
 			Assert.False(axis.ShowTrackballLabel);
 			Assert.NotNull(axis.AssociatedAxes);
 			Assert.Empty(axis.AssociatedAxes);
-			Assert.Null(axis.RangeStyles);
+			Assert.NotNull(axis.RangeStyles);
+			Assert.Empty(axis.RangeStyles);
 			Assert.Equal(Size.Zero, axis.AvailableSize);
 			Assert.Equal(default(RectF), axis.RenderedRect);
 			Assert.Equal(Rect.Zero, axis.ArrangeRect);

@@ -45,7 +45,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+		private void Picker_SelectedIndexChanged(object? sender, EventArgs e)
 		{
 			if (sender is not Microsoft.Maui.Controls.Picker value || CartesianChartLegend is null)
 				return;

@@ -177,7 +177,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		}
 
 		internal bool Empty { get; set; }
-
+		internal RectF SemanticBounds { get; set; }
 		internal RectF SegmentBounds { get; set; }
 
 		internal RectF LabelBounds { get; set; }
@@ -230,6 +230,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Methods
 
 		#region Protected Methods
+
+		/// <summary>
+		/// Returns the bounding rectangle of the rendered segment for accessibility.
+		/// </summary>
+		/// <returns>The segment bounds.</returns>
+		internal virtual Rect GetSemanticsBounds()
+		{
+			return SemanticBounds;
+		}
 
 		/// <summary>
 		/// Calculates the required values for rendering the chart segment.

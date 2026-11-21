@@ -36,6 +36,11 @@
         bool AllowViewNavigation { get; }
 
         /// <summary>
+        /// Gets the maximum display mode, which restricts the highest calendar view level.
+        /// </summary>
+        CalendarView MaximumDisplayMode { get; }
+
+        /// <summary>
         /// Gets the today highlight color.
         /// </summary>
         Brush TodayHighlightBrush { get; }

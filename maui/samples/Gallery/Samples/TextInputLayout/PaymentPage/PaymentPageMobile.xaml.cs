@@ -16,7 +16,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 			MonthField.InputViewPadding = new Thickness(16, 8, 2, 8);
 			YearField.InputViewPadding = new Thickness(16, 8, 2, 8);
 		}
-		private void SubmitButton_Clicked(object sender, EventArgs e)
+		private void SubmitButton_Clicked(object? sender, EventArgs e)
 		{
 			PaymentPageMobile.FieldNullCheck(PayNameField);
 			PaymentPageMobile.FieldNullCheck(CardNumberField);
@@ -91,7 +91,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 
 		}
 
-		private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+		private void Entry_TextChanged(object? sender, TextChangedEventArgs e)
 		{
 			if (e.NewTextValue.Length == 4)
 			{
@@ -99,7 +99,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 			}
 		}
 
-		private void Entry2_TextChanged(object sender, TextChangedEventArgs e)
+		private void Entry2_TextChanged(object? sender, TextChangedEventArgs e)
 		{
 			if (e.NewTextValue.Length == 4)
 			{
@@ -107,7 +107,7 @@ namespace Syncfusion.Maui.ControlsGallery.TextInputLayout.SfTextInputLayout
 			}
 		}
 
-		private void Entry3_TextChanged(object sender, TextChangedEventArgs e)
+		private void Entry3_TextChanged(object? sender, TextChangedEventArgs e)
 		{
 			if (e.NewTextValue.Length == 4)
 			{

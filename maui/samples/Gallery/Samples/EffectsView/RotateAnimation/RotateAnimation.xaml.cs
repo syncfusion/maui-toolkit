@@ -1,6 +1,5 @@
 ﻿namespace Syncfusion.Maui.ControlsGallery.EffectsView.SfEffectsView
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class RotateAnimation : SampleView
 	{
 		public RotateAnimation()
@@ -8,7 +7,7 @@
 			InitializeComponent();
 		}
 
-		private void RotationEffectsViewAnimationCompleted(object sender, EventArgs e)
+		private void RotationEffectsViewAnimationCompleted(object? sender, EventArgs e)
 		{
 			if (RotationEffectsView.Angle == 180)
 			{

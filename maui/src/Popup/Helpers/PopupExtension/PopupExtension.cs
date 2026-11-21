@@ -79,6 +79,22 @@
 
 						return shellPage.CurrentPage;
 					}
+					else if (windowPage is FlyoutPage flyoutPage && !shouldReturnOnlyMainPage)
+					{
+						// 1059467 - When the root page is a FlyoutPage, return the active Detail page so that safe-area / keyboard calculations reflect the page hierarchy (Detail is the visible page).
+						if (flyoutPage.Detail == null)
+						{
+							return new Page();
+						}
+
+						// FlyoutPage -> NavigationPage -> ContentPage: the visible page is the NavigationPage's current page, otherwise the ContentPage's SafeAreaEdges are never considered and the popup ignores the safe area.
+						if (flyoutPage.Detail is NavigationPage detailNavigationPage)
+						{
+							return detailNavigationPage.CurrentPage ?? new Page();
+						}
+
+						return flyoutPage.Detail;
+					}
 				}
 
 				return windowPage;

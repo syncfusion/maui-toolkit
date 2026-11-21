@@ -3,7 +3,6 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 	/// <summary>
 	/// SfNavigationDrawerStyle provides a set of predefined styles for SfNavigationDrawer control.
 	/// </summary>
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SfNavigationDrawerStyle : ResourceDictionary
 	{
 		/// <summary>

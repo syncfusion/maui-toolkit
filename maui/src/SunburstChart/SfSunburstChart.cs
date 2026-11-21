@@ -1251,7 +1251,15 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             {
                 SetInheritedBindingContext(CenterView, BindingContext);
             }
-        }
+
+			if (Levels != null)
+			{
+				foreach (var level in Levels)
+				{
+					SetInheritedBindingContext(level, BindingContext);
+				}
+			}
+		}
 
 
 		#endregion
@@ -1357,7 +1365,8 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                             segment.SunburstItems = item;
                             segment.IsSelected = SelectedSunburstItems.Contains(item);
                             segment.CurrentLevel = index;
-                            segment.Index = item.SliceIndex;
+							segment.HierarchicalLevel = level;
+							segment.Index = item.SliceIndex;
 
 							segment.ArcStartAngle = item.ArcStart;
                             segment.ArcEndAngle = item.ArcEnd;
@@ -1531,6 +1540,12 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             return fillColor;
         }
 
+		internal Brush? GetLegendFillColor(int index)
+		{
+			var firstLevel = Levels.FirstOrDefault(level => level.SunburstItems != null);
+			return firstLevel?.Fill ?? GetFillColor(index);
+		}
+
 		/// <summary>
 		/// Animates the drill-down operation using MAUI Animation API.
 		/// </summary>
@@ -1587,12 +1602,9 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 
 				// Add fade-in effect like Xamarin
 				area.DataLabelView.Opacity = 0;
-#if NET10_0_OR_GREATER
+
                 var animation = new Animation(v => area.DataLabelView.Opacity = v, 0, 1, Easing.CubicOut);
                 animation.Commit(area.DataLabelView, "FadeIn", length: 250);
-#else
-				area.DataLabelView.FadeTo(1.0, 250, Easing.CubicOut);
-#endif
 				area.DataLabelView.InvalidateDrawable();
 			}
 		}
@@ -1724,7 +1736,18 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 			segment.Fill = SelectionSettings != null && segment.IsSelected &&
 						   SelectionSettings.DisplayMode.HasFlag(SunburstSelectionDisplayMode.HighlightByBrush) && SelectionSettings.Fill != null
 						   ? SelectionSettings.Fill
-						   : GetFillColor(segment.Index) ?? Brush.Transparent;
+						   : GetSegmentFill(segment) ?? GetFillColor(segment.Index) ?? Brush.Transparent;
+		}
+
+		Brush? GetSegmentFill(SunburstSegment segment)
+		{
+			var level = segment.HierarchicalLevel;
+			if (level == null && segment.CurrentLevel >= 0 && segment.CurrentLevel < Levels.Count)
+			{
+				level = Levels[segment.CurrentLevel];
+			}
+
+			return level?.Fill;
 		}
 
 		internal void SetOpacity(SunburstSegment segment)
@@ -1894,7 +1917,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 
 			foreach (var item in area.legendItems.OfType<LegendItem>())
 			{
-				var originalBrush = GetFillColor(item.Index) ?? Brush.Transparent;
+				var originalBrush = GetLegendFillColor(item.Index) ?? Brush.Transparent;
 				bool isSelectedItem = item.Index == SelectedSunburstItems[0].SliceIndex;
 
 				if (isSelectedItem)
@@ -1918,7 +1941,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 			var item = area.legendItems.FirstOrDefault(sel => sel.Index.Equals(segment.Index));
 			if (item is LegendItem legendItem)
 			{
-				legendItem.IconBrush = !segment.IsSelected ? GetFillColor(legendItem.Index) ?? Brush.Transparent : SelectionSettings.Fill;
+				legendItem.IconBrush = !segment.IsSelected ? GetLegendFillColor(legendItem.Index) ?? Brush.Transparent : SelectionSettings.Fill;
 				var currentColor = legendItem.TextColor;
 				legendItem.TextColor = Color.FromRgba(
 					currentColor.Red,
@@ -1935,7 +1958,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 		{
 			foreach (var item in area.legendItems.OfType<LegendItem>())
 			{
-				item.IconBrush = GetFillColor(item.Index) ?? Brush.Transparent;
+				item.IconBrush = GetLegendFillColor(item.Index) ?? Brush.Transparent;
 				var currentColor = item.TextColor;
 				item.TextColor = Color.FromRgba(
 					currentColor.Red,
@@ -2466,6 +2489,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             if (bindable is SfSunburstChart chart)
             {
                 chart.OnCustomBrushesChanged(oldValue as ObservableCollection<Brush>, newValue as ObservableCollection<Brush>);
+				chart.area.ShouldPopulateLegendItems = true;
                 chart.ScheduleUpdate();
             }
         }
@@ -2488,7 +2512,8 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
 
         void CustomBrushes_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            ScheduleUpdate();
+			area.ShouldPopulateLegendItems = true;
+			ScheduleUpdate();
         }
 
         void OnCustomBrushesChanged(ObservableCollection<Brush>? oldValue, ObservableCollection<Brush>? newValue)
@@ -2930,24 +2955,13 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 layout = GetDefaultTooltipTemplate(tooltipSettings, sunburstSegment).CreateContent();
             }
 
-#if NET10_0_OR_GREATER
 			view = layout as View;
-#else
-            view = layout is ViewCell ? (layout as ViewCell)?.View : layout as View;
-#endif
+
 			if (view != null)
             {
-#if NET9_0_OR_GREATER
                 var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity);
-#else
-                var size = view.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
-#endif
-#if NET10_0_OR_GREATER
 				view.Frame = new Rect(0, 0, size.Width, size.Height);
 				view.InvalidateMeasure();
-#else
-                view.Layout(new Rect(0, 0, size.Width, size.Height));
-#endif
 			}
 
 			return view;
@@ -2990,11 +3004,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                     Margin = settings.Margin
                 };
 
-#if NET10_0_OR_GREATER
 				return stackLayout;
-#else
-                return new ViewCell { View = stackLayout };
-#endif
 			});
 
             return template;
@@ -3019,7 +3029,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
             return null;
         }
 
-        internal void UpdateLegendItems()
+		internal void UpdateLegendItems()
         {
             area.ShouldPopulateLegendItems = true;
             area.UpdateLegendItemAttributes();

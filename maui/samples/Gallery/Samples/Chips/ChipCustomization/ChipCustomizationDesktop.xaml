@@ -59,7 +59,7 @@
                                 </OnPlatform>
                             </tabView:SfTabItem.FontSize>
                             <tabView:SfTabItem.Content>
-                                <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                             <HorizontalStackLayout >
                                                 <Border  x:Name="text1" Stroke="{AppThemeBinding Light ={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"  StrokeThickness="2" StrokeShape="RoundRectangle 20" >
                                                     <Button WidthRequest="32" 
@@ -146,7 +146,7 @@
                                 </OnPlatform>
                             </tabView:SfTabItem.FontSize>
                             <tabView:SfTabItem.Content>
-                                <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <HorizontalStackLayout >
                                                 <Border  x:Name="background1" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
                                                     <Button WidthRequest="32" 
@@ -233,7 +233,7 @@
                                 </OnPlatform>
                             </tabView:SfTabItem.FontSize>
                             <tabView:SfTabItem.Content>
-                                <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                     <HorizontalStackLayout>
                                                 <Border  x:Name="border1" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
                                                     <Button WidthRequest="32" 
@@ -321,7 +321,7 @@
                             </Grid.ColumnDefinitions>
                             <Slider x:Name="textSlider"
                                         HeightRequest="50" 
-                                        VerticalOptions="CenterAndExpand"
+                                        VerticalOptions="Center"
                                         Minimum="0" 
                                         Maximum="10" 
                                         MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
@@ -353,7 +353,7 @@
                     <Slider x:Name="leftCornerRadius" 
                                     Grid.Column="1" 
                                     HeightRequest="50"
-                                    VerticalOptions="CenterAndExpand" 
+                                    VerticalOptions="Center" 
                                     Minimum="0" 
 									Maximum="20" 
                                     MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
@@ -383,7 +383,7 @@
                     <Slider x:Name="rightCornerRadius" 
                                     Grid.Column="1"
                                     HeightRequest="50" 
-                                    VerticalOptions="CenterAndExpand"
+                                    VerticalOptions="Center"
                                     Minimum="0" 
                                     Maximum="20" 
                                     MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"

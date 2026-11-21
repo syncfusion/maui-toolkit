@@ -51,6 +51,7 @@
 
             <chart:RangeColumnSeries EnableAnimation="True"
                                      ShowDataLabels="True"
+                                     x:Name="rangeColumnSeries1"
                                      Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}"
                                      ItemsSource="{Binding TemperatureData}"
                                      XBindingPath="Name"
@@ -67,18 +68,26 @@
 
                 </chart:RangeColumnSeries>
 
-        </chart:SfCartesianChart>
+            </chart:SfCartesianChart>
 
 
-        <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
-            <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
+            <HorizontalStackLayout Grid.Row="1" x:Name="hyperLinkLayout" Margin="5,5,0,0">
+                <Label Text="Source: " FontSize="12" VerticalOptions="Center"></Label>
                 <Label TextColor="#3E8EED" FontSize="12" FontAttributes="Italic" Text=" holiday-weather.com" VerticalOptions="Center">
-                <Label.GestureRecognizers>
+                    <Label.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding TapCommand}" CommandParameter="https://www.holiday-weather.com/rome/averages/"/>
-                </Label.GestureRecognizers>
-            </Label>
-        </HorizontalStackLayout>
-
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
         </Grid>
     </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <HorizontalStackLayout>
+                <Label Text="Apply gradient" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                <CheckBox x:Name="gradientCheckBox" IsChecked="False" CheckedChanged="gradientCheckBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
 </localCore:SampleView>

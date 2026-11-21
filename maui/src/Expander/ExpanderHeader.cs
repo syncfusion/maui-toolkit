@@ -720,11 +720,7 @@ namespace Syncfusion.Maui.Toolkit.Expander
 
 				if (isExpanded || (!isExpanded && _expander.IsViewLoaded))
 				{
-#if NET10_0_OR_GREATER
                         label.RelRotateToAsync(targetRotation, _iconAnimationDuration);
-#else
-					    label.RelRotateTo(targetRotation, _iconAnimationDuration);
-#endif
 				}
 			}
 		}

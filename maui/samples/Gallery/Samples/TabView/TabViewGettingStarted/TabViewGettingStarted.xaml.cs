@@ -5,7 +5,6 @@ namespace Syncfusion.Maui.ControlsGallery.TabView.SfTabView
     /// <summary>
     /// A sample view demonstrating the usage of SfTabView.
     /// </summary>
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TabViewGettingStarted : SampleView
     {
        
@@ -20,7 +19,7 @@ namespace Syncfusion.Maui.ControlsGallery.TabView.SfTabView
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="Syncfusion.Maui.Toolkit.TabView.TabSelectionChangedEventArgs"/> instance containing the event data.</param>
-        private void tabView_SelectionChanged(object sender, Syncfusion.Maui.Toolkit.TabView.TabSelectionChangedEventArgs e)
+        private void tabView_SelectionChanged(object? sender, Syncfusion.Maui.Toolkit.TabView.TabSelectionChangedEventArgs e)
         {
             switch(e.NewIndex)
             {

@@ -136,7 +136,7 @@
                      Text="Pay Now" FontFamily="Roboto-Regular"
                      BackgroundColor="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}"
                      Clicked="SubmitButton_Clicked"
-                     HorizontalOptions="FillAndExpand"/>
+                     HorizontalOptions="Fill"/>
                 </VerticalStackLayout>
             </Border>
 

@@ -729,7 +729,12 @@ namespace Syncfusion.Maui.Toolkit.NumericEntry
 		/// <returns>A string representing the alternative decimal separator.</returns>
 		static string GetAnotherSeparatorText()
         {
-            string separator = NSLocale.CurrentLocale.DecimalSeparator;
+			var decimalSeparator = NSLocale.CurrentLocale.DecimalSeparator;
+			if(decimalSeparator == null)
+			{
+				return "";
+			}
+			string separator = decimalSeparator;
             if (separator == ".")
             {
                return ",";

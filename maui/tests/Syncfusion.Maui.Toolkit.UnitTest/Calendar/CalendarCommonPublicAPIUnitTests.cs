@@ -1944,5 +1944,118 @@ namespace Syncfusion.Maui.Toolkit.UnitTest
 		}
 
 		#endregion
+
+		#region MinimumDisplayMode and MaximumDisplayMode
+
+		[Fact]
+		public void SfCalendar_MinimumDisplayMode_DefaultValueIsMonth()
+		{
+			// Arrange & Act
+			SfCalendar calendar = new SfCalendar();
+
+			// Assert
+			Assert.Equal(CalendarView.Month, calendar.MinimumDisplayMode);
+		}
+
+		[Fact]
+		public void SfCalendar_MaximumDisplayMode_DefaultValueIsCentury()
+		{
+			// Arrange & Act
+			SfCalendar calendar = new SfCalendar();
+
+			// Assert
+			Assert.Equal(CalendarView.Century, calendar.MaximumDisplayMode);
+		}
+
+		[Fact]
+		public void SfCalendar_SettingMinimumDisplayMode_ClampsBelowMinimumView()
+		{
+			// Arrange
+			SfCalendar calendar = new SfCalendar
+			{
+				View = CalendarView.Month
+			};
+
+			// Act - Set minimum after View to trigger clamping
+			calendar.MinimumDisplayMode = CalendarView.Year;
+
+			// Assert - View should be clamped to minimum (Year)
+			Assert.Equal(CalendarView.Year, calendar.View);
+		}
+
+		[Fact]
+		public void SfCalendar_SettingMaximumDisplayMode_ClampsAboveMaximumView()
+		{
+			// Arrange
+			SfCalendar calendar = new SfCalendar
+			{
+				View = CalendarView.Century
+			};
+
+			// Act - Set maximum after View to trigger clamping
+			calendar.MaximumDisplayMode = CalendarView.Decade;
+
+			// Assert - View should be clamped to maximum (Decade)
+			Assert.Equal(CalendarView.Decade, calendar.View);
+		}
+
+		[Fact]
+		public void SfCalendar_ViewWithinRange_RemainsUnchanged()
+		{
+			// Arrange
+			SfCalendar calendar = new SfCalendar
+			{
+				View = CalendarView.Year,
+				MinimumDisplayMode = CalendarView.Month,
+				MaximumDisplayMode = CalendarView.Century
+			};
+
+			// Act
+			calendar.View = CalendarView.Year;
+
+			// Assert
+			Assert.Equal(CalendarView.Year, calendar.View);
+		}
+
+		[Theory]
+		[InlineData(CalendarView.Month, CalendarView.Year, CalendarView.Century)]
+		[InlineData(CalendarView.Year, CalendarView.Month, CalendarView.Century)]
+		[InlineData(CalendarView.Decade, CalendarView.Month, CalendarView.Decade)]
+		[InlineData(CalendarView.Century, CalendarView.Month, CalendarView.Decade)]
+		public void SfCalendar_ChangingDisplayModeProperties_ClampsViewCorrectly(CalendarView newView, CalendarView minimum, CalendarView maximum)
+		{
+			// Arrange
+			SfCalendar calendar = new SfCalendar
+			{
+				View = newView
+			};
+
+			// Act - Set modes after View to trigger clamping
+			calendar.MinimumDisplayMode = minimum;
+			calendar.MaximumDisplayMode = maximum;
+
+			// Assert
+			CalendarView expected = CalendarViewHelper.GetValidDisplayViewMode(newView, minimum, maximum);
+			Assert.Equal(expected, calendar.View);
+		}
+
+		[Fact]
+		public void SfCalendar_BothModesEqual_RemainsAtSingleLevel()
+		{
+			// Arrange
+			SfCalendar calendar = new SfCalendar
+			{
+				View = CalendarView.Decade
+			};
+
+			// Act - Set both modes to Year after View to trigger clamping
+			calendar.MinimumDisplayMode = CalendarView.Year;
+			calendar.MaximumDisplayMode = CalendarView.Year;
+
+			// Assert - View should be clamped to the only allowed level (Year)
+			Assert.Equal(CalendarView.Year, calendar.View);
+		}
+
+		#endregion
 	}
 }

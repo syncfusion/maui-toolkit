@@ -5,7 +5,7 @@ namespace Syncfusion.Maui.ControlsGallery.Expander;
     /// <summary>
     /// Represents to add expander items to scroll view.
     /// </summary>
-#if NET8_0_OR_GREATER && (IOS || MACCATALYST)
+#if (IOS || MACCATALYST)
     internal class ExpanderScrollView : ScrollView, ICrossPlatformLayout
 #else
     internal class ExpanderScrollView : ScrollView
@@ -18,7 +18,7 @@ namespace Syncfusion.Maui.ControlsGallery.Expander;
 
         #region Public Methods
 
-#if NET8_0_OR_GREATER && (IOS || MACCATALYST)
+#if (IOS || MACCATALYST)
 
         /// <summary>
         /// Override this method due to .net8 blank issue.

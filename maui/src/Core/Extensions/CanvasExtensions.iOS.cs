@@ -47,6 +47,10 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 					}
 
 					// Apply the FontAttributes to the UIFont instance
+					if(uiFont == null)
+					{
+						return;
+					}
 					var fontDescriptor = uiFont.FontDescriptor;
 					if (textElement.FontAttributes.HasFlag(FontAttributes.Bold))
 					{
@@ -111,6 +115,10 @@ namespace Syncfusion.Maui.Toolkit.Graphics.Internals
 					}
 
 					// Apply the FontAttributes to the UIFont instance
+					if(uiFont == null)
+					{
+						return;
+					}
 					var fontDescriptor = uiFont.FontDescriptor;
 					if (textElement.FontAttributes.HasFlag(FontAttributes.Bold))
 					{

@@ -4,7 +4,6 @@ namespace Syncfusion.Maui.Toolkit.Chips
 	/// Represents a collection of styles for the <see cref="SfChip"/> control.
 	/// </summary>
 	/// <exclude/>
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SfChipStyles : ResourceDictionary
 	{
 		/// <summary>

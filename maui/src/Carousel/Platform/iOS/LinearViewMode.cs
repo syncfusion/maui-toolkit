@@ -323,8 +323,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			{
 				ConvertVirtualItemForLoadMore(indexPath);
 			}
+			var linearDatasource = _carousel.LinearDataSource != null ? _carousel.LinearDataSource.GetItem<PlatformCarouselItem>((nuint)indexPath.Row) : [];
+			if(linearDatasource == null)
+			{
+				return cell;
+			}
 
-			PlatformCarouselItem carouselItem = _carousel.LinearDataSource != null ? _carousel.LinearDataSource.GetItem<PlatformCarouselItem>((nuint)indexPath.Row) : [];
+			PlatformCarouselItem carouselItem = linearDatasource;
 			ConfigureCellAccessibility(cell, carouselItem, indexPath);
 			ConfigureCellWithItem(cell, carouselItem);
 
@@ -413,7 +418,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 			}
 			if (_carousel.LinearDataSource != null && _carousel.DataSource != null)
 			{
-				_carousel.LinearDataSource.ReplaceObject(indexPath.Row, _carousel.DataSource.GetItem<PlatformCarouselItem>((nuint)indexPath.Row));
+				var indexRow = _carousel.DataSource.GetItem<PlatformCarouselItem>((nuint)indexPath.Row);
+				if(indexRow == null)
+				{
+					return;
+				}
+				_carousel.LinearDataSource.ReplaceObject(indexPath.Row, indexRow);
 			}
 		}
 

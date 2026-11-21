@@ -12,7 +12,7 @@ public partial class NumericEntryCultureAndFormattingDesktop : SampleView
         percentCulture.Culture = new CultureInfo("en-US");
         usBorder.SetAppThemeColor(Border.StrokeProperty, Color.FromArgb("#6750A4"), Color.FromArgb("#D0BCFF"));
     }
-    private void IndiaImageButton_Clicked(object sender, EventArgs e)
+    private void IndiaImageButton_Clicked(object? sender, EventArgs e)
     {      
         currencyCulture.Culture = new CultureInfo("en-IN");
         decimalCulture.Culture = new CultureInfo("en-IN");
@@ -28,7 +28,7 @@ public partial class NumericEntryCultureAndFormattingDesktop : SampleView
 #endif
     }
 
-    private void USImageButton_Clicked(object sender, EventArgs e)
+    private void USImageButton_Clicked(object? sender, EventArgs e)
     {        
         currencyCulture.Culture = new CultureInfo("en-US");
         decimalCulture.Culture = new CultureInfo("en-US");
@@ -44,7 +44,7 @@ public partial class NumericEntryCultureAndFormattingDesktop : SampleView
 #endif
     }
 
-    private void RussiaImageButton_Clicked(object sender, EventArgs e)
+    private void RussiaImageButton_Clicked(object? sender, EventArgs e)
     {       
         currencyCulture.Culture = new CultureInfo("ru-RU");
         decimalCulture.Culture = new CultureInfo("ru-RU");
@@ -61,7 +61,7 @@ public partial class NumericEntryCultureAndFormattingDesktop : SampleView
     }
 
 
-    private void FranceImageButton_Clicked(object sender, EventArgs e)
+    private void FranceImageButton_Clicked(object? sender, EventArgs e)
     {
         currencyCulture.Culture = new CultureInfo("fr-FR");
         decimalCulture.Culture = new CultureInfo("fr-FR");

@@ -272,12 +272,38 @@
 					}
 				}
 
+				SemanticBounds = GetSemanticBounds();
+				foreach (var outlierBounds in _outlierSegmentBounds)
+				{
+					float left = Math.Min(SemanticBounds.Left, outlierBounds.Left);
+					float top = Math.Min(SemanticBounds.Top, outlierBounds.Top);
+					float right = Math.Max(SemanticBounds.Right, outlierBounds.Right);
+					float bottom = Math.Max(SemanticBounds.Bottom, outlierBounds.Bottom);
+					SemanticBounds = new RectF(left, top, right - left, bottom - top);
+				}
+
 			}
 		}
 
 		#endregion
 
 		#region Private methods
+
+		private RectF GetSemanticBounds()
+		{
+			float left = SegmentBounds.Left;
+			float top = SegmentBounds.Top;
+			float right = SegmentBounds.Right;
+			float bottom = SegmentBounds.Bottom;
+			float lineWidth = (float)(Math.Max(1, StrokeWidth) / 2);
+
+			left = Math.Min(left, Math.Min(_maximumLinePointX, _minimumLinePointX) - lineWidth);
+			right = Math.Max(right, Math.Max(_maximumLinePointX, _minimumLinePointX) + lineWidth);
+			top = Math.Min(top, Math.Min(_maximumLinePointY, _minimumLinePointY) - lineWidth);
+			bottom = Math.Max(bottom, Math.Max(_maximumLinePointY, _minimumLinePointY) + lineWidth);
+
+			return new RectF(left, top, right - left, bottom - top);
+		}
 
 		void Layout(BoxAndWhiskerSeries? series)
 		{

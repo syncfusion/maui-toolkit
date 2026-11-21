@@ -511,8 +511,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// <param name="selectedDateRange">The calendar date range.</param>
         /// <param name="allowViewNavigation">Defines the selection enabled for year, decade and century views.</param>
         /// <param name="calendarIdentifier">The calendar identifier.</param>
+        /// <param name="minimumDisplayMode">The minimum display mode for view navigation.</param>
         /// <returns>It returns the date is disabled date or not.</returns>
-        internal static bool IsDisabledDate(DateTime dateTime, CalendarView view, bool enablePastDate, DateTime minDate, DateTime maxDate, CalendarSelectionMode selectionMode, CalendarRangeSelectionDirection selectionDirection, CalendarDateRange? selectedDateRange, bool allowViewNavigation, CalendarIdentifier calendarIdentifier)
+        internal static bool IsDisabledDate(DateTime dateTime, CalendarView view, bool enablePastDate, DateTime minDate, DateTime maxDate, CalendarSelectionMode selectionMode, CalendarRangeSelectionDirection selectionDirection, CalendarDateRange? selectedDateRange, bool allowViewNavigation, CalendarIdentifier calendarIdentifier, CalendarView minimumDisplayMode = CalendarView.Month)
         {
             // To get the calendar instance based on the calendar identifier.
             Globalization.Calendar cultureCalendar = GetCalendar(calendarIdentifier);
@@ -583,7 +584,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     }
             }
 
-            if (selectionMode != CalendarSelectionMode.Range || isDisabledDate || (view != CalendarView.Month && allowViewNavigation))
+            if (selectionMode != CalendarSelectionMode.Range || isDisabledDate || (view != CalendarView.Month && allowViewNavigation && view != minimumDisplayMode))
             {
                 return isDisabledDate;
             }
@@ -1106,7 +1107,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         internal static bool IsInteractableDate(DateTime date, List<DateTime> disabledDates, List<DateTime> visibleDates, ICalendarCommon calendar, int numberOfWeeks)
         {
             //// If the interacted date is disabled date then the date must be non interactable.
-            if (IsDisabledDate(date, calendar.View, calendar.EnablePastDates, calendar.MinimumDate, calendar.MaximumDate, calendar.SelectionMode, calendar.RangeSelectionDirection, calendar.SelectedDateRange, calendar.AllowViewNavigation, calendar.Identifier))
+            if (IsDisabledDate(date, calendar.View, calendar.EnablePastDates, calendar.MinimumDate, calendar.MaximumDate, calendar.SelectionMode, calendar.RangeSelectionDirection, calendar.SelectedDateRange, calendar.AllowViewNavigation, calendar.Identifier, calendar.MinimumDisplayMode))
             {
                 return false;
             }
@@ -1577,19 +1578,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             //// If the template has view cell as it direct content then we cannot cast it to view.
             //// All layouts, controls and views are base type of view but ViewCell is not type of view,
             //// hence we need to get the view from view cell.
-#if NET9_0
-            if (content is ViewCell)
-            {
-                view = ((ViewCell)content).View;
-            }
-            else
-            {
-                view = (View)content;
-            }
-#elif NET10_0
             view = (View)content;
-#endif
-
             if (view.BindingContext == null && details != null)
             {
                 view.BindingContext = details;
@@ -1643,7 +1632,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             {
                 return CultureInfo.CurrentUICulture;
             }
-#if NET9_0_OR_GREATER && (MACCATALYST || IOS)
+#if MACCATALYST || IOS
             CultureInfo cultureInfo = CultureInfo.CreateSpecificCulture(language);
             if (calendarIdentifier == "Hijri")
             {
@@ -2576,6 +2565,18 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             }
 
             return numberOfWeeks;
+        }
+
+        /// <summary>
+        /// Gets the valid display view mode, clamping the provided view to fall within the minimum and maximum display modes.
+        /// </summary>
+        /// <param name="view">The requested calendar view.</param>
+        /// <param name="minimum">The minimum allowed display mode.</param>
+        /// <param name="maximum">The maximum allowed display mode.</param>
+        /// <returns>The clamped calendar view that respects the minimum and maximum constraints.</returns>
+        internal static CalendarView GetValidDisplayViewMode(CalendarView view, CalendarView minimum, CalendarView maximum)
+        {
+            return view < minimum ? minimum : view > maximum ? maximum : view;
         }
 
         #endregion

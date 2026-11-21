@@ -25,9 +25,13 @@
             plotBandRecurrenceChart.Handler?.DisconnectHandler();
         }
 
-		private void axis_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		private void axis_CheckedChanged(object? sender, CheckedChangedEventArgs e)
 		{
-			var checkBox = (CheckBox)sender;
+			if (sender is not CheckBox checkBox)
+			{
+				return;
+			}
+
 			if (ViewModel != null)
 			{
 				var input = checkBox.StyleId;

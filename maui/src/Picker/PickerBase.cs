@@ -85,7 +85,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         /// </summary>
         bool _isInternalPropertyChange = false;
 
-#if MACCATALYST || IOS || (ANDROID && NET10_0_OR_GREATER)
+#if MACCATALYST || IOS || ANDROID
 
         /// <summary>
         /// Holds the value of picker view loaded or not.
@@ -828,7 +828,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
                 return Size.Zero;
             }
 
-#if ANDROID && NET10_0_OR_GREATER
+#if ANDROID
             if (Mode == PickerMode.Default && !_isPickerViewLoaded)
             {
                 _isPickerViewLoaded = true;
@@ -839,7 +839,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
             return measuredSize;
         }
 
-#if !WINDOWS && NET10_0_OR_GREATER
+#if !WINDOWS
         /// <summary>
         /// Handles the allocation of size for the current view and updates the item height of the picker container when the size changes.
         /// </summary>

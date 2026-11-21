@@ -78,20 +78,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		void DrawPrimaryAxisGridLine(ChartAxis axis, ICanvas canvas)
 		{
-			var gridLineStyle = axis.MajorGridLineStyle ?? PolarGridLineLayout.GetDefaultGridLineStyle();
 			if (!axis.CanDrawMajorGridLines())
 			{
 				return;
 			}
-			else
-			{
-				canvas.StrokeSize = (float)gridLineStyle.StrokeWidth;
-				canvas.StrokeColor = gridLineStyle.Stroke.ToColor();
-				if (gridLineStyle.StrokeDashArray != null)
-				{
-					canvas.StrokeDashPattern = gridLineStyle.StrokeDashArray.ToFloatArray();
-				}
-			}
+
+			bool hasRangeStyles = axis.HasRangeStyles;
 
 			float radius = float.NaN;
 			if (_yAxis != null)
@@ -108,6 +100,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			for (int i = 0; i < totalSpokes; i++)
 			{
+				//Resolve the effective style for this spoke: the range style's major grid line
+				//style overrides the axis default when a range matches the label position.
+				var effectiveStyle = axis.MajorGridLineStyle ?? GetDefaultGridLineStyle();
+
+				if (hasRangeStyles)
+				{
+					effectiveStyle = axis.GetMajorGridLineStyleInRange(axis.VisibleLabels[i].Position) ?? effectiveStyle;
+				}
+
+				canvas.StrokeSize = (float)effectiveStyle.StrokeWidth;
+				canvas.StrokeColor = effectiveStyle.Stroke.ToColor();
+				canvas.StrokeDashPattern = effectiveStyle.StrokeDashArray?.ToFloatArray();
+
 				float angleValue = (float)axis.ValueToPolarAngle(axis.VisibleLabels[i].Position);
 				var point = _area.PolarAngleToPoint(axis, radius, angleValue);
 
@@ -129,15 +134,24 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				{
 					foreach (var position in tickPositions)
 					{
+						//Resolve the effective style for this ring: the range style's major grid line
+						//style overrides the axis default when a range matches the tick position.
+						var effectiveStyle = gridLineStyle;
+
+						if (axis.HasRangeStyles)
+						{
+							effectiveStyle = axis.GetMajorGridLineStyleInRange(position) ?? gridLineStyle;
+						}
+
 						float value = axis.ValueToCoefficient(position);
-						float y = height * (1f - value);
+						float y = height * value;
 						if (_area.Series?.Count > 0 && !(_isRadar))
 						{
-							PolarGridLineLayout.DrawPolarAxisGridLine(canvas, (float)(_desiredSize.Width / 2), (float)(_desiredSize.Height / 2), y, gridLineStyle);
+							PolarGridLineLayout.DrawPolarAxisGridLine(canvas, (float)(_desiredSize.Width / 2), (float)(_desiredSize.Height / 2), y, effectiveStyle);
 						}
 						else
 						{
-							DrawRadarAxisGridLine(canvas, axis, y, gridLineStyle);
+							DrawRadarAxisGridLine(canvas, axis, y, effectiveStyle);
 						}
 					}
 				}
@@ -148,15 +162,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					var minorGridLineStyle = rangeAxisBase.MinorGridLineStyle ?? PolarGridLineLayout.GetDefaultGridLineStyle();
 					foreach (var pos in smallTicks)
 					{
+						//Resolve the effective style for this ring: the range style's minor grid line
+						//style overrides the axis default when a range matches the tick position.
+						var effectiveStyle = rangeAxisBase.GetMinorGridLineStyleInRange(pos) ?? minorGridLineStyle;
+
 						float value = axis.ValueToCoefficient(pos);
-						float y = height * (1f - value);
+						float y = height * value;
 						if (_area.Series?.Count > 0 && !(_isRadar))
 						{
-							PolarGridLineLayout.DrawPolarAxisGridLine(canvas, (float)(_desiredSize.Width / 2), (float)(_desiredSize.Height / 2), y, minorGridLineStyle);
+							PolarGridLineLayout.DrawPolarAxisGridLine(canvas, (float)(_desiredSize.Width / 2), (float)(_desiredSize.Height / 2), y, effectiveStyle);
 						}
 						else
 						{
-							DrawRadarAxisGridLine(canvas, axis, y, minorGridLineStyle);
+							DrawRadarAxisGridLine(canvas, axis, y, effectiveStyle);
 						}
 					}
 				}

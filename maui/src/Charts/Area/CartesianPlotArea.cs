@@ -10,6 +10,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal readonly ChartTrendlineView _chartTrendlineView;
 		readonly CartesianChartArea _chartArea;
 		readonly ChartPlotBandView _chartPlotBandView;
+		private readonly ExtentSemanticsView _semanticsView;
+
+		internal readonly BackgroundAnnotationDrawableView _backgroundAnnotationDrawer;
 
 		#endregion
 
@@ -19,6 +22,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			BatchBegin();
 			_chartArea = area;
+			_semanticsView = new ExtentSemanticsView { ChartArea = _chartArea };
 			_gridLineLayout = new CartesianGridLineLayout(area);
 			_chartTrendlineView = new ChartTrendlineView(this);
 			_chartPlotBandView = new ChartPlotBandView(area);
@@ -30,7 +34,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			AbsoluteLayout.SetLayoutFlags(_chartPlotBandView, AbsoluteLayoutFlags.All);
 			Insert(0, _gridLineLayout);
 			Insert(1, _chartPlotBandView);
+
+			_backgroundAnnotationDrawer = new BackgroundAnnotationDrawableView(_chartArea._chart);
+			AbsoluteLayout.SetLayoutBounds(_backgroundAnnotationDrawer, new Rect(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutFlags(_backgroundAnnotationDrawer, AbsoluteLayoutFlags.All);
+			Insert(2, _backgroundAnnotationDrawer);
 			InsertTrendlineLayout();
+			AbsoluteLayout.SetLayoutBounds(_semanticsView, new Rect(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutFlags(_semanticsView, AbsoluteLayoutFlags.All);
+			Add(_semanticsView);
 			BatchCommit();
 		}
 
@@ -128,6 +140,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			_chartPlotBandView.InvalidateDrawable();
 		}
 
+		internal void InvalidateSegmentSemantics()
+		{
+			_semanticsView.InvalidateSemanticsNodes();
+		}
+
 		internal override void AddSeries(int index, object chartSeries)
 		{
 			if (chartSeries is CartesianSeries cartesian)
@@ -136,6 +153,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			base.AddSeries(index, chartSeries);
+		}
+
+		internal override void NotifySegmentSemanticsChanged()
+		{
+			this.InvalidateSegmentSemantics();
 		}
 
 		#endregion

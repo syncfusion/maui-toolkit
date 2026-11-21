@@ -106,7 +106,7 @@
                     </Grid>
                 </ScrollView>
             </Grid>              
-                <Grid x:Name="sortOptionGrid" BackgroundColor="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" IsVisible="False" VerticalOptions="End" HorizontalOptions="FillAndExpand" HeightRequest="550" RowDefinitions="56,*,2,*,80" >
+                <Grid x:Name="sortOptionGrid" BackgroundColor="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" IsVisible="False" VerticalOptions="End" HorizontalOptions="Fill" HeightRequest="550" RowDefinitions="56,*,2,*,80" >
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Tapped="SortOptionGridTapped"/>
                 </Grid.GestureRecognizers>
@@ -542,7 +542,7 @@
                     <TapGestureRecognizer Tapped="TempGridTapped"/>
                 </Grid.GestureRecognizers>
             </Grid>
-                <Grid x:Name="properties" VerticalOptions="End" HorizontalOptions="FillAndExpand" IsVisible="False" HeightRequest="300" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
+                <Grid x:Name="properties" VerticalOptions="End" HorizontalOptions="Fill" IsVisible="False" HeightRequest="300" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60"/>
                     <RowDefinition Height="*"/>
@@ -940,7 +940,7 @@
             </Grid.GestureRecognizers>
         </Grid>
 
-        <Grid x:Name="themePopup" IsVisible="false" VerticalOptions="End" HeightRequest="214" HorizontalOptions="FillAndExpand" RowDefinitions="56,auto">
+        <Grid x:Name="themePopup" IsVisible="false" VerticalOptions="End" HeightRequest="214" HorizontalOptions="Fill" RowDefinitions="56,auto">
 
             <BoxView CornerRadius="20,20,0,0" Color="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" HeightRequest="214" Grid.RowSpan="5"/>
             <Grid ColumnDefinitions="*,48" Grid.Row="0"  HeightRequest="56">

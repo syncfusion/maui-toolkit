@@ -64,6 +64,16 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		internal double Y => _yValue;
 		internal double Height => _height;
 
+		internal string GetAccessibilityText()
+		{
+			if (_dataLabelXValue != null || !string.IsNullOrEmpty(_dataLabelYValue.ToString()))
+			{
+				return _dataLabelXValue?.ToString() + " " + _dataLabelYValue.ToString();
+			}
+
+			return string.Empty;
+		}
+
 		/// <summary>
 		/// Converts the data points to corresponding screen points for rendering the pyramid segment.
 		/// </summary>
@@ -353,21 +363,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 							return content.DesiredSize;
 						}
 
-#if NET9_0_OR_GREATER
                         var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity);
 
                         if (desiredSize.IsZero)
 						{
 							return content.Measure(double.PositiveInfinity, double.PositiveInfinity);
 						}
-#else
-						var desiredSize = templateView.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
-
-						if (desiredSize.IsZero)
-						{
-							return content.Measure(double.PositiveInfinity, double.PositiveInfinity, MeasureFlags.IncludeMargins).Request;
-						}
-#endif
 
 						return desiredSize;
 					}
@@ -413,6 +414,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				canvas.StrokeSize = (float)StrokeWidth;
 				canvas.DrawPath(path);
 			}
+
+			SemanticBounds = path.Bounds;
+		}
+
+		internal override Rect GetSemanticsBounds()
+		{
+			return SemanticBounds;
 		}
 
 		#endregion

@@ -20,7 +20,7 @@
     <Grid x:Name="mainGrid">
       <tabView:SfTabView x:Name="TabView"
                          TabBarPlacement="Bottom"
-                         TabBarHeight="45"
+                         TabBarSize="45"
                          EnableSwiping="false"
                          TabBarBackground="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}"
                          SelectionChanged="Handle_SelectionChanged"

@@ -22,7 +22,6 @@
              <RowDefinition Height="Auto"></RowDefinition>
            </Grid.RowDefinitions>
            <chart:SfCartesianChart Grid.Row="0"
-                PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}"
                 IsTransposed="True" x:Name="Chart1" HorizontalOptions="Fill" VerticalOptions="Fill">
                 <chart:SfCartesianChart.Title>
                     <Label Text="Popular Android Apps in the Google Play Store - 2015" LineBreakMode="WordWrap" Margin="2,0,2,5" HorizontalOptions="Fill" HorizontalTextAlignment="Center" VerticalOptions="Center" FontSize="16"/>
@@ -40,11 +39,11 @@
                     </chart:NumericalAxis>
                 </chart:SfCartesianChart.YAxes>
                 <chart:SfCartesianChart.Series>
-                    <chart:ColumnSeries Label="Year - 2015" EnableAnimation="{Binding EnableAnimation}" ShowDataLabels="True" x:Name="barSeries1" ItemsSource="{Binding BarData1}" XBindingPath="Name" YBindingPath="Value">
+                    <chart:ColumnSeries Label="Year - 2015" EnableAnimation="{Binding EnableAnimation}" ShowDataLabels="True" x:Name="barSeries1" ItemsSource="{Binding BarData1}" XBindingPath="Name" YBindingPath="Value" Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}">
                         <chart:ColumnSeries.DataLabelSettings>
-                            <chart:CartesianDataLabelSettings LabelPlacement="Inner">
+                            <chart:CartesianDataLabelSettings LabelPlacement="Outer" UseSeriesPalette="False">
                                 <chart:CartesianDataLabelSettings.LabelStyle>
-                                    <chart:ChartDataLabelStyle LabelFormat="0.##B"></chart:ChartDataLabelStyle>
+                                    <chart:ChartDataLabelStyle LabelFormat="0.##B" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}"></chart:ChartDataLabelStyle>
                                 </chart:CartesianDataLabelSettings.LabelStyle>
                             </chart:CartesianDataLabelSettings>
                         </chart:ColumnSeries.DataLabelSettings>
@@ -61,4 +60,13 @@
             </HorizontalStackLayout>
         </Grid>
     </localCore:SampleView.Content>
+  
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <HorizontalStackLayout>
+                <Label Text="Apply gradient" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                <CheckBox x:Name="gradientCheckBox" IsChecked="False" CheckedChanged="gradientCheckBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+  </localCore:SampleView.OptionView>
 </localCore:SampleView>

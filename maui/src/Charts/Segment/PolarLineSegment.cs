@@ -173,6 +173,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				_y1Pos = point1.Y;
 				_x2Pos = point2.X;
 				_y2Pos = point2.Y;
+
+				var left = Math.Min(_x1Pos, _x2Pos);
+				var top = Math.Min(_y1Pos, _y2Pos);
+				var width = Math.Abs(_x2Pos - _x1Pos);
+				var height = Math.Abs(_y2Pos - _y1Pos);
+				SemanticBounds = new RectF(left, top, width, height);
 			}
 		}
 

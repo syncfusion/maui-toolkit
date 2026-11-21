@@ -104,13 +104,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 							if (axis.CanDrawMajorGridLines())
 							{
-								CartesianGridLineLayout.DrawVerticalGridLines(canvas, tickPositions, axis, left, top, width, height, gridLineStyle);
+								CartesianGridLineLayout.DrawVerticalGridLines(canvas, tickPositions, axis, left, top, width, height, gridLineStyle, false);
 							}
 
 							if (axis.SmallTickRequired && rangeAxisBase != null && rangeAxisBase.CanDrawMinorGridLines())
 							{
 								List<double> smallTicks = rangeAxisBase.SmallTickPoints;
-								CartesianGridLineLayout.DrawVerticalGridLines(canvas, smallTicks, axis, left, top, width, height, minorGirdLineStyle);
+								CartesianGridLineLayout.DrawVerticalGridLines(canvas, smallTicks, axis, left, top, width, height, minorGirdLineStyle, true);
 							}
 						}
 					}
@@ -128,13 +128,13 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 							if (axis.CanDrawMajorGridLines())
 							{
-								CartesianGridLineLayout.DrawHorizontalGridLines(canvas, tickPositions, axis, left, top, width, height, gridLineStyle);
+								CartesianGridLineLayout.DrawHorizontalGridLines(canvas, tickPositions, axis, left, top, width, height, gridLineStyle, false);
 							}
 
 							if (axis.SmallTickRequired && rangeAxisBase != null && rangeAxisBase.CanDrawMinorGridLines())
 							{
 								List<double> smallTicks = rangeAxisBase.SmallTickPoints;
-								CartesianGridLineLayout.DrawHorizontalGridLines(canvas, smallTicks, axis, left, top, width, height, minorGirdLineStyle);
+								CartesianGridLineLayout.DrawHorizontalGridLines(canvas, smallTicks, axis, left, top, width, height, minorGirdLineStyle, true);
 							}
 						}
 					}
@@ -142,42 +142,68 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 		}
 
-		static void DrawVerticalGridLines(ICanvas canvas, List<double> tickPositions, ChartAxis axis, float left, float top, float width, float height, ChartLineStyle? gridLineStyle)
+		static void DrawVerticalGridLines(ICanvas canvas, List<double> tickPositions, ChartAxis axis, float left, float top, float width, float height, ChartLineStyle? gridLineStyle, bool isMinorGridLine)
 		{
+			bool hasRangeStyles = axis.HasRangeStyles;
+
 			foreach (var tickPosition in tickPositions)
 			{
 				double value = axis.ValueToCoefficient(tickPosition);
 				float x = (float)Math.Round(width * value) + left;
 
-				if (gridLineStyle != null && gridLineStyle.CanDraw())
+				var effectiveStyle = gridLineStyle;
+
+				if (hasRangeStyles)
 				{
-					canvas.StrokeSize = (float)gridLineStyle.StrokeWidth;
-					canvas.StrokeColor = gridLineStyle.Stroke.ToColor();
-					if (gridLineStyle.StrokeDashArray != null)
-					{
-						canvas.StrokeDashPattern = gridLineStyle.StrokeDashArray.ToFloatArray();
-					}
+					//Resolve the effective style for this position across all containing ranges:
+					//the winning range style overrides the axis default, and unset styles fall back to it.
+					effectiveStyle = (isMinorGridLine
+						? axis.GetMinorGridLineStyleInRange(tickPosition)
+						: axis.GetMajorGridLineStyleInRange(tickPosition)) ?? gridLineStyle;
+				}
+
+				if (effectiveStyle != null && effectiveStyle.CanDraw())
+				{
+					canvas.StrokeSize = (float)effectiveStyle.StrokeWidth;
+					canvas.StrokeColor = effectiveStyle.Stroke.ToColor();
+
+					//Set the dash pattern per position so a dashed style in one range does not
+					//leak into positions outside the range rendered with a solid style.
+					canvas.StrokeDashPattern = effectiveStyle.StrokeDashArray?.ToFloatArray();
 				}
 
 				axis.DrawGridLine(canvas, tickPosition, x, top, x, height);
 			}
 		}
 
-		static void DrawHorizontalGridLines(ICanvas canvas, List<double> tickPositions, ChartAxis axis, float left, float top, float width, float height, ChartLineStyle? gridLineStyle)
+		static void DrawHorizontalGridLines(ICanvas canvas, List<double> tickPositions, ChartAxis axis, float left, float top, float width, float height, ChartLineStyle? gridLineStyle, bool isMinorGridLine)
 		{
+			bool hasRangeStyles = axis.HasRangeStyles;
+
 			foreach (var tickPosition in tickPositions)
 			{
 				double value = axis.ValueToCoefficient(tickPosition);
 				float y = (float)Math.Round(height * (1f - value)) + top;
-				//TODO: Set range base style if range style not null
-				if (gridLineStyle != null && gridLineStyle.CanDraw())
+
+				var effectiveStyle = gridLineStyle;
+
+				if (hasRangeStyles)
 				{
-					canvas.StrokeSize = (float)gridLineStyle.StrokeWidth;
-					canvas.StrokeColor = gridLineStyle.Stroke.ToColor();
-					if (gridLineStyle.StrokeDashArray != null)
-					{
-						canvas.StrokeDashPattern = gridLineStyle.StrokeDashArray.ToFloatArray();
-					}
+					//Resolve the effective style for this position across all containing ranges:
+					//the winning range style overrides the axis default, and unset styles fall back to it.
+					effectiveStyle = (isMinorGridLine
+						? axis.GetMinorGridLineStyleInRange(tickPosition)
+						: axis.GetMajorGridLineStyleInRange(tickPosition)) ?? gridLineStyle;
+				}
+
+				if (effectiveStyle != null && effectiveStyle.CanDraw())
+				{
+					canvas.StrokeSize = (float)effectiveStyle.StrokeWidth;
+					canvas.StrokeColor = effectiveStyle.Stroke.ToColor();
+
+					//Set the dash pattern per position so a dashed style in one range does not
+					//leak into positions outside the range rendered with a solid style.
+					canvas.StrokeDashPattern = effectiveStyle.StrokeDashArray?.ToFloatArray();
 				}
 
 				axis.DrawGridLine(canvas, tickPosition, left, y, width, y);

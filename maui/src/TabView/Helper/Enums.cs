@@ -16,6 +16,16 @@
 		/// Specifies the location above the content region of <see cref="SfTabView"/> control.
 		/// </summary>
 		Top,
+
+		/// <summary>
+		/// Specifies the location left to the content region of SfTabView control.
+		/// </summary>
+		Left,
+
+		/// <summary>
+		/// Specifies the location right to the content region of SfTabView control.
+		/// </summary>
+		Right,
 	}
 
 	#endregion
@@ -62,6 +72,16 @@
 		/// Specifies the location above the content region of the tab item header.
 		/// </summary>
 		Top,
+
+		/// <summary>
+		/// Specifies the location left to the content region of the tab item header.
+		/// </summary>
+		Left,
+
+		/// <summary>
+		/// Specifies the location right to the content region of the tab item header.
+		/// </summary>
+		Right
 	}
 
 	#endregion

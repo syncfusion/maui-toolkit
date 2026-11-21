@@ -19,7 +19,7 @@
    
     <localCore:SampleView.Content>
 
-            <chart:SfCartesianChart VerticalOptions="FillAndExpand" Margin="0,0,5,0" x:Name="Chart">
+            <chart:SfCartesianChart VerticalOptions="Fill" Margin="0,0,5,0" x:Name="Chart">
 
                 <chart:SfCartesianChart.BindingContext>
                     <local:AnnotationViewModel/>
@@ -27,7 +27,7 @@
             
             <chart:SfCartesianChart.Title>
                 <Label Text="The Impact of the Pandemic on Individual Travel Activity" Margin="0,2,0,10"
-                       HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="CenterAndExpand"
+                       HorizontalOptions="Center" HorizontalTextAlignment="Center" VerticalOptions="Center"
                        FontSize="16" LineBreakMode="WordWrap"/>
             </chart:SfCartesianChart.Title>
 

@@ -136,7 +136,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
                 return uIScroll.ContentOffset.Y;
             }
 
-            if (scrollView is UIView scrollViewUIView && scrollViewUIView.ToString().Contains("UICollectionViewControllerWrapperView", StringComparison.Ordinal))
+            if (scrollView is UIView scrollViewUIView && scrollViewUIView.ToString()?.Contains("UICollectionViewControllerWrapperView", StringComparison.Ordinal)==true)
             {
                 foreach (var subview in scrollViewUIView.Subviews.OfType<UIScrollView>())
                 {
@@ -401,7 +401,7 @@ namespace Syncfusion.Maui.Toolkit.PullToRefresh
 				}
 			}
 
-#if NET10_0_OR_GREATER && IOS
+#if IOS
 			if (gesture2 is UIPanGestureRecognizer pan2 && pan2.Class != null && pan2.Class.Name != null && pan2.Class.Name.Equals("UIScrollViewPanGestureRecognizer", StringComparison.Ordinal))
 			{
 				return true;

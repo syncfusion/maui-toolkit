@@ -113,10 +113,8 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 Add(_headerTextLabel);
                 AddOrRemoveNavigationArrows();
             }
-#if (IOS || ANDROID) && NET10_0
+#if IOS || ANDROID
             this.SafeAreaEdges = SafeAreaEdges.None;
-#elif IOS
-            this.IgnoreSafeArea = true;
 #endif
 		}
 
@@ -872,7 +870,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         {
             // Not to change the text style for century header text
             // No need to hover the header text when the allow view navigation is false.
-            if (_headerInfo.View == CalendarView.Century || !_headerInfo.AllowViewNavigation)
+            if (_headerInfo.View >= _headerInfo.MaximumDisplayMode || !_headerInfo.AllowViewNavigation)
             {
                 if (_headerTextLabel != null)
                 {

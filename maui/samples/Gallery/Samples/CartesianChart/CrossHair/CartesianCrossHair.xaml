@@ -10,7 +10,7 @@
             <chart:SfCartesianChart EnableSideBySideSeriesPlacement="False">
 
                 <chart:SfCartesianChart.Title>
-                <Label Text="Stock Performance Analysis" Margin="0,0,0,5" FontSize="Subtitle" HorizontalOptions="Center"/>
+                <Label Text="Stock Performance Analysis" Margin="0,0,0,5" FontSize="16" HorizontalOptions="Center"/>
                 </chart:SfCartesianChart.Title>
 
                 <chart:SfCartesianChart.BindingContext>

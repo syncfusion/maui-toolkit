@@ -411,7 +411,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     {
                         if (_dataSource != null)
 						{
-							_linearDataSource.Add(_dataSource.GetItem<NSObject>((nuint)i));
+							var item = _dataSource.GetItem<NSObject>((nuint)i);
+							if(item == null)
+							{
+								return;
+							}
+							_linearDataSource.Add(item);
 						}
 					}
                 }
@@ -676,7 +681,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 
                 for (int i = 0; i < count; i++)
                 {
-                    _linearDataSource.Add(_dataSource.GetItem<NSObject>((nuint)i));
+					var item = _dataSource.GetItem<NSObject>((nuint)i);
+					if(item == null)
+					{
+						return;
+					}
+
+					_linearDataSource.Add(item);
                 }
             }
         }
@@ -1600,15 +1611,27 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                             SetConversionArguments(convertItem, _dataSourceEndIndex);
                             if (_dataSource != null)
                             {
-                                item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+								var datasourceIndex = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+								if(datasourceIndex == null)
+								{
+									return;
+								}
+
+								item = datasourceIndex;
                             }
                         }
                     }
                     else
                     {
                         if (_dataSource != null)
-                        {
-                            item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+						{
+							var dataSourceEndIndex = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+							if (dataSourceEndIndex == null)
+							{
+								return;
+							}
+
+							item = dataSourceEndIndex;
                         }
                     }
                     AddItemToSubView(item, _dataSourceEndIndex);
@@ -1663,8 +1686,14 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 for (int i = (int)_linearDataSource.Count; i < count; i++)
                 {
                     if (_dataSource != null && IsDataSourceAvailable())
-                    {
-                        _linearDataSource.Add(_dataSource.GetItem<NSObject>((nuint)i));
+					{
+						var carouselitem = _dataSource.GetItem<NSObject>((nuint)i);
+						if (carouselitem == null)
+						{
+							return;
+						}
+
+						_linearDataSource.Add(carouselitem);
                     }
                 }
             }
@@ -2193,8 +2222,14 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             if (_dataSource != null)
             {
                 if (_dataSource.GetItem<NSObject>((nuint)_selectedIndex) as PlatformCarouselItem == null && _isLinearVirtual)
-                {
-                    object convertItem = _dataSource.GetItem<NSObject>((nuint)_selectedIndex);
+				{
+					var selectIndex = _dataSource.GetItem<NSObject>((nuint)_selectedIndex);
+					if(selectIndex == null)
+					{
+						return null;
+					}
+
+					object convertItem = selectIndex;
                     SetConversionArguments(convertItem, _selectedIndex);
                 }
 
@@ -2428,7 +2463,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     _dataSourceEndIndex++;
                     if (_dataSource != null)
                     {
-                        item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+						var dataSourceIndex = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+						if(dataSourceIndex == null)
+						{
+							return; 
+						}
+						item = dataSourceIndex;
                         AddItemToSubView(item, _dataSourceEndIndex);
                     }
 
@@ -2464,8 +2504,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 {
                     _dataSourceStartIndex--;
                     if (_dataSource != null)
-                    {
-                        item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceStartIndex);
+					{
+						var startIndex = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceStartIndex);
+						if(startIndex == null)
+						{
+							return;
+						}
+						item = startIndex;
                         item.Index = _dataSourceStartIndex;
                         item.Frame = new CGRect(-Bounds.Size.Width, (Bounds.Size.Height / 2) - (_itemHeight / 2) + ((_itemHeight / 2) * (1 - _scaleOffset)), _itemWidth, _itemHeight - ((_itemHeight / 2) * (1 - _scaleOffset) * 2));
                         ConfigureItemView(item);
@@ -2478,7 +2523,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                         
                         if (_dataSource != null)
                         {
-                            deletedItem = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+							var datasourceIndex = _dataSource.GetItem<PlatformCarouselItem>((nuint)_dataSourceEndIndex);
+							if(datasourceIndex == null)
+							{
+								return;
+							}
+
+							deletedItem = datasourceIndex;
                         }
 
                         if (IsItemOutOfView(deletedItem))
@@ -3212,7 +3263,12 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 {
                     if (_dataSource != null)
                     {
-                        item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_selectedIndex);
+						var SelectedIndex = _dataSource.GetItem<PlatformCarouselItem>((nuint)_selectedIndex);
+						if(SelectedIndex == null)
+						{
+							return;
+						}
+						item = SelectedIndex;
                     }
                 }
 
@@ -3260,8 +3316,14 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             {
                 if (_dataSource != null)
                 {
-                    _dataSource.GetItem<PlatformCarouselItem>((nuint)index).Index = index;
-                    item = _dataSource.GetItem<PlatformCarouselItem>((nuint)index);
+					var carouselItem = _dataSource.GetItem<PlatformCarouselItem>((nuint)index);
+					if(carouselItem == null)
+					{
+						return;
+					}
+
+					carouselItem.Index = index;
+                    item = carouselItem;
                 }
             }
         }
@@ -3363,7 +3425,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             {
                 ArrangeItem();
                 LinearViewLoading();
-                PlatformCarouselItem item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_selectedIndex);
+				var selectedIndex = _dataSource.GetItem<PlatformCarouselItem>((nuint)_selectedIndex);
+				if(selectedIndex == null)
+				{
+					return;
+				}
+
+				PlatformCarouselItem item = selectedIndex;
                 UpdateLinearCenterPosition(item);
             }
         }
@@ -3478,7 +3546,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 LinearViewLoading();
                 if (_dataSource != null)
                 {
-                    item = _dataSource.GetItem<PlatformCarouselItem>((nuint)_selectedIndex);
+					var selectedindex = _dataSource.GetItem<PlatformCarouselItem>((nuint)_selectedIndex);
+					if(selectedindex == null)
+					{
+						return;
+					}
+
+					item = selectedindex;
                 }
                 UpdateLinearCenterPosition(item);
             }
@@ -3562,8 +3636,14 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                 for (nint i = _selectedIndex; i < tempCount; i++)
                 {
                     if (_dataSource != null)
-                    {
-						item = item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+					{
+						var carouselItem = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						if(carouselItem == null)
+						{
+							return;
+						}
+
+						item = item = carouselItem;
                         AddItemToSubView(item, i);
                     }
 
@@ -3571,7 +3651,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
 					PlatformCarouselItem platformCarousel = [];
                     if (_dataSource != null)
                     {
-                        platformCarousel = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						var carouselItem = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						if (carouselItem == null)
+						{
+							return;
+						}
+
+						platformCarousel = carouselItem;
                     }
 
                     UpdateLinearRightPosition(platformCarousel, _offset * j);
@@ -3589,15 +3675,27 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     {
                         if (_dataSource != null)
                         {
-                            item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+							var carouselItems = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+							if(carouselItems == null)
+							{
+								return;
+							}
+
+							item = carouselItems;
                         }
                         AddItemToSubView(item, i, false);
 
                         _dataSourceStartIndex = i;
                         PlatformCarouselItem carouselItem = [];
                         if (_dataSource != null)
-                        {
-                            carouselItem = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						{
+							var itemCarousel = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+							if(itemCarousel == null)
+							{
+								return;
+							}
+
+							carouselItem = itemCarousel;
                         }
 
                         UpdateLinearLeftPosition(carouselItem, -(_offset * j));
@@ -3636,7 +3734,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     item = [];
                     if (_dataSource != null)
                     {
-                        item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						var carouselItem = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						if(carouselItem == null)
+						{
+							return;
+						}
+
+						item = carouselItem;
                         item.UserInteractionEnabled = IsInteractionEnable();
                         AddItemToSubView(item, i);
                     }
@@ -3665,7 +3769,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
             {
                 if (_dataSource != null)
                 {
-                    item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+					var carouselItem = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+					if(carouselItem == null)
+					{
+						return;
+					}
+
+					item = carouselItem;
                     AddItemToSubView(item, i);
                 }
 
@@ -3695,7 +3805,13 @@ namespace Syncfusion.Maui.Toolkit.Carousel
                     {
                         convertItem = list[(int)i];
                         SetConversionArguments(convertItem, i);
-                        item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						var carouselItem= _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+						if(carouselItem == null)
+						{
+							return;
+						}
+
+						item = carouselItem;
                         AddItemToSubView(item, i);
                         _dataSourceEndIndex = i;
                     }
@@ -3942,7 +4058,12 @@ After:
                         PlatformCarouselItem view = [];
                         if (_dataSource != null)
                         {
-                            view = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+							var item = _dataSource.GetItem<PlatformCarouselItem>((nuint)i);
+							if (item == null)
+							{
+								return;
+							}
+							view = item;
                         }
                         view.Frame = new CGRect(view.Frame.Location.X, (Bounds.Size.Height / 2) - (_itemHeight / 2), _itemWidth, _itemHeight);
                     }

@@ -3,10 +3,10 @@
 		<ControlCategory Name="Navigation">
 		<Control ControlName="NavigationDrawer"
 				 Title="Navigation Drawer"
-				 Image="navigationdrawer.png"
+				 Image="navigationdrawer.png" StatusTag="Updated"
 				 Description="The NavigationDrawer is a UI panel that displays app navigation options on the side of the screen.">
 			<Sample SampleName="GettingStarted"
-					Title="Getting Started"
+					Title="Getting Started" StatusTag="Updated"
 					SearchTags="navigationdrawer,drawer,navigation,nav,menubar"/>
 		</Control>
 		</ControlCategory>

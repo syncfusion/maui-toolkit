@@ -14,7 +14,7 @@ namespace Syncfusion.Maui.ControlsGallery.Carousel.Carousel
 			carousel = null;
 		}
 
-		private void carousel_SelectionChanged(object sender, Syncfusion.Maui.Toolkit.Carousel.SelectionChangedEventArgs e)
+		private void carousel_SelectionChanged(object? sender, Syncfusion.Maui.Toolkit.Carousel.SelectionChangedEventArgs e)
 		{
 			if (sender is Syncfusion.Maui.Toolkit.Carousel.SfCarousel sfCarousel)
 			{

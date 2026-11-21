@@ -39,7 +39,8 @@
                                                         <RoundRectangle CornerRadius="20,20,20,0"/>
                                                     </Border.StrokeShape>
                                                         
-                                                        <Label FontFamily="Roboto-Medium" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TileHeaderForegroundLight}, Dark={StaticResource TileHeaderForegroundDark}}" Text="{Binding Name}" FontSize="16" />
+                                                        <Label FontFamily="Roboto-Medium" VerticalOptions="Center" HorizontalOptions="Center" HorizontalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TileHeaderForegroundLight}, Dark={StaticResource TileHeaderForegroundDark
+                                                            }}" Text="{Binding Name}" FontSize="16" />
                                                 </Border>
                                             </Grid>
                                                 <BoxView Margin="22,0,0,1" HeightRequest="1" Color="{AppThemeBinding Light={StaticResource TileHeaderBorderLight}, Dark={StaticResource TileHeaderBorderDark}}" VerticalOptions="End"/>
@@ -116,7 +117,7 @@
                 </ScrollView>
             </Grid>
           
-                <Grid x:Name="sortOptionGrid" BackgroundColor="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" IsVisible="False" VerticalOptions="End" HorizontalOptions="FillAndExpand" HeightRequest="544" RowDefinitions="56,*,2,*,80">
+                <Grid x:Name="sortOptionGrid" BackgroundColor="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" IsVisible="False" VerticalOptions="End" HorizontalOptions="Fill" HeightRequest="544" RowDefinitions="56,*,2,*,80">
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Tapped="SortOptionGridTapped"/>
                 </Grid.GestureRecognizers>
@@ -634,7 +635,7 @@
                             <TapGestureRecognizer Tapped="TempGridTapped"/>
                         </Grid.GestureRecognizers>
                     </Grid>
-                    <Grid x:Name="properties" VerticalOptions="End" HorizontalOptions="FillAndExpand" IsVisible="False" HeightRequest="300"  >
+                    <Grid x:Name="properties" VerticalOptions="End" HorizontalOptions="Fill" IsVisible="False" HeightRequest="300"  >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="60"/>
                             <RowDefinition Height="*"/>
@@ -1069,7 +1070,7 @@
             </Grid.GestureRecognizers>
         </Grid>
 
-        <Grid x:Name="themePopup" IsVisible="false" VerticalOptions="End" HeightRequest="214" HorizontalOptions="FillAndExpand" RowDefinitions="56,auto">
+        <Grid x:Name="themePopup" IsVisible="false" VerticalOptions="End" HeightRequest="214" HorizontalOptions="Fill" RowDefinitions="56,auto">
 
             <BoxView CornerRadius="20,20,0,0" Color="{AppThemeBinding Light={StaticResource SidebarBackgroundLight}, Dark={StaticResource SidebarBackgroundDark}}" HeightRequest="214" Grid.RowSpan="5"/>
             <Grid ColumnDefinitions="*,48" Grid.Row="0"  HeightRequest="56">

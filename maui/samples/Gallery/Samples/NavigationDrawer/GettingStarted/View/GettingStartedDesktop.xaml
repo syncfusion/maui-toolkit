@@ -119,21 +119,85 @@
                     </navigationdrawer:DrawerSettings.DrawerContentView>
                 </navigationdrawer:DrawerSettings>
             </navigationdrawer:SfNavigationDrawer.DrawerSettings>
+          
+      <navigationdrawer:SfNavigationDrawer.SecondaryDrawerSettings>
+        <navigationdrawer:DrawerSettings DrawerHeaderHeight="50" DrawerWidth="360" DrawerHeight="{OnPlatform WinUI=400}"  ContentBackground="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" DrawerFooterHeight="0"
+                 Position="Right">
+          <navigationdrawer:DrawerSettings.DrawerHeaderView>
+            <!-- Header -->
+            <Grid Background="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackground}}" ColumnDefinitions="*,Auto" Padding="12,0,0,0">
+              <Label Text="Notifications" FontSize="18" TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForeground}}" FontAttributes="Bold" VerticalTextAlignment="Center"/>
+              <Border Grid.Column="1" StrokeThickness="0" HeightRequest="40" WidthRequest="40" BackgroundColor="Transparent">
+                <Border.StrokeShape>
+                  <RoundRectangle CornerRadius="30" />
+                </Border.StrokeShape>
+                <core:SfEffectsView  TouchDownEffects="Ripple">
+                  <Label Text="&#xe755;" FontSize="18" FontFamily="MauiSampleFontIcon" TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForeground}}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center">
+                    <Label.GestureRecognizers>
+                      <TapGestureRecognizer Tapped="CloseIcon_Tapped" />
+                    </Label.GestureRecognizers>
+                  </Label>
+                </core:SfEffectsView>
+              </Border>
+            </Grid>
+          </navigationdrawer:DrawerSettings.DrawerHeaderView>
+          <navigationdrawer:DrawerSettings.DrawerContentView>
 
-            <navigationdrawer:SfNavigationDrawer.ContentView>
+            <!-- Notifications List -->
+            <CollectionView ItemsSource="{Binding Notifications}" >
+              <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:Notification">
+                  <Border StrokeThickness="0.5" Stroke="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}">
+                    <Grid Padding="10" ColumnDefinitions="60,*,Auto" RowSpacing="2" RowDefinitions="Auto,Auto,Auto,Auto" >
+                      <!-- Profile Image -->
+                      <Image Source="{Binding ImageSource}" WidthRequest="50" HeightRequest="50" Aspect="AspectFill"
+                                Grid.RowSpan="3" Grid.Column="0" HorizontalOptions="Start" VerticalOptions="Start"
+                                Margin="0,0,10,0" />
+                      <!-- Name -->
+                      <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="16" TextColor="{AppThemeBinding Light={StaticResource HeaderForegroundLight}, Dark={StaticResource HeaderForegroundDark}}" Grid.Column="1" Grid.Row="0"/>
+                      <!-- Subject -->
+                      <Label Text="{Binding Subject}" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource HeaderForegroundLight}, Dark={StaticResource HeaderForegroundDark}}" Grid.Column="1" Grid.Row="1"/>
+                      <!-- Description -->
+                      <Label Text="{Binding Description}" LineBreakMode="TailTruncation" FontSize="14" TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" Grid.Column="1" Grid.Row="2"/>
+                      <!-- Timestamp (top-right) -->
+                      <Label Text="{Binding TimeStamp}" FontSize="12" Grid.Column="2" Grid.Row="0" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" TextColor="{AppThemeBinding Light={StaticResource TextColourAlt1Light}, Dark={StaticResource TextColourAlt1Dark}}" />
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </CollectionView.ItemTemplate>
+            </CollectionView>
+
+          </navigationdrawer:DrawerSettings.DrawerContentView>
+        </navigationdrawer:DrawerSettings>
+      </navigationdrawer:SfNavigationDrawer.SecondaryDrawerSettings>
+          
+      <navigationdrawer:SfNavigationDrawer.ContentView>
                 <Grid RowDefinitions="Auto,*" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}">
-                    <Grid ColumnDefinitions="Auto,*,Auto" Background="{AppThemeBinding Light={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackgroundDark}}" HeightRequest="42" ColumnSpacing="10">
+          <Border StrokeThickness="1" BackgroundColor="{AppThemeBinding Light={StaticResource BorderLight}, Dark={StaticResource BorderDark}}">
+                    <Grid ColumnDefinitions="Auto,*,Auto" Background="{AppThemeBinding Light={StaticResource SampleBrowserBackgroundLight}, Dark={StaticResource SampleBrowserBackgroundDark}}" HeightRequest="42" ColumnSpacing="10">
                         <Border Grid.Column="0" StrokeThickness="0" HeightRequest="40" WidthRequest="40" BackgroundColor="Transparent">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="30" />
                             </Border.StrokeShape>
                             <core:SfEffectsView x:Name="primaryNavigation" TouchDownEffects="Ripple">
-                                <Label Text="&#xe731;" TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" FontFamily="MauiSampleFontIcon" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28"/>
+                                <Label Text="&#xe731;" TextColor="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark}}" FontFamily="MauiSampleFontIcon" VerticalOptions="Center" HorizontalOptions="Center" FontSize="28"/>
                             </core:SfEffectsView>
                         </Border>
-                        <Label Grid.Column="1" x:Name="titleName" Text="Inbox" TextColor="{AppThemeBinding Light={StaticResource PrimaryForegroundLight}, Dark={StaticResource PrimaryForegroundDark}}" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"/>
-                        <Image Grid.Column="2" Source="person.png" VerticalOptions="Center" WidthRequest="35" HeightRequest="35" Margin="5"/>
-                    </Grid>
+              <Label Grid.Column="1" x:Name="titleName" Text="Inbox" TextColor="{AppThemeBinding Light={StaticResource HeaderForegroundLight}, Dark={StaticResource HeaderForegroundDark}}" FontSize="14" FontAttributes="Bold" VerticalOptions="Center" HorizontalOptions="Center"/>
+                        <Border Grid.Column="2" StrokeThickness="0" HeightRequest="40" WidthRequest="40" BackgroundColor="Transparent">
+                          <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="30" />
+                          </Border.StrokeShape>
+                          <core:SfEffectsView   TouchDownEffects="Ripple">
+                            <Label Text="&#xe71e;" FontFamily="MauiMaterialAssets" TextColor="{AppThemeBinding Light={StaticResource IconColourLight}, Dark={StaticResource IconColourDark}}" FontSize="14" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" Margin="12">
+                              <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                              </Label.GestureRecognizers>
+                            </Label>
+                          </core:SfEffectsView>
+                        </Border>
+          </Grid>
+          </Border>
 
                     <CollectionView BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}" Grid.Row="1"
                                          x:Name="collectionView"
@@ -150,7 +214,7 @@
                                               Margin="16, 0, 16, 0">
                                             <Label Text="{Binding Key, Converter={StaticResource groupHeaderTextConverter}}"
                                                    TextColor="{AppThemeBinding Light={StaticResource TileTextColourLight}, Dark={StaticResource TileTextColourDark}}"
-                                                   VerticalOptions="CenterAndExpand"
+                                                   VerticalOptions="Center"
                                                    FontFamily="Roboto-Regular"
                                                    FontSize="12"
                                                    Grid.Row="1" />
@@ -179,7 +243,7 @@
                                           Grid.RowSpan="3"
                                           Margin="0, 0, 0, 0"
                                           HorizontalOptions="Center"
-                                          VerticalOptions="StartAndExpand">
+                                          VerticalOptions="Start">
                                         <Image Source="{Binding Image}"
                                                HeightRequest="42"
                                                WidthRequest="42"/>
@@ -304,27 +368,82 @@
             </navigationdrawer:SfNavigationDrawer.ContentView>
         </navigationdrawer:SfNavigationDrawer>
     </Grid>
+  
+  <localcore:SampleView.OptionView>
+    <VerticalStackLayout Spacing="20" Margin="10,15,10,10">
+      <Label Text="Primary Drawer" FontAttributes="Bold" />
+      <Grid ColumnDefinitions="*,1.5*">
+        <Label Text="Transition" VerticalOptions="Center"/>
+        <Picker x:Name="transitioncomboBox" Grid.Column="1" HeightRequest="35"  
+                  BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                  TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}">
+          <Picker.ItemsSource>
+            <ListCollection:List x:TypeArguments="x:String">
+              <x:String>Push</x:String>
+              <x:String>Reveal</x:String>
+              <x:String>SlideOnTop</x:String>
+            </ListCollection:List>
+          </Picker.ItemsSource>
+            <Picker.SelectedItem>
+              <x:String>SlideOnTop</x:String>
+            </Picker.SelectedItem>
+        </Picker>
+      </Grid>
+      <Grid ColumnDefinitions="*,1.5*">
+        <Label Text="Position" VerticalOptions="Center"/>
+        <Picker Grid.Column="1" HeightRequest="35" x:Name="positioncomboBox" BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                          TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}">
+          <Picker.ItemsSource>
+            <ListCollection:List x:TypeArguments="x:String">
+              <x:String>Left</x:String>
+              <x:String>Right</x:String>
+              <x:String>Top</x:String>
+              <x:String>Bottom</x:String>
+            </ListCollection:List>
+          </Picker.ItemsSource>
+            <Picker.SelectedItem>
+              <x:String>Left</x:String>
+            </Picker.SelectedItem>
+        </Picker>
+      </Grid>
+      <Label Text="Secondary Drawer" FontAttributes="Bold" />
+      <Grid ColumnDefinitions="*,1.5*">
+        <Label Text="Transition" VerticalOptions="Center"/>
+        <Picker x:Name="secondarytransitioncomboBox" Grid.Column="1" HeightRequest="35" 
+                   BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                    TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}">
+          <Picker.ItemsSource>
+            <ListCollection:List x:TypeArguments="x:String">
+              <x:String>Push</x:String>
+              <x:String>Reveal</x:String>
+              <x:String>SlideOnTop</x:String>
+            </ListCollection:List>
+          </Picker.ItemsSource>
+           <Picker.SelectedItem>
+              <x:String>SlideOnTop</x:String>
+            </Picker.SelectedItem>
+        </Picker>
+      </Grid>
+      <Grid ColumnDefinitions="*,1.5*">
+        <Label Text="Position" VerticalOptions="Center"/>
+        <Picker Grid.Column="1" HeightRequest="35" x:Name="secondarypositioncomboBox" 
+                  BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
+                  TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}">
+          <Picker.ItemsSource>
+            <ListCollection:List x:TypeArguments="x:String">
+              <x:String>Left</x:String>
+              <x:String>Right</x:String>
+              <x:String>Top</x:String>
+              <x:String>Bottom</x:String>
+            </ListCollection:List>
+          </Picker.ItemsSource>
+            <Picker.SelectedItem>
+              <x:String>Right</x:String>
+            </Picker.SelectedItem>
+        </Picker>
+      </Grid>
+    </VerticalStackLayout>
+  </localcore:SampleView.OptionView>
 
-    <localcore:SampleView.OptionView>
-        <VerticalStackLayout Spacing="20" Margin="10">
-            <Grid ColumnDefinitions="*,*" Margin="0,-18,0,0">
-                <Label Text="Position" VerticalOptions="Center"/>
-                    <Picker Grid.Column="1" HeightRequest="37" x:Name="positioncomboBox"
-                            BackgroundColor="{AppThemeBinding Light={StaticResource BackgroundLight}, Dark={StaticResource BackgroundDark}}"
-                            TextColor="{AppThemeBinding Light={StaticResource TextColourLight}, Dark={StaticResource TextColourDark}}">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Left</x:String>
-                                <x:String>Right</x:String>
-                                <x:String>Top</x:String>
-                                <x:String>Bottom</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                        <Picker.SelectedItem>
-                            <x:String>Left</x:String>
-                        </Picker.SelectedItem>
-                    </Picker>
-            </Grid>
-        </VerticalStackLayout>
-    </localcore:SampleView.OptionView>
+
 </localcore:SampleView>

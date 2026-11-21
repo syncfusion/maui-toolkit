@@ -111,5 +111,66 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		{
 			canvas.StrokeDashPattern = null;
 		}
+
+		/// <summary>
+		/// Draws a line with gradient fill support.
+		/// For gradient brushes, constructs a thick path and applies gradient fill.
+		/// </summary>
+		internal static void DrawLineWithGradient(
+			this ICanvas canvas,
+			float x1,
+			float y1,
+			float x2,
+			float y2,
+			Brush? fill,
+			float strokeWidth,
+			RectF? gradientBounds = null)
+		{
+			// For gradient fill, construct a thick path and apply gradient
+			if (fill is GradientBrush)
+			{
+				// Create a thick path from the line
+				PathF? path = CreateStrokedLinePath(x1, y1, x2, y2, strokeWidth);
+
+				if (path != null)
+				{
+					// Use provided bounds for unified gradient across series, or segment bounds
+					RectF bounds = gradientBounds ?? path.Bounds;
+
+					// Apply the gradient fill
+					canvas.SetFillPaint(fill, bounds);
+					canvas.FillPath(path);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Creates a thick path from a line for gradient stroke rendering.
+		/// </summary>
+		private static PathF? CreateStrokedLinePath(float x1, float y1, float x2, float y2, float strokeWidth)
+		{
+			float dx = x2 - x1;
+			float dy = y2 - y1;
+			float length = (float)Math.Sqrt(dx * dx + dy * dy);
+
+			if (length == 0)
+			{
+				return null;
+			}
+
+			// Calculate perpendicular vector for the stroke width
+			float perpX = -dy / length * (strokeWidth / 2);
+			float perpY = dx / length * (strokeWidth / 2);
+
+			// Create a rectangular path around the line
+			PathF path = new PathF();
+			path.MoveTo(x1 + perpX, y1 + perpY);
+			path.LineTo(x2 + perpX, y2 + perpY);
+			path.LineTo(x2 - perpX, y2 - perpY);
+			path.LineTo(x1 - perpX, y1 - perpY);
+			path.Close();
+
+			return path;
+		}
 	}
 }

@@ -14,8 +14,7 @@
     </localCore:SampleView.Resources>
     
     <localCore:SampleView.Content>
-        <chart:SfCartesianChart x:Name="Chart" 
-                                PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}"
+        <chart:SfCartesianChart x:Name="Chart"
                                 HorizontalOptions="Fill" VerticalOptions="Fill">
             <chart:SfCartesianChart.BindingContext>
                 <local:ColumnSeriesViewModel/>
@@ -42,11 +41,11 @@
                 </chart:NumericalAxis>
             </chart:SfCartesianChart.YAxes>
             <chart:SfCartesianChart.Series>
-                <chart:ColumnSeries Label="Countries" EnableAnimation="{Binding EnableAnimation}" ShowDataLabels="True" x:Name="columnSeries1" ItemsSource="{Binding ColumnData1}" XBindingPath="Name" YBindingPath="Value">
+                <chart:ColumnSeries Label="Countries" EnableAnimation="{Binding EnableAnimation}" ShowDataLabels="True" x:Name="columnSeries1" ItemsSource="{Binding ColumnData1}" XBindingPath="Name" YBindingPath="Value" Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}">
                     <chart:ColumnSeries.DataLabelSettings>
-                        <chart:CartesianDataLabelSettings >
+                        <chart:CartesianDataLabelSettings UseSeriesPalette="False">
                             <chart:CartesianDataLabelSettings.LabelStyle>
-                                <chart:ChartDataLabelStyle FontSize="12" LabelFormat='0.00'/>
+                                <chart:ChartDataLabelStyle FontSize="12" LabelFormat='0.00' TextColor="White"/>
                             </chart:CartesianDataLabelSettings.LabelStyle>
                         </chart:CartesianDataLabelSettings>
                     </chart:ColumnSeries.DataLabelSettings>
@@ -54,4 +53,13 @@
             </chart:SfCartesianChart.Series>
         </chart:SfCartesianChart>
     </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <HorizontalStackLayout>
+                <Label Text="Apply gradient" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                <CheckBox x:Name="gradientCheckBox" IsChecked="False" CheckedChanged="gradientCheckBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
 </localCore:SampleView>

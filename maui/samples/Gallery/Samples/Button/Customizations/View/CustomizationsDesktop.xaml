@@ -16,7 +16,7 @@
             <button:SfButton  Grid.Column="0"
                 x:Name="cartButton"
                      StrokeThickness="{Binding BorderWidth}" 
-                     HorizontalOptions="CenterAndExpand"
+                     HorizontalOptions="Center"
                      HeightRequest="40"
                      Background="#A007A3"
                      BackgroundImageSource="{Binding BackgroundImage}"
@@ -85,7 +85,7 @@
                                         </OnPlatform>
                                     </tabView:SfTabItem.FontSize>
                                     <tabView:SfTabItem.Content>
-                                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                      <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                             <HorizontalStackLayout >
                                                     <Border  x:Name="text1" Stroke="{AppThemeBinding Light ={StaticResource PrimaryBackgroundLight}, Dark={StaticResource PrimaryBackground}}" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
                                                         <Button WidthRequest="32" 
@@ -173,7 +173,7 @@
                                     </tabView:SfTabItem.FontSize>
                                         <tabView:SfTabItem.Content>
                                             <ScrollView>
-                                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
 
                                                     <HorizontalStackLayout >
                                                         <Border  x:Name="background1" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
@@ -264,7 +264,7 @@
                                         </OnPlatform>
                                     </tabView:SfTabItem.FontSize>
                                     <tabView:SfTabItem.Content>
-                                        <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                      <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
                                             <HorizontalStackLayout >
                                                     <Border  x:Name="border1" Stroke="Transparent" StrokeThickness="2" StrokeShape="RoundRectangle 20" >
                                                         <Button WidthRequest="32" 
@@ -352,7 +352,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Slider x:Name="borderSlider"
                                     HeightRequest="50" 
-                                    VerticalOptions="CenterAndExpand"
+                                    VerticalOptions="Center"
                                     Minimum="0" 
                                     Maximum="10" 
                                     MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
@@ -385,7 +385,7 @@
 					                Grid.Column="0"
                                     Grid.Row="1"
 					                HeightRequest="50"
-					                VerticalOptions="CenterAndExpand" 
+					                VerticalOptions="Center" 
 					                Minimum="0" 
 									Maximum="50" 
 					                MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"
@@ -418,7 +418,7 @@
                                     Grid.Column="0"                                    
                                     Grid.Row="1"                                        
                                     HeightRequest="50" 
-                                    VerticalOptions="CenterAndExpand"
+                                    VerticalOptions="Center"
                                     Minimum="0" 
                                     Maximum="50"
                                     MaximumTrackColor="{AppThemeBinding Light= #E0E0E0, Dark= #404040}"

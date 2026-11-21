@@ -189,7 +189,7 @@
                                             Clicked="PlayButton_Clicked"
                                             IsVisible="true"
                                             Text="&#xe769;"
-                                            FontSize="Large"
+                                            FontSize="24"
                                             FontFamily="SyncFontIcons"
                                             TextColor="{AppThemeBinding Default={StaticResource PrimaryBackground}}"
                                             HorizontalOptions="Center"

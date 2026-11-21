@@ -13,8 +13,7 @@
         </ResourceDictionary>
     </localCore:SampleView.Resources>
     <localCore:SampleView.Content>
-        <chart:SfCartesianChart x:Name="Chart"                              
-                                PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}"
+        <chart:SfCartesianChart x:Name="Chart"
                                 HorizontalOptions="Fill" VerticalOptions="Fill">
             <chart:SfCartesianChart.BindingContext>
                 <local:LineSeriesViewModel/>
@@ -48,14 +47,14 @@
                 </chart:NumericalAxis>
             </chart:SfCartesianChart.YAxes>
             <chart:SfCartesianChart.Series>
-                <chart:LineSeries Label="Germany" EnableTooltip="True" EnableAnimation="True" StrokeWidth="1" ItemsSource="{Binding LineData1}" XBindingPath="Name" YBindingPath="Value" ShowMarkers="True" LegendIcon="SeriesType">
+                <chart:LineSeries x:Name="lineSeries1" Label="Germany" EnableTooltip="True" EnableAnimation="True" StrokeWidth="2" ItemsSource="{Binding LineData1}" XBindingPath="Name" YBindingPath="Value" ShowMarkers="True" LegendIcon="SeriesType" Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}">
                     <chart:LineSeries.MarkerSettings>
                         <chart:ChartMarkerSettings  Width="8" Height="8" 
                                                     Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" 
                                                     Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="1"/>
                     </chart:LineSeries.MarkerSettings>
                 </chart:LineSeries>
-                <chart:LineSeries Label="England" EnableTooltip="True" EnableAnimation="True" StrokeWidth="1" ItemsSource="{Binding LineData2}" XBindingPath="Name" YBindingPath="Value" ShowMarkers="True" LegendIcon="SeriesType">
+                <chart:LineSeries x:Name="lineSeries2" Label="England" EnableTooltip="True" EnableAnimation="True" StrokeWidth="2" ItemsSource="{Binding LineData2}" XBindingPath="Name" YBindingPath="Value" ShowMarkers="True" LegendIcon="SeriesType" Fill="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}">
                     <chart:LineSeries.MarkerSettings>
                         <chart:ChartMarkerSettings Width="8" Height="8" 
                                                    Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" 
@@ -65,4 +64,13 @@
             </chart:SfCartesianChart.Series>
         </chart:SfCartesianChart>
     </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <HorizontalStackLayout>
+                <Label Text="Apply gradient" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                <CheckBox x:Name="gradientCheckBox" IsChecked="False" CheckedChanged="gradientCheckBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
 </localCore:SampleView>

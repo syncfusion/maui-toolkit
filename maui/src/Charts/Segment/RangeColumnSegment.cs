@@ -114,6 +114,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 						canvas.DrawRectangle(rect);
 					}
 				}
+
+				SemanticBounds = new RectF(Left, Top, Right - Left, Bottom - Top);
 			}
 		}
 

@@ -3,7 +3,6 @@ using System.ComponentModel;
 
 namespace Syncfusion.Maui.ControlsGallery.Shimmer.SfShimmer
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class Chats : SampleView
 	{
 		readonly IDispatcherTimer _timer;

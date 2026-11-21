@@ -12,7 +12,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
         }
 
         // X axis label formatting logic
-        private void Primary_LabelCreated(object sender, Syncfusion.Maui.Toolkit.Charts.ChartAxisLabelEventArgs e)
+        private void Primary_LabelCreated(object? sender, Syncfusion.Maui.Toolkit.Charts.ChartAxisLabelEventArgs e)
         {
             DateTime baseDate = new(2024, 09, 16);
             var date = baseDate.AddDays(e.Position);

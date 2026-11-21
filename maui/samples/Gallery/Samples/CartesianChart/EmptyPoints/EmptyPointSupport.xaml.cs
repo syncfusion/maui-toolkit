@@ -10,9 +10,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			InitializeComponent();
 		}
 
-		private void picker_SelectedIndexChanged(object sender, EventArgs e)
+		private void picker_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var picker = (Microsoft.Maui.Controls.Picker)sender;
+			if (sender is not Microsoft.Maui.Controls.Picker picker)
+			{
+				return;
+			}
+			
 			int selectedIndex = picker.SelectedIndex;
 			switch (selectedIndex)
 			{

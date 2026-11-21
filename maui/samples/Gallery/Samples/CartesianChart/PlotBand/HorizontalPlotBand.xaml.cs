@@ -10,9 +10,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			YAxis.PlotBands = ViewModel.NumericalPlotBandFillCollection;
 		}
 
-		private void Picker_SelectedIndexChanged(object sender, EventArgs e)
+		private void Picker_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var picker = sender as PickerControl;
+			if (sender is not PickerControl picker)
+			{
+				return;
+			}
+
 			if (picker!.SelectedIndex == 0)
 			{
 				YAxis.PlotBands = ViewModel.NumericalPlotBandFillCollection;

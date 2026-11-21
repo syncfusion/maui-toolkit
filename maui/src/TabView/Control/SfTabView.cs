@@ -80,6 +80,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		SfGrid? _parentGrid;
 		TabSelectionChangedEventArgs? _selectionChangedEventArgs;
 		TabBarBorder? _tabBarBorder;
+		double _effectiveTabBarSize = 48d;
 
 		#endregion
 
@@ -177,6 +178,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <summary>
 		/// Identifies the <see cref="TabBarHeight"/> bindable property.
 		/// </summary>
+		[Obsolete("TabBarHeight is obsolete. Use TabBarSize instead. It only affects layout when placement is Top/Bottom; for Left/Right use TabBarSize (acts as width).", error: false)]
 		public static readonly BindableProperty TabBarHeightProperty =
 			BindableProperty.Create(
 				nameof(TabBarHeight),
@@ -184,6 +186,21 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				typeof(SfTabView),
 				48d,
 				propertyChanged: OnTabBarHeightChanged);
+
+		/// <summary>
+		/// Identifies the <see cref="TabBarSize"/> bindable property.
+		/// </summary>
+		/// <value>
+		/// The identifier for <see cref="TabBarSize"/> bindable property.
+		/// </value>
+		public static readonly BindableProperty TabBarSizeProperty =
+			BindableProperty.Create(
+				nameof(TabBarSize),
+				typeof(double),
+				typeof(SfTabView),
+				48d,
+				propertyChanged: OnTabBarSizeChanged);
+
 
 		/// <summary>
 		/// Identifies the <see cref="Items"/> bindable property.
@@ -260,7 +277,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				nameof(TabHeaderPadding),
 				typeof(Thickness),
 				typeof(SfTabView),
-				new Thickness(52, 0, 52, 0),
+				defaultValueCreator: DefaultTabHeaderPaddingCreator,
 				propertyChanged: OnTabHeaderPaddingPropertyChanged);
 
 		/// <summary>
@@ -867,10 +884,52 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// Content = tabView;
 		/// ]]></code>
 		/// </example>
+		[Obsolete("TabBarHeight is obsolete. Use TabBarSize instead. It only affects layout when placement is Top/Bottom; for Left/Right use TabBarSize (acts as width).", error: false)]
 		public double TabBarHeight
 		{
 			get => (double)GetValue(TabBarHeightProperty);
 			set => SetValue(TabBarHeightProperty, value);
+		}
+
+		/// <summary>
+		/// Gets or sets the width of the tab header.
+		/// </summary>
+		/// <value>
+		/// Specifies the width of the tab header. The default value is 48d.
+		/// </value>
+		/// <example>
+		/// The below example shows how to set the width of the tab header.
+		/// # [XAML](#tab/tabid-1)
+		/// <code><![CDATA[
+		/// <tabView:SfTabView TabBarSize="80">
+		///     <tabView:SfTabItem Header="TAB 1">
+		///         <tabView:SfTabItem.Content>
+		///             <Label Text="Content" />
+		///         </tabView:SfTabItem.Content>
+		///     </tabView:SfTabItem>
+		/// </tabView:SfTabView>
+		/// ]]></code>
+		/// # [C#](#tab/tabid-2)
+		/// <code><![CDATA[
+		/// var tabView = new SfTabView();
+		/// tabView.TabBarSize = 80;
+		/// var tabItems = new TabItemCollection
+		/// {
+		///     new SfTabItem
+		///     {
+		///         Header = "TAB 1",
+		///         Content = new Label { Text = "Content" }
+		///     }
+		/// };
+		///
+		/// tabView.Items = tabItems;
+		/// ]]></code>
+		/// ***
+		/// </example>
+		public double TabBarSize
+		{
+			get => (double)this.GetValue(TabBarSizeProperty);
+			set => this.SetValue(TabBarSizeProperty, value);
 		}
 
 		/// <summary>
@@ -2163,7 +2222,38 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <summary>
 		/// Handles changes to the <see cref="TabBarPlacement"/> property.
 		/// </summary>
-		static void OnTabBarPlacementChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateTabBarPlacement((TabBarPlacement)newValue);
+		static void OnTabBarPlacementChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			var tabView = bindable as SfTabView;
+			if (tabView == null)
+			{
+				return;
+			}
+
+			var newBarPlacement = (TabBarPlacement)newValue;
+			DefaultTabHeaderPaddingCreator(tabView);
+			tabView.UpdateTabBarPlacement(newBarPlacement);
+
+			bool isHorizontal = newBarPlacement == TabBarPlacement.Top || newBarPlacement == TabBarPlacement.Bottom;
+			bool isVertical = newBarPlacement == TabBarPlacement.Left || newBarPlacement == TabBarPlacement.Right;
+
+			if ((isHorizontal && (tabView.IndicatorPlacement == TabIndicatorPlacement.Left || tabView.IndicatorPlacement == TabIndicatorPlacement.Right)) ||
+				(isVertical && (tabView.IndicatorPlacement == TabIndicatorPlacement.Top || tabView.IndicatorPlacement == TabIndicatorPlacement.Bottom)))
+			{
+				tabView.IndicatorPlacement = isHorizontal ? TabIndicatorPlacement.Bottom : TabIndicatorPlacement.Left;
+			}
+
+			tabView._tabHeaderContainer?.UpdateTabPadding();
+			tabView._tabHeaderContainer?.UpdateScrollButtonEnabled(tabView._tabHeaderContainer.IsScrollButtonEnabled);
+			tabView._tabHeaderContainer?.UpdateTabIndicatorWidth();
+			tabView._tabHeaderContainer?.UpdateIndicatorPlacement(tabView.IndicatorPlacement);
+			tabView._tabHeaderContainer?.UpdateTabIndicatorPosition();
+			tabView._tabHeaderContainer?.UpdateHeaderItemHeight();
+			if (tabView.IsCenterButtonEnabled)
+			{
+				tabView.UpdateIsCenterButtonEnabled();
+			}
+		}
 
 		/// <summary>
 		/// Handles changes to the <see cref="HeaderHorizontalTextAlignment"/> property.
@@ -2173,7 +2263,28 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <summary>
 		/// Handles changes to the <see cref="IndicatorPlacement"/> property.
 		/// </summary>
-		static void OnIndicatorPlacementChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateIndicatorPlacement((TabIndicatorPlacement)newValue);
+		static void OnIndicatorPlacementChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			var tabView = bindable as SfTabView;
+			if (tabView == null)
+			{
+				return;
+			}
+
+			var indicatorPlacement = (TabIndicatorPlacement)newValue;
+			bool isHorizontal = tabView.TabBarPlacement == TabBarPlacement.Top || tabView.TabBarPlacement == TabBarPlacement.Bottom;
+			bool isVertical = tabView.TabBarPlacement == TabBarPlacement.Left || tabView.TabBarPlacement == TabBarPlacement.Right;
+
+			if ((isHorizontal && (indicatorPlacement == TabIndicatorPlacement.Left || indicatorPlacement == TabIndicatorPlacement.Right)) ||
+				(isVertical && (indicatorPlacement == TabIndicatorPlacement.Top || indicatorPlacement == TabIndicatorPlacement.Bottom)))
+			{
+				tabView.IndicatorPlacement = (TabIndicatorPlacement)oldValue;
+				return;
+			}
+
+			tabView.UpdateIndicatorPlacement(indicatorPlacement);
+			tabView.InvalidateMeasure();
+		}
 
 		/// <summary>
 		/// Handles changes to the <see cref="TabWidthMode"/> property.
@@ -2204,6 +2315,11 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// Handles changes to the <see cref="TabBarHeight"/> property.
 		/// </summary>
 		static void OnTabBarHeightChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateTabBarHeight((double)newValue);
+
+		/// <summary>
+		/// Handles changes to the <see cref="TabBarSize"/> property.
+		/// </summary>
+		static void OnTabBarSizeChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabView)?.UpdateTabBarSize((double)newValue);
 
 		/// <summary>
 		/// Handles changes to the <see cref="Items"/> property.
@@ -2420,6 +2536,44 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			}
 		}
 
+		void EnsureVerticalGridForTopBottom()
+		{
+			_parentGrid?.RowDefinitions.Clear();
+			_parentGrid?.ColumnDefinitions.Clear();
+
+			_parentGrid?.RowDefinitions.Add(new RowDefinition());
+			_parentGrid?.RowDefinitions.Add(new RowDefinition());
+			_parentGrid?.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
+		}
+
+		void EnsureHorizontalGridForLeftRight()
+		{
+			_parentGrid?.RowDefinitions.Clear();
+			_parentGrid?.ColumnDefinitions.Clear();
+
+			_parentGrid?.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+			_parentGrid?.ColumnDefinitions.Add(new ColumnDefinition());
+			_parentGrid?.ColumnDefinitions.Add(new ColumnDefinition());
+		}
+
+		static object DefaultTabHeaderPaddingCreator(BindableObject bindable)
+		{
+			var thickness = new Thickness(0);
+			if (bindable is SfTabView tabView)
+			{
+				var isHorizontal = tabView.TabBarPlacement == TabBarPlacement.Top || tabView.TabBarPlacement == TabBarPlacement.Bottom;
+				if (isHorizontal)
+				{
+					thickness = new Thickness(52, 0, 52, 0);
+				}
+				else
+				{
+					thickness = new Thickness(0, 52, 0, 52);
+				}
+			}
+			return thickness;
+		}
+
 		/// <summary>
 		/// Updates the header item spacing of the tab bar.
 		/// </summary>
@@ -2523,7 +2677,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		void InitializeHeaderContainer()
 		{
 			_tabHeaderContainer ??= [];
-			_tabHeaderContainer.HeightRequest = TabBarHeight;
+			_tabHeaderContainer.HeightRequest = _effectiveTabBarSize;
 			_tabHeaderContainer.Background = TabBarBackground;
 			_tabHeaderContainer.Items = Items;
 
@@ -2534,6 +2688,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			UpdateCornerRadius(this.IndicatorCornerRadius);
 			UpdateHeaderHorizontalTextAlignment(HeaderHorizontalTextAlignment);
 			UpdateTabWidthMode(TabWidthMode);
+			UpdateTabHeaderPadding(TabHeaderPadding);
+			UpdateTabBarSize(TabBarSize);
 
 			_tabHeaderContainer.SelectionChanging += HeaderContainer_SelectionChanging;
 			_tabHeaderContainer.SelectionChanged += HeaderContainer_SelectionChanged;
@@ -2725,38 +2881,84 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void UpdateTabBarPlacement(TabBarPlacement tabBarPlacement)
 		{
-			if (_tabHeaderContainer != null && _tabContentContainer != null)
+			if (_tabHeaderContainer == null || _tabContentContainer == null || _parentGrid == null)
 			{
-				int tabContentContainerIndex = 0;
-				int tabHeaderContainerIndex = 1;
-				if (tabBarPlacement == TabBarPlacement.Top)
-				{
-					tabContentContainerIndex = 1;
-					tabHeaderContainerIndex = 0;
-				}
+				return;
+			}
 
-				Grid.SetRow(_tabContentContainer, tabContentContainerIndex);
-				Grid.SetRow(_tabHeaderContainer, tabHeaderContainerIndex);
+			var tabBarsize = _effectiveTabBarSize;
+			if (tabBarPlacement == TabBarPlacement.Top || tabBarPlacement == TabBarPlacement.Bottom)
+			{
+				EnsureVerticalGridForTopBottom();
+
+				int headerRow = (tabBarPlacement == TabBarPlacement.Top) ? 0 : 1;
+				int contentRow = (tabBarPlacement == TabBarPlacement.Top) ? 1 : 0;
+
+				Grid.SetColumn(_tabHeaderContainer, 0);
+				Grid.SetRow(_tabHeaderContainer, headerRow);
+
+				Grid.SetColumn(_tabContentContainer, 0);
+				Grid.SetRow(_tabContentContainer, contentRow);
 
 				if (_tabBarBorder != null)
 				{
-					Grid.SetRow(_tabBarBorder, tabHeaderContainerIndex);
+					Grid.SetColumn(_tabBarBorder, 0);
+					Grid.SetRow(_tabBarBorder, headerRow);
 				}
 
-				if (_parentGrid != null)
+				// Header height applies in horizontal layout
+				if (tabBarsize >= 0)
 				{
-					if (TabBarHeight >= 0)
-					{
-						_parentGrid.RowDefinitions[tabHeaderContainerIndex].Height = TabBarHeight;
-						
-					}
-					_parentGrid.RowDefinitions[tabContentContainerIndex].Height = GridLength.Star;
+					_parentGrid.RowDefinitions[headerRow].Height = tabBarsize;
+				}
+				_parentGrid.RowDefinitions[contentRow].Height = GridLength.Star;
 #if NET10_0
-						_parentGrid.SafeAreaEdges = new SafeAreaEdges(SafeAreaRegions.Container, SafeAreaRegions.Container, SafeAreaRegions.Container, SafeAreaRegions.None);
+				_parentGrid.SafeAreaEdges = new SafeAreaEdges(SafeAreaRegions.Container, SafeAreaRegions.Container, SafeAreaRegions.Container, SafeAreaRegions.None);
 #endif
+				_tabHeaderContainer.WidthRequest = -1;
+				_tabHeaderContainer.HeightRequest = tabBarsize;
+				_tabHeaderContainer.Placement = TabBarPlacement;
+			}
+			else
+			{
+				EnsureHorizontalGridForLeftRight();
+
+				int headerColumn = (tabBarPlacement == TabBarPlacement.Left) ? 0 : 1;
+				int contentColumn = (tabBarPlacement == TabBarPlacement.Left) ? 1 : 0;
+
+				Grid.SetRow(_tabHeaderContainer, 0);
+				Grid.SetColumn(_tabHeaderContainer, headerColumn);
+
+				Grid.SetRow(_tabContentContainer, 0);
+				Grid.SetColumn(_tabContentContainer, contentColumn);
+
+				if (_tabBarBorder != null)
+				{
+					Grid.SetRow(_tabBarBorder, 0);
+					Grid.SetColumn(_tabBarBorder, headerColumn);
 				}
 
-				UpdateCenterButtonPosition();
+
+				// Vertical docking uses WidthRequest; clear HeightRequest
+				_tabHeaderContainer.HeightRequest = -1;
+				_tabHeaderContainer.WidthRequest = tabBarsize;
+				_tabHeaderContainer.Placement = this.TabBarPlacement;
+
+				// Columns sizing
+				if (tabBarsize >= 0)
+				{
+					_parentGrid.ColumnDefinitions[headerColumn].Width = tabBarsize;
+				}
+				_parentGrid.ColumnDefinitions[contentColumn].Width = GridLength.Star;
+			}
+
+			InvalidateMeasure();
+			_tabHeaderContainer.UpdateHeaderItemHeight();
+
+			if (_tabHeaderContainer is SfTabBar tabBar)
+			{
+				var size = (tabBarsize >= 0 ? tabBarsize : 48d);
+				tabBar.UpdateHeaderItemsSize(tabBarPlacement, size);
 			}
 		}
 
@@ -2769,11 +2971,29 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			{
 				if (TabBarPlacement is TabBarPlacement.Top)
 				{
+					Grid.SetColumn(_centerButtonView, 0);
+					Grid.SetRow(_centerButtonView, 0);
 					_centerButtonView.HorizontalOptions = LayoutOptions.Center;
 					_centerButtonView.VerticalOptions = LayoutOptions.Start;
 				}
+				else if (TabBarPlacement is TabBarPlacement.Left)
+				{
+					Grid.SetColumn(_centerButtonView, 0);
+					Grid.SetRow(_centerButtonView, 0);
+					_centerButtonView.VerticalOptions = LayoutOptions.Center;
+					_centerButtonView.HorizontalOptions = LayoutOptions.Start;
+				}
+				else if (TabBarPlacement is TabBarPlacement.Right)
+				{
+					Grid.SetColumn(_centerButtonView, 1);
+					Grid.SetRow(_centerButtonView, 0);
+					_centerButtonView.VerticalOptions = LayoutOptions.Center;
+					_centerButtonView.HorizontalOptions = LayoutOptions.End;
+				}
 				else
 				{
+					Grid.SetColumn(_centerButtonView, 0);
+					Grid.SetRow(_centerButtonView, 1);
 					_centerButtonView.HorizontalOptions = LayoutOptions.Center;
 					_centerButtonView.VerticalOptions = LayoutOptions.End;
 				}
@@ -2800,7 +3020,14 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					{
 						UpdateCenterButtonPosition();
 						_parentGrid.Children.Add(_centerButtonView);
-						Grid.SetRowSpan(_centerButtonView, 2);
+						if (TabBarPlacement is TabBarPlacement.Top || TabBarPlacement is TabBarPlacement.Bottom)
+						{
+							Grid.SetRowSpan(_centerButtonView, 2);
+						}
+						else
+						{
+							Grid.SetColumnSpan(_centerButtonView, 2);
+						}
 					}
 					else
 					{
@@ -2810,6 +3037,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						}
 					}
 				}
+				this._tabHeaderContainer?.UpdateTabPadding();
+				this._tabHeaderContainer?.UpdateScrollButtonEnabled(this._tabHeaderContainer.IsScrollButtonEnabled);
+				this._tabHeaderContainer?.UpdateTabIndicatorWidth();
+				this._tabHeaderContainer?.UpdateHeaderItemHeight();
+				this._tabHeaderContainer?.UpdateIndicatorPlacement(this.IndicatorPlacement);
+				this._tabHeaderContainer?.UpdateTabIndicatorPosition();
 			}
 		}
 
@@ -2874,21 +3107,43 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void UpdateTabBarHeight(double tabBarHeight)
 		{
-			if (_tabHeaderContainer != null)
+			if (_tabHeaderContainer == null || _parentGrid == null)
 			{
-				if (TabBarHeight > 0)
-				{
-					_tabHeaderContainer.HeightRequest = tabBarHeight;
-					_tabHeaderContainer.UpdateHeaderItemHeight();
-					UpdateTabBarPlacement(TabBarPlacement);
-					_tabHeaderContainer.IsVisible = true;
-				}
-				else
-				{
-					_tabHeaderContainer.IsVisible = false;
-					UpdateTabBarPlacement(TabBarPlacement);
-				}
+				return;
 			}
+
+			_effectiveTabBarSize = tabBarHeight;
+
+			if (_tabHeaderContainer is SfTabBar tabBar)
+			{
+				tabBar.UpdateHeaderItemsSize(TabBarPlacement, tabBarHeight);
+			}
+
+			UpdateTabBarPlacement(TabBarPlacement);
+
+			_tabHeaderContainer.IsVisible = tabBarHeight > 0;
+		}
+
+		/// <summary>
+		/// Updates the size of the tab bar.
+		/// </summary>
+		void UpdateTabBarSize(double tabBarSize)
+		{
+			if (_tabHeaderContainer == null || _parentGrid == null)
+			{
+				return;
+			}
+
+			_effectiveTabBarSize = tabBarSize;
+
+			if (_tabHeaderContainer is SfTabBar tabBar)
+			{
+				tabBar.UpdateHeaderItemsSize(TabBarPlacement, tabBarSize);
+			}
+
+			UpdateTabBarPlacement(TabBarPlacement);
+
+			_tabHeaderContainer.IsVisible = TabBarSize > 0;
 		}
 
 		/// <summary>
@@ -2976,9 +3231,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 			if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
 			{
-				Grid.SetRowSpan(_centerButtonView, 2);
+				if (TabBarPlacement is TabBarPlacement.Top || TabBarPlacement is TabBarPlacement.Bottom)
+				{
+					Grid.SetRowSpan(_centerButtonView, 2);
+				}
+				else
+				{
+					Grid.SetColumnSpan(_centerButtonView, 2);
+				}
 				UpdateCenterButtonPosition();
-				_parentGrid.Children.Add(_centerButtonView);
+				if (!_parentGrid.Children.Contains(_centerButtonView))
+				{
+					_parentGrid.Children.Add(_centerButtonView);
+				}
 				if (_centerButtonView is not null && CenterButtonSettings is not null && _centerButtonView.WidthRequest != CenterButtonSettings.Width)
 				{
 					OnDefaultCenterButtonSettingsChanged();
@@ -2998,7 +3263,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void OnDefaultCenterButtonSettingsChanged()
 		{
-			if (_tabHeaderContainer is null || CenterButtonSettings is null || _centerButtonView is null)
+			if (_tabHeaderContainer is null || CenterButtonSettings is null || _centerButtonView is null || this.TabWidthMode == TabWidthMode.SizeToContent)
 			{
 				return;
 			}

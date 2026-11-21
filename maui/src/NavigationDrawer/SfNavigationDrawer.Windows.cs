@@ -103,8 +103,67 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		void NavigationDrawerNativeView_PointerPressed(object sender, PointerRoutedEventArgs e)
 		{
 			var point = e.GetCurrentPoint(_navigationDrawerNativeView).Position;
-			OnHandleTouchInteraction(PointerActions.Pressed, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+            bool handled = false;
 
+            // Prioritize primary drawer if it has priority or is already open/swiping
+            if ((this.IsPrimaryDrawerPrioritized() && !_isSecondaryDrawerOpen) || _isDrawerOpen || _isPrimaryDrawerSwiping)
+            {
+                this.OnHandleTouchInteraction(PointerActions.Pressed, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                _isPrimaryDrawerSwiping = true;
+                handled = true;
+            }
+            // Handle secondary drawer if it's open/swiping and primary isn't prioritized
+            else if (_isSecondaryDrawerOpen || _isSecondaryDrawerSwiping)
+            {
+                this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                handled = true;
+            }
+            // Edge activation for secondary drawer (only if primary isn't prioritized or active)
+            else if (this.SecondaryDrawerSettings != null && !_isPrimaryDrawerSwiping)
+            {
+                switch (this.SecondaryDrawerSettings.Position)
+                {
+                    case Position.Left:
+                        if (point.X <= this.SecondaryDrawerSettings.TouchThreshold && point.X >= 0)
+                        {
+                            this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                            _isSecondaryDrawerSwiping = true;
+                            handled = true;
+                        }
+                        break;
+                    case Position.Right:
+                        if (point.X >= (this.ScreenWidth - this.SecondaryDrawerSettings.TouchThreshold) && point.X <= this.ScreenWidth)
+                        {
+                            this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                            _isSecondaryDrawerSwiping = true;
+                            handled = true;
+                        }
+                        break;
+                    case Position.Top:
+                        if (point.Y <= this.SecondaryDrawerSettings.TouchThreshold && point.Y >= 0)
+                        {
+                            this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                            _isSecondaryDrawerSwiping = true;
+                            handled = true;
+                        }
+                        break;
+                    case Position.Bottom:
+                        if (point.Y >= (this.ScreenHeight - this.SecondaryDrawerSettings.TouchThreshold) && point.Y <= this.ScreenHeight)
+                        {
+                            this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                            _isSecondaryDrawerSwiping = true;
+                            handled = true;
+                        }
+                        break;
+                }
+            }
+
+            // Fallback to primary drawer if not handled by secondary and primary itself is not currently swiping
+            if (!handled && !_isPrimaryDrawerSwiping && !_isSecondaryDrawerSwiping)
+            {
+                this.OnHandleTouchInteraction(PointerActions.Pressed, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                _isPrimaryDrawerSwiping = true;
+            }
 			if (!_isDrawerOpen)
 			{
 				_isPressedState = true;
@@ -120,7 +179,16 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		void NavigationDrawerNativeView_PointerReleased(object sender, PointerRoutedEventArgs e)
 		{
 			var point = e.GetCurrentPoint(_navigationDrawerNativeView).Position;
-			OnHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+			if (_isSecondaryDrawerOpen || _isSecondaryDrawerSwiping)
+            {
+                this.OnSecondaryHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                _isSecondaryDrawerSwiping = false;
+            }
+            else
+            {
+                this.OnHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(point.X, point.Y));
+                _isPrimaryDrawerSwiping = false;
+            }
 			_isPressedState = false;
 		}
 
@@ -131,7 +199,16 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		/// <param name="e">The pointer event arguments.</param>
 		void NavigationDrawerNativeView_PointerCanceled(object sender, PointerRoutedEventArgs e)
 		{
-			OnHandleTouchInteraction(PointerActions.Cancelled, new Microsoft.Maui.Graphics.Point(0, 0));
+			if (_isSecondaryDrawerOpen || _isSecondaryDrawerSwiping)
+            {
+                this.OnSecondaryHandleTouchInteraction(PointerActions.Cancelled, new Microsoft.Maui.Graphics.Point(0, 0));
+                _isSecondaryDrawerSwiping = false;
+            }
+            else
+            {
+                this.OnHandleTouchInteraction(PointerActions.Cancelled, new Microsoft.Maui.Graphics.Point(0, 0));
+                _isPrimaryDrawerSwiping = false;
+            }
 			_isPressedState = false;
 		}
 
@@ -143,22 +220,55 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 		void NavigationDrawerNativeView_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
 		{
 			var point = e.Position;
-			if (_isPressed)
-			{
-				bool shouldHandleTouch = DrawerSettings.Position switch
-				{
-					Position.Left => point.X <= DrawerSettings.DrawerWidth || _isTransitionDifference,
-					Position.Right => point.X >= ScreenWidth - DrawerSettings.DrawerWidth,
-					Position.Top => point.Y <= DrawerSettings.DrawerHeight,
-					Position.Bottom => point.Y >= ScreenHeight - DrawerSettings.DrawerHeight,
-					_ => false
-				};
-
-				if (shouldHandleTouch)
-				{
-					OnHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
-				}
-			}
+            if (_isPressed)
+            {
+                if (_isSecondaryDrawerOpen || _isSecondaryDrawerSwiping)
+                {
+                    switch (this.SecondaryDrawerSettings.Position)
+                    {
+                        case Position.Left:
+                            if (point.X <= this.SecondaryDrawerSettings.DrawerWidth || _isTransitionDifference)
+                                this.OnSecondaryHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
+                            break;
+                        case Position.Right:
+                            if (point.X >= this.ScreenWidth - this.SecondaryDrawerSettings.DrawerWidth)
+                                this.OnSecondaryHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
+                            break;
+                        case Position.Top:
+                            if (point.Y <= this.SecondaryDrawerSettings.DrawerHeight)
+                                this.OnSecondaryHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
+                            break;
+                        case Position.Bottom:
+                            if (point.Y >= this.ScreenHeight - this.SecondaryDrawerSettings.DrawerHeight)
+                                this.OnSecondaryHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
+                            break;
+                    }
+                    _isSecondaryDrawerSwiping = false;
+                }
+                else
+                {
+                    switch (this.DrawerSettings.Position)
+                    {
+                        case Position.Left:
+                            if (point.X <= this.DrawerSettings.DrawerWidth || _isTransitionDifference)
+                                this.OnHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
+                            break;
+                        case Position.Right:
+                            if (point.X >= this.ScreenWidth - this.DrawerSettings.DrawerWidth)
+                                this.OnHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
+                            break;
+                        case Position.Top:
+                            if (point.Y <= this.DrawerSettings.DrawerHeight)
+                                this.OnHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
+                            break;
+                        case Position.Bottom:
+                            if (point.Y >= this.ScreenHeight - this.DrawerSettings.DrawerHeight)
+                                this.OnHandleTouchInteraction(PointerActions.Released, new Microsoft.Maui.Graphics.Point(e.Position.X, e.Position.Y));
+                            break;
+                    }
+                    _isPrimaryDrawerSwiping = false;
+                }
+            }
 			_initialPoint = new Point(0, 0);
 		}
 
@@ -173,27 +283,112 @@ namespace Syncfusion.Maui.Toolkit.NavigationDrawer
 
 			if (!_isPressed && _initialPoint.X != 0 && _initialPoint.Y != 0)
 			{
-				bool shouldHandleTouch = DrawerSettings.Position switch
-				{
-					Position.Left => _drawerLayout != null && _initialPoint.X <= DrawerSettings.TouchThreshold && _initialPoint.X >= 0 && !_isPressedState,
-					Position.Right => _initialPoint.X >= _touchRightThreshold && _initialPoint.X >= 0 && !_isPressedState,
-					Position.Top => _initialPoint.Y <= DrawerSettings.TouchThreshold,
-					Position.Bottom => _initialPoint.Y >= _touchBottomThreshold,
-					_ => false
-				};
+				bool isgestureHandled = false;
 
-				if (shouldHandleTouch)
-				{
-					OnHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
-				}
+                // Prioritize primary drawer gesture handling
+                if (!_isPrimaryDrawerSwiping && this.IsPrimaryDrawerPrioritized() && !_isSecondaryDrawerOpen)
+                {
+                    switch (this.DrawerSettings.Position)
+                    {
+                        case Position.Left:
+                            if (_drawerLayout != null && _initialPoint.X <= this.DrawerSettings.TouchThreshold && _initialPoint.X >= 0 && !_isPressedState)
+                            {
+                                this.OnHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+                                _isPrimaryDrawerSwiping = true;
+                                isgestureHandled = true;
+                            }
+                            break;
+                        case Position.Right:
+                            if (_initialPoint.X >= _touchRightThreshold && _initialPoint.X >= 0 && !_isPressedState)
+                            {
+                                this.OnHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+                                _isPrimaryDrawerSwiping = true;
+                                isgestureHandled = true;
+                            }
+                            break;
+                        case Position.Top:
+                            if (_initialPoint.Y <= this.DrawerSettings.TouchThreshold)
+                            {
+                                this.OnHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+                                _isPrimaryDrawerSwiping = true;
+                                isgestureHandled = true;
+                            }
+                            break;
+                        case Position.Bottom:
+                            if (_initialPoint.Y >= _touchBottomThreshold)
+                            {
+                                this.OnHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+                                _isPrimaryDrawerSwiping = true;
+                                isgestureHandled = true;
+                            }
+                            break;
+                    }
+                }
+
+                // If primary didn't handle it, try secondary drawer
+                if (!isgestureHandled && !_isSecondaryDrawerSwiping && !_isPrimaryDrawerSwiping)
+                {
+                    switch (this.SecondaryDrawerSettings.Position)
+                    {
+                        case Position.Left:
+                            if (this.SecondaryDrawerSettings != null && _initialPoint.X <= this.SecondaryDrawerSettings.TouchThreshold && _initialPoint.X >= 0 && !_isPressedState)
+                            {
+                                this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+                                _isSecondaryDrawerSwiping = true;
+                                isgestureHandled = true;
+                            }
+                            break;
+                        case Position.Right:
+                            if (_initialPoint.X >= (this.ScreenWidth - this.SecondaryDrawerSettings.TouchThreshold) && _initialPoint.X >= 0 && !_isPressedState)
+                            {
+                                this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+                                _isSecondaryDrawerSwiping = true;
+                                isgestureHandled = true;
+                            }
+                            break;
+                        case Position.Top:
+                            if (_initialPoint.Y <= this.SecondaryDrawerSettings.TouchThreshold && !_isPressedState)
+                            {
+                                this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+                                _isSecondaryDrawerSwiping = true;
+                                isgestureHandled = true;
+                            }
+                            break;
+                        case Position.Bottom:
+                            if (_initialPoint.Y >= (this.ScreenHeight - this.SecondaryDrawerSettings.TouchThreshold) && !_isPressedState)
+                            {
+                                this.OnSecondaryHandleTouchInteraction(PointerActions.Pressed, new Point(e.Position.X, e.Position.Y));
+                                _isSecondaryDrawerSwiping = true;
+                                isgestureHandled = true;
+                            }
+                            break;
+                    }
+                }
+            
 			}
 
 			if (_initialPoint.X >= 0 && _initialPoint.Y >= 0 && _initialPoint.X <= ScreenWidth && _initialPoint.Y <= ScreenHeight)
 			{
-				OnHandleTouchInteraction(PointerActions.Moved, new Point(e.Position.X, e.Position.Y));
+				if (_isSecondaryDrawerOpen || _isSecondaryDrawerSwiping)
+                {
+                    this.OnSecondaryHandleTouchInteraction(PointerActions.Moved, new Point(e.Position.X, e.Position.Y));
+                }
+                else if (_isDrawerOpen || _isPrimaryDrawerSwiping)
+                {
+                    this.OnHandleTouchInteraction(PointerActions.Moved, new Point(e.Position.X, e.Position.Y));
+                }
 			}
 		}
-
+		
+		bool IsPrimaryDrawerPrioritized()
+        {
+            if (this.SecondaryDrawerSettings != null && this.DrawerSettings.Position == this.SecondaryDrawerSettings.Position &&
+                (this.DrawerSettings.DrawerHeaderView !=null || this.DrawerSettings.DrawerContentView !=null || this.DrawerSettings.DrawerFooterView!=null))
+            {
+                return true;
+            }
+            return false;
+        }
 		#endregion
 
 		#region Override Methods

@@ -187,6 +187,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		///  Gets or sets the stroke dash array to customize the appearance of the stroke.
 		/// </summary>
 		/// <value>It accepts the <see cref="DoubleCollection"/> value and the default value is null.</value>
+		/// For line-based series, gradients are not rendered when StrokeDashArray is set. In such cases, the fill falls back to a solid color using the first gradient stop to preserve the dashed stroke pattern.
 		/// <example>
 		/// # [Xaml](#tab/tabid-5)
 		/// <code><![CDATA[

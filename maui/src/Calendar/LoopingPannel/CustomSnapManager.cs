@@ -392,9 +392,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 return;
             }
 
-            //// Skip the view update while the allow view navigation is enabled and the view is not month view.
-            //// Because other than month view, views show selection when the allow view navigation disabled.
-            if (_calendarInfo.View != CalendarView.Month && _calendarInfo.AllowViewNavigation)
+            //// Skip the view update while the allow view navigation is enabled and the view is not month view or at minimum display mode.
+            //// Because other than month view, views show selection when the allow view navigation disabled or at minimum display mode.
+            if (_calendarInfo.View != CalendarView.Month && _calendarInfo.AllowViewNavigation && _calendarInfo.View != _calendarInfo.MinimumDisplayMode)
             {
                 return;
             }
@@ -453,9 +453,9 @@ namespace Syncfusion.Maui.Toolkit.Calendar
         /// </summary>
         internal void UpdateSelectedCellStyle()
         {
-            //// Skip the view update while the allow view navigation is enabled and the view is not month view.
-            //// Because other than month view, views show selection when the allow view navigation disabled.
-            if (_calendarInfo.View != CalendarView.Month && _calendarInfo.AllowViewNavigation)
+            //// Skip the view update while the allow view navigation is enabled and the view is not month view or at minimum display mode.
+            //// Because other than month view, views show selection when the allow view navigation disabled or at minimum display mode.
+            if (_calendarInfo.View != CalendarView.Month && _calendarInfo.AllowViewNavigation && _calendarInfo.View != _calendarInfo.MinimumDisplayMode)
             {
                 return;
             }

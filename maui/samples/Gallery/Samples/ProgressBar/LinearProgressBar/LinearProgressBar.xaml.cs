@@ -26,7 +26,7 @@ public partial class LinearProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the progress bar.</param>
     /// <param name="e">The event data containing the current progress value.</param>
-    private void CornerRadiusProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void CornerRadiusProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -52,7 +52,7 @@ public partial class LinearProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the progress bar.</param>
     /// <param name="e">The event data containing the current progress value.</param>
-    private void PaddingProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void PaddingProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -78,7 +78,7 @@ public partial class LinearProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the progress bar.</param>
     /// <param name="e">The event data containing the current progress value.</param>
-    private void RangeProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void RangeProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -104,7 +104,7 @@ public partial class LinearProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the progress bar.</param>
     /// <param name="e">The event data containing the current progress value.</param>
-    private void GradientProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void GradientProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -129,7 +129,7 @@ public partial class LinearProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the progress bar.</param>
     /// <param name="e">The event data containing the current progress value.</param>
-    private void SecondaryProgressProgressBar_ValueChanged(object sender, ProgressValueEventArgs e)
+    private void SecondaryProgressProgressBar_ValueChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {
@@ -159,7 +159,7 @@ public partial class LinearProgressBar : SampleView
     /// </summary>
     /// <param name="sender">The source of the event, typically the progress bar.</param>
     /// <param name="e">The event data containing the current progress value.</param>
-    private void SegmentedCornerRadiusProgressBar_ProgressChanged(object sender, ProgressValueEventArgs e)
+    private void SegmentedCornerRadiusProgressBar_ProgressChanged(object? sender, ProgressValueEventArgs e)
     {
         Dispatcher.DispatchAsync(() =>
         {

@@ -253,6 +253,27 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override Rect GetSemanticsBounds()
+		{
+			if (Math.Abs(LabelRect.Width) > 0 && Math.Abs(LabelRect.Height) > 0)
+			{
+				// Normalize rect to ensure positive width and height
+				double x = LabelRect.X - (LabelRect.Width / 2);
+				double y = LabelRect.Y - (LabelRect.Height / 2);
+				;
+				double width = Math.Abs(LabelRect.Width);
+				double height = Math.Abs(LabelRect.Height);
+
+				if (CoordinateUnit == ChartCoordinateUnit.Axis && Chart != null)
+				{
+					var clipRect = Chart._chartArea.ActualSeriesClipRect;
+					return new Rect(x - clipRect.X, y - clipRect.Y, width, height);
+				}
+				return new Rect(x, y, width, height);
+			}
+			return base.GetSemanticsBounds();
+		}
+
 		internal override bool HitTest(Point touchPoint)
 		{
 			return IsPointInLabelBounds(touchPoint, LabelRect);

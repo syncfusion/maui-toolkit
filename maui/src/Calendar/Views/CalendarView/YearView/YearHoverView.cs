@@ -128,7 +128,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             _selectedDateRange = selectedDateRange;
             //// Does not need to update the UI while selected range value changes on
             //// single and multiple selection mode and in default range selection direction.
-            if (_calendarViewInfo.SelectionMode != CalendarSelectionMode.Range || _calendarViewInfo.RangeSelectionDirection == CalendarRangeSelectionDirection.Default || _calendarViewInfo.AllowViewNavigation)
+            if (_calendarViewInfo.SelectionMode != CalendarSelectionMode.Range || _calendarViewInfo.RangeSelectionDirection == CalendarRangeSelectionDirection.Default || (_calendarViewInfo.AllowViewNavigation && !(_calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode)))
             {
                 return;
             }
@@ -196,7 +196,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                 bool isBlackoutDate = CalendarViewHelper.IsDateInDateCollection(dateTime, _disabledDates);
 
                 // Bool Property to check the disabled date
-                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier);
+                bool isDisabledDate = CalendarViewHelper.IsDisabledDate(dateTime, _calendarViewInfo.View, _calendarViewInfo.EnablePastDates, _calendarViewInfo.MinimumDate, _calendarViewInfo.MaximumDate, _calendarViewInfo.SelectionMode, _calendarViewInfo.RangeSelectionDirection, _selectedDateRange, _calendarViewInfo.AllowViewNavigation, _calendarViewInfo.Identifier, _calendarViewInfo.MinimumDisplayMode);
                 RectF rect = new RectF(xPosition, yPosition, yearCellWidth, yearCellHeight);
                 float highlightXPosition = xPosition + horizontalPadding;
                 float highlightYPosition = yPosition + verticalHighlightPadding;
@@ -466,7 +466,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
             float xPosition = 0;
             float yPosition = 0;
             //// When the mode is range selection and not default direction, need to draw the dashed line hovering
-            if (_calendarViewInfo.SelectionMode != CalendarSelectionMode.Range || _calendarViewInfo.RangeSelectionDirection == CalendarRangeSelectionDirection.Default || _calendarViewInfo.AllowViewNavigation || _calendarViewInfo.YearView.CellTemplate != null)
+            if (_calendarViewInfo.SelectionMode != CalendarSelectionMode.Range || _calendarViewInfo.RangeSelectionDirection == CalendarRangeSelectionDirection.Default || (_calendarViewInfo.AllowViewNavigation && !(_calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode)) || _calendarViewInfo.YearView.CellTemplate != null)
             {
                 xPosition = (float)(isRTL ? yearViewWidth - _hoverPosition.Value.X : _hoverPosition.Value.X);
                 yPosition = (float)_hoverPosition.Value.Y;
@@ -528,7 +528,7 @@ namespace Syncfusion.Maui.Toolkit.Calendar
                     }
 
                 case CalendarSelectionMode.Range:
-                    if (_calendarViewInfo.RangeSelectionDirection == CalendarRangeSelectionDirection.Default || _calendarViewInfo.AllowViewNavigation || _calendarViewInfo.YearView.CellTemplate != null)
+                    if (_calendarViewInfo.RangeSelectionDirection == CalendarRangeSelectionDirection.Default || (_calendarViewInfo.AllowViewNavigation && !(_calendarViewInfo.View == _calendarViewInfo.MinimumDisplayMode)) || _calendarViewInfo.YearView.CellTemplate != null)
                     {
                         float highlightXPosition = xPosition + horizontalPadding;
                         float highlightYPosition = yPosition + verticalHighlightPadding;

@@ -20,7 +20,7 @@ internal class CenterButtonView : ContentView, ITouchListener
 	bool _isCenterButtonPressed;
 	SfImage? _centerButtonImage;
 	SfLabel? _centerButtonTitle;
-	SfVerticalStackLayout? _centerButtonVerticalLayout;
+	SfVerticalStackBase? _centerButtonVerticalLayout;
 
 	#endregion
 
@@ -355,7 +355,7 @@ internal class CenterButtonView : ContentView, ITouchListener
 			ShouldIgnoreTouches = true,
 		};
 
-		_centerButtonVerticalLayout = new SfVerticalStackLayout()
+		_centerButtonVerticalLayout = new SfVerticalStackBase()
 		{
 			HorizontalOptions = LayoutOptions.Fill,
 			VerticalOptions = LayoutOptions.Center,

@@ -194,6 +194,20 @@
 				propertyChanged: OnTouchThresholdPropertyChanged);
 
 		/// <summary>
+        /// Identifies the <see cref="IsOpen"/> bindable property.
+        /// </summary>
+        /// <value>
+        /// The identifier for <see cref="IsOpen"/> bindable property.
+        /// </value>
+        public static readonly BindableProperty IsOpenProperty = 
+			BindableProperty.Create(nameof(IsOpen), 
+			typeof(bool), typeof(DrawerSettings), 
+			false, 
+			BindingMode.TwoWay, 
+			null, 
+			propertyChanged: OnIsOpenChanged);		
+
+		/// <summary>
 		/// Identifies the <see cref="AnimationEasing"/> bindable property.
 		/// </summary>
 		public static readonly BindableProperty AnimationEasingProperty = BindableProperty.Create(nameof(AnimationEasing), typeof(Easing), typeof(DrawerSettings), Easing.Linear);
@@ -521,6 +535,15 @@
 			set { SetValue(TouchThresholdProperty, value); }
 		}
 
+        /// <summary>
+        /// Gets or sets a value indicating whether to open or close the drawer.
+        /// </summary>
+        public bool IsOpen
+        {
+            get { return (bool)this.GetValue(IsOpenProperty); }
+            set { this.SetValue(IsOpenProperty, value); }
+        }
+		
 		#endregion
 
 		#region Internal Methods
@@ -736,6 +759,17 @@
 				settings.OnPropertyChanged(nameof(TouchThreshold));
 			}
 		}
+
+        /// <summary>
+        /// Invoked whenever the <see cref="IsOpenProperty"/> is set.
+        /// </summary>
+        /// <param name="bindable">The bindable.</param>
+        /// <param name="oldValue">The old value.</param>
+        /// <param name="newValue">The new value.</param>
+        private static void OnIsOpenChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+             (bindable as DrawerSettings)?.OnPropertyChanged("IsOpen");
+        }
 
 		#endregion
 	}

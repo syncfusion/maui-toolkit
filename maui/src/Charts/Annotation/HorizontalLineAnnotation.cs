@@ -226,6 +226,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override Rect GetSemanticsBounds()
+		{
+			return base.GetSemanticsBounds();
+		}
 		internal override void OnLayout(SfCartesianChart chart, ChartAxis xAxis, ChartAxis yAxis, double x1, double y1)
 		{
 			ResetPosition();

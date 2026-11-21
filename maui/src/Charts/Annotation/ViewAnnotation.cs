@@ -251,6 +251,15 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override Rect GetSemanticsBounds()
+		{
+			if (View != null && !View.Bounds.IsEmpty)
+			{
+				return View.Bounds;
+			}
+			return base.GetSemanticsBounds();
+		}
+
 		internal override bool HitTest(Point touchPoint)
 		{
 			return View.Bounds.Contains(touchPoint);
@@ -329,11 +338,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 			if (View.Bounds.IsEmpty)
 			{
-#if NET9_0_OR_GREATER
 				var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity);
-#else
-				var sizeRequest = View.Measure(double.PositiveInfinity, double.PositiveInfinity).Request;
-#endif
 				measuredWidth = sizeRequest.Width;
 				measuredHeight = sizeRequest.Height;
 			}

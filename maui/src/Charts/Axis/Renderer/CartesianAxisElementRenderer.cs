@@ -101,6 +101,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			float tickSize = (float)tickStyle.TickSize;
 			float axisLineWidth = (float)_chartAxis.AxisLineStyle.StrokeWidth;
 
+			bool hasRangeStyles = _chartAxis.HasRangeStyles;
+
 			float x1 = 0, y1 = 0, x2 = 0, y2 = 0;
 			if (tickPoints.Count > 0)
 			{
@@ -165,8 +167,19 @@ namespace Syncfusion.Maui.Toolkit.Charts
 					}
 				}
 
-				canvas.StrokeSize = (float)tickStyle.StrokeWidth;
-				canvas.StrokeColor = tickStyle.Stroke.ToColor();
+				//Resolve the effective tick style for this position across all containing ranges:
+				//the winning range style overrides the default, and unset styles fall back to it.
+				ChartAxisTickStyle effectiveTickStyle = tickStyle;
+
+				if (hasRangeStyles)
+				{
+					effectiveTickStyle = (isDrawMinorTick
+						? _chartAxis.GetMinorTickStyleInRange(position)
+						: _chartAxis.GetMajorTickStyleInRange(position)) ?? tickStyle;
+				}
+
+				canvas.StrokeSize = (float)effectiveTickStyle.StrokeWidth;
+				canvas.StrokeColor = effectiveTickStyle.Stroke.ToColor();
 
 				if (!isDrawMinorTick)
 				{

@@ -416,7 +416,100 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				return solidBrush.Color;
 			}
 
+			if (brush is GradientBrush gradientBrush)
+			{
+				// Return first gradient stop color if available
+				if (gradientBrush.GradientStops?.Count > 0)
+					return gradientBrush.GradientStops[0].Color;
+			}
+
 			return Colors.Transparent;
+		}
+
+		/// <summary>
+		/// Calculates the bounding rectangle for gradient application across all segments in a series.
+		/// This eliminates the O(N²) per-segment bounds recalculation pattern.
+		/// </summary>
+		/// <param name="series">The series containing segments to measure.</param>
+		/// <param name="strokeWidth">The stroke width for padding calculation.</param>
+		/// <param name="includeControlPoints">If true, includes control points (for splines). If false, uses only endpoints (for lines).</param>
+		/// <returns>A RectF representing the calculated bounds with padding for stroke width.</returns>
+		internal static RectF CalculateGradientBoundsForSeries(CartesianSeries series, double strokeWidth, bool includeControlPoints = false)
+		{
+			float minX = float.MaxValue;
+			float minY = float.MaxValue;
+			float maxX = float.MinValue;
+			float maxY = float.MinValue;
+
+			bool hasValidSegments = false;
+
+			if (series?._segments != null && series._segments.Count > 0)
+			{
+				foreach (var segment in series._segments)
+				{
+					if (segment is CartesianSegment cartSegment && !cartSegment.Empty)
+					{
+						// Get X and Y endpoints
+						float x1 = float.NaN, y1 = float.NaN, x2 = float.NaN, y2 = float.NaN;
+
+						if (segment is LineSegment lineSeg)
+						{
+							x1 = lineSeg.X1;
+							y1 = lineSeg.Y1;
+							x2 = lineSeg.X2;
+							y2 = lineSeg.Y2;
+						}
+						else if (segment is SplineSegment splineSeg)
+						{
+							x1 = splineSeg.X1;
+							y1 = splineSeg.Y1;
+							x2 = splineSeg.X2;
+							y2 = splineSeg.Y2;
+						}
+						else if (segment is StepLineSegment stepSeg)
+						{
+							x1 = stepSeg.X1;
+							y1 = stepSeg.Y1;
+							x2 = stepSeg.X2;
+							y2 = stepSeg.Y2;
+						}
+
+						if (!float.IsNaN(x1) && !float.IsNaN(y1) && !float.IsNaN(x2) && !float.IsNaN(y2))
+						{
+							minX = Math.Min(minX, Math.Min(x1, x2));
+							maxX = Math.Max(maxX, Math.Max(x1, x2));
+							minY = Math.Min(minY, Math.Min(y1, y2));
+							maxY = Math.Max(maxY, Math.Max(y1, y2));
+
+							// Include control points for splines
+							if (includeControlPoints && segment is SplineSegment spline)
+							{
+								minX = Math.Min(minX, Math.Min(spline.StartControlX, spline.EndControlX));
+								maxX = Math.Max(maxX, Math.Max(spline.StartControlX, spline.EndControlX));
+								minY = Math.Min(minY, Math.Min(spline.StartControlY, spline.EndControlY));
+								maxY = Math.Max(maxY, Math.Max(spline.StartControlY, spline.EndControlY));
+							}
+
+							hasValidSegments = true;
+						}
+					}
+				}
+			}
+
+			if (!hasValidSegments)
+			{
+				// Return a minimal bounds if no valid segments
+				return new RectF(0, 0, 1, 1);
+			}
+
+			// Add padding for stroke width
+			float padding = (float)(strokeWidth / 2 + 1);
+			return new RectF(
+				minX - padding,
+				minY - padding,
+				maxX - minX + 2 * padding,
+				maxY - minY + 2 * padding
+			);
 		}
 
 		internal static bool IsOverlap(this Rect currentRect, Rect rect)
@@ -473,11 +566,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 				label.SetBinding(Label.FontAttributesProperty,
 					BindingHelper.CreateBinding(nameof(TooltipInfo.FontAttributes), getter: static (TooltipInfo tooltipInfo) => tooltipInfo.FontAttributes));
 
-#if NET10_0_OR_GREATER
                 return label;
-#else
-				return new ViewCell { View = label };
-#endif
 			});
 
 			return template;

@@ -203,7 +203,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                     {
                         var legendItem = new LegendItem();
                         legendItem.IconType = ShapeType.Circle;
-						var solidColor = _chart.GetFillColor(currentItem.SliceIndex) ?? Brush.Transparent;
+						var solidColor = _chart.GetLegendFillColor(currentItem.SliceIndex) ?? Brush.Transparent;
 						legendItem.IconBrush = solidColor ?? new SolidColorBrush(Colors.Transparent);
                         legendItem.Text = currentItem.Key?.ToString() ?? string.Empty;
                         legendItem.Index = currentItem.SliceIndex;
@@ -274,7 +274,7 @@ namespace Syncfusion.Maui.Toolkit.SunburstChart
                 {
                     if (legendItem != null)
                     {
-                        legendItem.IconBrush = _chart.GetFillColor(legendItem.Index) ?? new SolidColorBrush(Colors.Transparent);
+                        legendItem.IconBrush = _chart.GetLegendFillColor(legendItem.Index) ?? new SolidColorBrush(Colors.Transparent);
                         // break;
                     }
                 }

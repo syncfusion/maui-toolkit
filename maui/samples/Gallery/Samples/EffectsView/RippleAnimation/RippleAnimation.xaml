@@ -29,7 +29,7 @@
 
                             <Image x:Name="cardImage" Source="person1.png" Margin="7" VerticalOptions="Center"
 									   WidthRequest="72" HeightRequest="72" />
-                            <StackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+              <StackLayout Grid.Column="1" VerticalOptions="Center" HorizontalOptions="Fill">
                                 <Label Text="Laura Steffi"  TextColor="#FFFFFF" FontFamily="Roboto-Medium"
                                            Grid.Row="0"  VerticalTextAlignment="Center"
                                            Margin="15,0,0,0" FontSize="18" />

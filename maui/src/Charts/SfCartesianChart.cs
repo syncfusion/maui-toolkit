@@ -2206,7 +2206,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             {
                 if (viewAnnotation.X1 != null || !double.IsNaN(viewAnnotation.Y1) && !_annotationLayout.Children.Contains(view))
                 {
-                    _annotationLayout.Children.Add(view);
+					view.ZIndex = viewAnnotation.ZIndex;
+					_annotationLayout.Children.Add(view);
                 }
             }
         }
@@ -2281,7 +2282,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
         internal void InvalidateAnnotation()
         {
             _annotationLayout.InvalidateDrawable();
-        }
+			if (_chartArea.PlotArea is CartesianPlotArea plotarea)
+			{
+				plotarea._backgroundAnnotationDrawer.InvalidateDrawable();
+			}
+		}
 
         static void OnAnnotationBehindSeries(BindableObject bindable, object oldValue, object newValue)
         {

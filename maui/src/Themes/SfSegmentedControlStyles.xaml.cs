@@ -3,7 +3,6 @@ namespace Syncfusion.Maui.Toolkit.SegmentedControl
 	/// <summary>
 	/// Represents a class which is used to styles.
 	/// </summary>
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class SfSegmentedControlStyles : ResourceDictionary
 	{
 		/// <summary>

@@ -16,7 +16,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			chart.Handler?.DisconnectHandler();
 		}
 
-		private void checkbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		private void checkbox_CheckedChanged(object? sender, CheckedChangedEventArgs e)
 		{
 			dataPointSelection.Type = e.Value ? ChartSelectionType.Multiple : ChartSelectionType.SingleDeselect;
 			//series2.Fill = Color.FromArgb("#40314A6E");

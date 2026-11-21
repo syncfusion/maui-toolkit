@@ -124,6 +124,21 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 					canvas.DrawLine(_lineX1, _lineY1, _lineX2, _lineY2);
 				}
+
+				float semanticLeft = Math.Min(Left, Right);
+				float semanticTop = Math.Min(Top, Bottom);
+				float semanticRight = Math.Max(Left, Right);
+				float semanticBottom = Math.Max(Top, Bottom);
+
+				if (waterfallSeries.ShowConnectorLine == true && _previousWaterfallSegment != null)
+				{
+					semanticLeft = Math.Min(semanticLeft, Math.Min(_lineX1, _lineX2));
+					semanticTop = Math.Min(semanticTop, Math.Min(_lineY1, _lineY2));
+					semanticRight = Math.Max(semanticRight, Math.Max(_lineX1, _lineX2));
+					semanticBottom = Math.Max(semanticBottom, Math.Max(_lineY1, _lineY2));
+				}
+
+				SemanticBounds = new RectF(semanticLeft, semanticTop, semanticRight - semanticLeft, semanticBottom - semanticTop);
 			}
 		}
 

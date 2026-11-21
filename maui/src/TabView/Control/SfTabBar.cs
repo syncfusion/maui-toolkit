@@ -25,25 +25,34 @@ namespace Syncfusion.Maui.Toolkit.TabView
         SfGrid? _tabHeaderContentContainer;
         SfGrid? _tabHeaderParentContainer;
         SfBorder? _tabSelectionIndicator;
-        SfHorizontalStackLayout? _tabHeaderItemContent;
         RoundRectangle? _roundRectangle;
+		TabBarPlacement _placement = TabBarPlacement.Top;
+		SfHorizontalStackBase? _tabHeaderRow;
+		SfVerticalStackBase? _tabHeaderColumn;
+		SfStackBase? _tabItemsPanel;
 		internal SfBorder? _tabHeaderParentBorder;
 		RoundRectangle? _tabHeaderParenRoundRectangle;
 
 		// Dimension and positioning fields
 
 		double _previousTabX = 0d;
-        double _selectedTabX = 0d;
-        double _currentIndicatorWidth = 0d;
+		double _previousTabY = 0d;
+		double _selectedTabX = 0d;
+		double _selectedTabY = 0d;
+		double _currentIndicatorWidth = 0d;
+		double _currentIndicatorHeight = 0d;
 		double _tabHeaderImageSize = 32d;
 		readonly double _arrowButtonSize = 32;
 		double _removedItemWidth = 0;
-		private Size desiredSize;
+		double _removedItemHeight = 0;
+		SfStackBase? _from;
+		SfStackBase? _to;
 
-        // State-tracking fields
+		// State-tracking fields
 
-        double _previousIndicatorWidth = 0d;
-        int _previewSelectedIndex = 0;
+		double _previousIndicatorWidth = 0d;
+		double _previousIndicatorHeight = 0d;
+		int _previewSelectedIndex = 0;
 
         // Event-related fields
 
@@ -119,7 +128,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 nameof(TabHeaderPadding),
                 typeof(Thickness),
                 typeof(SfTabBar),
-                new Thickness(52, 0, 52, 0),
+				defaultValueCreator: DefaultTabHeaderPaddingCreator,
                 propertyChanged: OnTabHeaderPaddingPropertyChanged);
 
         /// <summary>
@@ -673,6 +682,25 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			set => SetValue(EnableRippleAnimationProperty, value);
 		}
 
+		/// <summary>
+		/// Gets or sets whether the tab header should be at the bottom or top or left or right of the tab content.
+		/// </summary>
+		/// <value>
+		/// One of the <see cref="Syncfusion.Maui.Toolkit.TabView.TabBarPlacement"/> enumeration that specifies the placement of the tab bar. The default mode is <see cref="Syncfusion.Maui.Toolkit.TabView.TabBarPlacement.Top"/>.
+		/// </value>
+		internal TabBarPlacement Placement
+		{
+			get => _placement;
+			set
+			{
+				if (_placement != value)
+				{
+					_placement = value;
+					ApplyOrientation();
+				}
+			}
+		}
+
 		#endregion
 
 		#region Public Methods
@@ -684,7 +712,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// <returns>It returns the effectsView.</returns>
 		public SfEffectsView? GetEffectsView(SfTabItem tabItem)
         {
-            if (tabItem != null && _tabHeaderItemContent != null)
+            if (tabItem != null && _tabItemsPanel!= null)
             {
                 var index = Items.IndexOf(tabItem);
                 if (index >= 0)
@@ -694,7 +722,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						index = GetAdjustedIndexForCenterButton(index);
 					}
 
-					var child = _tabHeaderItemContent.Children[index];
+					var child = _tabItemsPanel.Children[index];
                     if (child is SfGrid grid)
                     {
                         var effectsView = grid.Children[0] as SfEffectsView;
@@ -703,6 +731,46 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 }
             }
             return null;
+        }
+
+		/// <summary>
+		/// Update each header item's WidthRequest/HeightRequest based on tab bar placement.
+		/// Call after changing placement so Parent.PropertyChanged runs on items.
+		/// </summary>
+		internal void UpdateHeaderItemsSize(TabBarPlacement placement, double tabBarSize)
+		{
+			var verticalWidth = tabBarSize >= 0 ? tabBarSize : 48d;
+			var horizontalHeight = tabBarSize >= 0 ? tabBarSize : 48d;
+			if (this.Items == null)
+			{
+				return;
+			}
+
+            foreach (var child in this.Items)
+            {
+                if (child is SfTabItem item)
+                {
+                    if (child is not View childView)
+                        continue;
+
+                    if (ReferenceEquals(child, _centerButtonViewPlaceholder))
+                    {
+                        continue;
+                    }
+
+                    if (placement == TabBarPlacement.Top || placement == TabBarPlacement.Bottom)
+                    {
+                        item.WidthRequest = -1;
+                        item.HeightRequest = tabBarSize;
+                    }
+                    else
+                    {
+                        item.HeightRequest = -1;
+                        item.WidthRequest = tabBarSize;
+                    }
+                    item.InvalidateMeasure();
+                }
+            }
         }
 
         /// <summary>
@@ -717,7 +785,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				return;
 			}
 
-			var index = _tabHeaderItemContent?.Children.IndexOf((IView)(sender));
+			var index = _tabItemsPanel?.Children.IndexOf((IView)(sender));
 			if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && ItemsSource is not null)
 			{
 				// Calculate the left items count
@@ -775,6 +843,177 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
+		/// <summary>
+		/// Resets the cached indicator position/size state of the axis that is no longer in use after an orientation change.
+		/// </summary>
+		void ResetIndicatorStateForOrientationChange(bool isHorizontal)
+		{
+			if (isHorizontal)
+			{
+				_previousTabY = 0d;
+				_selectedTabY = 0d;
+				_currentIndicatorHeight = 0d;
+				_previousIndicatorHeight = 0d;
+				_removedItemHeight = 0d;
+			}
+			else
+			{
+				_previousTabX = 0d;
+				_selectedTabX = 0d;
+				_currentIndicatorWidth = 0d;
+				_previousIndicatorWidth = 0d;
+				_removedItemWidth = 0d;
+			}
+			_previewSelectedIndex = -1;
+		}
+
+		internal void ApplyOrientation()
+		{
+			if (_tabHeaderContentContainer == null || _tabHeaderScrollView == null || _tabSelectionIndicator == null)
+				return;
+
+			if (_tabHeaderContentContainer != null && _tabItemsPanel != null)
+			{
+				_tabHeaderContentContainer.Children.Remove(_tabItemsPanel);
+			}
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+
+			ResetIndicatorStateForOrientationChange(isHorizontal);
+			if (isHorizontal)
+			{
+				_tabItemsPanel = _tabHeaderRow;
+				_tabHeaderScrollView.Orientation = ScrollOrientation.Horizontal;
+
+				if (IndicatorPlacement != TabIndicatorPlacement.Fill)
+				{
+					_tabSelectionIndicator.WidthRequest = -1;
+					_tabSelectionIndicator.HeightRequest = IndicatorStrokeThickness;
+					_tabSelectionIndicator.HorizontalOptions = LayoutOptions.Start;
+					_tabSelectionIndicator.VerticalOptions = LayoutOptions.End;
+				}
+				else
+				{
+					_tabSelectionIndicator.WidthRequest = -1;
+					_tabSelectionIndicator.HeightRequest = this.HeightRequest;
+					_tabSelectionIndicator.HorizontalOptions = LayoutOptions.Start;
+					_tabSelectionIndicator.VerticalOptions = LayoutOptions.Fill;
+				}
+				_tabSelectionIndicator.TranslationX = 0;
+				_tabSelectionIndicator.TranslationY = 0;
+			}
+			else
+			{
+				_tabItemsPanel = _tabHeaderColumn;
+				_tabHeaderScrollView.Orientation = ScrollOrientation.Vertical;
+
+				if (_tabItemsPanel != null)
+				{
+					_tabItemsPanel.VerticalOptions = LayoutOptions.Start;
+					_tabItemsPanel.HorizontalOptions = LayoutOptions.Fill;
+				}
+
+				if (_tabHeaderContentContainer != null)
+				{
+					_tabHeaderContentContainer.VerticalOptions = LayoutOptions.Start;
+					_tabHeaderContentContainer.HorizontalOptions = LayoutOptions.Fill;
+				}
+
+				_tabHeaderScrollView.VerticalOptions = LayoutOptions.Start;
+				_tabHeaderScrollView.HorizontalOptions = LayoutOptions.Fill;
+
+				if (IndicatorPlacement != TabIndicatorPlacement.Fill)
+				{
+					_tabSelectionIndicator.HeightRequest = -1;
+					_tabSelectionIndicator.WidthRequest = IndicatorStrokeThickness;
+					_tabSelectionIndicator.VerticalOptions = LayoutOptions.Start;
+					_tabSelectionIndicator.HorizontalOptions = LayoutOptions.Start;
+				}
+				else
+				{
+					_tabSelectionIndicator.HeightRequest = -1;
+					_tabSelectionIndicator.WidthRequest = -1;
+					_tabSelectionIndicator.VerticalOptions = LayoutOptions.Start;
+					_tabSelectionIndicator.HorizontalOptions = LayoutOptions.Fill;
+				}
+
+				_tabSelectionIndicator.TranslationX = 0;
+				_tabSelectionIndicator.TranslationY = 0;
+			}
+
+			if (_tabHeaderContentContainer != null)
+			{
+				_tabHeaderContentContainer.Children.Insert(0, _tabItemsPanel);
+			}
+
+			if (_tabHeaderRow != null && _tabHeaderColumn != null)
+			{
+				if (isHorizontal)
+				{
+					_from = _tabHeaderColumn;
+					_to = _tabHeaderRow;
+				}
+				else
+				{
+					_from = _tabHeaderRow;
+					_to = _tabHeaderColumn;
+				}
+
+				if (_from != null && _to != null && _from.Children.Count > 0)
+				{
+					var moving = _from.Children.ToList();
+					_from.Children.Clear();
+					foreach (var c in moving)
+						_to.Children.Add(c);
+				}
+			}
+
+			UpdateCenterButtonPlaceholder();
+			if (IsScrollButtonEnabled)
+				UpdateScrollButtonEnabled(true);
+
+            var horDefault = new Thickness(52, 0, 52, 0);
+            var verDefault = new Thickness(0, 52, 0, 52);
+            if (isHorizontal)
+            {
+                if (this.TabHeaderPadding == verDefault)
+                {
+                    this.SetValue(TabHeaderPaddingProperty, horDefault);
+                }
+            }
+            else
+            {
+                if (this.TabHeaderPadding == horDefault)
+                {
+                    this.SetValue(TabHeaderPaddingProperty, verDefault);
+                }
+            }
+
+            UpdateTabPadding();
+            CalculateTabItemWidth();
+            UpdateHeaderItemHeight();
+            UpdateTabIndicatorWidth();
+            UpdateTabHeaderAlignment();
+            UpdateIndicatorPlacement(IndicatorPlacement);
+        }
+
+        static object DefaultTabHeaderPaddingCreator(BindableObject bindable)
+        {
+            var thickness = new Thickness(0);
+            if (bindable is SfTabBar bar)
+            {
+                var isHorizontal = bar.Placement == TabBarPlacement.Top || bar.Placement == TabBarPlacement.Bottom;
+                if (isHorizontal)
+                {
+                    thickness = new Thickness(52, 0, 52, 0);
+                }
+                else
+                {
+                    thickness = new Thickness(0, 52, 0, 52);
+                }
+            }
+            return thickness;
+        }
+
         void UpdateTabIndicatorWidthIfNeeded()
         {
 #if !WINDOWS
@@ -817,18 +1056,19 @@ namespace Syncfusion.Maui.Toolkit.TabView
             // Check if tabSelectionIndicator is not null
             if (_tabSelectionIndicator != null)
             {
-                // Ensure tempIndicatorWidth is non-negative
-                if (_currentIndicatorWidth >= 0)
-                {
 					int adjustedIndex = SelectedIndex; // Default to the existing selected index
 					if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
 					{
 						adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
 					}
 
-					// Update the scroll view position based on the currently selected index
+					bool isHorizontal = this.Placement == TabBarPlacement.Top || this.Placement == TabBarPlacement.Bottom;
+					bool isVertical = this.Placement == TabBarPlacement.Left || this.Placement == TabBarPlacement.Right;
+					bool canScroll = (isHorizontal && _currentIndicatorWidth >= 0) || (isVertical && _currentIndicatorHeight >= 0);
+
+				// Update the scroll view position based on the currently selected index
+				if (canScroll)
 					UpdateScrollViewPosition(adjustedIndex);
-				}
             }
         }
 
@@ -852,9 +1092,21 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		{
 			var indicatorPlacement = this.IndicatorPlacement;
 
-			if (this._tabSelectionIndicator != null && indicatorPlacement != TabIndicatorPlacement.Fill)
+			if (_tabSelectionIndicator == null)
+				return;
+
+			if (indicatorPlacement == TabIndicatorPlacement.Fill)
+				return;
+
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+
+			if (isHorizontal)
 			{
-				this._tabSelectionIndicator.HeightRequest = this.IndicatorStrokeThickness;
+				_tabSelectionIndicator.HeightRequest = newValue;
+			}
+			else
+			{
+				_tabSelectionIndicator.WidthRequest = newValue;
 			}
 		}
 
@@ -899,7 +1151,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				}
 
 				// Remove the child at specified index
-				_tabHeaderItemContent?.Children.RemoveAt(removeItemIndex);
+				_tabItemsPanel?.Children.RemoveAt(removeItemIndex);
 				AddCenterButtonViewPlaceholder();
 				if (Items.Count > 0 && SelectedIndex >= Items.Count && index==SelectedIndex)
                 {
@@ -908,6 +1160,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				else if (index <= SelectedIndex)
 				{
 					_removedItemWidth = tabItem.Width;
+					_removedItemHeight = tabItem.Height;
 
 					if (index < SelectedIndex)
 					{
@@ -996,27 +1249,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		internal void UpdateIsCenterButtonEnabled()
 		{
-			if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
-			{
-				AddCenterButtonViewPlaceholder();
-			}
-			else
-			{
-				if (_tabHeaderItemContent is not null && _tabHeaderItemContent.Children.Contains(_centerButtonViewPlaceholder))
-				{
-					_tabHeaderItemContent.Children.Remove(_centerButtonViewPlaceholder);
-				}
-			}
+			UpdateCenterButtonPlaceholder();
 
 			CalculateTabItemWidth();
 			CalculateTabItemsSourceWidth();
 			if (ItemsSource is not null && ItemsSource.Count > 0 && (!IsCenterButtonEnabled || IsCenterButtonEnabled && TabWidthMode is TabWidthMode.SizeToContent))
 			{
-				if (_tabHeaderItemContent is not null)
+				if (_tabItemsPanel is not null)
 				{
-					for (int index = 0; index < _tabHeaderItemContent.Count; index++)
+					for (int index = 0; index < _tabItemsPanel.Count; index++)
 					{
-						if (_tabHeaderItemContent.Children[index] is not null && _tabItemTemplateWidth is not null && _tabItemTemplateWidth.Count > 0 && _tabItemTemplateWidth[index] > 0 && _tabHeaderItemContent.Children[index] is View view)
+						if (_tabItemsPanel.Children[index] is not null && _tabItemTemplateWidth is not null && _tabItemTemplateWidth.Count > 0 && _tabItemTemplateWidth[index] > 0 && _tabItemsPanel.Children[index] is View view)
 						{
 							view.WidthRequest = _tabItemTemplateWidth[index];
 						}
@@ -1050,7 +1293,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// </summary>
         internal void UpdateItems()
         {
-            _tabHeaderItemContent?.Children.Clear();
+            _tabItemsPanel?.Children.Clear();
             ClearItems();
 
             if (Items is null)
@@ -1082,26 +1325,62 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// </summary>
         internal void UpdateHeaderItemHeight()
         {
-            if (_tabHeaderItemContent != null && _tabHeaderItemContent.Height != HeightRequest)
-            {
-                _tabHeaderItemContent.HeightRequest = HeightRequest;
-                CalculateTabItemWidth();
-                if (_tabSelectionIndicator != null && IndicatorPlacement == TabIndicatorPlacement.Fill)
-                {
-                    _tabSelectionIndicator.HeightRequest = HeightRequest;
-                }
+			if (_tabItemsPanel == null || _tabHeaderContentContainer == null || _tabHeaderScrollView == null)
+				return;
 
-                if (_tabHeaderContentContainer != null)
-                {
-                    _tabHeaderContentContainer.HeightRequest = _tabHeaderItemContent.HeightRequest;
-                }
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (isHorizontal)
+			{
+				_tabItemsPanel.HeightRequest = HeightRequest;
+				_tabItemsPanel.WidthRequest = -1;
 
-                if (_tabHeaderScrollView != null)
-                {
-                    _tabHeaderScrollView.HeightRequest = _tabHeaderItemContent.HeightRequest;
-                }
-            }
-        }
+				if (_tabSelectionIndicator != null && IndicatorPlacement == TabIndicatorPlacement.Fill)
+					_tabSelectionIndicator.HeightRequest = HeightRequest;
+
+				_tabHeaderContentContainer.HeightRequest = _tabItemsPanel.HeightRequest;
+				_tabHeaderContentContainer.WidthRequest = -1;
+
+				_tabHeaderScrollView.HeightRequest = _tabItemsPanel.HeightRequest;
+				_tabHeaderScrollView.WidthRequest = -1;
+
+				CalculateTabItemWidth();
+			}
+			else
+			{
+				_tabItemsPanel.HeightRequest = -1;
+				_tabItemsPanel.WidthRequest = WidthRequest;
+
+				_tabHeaderContentContainer.HeightRequest = -1;
+				_tabHeaderContentContainer.WidthRequest = WidthRequest;
+				_tabHeaderScrollView.WidthRequest = _tabItemsPanel.WidthRequest;
+				var viewportHeight = HeightRequest > 0
+					  ? HeightRequest
+					  : ((Parent as VisualElement)?.Height ?? 0);
+				if (IsScrollButtonEnabled)
+				{
+					_tabHeaderScrollView.HeightRequest = Math.Max(0, viewportHeight - (_arrowButtonSize * 2));
+					_tabHeaderScrollView.VerticalOptions = LayoutOptions.Start;
+				}
+				else if (TabWidthMode == TabWidthMode.SizeToContent)
+				{
+					_tabHeaderScrollView.HeightRequest = viewportHeight;
+					_tabHeaderScrollView.VerticalOptions = LayoutOptions.Start;
+				}
+				else
+				{
+					_tabHeaderScrollView.HeightRequest = viewportHeight;
+				}
+				CalculateTabItemWidth();
+
+				if (_tabSelectionIndicator != null)
+				{
+					if (IndicatorPlacement != TabIndicatorPlacement.Fill)
+						_tabSelectionIndicator.WidthRequest = IndicatorStrokeThickness;
+					else
+						_tabSelectionIndicator.WidthRequest = WidthRequest;
+				}
+			}
+		}
 
         internal void UpdateSelectionIndicatorZIndex()
         {
@@ -1153,16 +1432,30 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// <param name="index">index.</param>
         internal void AddHeaderItems(View? item, int index = -1)
         {
-            if (item != null)
-            {
-                item.VerticalOptions = LayoutOptions.Fill;
-                item.HorizontalOptions = LayoutOptions.Center;
-            }
+			SfGrid touchEffectGrid = new SfGrid
+			{
+				Style = new Style(typeof(SfGrid))
+			};
 
-            SfGrid touchEffectGrid = new SfGrid
-            {
-                Style = new Style(typeof(SfGrid))
-            };
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (item != null)
+			{
+				if (isHorizontal)
+				{
+					item.VerticalOptions = LayoutOptions.Fill;
+					item.HorizontalOptions = LayoutOptions.Center;
+					touchEffectGrid.VerticalOptions = LayoutOptions.Fill;
+					touchEffectGrid.HorizontalOptions = LayoutOptions.Fill;
+				}
+				else
+				{
+					item.VerticalOptions = LayoutOptions.Start;
+					item.HorizontalOptions = LayoutOptions.Fill;
+					touchEffectGrid.VerticalOptions = LayoutOptions.Start;
+					touchEffectGrid.HorizontalOptions = LayoutOptions.Fill;
+				}
+			}
+			
             touchEffectGrid.SetBinding(SfGrid.IsVisibleProperty, BindingHelper.CreateBinding(nameof(SfTabItem.IsVisible), getter: static (SfTabItem item) => item.IsVisible, source: item));
 
             CalculateTabItemWidth();
@@ -1183,12 +1476,64 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
-        /// <summary>
-        /// This method is used to measure the header content width.
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
-        internal double MeasureHeaderContentWidth(SfTabItem item)
+		/// <summary>
+		/// This method is used to measure the header content height.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		internal double MeasureHeaderContentHeight(SfTabItem item)
+		{
+			if (item != null)
+			{
+				Size desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
+				var height = 0d;
+				_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
+				if (item.IsVisible)
+				{
+					var hasImage = HasValidImageSource(item.ImageSource);
+					if (hasImage && !string.IsNullOrEmpty(item.Header))
+					{
+						if (item.HeaderDisplayMode == TabBarDisplayMode.Image)
+						{
+							height = _tabHeaderImageSize;
+						}
+						else if (item.HeaderDisplayMode == TabBarDisplayMode.Text)
+						{
+							height = desiredSize.Height;
+						}
+						else
+						{
+							if (item.ImagePosition == TabImagePosition.Top || item.ImagePosition == TabImagePosition.Bottom)
+							{
+								height = desiredSize.Height + item.ImageTextSpacing + _tabHeaderImageSize;
+							}
+							else
+							{
+								height = Math.Max(desiredSize.Height, _tabHeaderImageSize);
+							}
+						}
+					}
+					else if (hasImage)
+					{
+						height = _tabHeaderImageSize;
+					}
+					else
+					{
+						height = desiredSize.Height;
+					}
+				}
+
+				return height;
+			}
+			return 0;
+		}
+
+		/// <summary>
+		/// This method is used to measure the header content width.
+		/// </summary>
+		/// <param name="item"></param>
+		/// <returns></returns>
+		internal double MeasureHeaderContentWidth(SfTabItem item)
         {
             if (item != null)
             {
@@ -1272,12 +1617,12 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		internal void UpdateScrollViewPosition(int position)
         {
             if (_tabHeaderScrollView != null &&
-                _tabHeaderItemContent != null &&
-                _tabHeaderItemContent.Children.Count > position &&
+                _tabItemsPanel!= null &&
+                _tabItemsPanel.Children.Count > position &&
                 (TabWidthMode != TabWidthMode.Default ||
                 (ItemsSource != null && ItemsSource.Count > 0 || HeaderItemTemplate != null)))
             {
-                int rtlPosition = _tabHeaderItemContent.Children.Count - position - 1;
+                int rtlPosition = _tabItemsPanel.Children.Count - position - 1;
 #if __MACCATALYST__ || __IOS__
                 UpdateScrollViewPositionForIOS(position, rtlPosition);
 #elif ANDROID
@@ -1292,47 +1637,95 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         async void UpdateScrollViewPositionForIOS(int position, int rtlPosition)
         {
-            if (HeaderItemTemplate == null && _tabHeaderScrollView != null &&
-                _tabHeaderItemContent != null)
-            {
-                double totalWidth = 0;
-                foreach (var child in _tabHeaderItemContent.Children)
-                {
-                    if (!double.IsNaN(child.Width))
-                    {
-                        totalWidth += child.Width;
-                    }
-                }
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
 
-                if ((totalWidth > Width) && (Width != -1))
-                {
-                    if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
-                    {
+			if (HeaderItemTemplate == null && _tabHeaderScrollView != null &&
+                _tabItemsPanel!= null)
+            {
+				if (isHorizontal)
+				{
+					HeightRequest = -1;
+					double totalWidth = 0;
+					foreach (var child in _tabItemsPanel.Children)
+					{
+						if (!double.IsNaN(child.Width))
+						{
+							totalWidth += child.Width;
+						}
+					}
+
+					if ((totalWidth > Width) && (Width != -1))
+					{
+						if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+						{
 #if IOS
-                        if (position == 0 && TabWidthMode == TabWidthMode.SizeToContent)
-                        {
-                            await _tabHeaderScrollView.ScrollToAsync(totalWidth + TabHeaderPadding.Right, 0, true).ConfigureAwait(false);
-                        }
-                        else
+							if (position == 0 && TabWidthMode == TabWidthMode.SizeToContent)
+							{
+								await _tabHeaderScrollView.ScrollToAsync(totalWidth + TabHeaderPadding.Right, 0, true).ConfigureAwait(false);
+							}
+							else
 #endif
-                        {
-                            await _tabHeaderScrollView.ScrollToAsync(_tabHeaderItemContent?.Children[rtlPosition] as Element, ScrollToPosition.MakeVisible, true).ConfigureAwait(false);
-                        }
-                    }
-                    else
-                    {
+							{
+								await _tabHeaderScrollView.ScrollToAsync(_tabItemsPanel?.Children[rtlPosition] as Element, ScrollToPosition.MakeVisible, true).ConfigureAwait(false);
+							}
+						}
+						else
+						{
 #if IOS
-                        if (position == 0 && TabWidthMode == TabWidthMode.SizeToContent)
-                        {
-                            await _tabHeaderScrollView.ScrollToAsync(0, 0, true).ConfigureAwait(false);
-                        }
-                        else
+							if (position == 0 && TabWidthMode == TabWidthMode.SizeToContent)
+							{
+								await _tabHeaderScrollView.ScrollToAsync(0, 0, true).ConfigureAwait(false);
+							}
+							else
 #endif
-                        {
-                            await _tabHeaderScrollView.ScrollToAsync(_tabHeaderItemContent?.Children[position] as Element, ScrollToPosition.MakeVisible, true).ConfigureAwait(false);
-                        }
-                    }
-                }
+							{
+								await _tabHeaderScrollView.ScrollToAsync(_tabItemsPanel?.Children[position] as Element, ScrollToPosition.MakeVisible, true).ConfigureAwait(false);
+							}
+						}
+					}
+				}
+				else
+				{
+					WidthRequest = -1;
+					double totalHeight = 0;
+					foreach (var child in _tabItemsPanel.Children)
+					{
+						if (child.Height != double.NaN)
+						{
+							totalHeight += child.Height;
+						}
+					}
+
+					if ((totalHeight > HeightRequest) && (HeightRequest != -1))
+					{
+						if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+						{
+#if IOS
+							if (position == 0 && TabWidthMode == TabWidthMode.SizeToContent)
+							{
+								await _tabHeaderScrollView.ScrollToAsync(totalHeight + TabHeaderPadding.Top, 0, true).ConfigureAwait(false);
+							}
+							else
+#endif
+							{
+								await _tabHeaderScrollView.ScrollToAsync(_tabItemsPanel?.Children[rtlPosition] as Element, ScrollToPosition.MakeVisible, true).ConfigureAwait(false);
+							}
+						}
+						else
+						{
+#if IOS
+							if (position == 0 && TabWidthMode == TabWidthMode.SizeToContent)
+							{
+								await _tabHeaderScrollView.ScrollToAsync(0, 0, true).ConfigureAwait(false);
+							}
+							else
+#endif
+							{
+								await _tabHeaderScrollView.ScrollToAsync(_tabItemsPanel?.Children[position] as Element, ScrollToPosition.MakeVisible, true).ConfigureAwait(false);
+							}
+						}
+					}
+				}
             }
         }
 
@@ -1340,33 +1733,74 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         async void UpdateScrollViewPositionForAndroid(int position, int rtlPosition)
         {
-            if (_tabHeaderScrollView == null)
+			if (_tabHeaderScrollView == null || _tabItemsPanel == null)
 			{
 				return;
 			}
 
-			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
-            {
-                await _tabHeaderScrollView.ScrollToAsync(_tabHeaderItemContent?.Children[rtlPosition] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
-            }
-            else
-            {
-                await _tabHeaderScrollView.ScrollToAsync(_tabHeaderItemContent?.Children[position] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
-            }
-        }
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			var targetElement = _tabItemsPanel.Children.Count > position ? _tabItemsPanel.Children[position] as Element : null;
+			var rtlElement = _tabItemsPanel.Children.Count > rtlPosition ? _tabItemsPanel.Children[rtlPosition] as Element : null;
+
+			if (isHorizontal)
+			{
+				if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+				{
+					if (rtlElement != null && IsDescendantOfScrollView(rtlElement, _tabHeaderScrollView))
+					{
+						await _tabHeaderScrollView.ScrollToAsync(_tabItemsPanel?.Children[rtlPosition] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
+					}
+				}
+				else
+				{
+					if (targetElement != null && IsDescendantOfScrollView(targetElement, _tabHeaderScrollView))
+					{
+						await _tabHeaderScrollView.ScrollToAsync(_tabItemsPanel?.Children[position] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
+					}
+				}
+			}
+			else
+			{
+				if (targetElement != null && IsDescendantOfScrollView(targetElement, _tabHeaderScrollView))
+				{
+					await _tabHeaderScrollView.ScrollToAsync(_tabItemsPanel?.Children[position] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
+				}
+			}
+	    }
 
 #else
 
         async void UpdateScrollViewPositionForWindows(int position, int rtlPosition)
         {
-            if (_tabHeaderScrollView == null)
-			{
+           if (_tabHeaderScrollView == null || _tabItemsPanel == null)
+		   {
 				return;
-			}
+		   }
 
-			await _tabHeaderScrollView.ScrollToAsync(_tabHeaderItemContent?.Children[position] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
-        }
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			var targetElement = _tabItemsPanel.Children.Count > position ? _tabItemsPanel.Children[position] as Element : null;
+
+				if (targetElement != null && _tabHeaderScrollView != null && IsDescendantOfScrollView(targetElement, _tabHeaderScrollView))
+				{
+					await _tabHeaderScrollView.ScrollToAsync(_tabItemsPanel?.Children[position] as Element, ScrollToPosition.Center, true).ConfigureAwait(false);
+			    }
+	    }
 #endif
+
+		static bool IsDescendantOfScrollView(Element? child, ScrollView? scrollView)
+		{
+			if (child == null || scrollView == null)
+				return false;
+
+			Element? parent = child.Parent;
+			while (parent != null)
+			{
+				if (ReferenceEquals(parent, scrollView))
+					return true;
+				parent = parent.Parent;
+			}
+			return false;
+		}
 
 		#region Center button methods
 		/// <summary>
@@ -1399,6 +1833,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void UpdateTabBarLayout()
 		{
+			UpdateCenterButtonPlaceholder();
 			CalculateTabItemWidth();
 			CalculateTabItemsSourceWidth();
 			UpdateTabIndicatorWidth();
@@ -1498,7 +1933,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
             UpdateTabPadding();
 		}
 
-        void UpdateTabPadding()
+        internal void UpdateTabPadding()
         {
             if (_tabHeaderContentContainer != null)
             {
@@ -1507,9 +1942,13 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
             CalculateTabItemWidth();
 			CalculateTabItemsSourceWidth();
+
+#if ANDROID || IOS
+                InvalidateMeasure();
+#endif
 		}
 
-        void UpdateTabHeaderItemSpacing()
+		void UpdateTabHeaderItemSpacing()
         {
 	        CalculateTabItemWidth();
         }
@@ -1524,9 +1963,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (ItemsSource != null || HeaderItemTemplate != null)
             {
-                BindableLayout.SetItemsSource(_tabHeaderItemContent, ItemsSource);
-                BindableLayout.SetItemTemplate(_tabHeaderItemContent, HeaderItemTemplate);
-                if (_tabHeaderItemContent != null)
+                BindableLayout.SetItemsSource(_tabItemsPanel, ItemsSource);
+                BindableLayout.SetItemTemplate(_tabItemsPanel, HeaderItemTemplate);
+				UpdateCenterButtonPlaceholder();
+                if (_tabItemsPanel!= null)
                 {
 					if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
 					{
@@ -1535,7 +1975,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 					}
 					else
 					{
-						foreach (var item in _tabHeaderItemContent.Children)
+						foreach (var item in _tabItemsPanel.Children)
 						{
 							if (item is not null)
 							{
@@ -1573,7 +2013,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
-            var headerItemsCount = _tabHeaderItemContent?.Children?.Count;
+            var headerItemsCount = _tabItemsPanel?.Children?.Count;
 
             HandleOldItems(e);
             HandleNewItems(e, headerItemsCount);
@@ -1589,10 +2029,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     SelectedIndex = ItemsSource.Count - 1;
                 }
 
-				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _tabHeaderItemContent is not null)
+				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _tabItemsPanel is not null)
 				{
-					_tabHeaderItemContent.Children.Clear();
-					BindableLayout.SetItemsSource(_tabHeaderItemContent, null);
+					_tabItemsPanel.Children.Clear();
+					BindableLayout.SetItemsSource(_tabItemsPanel, null);
 					UpdateItemsSource();
 				}
 
@@ -1609,10 +2049,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (e.NewItems != null)
             {
-				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _tabHeaderItemContent is not null)
+				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _tabItemsPanel is not null)
 				{
-					_tabHeaderItemContent.Children.Clear();
-					BindableLayout.SetItemsSource(_tabHeaderItemContent, null);
+					_tabItemsPanel.Children.Clear();
+					BindableLayout.SetItemsSource(_tabItemsPanel, null);
 					UpdateItemsSource();
 				}
 				else
@@ -1624,7 +2064,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 							var index = ItemsSource?.IndexOf(item);
 							if (SelectedIndex >= index &&
 								SelectedIndex + 1 < ItemsSource?.Count &&
-								headerItemsCount != _tabHeaderItemContent?.Children.Count)
+								headerItemsCount != _tabItemsPanel?.Children.Count)
 							{
 								SelectedIndex += 1;
 							}
@@ -1903,7 +2343,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (_tabSelectionChangedEventArgs != null)
             {
-                if (_tabHeaderItemContent != null)
+                if (_tabItemsPanel!= null)
                 {
                     var index = Items.IndexOf(tabItem);
                     _selectionChangingEventArgs = new SelectionChangingEventArgs
@@ -1963,24 +2403,69 @@ namespace Syncfusion.Maui.Toolkit.TabView
             if (_tabSelectionIndicator != null)
             {
                 UpdateSelectionIndicatorZIndex();
-                _tabSelectionIndicator.HeightRequest = HeightRequest;
-                _tabSelectionIndicator.VerticalOptions = LayoutOptions.Fill;
-                if (indicatorPlacement != TabIndicatorPlacement.Fill)
-                {
-                    UpdateTabSelectionIndicatorForNonFill(indicatorPlacement);
-                }
-                else
-                {
-                    if (_roundRectangle != null)
-                    {
-                        _roundRectangle.CornerRadius = IndicatorCornerRadius != new CornerRadius(-1) ? IndicatorCornerRadius : new CornerRadius(0);
-                        _tabSelectionIndicator.StrokeShape = _roundRectangle;
-                    }
-                }
-            }
+				var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+				if (isHorizontal)
+				{
+					_tabSelectionIndicator.HeightRequest = this.HeightRequest;
+					_tabSelectionIndicator.VerticalOptions = LayoutOptions.Fill;
+					ApplyIndicatorPlacement(isHorizontal: true, indicatorPlacement);
+				}
+				else
+				{
+					_tabSelectionIndicator.WidthRequest = this.WidthRequest;
+					_tabSelectionIndicator.HorizontalOptions = LayoutOptions.Fill;
+					ApplyIndicatorPlacement(isHorizontal: false, indicatorPlacement);
+				}
+			}
         }
 
-        void UpdateTabSelectionIndicatorForNonFill(TabIndicatorPlacement indicatorPlacement)
+		void ApplyIndicatorPlacement(bool isHorizontal, TabIndicatorPlacement indicatorPlacement)
+		{
+			if (indicatorPlacement != TabIndicatorPlacement.Fill)
+			{
+				bool isEndPlacement = isHorizontal
+					? indicatorPlacement == TabIndicatorPlacement.Bottom
+					: indicatorPlacement == TabIndicatorPlacement.Right;
+
+				if (_tabSelectionIndicator != null)
+				{
+					if (isHorizontal)
+					{
+						_tabSelectionIndicator.HeightRequest = this.IndicatorStrokeThickness;
+						_tabSelectionIndicator.VerticalOptions = isEndPlacement ? LayoutOptions.End : LayoutOptions.Start;
+					}
+					else
+					{
+						_tabSelectionIndicator.WidthRequest = this.IndicatorStrokeThickness;
+						_tabSelectionIndicator.HorizontalOptions = isEndPlacement ? LayoutOptions.End : LayoutOptions.Start;
+					}
+				}
+
+				ApplyCornerRadius(isEndPlacement);
+			}
+			else
+			{
+				ApplyCornerRadius(isFill: true);
+			}
+		}
+
+		void ApplyCornerRadius(bool isEndPlacement = false, bool isFill = false)
+		{
+			if (_roundRectangle != null)
+			{
+				CornerRadius cornerRadius = IndicatorCornerRadius != new CornerRadius(-1)
+					? IndicatorCornerRadius
+					: (isFill ? new CornerRadius(0) : isEndPlacement ? new CornerRadius(4, 4, 0, 0) : new CornerRadius(0, 0, 4, 4));
+
+				_roundRectangle.CornerRadius = cornerRadius;
+				if (_tabSelectionIndicator != null)
+				{
+					_tabSelectionIndicator.StrokeShape = _roundRectangle;
+				}
+			}
+		}
+
+		void UpdateTabSelectionIndicatorForNonFill(TabIndicatorPlacement indicatorPlacement)
         {
             if (_tabSelectionIndicator != null)
             {
@@ -2008,34 +2493,65 @@ namespace Syncfusion.Maui.Toolkit.TabView
         }
         void UpdateOnScrollButtonEnabled()
         {
-            if (_tabHeaderParentContainer != null)
-            {
-                _tabHeaderParentContainer.Clear();
-                _tabHeaderParentContainer.ColumnDefinitions.Clear();
-                _tabHeaderParentContainer.ColumnDefinitions =
-					[
-						new ColumnDefinition { Width = new GridLength(_arrowButtonSize) },
-                        new ColumnDefinition(),
-                        new ColumnDefinition { Width = new GridLength(_arrowButtonSize) },
-                    ];
-
-                ConfigureArrowButtonTypes();
-
-                _tabHeaderParentContainer.Children.Add(_backwardArrow);
-                _tabHeaderParentContainer.Children.Add(_tabHeaderScrollView);
-                _tabHeaderParentContainer.Children.Add(_forwardArrow);
-                UpdateScrollButtonState();
-            }
-        }
-
-        void ConfigureArrowButtonTypes()
-        {
-            if (_tabHeaderParentContainer == null)
-			{
+			if (_tabHeaderParentContainer == null || _tabHeaderScrollView == null)
 				return;
-			}
+				var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+				DetachHeaderChrome();
+
+				_tabHeaderParentContainer.Clear();
+
+				if (isHorizontal)
+				{
+					// HORIZONTAL: ◀ [ScrollView] ▶
+					_tabHeaderParentContainer.RowDefinitions.Clear();
+					_tabHeaderParentContainer.ColumnDefinitions.Clear();
+					_tabHeaderParentContainer.ColumnDefinitions = new ColumnDefinitionCollection
+					{
+						new ColumnDefinition { Width = new GridLength(_arrowButtonSize) },
+						new ColumnDefinition(),
+						new ColumnDefinition { Width = new GridLength(_arrowButtonSize) },
+					};
+							_tabHeaderParentContainer.RowDefinitions = new RowDefinitionCollection
+					{
+						new RowDefinition { Height = GridLength.Star }
+					};
+
+					_tabHeaderScrollView.Orientation = ScrollOrientation.Horizontal;
+
+					if (_backwardArrow != null && _forwardArrow != null)
+					{
+						// Reset sizes for HORIZONTAL
+						_backwardArrow.HeightRequest = -1;
+						_forwardArrow.HeightRequest = -1;
+						_backwardArrow.WidthRequest = _arrowButtonSize;
+						_forwardArrow.WidthRequest = _arrowButtonSize;
+
+						_backwardArrow.VerticalOptions = LayoutOptions.Fill;
+						_forwardArrow.VerticalOptions = LayoutOptions.Fill;
+						_backwardArrow.HorizontalOptions = LayoutOptions.Center;
+						_forwardArrow.HorizontalOptions = LayoutOptions.Center;
+
+						// Arrow glyphs for horizontal + RTL
 #if WINDOWS
-			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+        if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+        {
+            _forwardArrow.ButtonArrowType = ArrowType.Backward;
+            _backwardArrow.ButtonArrowType = ArrowType.Forward;
+        }
+        else
+#endif
+						{
+							_backwardArrow.ButtonArrowType = ArrowType.Backward;
+							_forwardArrow.ButtonArrowType = ArrowType.Forward;
+						}
+
+						// Clear any rotation from vertical fallback
+						_backwardArrow.Rotation = 0;
+						_forwardArrow.Rotation = 0;
+					}
+
+#if WINDOWS
+            if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
             {
                 if (_forwardArrow != null && _backwardArrow != null)
                 {
@@ -2052,33 +2568,163 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 }
             }
 #else
-			if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
-            {
-                _tabHeaderParentContainer.SetColumn(_backwardArrow, 2);
-                _tabHeaderParentContainer.SetColumn(_tabHeaderScrollView, 1);
-                _tabHeaderParentContainer.SetColumn(_forwardArrow, 0);
-            }
-            else
+					if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+					{
+						SafeAddChildToGrid(_tabHeaderParentContainer, _backwardArrow!, 0, 2);
+						SafeAddChildToGrid(_tabHeaderParentContainer, _tabHeaderScrollView, 0, 1);
+						SafeAddChildToGrid(_tabHeaderParentContainer, _forwardArrow!, 0, 0);
+					}
+					else
 #endif
-            {
-                _tabHeaderParentContainer.SetColumn(_backwardArrow, 0);
-                _tabHeaderParentContainer.SetColumn(_tabHeaderScrollView, 1);
-                _tabHeaderParentContainer.SetColumn(_forwardArrow, 2);
-            }
+					{
+						SafeAddChildToGrid(_tabHeaderParentContainer, _backwardArrow!, 0, 0);
+						SafeAddChildToGrid(_tabHeaderParentContainer, _tabHeaderScrollView, 0, 1);
+						SafeAddChildToGrid(_tabHeaderParentContainer, _forwardArrow!, 0, 2);
+					}
+				}
+				else
+				{
+					_tabHeaderParentContainer.RowDefinitions.Clear();
+					_tabHeaderParentContainer.ColumnDefinitions.Clear();
+
+					_tabHeaderParentContainer.RowDefinitions = new RowDefinitionCollection
+					{
+						new RowDefinition { Height = new GridLength(_arrowButtonSize) },
+						new RowDefinition(),
+						new RowDefinition { Height = new GridLength(_arrowButtonSize) }
+					};
+
+					_tabHeaderParentContainer.ColumnDefinitions = new ColumnDefinitionCollection
+					{
+						new ColumnDefinition { Width = GridLength.Star }
+					};
+
+					_tabHeaderScrollView.Orientation = ScrollOrientation.Vertical;
+
+					if (_backwardArrow != null && _forwardArrow != null)
+					{
+						_backwardArrow.HeightRequest = _arrowButtonSize;
+						_forwardArrow.HeightRequest = _arrowButtonSize;
+						_backwardArrow.WidthRequest = -1;
+						_forwardArrow.WidthRequest = -1;
+
+						_backwardArrow.VerticalOptions = LayoutOptions.Center;
+						_forwardArrow.VerticalOptions = LayoutOptions.Center;
+						_backwardArrow.HorizontalOptions = LayoutOptions.Center;
+						_forwardArrow.HorizontalOptions = LayoutOptions.Center;
+
+						_forwardArrow.ButtonArrowType = ArrowType.Forward;
+						_backwardArrow.ButtonArrowType = ArrowType.Backward;
+
+						_backwardArrow.Rotation = 0;
+						_forwardArrow.Rotation = 0;
+
+					}
+
+					SafeAddChildToGrid(_tabHeaderParentContainer, _backwardArrow, 0, 0);
+					SafeAddChildToGrid(_tabHeaderParentContainer, _tabHeaderScrollView, 1, 0);
+					SafeAddChildToGrid(_tabHeaderParentContainer, _forwardArrow, 2, 0);
+				}
+				UpdateScrollButtonState();
         }
+
+		void SafeAddChildToGrid(Grid grid, View? child, int row = 0, int column = 0)
+		{
+			if (child == null || grid == null)
+				return;
+
+			if (child.Parent is Layout oldParent && oldParent != grid)
+			{
+				oldParent.Children.Remove(child);
+			}
+
+			if (grid.Children.Contains(child))
+			{
+				grid.Children.Remove(child);
+			}
+
+			Grid.SetRow(child, row);
+			Grid.SetColumn(child, column);
+			grid.Children.Add(child);
+		}
+
+		void DetachHeaderChrome()
+		{
+			if (_tabHeaderParentContainer != null)
+			{
+				if (_backwardArrow != null && _tabHeaderParentContainer.Children.Contains(_backwardArrow))
+					_tabHeaderParentContainer.Children.Remove(_backwardArrow);
+
+				if (_forwardArrow != null && _tabHeaderParentContainer.Children.Contains(_forwardArrow))
+					_tabHeaderParentContainer.Children.Remove(_forwardArrow);
+
+				if (_tabHeaderScrollView != null && _tabHeaderParentContainer.Children.Contains(_tabHeaderScrollView))
+					_tabHeaderParentContainer.Children.Remove(_tabHeaderScrollView);
+			}
+
+			if (_tabHeaderContentContainer != null)
+			{
+				if (_backwardArrow != null && _tabHeaderContentContainer.Children.Contains(_backwardArrow))
+					_tabHeaderContentContainer.Children.Remove(_backwardArrow);
+
+				if (_forwardArrow != null && _tabHeaderContentContainer.Children.Contains(_forwardArrow))
+					_tabHeaderContentContainer.Children.Remove(_forwardArrow);
+			}
+
+			void DetachFromParent(View? view)
+			{
+				if (view?.Parent is Layout layout)
+					layout.Children.Remove(view);
+			}
+
+			DetachFromParent(_backwardArrow);
+			DetachFromParent(_forwardArrow);
+			DetachFromParent(_tabHeaderScrollView);
+		}
 
         void UpdateScrollButtonDisabled()
         {
-            if (_tabHeaderParentContainer != null)
-            {
-                _tabHeaderParentContainer.Clear();
-                _tabHeaderParentContainer.ColumnDefinitions.Clear();
-                _tabHeaderParentContainer.ColumnDefinitions =
-					[
-						new ColumnDefinition(),
-                    ];
-                _tabHeaderParentContainer.Children.Add(_tabHeaderScrollView);
-            }
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+
+			if (_tabHeaderParentContainer == null || _tabHeaderScrollView == null)
+				return;
+				this._tabHeaderParentContainer.Clear();
+
+				if (isHorizontal)
+				{
+					_tabHeaderParentContainer.RowDefinitions.Clear();
+					_tabHeaderParentContainer.ColumnDefinitions.Clear();
+					_tabHeaderParentContainer.ColumnDefinitions = new ColumnDefinitionCollection
+					{
+						new ColumnDefinition { Width = GridLength.Star }
+					};
+					_tabHeaderParentContainer.RowDefinitions = new RowDefinitionCollection
+					{
+						new RowDefinition { Height = GridLength.Star }
+					};
+
+					_tabHeaderScrollView.Orientation = ScrollOrientation.Horizontal;
+					SafeAddChildToGrid(_tabHeaderParentContainer, _tabHeaderScrollView, 0, 0);
+				}
+				else
+				{
+					_tabHeaderParentContainer.RowDefinitions.Clear();
+					_tabHeaderParentContainer.ColumnDefinitions.Clear();
+
+					_tabHeaderParentContainer.RowDefinitions = new RowDefinitionCollection
+						{
+							new RowDefinition { Height = GridLength.Star }
+						};
+					_tabHeaderParentContainer.ColumnDefinitions = new ColumnDefinitionCollection
+						{
+							new ColumnDefinition { Width = GridLength.Star }
+						};
+
+					_tabHeaderScrollView.Orientation = ScrollOrientation.Vertical;
+
+
+					SafeAddChildToGrid(_tabHeaderParentContainer, _tabHeaderScrollView, 0, 0);
+				}
         }
 
         void DeselectOldItem(int oldIndex)
@@ -2168,7 +2814,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         void CalculateTabItemWidthForCustomMode()
         {
-            foreach (var item in Items)
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			foreach (var item in Items)
             {
                 if (item != null)
                 {
@@ -2185,8 +2832,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
                     if (item.Header != null)
                     {
                         Size desiredSize = item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily);
-                        double width = desiredSize.Width + HeaderItemSpacing;
-                        UpdateTabItemWidth(item, item.IsSelected ? width : _tabHeaderImageSize + HeaderItemSpacing);
+                        double extent = isHorizontal? desiredSize.Width + HeaderItemSpacing : desiredSize.Height + HeaderItemSpacing;
+                        ApplyItemExtent(item, item.IsSelected ? extent : _tabHeaderImageSize + HeaderItemSpacing);
                     }
                 }
             }
@@ -2194,9 +2841,17 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         void CalculateTabItemWidthForSizeToContent()
         {
+			Size desiredSize;
 #if ANDROID || IOS
                     float _displayScale = (float)DeviceDisplay.MainDisplayInfo.Density;
 #endif
+			// Determine orientation once before iterating. This mirrors the .NET MAUI SfTabView
+			// implementation (CalculateTabItemWidth -> UpdateItemsExtent) where the orientation
+			// is resolved outside the loop so every item is sized for the active placement
+			// (Top/Bottom -> horizontal extent, Left/Right -> vertical extent).
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			bool isVertical = !isHorizontal;
+
 			foreach (var item in Items)
             {
                 if (item != null)
@@ -2208,42 +2863,47 @@ namespace Syncfusion.Maui.Toolkit.TabView
                                 desiredSize = (item.Header.Measure((float)item.FontSize, item.FontAttributes, item.FontFamily)* _displayScale);
                             }
 #endif
-					CalculateTabItemWidthForSizeToContentForItem(item, desiredSize);
-                }
+					// Apply extent for every item based on the resolved orientation.
+					// Previously this method contained an early `return` for the vertical
+					// case which caused only the first item to be sized, leaving the rest
+					// with stale extents and producing incorrect spacing in Left/Right
+					// placements (and on dynamic TabWidthMode / TabBarPlacement changes).
+					CalculateTabItemWidthForSizeToContentForItem(item, desiredSize, isVertical);
+				}
             }
         }
 
-        void CalculateTabItemWidthForSizeToContentForItem(SfTabItem item, Size desiredSize)
+        void CalculateTabItemWidthForSizeToContentForItem(SfTabItem item, Size desiredSize, bool isVertical)
         {
 			_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
+			var extent = 0d;
 			if (item.IsVisible)
             {
-                double width;
-				var hasImage = HasValidImageSource(item.ImageSource);
-				if (item.HeaderContent != null)
-				{
-					Size headerContentSize = item.HeaderContent.Measure(double.PositiveInfinity, double.PositiveInfinity);
-					width = headerContentSize.Width + HeaderItemSpacing;
-				}
-				else if (hasImage && !string.IsNullOrEmpty(item.Header))
+                var hasImage = HasValidImageSource(item.ImageSource);
+                if (item.HeaderContent != null)
                 {
-                    width = GetWidthForSizeToContentWithImageAndText(item, desiredSize);
+                    Size headerContentSize = item.HeaderContent.Measure(double.PositiveInfinity, double.PositiveInfinity);
+                    extent = isVertical ? headerContentSize.Height + HeaderItemSpacing : headerContentSize.Width + HeaderItemSpacing;
+                }
+                else if (hasImage && !string.IsNullOrEmpty(item.Header))
+                {
+                    extent = GetWidthForSizeToContentWithImageAndText(item, desiredSize, isVertical);
                 }
                 else if (hasImage)
                 {
                     item.HeaderDisplayMode = TabBarDisplayMode.Image;
-                    width = _tabHeaderImageSize + HeaderItemSpacing;
+                    extent = _tabHeaderImageSize + HeaderItemSpacing;
                 }
                 else
                 {
                     item.HeaderDisplayMode = TabBarDisplayMode.Text;
-                    width = desiredSize.Width + HeaderItemSpacing;
+                    extent = isVertical ? desiredSize.Height + HeaderItemSpacing : desiredSize.Width + HeaderItemSpacing;
                 }
-                UpdateTabItemWidth(item, width);
+                ApplyItemExtent(item, extent);
             }
         }
 
-        double GetWidthForSizeToContentWithImageAndText(SfTabItem item, Size desiredSize)
+        double GetWidthForSizeToContentWithImageAndText(SfTabItem item, Size desiredSize, bool isVertical)
         {
 			_tabHeaderImageSize = CalculateTabHeaderImageSize(item.ImageSize);
 			if (HeaderDisplayMode == TabBarDisplayMode.Image)
@@ -2254,32 +2914,39 @@ namespace Syncfusion.Maui.Toolkit.TabView
             else if (HeaderDisplayMode == TabBarDisplayMode.Text)
             {
                 item.HeaderDisplayMode = TabBarDisplayMode.Text;
-                return desiredSize.Width + HeaderItemSpacing;
+				// Use vertical (Height) when stacked left/right, horizontal (Width) when top/bottom.
+				var size = isVertical ? desiredSize.Height + HeaderItemSpacing : desiredSize.Width + HeaderItemSpacing;
+				return size;
             }
             else
             {
                 if (item.ImagePosition == TabImagePosition.Left || item.ImagePosition == TabImagePosition.Right)
                 {
-                    return desiredSize.Width + HeaderItemSpacing + _tabHeaderImageSize + item.ImageTextSpacing;
+					// Match .NET MAUI SfTabView semantics: text extent uses Height for vertical
+					// placements and Width for horizontal placements.
+					var size = isVertical ? desiredSize.Height + HeaderItemSpacing + _tabHeaderImageSize + item.ImageTextSpacing : desiredSize.Width + HeaderItemSpacing + _tabHeaderImageSize + item.ImageTextSpacing;
+
+					return size;
                 }
                 else
                 {
-                    return desiredSize.Width + HeaderItemSpacing;
+					var size = isVertical ? desiredSize.Height + HeaderItemSpacing : desiredSize.Width + HeaderItemSpacing;
+					return size;
                 }
             }
         }
 
         void InsertHeaderItemToContent(SfGrid touchEffectGrid, int index)
         {
-            if (_tabHeaderItemContent != null)
+            if (_tabItemsPanel!= null)
             {
                 if (index >= 0)
                 {
-                    _tabHeaderItemContent.Children.Insert(index, touchEffectGrid);
+                    _tabItemsPanel.Children.Insert(index, touchEffectGrid);
                 }
                 else
                 {
-                    _tabHeaderItemContent.Children.Add(touchEffectGrid);
+                    _tabItemsPanel.Children.Add(touchEffectGrid);
                 }
 
 				AddCenterButtonViewPlaceholder();
@@ -2291,59 +2958,106 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void AddCenterButtonViewPlaceholder()
 		{
-			if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _tabHeaderItemContent is not null)
+			UpdateCenterButtonPlaceholder();
+		}
+
+		void UpdateCenterButtonPlaceholder()
+		{
+			if (_tabItemsPanel is null)
 			{
-				int totalCount = 0;
-				if (ItemsSource is not null && ItemsSource.Count > 0)
+				return;
+			}
+
+			bool shouldShowPlaceholder = IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default;
+			bool hasPlaceholder = _tabItemsPanel.Children.Contains(_centerButtonViewPlaceholder);
+			if (!shouldShowPlaceholder)
+			{
+				if (hasPlaceholder)
 				{
-					totalCount = ItemsSource.Count;
-				}
-				else
-				{
-					totalCount = GetVisibleItems();
+					_tabItemsPanel.Children.Remove(_centerButtonViewPlaceholder);
 				}
 
-				// Find or calculate correct positions for left and right items
-				int leftItemsCount = totalCount / 2 + totalCount % 2;
-				if (_tabHeaderItemContent.Children.Contains(_centerButtonViewPlaceholder))
-				{
-					_tabHeaderItemContent.Children.Remove(_centerButtonViewPlaceholder);
-				}
+				return;
+			}
 
-				if (totalCount > 0 && leftItemsCount <= _tabHeaderItemContent.Count)
-				{
-					_tabHeaderItemContent.Children.Insert(leftItemsCount, _centerButtonViewPlaceholder);
-				}
+			if (hasPlaceholder)
+			{
+				_tabItemsPanel.Children.Remove(_centerButtonViewPlaceholder);
+			}
+
+			int totalCount = ItemsSource is not null && ItemsSource.Count > 0
+				? ItemsSource.Count
+				: GetVisibleItems();
+			int leftItemsCount = totalCount / 2 + totalCount % 2;
+			if (totalCount > 0 && leftItemsCount <= _tabItemsPanel.Count)
+			{
+				_tabItemsPanel.Children.Insert(leftItemsCount, _centerButtonViewPlaceholder);
 			}
 		}
 
 		void CalculateTabItemWidthForDefaultWidthMode()
         {
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+
 			double width = 0;
+			double extent = 0;
+
 			int visibleItemsCount = GetVisibleItems();
 
-			if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _centerButtonViewPlaceholder is not null && WidthRequest > 0)
+			if (isHorizontal)
 			{
-				double totalAvailableWidth = WidthRequest - _centerButtonViewPlaceholder.WidthRequest;
-				var (leftItemWidth, rightItemWidth, leftItemsCount) = CalculateLeftRightItemsWidth(totalAvailableWidth, visibleItemsCount);
-				for (int i = 0; i < Items.Count; i++)
+				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _centerButtonViewPlaceholder is not null && WidthRequest > 0)
 				{
-					width = i < leftItemsCount ? leftItemWidth : rightItemWidth;
-					SetHeaderDisplayMode(Items[i]);
-					UpdateTabItemWidth(Items[i], width);
+					double totalAvailableWidth = WidthRequest - _centerButtonViewPlaceholder.WidthRequest;
+					var (leftItemWidth, rightItemWidth, leftItemsCount) = CalculateLeftRightItemsWidth(totalAvailableWidth, visibleItemsCount);
+					for (int i = 0; i < Items.Count; i++)
+					{
+						width = i < leftItemsCount ? leftItemWidth : rightItemWidth;
+						SetHeaderDisplayMode(Items[i]);
+						ApplyItemExtent(Items[i], width);
+					}
+				}
+				else
+				{
+					width = WidthRequest / visibleItemsCount;
+					if (width > 0)
+					{
+						foreach (var item in Items)
+						{
+							if (item != null && item.IsVisible)
+							{
+								SetHeaderDisplayMode(item);
+								ApplyItemExtent(item, width);
+							}
+						}
+					}
 				}
 			}
 			else
 			{
-				width = WidthRequest / visibleItemsCount;
-				if (width > 0)
+				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _centerButtonViewPlaceholder is not null && HeightRequest > 0)
 				{
-					foreach (var item in Items)
+					double totalAvailableHeight = HeightRequest - _centerButtonViewPlaceholder.HeightRequest;
+					var (topItemHeight, bottomItemHeight, topItemsCount) = CalculateTopBottomItemsHeight(totalAvailableHeight, visibleItemsCount);
+					for (int i = 0; i < Items.Count; i++)
 					{
-						if (item != null && item.IsVisible)
+						extent = i < topItemsCount ? topItemHeight : bottomItemHeight;
+						SetHeaderDisplayMode(Items[i]);
+						ApplyItemExtent(Items[i], extent);
+					}
+				}
+				else
+				{
+					extent = HeightRequest / visibleItemsCount;
+					if (extent > 0)
+					{
+						foreach (var item in Items)
 						{
-							SetHeaderDisplayMode(item);
-							UpdateTabItemWidth(item, width);
+							if (item != null && item.IsVisible)
+							{
+								SetHeaderDisplayMode(item);
+								ApplyItemExtent(item, extent);
+							}
 						}
 					}
 				}
@@ -2355,9 +3069,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void CalculateTabItemsSourceWidthForSizeToContent()
 		{
-			if (_tabHeaderItemContent is not null)
+			if (_tabItemsPanel is not null)
 			{
-				foreach (var item in _tabHeaderItemContent.Children)
+				foreach (var item in _tabItemsPanel.Children)
 				{
 					if (item is not null)
 					{
@@ -2372,39 +3086,84 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void CalculateTabItemsSourceWidthForDefaultWidthMode()
 		{
-			if (ItemsSource is not null && _tabHeaderItemContent is not null)
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+
+			if (isHorizontal)
 			{
-				double width = 0;
-				int itemsSourceCount = ItemsSource.Count;
-
-				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _centerButtonViewPlaceholder is not null && WidthRequest > 0)
+				if (ItemsSource is not null && _tabItemsPanel is not null)
 				{
-					double totalAvailableWidth = WidthRequest - _centerButtonViewPlaceholder.WidthRequest;
-					var (leftItemWidth, rightItemWidth, leftItemsCount) = CalculateLeftRightItemsWidth(totalAvailableWidth, itemsSourceCount);
-					for (int index = 0; index < _tabHeaderItemContent.Children.Count; index++)
-					{
-						var adjustedIndex = index;
-						width = index < leftItemsCount ? leftItemWidth : rightItemWidth;
-						if (index == leftItemsCount)
-						{
-							continue;
-						}
+					double width = 0;
+					int itemsSourceCount = ItemsSource.Count;
 
-						var item = _tabHeaderItemContent.Children[index];
-						AddTabViewItemFromTemplate(item);
-						if (item is View view && TabWidthMode is TabWidthMode.Default)
+					if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _centerButtonViewPlaceholder is not null && WidthRequest > 0)
+					{
+						double totalAvailableWidth = WidthRequest - _centerButtonViewPlaceholder.WidthRequest;
+						var (leftItemWidth, rightItemWidth, leftItemsCount) = CalculateLeftRightItemsWidth(totalAvailableWidth, itemsSourceCount);
+						for (int index = 0; index < _tabItemsPanel.Children.Count; index++)
 						{
-							view.WidthRequest = width;
+							var adjustedIndex = index;
+							width = index < leftItemsCount ? leftItemWidth : rightItemWidth;
+							if (index == leftItemsCount)
+							{
+								continue;
+							}
+
+							var item = _tabItemsPanel.Children[index];
+							AddTabViewItemFromTemplate(item);
+							if (item is View view && TabWidthMode is TabWidthMode.Default)
+							{
+								view.WidthRequest = width;
+							}
+						}
+					}
+					else
+					{
+						foreach (var item in _tabItemsPanel.Children)
+						{
+							if (item is not null)
+							{
+								AddTabViewItemFromTemplate(item);
+							}
 						}
 					}
 				}
-				else
+			}
+			else
+			{
+				if (ItemsSource is not null && _tabItemsPanel is not null)
 				{
-					foreach (var item in _tabHeaderItemContent.Children)
+					double height = 0;
+					int itemsSourceCount = ItemsSource.Count;
+
+					if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && _centerButtonViewPlaceholder is not null && HeightRequest > 0)
 					{
-						if (item is not null)
+						double totalAvailableHeight = HeightRequest - _centerButtonViewPlaceholder.HeightRequest;
+						var (topItemHeight, bottoItemHeight, topItemsCount) = CalculateTopBottomItemsHeight(totalAvailableHeight, itemsSourceCount);
+						for (int index = 0; index < _tabItemsPanel.Children.Count; index++)
 						{
+							var adjustedIndex = index;
+							height = index < topItemsCount ? topItemHeight : bottoItemHeight;
+							if (index == topItemsCount)
+							{
+								continue;
+							}
+
+							var item = _tabItemsPanel.Children[index];
 							AddTabViewItemFromTemplate(item);
+							if (item is View view && TabWidthMode is TabWidthMode.Default)
+							{
+								view.HeightRequest = height;
+							}
+						}
+					}
+					else
+					{
+						foreach (var item in _tabItemsPanel.Children)
+						{
+							if (item is not null)
+							{
+								AddTabViewItemFromTemplate(item);
+							}
 						}
 					}
 				}
@@ -2426,6 +3185,20 @@ namespace Syncfusion.Maui.Toolkit.TabView
 			return (leftItemWidth, rightItemWidth, leftItemsCount);
 		}
 
+		/// <summary>
+		/// Calculates the height of items distributed into top and bottom sections.
+		/// </summary>
+		/// <param name="totalHeight">totalHeight.</param>
+		/// <param name="itemCount">itemCount.</param>
+		/// <returns></returns>
+		(double topItemHeight, double bottomItemHeight, int topItemsCount) CalculateTopBottomItemsHeight(double totalHeight, int itemCount)
+		{
+			int topItemsCount = (itemCount / 2) + (itemCount % 2); // handle the odd count
+			int bottomItemsCount = itemCount / 2;
+			double topItemHeight = topItemsCount > 0 ? totalHeight / 2 / topItemsCount : 0;
+			double bottomItemHeight = bottomItemsCount > 0 ? totalHeight / 2 / bottomItemsCount : 0;
+			return (topItemHeight, bottomItemHeight, topItemsCount);
+		}
 
 		void SetHeaderDisplayMode(SfTabItem item)
         {
@@ -2484,14 +3257,27 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
-        static void UpdateTabItemWidth(SfTabItem item, double width)
+        void ApplyItemExtent(SfTabItem item, double extent)
         {
-            item.WidthRequest = width;
-            if (item.Parent != null && (item.Parent is SfGrid grid))
-            {
-                var parentGrid = grid;
-                parentGrid.WidthRequest = item.WidthRequest;
-            }
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (isHorizontal)
+			{
+				item.WidthRequest = extent;
+				if (item.Parent != null && (item.Parent is SfGrid grid))
+				{
+					var parentGrid = grid;
+					parentGrid.WidthRequest = item.WidthRequest;
+				}
+			}
+			else
+			{
+				item.HeightRequest = extent;
+				if (item.Parent != null && (item.Parent is SfGrid grid))
+				{
+					var parentGrid = grid;
+					parentGrid.HeightRequest = item.HeightRequest;
+				}
+			}
         }
 
         /// <summary>
@@ -2503,15 +3289,18 @@ namespace Syncfusion.Maui.Toolkit.TabView
             {
                 foreach (var item in Items)
                 {
-                    if (item.ImageSource != null && !string.IsNullOrEmpty(item.Header))
-                    {
-                        item.HeaderDisplayMode = HeaderDisplayMode;
-                    }
+                    SetHeaderDisplayMode(item);
                 }
 
-                UpdateTabIndicatorWidth();
-                CalculateTabItemWidth();
-            }
+				CalculateTabItemWidth();
+				CalculateTabItemsSourceWidth();
+				UpdateHeaderItemHeight();
+				UpdateTabIndicatorWidth();
+				if (IsScrollButtonEnabled)
+				{
+					UpdateScrollButtonState();
+				}
+			}
         }
 
 		/// <summary>
@@ -2557,27 +3346,41 @@ namespace Syncfusion.Maui.Toolkit.TabView
             _tabSelectionIndicator.StrokeShape = _roundRectangle;
             UpdateIndicatorBackground(IndicatorBackground);
 
-            // Initialize the horizontal stack layout for tab items
-            _tabHeaderItemContent = new SfHorizontalStackLayout()
-            {
-                HorizontalOptions = LayoutOptions.Fill,
+			_tabHeaderRow = new SfHorizontalStackBase
+			{
+				HorizontalOptions = LayoutOptions.Fill,
 				Spacing = 0,
 #if NET10_0
                 SafeAreaEdges = SafeAreaEdges.None,
 #endif
 			};
 
-            // Create a grid to hold the tab items and indicator
-            _tabHeaderContentContainer = new SfGrid()
-            {
-                HorizontalOptions = LayoutOptions.Fill,
-                Children = { _tabHeaderItemContent, _tabSelectionIndicator },
+			_tabHeaderColumn = new SfVerticalStackBase
+			{
+				VerticalOptions = LayoutOptions.Fill,
+				HorizontalOptions = LayoutOptions.Fill,
+				Spacing = 0,
+#if NET10_0
+                SafeAreaEdges = SafeAreaEdges.None,
+#endif
+			};
+
+			_tabItemsPanel = _tabHeaderRow;
+
+			// Create a grid to hold the tab items and indicator
+			_tabHeaderContentContainer = new SfGrid
+			{
+				HorizontalOptions = LayoutOptions.Fill,
+				VerticalOptions = LayoutOptions.Start,
 				ColumnSpacing = 0,
 				RowSpacing = 0,
 #if NET10_0
                 SafeAreaEdges = SafeAreaEdges.None,
 #endif
 			};
+
+			_tabHeaderContentContainer.Children.Add(_tabItemsPanel);
+			_tabHeaderContentContainer.Children.Add(_tabSelectionIndicator);
 
 			InitializeCenterButtonViewPlaceholder();
 			InitializeTabHeaderScrollView();
@@ -2593,6 +3396,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 Content = _tabHeaderContentContainer,
                 Orientation = ScrollOrientation.Horizontal,
                 HorizontalScrollBarVisibility = ScrollBarVisibility.Never,
+				VerticalScrollBarVisibility = ScrollBarVisibility.Never,
 #if NET10_0
                 SafeAreaEdges = SafeAreaEdges.None,
 #endif
@@ -2603,48 +3407,49 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         void InitializeTabHeaderParentContainer()
         {
-            _tabHeaderParentContainer = new SfGrid()
-            {
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition(),
-                },
-				ColumnSpacing = 0,
-				RowSpacing = 0,
+				_tabHeaderParentContainer = new SfGrid()
+				{
+					ColumnDefinitions =
+				{
+					new ColumnDefinition(),
+				},
+					ColumnSpacing = 0,
+					RowSpacing = 0,
 #if NET10_0
                 SafeAreaEdges = SafeAreaEdges.None,
 #endif
-			};
-			_tabHeaderParenRoundRectangle = new RoundRectangle();
-			_tabHeaderParentBorder = new SfBorder()
-			{
-				HorizontalOptions = LayoutOptions.Fill,
-				StrokeThickness = 0,
-				Stroke = Colors.Transparent,
-				Content = _tabHeaderParentContainer,
+				};
+				_tabHeaderParenRoundRectangle = new RoundRectangle();
+				_tabHeaderParentBorder = new SfBorder()
+				{
+					HorizontalOptions = LayoutOptions.Fill,
+					StrokeThickness = 0,
+					Stroke = Colors.Transparent,
+					Content = _tabHeaderParentContainer,
 #if NET10_0
                 SafeAreaEdges = SafeAreaEdges.None,
 #endif
-			};
-			_tabHeaderParentBorder.StrokeShape = _tabHeaderParenRoundRectangle;
-			_backwardArrow = new ArrowIcon
-            {
-                ButtonArrowType = ArrowType.Backward
-            };
-            _backwardArrow.ScrollButtonClicked += OnScrollBackwardClicked;
+				};
+				_tabHeaderParentBorder.StrokeShape = _tabHeaderParenRoundRectangle;
 
-            _forwardArrow = new ArrowIcon
-            {
-                ButtonArrowType = ArrowType.Forward
-            };
-            _forwardArrow.ScrollButtonClicked += OnScrollForwardClicked;
-            // Add the scroll view to the parent container
-            _tabHeaderParentContainer.Children.Add(_tabHeaderScrollView);
+				_backwardArrow = new ArrowIcon
+				{
+					ButtonArrowType = ArrowType.Backward
+				};
+				_backwardArrow.ScrollButtonClicked += OnScrollBackwardClicked;
 
-			// Add parent container to the main layout
-			Children.Add(_tabHeaderParentBorder);
+				_forwardArrow = new ArrowIcon
+				{
+					ButtonArrowType = ArrowType.Forward
+				};
+				_forwardArrow.ScrollButtonClicked += OnScrollForwardClicked;
+				// Add the scroll view to the parent container
+				_tabHeaderParentContainer.Children.Add(_tabHeaderScrollView);
 
-		}
+				// Add parent container to the main layout
+				Children.Add(_tabHeaderParentBorder);
+
+			}
 
 		/// <summary>
 		/// Initialize the center button view placeholder.
@@ -2659,10 +3464,10 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// </summary>
 		void MeasureTabItemTemplateWidth()
 		{
-			if (_tabHeaderItemContent is not null && ItemsSource is not null && ItemsSource.Count > 0 && _tabHeaderItemContent.Children.Count > 0)
+			if (_tabItemsPanel is not null && ItemsSource is not null && ItemsSource.Count > 0 && _tabItemsPanel.Children.Count > 0)
 			{
 				_tabItemTemplateWidth = new();
-				foreach (var item in _tabHeaderItemContent.Children)
+				foreach (var item in _tabItemsPanel.Children)
 				{
 					double width = 0;
 					if (item is View view && view is not SfGrid)
@@ -2696,30 +3501,59 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (_tabHeaderScrollView != null && _backwardArrow != null && _forwardArrow != null)
             {
-                double width = 0;
-                var scrollViewWidth = WidthRequest - _arrowButtonSize * 2;
-                if (TabWidthMode == TabWidthMode.SizeToContent)
-                {
-                    scrollViewWidth = WidthRequest - (_arrowButtonSize * 2 + TabHeaderPadding.Left + TabHeaderPadding.Right);
-                }
+				var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+				double width = 0;
+				var scrollViewWidth = WidthRequest - _arrowButtonSize * 2;
+				double height = 0;
+				var scrollViewHeight = HeightRequest - _arrowButtonSize * 2;
+				if (isHorizontal)
+				{
+					if (TabWidthMode == TabWidthMode.SizeToContent)
+					{
+						scrollViewWidth = WidthRequest - (_arrowButtonSize * 2 + TabHeaderPadding.Left + TabHeaderPadding.Right);
+					}
 
-                if (_tabHeaderItemContent != null)
-                {
-                    foreach (var item in _tabHeaderItemContent.Children)
-                    {
-                        if (!double.IsNaN(item.Width))
-                        {
-                            width += item.Width;
-                        }
-                        else
-                        {
-                            var index = _tabHeaderItemContent.Children.IndexOf(item);
-                            width += _tabHeaderItemContent.Children[index].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
-                        }
-                    }
-                }
+					if (_tabItemsPanel != null)
+					{
+						foreach (var item in _tabItemsPanel.Children)
+						{
+							if (!double.IsNaN(item.Width))
+							{
+								width += item.Width;
+							}
+							else
+							{
+								var index = _tabItemsPanel.Children.IndexOf(item);
+								width += _tabItemsPanel.Children[index].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
+							}
+						}
+					}
+					UpdateScrollButtonStateBasedOnScrollPosition(scrollViewWidth, width);
+				}
+				else
+				{
+					if (TabWidthMode == TabWidthMode.SizeToContent)
+					{
+						scrollViewHeight = HeightRequest - (_arrowButtonSize * 2 + TabHeaderPadding.Top + TabHeaderPadding.Bottom);
+					}
 
-                UpdateScrollButtonStateBasedOnScrollPosition(scrollViewWidth, width);
+					if (_tabItemsPanel != null)
+					{
+						foreach (var item in _tabItemsPanel.Children)
+						{
+							if (!double.IsNaN(item.Height))
+							{
+								height += item.Height;
+							}
+							else
+							{
+								var index = _tabItemsPanel.Children.IndexOf(item);
+								height += _tabItemsPanel.Children[index].Measure(double.PositiveInfinity, double.PositiveInfinity).Height;
+							}
+						}
+					}
+					UpdateScrollButtonStateBasedOnScrollPositionHeight(scrollViewHeight, height);
+				}
 
                 if (ScrollButtonBackground != null)
                 {
@@ -2731,54 +3565,109 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         void UpdateScrollButtonStateBasedOnScrollPosition(double scrollViewWidth, double width)
         {
-            if (_tabHeaderScrollView != null && _backwardArrow != null && _forwardArrow != null)
+			if (_tabHeaderScrollView != null && _backwardArrow != null && _forwardArrow != null)
             {
-                if (_tabHeaderScrollView.ScrollX == 0 && width != 0 && width < scrollViewWidth)
-                {
-                    _backwardArrow.IsEnabled = false;
-                    _forwardArrow.IsEnabled = false;
-                    _backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
-                    _forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
-                }
-                else if (_tabHeaderScrollView.ScrollX == 0)
-                {
-                    _backwardArrow.IsEnabled = false;
-                    _forwardArrow.IsEnabled = true;
-                    _backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
-                    _forwardArrow.ScrollButtonColor = ScrollButtonColor;
-                }
-                else if (Math.Round(_tabHeaderScrollView.ScrollX) == Math.Round(_tabHeaderScrollView.ContentSize.Width - _tabHeaderScrollView.Width))
-                {
-                    _backwardArrow.IsEnabled = true;
-                    _forwardArrow.IsEnabled = false;
-                    _forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
-                    _backwardArrow.ScrollButtonColor = ScrollButtonColor;
-                }
-                else
-                {
-                    _backwardArrow.IsEnabled = true;
-                    _forwardArrow.IsEnabled = true;
-                    _backwardArrow.ScrollButtonColor = ScrollButtonColor;
-                    _forwardArrow.ScrollButtonColor = ScrollButtonColor;
-                }
+					if (_tabHeaderScrollView.ScrollX == 0 && width != 0 && width < scrollViewWidth)
+					{
+						_backwardArrow.IsEnabled = false;
+						_forwardArrow.IsEnabled = false;
+						_backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+						_forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+					}
+					else if (_tabHeaderScrollView.ScrollX == 0)
+					{
+						_backwardArrow.IsEnabled = false;
+						_forwardArrow.IsEnabled = true;
+						_backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+						_forwardArrow.ScrollButtonColor = ScrollButtonColor;
+					}
+					else if (Math.Round(_tabHeaderScrollView.ScrollX) == Math.Round(_tabHeaderScrollView.ContentSize.Width - _tabHeaderScrollView.Width))
+					{
+						_backwardArrow.IsEnabled = true;
+						_forwardArrow.IsEnabled = false;
+						_forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+						_backwardArrow.ScrollButtonColor = ScrollButtonColor;
+					}
+					else
+					{
+						_backwardArrow.IsEnabled = true;
+						_forwardArrow.IsEnabled = true;
+						_backwardArrow.ScrollButtonColor = ScrollButtonColor;
+						_forwardArrow.ScrollButtonColor = ScrollButtonColor;
+					}
             }
         }
 
-        void OnScrollBackwardClicked(object? sender, EventArgs e)
+		void UpdateScrollButtonStateBasedOnScrollPositionHeight(double scrollViewHeight, double height)
+		{
+			if (_tabHeaderScrollView != null && _backwardArrow != null && _forwardArrow != null)
+			{
+				if (_tabHeaderScrollView.ScrollX == 0 && height > 0 && height <= scrollViewHeight)
+				{
+					_backwardArrow.IsEnabled = false;
+					_forwardArrow.IsEnabled = false;
+					_backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+					_forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+				}
+				else if (_tabHeaderScrollView.ScrollY == 0)
+				{
+					_backwardArrow.IsEnabled = false;
+					_forwardArrow.IsEnabled = true;
+					_backwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+					_forwardArrow.ScrollButtonColor = ScrollButtonColor;
+				}
+				else if (Math.Round(_tabHeaderScrollView.ScrollY) == Math.Round(_tabHeaderScrollView.ContentSize.Height - _tabHeaderScrollView.Height))
+				{
+					_backwardArrow.IsEnabled = true;
+					_forwardArrow.IsEnabled = false;
+					_forwardArrow.ScrollButtonColor = ScrollButtonDisabledIconColor;
+					_backwardArrow.ScrollButtonColor = ScrollButtonColor;
+				}
+				else
+				{
+					_backwardArrow.IsEnabled = true;
+					_forwardArrow.IsEnabled = true;
+					_backwardArrow.ScrollButtonColor = ScrollButtonColor;
+					_forwardArrow.ScrollButtonColor = ScrollButtonColor;
+				}
+			}
+		}
+
+		void OnScrollBackwardClicked(object? sender, EventArgs e)
         {
-            if (_tabHeaderScrollView != null)
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (_tabHeaderScrollView != null)
             {
-                var scrollToX = Math.Clamp(_tabHeaderScrollView.ScrollX - 100d, 0, _tabHeaderScrollView.ContentSize.Width - _tabHeaderScrollView.Width);
-                _tabHeaderScrollView.ScrollToAsync(scrollToX, 0, true);
+				if (isHorizontal)
+				{
+					var scrollToX = Math.Clamp(_tabHeaderScrollView.ScrollX - 100d, 0, _tabHeaderScrollView.ContentSize.Width - _tabHeaderScrollView.Width);
+					_tabHeaderScrollView.ScrollToAsync(scrollToX, 0, true);
+				}
+				else
+				{
+		            var maxY = Math.Max(0, _tabHeaderScrollView.ContentSize.Height - _tabHeaderScrollView.Height);
+				    var scrollToY = Math.Clamp(_tabHeaderScrollView.ScrollY - 100d, 0, maxY);
+					_tabHeaderScrollView.ScrollToAsync(0, scrollToY, true);
+				}
             }
         }
 
         void OnScrollForwardClicked(object? sender, EventArgs e)
         {
-            if (_tabHeaderScrollView != null)
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (_tabHeaderScrollView != null)
             {
-                var scrollToX = Math.Clamp(_tabHeaderScrollView.ScrollX + 100d, 0, _tabHeaderScrollView.ContentSize.Width - _tabHeaderScrollView.Width);
-                _tabHeaderScrollView.ScrollToAsync(scrollToX, 0, true);
+				if (isHorizontal)
+				{
+					var scrollToX = Math.Clamp(_tabHeaderScrollView.ScrollX + 100d, 0, _tabHeaderScrollView.ContentSize.Width - _tabHeaderScrollView.Width);
+					_tabHeaderScrollView.ScrollToAsync(scrollToX, 0, true);
+				}
+				else
+				{
+					var maxY = Math.Max(0, _tabHeaderScrollView.ContentSize.Height - _tabHeaderScrollView.Height);
+					var scrollToY = Math.Clamp(_tabHeaderScrollView.ScrollY + 100d, 0, maxY);
+				    _tabHeaderScrollView.ScrollToAsync(0, scrollToY, true);
+				}
             }
         }
 
@@ -2787,38 +3676,55 @@ namespace Syncfusion.Maui.Toolkit.TabView
         /// </summary>
         void UpdateTabIndicatorTemplateWidth()
         {
-            if (_tabSelectionIndicator != null &&
-                _tabHeaderItemContent != null &&
-                _tabHeaderItemContent.Children.Count > 0 &&
-                SelectedIndex >= 0 &&
-                _tabHeaderItemContent.Children.Count > SelectedIndex)
-            {
-				int adjustedIndex = SelectedIndex; // Default to the existing selected index
-				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
-				{
-					adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
-				}
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
 
-				if (adjustedIndex < _tabHeaderItemContent.Children.Count)
-				{
-					_selectedTabX = _tabHeaderItemContent.Children[adjustedIndex].Frame.X;
-					if (SelectedIndex >= 0)
+			if (_tabSelectionIndicator != null &&
+                _tabItemsPanel != null &&
+                _tabItemsPanel.Children.Count > 0 &&
+                SelectedIndex >= 0 &&
+                _tabItemsPanel.Children.Count > SelectedIndex)
+            {
+				
+					int adjustedIndex = SelectedIndex; // Default to the existing selected index
+					if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
 					{
-						_selectedTabX = CalculateTabXPosition();
+						adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
 					}
-					_currentIndicatorWidth = _tabHeaderItemContent.Children[adjustedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
-					IndicatorAnimation();
-					_previousTabX = _selectedTabX;
-					_previewSelectedIndex = adjustedIndex;
-					UpdateTabIndicatorPosition();
-				}
+
+					if (adjustedIndex < _tabItemsPanel.Children.Count)
+					{
+						if (isHorizontal)
+						{
+							_selectedTabX = _tabItemsPanel.Children[adjustedIndex].Frame.X;
+							if (SelectedIndex >= 0)
+							{
+								_selectedTabX = CalculateTabXPosition();
+							}
+							_currentIndicatorWidth = _tabItemsPanel.Children[adjustedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
+							IndicatorAnimation();
+							_previousTabX = _selectedTabX;
+						}
+						else
+						{
+							_selectedTabY = _tabItemsPanel.Children[adjustedIndex].Frame.Height;
+							if (SelectedIndex >= 0)
+							{
+								_selectedTabY = CalculateTabYPosition();
+							}
+						   _currentIndicatorHeight = _tabItemsPanel.Children[adjustedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Height;
+							IndicatorAnimation();
+							_previousTabY = _selectedTabY;
+						}
+						_previewSelectedIndex = adjustedIndex;
+						UpdateTabIndicatorPosition();
+					}
             }
         }
 
         double CalculateTabXPosition()
         {
             double xPosition = 0;
-            if (_tabHeaderItemContent != null)
+            if (_tabItemsPanel != null)
             {
 				int adjustedIndex = SelectedIndex;
 				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
@@ -2828,30 +3734,51 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 				for (int i = 0; i < adjustedIndex; i++)
                 {
-                    var size = _tabHeaderItemContent.Children[i].Measure(double.PositiveInfinity, double.PositiveInfinity);
+                    var size = _tabItemsPanel.Children[i].Measure(double.PositiveInfinity, double.PositiveInfinity);
                     xPosition += size.Width;
                 }
             }
             return xPosition;
         }
 
-        /// <summary>
-        /// Update indicator width based on items.
-        /// </summary>
-        internal void UpdateTabIndicatorWidth()
+		double CalculateTabYPosition()
+			{
+				double yPosition = 0;
+				if (_tabItemsPanel != null && SelectedIndex >= 0)
+				{
+					int adjustedIndex = SelectedIndex;
+					if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+					{
+						adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
+					}
+
+					for (int i = 0; i < adjustedIndex; i++)
+					{
+						var childSize = _tabItemsPanel.Children[i].Measure(_tabItemsPanel.WidthRequest, double.PositiveInfinity);
+						yPosition += childSize.Height;
+					}
+				}
+				return yPosition;
+			}
+		
+
+		/// <summary>
+		/// Update indicator width based on items.
+		/// </summary>
+		internal void UpdateTabIndicatorWidth()
         {
-            if (_tabSelectionIndicator != null &&
-                _tabHeaderItemContent != null &&
-                _tabHeaderItemContent?.Children.Count > 0 &&
-                _tabHeaderItemContent.Children.Count > SelectedIndex && SelectedIndex >= 0)
+			if (_tabSelectionIndicator != null &&
+                _tabItemsPanel != null &&
+                _tabItemsPanel?.Children.Count > 0 &&
+                _tabItemsPanel.Children.Count > SelectedIndex && SelectedIndex >= 0)
             {
-                if (ItemsSource != null && ItemsSource.Count > 0 || HeaderItemTemplate != null)
+				if (ItemsSource != null && ItemsSource.Count > 0 || HeaderItemTemplate != null)
                 {
                     UpdateTabIndicatorTemplateWidth();
                 }
                 else
                 {
-					if (this._tabHeaderItemContent.Children[(int)this.SelectedIndex].Frame.Width > 0)
+					if (this._tabItemsPanel.Children[(int)this.SelectedIndex].Frame.Width > 0 || this._tabItemsPanel.Children[(int)this.SelectedIndex].Frame.Height > 0)
 					{
 						if (Items is not null && Items.Count > 0 && SelectedIndex < Items.Count)
 						{
@@ -2864,36 +3791,63 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         void UpdateTabIndicatorForSelectedItem()
         {
-            if (_tabHeaderItemContent == null)
+            if (_tabItemsPanel == null)
 			{
 				return;
 			}
 
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+
 			SfTabItem item = Items[SelectedIndex];
 
-            if (SelectedIndex > 0 && _selectedTabX <= 0)
-            {
-                _selectedTabX = _tabHeaderItemContent.Children[SelectedIndex - 1].Frame.X;
-            }
-            if (WidthRequest > 0)
-            {
-                UpdateTabIndicatorWidthOnWidthRequest(item);
-            }
+			if (isHorizontal)
+			{
+				if (SelectedIndex > 0 && _selectedTabX <= 0)
+				{
+					_selectedTabX = _tabItemsPanel.Children[SelectedIndex - 1].Frame.X;
+				}
+				if (WidthRequest > 0)
+				{
+					UpdateTabIndicatorWidthOnWidthRequest(item);
+				}
 
-            if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
-            {
+				if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+				{
 #if !WINDOWS
-                _selectedTabX = -_selectedTabX;
+					_selectedTabX = -_selectedTabX;
 #endif
-            }
+				}
 
-            IndicatorAnimation();
-            _previousTabX = _selectedTabX;
-			_previousIndicatorWidth = _currentIndicatorWidth;
+				IndicatorAnimation();
+				_previousTabX = _selectedTabX;
+				_previousIndicatorWidth = _currentIndicatorWidth;
+			}
+			else
+			{
+				if (SelectedIndex > 0 && _selectedTabY <= 0)
+				{
+					_selectedTabY = _tabItemsPanel.Children[SelectedIndex - 1].Frame.Y;
+				}
+				if (HeightRequest > 0)
+				{
+					UpdateTabIndicatorWidthOnWidthRequest(item);
+				}
+
+				if (((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+				{
+#if !WINDOWS
+					_selectedTabX = -_selectedTabX;
+#endif
+				}
+
+				IndicatorAnimation();
+				_previousTabY= _selectedTabY;
+				_previousIndicatorHeight = _currentIndicatorHeight;
+			}
 			_previewSelectedIndex = SelectedIndex;
-            if (_tabHeaderItemContent != null)
+            if (_tabItemsPanel != null)
             {
-                if (SelectedIndex < _tabHeaderItemContent.Children.Count)
+                if (SelectedIndex < _tabItemsPanel.Children.Count)
                 {
                     UpdateTabIndicatorPosition();
                 }
@@ -2902,44 +3856,81 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         void UpdateTabIndicatorWidthOnWidthRequest(SfTabItem item)
         {
-            if (_tabHeaderItemContent != null && _tabSelectionIndicator != null)
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (_tabItemsPanel != null && _tabSelectionIndicator != null)
             {
-				int adjustedIndex = SelectedIndex;
-				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+					int adjustedIndex = SelectedIndex;
+					if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+					{
+						adjustedIndex = GetAdjustedIndexForCenterButton(SelectedIndex);
+					}
+				if (isHorizontal)
 				{
-					adjustedIndex = GetAdjustedIndexForCenterButton(SelectedIndex);
+					if (IndicatorPlacement == TabIndicatorPlacement.Fill)
+					{
+						_selectedTabX = _tabItemsPanel.Children[adjustedIndex].Frame.X;
+						_currentIndicatorWidth = _tabItemsPanel.Children[adjustedIndex].Width;
+						if (double.IsNaN(_currentIndicatorWidth))
+						{
+							_currentIndicatorWidth = _tabItemsPanel.Children[adjustedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
+						}
+					}
+					else
+					{
+						if (IndicatorWidthMode == IndicatorWidthMode.Fit)
+						{
+							UpdateIndicatorForFitMode(item);
+						}
+						else
+						{
+							_selectedTabX = _tabItemsPanel.Children[adjustedIndex].Frame.X;
+							_currentIndicatorWidth = _tabItemsPanel.Children[adjustedIndex].Width;
+						}
+					}
+
+					if (_removedItemWidth != 0 && TabWidthMode == TabWidthMode.SizeToContent)
+					{
+						(_selectedTabX, _currentIndicatorWidth) = UpdateIndicatorPosition(_selectedTabX, _currentIndicatorWidth);
+					}
+
+					if (_currentIndicatorWidth > _tabSelectionIndicator.Width)
+					{
+						_tabSelectionIndicator.MaximumWidthRequest = _currentIndicatorWidth * 2;
+					}
 				}
-
-				if (IndicatorPlacement == TabIndicatorPlacement.Fill)
-                {
-                    _selectedTabX = _tabHeaderItemContent.Children[adjustedIndex].Frame.X;
-                    _currentIndicatorWidth = _tabHeaderItemContent.Children[adjustedIndex].Width;
-                    if (double.IsNaN(_currentIndicatorWidth))
-                    {
-                        _currentIndicatorWidth = _tabHeaderItemContent.Children[adjustedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Width;
-                    }
-                }
-                else
-                {
-                    if (IndicatorWidthMode == IndicatorWidthMode.Fit)
-                    {
-                        UpdateIndicatorForFitMode(item);
-                    }
-                    else
-                    {
-                        _selectedTabX = _tabHeaderItemContent.Children[adjustedIndex].Frame.X;
-                        _currentIndicatorWidth = _tabHeaderItemContent.Children[adjustedIndex].Width;
-                    }
-                }
-
-				if (_removedItemWidth != 0 && TabWidthMode == TabWidthMode.SizeToContent)
+				else
 				{
-					(_selectedTabX, _currentIndicatorWidth) = UpdateIndicatorPosition(_selectedTabX, _currentIndicatorWidth);
-				}
+					if (IndicatorPlacement == TabIndicatorPlacement.Fill)
+					{
+						_selectedTabY = _tabItemsPanel.Children[adjustedIndex].Frame.Y;
+						_currentIndicatorHeight = _tabItemsPanel.Children[adjustedIndex].Height;
+						if (double.IsNaN(_currentIndicatorHeight))
+						{
+							_currentIndicatorHeight = _tabItemsPanel.Children[adjustedIndex].Measure(double.PositiveInfinity, double.PositiveInfinity).Height;
+						}
+					}
+					else
+					{
+						if (IndicatorWidthMode == IndicatorWidthMode.Fit)
+						{
+							UpdateIndicatorForFitMode(item);
+						}
+						else
+						{
+							_selectedTabY = _tabItemsPanel.Children[adjustedIndex].Frame.Y;
+							_currentIndicatorHeight = _tabItemsPanel.Children[adjustedIndex].Height;
+						}
+					}
 
-				if (_currentIndicatorWidth > _tabSelectionIndicator.Width)
-				{
-					_tabSelectionIndicator.MaximumWidthRequest = _currentIndicatorWidth * 2;
+					if (_removedItemHeight != 0 && TabWidthMode == TabWidthMode.SizeToContent)
+					{
+						(_selectedTabY, _currentIndicatorHeight) = UpdateIndicatorPosition(_selectedTabY, _currentIndicatorHeight);
+					}
+
+					if (_currentIndicatorHeight > _tabSelectionIndicator.Height)
+					{
+						_tabSelectionIndicator.MaximumHeightRequest = _currentIndicatorHeight * 2;
+					}
 				}
 			}
         }
@@ -2948,40 +3939,89 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		/// Updates the position of the tab indicator based on the selected tab's X position and width.
 		/// </summary>
 		/// <param name="selectedViewX">The X position of the selected tab item.</param>
-		/// <param name="tempIndicatorWidth">The width of the tab indicator.</param>
-		(double, double) UpdateIndicatorPosition(double selectedViewX, double tempIndicatorWidth)
+		/// <param name="extent">The width of the tab indicator.</param>
+		(double, double) UpdateIndicatorPosition(double selectedViewX, double extent)
 		{
-			if (_tabHeaderItemContent != null)
-			{
-				selectedViewX -= _removedItemWidth;
-				_removedItemWidth = 0;
-			}
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
 
-			return (selectedViewX, tempIndicatorWidth);
+			if (isHorizontal)
+			{
+				if (_tabItemsPanel != null)
+				{
+					selectedViewX -= _removedItemWidth;
+					_removedItemWidth = 0;
+				}
+
+				return (selectedViewX, extent);
+			}
+			else
+			{
+				if (_tabItemsPanel != null)
+				{ 
+					selectedViewX -= _removedItemHeight;
+					_removedItemHeight = 0;
+				}
+
+				return (selectedViewX, extent);
+			}
+		}
+
+		 bool TryGetSelectedChild(out IView? child)
+		{
+			child = null;
+			if (_tabItemsPanel == null)
+				return false;
+
+			int count = _tabItemsPanel.Children.Count;
+			int selctedIndex = (int)SelectedIndex;
+
+			if (count <= 0)
+				return false;
+			if (selctedIndex < 0 || selctedIndex >= count)
+				return false;
+
+			child = _tabItemsPanel.Children[selctedIndex];
+			return child != null;
 		}
 
 		void UpdateIndicatorForFitMode(SfTabItem item)
         {
-            if (_tabHeaderItemContent == null)
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (_tabItemsPanel == null)
 			{
 				return;
 			}
 
 			if (GetVisibleItems() == 0)
 			{
-				_currentIndicatorWidth = 0.1;
+				if (isHorizontal)
+				{
+					_currentIndicatorWidth = 0.1;
+				}
+				else
+				{
+					_currentIndicatorHeight = 0.1;
+				}
 			}
 			else
             {
-                _currentIndicatorWidth = MeasureHeaderContentWidth(item);
-                UpdateCurrentIndicatorWidth(item);
+				if (isHorizontal)
+				{
+					_currentIndicatorWidth = MeasureHeaderContentWidth(item);
+					UpdateCurrentIndicatorWidth(item);
+				}
+				else
+				{
+					_currentIndicatorHeight = MeasureHeaderContentHeight(item);
+					UpdateCurrentIndicatorHeight(item);
+				}
                 
             }
         }
 
         void UpdateCurrentIndicatorWidth(SfTabItem item)
         {
-            if (_tabHeaderItemContent!=null)
+            if (_tabItemsPanel!=null)
             {
 				int adjustedIndex = SelectedIndex; // Default to the existing selected index
 
@@ -2992,15 +4032,15 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
 				if (item.HeaderHorizontalTextAlignment == TextAlignment.Start && item.HeaderContent is null)
                 {
-                    _selectedTabX = (_tabHeaderItemContent.Children[adjustedIndex].Frame.Left);
+                    _selectedTabX = (_tabItemsPanel.Children[adjustedIndex].Frame.Left);
                 }
                 else if (item.HeaderHorizontalTextAlignment == TextAlignment.End && item.HeaderContent is null)
                 {
-                    _selectedTabX = (_tabHeaderItemContent.Children[adjustedIndex].Frame.Right) - _currentIndicatorWidth;
+                    _selectedTabX = (_tabItemsPanel.Children[adjustedIndex].Frame.Right) - _currentIndicatorWidth;
                 }
                 else
                 {
-                    _selectedTabX = (_tabHeaderItemContent.Children[adjustedIndex].Frame.Center.X) - ((_currentIndicatorWidth / 2));
+                    _selectedTabX = (_tabItemsPanel.Children[adjustedIndex].Frame.Center.X) - ((_currentIndicatorWidth / 2));
 				}
 
 #if ANDROID
@@ -3009,78 +4049,165 @@ namespace Syncfusion.Maui.Toolkit.TabView
 				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && (_isItemRemovedWithCenterButton || _isTabItemPropertyChanged) && itemsCount % 2 == 0 && SelectedIndex == Items.Count - 1)
 				{
 					double totalWidth = 0;
-					for (int index = 0; index < _tabHeaderItemContent.Count - 1; index++)
+					for (int index = 0; index < _tabItemsPanel.Count - 1; index++)
 					{
-						totalWidth += _tabHeaderItemContent.Children[index].Width;
+						totalWidth += _tabItemsPanel.Children[index].Width;
 					}
 
 					if (_selectedTabX < totalWidth)
 					{
-						_selectedTabX += _tabHeaderItemContent.Children[adjustedIndex - 1].Width;
+						_selectedTabX += _tabItemsPanel.Children[adjustedIndex - 1].Width;
 					}
 
 					_isTabItemPropertyChanged = false;
 				}
 #endif
 
-				if (_currentIndicatorWidth > _tabHeaderItemContent.Children[adjustedIndex].Width)
+				if (_currentIndicatorWidth > _tabItemsPanel.Children[adjustedIndex].Width)
                 {
-                    _selectedTabX = _tabHeaderItemContent.Children[adjustedIndex].Frame.X;
-                    _currentIndicatorWidth = _tabHeaderItemContent.Children[adjustedIndex].Width;
+                    _selectedTabX = _tabItemsPanel.Children[adjustedIndex].Frame.X;
+                    _currentIndicatorWidth = _tabItemsPanel.Children[adjustedIndex].Width;
                 }
             }
         }
 
-        /// <summary>
-        /// Method to animate the selection indicator in Tab View.
-        /// </summary>
-        void IndicatorAnimation()
-        {
-            double previousIndicatorWidth = 0;
-            if (_tabSelectionIndicator != null)
+		void UpdateCurrentIndicatorHeight(SfTabItem item)
+		{
+			if (_tabItemsPanel != null)
 			{
-				previousIndicatorWidth = _tabSelectionIndicator.Width;
-			}
+				int adjustedIndex = SelectedIndex; // Default to the existing selected index
 
-			previousIndicatorWidth = previousIndicatorWidth < 0 ? 0 : previousIndicatorWidth;
-			int adjustedIndex = SelectedIndex;
-			if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
-			{
-				adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
-			}
+				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+				{
+					adjustedIndex = GetAdjustedIndexForCenterButton(SelectedIndex);
+				}
 
-			var selectedItem = _tabHeaderItemContent?.Children[adjustedIndex];
-            double selectedItemWidth = (selectedItem != null) ?
-                selectedItem.Measure(double.PositiveInfinity, double.PositiveInfinity).Width : 0;
+				var yPosition = CalculateTabYPosition();
+				_currentIndicatorHeight = MeasureHeaderContentHeight(item);
+				_selectedTabY = yPosition + (_tabItemsPanel.Children[adjustedIndex].Frame.Height/2 - (_currentIndicatorHeight / 2));
 
-            double widthMultiplier = CalculateWidthMultiplier(previousIndicatorWidth, selectedItemWidth);
-            uint animationDuration = (uint)ContentTransitionDuration;
+#if ANDROID
+				var itemsCount = GetVisibleItems();
 
-            var firstWidthAnimation = new Animation(FirstWidthAnimatedMethod, previousIndicatorWidth, previousIndicatorWidth * widthMultiplier);
-            var secondWidthAnimation = new Animation(SecondWidthAnimatedMethod, previousIndicatorWidth * widthMultiplier, _currentIndicatorWidth);
+				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default && (_isItemRemovedWithCenterButton || _isTabItemPropertyChanged) && itemsCount % 2 == 0 && SelectedIndex == Items.Count - 1)
+				{
+					double totalHeight = 0;
+					for (int index = 0; index < _tabItemsPanel.Count - 1; index++)
+					{
+						totalHeight += _tabItemsPanel.Children[index].Height;
+					}
 
-            var translateAnimation = new Animation();
-            double targetX = _selectedTabX;
-            if (_tabSelectionIndicator != null)
-            {
-#if !WINDOWS
-                if (HeaderItemTemplate != null &&
-                    ((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
-                {
-                    targetX = -_selectedTabX;
-                }
+					if (_selectedTabY < totalHeight)
+					{
+						_selectedTabY += _tabItemsPanel.Children[adjustedIndex - 1].Height;
+					}
+
+					_isTabItemPropertyChanged = false;
+				}
 #endif
 
-                translateAnimation = new Animation(TranslateAnimatedMethod, _tabSelectionIndicator.TranslationX, targetX);
-            }
+				if (_currentIndicatorHeight > _tabItemsPanel.Children[adjustedIndex].Height)
+				{
+					_selectedTabY = _tabItemsPanel.Children[adjustedIndex].Frame.Y;
+					_currentIndicatorHeight = _tabItemsPanel.Children[adjustedIndex].Height;
+				}
+			}
+		}
 
-            var parentAnimation = new Animation
+		/// <summary>
+		/// Method to animate the selection indicator in Tab View.
+		/// </summary>
+		void IndicatorAnimation()
+        {
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (isHorizontal)
+			{
+				double previousIndicatorWidth = 0;
+				if (_tabSelectionIndicator != null)
+				{
+					previousIndicatorWidth = _tabSelectionIndicator.Width;
+				}
+
+				previousIndicatorWidth = previousIndicatorWidth < 0 ? 0 : previousIndicatorWidth;
+				int adjustedIndex = SelectedIndex;
+				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+				{
+					adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
+				}
+
+				var selectedItem = _tabItemsPanel?.Children[adjustedIndex];
+				double selectedItemWidth = (selectedItem != null) ?
+					selectedItem.Measure(double.PositiveInfinity, double.PositiveInfinity).Width : 0;
+
+				double widthMultiplier = CalculateWidthMultiplier(previousIndicatorWidth, selectedItemWidth);
+				uint animationDuration = (uint)ContentTransitionDuration;
+
+				var firstWidthAnimation = new Animation(FirstWidthAnimatedMethod, previousIndicatorWidth, previousIndicatorWidth * widthMultiplier);
+				var secondWidthAnimation = new Animation(SecondWidthAnimatedMethod, previousIndicatorWidth * widthMultiplier, _currentIndicatorWidth);
+
+				var translateAnimation = new Animation();
+				double targetX = _selectedTabX;
+				if (_tabSelectionIndicator != null)
+				{
+#if !WINDOWS
+					if (HeaderItemTemplate != null &&
+						((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft)
+					{
+						targetX = -_selectedTabX;
+					}
+#endif
+
+					translateAnimation = new Animation(TranslateAnimatedMethod, _tabSelectionIndicator.TranslationX, targetX);
+				}
+
+				var parentAnimation = new Animation
 			{
 				{ 0, 0.5, firstWidthAnimation },
 				{ 0.5, 1, secondWidthAnimation },
 				{ 0, 1, translateAnimation }
 			};
-            AnimateTabSelectionIndicator(parentAnimation, animationDuration, targetX);
+				AnimateTabSelectionIndicator(parentAnimation, animationDuration, targetX);
+			}
+			else
+			{
+				double previousIndicatorHeight = 0;
+				if (_tabSelectionIndicator != null)
+				{
+					previousIndicatorHeight = _tabSelectionIndicator.Height;
+				}
+
+				previousIndicatorHeight = previousIndicatorHeight < 0 ? 0 : previousIndicatorHeight;
+				int adjustedIndex = SelectedIndex;
+				if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+				{
+					adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
+				}
+
+				var selectedItem = _tabItemsPanel?.Children[adjustedIndex];
+				double selectedItemHeight = (selectedItem != null) ?
+					selectedItem.Measure(double.PositiveInfinity, double.PositiveInfinity).Height : 0;
+
+				double heightMultiplier = CalculateHeightMultiplier(previousIndicatorHeight, selectedItemHeight);
+				uint animationDuration = (uint)ContentTransitionDuration;
+
+				var firstHeightAnimation = new Animation(FirstHeightAnimatedMethod, previousIndicatorHeight, previousIndicatorHeight * heightMultiplier);
+				var secondHeightAnimation = new Animation(SecondHeightAnimatedMethod, previousIndicatorHeight * heightMultiplier, _currentIndicatorHeight);
+
+				var translateAnimation = new Animation();
+				double targetY = _selectedTabY;
+				if (_tabSelectionIndicator != null)
+				{
+					translateAnimation = new Animation(TranslateAnimatedMethod, _tabSelectionIndicator.TranslationY, targetY);
+				}
+
+				var parentAnimation = new Animation
+			{
+				{ 0, 0.5, firstHeightAnimation },
+				{ 0.5, 1, secondHeightAnimation },
+				{ 0, 1, translateAnimation }
+			};
+				AnimateTabSelectionIndicator(parentAnimation, animationDuration, targetY);
+			}
         }
 
         double CalculateWidthMultiplier(double previousIndicatorWidth, double selectedItemWidth)
@@ -3107,45 +4234,113 @@ namespace Syncfusion.Maui.Toolkit.TabView
             return widthMultiplier;
         }
 
-        void AnimateTabSelectionIndicator(Animation parentAnimation, uint animationDuration, double targetX)
+		double CalculateHeightMultiplier(double previousIndicatorHeight, double selectedItemHeight)
+		{
+			double heightMultiplier = selectedItemHeight / _currentIndicatorHeight;
+			if (_currentIndicatorHeight > previousIndicatorHeight)
+			{
+				heightMultiplier = (int)(selectedItemHeight / _currentIndicatorHeight);
+				heightMultiplier = heightMultiplier < 1 ? heightMultiplier + 1 : heightMultiplier;
+			}
+
+			if (_currentIndicatorHeight < previousIndicatorHeight)
+			{
+				heightMultiplier = (int)(selectedItemHeight / previousIndicatorHeight);
+				heightMultiplier = heightMultiplier < 1 ? heightMultiplier + 1 : heightMultiplier;
+
+				if (previousIndicatorHeight / _currentIndicatorHeight > 2 && IndicatorWidthMode == IndicatorWidthMode.Stretch)
+				{
+					heightMultiplier *= 0.5;
+				}
+			}
+
+			heightMultiplier = heightMultiplier > 2 ? 2 : heightMultiplier;
+			return heightMultiplier;
+		}
+
+		void AnimateTabSelectionIndicator(Animation parentAnimation, uint animationDuration, double targetX)
         {
-            if (_tabSelectionIndicator != null)
-            {
-                if (ShouldPerformAction())
-                {
-                    parentAnimation.Commit(this, "SelectionIndicatorAnimation", 16, animationDuration, AnimationEasing, finished: (v, e) =>
-                    {
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (isHorizontal)
+			{
+				if (_tabSelectionIndicator != null)
+				{
+					if (ShouldPerformAction())
+					{
+						parentAnimation.Commit(this, "SelectionIndicatorAnimation", 16, animationDuration, AnimationEasing, finished: (v, e) =>
+						{
 #if WINDOWS || ANDROID
                         if (_tabSelectionIndicator.TranslationX == targetX)
 #endif
-                        {
-                            UpdateFillSelectedTabItem();
-                        }
-                    });
-                }
-                else
-                {
-                    if (!this.AnimationIsRunning("SelectionIndicatorAnimation") || (this.AnimationIsRunning("SelectionIndicatorAnimation") && (_previousTabX != _selectedTabX)))
-                    {
-                        if (!double.IsNaN(_currentIndicatorWidth))
-                        {
-                            _tabSelectionIndicator.WidthRequest = _currentIndicatorWidth;
-                        }
-
-                        _tabSelectionIndicator.Measure(_tabSelectionIndicator.WidthRequest, _tabSelectionIndicator.HeightRequest);
-						_tabSelectionIndicator.TranslationX = targetX;
-						UpdateFillSelectedTabItem();
-						// need to check If below code required or not.
-						int adjustedIndex = SelectedIndex;
-						if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
-						{
-							adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
-						}
-
-						UpdateScrollViewPosition(adjustedIndex);
+							{
+								UpdateFillSelectedTabItem();
+							}
+						});
 					}
-                }
-            }
+					else
+					{
+						if (!this.AnimationIsRunning("SelectionIndicatorAnimation") || (this.AnimationIsRunning("SelectionIndicatorAnimation") && (_previousTabX != _selectedTabX)))
+						{
+							if (!double.IsNaN(_currentIndicatorWidth))
+							{
+								_tabSelectionIndicator.WidthRequest = _currentIndicatorWidth;
+							}
+
+							_tabSelectionIndicator.Measure(_tabSelectionIndicator.WidthRequest, _tabSelectionIndicator.HeightRequest);
+							_tabSelectionIndicator.TranslationX = targetX;
+							UpdateFillSelectedTabItem();
+							// need to check If below code required or not.
+							int adjustedIndex = SelectedIndex;
+							if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+							{
+								adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
+							}
+
+							UpdateScrollViewPosition(adjustedIndex);
+						}
+					}
+				}
+			}
+			else
+			{
+				if (_tabSelectionIndicator != null)
+				{
+					if (ShouldPerformAction())
+					{
+						parentAnimation.Commit(this, "SelectionIndicatorAnimation", 16, animationDuration, AnimationEasing, finished: (v, e) =>
+						{
+#if WINDOWS || ANDROID
+                        if (_tabSelectionIndicator.TranslationY == targetX)
+#endif
+							{
+								UpdateFillSelectedTabItem();
+							}
+						});
+					}
+					else
+					{
+						if (!this.AnimationIsRunning("SelectionIndicatorAnimation") || (this.AnimationIsRunning("SelectionIndicatorAnimation") && (_previousTabY != _selectedTabY)))
+						{
+							if (!double.IsNaN(_currentIndicatorHeight))
+							{
+								_tabSelectionIndicator.HeightRequest = _currentIndicatorHeight;
+							}
+
+							_tabSelectionIndicator.Measure(_tabSelectionIndicator.WidthRequest, _tabSelectionIndicator.HeightRequest);
+							_tabSelectionIndicator.TranslationY = targetX;
+							UpdateFillSelectedTabItem();
+							// need to check If below code required or not.
+							int adjustedIndex = SelectedIndex;
+							if (IsCenterButtonEnabled && TabWidthMode is TabWidthMode.Default)
+							{
+								adjustedIndex = GetAdjustedIndexForCenterButton(adjustedIndex);
+							}
+
+							UpdateScrollViewPosition(adjustedIndex);
+						}
+					}
+				}
+			}
         }
 
 		/// <summary>
@@ -3155,21 +4350,44 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		bool ShouldPerformAction()
 		{
 			var isAnimationRunning = this.AnimationIsRunning("SelectionIndicatorAnimation");
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+
+			if (isHorizontal)
+			{
 
 #if !WINDOWS
-			var isSelectedViewXConditionMet = this._selectedTabX >= 0 ||
-				((((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft) && _selectedTabX < 0);
+				var isSelectedViewXConditionMet = this._selectedTabX >= 0 ||
+					((((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft) && _selectedTabX < 0);
 #else
     var isSelectedViewXConditionMet = _selectedTabX > 0;
 #endif
 
-			var hasIndexChanged = _previewSelectedIndex != SelectedIndex;
-			var isIndicatorDimensionChanged = _previousIndicatorWidth != _currentIndicatorWidth;
-			var isItemCountChanged = _tabHeaderItemContent is not null && _tabHeaderItemContent.Count != GetVisibleItems();
-			var isPositionChanged = _previousTabX != _selectedTabX;
+				var hasIndexChanged = _previewSelectedIndex != SelectedIndex;
+				var isIndicatorDimensionChanged = _previousIndicatorWidth != _currentIndicatorWidth;
+				var isItemCountChanged = _tabItemsPanel is not null && _tabItemsPanel.Count != GetVisibleItems();
+				var isPositionChanged = _previousTabX != _selectedTabX;
 
-			return (hasIndexChanged || (isAnimationRunning && (isIndicatorDimensionChanged || isItemCountChanged || isPositionChanged)))
-				   && isSelectedViewXConditionMet;
+				return (hasIndexChanged || (isAnimationRunning && (isIndicatorDimensionChanged || isItemCountChanged || isPositionChanged)))
+					   && isSelectedViewXConditionMet;
+			}
+			else
+			{
+
+#if !WINDOWS
+				var isSelectedViewYConditionMet = this._selectedTabY >= 0 ||
+					((((this as IVisualElementController).EffectiveFlowDirection & EffectiveFlowDirection.RightToLeft) == EffectiveFlowDirection.RightToLeft) && _selectedTabY < 0);
+#else
+    var isSelectedViewYConditionMet = _selectedTabY > 0;
+#endif
+
+				var hasIndexChanged = _previewSelectedIndex != SelectedIndex;
+				var isIndicatorDimensionChanged = _previousIndicatorHeight != _currentIndicatorHeight;
+				var isItemCountChanged = _tabItemsPanel is not null && _tabItemsPanel.Count != GetVisibleItems();
+				var isPositionChanged = _previousTabY != _selectedTabY;
+
+				return (hasIndexChanged || (isAnimationRunning && (isIndicatorDimensionChanged || isItemCountChanged || isPositionChanged)))
+					   && isSelectedViewYConditionMet;
+			}
 		}
 
 		/// <summary>
@@ -3219,25 +4437,63 @@ namespace Syncfusion.Maui.Toolkit.TabView
             }
         }
 
-        /// <summary>
-        /// This is update the tab selection indicator x position.
-        /// </summary>
-        /// <param name="value"></param>
+		/// <summary>
+		/// This is update the tab selection indicator width
+		/// </summary>
+		void SecondHeightAnimatedMethod(double value)
+		{
+			UpdateTabSelectionIndicatorHeight(value);
+		}
+
+		/// <summary>
+		/// This is update the tab selection indicator width
+		/// </summary>
+		/// <param name="value"></param>
+		void FirstHeightAnimatedMethod(double value)
+		{
+			UpdateTabSelectionIndicatorHeight(value);
+		}
+
+		void UpdateTabSelectionIndicatorHeight(double value)
+		{
+			if (_tabSelectionIndicator != null)
+			{
+				_tabSelectionIndicator.HeightRequest = value;
+				if (_tabSelectionIndicator.HeightRequest >= 0)
+				{
+					_tabSelectionIndicator.Measure(_tabSelectionIndicator.WidthRequest, _tabSelectionIndicator.HeightRequest);
+				}
+			}
+		}
+
+		/// <summary>
+		/// This is update the tab selection indicator x position.
+		/// </summary>
+		/// <param name="value"></param>
 #if MACCATALYST || IOS
         async void TranslateAnimatedMethod(double value)
 #else
-        void TranslateAnimatedMethod(double value)
+		void TranslateAnimatedMethod(double value)
 #endif
         {
-            if (_tabSelectionIndicator != null)
+			var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+			if (_tabSelectionIndicator != null)
             {
 #if MACCATALYST || IOS
                 //Delay is used for transition: On Mac and iOS, the transition animation is not functioning properly and does not behave like it does on Windows and Android platforms.
                 await Task.Delay(150);
 #endif
-                _tabSelectionIndicator.TranslationX = value;
+				if (isHorizontal)
+				{
+					_tabSelectionIndicator.TranslationX = value;
+				}
+				else
+				{
+					_tabSelectionIndicator.TranslationY = value;
+				}
             }
         }
+
         void ResetStyle()
         {
             Style = new Style(typeof(SfStackLayout));
@@ -3252,9 +4508,9 @@ namespace Syncfusion.Maui.Toolkit.TabView
                 _tabHeaderContentContainer.Style = new Style(typeof(SfGrid));
             }
 
-            if (_tabHeaderItemContent != null)
+            if (_tabItemsPanel != null)
             {
-                _tabHeaderItemContent.Style = new Style(typeof(SfHorizontalStackLayout));
+                _tabItemsPanel.Style = new Style(typeof(SfHorizontalStackBase));
             }
 
             if (_tabSelectionIndicator != null)
@@ -3266,7 +4522,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         void Items_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             // Handle old items being removed
-            var headerItemsCount = _tabHeaderItemContent?.Children.Count;
+            var headerItemsCount = _tabItemsPanel?.Children.Count;
             if (e.OldItems != null)
             {
 #if ANDROID
@@ -3297,7 +4553,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						AddTabItemProperties(tabItem, index);
 						if (SelectedIndex >= index &&
                     SelectedIndex + 1 < Items.Count &&
-                    headerItemsCount != _tabHeaderItemContent?.Children.Count)
+                    headerItemsCount != _tabItemsPanel?.Children.Count)
                         {
                             SelectedIndex += 1;
                         }
@@ -3321,7 +4577,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
         {
             if (Items == null || Items.Count == 0)
             {
-                _tabHeaderItemContent?.Children.Clear();
+                _tabItemsPanel?.Children.Clear();
                 if (_tabSelectionIndicator != null)
                 {
                     _tabSelectionIndicator.WidthRequest = 0.01d;
@@ -3348,7 +4604,8 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		 {
 			if (_tabHeaderParentContainer is not null && _tabHeaderScrollView is not null)
 			{
-				if (TabWidthMode is TabWidthMode.SizeToContent)
+				var isHorizontal = _placement == TabBarPlacement.Top || _placement == TabBarPlacement.Bottom;
+				if (TabWidthMode is TabWidthMode.SizeToContent && isHorizontal)
 				{
 					if (TabHeaderAlignment == TabHeaderAlignment.Start)
 					{
@@ -3374,22 +4631,62 @@ namespace Syncfusion.Maui.Toolkit.TabView
 						_tabHeaderParentContainer.HorizontalOptions = LayoutOptions.End;
 					}
 				}
+				else if (TabWidthMode == TabWidthMode.SizeToContent && !isHorizontal && _tabHeaderContentContainer !=null)
+				{
+					if (TabHeaderAlignment == TabHeaderAlignment.Start)
+					{
+#if ANDROID
+						_tabHeaderScrollView.VerticalOptions = LayoutOptions.Start;
+#endif
+						_tabHeaderContentContainer.VerticalOptions = LayoutOptions.Start;
+					}
+					else if (TabHeaderAlignment == TabHeaderAlignment.Center)
+					{
+#if ANDROID
+						_tabHeaderScrollView.VerticalOptions = LayoutOptions.Center;
+#endif
+						_tabHeaderContentContainer.VerticalOptions = LayoutOptions.Center;
+					}
+					else
+					{
+#if ANDROID
+						_tabHeaderScrollView.VerticalOptions = LayoutOptions.End;
+#endif
+						_tabHeaderContentContainer.VerticalOptions = LayoutOptions.End;
+					}
+				}
 				else
 				{
 #if ANDROID
 					if (_tabHeaderScrollView is not null)
 					{
-						_tabHeaderScrollView.HorizontalOptions = LayoutOptions.Fill;
+						if (isHorizontal)
+						{
+							_tabHeaderScrollView.HorizontalOptions = LayoutOptions.Fill;
+						}
+						else
+						{
+							_tabHeaderScrollView.VerticalOptions = LayoutOptions.Fill;
+						}
 					}
 #endif
-					_tabHeaderParentContainer.HorizontalOptions = LayoutOptions.Fill;
+					if (isHorizontal)
+					{
+						_tabHeaderParentContainer.HorizontalOptions = LayoutOptions.Fill;
+					}
+					else
+					{
+						_tabHeaderParentContainer.VerticalOptions = LayoutOptions.Fill;
+					}
 				}
 			}
+			UpdateCenterButtonPlaceholder();
 		 }
 
 		void UpdateTabWidthMode()
         {
             UpdateTabPadding();
+			UpdateHeaderDisplayMode();
 			UpdateTabHeaderAlignment();
 			UpdateIsCenterButtonEnabled();
 		}
@@ -3567,8 +4864,16 @@ namespace Syncfusion.Maui.Toolkit.TabView
 
         static void OnSelectedIndexChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateSelectedIndex((int)newValue, (int)oldValue);
 
-        static void OnScrollButtonEnabledChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateScrollButtonEnabled((Boolean)newValue);
-
+		static void OnScrollButtonEnabledChanged(BindableObject bindable, object oldValue, object newValue)
+		{
+			var tabBar = bindable as SfTabBar;
+			tabBar?.UpdateScrollButtonEnabled((bool)newValue);
+			tabBar?.UpdateTabIndicatorWidth();
+			tabBar?.UpdateHeaderItemHeight();
+#if IOS
+             tabBar?.UpdateTabPadding();
+#endif
+		}
 		static void OnIsCenterButtonEnabledChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateIsCenterButtonEnabled();
 
 		static void OnHeaderDisplayModeChanged(BindableObject bindable, object oldValue, object newValue) => (bindable as SfTabBar)?.UpdateHeaderDisplayMode();

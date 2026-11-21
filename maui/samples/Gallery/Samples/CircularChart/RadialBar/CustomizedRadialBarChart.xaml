@@ -126,7 +126,7 @@
                                 </Label>
                                 <Label FontSize="{OnPlatform WinUI='13' ,Android='10',MacCatalyst='13',iOS='10'}" Grid.Row="1"
                                        Margin="{OnPlatform WinUI='10,0,0,30',Android='5,0,0,50',MacCatalyst='10,0,0,30',iOS='10,0,0,27'}" 
-                                       HeightRequest="{OnPlatform WinUI=30,Android=23,MacCatalyst=30,iOS=23}" Text="{Binding Item.Name}" 
+                                       HeightRequest="{OnPlatform WinUI=30,Android=23,MacCatalyst=30,iOS=23}" Text="{Binding Item, Converter={StaticResource valueConverter}, ConverterParameter='Name'}" 
                                        Grid.Column="1" VerticalTextAlignment="Start"  HorizontalTextAlignment="Start" />
                             </Grid>
                         </DataTemplate>

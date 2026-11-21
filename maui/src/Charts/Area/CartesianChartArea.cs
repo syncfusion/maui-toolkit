@@ -12,6 +12,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		#region Private Fields
 		readonly CartesianPlotArea _cartesianPlotArea;
 		readonly AbsoluteLayout _behaviorLayout;
+		internal readonly SfCartesianChart _chart;
 		bool _isSbsWithOneData;
 		bool _isTransposed;
 		bool _enableSideBySideSeriesPlacement = true;
@@ -84,6 +85,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
 		public CartesianChartArea(SfCartesianChart chart)
 		{
 			BatchBegin();
+			_chart = chart;
 			_xAxes = chart.XAxes;
 			_xAxes.CollectionChanged += XAxes_CollectionChanged;
 			_yAxes = chart.YAxes;

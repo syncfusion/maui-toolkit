@@ -51,7 +51,7 @@
                     </Border.Shadow>
                     <StackLayout Orientation="Vertical" 
                         HeightRequest="{Binding CenterHoleSize,Converter={StaticResource cornerRadius}}"
-                        HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                        HorizontalOptions="Center" VerticalOptions="Center">
 
                         <Grid HorizontalOptions="Center">
                             <Path Data="{StaticResource PathData}" Fill="{AppThemeBinding Default={StaticResource ContentForeground}}"/>
@@ -60,7 +60,7 @@
                         <Label LineBreakMode="WordWrap" WidthRequest="{Binding CenterHoleSize,Converter={StaticResource cornerRadius}}" 
                                Text="Behind the Bricks" TextColor="{AppThemeBinding Default={StaticResource ContentForeground}}" FontSize="12" Padding="0,5,0,0"
                                VerticalTextAlignment="Start"  HorizontalTextAlignment="Center" FontFamily="Verdana"
-                               HorizontalOptions="CenterAndExpand" HeightRequest="{OnPlatform iOS={Binding CenterHoleSize,Converter={StaticResource cornerRadius}}}"/>
+                               HorizontalOptions="Center" HeightRequest="{OnPlatform iOS={Binding CenterHoleSize,Converter={StaticResource cornerRadius}}}"/>
                     </StackLayout>
                 </Border>
             </chart:SfSunburstChart.CenterView>

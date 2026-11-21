@@ -217,19 +217,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             View view;
             var content = template.CreateContent();
-#if NET9_0
-            if (content is ViewCell)
-            {
-                view = ((ViewCell)content).View;
-            }
-            else
-            {
-                view = (View)content;
-            }
-#elif NET10_0
             view = (View)content;
-#endif
-
             if (view.BindingContext == null)
             {
                 view.BindingContext = itemDetail;
@@ -248,19 +236,7 @@ namespace Syncfusion.Maui.Toolkit.Picker
         {
             View view;
             var content = template.CreateContent();
-#if NET9_0
-            if (content is ViewCell)
-            {
-                view = ((ViewCell)content).View;
-            }
-            else
-            {
-                view = (View)content;
-            }
-#elif NET10_0
             view = (View)content;
-#endif
-
             if (view.BindingContext == null && info != null)
             {
                 view.BindingContext = info;

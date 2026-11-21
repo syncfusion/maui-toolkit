@@ -66,7 +66,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
         #region Internal Properties
 
         internal readonly SfPolarChart _polarChart;
-        internal RectF ActualSeriesClipRect { get { return _actualSeriesClipRect; } set { _actualSeriesClipRect = value; } }
+		internal readonly ExtentSemanticsView _semanticsView;
+		internal RectF ActualSeriesClipRect { get { return _actualSeriesClipRect; } set { _actualSeriesClipRect = value; } }
         internal Thickness PlotAreaMargin { get; set; } = Thickness.Zero;
         internal IList<Brush>? PaletteColors { get; set; }
         internal View? PlotAreaBackgroundView
@@ -93,6 +94,7 @@ namespace Syncfusion.Maui.Toolkit.Charts
                 }
             }
         }
+
         internal PointF PolarAxisCenter { get; set; }
 
         #endregion
@@ -150,7 +152,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             _seriesViews = [];
             _axisLayout = new PolarAxisLayoutView(this);
             _dataLabelView = new PolarDataLabelView(this);
-            _behaviorLayout = polarChart.BehaviorLayout;
+			_semanticsView = new ExtentSemanticsView { ChartArea = this };
+			_behaviorLayout = polarChart.BehaviorLayout;
             _dataLabelLayout = [];
             AbsoluteLayout.SetLayoutBounds(_gridLineLayout, new Rect(0, 0, 1, 1));
             AbsoluteLayout.SetLayoutFlags(_gridLineLayout, AbsoluteLayoutFlags.All);
@@ -160,7 +163,9 @@ namespace Syncfusion.Maui.Toolkit.Charts
             AbsoluteLayout.SetLayoutFlags(_axisLayout, AbsoluteLayoutFlags.All);
             AbsoluteLayout.SetLayoutBounds(_dataLabelView, new Rect(0, 0, 1, 1));
             AbsoluteLayout.SetLayoutFlags(_dataLabelView, AbsoluteLayoutFlags.All);
-            AbsoluteLayout.SetLayoutBounds(_behaviorLayout, new Rect(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutBounds(_semanticsView, new Rect(0, 0, 1, 1));
+			AbsoluteLayout.SetLayoutFlags(_semanticsView, AbsoluteLayoutFlags.All);
+			AbsoluteLayout.SetLayoutBounds(_behaviorLayout, new Rect(0, 0, 1, 1));
             AbsoluteLayout.SetLayoutFlags(_behaviorLayout, Microsoft.Maui.Layouts.AbsoluteLayoutFlags.All);
             AbsoluteLayout.SetLayoutBounds(_dataLabelLayout, new Rect(0, 0, 1, 1));
             AbsoluteLayout.SetLayoutFlags(_dataLabelLayout, AbsoluteLayoutFlags.All);
@@ -170,7 +175,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             Add(_axisLayout);
             Add(_behaviorLayout);
             Add(_dataLabelLayout);
-        }
+			Add(_semanticsView);
+		}
 
         #endregion
 
@@ -239,7 +245,12 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
         }
 
-        internal void ScheduleUpdate(bool reLayout)
+		internal void InvalidateSegmentSemantics()
+		{
+			_semanticsView.InvalidateSemanticsNodes();
+		}
+
+		internal void ScheduleUpdate(bool reLayout)
         {
             NeedsRelayout = reLayout;
             ScheduleUpdateArea();
@@ -336,7 +347,8 @@ namespace Syncfusion.Maui.Toolkit.Charts
             }
 
             _dataLabelView?.InvalidateDrawable();
-        }
+			_semanticsView.InvalidateSemanticsNodes();
+		}
 
         void AddSeries(int index, object series)
         {

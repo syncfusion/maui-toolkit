@@ -3,7 +3,6 @@ using MAUIPicker = Microsoft.Maui.Controls.Picker;
 
 namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class BoxAndWhisker : SampleView
 	{
 		public BoxAndWhisker()
@@ -24,9 +23,13 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			}
 		}
 
-		private void ModePicker_SelectedIndexChanged(object sender, EventArgs e)
+		private void ModePicker_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var picker = (MAUIPicker)sender;
+			if (sender is not MAUIPicker picker)
+			{
+				return;
+			}
+
 			int selectedIndex = picker.SelectedIndex;
 
 			if (selectedIndex == 0)

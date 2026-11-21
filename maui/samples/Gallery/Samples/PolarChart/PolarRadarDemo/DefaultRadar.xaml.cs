@@ -16,7 +16,7 @@ namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 			Chart.Handler?.DisconnectHandler();
 		}
 
-		private void type_SelectedIndexChanged(object sender, EventArgs e)
+		private void type_SelectedIndexChanged(object? sender, EventArgs e)
 		{
 			if (sender is not MAUIPicker picker)
 				return;
@@ -31,9 +31,13 @@ namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 			line1.IsVisibleOnLegend = line2.IsVisibleOnLegend = line3.IsVisibleOnLegend = showLine;
 		}
 
-		private void Angle_SelectedIndexChanged(object sender, EventArgs e)
+		private void Angle_SelectedIndexChanged(object? sender, EventArgs e)
 		{
-			var picker = (MAUIPicker)sender;
+			if (sender is not MAUIPicker picker)
+			{
+				return;
+			}
+
 			int selectedIndex = picker.SelectedIndex;
 			if (selectedIndex == 0)
 			{
@@ -53,7 +57,7 @@ namespace Syncfusion.Maui.ControlsGallery.PolarChart.SfPolarChart
 			}
 		}
 
-		private void checkbox_CheckedChanged(object sender, CheckedChangedEventArgs e)
+		private void checkbox_CheckedChanged(object? sender, CheckedChangedEventArgs e)
 		{
 			if (e.Value)
 			{

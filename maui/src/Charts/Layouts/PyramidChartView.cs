@@ -34,6 +34,11 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			canvas.CanvasRestoreState();
+
+			if (_chart.Area?.PlotArea is PyramidChartArea pyramidChartArea)
+			{
+				pyramidChartArea.InvalidateSegmentSemantics();
+			}
 		}
 
 		#endregion

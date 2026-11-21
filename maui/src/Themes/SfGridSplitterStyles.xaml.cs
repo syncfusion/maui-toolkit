@@ -25,7 +25,6 @@ namespace Syncfusion.Maui.Toolkit.GridSplitter
     /// platform application resource dictionary at draw time).
     /// </para>
     /// </remarks>
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SfGridSplitterStyles : ResourceDictionary
     {
         /// <summary>

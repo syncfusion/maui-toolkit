@@ -2,11 +2,11 @@
 
 namespace Syncfusion.Maui.Toolkit.Accordion
 {
-    /// <summary>
-    /// Represents a specialized <see cref="ScrollView"/> for displaying accordion items.
-    /// This view facilitates the scrolling functionality for accordion controls.
-    /// </summary>
-#if NET8_0_OR_GREATER && (IOS || MACCATALYST)
+	/// <summary>
+	/// Represents a specialized <see cref="ScrollView"/> for displaying accordion items.
+	/// This view facilitates the scrolling functionality for accordion controls.
+	/// </summary>
+#if (IOS || MACCATALYST)
     internal partial class AccordionScrollView : ScrollView, ICrossPlatformLayout
 #else
     internal partial class AccordionScrollView : ScrollView
@@ -14,7 +14,7 @@ namespace Syncfusion.Maui.Toolkit.Accordion
     {
 		#region Methods
 
-#if NET8_0_OR_GREATER && (IOS || MACCATALYST)
+#if (IOS || MACCATALYST)
 
 		/// <summary>
 		/// Arranges the bounds for the <see cref="ItemContainer"/> when using .NET 8
@@ -40,6 +40,6 @@ namespace Syncfusion.Maui.Toolkit.Accordion
         }
 #endif
 
-        #endregion
+#endregion
     }
 }

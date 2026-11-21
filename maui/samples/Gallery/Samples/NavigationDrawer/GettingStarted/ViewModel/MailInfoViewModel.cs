@@ -13,6 +13,7 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 
 		ObservableCollection<MailInfo>? _mailInfos;
 		ObservableCollection<MailInfo>? _archivedMessages;
+		ObservableCollection<Notification>? notifications;
 		Command? _undoCommand;
 		Command? _deleteCommand;
 		bool? _isDeleted;
@@ -53,6 +54,24 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 			_random = new Random();
 			GenerateSource();
 			_collectionViewRepository = new MailInfoRepository();
+
+			notifications = new ObservableCollection<Notification>
+		{
+			new Notification { Name = "Clara", Subject = "Goto Meeting", Description = "Join meeting to discuss about daily status, workflow, pending work and improve process", ImageSource = "peoplecircle9.png",TimeStamp = "12:10 PM" },
+			new Notification { Name = "Gabriella", Subject = "FW: Status Update", Description = "Hi, Please find the today's status", ImageSource = "peoplecircle16.png",TimeStamp = "12:50 PM" },
+			new Notification { Name = "Jackson", Subject = "Greetings! Congrats", Description = "Hi, Congrats you have won the raffle", ImageSource = "peoplecircle18.png" ,TimeStamp = "05:45 PM"},
+			new Notification { Name = "Liam", Subject = "Report Monitor", Description = "Do not reply, Please find the attachment. Attachment have the full details of monitor report with timing", ImageSource = "peoplecircle23.png" ,TimeStamp = "04:00 PM"},
+			new Notification { Name = "Lita", Subject = "News Letter", Description = "Hi, Please find the attached news letter", ImageSource = "peoplecircle25.png" , TimeStamp = "07:10 AM"},
+			new Notification { Name = "Briley", Subject = "Conference about Latest", Description = "Hi, We are scheduled a meeting", ImageSource = "peoplecircle26.png" ,TimeStamp = "12:10 PM"},
+			new Notification { Name = "Maci", Subject = "RE: Status Update", Description = "Thanks for the update", ImageSource = "person.png" ,TimeStamp = "06:40 PM"},
+			new Notification { Name = "Peter", Subject = "RE: Status Update", Description = "Thanks for the update", ImageSource = "peoplecircle5.png" ,TimeStamp = "10:25 AM"},
+			new Notification { Name = "Sophia", Subject = "Project Kickoff", Description = "Reminder: Project kickoff meeting scheduled for tomorrow at 10 AM", ImageSource = "emp_08.png" ,TimeStamp = "2:10 PM"},
+			new Notification { Name = "Ethan", Subject = "Weekly Report", Description = "Please review the attached weekly performance report", ImageSource = "emp_07.png" ,TimeStamp = "02:00 PM"},
+			new Notification { Name = "Olivia", Subject = "System Maintenance", Description = "Scheduled maintenance will occur tonight from 12 AM to 3 AM", ImageSource = "emp_09.png" ,TimeStamp = "11:00 AM"},
+			new Notification { Name = "Noah", Subject = "Policy Update", Description = "New company policy has been released. Please check your email for details", ImageSource = "emp_06.png" ,TimeStamp = "11:18 AM"},
+			new Notification { Name = "Ava", Subject = "Training Session", Description = "Join the mandatory training session on Friday at 2 PM", ImageSource = "emp_03.png"  ,TimeStamp = "12:10 PM"},
+			new Notification { Name = "Isabella", Subject = "Reminder: Submit Timesheet", Description = "Please submit your timesheet before 6 PM today to avoid delays in processing.", ImageSource = "emp_04.png"  ,TimeStamp = "12:10 PM"}
+		};
 		}
 
 		#endregion
@@ -75,6 +94,15 @@ namespace Syncfusion.Maui.ControlsGallery.NavigationDrawer.NavigationDrawer
 		{
 			get { return _archivedMessages; }
 			set { _archivedMessages = value; OnPropertyChanged("ArchivedMessages"); }
+		}
+
+		/// <summary>
+		/// Gets or sets the MailInfo type of ObservableCollection and notifies user when collection value gets changed.
+		/// </summary>
+		public ObservableCollection<Notification>? Notifications
+		{
+			get { return notifications; }
+			set { notifications = value; OnPropertyChanged("Notifications"); }
 		}
 
 		/// <summary>

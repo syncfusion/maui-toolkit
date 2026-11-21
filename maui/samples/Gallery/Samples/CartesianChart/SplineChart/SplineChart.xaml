@@ -21,7 +21,7 @@
           <RowDefinition Height="*"></RowDefinition>
           <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" PaletteBrushes="{AppThemeBinding Light={StaticResource PaletteBrushesLight}, Dark={StaticResource PaletteBrushesDark}}" HorizontalOptions="Fill" VerticalOptions="Fill">
+        <chart:SfCartesianChart Grid.Row="0" x:Name="Chart" HorizontalOptions="Fill" VerticalOptions="Fill">
             <chart:SfCartesianChart.Legend>
             <chart:ChartLegend ToggleSeriesVisibility="True"/>
         </chart:SfCartesianChart.Legend>
@@ -47,14 +47,14 @@
             </chart:NumericalAxis>
         </chart:SfCartesianChart.YAxes>
             <chart:SfCartesianChart.Series>
-                    <chart:SplineSeries Label="High" EnableTooltip="True" EnableAnimation="True" ItemsSource="{Binding SplineData1}" XBindingPath="Name" YBindingPath="Value" StrokeWidth="1" ShowMarkers="True" LegendIcon="SeriesType" >
+                <chart:SplineSeries x:Name="splineSeries1" Label="High" EnableTooltip="True" EnableAnimation="True" ItemsSource="{Binding SplineData1}" XBindingPath="Name" YBindingPath="Value" StrokeWidth="2" ShowMarkers="True" LegendIcon="SeriesType" Fill="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}">
                     <chart:SplineSeries.MarkerSettings>
-                            <chart:ChartMarkerSettings Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="1"/>
+                        <chart:ChartMarkerSettings Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series1Light}, Dark={StaticResource series1Dark}}" StrokeWidth="1"/>
                     </chart:SplineSeries.MarkerSettings>
                 </chart:SplineSeries>
-                    <chart:SplineSeries Label="Low" EnableTooltip="True" EnableAnimation="True" ItemsSource="{Binding SplineData1}" XBindingPath="Name" YBindingPath="Size" StrokeWidth="1" ShowMarkers="True" LegendIcon="SeriesType">
+                <chart:SplineSeries x:Name="splineSeries2" Label="Low" EnableTooltip="True" EnableAnimation="True" ItemsSource="{Binding SplineData1}" XBindingPath="Name" YBindingPath="Size" StrokeWidth="2" ShowMarkers="True" LegendIcon="SeriesType" Fill="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}">
                     <chart:SplineSeries.MarkerSettings>
-                            <chart:ChartMarkerSettings Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" StrokeWidth="1"/>
+                        <chart:ChartMarkerSettings Width="8" Height="8" Fill="{AppThemeBinding Default={StaticResource ContentBackground}}" Stroke="{AppThemeBinding Light={StaticResource series2Light}, Dark={StaticResource series2Dark}}" StrokeWidth="1"/>
                     </chart:SplineSeries.MarkerSettings>
                 </chart:SplineSeries>
             </chart:SfCartesianChart.Series>
@@ -69,4 +69,13 @@
         </HorizontalStackLayout>
     </Grid>
     </localCore:SampleView.Content>
+
+    <localCore:SampleView.OptionView>
+        <Grid>
+            <HorizontalStackLayout>
+                <Label Text="Apply gradient" FontSize="{OnPlatform Android='17', WinUI='17'}" Padding="{OnPlatform Android='5', WinUI='5'}"/>
+                <CheckBox x:Name="gradientCheckBox" IsChecked="False" CheckedChanged="gradientCheckBox_CheckedChanged" VerticalOptions="Start" Margin="30,0,0,0"/>
+            </HorizontalStackLayout>
+        </Grid>
+    </localCore:SampleView.OptionView>
 </localCore:SampleView>

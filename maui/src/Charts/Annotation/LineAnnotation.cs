@@ -192,6 +192,35 @@ namespace Syncfusion.Maui.Toolkit.Charts
 
 		#region Internal Methods
 
+		internal override Rect GetSemanticsBounds()
+		{
+			if (!float.IsNaN(XPosition1) && !float.IsNaN(XPosition2) &&
+				!float.IsNaN(YPosition1) && !float.IsNaN(YPosition2))
+			{
+				double minX = Math.Min(XPosition1, XPosition2);
+				double maxX = Math.Max(XPosition1, XPosition2);
+				double minY = Math.Min(YPosition1, YPosition2);
+				double maxY = Math.Max(YPosition1, YPosition2);
+				double width = maxX - minX;
+				double height = maxY - minY;
+
+				if (width > 0 || height > 0)
+				{
+					// Add stroke width for better bounds
+					double expandSize = StrokeWidth / 2;
+
+					if (CoordinateUnit == ChartCoordinateUnit.Axis)
+					{
+						var clipRect = Chart!._chartArea.ActualSeriesClipRect;
+						return new Rect(minX - expandSize - clipRect.X, minY - expandSize - clipRect.Y, width + (expandSize * 2), height + (expandSize * 2));
+					}
+
+					return new Rect(minX - expandSize, minY - expandSize, width + (expandSize * 2), height + (expandSize * 2));
+				}
+			}
+			return base.GetSemanticsBounds();
+		}
+
 		internal override bool HitTest(Point touchPoint)
 		{
 			// Early exit validation - positions must be valid.

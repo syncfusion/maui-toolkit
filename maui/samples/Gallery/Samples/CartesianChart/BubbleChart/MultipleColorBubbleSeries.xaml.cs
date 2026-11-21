@@ -35,7 +35,7 @@ namespace Syncfusion.Maui.ControlsGallery.CartesianChart.SfCartesianChart
 			Chart2.Handler?.DisconnectHandler();
 		}
 
-		private void yAxis_LabelCreated(object sender, ChartAxisLabelEventArgs e)
+		private void yAxis_LabelCreated(object? sender, ChartAxisLabelEventArgs e)
 		{
 			double position = e.Position;
 			if (position > 0 && position <= 10000)
