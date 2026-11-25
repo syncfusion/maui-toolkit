@@ -405,8 +405,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			}
 
 			path.Close();
+			canvas.SaveState();
 			canvas.SetFillPaint(Fill, path.Bounds);
 			canvas.FillPath(path);
+			canvas.RestoreState();
 
 			if (HasStroke)
 			{

@@ -240,8 +240,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				RangeAreaSegment.DrawAreaPath(ref _path, fillPoints, isDynamicAnimation, animationValue, PreviousFillPoints);
 
+				canvas.SaveState();
 				canvas.SetFillPaint(Fill, _path.Bounds);
 				canvas.FillPath(_path);
+				canvas.RestoreState();
 			}
 
 			if (HasStroke && highStrokePoints != null && lowStrokePoints != null)

@@ -227,8 +227,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				PolarAreaSegment.DrawAreaPath(ref _path, fillPoints);
 
+				canvas.SaveState();
 				canvas.SetFillPaint(Fill, _path.Bounds);
 				canvas.FillPath(_path);
+				canvas.RestoreState();
 			}
 
 			if (HasStroke && strokePoints != null)

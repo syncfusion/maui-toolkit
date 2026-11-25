@@ -180,9 +180,11 @@
 				segmentPath.CurveTo(_endCurveStartPoint, _endCurveEndPoint, _outerCurveEndPoint);
 			}
 
-			canvas.SetFillPaint(Fill, segmentPath.Bounds);
 			canvas.Alpha = Opacity;
+			canvas.SaveState();
+			canvas.SetFillPaint(Fill, segmentPath.Bounds);
 			canvas.FillPath(segmentPath);
+			canvas.RestoreState();
 			DrawSegmentStroke(canvas);
 		}
 
@@ -220,9 +222,11 @@
 					track.CurveTo(_trackEndCurveStartPoint, _trackEndCurveEndPoint, _trackOuterCurveEndPoint);
 				}
 
-				canvas.SetFillPaint(_currentSeries.TrackFill, track.Bounds);
 				canvas.Alpha = Opacity;
+				canvas.SaveState();
+				canvas.SetFillPaint(_currentSeries.TrackFill, track.Bounds);
 				canvas.FillPath(track);
+				canvas.RestoreState();
 				DrawTrackStroke(canvas);
 			}
 		}
