@@ -319,7 +319,7 @@ namespace Syncfusion.Maui.Toolkit.TabView
 		}
 #endif
 
-#if ANDROID || WINDOWS
+#if ANDROID || WINDOWS || IOS || MACCATALYST
 		/// <summary>
 		/// Measure Override method.
 		/// </summary>
