@@ -95,8 +95,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			{
 				AreaSegment.DrawSegment(canvas, ref _path, fillPoints, animationValue, isDynamicAnimation, PreviousFillPoints);
 
+				canvas.SaveState();
 				canvas.SetFillPaint(Fill, _path.Bounds);
 				canvas.FillPath(_path);
+				canvas.RestoreState();
 			}
 
 			if (HasStroke && strokePoints != null)

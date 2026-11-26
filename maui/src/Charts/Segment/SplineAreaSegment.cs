@@ -332,8 +332,10 @@ namespace Syncfusion.Maui.Toolkit.Charts
 			path.LineTo(fillPoints[fillPointsCount - 2], fillPoints[fillPointsCount - 1]);
 			path.LineTo(fillPoints[0], fillPoints[1]);
 
+			canvas.SaveState();
 			canvas.SetFillPaint(Fill, path.Bounds);
 			canvas.FillPath(path);
+			canvas.RestoreState();
 
 			if (HasStroke && strokePoints != null)
 			{

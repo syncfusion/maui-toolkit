@@ -148,9 +148,11 @@
 			path.MoveTo(_currentBounds.Left + (_currentBounds.Width / 2), _currentBounds.Top + (_currentBounds.Height / 2));
 			path.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -drawStartAngle, -endArcAngle, pieSeries._isClockWise);
 			path.Close();
-			canvas.SetFillPaint(Fill, path.Bounds);
 			canvas.Alpha = Opacity;
+			canvas.SaveState();
+			canvas.SetFillPaint(Fill, path.Bounds);
 			canvas.FillPath(path);
+			canvas.RestoreState();
 
 			//Drawing stroke.
 			if (HasStroke)

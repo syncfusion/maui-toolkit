@@ -301,9 +301,11 @@
 					path.CurveTo(_endCurveCenterPoint, _outerCurveEndMidPoint, _outerCurveEndPoint);
 				}
 
-				canvas.SetFillPaint(Fill, path.Bounds);
 				canvas.Alpha = Opacity;
+				canvas.SaveState();
+				canvas.SetFillPaint(Fill, path.Bounds);
 				canvas.FillPath(path);
+				canvas.RestoreState();
 				SemanticBounds = path.Bounds;
 				SegmentStrokePath(canvas, series, segmentStartAngle, segmentEndAngle, drawStartAngle);
 			}
@@ -342,9 +344,11 @@
 			path.AddArc(_actualBounds.Left, _actualBounds.Top, _actualBounds.Right, _actualBounds.Bottom, -drawStartAngle, -(drawEndAngle), series._isClockWise);
 			path.AddArc(_currentBounds.Left, _currentBounds.Top, _currentBounds.Right, _currentBounds.Bottom, -(drawEndAngle), -drawStartAngle, !series._isClockWise);
 			path.Close();
-			canvas.SetFillPaint(Fill, path.Bounds);
 			canvas.Alpha = Opacity;
+			canvas.SaveState();
+			canvas.SetFillPaint(Fill, path.Bounds);
 			canvas.FillPath(path);
+			canvas.RestoreState();
 			SemanticBounds = path.Bounds;
 
 			if (HasStroke)
